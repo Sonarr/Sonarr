@@ -174,20 +174,19 @@ module.exports = Marionette.Layout.extend({
             return self.episodeFileCollection.get(episodeFileId);
         });
 
-        reqres.setHandler(reqres.Requests.GetAlternateNameBySeasonNumber, function(seriesId, seasonNumber) {
+        reqres.setHandler(reqres.Requests.GetAlternateNameBySeasonNumber, function(seriesId, seasonNumber, sceneSeasonNumber) {
             if (self.model.get('id') !== seriesId) {
                 return [];
             }
-
-            return _.where(self.model.get('alternateTitles'), { seasonNumber : seasonNumber });
-        });
-
-        reqres.setHandler(reqres.Requests.GetAlternateNameBySceneSeasonNumber, function(seriesId, sceneSeasonNumber) {
-            if (self.model.get('id') !== seriesId) {
-                return [];
+            
+            if (sceneSeasonNumber === undefined) {
+                sceneSeasonNumber = seasonNumber;
             }
-
-            return _.where(self.model.get('alternateTitles'), { sceneSeasonNumber : sceneSeasonNumber });
+            
+            return _.where(self.model.get('alternateTitles'),
+                function(alt) {
+                    return alt.sceneSeasonNumber === sceneSeasonNumber || alt.seasonNumber === seasonNumber;
+                });
         });
 
         $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch()).done(function() {

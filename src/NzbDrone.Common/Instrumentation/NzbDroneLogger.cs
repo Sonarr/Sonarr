@@ -103,12 +103,12 @@ namespace NzbDrone.Common.Instrumentation
 
         private static void RegisterAppFile(IAppFolderInfo appFolderInfo)
         {
-            RegisterAppFile(appFolderInfo, "appFileInfo", "sonarr.txt", 5);
-            RegisterAppFile(appFolderInfo, "appFileDebug", "sonarr.debug.txt", 50);
-            RegisterAppFile(appFolderInfo, "appFileTrace", "sonarr.trace.txt", 50);
+            RegisterAppFile(appFolderInfo, "appFileInfo", "sonarr.txt", 5, LogLevel.Info);
+            RegisterAppFile(appFolderInfo, "appFileDebug", "sonarr.debug.txt", 50, LogLevel.Off);
+            RegisterAppFile(appFolderInfo, "appFileTrace", "sonarr.trace.txt", 50, LogLevel.Off);
         }
 
-        private static LoggingRule RegisterAppFile(IAppFolderInfo appFolderInfo, string name, string fileName, int maxArchiveFiles)
+        private static LoggingRule RegisterAppFile(IAppFolderInfo appFolderInfo, string name, string fileName, int maxArchiveFiles, LogLevel minLogLevel)
         {
             var fileTarget = new NzbDroneFileTarget();
 
@@ -125,7 +125,7 @@ namespace NzbDrone.Common.Instrumentation
             fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
             fileTarget.Layout = FILE_LOG_LAYOUT;
 
-            var loggingRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
+            var loggingRule = new LoggingRule("*", minLogLevel, fileTarget);
 
             LogManager.Configuration.AddTarget(name, fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);

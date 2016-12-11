@@ -119,6 +119,8 @@
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
+    <Compile Include="Datastore\Migration\103_fix_metadata_file_extensionsFixture.cs" />
+    <Compile Include="Datastore\Migration\099_extra_and_subtitle_filesFixture.cs" />
     <Compile Include="Datastore\Migration\101_add_ultrahd_quality_in_profilesFixture.cs" />
     <Compile Include="Datastore\Migration\071_unknown_quality_in_profileFixture.cs" />
     <Compile Include="Datastore\Migration\072_history_downloadIdFixture.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="DecisionEngineTests\RssSync\ProperSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\Search\SeriesSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\SameEpisodesSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\RawDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="Download\CompletedDownloadServiceFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\RTorrentTests\RTorrentFixture.cs" />
     <Compile Include="Download\DownloadClientTests\QBittorrentTests\QBittorrentFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\SabnzbdTests\JsonConvertersTests\SabnzbdQueueTimeConverterFixture.cs" />
     <Compile Include="Download\DownloadClientTests\SabnzbdTests\SabnzbdFixture.cs" />
     <Compile Include="Download\DownloadClientTests\TransmissionTests\TransmissionFixture.cs" />
     <Compile Include="Download\DownloadClientTests\TransmissionTests\TransmissionFixtureBase.cs" />
@@ -220,6 +224,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedIndexerStatusFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFilesFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupUnusedTagsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleasesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasksFixture.cs" />
     <Compile Include="Http\HttpProxySettingsProviderFixture.cs" />
@@ -407,7 +412,10 @@
     <None Include="Files\Indexers\BroadcastheNet\RecentFeed.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Files\Indexers\HdBits\RecentFeed.json">
+    <None Include="Files\Indexers\HdBits\RecentFeedLongIDs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Indexers\HdBits\RecentFeedStringIDs.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Files\html_image.jpg">
@@ -423,6 +431,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\Indexers\relative_urls.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Indexers\TorrentRss\AnimeTosho_NoSize.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\Indexers\TorrentRss\ExtraTorrents.xml">

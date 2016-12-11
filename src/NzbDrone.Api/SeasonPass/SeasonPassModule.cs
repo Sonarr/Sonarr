@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.SeasonPass

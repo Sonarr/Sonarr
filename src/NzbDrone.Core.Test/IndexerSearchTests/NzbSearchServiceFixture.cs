@@ -52,11 +52,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .Returns<int, int>((i, j) => _xemEpisodes.Where(d => d.SeasonNumber == j).ToList());
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.GetSceneNamesBySeasonNumbers(It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))
-                  .Returns(new List<string>());
-
-            Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.GetSceneNamesBySceneSeasonNumbers(It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))
+                  .Setup(s => s.GetSceneNames(It.IsAny<int>(), It.IsAny<List<int>>(), It.IsAny<List<int>>()))
                   .Returns(new List<string>());
         }
 
@@ -252,6 +248,19 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
             criteria.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void getscenenames_should_use_seasonnumber_if_no_scene_seasonnumber_is_available()
+        {
+            WithEpisodes();
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, 7, false, true);
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Verify(v => v.GetSceneNames(_xemSeries.Id, It.Is<List<int>>(l => l.Contains(7)), It.Is<List<int>>(l => l.Contains(7))), Times.Once());
         }
     }
 }

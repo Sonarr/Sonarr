@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Notifications.Twitter
         void SendNotification(string message, TwitterSettings settings);
         ValidationFailure Test(TwitterSettings settings);
         string GetOAuthRedirect(string consumerKey, string consumerSecret, string callbackUrl);
-        object GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier);
+        OAuthToken GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier);
     }
 
     public class TwitterService : ITwitterService
@@ -43,14 +43,14 @@ namespace NzbDrone.Core.Notifications.Twitter
             return HttpUtility.ParseQueryString(response.Content);
         }
 
-        public object GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier)
+        public OAuthToken GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier)
         {
             // Creating a new instance with a helper method
             var oAuthRequest = OAuthRequest.ForAccessToken(consumerKey, consumerSecret, oauthToken, "", oauthVerifier);
             oAuthRequest.RequestUrl = "https://api.twitter.com/oauth/access_token";
             var qscoll = OAuthQuery(oAuthRequest);
             
-            return new
+            return new OAuthToken
             {
                 AccessToken = qscoll["oauth_token"],
                 AccessTokenSecret = qscoll["oauth_token_secret"]

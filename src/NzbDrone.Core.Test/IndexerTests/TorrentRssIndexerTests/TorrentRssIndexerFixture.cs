@@ -175,5 +175,48 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Peers.Should().NotHaveValue();
             torrentInfo.Seeders.Should().NotHaveValue();
         }
+
+        [Test]
+        public void should_parse_recent_feed_from_AnimeTosho_without_size()
+        {
+            GivenRecentFeedResponse("TorrentRss/AnimeTosho_NoSize.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(2);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = releases.First() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("[FFF] Ore Monogatari!! - Vol.01 [BD][720p-AAC]");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("http://storage.animetosho.org/torrents/85a570f25067f69b3c83b901ce6c00c491345288/%5BFFF%5D%20Ore%20Monogatari%21%21%20-%20Vol.01%20%5BBD%5D%5B720p-AAC%5D.torrent");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().Be("https://animetosho.org/view/fff-ore-monogatari-vol-01-bd-720p-aac.1009077");
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("Tue, 02 Aug 2016 13:48:04 +0000").ToUniversalTime());
+            torrentInfo.Size.Should().Be((long)Math.Round((double)1.366m * 1024L * 1024L * 1024L));
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().NotHaveValue();
+            torrentInfo.Seeders.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void should_parse_multi_enclosure_from_AnimeTosho()
+        {
+            GivenRecentFeedResponse("TorrentRss/AnimeTosho_NoSize.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(2);
+            releases.Last().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = releases.Last() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("DAYS - 05 (1280x720 HEVC2 AAC).mkv");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("http://storage.animetosho.org/torrents/4b58360143d59a55cbd922397a3eaa378165f3ff/DAYS%20-%2005%20%281280x720%20HEVC2%20AAC%29.torrent");            
+        }
     }
 }

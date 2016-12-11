@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Indexers;
+﻿using System;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -7,6 +8,25 @@ namespace NzbDrone.Api.Indexers
         public IndexerModule(IndexerFactory indexerFactory)
             : base(indexerFactory, "indexer")
         {
+        }
+
+        protected override void MapToResource(IndexerResource resource, IndexerDefinition definition)
+        {
+            base.MapToResource(resource, definition);
+            
+            resource.EnableRss = definition.EnableRss;
+            resource.EnableSearch = definition.EnableSearch;
+            resource.SupportsRss = definition.SupportsRss;
+            resource.SupportsSearch = definition.SupportsSearch;
+            resource.Protocol = definition.Protocol;
+        }
+
+        protected override void MapToModel(IndexerDefinition definition, IndexerResource resource)
+        {
+            base.MapToModel(definition, resource);
+
+            definition.EnableRss = resource.EnableRss;
+            definition.EnableSearch = resource.EnableSearch;
         }
 
         protected override void Validate(IndexerDefinition definition, bool includeWarnings)

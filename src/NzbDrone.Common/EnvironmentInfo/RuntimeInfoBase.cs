@@ -22,13 +22,13 @@ namespace NzbDrone.Common.EnvironmentInfo
                                serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
                                serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending;
 
-            //Guarded to avoid issues when running in a non-managed process 
+            //Guarded to avoid issues when running in a non-managed process
             var entry = Assembly.GetEntryAssembly();
 
             if (entry != null)
             {
                 ExecutingApplication = entry.Location;
-            }            
+            }
         }
 
         static RuntimeInfoBase()
@@ -69,7 +69,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public bool IsWindowsService { get; private set; }
 
         public bool IsConsole
-        { 
+        {
             get
             {
                 if (OsInfo.IsWindows)
@@ -78,7 +78,7 @@ namespace NzbDrone.Common.EnvironmentInfo
                 }
 
                 return true;
-            } 
+            }
         }
 
         public bool IsRunning { get; set; }
@@ -105,7 +105,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             }
             catch
             {
-                
+
             }
 
 			try
@@ -115,13 +115,12 @@ namespace NzbDrone.Common.EnvironmentInfo
 			}
 			catch
 			{
-			
+
 			}
 
             string lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
             if (lowerCurrentDir.Contains("teamcity")) return false;
             if (lowerCurrentDir.Contains("_output")) return false;
-            if (lowerCurrentDir.StartsWith("/run/")) return false;
 
             return true;
         }

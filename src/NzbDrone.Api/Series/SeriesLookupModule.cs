@@ -4,7 +4,6 @@ using NzbDrone.Api.Extensions;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using System.Linq;
-using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Series
 {
@@ -31,7 +30,7 @@ namespace NzbDrone.Api.Series
         {
             foreach (var currentSeries in series)
             {
-                var resource = currentSeries.InjectTo<SeriesResource>();
+                var resource = currentSeries.ToResource();
                 var poster = currentSeries.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Poster);
                 if (poster != null)
                 {

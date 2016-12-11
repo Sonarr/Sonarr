@@ -5,7 +5,6 @@ using NLog;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
@@ -14,7 +13,7 @@ using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
-    public class EpisodeModule : NzbDroneRestModuleWithSignalR<EpisodeFileResource, EpisodeFile>,
+    public class EpisodeFileModule : NzbDroneRestModuleWithSignalR<EpisodeFileResource, EpisodeFile>,
                                  IHandle<EpisodeFileAddedEvent>
     {
         private readonly IMediaFileService _mediaFileService;
@@ -23,7 +22,7 @@ namespace NzbDrone.Api.EpisodeFiles
         private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly Logger _logger;
 
-        public EpisodeModule(IBroadcastSignalRMessage signalRBroadcaster,
+        public EpisodeFileModule(IBroadcastSignalRMessage signalRBroadcaster,
                              IMediaFileService mediaFileService,
                              IRecycleBinProvider recycleBinProvider,
                              ISeriesService seriesService,
@@ -47,7 +46,7 @@ namespace NzbDrone.Api.EpisodeFiles
             var episodeFile = _mediaFileService.Get(id);
             var series = _seriesService.GetSeries(episodeFile.SeriesId);
 
-            return MapToResource(series, episodeFile);
+            return episodeFile.ToResource(series, _qualityUpgradableSpecification);
         }
 
         private List<EpisodeFileResource> GetEpisodeFiles()
@@ -61,8 +60,7 @@ namespace NzbDrone.Api.EpisodeFiles
 
             var series = _seriesService.GetSeries(seriesId);
 
-            return _mediaFileService.GetFilesBySeries(seriesId)
-                                    .Select(f => MapToResource(series, f)).ToList();
+            return _mediaFileService.GetFilesBySeries(seriesId).ConvertAll(f => f.ToResource(series, _qualityUpgradableSpecification));
         }
 
         private void SetQuality(EpisodeFileResource episodeFileResource)
@@ -81,16 +79,6 @@ namespace NzbDrone.Api.EpisodeFiles
             _logger.Info("Deleting episode file: {0}", fullPath);
             _recycleBinProvider.DeleteFile(fullPath);
             _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
-        }
-
-        private EpisodeFileResource MapToResource(Core.Tv.Series series, EpisodeFile episodeFile)
-        {
-            var resource = episodeFile.InjectTo<EpisodeFileResource>();
-            resource.Path = Path.Combine(series.Path, episodeFile.RelativePath);
-
-            resource.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, episodeFile.Quality);
-
-            return resource;
         }
 
         public void Handle(EpisodeFileAddedEvent message)

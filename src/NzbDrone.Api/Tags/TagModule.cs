@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tags;
@@ -18,34 +17,38 @@ namespace NzbDrone.Api.Tags
         {
             _tagService = tagService;
 
-            GetResourceById = Get;
-            GetResourceAll = GetAll;
-            CreateResource = Create;
-            UpdateResource = Update;
-            DeleteResource = Delete;
+            GetResourceById = GetTag;
+            GetResourceAll = GetAllTags;
+            CreateResource = CreateTag;
+            UpdateResource = UpdateTag;
+            DeleteResource = DeleteTag;
         }
 
-        private TagResource Get(int id)
+        private TagResource GetTag(int id)
         {
-            return _tagService.GetTag(id).InjectTo<TagResource>();
+            return _tagService.GetTag(id).ToResource();
         }
 
-        private List<TagResource> GetAll()
+        private List<TagResource> GetAllTags()
         {
-            return ToListResource(_tagService.All);
+            return _tagService.All().ToResource();
         }
 
-        private int Create(TagResource resource)
+        private int CreateTag(TagResource resource)
         {
-            return _tagService.Add(resource.InjectTo<Tag>()).Id;
+            var model = resource.ToModel();
+
+            return _tagService.Add(model).Id;
         }
 
-        private void Update(TagResource resource)
+        private void UpdateTag(TagResource resource)
         {
-            _tagService.Update(resource.InjectTo<Tag>());
+            var model = resource.ToModel();
+
+            _tagService.Update(model);
         }
 
-        private void Delete(int id)
+        private void DeleteTag(int id)
         {
             _tagService.Delete(id);
         }

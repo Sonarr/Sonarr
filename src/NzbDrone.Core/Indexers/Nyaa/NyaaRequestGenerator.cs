@@ -51,17 +51,11 @@ namespace NzbDrone.Core.Indexers.Nyaa
             {
                 var searchTitle = PrepareQuery(queryTitle);
 
-                pageableRequests.Add(GetPagedRequests(MaxPages,
-                    string.Format("&term={0}+{1:0}",
-                    searchTitle,
-                    searchCriteria.AbsoluteEpisodeNumber)));
+                pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+{searchCriteria.AbsoluteEpisodeNumber:0}"));
 
                 if (searchCriteria.AbsoluteEpisodeNumber < 10)
                 {
-                    pageableRequests.Add(GetPagedRequests(MaxPages,
-                        string.Format("&term={0}+{1:00}",
-                        searchTitle,
-                        searchCriteria.AbsoluteEpisodeNumber)));
+                    pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+{searchCriteria.AbsoluteEpisodeNumber:00}"));
                 }
             }
 
@@ -82,19 +76,26 @@ namespace NzbDrone.Core.Indexers.Nyaa
             return pageableRequests;
         }
 
-        private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, string searchParameters)
+        private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, string term)
         {
             var baseUrl = string.Format("{0}/?page=rss{1}", Settings.BaseUrl.TrimEnd('/'), Settings.AdditionalParameters);
 
+            if (term != null)
+            {
+                baseUrl += "&term=" + term;
+            }
+
             if (PageSize == 0)
             {
-                yield return new IndexerRequest(string.Format("{0}{1}", baseUrl, searchParameters), HttpAccept.Rss);
+                yield return new IndexerRequest(baseUrl, HttpAccept.Rss);
             }
             else
             {
-                for (var page = 0; page < maxPages; page++)
+                yield return new IndexerRequest(baseUrl, HttpAccept.Rss);
+
+                for (var page = 1; page < maxPages; page++)
                 {
-                    yield return new IndexerRequest(string.Format("{0}&offset={1}{2}", baseUrl, page + 1, searchParameters), HttpAccept.Rss);
+                    yield return new IndexerRequest($"{baseUrl}&offset={page + 1}", HttpAccept.Rss);
                 }
             }
         }

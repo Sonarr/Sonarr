@@ -1,9 +1,9 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Extras.Metadata;
+using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.Housekeeping.Housekeepers;
-using NzbDrone.Core.Metadata;
-using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_not_delete_metadata_files_when_there_is_only_one_for_that_series_and_consumer()
         {
             var file = Builder<MetadataFile>.CreateNew()
-                                            .BuildNew();
+                                         .BuildNew();
 
             Db.Insert(file);
             Subject.Clean();

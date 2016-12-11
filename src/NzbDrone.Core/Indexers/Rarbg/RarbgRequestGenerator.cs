@@ -79,6 +79,12 @@ namespace NzbDrone.Core.Indexers.Rarbg
                 .Resource("/pubapi_v2.php")
                 .Accept(HttpAccept.Json);
 
+            if (Settings.CaptchaToken.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.UseSimplifiedUserAgent = true;
+                requestBuilder.SetCookie("cf_clearance", Settings.CaptchaToken);
+            }
+
             requestBuilder.AddQueryParam("mode", mode);
 
             if (tvdbId.HasValue)

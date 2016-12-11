@@ -30,16 +30,16 @@ namespace NzbDrone.Update
         {
             try
             {
+                SecurityProtocolPolicy.Register();
+                X509CertificateValidationPolicy.Register();
+
                 var startupArgument = new StartupContext(args);
                 NzbDroneLogger.Register(startupArgument, true, true);
 
                 Logger.Info("Starting Sonarr Update Client");
 
-                X509CertificateValidationPolicy.Register();
-
                 _container = UpdateContainerBuilder.Build(startupArgument);
 
-                Logger.Info("Updating Sonarr to version {0}", BuildInfo.Version);
                 _container.Resolve<UpdateApp>().Start(args);
 
                 Logger.Info("Update completed successfully");
@@ -55,7 +55,6 @@ namespace NzbDrone.Update
             var startupContext = ParseArgs(args);
             var targetFolder = GetInstallationDirectory(startupContext);
 
-            Logger.Info("Starting update process. Target Path:{0}", targetFolder);
             _installUpdateService.Start(targetFolder, startupContext.ProcessId);
         }
 

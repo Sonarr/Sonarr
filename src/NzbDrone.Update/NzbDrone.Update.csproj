@@ -58,6 +58,7 @@
     <Compile Include="UpdateContainerBuilder.cs" />
     <Compile Include="UpdateEngine\BackupAndRestore.cs" />
     <Compile Include="UpdateEngine\BackupAppData.cs" />
+    <Compile Include="UpdateEngine\DetectExistingVersion.cs" />
     <Compile Include="UpdateEngine\DetectApplicationType.cs" />
     <Compile Include="UpdateEngine\InstallUpdateService.cs" />
     <Compile Include="UpdateEngine\StartNzbDrone.cs" />

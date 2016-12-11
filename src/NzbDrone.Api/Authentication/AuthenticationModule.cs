@@ -43,7 +43,7 @@ namespace NzbDrone.Api.Authentication
                 expiry = DateTime.UtcNow.AddDays(7);
             }
 
-            return this.LoginAndRedirect(user.Identifier, expiry);
+            return this.LoginAndRedirect(user.Identifier, expiry, _configFileProvider.UrlBase + "/");
         }
 
         private Response Logout()

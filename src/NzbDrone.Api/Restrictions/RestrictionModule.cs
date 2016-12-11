@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Restrictions;
 
@@ -16,11 +15,11 @@ namespace NzbDrone.Api.Restrictions
         {
             _restrictionService = restrictionService;
 
-            GetResourceById = Get;
-            GetResourceAll = GetAll;
-            CreateResource = Create;
-            UpdateResource = Update;
-            DeleteResource = Delete;
+            GetResourceById = GetRestriction;
+            GetResourceAll = GetAllRestrictions;
+            CreateResource = CreateRestriction;
+            UpdateResource = UpdateRestriction;
+            DeleteResource = DeleteRestriction;
 
             SharedValidator.Custom(restriction =>
             {
@@ -33,27 +32,27 @@ namespace NzbDrone.Api.Restrictions
             });
         }
 
-        private RestrictionResource Get(int id)
+        private RestrictionResource GetRestriction(int id)
         {
-            return _restrictionService.Get(id).InjectTo<RestrictionResource>();
+            return _restrictionService.Get(id).ToResource();
         }
 
-        private List<RestrictionResource> GetAll()
+        private List<RestrictionResource> GetAllRestrictions()
         {
-            return ToListResource(_restrictionService.All);
+            return _restrictionService.All().ToResource();
         }
 
-        private int Create(RestrictionResource resource)
+        private int CreateRestriction(RestrictionResource resource)
         {
-            return _restrictionService.Add(resource.InjectTo<Restriction>()).Id;
+            return _restrictionService.Add(resource.ToModel()).Id;
         }
 
-        private void Update(RestrictionResource resource)
+        private void UpdateRestriction(RestrictionResource resource)
         {
-            _restrictionService.Update(resource.InjectTo<Restriction>());
+            _restrictionService.Update(resource.ToModel());
         }
 
-        private void Delete(int id)
+        private void DeleteRestriction(int id)
         {
             _restrictionService.Delete(id);
         }

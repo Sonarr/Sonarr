@@ -9,6 +9,20 @@ namespace NzbDrone.Core.Test.Datastore.PagingSpecExtensionsTests
     public class ToSortDirectionFixture
     {
         [Test]
+        public void should_convert_default_to_asc()
+        {
+            var pagingSpec = new PagingSpec<Episode>
+            {
+                Page = 1,
+                PageSize = 10,
+                SortDirection = SortDirection.Default,
+                SortKey = "AirDate"
+            };
+
+            pagingSpec.ToSortDirection().Should().Be(Marr.Data.QGen.SortDirection.Asc);
+        }
+
+        [Test]
         public void should_convert_ascending_to_asc()
         {
             var pagingSpec = new PagingSpec<Episode>

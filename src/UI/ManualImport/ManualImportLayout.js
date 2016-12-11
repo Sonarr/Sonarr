@@ -27,7 +27,8 @@ module.exports = Marionette.Layout.extend({
     },
 
     ui : {
-        importButton : '.x-import'
+        importButton : '.x-import',
+        importMode   : '.x-importmode'
     },
 
     events : {
@@ -94,6 +95,7 @@ module.exports = Marionette.Layout.extend({
         this.folder = options.folder;
         this.downloadId = options.downloadId;
         this.title = options.title;
+        this.importMode = options.importMode || 'Move';
 
         this.templateHelpers = {
             title : this.title || this.folder
@@ -105,11 +107,13 @@ module.exports = Marionette.Layout.extend({
         if (this.folder || this.downloadId) {
             this._showLoading();
             this._loadCollection();
+            this.ui.importMode.val(this.importMode);
         }
 
         else {
             this._showSelectFolder();
             this.ui.importButton.hide();
+            this.ui.importMode.hide();
         }
     },
 
@@ -196,6 +200,8 @@ module.exports = Marionette.Layout.extend({
             return;
         }
 
+        var importMode = this.ui.importMode.val();
+
         CommandController.Execute('manualImport', {
             name  : 'manualImport',
             files : _.map(selected, function (file) {
@@ -206,7 +212,8 @@ module.exports = Marionette.Layout.extend({
                     quality    : file.get('quality'),
                     downloadId : file.get('downloadId')
                 };
-            })
+            }),
+            importMode : importMode
         });
 
         vent.trigger(vent.Commands.CloseModalCommand);

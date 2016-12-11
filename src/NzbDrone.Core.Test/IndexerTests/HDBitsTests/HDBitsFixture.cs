@@ -27,10 +27,11 @@ namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
             };
         }
 
-        [Test]
-        public void should_parse_recent_feed_from_HDBits()
+        [TestCase("Files/Indexers/HdBits/RecentFeedLongIDs.json")]
+        [TestCase("Files/Indexers/HdBits/RecentFeedStringIDs.json")]
+        public void should_parse_recent_feed_from_HDBits(string fileName)
         {
-            var responseJson = ReadAllText(@"Files/Indexers/HdBits/RecentFeed.json");
+            var responseJson = ReadAllText(fileName);
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.POST)))

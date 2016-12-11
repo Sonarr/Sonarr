@@ -48,8 +48,17 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Castle.2009.S01E14.HDTV.XviD.HUN-LOL", Language.Hungarian)]
         public void should_parse_language(string postTitle, Language language)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
-            result.Language.Should().Be(language);
+            var result = LanguageParser.ParseLanguage(postTitle);
+            result.Should().Be(language);
+        }
+
+        [TestCase("2 Broke Girls - S01E01 - Pilot.en.sub", Language.English)]
+        [TestCase("2 Broke Girls - S01E01 - Pilot.eng.sub", Language.English)]
+        [TestCase("2 Broke Girls - S01E01 - Pilot.sub", Language.Unknown)]
+        public void should_parse_subtitle_language(string fileName, Language language)
+        {
+            var result = LanguageParser.ParseSubtitleLanguage(fileName);
+            result.Should().Be(language);
         }
     }
 }

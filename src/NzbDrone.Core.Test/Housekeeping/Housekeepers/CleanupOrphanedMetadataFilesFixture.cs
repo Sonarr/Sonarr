@@ -1,10 +1,10 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Extras.Metadata;
+using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Metadata;
-using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -94,10 +94,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             Db.Insert(series);
 
             var metadataFile = Builder<MetadataFile>.CreateNew()
-                                                    .With(m => m.SeriesId = series.Id)
-                                                    .With(m => m.Type = MetadataType.EpisodeMetadata)
-                                                    .With(m => m.EpisodeFileId = 0)
-                                                    .BuildNew();
+                                                 .With(m => m.SeriesId = series.Id)
+                                                 .With(m => m.Type = MetadataType.EpisodeMetadata)
+                                                 .With(m => m.EpisodeFileId = 0)
+                                                 .BuildNew();
 
             Db.Insert(metadataFile);
             Subject.Clean();

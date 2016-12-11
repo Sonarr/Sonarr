@@ -20,4 +20,28 @@ namespace NzbDrone.Api.Blacklist
 
         public SeriesResource Series { get; set; }
     }
+
+    public static class BlacklistResourceMapper
+    {
+        public static BlacklistResource MapToResource(this Core.Blacklisting.Blacklist model)
+        {
+            if (model == null) return null;
+
+            return new BlacklistResource
+            {
+                Id = model.Id,
+
+                SeriesId = model.SeriesId,
+                EpisodeIds = model.EpisodeIds,
+                SourceTitle = model.SourceTitle,
+                Quality = model.Quality,
+                Date = model.Date,
+                Protocol = model.Protocol,
+                Indexer = model.Indexer,
+                Message = model.Message,
+
+                Series = model.Series.ToResource()
+            };
+        }
+    }
 }

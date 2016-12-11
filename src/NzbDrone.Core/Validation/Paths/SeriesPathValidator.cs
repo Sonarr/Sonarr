@@ -1,7 +1,6 @@
 ﻿using FluentValidation.Validators;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Validation.Paths
 {
@@ -19,12 +18,10 @@ namespace NzbDrone.Core.Validation.Paths
         {
             if (context.PropertyValue == null) return true;
 
-            var series = new Series();
-            series.InjectFrom(context.ParentContext.InstanceToValidate);
+            dynamic instance = context.ParentContext.InstanceToValidate;
+            var instanceId = (int)instance.Id;
 
-            if (series.Id == 0) return true;
-
-            return (!_seriesService.GetAllSeries().Exists(s => s.Path.PathEquals(context.PropertyValue.ToString()) && s.Id != series.Id));
+            return (!_seriesService.GetAllSeries().Exists(s => s.Path.PathEquals(context.PropertyValue.ToString()) && s.Id != instanceId));
         }
     }
 }

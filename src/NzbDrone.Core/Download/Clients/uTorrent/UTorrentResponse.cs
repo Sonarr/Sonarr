@@ -12,6 +12,10 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         public List<object> RssFeeds { get; set; }
         public List<object> RssFilters { get; set; }
 
+        [JsonProperty(PropertyName = "torrentp")]
+        public List<UTorrentTorrent> TorrentsChanged { get; set; }
+        [JsonProperty(PropertyName = "torrentm")]
+        public List<string> TorrentsRemoved { get; set; }
         [JsonProperty(PropertyName = "torrentc")]
         public string CacheNumber { get; set; }
 

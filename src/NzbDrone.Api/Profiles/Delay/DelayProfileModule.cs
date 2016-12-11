@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
-using NzbDrone.Api.Mapping;
+using FluentValidation.Results;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Validation;
 using NzbDrone.Core.Profiles.Delay;
@@ -26,12 +26,21 @@ namespace NzbDrone.Api.Profiles.Delay
             SharedValidator.RuleFor(d => d.Tags).SetValidator(tagInUseValidator);
             SharedValidator.RuleFor(d => d.UsenetDelay).GreaterThanOrEqualTo(0);
             SharedValidator.RuleFor(d => d.TorrentDelay).GreaterThanOrEqualTo(0);
-            SharedValidator.RuleFor(d => d.Id).SetValidator(new DelayProfileValidator());
+
+            SharedValidator.Custom(delayProfile =>
+            {
+                if (!delayProfile.EnableUsenet && !delayProfile.EnableTorrent)
+                {
+                    return new ValidationFailure("", "Either Usenet or Torrent should be enabled");
+                }
+
+                return null;
+            });
         }
 
         private int Create(DelayProfileResource resource)
         {
-            var model = resource.InjectTo<DelayProfile>();
+            var model = resource.ToModel();
             model = _delayProfileService.Add(model);
 
             return model.Id;
@@ -49,17 +58,18 @@ namespace NzbDrone.Api.Profiles.Delay
 
         private void Update(DelayProfileResource resource)
         {
-            GetNewId<DelayProfile>(_delayProfileService.Update, resource);
+            var model = resource.ToModel();
+            _delayProfileService.Update(model);
         }
 
         private DelayProfileResource GetById(int id)
         {
-            return _delayProfileService.Get(id).InjectTo<DelayProfileResource>();
+            return _delayProfileService.Get(id).ToResource();
         }
 
         private List<DelayProfileResource> GetAll()
         {
-            return _delayProfileService.All().InjectTo<List<DelayProfileResource>>();
+            return _delayProfileService.All().ToResource();
         }
     }
 }

@@ -65,6 +65,11 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
                     PrepareQuery(queryTitle),
                     "category:tv",
                     string.Format("S{0:00}", searchCriteria.SeasonNumber)));
+
+                pageableRequests.Add(GetPagedRequests(MaxPages, "usearch",
+                    PrepareQuery(queryTitle),
+                    "category:tv",
+                    string.Format("Season {0}", searchCriteria.SeasonNumber)));
             }
 
             return pageableRequests;

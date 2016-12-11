@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.HistoryTests
                                    Path = @"C:\Test\Unsorted\Series.s01e01.mkv"
                                };
 
-            Subject.Handle(new EpisodeImportedEvent(localEpisode, episodeFile, true, "sab","abcd"));
+            Subject.Handle(new EpisodeImportedEvent(localEpisode, episodeFile, true, "sab", "abcd", true));
 
             Mocker.GetMock<IHistoryRepository>()
                 .Verify(v => v.Insert(It.Is<History.History>(h => h.SourceTitle == Path.GetFileNameWithoutExtension(localEpisode.Path))));

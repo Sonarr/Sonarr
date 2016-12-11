@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Series;
+using NzbDrone.Common.Crypto;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Qualities;
 
@@ -20,13 +22,35 @@ namespace NzbDrone.Api.ManualImport
         public int QualityWeight { get; set; }
         public string DownloadId { get; set; }
         public IEnumerable<Rejection> Rejections { get; set; }
+    }
 
-        public int Id
+    public static class ManualImportResourceMapper
+    {
+        public static ManualImportResource ToResource(this Core.MediaFiles.EpisodeImport.Manual.ManualImportItem model)
         {
-            get
+            if (model == null) return null;
+
+            return new ManualImportResource
             {
-                return Path.GetHashCode();
-            }
+                Id = HashConverter.GetHashInt31(model.Path),
+
+                Path = model.Path,
+                RelativePath = model.RelativePath,
+                Name = model.Name,
+                Size = model.Size,
+                Series = model.Series.ToResource(),
+                SeasonNumber = model.SeasonNumber,
+                Episodes = model.Episodes.ToResource(),
+                Quality = model.Quality,
+                //QualityWeight
+                DownloadId = model.DownloadId,
+                Rejections = model.Rejections
+            };
+        }
+
+        public static List<ManualImportResource> ToResource(this IEnumerable<Core.MediaFiles.EpisodeImport.Manual.ManualImportItem> models)
+        {
+            return models.Select(ToResource).ToList();
         }
     }
 }

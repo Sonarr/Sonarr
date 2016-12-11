@@ -8,7 +8,7 @@ namespace NzbDrone.Api
 {
     public abstract class NzbDroneRestModuleWithSignalR<TResource, TModel> : NzbDroneRestModule<TResource>, IHandle<ModelEvent<TModel>>
         where TResource : RestResource, new()
-        where TModel : ModelBase
+        where TModel : ModelBase, new()
     {
         private readonly IBroadcastSignalRMessage _signalRBroadcaster;
 

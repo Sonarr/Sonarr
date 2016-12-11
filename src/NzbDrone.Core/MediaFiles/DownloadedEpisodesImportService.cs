@@ -16,7 +16,7 @@ namespace NzbDrone.Core.MediaFiles
     public interface IDownloadedEpisodesImportService
     {
         List<ImportResult> ProcessRootFolder(DirectoryInfo directoryInfo);
-        List<ImportResult> ProcessPath(string path, Series series = null, DownloadClientItem downloadClientItem = null);
+        List<ImportResult> ProcessPath(string path, ImportMode importMode = ImportMode.Auto, Series series = null, DownloadClientItem downloadClientItem = null);
         bool ShouldDeleteFolder(DirectoryInfo directoryInfo, Series series);
     }
 
@@ -56,20 +56,20 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var subFolder in _diskProvider.GetDirectories(directoryInfo.FullName))
             {
-                var folderResults = ProcessFolder(new DirectoryInfo(subFolder));
+                var folderResults = ProcessFolder(new DirectoryInfo(subFolder), ImportMode.Auto, null);
                 results.AddRange(folderResults);
             }
 
             foreach (var videoFile in _diskScanService.GetVideoFiles(directoryInfo.FullName, false))
             {
-                var fileResults = ProcessFile(new FileInfo(videoFile));
+                var fileResults = ProcessFile(new FileInfo(videoFile), ImportMode.Auto, null);
                 results.AddRange(fileResults);
             }
 
             return results;
         }
 
-        public List<ImportResult> ProcessPath(string path, Series series = null, DownloadClientItem downloadClientItem = null)
+        public List<ImportResult> ProcessPath(string path, ImportMode importMode = ImportMode.Auto, Series series = null, DownloadClientItem downloadClientItem = null)
         {
             if (_diskProvider.FolderExists(path))
             {
@@ -77,10 +77,10 @@ namespace NzbDrone.Core.MediaFiles
 
                 if (series == null)
                 {
-                    return ProcessFolder(directoryInfo, downloadClientItem);
+                    return ProcessFolder(directoryInfo, importMode, downloadClientItem);
                 }
 
-                return ProcessFolder(directoryInfo, series, downloadClientItem);
+                return ProcessFolder(directoryInfo, importMode, series, downloadClientItem);
             }
 
             if (_diskProvider.FileExists(path))
@@ -89,10 +89,10 @@ namespace NzbDrone.Core.MediaFiles
 
                 if (series == null)
                 {
-                    return ProcessFile(fileInfo, downloadClientItem);
+                    return ProcessFile(fileInfo, importMode, downloadClientItem);
                 }
 
-                return ProcessFile(fileInfo, series, downloadClientItem);
+                return ProcessFile(fileInfo, importMode, series, downloadClientItem);
             }
 
             _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}", path);
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.MediaFiles
             return true;
         }
 
-        private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem = null)
+        private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, ImportMode importMode, DownloadClientItem downloadClientItem)
         {
             var cleanedUpName = GetCleanedUpFolderName(directoryInfo.Name);
             var series = _parsingService.GetSeries(cleanedUpName);
@@ -148,11 +148,10 @@ namespace NzbDrone.Core.MediaFiles
                        };
             }
 
-            return ProcessFolder(directoryInfo, series, downloadClientItem);
+            return ProcessFolder(directoryInfo, importMode, series, downloadClientItem);
         }
 
-        private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, Series series,
-                                                 DownloadClientItem downloadClientItem = null)
+        private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, ImportMode importMode, Series series, DownloadClientItem downloadClientItem)
         {
             if (_seriesService.SeriesPathExists(directoryInfo.FullName))
             {
@@ -185,7 +184,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, folderInfo, true);
-            var importResults = _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
+            var importResults = _importApprovedEpisodes.Import(decisions, true, downloadClientItem, importMode);
 
             if ((downloadClientItem == null || !downloadClientItem.IsReadOnly) &&
                 importResults.Any(i => i.Result == ImportResultType.Imported) &&
@@ -198,7 +197,7 @@ namespace NzbDrone.Core.MediaFiles
             return importResults;
         }
 
-        private List<ImportResult> ProcessFile(FileInfo fileInfo, DownloadClientItem downloadClientItem = null)
+        private List<ImportResult> ProcessFile(FileInfo fileInfo, ImportMode importMode, DownloadClientItem downloadClientItem)
         {
             var series = _parsingService.GetSeries(Path.GetFileNameWithoutExtension(fileInfo.Name));
 
@@ -212,10 +211,10 @@ namespace NzbDrone.Core.MediaFiles
                        };
             }
 
-            return ProcessFile(fileInfo, series, downloadClientItem);
+            return ProcessFile(fileInfo, importMode, series, downloadClientItem);
         }
 
-        private List<ImportResult> ProcessFile(FileInfo fileInfo, Series series, DownloadClientItem downloadClientItem = null)
+        private List<ImportResult> ProcessFile(FileInfo fileInfo, ImportMode importMode, Series series, DownloadClientItem downloadClientItem)
         {
             if (Path.GetFileNameWithoutExtension(fileInfo.Name).StartsWith("._"))
             {
@@ -240,7 +239,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, null, true);
 
-            return _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
+            return _importApprovedEpisodes.Import(decisions, true, downloadClientItem, importMode);
         }
 
         private string GetCleanedUpFolderName(string folder)

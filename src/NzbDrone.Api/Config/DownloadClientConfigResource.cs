@@ -1,5 +1,6 @@
 ﻿using System;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Config
 {
@@ -14,5 +15,24 @@ namespace NzbDrone.Api.Config
 
         public bool AutoRedownloadFailed { get; set; }
         public bool RemoveFailedDownloads { get; set; }
+    }
+
+    public static class DownloadClientConfigResourceMapper
+    {
+        public static DownloadClientConfigResource ToResource(IConfigService model)
+        {
+            return new DownloadClientConfigResource
+            {
+                DownloadedEpisodesFolder = model.DownloadedEpisodesFolder,
+                DownloadClientWorkingFolders = model.DownloadClientWorkingFolders,
+                DownloadedEpisodesScanInterval = model.DownloadedEpisodesScanInterval,
+
+                EnableCompletedDownloadHandling = model.EnableCompletedDownloadHandling,
+                RemoveCompletedDownloads = model.RemoveCompletedDownloads,
+
+                AutoRedownloadFailed = model.AutoRedownloadFailed,
+                RemoveFailedDownloads = model.RemoveFailedDownloads
+            };
+        }
     }
 }

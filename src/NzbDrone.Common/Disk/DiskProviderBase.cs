@@ -9,7 +9,6 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Instrumentation.Extensions;
 
 namespace NzbDrone.Common.Disk
 {
@@ -390,7 +389,10 @@ namespace NzbDrone.Common.Disk
 
         public virtual List<IMount> GetMounts()
         {
-            return GetDriveInfoMounts();
+            return GetDriveInfoMounts().Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable)
+                                       .Select(d => new DriveInfoMount(d))
+                                       .Cast<IMount>()
+                                       .ToList();
         }
 
         public virtual IMount GetMount(string path)
@@ -411,13 +413,10 @@ namespace NzbDrone.Common.Disk
             }
         }
 
-        protected List<IMount> GetDriveInfoMounts()
+        protected List<DriveInfo> GetDriveInfoMounts()
         {
             return DriveInfo.GetDrives()
-                            .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable)
                             .Where(d => d.IsReady)
-                            .Select(d => new DriveInfoMount(d))
-                            .Cast<IMount>()
                             .ToList();
         }
 

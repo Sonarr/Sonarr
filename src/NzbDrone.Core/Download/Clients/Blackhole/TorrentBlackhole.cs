@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -23,6 +24,14 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
         public TimeSpan ScanGracePeriod { get; set; }
 
+        public override bool PreferTorrentFile
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public TorrentBlackhole(IScanWatchFolder scanWatchFolder,
                                 ITorrentFileInfoReader torrentFileInfoReader,
                                 IHttpClient httpClient,
@@ -39,7 +48,26 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            throw new NotSupportedException("Blackhole does not support magnet links.");
+            if (!Settings.SaveMagnetFiles)
+            {
+                throw new NotSupportedException("Blackhole does not support magnet links.");
+            }
+
+            var title = remoteEpisode.Release.Title;
+
+            title = FileNameBuilder.CleanFileName(title);
+
+            var filepath = Path.Combine(Settings.TorrentFolder, string.Format("{0}.magnet", title));
+
+            var fileContent = Encoding.UTF8.GetBytes(magnetLink);
+            using (var stream = _diskProvider.OpenWriteStream(filepath))
+            {
+                stream.Write(fileContent, 0, fileContent.Length);
+            }
+
+            _logger.Debug("Saving magnet link succeeded, saved to: {0}", filepath);
+
+            return null;
         }
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)

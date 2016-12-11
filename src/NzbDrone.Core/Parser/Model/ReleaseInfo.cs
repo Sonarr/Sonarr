@@ -19,6 +19,12 @@ namespace NzbDrone.Core.Parser.Model
         public int TvRageId { get; set; }
         public DateTime PublishDate { get; set; }
 
+        public string Origin { get; set; }
+        public string Source { get; set; }
+        public string Container { get; set; }
+        public string Codec { get; set; }
+        public string Resolution { get; set; }
+
         public int Age
         {
             get

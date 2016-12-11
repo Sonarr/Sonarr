@@ -272,6 +272,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             failures.AddIfNotNull(TestConnection());
             failures.AddIfNotNull(TestCategory());
+            failures.AddIfNotNull(TestSettings());
         }
 
         private ValidationFailure TestConnection()
@@ -315,7 +316,24 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return null;
         }
 
-        // Javascript doesn't support 64 bit integers natively so json officially doesn't either. 
+        private ValidationFailure TestSettings()
+        {
+            var config = _proxy.GetConfig(Settings);
+
+            var keepHistory = config.GetValueOrDefault("KeepHistory");
+            if (keepHistory == "0")
+            {
+                return new NzbDroneValidationFailure(string.Empty, "NzbGet setting KeepHistory should be greater than 0")
+                {
+                    InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    DetailedDescription = "NzbGet setting KeepHistory is set to 0. Which prevents Sonarr from seeing completed downloads."
+                };
+            }
+
+            return null;
+        }
+
+        // Javascript doesn't support 64 bit integers natively so json officially doesn't either.
         // NzbGet api thus sends it in two 32 bit chunks. Here we join the two chunks back together.
         // Simplified decimal example: "42" splits into "4" and "2". To join them I shift (<<) the "4" 1 digit to the left = "40". combine it with "2". which becomes "42" again.
         private long MakeInt64(uint high, uint low)

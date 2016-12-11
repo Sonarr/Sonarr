@@ -27,6 +27,8 @@ namespace NzbDrone.Api.Authentication
             _configFileProvider = configFileProvider;
         }
 
+        public int Order { get { return 10; } }
+
         public void Register(IPipelines pipelines)
         {
             if (_configFileProvider.AuthenticationMethod == AuthenticationType.Forms)
@@ -75,7 +77,7 @@ namespace NzbDrone.Api.Authentication
             if (context.Request.IsApiRequest())
             {
                 if ((context.Response.StatusCode == HttpStatusCode.SeeOther &&
-                     context.Response.Headers["Location"].StartsWith("/login", StringComparison.InvariantCultureIgnoreCase)) ||
+                     context.Response.Headers["Location"].StartsWith($"{_configFileProvider.UrlBase}/login", StringComparison.InvariantCultureIgnoreCase)) ||
                     context.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     context.Response = new { Error = "Unauthorized" }.AsResponse(HttpStatusCode.Unauthorized);

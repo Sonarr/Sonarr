@@ -58,7 +58,7 @@ namespace NzbDrone.Core.ThingiProvider
                     };
                 }
 
-                definition = GetProviderCharacteristics(provider, definition);
+                SetProviderCharacteristics(provider, definition);
 
                 yield return definition;
             }
@@ -81,9 +81,9 @@ namespace NzbDrone.Core.ThingiProvider
             return GetInstance(definition).Test();
         }
 
-        public object ConnectData(TProviderDefinition definition, string stage, IDictionary<string, object> query)
+        public object RequestAction(TProviderDefinition definition, string action, IDictionary<string, string> query)
         {
-            return GetInstance(definition).ConnectData(stage, query);
+            return GetInstance(definition).RequestAction(action, query);
         }
 
         public List<TProvider> GetAvailableProviders()
@@ -117,7 +117,8 @@ namespace NzbDrone.Core.ThingiProvider
         {
             var type = GetImplementation(definition);
             var instance = (TProvider)_container.Resolve(type);
-            instance.Definition = GetProviderCharacteristics(instance, definition);
+            instance.Definition = definition;
+            SetProviderCharacteristics(instance, definition);
             return instance;
         }
 
@@ -144,12 +145,15 @@ namespace NzbDrone.Core.ThingiProvider
             return All().Where(c => c.Settings.Validate().IsValid).ToList();
         }
 
-        public virtual TProviderDefinition GetProviderCharacteristics(TProvider provider, TProviderDefinition definition)
+        public void SetProviderCharacteristics(TProviderDefinition definition)
+        {
+            GetInstance(definition);
+        }
+
+        public virtual void SetProviderCharacteristics(TProvider provider, TProviderDefinition definition)
         {
             definition.ImplementationName = provider.Name;
             definition.Message = provider.Message;
-
-            return definition;
         }
 
         //TODO: Remove providers even if the ConfigContract can't be deserialized (this will fail to remove providers if the settings can't be deserialized).

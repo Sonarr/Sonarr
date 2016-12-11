@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var $ = require('jquery');
 var vent = require('vent');
 var Marionette = require('marionette');
 var DeleteView = require('../Delete/NotificationDeleteView');
@@ -90,21 +91,45 @@ var view = Marionette.ItemView.extend({
         this.ui.indicator.show();
 
         var self = this;
-        var callbackUrl = window.location.origin + '/oauth.html';
-        var fields = this.model.get('fields');
-        var consumerKeyObj = _.findWhere(fields, { name: 'ConsumerKey' });
-        var consumerSecretObj = _.findWhere(fields, { name: 'ConsumerSecret' });
-        var queryParams = {
-            callbackUrl: callbackUrl,
-            consumerKey: (consumerKeyObj ? consumerKeyObj.value : ''),
-            consumerSecret: (consumerSecretObj ? consumerSecretObj.value : '')
-        };
 
-        var promise = this.model.connectData(this.ui.authorizedNotificationButton.data('value'), queryParams);
-
+        var promise = this.model.requestAction('startOAuth', { callbackUrl: window.location.origin + '/oauth.html' })
+            .then(function(response) {
+                return self._showOAuthWindow(response.oauthUrl);
+            })
+            .then(function(responseQueryParams) {
+                return self.model.requestAction('getOAuthToken', responseQueryParams);
+            })
+            .then(function(response) {
+                self.model.setFieldValue('AccessToken', response.accessToken);
+                self.model.setFieldValue('AccessTokenSecret', response.accessTokenSecret);
+            });
+            
         promise.always(function() {
-            self.ui.indicator.hide();
-        });
+                self.ui.indicator.hide();
+            });
+    },
+    
+    _showOAuthWindow : function(oauthUrl) {
+        var promise = $.Deferred();
+    
+        window.open(oauthUrl);
+        var selfWindow = window;
+        selfWindow.onCompleteOauth = function(query, callback) {
+            delete selfWindow.onCompleteOauth;
+
+            var queryParams = {};
+            var splitQuery = query.substring(1).split('&');
+            _.each(splitQuery, function (param) {
+                var paramSplit = param.split('=');
+                queryParams[paramSplit[0]] = paramSplit[1];
+            });
+
+            callback();
+
+            promise.resolve(queryParams);
+        };
+        
+        return promise;
     }
 });
 

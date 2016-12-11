@@ -12,10 +12,8 @@ using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.MetadataSource.SkyHook.Resource;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
@@ -126,12 +124,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 folder = new FileInfo(file).Directory.FullName;
             }
 
-            Series series = null;
+            var relativeFile = folder.GetRelativePath(file);
 
-            var parsedEpisodeInfo = Parser.Parser.ParsePath(folder.GetRelativePath(file));
-            if (parsedEpisodeInfo != null)
+            var series = _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
+
+            if (series == null)
             {
-                series = _parsingService.GetSeries(parsedEpisodeInfo.SeriesTitle);
+                series = _parsingService.GetSeries(relativeFile);
             }
 
             if (series == null && downloadId.IsNotNullOrWhiteSpace())
@@ -190,7 +189,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
         public void Execute(ManualImportCommand message)
         {
-            _logger.ProgressTrace("Manually importing {0} files", message.Files.Count);
+            _logger.ProgressTrace("Manually importing {0} files using mode {1}", message.Files.Count, message.ImportMode);
 
             var imported = new List<ImportResult>();
             var importedTrackedDownload = new List<ManuallyImportedFile>();
@@ -198,7 +197,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             for (int i = 0; i < message.Files.Count; i++)
             {
                 _logger.ProgressTrace("Processing file {0} of {1}", i + 1, message.Files.Count);
-                
+
                 var file = message.Files[i];
                 var series = _seriesService.GetSeries(file.SeriesId);
                 var episodes = _episodeService.GetEpisodes(file.EpisodeIds);
@@ -218,20 +217,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     Size = 0
                 };
 
-                //TODO: Option to copy instead of import
                 //TODO: Cleanup non-tracked downloads
 
                 var importDecision = new ImportDecision(localEpisode);
 
                 if (file.DownloadId.IsNullOrWhiteSpace())
                 {
-                    imported.AddRange(_importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, !existingFile));                    
+                    imported.AddRange(_importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, !existingFile, null, message.ImportMode));
                 }
 
                 else
                 {
                     var trackedDownload = _trackedDownloadService.Find(file.DownloadId);
-                    var importResult = _importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, true, trackedDownload.DownloadItem).First();
+                    var importResult = _importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, true, trackedDownload.DownloadItem, message.ImportMode).First();
 
                     imported.Add(importResult);
 

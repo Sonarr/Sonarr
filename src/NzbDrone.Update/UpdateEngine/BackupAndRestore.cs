@@ -27,13 +27,14 @@ namespace NzbDrone.Update.UpdateEngine
         public void Backup(string source)
         {
             _logger.Info("Creating backup of existing installation");
-            _diskTransferService.TransferFolder(source, _appFolderInfo.GetUpdateBackUpFolder(), TransferMode.Copy, false);
+            _diskTransferService.MirrorFolder(source, _appFolderInfo.GetUpdateBackUpFolder());
         }
 
         public void Restore(string target)
         {
             _logger.Info("Attempting to rollback upgrade");
-            _diskTransferService.TransferFolder(_appFolderInfo.GetUpdateBackUpFolder(), target, TransferMode.Copy, false);
+            var count = _diskTransferService.MirrorFolder(_appFolderInfo.GetUpdateBackUpFolder(), target);
+            _logger.Info("Rolled back {0} files", count);
         }
     }
 }

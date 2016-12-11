@@ -65,7 +65,8 @@ namespace NzbDrone.Core.Indexers
         }
 
         public virtual ProviderDefinition Definition { get; set; }
-        public object ConnectData(string stage, IDictionary<string, object> query) { return null; }
+
+        public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
 
         protected TSettings Settings
         {

@@ -6,7 +6,6 @@ using NzbDrone.Core.Download;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Extensions;
 using NLog;
 using NzbDrone.Core.Indexers;
@@ -39,9 +38,7 @@ namespace NzbDrone.Api.Indexers
         {
             _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl);
 
-            var info = release.Protocol == DownloadProtocol.Usenet ? 
-                                           release.InjectTo<ReleaseInfo>() :
-                                           release.InjectTo<TorrentInfo>();
+            var info = release.ToModel();
 
             info.Guid = "PUSH-" + info.DownloadUrl;
 

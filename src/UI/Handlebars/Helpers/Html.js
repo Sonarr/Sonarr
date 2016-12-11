@@ -7,6 +7,7 @@ var placeholder = StatusModel.get('urlBase') + '/Content/Images/poster-dark.png'
 window.NzbDrone.imageError = function(img) {
     if (!img.src.contains(placeholder)) {
         img.src = placeholder;
+        img.srcset = "";
         $(img).addClass('placeholder-image');
     }
 

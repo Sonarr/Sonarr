@@ -7,7 +7,7 @@
         Paused,
         Checking,
         Downloading,
-        ToPP,
+        ToPP,           // TODO: Remove in v3
         QuickCheck,
         Verifying,
         Repairing,
@@ -17,6 +17,7 @@
         Running,        // Running PP Script
         Completed,
         Failed,
-        Deleted
+        Deleted,
+        Propagating
     }
 }

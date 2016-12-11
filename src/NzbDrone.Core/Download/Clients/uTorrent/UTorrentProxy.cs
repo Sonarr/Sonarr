@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
     {
         int GetVersion(UTorrentSettings settings);
         Dictionary<string, string> GetConfig(UTorrentSettings settings);
-        List<UTorrentTorrent> GetTorrents(UTorrentSettings settings);
+        UTorrentResponse GetTorrents(string cacheID, UTorrentSettings settings);
 
         void AddTorrentFromUrl(string torrentUrl, UTorrentSettings settings);
         void AddTorrentFromFile(string fileName, byte[] fileContent, UTorrentSettings settings);
@@ -70,14 +70,19 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return configuration;
         }
 
-        public List<UTorrentTorrent> GetTorrents(UTorrentSettings settings)
+        public UTorrentResponse GetTorrents(string cacheID, UTorrentSettings settings)
         {
             var requestBuilder = BuildRequest(settings)
                 .AddQueryParam("list", 1);
 
+            if (cacheID.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.AddQueryParam("cid", cacheID);
+            }
+
             var result = ProcessRequest(requestBuilder, settings);
 
-            return result.Torrents;
+            return result;
         }
 
         public void AddTorrentFromUrl(string torrentUrl, UTorrentSettings settings)

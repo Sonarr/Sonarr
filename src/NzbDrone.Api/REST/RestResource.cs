@@ -12,7 +12,7 @@ namespace NzbDrone.Api.REST
         {
             get
             {
-                return GetType().Name.ToLower().Replace("resource", "");
+                return GetType().Name.ToLowerInvariant().Replace("resource", "");
             }
         }
     }

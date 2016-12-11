@@ -108,5 +108,19 @@ namespace NzbDrone.Core.Test.Configuration
 
             keys.Should().OnlyHaveUniqueItems();
         }
+
+        [Test]
+        public void should_ignore_null_properties()
+        {
+            Mocker.GetMock<IConfigRepository>()
+                  .Setup(v => v.Get("downloadedepisodesfolder"))
+                  .Returns(new Config { Id = 1, Key = "DownloadedEpisodesFolder", Value = @"C:\test".AsOsAgnostic() });
+
+            var dict = new Dictionary<string, object>();
+            dict.Add("DownloadedEpisodesFolder", null);
+            Subject.SaveConfigDictionary(dict);
+
+            Mocker.GetMock<IConfigRepository>().Verify(c => c.Upsert("downloadedepisodesfolder", It.IsAny<string>()), Times.Never());
+        }
     }
 }

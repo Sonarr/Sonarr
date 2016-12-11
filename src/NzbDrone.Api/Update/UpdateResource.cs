@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Update;
@@ -19,5 +21,33 @@ namespace NzbDrone.Api.Update
         public bool Latest { get; set; }
         public UpdateChanges Changes { get; set; }
         public string Hash { get; set; }
+    }
+
+    public static class UpdateResourceMapper
+    {
+        public static UpdateResource ToResource(this UpdatePackage model)
+        {
+            if (model == null) return null;
+
+            return new UpdateResource
+            {
+                Version = model.Version,
+
+                Branch = model.Branch,
+                ReleaseDate = model.ReleaseDate,
+                FileName = model.FileName,
+                Url = model.Url,
+                //Installed
+                //Installable
+                //Latest
+                Changes = model.Changes,
+                Hash = model.Hash,
+            };
+        }
+
+        public static List<UpdateResource> ToResource(this IEnumerable<UpdatePackage> models)
+        {
+            return models.Select(ToResource).ToList();
+        }
     }
 }

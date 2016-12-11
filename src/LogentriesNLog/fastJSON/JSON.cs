@@ -24,6 +24,7 @@ namespace LogentriesNLog.fastJSON
             SerializeNullValues = false;
             UseOptimizedDatasetSchema = false;
             UsingGlobalTypes = false;
+            UseUTCDateTime = true;
         }
         public bool UseOptimizedDatasetSchema = true;
         public bool UseFastGuid = true;
@@ -39,7 +40,7 @@ namespace LogentriesNLog.fastJSON
             return ToJSON(obj, UseSerializerExtension, UseFastGuid, UseOptimizedDatasetSchema, SerializeNullValues);
         }
 
-      
+
         public string ToJSON(object obj,
                              bool enableSerializerExtensions,
                              bool enableFastGuid,
@@ -49,13 +50,13 @@ namespace LogentriesNLog.fastJSON
             return new JSONSerializer(enableOptimizedDatasetSchema, enableFastGuid, enableSerializerExtensions, serializeNullValues, IndentOutput).ConvertToJSON(obj);
         }
 
-      
+
         public T ToObject<T>(string json)
         {
             return (T)ToObject(json, typeof(T));
         }
 
-      
+
         public object ToObject(string json, Type type)
         {
             var ht = new JsonParser(json).Decode() as Dictionary<string, object>;
@@ -320,7 +321,7 @@ namespace LogentriesNLog.fastJSON
                 }
             }
 
-           
+
             _getterscache.Add(type, getters);
             return getters;
         }
@@ -448,7 +449,7 @@ namespace LogentriesNLog.fastJSON
 #if !SILVERLIGHT
                         else if (pi.isDictionary || pi.isHashtable)
                             oset = CreateDictionary((ArrayList)v, pi.pt, pi.GenericTypes, globaltypes);
-#else 
+#else
                         else if (pi.isDictionary)
                             oset = CreateDictionary((List<object>)v, pi.pt, pi.GenericTypes, globaltypes);
 #endif

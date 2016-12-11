@@ -27,13 +27,11 @@ namespace NzbDrone.Core.Download
             return base.Active().Where(c => c.Enable).ToList();
         }
 
-        public override DownloadClientDefinition GetProviderCharacteristics(IDownloadClient provider, DownloadClientDefinition definition)
+        public override void SetProviderCharacteristics(IDownloadClient provider, DownloadClientDefinition definition)
         {
-            definition = base.GetProviderCharacteristics(provider, definition);
+            base.SetProviderCharacteristics(provider, definition);
 
             definition.Protocol = provider.Protocol;
-
-            return definition;
         }
     }
 }

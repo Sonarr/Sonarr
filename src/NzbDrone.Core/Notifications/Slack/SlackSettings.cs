@@ -11,7 +11,6 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             RuleFor(c => c.WebHookUrl).IsValidUrl();
             RuleFor(c => c.Username).NotEmpty();
-            RuleFor(c => c.Icon).NotEmpty();
         }
     }
 

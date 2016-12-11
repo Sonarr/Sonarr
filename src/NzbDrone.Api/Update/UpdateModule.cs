@@ -2,7 +2,6 @@
 using System.Linq;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Update;
-using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Update
 {
@@ -20,7 +19,7 @@ namespace NzbDrone.Api.Update
         {
             var resources = _recentUpdateProvider.GetRecentUpdatePackages()
                                                  .OrderByDescending(u => u.Version)
-                                                 .InjectTo<List<UpdateResource>>();
+                                                 .ToResource();
 
             if (resources.Any())
             {

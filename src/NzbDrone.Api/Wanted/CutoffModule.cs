@@ -23,13 +23,7 @@ namespace NzbDrone.Api.Wanted
 
         private PagingResource<EpisodeResource> GetCutoffUnmetEpisodes(PagingResource<EpisodeResource> pagingResource)
         {
-            var pagingSpec = new PagingSpec<Episode>
-            {
-                Page = pagingResource.Page,
-                PageSize = pagingResource.PageSize,
-                SortKey = pagingResource.SortKey,
-                SortDirection = pagingResource.SortDirection
-            };
+            var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>("airDateUtc", SortDirection.Descending);
 
             if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
             {
@@ -40,7 +34,7 @@ namespace NzbDrone.Api.Wanted
                 pagingSpec.FilterExpression = v => v.Monitored == true && v.Series.Monitored == true;
             }
 
-            PagingResource<EpisodeResource> resource = ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, pagingSpec);
+            var resource = ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, pagingSpec, v => MapToResource(v, true, true));
 
             return resource;
         }

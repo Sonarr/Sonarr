@@ -21,6 +21,7 @@ namespace NzbDrone.Host
         {
             try
             {
+                SecurityProtocolPolicy.Register();
                 X509CertificateValidationPolicy.Register();
 
                 Logger.Info("Starting Sonarr - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);

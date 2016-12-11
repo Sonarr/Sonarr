@@ -169,8 +169,12 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             releases = ParseResponse(parser, response);
             ValidateReleases(releases, indexerSettings);
 
-            if (!releases.Any(r => r.Size < ValidSizeThreshold))
+            if (releases.Count(r => r.Size >= ValidSizeThreshold) > releases.Count() / 2)
             {
+                if (releases.Any(r => r.Size < ValidSizeThreshold))
+                {
+                    _logger.Debug("Feed {0} contains very small releases.", response.Request.Url);
+                }
                 _logger.Trace("Feed has valid size in description.");
                 return settings;
             }

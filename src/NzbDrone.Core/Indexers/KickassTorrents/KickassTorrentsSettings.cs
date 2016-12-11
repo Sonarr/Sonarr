@@ -20,11 +20,11 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
 
         public KickassTorrentsSettings()
         {
-            BaseUrl = "https://kat.cr";
+            BaseUrl = "";
             VerifiedOnly = true;
         }
 
-        [FieldDefinition(0, Label = "Website URL")]
+        [FieldDefinition(0, Label = "Website URL", HelpText = "Please verify that the url you enter is a trustworthy site.")]
         public string BaseUrl { get; set; }
 
         [FieldDefinition(1, Label = "Verified Only", Type = FieldType.Checkbox, HelpText = "By setting this to No you will likely get more junk and unconfirmed releases, so use it with caution.")]

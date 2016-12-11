@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public double Progress { get; set; } // Torrent progress (%/100)
 
-        public int Eta { get; set; } // Torrent ETA (seconds)
+        public ulong Eta { get; set; } // Torrent ETA (seconds)
 
         public string State { get; set; } // Torrent state. See possible values here below
 
@@ -21,5 +21,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         [JsonProperty(PropertyName = "save_path")]
         public string SavePath { get; set; } // Torrent save path
+
+        public float Ratio { get; set; } // Torrent share ratio
     }
 }

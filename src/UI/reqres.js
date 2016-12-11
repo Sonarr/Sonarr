@@ -4,8 +4,7 @@ var reqres = new Wreqr.RequestResponse();
 
 reqres.Requests = {
     GetEpisodeFileById                  : 'GetEpisodeFileById',
-    GetAlternateNameBySeasonNumber      : 'GetAlternateNameBySeasonNumber',
-    GetAlternateNameBySceneSeasonNumber : 'GetAlternateNameBySceneSeasonNumber'
+    GetAlternateNameBySeasonNumber      : 'GetAlternateNameBySeasonNumber'
 };
 
 module.exports = reqres;

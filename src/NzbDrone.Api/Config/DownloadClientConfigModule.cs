@@ -21,5 +21,10 @@ namespace NzbDrone.Api.Config
                            .SetValidator(pathExistsValidator)
                            .When(c => !string.IsNullOrWhiteSpace(c.DownloadedEpisodesFolder));
         }
+
+        protected override DownloadClientConfigResource ToResource(IConfigService model)
+        {
+            return DownloadClientConfigResourceMapper.ToResource(model);
+        }
     }
 }

@@ -14,6 +14,8 @@ namespace NzbDrone.Api.Extensions.Pipelines
             _cacheableSpecification = cacheableSpecification;
         }
 
+        public int Order { get { return 0; } }
+
         public void Register(IPipelines pipelines)
         {
             pipelines.BeforeRequest.AddItemToStartOfPipeline((Func<NancyContext, Response>) Handle);

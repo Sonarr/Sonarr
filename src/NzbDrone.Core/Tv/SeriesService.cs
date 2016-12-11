@@ -77,7 +77,6 @@ namespace NzbDrone.Core.Tv
 
             _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
 
-            newSeries.Monitored = true;
             newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
             newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
             newSeries.Added = DateTime.UtcNow;

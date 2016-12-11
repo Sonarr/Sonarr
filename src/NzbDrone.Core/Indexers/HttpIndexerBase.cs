@@ -8,6 +8,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Http.CloudFlare;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.Indexers
     {
         protected const int MaxNumResultsPerQuery = 1000;
 
-        private readonly IHttpClient _httpClient;
+        protected readonly IHttpClient _httpClient;
 
         public override bool SupportsRss { get { return true; } }
         public override bool SupportsSearch { get { return true; } }
@@ -245,6 +246,18 @@ namespace NzbDrone.Core.Indexers
                 _indexerStatusService.RecordFailure(Definition.Id);
                 _logger.Warn("Invalid API Key for {0} {1}", this, url);
             }
+            catch (CloudFlareCaptchaException ex)
+            {
+                _indexerStatusService.RecordFailure(Definition.Id);
+                if (ex.IsExpired)
+                {
+                    _logger.Error(ex, "Expired CAPTCHA token for {0}, please refresh in indexer settings.", this);
+                }
+                else
+                {
+                    _logger.Error(ex, "CAPTCHA token required for {0}, check indexer settings.", this);
+                }
+            }
             catch (IndexerException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
@@ -312,6 +325,17 @@ namespace NzbDrone.Core.Indexers
             catch (RequestLimitReachedException)
             {
                 _logger.Warn("Request limit reached");
+            }
+            catch (CloudFlareCaptchaException ex)
+            {
+                if (ex.IsExpired)
+                {
+                    return new ValidationFailure("CaptchaToken", "CloudFlare CAPTCHA token expired, please Refresh.");
+                }
+                else
+                {
+                    return new ValidationFailure("CaptchaToken", "Site protected by CloudFlare CAPTCHA. Valid CAPTCHA token required.");
+                }
             }
             catch (UnsupportedFeedException ex)
             {

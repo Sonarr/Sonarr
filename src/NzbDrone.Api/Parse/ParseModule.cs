@@ -1,5 +1,6 @@
-﻿using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
+﻿using NzbDrone.Api.Episodes;
+using NzbDrone.Api.Series;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Api.Parse
 {
@@ -16,7 +17,7 @@ namespace NzbDrone.Api.Parse
 
         private ParseResource Parse()
         {
-            var title = Request.Query.Title.Value;
+            var title = Request.Query.Title.Value as string;
             var parsedEpisodeInfo = Parser.ParseTitle(title);
 
             if (parsedEpisodeInfo == null)
@@ -26,24 +27,24 @@ namespace NzbDrone.Api.Parse
 
             var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0);
 
-            if (remoteEpisode == null)
+            if (remoteEpisode != null)
             {
-                remoteEpisode = new RemoteEpisode
-                                {
-                                    ParsedEpisodeInfo = parsedEpisodeInfo
-                                };
-
                 return new ParseResource
-                       {
-                           Title = title,
-                           ParsedEpisodeInfo = parsedEpisodeInfo
-                       };
+                {
+                    Title = title,
+                    ParsedEpisodeInfo = remoteEpisode.ParsedEpisodeInfo,
+                    Series = remoteEpisode.Series.ToResource(),
+                    Episodes = remoteEpisode.Episodes.ToResource()
+                };
             }
-
-            var resource = ToResource(remoteEpisode);
-            resource.Title = title;
-
-            return resource;
+            else
+            {
+                return new ParseResource
+                {
+                    Title = title,
+                    ParsedEpisodeInfo = parsedEpisodeInfo
+                };
+            }
         }
     }
 }

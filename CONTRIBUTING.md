@@ -8,8 +8,8 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 ## Development ##
 
 ### Tools required ###
-- Visual Studio 2013
-- HTML/Javascript editor of choice (Sublime Text/Webstorm/etc)
+- Visual Studio 2015
+- HTML/Javascript editor of choice (Sublime Text/Webstorm/Atom/etc)
 - npm (node package manager)
 - git
 

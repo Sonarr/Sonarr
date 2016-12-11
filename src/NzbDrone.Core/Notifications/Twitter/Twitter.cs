@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Twitter
 {
@@ -34,26 +36,45 @@ namespace NzbDrone.Core.Notifications.Twitter
         {
         }
 
-        public override object ConnectData(string stage, IDictionary<string, object> query)
+        public override object RequestAction(string action, IDictionary<string, string> query)
         {
-            if (stage == "step1")
+            if (action == "startOAuth")
             {
-                return new 
+                Settings.Validate().Filter("ConsumerKey", "ConsumerSecret").ThrowOnError();
+
+                if (query["callbackUrl"].IsNullOrWhiteSpace())
                 {
-                    nextStep = "step2",
-                    action = "openWindow",
-                    url = _twitterService.GetOAuthRedirect(query["consumerKey"].ToString(), query["consumerSecret"].ToString(), query["callbackUrl"].ToString())
-                };
-            }
-            else if (stage == "step2")
-            {
+                    throw new BadRequestException("QueryParam callbackUrl invalid.");
+                }
+
+                var oauthRedirectUrl = _twitterService.GetOAuthRedirect(Settings.ConsumerKey, Settings.ConsumerSecret, query["callbackUrl"]);
                 return new
                 {
-                    action = "updateFields",
-                    fields = _twitterService.GetOAuthToken(query["consumerKey"].ToString(), query["consumerSecret"].ToString(), query["oauth_token"].ToString(), query["oauth_verifier"].ToString())
+                    oauthUrl = oauthRedirectUrl
                 };
             }
-            return new {};
+            else if (action == "getOAuthToken")
+            {
+                Settings.Validate().Filter("ConsumerKey", "ConsumerSecret").ThrowOnError();
+
+                if (query["oauth_token"].IsNullOrWhiteSpace())
+                {
+                    throw new BadRequestException("QueryParam oauth_token invalid.");
+                }
+
+                if (query["oauth_verifier"].IsNullOrWhiteSpace())
+                {
+                    throw new BadRequestException("QueryParam oauth_verifier invalid.");
+                }
+
+                var oauthToken = _twitterService.GetOAuthToken(Settings.ConsumerKey, Settings.ConsumerSecret, query["oauth_token"], query["oauth_verifier"]);
+                return new
+                {
+                    accessToken = oauthToken.AccessToken,
+                    accessTokenSecret = oauthToken.AccessTokenSecret
+                };
+            }
+            return new { };
         }
 
         public override string Name

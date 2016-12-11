@@ -85,7 +85,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                     queueItem.RemainingTime = null;
                 }
-                else if (sabQueueItem.Status == SabnzbdDownloadStatus.Queued || sabQueueItem.Status == SabnzbdDownloadStatus.Grabbing)
+                else if (sabQueueItem.Status == SabnzbdDownloadStatus.Queued ||
+                         sabQueueItem.Status == SabnzbdDownloadStatus.Grabbing ||
+                         sabQueueItem.Status == SabnzbdDownloadStatus.Propagating)
                 {
                     queueItem.Status = DownloadItemStatus.Queued;
                 }
@@ -273,6 +275,80 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             failures.AddIfNotNull(TestCategory());
         }
 
+        private bool HasVersion(int major, int minor, int patch = 0, string candidate = null)
+        {
+            candidate = candidate ?? string.Empty;
+
+            var version = _proxy.GetVersion(Settings);
+            var parsed = VersionRegex.Match(version);
+
+            int actualMajor;
+            int actualMinor;
+            int actualPatch;
+            string actualCandidate;
+
+            if (!parsed.Success)
+            {
+                if (!version.Equals("develop", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return false;
+                }
+
+                actualMajor = 1;
+                actualMinor = 1;
+                actualPatch = 0;
+                actualCandidate = null;
+            }
+
+            else
+            {
+                actualMajor = Convert.ToInt32(parsed.Groups["major"].Value);
+                actualMinor = Convert.ToInt32(parsed.Groups["minor"].Value);
+                actualPatch = Convert.ToInt32(parsed.Groups["patch"].Value.Replace("x", ""));
+                actualCandidate = parsed.Groups["candidate"].Value.ToUpper();
+            }
+
+            if (actualMajor > major)
+            {
+                return true;
+            }
+            else if (actualMajor < major)
+            {
+                return false;
+            }
+
+            if (actualMinor > minor)
+            {
+                return true;
+            }
+            else if (actualMinor < minor)
+            {
+                return false;
+            }
+
+            if (actualPatch > patch)
+            {
+                return true;
+            }
+            else if (actualPatch < patch)
+            {
+                return false;
+            }
+
+            if (actualCandidate.IsNullOrWhiteSpace())
+            {
+                return true;
+            }
+            else if (candidate.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+            else
+            {
+                return actualCandidate.CompareTo(candidate) > 0;
+            }
+        }
+
         private ValidationFailure TestConnectionAndVersion()
         {
             try
@@ -282,6 +358,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (!parsed.Success)
                 {
+                    if (version.Equals("develop", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return new NzbDroneValidationFailure("Version", "Sabnzbd develop version, assuming version 1.1.0 or higher.")
+                        {
+                            IsWarning = true,
+                            DetailedDescription = "Sonarr may not be able to support new features added to SABnzbd when running develop versions."
+                        };
+                    }
+
                     return new ValidationFailure("Version", "Unknown Version: " + version);
                 }
 
@@ -332,7 +417,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         private ValidationFailure TestGlobalConfig()
         {
             var config = _proxy.GetConfig(Settings);
-            if (config.Misc.pre_check)
+            if (config.Misc.pre_check && !HasVersion(1, 1))
             {
                 return new NzbDroneValidationFailure("", "Disable 'Check before download' option in Sabnbzd")
                 {

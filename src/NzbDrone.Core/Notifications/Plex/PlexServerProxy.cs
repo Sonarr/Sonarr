@@ -44,8 +44,24 @@ namespace NzbDrone.Core.Notifications.Plex
             _logger.Trace("Sections response: {0}", response.Content);
             CheckForError(response, settings);
 
-            return Json.Deserialize<PlexMediaContainer>(response.Content)
-                       .Directories
+            if (response.Content.Contains("_children"))
+            {
+                return Json.Deserialize<PlexMediaContainerLegacy>(response.Content)
+                    .Sections
+                    .Where(d => d.Type == "show")
+                    .Select(s => new PlexSection
+                                 {
+                                     Id = s.Id,
+                                     Language = s.Language,
+                                     Locations = s.Locations,
+                                     Type = s.Type
+                                 })
+                    .ToList();
+            }
+
+            return Json.Deserialize<PlexResponse<PlexSectionsContainer>>(response.Content)
+                       .MediaContainer
+                       .Sections
                        .Where(d => d.Type == "show")
                        .ToList();
         }
@@ -81,7 +97,15 @@ namespace NzbDrone.Core.Notifications.Plex
             _logger.Trace("Version response: {0}", response.Content);
             CheckForError(response, settings);
 
-            return Json.Deserialize<PlexIdentity>(response.Content).Version;
+            if (response.Content.Contains("_children"))
+            {
+                return Json.Deserialize<PlexIdentity>(response.Content)
+                           .Version;
+            }
+
+            return Json.Deserialize<PlexResponse<PlexIdentity>>(response.Content)
+                       .MediaContainer
+                       .Version;
         }
 
         public List<PlexPreference> Preferences(PlexServerSettings settings)
@@ -93,7 +117,15 @@ namespace NzbDrone.Core.Notifications.Plex
             _logger.Trace("Preferences response: {0}", response.Content);
             CheckForError(response, settings);
 
-            return Json.Deserialize<PlexPreferences>(response.Content).Preferences;
+            if (response.Content.Contains("_children"))
+            {
+                return Json.Deserialize<PlexPreferencesLegacy>(response.Content)
+                           .Preferences;
+            }
+
+            return Json.Deserialize<PlexResponse<PlexPreferences>>(response.Content)
+                       .MediaContainer
+                       .Preferences;
         }
 
         public int? GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings)
@@ -107,8 +139,20 @@ namespace NzbDrone.Core.Notifications.Plex
             _logger.Trace("Sections response: {0}", response.Content);
             CheckForError(response, settings);
 
-            var items = Json.Deserialize<PlexSectionResponse>(response.Content)
-                           .Items;
+            List<PlexSectionItem> items;
+
+            if (response.Content.Contains("_children"))
+            {
+                items = Json.Deserialize<PlexSectionResponseLegacy>(response.Content)
+                            .Items;
+            }
+
+            else
+            {
+                items = Json.Deserialize<PlexResponse<PlexSectionResponse>>(response.Content)
+                            .MediaContainer
+                            .Items;
+            }
 
             if (items == null || items.Empty())
             {
@@ -203,7 +247,15 @@ namespace NzbDrone.Core.Notifications.Plex
                 throw new PlexAuthenticationException("Unauthorized - Username or password is incorrect");
             }
 
-            var error = Json.Deserialize<PlexError>(response.Content);
+            if (response.Content.IsNullOrWhiteSpace())
+            {
+                _logger.Trace("No response body returned, no error detected");
+                return;
+            }
+
+            var error = response.Content.Contains("_children") ?
+                        Json.Deserialize<PlexError>(response.Content) : 
+                        Json.Deserialize<PlexResponse<PlexError>>(response.Content).MediaContainer;
 
             if (error != null && !error.Error.IsNullOrWhiteSpace())
             {

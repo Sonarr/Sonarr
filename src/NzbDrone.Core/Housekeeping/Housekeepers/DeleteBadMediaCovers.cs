@@ -4,23 +4,27 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Metadata.Files;
+using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
     public class DeleteBadMediaCovers : IHousekeepingTask
     {
+        private readonly IMetadataFileService _metaFileService;
         private readonly ISeriesService _seriesService;
-        private readonly IMetadataFileService _metadataFileService;
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public DeleteBadMediaCovers(ISeriesService seriesService, IMetadataFileService metadataFileService, IDiskProvider diskProvider, IConfigService configService, Logger logger)
+        public DeleteBadMediaCovers(IMetadataFileService metaFileService,
+                                    ISeriesService seriesService,
+                                    IDiskProvider diskProvider,
+                                    IConfigService configService,
+                                    Logger logger)
         {
+            _metaFileService = metaFileService;
             _seriesService = seriesService;
-            _metadataFileService = metadataFileService;
             _diskProvider = diskProvider;
             _configService = configService;
             _logger = logger;
@@ -34,7 +38,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
             foreach (var show in series)
             {
-                var images = _metadataFileService.GetFilesBySeries(show.Id)
+                var images = _metaFileService.GetFilesBySeries(show.Id)
                     .Where(c => c.LastUpdated > new DateTime(2014, 12, 27) && c.RelativePath.EndsWith(".jpg", StringComparison.InvariantCultureIgnoreCase));
 
                 foreach (var image in images)
@@ -61,7 +65,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         private void DeleteMetadata(int id, string path)
         {
-            _metadataFileService.Delete(id);
+            _metaFileService.Delete(id);
             _diskProvider.DeleteFile(path);
         }
 

@@ -70,17 +70,17 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.Debug("External directory scan request for known download {0}. [{1}]", message.DownloadClientId, message.Path);
 
-                    return _downloadedEpisodesImportService.ProcessPath(message.Path, trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
+                    return _downloadedEpisodesImportService.ProcessPath(message.Path, message.ImportMode, trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
                 }
                 else
                 {
                     _logger.Warn("External directory scan request for unknown download {0}, attempting normal import. [{1}]", message.DownloadClientId, message.Path);
 
-                    return _downloadedEpisodesImportService.ProcessPath(message.Path);
+                    return _downloadedEpisodesImportService.ProcessPath(message.Path, message.ImportMode);
                 }
             }
 
-            return _downloadedEpisodesImportService.ProcessPath(message.Path);
+            return _downloadedEpisodesImportService.ProcessPath(message.Path, message.ImportMode);
         }
 
         public void Execute(DownloadedEpisodesScanCommand message)

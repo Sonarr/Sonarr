@@ -10,8 +10,6 @@ namespace NzbDrone.Core.Indexers.HDBits
         [JsonProperty(Required = Required.Always)]
         public string Passkey { get; set; }
 
-        public int? Id { get; set; }
-
         public string Hash { get; set; }
 
         public string Search { get; set; }
@@ -54,7 +52,7 @@ namespace NzbDrone.Core.Indexers.HDBits
 
     public class TorrentQueryResponse
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
         public string Hash { get; set; }
         public int Leechers { get; set; }
         public int Seeders { get; set; }

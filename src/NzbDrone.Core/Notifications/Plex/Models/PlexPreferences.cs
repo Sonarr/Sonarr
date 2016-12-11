@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Notifications.Plex.Models
 {
     public class PlexPreferences
     {
-        [JsonProperty("_children")]
+        [JsonProperty("Setting")]
         public List<PlexPreference> Preferences { get; set; }
     }
 
@@ -14,5 +14,11 @@ namespace NzbDrone.Core.Notifications.Plex.Models
         public string Id { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
+    }
+
+    public class PlexPreferencesLegacy
+    {
+        [JsonProperty("_children")]
+        public List<PlexPreference> Preferences { get; set; }
     }
 }

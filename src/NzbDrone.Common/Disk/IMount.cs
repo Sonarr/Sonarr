@@ -13,5 +13,6 @@ namespace NzbDrone.Common.Disk
         long TotalFreeSpace { get; }
         long TotalSize { get; }
         string VolumeLabel { get; }
+        string VolumeName { get; }
     }
 }

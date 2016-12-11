@@ -37,7 +37,8 @@ namespace NzbDrone.Core.Download
 
         public IDownloadClient MapDownloadClient(IDownloadClient downloadClient)
         {
-            downloadClient.Definition = _downloadClientFactory.GetProviderCharacteristics(downloadClient, (DownloadClientDefinition)downloadClient.Definition);
+            _downloadClientFactory.SetProviderCharacteristics(downloadClient, (DownloadClientDefinition)downloadClient.Definition);
+
             return downloadClient;
         }
     }

@@ -11,37 +11,41 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Extras;
 
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IImportApprovedEpisodes
     {
-        List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null);
+        List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null, ImportMode importMode = ImportMode.Auto);
     }
 
     public class ImportApprovedEpisodes : IImportApprovedEpisodes
     {
         private readonly IUpgradeMediaFiles _episodeFileUpgrader;
         private readonly IMediaFileService _mediaFileService;
+        private readonly IExtraService _extraService;
         private readonly IDiskProvider _diskProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public ImportApprovedEpisodes(IUpgradeMediaFiles episodeFileUpgrader,
                                       IMediaFileService mediaFileService,
+                                      IExtraService extraService,
                                       IDiskProvider diskProvider,
                                       IEventAggregator eventAggregator,
                                       Logger logger)
         {
             _episodeFileUpgrader = episodeFileUpgrader;
             _mediaFileService = mediaFileService;
+            _extraService = extraService;
             _diskProvider = diskProvider;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
-        public List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null)
+        public List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null, ImportMode importMode = ImportMode.Auto)
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
@@ -52,7 +56,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             var importResults = new List<ImportResult>();
 
-            foreach (var importDecision in qualifiedImports.OrderByDescending(e => e.LocalEpisode.Episodes.Select(episode => episode.EpisodeNumber).MinOrDefault())
+            foreach (var importDecision in qualifiedImports.OrderBy(e => e.LocalEpisode.Episodes.Select(episode => episode.EpisodeNumber).MinOrDefault())
                                                            .ThenByDescending(e => e.LocalEpisode.Size))
             {
                 var localEpisode = importDecision.LocalEpisode;
@@ -81,10 +85,23 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.Episodes = localEpisode.Episodes;
                     episodeFile.ReleaseGroup = localEpisode.ParsedEpisodeInfo.ReleaseGroup;
 
+                    bool copyOnly;
+                    switch (importMode)
+                    {
+                        default:
+                        case ImportMode.Auto:
+                            copyOnly = downloadClientItem != null && downloadClientItem.IsReadOnly;
+                            break;
+                        case ImportMode.Move:
+                            copyOnly = false;
+                            break;
+                        case ImportMode.Copy:
+                            copyOnly = true;
+                            break;
+                    }
+
                     if (newDownload)
                     {
-                        bool copyOnly = downloadClientItem != null && downloadClientItem.IsReadOnly;
-
                         episodeFile.SceneName = GetSceneName(downloadClientItem, localEpisode);
 
                         var moveResult = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, copyOnly);
@@ -98,9 +115,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     _mediaFileService.Add(episodeFile);
                     importResults.Add(new ImportResult(importDecision));
 
+                    if (newDownload)
+                    {
+                        _extraService.ImportExtraFiles(localEpisode, episodeFile, copyOnly);
+                    }
+
                     if (downloadClientItem != null)
                     {
-                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadId));
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadId, downloadClientItem.IsReadOnly));
                     }
                     else
                     {

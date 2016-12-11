@@ -58,42 +58,8 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         }
 
         [Test]
-        public void fanzub_fetch_recent()
-        {
-            Assert.Inconclusive("Fanzub Down");
-
-            var indexer = Mocker.Resolve<Fanzub>();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "MyIndexer",
-                Settings = NullConfig.Instance
-            };
-
-            var result = indexer.FetchRecent();
-
-            ValidateResult(result);
-        }
-
-        [Test]
-        public void fanzub_search_single()
-        {
-            Assert.Inconclusive("Fanzub Down");
-
-            var indexer = Mocker.Resolve<Fanzub>();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "MyIndexer",
-                Settings = NullConfig.Instance
-            };
-
-            var result = indexer.Fetch(_animeSearchCriteria);
-
-            ValidateResult(result);
-        }
-
-        [Test]
+        [ManualTest]
+        [Explicit]
         public void kickass_fetch_recent()
         {
             var indexer = Mocker.Resolve<KickassTorrents>();
@@ -110,6 +76,8 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         }
 
         [Test]
+        [ManualTest]
+        [Explicit]
         public void kickass_search_single()
         {
             var indexer = Mocker.Resolve<KickassTorrents>();
