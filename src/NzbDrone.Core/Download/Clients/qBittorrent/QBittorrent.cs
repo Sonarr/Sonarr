@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 var item = new DownloadClientItem();
                 item.DownloadId = torrent.Hash.ToUpper();
-                item.Category = torrent.Label;
+                item.Category = torrent.Category.IsNotNullOrWhiteSpace() ? torrent.Category : torrent.Label;
                 item.Title = torrent.Name;
                 item.TotalSize = torrent.Size;
                 item.DownloadClient = Definition.Name;
