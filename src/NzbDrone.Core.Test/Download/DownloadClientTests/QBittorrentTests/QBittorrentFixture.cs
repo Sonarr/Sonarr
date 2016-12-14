@@ -401,5 +401,55 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             var item = Subject.GetItems().Single();
             item.IsReadOnly.Should().BeFalse();
         }
+
+        [Test]
+        public void should_get_category_from_the_category_if_set()
+        {
+            const string category = "tv-sonarr";
+            GivenMaxRatio(1.0f);
+
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "pausedUP",
+                Category = category,
+                SavePath = "",
+                Ratio = 1.0f
+            };
+
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            item.Category.Should().Be(category);
+        }
+
+        [Test]
+        public void should_get_category_from_the_label_if_the_category_is_not_available()
+        {
+            const string category = "tv-sonarr";
+            GivenMaxRatio(1.0f);
+
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "pausedUP",
+                Label = category,
+                SavePath = "",
+                Ratio = 1.0f
+            };
+
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            item.Category.Should().Be(category);
+        }
     }
 }
