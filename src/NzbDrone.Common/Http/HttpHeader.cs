@@ -145,6 +145,8 @@ namespace NzbDrone.Common.Http
 
                 if (charset.IsNotNullOrWhiteSpace())
                 {
+					charset = charset.Replace("\"","");
+					
                     encoding = Encoding.GetEncoding(charset);
                 }
             }
