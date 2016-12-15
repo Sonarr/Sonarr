@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         public string State { get; set; } // Torrent state. See possible values here below
 
         public string Label { get; set; } // Label of the torrent
+        public string Category { get; set; } // Category of the torrent (3.3.5+)
 
         [JsonProperty(PropertyName = "save_path")]
         public string SavePath { get; set; } // Torrent save path
