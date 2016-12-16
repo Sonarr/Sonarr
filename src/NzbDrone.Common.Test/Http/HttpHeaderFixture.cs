@@ -14,12 +14,11 @@ namespace NzbDrone.Common.Test.Http
     {
         [TestCase("text/html; charset=\"utf-8\"")]
         [TestCase("text/html; charset=utf-8")]
-
         public void should_get_encoding(string contentType)
         {
             var headers = new NameValueCollection();
 
-            headers.Add("content-type", contentType);
+            headers.Add("Content-Type", contentType);
 
             var httpheader = new HttpHeader(headers);
 
