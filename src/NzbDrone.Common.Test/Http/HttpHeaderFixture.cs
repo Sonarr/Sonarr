@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using FluentAssertions;
 using NzbDrone.Test.Common;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace NzbDrone.Common.Test.Http
 
             var httpheader = new HttpHeader(headers);
 
-            Assert.AreEqual(httpheader.GetEncodingFromContentType(), Encoding.GetEncoding(charsetExpected));
+            httpheader.GetEncodingFromContentType().Should().Be(Encoding.GetEncoding(charsetExpected));
         }
 
         [TestCase("text/html; charset=asdasd")]
@@ -34,7 +35,8 @@ namespace NzbDrone.Common.Test.Http
 
             var httpheader = new HttpHeader(headers);
 
-            Assert.Throws<ArgumentException>(() => httpheader.GetEncodingFromContentType());
+            Action action = () => httpheader.GetEncodingFromContentType();
+            action.ShouldThrow<ArgumentException>();
         }
     }
 }
