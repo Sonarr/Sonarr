@@ -84,6 +84,7 @@
     <Compile Include="ExtensionTests\IEnumerableExtensionTests\IntersectByFixture.cs" />
     <Compile Include="ExtensionTests\Int64ExtensionFixture.cs" />
     <Compile Include="Http\HttpClientFixture.cs" />
+    <Compile Include="Http\HttpHeaderFixture.cs" />
     <Compile Include="Http\HttpRequestBuilderFixture.cs" />
     <Compile Include="Http\HttpRequestFixture.cs" />
     <Compile Include="Http\HttpUriFixture.cs" />
