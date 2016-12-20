@@ -41,7 +41,7 @@ namespace NzbDrone.Api.Series
 
         public static List<Season> ToModel(this IEnumerable<SeasonResource> resources)
         {
-            return resources.Select(ToModel).ToList();
+            return resources?.Select(ToModel).ToList();
         }
     }
 }
