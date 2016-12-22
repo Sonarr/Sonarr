@@ -1,6 +1,7 @@
 var vent = require('vent');
 var Marionette = require('marionette');
 var Profiles = require('../../Profile/ProfileCollection');
+var LanguageProfiles = require('../../LanguageProfile/LanguageProfileCollection');
 var AsModelBoundView = require('../../Mixins/AsModelBoundView');
 var AsValidatedView = require('../../Mixins/AsValidatedView');
 var AsEditModalView = require('../../Mixins/AsEditModalView');
@@ -11,9 +12,10 @@ var view = Marionette.ItemView.extend({
     template : 'Series/Edit/EditSeriesViewTemplate',
 
     ui : {
-        profile : '.x-profile',
-        path    : '.x-path',
-        tags    : '.x-tags'
+        profile         : '.x-profile',
+        languageProfile : '.x-language-profile',
+        path            : '.x-path',
+        tags            : '.x-tags'
     },
 
     events : {
@@ -22,6 +24,7 @@ var view = Marionette.ItemView.extend({
 
     initialize : function() {
         this.model.set('profiles', Profiles);
+        this.model.set('languageProfiles', LanguageProfiles);
     },
 
     onRender : function() {
@@ -34,7 +37,9 @@ var view = Marionette.ItemView.extend({
 
     _onBeforeSave : function() {
         var profileId = this.ui.profile.val();
+        var languageProfileId = this.ui.languageProfile.val();
         this.model.set({ profileId : profileId });
+        this.model.set({ languageProfileId : languageProfileId });
     },
 
     _onAfterSave : function() {

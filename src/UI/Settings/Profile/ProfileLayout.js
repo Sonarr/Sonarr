@@ -1,21 +1,24 @@
 var Marionette = require('marionette');
 var ProfileCollection = require('../../Profile/ProfileCollection');
+var LanguageProfileCollection = require('../../LanguageProfile/LanguageProfileCollection');
 var ProfileCollectionView = require('./ProfileCollectionView');
+var LanguageProfileCollectionView = require('../LanguageProfile/LanguageProfileCollectionView');
 var DelayProfileLayout = require('./Delay/DelayProfileLayout');
 var DelayProfileCollection = require('./Delay/DelayProfileCollection');
-var LanguageCollection = require('./Language/LanguageCollection');
 
 module.exports = Marionette.Layout.extend({
     template : 'Settings/Profile/ProfileLayoutTemplate',
 
     regions : {
-        profile      : '#profile',
-        delayProfile : '#delay-profile'
+        profile         : '#profile',
+        languageProfile : '#language-profile',
+        delayProfile    : '#delay-profile'
     },
 
     initialize : function(options) {
         this.settings = options.settings;
         ProfileCollection.fetch();
+        LanguageProfileCollection.fetch();
 
         this.delayProfileCollection = new DelayProfileCollection();
         this.delayProfileCollection.fetch();
@@ -24,5 +27,6 @@ module.exports = Marionette.Layout.extend({
     onShow : function() {
         this.profile.show(new ProfileCollectionView({ collection : ProfileCollection }));
         this.delayProfile.show(new DelayProfileLayout({ collection : this.delayProfileCollection }));
+        this.languageProfile.show(new LanguageProfileCollectionView( {collection : LanguageProfileCollection}));
     }
 });

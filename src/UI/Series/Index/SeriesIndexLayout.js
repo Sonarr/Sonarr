@@ -9,6 +9,7 @@ var RelativeDateCell = require('../../Cells/RelativeDateCell');
 var SeriesTitleCell = require('../../Cells/SeriesTitleCell');
 var TemplatedCell = require('../../Cells/TemplatedCell');
 var ProfileCell = require('../../Cells/ProfileCell');
+var LanguageProfileCell = require('../../Cells/LanguageProfileCell');
 var EpisodeProgressCell = require('../../Cells/EpisodeProgressCell');
 var SeriesActionsCell = require('../../Cells/SeriesActionsCell');
 var SeriesStatusCell = require('../../Cells/SeriesStatusCell');
@@ -49,6 +50,11 @@ module.exports = Marionette.Layout.extend({
             name  : 'profileId',
             label : 'Profile',
             cell  : ProfileCell
+        },
+        {
+            name  : 'languageProfileId',
+            label : 'Language profile',
+            cell  : LanguageProfileCell
         },
         {
             name  : 'network',

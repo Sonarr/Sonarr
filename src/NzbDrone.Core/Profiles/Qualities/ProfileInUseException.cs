@@ -1,6 +1,6 @@
 ﻿using NzbDrone.Common.Exceptions;
 
-namespace NzbDrone.Core.Profiles
+namespace NzbDrone.Core.Profiles.Qualities
 {
     public class ProfileInUseException : NzbDroneException
     {

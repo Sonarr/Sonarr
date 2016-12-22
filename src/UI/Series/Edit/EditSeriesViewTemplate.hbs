@@ -69,6 +69,19 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="col-sm-4 control-label">Language profile</label>
+
+                        <div class="col-sm-4">
+                            <select class="form-control x-language-profile" id="inputLanguageProfile" name="languageProfileId">
+                                {{#each languageProfiles.models}}
+                                    <option value="{{id}}">{{attributes.name}}</option>
+                                {{/each}}
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="col-sm-4 control-label">Series Type</label>
                         <div class="col-sm-4">
                             {{> SeriesTypeSelectionPartial}}

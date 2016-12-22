@@ -5,6 +5,7 @@ var RootFolderLayout = require('./RootFolders/RootFolderLayout');
 var ExistingSeriesCollectionView = require('./Existing/AddExistingSeriesCollectionView');
 var AddSeriesView = require('./AddSeriesView');
 var ProfileCollection = require('../Profile/ProfileCollection');
+var LanguageProfileCollection = require('../LanguageProfile/LanguageProfileCollection');
 var RootFolderCollection = require('./RootFolders/RootFolderCollection');
 require('../Series/SeriesCollection');
 
@@ -26,6 +27,7 @@ module.exports = Marionette.Layout.extend({
 
     initialize : function() {
         ProfileCollection.fetch();
+        LanguageProfileCollection.fetch();
         RootFolderCollection.fetch().done(function() {
             RootFolderCollection.synced = true;
         });

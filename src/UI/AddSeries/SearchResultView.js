@@ -4,6 +4,7 @@ var AppLayout = require('../AppLayout');
 var Backbone = require('backbone');
 var Marionette = require('marionette');
 var Profiles = require('../Profile/ProfileCollection');
+var LanguageProfiles = require('../LanguageProfile/LanguageProfileCollection');
 var RootFolders = require('./RootFolders/RootFolderCollection');
 var RootFolderLayout = require('./RootFolders/RootFolderLayout');
 var SeriesCollection = require('../Series/SeriesCollection');
@@ -19,6 +20,7 @@ var view = Marionette.ItemView.extend({
 
     ui : {
         profile         : '.x-profile',
+        languageProfile : '.x-language-profile',
         rootFolder      : '.x-root-folder',
         seasonFolder    : '.x-season-folder',
         seriesType      : '.x-series-type',
@@ -30,13 +32,14 @@ var view = Marionette.ItemView.extend({
     },
 
     events : {
-        'click .x-add'            : '_addWithoutSearch',
-        'click .x-add-search'     : '_addAndSearch',
-        'change .x-profile'       : '_profileChanged',
-        'change .x-root-folder'   : '_rootFolderChanged',
-        'change .x-season-folder' : '_seasonFolderChanged',
-        'change .x-series-type'   : '_seriesTypeChanged',
-        'change .x-monitor'       : '_monitorChanged'
+        'click .x-add'               : '_addWithoutSearch',
+        'click .x-add-search'        : '_addAndSearch',
+        'change .x-profile'          : '_profileChanged',
+        'change .x-language-profile' : '_languageProfileChanged',
+        'change .x-root-folder'      : '_rootFolderChanged',
+        'change .x-season-folder'    : '_seasonFolderChanged',
+        'change .x-series-type'      : '_seriesTypeChanged',
+        'change .x-monitor'          : '_monitorChanged'
     },
 
     initialize : function() {
@@ -56,6 +59,7 @@ var view = Marionette.ItemView.extend({
     onRender : function() {
 
         var defaultProfile = Config.getValue(Config.Keys.DefaultProfileId);
+        var defaultLanguageProfile = Config.getValue(Config.Keys.DefaultLanguageProfileId);
         var defaultRoot = Config.getValue(Config.Keys.DefaultRootFolderId);
         var useSeasonFolder = Config.getValueBoolean(Config.Keys.UseSeasonFolder, true);
         var defaultSeriesType = Config.getValue(Config.Keys.DefaultSeriesType, 'standard');
@@ -63,6 +67,10 @@ var view = Marionette.ItemView.extend({
 
         if (Profiles.get(defaultProfile)) {
             this.ui.profile.val(defaultProfile);
+        }
+
+        if (LanguageProfiles.get(defaultLanguageProfile)) {
+            this.ui.languageProfile.val(defaultLanguageProfile);
         }
 
         if (RootFolders.get(defaultRoot)) {
@@ -100,6 +108,7 @@ var view = Marionette.ItemView.extend({
         }
 
         this.templateHelpers.profiles = Profiles.toJSON();
+        this.templateHelpers.languageProfiles = LanguageProfiles.toJSON();
 
         if (!this.model.get('isExisting')) {
             this.templateHelpers.rootFolders = RootFolders.toJSON();
@@ -109,6 +118,10 @@ var view = Marionette.ItemView.extend({
     _onConfigUpdated : function(options) {
         if (options.key === Config.Keys.DefaultProfileId) {
             this.ui.profile.val(options.value);
+        }
+
+        if (options.key === Config.Keys.DefaultLanguageProfileId) {
+            this.ui.languageProfile.val(options.value);
         }
 
         else if (options.key === Config.Keys.DefaultRootFolderId) {
@@ -130,6 +143,10 @@ var view = Marionette.ItemView.extend({
 
     _profileChanged : function() {
         Config.setValue(Config.Keys.DefaultProfileId, this.ui.profile.val());
+    },
+
+    _languageProfileChanged : function() {
+        Config.setValue(Config.Keys.DefaultLanguageProfileId, this.ui.profile.val());
     },
 
     _seasonFolderChanged : function() {
@@ -177,6 +194,7 @@ var view = Marionette.ItemView.extend({
         addSearchButton.addClass('disabled');
 
         var profile = this.ui.profile.val();
+        var languageProfile = this.ui.languageProfile.val();
         var rootFolderPath = this.ui.rootFolder.children(':selected').text();
         var seriesType = this.ui.seriesType.val();
         var seasonFolder = this.ui.seasonFolder.prop('checked');
@@ -185,12 +203,13 @@ var view = Marionette.ItemView.extend({
         options.searchForMissingEpisodes = searchForMissingEpisodes;
 
         this.model.set({
-            profileId      : profile,
-            rootFolderPath : rootFolderPath,
-            seasonFolder   : seasonFolder,
-            seriesType     : seriesType,
-            addOptions     : options,
-            monitored      : true
+            profileId         : profile,
+            languageProfileId : languageProfile,
+            rootFolderPath    : rootFolderPath,
+            seasonFolder      : seasonFolder,
+            seriesType        : seriesType,
+            addOptions        : options,
+            monitored         : true
         }, { silent : true });
 
         var self = this;

@@ -8,10 +8,13 @@ var EpisodeNumberCell = require('../../Series/Details/EpisodeNumberCell');
 var SeasonEpisodeNumberCell = require('../../Cells/EpisodeNumberCell');
 var EpisodeFilePathCell = require('../../Cells/EpisodeFilePathCell');
 var EpisodeStatusCell = require('../../Cells/EpisodeStatusCell');
+var EpisodeLanguageCell = require('../../Cells/EpisodeLanguageCell');
 var RelativeDateCell = require('../../Cells/RelativeDateCell');
 var EpisodeCollection = require('../../Series/EpisodeCollection');
 var ProfileSchemaCollection = require('../../Settings/Profile/ProfileSchemaCollection');
+var LanguageProfileSchemaCollection = require('../../Settings/LanguageProfile/LanguageProfileSchemaCollection');
 var QualitySelectView = require('./QualitySelectView');
+var LanguageSelectView = require('./LanguageSelectView');
 var EmptyView = require('./EmptyView');
 
 module.exports = Marionette.Layout.extend({
@@ -20,7 +23,8 @@ module.exports = Marionette.Layout.extend({
 
     regions : {
         episodeGrid : '.x-episode-list',
-        quality     : '.x-quality'
+        quality     : '.x-quality',
+        language    : '.x-languages'
     },
 
     ui : {
@@ -97,6 +101,12 @@ module.exports = Marionette.Layout.extend({
                 cell  : RelativeDateCell
             },
             {
+                name     : 'language',
+                label    : 'Language',
+                cell     : EpisodeLanguageCell,
+                sortable : false			
+            },
+            {
                 name     : 'status',
                 label    : 'Quality',
                 cell     : EpisodeStatusCell,
@@ -133,15 +143,27 @@ module.exports = Marionette.Layout.extend({
         var self = this;
 
         var profileSchemaCollection = new ProfileSchemaCollection();
+        var languageProfileSchemaCollection = new LanguageProfileSchemaCollection();
         var promise = profileSchemaCollection.fetch();
+        var promiseLanguages = languageProfileSchemaCollection.fetch();
+
 
         promise.done(function() {
             var profile = profileSchemaCollection.first();
 
-            self.qualitySelectView = new QualitySelectView({ qualities: _.map(profile.get('items'), 'quality') });
+            self.qualitySelectView = new QualitySelectView({ qualities : _.map(profile.get('items'), 'quality') });
             self.listenTo(self.qualitySelectView, 'seasonedit:quality', self._changeQuality);
 
             self.quality.show(self.qualitySelectView);
+        });
+
+        promiseLanguages.done(function() {
+            var languageProfile = languageProfileSchemaCollection.first();
+
+            self.languageSelectView = new LanguageSelectView({ languages : _.map(languageProfile.get('languages'), 'language') });
+            self.listenTo(self.languageSelectView, 'seasonedit:language', self._changeLanguage);
+
+            self.language.show(self.languageSelectView);
         });
     },
 
@@ -165,6 +187,25 @@ module.exports = Marionette.Layout.extend({
         });
     },
 
+    _changeLanguage : function(options) {
+        var newLanguage = options.selected;
+        newLanguage.revision =  {
+                version : 1,
+                real    : 0
+            };
+
+        var selected = this._getSelectedEpisodeFileIds();
+
+        _.each(selected, function(episodeFileId) {
+            if (reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
+                var episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, episodeFileId);
+                episodeFile.set('language', newLanguage);
+                episodeFile.save();
+            }
+        });
+    },
+    
+    
     _deleteFiles : function() {
         if (!window.confirm('Are you sure you want to delete the episode files for the selected episodes?')) {
             return;

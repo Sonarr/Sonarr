@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 
 namespace NzbDrone.Core.Qualities
 {

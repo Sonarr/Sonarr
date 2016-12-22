@@ -5,6 +5,7 @@ using NzbDrone.Api.REST;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Languages;
 
 
 namespace NzbDrone.Api.History
@@ -18,6 +19,7 @@ namespace NzbDrone.Api.History
         public bool QualityCutoffNotMet { get; set; }
         public DateTime Date { get; set; }
         public string DownloadId { get; set; }
+        public Language Language { get; set; }
 
         public HistoryEventType EventType { get; set; }
 

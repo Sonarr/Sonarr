@@ -4,6 +4,7 @@ var Backgrid = require('backgrid');
 var BlacklistCollection = require('./BlacklistCollection');
 var SeriesTitleCell = require('../../Cells/SeriesTitleCell');
 var QualityCell = require('../../Cells/QualityCell');
+var LanguageCell = require('../../Cells/LanguageCell');
 var RelativeDateCell = require('../../Cells/RelativeDateCell');
 var BlacklistActionsCell = require('./BlacklistActionsCell');
 var GridPager = require('../../Shared/Grid/Pager');
@@ -29,6 +30,12 @@ module.exports = Marionette.Layout.extend({
             name  : 'sourceTitle',
             label : 'Source Title',
             cell  : 'string'
+        },
+        {
+            name     : 'language',
+            label    : 'Language',
+            cell     : LanguageCell,
+            sortable : false
         },
         {
             name     : 'quality',
