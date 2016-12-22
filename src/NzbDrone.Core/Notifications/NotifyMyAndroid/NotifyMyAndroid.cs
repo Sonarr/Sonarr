@@ -1,8 +1,6 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.NotifyMyAndroid
 {
@@ -15,29 +13,18 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
             _proxy = proxy;
         }
 
-        public override string Link => "http://www.notifymyandroid.com/";
+        public override string Link => "https://www.notifymyandroid.com/";
+        public override string Name => "Notify My Android";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            const string title = "Episode Grabbed";
-
-            _proxy.SendNotification(title, grabMessage.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
+            _proxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string title = "Episode Downloaded";
-
-            _proxy.SendNotification(title, message.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
+            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
-
-        public override void OnRename(Series series)
-        {
-        }
-
-        public override string Name => "Notify My Android";
-
-        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

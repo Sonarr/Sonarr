@@ -8,6 +8,12 @@ namespace NzbDrone.Core.Notifications
 {
     public abstract class NotificationBase<TSettings> : INotification where TSettings : IProviderConfig, new()
     {
+        protected const string EPISODE_GRABBED_TITLE = "Episode Grabbed";
+        protected const string EPISODE_DOWNLOADED_TITLE = "Episode Downloaded";
+
+        protected const string EPISODE_GRABBED_TITLE_BRANDED = "Sonarr - " + EPISODE_GRABBED_TITLE;
+        protected const string EPISODE_DOWNLOADED_TITLE_BRANDED = "Sonarr - " + EPISODE_DOWNLOADED_TITLE;
+
         public abstract string Name { get; }
 
         public Type ConfigContract => typeof(TSettings);
@@ -21,14 +27,25 @@ namespace NzbDrone.Core.Notifications
 
         public abstract string Link { get; }
 
-        public abstract void OnGrab(GrabMessage grabMessage);
-        public abstract void OnDownload(DownloadMessage message); 
-        public abstract void OnRename(Series series);
+        public virtual void OnGrab(GrabMessage grabMessage)
+        {
 
-        public virtual bool SupportsOnGrab => true;
-        public virtual bool SupportsOnDownload => true;
-        public virtual bool SupportsOnUpgrade => true;
-        public virtual bool SupportsOnRename => true;
+        }
+
+        public virtual void OnDownload(DownloadMessage message)
+        {
+
+        }
+
+        public virtual void OnRename(Series series)
+        {
+
+        }
+
+        public bool SupportsOnGrab => HasConcreteImplementation("OnGrab");
+        public bool SupportsOnRename => HasConcreteImplementation("OnRename");
+        public bool SupportsOnDownload => HasConcreteImplementation("OnDownload");
+        public bool SupportsOnUpgrade => SupportsOnDownload;
 
         protected TSettings Settings => (TSettings)Definition.Settings;
 
@@ -38,6 +55,19 @@ namespace NzbDrone.Core.Notifications
         }
 
         public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
+
+
+        private bool HasConcreteImplementation(string methodName)
+        {
+            var method = GetType().GetMethod(methodName);
+
+            if (method == null)
+            {
+                throw new MissingMethodException(GetType().Name, Name);
+            }
+
+            return !method.DeclaringType.IsAbstract;
+        }
 
     }
 }

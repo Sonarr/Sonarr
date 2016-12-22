@@ -9,32 +9,24 @@ namespace NzbDrone.Core.Notifications.Plex
     {
         private readonly IPlexClientService _plexClientService;
 
+        public override string Link => "https://www.plex.tv/";
+        public override string Name => "Plex Media Center";
+
         public PlexClient(IPlexClientService plexClientService)
         {
             _plexClientService = plexClientService;
         }
 
-        public override string Link => "http://www.plexapp.com/";
-
         public override void OnGrab(GrabMessage grabMessage)
         {
-            const string header = "Sonarr [TV] - Grabbed";
-            _plexClientService.Notify(Settings, header, grabMessage.Message);
+            _plexClientService.Notify(Settings, EPISODE_GRABBED_TITLE_BRANDED, grabMessage.Message);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string header = "Sonarr [TV] - Downloaded";
-            _plexClientService.Notify(Settings, header, message.Message);
+            _plexClientService.Notify(Settings, EPISODE_DOWNLOADED_TITLE_BRANDED, message.Message);
         }
 
-        public override void OnRename(Series series)
-        {
-        }
-
-        public override string Name => "Plex Media Center";
-
-        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

@@ -4,7 +4,7 @@ using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
-namespace NzbDrone.Core.Notifications.MediaBrowser
+namespace NzbDrone.Core.Notifications.Emby
 {
     public class MediaBrowserProxy
     {

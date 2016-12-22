@@ -14,11 +14,8 @@ namespace NzbDrone.Core.Notifications.Plex
             _plexServerService = plexServerService;
         }
 
-        public override string Link => "http://www.plexapp.com/";
-
-        public override void OnGrab(GrabMessage grabMessage)
-        {
-        }
+        public override string Link => "https://www.plex.tv/";
+        public override string Name => "Plex Media Server";
 
         public override void OnDownload(DownloadMessage message)
         {
@@ -37,10 +34,6 @@ namespace NzbDrone.Core.Notifications.Plex
                 _plexServerService.UpdateLibrary(series, Settings);
             }
         }
-
-        public override string Name => "Plex Media Server";
-
-        public override bool SupportsOnGrab => false;
 
         public override ValidationResult Test()
         {
