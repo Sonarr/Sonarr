@@ -2,10 +2,8 @@
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using NzbDrone.Common.Cloud;
 
 namespace NzbDrone.Core.HealthCheck.Checks

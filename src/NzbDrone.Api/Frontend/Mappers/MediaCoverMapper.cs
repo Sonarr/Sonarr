@@ -1,6 +1,5 @@
 using System.IO;
 using System.Text.RegularExpressions;
-using Nancy;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;

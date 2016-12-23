@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Api.EpisodeFiles;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.DecisionEngine;

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using Nancy;
+﻿using System.Linq;
 using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
 using NLog;
-using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;

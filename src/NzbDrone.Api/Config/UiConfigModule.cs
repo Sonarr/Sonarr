@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using NzbDrone.Core.Configuration;
+﻿using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Config
 {

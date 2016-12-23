@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Core.Notifications.Plex
+﻿namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexError
     {

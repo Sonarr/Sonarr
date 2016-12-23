@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
-using System;
 
 namespace NzbDrone.Core.ThingiProvider
 {

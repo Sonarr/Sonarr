@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Api.Profiles

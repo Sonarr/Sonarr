@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using NLog;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Datastore.Events;

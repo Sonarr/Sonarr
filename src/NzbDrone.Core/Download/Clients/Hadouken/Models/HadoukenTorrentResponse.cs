@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NzbDrone.Core.Download.Clients.Hadouken.Models
+﻿namespace NzbDrone.Core.Download.Clients.Hadouken.Models
 {
     public class HadoukenTorrentResponse
     {

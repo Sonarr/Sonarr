@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Http;
-using NzbDrone.Common.Http;
 using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Core.Configuration

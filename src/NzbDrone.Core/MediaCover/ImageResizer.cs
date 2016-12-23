@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ImageResizer;
+﻿using ImageResizer;
 using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.MediaCover

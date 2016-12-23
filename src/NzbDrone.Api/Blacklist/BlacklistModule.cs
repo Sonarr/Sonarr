@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Core.Blacklisting;
+﻿using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Api.Blacklist

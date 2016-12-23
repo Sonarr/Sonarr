@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Api.Metadata
+﻿namespace NzbDrone.Api.Metadata
 {
     public class MetadataResource : ProviderResource
     {

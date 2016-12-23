@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
-using FluentMigrator;
 using FluentMigrator.Runner;
 using Marr.Data;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Test.Framework
 {

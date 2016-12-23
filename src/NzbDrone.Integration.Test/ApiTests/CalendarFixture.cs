@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.Series;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Integration.Test.Client;
 using System;
-using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 

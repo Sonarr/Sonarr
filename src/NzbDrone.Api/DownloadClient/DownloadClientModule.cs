@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Core.Download;
+﻿using NzbDrone.Core.Download;
 
 namespace NzbDrone.Api.DownloadClient
 {

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Configuration;
-using NzbDrone.Common.Exceptron.Message;
 
 namespace NzbDrone.Common.Exceptron.Configuration
 {

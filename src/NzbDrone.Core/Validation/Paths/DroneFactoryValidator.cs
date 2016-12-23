@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation.Validators;
+﻿using FluentValidation.Validators;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Core.Download.Clients.Deluge
+﻿namespace NzbDrone.Core.Download.Clients.Deluge
 {
     public class DelugeException : DownloadClientException
     {

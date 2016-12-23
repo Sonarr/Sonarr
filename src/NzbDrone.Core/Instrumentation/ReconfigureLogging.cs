@@ -2,11 +2,8 @@
 using System.Linq;
 using NLog;
 using NLog.Config;
-using NLog.Targets;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
-using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Instrumentation

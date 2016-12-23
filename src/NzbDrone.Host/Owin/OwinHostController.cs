@@ -1,7 +1,6 @@
 using System;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Security;
 using NzbDrone.Host.AccessControl;
 
 namespace NzbDrone.Host.Owin

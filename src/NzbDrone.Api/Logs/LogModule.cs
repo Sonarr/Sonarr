@@ -1,5 +1,4 @@
-﻿using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Instrumentation;
+﻿using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Api.Logs
 {

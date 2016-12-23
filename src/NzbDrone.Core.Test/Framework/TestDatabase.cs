@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Moq;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Validation.Paths;
 

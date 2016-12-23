@@ -9,7 +9,6 @@ using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using System;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo

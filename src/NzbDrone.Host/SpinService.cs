@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using NLog;
+using NLog.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
 

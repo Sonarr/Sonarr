@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using NLog.Common;
 using NLog.Targets;
 using NLog.Targets.Wrappers;

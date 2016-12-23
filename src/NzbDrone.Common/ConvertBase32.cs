@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Common
+﻿namespace NzbDrone.Common
 {
     public static class ConvertBase32
     {

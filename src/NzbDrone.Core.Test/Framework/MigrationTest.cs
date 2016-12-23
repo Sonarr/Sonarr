@@ -1,8 +1,6 @@
 using System;
-using System.Data;
 using FluentMigrator;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 

@@ -1,6 +1,4 @@
 ﻿using FluentValidation.Results;
-using NLog;
-using NzbDrone.Common.Processes;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;

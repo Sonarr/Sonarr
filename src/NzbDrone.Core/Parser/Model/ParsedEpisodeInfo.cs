@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Qualities;

@@ -1,6 +1,4 @@
-﻿using System.Data;
-using FluentMigrator;
-using NzbDrone.Common.Serializer;
+﻿using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration

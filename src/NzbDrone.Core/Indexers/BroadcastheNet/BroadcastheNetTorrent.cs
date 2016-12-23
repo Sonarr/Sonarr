@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Core.Indexers.BroadcastheNet
+﻿namespace NzbDrone.Core.Indexers.BroadcastheNet
 {
     public class BroadcastheNetTorrent
     {

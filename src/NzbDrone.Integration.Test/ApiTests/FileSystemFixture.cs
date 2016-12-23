@@ -1,14 +1,9 @@
-﻿using System;
-using System.Threading;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.Series;
 using System.Linq;
-using NzbDrone.Test.Common;
 using NzbDrone.Integration.Test.Client;
 using RestSharp;
 using System.Net;
-using Newtonsoft.Json.Linq;
 using NzbDrone.Common.Disk;
 using System.Reflection;
 using System.IO;

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NLog;
 using NzbDrone.Test.Common;
-using NUnit.Framework;
-using System.IO;
 
 namespace NzbDrone.Integration.Test
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Host.AccessControl
+﻿namespace NzbDrone.Host.AccessControl
 {
     public class UrlAcl
     {

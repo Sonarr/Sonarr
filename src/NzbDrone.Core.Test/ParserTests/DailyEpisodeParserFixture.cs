@@ -2,7 +2,6 @@ using System;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Expansive;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
