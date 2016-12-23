@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Http.CloudFlare

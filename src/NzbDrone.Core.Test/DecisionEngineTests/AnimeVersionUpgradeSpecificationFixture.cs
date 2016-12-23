@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Marr.Data;

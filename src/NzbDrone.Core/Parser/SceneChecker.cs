@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Core.Parser
+﻿namespace NzbDrone.Core.Parser
 {
     public static class SceneChecker
     {

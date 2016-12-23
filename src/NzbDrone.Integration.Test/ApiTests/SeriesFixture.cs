@@ -1,9 +1,6 @@
-﻿using System.Net;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.Series;
 using System.Linq;
-using NzbDrone.Test.Common;
 using System.IO;
 using System.Collections.Generic;
 

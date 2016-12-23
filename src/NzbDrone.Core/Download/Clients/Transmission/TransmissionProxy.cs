@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Net;
-using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Rest;
 using NLog;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Common.Http;

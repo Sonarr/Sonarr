@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Series;

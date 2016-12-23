@@ -4,7 +4,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Fanzub;
 using NzbDrone.Core.Indexers.KickassTorrents;
 using NzbDrone.Core.Indexers.Nyaa;
 using NzbDrone.Core.Indexers.Wombles;

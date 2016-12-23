@@ -5,7 +5,6 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Common.Instrumentation

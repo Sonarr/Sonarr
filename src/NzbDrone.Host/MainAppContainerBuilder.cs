@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Nancy.Bootstrapper;
 using NzbDrone.Api;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http.Dispatchers;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Organizer;
 using NzbDrone.SignalR;
 
 namespace NzbDrone.Host

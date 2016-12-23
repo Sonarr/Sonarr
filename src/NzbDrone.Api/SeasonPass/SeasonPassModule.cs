@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Nancy;
+﻿using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Tv;
 

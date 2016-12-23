@@ -6,7 +6,6 @@ using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using System;
 using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers

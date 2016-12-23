@@ -1,7 +1,4 @@
-﻿using System;
-using FluentAssertions;
-using NUnit.Framework;
-using NzbDrone.Common.Http;
+﻿using NUnit.Framework;
 
 namespace NzbDrone.Common.Test.Http
 {

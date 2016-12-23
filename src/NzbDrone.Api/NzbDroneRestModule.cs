@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Validation;
 using NzbDrone.Core.Datastore;

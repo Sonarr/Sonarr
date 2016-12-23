@@ -2,7 +2,6 @@
 using System.Data;
 using FluentMigrator.Model;
 using FluentMigrator.Runner;
-using System;
 using FluentMigrator.Runner.Processors.SQLite;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework

@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Core.Notifications;
+﻿using NzbDrone.Core.Notifications;
 
 namespace NzbDrone.Api.Notifications
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -9,7 +8,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
-    
+
     public class GetVideoFilesFixture : CoreTest<DiskScanService>
     {
         private string[] _files;

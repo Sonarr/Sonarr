@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Update

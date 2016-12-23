@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Core.Notifications.Pushalot
+﻿namespace NzbDrone.Core.Notifications.Pushalot
 {
     public class PushalotResponse
     {

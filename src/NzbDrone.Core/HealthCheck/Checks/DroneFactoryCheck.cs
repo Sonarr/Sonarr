@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using NzbDrone.Common.Disk;
+﻿using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 

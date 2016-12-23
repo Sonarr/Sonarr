@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;

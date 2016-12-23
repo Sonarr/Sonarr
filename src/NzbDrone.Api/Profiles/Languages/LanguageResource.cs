@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NzbDrone.Api.REST;
 
 namespace NzbDrone.Api.Profiles.Languages

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using FluentValidation.Results;
-using NzbDrone.Core.Extras.Files;
 using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.ThingiProvider;

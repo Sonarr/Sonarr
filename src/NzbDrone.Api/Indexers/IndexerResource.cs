@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Core.Indexers;
+﻿using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Api.Indexers
 {

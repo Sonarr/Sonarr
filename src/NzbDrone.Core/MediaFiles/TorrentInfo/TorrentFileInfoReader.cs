@@ -1,5 +1,4 @@
-﻿using System;
-using MonoTorrent;
+﻿using MonoTorrent;
 
 namespace NzbDrone.Core.MediaFiles.TorrentInfo
 {

@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {

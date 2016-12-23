@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Core.Indexers;
+﻿using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.TrackedDownloads

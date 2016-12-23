@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 
 namespace NzbDrone.Common.TPL
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Core.ThingiProvider;
+﻿using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {

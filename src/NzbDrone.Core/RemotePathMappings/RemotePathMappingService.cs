@@ -7,7 +7,6 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.RemotePathMappings
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;

@@ -5,7 +5,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks

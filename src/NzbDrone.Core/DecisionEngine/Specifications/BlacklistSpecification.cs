@@ -1,6 +1,5 @@
 using NLog;
 using NzbDrone.Core.Blacklisting;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 

@@ -1,4 +1,3 @@
-using System;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;

@@ -1,5 +1,4 @@
 using System;
-using NzbDrone.Common.Exceptron.Configuration;
 
 namespace NzbDrone.Common.Exceptron.Message
 {

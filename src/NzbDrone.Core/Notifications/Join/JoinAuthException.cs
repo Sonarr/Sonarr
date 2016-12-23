@@ -1,5 +1,4 @@
 ﻿using System;
-using NzbDrone.Common.Exceptions;
 
 namespace NzbDrone.Core.Notifications.Join
 {

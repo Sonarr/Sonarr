@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.SQLite;
-using System.IO;
 using Marr.Data;
 using Marr.Data.Reflection;
 using NLog;

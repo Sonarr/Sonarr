@@ -6,7 +6,6 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Cache;
-using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Messaging.Events;

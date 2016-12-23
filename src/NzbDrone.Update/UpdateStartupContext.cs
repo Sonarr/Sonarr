@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Update
+﻿namespace NzbDrone.Update
 {
     public class UpdateStartupContext
     {

@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using FizzWare.NBuilder;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.DecisionEngine;
 
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Indexers;

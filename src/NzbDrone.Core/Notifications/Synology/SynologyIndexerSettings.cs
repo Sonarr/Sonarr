@@ -1,6 +1,4 @@
-﻿using System;
-using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;

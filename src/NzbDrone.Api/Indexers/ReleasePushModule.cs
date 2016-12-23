@@ -8,7 +8,6 @@ using System.Linq;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Api.Extensions;
 using NLog;
-using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Api.Indexers
 {

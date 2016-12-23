@@ -1,4 +1,3 @@
-using System;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Core.Annotations;

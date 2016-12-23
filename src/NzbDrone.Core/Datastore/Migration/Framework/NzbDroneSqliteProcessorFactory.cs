@@ -1,5 +1,4 @@
-﻿using System;
-using FluentMigrator;
+﻿using FluentMigrator;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Generators.SQLite;
 using FluentMigrator.Runner.Processors.SQLite;

@@ -27,10 +27,8 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Integration.Test.Client;
 using NzbDrone.SignalR;
-using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 using RestSharp;
-using System.Collections;
 
 namespace NzbDrone.Integration.Test
 {

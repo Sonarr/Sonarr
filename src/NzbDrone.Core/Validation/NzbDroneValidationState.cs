@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentValidation;
-using FluentValidation.Results;
-
 namespace NzbDrone.Core.Validation
 {
     public class NzbDroneValidationState

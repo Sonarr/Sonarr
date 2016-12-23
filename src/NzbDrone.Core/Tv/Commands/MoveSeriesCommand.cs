@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Core.Messaging.Commands;
+﻿using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Tv.Commands
 {

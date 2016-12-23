@@ -1,5 +1,3 @@
-using NzbDrone.Common.Exceptions;
-
 namespace NzbDrone.Core.Update
 {
     public class UpdateFolderNotWritableException : UpdateFailedException

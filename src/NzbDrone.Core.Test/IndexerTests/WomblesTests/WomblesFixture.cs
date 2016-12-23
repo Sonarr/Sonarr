@@ -2,17 +2,12 @@
 using System.Linq;
 using FluentAssertions;
 using Moq;
-using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.TorrentRss;
 using NzbDrone.Core.Indexers.Wombles;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.ThingiProvider;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerTests.WomblesTests
 {

@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Parser.Model;
-using System.Linq;
 
 namespace NzbDrone.Api.Indexers
 {

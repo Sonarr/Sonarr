@@ -1,9 +1,6 @@
-﻿using System.Net;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Commands;
-using NzbDrone.Common.Serializer;
-using RestSharp;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {

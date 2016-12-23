@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Api.REST;
+﻿using NzbDrone.Api.REST;
 
 namespace NzbDrone.Api.DiskSpace
 {

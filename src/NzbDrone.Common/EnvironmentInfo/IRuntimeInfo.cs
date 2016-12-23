@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Common.EnvironmentInfo
+﻿namespace NzbDrone.Common.EnvironmentInfo
 {
     public interface IRuntimeInfo
     {

@@ -1,8 +1,6 @@
-﻿using System;
-using NLog.Config;
+﻿using NLog.Config;
 using NLog;
 using NLog.Targets;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
