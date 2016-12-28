@@ -2,7 +2,6 @@
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Twitter
@@ -17,6 +16,7 @@ namespace NzbDrone.Core.Notifications.Twitter
             _twitterService = twitterService;
         }
 
+        public override string Name => "Twitter";
         public override string Link => "https://twitter.com/";
 
         public override void OnGrab(GrabMessage message)
@@ -27,10 +27,6 @@ namespace NzbDrone.Core.Notifications.Twitter
         public override void OnDownload(DownloadMessage message)
         {
             _twitterService.SendNotification($"Imported: {message.Message}", Settings);
-        }
-
-        public override void OnRename(Series series)
-        {
         }
 
         public override object RequestAction(string action, IDictionary<string, string> query)
@@ -73,10 +69,6 @@ namespace NzbDrone.Core.Notifications.Twitter
             }
             return new { };
         }
-
-        public override string Name => "Twitter";
-
-        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {
