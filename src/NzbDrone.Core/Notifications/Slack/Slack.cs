@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Notifications.Slack
         }
 
         public override string Name => "Slack";
-
         public override string Link => "https://my.slack.com/services/new/incoming-webhook/";
 
         public override void OnGrab(GrabMessage message)

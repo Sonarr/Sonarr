@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Join
 {
@@ -14,29 +13,19 @@ namespace NzbDrone.Core.Notifications.Join
             _proxy = proxy;
         }
 
-        public override string Link => "https://joinjoaomgcd.appspot.com/";
+        public override string Name => "Join";
+
+        public override string Link => "https://joaoapps.com/join/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            const string title = "Sonarr - Episode Grabbed";
-
-            _proxy.SendNotification(title, grabMessage.Message, Settings);
+            _proxy.SendNotification(EPISODE_GRABBED_TITLE_BRANDED, Message.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string title = "Sonarr - Episode Downloaded";
-
-            _proxy.SendNotification(title, message.Message, Settings);
+            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE_BRANDED, message.Message, Settings);
         }
-
-        public override void OnRename(Series series)
-        {
-        }
-
-        public override string Name => "Join";
-
-        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

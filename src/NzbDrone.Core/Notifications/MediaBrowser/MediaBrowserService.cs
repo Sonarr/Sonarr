@@ -5,7 +5,7 @@ using NLog;
 using NzbDrone.Core.Rest;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Notifications.MediaBrowser
+namespace NzbDrone.Core.Notifications.Emby
 {
     public interface IMediaBrowserService
     {

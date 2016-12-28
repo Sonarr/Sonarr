@@ -4,7 +4,7 @@ using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
-namespace NzbDrone.Core.Notifications.MediaBrowser
+namespace NzbDrone.Core.Notifications.Emby
 {
     public class MediaBrowserSettingsValidator : AbstractValidator<MediaBrowserSettings>
     {
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
         public bool UpdateLibrary { get; set; }
 
         [JsonIgnore]
-        public string Address => string.Format("{0}:{1}", Host, Port);
+        public string Address => $"{Host}:{Port}";
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host) && Port > 0;
 

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
@@ -14,29 +13,18 @@ namespace NzbDrone.Core.Notifications.Pushover
             _proxy = proxy;
         }
 
+        public override string Name => "Pushover";
         public override string Link => "https://pushover.net/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            const string title = "Episode Grabbed";
-
-            _proxy.SendNotification(title, grabMessage.Message, Settings);
+            _proxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string title = "Episode Downloaded";
-
-            _proxy.SendNotification(title, message.Message, Settings);
+            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
         }
-
-        public override void OnRename(Series series)
-        {
-        }
-
-        public override string Name => "Pushover";
-
-        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {
