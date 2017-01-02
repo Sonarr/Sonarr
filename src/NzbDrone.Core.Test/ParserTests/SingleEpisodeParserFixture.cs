@@ -125,6 +125,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.100000.Dollar.Pyramid.2016.S01E05.720p.HDTV.x264-W4F", "The 100000 Dollar Pyramid 2016", 1, 5)]
         [TestCase("Class S01E02 (22 October 2016) HDTV 720p [Webrip]", "Class", 1, 2)]
         [TestCase("this.is.not.happening.2015.0308-yestv", "this is not happening 2015", 3, 8)]
+        [TestCase("Jeopardy - S2016E231", "Jeopardy", 2016, 231)]
+        [TestCase("Jeopardy - 2016x231", "Jeopardy", 2016, 231)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
