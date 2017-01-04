@@ -133,3 +133,5 @@ output/*
 
 _start
 _temp_*/**/*
+
+src/.idea/
