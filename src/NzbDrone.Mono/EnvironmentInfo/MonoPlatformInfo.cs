@@ -30,6 +30,7 @@ namespace NzbDrone.Mono.EnvironmentInfo
                         if (versionMatch.Success)
                         {
                             runTimeVersion = new Version(versionMatch.Groups["version"].Value);
+                            Environment.SetEnvironmentVariable("RUNTIME_VERSION", runTimeVersion.ToString());
                         }
                     }
                 }
@@ -38,7 +39,6 @@ namespace NzbDrone.Mono.EnvironmentInfo
             {
                 logger.Error(ex, "Unable to get mono version: " + ex.Message);
             }
-
 
             Version = runTimeVersion;
         }

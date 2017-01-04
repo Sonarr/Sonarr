@@ -82,6 +82,9 @@ namespace NzbDrone.Common.EnvironmentInfo
                 Name = Os.ToString();
                 FullName = Name;
             }
+
+            Environment.SetEnvironmentVariable("OS_NAME", Name);
+            Environment.SetEnvironmentVariable("OS_VERSION", Version);
         }
     }
 
