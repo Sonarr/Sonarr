@@ -180,7 +180,7 @@ namespace NzbDrone.Api.Series
 
                 foreach (var season in resource.Seasons)
                 {
-                    season.Statistics = SeasonStatisticsResourceMapper.ToResource(dictSeasonStats.GetValueOrDefault(season.SeasonNumber));
+                    season.Statistics = dictSeasonStats.GetValueOrDefault(season.SeasonNumber).ToResource();
                 }
             }
         }

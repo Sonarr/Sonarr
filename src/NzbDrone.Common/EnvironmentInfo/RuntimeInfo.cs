@@ -5,15 +5,14 @@ using System.Reflection;
 using System.Security.Principal;
 using System.ServiceProcess;
 using NLog;
-using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
-    public abstract class RuntimeInfoBase : IRuntimeInfo
+    public class RuntimeInfo : IRuntimeInfo
     {
         private readonly Logger _logger;
 
-        public RuntimeInfoBase(IServiceProvider serviceProvider, Logger logger)
+        public RuntimeInfo(IServiceProvider serviceProvider, Logger logger)
         {
             _logger = logger;
 
@@ -31,7 +30,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             }
         }
 
-        static RuntimeInfoBase()
+        static RuntimeInfo()
         {
             IsProduction = InternalIsProduction();
         }
@@ -59,31 +58,18 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         public bool IsWindowsService { get; private set; }
 
-        public bool IsConsole
-        {
-            get
-            {
-                if (OsInfo.IsWindows)
-                {
-                    return IsUserInteractive && Process.GetCurrentProcess().ProcessName.Equals(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase);
-                }
-
-                return true;
-            }
-        }
-
-        public bool IsRunning { get; set; }
+        public bool IsExiting { get; set; }
         public bool RestartPending { get; set; }
-        public string ExecutingApplication { get; private set; }
+        public string ExecutingApplication { get; }
 
-        public abstract string RuntimeVersion { get; }
-
-        public static bool IsProduction { get; private set; }
+        public static bool IsProduction { get; }
 
         private static bool InternalIsProduction()
         {
             if (BuildInfo.IsDebug || Debugger.IsAttached) return false;
-            if (BuildInfo.Version.Revision > 10000) return false; //Official builds will never have such a high revision
+
+            //Official builds will never have such a high revision
+            if (BuildInfo.Version.Revision > 10000) return false;
 
             try
             {
@@ -99,17 +85,17 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             }
 
-			try
-			{
-				var currentAssmeblyLocation = typeof(RuntimeInfoBase).Assembly.Location;
-				if(currentAssmeblyLocation.ToLower().Contains("_output"))return false;
-			}
-			catch
-			{
+            try
+            {
+                var currentAssemblyLocation = typeof(RuntimeInfo).Assembly.Location;
+                if (currentAssemblyLocation.ToLower().Contains("_output")) return false;
+            }
+            catch
+            {
 
-			}
+            }
 
-            string lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
+            var lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
             if (lowerCurrentDir.Contains("teamcity")) return false;
             if (lowerCurrentDir.Contains("_output")) return false;
 

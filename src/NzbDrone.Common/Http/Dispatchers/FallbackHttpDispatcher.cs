@@ -10,21 +10,23 @@ namespace NzbDrone.Common.Http.Dispatchers
     {
         private readonly ManagedHttpDispatcher _managedDispatcher;
         private readonly CurlHttpDispatcher _curlDispatcher;
+        private readonly IPlatformInfo _platformInfo;
         private readonly Logger _logger;
 
         private readonly ICached<bool> _curlTLSFallbackCache;
 
-        public FallbackHttpDispatcher(ManagedHttpDispatcher managedDispatcher, CurlHttpDispatcher curlDispatcher, ICacheManager cacheManager, Logger logger)
+        public FallbackHttpDispatcher(ManagedHttpDispatcher managedDispatcher, CurlHttpDispatcher curlDispatcher, ICacheManager cacheManager, IPlatformInfo platformInfo, Logger logger)
         {
             _managedDispatcher = managedDispatcher;
             _curlDispatcher = curlDispatcher;
+            _platformInfo = platformInfo;
             _curlTLSFallbackCache = cacheManager.GetCache<bool>(GetType(), "curlTLSFallback");
             _logger = logger;
         }
 
         public HttpResponse GetResponse(HttpRequest request, CookieContainer cookies)
         {
-            if (OsInfo.IsMonoRuntime && request.Url.Scheme == "https")
+            if (PlatformInfo.IsMono && request.Url.Scheme == "https")
             {
                 if (!_curlTLSFallbackCache.Find(request.Url.Host))
                 {

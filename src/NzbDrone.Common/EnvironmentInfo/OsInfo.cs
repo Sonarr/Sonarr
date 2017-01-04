@@ -1,87 +1,95 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using NLog;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
-    public static class OsInfo
+    public class OsInfo : IOsInfo
     {
+        public static Os Os { get; }
+
+        public static bool IsNotWindows => !IsWindows;
+        public static bool IsLinux => Os == Os.Linux;
+        public static bool IsOsx => Os == Os.Osx;
+        public static bool IsWindows => Os == Os.Windows;
+
+        public string Version { get; }
+        public string Name { get; }
+        public string FullName { get; }
 
         static OsInfo()
         {
-            var platform = (int)Environment.OSVersion.Platform;
+            var platform = Environment.OSVersion.Platform;
 
-            Version = Environment.OSVersion.Version;
-
-            IsMonoRuntime = Type.GetType("Mono.Runtime") != null;           
-            IsNotWindows = (platform == 4) || (platform == 6) || (platform == 128);
-            IsOsx = IsRunningOnMac();
-            IsLinux = IsNotWindows && !IsOsx;
-            IsWindows = !IsNotWindows;
-
-            FirstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
-
-            if (IsWindows)
+            switch (platform)
             {
-                Os = Os.Windows;
-                PathStringComparison = StringComparison.OrdinalIgnoreCase;
+                case PlatformID.Win32NT:
+                    {
+                        Os = Os.Windows;
+                        break;
+                    }
+                case PlatformID.MacOSX:
+                case PlatformID.Unix:
+                    {
+                        // Sometimes Mac OS reports itself as Unix
+                        if (Directory.Exists("/System/Library/CoreServices/") &&
+                            (File.Exists("/System/Library/CoreServices/SystemVersion.plist") ||
+                            File.Exists("/System/Library/CoreServices/ServerVersion.plist"))
+                            )
+                        {
+                            Os = Os.Osx;
+                        }
+                        else
+                        {
+                            Os = Os.Linux;
+                        }
+                        break;
+                    }
+            }
+        }
+
+        public OsInfo(IEnumerable<IOsVersionAdapter> versionAdapters, Logger logger)
+        {
+            OsVersionModel osInfo = null;
+
+            foreach (var osVersionAdapter in versionAdapters.Where(c => c.Enabled))
+            {
+                try
+                {
+                    osInfo = osVersionAdapter.Read();
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Couldn't get OS Version info");
+                }
+
+                if (osInfo != null)
+                {
+                    break;
+                }
+            }
+
+            if (osInfo != null)
+            {
+                Name = osInfo.Name;
+                Version = osInfo.Version;
+                FullName = osInfo.FullName;
             }
             else
             {
-                Os = IsOsx ? Os.Osx : Os.Linux;
-
-                PathStringComparison = StringComparison.Ordinal;
+                Name = Os.ToString();
+                FullName = Name;
             }
         }
+    }
 
-        public static Version Version { get; private set; }
-        public static bool IsMonoRuntime { get; private set; }
-        public static bool IsNotWindows { get; private set; }
-        public static bool IsLinux { get; private set; }
-        public static bool IsOsx { get; private set; }
-        public static bool IsWindows { get; private set; }
-        public static Os Os { get; private set; }
-        public static DayOfWeek FirstDayOfWeek { get; private set; }
-        public static StringComparison PathStringComparison { get; private set; }
-
-        //Borrowed from: https://github.com/jpobst/Pinta/blob/master/Pinta.Core/Managers/SystemManager.cs
-        //From Managed.Windows.Forms/XplatUI
-        [DllImport("libc")]
-        static extern int uname(IntPtr buf);
-
-        [DebuggerStepThrough]
-        static bool IsRunningOnMac()
-        {
-            var buf = IntPtr.Zero;
-
-            try
-            {
-                buf = Marshal.AllocHGlobal(8192);
-                // This is a hacktastic way of getting sysname from uname ()
-                if (uname(buf) == 0)
-                {
-                    var os = Marshal.PtrToStringAnsi(buf);
-
-                    if (os == "Darwin")
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-            }
-            finally
-            {
-                if (buf != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(buf);
-                }
-            }
-
-            return false;
-        }
+    public interface IOsInfo
+    {
+        string Version { get; }
+        string Name { get; }
+        string FullName { get; }
     }
 
     public enum Os

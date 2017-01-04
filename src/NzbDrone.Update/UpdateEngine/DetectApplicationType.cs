@@ -24,7 +24,7 @@ namespace NzbDrone.Update.UpdateEngine
         {
             if (OsInfo.IsNotWindows)
             {
-                //Tehcnically its the console, but its been renamed for mono (Linux/OS X)
+                // Technically it is the console, but it has been renamed for mono (Linux/OS X)
                 return AppType.Normal;
             }
 

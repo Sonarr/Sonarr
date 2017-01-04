@@ -164,7 +164,6 @@ namespace NzbDrone.Core.MediaFiles
 
                 catch (Exception ex)
                 {
-                    ex.ExceptronIgnoreOnMono();
                     _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
                 }
             }

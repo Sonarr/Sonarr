@@ -57,8 +57,10 @@
 	
 	
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5C7F3FB135E52A44B9447C48B2EEEE92/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5C7F3FB135E52A44B9447C48B2EEEE92/IsOn/@EntryValue">False</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5C7F3FB135E52A44B9447C48B2EEEE92/RelativePriority/@EntryValue">1</s:Double>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileEAB6F2886783AB41B46249432F57475A/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileEAB6F2886783AB41B46249432F57475A/IsOn/@EntryValue">False</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileEAB6F2886783AB41B46249432F57475A/RelativePriority/@EntryValue">3</s:Double>
 	
 	

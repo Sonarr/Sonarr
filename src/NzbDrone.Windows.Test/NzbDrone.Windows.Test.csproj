@@ -73,6 +73,8 @@
   <ItemGroup>
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
     <Compile Include="DiskProviderTests\FreeSpaceFixture.cs" />
+    <Compile Include="EnvironmentInfo\WindowsVersionInfoFixture.cs" />
+    <Compile Include="EnvironmentInfo\DotNetPlatformInfoFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

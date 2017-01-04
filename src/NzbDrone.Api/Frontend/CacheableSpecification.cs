@@ -14,7 +14,7 @@ namespace NzbDrone.Api.Frontend
     {
         public bool IsCacheable(NancyContext context)
         {
-            if (!RuntimeInfoBase.IsProduction)
+            if (!RuntimeInfo.IsProduction)
             {
                 return false;
             }

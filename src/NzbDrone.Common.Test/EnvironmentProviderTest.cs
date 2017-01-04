@@ -29,7 +29,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void IsProduction_should_return_false_when_run_within_nunit()
         {
-            RuntimeInfoBase.IsProduction.Should().BeFalse("Process name is " + Process.GetCurrentProcess().ProcessName + " Folder is " + Directory.GetCurrentDirectory());
+            RuntimeInfo.IsProduction.Should().BeFalse("Process name is " + Process.GetCurrentProcess().ProcessName + " Folder is " + Directory.GetCurrentDirectory());
         }
 
         [Test]

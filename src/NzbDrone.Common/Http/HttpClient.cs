@@ -30,12 +30,19 @@ namespace NzbDrone.Common.Http
         private readonly ICached<CookieContainer> _cookieContainerCache;
         private readonly List<IHttpRequestInterceptor> _requestInterceptors;
         private readonly IHttpDispatcher _httpDispatcher;
+        private readonly IUserAgentBuilder _userAgentBuilder;
 
-        public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors, ICacheManager cacheManager, IRateLimitService rateLimitService, IHttpDispatcher httpDispatcher, Logger logger)
+        public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors,
+            ICacheManager cacheManager,
+            IRateLimitService rateLimitService,
+            IHttpDispatcher httpDispatcher,
+            IUserAgentBuilder userAgentBuilder,
+            Logger logger)
         {
             _requestInterceptors = requestInterceptors.ToList();
             _rateLimitService = rateLimitService;
             _httpDispatcher = httpDispatcher;
+            _userAgentBuilder = userAgentBuilder;
             _logger = logger;
 
             ServicePointManager.DefaultConnectionLimit = 12;
@@ -78,7 +85,7 @@ namespace NzbDrone.Common.Http
                 _logger.Trace("Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
             }
 
-            if (!RuntimeInfoBase.IsProduction &&
+            if (!RuntimeInfo.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
                  response.StatusCode == HttpStatusCode.MovedPermanently ||
                  response.StatusCode == HttpStatusCode.Found))
@@ -163,7 +170,7 @@ namespace NzbDrone.Common.Http
 
                 var stopWatch = Stopwatch.StartNew();
                 var webClient = new GZipWebClient();
-                webClient.Headers.Add(HttpRequestHeader.UserAgent, UserAgentBuilder.UserAgent);
+                webClient.Headers.Add(HttpRequestHeader.UserAgent, _userAgentBuilder.GetUserAgent());
                 webClient.DownloadFile(url, fileName);
                 stopWatch.Stop();
                 _logger.Debug("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);

@@ -25,7 +25,7 @@ namespace NzbDrone.Integration.Test
         protected override void InitializeTestTarget()
         {
             // Add Wombles
-            var wombles = Indexers.Post(new Api.Indexers.IndexerResource
+            Indexers.Post(new Api.Indexers.IndexerResource
             {
                 EnableRss = true,
                 ConfigContract = "NullConfig",

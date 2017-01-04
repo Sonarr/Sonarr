@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Test.Framework;
@@ -8,17 +9,13 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
     [TestFixture]
     public class MonoVersionCheckFixture : CoreTest<MonoVersionCheck>
     {
-        [SetUp]
-        public void Setup()
-        {
-            MonoOnly();
-        }
-
         private void GivenOutput(string version)
         {
-            Mocker.GetMock<IRuntimeInfo>()
-                  .SetupGet(s => s.RuntimeVersion)
-                  .Returns(string.Format("{0} (tarball Wed Sep 25 16:35:44 CDT 2013)", version));
+            MonoOnly();
+
+            Mocker.GetMock<IPlatformInfo>()
+                  .SetupGet(s => s.Version)
+                  .Returns(new Version(version));
         }
 
         [TestCase("3.10")]

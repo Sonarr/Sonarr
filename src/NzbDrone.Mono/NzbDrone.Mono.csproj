@@ -71,9 +71,13 @@
     <Compile Include="Disk\DiskProvider.cs" />
     <Compile Include="Disk\FindDriveType.cs" />
     <Compile Include="Disk\LinuxPermissionsException.cs" />
-    <Compile Include="EnvironmentInfo\MonoRuntimeProvider.cs" />
+    <Compile Include="EnvironmentInfo\VersionAdapters\IssueFileVersionAdapter.cs" />
+    <Compile Include="EnvironmentInfo\VersionAdapters\MacOsVersionAdapter.cs" />
+    <Compile Include="EnvironmentInfo\MonoPlatformInfo.cs" />
     <Compile Include="Disk\ProcMount.cs" />
     <Compile Include="Disk\ProcMountProvider.cs" />
+    <Compile Include="EnvironmentInfo\VersionAdapters\SynologyVersionAdapter.cs" />
+    <Compile Include="EnvironmentInfo\VersionAdapters\ReleaseFileVersionAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Disk\SymbolicLinkResolver.cs" />
   </ItemGroup>

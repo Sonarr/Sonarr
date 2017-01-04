@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
@@ -10,6 +11,12 @@ namespace NzbDrone.Core.Test.UpdateTests
 {
     public class UpdatePackageProviderFixture : CoreTest<UpdatePackageProvider>
     {
+        [SetUp]
+        public void Setup()
+        {
+            Mocker.GetMock<IPlatformInfo>().SetupGet(c => c.Version).Returns(new Version("9.9.9"));
+        }
+
         [Test]
         public void no_update_when_version_higher()
         {

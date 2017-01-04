@@ -48,7 +48,7 @@ namespace NzbDrone.Common.Instrumentation
             }
             else
             {
-                if (inConsole && (OsInfo.IsNotWindows || RuntimeInfoBase.IsUserInteractive))
+                if (inConsole && (OsInfo.IsNotWindows || RuntimeInfo.IsUserInteractive))
                 {
                     RegisterConsole();
                 }
@@ -151,16 +151,6 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.Configuration.AddTarget("updateFile", fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
         }
-
-        private static void RegisterExceptron()
-        {
-            var exceptronTarget = new ExceptronTarget();
-            var rule = new LoggingRule("*", LogLevel.Warn, exceptronTarget);
-
-            LogManager.Configuration.AddTarget("ExceptronTarget", exceptronTarget);
-            LogManager.Configuration.LoggingRules.Add(rule);
-        }
-
 
         public static Logger GetLogger(Type obj)
         {
