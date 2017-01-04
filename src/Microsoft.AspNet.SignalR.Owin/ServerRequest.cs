@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Security.Principal;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Owin.Infrastructure;
 
 namespace Microsoft.AspNet.SignalR.Owin
