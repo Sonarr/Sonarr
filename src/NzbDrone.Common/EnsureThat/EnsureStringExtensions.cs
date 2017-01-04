@@ -101,12 +101,12 @@ namespace NzbDrone.Common.EnsureThat
 
             if (param.Value.IsPathValid()) return param;
 
-            if (OsInfo.IsNotWindows)
+            if (OsInfo.IsWindows)
             {
-                throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid *nix path. paths must start with /", param.Value));
+                throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid Windows path. paths must be a full path eg. C:\\Windows", param.Value));
             }
-         
-            throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid Windows path. paths must be a full path eg. C:\\Windows", param.Value));
+
+            throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid *nix path. paths must start with /", param.Value));
         }
     }
 }

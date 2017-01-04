@@ -13,6 +13,8 @@ namespace NzbDrone.Api.System
     {
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IPlatformInfo _platformInfo;
+        private readonly IOsInfo _osInfo;
         private readonly IRouteCacheProvider _routeCacheProvider;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IMainDatabase _database;
@@ -20,14 +22,17 @@ namespace NzbDrone.Api.System
 
         public SystemModule(IAppFolderInfo appFolderInfo,
                             IRuntimeInfo runtimeInfo,
+                            IPlatformInfo platformInfo,
+                            IOsInfo osInfo,
                             IRouteCacheProvider routeCacheProvider,
                             IConfigFileProvider configFileProvider,
                             IMainDatabase database,
-                            ILifecycleService lifecycleService)
-            : base("system")
+                            ILifecycleService lifecycleService) : base("system")
         {
             _appFolderInfo = appFolderInfo;
             _runtimeInfo = runtimeInfo;
+            _platformInfo = platformInfo;
+            _osInfo = osInfo;
             _routeCacheProvider = routeCacheProvider;
             _configFileProvider = configFileProvider;
             _database = database;
@@ -41,27 +46,29 @@ namespace NzbDrone.Api.System
         private Response GetStatus()
         {
             return new
-                {
-                    Version = BuildInfo.Version.ToString(),
-                    BuildTime = BuildInfo.BuildDateTime,
-                    IsDebug = BuildInfo.IsDebug,
-                    IsProduction = RuntimeInfoBase.IsProduction,
-                    IsAdmin = _runtimeInfo.IsAdmin,
-                    IsUserInteractive = RuntimeInfoBase.IsUserInteractive,
-                    StartupPath = _appFolderInfo.StartUpFolder,
-                    AppData = _appFolderInfo.GetAppDataPath(),
-                    OsVersion = OsInfo.Version.ToString(),
-                    IsMonoRuntime = OsInfo.IsMonoRuntime,
-                    IsMono = OsInfo.IsNotWindows,
-                    IsLinux = OsInfo.IsLinux,
-                    IsOsx = OsInfo.IsOsx,
-                    IsWindows = OsInfo.IsWindows,
-                    Branch = _configFileProvider.Branch,
-                    Authentication = _configFileProvider.AuthenticationMethod,
-                    SqliteVersion = _database.Version,
-                    UrlBase = _configFileProvider.UrlBase,
-                    RuntimeVersion = _runtimeInfo.RuntimeVersion
-                }.AsResponse();
+            {
+                Version = BuildInfo.Version.ToString(),
+                BuildTime = BuildInfo.BuildDateTime,
+                IsDebug = BuildInfo.IsDebug,
+                IsProduction = RuntimeInfo.IsProduction,
+                IsAdmin = _runtimeInfo.IsAdmin,
+                IsUserInteractive = RuntimeInfo.IsUserInteractive,
+                StartupPath = _appFolderInfo.StartUpFolder,
+                AppData = _appFolderInfo.GetAppDataPath(),
+                OsName = _osInfo.Name,
+                OsVersion = _osInfo.Version,
+                IsMonoRuntime = PlatformInfo.IsMono,
+                IsMono = PlatformInfo.IsMono,
+                IsLinux = OsInfo.IsLinux,
+                IsOsx = OsInfo.IsOsx,
+                IsWindows = OsInfo.IsWindows,
+                Branch = _configFileProvider.Branch,
+                Authentication = _configFileProvider.AuthenticationMethod,
+                SqliteVersion = _database.Version,
+                UrlBase = _configFileProvider.UrlBase,
+                RuntimeVersion = _platformInfo.Version,
+                RuntimeName = PlatformInfo.Platform
+            }.AsResponse();
         }
 
         private Response GetRoutes()

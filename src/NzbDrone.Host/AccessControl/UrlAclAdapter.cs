@@ -20,6 +20,7 @@ namespace NzbDrone.Host.AccessControl
         private readonly INetshProvider _netshProvider;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IOsInfo _osInfo;
         private readonly Logger _logger;
 
         public List<string> Urls
@@ -30,19 +31,21 @@ namespace NzbDrone.Host.AccessControl
             }
         }
 
-        private List<UrlAcl> InternalUrls { get; set; }
-        private List<UrlAcl> RegisteredUrls { get; set; } 
+        private List<UrlAcl> InternalUrls { get; }
+        private List<UrlAcl> RegisteredUrls { get; } 
 
         private static readonly Regex UrlAclRegex = new Regex(@"(?<scheme>https?)\:\/\/(?<address>.+?)\:(?<port>\d+)/(?<urlbase>.+)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public UrlAclAdapter(INetshProvider netshProvider,
                              IConfigFileProvider configFileProvider,
                              IRuntimeInfo runtimeInfo,
+                             IOsInfo osInfo,
                              Logger logger)
         {
             _netshProvider = netshProvider;
             _configFileProvider = configFileProvider;
             _runtimeInfo = runtimeInfo;
+            _osInfo = osInfo;
             _logger = logger;
 
             InternalUrls = new List<UrlAcl>();
@@ -105,7 +108,8 @@ namespace NzbDrone.Host.AccessControl
 
         private void RefreshRegistration()
         {
-            if (OsInfo.Version.Major < 6) return;
+            var osVersion = new Version(_osInfo.Version);
+            if (osVersion.Major < 6) return;
 
             foreach (var urlAcl in InternalUrls)
             {

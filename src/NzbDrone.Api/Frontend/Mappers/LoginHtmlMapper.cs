@@ -67,7 +67,7 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         private string GetLoginText()
         {
-            if (RuntimeInfoBase.IsProduction && _generatedContent != null)
+            if (RuntimeInfo.IsProduction && _generatedContent != null)
             {
                 return _generatedContent;
             }

@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -151,7 +149,7 @@ namespace NzbDrone.Test.Common.AutoMoq
 
         private Mock<T> TheRegisteredMockForThisType<T>(Type type) where T : class
         {
-            return (Mock<T>)_registeredMocks.Where(x => x.Key == type).First().Value;
+            return (Mock<T>)_registeredMocks.First(x => x.Key == type).Value;
         }
 
         private void CreateANewMockAndRegisterIt<T>(Type type, MockBehavior behavior) where T : class

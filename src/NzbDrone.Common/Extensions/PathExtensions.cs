@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -47,7 +48,7 @@ namespace NzbDrone.Common.Extensions
         {
             if (!comparison.HasValue)
             {
-                comparison = OsInfo.PathStringComparison;
+                comparison = DiskProviderBase.PathStringComparison;
             }
 
             if (firstPath.Equals(secondPath, comparison.Value)) return true;
@@ -93,7 +94,7 @@ namespace NzbDrone.Common.Extensions
 
             while (child.Parent != null)
             {
-                if (child.Parent.FullName.Equals(parent.FullName, OsInfo.PathStringComparison))
+                if (child.Parent.FullName.Equals(parent.FullName, DiskProviderBase.PathStringComparison))
                 {
                     return true;
                 }

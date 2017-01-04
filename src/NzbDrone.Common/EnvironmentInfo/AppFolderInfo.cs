@@ -41,10 +41,10 @@ namespace NzbDrone.Common.EnvironmentInfo
             TempFolder = Path.GetTempPath();
         }
 
-        public string AppDataFolder { get; private set; }
+        public string AppDataFolder { get; }
 
-        public string StartUpFolder { get; private set; }
+        public string StartUpFolder { get; }
 
-        public string TempFolder { get; private set; }
+        public string TempFolder { get; }
     }
 }

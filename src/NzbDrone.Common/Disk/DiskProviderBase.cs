@@ -16,6 +16,19 @@ namespace NzbDrone.Common.Disk
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProviderBase));
 
+        public static StringComparison PathStringComparison
+        {
+            get
+            {
+                if (OsInfo.IsWindows)
+                {
+                    return StringComparison.OrdinalIgnoreCase;
+                }
+
+                return StringComparison.Ordinal;
+            }
+        }
+
         public abstract long? GetAvailableSpace(string path);
         public abstract void InheritFolderPermissions(string filename);
         public abstract void SetPermissions(string path, string mask, string user, string group);
@@ -86,7 +99,7 @@ namespace NzbDrone.Common.Disk
         public bool FileExists(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
-            return FileExists(path, OsInfo.PathStringComparison);
+            return FileExists(path, PathStringComparison);
         }
 
         public bool FileExists(string path, StringComparison stringComparison)

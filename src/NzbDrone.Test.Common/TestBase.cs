@@ -133,7 +133,7 @@ namespace NzbDrone.Test.Common
 
         protected void MonoOnly()
         {
-            if (OsInfo.IsWindows)
+            if (!PlatformInfo.IsMono)
             {
                 throw new IgnoreException("mono specific test");
             }

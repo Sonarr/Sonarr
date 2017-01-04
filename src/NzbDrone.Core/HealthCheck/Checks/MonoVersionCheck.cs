@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -9,50 +8,43 @@ namespace NzbDrone.Core.HealthCheck.Checks
 {
     public class MonoVersionCheck : HealthCheckBase
     {
-        private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IPlatformInfo _platformInfo;
         private readonly Logger _logger;
-        private static readonly Regex VersionRegex = new Regex(@"(?<=\W|^)(?<version>\d+\.\d+(\.\d+)?(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public MonoVersionCheck(IRuntimeInfo runtimeInfo, Logger logger)
+        public MonoVersionCheck(IPlatformInfo platformInfo, Logger logger)
         {
-            _runtimeInfo = runtimeInfo;
+            _platformInfo = platformInfo;
             _logger = logger;
         }
 
         public override HealthCheck Check()
         {
-            if (OsInfo.IsWindows)
+            if (!PlatformInfo.IsMono)
             {
                 return new HealthCheck(GetType());
             }
 
-            var versionString = _runtimeInfo.RuntimeVersion;
-            var versionMatch = VersionRegex.Match(versionString);
+            var monoVersion = _platformInfo.Version;
 
-            if (versionMatch.Success)
+            if (monoVersion == new Version("3.4.0") && HasMonoBug18599())
             {
-                var version = new Version(versionMatch.Groups["version"].Value);
-
-                if (version == new Version(3, 4, 0) && HasMonoBug18599())
-                {
-                    _logger.Debug("mono version 3.4.0, checking for mono bug #18599 returned positive.");
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, "your mono version 3.4.0 has a critical bug, you should upgrade to a higher version");
-                }
-
-                if (version == new Version(4, 4, 0) || version == new Version(4, 4, 1))
-                {
-                    _logger.Debug("mono version {0}", version);
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, $"your mono version {version} has a bug that causes issues connecting to indexers/download clients");
-                }
-
-                if (version >= new Version(3, 10))
-                {
-                    _logger.Debug("mono version is 3.10 or better: {0}", version.ToString());
-                    return new HealthCheck(GetType());
-                }
+                _logger.Debug("Mono version 3.4.0, checking for Mono bug #18599 returned positive.");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, "You are running an old and unsupported version of Mono with a known bug. You should upgrade to a higher version");
             }
 
-            return new HealthCheck(GetType(), HealthCheckResult.Warning, "mono version is less than 3.10, upgrade for improved stability");
+            if (monoVersion == new Version("4.4.0") || monoVersion == new Version("4.4.1"))
+            {
+                _logger.Debug("Mono version {0}", monoVersion);
+                return new HealthCheck(GetType(), HealthCheckResult.Error, $"Your Mono version {monoVersion} has a bug that causes issues connecting to indexers/download clients.  You should upgrade to a higher version");
+            }
+
+            if (monoVersion >= new Version("3.10"))
+            {
+                _logger.Debug("Mono version is 3.10 or better: {0}", monoVersion);
+                return new HealthCheck(GetType());
+            }
+
+            return new HealthCheck(GetType(), HealthCheckResult.Warning, "You are running an old and unsupported version of Mono. Please upgrade Mono for improved stability.");
         }
 
         public override bool CheckOnConfigChange => false;
@@ -70,7 +62,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return false;
             }
 
-            var fieldInfo = numberFormatterType.GetField("userFormatProvider", BindingFlags.Static | BindingFlags.NonPublic);
+            var fieldInfo = numberFormatterType.GetField("userFormatProvider",
+                BindingFlags.Static | BindingFlags.NonPublic);
 
             if (fieldInfo == null)
             {

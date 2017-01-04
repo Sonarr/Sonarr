@@ -64,7 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Disk\DiskProvider.cs" />
-    <Compile Include="EnvironmentInfo\DotNetRuntimeProvider.cs" />
+    <Compile Include="EnvironmentInfo\DotNetPlatformInfo.cs" />
+    <Compile Include="EnvironmentInfo\WindowsVersionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

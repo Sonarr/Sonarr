@@ -81,10 +81,17 @@
   <ItemGroup>
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
     <Compile Include="DiskProviderTests\FreeSpaceFixture.cs" />
+    <Compile Include="EnvironmentInfo\MonoPlatformInfoFixture.cs" />
+    <Compile Include="EnvironmentInfo\ReleaseFileVersionAdapterFixture.cs" />
+    <Compile Include="EnvironmentInfo\VersionAdapters\ReleaseFileVersionAdapterFixture.cs" />
+    <Compile Include="EnvironmentInfo\VersionAdapters\MacOsVersionAdapterFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Files\macOS\SystemVersion.plist">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +122,19 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Files\linux\lsb-release">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Files\linux\os-release">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Files\synology\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
