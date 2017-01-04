@@ -112,8 +112,8 @@
       xcopy /s /y "$(SolutionDir)\..\_output\NzbDrone.Windows.*"   "$(TargetDir)"
     </PostBuildEvent>
     <PostBuildEvent Condition="('$(OS)' != 'Windows_NT')">
-      cp -rv $(SolutionDir)\..\_output\NzbDrone.Mono.* $(TargetDir)
-      cp -rv $(SolutionDir)\..\_output\NzbDrone.Windows.* $(TargetDir)
+      cp -rv $(SolutionDir)\..\_output\NzbDrone.Mono.* $(TargetDir) || true
+      cp -rv $(SolutionDir)\..\_output\NzbDrone.Windows.* $(TargetDir) || true
     </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

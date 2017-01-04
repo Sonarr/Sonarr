@@ -3,7 +3,6 @@ using NzbDrone.Api.REST;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.SignalR;
-using Nancy;
 
 namespace NzbDrone.Api.Episodes
 {
