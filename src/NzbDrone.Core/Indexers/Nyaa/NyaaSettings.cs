@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         public NyaaSettings()
         {
-            BaseUrl = "http://www.nyaa.se";
+            BaseUrl = "https://www.nyaa.se";
             AdditionalParameters = "&cats=1_37&filter=1";
         }
 
