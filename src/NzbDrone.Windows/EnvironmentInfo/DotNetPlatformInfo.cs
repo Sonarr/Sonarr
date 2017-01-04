@@ -8,7 +8,9 @@ namespace NzbDrone.Windows.EnvironmentInfo
     {
         public DotNetPlatformInfo()
         {
-            Version = GetFrameworkVersion();
+            var version = GetFrameworkVersion();
+            Environment.SetEnvironmentVariable("RUNTIME_VERSION", version.ToString());
+            Version = version;
         }
 
         public override Version Version { get; }
@@ -27,27 +29,27 @@ namespace NzbDrone.Windows.EnvironmentInfo
 
                 if (releaseKey >= 394802)
                 {
-                    return new Version(4,6,2);
+                    return new Version(4, 6, 2);
                 }
                 if (releaseKey >= 394254)
                 {
-                    return new Version(4,6,1);
+                    return new Version(4, 6, 1);
                 }
                 if (releaseKey >= 393295)
                 {
-                    return new Version(4,6);
+                    return new Version(4, 6);
                 }
                 if (releaseKey >= 379893)
                 {
-                    return new Version(4,5,2);
+                    return new Version(4, 5, 2);
                 }
                 if (releaseKey >= 378675)
                 {
-                    return new Version(4,5,1);
+                    return new Version(4, 5, 1);
                 }
                 if (releaseKey >= 378389)
                 {
-                    return new Version(4,5);
+                    return new Version(4, 5);
                 }
 
                 return new Version(4, 0);
