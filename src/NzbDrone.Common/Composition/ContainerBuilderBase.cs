@@ -13,11 +13,14 @@ namespace NzbDrone.Common.Composition
     {
         private readonly List<Type> _loadedTypes;
 
-        public IContainer Container { get; private set; }
+        protected IContainer Container { get; }
 
-        protected ContainerBuilderBase(IStartupContext args, params string[] assemblies)
+        protected ContainerBuilderBase(IStartupContext args, List<string> assemblies)
         {
             _loadedTypes = new List<Type>();
+
+            assemblies.Add(OsInfo.IsWindows ? "NzbDrone.Windows" : "NzbDrone.Mono");
+            assemblies.Add("NzbDrone.Common");
 
             foreach (var assembly in assemblies)
             {
