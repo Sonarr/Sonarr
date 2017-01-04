@@ -15,26 +15,15 @@ namespace NzbDrone.Host
             var assemblies = new List<string>
                              {
                                  "NzbDrone.Host",
-                                 "NzbDrone.Common",
                                  "NzbDrone.Core",
                                  "NzbDrone.Api",
                                  "NzbDrone.SignalR"
                              };
 
-            if (OsInfo.IsWindows)
-            {
-                assemblies.Add("NzbDrone.Windows");
-            }
-
-            else
-            {
-                assemblies.Add("NzbDrone.Mono");
-            }
-
-            return new MainAppContainerBuilder(args, assemblies.ToArray()).Container;
+            return new MainAppContainerBuilder(args, assemblies).Container;
         }
 
-        private MainAppContainerBuilder(StartupContext args, string[] assemblies)
+        private MainAppContainerBuilder(StartupContext args, List<string> assemblies)
             : base(args, assemblies)
         {
             AutoRegisterImplementations<NzbDronePersistentConnection>();
