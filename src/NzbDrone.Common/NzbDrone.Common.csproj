@@ -125,22 +125,6 @@
     <Compile Include="EnvironmentInfo\StartupContext.cs" />
     <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
-    <Compile Include="Exceptron\Configuration\ExceptronConfiguration.cs" />
-    <Compile Include="Exceptron\ExceptionData.cs" />
-    <Compile Include="Exceptron\ExceptionSeverity.cs" />
-    <Compile Include="Exceptron\ExceptronApiException.cs" />
-    <Compile Include="Exceptron\ExceptronClient.cs" />
-    <Compile Include="Exceptron\fastJSON\Getters.cs" />
-    <Compile Include="Exceptron\fastJSON\JSON.cs" />
-    <Compile Include="Exceptron\fastJSON\JsonParser.cs" />
-    <Compile Include="Exceptron\fastJSON\JsonSerializer.cs" />
-    <Compile Include="Exceptron\fastJSON\SafeDictionary.cs" />
-    <Compile Include="Exceptron\IExceptronClient.cs" />
-    <Compile Include="Exceptron\IRestClient.cs" />
-    <Compile Include="Exceptron\Message\ExceptionReport.cs" />
-    <Compile Include="Exceptron\Message\ExceptionResponse.cs" />
-    <Compile Include="Exceptron\Message\Frame.cs" />
-    <Compile Include="Exceptron\RestClient.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />
     <Compile Include="Expansive\PatternStyle.cs" />
@@ -237,7 +221,6 @@
     <EmbeddedResource Include="EnsureThat\Resources\ExceptionMessages.resx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Exceptron\fastJSON\license.txt" />
     <Content Include="Expansive\license.txt" />
   </ItemGroup>
   <ItemGroup>

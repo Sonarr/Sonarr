@@ -38,9 +38,6 @@ namespace NzbDrone.Common.Instrumentation
                 RegisterDebugger();
             }
 
-            //Disabling for now - until its fixed or we yank it out
-            //RegisterExceptron();
-
             if (updateApp)
             {
                 RegisterUpdateFile(appFolderInfo);
