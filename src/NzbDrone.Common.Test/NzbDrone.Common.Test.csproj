@@ -76,6 +76,7 @@
     <Compile Include="DiskTests\IsParentFixtureBase.cs" />
     <Compile Include="DiskTests\DiskTransferServiceFixture.cs" />
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
+    <Compile Include="EnvironmentInfo\BuildInfoFixture.cs" />
     <Compile Include="EnvironmentProviderTest.cs" />
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />

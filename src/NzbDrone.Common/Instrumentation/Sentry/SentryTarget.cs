@@ -44,12 +44,14 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             {
                 Compression = true,
                 Environment = RuntimeInfo.IsProduction ? "production" : "development",
-                Release = BuildInfo.Version.ToString(),
+                Release = BuildInfo.Release
             };
 
             _client.Tags.Add("osfamily", OsInfo.Os.ToString());
             _client.Tags.Add("runtime", PlatformInfo.Platform.ToString().ToLower());
             _client.Tags.Add("culture", Thread.CurrentThread.CurrentCulture.Name);
+            _client.Tags.Add("branch", BuildInfo.Branch);
+            _client.Tags.Add("version", BuildInfo.Version.ToString());
         }
 
         protected override void Write(LogEventInfo logEvent)
