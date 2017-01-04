@@ -97,6 +97,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             var lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
             if (lowerCurrentDir.Contains("teamcity")) return false;
+            if (lowerCurrentDir.Contains("buildagent")) return false;
             if (lowerCurrentDir.Contains("_output")) return false;
 
             return true;
