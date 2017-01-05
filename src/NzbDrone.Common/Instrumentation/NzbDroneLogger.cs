@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using LogentriesNLog;
 using NLog;
 using NLog.Config;
@@ -61,7 +62,13 @@ namespace NzbDrone.Common.Instrumentation
 
         public static void UnRegisterRemoteLoggers()
         {
-            LogManager.Configuration.RemoveTarget("sentryTarget");
+            var sentryRules = LogManager.Configuration.LoggingRules.Where(r => r.Targets.Any(t => t.Name == "sentryTarget"));
+
+            foreach (var rules in sentryRules)
+            {
+                rules.Targets.Clear();
+            }
+
             LogManager.ReconfigExistingLoggers();
         }
 
@@ -103,7 +110,7 @@ namespace NzbDrone.Common.Instrumentation
             };
 
             var loggingRule = new LoggingRule("*", updateClient ? LogLevel.Trace : LogLevel.Error, target);
-            LogManager.Configuration.AddTarget("logentries", target);
+            LogManager.Configuration.AddTarget("sentryTarget", target);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
         }
 
