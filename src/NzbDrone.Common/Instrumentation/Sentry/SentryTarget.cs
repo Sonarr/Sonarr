@@ -59,7 +59,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             try
             {
                 // don't report non-critical events without exceptions
-                if (logEvent.Exception == null && logEvent.Level < LogLevel.Warn)
+                if (logEvent.Exception == null)
                 {
                     return;
                 }
@@ -78,9 +78,14 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     {
                         logEvent.Level.ToString(),
                         logEvent.LoggerName,
-                        logEvent.Exception?.GetType().ToString()
+                        logEvent.Message
                     }
                 };
+
+                if (logEvent.Exception != null)
+                {
+                    sentryEvent.Fingerprint.Add(logEvent.Exception.GetType().FullName);
+                }
 
                 sentryEvent.Tags.Add("os_name", Environment.GetEnvironmentVariable("OS_NAME"));
                 sentryEvent.Tags.Add("os_version", Environment.GetEnvironmentVariable("OS_VERSION"));
