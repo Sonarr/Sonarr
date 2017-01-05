@@ -22,7 +22,7 @@ namespace NzbDrone.Api
         /// </summary>
         public static IEnumerable<Func<Assembly, bool>> DefaultAutoRegisterIgnoredAssemblies = new Func<Assembly, bool>[]
             {
-                asm => !asm.FullName.StartsWith("Nancy.", StringComparison.InvariantCulture),
+                asm => !asm.FullName.StartsWith("Nancy.", StringComparison.InvariantCulture)
             };
 
         /// <summary>

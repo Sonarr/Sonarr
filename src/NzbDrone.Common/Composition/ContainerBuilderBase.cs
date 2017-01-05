@@ -6,7 +6,6 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using TinyIoC;
 
-
 namespace NzbDrone.Common.Composition
 {
     public abstract class ContainerBuilderBase

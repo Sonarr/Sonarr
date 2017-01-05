@@ -12,7 +12,7 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 
-namespace NzbDrone.Core.Test.InstrumentationTests
+namespace NzbDrone.Core.Test.Instrumentation
 {
     [TestFixture]
     public class DatabaseTargetFixture : DbTest<DatabaseTarget, Log>

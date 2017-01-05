@@ -265,7 +265,7 @@
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TestTorrentRssIndexer.cs" />
     <Compile Include="IndexerTests\WomblesTests\WomblesFixture.cs" />
     <Compile Include="IndexerTests\XElementExtensionsFixture.cs" />
-    <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
+    <Compile Include="Instrumentation\DatabaseTargetFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
@@ -570,6 +570,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="InstrumentationTests\" />
     <Folder Include="ProviderTests\UpdateProviderTests\" />
   </ItemGroup>
   <ItemGroup>
