@@ -63,18 +63,16 @@ namespace NzbDrone.Api.ErrorManagement
                         }.AsResponse(HttpStatusCode.Conflict);
                 }
 
-                var sqlErrorMessage = string.Format("[{0} {1}]", context.Request.Method, context.Request.Path);
-
-                _logger.Error(sqLiteException, sqlErrorMessage);
+                _logger.Error(sqLiteException, "[{0} {1}]", context.Request.Method, context.Request.Path);
             }
-            
-            _logger.Fatal(exception, "Request Failed");
+
+            _logger.Fatal(exception, "Request Failed. {0} {1}", context.Request.Method, context.Request.Path);
 
             return new ErrorModel
-                {
-                    Message = exception.Message,
-                    Description = exception.ToString()
-                }.AsResponse(HttpStatusCode.InternalServerError);
+            {
+                Message = exception.Message,
+                Description = exception.ToString()
+            }.AsResponse(HttpStatusCode.InternalServerError);
         }
     }
 }
