@@ -78,7 +78,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     {
                         logEvent.Level.ToString(),
                         logEvent.LoggerName,
-                        logEvent.Message,
                         logEvent.Exception?.GetType().ToString()
                     }
                 };
