@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Notifications.Twitter
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test message: " + ex.Message);
+                _logger.Error(ex, "Unable to send test message");
                 return new ValidationFailure("Host", "Unable to send test message");
             }
             return null;

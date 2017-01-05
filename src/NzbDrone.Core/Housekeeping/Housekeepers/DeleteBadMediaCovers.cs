@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e, "Couldn't validate image " + image.RelativePath);
+                        _logger.Error(e, "Couldn't validate image {0}", image.RelativePath);
                     }
                 }
             }

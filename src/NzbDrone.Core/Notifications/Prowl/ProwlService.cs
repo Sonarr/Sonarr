@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Notifications.Prowl
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test message: " + ex.Message);
+                _logger.Error(ex, "Unable to send test message");
                 return new ValidationFailure("ApiKey", "Unable to send test message");
             }
 

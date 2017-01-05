@@ -58,11 +58,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
             if (filename == null) return null;
 
             var metadata = new MetadataFile
-                           {
-                               SeriesId = series.Id,
-                               Consumer = GetType().Name,
-                               RelativePath = series.Path.GetRelativePath(path)
-                           };
+            {
+                SeriesId = series.Id,
+                Consumer = GetType().Name,
+                RelativePath = series.Path.GetRelativePath(path)
+            };
 
             if (SeriesImagesRegex.IsMatch(filename))
             {
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 {
                     return null;
                 }
-                
+
                 return metadata;
             }
 
@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         var streamDetails = new XElement("streamdetails");
 
                         var video = new XElement("video");
-                        video.Add(new XElement("aspect", (float) episodeFile.MediaInfo.Width / (float) episodeFile.MediaInfo.Height));
+                        video.Add(new XElement("aspect", (float)episodeFile.MediaInfo.Width / (float)episodeFile.MediaInfo.Height));
                         video.Add(new XElement("bitrate", episodeFile.MediaInfo.VideoBitrate));
                         video.Add(new XElement("codec", episodeFile.MediaInfo.VideoCodec));
                         video.Add(new XElement("framerate", episodeFile.MediaInfo.VideoFps));
@@ -338,8 +338,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to process episode image for file: " + Path.Combine(series.Path, episodeFile.RelativePath));
-                
+                _logger.Error(ex, "Unable to process episode image for file: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
+
                 return new List<ImageFileResult>();
             }
         }

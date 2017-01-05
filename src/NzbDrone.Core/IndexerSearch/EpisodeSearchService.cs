@@ -53,8 +53,7 @@ namespace NzbDrone.Core.IndexerSearch
                         }
                         catch (Exception ex)
                         {
-                            var message = String.Format("Unable to search for missing episodes in season {0} of [{1}]", season.Key, series.Key);
-                            _logger.Error(ex, message);
+                            _logger.Error(ex, "Unable to search for missing episodes in season {0} of [{1}]", season.Key, series.Key);
                             continue;
                         }
                     }
@@ -67,8 +66,7 @@ namespace NzbDrone.Core.IndexerSearch
                         }
                         catch (Exception ex)
                         {
-                            var message = String.Format("Unable to search for missing episode: [{0}]", season.First());
-                            _logger.Error(ex, message);
+                            _logger.Error(ex, "Unable to search for missing episode: [{0}]", season.First());
                             continue;
                         }
                     }

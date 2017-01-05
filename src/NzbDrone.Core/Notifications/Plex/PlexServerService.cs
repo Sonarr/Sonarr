@@ -175,12 +175,12 @@ namespace NzbDrone.Core.Notifications.Plex
             }
             catch(PlexAuthenticationException ex)
             {
-                _logger.Error(ex, "Unable to connect to Plex Server: " + ex.Message);
+                _logger.Error(ex, "Unable to connect to Plex Server");
                 return new ValidationFailure("Username", "Incorrect username or password");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to connect to Plex Server: " + ex.Message);
+                _logger.Error(ex, "Unable to connect to Plex Server");
                 return new ValidationFailure("Host", "Unable to connect to Plex Server");
             }
 

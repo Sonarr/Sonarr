@@ -108,16 +108,16 @@ namespace NzbDrone.Common.Disk
 
             switch (stringComparison)
             {
-                    case StringComparison.CurrentCulture:
-                    case StringComparison.InvariantCulture:
-                    case StringComparison.Ordinal:
-                {
-                     return File.Exists(path) && path == path.GetActualCasing();
-                }
+                case StringComparison.CurrentCulture:
+                case StringComparison.InvariantCulture:
+                case StringComparison.Ordinal:
+                    {
+                        return File.Exists(path) && path == path.GetActualCasing();
+                    }
                 default:
-                {
-                     return File.Exists(path);
-                }
+                    {
+                        return File.Exists(path);
+                    }
             }
         }
 
@@ -128,7 +128,7 @@ namespace NzbDrone.Common.Disk
             try
             {
                 var testPath = Path.Combine(path, "sonarr_write_test.txt");
-                var testContent = string.Format("This file was created to verify if '{0}' is writable. It should've been automatically deleted. Feel free to delete it.", path);
+                var testContent = $"This file was created to verify if '{path}' is writable. It should've been automatically deleted. Feel free to delete it.";
                 File.WriteAllText(testPath, testContent);
                 File.Delete(testPath);
                 return true;

@@ -260,14 +260,13 @@ namespace NzbDrone.Core.Indexers
             catch (IndexerException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
-                var message = string.Format("{0} - {1}", ex.Message, url);
-                _logger.Warn(ex, message);
+                _logger.Warn(ex, "{0}", url);
             }
             catch (Exception feedEx)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
                 feedEx.Data.Add("FeedUrl", url);
-                _logger.Error(feedEx, "An error occurred while processing feed. " + url);
+                _logger.Error(feedEx, "An error occurred while processing feed. {0}", url);
             }
 
             return CleanupReleases(releases);

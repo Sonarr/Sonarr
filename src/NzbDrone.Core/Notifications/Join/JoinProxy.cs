@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Join
             catch (JoinException ex)
             {
                 _logger.Error(ex, "Unable to send Join message.");
-                throw ex;
+                throw;
             }
         }
 

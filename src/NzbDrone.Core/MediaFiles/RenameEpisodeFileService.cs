@@ -96,14 +96,14 @@ namespace NzbDrone.Core.MediaFiles
                 if (!episodeFilePath.PathEquals(newPath, StringComparison.Ordinal))
                 {
                     yield return new RenameEpisodeFilePreview
-                                 {
-                                     SeriesId = series.Id,
-                                     SeasonNumber = seasonNumber,
-                                     EpisodeNumbers = episodesInFile.Select(e => e.EpisodeNumber).ToList(),
-                                     EpisodeFileId = file.Id,
-                                     ExistingPath = file.RelativePath,
-                                     NewPath = series.Path.GetRelativePath(newPath)
-                                 };
+                    {
+                        SeriesId = series.Id,
+                        SeasonNumber = seasonNumber,
+                        EpisodeNumbers = episodesInFile.Select(e => e.EpisodeNumber).ToList(),
+                        EpisodeFileId = file.Id,
+                        ExistingPath = file.RelativePath,
+                        NewPath = series.Path.GetRelativePath(newPath)
+                    };
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Failed to rename file: " + episodeFilePath);
+                    _logger.Error(ex, "Failed to rename file {0}", episodeFilePath);
                 }
             }
 
