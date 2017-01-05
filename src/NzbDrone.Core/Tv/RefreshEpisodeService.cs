@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Tv
                 }
                 catch (Exception e)
                 {
-                    _logger.Fatal(e, string.Format("An error has occurred while updating episode info for series {0}. {1}", series, episode));
+                    _logger.Fatal(e, "An error has occurred while updating episode info for series {0}. {1}", series, episode));
                     failCount++;
                 }
             }
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Tv
             }
 
             var groups = allEpisodes.Where(c => c.AirDateUtc.HasValue)
-                                    .GroupBy(e => new {e.SeasonNumber, e.AirDate})
+                                    .GroupBy(e => new { e.SeasonNumber, e.AirDate })
                                     .Where(g => g.Count() > 1)
                                     .ToList();
 
