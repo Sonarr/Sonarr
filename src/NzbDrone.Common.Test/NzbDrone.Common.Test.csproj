@@ -89,6 +89,7 @@
     <Compile Include="Http\HttpRequestBuilderFixture.cs" />
     <Compile Include="Http\HttpRequestFixture.cs" />
     <Compile Include="Http\HttpUriFixture.cs" />
+    <Compile Include="Http\UserAgentBuilderFixture.cs" />
     <Compile Include="InstrumentationTests\CleanseLogMessageFixture.cs" />
     <Compile Include="LevenshteinDistanceFixture.cs" />
     <Compile Include="OsPathFixture.cs" />
