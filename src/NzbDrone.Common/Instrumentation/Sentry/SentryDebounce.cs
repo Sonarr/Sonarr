@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Common.Cache;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.Instrumentation.Sentry
 {
     public class SentryDebounce
     {
-        private readonly Dictionary<string, DateTime> _dictionary;
-        private static readonly TimeSpan TTL = TimeSpan.FromHours(1);
+        private readonly TimeSpan _ttl;
+        private readonly Cached<bool> _cache;
 
         public SentryDebounce()
         {
-            _dictionary = new Dictionary<string, DateTime>();
+            _cache = new Cached<bool>();
+            _ttl = RuntimeInfo.IsProduction ? TimeSpan.FromHours(1) : TimeSpan.FromSeconds(10);
         }
 
         public bool Allowed(IEnumerable<string> fingerPrint)
         {
             var key = string.Join("|", fingerPrint);
+            var exists = _cache.Find(key);
 
-            DateTime expiry;
-            _dictionary.TryGetValue(key, out expiry);
-
-            if (expiry >= DateTime.Now)
+            if (exists)
             {
                 return false;
             }
 
-            _dictionary[key] = DateTime.Now + TTL;
+            _cache.Set(key, true, _ttl);
             return true;
         }
     }
