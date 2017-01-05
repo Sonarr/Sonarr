@@ -9,7 +9,7 @@ namespace NzbDrone.Host
 {
     public static class PlatformValidation
     {
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger(typeof(PlatformValidation));
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(PlatformValidation));
 
         private const string DOWNLOAD_LINK = "http://www.microsoft.com/en-us/download/details.aspx?id=42643";
 
@@ -49,7 +49,7 @@ namespace NzbDrone.Host
             }
             catch (Exception e)
             {
-                Logger.Warn("Couldn't load {0}", e.Message);
+                Logger.Warn(e, "Couldn't load {0}", assemblyString);
                 return false;
             }
 

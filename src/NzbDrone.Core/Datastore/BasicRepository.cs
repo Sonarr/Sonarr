@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Datastore
 
             if (result.Count != idList.Count())
             {
-                throw new ApplicationException("Expected query to return {0} rows but returned {1}".Inject(idList.Count(), result.Count));
+                throw new ApplicationException($"Expected query to return {idList.Count} rows but returned {result.Count}");
             }
 
             return result;

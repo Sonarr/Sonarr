@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
             catch (DownloadClientException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -232,7 +232,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
             catch (DownloadClientAuthenticationException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure("Username", "Authentication failure")
                 {
                     DetailedDescription = "Please verify your username and password."
@@ -240,7 +240,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
             catch (WebException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 if (ex.Status == WebExceptionStatus.ConnectFailure)
                 {
                     return new NzbDroneValidationFailure("Host", "Unable to connect")
@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
 
@@ -267,7 +267,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 

@@ -181,7 +181,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Failed to Update Scene Mappings:");
+                    _logger.Error(ex, "Failed to Update Scene Mappings.");
                 }
             }
             

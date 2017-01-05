@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Messaging.Events
             _taskFactory = new TaskFactory();
         }
 
-        public void PublishEvent<TEvent>(TEvent @event) where TEvent : class ,IEvent
+        public void PublishEvent<TEvent>(TEvent @event) where TEvent : class, IEvent
         {
             Ensure.That(@event, () => @event).IsNotNull();
 
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Messaging.Events
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, string.Format("{0} failed while processing [{1}]", handler.GetType().Name, eventName));
+                    _logger.Error(e, "{0} failed while processing [{1}]", handler.GetType().Name, eventName);
                 }
             }
 

@@ -53,9 +53,7 @@ namespace NzbDrone.Core.Tv
             }
             catch (IOException ex)
             {
-                var errorMessage = string.Format("Unable to move series from '{0}' to '{1}'", source, destination);
-
-                _logger.Error(ex, errorMessage);
+                _logger.Error(ex, "Unable to move series from '{0}' to '{1}'", source, destination);
                 throw;
             }
 

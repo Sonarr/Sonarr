@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Tv
             _logger.ProgressInfo("Updating Info for {0}", series.Title);
 
             Tuple<Series, List<Episode>> tuple;
-            
+
             try
             {
                 tuple = _seriesInfo.GetSeriesInfo(series.TvdbId);
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Tv
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e, "Couldn't refresh info for {0}".Inject(series));
+                            _logger.Error(e, "Couldn't refresh info for {0}", series);
                         }
                     }
 
@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Tv
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e, "Couldn't rescan series {0}".Inject(series));
+                            _logger.Error(e, "Couldn't rescan series {0}", series);
                         }
                     }
                 }

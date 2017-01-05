@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Indexers
                 catch (Exception itemEx)
                 {
                     itemEx.Data.Add("Item", item.Title());
-                    _logger.Error(itemEx, "An error occurred while processing feed item from " + indexerResponse.Request.Url);
+                    _logger.Error(itemEx, "An error occurred while processing feed item from {0}", indexerResponse.Request.Url);
                 }
             }
 

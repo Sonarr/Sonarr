@@ -43,7 +43,7 @@ namespace NzbDrone.Host
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Couldn't open default browser to " + url);
+                _logger.Error(e, "Couldn't open default browser to {0}", url);
             }
         }
     }

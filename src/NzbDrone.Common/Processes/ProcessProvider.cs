@@ -98,9 +98,9 @@ namespace NzbDrone.Common.Processes
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo(url)
-                    {
-                        UseShellExecute = true
-                    }
+                {
+                    UseShellExecute = true
+                }
             };
 
             process.Start();
@@ -136,9 +136,9 @@ namespace NzbDrone.Common.Processes
             logger.Debug("Starting {0} {1}", path, args);
 
             var process = new Process
-                {
-                    StartInfo = startInfo
-                };
+            {
+                StartInfo = startInfo
+            };
 
             process.OutputDataReceived += (sender, eventArgs) =>
             {

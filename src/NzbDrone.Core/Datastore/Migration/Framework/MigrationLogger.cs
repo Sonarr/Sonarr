@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public void Error(Exception exception)
         {
-            _logger.Error(exception, exception.Message);
+            _logger.Error(exception);
         }
 
         public void Write(string message, bool escaped)

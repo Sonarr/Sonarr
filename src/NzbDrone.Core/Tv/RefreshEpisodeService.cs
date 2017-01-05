@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Tv
                 }
                 catch (Exception e)
                 {
-                    _logger.Fatal(e, "An error has occurred while updating episode info for series {0}. {1}", series, episode));
+                    _logger.Fatal(e, "An error has occurred while updating episode info for series {0}. {1}", series, episode);
                     failCount++;
                 }
             }

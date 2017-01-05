@@ -113,7 +113,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                     int.TryParse(aBitRate, out audioBitRate);
                     int.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
-                    
+
 
                     string audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
                     int aCindex = audioChannelsStr.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
@@ -138,25 +138,25 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                     int.TryParse(audioChannelsStr, out audioChannels);
                     var mediaInfoModel = new MediaInfoModel
-                                                {
-                                                    VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "Codec/String"),
-                                                    VideoBitrate = videoBitRate,
-                                                    VideoBitDepth = videoBitDepth,
-                                                    Height = height,
-                                                    Width = width,
-                                                    AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
-                                                    AudioBitrate = audioBitRate,
-                                                    RunTime = GetBestRuntime(audioRuntime, videoRuntime, generalRuntime),
-                                                    AudioStreamCount = streamCount,
-                                                    AudioChannels = audioChannels,
-                                                    AudioChannelPositions = audioChannelPositions,
-                                                    AudioChannelPositionsText = audioChannelPositionsText,
-                                                    AudioProfile = audioProfile.Trim(),
-                                                    VideoFps = videoFrameRate,
-                                                    AudioLanguages = audioLanguages,
-                                                    Subtitles = subtitles,
-                                                    ScanType = scanType
-                                                };
+                    {
+                        VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "Codec/String"),
+                        VideoBitrate = videoBitRate,
+                        VideoBitDepth = videoBitDepth,
+                        Height = height,
+                        Width = width,
+                        AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
+                        AudioBitrate = audioBitRate,
+                        RunTime = GetBestRuntime(audioRuntime, videoRuntime, generalRuntime),
+                        AudioStreamCount = streamCount,
+                        AudioChannels = audioChannels,
+                        AudioChannelPositions = audioChannelPositions,
+                        AudioChannelPositionsText = audioChannelPositionsText,
+                        AudioProfile = audioProfile.Trim(),
+                        VideoFps = videoFrameRate,
+                        AudioLanguages = audioLanguages,
+                        Subtitles = subtitles,
+                        ScanType = scanType
+                    };
 
                     return mediaInfoModel;
                 }
@@ -171,14 +171,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to parse media info from file: " + filename);
+                _logger.Error(ex, "Unable to parse media info from file: {0}", filename);
             }
             finally
             {
-                if (mediaInfo != null)
-                {
-                    mediaInfo.Close();
-                }
+                mediaInfo?.Close();
             }
 
             return null;
