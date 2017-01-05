@@ -24,8 +24,14 @@ namespace NzbDrone.Common.Http
 
         public UserAgentBuilder(IOsInfo osInfo)
         {
-            var osName = osInfo.Name.ToLower();
-            var osVersion = osInfo.Version.ToLower();
+            var osName = OsInfo.Os.ToString();
+
+            if (!string.IsNullOrWhiteSpace(osInfo.Name))
+            {
+                osName = osInfo.Name.ToLower();
+            }
+
+            var osVersion = osInfo.Version?.ToLower();
 
             _userAgent = $"Sonarr/{BuildInfo.Version} ({osName} {osVersion})";
             _userAgentSimplified = $"Sonarr/{BuildInfo.Version.ToString(2)}";
