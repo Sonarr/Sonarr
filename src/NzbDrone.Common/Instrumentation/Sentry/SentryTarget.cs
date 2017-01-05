@@ -58,34 +58,31 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             _debounce = new SentryDebounce();
         }
 
-
-        private List<string> GetFingerPrint(LogEventInfo logEvent)
+        private static List<string> GetFingerPrint(LogEventInfo logEvent)
         {
             var fingerPrint = new List<string>
             {
                 logEvent.Level.Ordinal.ToString(),
+                logEvent.LoggerName
             };
 
-            var lineNumber = "";
+            var ex = logEvent.Exception;
 
-            if (logEvent.StackTrace != null)
+            if (ex != null)
             {
-                var stackFrame = logEvent.StackTrace.GetFrame(logEvent.UserStackFrameNumber);
-                if (stackFrame != null)
+                var exception = ex.GetType().Name;
+
+                if (ex.InnerException != null)
                 {
-                    lineNumber = $"#{stackFrame.GetFileLineNumber()}";
+                    exception += ex.InnerException.GetType().Name;
                 }
-            }
 
-            fingerPrint.Add(logEvent.LoggerName + lineNumber);
-
-            if (logEvent.Exception != null)
-            {
-                fingerPrint.Add(logEvent.Exception.GetType().Name);
+                fingerPrint.Add(exception);
             }
 
             return fingerPrint;
         }
+
 
         protected override void Write(LogEventInfo logEvent)
         {
@@ -111,11 +108,20 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 {
                     Level = LoggingLevelMap[logEvent.Level],
                     Message = sentryMessage,
-                    Extra = extras
+                    Extra = extras,
+                    Fingerprint =
+                    {
+                        logEvent.Level.ToString(),
+                        logEvent.LoggerName,
+                        logEvent.Message
+                    }
                 };
 
+                if (logEvent.Exception != null)
+                {
+                    sentryEvent.Fingerprint.Add(logEvent.Exception.GetType().FullName);
+                }
 
-                fingerPrint.ForEach(c => sentryEvent.Fingerprint.Add(c));
 
                 sentryEvent.Tags.Add("os_name", Environment.GetEnvironmentVariable("OS_NAME"));
                 sentryEvent.Tags.Add("os_version", Environment.GetEnvironmentVariable("OS_VERSION"));

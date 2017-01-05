@@ -182,7 +182,6 @@
     <Compile Include="Instrumentation\LogEventExtensions.cs" />
     <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
     <Compile Include="Instrumentation\NzbDroneLogger.cs" />
-    <Compile Include="Instrumentation\Sentry\PopulateStackTraceRenderer.cs" />
     <Compile Include="Instrumentation\Sentry\SentryDebounce.cs" />
     <Compile Include="Instrumentation\Sentry\SentryTarget.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
