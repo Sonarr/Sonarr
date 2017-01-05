@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using NLog;
@@ -12,7 +11,6 @@ using SharpRaven.Data;
 
 namespace NzbDrone.Common.Instrumentation.Sentry
 {
-
     public class SentryUserFactory : ISentryUserFactory
     {
         public SentryUser Create()
@@ -20,6 +18,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             return new SentryUser((string)null);
         }
     }
+
 
     [Target("Sentry")]
     public class SentryTarget : TargetWithLayout
@@ -39,6 +38,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             {LogLevel.Warn, ErrorLevel.Warning},
         };
 
+        private readonly SentryDebounce _debounce;
+
         public SentryTarget(string dsn)
         {
             _client = new RavenClient(new Dsn(dsn), new JsonPacketFactory(), new SentryRequestFactory(), new SentryUserFactory())
@@ -53,6 +54,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             _client.Tags.Add("culture", Thread.CurrentThread.CurrentCulture.Name);
             _client.Tags.Add("branch", BuildInfo.Branch);
             _client.Tags.Add("version", BuildInfo.Version.ToString());
+
+            _debounce = new SentryDebounce();
         }
 
 
@@ -94,6 +97,12 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     return;
                 }
 
+                var fingerPrint = GetFingerPrint(logEvent);
+                if (!_debounce.Allowed(fingerPrint))
+                {
+                    return;
+                }
+
                 var extras = logEvent.Properties.ToDictionary(x => x.Key.ToString(), x => x.Value.ToString());
                 _client.Logger = logEvent.LoggerName;
 
@@ -105,7 +114,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     Extra = extras
                 };
 
-                var fingerPrint = GetFingerPrint(logEvent);
+
                 fingerPrint.ForEach(c => sentryEvent.Fingerprint.Add(c));
 
                 sentryEvent.Tags.Add("os_name", Environment.GetEnvironmentVariable("OS_NAME"));
