@@ -9,6 +9,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Lifecycle;
@@ -154,7 +155,7 @@ namespace NzbDrone.Core.Configuration
                     SetValue("AuthenticationMethod", AuthenticationType.Basic);
                     return AuthenticationType.Basic;
                 }
-                
+
                 return GetValueEnum("AuthenticationMethod", AuthenticationType.None);
             }
         }
@@ -188,7 +189,7 @@ namespace NzbDrone.Core.Configuration
 
         public UpdateMechanism UpdateMechanism => GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false);
 
-        public string UpdateScriptPath => GetValue("UpdateScriptPath", "", false );
+        public string UpdateScriptPath => GetValue("UpdateScriptPath", "", false);
 
         public int GetValueInt(string key, int defaultValue)
         {
@@ -344,6 +345,11 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureDefaultConfigFile();
             DeleteOldValues();
+
+            if (!AnalyticsEnabled)
+            {
+                NzbDroneLogger.UnRegisterRemoteLoggers();
+            }
         }
 
         public void Execute(ResetApiKeyCommand message)

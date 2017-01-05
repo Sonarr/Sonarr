@@ -59,6 +59,12 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.ReconfigExistingLoggers();
         }
 
+        public static void UnRegisterRemoteLoggers()
+        {
+            LogManager.Configuration.RemoveTarget("sentryTarget");
+            LogManager.ReconfigExistingLoggers();
+        }
+
         private static void RegisterLogEntries()
         {
             var target = new LogentriesTarget();
@@ -112,7 +118,6 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.Configuration.LoggingRules.Add(loggingRule);
         }
 
-
         private static void RegisterConsole()
         {
             var level = LogLevel.Trace;
@@ -128,7 +133,7 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.Configuration.LoggingRules.Add(loggingRule);
         }
 
-        const string FILE_LOG_LAYOUT = @"${date:format=yy-M-d HH\:mm\:ss.f}|${level}|${logger}|${message}${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
+        private const string FILE_LOG_LAYOUT = @"${date:format=yy-M-d HH\:mm\:ss.f}|${level}|${logger}|${message}${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
 
         private static void RegisterAppFile(IAppFolderInfo appFolderInfo)
         {
@@ -137,7 +142,7 @@ namespace NzbDrone.Common.Instrumentation
             RegisterAppFile(appFolderInfo, "appFileTrace", "sonarr.trace.txt", 50, LogLevel.Off);
         }
 
-        private static LoggingRule RegisterAppFile(IAppFolderInfo appFolderInfo, string name, string fileName, int maxArchiveFiles, LogLevel minLogLevel)
+        private static void RegisterAppFile(IAppFolderInfo appFolderInfo, string name, string fileName, int maxArchiveFiles, LogLevel minLogLevel)
         {
             var fileTarget = new NzbDroneFileTarget();
 
@@ -158,8 +163,6 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration.AddTarget(name, fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
-
-            return loggingRule;
         }
 
         private static void RegisterUpdateFile(IAppFolderInfo appFolderInfo)
