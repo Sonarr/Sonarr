@@ -74,6 +74,13 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     Level = LoggingLevelMap[logEvent.Level],
                     Message = sentryMessage,
                     Extra = extras,
+                    Fingerprint =
+                    {
+                        logEvent.Level.ToString(),
+                        logEvent.LoggerName,
+                        logEvent.Message,
+                        logEvent.Exception?.GetType().ToString()
+                    }
                 };
 
                 sentryEvent.Tags.Add("os_name", Environment.GetEnvironmentVariable("OS_NAME"));
