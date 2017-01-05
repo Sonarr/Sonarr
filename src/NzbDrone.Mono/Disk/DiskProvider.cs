@@ -54,7 +54,7 @@ namespace NzbDrone.Mono.Disk
             }
             catch (InvalidOperationException ex)
             {
-                Logger.Error(ex, "Couldn't get free space for " + path);
+                Logger.Error(ex, "Couldn't get free space for {0}", path);
             }
 
             return null;
@@ -107,7 +107,7 @@ namespace NzbDrone.Mono.Disk
             }
             catch (InvalidOperationException e)
             {
-                Logger.Error(e, "Couldn't get total space for " + path);
+                Logger.Error(e, "Couldn't get total space for {0}", path);
             }
 
             return null;
@@ -207,7 +207,7 @@ namespace NzbDrone.Mono.Disk
 
             return g.gr_gid;
 
-            
+
         }
     }
 }

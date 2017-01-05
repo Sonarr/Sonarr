@@ -81,7 +81,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         private bool CheckSize(long size, QualityModel quality)
         {
-            if (_largeSampleSizeQualities.Contains(quality.Quality))
             {
                 if (size < SampleSizeLimit * 2)
                 {

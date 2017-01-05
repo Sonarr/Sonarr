@@ -14,7 +14,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public FreeSpaceSpecification(IDiskProvider diskProvider, IConfigService configService,  Logger logger)
+        public FreeSpaceSpecification(IDiskProvider diskProvider, IConfigService configService, Logger logger)
         {
             _diskProvider = diskProvider;
             _configService = configService;
@@ -54,11 +54,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             }
             catch (DirectoryNotFoundException ex)
             {
-                _logger.Error("Unable to check free disk space while importing. " + ex.Message);
+                _logger.Error(ex, "Unable to check free disk space while importing.");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to check free disk space while importing: " + localEpisode.Path);
+                _logger.Error(ex, "Unable to check free disk space while importing. {0}", localEpisode.Path);
             }
 
             return Decision.Accept();

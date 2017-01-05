@@ -125,7 +125,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             }
             catch (Exception e)
             {
-                InternalLogger.Error("Unable to send Sentry request: {0}", e.Message);
+                InternalLogger.Error(e, "Unable to send Sentry request");
             }
         }
     }

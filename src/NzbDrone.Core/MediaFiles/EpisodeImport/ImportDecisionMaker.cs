@@ -111,7 +111,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Couldn't import file. " + file);
+                _logger.Error(e, "Couldn't import file. {0}", file);
 
                 var localEpisode = new LocalEpisode { Path = file };
                 decision = new ImportDecision(localEpisode, new Rejection("Unexpected error processing file"));
@@ -143,8 +143,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             {
                 //e.Data.Add("report", remoteEpisode.Report.ToJson());
                 //e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
-                _logger.Error(e, "Couldn't evaluate decision on " + localEpisode.Path);
-                return new Rejection(string.Format("{0}: {1}", spec.GetType().Name, e.Message));
+                _logger.Error(e, "Couldn't evaluate decision on {0}", localEpisode.Path);
+                return new Rejection($"{spec.GetType().Name}: {e.Message}");
             }
 
             return null;

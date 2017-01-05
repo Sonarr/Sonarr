@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Notifications.Email
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test email: " + ex.Message);
+                _logger.Error(ex, "Unable to send test email");
                 return new ValidationFailure("Server", "Unable to send test email");
             }
 

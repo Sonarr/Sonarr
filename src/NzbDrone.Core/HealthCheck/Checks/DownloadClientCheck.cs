@@ -33,10 +33,11 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
                 catch (Exception ex)
                 {
-                    var message = String.Format("Unable to communicate with {0}.", downloadClient.Definition.Name);
 
-                    _logger.Error(ex, message);
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, message + " " + ex.Message);
+                    _logger.Error(ex, "Unable to communicate with {0}", downloadClient.Definition.Name);
+
+                    var message = $"Unable to communicate with {downloadClient.Definition.Name}.";
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, $"{message} {ex.Message}");
                 }
             }
 

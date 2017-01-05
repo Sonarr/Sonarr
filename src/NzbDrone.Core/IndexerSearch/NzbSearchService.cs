@@ -120,7 +120,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         var episode = sceneSeasonEpisodes.First();
                         var searchSpec = Get<SingleEpisodeSearchCriteria>(series, sceneSeasonEpisodes.ToList(), userInvokedSearch);
-                        
+
                         searchSpec.SeasonNumber = sceneSeasonEpisodes.Key;
                         searchSpec.MonitoredEpisodesOnly = true;
 
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> SearchSingle(Series series, Episode episode, bool userInvokedSearch)
         {
-            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, new List<Episode>{episode}, userInvokedSearch);
+            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, new List<Episode> { episode }, userInvokedSearch);
 
             if (series.UseSceneNumbering && episode.SceneSeasonNumber.HasValue && episode.SceneEpisodeNumber.HasValue)
             {
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.IndexerSearch
         private List<DownloadDecision> SearchDaily(Series series, Episode episode, bool userInvokedSearch)
         {
             var airDate = DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture);
-            var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode>{ episode }, userInvokedSearch);
+            var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode> { episode }, userInvokedSearch);
             searchSpec.AirDate = airDate;
 
             return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
@@ -272,7 +272,7 @@ namespace NzbDrone.Core.IndexerSearch
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e, "Error while searching for " + criteriaBase);
+                        _logger.Error(e, "Error while searching for {0}", criteriaBase);
                     }
                 }).LogExceptions());
             }

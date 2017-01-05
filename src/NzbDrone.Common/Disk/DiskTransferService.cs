@@ -352,7 +352,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, string.Format("Failed to properly rollback the file move [{0}] to [{1}], incomplete file may be left in target path.", sourcePath, targetPath));
+                _logger.Error(ex, "Failed to properly rollback the file move [{0}] to [{1}], incomplete file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -368,7 +368,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, string.Format("Failed to properly rollback the file move [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath));
+                _logger.Error(ex, "Failed to properly rollback the file move [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -387,7 +387,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, string.Format("Failed to properly rollback the file copy [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath));
+                _logger.Error(ex, "Failed to properly rollback the file copy [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -429,7 +429,7 @@ namespace NzbDrone.Common.Disk
 
                     if (i == RetryCount)
                     {
-                        _logger.Error("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath, i + 1, RetryCount);
+                        _logger.Error("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath);
                     }
                     else
                     {

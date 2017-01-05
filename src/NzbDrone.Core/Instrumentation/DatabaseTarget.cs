@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Instrumentation
             }
             catch (SQLiteException ex)
             {
-                InternalLogger.Error("Unable to save log event to database: {0}", ex);
+                InternalLogger.Error(ex, "Unable to save log event to database");
                 throw;
             }
         }

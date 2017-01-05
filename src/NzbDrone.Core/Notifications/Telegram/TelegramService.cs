@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Notifications.Telegram
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test message: " + ex.Message);
+                _logger.Error(ex, "Unable to send test message");
 
                 var restException = ex as RestException;
 
