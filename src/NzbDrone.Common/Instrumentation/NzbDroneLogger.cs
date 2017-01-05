@@ -33,6 +33,8 @@ namespace NzbDrone.Common.Instrumentation
 
             GlobalExceptionHandlers.Register();
 
+            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("populatestacktrace", typeof(PopulateStackTraceRenderer));
+
             var appFolderInfo = new AppFolderInfo(startupContext);
 
             if (Debugger.IsAttached)
@@ -106,10 +108,11 @@ namespace NzbDrone.Common.Instrumentation
             var target = new SentryTarget(dsn)
             {
                 Name = "sentryTarget",
-                Layout = "${message}"
+                Layout = "${message}${populatestacktrace}"
             };
 
             var loggingRule = new LoggingRule("*", updateClient ? LogLevel.Trace : LogLevel.Error, target);
+
             LogManager.Configuration.AddTarget("sentryTarget", target);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
         }
