@@ -37,7 +37,7 @@ namespace NzbDrone.Mono.EnvironmentInfo
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Unable to get mono version: " + ex.Message);
+                logger.Error(ex, "Unable to get mono version");
             }
 
             Version = runTimeVersion;
