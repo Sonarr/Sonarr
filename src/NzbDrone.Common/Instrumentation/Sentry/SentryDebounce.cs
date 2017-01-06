@@ -29,5 +29,10 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             _cache.Set(key, true, _ttl);
             return true;
         }
+
+        public void Clear()
+        {
+            _cache.Clear();
+        }
     }
 }

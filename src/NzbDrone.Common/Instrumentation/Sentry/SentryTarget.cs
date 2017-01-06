@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using NLog;
 using NLog.Common;
@@ -27,6 +28,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
         };
 
         private readonly SentryDebounce _debounce;
+        private bool _unauthorized;
+
 
         public SentryTarget(string dsn)
         {
@@ -37,6 +40,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 Release = BuildInfo.Release
             };
 
+            _client.ErrorOnCapture = OnError;
+
             _client.Tags.Add("osfamily", OsInfo.Os.ToString());
             _client.Tags.Add("runtime", PlatformInfo.Platform.ToString().ToLower());
             _client.Tags.Add("culture", Thread.CurrentThread.CurrentCulture.Name);
@@ -44,6 +49,24 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             _client.Tags.Add("version", BuildInfo.Version.ToString());
 
             _debounce = new SentryDebounce();
+        }
+
+        private void OnError(Exception ex)
+        {
+            var webException = ex as WebException;
+
+            if (webException != null)
+            {
+                var response = webException.Response as HttpWebResponse;
+                var statusCode = response?.StatusCode;
+                if (statusCode == HttpStatusCode.Unauthorized)
+                {
+                    _unauthorized = true;
+                    _debounce.Clear();
+                }
+            }
+
+            InternalLogger.Error(ex, "Unable to send error to Sentry");
         }
 
         private static List<string> GetFingerPrint(LogEventInfo logEvent)
@@ -77,7 +100,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             try
             {
                 // don't report non-critical events without exceptions
-                if (logEvent.Exception == null)
+                if (logEvent.Exception == null || _unauthorized)
                 {
                     return;
                 }
@@ -121,7 +144,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             }
             catch (Exception e)
             {
-                InternalLogger.Error(e, "Unable to send Sentry request");
+                OnError(e);
             }
         }
     }
