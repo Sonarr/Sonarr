@@ -11,23 +11,11 @@ using SharpRaven.Data;
 
 namespace NzbDrone.Common.Instrumentation.Sentry
 {
-    public class SentryUserFactory : ISentryUserFactory
-    {
-        public SentryUser Create()
-        {
-            return new SentryUser((string)null);
-        }
-    }
-
-
     [Target("Sentry")]
     public class SentryTarget : TargetWithLayout
     {
         private readonly RavenClient _client;
 
-        /// <summary>
-        /// Map of NLog log levels to Raven/Sentry log levels
-        /// </summary>
         private static readonly IDictionary<LogLevel, ErrorLevel> LoggingLevelMap = new Dictionary<LogLevel, ErrorLevel>
         {
             {LogLevel.Debug, ErrorLevel.Debug},
@@ -42,7 +30,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
         public SentryTarget(string dsn)
         {
-            _client = new RavenClient(new Dsn(dsn), new JsonPacketFactory(), new SentryRequestFactory(), new SentryUserFactory())
+            _client = new RavenClient(new Dsn(dsn), new SonarrJsonPacketFactory(), new SentryRequestFactory(), new MachineNameUserFactory())
             {
                 Compression = true,
                 Environment = RuntimeInfo.IsProduction ? "production" : "development",
@@ -103,7 +91,9 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 var extras = logEvent.Properties.ToDictionary(x => x.Key.ToString(), x => x.Value.ToString());
                 _client.Logger = logEvent.LoggerName;
 
-                var sentryMessage = new SentryMessage(Layout.Render(logEvent));
+
+                var sentryMessage = new SentryMessage(logEvent.Message, logEvent.Parameters);
+
                 var sentryEvent = new SentryEvent(logEvent.Exception)
                 {
                     Level = LoggingLevelMap[logEvent.Level],
