@@ -47,14 +47,14 @@ namespace NzbDrone.Core.Test.Qualities
                         new object[] {Quality.Bluray2160p, 19},
                 };
 
-        [Test, TestCaseSource("FromIntCases")]
+        [Test, TestCaseSource(nameof(FromIntCases))]
         public void should_be_able_to_convert_int_to_qualityTypes(int source, Quality expected)
         {
             var quality = (Quality)source;
             quality.Should().Be(expected);
         }
 
-        [Test, TestCaseSource("ToIntCases")]
+        [Test, TestCaseSource(nameof(ToIntCases))]
         public void should_be_able_to_convert_qualityTypes_to_int(Quality source, int expected)
         {
             var i = (int)source;

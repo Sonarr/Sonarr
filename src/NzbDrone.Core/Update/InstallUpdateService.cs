@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Update
         {
             if (configFileProvider == null)
             {
-                throw new ArgumentNullException("configFileProvider");
+                throw new ArgumentNullException(nameof(configFileProvider));
             }
             _checkUpdateService = checkUpdateService;
             _appFolderInfo = appFolderInfo;
