@@ -62,7 +62,7 @@ namespace NzbDrone.Update
         {
             if (args == null || !args.Any())
             {
-                throw new ArgumentOutOfRangeException("args", "args must be specified");
+                throw new ArgumentOutOfRangeException(nameof(args), "args must be specified");
             }
 
             var startupContext = new UpdateStartupContext
@@ -101,7 +101,7 @@ namespace NzbDrone.Update
             int id;
             if (!int.TryParse(arg, out id) || id <= 0)
             {
-                throw new ArgumentOutOfRangeException("arg", "Invalid process ID");
+                throw new ArgumentOutOfRangeException(nameof(arg), "Invalid process ID");
             }
 
             Logger.Debug("NzbDrone process ID: {0}", id);

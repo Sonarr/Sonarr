@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Qualities
             var quality = AllLookup[id];
 
             if (quality == null)
-                throw new ArgumentException("ID does not match a known quality", "id");
+                throw new ArgumentException("ID does not match a known quality", nameof(id));
                         
             return quality;
         }

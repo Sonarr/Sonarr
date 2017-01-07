@@ -132,7 +132,7 @@ namespace NzbDrone.Core.RootFolders
         {
             _logger.Debug("Generating list of unmapped folders");
             if (string.IsNullOrEmpty(path))
-                throw new ArgumentException("Invalid path provided", "path");
+                throw new ArgumentException("Invalid path provided", nameof(path));
 
             var results = new List<UnmappedFolder>();
             var series = _seriesRepository.All().ToList();
