@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             };
         }
 
-        [Test, TestCaseSource("AllowedTestCases")]
+        [Test, TestCaseSource(nameof(AllowedTestCases))]
         public void should_allow_if_quality_is_defined_in_profile(Quality qualityType)
         {
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
-        [Test, TestCaseSource("DeniedTestCases")]
+        [Test, TestCaseSource(nameof(DeniedTestCases))]
         public void should_not_allow_if_quality_is_not_defined_in_profile(Quality qualityType)
         {
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
