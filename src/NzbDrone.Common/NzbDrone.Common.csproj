@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CurlSharp, Version=1.0.6216.18898, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\CurlSharp\CurlSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -233,10 +237,6 @@
     <Content Include="Expansive\license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExternalModules\CurlSharp\CurlSharp\CurlSharp.csproj">
-      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
-      <Name>CurlSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LogentriesNLog\LogentriesNLog.csproj">
       <Project>{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}</Project>
       <Name>LogentriesNLog</Name>

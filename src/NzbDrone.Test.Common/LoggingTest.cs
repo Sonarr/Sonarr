@@ -20,7 +20,7 @@ namespace NzbDrone.Test.Common
             if (LogManager.Configuration == null || LogManager.Configuration.AllTargets.None(c => c is ExceptionVerification))
             {
                 LogManager.Configuration = new LoggingConfiguration();
-                var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };
+                var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception:format=toString}" };
                 LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
                 LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
 
