@@ -10,20 +10,20 @@ using NzbDrone.Common.Processes;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Dummy;
 
-namespace NzbDrone.Common.Test
+namespace NzbDrone.Common.Test.Processes
 {
     [TestFixture]
-    public class ProcessProviderTests : TestBase<ProcessProvider>
+    public class ProcessProviderFixture : TestBase<ProcessProvider>
     {
 
         [SetUp]
         public void Setup()
         {
             Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c =>
-                {
-                    c.Kill();
-                    c.WaitForExit();
-                });
+            {
+                c.Kill();
+                c.WaitForExit();
+            });
 
             Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).Should().BeEmpty();
         }
@@ -41,7 +41,7 @@ namespace NzbDrone.Common.Test
                 {
                     TestLogger.Warn(ex, "{0} when killing process", ex.Message);
                 }
-                
+
             });
         }
 
@@ -100,6 +100,12 @@ namespace NzbDrone.Common.Test
         {
             Console.WriteLine(new ProcessInfo().ToString());
             ExceptionVerification.MarkInconclusive(typeof(Win32Exception));
+        }
+
+        [Test]
+        public void should_find_process_by_name()
+        {
+            Subject.FindProcessByName(Process.GetCurrentProcess().ProcessName).Should().NotBeNull();
         }
     }
 }

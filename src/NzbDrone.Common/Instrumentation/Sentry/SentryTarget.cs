@@ -33,22 +33,21 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
         public SentryTarget(string dsn)
         {
+            _debounce = new SentryDebounce();
+
             _client = new RavenClient(new Dsn(dsn), new SonarrJsonPacketFactory(), new SentryRequestFactory(), new MachineNameUserFactory())
             {
                 Compression = true,
-                Environment = RuntimeInfo.IsProduction ? "production" : "development",
-                Release = BuildInfo.Release
+                Release = BuildInfo.Release,
+                ErrorOnCapture = OnError,
+                Timeout = TimeSpan.FromSeconds(1)
             };
-
-            _client.ErrorOnCapture = OnError;
 
             _client.Tags.Add("osfamily", OsInfo.Os.ToString());
             _client.Tags.Add("runtime", PlatformInfo.Platform.ToString().ToLower());
             _client.Tags.Add("culture", Thread.CurrentThread.CurrentCulture.Name);
             _client.Tags.Add("branch", BuildInfo.Branch);
             _client.Tags.Add("version", BuildInfo.Version.ToString());
-
-            _debounce = new SentryDebounce();
         }
 
         private void OnError(Exception ex)

@@ -94,7 +94,7 @@
     <Compile Include="LevenshteinDistanceFixture.cs" />
     <Compile Include="OsPathFixture.cs" />
     <Compile Include="PathExtensionFixture.cs" />
-    <Compile Include="ProcessProviderTests.cs" />
+    <Compile Include="Processes\ProcessProviderFixture.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="ReflectionTests\ReflectionExtensionFixture.cs" />
     <Compile Include="ServiceFactoryFixture.cs" />

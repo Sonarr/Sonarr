@@ -72,7 +72,7 @@ namespace NzbDrone.Update
 
             if (OsInfo.IsNotWindows)
             {
-                switch (args.Count())
+                switch (args.Length)
                 {
                     case 1:
                         return startupContext;

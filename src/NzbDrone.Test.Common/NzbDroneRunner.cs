@@ -57,7 +57,7 @@ namespace NzbDrone.Test.Common
                     Assert.Fail("Process has exited");
                 }
 
-                SetApiKey();
+                GetApiKey();
 
                 var request = new RestRequest("system/status");
                 request.AddHeader("Authorization", ApiKey);
@@ -71,7 +71,7 @@ namespace NzbDrone.Test.Common
                     return;
                 }
 
-                Console.WriteLine("Waiting for NzbDrone to start. Response Status : {0}  [{1}] {2}", statusCall.ResponseStatus, statusCall.StatusDescription, statusCall.ErrorException);
+                Console.WriteLine("Waiting for NzbDrone to start. Response Status : {0}  [{1}]", statusCall.ResponseStatus, statusCall.StatusDescription);
 
                 Thread.Sleep(500);
             }
@@ -81,7 +81,7 @@ namespace NzbDrone.Test.Common
         {
             if (_nzbDroneProcess != null)
             {
-                _processProvider.Kill(_nzbDroneProcess.Id);                
+                _processProvider.Kill(_nzbDroneProcess.Id);
             }
 
             _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
@@ -105,22 +105,22 @@ namespace NzbDrone.Test.Common
             }
         }
 
-        private void SetApiKey()
+        private void GetApiKey()
         {
             var configFile = Path.Combine(AppData, "config.xml");
             var attempts = 0;
 
-            while (ApiKey == null && attempts < 50)
+            while (ApiKey == null && attempts < 30)
             {
                 try
                 {
                     if (File.Exists(configFile))
                     {
-                        var apiKeyElement = XDocument.Load(configFile)
-                            .XPathSelectElement("Config/ApiKey");
+                        var apiKeyElement = XDocument.Load(configFile).XPathSelectElement("Config/ApiKey");
                         if (apiKeyElement != null)
                         {
                             ApiKey = apiKeyElement.Value;
+                            return;
                         }
                     }
                 }
@@ -132,6 +132,8 @@ namespace NzbDrone.Test.Common
                 attempts++;
                 Thread.Sleep(1000);
             }
+
+            Assert.Fail("Couldn't get API key in time.");
         }
     }
 }

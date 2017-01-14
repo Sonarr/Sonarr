@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             }
             catch (DownloadClientException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -170,12 +170,12 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
                 if (version < new Version("5.1"))
                 {
-                    return new ValidationFailure(string.Empty, "Old Hadouken client with unsupported API, need 5.1 or higher");                    
+                    return new ValidationFailure(string.Empty, "Old Hadouken client with unsupported API, need 5.1 or higher");
                 }
             }
             catch (DownloadClientAuthenticationException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex);
 
                 return new NzbDroneValidationFailure("Password", "Authentication failed");
             }
@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             }
             catch (Exception ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure(String.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 

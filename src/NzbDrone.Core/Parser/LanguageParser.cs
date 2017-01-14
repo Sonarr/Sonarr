@@ -125,11 +125,11 @@ namespace NzbDrone.Core.Parser
 
                 Logger.Debug("Unable to parse langauge from subtitle file: {0}", fileName);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Logger.Debug("Failed parsing langauge from subtitle file: {0}", fileName);
+                Logger.Debug(e, "Failed parsing langauge from subtitle file: {0}", fileName);
             }
-            
+
             return Language.Unknown;
         }
     }
