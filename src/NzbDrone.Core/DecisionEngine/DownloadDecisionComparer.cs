@@ -4,6 +4,7 @@ using System.Linq;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine
 {
@@ -75,8 +76,21 @@ namespace NzbDrone.Core.DecisionEngine
 
         private int CompareEpisodeCount(DownloadDecision x, DownloadDecision y)
         {
-            return CompareAll(CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.FullSeason),
-                           CompareByReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Count));
+            var seasonPackCompare = CompareBy(x.RemoteEpisode, y.RemoteEpisode,
+                remoteEpisode => remoteEpisode.ParsedEpisodeInfo.FullSeason);
+
+            if (seasonPackCompare != 0)
+            {
+                return seasonPackCompare;
+            }
+
+            if (x.RemoteEpisode.Series.SeriesType == SeriesTypes.Anime &
+                y.RemoteEpisode.Series.SeriesType == SeriesTypes.Anime)
+            {
+                return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Count);
+            }
+
+            return CompareByReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Count);
         }
 
         private int CompareEpisodeNumber(DownloadDecision x, DownloadDecision y)
