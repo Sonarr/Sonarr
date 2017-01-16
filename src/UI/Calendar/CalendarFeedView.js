@@ -9,6 +9,7 @@ module.exports = Marionette.Layout.extend({
     ui : {
         includeUnmonitored : '.x-includeUnmonitored',
         premiersOnly       : '.x-premiersOnly',
+        asAllDay           : '.x-asAllDay',
         tags               : '.x-tags',
         icalUrl            : '.x-ical-url',
         icalCopy           : '.x-ical-copy',
@@ -18,6 +19,7 @@ module.exports = Marionette.Layout.extend({
     events : {
         'click .x-includeUnmonitored' : '_updateUrl',
         'click .x-premiersOnly'       : '_updateUrl',
+        'click .x-asAllDay'           : '_updateUrl',
         'itemAdded .x-tags'           : '_updateUrl',
         'itemRemoved .x-tags'         : '_updateUrl'
     },
@@ -29,7 +31,7 @@ module.exports = Marionette.Layout.extend({
     },
 
     _updateUrl : function() {
-        var icalUrl = window.location.host + StatusModel.get('urlBase') + '/feed/calendar/NzbDrone.ics?';
+        var icalUrl = window.location.host + StatusModel.get('urlBase') + '/feed/calendar/Sonarr.ics?';
 
         if (this.ui.includeUnmonitored.prop('checked')) {
             icalUrl += 'unmonitored=true&';
@@ -37,6 +39,10 @@ module.exports = Marionette.Layout.extend({
 
         if (this.ui.premiersOnly.prop('checked')) {
             icalUrl += 'premiersOnly=true&';
+        }
+
+        if (this.ui.asAllDay.prop('checked')) {
+            icalUrl += 'asAllDay=true&';
         }
 
         if (this.ui.tags.val()) {

@@ -37,6 +37,7 @@ namespace NzbDrone.Api.Calendar
             var end = DateTime.Today.AddDays(futureDays);
             var unmonitored = false;
             var premiersOnly = false;
+            var asAllDay = false;
             var tags = new List<int>();
 
             // TODO: Remove start/end parameters in v3, they don't work well for iCal
@@ -46,6 +47,7 @@ namespace NzbDrone.Api.Calendar
             var queryFutureDays = Request.Query.FutureDays;
             var queryUnmonitored = Request.Query.Unmonitored;
             var queryPremiersOnly = Request.Query.PremiersOnly;
+            var queryAsAllDay = Request.Query.AsAllDay;
             var queryTags = Request.Query.Tags;
 
             if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
@@ -71,6 +73,11 @@ namespace NzbDrone.Api.Calendar
             if (queryPremiersOnly.HasValue)
             {
                 premiersOnly = bool.Parse(queryPremiersOnly.Value);
+            }
+
+            if (queryAsAllDay.HasValue)
+            {
+                asAllDay = bool.Parse(queryAsAllDay.Value);
             }
 
             if (queryTags.HasValue)
@@ -102,10 +109,18 @@ namespace NzbDrone.Api.Calendar
                 var occurrence = calendar.Create<Event>();
                 occurrence.Uid = "NzbDrone_episode_" + episode.Id;
                 occurrence.Status = episode.HasFile ? EventStatus.Confirmed : EventStatus.Tentative;
-                occurrence.Start = new CalDateTime(episode.AirDateUtc.Value) { HasTime = true };
-                occurrence.End = new CalDateTime(episode.AirDateUtc.Value.AddMinutes(episode.Series.Runtime)) { HasTime = true };
                 occurrence.Description = episode.Overview;
                 occurrence.Categories = new List<string>() { episode.Series.Network };
+
+                if (asAllDay)
+                {
+                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value) { HasTime = false };
+                }
+                else
+                {
+                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value) { HasTime = true };
+                    occurrence.End = new CalDateTime(episode.AirDateUtc.Value.AddMinutes(episode.Series.Runtime)) { HasTime = true };
+                }
 
                 switch (episode.Series.SeriesType)
                 {
