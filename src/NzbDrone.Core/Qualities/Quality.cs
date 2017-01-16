@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Converters;
-
 
 namespace NzbDrone.Core.Qualities
 {
@@ -57,64 +55,83 @@ namespace NzbDrone.Core.Qualities
             return !Equals(left, right);
         }
 
-        public static Quality Unknown     { get { return new Quality(0, "Unknown"); } }
-        public static Quality SDTV        { get { return new Quality(1, "SDTV"); } }
-        public static Quality DVD         { get { return new Quality(2, "DVD"); } }
-        public static Quality WEBDL1080p  { get { return new Quality(3, "WEBDL-1080p"); } }
-        public static Quality HDTV720p    { get { return new Quality(4, "HDTV-720p"); } }
-        public static Quality WEBDL720p   { get { return new Quality(5, "WEBDL-720p"); } }
-        public static Quality Bluray720p  { get { return new Quality(6, "Bluray-720p"); } }
-        public static Quality Bluray1080p { get { return new Quality(7, "Bluray-1080p"); } }
-        public static Quality WEBDL480p   { get { return new Quality(8, "WEBDL-480p"); } }
-        public static Quality HDTV1080p   { get { return new Quality(9, "HDTV-1080p"); } }
-        public static Quality RAWHD       { get { return new Quality(10, "Raw-HD"); } }
+        public static Quality Unknown => new Quality(0,  "Unknown");
+        public static Quality SDTV => new Quality(1,  "SDTV");
+        public static Quality DVD => new Quality(2,  "DVD");
+        public static Quality WEBDL1080p => new Quality(3,  "WEBDL-1080p");
+        public static Quality HDTV720p => new Quality(4,  "HDTV-720p");
+        public static Quality WEBDL720p => new Quality(5,  "WEBDL-720p");
+        public static Quality Bluray720p => new Quality(6,  "Bluray-720p");
+        public static Quality Bluray1080p => new Quality(7,  "Bluray-1080p");
+        public static Quality WEBDL480p => new Quality(8,  "WEBDL-480p");
+        public static Quality HDTV1080p => new Quality(9,  "HDTV-1080p");
+        public static Quality RAWHD => new Quality(10, "Raw-HD");
         //public static Quality HDTV480p    { get { return new Quality(11, "HDTV-480p"); } }
-        
-        public static List<Quality> All
+        //public static Quality WEBRip480p  { get { return new Quality(12, "WEBRip-480p"); } }
+        //public static Quality Bluray480p  { get { return new Quality(13, "Bluray-480p"); } }
+        //public static Quality WEBRip720p  { get { return new Quality(14, "WEBRip-720p"); } }
+        //public static Quality WEBRip1080p { get { return new Quality(15, "WEBRip-1080p"); } }
+        public static Quality HDTV2160p => new Quality(16, "HDTV-2160p");
+        //public static Quality WEBRip2160p { get { return new Quality(17, "WEBRip-2160p"); } }
+        public static Quality WEBDL2160p => new Quality(18, "WEBDL-2160p");
+        public static Quality Bluray2160p => new Quality(19, "Bluray-2160p");
+
+        static Quality()
         {
-            get
+            All = new List<Quality>
             {
-                return new List<Quality>
-                {
-                    SDTV,
-                    DVD,
-                    WEBDL1080p,
-                    HDTV720p,
-                    WEBDL720p,
-                    Bluray720p,
-                    Bluray1080p,
-                    WEBDL480p,
-                    HDTV1080p,
-                    RAWHD
-                };
+                Unknown,
+                SDTV,
+                DVD,
+                WEBDL1080p,
+                HDTV720p,
+                WEBDL720p,
+                Bluray720p,
+                Bluray1080p,
+                WEBDL480p,
+                HDTV1080p,
+                RAWHD,
+                HDTV2160p,
+                WEBDL2160p,
+                Bluray2160p,
+            };
+
+            AllLookup = new Quality[All.Select(v => v.Id).Max() + 1];
+            foreach (var quality in All)
+            {
+                AllLookup[quality.Id] = quality;
             }
+
+            DefaultQualityDefinitions = new HashSet<QualityDefinition>
+            {
+                new QualityDefinition(Quality.Unknown)     { Weight = 1,  MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.SDTV)        { Weight = 2,  MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.WEBDL480p)   { Weight = 3,  MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.DVD)         { Weight = 4,  MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.HDTV720p)    { Weight = 5,  MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.HDTV1080p)   { Weight = 6,  MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.RAWHD)       { Weight = 7,  MinSize = 0, MaxSize = null },
+                new QualityDefinition(Quality.WEBDL720p)   { Weight = 8,  MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.Bluray720p)  { Weight = 9,  MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.WEBDL1080p)  { Weight = 10, MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.Bluray1080p) { Weight = 11, MinSize = 0, MaxSize = 100 },
+                new QualityDefinition(Quality.HDTV2160p)   { Weight = 12, MinSize = 0, MaxSize = null },
+                new QualityDefinition(Quality.WEBDL2160p)  { Weight = 13, MinSize = 0, MaxSize = null },
+                new QualityDefinition(Quality.Bluray2160p) { Weight = 14, MinSize = 0, MaxSize = null },
+            };
         }
 
-        public static HashSet<QualityDefinition> DefaultQualityDefinitions
-        {
-            get
-            {
-                return new HashSet<QualityDefinition>
-                {
-                    new QualityDefinition(Quality.SDTV)        { /*Title = "SDTV",        */ Weight = 1,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.WEBDL480p)   { /*Title = "WEB-DL",      */ Weight = 2,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.DVD)         { /*Title = "DVD",         */ Weight = 3,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.HDTV720p)    { /*Title = "720p HDTV",   */ Weight = 4,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.HDTV1080p)   { /*Title = "1080p HDTV",  */ Weight = 5,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.RAWHD)       { /*Title = "RawHD",       */ Weight = 6,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.WEBDL720p)   { /*Title = "720p WEB-DL", */ Weight = 7,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.Bluray720p)  { /*Title = "720p BluRay", */ Weight = 8,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.WEBDL1080p)  { /*Title = "1080p WEB-DL",*/ Weight = 9,  MinSize=0, MaxSize=100 },
-                    new QualityDefinition(Quality.Bluray1080p) { /*Title = "1080p BluRay",*/ Weight = 10, MinSize=0, MaxSize=100 }
-                };
-            }
-        }
+        public static readonly List<Quality> All;
+
+        public static readonly Quality[] AllLookup;
+
+        public static readonly HashSet<QualityDefinition> DefaultQualityDefinitions;
 
         public static Quality FindById(int id)
         {
             if (id == 0) return Unknown;
 
-            Quality quality = All.FirstOrDefault(v => v.Id == id);
+            var quality = AllLookup[id];
 
             if (quality == null)
                 throw new ArgumentException("ID does not match a known quality", "id");

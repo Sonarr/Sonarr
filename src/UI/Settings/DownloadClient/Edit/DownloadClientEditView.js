@@ -1,97 +1,56 @@
-﻿'use strict';
+var vent = require('vent');
+var Marionette = require('marionette');
+var DeleteView = require('../Delete/DownloadClientDeleteView');
+var AsModelBoundView = require('../../../Mixins/AsModelBoundView');
+var AsValidatedView = require('../../../Mixins/AsValidatedView');
+var AsEditModalView = require('../../../Mixins/AsEditModalView');
+require('../../../Form/FormBuilder');
+require('../../../Mixins/FileBrowser');
+require('bootstrap');
 
-define(
-    [
-        'vent',
-        'AppLayout',
-        'marionette',
-        'Settings/DownloadClient/Delete/DownloadClientDeleteView',
-        'Commands/CommandController',
-        'Mixins/AsModelBoundView',
-        'Mixins/AsValidatedView',
-        'underscore',
-        'Form/FormBuilder',
-        'Mixins/AutoComplete',
-        'bootstrap'
-    ], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, _) {
+var view = Marionette.ItemView.extend({
+    template : 'Settings/DownloadClient/Edit/DownloadClientEditViewTemplate',
 
-        var view = Marionette.ItemView.extend({
-            template: 'Settings/DownloadClient/Edit/DownloadClientEditViewTemplate',
+    ui : {
+        path      : '.x-path',
+        modalBody : '.modal-body'
+    },
 
-            ui: {
-                path      : '.x-path',
-                modalBody : '.modal-body'
-            },
+    events : {
+        'click .x-back' : '_back'
+    },
 
-            events: {
-                'click .x-save'        : '_save',
-                'click .x-save-and-add': '_saveAndAdd',
-                'click .x-delete'      : '_delete',
-                'click .x-back'        : '_back',
-                'click .x-test'        : '_test'
-            },
+    _deleteView : DeleteView,
 
-            initialize: function (options) {
-                this.downloadClientCollection = options.downloadClientCollection;
-            },
+    initialize : function(options) {
+        this.targetCollection = options.targetCollection;
+    },
 
-            onShow: function () {
-                //Hack to deal with modals not overflowing
-                if (this.ui.path.length > 0) {
-                    this.ui.modalBody.addClass('modal-overflow');
-                }
+    onShow : function() {
+        if (this.ui.path.length > 0) {
+            this.ui.modalBody.addClass('modal-overflow');
+        }
 
-                this.ui.path.autoComplete('/directories');
-            },
+        this.ui.path.fileBrowser();
+    },
 
-            _save: function () {
-                var self = this;
-                var promise = this.model.save();
+    _onAfterSave : function() {
+        this.targetCollection.add(this.model, { merge : true });
+        vent.trigger(vent.Commands.CloseModalCommand);
+    },
 
-                if (promise) {
-                    promise.done(function () {
-                        self.downloadClientCollection.add(self.model, { merge: true });
-                        vent.trigger(vent.Commands.CloseModalCommand);
-                    });
-                }
-            },
+    _onAfterSaveAndAdd : function() {
+        this.targetCollection.add(this.model, { merge : true });
 
-            _saveAndAdd: function () {
-                var self = this;
-                var promise = this.model.save();
+        require('../Add/DownloadClientSchemaModal').open(this.targetCollection);
+    },
+    _back              : function() {
+        require('../Add/DownloadClientSchemaModal').open(this.targetCollection);
+    }
+});
 
-                if (promise) {
-                    promise.done(function () {
-                        self.notificationCollection.add(self.model, { merge: true });
+AsModelBoundView.call(view);
+AsValidatedView.call(view);
+AsEditModalView.call(view);
 
-                        require('Settings/DownloadClient/Add/SchemaModal').open(self.downloadClientCollection);
-                    });
-                }
-            },
-
-            _delete: function () {
-                var view = new DeleteView({ model: this.model });
-                AppLayout.modalRegion.show(view);
-            },
-
-            _back: function () {
-                require('Settings/DownloadClient/Add/SchemaModal').open(this.downloadClientCollection);
-            },
-
-            _test: function () {
-                var testCommand = 'test{0}'.format(this.model.get('implementation'));
-                var properties = {};
-
-                _.each(this.model.get('fields'), function (field) {
-                    properties[field.name] = field.value;
-                });
-
-                CommandController.Execute(testCommand, properties);
-            }
-        });
-
-        AsModelBoundView.call(view);
-        AsValidatedView.call(view);
-
-        return view;
-    });
+module.exports = view;

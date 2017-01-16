@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd.Responses
 {
@@ -7,9 +6,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd.Responses
     {
         public SabnzbdCategoryResponse()
         {
-            Categories = new List<String>();
+            Categories = new List<string>();
         }
 
-        public List<String> Categories { get; set; }
+        public List<string> Categories { get; set; }
     }
 }

@@ -6,13 +6,7 @@ namespace NzbDrone.Core.MediaFiles.Commands
     {
         public int? SeriesId { get; set; }
 
-        public override bool SendUpdatesToClient
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SendUpdatesToClient => true;
 
         public RescanSeriesCommand()
         {

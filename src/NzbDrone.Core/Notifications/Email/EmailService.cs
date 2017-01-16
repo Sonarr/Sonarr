@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
+using FluentValidation.Results;
 using NLog;
-using NzbDrone.Core.Messaging.Commands;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Notifications.Email
 {
     public interface IEmailService
     {
         void SendEmail(EmailSettings settings, string subject, string body, bool htmlBody = false);
+        ValidationFailure Test(EmailSettings settings);
     }
 
-    public class EmailService : IEmailService, IExecute<TestEmailCommand>
+    public class EmailService : IEmailService
     {
         private readonly Logger _logger;
 
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Email
 
             NetworkCredential credentials = null;
 
-            if (!String.IsNullOrWhiteSpace(settings.Username))
+            if (!string.IsNullOrWhiteSpace(settings.Username))
                 credentials = new NetworkCredential(settings.Username, settings.Password);
 
             try
@@ -44,36 +44,35 @@ namespace NzbDrone.Core.Notifications.Email
             catch(Exception ex)
             {
                 _logger.Error("Error sending email. Subject: {0}", email.Subject);
-                _logger.DebugException(ex.Message, ex);
+                _logger.Debug(ex, ex.Message);
+                throw;
             }
         }
 
         private void Send(MailMessage email, string server, int port, bool ssl, NetworkCredential credentials)
         {
-            try
-            {
-                var smtp = new SmtpClient(server, port);
-                smtp.EnableSsl = ssl;
-                smtp.Credentials = credentials;
+            var smtp = new SmtpClient(server, port);
+            smtp.EnableSsl = ssl;
+            smtp.Credentials = credentials;
 
-                smtp.Send(email);
-            }
-
-            catch (Exception ex)
-            {
-                _logger.ErrorException("There was an error sending an email.", ex);
-                throw;
-            }
+            smtp.Send(email);
         }
 
-        public void Execute(TestEmailCommand message)
+        public ValidationFailure Test(EmailSettings settings)
         {
-            var settings = new EmailSettings();
-            settings.InjectFrom(message);
-
             const string body = "Success! You have properly configured your email notification settings";
 
-            SendEmail(settings, "NzbDrone - Test Notification", body);
+            try
+            {
+                SendEmail(settings, "Sonarr - Test Notification", body);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unable to send test email");
+                return new ValidationFailure("Server", "Unable to send test email");
+            }
+
+            return null;
         }
     }
 }

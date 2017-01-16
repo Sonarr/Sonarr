@@ -1,0 +1,103 @@
+{{#if_eq eventType compare="grabbed"}}
+<dl class="dl-horizontal info">
+
+    <dt>Name:</dt>
+    <dd>{{sourceTitle}}</dd>
+
+    {{#with data}}
+    {{#if indexer}}
+    <dt>Indexer:</dt>
+    <dd>{{indexer}}</dd>
+    {{/if}}
+
+    {{#if releaseGroup}}
+    <dt>Release Group:</dt>
+    <dd>{{releaseGroup}}</dd>
+    {{/if}}
+
+    {{#if nzbInfoUrl}}
+    <dt>Info:</dt>
+    <dd><a href="{{nzbInfoUrl}}">{{nzbInfoUrl}}</a></dd>
+    {{/if}}
+
+    {{#if downloadClient}}
+    <dt>Download Client:</dt>
+    <dd>{{downloadClient}}</dd>
+    {{/if}}
+
+    {{#if downloadId}}
+    <dt>Grab ID:</dt>
+    <dd>{{downloadId}}</dd>
+    {{/if}}
+
+    {{#if age}}
+    {{historyAge}}
+    {{/if}}
+
+    {{#if publishedDate}}
+    <dt>Published Date:</dt>
+    <dd>{{ShortDate publishedDate}} {{LTS publishedDate}}</dd>
+    {{/if}}
+    {{/with}}
+</dl>
+{{/if_eq}}
+
+{{#if_eq eventType compare="downloadFailed"}}
+<dl class="dl-horizontal">
+
+    <dt>Name:</dt>
+    <dd>{{sourceTitle}}</dd>
+
+    {{#with data}}
+    <dt>Message:</dt>
+    <dd>{{message}}</dd>
+    {{/with}}
+</dl>
+{{/if_eq}}
+
+{{#if_eq eventType compare="downloadFolderImported"}}
+<dl class="dl-horizontal">
+
+    {{#if sourceTitle}}
+    <dt>Name:</dt>
+    <dd>{{sourceTitle}}</dd>
+    {{/if}}
+
+    {{#with data}}
+    {{#if droppedPath}}
+    <dt>Source:</dt>
+    <dd>{{droppedPath}}</dd>
+    {{/if}}
+
+    {{#if importedPath}}
+    <dt>Imported To:</dt>
+    <dd>{{importedPath}}</dd>
+    {{/if}}
+    {{/with}}
+</dl>
+{{/if_eq}}
+
+{{#if_eq eventType compare="episodeFileDeleted"}}
+<dl class="dl-horizontal">
+
+    <dt>Path:</dt>
+    <dd>{{sourceTitle}}</dd>
+
+    {{#with data}}
+    <dt>Reason:</dt>
+    <dd>
+        {{#if_eq reason compare="Manual"}}
+            File was deleted by via UI
+        {{/if_eq}}
+
+        {{#if_eq reason compare="MissingFromDisk"}}
+            Sonarr was unable to find the file on disk so it was removed
+        {{/if_eq}}
+
+        {{#if_eq reason compare="Upgrade"}}
+            File was deleted to import an upgrade
+        {{/if_eq}}
+    </dd>
+    {{/with}}
+</dl>
+{{/if_eq}}

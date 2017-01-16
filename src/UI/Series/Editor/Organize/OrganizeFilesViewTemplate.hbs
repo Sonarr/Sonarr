@@ -1,0 +1,25 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Organize of Selected Series</h3>
+    </div>
+    <div class="modal-body update-files-series-modal">
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Tip: To preview a rename... select "Cancel" then any series title and use the <i data-original-title="" class="icon-sonarr-rename" title=""></i>
+        </div>
+
+        Are you sure you want to update all files in the {{numberOfSeries}} selected series?
+
+        {{debug}}
+        <ul class="selected-series">
+            {{#each series}}
+            <li>{{title}}</li>
+            {{/each}}
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger x-confirm-organize">Organize</button>
+    </div>
+</div>

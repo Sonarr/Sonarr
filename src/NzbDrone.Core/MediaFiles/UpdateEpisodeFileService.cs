@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
@@ -43,32 +44,34 @@ namespace NzbDrone.Core.MediaFiles
 
         private bool ChangeFileDate(EpisodeFile episodeFile, Series series, List<Episode> episodes)
         {
+            var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+
             switch (_configService.FileDate)
             {
                 case FileDateType.LocalAirDate:
-                {
-                    var airDate = episodes.First().AirDate;
-                    var airTime = series.AirTime;
-
-                    if (airDate.IsNullOrWhiteSpace() || airTime.IsNullOrWhiteSpace())
                     {
-                        return false;
-                    }
+                        var airDate = episodes.First().AirDate;
+                        var airTime = series.AirTime;
 
-                    return ChangeFileDateToLocalAirDate(episodeFile.Path, airDate, airTime);
-                }
+                        if (airDate.IsNullOrWhiteSpace() || airTime.IsNullOrWhiteSpace())
+                        {
+                            return false;
+                        }
+
+                        return ChangeFileDateToLocalAirDate(episodeFilePath, airDate, airTime);
+                    }
 
                 case FileDateType.UtcAirDate:
-                {
-                    var airDateUtc = episodes.First().AirDateUtc;
-
-                    if (!airDateUtc.HasValue)
                     {
-                        return false;
-                    }
+                        var airDateUtc = episodes.First().AirDateUtc;
 
-                    return ChangeFileDateToUtcAirDate(episodeFile.Path, airDateUtc.Value);
-                }
+                        if (!airDateUtc.HasValue)
+                        {
+                            return false;
+                        }
+
+                        return ChangeFileDateToUtcAirDate(episodeFilePath, airDateUtc.Value);
+                    }
             }
 
             return false;
@@ -96,7 +99,7 @@ namespace NzbDrone.Core.MediaFiles
                 if (ChangeFileDate(episodeFile, message.Series, episodesInFile))
                 {
                     updated.Add(episodeFile);
-                }   
+                }
             }
 
             if (updated.Any())
@@ -117,7 +120,7 @@ namespace NzbDrone.Core.MediaFiles
             if (DateTime.TryParse(fileDate + ' ' + fileTime, out airDate))
             {
                 // avoiding false +ve checks and set date skewing by not using UTC (Windows)
-                DateTime oldDateTime = _diskProvider.FileGetLastWriteUtc(filePath);
+                DateTime oldDateTime = _diskProvider.FileGetLastWrite(filePath);
 
                 if (!DateTime.Equals(airDate, oldDateTime))
                 {
@@ -131,7 +134,7 @@ namespace NzbDrone.Core.MediaFiles
 
                     catch (Exception ex)
                     {
-                        _logger.WarnException("Unable to set date of file [" + filePath + "]", ex);
+                        _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
                     }
                 }
             }
@@ -146,7 +149,7 @@ namespace NzbDrone.Core.MediaFiles
 
         private bool ChangeFileDateToUtcAirDate(string filePath, DateTime airDateUtc)
         {
-            DateTime oldLastWrite = _diskProvider.FileGetLastWriteUtc(filePath);
+            DateTime oldLastWrite = _diskProvider.FileGetLastWrite(filePath);
 
             if (!DateTime.Equals(airDateUtc, oldLastWrite))
             {
@@ -160,7 +163,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 catch (Exception ex)
                 {
-                    _logger.WarnException("Unable to set date of file [" + filePath + "]", ex);
+                    _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
                 }
             }
 

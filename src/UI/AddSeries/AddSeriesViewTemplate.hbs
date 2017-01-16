@@ -1,0 +1,24 @@
+{{#if folder.path}}
+<div class="unmapped-folder-path">
+    <div class="col-md-12">
+        {{folder.path}}
+    </div>
+</div>{{/if}}
+<div class="x-search-bar">
+    <div class="input-group input-group-lg add-series-search">
+        <span class="input-group-addon"><i class="icon-sonarr-search"/></span>
+
+        {{#if folder}}
+        <input type="text" class="form-control x-series-search" value="{{folder.name}}">
+        {{else}}
+        <input type="text" class="form-control x-series-search" placeholder="Start typing the name of series you want to add ...">
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div id="search-result" class="result-list col-md-12"/>
+</div>
+<div class="btn btn-block text-center new-series-loadmore x-load-more" style="display: none;">
+    <i class="icon-sonarr-load-more"/>
+    more
+</div>

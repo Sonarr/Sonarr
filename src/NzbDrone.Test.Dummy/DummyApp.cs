@@ -9,7 +9,9 @@ namespace NzbDrone.Test.Dummy
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Dummy process. ID:{0}  Path:{1}", Process.GetCurrentProcess().Id, Process.GetCurrentProcess().MainModule.FileName);
+            var process = Process.GetCurrentProcess();
+
+            Console.WriteLine("Dummy process. ID:{0} Name:{1} Path:{2}", process.Id, process.ProcessName, process.MainModule.FileName);
             Console.ReadLine();
         }
     }

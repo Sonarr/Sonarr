@@ -1,23 +1,9 @@
-﻿'use strict';
+var ThingyAddCollectionView = require('../../ThingyAddCollectionView');
+var ThingyHeaderGroupView = require('../../ThingyHeaderGroupView');
+var AddItemView = require('./DownloadClientAddItemView');
 
-define([
-    'marionette',
-    'Settings/DownloadClient/Add/DownloadClientAddItemView'
-], function (Marionette, AddItemView) {
-
-    return Marionette.CompositeView.extend({
-        itemView         : AddItemView,
-        itemViewContainer: '.add-download-client .items',
-        template         : 'Settings/DownloadClient/Add/DownloadClientAddCollectionViewTemplate',
-
-        itemViewOptions: function () {
-            return {
-                downloadClientCollection: this.downloadClientCollection
-            };
-        },
-
-        initialize: function (options) {
-            this.downloadClientCollection = options.downloadClientCollection;
-        }
-    });
+module.exports = ThingyAddCollectionView.extend({
+    itemView          : ThingyHeaderGroupView.extend({ itemView : AddItemView }),
+    itemViewContainer : '.add-download-client .items',
+    template          : 'Settings/DownloadClient/Add/DownloadClientAddCollectionViewTemplate'
 });

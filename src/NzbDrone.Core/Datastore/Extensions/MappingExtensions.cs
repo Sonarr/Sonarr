@@ -1,8 +1,8 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Common.Reflection;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Datastore.Extensions
 {
@@ -16,13 +16,17 @@ namespace NzbDrone.Core.Datastore.Extensions
                 .AutoMapPropertiesWhere(IsMappableProperty);
         }
 
-
+        public static ColumnMapBuilder<T> RegisterDefinition<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName = null) where T : ProviderDefinition, new()
+        {
+            return RegisterModel(mapBuilder, tableName).Ignore(c => c.ImplementationName);
+        }
+        
         public static ColumnMapBuilder<T> RegisterModel<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName = null) where T : ModelBase, new()
         {
             return mapBuilder.Table.MapTable(tableName)
                              .Columns
                              .AutoMapPropertiesWhere(IsMappableProperty)
-                             .PrefixAltNames(String.Format("{0}_", typeof(T).Name))
+                             .PrefixAltNames(string.Format("{0}_", typeof(T).Name))
                              .For(c => c.Id)
                              .SetPrimaryKey()
                              .SetReturnValue()
@@ -55,7 +59,5 @@ namespace NzbDrone.Core.Datastore.Extensions
 
             return false;
         }
-
-
     }
 }

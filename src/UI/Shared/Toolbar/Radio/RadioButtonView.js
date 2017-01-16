@@ -1,63 +1,50 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'Config'
-    ], function (Marionette, Config) {
+var Marionette = require('marionette');
+var Config = require('../../../Config');
 
-        return Marionette.ItemView.extend({
-            template : 'Shared/Toolbar/RadioButtonTemplate',
-            className: 'btn btn-default',
-            
-            ui: {
-                icon: 'i'
-            },
+module.exports = Marionette.ItemView.extend({
+    template  : 'Shared/Toolbar/RadioButtonTemplate',
+    className : 'btn btn-default',
 
-            events: {
-                'click': 'onClick'
-            },
+    ui : {
+        icon : 'i'
+    },
 
-            initialize: function () {
+    events : {
+        'click' : 'onClick'
+    },
 
-                this.storageKey = this.model.get('menuKey') + ':' + this.model.get('key');
-            },
+    initialize : function() {
+        this.storageKey = this.model.get('menuKey') + ':' + this.model.get('key');
+    },
 
-            onRender: function () {
-                if (this.model.get('active')) {
-                    this.$el.addClass('active');
-                    this.invokeCallback();
-                }
+    onRender : function() {
+        if (this.model.get('active')) {
+            this.$el.addClass('active');
+            this.invokeCallback();
+        }
 
-                if(!this.model.get('title')){
-                    this.$el.addClass('btn-icon-only');
-                }
+        if (!this.model.get('title')) {
+            this.$el.addClass('btn-icon-only');
+        }
 
-                if (this.model.get('tooltip')) {
-                    this.$el.attr('title', this.model.get('tooltip'));
-                    this.$el.attr('data-container', 'body');
-                }
-            },
+        if (this.model.get('tooltip')) {
+            this.$el.attr('title', this.model.get('tooltip'));
+        }
+    },
 
-            onClick: function () {
+    onClick : function() {
+        Config.setValue(this.model.get('menuKey'), this.model.get('key'));
+        this.invokeCallback();
+    },
 
-                Config.setValue(this.model.get('menuKey'), this.model.get('key'));
-                this.invokeCallback();
-            },
+    invokeCallback : function() {
+        if (!this.model.ownerContext) {
+            throw 'ownerContext must be set.';
+        }
 
-            invokeCallback: function () {
-
-                if (!this.model.ownerContext) {
-                    throw 'ownerContext must be set.';
-                }
-
-                var callback = this.model.get('callback');
-                if (callback) {
-                    callback.call(this.model.ownerContext, this);
-                }
-            }
-        });
-    });
-
-
-
-
+        var callback = this.model.get('callback');
+        if (callback) {
+            callback.call(this.model.ownerContext, this);
+        }
+    }
+});

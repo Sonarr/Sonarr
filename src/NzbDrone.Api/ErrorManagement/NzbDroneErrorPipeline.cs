@@ -20,12 +20,13 @@ namespace NzbDrone.Api.ErrorManagement
 
         public Response HandleException(NancyContext context, Exception exception)
         {
+            _logger.Trace("Handling Exception");
 
             var apiException = exception as ApiException;
 
             if (apiException != null)
             {
-                _logger.WarnException("API Error", apiException);
+                _logger.Warn(apiException, "API Error");
                 return apiException.ToErrorResponse();
             }
 
@@ -49,12 +50,11 @@ namespace NzbDrone.Api.ErrorManagement
                 }.AsResponse((HttpStatusCode)clientException.StatusCode);
             }
 
+            var sqLiteException = exception as SQLiteException;
 
-            if (context.Request.Method == "PUT" || context.Request.Method == "POST")
+            if (sqLiteException != null)
             {
-                var sqLiteException = exception as SQLiteException;
-
-                if (sqLiteException != null)
+                if (context.Request.Method == "PUT" || context.Request.Method == "POST")
                 {
                     if (sqLiteException.Message.Contains("constraint failed"))
                         return new ErrorModel
@@ -62,15 +62,17 @@ namespace NzbDrone.Api.ErrorManagement
                             Message = exception.Message,
                         }.AsResponse(HttpStatusCode.Conflict);
                 }
+
+                _logger.Error(sqLiteException, "[{0} {1}]", context.Request.Method, context.Request.Path);
             }
 
-            _logger.FatalException("Request Failed", exception);
+            _logger.Fatal(exception, "Request Failed. {0} {1}", context.Request.Method, context.Request.Path);
 
             return new ErrorModel
-                {
-                    Message = exception.Message,
-                    Description = exception.ToString()
-                }.AsResponse(HttpStatusCode.InternalServerError);
+            {
+                Message = exception.Message,
+                Description = exception.ToString()
+            }.AsResponse(HttpStatusCode.InternalServerError);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
+using FluentValidation.Results;
 using NLog;
-using NzbDrone.Core.Messaging.Commands;
 using Prowlin;
 
 namespace NzbDrone.Core.Notifications.Prowl
@@ -8,9 +8,10 @@ namespace NzbDrone.Core.Notifications.Prowl
     public interface IProwlService
     {
         void SendNotification(string title, string message, string apiKey, NotificationPriority priority = NotificationPriority.Normal, string url = null);
+        ValidationFailure Test(ProwlSettings settings);
     }
 
-    public class ProwlService : IProwlService, IExecute<TestProwlCommand>
+    public class ProwlService : IProwlService
     {
         private readonly Logger _logger;
 
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Prowl
             {
                 var notification = new Prowlin.Notification
                                    {
-                                       Application = "NzbDrone",
+                                       Application = "Sonarr",
                                        Description = message,
                                        Event = title,
                                        Priority = priority,
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
                 var notificationResult = client.SendNotification(notification);
 
-                if (!String.IsNullOrWhiteSpace(notificationResult.ErrorMessage))
+                if (!string.IsNullOrWhiteSpace(notificationResult.ErrorMessage))
                 {
                     throw new InvalidApiKeyException("API Key: " + apiKey + " is invalid");
                 }
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
             catch (Exception ex)
             {
-                _logger.DebugException(ex.Message, ex);
+                _logger.Debug(ex, ex.Message);
                 _logger.Warn("Invalid API Key: {0}", apiKey);
             }
         }
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Notifications.Prowl
                 _logger.Debug("Verifying API Key: {0}", apiKey);
 
                 var verificationResult = client.SendVerification(verificationRequest);
-                if (!String.IsNullOrWhiteSpace(verificationResult.ErrorMessage) &&
+                if (!string.IsNullOrWhiteSpace(verificationResult.ErrorMessage) &&
                     verificationResult.ResultCode != "200")
                 {
                     throw new InvalidApiKeyException("API Key: " + apiKey + " is invalid");
@@ -74,20 +75,30 @@ namespace NzbDrone.Core.Notifications.Prowl
 
             catch (Exception ex)
             {
-                _logger.DebugException(ex.Message, ex);
+                _logger.Debug(ex, ex.Message);
                 _logger.Warn("Invalid API Key: {0}", apiKey);
                 throw new InvalidApiKeyException("API Key: " + apiKey + " is invalid");
             }
         }
 
-        public void Execute(TestProwlCommand message)
+        public ValidationFailure Test(ProwlSettings settings)
         {
-            Verify(message.ApiKey);
+            try
+            {
+                Verify(settings.ApiKey);
 
-            const string title = "Test Notification";
-            const string body = "This is a test message from NzbDrone";
+                const string title = "Test Notification";
+                const string body = "This is a test message from Sonarr";
 
-            SendNotification(title, body, message.ApiKey);
+                SendNotification(title, body, settings.ApiKey);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unable to send test message");
+                return new ValidationFailure("ApiKey", "Unable to send test message");
+            }
+
+            return null;
         }
     }
 }

@@ -1,31 +1,22 @@
-'use strict';
+module.exports = function() {
+    var originalInit = this.prototype.initialize;
 
-define(
-    function () {
+    this.prototype.initialize = function() {
 
-        return function () {
+        this.isSaved = true;
 
-            var originalInit = this.prototype.initialize;
+        this.on('change', function() {
+            this.isSaved = false;
+        }, this);
 
-            this.prototype.initialize = function () {
+        this.on('sync', function() {
+            this.isSaved = true;
+        }, this);
 
-                this.isSaved = true;
+        if (originalInit) {
+            originalInit.call(this);
+        }
+    };
 
-                this.on('change', function () {
-                    this.isSaved = false;
-                }, this);
-
-                this.on('sync', function () {
-                    this.isSaved = true;
-                }, this);
-
-
-                if (originalInit) {
-                    originalInit.call(this);
-                }
-            };
-
-            return this;
-        };
-    }
-);
+    return this;
+};

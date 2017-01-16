@@ -16,33 +16,28 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             _episodeService = episodeService;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Episode doesn't match";
-            }
-        }
-        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
+        public RejectionType Type => RejectionType.Permanent;
+
+        public Decision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria == null)
             {
-                return true;
+                return Decision.Accept();
             }
 
             var dailySearchSpec = searchCriteria as DailyEpisodeSearchCriteria;
 
-            if (dailySearchSpec == null) return true;
+            if (dailySearchSpec == null) return Decision.Accept();
 
             var episode = _episodeService.GetEpisode(dailySearchSpec.Series.Id, dailySearchSpec.AirDate.ToString(Episode.AIR_DATE_FORMAT));
 
-            if (!remoteEpisode.ParsedEpisodeInfo.IsDaily() || remoteEpisode.ParsedEpisodeInfo.AirDate != episode.AirDate)
+            if (!remoteEpisode.ParsedEpisodeInfo.IsDaily || remoteEpisode.ParsedEpisodeInfo.AirDate != episode.AirDate)
             {
                 _logger.Debug("Episode AirDate does not match searched episode number, skipping.");
-                return false;
+                return Decision.Reject("Episode does not match");
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

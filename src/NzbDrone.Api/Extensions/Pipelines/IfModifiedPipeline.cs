@@ -1,3 +1,4 @@
+using System;
 using Nancy;
 using Nancy.Bootstrapper;
 using NzbDrone.Api.Frontend;
@@ -13,9 +14,11 @@ namespace NzbDrone.Api.Extensions.Pipelines
             _cacheableSpecification = cacheableSpecification;
         }
 
+        public int Order => 0;
+
         public void Register(IPipelines pipelines)
         {
-            pipelines.BeforeRequest.AddItemToStartOfPipeline(Handle);
+            pipelines.BeforeRequest.AddItemToStartOfPipeline((Func<NancyContext, Response>) Handle);
         }
 
         private Response Handle(NancyContext context)

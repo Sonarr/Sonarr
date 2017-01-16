@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
@@ -22,42 +20,11 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             _indexers = new List<IIndexer>();
 
-            _indexers.Add(new Newznab());
-            _indexers.Add(new Omgwtfnzbs());
-            _indexers.Add(new Wombles());
+            _indexers.Add(Mocker.Resolve<Newznab>());
+            _indexers.Add(Mocker.Resolve<Omgwtfnzbs>());
+            _indexers.Add(Mocker.Resolve<Wombles>());
 
             Mocker.SetConstant<IEnumerable<IIndexer>>(_indexers);
-        }
-
-        [Test]
-        public void should_create_default_indexer_on_startup()
-        {
-            IList<IndexerDefinition> storedIndexers = null;
-
-            Mocker.GetMock<IIndexerRepository>()
-                  .Setup(c => c.InsertMany(It.IsAny<IList<IndexerDefinition>>()))
-                  .Callback<IList<IndexerDefinition>>(indexers => storedIndexers = indexers);
-
-            Subject.Handle(new ApplicationStartedEvent());
-
-            storedIndexers.Should().NotBeEmpty();
-            storedIndexers.Select(c => c.Name).Should().OnlyHaveUniqueItems();
-            storedIndexers.Select(c => c.Enable).Should().NotBeEmpty();
-            storedIndexers.Select(c => c.Implementation).Should().NotContainNulls();
-        }
-
-        [Test]
-        public void getting_list_of_indexers()
-        {
-            Mocker.SetConstant<IIndexerRepository>(Mocker.Resolve<IndexerRepository>());
-
-            Subject.Handle(new ApplicationStartedEvent());
-
-            var indexers = Subject.All().ToList();
-            indexers.Should().NotBeEmpty();
-            indexers.Should().NotContain(c => c.Settings == null);
-            indexers.Should().NotContain(c => c.Name == null);
-            indexers.Select(c => c.Name).Should().OnlyHaveUniqueItems();
         }
 
         [Test]

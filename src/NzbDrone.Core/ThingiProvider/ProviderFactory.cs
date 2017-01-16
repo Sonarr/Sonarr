@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Lifecycle;
@@ -38,14 +39,51 @@ namespace NzbDrone.Core.ThingiProvider
             return _providerRepository.All().ToList();
         }
 
-        public List<TProviderDefinition> Templates()
+        public IEnumerable<TProviderDefinition> GetDefaultDefinitions()
         {
-            return _providers.Select(p => new TProviderDefinition()
+            foreach (var provider in _providers)
             {
-                ConfigContract = p.ConfigContract.Name,
-                Implementation = p.GetType().Name,
-                Settings = (IProviderConfig)Activator.CreateInstance(p.ConfigContract)
-            }).ToList();
+                var definition = provider.DefaultDefinitions
+                    .OfType<TProviderDefinition>()
+                    .FirstOrDefault(v => v.Name == null || v.Name == provider.GetType().Name);
+
+                if (definition == null)
+                {
+                    definition = new TProviderDefinition()
+                    {
+                        Name = string.Empty,
+                        ConfigContract = provider.ConfigContract.Name,
+                        Implementation = provider.GetType().Name,
+                        Settings = (IProviderConfig)Activator.CreateInstance(provider.ConfigContract)
+                    };
+                }
+
+                SetProviderCharacteristics(provider, definition);
+
+                yield return definition;
+            }
+        }
+
+        public IEnumerable<TProviderDefinition> GetPresetDefinitions(TProviderDefinition providerDefinition)
+        {
+            var provider = _providers.First(v => v.GetType().Name == providerDefinition.Implementation);
+
+            var definitions = provider.DefaultDefinitions
+                   .OfType<TProviderDefinition>()
+                   .Where(v => v.Name != null && v.Name != provider.GetType().Name)
+                   .ToList();
+
+            return definitions;
+        }
+
+        public ValidationResult Test(TProviderDefinition definition)
+        {
+            return GetInstance(definition).Test();
+        }
+
+        public object RequestAction(TProviderDefinition definition, string action, IDictionary<string, string> query)
+        {
+            return GetInstance(definition).RequestAction(action, query);
         }
 
         public List<TProvider> GetAvailableProviders()
@@ -66,19 +104,21 @@ namespace NzbDrone.Core.ThingiProvider
         public virtual void Update(TProviderDefinition definition)
         {
             _providerRepository.Update(definition);
-            _eventAggregator.PublishEvent(new ProviderUpdatedEvent<TProvider>());
+            _eventAggregator.PublishEvent(new ProviderUpdatedEvent<TProvider>(definition));
         }
 
         public void Delete(int id)
         {
             _providerRepository.Delete(id);
+            _eventAggregator.PublishEvent(new ProviderDeletedEvent<TProvider>(id));
         }
 
-        protected TProvider GetInstance(TProviderDefinition definition)
+        public TProvider GetInstance(TProviderDefinition definition)
         {
             var type = GetImplementation(definition);
             var instance = (TProvider)_container.Resolve(type);
             instance.Definition = definition;
+            SetProviderCharacteristics(instance, definition);
             return instance;
         }
 
@@ -105,6 +145,18 @@ namespace NzbDrone.Core.ThingiProvider
             return All().Where(c => c.Settings.Validate().IsValid).ToList();
         }
 
+        public void SetProviderCharacteristics(TProviderDefinition definition)
+        {
+            GetInstance(definition);
+        }
+
+        public virtual void SetProviderCharacteristics(TProvider provider, TProviderDefinition definition)
+        {
+            definition.ImplementationName = provider.Name;
+            definition.Message = provider.Message;
+        }
+
+        //TODO: Remove providers even if the ConfigContract can't be deserialized (this will fail to remove providers if the settings can't be deserialized).
         private void RemoveMissingImplementations()
         {
             var storedProvider = _providerRepository.All();

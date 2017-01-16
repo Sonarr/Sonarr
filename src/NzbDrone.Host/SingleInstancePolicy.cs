@@ -16,17 +16,14 @@ namespace NzbDrone.Host
     {
         private readonly IProcessProvider _processProvider;
         private readonly IBrowserService _browserService;
-        private readonly INzbDroneProcessProvider _nzbDroneProcessProvider;
         private readonly Logger _logger;
 
         public SingleInstancePolicy(IProcessProvider processProvider,
                                     IBrowserService browserService,
-                                    INzbDroneProcessProvider nzbDroneProcessProvider,
                                     Logger logger)
         {
             _processProvider = processProvider;
             _browserService = browserService;
-            _nzbDroneProcessProvider = nzbDroneProcessProvider;
             _logger = logger;
         }
 
@@ -34,7 +31,7 @@ namespace NzbDrone.Host
         {
             if (IsAlreadyRunning())
             {
-                _logger.Warn("Another instance of NzbDrone is already running.");
+                _logger.Warn("Another instance of Sonarr is already running.");
                 _browserService.LaunchWebUI();
                 throw new TerminateApplicationException("Another instance is already running");
             }
@@ -55,18 +52,28 @@ namespace NzbDrone.Host
 
         private List<int> GetOtherNzbDroneProcessIds()
         {
-            var currentId = _processProvider.GetCurrentProcess().Id;
-            var otherProcesses = _nzbDroneProcessProvider.FindNzbDroneProcesses()
-                                                         .Select(c => c.Id)
-                                                         .Except(new[] {currentId})
-                                                         .ToList();
-
-            if (otherProcesses.Any())
+            try
             {
-                _logger.Info("{0} instance(s) of NzbDrone are running", otherProcesses.Count);
-            }
+                var currentId = _processProvider.GetCurrentProcess().Id;
 
-            return otherProcesses;
+                var otherProcesses = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME)
+                                                     .Union(_processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME))
+                                                     .Select(c => c.Id)
+                                                     .Except(new[] { currentId })
+                                                     .ToList();
+
+                if (otherProcesses.Any())
+                {
+                    _logger.Info("{0} instance(s) of Sonarr are running", otherProcesses.Count);
+                }
+
+                return otherProcesses;
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Failed to check for multiple instances of Sonarr.");
+                return new List<int>();
+            }
         }
     }
 }

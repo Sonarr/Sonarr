@@ -1,10 +1,5 @@
-'use strict';
+var Marionette = require('marionette');
 
-define(
-    [
-        'marionette'
-    ], function (Marionette) {
-        return Marionette.ItemView.extend({
-            template: 'System/Update/EmptyViewTemplate'
-        });
-    });
+module.exports = Marionette.ItemView.extend({
+    template : 'System/Update/EmptyViewTemplate'
+});

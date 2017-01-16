@@ -8,16 +8,13 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SqLiteAlter.DropColumns("NamingConfig",
-                new[]
-                {
-                    "Separator",
-                    "NumberStyle",
-                    "IncludeSeriesTitle",
-                    "IncludeEpisodeTitle",
-                    "IncludeQuality",
-                    "ReplaceSpaces"
-                });
+            Delete.Column("Separator")
+                  .Column("NumberStyle")
+                  .Column("IncludeSeriesTitle")
+                  .Column("IncludeEpisodeTitle")
+                  .Column("IncludeQuality")
+                  .Column("ReplaceSpaces")
+                  .FromTable("NamingConfig");
         }
     }
 }

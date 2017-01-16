@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Test.Framework;
 
@@ -15,14 +14,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     {
         public static object[] IsUpgradeTestCases =
         {
-            new object[] { Quality.SDTV, false, Quality.SDTV, true, Quality.SDTV, true },
-            new object[] { Quality.WEBDL720p, false, Quality.WEBDL720p, true, Quality.WEBDL720p, true },
-            new object[] { Quality.SDTV, false, Quality.SDTV, false, Quality.SDTV, false },
-            new object[] { Quality.WEBDL720p, false, Quality.HDTV720p, true, Quality.Bluray720p, false },
-            new object[] { Quality.WEBDL720p, false, Quality.HDTV720p, true, Quality.WEBDL720p, false },
-            new object[] { Quality.WEBDL720p, false, Quality.WEBDL720p, false, Quality.WEBDL720p, false },
-            new object[] { Quality.SDTV, false, Quality.SDTV, true, Quality.SDTV, true },
-            new object[] { Quality.WEBDL1080p, false, Quality.WEBDL1080p, false, Quality.WEBDL1080p, false }
+            new object[] { Quality.SDTV, 1, Quality.SDTV, 2, Quality.SDTV, true },
+            new object[] { Quality.WEBDL720p, 1, Quality.WEBDL720p, 2, Quality.WEBDL720p, true },
+            new object[] { Quality.SDTV, 1, Quality.SDTV, 1, Quality.SDTV, false },
+            new object[] { Quality.WEBDL720p, 1, Quality.HDTV720p, 2, Quality.Bluray720p, false },
+            new object[] { Quality.WEBDL720p, 1, Quality.HDTV720p, 2, Quality.WEBDL720p, false },
+            new object[] { Quality.WEBDL720p, 1, Quality.WEBDL720p, 1, Quality.WEBDL720p, false },
+            new object[] { Quality.WEBDL1080p, 1, Quality.WEBDL1080p, 1, Quality.WEBDL1080p, false }
         };
         
         [SetUp]
@@ -39,13 +37,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test, TestCaseSource("IsUpgradeTestCases")]
-        public void IsUpgradeTest(Quality current, bool currentProper, Quality newQuality, bool newProper, Quality cutoff, bool expected)
+        public void IsUpgradeTest(Quality current, int currentVersion, Quality newQuality, int newVersion, Quality cutoff, bool expected)
         {
             GivenAutoDownloadPropers(true);
 
-            var qualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() };
+            var profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() };
 
-            Subject.IsUpgradable(qualityProfile, new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
+            Subject.IsUpgradable(profile, new QualityModel(current, new Revision(version: currentVersion)), new QualityModel(newQuality, new Revision(version: newVersion)))
                     .Should().Be(expected);
         }
 
@@ -54,9 +52,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(false);
 
-            var qualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() };
+            var profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() };
 
-            Subject.IsUpgradable(qualityProfile, new QualityModel(Quality.DVD, true), new QualityModel(Quality.DVD, false))
+            Subject.IsUpgradable(profile, new QualityModel(Quality.DVD, new Revision(version: 2)), new QualityModel(Quality.DVD, new Revision(version: 1)))
                     .Should().BeFalse();
         }
     }

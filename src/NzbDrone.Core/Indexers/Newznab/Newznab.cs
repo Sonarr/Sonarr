@@ -1,66 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
-    public class Newznab : IndexerBase<NewznabSettings>
+    public class Newznab : HttpIndexerBase<NewznabSettings>
     {
-        public override IParseFeed Parser
+        private readonly INewznabCapabilitiesProvider _capabilitiesProvider;
+
+        public override string Name => "Newznab";
+
+        public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
+
+        public override int PageSize => _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize;
+
+        public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            get
+            return new NewznabRequestGenerator(_capabilitiesProvider)
             {
-                return new NewznabParser();
-            }
+                PageSize = PageSize,
+                Settings = Settings
+            };
+        }
+
+        public override IParseIndexerResponse GetParser()
+        {
+            return new NewznabRssParser();
         }
 
         public override IEnumerable<ProviderDefinition> DefaultDefinitions
         {
             get
             {
-                var list = new List<IndexerDefinition>();
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "Nzbs.org",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("http://nzbs.org", new List<Int32> { 5000 })
-                });
-
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "Nzb.su",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("https://api.nzb.su", new List<Int32>())
-                });
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "Dognzb.cr",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("https://api.dognzb.cr", new List<Int32>())
-                });
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "OZnzb.com",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("https://www.oznzb.com", new List<Int32>())
-                });
-
-                return list;
+                yield return GetDefinition("DOGnzb", GetSettings("https://api.dognzb.cr"));
+                yield return GetDefinition("DrunkenSlug", GetSettings("https://api.drunkenslug.com"));
+                yield return GetDefinition("Nzb.su", GetSettings("https://api.nzb.su"));
+                yield return GetDefinition("NZBCat", GetSettings("https://nzb.cat"));
+                yield return GetDefinition("NZBFinder.ws", GetSettings("https://nzbfinder.ws", 5010, 5030, 5040, 5045));
+                yield return GetDefinition("NZBgeek", GetSettings("https://api.nzbgeek.info"));
+                yield return GetDefinition("nzbplanet.net", GetSettings("https://api.nzbplanet.net"));
+                yield return GetDefinition("Nzbs.org", GetSettings("http://nzbs.org", 5000));
+                yield return GetDefinition("OZnzb.com", GetSettings("https://api.oznzb.com"));
+                yield return GetDefinition("PFmonkey", GetSettings("https://www.pfmonkey.com"));
+                yield return GetDefinition("SimplyNZBs", GetSettings("https://simplynzbs.com"));
+                yield return GetDefinition("Usenet Crawler", GetSettings("https://www.usenet-crawler.com"));
             }
         }
 
-        public override ProviderDefinition Definition { get; set; }
+        public Newznab(INewznabCapabilitiesProvider capabilitiesProvider, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, indexerStatusService, configService, parsingService, logger)
+        {
+            _capabilitiesProvider = capabilitiesProvider;
+        }
 
-        private NewznabSettings GetSettings(string url, List<int> categories)
+        private IndexerDefinition GetDefinition(string name, NewznabSettings settings)
+        {
+            return new IndexerDefinition
+                   {
+                       EnableRss = false,
+                       EnableSearch = false,
+                       Name = name,
+                       Implementation = GetType().Name,
+                       Settings = settings,
+                       Protocol = DownloadProtocol.Usenet,
+                       SupportsRss = SupportsRss,
+                       SupportsSearch = SupportsSearch
+                   };
+        }
+
+        private NewznabSettings GetSettings(string url, params int[] categories)
         {
             var settings = new NewznabSettings { Url = url };
 
@@ -72,85 +87,39 @@ namespace NzbDrone.Core.Indexers.Newznab
             return settings;
         }
 
-        public override bool SupportsPaging
+        protected override void Test(List<ValidationFailure> failures)
         {
-            get
-            {
-                return true;
-            }
+            base.Test(failures);
+
+            failures.AddIfNotNull(TestCapabilities());
         }
 
-        public override IEnumerable<string> RecentFeed
+        protected virtual ValidationFailure TestCapabilities()
         {
-            get
+            try
             {
-                //Todo: We should be able to update settings on start
-                if (Settings.Url.Contains("nzbs.org"))
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                if (capabilities.SupportedSearchParameters != null && capabilities.SupportedSearchParameters.Contains("q"))
                 {
-                    Settings.Categories = new List<int> { 5000 };
+                    return null;
                 }
 
-                var url = String.Format("{0}/api?t=tvsearch&cat={1}&extended=1", Settings.Url.TrimEnd('/'), String.Join(",", Settings.Categories));
-
-                if (!String.IsNullOrWhiteSpace(Settings.ApiKey))
+                if (capabilities.SupportedTvSearchParameters != null &&
+                    new[] { "q", "tvdbid", "rid" }.Any(v => capabilities.SupportedTvSearchParameters.Contains(v)) &&
+                    new[] { "season", "ep" }.All(v => capabilities.SupportedTvSearchParameters.Contains(v)))
                 {
-                    url += "&apikey=" + Settings.ApiKey;
+                    return null;
                 }
 
-                yield return url;
+                return new ValidationFailure(string.Empty, "Indexer does not support required search parameters");
             }
-        }
-
-        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
-        {
-            if (tvRageId > 0)
+            catch (Exception ex)
             {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&ep={3}", url, tvRageId, seasonNumber, episodeNumber));
+                _logger.Warn(ex, "Unable to connect to indexer: " + ex.Message);
+
+                return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
             }
-
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeNumber));
-        }
-
-        public override IEnumerable<string> GetSearchUrls(string query, int offset)
-        {
-            // encode query (replace the + with spaces first)
-            query = query.Replace("+", " ");
-            query = System.Web.HttpUtility.UrlEncode(query);
-            return RecentFeed.Select(url => String.Format("{0}&offset={1}&limit=100&q={2}", url.Replace("t=tvsearch", "t=search"), offset, query));
-        }
-
-
-        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
-        {
-            if (tvRageId > 0)
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2:yyyy}&ep={2:MM}/{2:dd}", url, tvRageId, date)).ToList();
-            }
-
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2:yyyy}&ep={2:MM}/{2:dd}", url, NewsnabifyTitle(seriesTitle), date)).ToList();
-        }
-
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
-        {
-            if (tvRageId > 0)
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&offset={3}", url, tvRageId, seasonNumber, offset));
-            }
-
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&offset={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, offset));
-        }
-
-        public override DownloadProtocol Protocol
-        {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
-
-        private static string NewsnabifyTitle(string title)
-        {
-            return title.Replace("+", "%20");
         }
     }
 }

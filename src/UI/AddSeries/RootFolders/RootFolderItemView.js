@@ -1,37 +1,28 @@
-﻿'use strict';
+var Marionette = require('marionette');
 
-define(
-    [
-        'marionette'
-    ], function (Marionette) {
+module.exports = Marionette.ItemView.extend({
+    template  : 'AddSeries/RootFolders/RootFolderItemViewTemplate',
+    className : 'recent-folder',
+    tagName   : 'tr',
 
-        return Marionette.ItemView.extend({
+    initialize : function() {
+        this.listenTo(this.model, 'change', this.render);
+    },
 
-            template: 'AddSeries/RootFolders/RootFolderItemViewTemplate',
-            tagName : 'tr',
+    events : {
+        'click .x-delete' : 'removeFolder',
+        'click .x-folder' : 'folderSelected'
+    },
 
-            initialize: function () {
-                 this.listenTo(this.model, 'change', this.render);
-            },
+    removeFolder : function() {
+        var self = this;
 
-
-            events: {
-                'click .x-delete': 'removeFolder',
-                'click .x-folder': 'folderSelected'
-            },
-
-            removeFolder: function () {
-
-                var self = this;
-
-                this.model.destroy()
-                    .success(function(){
-                        self.close();
-                    });
-            },
-
-            folderSelected: function () {
-                this.trigger('folderSelected', this.model);
-            }
+        this.model.destroy().success(function() {
+            self.close();
         });
-    });
+    },
+
+    folderSelected : function() {
+        this.trigger('folderSelected', this.model);
+    }
+});

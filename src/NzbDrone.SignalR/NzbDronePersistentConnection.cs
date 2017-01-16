@@ -1,22 +1,20 @@
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.SignalR
 {
-    public sealed class NzbDronePersistentConnection : PersistentConnection, IExecute<BroadcastSignalRMessage>
+    public interface IBroadcastSignalRMessage
     {
-        private IPersistentConnectionContext Context
-        {
-            get
-            {
-                return ((ConnectionManager)GlobalHost.ConnectionManager).GetConnection(GetType());
-            }
-        }
+        void BroadcastMessage(SignalRMessage message);
+    }
 
-        public void Execute(BroadcastSignalRMessage message)
+    public sealed class NzbDronePersistentConnection : PersistentConnection, IBroadcastSignalRMessage
+    {
+        private IPersistentConnectionContext Context => ((ConnectionManager)GlobalHost.ConnectionManager).GetConnection(GetType());
+
+        public void BroadcastMessage(SignalRMessage message)
         {
-            Context.Connection.Broadcast(message.Body);
+            Context.Connection.Broadcast(message);
         }
     }
 }

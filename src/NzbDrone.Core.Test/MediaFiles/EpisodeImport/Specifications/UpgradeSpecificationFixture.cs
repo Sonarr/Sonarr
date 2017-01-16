@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -22,14 +23,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         public void Setup()
         {
             _series = Builder<Series>.CreateNew()
-                                     .With(s => s.SeriesType = SeriesTypes.Standard)                                     
-                                     .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .With(s => s.SeriesType = SeriesTypes.Standard)
+                                     .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                      .Build();
 
             _localEpisode = new LocalEpisode
                                 {
                                     Path = @"C:\Test\30 Rock\30.rock.s01e01.avi",
-                                    Quality = new QualityModel(Quality.HDTV720p, false),
+                                    Quality = new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
                                     Series = _series
                                 };
         }
@@ -44,7 +45,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -57,7 +58,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -69,12 +70,12 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.SDTV, false)
+                                                                                    Quality = new QualityModel(Quality.SDTV, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -86,12 +87,12 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.SDTV, false)
+                                                                                    Quality = new QualityModel(Quality.SDTV, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -103,12 +104,12 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.Bluray720p, false)
+                                                                                    Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -120,12 +121,12 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.Bluray720p, false)
+                                                                                    Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -137,19 +138,19 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.SDTV, false)
+                                                                                    Quality = new QualityModel(Quality.SDTV, new Revision(version: 1))
                                                                                 }))
                                                      .TheNext(1)
                                                      .With(e => e.EpisodeFileId = 2)
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.Bluray720p, false)
+                                                                                    Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
         }
     }
 }

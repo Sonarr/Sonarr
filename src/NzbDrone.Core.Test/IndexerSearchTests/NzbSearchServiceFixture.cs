@@ -1,10 +1,10 @@
-﻿using NzbDrone.Core.IndexerSearch;
+﻿using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Test.Framework;
 using FizzWare.NBuilder;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -16,25 +16,28 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 {
     public class NzbSearchServiceFixture : CoreTest<NzbSearchService>
     {
+        private Mock<IIndexer> _mockIndexer;
         private Series _xemSeries;
         private List<Episode> _xemEpisodes;
 
         [SetUp]
         public void SetUp()
         {
-            var indexer = Mocker.GetMock<IIndexer>();
-            indexer.SetupGet(s => s.SupportsSearching).Returns(true);
+            _mockIndexer = Mocker.GetMock<IIndexer>();
+            _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition { Id = 1 });
+            _mockIndexer.SetupGet(s => s.SupportsSearch).Returns(true);
 
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.GetAvailableProviders())
-                  .Returns(new List<IIndexer> { indexer.Object });
+                  .Setup(s => s.SearchEnabled())
+                  .Returns(new List<IIndexer> { _mockIndexer.Object });
 
-            Mocker.GetMock<NzbDrone.Core.DecisionEngine.IMakeDownloadDecision>()
+            Mocker.GetMock<IMakeDownloadDecision>()
                 .Setup(s => s.GetSearchDecision(It.IsAny<List<Parser.Model.ReleaseInfo>>(), It.IsAny<SearchCriteriaBase>()))
-                .Returns(new List<NzbDrone.Core.DecisionEngine.Specifications.DownloadDecision>());
+                .Returns(new List<DownloadDecision>());
 
             _xemSeries = Builder<Series>.CreateNew()
                 .With(v => v.UseSceneNumbering = true)
+                .With(v => v.Monitored = true)
                 .Build();
 
             _xemEpisodes = new List<Episode>();
@@ -46,9 +49,13 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(v => v.GetEpisodesBySeason(_xemSeries.Id, It.IsAny<int>()))
                 .Returns<int, int>((i, j) => _xemEpisodes.Where(d => d.SeasonNumber == j).ToList());
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.GetSceneNames(It.IsAny<int>(), It.IsAny<List<int>>(), It.IsAny<List<int>>()))
+                  .Returns(new List<string>());
         }
 
-        private void WithEpisode(int seasonNumber, int episodeNumber, int sceneSeasonNumber, int sceneEpisodeNumber)
+        private void WithEpisode(int seasonNumber, int episodeNumber, int? sceneSeasonNumber, int? sceneEpisodeNumber)
         {
             var episode = Builder<Episode>.CreateNew()
                 .With(v => v.SeriesId == _xemSeries.Id)
@@ -57,6 +64,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .With(v => v.EpisodeNumber, episodeNumber)
                 .With(v => v.SceneSeasonNumber, sceneSeasonNumber)
                 .With(v => v.SceneEpisodeNumber, sceneEpisodeNumber)
+                .With(v => v.Monitored = true)
                 .Build();
 
             _xemEpisodes.Add(episode);
@@ -84,22 +92,24 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             WithEpisode(5, 1, 6, 12);
 
             // Season 7+ maps normally, so no mapping specified.
-            WithEpisode(7, 1, 0, 0);
-            WithEpisode(7, 2, 0, 0);
+            WithEpisode(7, 1, null, null);
+            WithEpisode(7, 2, null, null);
         }
 
         private List<SearchCriteriaBase> WatchForSearchCriteria()
         {
-            List<SearchCriteriaBase> result = new List<SearchCriteriaBase>();
+            var result = new List<SearchCriteriaBase>();
 
-            Mocker.GetMock<IFetchFeedFromIndexers>()
-                .Setup(v => v.Fetch(It.IsAny<IIndexer>(), It.IsAny<SingleEpisodeSearchCriteria>()))
-                .Callback<IIndexer, SingleEpisodeSearchCriteria>((i, s) => result.Add(s))
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<SingleEpisodeSearchCriteria>()))
+                .Callback<SingleEpisodeSearchCriteria>(s => result.Add(s))
                 .Returns(new List<Parser.Model.ReleaseInfo>());
 
-            Mocker.GetMock<IFetchFeedFromIndexers>()
-                .Setup(v => v.Fetch(It.IsAny<IIndexer>(), It.IsAny<SeasonSearchCriteria>()))
-                .Callback<IIndexer, SeasonSearchCriteria>((i, s) => result.Add(s))
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<SeasonSearchCriteria>()))
+                .Callback<SeasonSearchCriteria>(s => result.Add(s))
+                .Returns(new List<Parser.Model.ReleaseInfo>());
+
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeEpisodeSearchCriteria>()))
+                .Callback<AnimeEpisodeSearchCriteria>(s => result.Add(s))
                 .Returns(new List<Parser.Model.ReleaseInfo>());
 
             return result;
@@ -112,7 +122,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.EpisodeSearch(_xemEpisodes.First());
+            Subject.EpisodeSearch(_xemEpisodes.First(), true);
 
             var criteria = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
 
@@ -128,7 +138,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 1);
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true);
 
             var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
 
@@ -143,7 +153,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 2);
+            Subject.SeasonSearch(_xemSeries.Id, 2, false, true);
 
             var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
 
@@ -159,7 +169,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 4);
+            Subject.SeasonSearch(_xemSeries.Id, 4, false, true);
 
             var criteria1 = allCriteria.OfType<SeasonSearchCriteria>().ToList();
             var criteria2 = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
@@ -179,12 +189,77 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 7);
+            Subject.SeasonSearch(_xemSeries.Id, 7, false, true);
 
             var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
 
             criteria.Count.Should().Be(1);
             criteria[0].SeasonNumber.Should().Be(7);
+        }
+
+        [Test]
+        public void season_search_for_anime_should_search_for_each_monitored_episode()
+        {
+            WithEpisodes();
+            _xemSeries.SeriesType = SeriesTypes.Anime;
+            _xemEpisodes.ForEach(e => e.EpisodeFileId = 0);
+
+            var seasonNumber = 1;
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true, true);
+
+            var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(_xemEpisodes.Count(e => e.SeasonNumber == seasonNumber));
+        }
+
+        [Test]
+        public void season_search_for_anime_should_not_search_for_unmonitored_episodes()
+        {
+            WithEpisodes();
+            _xemSeries.SeriesType = SeriesTypes.Anime;
+            _xemEpisodes.ForEach(e => e.Monitored = false);
+            _xemEpisodes.ForEach(e => e.EpisodeFileId = 0);
+
+            var seasonNumber = 1;
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, false, true);
+
+            var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void season_search_for_anime_should_not_search_for_episodes_with_files()
+        {
+            WithEpisodes();
+            _xemSeries.SeriesType = SeriesTypes.Anime;
+            _xemEpisodes.ForEach(e => e.EpisodeFileId = 1);
+
+            var seasonNumber = 1;
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true, true);
+
+            var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void getscenenames_should_use_seasonnumber_if_no_scene_seasonnumber_is_available()
+        {
+            WithEpisodes();
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, 7, false, true);
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Verify(v => v.GetSceneNames(_xemSeries.Id, It.Is<List<int>>(l => l.Contains(7)), It.Is<List<int>>(l => l.Contains(7))), Times.Once());
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Series
@@ -19,11 +19,12 @@ namespace NzbDrone.Api.Series
 
         private Response SaveAll()
         {
-            //Read from request
-            var series = Request.Body.FromJson<List<SeriesResource>>().InjectTo<List<Core.Tv.Series>>();
+            var resources = Request.Body.FromJson<List<SeriesResource>>();
+
+            var series = resources.Select(seriesResource => seriesResource.ToModel(_seriesService.GetSeries(seriesResource.Id))).ToList();
 
             return _seriesService.UpdateSeries(series)
-                                 .InjectTo<List<SeriesResource>>()
+                                 .ToResource()
                                  .AsResponse(HttpStatusCode.Accepted);
         }
     }

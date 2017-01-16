@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using NzbDrone.Api.REST;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Update;
-using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Update
 {
     public class UpdateModule : NzbDroneRestModule<UpdateResource>
     {
         private readonly IRecentUpdateProvider _recentUpdateProvider;
-        private readonly IInstallUpdates _installUpdateService;
 
-        public UpdateModule(IRecentUpdateProvider recentUpdateProvider,
-                            IInstallUpdates installUpdateService)
+        public UpdateModule(IRecentUpdateProvider recentUpdateProvider)
         {
             _recentUpdateProvider = recentUpdateProvider;
-            _installUpdateService = installUpdateService;
             GetResourceAll = GetRecentUpdates;
         }
 
@@ -26,36 +19,27 @@ namespace NzbDrone.Api.Update
         {
             var resources = _recentUpdateProvider.GetRecentUpdatePackages()
                                                  .OrderByDescending(u => u.Version)
-                                                 .InjectTo<List<UpdateResource>>();
+                                                 .ToResource();
 
-            foreach (var updateResource in resources)
+            if (resources.Any())
             {
-                if (updateResource.Version > BuildInfo.Version)
+                var first = resources.First();
+                first.Latest = true;
+
+                if (first.Version > BuildInfo.Version)
                 {
-                    updateResource.IsUpgrade = true;
+                    first.Installable = true;
                 }
 
-                else if (updateResource.Version == BuildInfo.Version)
+                var installed = resources.SingleOrDefault(r => r.Version == BuildInfo.Version);
+
+                if (installed != null)
                 {
-                    updateResource.Installed = true;
+                    installed.Installed = true;
                 }
             }
 
             return resources;
         }
-    }
-
-    public class UpdateResource : RestResource
-    {
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.VersionConverter))]
-        public Version Version { get; set; }
-
-        public String Branch { get; set; }
-        public DateTime ReleaseDate { get; set; }
-        public String FileName { get; set; }
-        public String Url { get; set; }
-        public Boolean IsUpgrade { get; set; }
-        public Boolean Installed { get; set; }
-        public UpdateChanges Changes { get; set; }
     }
 }

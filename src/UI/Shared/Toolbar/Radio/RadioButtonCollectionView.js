@@ -1,44 +1,37 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'Shared/Toolbar/Radio/RadioButtonView',
-        'Config'
-    ], function (Marionette, RadioButtonView, Config) {
-        return Marionette.CollectionView.extend({
-            className: 'btn-group',
-            itemView : RadioButtonView,
+var Marionette = require('marionette');
+var RadioButtonView = require('./RadioButtonView');
+var Config = require('../../../Config');
 
-            attributes: {
-                'data-toggle': 'buttons'
-            },
+module.exports = Marionette.CollectionView.extend({
+    className : 'btn-group',
+    itemView  : RadioButtonView,
 
-            initialize: function (options) {
-                this.menu = options.menu;
+    attributes : {
+        'data-toggle' : 'buttons'
+    },
 
-                this.setActive();
-            },
+    initialize : function(options) {
+        this.menu = options.menu;
 
-            setActive: function () {
-                var storedKey = this.menu.defaultAction;
+        this.setActive();
+    },
 
-                if (this.menu.storeState) {
-                    storedKey = Config.getValue(this.menu.menuKey, storedKey);
-                }
+    setActive : function() {
+        var storedKey = this.menu.defaultAction;
 
-                if (!storedKey)
-                    return;
+        if (this.menu.storeState) {
+            storedKey = Config.getValue(this.menu.menuKey, storedKey);
+        }
 
-                this.collection.each(function (model) {
-                    if (model.get('key').toLocaleLowerCase() === storedKey.toLowerCase()) {
-                        model.set('active', true);
-                    }
-                    else {
-                        model.set('active, false');
-                    }
-                });
+        if (!storedKey) {
+            return;
+        }
+        this.collection.each(function(model) {
+            if (model.get('key').toLocaleLowerCase() === storedKey.toLowerCase()) {
+                model.set('active', true);
+            } else {
+                model.set('active, false');
             }
         });
-    });
-
-
+    }
+});

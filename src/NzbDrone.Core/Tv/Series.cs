@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Marr.Data;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Common;
-
+using NzbDrone.Core.Profiles;
 
 namespace NzbDrone.Core.Tv
 {
@@ -13,20 +12,24 @@ namespace NzbDrone.Core.Tv
         public Series()
         {
             Images = new List<MediaCover.MediaCover>();
-            Genres = new List<String>();
+            Genres = new List<string>();
             Actors = new List<Actor>();
+            Seasons = new List<Season>();
+            Tags = new HashSet<int>();
         }
 
         public int TvdbId { get; set; }
         public int TvRageId { get; set; }
+        public int TvMazeId { get; set; }
         public string ImdbId { get; set; }
         public string Title { get; set; }
         public string CleanTitle { get; set; }
+        public string SortTitle { get; set; }
         public SeriesStatusType Status { get; set; }
         public string Overview { get; set; }
-        public String AirTime { get; set; }
+        public string AirTime { get; set; }
         public bool Monitored { get; set; }
-        public int QualityProfileId { get; set; }
+        public int ProfileId { get; set; }
         public bool SeasonFolder { get; set; }
         public DateTime? LastInfoSync { get; set; }
         public int Runtime { get; set; }
@@ -38,16 +41,17 @@ namespace NzbDrone.Core.Tv
         public string Path { get; set; }
         public int Year { get; set; }
         public Ratings Ratings { get; set; }
-        public List<String> Genres { get; set; }
+        public List<string> Genres { get; set; }
         public List<Actor> Actors { get; set; }
-        public String Certification { get; set; }
-
+        public string Certification { get; set; }
         public string RootFolderPath { get; set; }
-
+        public DateTime Added { get; set; }
         public DateTime? FirstAired { get; set; }
-        public LazyLoaded<QualityProfile> QualityProfile { get; set; }
+        public LazyLoaded<Profile> Profile { get; set; }
 
         public List<Season> Seasons { get; set; }
+        public HashSet<int> Tags { get; set; }
+        public AddSeriesOptions AddOptions { get; set; }
 
         public override string ToString()
         {

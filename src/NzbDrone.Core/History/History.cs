@@ -8,6 +8,8 @@ namespace NzbDrone.Core.History
 {
     public class History : ModelBase
     {
+        public const string DOWNLOAD_CLIENT = "downloadClient";
+
         public History()
         {
             Data = new Dictionary<string, string>();
@@ -22,6 +24,9 @@ namespace NzbDrone.Core.History
         public Series Series { get; set; }
         public HistoryEventType EventType { get; set; }
         public Dictionary<string, string> Data { get; set; }
+
+        public string DownloadId { get; set; }
+
     }
 
     public enum HistoryEventType
@@ -30,6 +35,7 @@ namespace NzbDrone.Core.History
         Grabbed = 1,
         SeriesFolderImported = 2,
         DownloadFolderImported = 3,
-        DownloadFailed = 4
+        DownloadFailed = 4,
+        EpisodeFileDeleted = 5
     }
 }

@@ -1,23 +1,34 @@
-'use strict';
-define(
-    [
-        'Cells/NzbDroneCell',
-        'moment',
-        'Shared/FormatHelpers'
-    ], function (NzbDroneCell, Moment, FormatHelpers) {
-        return NzbDroneCell.extend({
+var NzbDroneCell = require('./NzbDroneCell');
+var moment = require('moment');
+var FormatHelpers = require('../Shared/FormatHelpers');
+var UiSettings = require('../Shared/UiSettingsModel');
 
-            className: 'relative-date-cell',
+module.exports = NzbDroneCell.extend({
+    className : 'relative-date-cell',
 
-            render: function () {
+    render : function() {
 
-                var date = this.model.get(this.column.get('name'));
+        var dateStr = this.model.get(this.column.get('name'));
 
-                if (date) {
-                    this.$el.html('<span title="' + Moment(date).format('LLLL') + '" >' + FormatHelpers.dateHelper(date) + '</span>');
+        if (dateStr) {
+            var date = moment(dateStr);
+            var diff = date.diff(moment().zone(date.zone()).startOf('day'), 'days', true);
+            var result = '<span title="{0}">{1}</span>';
+            var tooltip = date.format(UiSettings.longDateTime());
+            var text;
+
+            if (diff > 0 && diff < 1) {
+                text = date.format(UiSettings.time(true, false));
+            } else {
+                if (UiSettings.get('showRelativeDates')) {
+                    text = FormatHelpers.relativeDate(dateStr);
+                } else {
+                    text = date.format(UiSettings.get('shortDateFormat'));
                 }
-
-                return this;
             }
-        });
-    });
+
+            this.$el.html(result.format(tooltip, text));
+        }
+        return this;
+    }
+});

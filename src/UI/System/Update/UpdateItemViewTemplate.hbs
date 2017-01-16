@@ -1,0 +1,43 @@
+<div class="update">
+    <fieldset>
+        <legend>{{version}}
+            <span class="date">
+                - {{ShortDate releaseDate}}
+            </span>
+            <span class="status">
+                {{#unless_eq branch compare="master"}}
+                    <span class="label label-default">{{branch}}</span>
+                {{/unless_eq}}
+                {{#if installed}}
+                    <span class="label label-success">Installed</span>
+                {{else}}
+                    {{#if latest}}
+                        {{#if installable}}
+                            <span class="label label-info install-update x-install-update">Install Latest</span>
+                        {{else}}
+                            <span class="label label-info label-disabled" title="Cannot install an older version">Install Latest</span>
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+            </span>
+        </legend>
+
+        {{#with changes}}
+            {{#each new}}
+                <div class="change">
+                    <span class="label label-success">New</span> {{this}}
+                </div>
+            {{/each}}
+
+            {{#each fixed}}
+                <div class="change">
+                    <span class="label label-info">Fixed</span> {{this}}
+                </div>
+            {{/each}}
+        {{/with}}
+
+        {{#unless changes}}
+            Maintenance release
+        {{/unless}}
+    </fieldset>
+</div>

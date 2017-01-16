@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Api.Indexers;
 using NzbDrone.Api.Notifications;
 using RestSharp;
 

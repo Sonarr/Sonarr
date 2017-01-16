@@ -1,13 +1,9 @@
-﻿'use strict';
-define(
-    [
-        'AppLayout',
-        'marionette',
-        'Settings/Metadata/MetadataItemView'
-    ], function (AppLayout, Marionette, MetadataItemView) {
-        return Marionette.CompositeView.extend({
-            itemView         : MetadataItemView,
-            itemViewContainer: '#x-metadata',
-            template         : 'Settings/Metadata/MetadataCollectionViewTemplate'
-        });
-    });
+var AppLayout = require('../../AppLayout');
+var Marionette = require('marionette');
+var MetadataItemView = require('./MetadataItemView');
+
+module.exports = Marionette.CompositeView.extend({
+    itemView          : MetadataItemView,
+    itemViewContainer : '#x-metadata',
+    template          : 'Settings/Metadata/MetadataCollectionViewTemplate'
+});

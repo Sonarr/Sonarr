@@ -1,18 +1,12 @@
-'use strict';
-define(
-    [
-        'Cells/NzbDroneCell',
-        'System/StatusModel'
-    ], function (NzbDroneCell, StatusModel) {
-        return NzbDroneCell.extend({
+var NzbDroneCell = require('../../../Cells/NzbDroneCell');
 
-            className: 'download-log-cell',
+module.exports = NzbDroneCell.extend({
+    className : 'download-log-cell',
 
-            render: function () {
-                this.$el.empty();
-                this.$el.html('<a href="{0}/logfile/{1}" class="no-router" target="_blank">Download</a>'.format(StatusModel.get('urlBase'), this.cellValue));
+    render : function() {
+        this.$el.empty();
+        this.$el.html('<a href="{0}" class="no-router" target="_blank">Download</a>'.format(this.cellValue));
 
-                return this;
-            }
-        });
-    });
+        return this;
+    }
+});

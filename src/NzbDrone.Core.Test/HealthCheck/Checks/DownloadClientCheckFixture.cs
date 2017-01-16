@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.HealthCheck.Checks;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
@@ -15,8 +16,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         public void should_return_warning_when_download_client_has_not_been_configured()
         {
             Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(s => s.GetDownloadClient())
-                  .Returns((IDownloadClient)null);
+                  .Setup(s => s.GetDownloadClients())
+                  .Returns(new IDownloadClient[0]);
 
             Subject.Check().ShouldBeWarning();
         }
@@ -25,15 +26,18 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         public void should_return_error_when_download_client_throws()
         {
             var downloadClient = Mocker.GetMock<IDownloadClient>();
+            downloadClient.Setup(s => s.Definition).Returns(new IndexerDefinition{Name = "Test"});
 
-            downloadClient.Setup(s => s.GetQueue())
+            downloadClient.Setup(s => s.GetItems())
                           .Throws<Exception>();
 
             Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(s => s.GetDownloadClient())
-                  .Returns(downloadClient.Object);
+                  .Setup(s => s.GetDownloadClients())
+                  .Returns(new IDownloadClient[] { downloadClient.Object });
 
             Subject.Check().ShouldBeError();
+            
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]
@@ -41,12 +45,12 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             var downloadClient = Mocker.GetMock<IDownloadClient>();
 
-            downloadClient.Setup(s => s.GetQueue())
-                          .Returns(new List<QueueItem>());
+            downloadClient.Setup(s => s.GetItems())
+                          .Returns(new List<DownloadClientItem>());
 
             Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(s => s.GetDownloadClient())
-                  .Returns(downloadClient.Object);
+                  .Setup(s => s.GetDownloadClients())
+                  .Returns(new IDownloadClient[] { downloadClient.Object });
 
             Subject.Check().ShouldBeOk();
         }

@@ -1,12 +1,8 @@
-﻿using System;
-
-namespace NzbDrone.Core.Organizer
+﻿namespace NzbDrone.Core.Organizer
 {
-    public class EpisodeFormat
+    public class AbsoluteEpisodeFormat
     {
-        public String Separator { get; set; }
-        public String EpisodePattern { get; set; }
-        public String EpisodeSeparator { get; set; }
-        public String SeasonEpisodePattern { get; set; }
+        public string Separator { get; set; }
+        public string AbsoluteEpisodePattern { get; set; }
     }
 }

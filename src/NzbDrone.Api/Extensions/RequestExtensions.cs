@@ -26,5 +26,15 @@ namespace NzbDrone.Api.Extensions
                     request.UserHostAddress.Equals("127.0.0.1") ||
                     request.UserHostAddress.Equals("::1"));
         }
+
+        public static bool IsLoginRequest(this Request request)
+        {
+            return request.Path.Equals("/login", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool IsContentRequest(this Request request)
+        {
+            return request.Path.StartsWith("/Content/", StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

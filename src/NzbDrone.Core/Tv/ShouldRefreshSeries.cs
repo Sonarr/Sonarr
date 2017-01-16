@@ -22,15 +22,21 @@ namespace NzbDrone.Core.Tv
 
         public bool ShouldRefresh(Series series)
         {
-            if (series.Status == SeriesStatusType.Continuing)
-            {
-                _logger.Trace("Series {0} is continuing, should refresh.", series.Title);
-                return true;
-            }
-
             if (series.LastInfoSync < DateTime.UtcNow.AddDays(-30))
             {
                 _logger.Trace("Series {0} last updated more than 30 days ago, should refresh.", series.Title);
+                return true;
+            }
+
+            if (series.LastInfoSync >= DateTime.UtcNow.AddHours(-6))
+            {
+                _logger.Trace("Series {0} last updated less than 6 hours ago, should not be refreshed.", series.Title);
+                return false;
+            }
+
+            if (series.Status == SeriesStatusType.Continuing)
+            {
+                _logger.Trace("Series {0} is continuing, should refresh.", series.Title);
                 return true;
             }
 
@@ -42,7 +48,7 @@ namespace NzbDrone.Core.Tv
                 return true;
             }
 
-            _logger.Trace("Series {0} should not be refreshed.", series.Title);
+            _logger.Trace("Series {0} ended long ago, should not be refreshed.", series.Title);
             return false;
         }
     }

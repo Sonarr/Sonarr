@@ -1,23 +1,21 @@
-'use strict';
+var Marionette = require('marionette');
+var NzbDroneCell = require('./NzbDroneCell');
 
-define(
-    [
-        'marionette',
-        'Cells/NzbDroneCell'
-    ], function (Marionette, NzbDroneCell) {
-        return NzbDroneCell.extend({
+module.exports = NzbDroneCell.extend({
+    render : function() {
 
-            render: function () {
+        var templateName = this.column.get('template') || this.template;
 
-                var templateName = this.column.get('template') || this.template;
+        this.templateFunction = Marionette.TemplateCache.get(templateName);
+        this.$el.empty();
 
-                this.templateFunction = Marionette.TemplateCache.get(templateName);
-                var data = this.cellValue.toJSON();
-                var html = this.templateFunction(data);
-                this.$el.html(html);
+        if (this.cellValue) {
+            var data = this.cellValue.toJSON();
+            var html = this.templateFunction(data);
+            this.$el.html(html);
+        }
 
-                this.delegateEvents();
-                return this;
-            }
-        });
-    });
+        this.delegateEvents();
+        return this;
+    }
+});

@@ -1,9 +1,4 @@
-﻿'use strict';
-define(
-    [
-        'backbone',
-        'underscore'
-    ], function (Backbone, _) {
-        return Backbone.Model.extend({
-        });
-    });
+var Backbone = require('backbone');
+var _ = require('underscore');
+
+module.exports = Backbone.Model.extend({});

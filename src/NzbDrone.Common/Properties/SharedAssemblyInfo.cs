@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("www.nzbdrone.com")]
+// Gets updated at build time by TeamCity to branch name
+[assembly: AssemblyConfiguration("debug")]
+
+[assembly: AssemblyCompany("sonarr.tv")]
 [assembly: AssemblyProduct("NzbDrone")]
 [assembly: AssemblyCopyright("GNU General Public v3")]
 [assembly: AssemblyTrademark("")]

@@ -3,9 +3,12 @@
 @import "../Content/Bootstrap/buttons";
 @import "../Shared/Styles/clickable";
 @import "../Content/variables";
+@import "../Content/mixins";
 @import "../Content/Overrides/bootstrap";
 
 .calendar {
+  width: 100%;
+
   th, td {
     border-color : #eeeeee;
   }
@@ -19,6 +22,10 @@
 
   .fc-event {
     .clickable;
+
+    .status {
+      margin-right : 4px;
+    }
   }
 
   th {
@@ -30,7 +37,7 @@
   }
 
   .fc-state-highlight {
-    background : #f1f1f1;
+    background : #dbdbdb;
   }
 
   .past {
@@ -105,30 +112,44 @@
     border-color : @nzbdronePurple;
   }
 
+  .pink {
+    border-color : @nzbdronePink;
+  }
+
+  .premiere {
+    border-color : @droneTeal;
+  }
+
+  .unmonitored {
+    border-color     : grey;
+  }
+
   .episode-title {
     .btn-link;
     .text-overflow;
     color      : @link-color;
     margin-top : 1px;
     display    : inline-block;
-    
+
     @media (max-width: @screen-xs-min) {
       width      : 140px;
     }
-    
+
     @media (min-width: @screen-md-min) {
-      width      : 140px;
+      width      : 135px;
     }
   }
 }
 
 .calendar {
 
-  background-position : -160px -128px;
+//  background-position : -160px -128px;
 
   .primary {
     border-color     : @btn-primary-bg;
     background-color : @btn-primary-bg;
+
+    .color-impaired-background-gradient(90deg, @btn-primary-bg);
   }
 
   .info {
@@ -144,11 +165,15 @@
   .warning {
     border-color     : @btn-warning-bg;
     background-color : @btn-warning-bg;
+
+    .color-impaired-background-gradient(90deg, @btn-warning-bg);
   }
 
   .danger {
     border-color     : @btn-danger-bg;
     background-color : @btn-danger-bg;
+
+    .color-impaired-background-gradient(90deg, @btn-danger-bg);
   }
 
   .success {
@@ -161,22 +186,69 @@
     background-color : @nzbdronePurple;
   }
 
+  .pink {
+    border-color     : @nzbdronePink;
+    background-color : @nzbdronePink;
+  }
+
+  .premiere {
+    border-color     : @droneTeal;
+    background-color : @droneTeal;
+
+    .color-impaired-background-gradient(90deg, @droneTeal);
+  }
+
+  .unmonitored {
+    border-color     : grey;
+    background-color : grey;
+
+    .color-impaired-background-gradient(45deg, grey);
+  }
+
   .chart {
-    margin-top  : 2px;
-    margin-right: 2px;
+    margin-top   : 2px;
+    margin-right : 2px;
+    line-height  : 12px;
+  }
+
+  .legend-labels {
+    max-width : 100%;
+    width     : 500px;
+
+    @media (max-width: @screen-xs-min) {
+      width : 100%;
+    }
+  }
+
+  .legend-label {
+    display : inline-block;
+    width   : 150px;
   }
 }
 
-.ical
-{
+.ical {
   color: @btn-link-disabled-color;
   cursor: pointer;
 }
 
 .ical-url {
 
-  input {
-    width  : 440px;
+  input, input[readonly] {
     cursor : text;
+  }
+}
+
+.calendar-title {
+    text-align : center;
+
+  h2 {
+    margin-top    : 0px;
+    margin-bottom : 5px;
+  }
+}
+
+.calendar-toolbar {
+  .page-toolbar {
+    margin-bottom : 10px;
   }
 }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
-using NzbDrone.Core.Instrumentation.Extensions;
+using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
@@ -30,6 +31,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IEventAggregator _eventAggregator;
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _filenameBuilder;
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public RenameEpisodeFileService(ISeriesService seriesService,
@@ -38,6 +40,7 @@ namespace NzbDrone.Core.MediaFiles
                                         IEventAggregator eventAggregator,
                                         IEpisodeService episodeService,
                                         IBuildFileNames filenameBuilder,
+                                        IDiskProvider diskProvider,
                                         Logger logger)
         {
             _seriesService = seriesService;
@@ -46,6 +49,7 @@ namespace NzbDrone.Core.MediaFiles
             _eventAggregator = eventAggregator;
             _episodeService = episodeService;
             _filenameBuilder = filenameBuilder;
+            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -56,8 +60,8 @@ namespace NzbDrone.Core.MediaFiles
             var files = _mediaFileService.GetFilesBySeries(seriesId);
 
             return GetPreviews(series, episodes, files)
-                .OrderBy(e => e.SeasonNumber)
-                .ThenBy(e => e.EpisodeNumbers.First())
+                .OrderByDescending(e => e.SeasonNumber)
+                .ThenByDescending(e => e.EpisodeNumbers.First())
                 .ToList();
         }
 
@@ -68,43 +72,40 @@ namespace NzbDrone.Core.MediaFiles
             var files = _mediaFileService.GetFilesBySeason(seriesId, seasonNumber);
 
             return GetPreviews(series, episodes, files)
-                .OrderBy(e => e.EpisodeNumbers.First()).ToList();
+                .OrderByDescending(e => e.EpisodeNumbers.First()).ToList();
         }
 
         private IEnumerable<RenameEpisodeFilePreview> GetPreviews(Series series, List<Episode> episodes, List<EpisodeFile> files)
         {
-            foreach (var file in files)
+            foreach (var f in files)
             {
+                var file = f;
                 var episodesInFile = episodes.Where(e => e.EpisodeFileId == file.Id).ToList();
+                var episodeFilePath = Path.Combine(series.Path, file.RelativePath);
 
                 if (!episodesInFile.Any())
                 {
-                    _logger.Warn("File ({0}) is not linked to any episodes", file.Path);
+                    _logger.Warn("File ({0}) is not linked to any episodes", episodeFilePath);
                     continue;
                 }
 
                 var seasonNumber = episodesInFile.First().SeasonNumber;
-                var newName = _filenameBuilder.BuildFilename(episodesInFile, series, file);
-                var newPath = _filenameBuilder.BuildFilePath(series, seasonNumber, newName, Path.GetExtension(file.Path));
+                var newName = _filenameBuilder.BuildFileName(episodesInFile, series, file);
+                var newPath = _filenameBuilder.BuildFilePath(series, seasonNumber, newName, Path.GetExtension(episodeFilePath));
 
-                if (!file.Path.PathEquals(newPath))
+                if (!episodeFilePath.PathEquals(newPath, StringComparison.Ordinal))
                 {
                     yield return new RenameEpisodeFilePreview
-                                 {
-                                     SeriesId = series.Id,
-                                     SeasonNumber = seasonNumber,
-                                     EpisodeNumbers = episodesInFile.Select(e => e.EpisodeNumber).ToList(),
-                                     EpisodeFileId = file.Id,
-                                     ExistingPath = GetRelativePath(series.Path, file.Path),
-                                     NewPath = GetRelativePath(series.Path, newPath)
-                                 };
+                    {
+                        SeriesId = series.Id,
+                        SeasonNumber = seasonNumber,
+                        EpisodeNumbers = episodesInFile.Select(e => e.EpisodeNumber).ToList(),
+                        EpisodeFileId = file.Id,
+                        ExistingPath = file.RelativePath,
+                        NewPath = series.Path.GetRelativePath(newPath)
+                    };
                 }
             }
-        }
-
-        private string GetRelativePath(string seriesPath, string path)
-        {
-            return path.Substring(seriesPath.Length + 1);
         }
 
         private void RenameFiles(List<EpisodeFile> episodeFiles, Series series)
@@ -113,6 +114,8 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var episodeFile in episodeFiles)
             {
+                var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+
                 try
                 {
                     _logger.Debug("Renaming episode file: {0}", episodeFile);
@@ -129,12 +132,14 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Failed to rename file: " + episodeFile.Path, ex);
+                    _logger.Error(ex, "Failed to rename file {0}", episodeFilePath);
                 }
             }
 
             if (renamed.Any())
             {
+                _diskProvider.RemoveEmptySubfolders(series.Path);
+
                 _eventAggregator.PublishEvent(new SeriesRenamedEvent(series));
             }
         }

@@ -57,7 +57,7 @@ namespace NzbDrone.Common.Expansive
             foreach (var arg in args)
             {
                 var newArg = arg;
-                var tokenPattern = new Regex(_patternStyle.TokenFilter(String.Join("|", tokens)));
+                var tokenPattern = new Regex(_patternStyle.TokenFilter(string.Join("|", tokens)));
                 while (tokenPattern.IsMatch(newArg))
                 {
                     foreach (Match match in tokenPattern.Matches(newArg))
@@ -141,7 +141,7 @@ namespace NzbDrone.Common.Expansive
                     if (thisNode.CallTree.Contains(token))
                         throw new CircularReferenceException(string.Format("Circular Reference Detected for token '{0}'. Call Tree: {1}->{2}",
                                                                            token,
-                                                                           String.Join("->", thisNode.CallTree.ToArray().Reverse()), token));
+                                                                           string.Join("->", thisNode.CallTree.ToArray().Reverse()), token));
 
                     // expand this match
                     var expandedValue = expansionFactory(token);

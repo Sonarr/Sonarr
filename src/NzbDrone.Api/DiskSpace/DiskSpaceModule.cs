@@ -8,15 +8,16 @@ namespace NzbDrone.Api.DiskSpace
         private readonly IDiskSpaceService _diskSpaceService;
 
         public DiskSpaceModule(IDiskSpaceService diskSpaceService)
-            :base("diskspace")
+            : base("diskspace")
         {
             _diskSpaceService = diskSpaceService;
             GetResourceAll = GetFreeSpace;
         }
 
+
         public List<DiskSpaceResource> GetFreeSpace()
         {
-            return ToListResource(_diskSpaceService.GetFreeSpace);
+            return _diskSpaceService.GetFreeSpace().ConvertAll(DiskSpaceResourceMapper.MapToResource);
         }
     }
 }

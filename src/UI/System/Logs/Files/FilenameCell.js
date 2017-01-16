@@ -1,18 +1,12 @@
-'use strict';
-define(
-    [
-        'Cells/NzbDroneCell'
-    ], function (NzbDroneCell) {
-        return NzbDroneCell.extend({
+var NzbDroneCell = require('../../../Cells/NzbDroneCell');
 
-            className: 'log-filename-cell',
+module.exports = NzbDroneCell.extend({
+    className : 'log-filename-cell',
 
-            render: function () {
+    render : function() {
+        var filename = this._getValue();
+        this.$el.html(filename);
 
-                var filename = this._getValue();
-                this.$el.html(filename);
-
-                return this;
-            }
-        });
-    });
+        return this;
+    }
+});

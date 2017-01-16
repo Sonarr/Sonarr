@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
             var destinationFolder = new DirectoryInfo(GetTempFilePath());
             var testArchive = OsInfo.IsWindows ? "TestArchive.zip" : "TestArchive.tar.gz";
 
-            Subject.Extract(Path.Combine("Files", testArchive), destinationFolder.FullName);
+            Subject.Extract(GetTestPath("Files/" + testArchive), destinationFolder.FullName);
 
             destinationFolder.Exists.Should().BeTrue();
             destinationFolder.GetDirectories().Should().HaveCount(1);

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 using NzbDrone.Host;
 
 namespace NzbDrone.SysTray
@@ -14,13 +16,17 @@ namespace NzbDrone.SysTray
     public class SystemTrayApp : Form, ISystemTrayApp
     {
         private readonly IBrowserService _browserService;
+        private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IProcessProvider _processProvider;
 
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenu _trayMenu = new ContextMenu();
 
-        public SystemTrayApp(IBrowserService browserService)
+        public SystemTrayApp(IBrowserService browserService, IRuntimeInfo runtimeInfo, IProcessProvider processProvider)
         {
             _browserService = browserService;
+            _runtimeInfo = runtimeInfo;
+            _processProvider = processProvider;
         }
 
         public void Start()
@@ -32,7 +38,7 @@ namespace NzbDrone.SysTray
             _trayMenu.MenuItems.Add("-");
             _trayMenu.MenuItems.Add("Exit", OnExit);
 
-            _trayIcon.Text = String.Format("NzbDrone - {0}", BuildInfo.Version);
+            _trayIcon.Text = string.Format("Sonarr - {0}", BuildInfo.Version);
             _trayIcon.Icon = Properties.Resources.NzbDroneIcon;
 
             _trayIcon.ContextMenu = _trayMenu;
@@ -81,7 +87,8 @@ namespace NzbDrone.SysTray
 
         private void OnExit(object sender, EventArgs e)
         {
-            Application.Exit();
+            LogManager.Configuration = null;
+            Environment.Exit(0);
         }
 
         private void LaunchBrowser(object sender, EventArgs e)
@@ -98,6 +105,11 @@ namespace NzbDrone.SysTray
 
         private void OnApplicationExit(object sender, EventArgs e)
         {
+            if (_runtimeInfo.RestartPending)
+            {
+                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--restart --nobrowser");
+            }
+
             DisposeTrayIcon();
         }
 
@@ -115,7 +127,7 @@ namespace NzbDrone.SysTray
                 _trayIcon.Visible = false;
                 _trayIcon.Dispose();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }

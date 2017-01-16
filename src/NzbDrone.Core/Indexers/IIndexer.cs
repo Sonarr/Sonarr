@@ -1,20 +1,21 @@
-using System;
 using System.Collections.Generic;
+using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
     public interface IIndexer : IProvider
     {
-        IParseFeed Parser { get; }
+        bool SupportsRss { get; }
+        bool SupportsSearch { get; }
         DownloadProtocol Protocol { get; }
-        Boolean SupportsPaging { get; }
-        Boolean SupportsSearching { get; }
-
-        IEnumerable<string> RecentFeed { get; }
-        IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
-        IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
-        IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
-        IEnumerable<string> GetSearchUrls(string query, int offset = 0);
+        
+        IList<ReleaseInfo> FetchRecent();
+        IList<ReleaseInfo> Fetch(SeasonSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(SingleEpisodeSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(DailyEpisodeSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(AnimeEpisodeSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(SpecialEpisodeSearchCriteria searchCriteria);
     }
 }

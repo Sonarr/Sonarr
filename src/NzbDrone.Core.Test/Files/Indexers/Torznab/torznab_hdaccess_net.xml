@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="1.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:torznab="http://torznab.com/schemas/2015/feed">
+  <channel>
+    <atom:link href="https://hdaccess.net/api" rel="self" type="application/rss+xml" />
+    <title>HDAccess</title>
+    <description>HDAccess API</description>
+    <link>https://hdaccess.net</link>
+    <language>en-us</language>
+    <webMaster>($email) (HDA Invites)</webMaster>
+    <category>search</category>
+    <image>
+      <url>https://hdaccess.net/logo_small.png</url>
+      <title>HDAccess</title>
+      <link>https://hdaccess.net</link>
+      <description>HDAccess API</description>
+    </image>
+
+    <item>
+      <title>Better Call Saul S01E05 Alpine Shepherd 1080p NF WEBRip DD5.1 x264</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11515</guid>
+      <link>https://hdaccess.net/download.php?torrent=11515&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11515&amp;hit=1#comments</comments>
+      <pubDate>Sat, 14 Mar 2015 17:10:42 -0400</pubDate>
+      <category>HDTV 1080p</category>
+      <size>2538463390</size>
+      <description>Better.Call.Saul.S01E05.Alpine.Shepherd.1080p.NF.WEBRip.DD5.1.x264.torrent</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11515&amp;passkey=123456" length="2538463390" type="application/x-bittorrent" />
+      <torznab:attr name="rageid" value="37780" />
+      <torznab:attr name="imdb" value="3032476" />
+      <torznab:attr name="tvdbid" value="273181" />
+      <torznab:attr name="category" value="5000" />
+      <torznab:attr name="category" value="5040" />
+      <torznab:attr name="category" value="100009" />
+      <torznab:attr name="category" value="100036" />
+      <torznab:attr name="type" value="series" />
+      <torznab:attr name="seeders" value="7" />
+      <torznab:attr name="peers" value="7" />
+      <torznab:attr name="coverurl" value="https://hdaccess.net/images/posters/273181.jpg" />
+      <torznab:attr name="bannerurl" value="https://hdaccess.net/images/banners/273181.jpg" />
+      <torznab:attr name="infohash" value="63e07ff523710ca268567dad344ce1e0e6b7e8a3" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+
+    <item>
+      <title>Ocean Giants 2013 1080p 3D BluRay Remux MVC DTS-HD MA 5.1-HDAccess</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11511</guid>
+      <link>https://hdaccess.net/download.php?torrent=11511&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11511&amp;hit=1#comments</comments>
+      <pubDate>Sat, 14 Mar 2015 16:33:42 -0400</pubDate>
+      <category>CUSTOM 3D BD</category>
+      <size>15330508800</size>
+      <description>Ocean Giants 2013 1080p 3D BluRay Remux MVC DTS-HD MA 5.1-HDAccess.torrent</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11511&amp;passkey=123456" length="15330508800" type="application/x-bittorrent" />
+      <torznab:attr name="category" value="2000" />
+      <torznab:attr name="category" value="2060" />
+      <torznab:attr name="category" value="100001" />
+      <torznab:attr name="category" value="100018" />
+      <torznab:attr name="type" value="movie" />
+      <torznab:attr name="seeders" value="41" />
+      <torznab:attr name="peers" value="41" />
+      <torznab:attr name="coverurl" value="http://s5.postimg.org/gl7z658on/screenshot_1008.png" />
+      <torznab:attr name="infohash" value="ec039a525a6feac4b15889323f4f443de381e7cc" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+
+    <item>
+      <title>Wild 2014 720p BluRay DTS x264-HDAccess</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11506</guid>
+      <link>https://hdaccess.net/download.php?torrent=11506&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11506&amp;hit=1#comments</comments>
+      <pubDate>Sat, 14 Mar 2015 14:28:43 -0400</pubDate>
+      <category>720p</category>
+      <size>6501510357</size>
+      <description>Wild.2014.720p.BluRay.DTS.x264-HDAccess.torrent</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11506&amp;passkey=123456" length="6501510357" type="application/x-bittorrent" />
+      <torznab:attr name="imdb" value="2305051" />
+      <torznab:attr name="category" value="2000" />
+      <torznab:attr name="category" value="2060" />
+      <torznab:attr name="category" value="100002" />
+      <torznab:attr name="category" value="100022" />
+      <torznab:attr name="type" value="movie" />
+      <torznab:attr name="seeders" value="57" />
+      <torznab:attr name="peers" value="58" />
+      <torznab:attr name="coverurl" value="https://hdaccess.net/imdb/images/2305051.jpg" />
+      <torznab:attr name="infohash" value="6704c29a00304f01b7dbb7959bfea5ccefe7d7d5" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+
+    <item>
+      <title>Absolute Power 1997.1080p BluRay Remux AVC DTS-HD MA 5.1-HDX</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11504</guid>
+      <link>https://hdaccess.net/download.php?torrent=11504&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11504&amp;hit=1#comments</comments>
+      <pubDate>Sat, 14 Mar 2015 13:34:08 -0400</pubDate>
+      <category>REMUX</category>
+      <size>25267070253</size>
+      <description>Absolute.Power.1997.1080p.BluRay.Remux.AVC.DTS-HD.MA.5.1-HDX.mkv.torrent</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11504&amp;passkey=123456" length="25267070253" type="application/x-bittorrent" />
+      <torznab:attr name="imdb" value="0118548" />
+      <torznab:attr name="category" value="2000" />
+      <torznab:attr name="category" value="2060" />
+      <torznab:attr name="category" value="100002" />
+      <torznab:attr name="category" value="100026" />
+      <torznab:attr name="type" value="movie" />
+      <torznab:attr name="seeders" value="6" />
+      <torznab:attr name="peers" value="7" />
+      <torznab:attr name="coverurl" value="https://hdaccess.net/imdb/images/0118548.jpg" />
+      <torznab:attr name="infohash" value="668c1fed4b6bad43b1c84656da30d5f4eb58afdb" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+
+    <item>
+      <title>12 Monkeys S01E09 Tomorrow 720p WEB-DL DD5.1 H.264-BS</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11501</guid>
+      <link>https://hdaccess.net/download.php?torrent=11501&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11501&amp;hit=1#comments</comments>
+      <pubDate>Sat, 14 Mar 2015 12:42:19 -0400</pubDate>
+      <category>TV 720p WEB-DL</category>
+      <size>1397243303</size>
+      <description>12.Monkeys.S01E09.Tomorrow.720p.WEB-DL.DD5.1.H.264-BS.torrent</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11501&amp;passkey=123456" length="1397243303" type="application/x-bittorrent" />
+      <torznab:attr name="rageid" value="36903" />
+      <torznab:attr name="imdb" value="3148266" />
+      <torznab:attr name="tvdbid" value="272644" />
+      <torznab:attr name="category" value="5000" />
+      <torznab:attr name="category" value="5040" />
+      <torznab:attr name="category" value="100004" />
+      <torznab:attr name="category" value="100038" />
+      <torznab:attr name="type" value="series" />
+      <torznab:attr name="seeders" value="6" />
+      <torznab:attr name="peers" value="6" />
+      <torznab:attr name="coverurl" value="https://hdaccess.net/images/posters/272644.jpg" />
+      <torznab:attr name="bannerurl" value="https://hdaccess.net/images/banners/272644.jpg" />
+      <torznab:attr name="infohash" value="9fbf7d6d52eb9847700591dad758988fb0799c53" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+  </channel>
+</rss>

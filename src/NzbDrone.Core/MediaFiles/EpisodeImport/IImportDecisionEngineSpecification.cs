@@ -3,8 +3,8 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
-    public interface IImportDecisionEngineSpecification : IRejectWithReason
+    public interface IImportDecisionEngineSpecification
     {
-        bool IsSatisfiedBy(LocalEpisode localEpisode);
+        Decision IsSatisfiedBy(LocalEpisode localEpisode);
     }
 }

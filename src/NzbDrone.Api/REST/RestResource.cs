@@ -8,12 +8,6 @@ namespace NzbDrone.Api.REST
         public int Id { get; set; }
 
         [JsonIgnore]
-        public virtual string ResourceName
-        {
-            get
-            {
-                return GetType().Name.ToLower().Replace("resource", "");
-            }
-        }
+        public virtual string ResourceName => GetType().Name.ToLowerInvariant().Replace("resource", "");
     }
 }

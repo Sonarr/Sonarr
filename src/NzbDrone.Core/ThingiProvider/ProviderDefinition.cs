@@ -5,10 +5,13 @@ namespace NzbDrone.Core.ThingiProvider
     public abstract class ProviderDefinition : ModelBase
     {
         private IProviderConfig _settings;
-        public string Name { get; set; }
-        public string Implementation { get; set; }
 
+        public string Name { get; set; }
+        public string ImplementationName { get; set; }
+        public string Implementation { get; set; }
         public string ConfigContract { get; set; }
+        public virtual bool Enable { get; set; }
+        public ProviderMessage Message { get; set; }
 
         public IProviderConfig Settings
         {

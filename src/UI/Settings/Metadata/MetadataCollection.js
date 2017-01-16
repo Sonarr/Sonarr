@@ -1,12 +1,7 @@
-﻿'use strict';
-define(
-    [
-        'backbone',
-        'Settings/Metadata/MetadataModel'
-    ], function (Backbone, MetadataModel) {
+var Backbone = require('backbone');
+var MetadataModel = require('./MetadataModel');
 
-        return Backbone.Collection.extend({
-            model: MetadataModel,
-            url  : window.NzbDrone.ApiRoot + '/metadata'
-        });
-    });
+module.exports = Backbone.Collection.extend({
+    model : MetadataModel,
+    url   : window.NzbDrone.ApiRoot + '/metadata'
+});

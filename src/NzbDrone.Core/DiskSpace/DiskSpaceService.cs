@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.DiskSpace
 
         private IEnumerable<DiskSpace> GetDroneFactoryFreeSpace()
         {
-            if (!String.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder))
+            if (!string.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder))
             {
                 return GetDiskSpace(new[] { _diskProvider.GetPathRoot(_configService.DownloadedEpisodesFolder) });
             }
@@ -58,10 +59,10 @@ namespace NzbDrone.Core.DiskSpace
 
         private IEnumerable<DiskSpace> GetFixedDisksFreeSpace()
         {
-            return GetDiskSpace(_diskProvider.GetFixedDrives());
+            return GetDiskSpace(_diskProvider.GetMounts().Where(d => d.DriveType == DriveType.Fixed).Select(d => d.RootDirectory), true);
         }
 
-        private IEnumerable<DiskSpace> GetDiskSpace(IEnumerable<String> paths)
+        private IEnumerable<DiskSpace> GetDiskSpace(IEnumerable<string> paths, bool suppressWarnings = false)
         {
             foreach (var path in paths)
             {
@@ -88,7 +89,10 @@ namespace NzbDrone.Core.DiskSpace
                 }
                 catch (Exception ex)
                 {
-                    _logger.WarnException("Unable to get free space for: " + path, ex);
+                    if (!suppressWarnings)
+                    {
+                        _logger.Warn(ex, "Unable to get free space for: " + path);
+                    }
                 }
 
                 if (diskSpace != null)

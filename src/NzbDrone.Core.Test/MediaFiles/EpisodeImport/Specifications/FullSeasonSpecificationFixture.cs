@@ -1,8 +1,6 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -36,13 +34,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         {
             _localEpisode.ParsedEpisodeInfo.FullSeason = true;
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_when_file_does_not_contain_the_full_season()
         {
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
         }
     }
 }

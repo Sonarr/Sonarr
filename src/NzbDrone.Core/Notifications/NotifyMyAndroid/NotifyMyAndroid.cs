@@ -1,37 +1,38 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Notifications.NotifyMyAndroid
 {
     public class NotifyMyAndroid : NotificationBase<NotifyMyAndroidSettings>
     {
-        private readonly INotifyMyAndroidProxy _notifyMyAndroidProxy;
+        private readonly INotifyMyAndroidProxy _proxy;
 
-        public NotifyMyAndroid(INotifyMyAndroidProxy notifyMyAndroidProxy)
+        public NotifyMyAndroid(INotifyMyAndroidProxy proxy)
         {
-            _notifyMyAndroidProxy = notifyMyAndroidProxy;
+            _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "http://www.notifymyandroid.com/"; }
-        }
+        public override string Link => "https://www.notifymyandroid.com/";
+        public override string Name => "Notify My Android";
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
-            const string title = "Episode Grabbed";
-
-            _notifyMyAndroidProxy.SendNotification(title, message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
+            _proxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string title = "Episode Downloaded";
-
-            _notifyMyAndroidProxy.SendNotification(title, message.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
+            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
-        public override void AfterRename(Series series)
+        public override ValidationResult Test()
         {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_proxy.Test(Settings));
+
+            return new ValidationResult(failures);
         }
     }
 }

@@ -1,35 +1,40 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexClient : NotificationBase<PlexClientSettings>
     {
-        private readonly IPlexService _plexProvider;
+        private readonly IPlexClientService _plexClientService;
 
-        public PlexClient(IPlexService plexProvider)
+        public override string Link => "https://www.plex.tv/";
+        public override string Name => "Plex Media Center";
+
+        public PlexClient(IPlexClientService plexClientService)
         {
-            _plexProvider = plexProvider;
+            _plexClientService = plexClientService;
         }
 
-        public override string Link
+        public override void OnGrab(GrabMessage grabMessage)
         {
-            get { return "http://www.plexapp.com/"; }
-        }
-
-        public override void OnGrab(string message)
-        {
-            const string header = "NzbDrone [TV] - Grabbed";
-            _plexProvider.Notify(Settings, header, message);
+            _plexClientService.Notify(Settings, EPISODE_GRABBED_TITLE_BRANDED, grabMessage.Message);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string header = "NzbDrone [TV] - Downloaded";
-            _plexProvider.Notify(Settings, header, message.Message);
+            _plexClientService.Notify(Settings, EPISODE_DOWNLOADED_TITLE_BRANDED, message.Message);
         }
 
-        public override void AfterRename(Series series)
+
+        public override ValidationResult Test()
         {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_plexClientService.Test(Settings));
+
+            return new ValidationResult(failures);
         }
     }
 }

@@ -14,36 +14,33 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Series or Episode is not monitored";
-            }
-        }
+        public RejectionType Type => RejectionType.Permanent;
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria != null)
             {
-                _logger.Debug("Skipping monitored check during search");
-                return true;
+                if (!searchCriteria.MonitoredEpisodesOnly)
+                {
+                    _logger.Debug("Skipping monitored check during search");
+                    return Decision.Accept();
+                }
             }
 
             if (!subject.Series.Monitored)
             {
                 _logger.Debug("{0} is present in the DB but not tracked. skipping.", subject.Series);
-                return false;
+                return Decision.Reject("Series is not monitored");
             }
 
-            //return monitored if any of the episodes are monitored
-            if (subject.Episodes.Any(episode => episode.Monitored))
+            var monitoredCount = subject.Episodes.Count(episode => episode.Monitored);
+            if (monitoredCount == subject.Episodes.Count)
             {
-                return true;
+                return Decision.Accept();
             }
 
-            _logger.Debug("No episodes are monitored. skipping.");
-            return false;
+            _logger.Debug("Only {0}/{1} episodes are monitored. skipping.", monitoredCount, subject.Episodes.Count);
+            return Decision.Reject("Episode is not monitored");
         }
     }
 }

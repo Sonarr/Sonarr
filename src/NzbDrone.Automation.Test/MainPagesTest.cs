@@ -10,13 +10,11 @@ namespace NzbDrone.Automation.Test
     {
         private PageBase page;
 
-
         [SetUp]
         public void Setup()
         {
             page = new PageBase(driver);
         }
-
 
         [Test]
         public void series_page()
@@ -36,12 +34,12 @@ namespace NzbDrone.Automation.Test
         }
 
         [Test]
-        public void history_page()
+        public void activity_page()
         {
-            page.HistoryNavIcon.Click();
+            page.ActivityNavIcon.Click();
             page.WaitForNoSpinner();
 
-            page.FindByClass("iv-history-historylayout").Should().NotBeNull();
+            page.FindByClass("iv-activity-activitylayout").Should().NotBeNull();
         }
 
         [Test]
@@ -62,7 +60,6 @@ namespace NzbDrone.Automation.Test
             page.FindByClass("iv-system-systemlayout").Should().NotBeNull();
         }
 
-
         [Test]
         public void add_series_page()
         {
@@ -75,7 +72,5 @@ namespace NzbDrone.Automation.Test
 
             page.FindByClass("iv-addseries-addserieslayout").Should().NotBeNull();
         }
-
-
     }
 }

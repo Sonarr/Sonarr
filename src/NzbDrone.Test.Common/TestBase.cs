@@ -54,6 +54,9 @@ namespace NzbDrone.Test.Common
                 if (_mocker == null)
                 {
                     _mocker = new AutoMoqer();
+                    _mocker.SetConstant<ICacheManager>(new CacheManager());
+                    _mocker.SetConstant<IStartupContext>(new StartupContext(new string[0]));
+                    _mocker.SetConstant(TestLogger);
                 }
 
                 return _mocker;
@@ -86,18 +89,11 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
-
             GetType().IsPublic.Should().BeTrue("All Test fixtures should be public to work in mono.");
-
-            Mocker.SetConstant<ICacheManager>(new CacheManager());
-
-            Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
-
-            Mocker.SetConstant<IStartupContext>(new StartupContext(new string[0]));
 
             LogManager.ReconfigExistingLoggers();
 
-            TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);
+            TempFolder = Path.Combine(TestContext.CurrentContext.TestDirectory, "_temp_" + DateTime.Now.Ticks);
 
             Directory.CreateDirectory(TempFolder);
         }
@@ -129,18 +125,17 @@ namespace NzbDrone.Test.Common
 
         protected void WindowsOnly()
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 throw new IgnoreException("windows specific test");
             }
         }
 
-
         protected void MonoOnly()
         {
-            if (!OsInfo.IsMono)
+            if (!PlatformInfo.IsMono)
             {
-                throw new IgnoreException("linux specific test");
+                throw new IgnoreException("mono specific test");
             }
         }
 
@@ -151,6 +146,16 @@ namespace NzbDrone.Test.Common
                 .Returns(VirtualPath);
 
             TestFolderInfo = Mocker.GetMock<IAppFolderInfo>().Object;
+        }
+
+        protected string GetTestPath(string path)
+        {
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, Path.Combine(path.Split('/')));
+        }
+
+        protected string ReadAllText(string path)
+        {
+            return File.ReadAllText(GetTestPath(path));
         }
 
         protected string GetTempFilePath()

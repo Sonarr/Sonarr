@@ -1,9 +1,9 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: nzbdrone
-Source: https://github.com/NzbDrone/NzbDrone
+Source: https://github.com/Sonarr/Sonarr
 
 Files: *
-Copyright: 2010-2013 NzbDrone <contact@nzbdrone.com>
+Copyright: 2010-2016 Sonarr <hello@sonarr.tv>
 
 License: GPL-3.0+
 

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Parser;
@@ -40,10 +38,27 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Shield,.The.1x13.Tueurs.De.Flics.FR.DVDRip.XviD", Language.French)]
         [TestCase("True.Detective.S01E01.1080p.WEB-DL.Rus.Eng.TVKlondike", Language.Russian)]
         [TestCase("The.Trip.To.Italy.S02E01.720p.HDTV.x264-TLA", Language.English)]
+        [TestCase("Revolution S01E03 No Quarter 2012 WEB-DL 720p Nordic-philipo mkv", Language.Norwegian)]
+        [TestCase("Extant.S01E01.VOSTFR.HDTV.x264-RiDERS", Language.French)]
+        [TestCase("Constantine.2014.S01E01.WEBRiP.H264.AAC.5.1-NL.SUBS", Language.Dutch)]
+        [TestCase("Elementary - S02E16 - Kampfhaehne - mkv - by Videomann", Language.German)]
+        [TestCase("Two.Greedy.Italians.S01E01.The.Family.720p.HDTV.x264-FTP", Language.English)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD.HUNDUB-LOL", Language.Hungarian)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL", Language.Hungarian)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD.HUN-LOL", Language.Hungarian)]
         public void should_parse_language(string postTitle, Language language)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
-            result.Language.Should().Be(language);
+            var result = LanguageParser.ParseLanguage(postTitle);
+            result.Should().Be(language);
+        }
+
+        [TestCase("2 Broke Girls - S01E01 - Pilot.en.sub", Language.English)]
+        [TestCase("2 Broke Girls - S01E01 - Pilot.eng.sub", Language.English)]
+        [TestCase("2 Broke Girls - S01E01 - Pilot.sub", Language.Unknown)]
+        public void should_parse_subtitle_language(string fileName, Language language)
+        {
+            var result = LanguageParser.ParseSubtitleLanguage(fileName);
+            result.Should().Be(language);
         }
     }
 }

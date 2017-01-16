@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentValidation.Results;
 
 namespace NzbDrone.Core.ThingiProvider
 {
@@ -9,9 +10,15 @@ namespace NzbDrone.Core.ThingiProvider
         List<TProviderDefinition> All();
         List<TProvider> GetAvailableProviders();
         TProviderDefinition Get(int id);
-        TProviderDefinition Create(TProviderDefinition indexer);
-        void Update(TProviderDefinition indexer);
+        TProviderDefinition Create(TProviderDefinition definition);
+        void Update(TProviderDefinition definition);
         void Delete(int id);
-        List<TProviderDefinition> Templates();
+        IEnumerable<TProviderDefinition> GetDefaultDefinitions();
+        IEnumerable<TProviderDefinition> GetPresetDefinitions(TProviderDefinition providerDefinition);
+        void SetProviderCharacteristics(TProviderDefinition definition);
+        void SetProviderCharacteristics(TProvider provider, TProviderDefinition definition);
+        TProvider GetInstance(TProviderDefinition definition);
+        ValidationResult Test(TProviderDefinition definition);
+        object RequestAction(TProviderDefinition definition, string action, IDictionary<string, string> query);
     }
 }

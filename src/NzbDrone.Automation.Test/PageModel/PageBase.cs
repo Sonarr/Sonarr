@@ -27,11 +27,10 @@ namespace NzbDrone.Automation.Test.PageModel
             return wait.Until(d => d.FindElement(by));
         }
 
-
-        public void WaitForNoSpinner(int timeout = 20)
+        public void WaitForNoSpinner(int timeout = 30)
         {
             //give the spinner some time to show up.
-            Thread.Sleep(100);
+            Thread.Sleep(200);
 
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(timeout));
             wait.Until(d =>
@@ -48,54 +47,16 @@ namespace NzbDrone.Automation.Test.PageModel
             });
         }
 
+        public IWebElement SeriesNavIcon => FindByClass("x-series-nav");
 
-        public IWebElement SeriesNavIcon
-        {
-            get
-            {
-                return FindByClass("x-series-nav");
-            }
-        }
+        public IWebElement CalendarNavIcon => FindByClass("x-calendar-nav");
 
-        public IWebElement CalendarNavIcon
-        {
-            get
-            {
-                return FindByClass("x-calendar-nav");
-            }
-        }
+        public IWebElement ActivityNavIcon => FindByClass("x-activity-nav");
 
-        public IWebElement HistoryNavIcon
-        {
-            get
-            {
-                return FindByClass("x-history-nav");
-            }
-        }
+        public IWebElement WantedNavIcon => FindByClass("x-wanted-nav");
 
-        public IWebElement WantedNavIcon
-        {
-            get
-            {
-                return FindByClass("x-wanted-nav");
-            }
-        }
+        public IWebElement SettingNavIcon => FindByClass("x-settings-nav");
 
-        public IWebElement SettingNavIcon
-        {
-            get
-            {
-                return FindByClass("x-settings-nav");
-            }
-        }
-
-        public IWebElement SystemNavIcon
-        {
-            get
-            {
-                return FindByClass("x-system-nav");
-            }
-        }
-
+        public IWebElement SystemNavIcon => FindByClass("x-system-nav");
     }
 }

@@ -1,0 +1,11 @@
+<ul>
+    {{#each this}}
+    <li>
+        {{#if reason}}
+            {{reason}}
+        {{else}}
+            {{this}}
+        {{/if}}
+    </li>
+    {{/each}}
+</ul>

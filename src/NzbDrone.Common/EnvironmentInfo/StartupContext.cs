@@ -8,6 +8,8 @@ namespace NzbDrone.Common.EnvironmentInfo
         Dictionary<string, string> Args { get; }
         bool InstallService { get; }
         bool UninstallService { get; }
+
+        string PreservedArguments { get; }
     }
 
     public class StartupContext : IStartupContext
@@ -27,17 +29,17 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             foreach (var s in args)
             {
-                var flag = s.Trim(' ', '/', '-').ToLower();
+                var flag = s.Trim(' ', '/', '-');
 
                 var argParts = flag.Split('=');
 
                 if (argParts.Length == 2)
                 {
-                    Args.Add(argParts[0].Trim(), argParts[1].Trim(' ', '"'));
+                    Args.Add(argParts[0].Trim().ToLower(), argParts[1].Trim(' ', '"'));
                 }
                 else
                 {
-                    Flags.Add(flag);
+                    Flags.Add(flag.ToLower());
                 }
             }
         }
@@ -45,19 +47,27 @@ namespace NzbDrone.Common.EnvironmentInfo
         public HashSet<string> Flags { get; private set; }
         public Dictionary<string, string> Args { get; private set; }
 
-        public bool InstallService
-        {
-            get
-            {
-                return Flags.Contains(INSTALL_SERVICE);
-            }
-        }
+        public bool InstallService => Flags.Contains(INSTALL_SERVICE);
 
-        public bool UninstallService
+        public bool UninstallService => Flags.Contains(UNINSTALL_SERVICE);
+
+        public string PreservedArguments
         {
             get
             {
-                return Flags.Contains(UNINSTALL_SERVICE);
+                var args = "";
+
+                if (Args.ContainsKey(APPDATA))
+                {
+                    args = "/data=" + Args[APPDATA];
+                }
+
+                if (Flags.Contains(NO_BROWSER))
+                {
+                    args += " /" + NO_BROWSER;
+                }
+
+                return args.Trim();
             }
         }
     }

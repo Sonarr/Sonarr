@@ -1,6 +1,7 @@
-﻿using NLog;
+﻿using System.Linq;
+using NLog;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 
@@ -10,17 +11,17 @@ namespace NzbDrone.Core.IndexerSearch
     {
         private readonly ISeriesService _seriesService;
         private readonly ISearchForNzb _nzbSearchService;
-        private readonly IDownloadApprovedReports _downloadApprovedReports;
+        private readonly IProcessDownloadDecisions _processDownloadDecisions;
         private readonly Logger _logger;
 
         public SeriesSearchService(ISeriesService seriesService,
                                    ISearchForNzb nzbSearchService,
-                                   IDownloadApprovedReports downloadApprovedReports,
+                                   IProcessDownloadDecisions processDownloadDecisions,
                                    Logger logger)
         {
             _seriesService = seriesService;
             _nzbSearchService = nzbSearchService;
-            _downloadApprovedReports = downloadApprovedReports;
+            _processDownloadDecisions = processDownloadDecisions;
             _logger = logger;
         }
 
@@ -30,10 +31,16 @@ namespace NzbDrone.Core.IndexerSearch
 
             var downloadedCount = 0;
 
-            foreach (var season in series.Seasons)
+            foreach (var season in series.Seasons.OrderBy(s => s.SeasonNumber))
             {
-                var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber);
-                downloadedCount += _downloadApprovedReports.DownloadApproved(decisions).Count;
+                if (!season.Monitored)
+                {
+                    _logger.Debug("Season {0} of {1} is not monitored, skipping search", season.SeasonNumber, series.Title);
+                    continue;
+                }
+
+                var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, message.Trigger == CommandTrigger.Manual);
+                downloadedCount += _processDownloadDecisions.ProcessDecisions(decisions).Grabbed.Count;
             }
 
             _logger.ProgressInfo("Series search completed. {0} reports downloaded.", downloadedCount);

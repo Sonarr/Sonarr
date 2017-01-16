@@ -1,28 +1,30 @@
-﻿'use strict';
+var Marionette = require('marionette');
+var IndexerCollection = require('./IndexerCollection');
+var CollectionView = require('./IndexerCollectionView');
+var OptionsView = require('./Options/IndexerOptionsView');
+var RestrictionCollection = require('./Restriction/RestrictionCollection');
+var RestrictionCollectionView = require('./Restriction/RestrictionCollectionView');
 
-define(
-    [
-        'marionette',
-        'Settings/Indexers/CollectionView',
-        'Settings/Indexers/Options/IndexerOptionsView'
-    ], function (Marionette, CollectionView, OptionsView) {
-        return Marionette.Layout.extend({
-            template: 'Settings/Indexers/IndexerLayoutTemplate',
+module.exports = Marionette.Layout.extend({
+    template : 'Settings/Indexers/IndexerLayoutTemplate',
 
-            regions: {
-                indexersRegion : '#indexers-collection',
-                indexerOptions        : '#indexer-options'
-            },
+    regions : {
+        indexers       : '#x-indexers-region',
+        indexerOptions : '#x-indexer-options-region',
+        restriction    : '#x-restriction-region'
+    },
 
-            initialize: function (options) {
-                this.settings = options.settings;
-                this.indexersCollection = options.indexersCollection;
-            },
+    initialize : function() {
+        this.indexersCollection = new IndexerCollection();
+        this.indexersCollection.fetch();
 
-            onShow: function () {
-                this.indexersRegion.show(new CollectionView({ collection: this.indexersCollection }));
-                this.indexerOptions.show(new OptionsView({ model: this.settings }));
-            }
-        });
-    });
+        this.restrictionCollection = new RestrictionCollection();
+        this.restrictionCollection.fetch();
+    },
 
+    onShow : function() {
+        this.indexers.show(new CollectionView({ collection : this.indexersCollection }));
+        this.indexerOptions.show(new OptionsView({ model : this.model }));
+        this.restriction.show(new RestrictionCollectionView({ collection : this.restrictionCollection }));
+    }
+});

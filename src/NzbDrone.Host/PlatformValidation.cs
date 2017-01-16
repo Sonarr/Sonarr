@@ -9,26 +9,28 @@ namespace NzbDrone.Host
 {
     public static class PlatformValidation
     {
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(PlatformValidation));
+
+        private const string DOWNLOAD_LINK = "http://www.microsoft.com/en-us/download/details.aspx?id=42643";
 
         public static bool IsValidate(IUserAlert userAlert)
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 return true;
             }
 
             if (!IsAssemblyAvailable("System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))
             {
-                userAlert.Alert("It looks like you don't have full version of .NET Framework installed. You will now be directed the download page.");
+                userAlert.Alert("It looks like you don't have the correct version of .NET Framework installed. You will now be directed the download page.");
 
                 try
                 {
-                    Process.Start("http://www.microsoft.com/en-ca/download/details.aspx?id=30653");
+                    Process.Start(DOWNLOAD_LINK);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    userAlert.Alert("Oops. can't start default browser. Please visit http://www.microsoft.com/en-ca/download/details.aspx?id=30653 to download .NET Framework 4.5.");
+                    userAlert.Alert("Oops. Couldn't start your browser. Please visit http://www.microsoft.com/net to download the latest version of .NET Framework");
                 }
 
                 return false;
@@ -47,7 +49,7 @@ namespace NzbDrone.Host
             }
             catch (Exception e)
             {
-                Logger.Warn("Couldn't load {0}", e.Message);
+                Logger.Warn(e, "Couldn't load {0}", assemblyString);
                 return false;
             }
 

@@ -1,5 +1,7 @@
-﻿using NzbDrone.Common;
-using NzbDrone.Core.Messaging.Commands;
+﻿using System;
+using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common.Extensions;
 using RestSharp;
 using NzbDrone.Core.Rest;
 
@@ -7,35 +9,61 @@ namespace NzbDrone.Core.Notifications.Pushover
 {
     public interface IPushoverProxy
     {
-        void SendNotification(string title, string message, string apiKey, string userKey, PushoverPriority priority, string sound);
+        void SendNotification(string title, string message, PushoverSettings settings);
+        ValidationFailure Test(PushoverSettings settings);
     }
 
-    public class PushoverProxy : IPushoverProxy, IExecute<TestPushoverCommand>
+    public class PushoverProxy : IPushoverProxy
     {
+        private readonly Logger _logger;
         private const string URL = "https://api.pushover.net/1/messages.json";
 
-        public void SendNotification(string title, string message, string apiKey, string userKey, PushoverPriority priority, string sound)
+        public PushoverProxy(Logger logger)
         {
-            var client = new RestClient(URL);
+            _logger = logger;
+        }
+
+        public void SendNotification(string title, string message, PushoverSettings settings)
+        {
+            var client = RestClientFactory.BuildClient(URL);
             var request = new RestRequest(Method.POST);
-            request.AddParameter("token", apiKey);
-            request.AddParameter("user", userKey);
+            request.AddParameter("token", settings.ApiKey);
+            request.AddParameter("user", settings.UserKey);
             request.AddParameter("title", title);
             request.AddParameter("message", message);
-            request.AddParameter("priority", (int)priority);
+            request.AddParameter("priority", settings.Priority);
 
-            if (!sound.IsNullOrWhiteSpace()) request.AddParameter("sound", sound);
+            if ((PushoverPriority)settings.Priority == PushoverPriority.Emergency)
+            {
+                request.AddParameter("retry", settings.Retry);
+                request.AddParameter("expire", settings.Expire);
+            }
+
+            if (!settings.Sound.IsNullOrWhiteSpace())
+            {
+                request.AddParameter("sound", settings.Sound);
+            }
 
 
             client.ExecuteAndValidate(request);
         }
 
-        public void Execute(TestPushoverCommand message)
+        public ValidationFailure Test(PushoverSettings settings)
         {
-            const string title = "Test Notification";
-            const string body = "This is a test message from NzbDrone";
+            try
+            {
+                const string title = "Test Notification";
+                const string body = "This is a test message from Sonarr";
 
-            SendNotification(title, body, message.ApiKey, message.UserKey, (PushoverPriority)message.Priority, message.Sound);
+                SendNotification(title, body, settings);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unable to send test message");
+                return new ValidationFailure("ApiKey", "Unable to send test message");
+            }
+
+            return null;
         }
     }
 }

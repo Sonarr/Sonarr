@@ -2,6 +2,7 @@
 @import "../Shared/Styles/clickable.less";
 @import "Indexers/indexers";
 @import "Quality/quality";
+@import "Profile/profile";
 @import "Notifications/notifications";
 @import "Metadata/metadata";
 @import "DownloadClient/downloadclient";
@@ -52,10 +53,13 @@ li.save-and-add:hover {
   width: 500px;
 }
 
-.advanced-settings-toggle {
+.settings-controls {
   margin-top: 10px;
-  margin-right: 40px;
+}
+
+.advanced-settings-toggle {
   display: inline-block;
+  margin-bottom: 10px;
 
   .checkbox {
     width         : 100px;
@@ -105,12 +109,53 @@ li.save-and-add:hover {
 }
 
 .settings-tabs {
+  li>a {
+    padding : 10px;
+  }
+
   @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
     li {
       a {
         white-space : nowrap;
         padding     : 10px;
       }
+    }
+  }
+}
+
+.indicator {
+  display       : none;
+  padding-right : 5px;
+}
+
+.add-rule-setting-mapping {
+  cursor     : pointer;
+  font-size  : 14px;
+  text-align : center;
+  display    : inline-block;
+  padding    : 2px 6px;
+
+  i {
+    cursor : pointer;
+  }
+}
+
+.rule-setting-list {
+
+  .rule-setting-header .row {
+    font-weight : bold;
+    line-height : 40px;
+  }
+
+  .rows .row {
+    line-height    : 30px;
+    border-top     : 1px solid #ddd;
+    vertical-align : middle;
+    padding        : 5px;
+
+    i {
+      cursor      : pointer;
+      margin-left : 5px;
     }
   }
 }

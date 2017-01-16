@@ -2,24 +2,34 @@ using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Frontend.Mappers
 {
     public class FaviconMapper : StaticResourceMapperBase
     {
         private readonly IAppFolderInfo _appFolderInfo;
+        private readonly IConfigFileProvider _configFileProvider;
 
-        public FaviconMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
+        public FaviconMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider,IConfigFileProvider configFileProvider, Logger logger)
             : base(diskProvider, logger)
         {
             _appFolderInfo = appFolderInfo;
+            _configFileProvider = configFileProvider;
         }
 
-        protected override string Map(string resourceUrl)
+        public override string Map(string resourceUrl)
         {
-            var path = Path.Combine("Content", "Images", "favicon.ico");
+            var fileName = "favicon.ico";
 
-            return Path.Combine(_appFolderInfo.StartUpFolder, "UI", path);
+            if (BuildInfo.IsDebug)
+            {
+                fileName = "favicon-debug.ico";
+            }
+
+            var path = Path.Combine("Content", "Images", fileName);
+
+            return Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, path);
         }
 
         public override bool CanHandle(string resourceUrl)

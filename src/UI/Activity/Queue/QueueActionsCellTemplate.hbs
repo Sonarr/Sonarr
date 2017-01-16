@@ -1,0 +1,12 @@
+{{#if_eq status compare="Completed"}}
+    {{#if_eq trackedDownloadStatus compare="Warning"}}
+        <i class="icon-sonarr-import-manual x-manual-import" title="Manual import"></i>
+    {{/if_eq}}
+{{/if_eq}}
+
+{{#if_eq status compare="Pending"}}
+    <i class="icon-sonarr-download x-grab" title="Add to download queue (Override Delay Profile)"></i>
+    <i class="icon-sonarr-delete x-remove" title="Remove pending release"></i>
+{{else}}
+    <i class="icon-sonarr-delete x-remove" title="Remove from download client"></i>
+{{/if_eq}}

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Common.TPL;
-
+using System;
 namespace NzbDrone.Core.Indexers
 {
     public interface IFetchAndParseRss
@@ -15,13 +15,11 @@ namespace NzbDrone.Core.Indexers
     public class FetchAndParseRssService : IFetchAndParseRss
     {
         private readonly IIndexerFactory _indexerFactory;
-        private readonly IFetchFeedFromIndexers _feedFetcher;
         private readonly Logger _logger;
 
-        public FetchAndParseRssService(IIndexerFactory indexerFactory, IFetchFeedFromIndexers feedFetcher, Logger logger)
+        public FetchAndParseRssService(IIndexerFactory indexerFactory, Logger logger)
         {
             _indexerFactory = indexerFactory;
-            _feedFetcher = feedFetcher;
             _logger = logger;
         }
 
@@ -29,7 +27,7 @@ namespace NzbDrone.Core.Indexers
         {
             var result = new List<ReleaseInfo>();
 
-            var indexers = _indexerFactory.GetAvailableProviders().ToList();
+            var indexers = _indexerFactory.RssEnabled();
 
             if (!indexers.Any())
             {
@@ -48,11 +46,18 @@ namespace NzbDrone.Core.Indexers
 
                 var task = taskFactory.StartNew(() =>
                      {
-                         var indexerFeed = _feedFetcher.FetchRss(indexerLocal);
-
-                         lock (result)
+                         try
                          {
-                             result.AddRange(indexerFeed);
+                             var indexerReports = indexerLocal.FetchRecent();
+
+                             lock (result)
+                             {
+                                 result.AddRange(indexerReports);
+                             }
+                         }
+                         catch (Exception e)
+                         {
+                             _logger.Error(e, "Error during RSS Sync");
                          }
                      }).LogExceptions();
 

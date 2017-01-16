@@ -1,24 +1,20 @@
-﻿'use strict';
-define(
-    [
-        'backbone',
-        'AddSeries/Existing/UnmappedFolderModel',
-        'underscore'
-    ], function (Backbone, UnmappedFolderModel,_) {
-        return Backbone.Collection.extend({
-            model: UnmappedFolderModel,
+var Backbone = require('backbone');
+var UnmappedFolderModel = require('./UnmappedFolderModel');
+var _ = require('underscore');
 
-            importItems: function (rootFolderModel) {
+module.exports = Backbone.Collection.extend({
+    model : UnmappedFolderModel,
 
-                this.reset();
-                var rootFolder = rootFolderModel;
+    importItems : function(rootFolderModel) {
 
-                _.each(rootFolderModel.get('unmappedFolders'), function (folder) {
-                    this.push(new UnmappedFolderModel({
-                        rootFolder: rootFolder,
-                        folder    : folder
-                    }));
-                }, this);
-            }
-        });
-    });
+        this.reset();
+        var rootFolder = rootFolderModel;
+
+        _.each(rootFolderModel.get('unmappedFolders'), function(folder) {
+            this.push(new UnmappedFolderModel({
+                rootFolder : rootFolder,
+                folder     : folder
+            }));
+        }, this);
+    }
+});

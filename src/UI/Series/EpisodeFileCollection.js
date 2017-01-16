@@ -1,31 +1,28 @@
-﻿'use strict';
-define(
-    [
-        'backbone',
-        'Series/EpisodeFileModel'
-    ], function (Backbone, EpisodeFileModel) {
-        return Backbone.Collection.extend({
-            url  : window.NzbDrone.ApiRoot + '/episodefile',
-            model: EpisodeFileModel,
+var Backbone = require('backbone');
+var EpisodeFileModel = require('./EpisodeFileModel');
 
-            originalFetch: Backbone.Collection.prototype.fetch,
+module.exports = Backbone.Collection.extend({
+    url   : window.NzbDrone.ApiRoot + '/episodefile',
+    model : EpisodeFileModel,
 
-            initialize: function (options) {
-                this.seriesId = options.seriesId;
-            },
+    originalFetch : Backbone.Collection.prototype.fetch,
 
-            fetch: function (options) {
-                if (!this.seriesId) {
-                    throw 'seriesId is required';
-                }
+    initialize : function(options) {
+        this.seriesId = options.seriesId;
+        this.models = [];
+    },
 
-                if (!options) {
-                    options = {};
-                }
+    fetch : function(options) {
+        if (!this.seriesId) {
+            throw 'seriesId is required';
+        }
 
-                options.data = { seriesId: this.seriesId };
+        if (!options) {
+            options = {};
+        }
 
-                return this.originalFetch.call(this, options);
-            }
-        });
-    });
+        options.data = { seriesId : this.seriesId };
+
+        return this.originalFetch.call(this, options);
+    }
+});

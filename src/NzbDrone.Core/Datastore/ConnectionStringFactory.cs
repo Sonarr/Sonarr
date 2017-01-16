@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
-using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Datastore
     {
         string MainDbConnectionString { get; }
         string LogDbConnectionString { get; }
+        string GetDatabasePath(string connectionString);
     }
 
     public class ConnectionStringFactory : IConnectionStringFactory
@@ -22,6 +23,13 @@ namespace NzbDrone.Core.Datastore
         public string MainDbConnectionString { get; private set; }
         public string LogDbConnectionString { get; private set; }
 
+        public string GetDatabasePath(string connectionString)
+        {
+            var connectionBuilder = new SQLiteConnectionStringBuilder(connectionString);
+
+            return connectionBuilder.DataSource;
+        }
+
         private static string GetConnectionString(string dbPath)
         {
             var connectionBuilder = new SQLiteConnectionStringBuilder();
@@ -29,7 +37,14 @@ namespace NzbDrone.Core.Datastore
             connectionBuilder.DataSource = dbPath;
             connectionBuilder.CacheSize = (int)-10.Megabytes();
             connectionBuilder.DateTimeKind = DateTimeKind.Utc;
-            connectionBuilder.JournalMode = SQLiteJournalModeEnum.Wal;
+            connectionBuilder.JournalMode = OsInfo.IsOsx ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
+            connectionBuilder.Pooling = true;
+            connectionBuilder.Version = 3;
+            
+            if (OsInfo.IsOsx)
+            {
+                connectionBuilder.Add("Full FSync", true);
+            }
 
             return connectionBuilder.ConnectionString;
         }

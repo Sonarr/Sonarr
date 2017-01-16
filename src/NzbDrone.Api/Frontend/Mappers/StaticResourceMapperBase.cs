@@ -1,8 +1,8 @@
+using System;
 using System.IO;
 using NLog;
 using Nancy;
 using Nancy.Responses;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Frontend.Mappers
     {
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
-        private readonly bool _caseSensitive;
+        private readonly StringComparison _caseSensitive;
 
         private static readonly NotFoundResponse NotFoundResponse = new NotFoundResponse();
 
@@ -23,11 +23,11 @@ namespace NzbDrone.Api.Frontend.Mappers
 
             if (!RuntimeInfo.IsProduction)
             {
-                _caseSensitive = true;
+                _caseSensitive = StringComparison.OrdinalIgnoreCase;
             }
         }
 
-        protected abstract string Map(string resourceUrl);
+        public abstract string Map(string resourceUrl);
 
         public abstract bool CanHandle(string resourceUrl);
 
@@ -51,14 +51,5 @@ namespace NzbDrone.Api.Frontend.Mappers
             return File.OpenRead(filePath);
         }
 
-        protected static Stream StringToStream(string text)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(text);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
     }
 }

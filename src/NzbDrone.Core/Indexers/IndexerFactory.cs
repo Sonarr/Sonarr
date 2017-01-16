@@ -9,39 +9,27 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerFactory : IProviderFactory<IIndexer, IndexerDefinition>
     {
-
+        List<IIndexer> RssEnabled();
+        List<IIndexer> SearchEnabled();
     }
 
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
+        private readonly IIndexerStatusService _indexerStatusService;
         private readonly IIndexerRepository _providerRepository;
-        private readonly INewznabTestService _newznabTestService;
+        private readonly Logger _logger;
 
-        public IndexerFactory(IIndexerRepository providerRepository,
+        public IndexerFactory(IIndexerStatusService indexerStatusService,
+                              IIndexerRepository providerRepository,
                               IEnumerable<IIndexer> providers,
                               IContainer container, 
-                              IEventAggregator eventAggregator, 
-                              INewznabTestService newznabTestService, 
+                              IEventAggregator eventAggregator,
                               Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
+            _indexerStatusService = indexerStatusService;
             _providerRepository = providerRepository;
-            _newznabTestService = newznabTestService;
-        }
-
-        protected override void InitializeProviders()
-        {
-            var definitions = _providers.Where(c => c.Protocol == DownloadProtocol.Usenet)
-                .SelectMany(indexer => indexer.DefaultDefinitions);
-
-            var currentProviders = All();
-
-            var newProviders = definitions.Where(def => currentProviders.All(c => c.Implementation != def.Implementation)).ToList();
-
-            if (newProviders.Any())
-            {
-                _providerRepository.InsertMany(newProviders.Cast<IndexerDefinition>().ToList());
-            }
+            _logger = logger;
         }
 
         protected override List<IndexerDefinition> Active()
@@ -49,15 +37,48 @@ namespace NzbDrone.Core.Indexers
             return base.Active().Where(c => c.Enable).ToList();
         }
 
-        public override IndexerDefinition Create(IndexerDefinition definition)
+        public override void SetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
         {
-            if (definition.Implementation == typeof(Newznab.Newznab).Name)
-            {
-                var indexer = GetInstance(definition);
-                _newznabTestService.Test(indexer);
-            }
+            base.SetProviderCharacteristics(provider, definition);
 
-            return base.Create(definition);
+            definition.Protocol = provider.Protocol;
+            definition.SupportsRss = provider.SupportsRss;
+            definition.SupportsSearch = provider.SupportsSearch;
+        }
+
+        public List<IIndexer> RssEnabled()
+        {
+            var enabledIndexers = GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableRss);
+
+            var indexers = FilterBlockedIndexers(enabledIndexers);
+
+            return indexers.ToList();
+        }
+
+        public List<IIndexer> SearchEnabled()
+        {
+            var enabledIndexers = GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableSearch);
+
+            var indexers = FilterBlockedIndexers(enabledIndexers);
+
+            return indexers.ToList();
+        }
+
+        private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)
+        {
+            var blockedIndexers = _indexerStatusService.GetBlockedIndexers().ToDictionary(v => v.IndexerId, v => v);
+
+            foreach (var indexer in indexers)
+            {
+                IndexerStatus blockedIndexerStatus;
+                if (blockedIndexers.TryGetValue(indexer.Definition.Id, out blockedIndexerStatus))
+                {
+                    _logger.Debug("Temporarily ignoring indexer {0} till {1} due to recent failures.", indexer.Definition.Name, blockedIndexerStatus.DisabledTill.Value.ToLocalTime());
+                    continue;
+                }
+
+                yield return indexer;
+            }
         }
     }
 }

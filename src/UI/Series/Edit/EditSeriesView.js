@@ -1,54 +1,54 @@
-﻿'use strict';
-define(
-    [
-        'vent',
-        'marionette',
-        'Quality/QualityProfileCollection',
-        'Mixins/AsModelBoundView',
-        'Mixins/AsValidatedView',
-        'Mixins/AutoComplete'
-    ], function (vent, Marionette, QualityProfiles, AsModelBoundView, AsValidatedView) {
+var vent = require('vent');
+var Marionette = require('marionette');
+var Profiles = require('../../Profile/ProfileCollection');
+var AsModelBoundView = require('../../Mixins/AsModelBoundView');
+var AsValidatedView = require('../../Mixins/AsValidatedView');
+var AsEditModalView = require('../../Mixins/AsEditModalView');
+require('../../Mixins/TagInput');
+require('../../Mixins/FileBrowser');
 
-        var view = Marionette.ItemView.extend({
-            template: 'Series/Edit/EditSeriesViewTemplate',
+var view = Marionette.ItemView.extend({
+    template : 'Series/Edit/EditSeriesViewTemplate',
 
-            ui: {
-                qualityProfile: '.x-quality-profile',
-                path          : '.x-path'
-            },
+    ui : {
+        profile : '.x-profile',
+        path    : '.x-path',
+        tags    : '.x-tags'
+    },
 
-            events: {
-                'click .x-save'  : '_saveSeries',
-                'click .x-remove': '_removeSeries'
-            },
+    events : {
+        'click .x-remove' : '_removeSeries'
+    },
 
+    initialize : function() {
+        this.model.set('profiles', Profiles);
+    },
 
-            initialize: function () {
-                this.model.set('qualityProfiles', QualityProfiles);
-            },
-
-            _saveSeries: function () {
-
-                var self = this;
-                var qualityProfileId = this.ui.qualityProfile.val();
-                this.model.set({ qualityProfileId: qualityProfileId});
-
-                this.model.save().done(function () {
-                    self.trigger('saved');
-                    vent.trigger(vent.Commands.CloseModalCommand);
-                });
-            },
-
-            onRender: function () {
-                this.ui.path.autoComplete('/directories');
-            },
-
-            _removeSeries: function () {
-                vent.trigger(vent.Commands.DeleteSeriesCommand, {series:this.model});
-            }
+    onRender : function() {
+        this.ui.path.fileBrowser();
+        this.ui.tags.tagInput({
+            model    : this.model,
+            property : 'tags'
         });
+    },
 
+    _onBeforeSave : function() {
+        var profileId = this.ui.profile.val();
+        this.model.set({ profileId : profileId });
+    },
 
-        AsModelBoundView.apply(view);
-        return AsValidatedView.apply(view);
-    });
+    _onAfterSave : function() {
+        this.trigger('saved');
+        vent.trigger(vent.Commands.CloseModalCommand);
+    },
+
+    _removeSeries : function() {
+        vent.trigger(vent.Commands.DeleteSeriesCommand, { series : this.model });
+    }
+});
+
+AsModelBoundView.call(view);
+AsValidatedView.call(view);
+AsEditModalView.call(view);
+
+module.exports = view;

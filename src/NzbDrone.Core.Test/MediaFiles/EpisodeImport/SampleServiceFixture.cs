@@ -14,7 +14,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
     [TestFixture]
-    public class SampleServiceFixture : CoreTest<SampleService>
+    public class SampleServiceFixture : CoreTest<DetectSample>
     {
         private Series _series;
         private LocalEpisode _localEpisode;
@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.SeriesType = SeriesTypes.Standard)
+                                     .With(s => s.Runtime = 30)
                                      .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(1)
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         private void GivenRuntime(int seconds)
         {
             Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
+                  .Setup(s => s.GetRunTime(It.IsAny<string>()))
                   .Returns(new TimeSpan(0, 0, seconds));
         }
 
@@ -71,6 +72,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
+        public void should_return_false_for_strm()
+        {
+            _localEpisode.Path = @"C:\Test\some.show.s01e01.strm";
+
+            ShouldBeFalse();
+
+            Mocker.GetMock<IVideoFileInfoReader>().Verify(c => c.GetRunTime(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
         public void should_use_runtime()
         {
             GivenRuntime(120);
@@ -80,9 +91,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                              _localEpisode.Quality,
                              _localEpisode.Path,
                              _localEpisode.Size,
-                             _localEpisode.SeasonNumber);
+                             _localEpisode.IsSpecial);
 
-            Mocker.GetMock<IVideoFileInfoReader>().Verify(v => v.GetRunTime(It.IsAny<String>()), Times.Once());
+            Mocker.GetMock<IVideoFileInfoReader>().Verify(v => v.GetRunTime(It.IsAny<string>()), Times.Once());
         }
 
         [Test]
@@ -94,9 +105,18 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
-        public void should_return_false_if_runtime_greater_than_than_minimum()
+        public void should_return_false_if_runtime_greater_than_minimum()
         {
-            GivenRuntime(120);
+            GivenRuntime(600);
+
+            ShouldBeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_runtime_greater_than_webisode_minimum()
+        {
+            _series.Runtime = 6;
+            GivenRuntime(299);
 
             ShouldBeFalse();
         }
@@ -105,7 +125,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_acceptable_size()
         {
             Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
+                  .Setup(s => s.GetRunTime(It.IsAny<string>()))
                   .Throws<DllNotFoundException>();
 
             GivenFileSize(1000.Megabytes());
@@ -116,7 +136,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_undersize()
         {
             Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
+                  .Setup(s => s.GetRunTime(It.IsAny<string>()))
                   .Throws<DllNotFoundException>();
 
             GivenFileSize(1.Megabytes());
@@ -132,13 +152,22 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             ShouldBeFalse();
         }
 
+        [Test]
+        public void should_return_false_for_anime_special()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _localEpisode.Episodes[0].SeasonNumber = 0;
+
+            ShouldBeFalse();
+        }
+
         private void ShouldBeTrue()
         {
             Subject.IsSample(_localEpisode.Series,
                                          _localEpisode.Quality,
                                          _localEpisode.Path,
                                          _localEpisode.Size,
-                                         _localEpisode.SeasonNumber).Should().BeTrue();
+                                         _localEpisode.IsSpecial).Should().BeTrue();
         }
 
         private void ShouldBeFalse()
@@ -147,7 +176,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                              _localEpisode.Quality,
                              _localEpisode.Path,
                              _localEpisode.Size,
-                             _localEpisode.SeasonNumber).Should().BeFalse();
+                             _localEpisode.IsSpecial).Should().BeFalse();
         }
     }
 }

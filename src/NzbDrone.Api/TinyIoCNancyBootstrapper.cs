@@ -1,34 +1,37 @@
-﻿using System;
+﻿using TinyIoC;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Nancy;
-using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
-using TinyIoC;
+using Nancy.Bootstrapper;
 
 namespace NzbDrone.Api
 {
+
+
+    /// <summary>
+    /// TinyIoC bootstrapper - registers default route resolver and registers itself as
+    /// INancyModuleCatalog for resolving modules but behaviour can be overridden if required.
+    /// </summary>
     public class TinyIoCNancyBootstrapper : NancyBootstrapperWithRequestContainerBase<TinyIoCContainer>
     {
-        // <summary>
+        /// <summary>
         /// Default assemblies that are ignored for autoregister
         /// </summary>
-        private static readonly IEnumerable<Func<Assembly, bool>> DefaultAutoRegisterIgnoredAssemblies = new Func<Assembly, bool>[]
+        public static IEnumerable<Func<Assembly, bool>> DefaultAutoRegisterIgnoredAssemblies = new Func<Assembly, bool>[]
             {
-                asm => !asm.FullName.StartsWith("Nancy.", StringComparison.InvariantCulture),
+                asm => !asm.FullName.StartsWith("Nancy.", StringComparison.InvariantCulture)
             };
 
         /// <summary>
         /// Gets the assemblies to ignore when autoregistering the application container
-        /// Return true from the delegate to ignore that particular assembly, returning true
-        /// does not mean the assembly *will* be included, a false from another delegate will
+        /// Return true from the delegate to ignore that particular assembly, returning false
+        /// does not mean the assembly *will* be included, a true from another delegate will
         /// take precedence.
         /// </summary>
-        protected virtual IEnumerable<Func<Assembly, bool>> AutoRegisterIgnoredAssemblies
-        {
-            get { return DefaultAutoRegisterIgnoredAssemblies; }
-        }
+        protected virtual IEnumerable<Func<Assembly, bool>> AutoRegisterIgnoredAssemblies => DefaultAutoRegisterIgnoredAssemblies;
 
         /// <summary>
         /// Configures the container using AutoRegister followed by registration
@@ -48,11 +51,6 @@ namespace NzbDrone.Api
         {
             return this.ApplicationContainer.Resolve<INancyEngine>();
         }
-
-        /*        protected override IModuleKeyGenerator GetModuleKeyGenerator()
-                {
-                    return ApplicationContainer.Resolve<IModuleKeyGenerator>();
-                }*/
 
         /// <summary>
         /// Create a default, unconfigured, container
@@ -83,7 +81,20 @@ namespace NzbDrone.Api
         {
             foreach (var typeRegistration in typeRegistrations)
             {
-                container.Register(typeRegistration.RegistrationType, typeRegistration.ImplementationType).AsSingleton();
+                switch (typeRegistration.Lifetime)
+                {
+                    case Lifetime.Transient:
+                        container.Register(typeRegistration.RegistrationType, typeRegistration.ImplementationType).AsMultiInstance();
+                        break;
+                    case Lifetime.Singleton:
+                        container.Register(typeRegistration.RegistrationType, typeRegistration.ImplementationType).AsSingleton();
+                        break;
+                    case Lifetime.PerRequest:
+                        throw new InvalidOperationException("Unable to directly register a per request lifetime.");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
@@ -92,12 +103,25 @@ namespace NzbDrone.Api
         /// by IEnumerable{Type} constructor dependencies.
         /// </summary>
         /// <param name="container">Container to register into</param>
-        /// <param name="collectionTypeRegistrationsn">Collection type registrations to register</param>
-        protected override sealed void RegisterCollectionTypes(TinyIoCContainer container, IEnumerable<CollectionTypeRegistration> collectionTypeRegistrationsn)
+        /// <param name="collectionTypeRegistrations">Collection type registrations to register</param>
+        protected override sealed void RegisterCollectionTypes(TinyIoCContainer container, IEnumerable<CollectionTypeRegistration> collectionTypeRegistrations)
         {
-            foreach (var collectionTypeRegistration in collectionTypeRegistrationsn)
+            foreach (var collectionTypeRegistration in collectionTypeRegistrations)
             {
-                container.RegisterMultiple(collectionTypeRegistration.RegistrationType, collectionTypeRegistration.ImplementationTypes);
+                switch (collectionTypeRegistration.Lifetime)
+                {
+                    case Lifetime.Transient:
+                        container.RegisterMultiple(collectionTypeRegistration.RegistrationType, collectionTypeRegistration.ImplementationTypes).AsMultiInstance();
+                        break;
+                    case Lifetime.Singleton:
+                        container.RegisterMultiple(collectionTypeRegistration.RegistrationType, collectionTypeRegistration.ImplementationTypes).AsSingleton();
+                        break;
+                    case Lifetime.PerRequest:
+                        throw new InvalidOperationException("Unable to directly register a per request lifetime.");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
@@ -136,8 +160,9 @@ namespace NzbDrone.Api
         /// <summary>
         /// Creates a per request child/nested container
         /// </summary>
+        /// <param name="context">Current context</param>
         /// <returns>Request container instance</returns>
-        protected override sealed TinyIoCContainer CreateRequestContainer()
+        protected override TinyIoCContainer CreateRequestContainer(NancyContext context)
         {
             return this.ApplicationContainer.GetChildContainer();
         }
@@ -161,12 +186,23 @@ namespace NzbDrone.Api
         }
 
         /// <summary>
+        /// Gets all registered request startup tasks
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IRequestStartup"/> instances.</returns>
+        protected override IEnumerable<IRequestStartup> RegisterAndGetRequestStartupTasks(TinyIoCContainer container, Type[] requestStartupTypes)
+        {
+            container.RegisterMultiple(typeof(IRequestStartup), requestStartupTypes);
+
+            return container.ResolveAll<IRequestStartup>(false);
+        }
+
+        /// <summary>
         /// Gets all registered application registration tasks
         /// </summary>
-        /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IApplicationRegistrations"/> instances.</returns>
-        protected override IEnumerable<IApplicationRegistrations> GetApplicationRegistrationTasks()
+        /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IRegistrations"/> instances.</returns>
+        protected override IEnumerable<IRegistrations> GetRegistrationTasks()
         {
-            return this.ApplicationContainer.ResolveAll<IApplicationRegistrations>(false);
+            return this.ApplicationContainer.ResolveAll<IRegistrations>(false);
         }
 
         /// <summary>
@@ -181,7 +217,7 @@ namespace NzbDrone.Api
         }
 
         /// <summary>
-        /// Retreive a specific module instance from the container
+        /// Retrieve a specific module instance from the container
         /// </summary>
         /// <param name="container">Container to use</param>
         /// <param name="moduleType">Type of the module</param>
@@ -201,9 +237,7 @@ namespace NzbDrone.Api
         {
             var assembly = typeof(NancyEngine).Assembly;
 
-            var whitelist = new Type[] { };
-
-            container.AutoRegister(AppDomain.CurrentDomain.GetAssemblies().Where(a => !ignoredAssemblies.Any(ia => ia(a))), DuplicateImplementationActions.RegisterMultiple, t => t.Assembly != assembly || whitelist.Any(wt => wt == t));
+            container.AutoRegister(AppDomain.CurrentDomain.GetAssemblies().Where(a => !ignoredAssemblies.Any(ia => ia(a))), DuplicateImplementationActions.RegisterMultiple, t => t.Assembly != assembly);
         }
     }
 }

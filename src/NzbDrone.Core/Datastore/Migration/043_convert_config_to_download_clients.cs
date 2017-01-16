@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
             var client = GetConfigValue(config, "DownloadClient", "");
 
-            if (String.IsNullOrWhiteSpace(client))
+            if (string.IsNullOrWhiteSpace(client))
             {
                 return;
             }
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             using (IDbCommand updateCmd = conn.CreateCommand())
             {
-                var text = String.Format("INSERT INTO DownloadClients (Enable, Name, Implementation, Settings, ConfigContract, Protocol) VALUES (1, ?, ?, ?, ?, ?)");
+                var text = string.Format("INSERT INTO DownloadClients (Enable, Name, Implementation, Settings, ConfigContract, Protocol) VALUES (1, ?, ?, ?, ?, ?)");
                 updateCmd.AddParameter(name);
                 updateCmd.AddParameter(implementation);
                 updateCmd.AddParameter(settings);
@@ -159,20 +159,20 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private class ClientSettingsForMigration
         {
-            public String Host { get; set; }
-            public Int32 Port { get; set; }
-            public String ApiKey { get; set; }
-            public String Username { get; set; }
-            public String Password { get; set; }
-            public String TvCategory { get; set; }
-            public Int32 RecentTvPriority { get; set; }
-            public Int32 OlderTvPriority { get; set; }
-            public Boolean UseSsl { get; set; }
+            public string Host { get; set; }
+            public int Port { get; set; }
+            public string ApiKey { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public string TvCategory { get; set; }
+            public int RecentTvPriority { get; set; }
+            public int OlderTvPriority { get; set; }
+            public bool UseSsl { get; set; }
         }
 
         private class FolderSettingsForMigration
         {
-            public String Folder { get; set; }
+            public string Folder { get; set; }
         }
 
         private enum SabnzbdPriorityForMigration

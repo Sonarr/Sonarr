@@ -3,7 +3,6 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
@@ -36,20 +35,20 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
         private void GivenInWorkingFolder()
         {
-            _localEpisode.Path = @"C:\Test\Unsorted TV\_UNPACK_30.rock\30.rock.s01e01.avi".AsOsAgnostic();
+            _localEpisode.Path = @"C:\Test\Unsorted TV\_UNPACK_30.rock\someSubFolder\30.rock.s01e01.avi".AsOsAgnostic();
         }
 
         private void GivenLastWriteTimeUtc(DateTime time)
         {
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.FileGetLastWriteUtc(It.IsAny<string>()))
+                .Setup(s => s.FileGetLastWrite(It.IsAny<string>()))
                 .Returns(time);
         }
 
         [Test]
         public void should_return_true_if_not_in_working_folder()
         {
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -60,7 +59,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddHours(-1));
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -69,7 +68,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow);
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -80,7 +79,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddDays(-5));
 
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
         }
     }
 }

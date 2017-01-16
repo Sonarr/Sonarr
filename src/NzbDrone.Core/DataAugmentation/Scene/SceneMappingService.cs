@@ -2,55 +2,72 @@ using System;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
-using NzbDrone.Core.Lifecycle;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using System.Collections.Generic;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
-        string GetSceneName(int tvdbId);
-        Nullable<int> GetTvDbId(string cleanName);
-        List<SceneMapping> FindByTvdbid(int tvdbId);
+        List<string> GetSceneNames(int tvdbId, List<int> seasonNumbers, List<int> sceneSeasonNumbers);
+        int? FindTvdbId(string title);
+        List<SceneMapping> FindByTvdbId(int tvdbId);
+        SceneMapping FindSceneMapping(string title);
+        int? GetSceneSeasonNumber(string title);
+        int? GetTvdbSeasonNumber(string title);
+        int? GetSceneSeasonNumber(int tvdbId, int seasonNumber);
     }
 
     public class SceneMappingService : ISceneMappingService,
-        IHandleAsync<ApplicationStartedEvent>,
-        IExecute<UpdateSceneMappingCommand>
+                                       IHandle<SeriesRefreshStartingEvent>,
+                                       IExecute<UpdateSceneMappingCommand>
     {
         private readonly ISceneMappingRepository _repository;
-        private readonly ISceneMappingProxy _sceneMappingProxy;
+        private readonly IEnumerable<ISceneMappingProvider> _sceneMappingProviders;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
-        private readonly ICached<SceneMapping> _getSceneNameCache;
-        private readonly ICached<SceneMapping> _gettvdbIdCache;
-        private readonly ICached<List<SceneMapping>> _findbytvdbIdCache;
+        private readonly ICachedDictionary<List<SceneMapping>> _getTvdbIdCache;
+        private readonly ICachedDictionary<List<SceneMapping>> _findByTvdbIdCache;
 
-        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, ICacheManager cacheManager, Logger logger)
+        public SceneMappingService(ISceneMappingRepository repository,
+                                   ICacheManager cacheManager,
+                                   IEnumerable<ISceneMappingProvider> sceneMappingProviders,
+                                   IEventAggregator eventAggregator,
+                                   Logger logger)
         {
             _repository = repository;
-            _sceneMappingProxy = sceneMappingProxy;
-
-            _getSceneNameCache = cacheManager.GetCache<SceneMapping>(GetType(), "scene_name");
-            _gettvdbIdCache = cacheManager.GetCache<SceneMapping>(GetType(), "tvdb_id");
-            _findbytvdbIdCache = cacheManager.GetCache<List<SceneMapping>>(GetType(), "find_tvdb_id");
+            _sceneMappingProviders = sceneMappingProviders;
+            _eventAggregator = eventAggregator;
             _logger = logger;
+
+            _getTvdbIdCache = cacheManager.GetCacheDictionary<List<SceneMapping>>(GetType(), "tvdb_id");
+            _findByTvdbIdCache = cacheManager.GetCacheDictionary<List<SceneMapping>>(GetType(), "find_tvdb_id");
         }
 
-        public string GetSceneName(int tvdbId)
+        public List<string> GetSceneNames(int tvdbId, List<int> seasonNumbers, List<int> sceneSeasonNumbers)
         {
-            var mapping = _getSceneNameCache.Find(tvdbId.ToString());
+            var mappings = FindByTvdbId(tvdbId);
 
-            if (mapping == null) return null;
+            if (mappings == null)
+            {
+                return new List<string>();
+            }
 
-            return mapping.SearchTerm;
+            var names = mappings.Where(n => n.SeasonNumber.HasValue && seasonNumbers.Contains(n.SeasonNumber.Value) ||
+                                            n.SceneSeasonNumber.HasValue && sceneSeasonNumbers.Contains(n.SceneSeasonNumber.Value) ||
+                                            (n.SeasonNumber ?? -1) == -1 && (n.SceneSeasonNumber ?? -1) == -1)
+                                .Select(n => n.SearchTerm).Distinct().ToList();
+
+            return FilterNonEnglish(names);
         }
 
-        public Nullable<Int32> GetTvDbId(string cleanName)
+        public int? FindTvdbId(string title)
         {
-            var mapping = _gettvdbIdCache.Find(cleanName.CleanSeriesTitle());
+            var mapping = FindMapping(title);
 
             if (mapping == null)
                 return null;
@@ -58,66 +75,174 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mapping.TvdbId;
         }
 
-        public List<SceneMapping> FindByTvdbid(int tvdbId)
+        public List<SceneMapping> FindByTvdbId(int tvdbId)
         {
-            return _findbytvdbIdCache.Find(tvdbId.ToString());
+            if (_findByTvdbIdCache.Count == 0)
+            {
+                RefreshCache();
+            }
+
+            var mappings = _findByTvdbIdCache.Find(tvdbId.ToString());
+
+            if (mappings == null)
+            {
+                return new List<SceneMapping>();
+            }
+
+            return mappings;
+        }
+
+        public SceneMapping FindSceneMapping(string title)
+        {
+            return FindMapping(title);
+        }
+
+        public int? GetSceneSeasonNumber(string title)
+        {
+            var mapping = FindMapping(title);
+
+            if (mapping == null)
+            {
+                return null;
+            }
+
+            return mapping.SceneSeasonNumber;
+        }
+
+        public int? GetTvdbSeasonNumber(string title)
+        {
+            var mapping = FindMapping(title);
+
+            if (mapping == null)
+            {
+                return null;
+            }
+
+            return mapping.SeasonNumber;
+        }
+
+        public int? GetSceneSeasonNumber(int tvdbId, int seasonNumber)
+        {
+            var mappings = FindByTvdbId(tvdbId);
+
+            if (mappings == null)
+            {
+                return null;
+            }
+
+            var mapping = mappings.FirstOrDefault(e => e.SeasonNumber == seasonNumber && e.SceneSeasonNumber.HasValue);
+
+            if (mapping == null)
+            {
+                return null;
+            }
+
+            return mapping.SceneSeasonNumber;
         }
 
         private void UpdateMappings()
         {
-            _logger.Info("Updating Scene mapping");
+            _logger.Info("Updating Scene mappings");
 
-            try
+            foreach (var sceneMappingProvider in _sceneMappingProviders)
             {
-                var mappings = _sceneMappingProxy.Fetch();
-
-                if (mappings.Any())
+                try
                 {
-                    _repository.Purge();
+                    var mappings = sceneMappingProvider.GetSceneMappings();
 
-                    foreach (var sceneMapping in mappings)
+                    if (mappings.Any())
                     {
-                        sceneMapping.ParseTerm = sceneMapping.Title.CleanSeriesTitle();
+                        _repository.Clear(sceneMappingProvider.GetType().Name);
+
+                        mappings.RemoveAll(sceneMapping =>
+                        {
+                            if (sceneMapping.Title.IsNullOrWhiteSpace() ||
+                                sceneMapping.SearchTerm.IsNullOrWhiteSpace())
+                            {
+                                _logger.Warn("Invalid scene mapping found for: {0}, skipping", sceneMapping.TvdbId);
+                                return true;
+                            }
+
+                            return false;
+                        });
+
+                        foreach (var sceneMapping in mappings)
+                        {
+                            sceneMapping.ParseTerm = sceneMapping.Title.CleanSeriesTitle();
+                            sceneMapping.Type = sceneMappingProvider.GetType().Name;
+                        }
+
+                        _repository.InsertMany(mappings.ToList());
                     }
-
-                    _repository.InsertMany(mappings);
+                    else
+                    {
+                        _logger.Warn("Received empty list of mapping. will not update.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    _logger.Warn("Received empty list of mapping. will not update.");
+                    _logger.Error(ex, "Failed to Update Scene Mappings.");
                 }
             }
-            catch (Exception ex)
+            
+            RefreshCache();
+
+            _eventAggregator.PublishEvent(new SceneMappingsUpdatedEvent());
+        }
+
+        private SceneMapping FindMapping(string title)
+        {
+            if (_getTvdbIdCache.Count == 0)
             {
-                _logger.ErrorException("Failed to Update Scene Mappings:", ex);
+                RefreshCache();
             }
 
-            RefreshCache();
+            var candidates = _getTvdbIdCache.Find(title.CleanSeriesTitle());
+
+            if (candidates == null)
+            {
+                return null;
+            }
+
+            if (candidates.Count == 1)
+            {
+                return candidates.First();
+            }
+
+            var exactMatch = candidates.OrderByDescending(v => v.SeasonNumber)
+                                       .FirstOrDefault(v => v.Title == title);
+
+            if (exactMatch != null)
+            {
+                return exactMatch;
+            }
+
+            var closestMatch = candidates.OrderBy(v => title.LevenshteinDistance(v.Title, 10, 1, 10))
+                                         .ThenByDescending(v => v.SeasonNumber)
+                                         .First();
+
+            return closestMatch;
         }
 
         private void RefreshCache()
         {
-            var mappings = _repository.All();
+            var mappings = _repository.All().ToList();
 
-            _gettvdbIdCache.Clear();
-            _getSceneNameCache.Clear();
-            _findbytvdbIdCache.Clear();
-
-            foreach (var sceneMapping in mappings)
-            {
-                _getSceneNameCache.Set(sceneMapping.TvdbId.ToString(), sceneMapping);
-                _gettvdbIdCache.Set(sceneMapping.ParseTerm.CleanSeriesTitle(), sceneMapping);
-            }
-            foreach (var sceneMapping in mappings.GroupBy(x => x.TvdbId))
-            {
-                _findbytvdbIdCache.Set(sceneMapping.Key.ToString(), sceneMapping.ToList());
-            }
+            _getTvdbIdCache.Update(mappings.GroupBy(v => v.ParseTerm).ToDictionary(v => v.Key, v => v.ToList()));
+            _findByTvdbIdCache.Update(mappings.GroupBy(v => v.TvdbId).ToDictionary(v => v.Key.ToString(), v => v.ToList()));
         }
 
-
-        public void HandleAsync(ApplicationStartedEvent message)
+        private List<string> FilterNonEnglish(List<string> titles)
         {
-            UpdateMappings();
+            return titles.Where(title => title.All(c => c <= 255)).ToList();
+        }
+
+        public void Handle(SeriesRefreshStartingEvent message)
+        {
+            if (message.ManualTrigger && _findByTvdbIdCache.IsExpired(TimeSpan.FromMinutes(1)))
+            {
+                UpdateMappings();
+            }
         }
 
         public void Execute(UpdateSceneMappingCommand message)

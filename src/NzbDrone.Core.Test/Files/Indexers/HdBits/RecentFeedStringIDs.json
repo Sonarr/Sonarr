@@ -1,0 +1,57 @@
+﻿{
+    "status": 0,
+    "data": [
+        {
+            "id": "257142",
+            "hash": "EABC50AEF9F53CEDED84ADF14144D3368E586F3A",
+            "leechers": 1,
+            "seeders": 46,
+            "name": "Supernatural S10E17 1080p WEB-DL DD5.1 H.264-ECI",
+            "times_completed": 49,
+            "size": 1718009717,
+            "utadded": 1428179446,
+            "added": "2015-04-04T20:30:46+0000",
+            "comments": 0,
+            "numfiles": 1,
+            "filename": "Supernatural.S10E17.1080p.WEB-DL.DD5.1.H.264-ECI.torrent",
+            "freeleech": "no",
+            "type_category": 2,
+            "type_codec": 1,
+            "type_medium": 6,
+            "type_origin": 0,
+            "username": "abc",
+            "owner": 1107944,
+            "tvdb": {
+                "id": 78901,
+                "season": 10,
+                "episode": 17
+            }
+        },
+        {
+            "id": "257140",
+            "hash": "BE3BA5396B9A30544353B55FDD89EDE46C8FB72A",
+            "leechers": 0,
+            "seeders": 18,
+            "name": "Scandal S04E18 1080p WEB-DL DD5.1 H.264-ECI",
+            "times_completed": 19,
+            "size": 1789106197,
+            "utadded": 1428179128,
+            "added": "2015-04-04T20:25:28+0000",
+            "comments": 0,
+            "numfiles": 1,
+            "filename": "Scandal.2012.S04E18.1080p.WEB-DL.DD5.1.H.264-ECI.torrent",
+            "freeleech": "no",
+            "type_category": 2,
+            "type_codec": 1,
+            "type_medium": 6,
+            "type_origin": 0,
+            "username": "abc",
+            "owner": 1107944,
+            "tvdb": {
+                "id": 248841,
+                "season": 4,
+                "episode": 18
+            }
+        }
+    ]
+}

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
@@ -22,35 +22,39 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason { get { return "File is still being unpacked"; } }
-
-        public bool IsSatisfiedBy(LocalEpisode localEpisode)
+        public Decision IsSatisfiedBy(LocalEpisode localEpisode)
         {
             if (localEpisode.ExistingFile)
             {
-                _logger.Debug("{0} is in series folder, unpacking check", localEpisode.Path);
-                return true;
+                _logger.Debug("{0} is in series folder, skipping unpacking check", localEpisode.Path);
+                return Decision.Accept();
             }
 
             foreach (var workingFolder in _configService.DownloadClientWorkingFolders.Split('|'))
             {
-                if (Directory.GetParent(localEpisode.Path).Name.StartsWith(workingFolder))
+                DirectoryInfo parent = Directory.GetParent(localEpisode.Path);
+                while (parent != null)
                 {
-                    if (OsInfo.IsMono)
+                    if (parent.Name.StartsWith(workingFolder))
                     {
-                        _logger.Debug("{0} is still being unpacked", localEpisode.Path);
-                        return false;
+                        if (OsInfo.IsNotWindows)
+                        {
+                            _logger.Debug("{0} is still being unpacked", localEpisode.Path);
+                            return Decision.Reject("File is still being unpacked");
+                        }
+
+                        if (_diskProvider.FileGetLastWrite(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
+                        {
+                            _logger.Debug("{0} appears to be unpacking still", localEpisode.Path);
+                            return Decision.Reject("File is still being unpacked");
+                        }
                     }
 
-                    if (_diskProvider.FileGetLastWriteUtc(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
-                    {
-                        _logger.Debug("{0} appears to be unpacking still", localEpisode.Path);
-                        return false;
-                    }
+                    parent = parent.Parent;
                 }
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

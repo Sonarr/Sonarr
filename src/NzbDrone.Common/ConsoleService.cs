@@ -14,10 +14,7 @@ namespace NzbDrone.Common
 
     public class ConsoleService : IConsoleService
     {
-        public static bool IsConsoleAvailable
-        {
-            get { return Console.In != StreamReader.Null; }
-        }
+        public static bool IsConsoleAvailable => Console.In != StreamReader.Null;
 
         public void PrintHelp()
         {
@@ -26,7 +23,7 @@ namespace NzbDrone.Common
             Console.WriteLine("     Commands:");
             Console.WriteLine("                 /{0} Install the application as a Windows Service ({1}).", StartupContext.INSTALL_SERVICE, ServiceProvider.NZBDRONE_SERVICE_NAME);
             Console.WriteLine("                 /{0} Uninstall already installed Windows Service ({1}).", StartupContext.UNINSTALL_SERVICE, ServiceProvider.NZBDRONE_SERVICE_NAME);
-            Console.WriteLine("                 /{0} Don't open NzbDrone in a browser", StartupContext.NO_BROWSER);
+            Console.WriteLine("                 /{0} Don't open Sonarr in a browser", StartupContext.NO_BROWSER);
             Console.WriteLine("                 <No Arguments>  Run application in console mode.");
         }
 

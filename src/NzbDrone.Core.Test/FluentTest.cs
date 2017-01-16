@@ -85,90 +85,6 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void ParentUriString_should_return_self_if_already_parent()
-        {
-            
-            var url = "http://www.nzbdrone.com";
-            var uri = new Uri(url);
-
-            
-            var result = uri.ParentUriString();
-
-            //Resolve
-            result.Should().Be(url);
-        }
-
-        [Test]
-        public void ParentUriString_should_return_parent_url_when_path_is_passed()
-        {
-            
-            var url = "http://www.nzbdrone.com/test/";
-            var uri = new Uri(url);
-
-            
-            var result = uri.ParentUriString();
-
-            //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
-        }
-
-        [Test]
-        public void ParentUriString_should_return_parent_url_when_multiple_paths_are_passed()
-        {
-            
-            var url = "http://www.nzbdrone.com/test/test2";
-            var uri = new Uri(url);
-
-            
-            var result = uri.ParentUriString();
-
-            //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
-        }
-
-        [Test]
-        public void ParentUriString_should_return_parent_url_when_url_with_query_string_is_passed()
-        {
-            
-            var url = "http://www.nzbdrone.com/test.aspx?test=10";
-            var uri = new Uri(url);
-
-            
-            var result = uri.ParentUriString();
-
-            //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
-        }
-
-        [Test]
-        public void ParentUriString_should_return_parent_url_when_url_with_path_and_query_strings_is_passed()
-        {
-            
-            var url = "http://www.nzbdrone.com/tester/test.aspx?test=10";
-            var uri = new Uri(url);
-
-            
-            var result = uri.ParentUriString();
-
-            //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
-        }
-
-        [Test]
-        public void ParentUriString_should_return_parent_url_when_url_with_query_strings_is_passed()
-        {
-            
-            var url = "http://www.nzbdrone.com/test.aspx?test=10&test2=5";
-            var uri = new Uri(url);
-
-            
-            var result = uri.ParentUriString();
-
-            //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
-        }
-
-        [Test]
         public void MaxOrDefault_should_return_zero_when_collection_is_empty()
         {
             
@@ -211,7 +127,7 @@ namespace NzbDrone.Core.Test
         public void Truncate_should_truncate_strings_to_max_specified_number_of_bytes()
         {
             
-            var str = ReadAllText("Files", "LongOverview.txt");
+            var str = ReadAllText("Files/LongOverview.txt");
 
             
             var resultString = str.Truncate(1000);

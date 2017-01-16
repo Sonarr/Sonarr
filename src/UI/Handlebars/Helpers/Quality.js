@@ -1,21 +1,12 @@
-'use strict';
-define(
-    [
-        'handlebars',
-        'Quality/QualityProfileCollection',
-        'underscore'
-    ], function (Handlebars, QualityProfileCollection, _) {
+var Handlebars = require('handlebars');
+var ProfileCollection = require('../../Profile/ProfileCollection');
 
-        Handlebars.registerHelper('qualityProfile', function (profileId) {
+Handlebars.registerHelper('profile', function(profileId) {
+    var profile = ProfileCollection.get(profileId);
 
-            var profile = QualityProfileCollection.get(profileId);
+    if (profile) {
+        return new Handlebars.SafeString('<span class="label label-default profile-label">' + profile.get('name') + '</span>');
+    }
 
-            if (profile) {
-                return new Handlebars.SafeString('<span class="label label-default quality-profile-label">' + profile.get("name") + '</span>');
-            }
-
-            return undefined;
-
-        });
-
-    });
+    return undefined;
+});

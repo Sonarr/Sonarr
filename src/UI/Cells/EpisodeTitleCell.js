@@ -1,33 +1,29 @@
-'use strict';
+var vent = require('vent');
+var NzbDroneCell = require('./NzbDroneCell');
 
-define(
-    [
-        'vent',
-        'Cells/NzbDroneCell'
-    ], function (vent, NzbDroneCell) {
-        return NzbDroneCell.extend({
+module.exports = NzbDroneCell.extend({
+    className : 'episode-title-cell',
 
-            className: 'episode-title-cell',
+    events : {
+        'click' : '_showDetails'
+    },
 
-            events: {
-                'click': '_showDetails'
-            },
+    render : function() {
+        var title = this.cellValue.get('title');
 
-            render: function () {
-                var title = this.cellValue.get('title');
+        if (!title || title === '') {
+            title = 'TBA';
+        }
 
-                if (!title || title === '') {
-                    title = 'TBA';
-                }
+        this.$el.html(title);
+        return this;
+    },
 
-                this.$el.html(title);
-                return this;
-            },
-
-            _showDetails: function () {
-                var hideSeriesLink = this.column.get('hideSeriesLink');
-
-                vent.trigger(vent.Commands.ShowEpisodeDetails, { episode: this.cellValue, hideSeriesLink: hideSeriesLink });
-            }
+    _showDetails : function() {
+        var hideSeriesLink = this.column.get('hideSeriesLink');
+        vent.trigger(vent.Commands.ShowEpisodeDetails, {
+            episode        : this.cellValue,
+            hideSeriesLink : hideSeriesLink
         });
-    });
+    }
+});

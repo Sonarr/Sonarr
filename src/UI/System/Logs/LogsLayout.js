@@ -1,48 +1,64 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'System/Logs/Table/LogsTableLayout',
-        'System/Logs/Files/LogFileLayout'
-    ], function (Marionette, LogsTableLayout, LogsFileLayout) {
-        return Marionette.Layout.extend({
-            template: 'System/Logs/LogsLayoutTemplate',
+var Marionette = require('marionette');
+var LogsTableLayout = require('./Table/LogsTableLayout');
+var LogsFileLayout = require('./Files/LogFileLayout');
+var LogFileCollection = require('./Files/LogFileCollection');
+var UpdateLogFileCollection = require('./Updates/LogFileCollection');
 
-            ui: {
-                tableTab: '.x-table-tab',
-                filesTab: '.x-files-tab'
-            },
+module.exports = Marionette.Layout.extend({
+    template : 'System/Logs/LogsLayoutTemplate',
 
-            regions: {
-                table: '#table',
-                files: '#files'
-            },
+    ui : {
+        tableTab       : '.x-table-tab',
+        filesTab       : '.x-files-tab',
+        updateFilesTab : '.x-update-files-tab'
+    },
 
-            events: {
-                'click .x-table-tab': '_showTable',
-                'click .x-files-tab': '_showFiles'
-            },
+    regions : {
+        table       : '#table',
+        files       : '#files',
+        updateFiles : '#update-files'
+    },
 
-            onShow: function () {
-                this._showTable();
-            },
+    events : {
+        'click .x-table-tab'        : '_showTable',
+        'click .x-files-tab'        : '_showFiles',
+        'click .x-update-files-tab' : '_showUpdateFiles'
+    },
 
-            _showTable: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
+    onShow : function() {
+        this._showTable();
+    },
 
-                this.ui.tableTab.tab('show');
-                this.table.show(new LogsTableLayout());
-            },
+    _showTable : function(e) {
+        if (e) {
+            e.preventDefault();
+        }
 
-            _showFiles: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
+        this.ui.tableTab.tab('show');
+        this.table.show(new LogsTableLayout());
+    },
 
-                this.ui.filesTab.tab('show');
-                this.files.show(new LogsFileLayout());
-            }
-        });
-    });
+    _showFiles : function(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        this.ui.filesTab.tab('show');
+        this.files.show(new LogsFileLayout({
+            collection         : new LogFileCollection(),
+            deleteFilesCommand : 'deleteLogFiles'
+        }));
+    },
+
+    _showUpdateFiles : function(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        this.ui.updateFilesTab.tab('show');
+        this.updateFiles.show(new LogsFileLayout({
+            collection         : new UpdateLogFileCollection(),
+            deleteFilesCommand : 'deleteUpdateLogFiles'
+        }));
+    }
+});

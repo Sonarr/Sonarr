@@ -1,4 +1,5 @@
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Update.UpdateEngine
@@ -21,6 +22,12 @@ namespace NzbDrone.Update.UpdateEngine
 
         public AppType GetAppType()
         {
+            if (OsInfo.IsNotWindows)
+            {
+                // Technically it is the console, but it has been renamed for mono (Linux/OS X)
+                return AppType.Normal;
+            }
+
             if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
                 && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {

@@ -23,7 +23,7 @@ namespace NzbDrone.Common.Serializer
             {
                 throw new JsonSerializationException("Can't convert type " + existingValue.GetType().FullName + " to number");
             }
-            if (objectType == typeof(Int64))
+            if (objectType == typeof(long))
             {
                 return Convert.ToInt64(reader.Value);
             }
@@ -33,7 +33,7 @@ namespace NzbDrone.Common.Serializer
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Int32) || objectType == typeof(Int64) || objectType == typeof(int);
+            return objectType == typeof(int) || objectType == typeof(long) || objectType == typeof(int);
         }
     }
 }

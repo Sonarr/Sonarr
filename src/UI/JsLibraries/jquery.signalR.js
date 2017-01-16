@@ -424,7 +424,7 @@
             connection.log("Negotiating with '" + url + "'.");
             $.ajax({
                 url: url,
-                global: false,
+                global: true,
                 cache: false,
                 type: "GET",
                 contentType: connection.contentType,
@@ -758,7 +758,7 @@
 
             $.ajax({
                 url: url,
-                global: false,
+                global: true,
                 cache: false,
                 type: "GET",
                 contentType: connection.contentType,
@@ -861,7 +861,7 @@
             url = this.addQs(url, connection);
             return $.ajax({
                 url: url,
-                global: false,
+                global: true,
                 type: connection.ajaxDataType === "jsonp" ? "GET" : "POST",
                 contentType: signalR._.defaultContentType,
                 dataType: connection.ajaxDataType,
@@ -899,7 +899,7 @@
                 url: url,
                 async: async,
                 timeout: 1000,
-                global: false,
+                global: true,
                 type: "POST",
                 contentType: connection.contentType,
                 dataType: connection.ajaxDataType,
@@ -1665,7 +1665,7 @@
                         connection.log("Attempting to connect to '" + url + "' using longPolling.");
                         instance.pollXhr = $.ajax({
                             url: url,
-                            global: false,
+                            global: true,
                             cache: false,
                             type: "GET",
                             dataType: connection.ajaxDataType,

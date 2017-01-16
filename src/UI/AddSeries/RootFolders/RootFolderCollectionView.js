@@ -1,16 +1,8 @@
-﻿'use strict';
+var Marionette = require('marionette');
+var RootFolderItemView = require('./RootFolderItemView');
 
-define(
-    [
-        'marionette',
-        'AddSeries/RootFolders/RootFolderItemView'
-    ], function (Marionette, RootFolderItemView) {
-
-
-        return Marionette.CollectionView.extend({
-            itemView: RootFolderItemView,
-
-            tagName  : 'table',
-            className: 'table table-hover'
-        });
-    });
+module.exports = Marionette.CompositeView.extend({
+    template          : 'AddSeries/RootFolders/RootFolderCollectionViewTemplate',
+    itemViewContainer : '.x-root-folders',
+    itemView          : RootFolderItemView
+});

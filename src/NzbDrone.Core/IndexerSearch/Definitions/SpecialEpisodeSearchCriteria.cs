@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
@@ -11,7 +8,14 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public override string ToString()
         {
-            return string.Format("[{0} : {1}]", SceneTitle, String.Join(",", EpisodeQueryTitles));
+            var episodeTitles = EpisodeQueryTitles.ToList();
+
+            if (episodeTitles.Count > 0)
+            {
+                return string.Format("[{0}] Specials", Series.Title);
+            }
+
+            return string.Format("[{0} : {1}]", Series.Title, string.Join(",", EpisodeQueryTitles));
         }
     }
 }

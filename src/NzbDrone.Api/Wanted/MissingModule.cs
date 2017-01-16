@@ -1,33 +1,25 @@
-﻿using System.Linq;
-using NzbDrone.Api.Episodes;
-using NzbDrone.Api.Extensions;
+﻿using NzbDrone.Api.Episodes;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Wanted
 {
-    public class MissingModule : NzbDroneRestModule<EpisodeResource>
+    public class MissingModule : EpisodeModuleWithSignalR
     {
-        private readonly IEpisodeService _episodeService;
-        private readonly SeriesRepository _seriesRepository;
-
-        public MissingModule(IEpisodeService episodeService, SeriesRepository seriesRepository)
-            :base("wanted/missing")
+        public MissingModule(IEpisodeService episodeService,
+                             ISeriesService seriesService,
+                             IQualityUpgradableSpecification qualityUpgradableSpecification,
+                             IBroadcastSignalRMessage signalRBroadcaster)
+            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster, "wanted/missing")
         {
-            _episodeService = episodeService;
-            _seriesRepository = seriesRepository;
             GetResourcePaged = GetMissingEpisodes;
         }
 
         private PagingResource<EpisodeResource> GetMissingEpisodes(PagingResource<EpisodeResource> pagingResource)
         {
-            var pagingSpec = new PagingSpec<Episode>
-            {
-                Page = pagingResource.Page,
-                PageSize = pagingResource.PageSize,
-                SortKey = pagingResource.SortKey,
-                SortDirection = pagingResource.SortDirection
-            };
+            var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>("airDateUtc", SortDirection.Descending);
 
             if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
             {
@@ -38,9 +30,7 @@ namespace NzbDrone.Api.Wanted
                 pagingSpec.FilterExpression = v => v.Monitored == true && v.Series.Monitored == true;
             }
 
-            PagingResource<EpisodeResource> resource = ApplyToPage(v => _episodeService.EpisodesWithoutFiles(v), pagingSpec);
-
-            resource.Records = resource.Records.LoadSubtype(e => e.SeriesId, _seriesRepository).ToList();
+            var resource = ApplyToPage(_episodeService.EpisodesWithoutFiles, pagingSpec, v => MapToResource(v, true, false));
 
             return resource;
         }

@@ -11,6 +11,7 @@ namespace NzbDrone.Common.Http
             if (request is HttpWebRequest)
             {
                 ((HttpWebRequest)request).KeepAlive = false;
+                ((HttpWebRequest)request).ServicePoint.Expect100Continue = false;
             }
 
             return request;

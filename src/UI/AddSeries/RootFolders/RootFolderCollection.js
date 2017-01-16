@@ -1,17 +1,10 @@
-﻿'use strict';
-define(
-    [
-        'backbone',
-        'AddSeries/RootFolders/RootFolderModel',
-        'Mixins/backbone.signalr.mixin'
-    ], function (Backbone, RootFolderModel) {
+var Backbone = require('backbone');
+var RootFolderModel = require('./RootFolderModel');
+require('../../Mixins/backbone.signalr.mixin');
 
-        var RootFolderCollection = Backbone.Collection.extend({
-            url  : window.NzbDrone.ApiRoot + '/rootfolder',
-            model: RootFolderModel
-        });
+var RootFolderCollection = Backbone.Collection.extend({
+    url   : window.NzbDrone.ApiRoot + '/rootfolder',
+    model : RootFolderModel
+});
 
-        //var collection = new RootFolderCollection().bindSignalR();
-
-        return new RootFolderCollection();
-    });
+module.exports = new RootFolderCollection();

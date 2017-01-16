@@ -1,32 +1,21 @@
-﻿'use strict';
+var Marionette = require('marionette');
+var QualityDefinitionCollection = require('../../Quality/QualityDefinitionCollection');
+var QualityDefinitionCollectionView = require('./Definition/QualityDefinitionCollectionView');
 
-define(
-    [
-        'marionette',
-        'Quality/QualityProfileCollection',
-        'Settings/Quality/Profile/QualityProfileCollectionView',
-        'Quality/QualityDefinitionCollection',
-        'Settings/Quality/Definition/QualityDefinitionCollectionView'
-    ], function (Marionette, QualityProfileCollection, QualityProfileCollectionView, QualityDefinitionCollection, QualityDefinitionCollectionView) {
-        return Marionette.Layout.extend({
-            template: 'Settings/Quality/QualityLayoutTemplate',
+module.exports = Marionette.Layout.extend({
+    template : 'Settings/Quality/QualityLayoutTemplate',
 
-            regions: {
-                qualityProfile    : '#quality-profile',
-                qualityDefinition : '#quality-definition'
-            },
+    regions : {
+        qualityDefinition : '#quality-definition'
+    },
 
-            initialize: function (options) {
-                this.settings = options.settings;
-                QualityProfileCollection.fetch();
-                this.qualityDefinitionCollection = new QualityDefinitionCollection();
-                this.qualityDefinitionCollection.fetch();
-            },
+    initialize : function(options) {
+        this.settings = options.settings;
+        this.qualityDefinitionCollection = new QualityDefinitionCollection();
+        this.qualityDefinitionCollection.fetch();
+    },
 
-            onShow: function () {
-                this.qualityProfile.show(new QualityProfileCollectionView({collection: QualityProfileCollection}));
-                this.qualityDefinition.show(new QualityDefinitionCollectionView({collection: this.qualityDefinitionCollection}));
-            }
-        });
-    });
-
+    onShow : function() {
+        this.qualityDefinition.show(new QualityDefinitionCollectionView({ collection : this.qualityDefinitionCollection }));
+    }
+});

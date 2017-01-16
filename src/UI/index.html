@@ -1,31 +1,44 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>NzbDrone</title>
+<!doctype html>
+<html>
+<head>
+    <title>Sonarr</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <!-- Chrome, Opera, and Firefox OS -->
+    <meta name="theme-color" content="#272727"/>
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#272727"/>
+
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+
     <link href="/Content/bootstrap.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/bootstrap.toggle-switch.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/Messenger/messenger.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/Messenger/messenger.flat.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/fullcalendar.css" rel='stylesheet' type='text/css'>
     <link href="/Content/theme.css" rel='stylesheet' type='text/css'/>
-    <link href="/Cells/cells.css" rel='stylesheet' type='text/css'>
-    <link href="/Series/series.css" rel='stylesheet' type='text/css'/>
-    <link href="/System/Logs/logs.css" rel='stylesheet' type='text/css'/>
-    <link href="/Settings/settings.css" rel='stylesheet' type='text/css'/>
-    <link href="/AddSeries/addSeries.css" rel='stylesheet' type='text/css'/>
-    <link href="/Calendar/calendar.css" rel='stylesheet' type='text/css'/>
-    <link href="/System/Update/update.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/cells.css" rel='stylesheet' type='text/css'>
+    <link href="/Content/series.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/activity.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/logs.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/settings.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/addSeries.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/calendar.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/update.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/overrides.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/info.css" rel='stylesheet' type='text/css'/>
 
-    <link rel="apple-touch-icon" href="/Content/Images/touch/57.png?v=2"/>
-    <link rel="apple-touch-icon" sizes="72x72" href="/Content/Images/touch/72.png?v=2"/>
-    <link rel="apple-touch-icon" sizes="114x114" href="/Content/Images/touch/114.png?v=2"/>
-    <link rel="apple-touch-icon" sizes="144x144" href="/Content/Images/touch/144.png?v=2"/>
-    <link rel="icon" type="image/ico" href="/Content/Images/favicon.ico?v=2"/>
-	
-    <link rel="alternate" type="text/calendar" title="iCalendar feed for NzbDrone" href="/feed/calendar/NzbDrone.ics" />
+    <link rel="apple-touch-icon" href="/Content/Images/touch/57.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/Images/touch/72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/Images/touch/114.png"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="/Content/Images/touch/144.png"/>
+    <link rel="mask-icon" href="/Content/Images/safari/logo.svg" color="#35c5f4">
+    <link rel="icon" type="image/ico" href="/Content/Images/favicon.ico"/>
+
+    <link rel="alternate" type="text/calendar" title="iCalendar feed for Sonarr" href="/feed/calendar/NzbDrone.ics"/>
 </head>
 <body>
 <div class="container">
@@ -35,7 +48,7 @@
     <div class="page-container">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12" id="notification-region"/>
+                <div class="col-md-12" id="notification-region"></div>
             </div>
             <div class="container-fluid main-region" id="main-region">
                 <div id="followingBalls">
@@ -46,36 +59,44 @@
                 </div>
             </div>
             <div id="modal-region"></div>
+            <div id="modal-region2"></div>
         </div>
     </div>
-    <a id="scroll-up" title="Back to the top!">
-        <i class="icon-circle-arrow-up"></i>
-    </a>
+    <div id="scroll-up">
+        <i class="icon-sonarr-back-to-top visible-lg-inline" title="Back to the top!"></i>
+    </div>
 </div>
 <div class="footer">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div id="footer-region">
-                    NzbDrone Ver.
+                    Sonarr Ver.
                     <span class="version"></span>
+                    <div class="branch"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div id="control-panel-region" class="control-panel"></div>
-</body>
 <div id="errors"></div>
+</body>
 <script type="text/javascript">
     window.NzbDrone = {
-        ApiRoot: 'API_ROOT',
-        ApiKey : 'API_KEY',
-        Version: 'APP_VERSION'
+        ApiRoot    : 'API_ROOT',
+        ApiKey     : 'API_KEY',
+        Version    : 'APP_VERSION',
+        Branch     : 'APP_BRANCH',
+        Analytics  : APP_ANALYTICS,
+        UrlBase    : 'URL_BASE',
+        Production : PRODUCTION
     };
 </script>
 
 <script src="/polyfills.js"></script>
-<script data-main="/main" src="/JsLibraries/require.js"></script>
-<script src="/JsLibraries/xrayquire.js"></script>
+<script src="/handlebars.runtime.js"></script>
+<script src="/templates.js"></script>
+<script src="/vendor.js"></script>
+<script src="/main.js"></script>
 </html>

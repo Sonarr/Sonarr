@@ -1,0 +1,36 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Select Folder</h3>
+    </div>
+    <div class="modal-body root-folders-modal">
+        <div class="validation-errors"></div>
+        <div class="alert alert-info">Enter the path that contains some or all of your TV series, you will be able to choose which series you want to import<button type="button" class="close" data-dismiss="alert">×</button></div>
+
+        <div class="row">
+            <div class="form-group">
+
+                <div class="col-md-12">
+
+                    <div class="input-group">
+                        <span class="input-group-addon">&nbsp;<i class="icon-sonarr-folder-open"></i></span>
+                        <input class="form-control x-path" type="text" validation-name="path" placeholder="Enter path to folder that contains your shows">
+                        <span class="input-group-btn"><button class="btn btn-success x-add"><i class="icon-sonarr-ok"/></button></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row root-folders">
+            <div class="col-md-12">
+                {{#if items}}
+                    <h4>Recent Folders</h4>
+                {{/if}}
+                <div id="current-dirs" class="root-folders-list"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Close</button>
+    </div>
+</div>

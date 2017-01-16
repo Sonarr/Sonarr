@@ -1,41 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using NLog;
-using NzbDrone.Core.MediaFiles.MediaInfo;
+﻿using NLog;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
     public class NotSampleSpecification : IImportDecisionEngineSpecification
     {
-        private readonly ISampleService _sampleService;
+        private readonly IDetectSample _detectSample;
         private readonly Logger _logger;
 
-        public NotSampleSpecification(ISampleService sampleService,
+        public NotSampleSpecification(IDetectSample detectSample,
                                       Logger logger)
         {
-            _sampleService = sampleService;
+            _detectSample = detectSample;
             _logger = logger;
         }
 
-        public string RejectionReason { get { return "Sample"; } }
-
-        public bool IsSatisfiedBy(LocalEpisode localEpisode)
+        public Decision IsSatisfiedBy(LocalEpisode localEpisode)
         {
             if (localEpisode.ExistingFile)
             {
                 _logger.Debug("Existing file, skipping sample check");
-                return true;
+                return Decision.Accept();
             }
 
-            return !_sampleService.IsSample(localEpisode.Series,
-                                            localEpisode.Quality,
-                                            localEpisode.Path,
-                                            localEpisode.Size,
-                                            localEpisode.SeasonNumber);
+            var sample = _detectSample.IsSample(localEpisode.Series,
+                                                localEpisode.Quality,
+                                                localEpisode.Path,
+                                                localEpisode.Size,
+                                                localEpisode.IsSpecial);
+
+            if (sample)
+            {
+                return Decision.Reject("Sample");
+            }
+
+            return Decision.Accept();
         }
     }
 }

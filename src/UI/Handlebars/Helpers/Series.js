@@ -1,74 +1,84 @@
-'use strict';
-define(
-    [
-        'handlebars',
-        'System/StatusModel',
-        'underscore'
-    ], function (Handlebars, StatusModel, _) {
-        Handlebars.registerHelper('poster', function () {
+var Handlebars = require('handlebars');
+var StatusModel = require('../../System/StatusModel');
+var _ = require('underscore');
 
-            var poster = _.where(this.images, {coverType: 'poster'});
+Handlebars.registerHelper('poster', function() {
 
-            if (poster[0]) {
-                return poster[0].url;
-            }
+    var placeholder = StatusModel.get('urlBase') + '/Content/Images/poster-dark.png';
+    var poster = _.where(this.images, { coverType : 'poster' });
 
-            return undefined;
-        });
+    if (poster[0]) {
+        if (!poster[0].url.match(/^https?:\/\//)) {
+            return new Handlebars.SafeString('<img class="series-poster x-series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, poster[0].url, 250)));
+        } else {
+            var url = poster[0].url.replace(/^https?\:/, '');
+            return new Handlebars.SafeString('<img class="series-poster x-series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, url)));
+        }
+    }
 
-        Handlebars.registerHelper('traktUrl', function () {
-            return 'http://trakt.tv/show/' + this.titleSlug;
-        });
+    return new Handlebars.SafeString('<img class="series-poster placeholder-image" src="{0}">'.format(placeholder));
+});
 
-        Handlebars.registerHelper('imdbUrl', function () {
-            return 'http://imdb.com/title/' + this.imdbId;
-        });
+Handlebars.registerHelper('traktUrl', function() {
+    return 'http://trakt.tv/search/tvdb/' + this.tvdbId + '?id_type=show';
+});
 
-        Handlebars.registerHelper('tvdbUrl', function () {
-            return 'http://www.thetvdb.com/?tab=series&id=' + this.tvdbId;
-        });
+Handlebars.registerHelper('imdbUrl', function() {
+    return 'http://imdb.com/title/' + this.imdbId;
+});
 
-        Handlebars.registerHelper('tvRageUrl', function () {
-            return 'http://www.tvrage.com/shows/id-' + this.tvRageId;
-        });
+Handlebars.registerHelper('tvdbUrl', function() {
+    return 'http://www.thetvdb.com/?tab=series&id=' + this.tvdbId;
+});
 
-        Handlebars.registerHelper('route', function () {
-            return StatusModel.get('urlBase') + '/series/' + this.titleSlug;
-        });
+Handlebars.registerHelper('tvRageUrl', function() {
+    return 'http://www.tvrage.com/shows/id-' + this.tvRageId;
+});
 
-        Handlebars.registerHelper('percentOfEpisodes', function () {
-            var episodeCount = this.episodeCount;
-            var episodeFileCount = this.episodeFileCount;
+Handlebars.registerHelper('tvMazeUrl', function() {
+    return 'http://www.tvmaze.com/shows/' + this.tvMazeId + '/_';
+});
 
-            var percent = 100;
+Handlebars.registerHelper('route', function() {
+    return StatusModel.get('urlBase') + '/series/' + this.titleSlug;
+});
 
-            if (episodeCount > 0) {
-                percent = episodeFileCount / episodeCount * 100;
-            }
+Handlebars.registerHelper('percentOfEpisodes', function() {
+    var episodeCount = this.episodeCount;
+    var episodeFileCount = this.episodeFileCount;
 
-            return percent;
-        });
+    var percent = 100;
 
-        Handlebars.registerHelper('seasonCountHelper', function () {
-            var seasonCount = this.seasonCount;
-            var continuing = this.status === 'continuing';
+    if (episodeCount > 0) {
+        percent = episodeFileCount / episodeCount * 100;
+    }
 
-            if (continuing) {
-                return new Handlebars.SafeString('<span class="label label-info">Season {0}</span>'.format(seasonCount));
-            }
+    return percent;
+});
 
-            if (seasonCount === 1) {
-                return new Handlebars.SafeString('<span class="label label-info">{0} Season</span>'.format(seasonCount));
-            }
+Handlebars.registerHelper('seasonCountHelper', function() {
+    var seasonCount = this.seasonCount;
+    var continuing = this.status === 'continuing';
 
-            return new Handlebars.SafeString('<span class="label label-info">{0} Seasons</span>'.format(seasonCount));
-        });
+    if (continuing) {
+        return new Handlebars.SafeString('<span class="label label-info">Season {0}</span>'.format(seasonCount));
+    }
 
-        Handlebars.registerHelper('titleWithYear', function () {
-            if (this.title.endsWith(' ({0})'.format(this.year))) {
-                return this.title;
-            }
+    if (seasonCount === 1) {
+        return new Handlebars.SafeString('<span class="label label-info">{0} Season</span>'.format(seasonCount));
+    }
 
-            return new Handlebars.SafeString('{0} <em>({1})</em>'.format(this.title, this.year));
-        });
-    });
+    return new Handlebars.SafeString('<span class="label label-info">{0} Seasons</span>'.format(seasonCount));
+});
+
+Handlebars.registerHelper('titleWithYear', function() {
+    if (this.title.endsWith(' ({0})'.format(this.year))) {
+        return this.title;
+    }
+
+    if (!this.year) {
+        return this.title;
+    }
+
+    return new Handlebars.SafeString('{0} <span class="year">({1})</span>'.format(this.title, this.year));
+});

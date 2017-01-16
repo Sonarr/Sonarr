@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
@@ -13,12 +12,11 @@ namespace NzbDrone.Core.Tv
         Series FindByTitle(string cleanTitle, int year);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
-        void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
     {
-        public SeriesRepository(IDatabase database, IEventAggregator eventAggregator)
+        public SeriesRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }
@@ -53,11 +51,6 @@ namespace NzbDrone.Core.Tv
         public Series FindByTvRageId(int tvRageId)
         {
             return Query.Where(s => s.TvRageId == tvRageId).SingleOrDefault();
-        }
-
-        public void SetSeriesType(int seriesId, SeriesTypes seriesType)
-        {
-            SetFields(new Series { Id = seriesId, SeriesType = seriesType }, s => s.SeriesType);
         }
     }
 }

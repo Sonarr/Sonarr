@@ -1,8 +1,7 @@
-﻿using System;
-using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
@@ -10,7 +9,7 @@ namespace NzbDrone.Core.Notifications.Plex
     {
         public PlexClientSettingsValidator()
         {
-            RuleFor(c => c.Host).NotEmpty();
+            RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).GreaterThan(0);
         }
     }
@@ -25,28 +24,22 @@ namespace NzbDrone.Core.Notifications.Plex
         }
 
         [FieldDefinition(0, Label = "Host")]
-        public String Host { get; set; }
+        public string Host { get; set; }
 
         [FieldDefinition(1, Label = "Port")]
-        public Int32 Port { get; set; }
+        public int Port { get; set; }
 
         [FieldDefinition(2, Label = "Username")]
-        public String Username { get; set; }
+        public string Username { get; set; }
 
         [FieldDefinition(3, Label = "Password")]
-        public String Password { get; set; }
+        public string Password { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Host);
-            }
-        }
+        public bool IsValid => !string.IsNullOrWhiteSpace(Host);
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return Validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NetFwTypeLib;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -14,10 +15,10 @@ namespace NzbDrone.Host.AccessControl
     public class FirewallAdapter : IFirewallAdapter
     {
         private const NET_FW_PROFILE_TYPE_ FIREWALL_PROFILE = NET_FW_PROFILE_TYPE_.NET_FW_PROFILE_STANDARD;
-        
+
         private readonly IConfigFileProvider _configFileProvider;
         private readonly Logger _logger;
-        
+
         public FirewallAdapter(IConfigFileProvider configFileProvider, Logger logger)
         {
             _configFileProvider = configFileProvider;
@@ -51,15 +52,11 @@ namespace NzbDrone.Host.AccessControl
                 var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
                 var ports = mgr.LocalPolicy.GetProfileByType(FIREWALL_PROFILE).GloballyOpenPorts;
 
-                foreach (INetFwOpenPort p in ports)
-                {
-                    if (p.Port == port)
-                        return true;
-                }
+                return ports.Cast<INetFwOpenPort>().Any(p => p.Port == port);
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Failed to check for open port in firewall", ex);
+                _logger.Warn(ex, "Failed to check for open port in firewall");
             }
             return false;
         }
@@ -84,13 +81,13 @@ namespace NzbDrone.Host.AccessControl
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Failed to open port in firewall for NzbDrone " + portNumber, ex);
+                _logger.Warn(ex, "Failed to open port in firewall for NzbDrone " + portNumber);
             }
         }
 
         private bool IsFirewallEnabled()
         {
-            if (OsInfo.IsMono) return false;
+            if (OsInfo.IsNotWindows) return false;
 
             try
             {
@@ -100,7 +97,7 @@ namespace NzbDrone.Host.AccessControl
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Failed to check if the firewall is enabled", ex);
+                _logger.Warn(ex, "Failed to check if the firewall is enabled");
                 return false;
             }
         }

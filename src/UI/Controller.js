@@ -1,86 +1,59 @@
-﻿'use strict';
-define(
-    [
-        'Shared/NzbDroneController',
-        'AppLayout',
-        'marionette',
-        'History/HistoryLayout',
-        'Settings/SettingsLayout',
-        'AddSeries/AddSeriesLayout',
-        'Wanted/WantedLayout',
-        'Calendar/CalendarLayout',
-        'Release/ReleaseLayout',
-        'System/SystemLayout',
-        'SeasonPass/SeasonPassLayout',
-        'System/Update/UpdateLayout',
-        'Series/Editor/SeriesEditorLayout'
-    ], function (NzbDroneController,
-                 AppLayout,
-                 Marionette,
-                 HistoryLayout,
-                 SettingsLayout,
-                 AddSeriesLayout,
-                 WantedLayout,
-                 CalendarLayout,
-                 ReleaseLayout,
-                 SystemLayout,
-                 SeasonPassLayout,
-                 UpdateLayout,
-                 SeriesEditorLayout) {
-        return NzbDroneController.extend({
+var NzbDroneController = require('./Shared/NzbDroneController');
+var AppLayout = require('./AppLayout');
+var Marionette = require('marionette');
+var ActivityLayout = require('./Activity/ActivityLayout');
+var SettingsLayout = require('./Settings/SettingsLayout');
+var AddSeriesLayout = require('./AddSeries/AddSeriesLayout');
+var WantedLayout = require('./Wanted/WantedLayout');
+var CalendarLayout = require('./Calendar/CalendarLayout');
+var ReleaseLayout = require('./Release/ReleaseLayout');
+var SystemLayout = require('./System/SystemLayout');
+var SeasonPassLayout = require('./SeasonPass/SeasonPassLayout');
+var SeriesEditorLayout = require('./Series/Editor/SeriesEditorLayout');
 
-            addSeries: function (action) {
-                this.setTitle('Add Series');
-                this.showMainRegion(new AddSeriesLayout({action: action}));
-            },
+module.exports = NzbDroneController.extend({
+    addSeries : function(action) {
+        this.setTitle('Add Series');
+        this.showMainRegion(new AddSeriesLayout({ action : action }));
+    },
 
-            calendar: function () {
-                this.setTitle('Calendar');
-                this.showMainRegion(new CalendarLayout());
-            },
+    calendar : function() {
+        this.setTitle('Calendar');
+        this.showMainRegion(new CalendarLayout());
+    },
 
-            settings: function (action) {
-                this.setTitle('Settings');
-                this.showMainRegion(new SettingsLayout({ action: action }));
-            },
+    settings : function(action) {
+        this.setTitle('Settings');
+        this.showMainRegion(new SettingsLayout({ action : action }));
+    },
 
-            wanted: function (action) {
-                this.setTitle('Wanted');
+    wanted : function(action) {
+        this.setTitle('Wanted');
+        this.showMainRegion(new WantedLayout({ action : action }));
+    },
 
-                this.showMainRegion(new WantedLayout({ action: action }));
-            },
+    activity : function(action) {
+        this.setTitle('Activity');
+        this.showMainRegion(new ActivityLayout({ action : action }));
+    },
 
-            history: function (action) {
-                this.setTitle('History');
+    rss : function() {
+        this.setTitle('RSS');
+        this.showMainRegion(new ReleaseLayout());
+    },
 
-                this.showMainRegion(new HistoryLayout({ action: action }));
-            },
+    system : function(action) {
+        this.setTitle('System');
+        this.showMainRegion(new SystemLayout({ action : action }));
+    },
 
-            rss: function () {
-                this.setTitle('RSS');
-                this.showMainRegion(new ReleaseLayout());
-            },
+    seasonPass : function() {
+        this.setTitle('Season Pass');
+        this.showMainRegion(new SeasonPassLayout());
+    },
 
-            system: function (action) {
-                this.setTitle('System');
-                this.showMainRegion(new SystemLayout({ action: action }));
-            },
-
-            seasonPass: function () {
-                this.setTitle('Season Pass');
-                this.showMainRegion(new SeasonPassLayout());
-            },
-
-            update: function () {
-                this.setTitle('Updates');
-                this.showMainRegion(new UpdateLayout());
-            },
-
-            seriesEditor: function () {
-                this.setTitle('Series Editor');
-                this.showMainRegion(new SeriesEditorLayout());
-            }
-
-        });
-    });
-
+    seriesEditor : function() {
+        this.setTitle('Series Editor');
+        this.showMainRegion(new SeriesEditorLayout());
+    }
+});

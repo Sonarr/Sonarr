@@ -1,33 +1,29 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'backgrid',
-        'System/Update/UpdateCollection',
-        'System/Update/UpdateCollectionView',
-        'Shared/LoadingView'
-    ], function (Marionette, Backgrid, UpdateCollection, UpdateCollectionView, LoadingView) {
-        return Marionette.Layout.extend({
-            template: 'System/Update/UpdateLayoutTemplate',
+var Marionette = require('marionette');
+var Backgrid = require('backgrid');
+var UpdateCollection = require('./UpdateCollection');
+var UpdateCollectionView = require('./UpdateCollectionView');
+var LoadingView = require('../../Shared/LoadingView');
 
-            regions: {
-                updates: '#x-updates'
-            },
+module.exports = Marionette.Layout.extend({
+    template : 'System/Update/UpdateLayoutTemplate',
 
-            initialize: function () {
-                this.updateCollection = new UpdateCollection();
+    regions : {
+        updates : '#x-updates'
+    },
 
-                this.listenTo(this.updateCollection, 'sync', this._showUpdates);
-            },
+    initialize : function() {
+        this.updateCollection = new UpdateCollection();
 
-            onRender: function () {
-                this.updates.show(new LoadingView());
+        this.listenTo(this.updateCollection, 'sync', this._showUpdates);
+    },
 
-                this.updateCollection.fetch();
-            },
+    onRender : function() {
+        this.updates.show(new LoadingView());
 
-            _showUpdates: function () {
-                this.updates.show(new UpdateCollectionView({ collection: this.updateCollection }));
-            }
-        });
-    });
+        this.updateCollection.fetch();
+    },
+
+    _showUpdates : function() {
+        this.updates.show(new UpdateCollectionView({ collection : this.updateCollection }));
+    }
+});

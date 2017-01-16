@@ -9,12 +9,13 @@ namespace NzbDrone.Core.MediaFiles
     {
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
+        List<EpisodeFile> GetFilesWithoutMediaInfo();
     }
 
 
     public class MediaFileRepository : BasicRepository<EpisodeFile>, IMediaFileRepository
     {
-        public MediaFileRepository(IDatabase database, IEventAggregator eventAggregator)
+        public MediaFileRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }
@@ -29,6 +30,11 @@ namespace NzbDrone.Core.MediaFiles
             return Query.Where(c => c.SeriesId == seriesId)
                         .AndWhere(c => c.SeasonNumber == seasonNumber)
                         .ToList();
+        }
+
+        public List<EpisodeFile> GetFilesWithoutMediaInfo()
+        {
+            return Query.Where(c => c.MediaInfo == null).ToList();
         }
     }
 }

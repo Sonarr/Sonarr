@@ -1,66 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NLog;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
-    public class Wombles : IndexerBase<NullConfig>
+    public class Wombles : HttpIndexerBase<NullConfig>
     {
-        public override DownloadProtocol Protocol
+        public override string Name => "Womble's";
+
+        public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
+        public override bool SupportsSearch => false;
+
+        public override IParseIndexerResponse GetParser()
         {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
+            return new WomblesRssParser();
         }
 
-        public override bool SupportsPaging
+        public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            get
-            {
-                return false;
-            }
+            return new RssIndexerRequestGenerator("http://newshost.co.za/rss/?sec=TV&fr=false");
         }
 
-        public override bool SupportsSearching
+        public Wombles(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
-            get
-            {
-                return false;
-            }
-        }
 
-        public override IParseFeed Parser
-        {
-            get
-            {
-                return new WomblesParser();
-            }
-        }
-
-        public override IEnumerable<string> RecentFeed
-        {
-            get { yield return "http://newshost.co.za/rss/?sec=TV&fr=false"; }
-        }
-
-        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
-        {
-            return new List<string>();
-        }
-
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
-        {
-            return new List<string>();
-        }
-
-        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
-        {
-            return new List<string>();
-        }
-
-        public override IEnumerable<string> GetSearchUrls(string query, int offset)
-        {
-            return new List<string>();
         }
     }
 }

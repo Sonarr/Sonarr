@@ -8,13 +8,7 @@ namespace NzbDrone.Core.MediaFiles.Commands
         public int SeriesId { get; set; }
         public List<int> Files { get; set; }
 
-        public override bool SendUpdatesToClient
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SendUpdatesToClient => true;
 
         public RenameFilesCommand()
         {

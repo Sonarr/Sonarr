@@ -38,5 +38,29 @@ namespace NzbDrone.Common.Test.EnvironmentTests
         }
 
 
+        [TestCase("/data=test", "/data=test")]
+        [TestCase("/Data=/a/b/c", "/data=/a/b/c")]
+        public void should_preserver_data(string arg, string preserved)
+        {
+            var args = new StartupContext(new[] { arg });
+            args.PreservedArguments.Should().Be(preserved);
+        }
+
+        [TestCase("/nobrowser", "/nobrowser")]
+        [TestCase("/Nobrowser", "/nobrowser")]
+        [TestCase("-Nobrowser", "/nobrowser")]
+        public void should_preserver_no_browser(string arg, string preserved)
+        {
+            var args = new StartupContext(new[] { arg });
+            args.PreservedArguments.Should().Be(preserved);
+        }
+
+     
+        [Test]
+        public void should_preserver_both()
+        {
+            var args = new StartupContext(new[] { "/data=test", "/Nobrowser" });
+            args.PreservedArguments.Should().Be("/data=test /nobrowser");
+        }
     }
 }

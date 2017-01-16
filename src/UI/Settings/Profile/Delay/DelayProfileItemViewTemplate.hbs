@@ -1,0 +1,57 @@
+    <div class="col-sm-2">
+        {{#if enableUsenet}}
+            {{#if enableTorrent}}
+                {{#if_eq preferredProtocol compare="usenet"}}
+                    Prefer Usenet
+                {{else}}
+                    Prefer Torrent
+                {{/if_eq}}
+            {{else}}
+                Only Usenet
+            {{/if}}
+        {{else}}
+            Only Torrent
+        {{/if}}
+    </div>
+    <div class="col-sm-2">
+        {{#if enableUsenet}}
+            {{#if_eq usenetDelay compare="0"}}
+                No delay
+            {{else}}
+                {{#if_eq usenetDelay compare="1"}}
+                    1 minute
+                {{else}}
+                    {{usenetDelay}} minutes
+                {{/if_eq}}
+            {{/if_eq}}
+        {{else}}
+            -
+        {{/if}}
+    </div>
+    <div class="col-sm-2">
+        {{#if enableTorrent}}
+            {{#if_eq torrentDelay compare="0"}}
+                No delay
+            {{else}}
+                {{#if_eq torrentDelay compare="1"}}
+                    1 minute
+                {{else}}
+                    {{torrentDelay}} minutes
+                {{/if_eq}}
+            {{/if_eq}}
+        {{else}}
+            -
+        {{/if}}
+    </div>
+    <div class="col-sm-5">
+        {{tagDisplay tags}}
+    </div>
+    <div class="col-sm-1">
+        <div class="pull-right">
+            {{#unless_eq id compare="1"}}
+                <i class="drag-handle icon-sonarr-reorder x-drag-handle" title="Reorder"/>
+            {{/unless_eq}}
+
+            <i class="icon-sonarr-edit x-edit" title="Edit"></i>
+        </div>
+    </div>

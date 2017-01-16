@@ -1,0 +1,27 @@
+<div class="indexer-item thingy">
+    <div>
+        <h3>{{name}}</h3>
+    </div>
+
+    <div class="settings">
+        {{#if supportsRss}}
+            {{#if enableRss}}
+                <span class="label label-success">RSS</span>
+            {{else}}
+                <span class="label label-default">RSS</span>
+            {{/if}}
+        {{else}}
+            <span class="label label-default label-disabled">RSS</span>
+        {{/if}}
+
+        {{#if supportsSearch}}
+            {{#if enableSearch}}
+                <span class="label label-success">Search</span>
+            {{else}}
+                <span class="label label-default">Search</span>
+            {{/if}}
+        {{else}}
+            <span class="label label-default label-disabled">Search</span>
+        {{/if}}
+    </div>
+</div>

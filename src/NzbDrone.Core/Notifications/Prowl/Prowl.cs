@@ -1,38 +1,40 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Tv;
 using Prowlin;
 
 namespace NzbDrone.Core.Notifications.Prowl
 {
     public class Prowl : NotificationBase<ProwlSettings>
     {
-        private readonly IProwlService _prowlProvider;
+        private readonly IProwlService _prowlService;
 
-        public Prowl(IProwlService prowlProvider)
+        public Prowl(IProwlService prowlService)
         {
-            _prowlProvider = prowlProvider;
+            _prowlService = prowlService;
         }
 
-        public override string Link
-        {
-            get { return "http://www.prowlapp.com/"; }
-        }
+        public override string Link => "https://www.prowlapp.com/";
+        public override string Name => "Prowl";
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
-            const string title = "Episode Grabbed";
-
-            _prowlProvider.SendNotification(title, message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlService.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string title = "Episode Downloaded";
-
-            _prowlProvider.SendNotification(title, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlService.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
-        public override void AfterRename(Series series)
+        public override ValidationResult Test()
         {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_prowlService.Test(Settings));
+
+            return new ValidationResult(failures);
         }
     }
 }

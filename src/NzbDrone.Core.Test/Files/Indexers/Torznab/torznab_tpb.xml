@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="1.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:torznab="http://torznab.com/schemas/2015/feed">
+  <channel>
+    <atom:link href="http://localhost:9117/" rel="self" type="application/rss+xml" />
+    <title>The Pirate Bay</title>
+    <description>The worlds largest bittorrent indexer</description>
+    <link>https://thepiratebay.se/</link>
+    <lanuage>en-us</lanuage>
+    <category>search</category>
+    <image>
+      <url>http://localhost:9117/logos/thepiratebay.png</url>
+      <title>The Pirate Bay</title>
+      <link>https://thepiratebay.se/</link>
+      <description>The Pirate Bay</description>
+    </image>
+    <item>
+      <title>Series Title S05E02 HDTV x264-Xclusive [eztv]</title>
+      <guid>https://thepiratebay.se/torrent/11811366/Series_Title_S05E02_HDTV_x264-Xclusive_%5Beztv%5D</guid>
+      <comments>https://thepiratebay.se/torrent/11811366/Series_Title_S05E02_HDTV_x264-Xclusive_%5Beztv%5D</comments>
+      <pubDate>Sat, 11 Apr 2015 21:34:00 -0600</pubDate>
+      <size>388895872</size>
+      <description>Series Title S05E02 HDTV x264-Xclusive [eztv]</description>
+      <link>magnet:?xt=urn:btih:9fb267cff5ae5603f07a347676ec3bf3e35f75e1&amp;dn=Game+of+Thrones+S05E02+HDTV+x264-Xclusive+%5Beztv%5D&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969</link>
+      <enclosure url="magnet:?xt=urn:btih:9fb267cff5ae5603f07a347676ec3bf3e35f75e1&amp;dn=Game+of+Thrones+S05E02+HDTV+x264-Xclusive+%5Beztv%5D&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" length="388895872" type="application/x-bittorrent;x-scheme-handler/magnet" />
+      <torznab:attr name="magneturl" value="magnet:?xt=urn:btih:9fb267cff5ae5603f07a347676ec3bf3e35f75e1&amp;dn=Game+of+Thrones+S05E02+HDTV+x264-Xclusive+%5Beztv%5D&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" />
+      <torznab:attr name="seeders" value="34128" />
+      <torznab:attr name="peers" value="36724" />
+      <torznab:attr name="infohash" value="9fb267cff5ae5603f07a347676ec3bf3e35f75e1" />
+      <torznab:attr name="minimumratio" value="1" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+    <item>
+      <title>Series Title S05E03 WEBRip XviD-FUM[ettv]</title>
+      <guid>https://thepiratebay.se/torrent/11811373/Series_Title_S05E03_WEBRip_XviD-FUM[ettv]</guid>
+      <comments>https://thepiratebay.se/torrent/11811373/Series_Title_S05E03_WEBRip_XviD-FUM[ettv]</comments>
+      <pubDate>Sat, 11 Apr 2015 21:42:00 -0600</pubDate>
+      <size>471722880</size>
+      <description>Series Title S05E03 WEBRip XviD-FUM[ettv]</description>
+      <link>magnet:?xt=urn:btih:c1f9f6bade11a4c46028b118053452460ab94be1&amp;dn=Game+of+Thrones+S05E03+WEBRip+XviD-FUM[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969</link>
+      <enclosure url="magnet:?xt=urn:btih:c1f9f6bade11a4c46028b118053452460ab94be1&amp;dn=Game+of+Thrones+S05E03+WEBRip+XviD-FUM[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" length="471722880" type="application/x-bittorrent;x-scheme-handler/magnet" />
+      <torznab:attr name="magneturl" value="magnet:?xt=urn:btih:c1f9f6bade11a4c46028b118053452460ab94be1&amp;dn=Game+of+Thrones+S05E03+WEBRip+XviD-FUM[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" />
+      <torznab:attr name="seeders" value="28706" />
+      <torznab:attr name="peers" value="30894" />
+      <torznab:attr name="infohash" value="c1f9f6bade11a4c46028b118053452460ab94be1" />
+      <torznab:attr name="minimumratio" value="1" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+    <item>
+      <title>Series Title S05E01 HDTV x264-Xclusive</title>
+      <guid>https://thepiratebay.se/torrent/11811268/Series_Title_S05E01_HDTV_x264-Xclusive</guid>
+      <comments>https://thepiratebay.se/torrent/11811268/Series_Title_S05E01_HDTV_x264-Xclusive</comments>
+      <pubDate>Sat, 11 Apr 2015 18:14:00 -0600</pubDate>
+      <size>312339328</size>
+      <description>Series Title S05E01 HDTV x264-Xclusive</description>
+      <link>magnet:?xt=urn:btih:fd8b1062af0d8c2426cb4d180b86815ffa91b479&amp;dn=Game+Of+Thrones+S05E01+HDTV+x264-Xclusive&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969</link>
+      <enclosure url="magnet:?xt=urn:btih:fd8b1062af0d8c2426cb4d180b86815ffa91b479&amp;dn=Game+Of+Thrones+S05E01+HDTV+x264-Xclusive&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" length="312339328" type="application/x-bittorrent;x-scheme-handler/magnet" />
+      <torznab:attr name="magneturl" value="magnet:?xt=urn:btih:fd8b1062af0d8c2426cb4d180b86815ffa91b479&amp;dn=Game+Of+Thrones+S05E01+HDTV+x264-Xclusive&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" />
+      <torznab:attr name="seeders" value="26637" />
+      <torznab:attr name="peers" value="27453" />
+      <torznab:attr name="infohash" value="fd8b1062af0d8c2426cb4d180b86815ffa91b479" />
+      <torznab:attr name="minimumratio" value="1" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+    <item>
+      <title>Series Title S05E04 WEBRip XviD-FUM[ettv]</title>
+      <guid>https://thepiratebay.se/torrent/11811448/Series_Title_S05E04_WEBRip_XviD-FUM[ettv]</guid>
+      <comments>https://thepiratebay.se/torrent/11811448/Series_Title_S05E04_WEBRip_XviD-FUM[ettv]</comments>
+      <pubDate>Sat, 11 Apr 2015 23:10:00 -0600</pubDate>
+      <size>442970944</size>
+      <description>Series Title S05E04 WEBRip XviD-FUM[ettv]</description>
+      <link>magnet:?xt=urn:btih:30abe6b5816c758d327672a0fa58ff2b055ad3fe&amp;dn=Game+of+Thrones+S05E04+WEBRip+XviD-FUM[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969</link>
+      <enclosure url="magnet:?xt=urn:btih:30abe6b5816c758d327672a0fa58ff2b055ad3fe&amp;dn=Game+of+Thrones+S05E04+WEBRip+XviD-FUM[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" length="442970944" type="application/x-bittorrent;x-scheme-handler/magnet" />
+      <torznab:attr name="magneturl" value="magnet:?xt=urn:btih:30abe6b5816c758d327672a0fa58ff2b055ad3fe&amp;dn=Game+of+Thrones+S05E04+WEBRip+XviD-FUM[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" />
+      <torznab:attr name="seeders" value="21551" />
+      <torznab:attr name="peers" value="22711" />
+      <torznab:attr name="infohash" value="30abe6b5816c758d327672a0fa58ff2b055ad3fe" />
+      <torznab:attr name="minimumratio" value="1" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+    <item>
+      <title>Series.Title.S03E19.HDTV.x264-LOL[ettv]</title>
+      <guid>https://thepiratebay.se/torrent/11817918/Series.Title.S03E19.HDTV.x264-LOL[ettv]</guid>
+      <comments>https://thepiratebay.se/torrent/11817918/Series.Title.S03E19.HDTV.x264-LOL[ettv]</comments>
+      <pubDate>Wed, 15 Apr 2015 18:58:00 -0600</pubDate>
+      <size>243951200</size>
+      <description>Series.Title.S03E19.HDTV.x264-LOL[ettv]</description>
+      <link>magnet:?xt=urn:btih:53896c2a6391a69a672041139e023c018c0f4aff&amp;dn=Series.Title.S03E19.HDTV.x264-LOL[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969</link>
+      <enclosure url="magnet:?xt=urn:btih:53896c2a6391a69a672041139e023c018c0f4aff&amp;dn=Series.Title.S03E19.HDTV.x264-LOL[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" length="243951200" type="application/x-bittorrent;x-scheme-handler/magnet" />
+      <torznab:attr name="magneturl" value="magnet:?xt=urn:btih:53896c2a6391a69a672041139e023c018c0f4aff&amp;dn=Series.Title.S03E19.HDTV.x264-LOL[ettv]&amp;tr=udp:%2F%2Fopen.demonii.com:1337&amp;tr=udp:%2F%2Ftracker.coppersurfer.tk:6969&amp;tr=udp:%2F%2Ftracker.leechers-paradise.org:6969&amp;tr=udp:%2F%2Fexodus.desync.com:6969" />
+      <torznab:attr name="seeders" value="15754" />
+      <torznab:attr name="peers" value="17336" />
+      <torznab:attr name="infohash" value="53896c2a6391a69a672041139e023c018c0f4aff" />
+      <torznab:attr name="minimumratio" value="1" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+  </channel>
+</rss>

@@ -1,11 +1,6 @@
-'use strict';
-define(
-    [
-        'backbone',
-        'Shared/Toolbar/ButtonModel'
-    ], function (Backbone, ButtonModel) {
-        return Backbone.Collection.extend({
-            model: ButtonModel
-        });
-    });
+var Backbone = require('backbone');
+var ButtonModel = require('./ButtonModel');
 
+module.exports = Backbone.Collection.extend({
+    model : ButtonModel
+});

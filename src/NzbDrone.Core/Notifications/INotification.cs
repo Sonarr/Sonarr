@@ -7,8 +7,12 @@ namespace NzbDrone.Core.Notifications
     {
         string Link { get; }
 
-        void OnGrab(string message);
+        void OnGrab(GrabMessage grabMessage);
         void OnDownload(DownloadMessage message);
-        void AfterRename(Series series);
+        void OnRename(Series series);
+        bool SupportsOnGrab { get; }
+        bool SupportsOnDownload { get; }
+        bool SupportsOnUpgrade { get; }
+        bool SupportsOnRename { get; }
     }
 }

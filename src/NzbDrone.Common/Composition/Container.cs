@@ -51,7 +51,10 @@ namespace NzbDrone.Common.Composition
 
         public void RegisterSingleton(Type service, Type implementation)
         {
-            _container.Register(service, implementation).AsSingleton();
+            var factory = CreateSingletonImplementationFactory(implementation);
+
+            _container.Register(service, factory);
+            _container.Register(service, factory, implementation.FullName);
         }
 
         public IEnumerable<T> ResolveAll<T>() where T : class
@@ -59,9 +62,23 @@ namespace NzbDrone.Common.Composition
             return _container.ResolveAll<T>();
         }
 
-        public void RegisterAllAsSingleton(Type registrationType, IEnumerable<Type> implementationList)
+        public void RegisterAllAsSingleton(Type service, IEnumerable<Type> implementationList)
         {
-            _container.RegisterMultiple(registrationType, implementationList).AsSingleton();
+            foreach (var implementation in implementationList)
+            {
+                var factory = CreateSingletonImplementationFactory(implementation);
+
+                _container.Register(service, factory, implementation.FullName);
+            }
+        }
+
+        private Func<TinyIoCContainer, NamedParameterOverloads, object> CreateSingletonImplementationFactory(Type implementation)
+        {
+            const string singleImplPrefix = "singleImpl_";
+
+            _container.Register(implementation, implementation, singleImplPrefix + implementation.FullName).AsSingleton();
+
+            return (c, p) => _container.Resolve(implementation, singleImplPrefix + implementation.FullName);
         }
 
         public bool IsTypeRegistered(Type type)

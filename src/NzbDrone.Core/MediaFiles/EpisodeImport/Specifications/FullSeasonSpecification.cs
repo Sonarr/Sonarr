@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
-using NLog;
-using NzbDrone.Common;
+﻿using NLog;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
@@ -15,17 +13,15 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason { get { return "Full season file"; } }
-
-        public bool IsSatisfiedBy(LocalEpisode localEpisode)
+        public Decision IsSatisfiedBy(LocalEpisode localEpisode)
         {
             if (localEpisode.ParsedEpisodeInfo.FullSeason)
             {
                 _logger.Debug("Single episode file detected as containing all episodes in the season");
-                return false;
+                return Decision.Reject("Single episode file contains all episodes in seasons");
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

@@ -5,8 +5,8 @@ namespace NzbDrone.Core.Jobs
 {
     public class ScheduledTask : ModelBase
     {
-        public String TypeName { get; set; }
-        public Int32 Interval { get; set; }
+        public string TypeName { get; set; }
+        public int Interval { get; set; }
         public DateTime LastExecution { get; set; }
     }
 }

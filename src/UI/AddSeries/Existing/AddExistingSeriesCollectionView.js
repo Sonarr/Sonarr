@@ -1,59 +1,51 @@
-﻿'use strict';
-define(
-    [
-        'marionette',
-        'AddSeries/AddSeriesView',
-        'AddSeries/Existing/UnmappedFolderCollection'
-    ], function (Marionette, AddSeriesView, UnmappedFolderCollection) {
+var Marionette = require('marionette');
+var AddSeriesView = require('../AddSeriesView');
+var UnmappedFolderCollection = require('./UnmappedFolderCollection');
 
-        return Marionette.CompositeView.extend({
+module.exports = Marionette.CompositeView.extend({
+    itemView          : AddSeriesView,
+    itemViewContainer : '.x-loading-folders',
+    template          : 'AddSeries/Existing/AddExistingSeriesCollectionViewTemplate',
 
-            itemView         : AddSeriesView,
-            itemViewContainer: '.x-loading-folders',
-            template         : 'AddSeries/Existing/AddExistingSeriesCollectionViewTemplate',
+    ui : {
+        loadingFolders : '.x-loading-folders'
+    },
 
-            ui: {
-                loadingFolders: '.x-loading-folders'
-            },
+    initialize : function() {
+        this.collection = new UnmappedFolderCollection();
+        this.collection.importItems(this.model);
+    },
 
-            initialize: function () {
-                this.collection = new UnmappedFolderCollection();
-                this.collection.importItems(this.model);
-            },
+    showCollection : function() {
+        this._showAndSearch(0);
+    },
 
-            showCollection: function () {
-                this._showAndSearch(0);
-            },
+    appendHtml : function(collectionView, itemView, index) {
+        collectionView.ui.loadingFolders.before(itemView.el);
+    },
 
-            appendHtml: function(collectionView, itemView, index){
-                collectionView.ui.loadingFolders.before(itemView.el);
-            },
+    _showAndSearch : function(index) {
+        var self = this;
+        var model = this.collection.at(index);
 
-            _showAndSearch: function (index) {
-                var self = this;
-                var model = this.collection.at(index);
-
-                if (model) {
-                    var currentIndex = index;
-                    var folderName = model.get('folder').name;
-                    this.addItemView(model, this.getItemView(), index);
-                    this.children.findByModel(model)
-                        .search({term: folderName})
-                        .always(function () {
-                            if (!self.isClosed) {
-                                self._showAndSearch(currentIndex + 1);
-                            }
-                        });
+        if (model) {
+            var currentIndex = index;
+            var folderName = model.get('folder').name;
+            this.addItemView(model, this.getItemView(), index);
+            this.children.findByModel(model).search({ term : folderName }).always(function() {
+                if (!self.isClosed) {
+                    self._showAndSearch(currentIndex + 1);
                 }
+            });
+        }
 
-                else {
-                    this.ui.loadingFolders.hide();
-                }
-            },
+        else {
+            this.ui.loadingFolders.hide();
+        }
+    },
 
-            itemViewOptions: {
-                isExisting: true
-            }
+    itemViewOptions : {
+        isExisting : true
+    }
 
-        });
-    });
+});

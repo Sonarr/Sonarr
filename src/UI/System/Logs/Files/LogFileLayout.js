@@ -1,159 +1,135 @@
-'use strict';
-define(
-    [
-        'vent',
-        'marionette',
-        'backgrid',
-        'System/Logs/Files/FilenameCell',
-        'Cells/RelativeDateCell',
-        'System/Logs/Files/DownloadLogCell',
-        'System/Logs/Files/LogFileCollection',
-        'System/Logs/Files/Row',
-        'System/Logs/Files/ContentsView',
-        'System/Logs/Files/ContentsModel',
-        'Shared/Toolbar/ToolbarLayout',
-        'Shared/LoadingView',
-        'jQuery/jquery.spin'
-    ], function (vent,
-        Marionette,
-        Backgrid,
-        FilenameCell,
-        RelativeDateCell,
-        DownloadLogCell,
-        LogFileCollection,
-        LogFileRow,
-        ContentsView,
-        ContentsModel,
-        ToolbarLayout,
-        LoadingView) {
-        return Marionette.Layout.extend({
-            template: 'System/Logs/Files/LogFileLayoutTemplate',
+var vent = require('vent');
+var Marionette = require('marionette');
+var Backgrid = require('backgrid');
+var FilenameCell = require('./FilenameCell');
+var RelativeDateCell = require('../../../Cells/RelativeDateCell');
+var DownloadLogCell = require('./DownloadLogCell');
+var LogFileRow = require('./Row');
+var ContentsView = require('./ContentsView');
+var ContentsModel = require('./ContentsModel');
+var ToolbarLayout = require('../../../Shared/Toolbar/ToolbarLayout');
+var LoadingView = require('../../../Shared/LoadingView');
+require('../../../jQuery/jquery.spin');
 
-            regions: {
-                toolbar  : '#x-toolbar',
-                grid     : '#x-grid',
-                contents : '#x-contents'
-            },
+module.exports = Marionette.Layout.extend({
+    template : 'System/Logs/Files/LogFileLayoutTemplate',
 
-            columns:
-                [
-                    {
-                        name : 'filename',
-                        label: 'Filename',
-                        cell : FilenameCell
-                    },
-                    {
-                        name : 'lastWriteTime',
-                        label: 'Last Write Time',
-                        cell : RelativeDateCell
-                    },
-                    {
-                        name    : 'filename',
-                        label   : '',
-                        cell    : DownloadLogCell,
-                        sortable: false
-                    }
-                ],
+    regions : {
+        toolbar  : '#x-toolbar',
+        grid     : '#x-grid',
+        contents : '#x-contents'
+    },
 
-            initialize: function () {
-                this.collection = new LogFileCollection();
+    columns : [
+        {
+            name     : 'filename',
+            label    : 'Filename',
+            cell     : FilenameCell,
+            sortable : false
+        },
+        {
+            name     : 'lastWriteTime',
+            label    : 'Last Write Time',
+            cell     : RelativeDateCell,
+            sortable : false
+        },
+        {
+            name     : 'downloadUrl',
+            label    : '',
+            cell     : DownloadLogCell,
+            sortable : false
+        }
+    ],
 
-                vent.on(vent.Commands.ShowLogFile, this._fetchLogFileContents, this);
-                vent.on(vent.Events.CommandComplete, this._commandComplete, this);
-                this.listenTo(this.collection, 'sync', this._collectionSynced);
+    initialize : function(options) {
+        this.collection = options.collection;
+        this.deleteFilesCommand = options.deleteFilesCommand;
 
-                this.collection.fetch();
-            },
+        this.listenTo(vent, vent.Commands.ShowLogFile, this._fetchLogFileContents);
+        this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
+        this.listenTo(this.collection, 'sync', this._collectionSynced);
 
-            onShow: function () {
-                this._showToolbar();
-                this._showTable();
-            },
+        this.collection.fetch();
+    },
 
-            _showToolbar: function () {
+    onShow : function() {
+        this._showToolbar();
+        this._showTable();
+    },
 
-                var leftSideButtons = {
-                    type      : 'default',
-                    storeState: false,
-                    items     :
-                        [
-                            {
-                                title         : 'Refresh',
-                                icon          : 'icon-refresh',
-                                ownerContext  : this,
-                                callback      : this._refreshTable
-                            },
-
-                            {
-                                title          : 'Delete Log Files',
-                                icon           : 'icon-trash',
-                                command        : 'deleteLogFiles',
-                                successMessage : 'Log files have been deleted',
-                                errorMessage   : 'Failed to delete log files'
-                            }
-                        ]
-                };
-
-                this.toolbar.show(new ToolbarLayout({
-                    left   :
-                        [
-                            leftSideButtons
-                        ],
-                    context: this
-                }));
-            },
-
-            _showTable: function () {
-                this.grid.show(new Backgrid.Grid({
-                    row       : LogFileRow,
-                    columns   : this.columns,
-                    collection: this.collection,
-                    className : 'table table-hover'
-                }));
-            },
-
-            _collectionSynced: function () {
-                if (!this.collection.any()) {
-                    return;
+    _showToolbar : function() {
+        var leftSideButtons = {
+            type       : 'default',
+            storeState : false,
+            items      : [
+                {
+                    title        : 'Refresh',
+                    icon         : 'icon-sonarr-refresh',
+                    ownerContext : this,
+                    callback     : this._refreshTable
+                },
+                {
+                    title          : 'Clear Log Files',
+                    icon           : 'icon-sonarr-clear',
+                    command        : this.deleteFilesCommand,
+                    successMessage : 'Log files have been deleted',
+                    errorMessage   : 'Failed to delete log files'
                 }
+            ]
+        };
 
-                var model = this.collection.first();
-                this._fetchLogFileContents({ model: model });
-            },
+        this.toolbar.show(new ToolbarLayout({
+            left    : [leftSideButtons],
+            context : this
+        }));
+    },
 
-            _fetchLogFileContents: function (options) {
-                this.contents.show(new LoadingView());
+    _showTable : function() {
+        this.grid.show(new Backgrid.Grid({
+            row        : LogFileRow,
+            columns    : this.columns,
+            collection : this.collection,
+            className  : 'table table-hover'
+        }));
+    },
 
-                var model = options.model;
-                var filename = model.get('filename');
+    _collectionSynced : function() {
+        if (!this.collection.any()) {
+            return;
+        }
 
-                var contentsModel = new ContentsModel({
-                    filename: filename
-                });
+        var model = this.collection.first();
+        this._fetchLogFileContents({ model : model });
+    },
 
-                this.listenToOnce(contentsModel, 'sync', this._showDetails);
+    _fetchLogFileContents : function(options) {
+        this.contents.show(new LoadingView());
 
-                contentsModel.fetch({ dataType: 'text' });
-            },
+        var model = options.model;
+        var contentsModel = new ContentsModel(model.toJSON());
 
-            _showDetails: function (model) {
-                this.contents.show(new ContentsView({ model: model }));
-            },
+        this.listenToOnce(contentsModel, 'sync', this._showDetails);
 
-            _refreshTable: function (buttonContext) {
-                this.contents.close();
-                var promise = this.collection.fetch();
+        contentsModel.fetch({ dataType : 'text' });
+    },
 
-                //Would be nice to spin the icon on the refresh button
-                if (buttonContext) {
-                    buttonContext.ui.icon.spinForPromise(promise);
-                }
-            },
+    _showDetails : function(model) {
+        this.contents.show(new ContentsView({ model : model }));
+    },
 
-            _commandComplete: function (options) {
-                if (options.command.get('name') === 'deletelogfiles') {
-                    this._refreshTable();
-                }
-            }
-        });
-    });
+    _refreshTable : function(buttonContext) {
+        this.contents.close();
+        var promise = this.collection.fetch();
+
+        //Would be nice to spin the icon on the refresh button
+        if (buttonContext) {
+            buttonContext.ui.icon.spinForPromise(promise);
+        }
+    },
+
+    _commandComplete : function(options) {
+        if (options.command.get('name') === this.deleteFilesCommand.toLowerCase()) {
+            this._refreshTable();
+        }
+    }
+});

@@ -7,20 +7,20 @@ namespace NzbDrone.Core.SeriesStats
 {
     public interface ISeriesStatisticsRepository
     {
-        List<SeriesStatistics> SeriesStatistics();
-        SeriesStatistics SeriesStatistics(int seriesId);
+        List<SeasonStatistics> SeriesStatistics();
+        List<SeasonStatistics> SeriesStatistics(int seriesId);
     }
 
     public class SeriesStatisticsRepository : ISeriesStatisticsRepository
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
 
-        public SeriesStatisticsRepository(IDatabase database)
+        public SeriesStatisticsRepository(IMainDatabase database)
         {
             _database = database;
         }
 
-        public List<SeriesStatistics> SeriesStatistics()
+        public List<SeasonStatistics> SeriesStatistics()
         {
             var mapper = _database.GetDataMapper();
 
@@ -28,13 +28,14 @@ namespace NzbDrone.Core.SeriesStats
 
             var sb = new StringBuilder();
             sb.AppendLine(GetSelectClause());
+            sb.AppendLine(GetEpisodeFilesJoin());
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
 
-            return mapper.Query<SeriesStatistics>(queryText);
+            return mapper.Query<SeasonStatistics>(queryText);
         }
 
-        public SeriesStatistics SeriesStatistics(int seriesId)
+        public List<SeasonStatistics> SeriesStatistics(int seriesId)
         {
             var mapper = _database.GetDataMapper();
 
@@ -43,26 +44,39 @@ namespace NzbDrone.Core.SeriesStats
 
             var sb = new StringBuilder();
             sb.AppendLine(GetSelectClause());
-            sb.AppendLine("WHERE SeriesId = @seriesId");
+            sb.AppendLine(GetEpisodeFilesJoin());
+            sb.AppendLine("WHERE Episodes.SeriesId = @seriesId");
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
 
-            return mapper.Find<SeriesStatistics>(queryText);
+            return mapper.Query<SeasonStatistics>(queryText);
         }
 
         private string GetSelectClause()
         {
-            return @"SELECT
-                     SeriesId,
+            return @"SELECT Episodes.*, SUM(EpisodeFiles.Size) as SizeOnDisk FROM
+                     (SELECT
+                     Episodes.SeriesId,
+                     Episodes.SeasonNumber,
+                     SUM(CASE WHEN AirdateUtc <= @currentDate OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS TotalEpisodeCount,
                      SUM(CASE WHEN (Monitored = 1 AND AirdateUtc <= @currentDate) OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
                      SUM(CASE WHEN EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
-                     MIN(CASE WHEN AirDateUtc < @currentDate OR EpisodeFileId > 0 OR Monitored = 0 THEN NULL ELSE AirDateUtc END) AS NextAiringString
-                     FROM Episodes";
+                     MIN(CASE WHEN AirDateUtc < @currentDate OR EpisodeFileId > 0 OR Monitored = 0 THEN NULL ELSE AirDateUtc END) AS NextAiringString,
+                     MAX(CASE WHEN AirDateUtc >= @currentDate OR EpisodeFileId = 0 AND Monitored = 0 THEN NULL ELSE AirDateUtc END) AS PreviousAiringString
+                     FROM Episodes
+                     GROUP BY Episodes.SeriesId, Episodes.SeasonNumber) as Episodes";
         }
 
         private string GetGroupByClause()
         {
-            return "GROUP BY SeriesId";
+            return "GROUP BY Episodes.SeriesId, Episodes.SeasonNumber";
+        }
+
+        private string GetEpisodeFilesJoin()
+        {
+            return @"LEFT OUTER JOIN EpisodeFiles
+                     ON EpisodeFiles.SeriesId = Episodes.SeriesId
+                     AND EpisodeFiles.SeasonNumber = Episodes.SeasonNumber";
         }
     }
 }

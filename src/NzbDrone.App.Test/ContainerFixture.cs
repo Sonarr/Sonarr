@@ -12,30 +12,43 @@ using NzbDrone.Host;
 using NzbDrone.Test.Common;
 using FluentAssertions;
 using System.Linq;
+using NzbDrone.Common.Composition;
+using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Download.TrackedDownloads;
 
 namespace NzbDrone.App.Test
 {
     [TestFixture]
     public class ContainerFixture : TestBase
     {
-        StartupContext args = new StartupContext("first", "second");
+        private IContainer _container;
+
+        [SetUp]
+        public void SetUp()
+        {
+            var args = new StartupContext("first", "second");
+
+            _container = MainAppContainerBuilder.BuildContainer(args);
+
+            _container.Register<IMainDatabase>(new MainDatabase(null));
+        }
 
         [Test]
         public void should_be_able_to_resolve_indexers()
         {
-            MainAppContainerBuilder.BuildContainer(args).Resolve<IEnumerable<IIndexer>>().Should().NotBeEmpty();
+            _container.Resolve<IEnumerable<IIndexer>>().Should().NotBeEmpty();
         }
 
         [Test]
         public void should_be_able_to_resolve_downloadclients()
         {
-            MainAppContainerBuilder.BuildContainer(args).Resolve<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
+            _container.Resolve<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
         }
 
         [Test]
         public void container_should_inject_itself()
         {
-            var factory = MainAppContainerBuilder.BuildContainer(args).Resolve<IServiceFactory>();
+            var factory = _container.Resolve<IServiceFactory>();
 
             factory.Build<IIndexerFactory>().Should().NotBeNull();
         }
@@ -44,22 +57,36 @@ namespace NzbDrone.App.Test
         public void should_resolve_command_executor_by_name()
         {
             var genericExecutor = typeof(IExecute<>).MakeGenericType(typeof(RssSyncCommand));
-            var container = MainAppContainerBuilder.BuildContainer(args);
 
-            var executor = container.Resolve(genericExecutor);
+            var executor = _container.Resolve(genericExecutor);
 
             executor.Should().NotBeNull();
             executor.Should().BeAssignableTo<IExecute<RssSyncCommand>>();
         }
 
         [Test]
-        [Ignore("need to fix this at some point")]
         public void should_return_same_instance_of_singletons()
         {
-            var container = MainAppContainerBuilder.BuildContainer(args);
+            var first = _container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
+            var second = _container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
 
-            var first = container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
-            var second = container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
+            first.Should().BeSameAs(second);
+        }
+
+        [Test]
+        public void should_return_same_instance_of_singletons_by_different_same_interface()
+        {
+            var first = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var second = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+
+            first.Should().BeSameAs(second);
+        }
+
+        [Test]
+        public void should_return_same_instance_of_singletons_by_different_interfaces()
+        {
+            var first = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var second = (DownloadMonitoringService)_container.Resolve<IExecute<CheckForFinishedDownloadCommand>>();
 
             first.Should().BeSameAs(second);
         }

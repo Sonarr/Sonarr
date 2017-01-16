@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Notifications.Xbmc;
 using NzbDrone.Core.Test.Framework;
@@ -47,7 +45,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Http
                 UpdateLibrary = true
             };
 
-            _expectedUrl = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", _settings.Address, "getcurrentlyplaying");
+            _expectedUrl = string.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", _settings.Address, "getcurrentlyplaying");
         }
 
         [Test]

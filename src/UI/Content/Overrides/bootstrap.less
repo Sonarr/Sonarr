@@ -5,7 +5,7 @@
 @input-border-focus: @droneTeal;
 @font-family-sans-serif:  "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 @modal-md: 800px;
-@modal-lg: 800px;
+@modal-lg: 1000px;
 
 .label, .badge, i {
   cursor : default;
@@ -19,7 +19,7 @@
   text-transform : none;
 }
 
-.line &>[class^="icon-"], .line &>[class*=" icon-"] {
+.line &>[class^="icon-sonarr-"], .line &>[class*="icon-sonarr-"] {
   margin-top  : 1em;
   height      : 1em;
   line-height : 1em;
@@ -71,4 +71,12 @@
     -moz-border-radius:6px 0 6px 6px;
     border-radius:6px 0 6px 6px;
   }
+}
+
+.btn {
+  text-transform: capitalize;
+}
+
+.table-responsive {
+  overflow-x: visible;
 }

@@ -1,8 +1,7 @@
-﻿using System;
-using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Email
 {
@@ -27,37 +26,29 @@ namespace NzbDrone.Core.Notifications.Email
         }
 
         [FieldDefinition(0, Label = "Server", HelpText = "Hostname or IP of Email server")]
-        public String Server { get; set; }
+        public string Server { get; set; }
 
         [FieldDefinition(1, Label = "Port")]
-        public Int32 Port { get; set; }
+        public int Port { get; set; }
 
         [FieldDefinition(2, Label = "SSL", Type = FieldType.Checkbox)]
-        public Boolean Ssl { get; set; }
+        public bool Ssl { get; set; }
 
         [FieldDefinition(3, Label = "Username")]
-        public String Username { get; set; }
+        public string Username { get; set; }
 
         [FieldDefinition(4, Label = "Password", Type = FieldType.Password)]
-        public String Password { get; set; }
+        public string Password { get; set; }
 
         [FieldDefinition(5, Label = "From Address")]
-        public String From { get; set; }
+        public string From { get; set; }
 
         [FieldDefinition(6, Label = "Recipient Address")]
-        public String To { get; set; }
+        public string To { get; set; }
 
-        public bool IsValid
+        public NzbDroneValidationResult Validate()
         {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Server) && Port > 0 && !string.IsNullOrWhiteSpace(From) && !string.IsNullOrWhiteSpace(To);
-            }
-        }
-
-        public ValidationResult Validate()
-        {
-            return Validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

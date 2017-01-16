@@ -18,25 +18,20 @@ namespace NzbDrone.Api.Episodes
 
         private List<RenameEpisodeResource> GetEpisodes()
         {
-            int seriesId;
-
-            if (Request.Query.SeriesId.HasValue)
-            {
-                seriesId = (int)Request.Query.SeriesId;
-            }
-
-            else
+            if (!Request.Query.SeriesId.HasValue)
             {
                 throw new BadRequestException("seriesId is missing");
             }
 
+            var seriesId = (int)Request.Query.SeriesId;
+
             if (Request.Query.SeasonNumber.HasValue)
             {
                 var seasonNumber = (int)Request.Query.SeasonNumber;
-                return ToListResource(() => _renameEpisodeFileService.GetRenamePreviews(seriesId, seasonNumber));
+                return _renameEpisodeFileService.GetRenamePreviews(seriesId, seasonNumber).ToResource();
             }
 
-            return ToListResource(() => _renameEpisodeFileService.GetRenamePreviews(seriesId));
+            return _renameEpisodeFileService.GetRenamePreviews(seriesId).ToResource();
         }
     }
 }

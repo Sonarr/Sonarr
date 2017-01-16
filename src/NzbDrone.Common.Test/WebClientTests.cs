@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Test
         {
             var jquery = Subject.DownloadString("http://www.google.com/robots.txt");
 
-            jquery.Should().NotBeBlank();
+            jquery.Should().NotBeNullOrWhiteSpace();
             jquery.Should().Contain("Sitemap");
         }
 
@@ -26,13 +26,5 @@ namespace NzbDrone.Common.Test
             Assert.Throws<ArgumentException>(() => Subject.DownloadString(url));
             ExceptionVerification.ExpectedWarns(1);
         }
-
-
-        [Test]
-        public void should_get_headers()
-        {
-            Subject.GetHeader("http://www.google.com").Should().NotBeEmpty();
-        }
     }
-
 }

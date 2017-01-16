@@ -1,36 +1,32 @@
-'use strict';
-define(
-    [
-        'Cells/NzbDroneCell'
-    ], function (NzbDroneCell) {
-        return NzbDroneCell.extend({
-            className: 'series-status-cell',
+var NzbDroneCell = require('./NzbDroneCell');
 
-            render: function () {
-                this.$el.empty();
-                var monitored = this.model.get('monitored');
-                var status = this.model.get('status');
+module.exports = NzbDroneCell.extend({
+    className : 'series-status-cell',
 
-                if (status === 'ended') {
-                    this.$el.html('<i class="icon-stop grid-icon" title="Ended"></i>');
-                    this._setStatusWeight(3);
-                }
+    render : function() {
+        this.$el.empty();
+        var monitored = this.model.get('monitored');
+        var status = this.model.get('status');
 
-                else if (!monitored) {
-                    this.$el.html('<i class="icon-pause grid-icon" title="Not Monitored"></i>');
-                    this._setStatusWeight(2);
-                }
+        if (status === 'ended') {
+            this.$el.html('<i class="icon-sonarr-series-ended grid-icon" title="Ended"></i>');
+            this._setStatusWeight(3);
+        }
 
-                else {
-                    this.$el.html('<i class="icon-play grid-icon" title="Continuing"></i>');
-                    this._setStatusWeight(1);
-                }
+        else if (!monitored) {
+            this.$el.html('<i class="icon-sonarr-series-unmonitored grid-icon" title="Not Monitored"></i>');
+            this._setStatusWeight(2);
+        }
 
-                return this;
-            },
+        else {
+            this.$el.html('<i class="icon-sonarr-series-continuing grid-icon" title="Continuing"></i>');
+            this._setStatusWeight(1);
+        }
 
-            _setStatusWeight: function (weight) {
-                this.model.set('statusWeight', weight, {silent: true});
-            }
-        });
-    });
+        return this;
+    },
+
+    _setStatusWeight : function(weight) {
+        this.model.set('statusWeight', weight, { silent : true });
+    }
+});

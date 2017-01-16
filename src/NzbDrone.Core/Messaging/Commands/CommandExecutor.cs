@@ -1,104 +1,63 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Common.TPL;
-using NzbDrone.Core.Messaging.Commands.Tracking;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ProgressMessaging;
 
 namespace NzbDrone.Core.Messaging.Commands
 {
-    public class CommandExecutor : ICommandExecutor
+    public class CommandExecutor : IHandle<ApplicationStartedEvent>,
+                                   IHandle<ApplicationShutdownRequested>
     {
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
-        private readonly ITrackCommands _trackCommands;
+        private readonly IManageCommandQueue _commandQueueManager;
         private readonly IEventAggregator _eventAggregator;
-        private readonly TaskFactory _taskFactory;
 
-        public CommandExecutor(Logger logger, IServiceFactory serviceFactory, ITrackCommands trackCommands, IEventAggregator eventAggregator)
+        private static CancellationTokenSource _cancellationTokenSource;
+        private const int THREAD_LIMIT = 3;
+
+        public CommandExecutor(IServiceFactory serviceFactory,
+                               IManageCommandQueue commandQueueManager,
+                               IEventAggregator eventAggregator,
+                               Logger logger)
         {
-            var scheduler = new LimitedConcurrencyLevelTaskScheduler(3);
-
             _logger = logger;
             _serviceFactory = serviceFactory;
-            _trackCommands = trackCommands;
+            _commandQueueManager = commandQueueManager;
             _eventAggregator = eventAggregator;
-            _taskFactory = new TaskFactory(scheduler);
         }
 
-        public void PublishCommand<TCommand>(TCommand command) where TCommand : Command
+        private void ExecuteCommands()
         {
-            Ensure.That(command, () => command).IsNotNull();
-
-            _logger.Trace("Publishing {0}", command.GetType().Name);
-
-            if (_trackCommands.FindExisting(command) != null)
+            try
             {
-                _logger.Trace("Command is already in progress: {0}", command.GetType().Name);
-                return;
+                foreach (var command in _commandQueueManager.Queue(_cancellationTokenSource.Token))
+                {
+                    try
+                    {
+                        ExecuteCommand((dynamic)command.Body, command);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex, "Error occurred while executing task {0}", command.Name);
+                    }
+                }
             }
-
-            _trackCommands.Store(command);
-
-            ExecuteCommand<TCommand>(command);
-        }
-
-        public void PublishCommand(string commandTypeName)
-        {
-            PublishCommand(commandTypeName, null);
-        }
-
-        public void PublishCommand(string commandTypeName, DateTime? lastExecutionTime)
-        {
-            dynamic command = GetCommand(commandTypeName);
-            command.LastExecutionTime = lastExecutionTime;
-
-            PublishCommand(command);
-        }
-
-        public Command PublishCommandAsync<TCommand>(TCommand command) where TCommand : Command
-        {
-            Ensure.That(command, () => command).IsNotNull();
-
-            _logger.Trace("Publishing {0}", command.GetType().Name);
-
-            var existingCommand = _trackCommands.FindExisting(command);
-
-            if (existingCommand != null)
+            catch (ThreadAbortException ex)
             {
-                _logger.Trace("Command is already in progress: {0}", command.GetType().Name);
-                return existingCommand;
+                _logger.Error(ex);
+                Thread.ResetAbort();
             }
-
-            _trackCommands.Store(command);
-
-            _taskFactory.StartNew(() => ExecuteCommand<TCommand>(command)
-                , TaskCreationOptions.PreferFairness)
-                .LogExceptions();
-
-            return command;
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unknown error in thread");
+            }
         }
 
-        public Command PublishCommandAsync(string commandTypeName)
-        {
-            dynamic command = GetCommand(commandTypeName);
-            return PublishCommandAsync(command);
-        }
-
-        private dynamic GetCommand(string commandTypeName)
-        {
-            var commandType = _serviceFactory.GetImplementations(typeof(Command))
-                .Single(c => c.FullName.Equals(commandTypeName, StringComparison.InvariantCultureIgnoreCase));
-
-            return Json.Deserialize("{}", commandType);
-        }
-
-        private void ExecuteCommand<TCommand>(Command command) where TCommand : Command
+        private void ExecuteCommand<TCommand>(TCommand command, CommandModel commandModel) where TCommand : Command
         {
             var handlerContract = typeof(IExecute<>).MakeGenericType(command.GetType());
             var handler = (IExecute<TCommand>)_serviceFactory.Build(handlerContract);
@@ -107,43 +66,68 @@ namespace NzbDrone.Core.Messaging.Commands
 
             try
             {
-                _trackCommands.Start(command);
-                BroadcastCommandUpdate(command);
+                _commandQueueManager.Start(commandModel);
+                BroadcastCommandUpdate(commandModel);
 
-                if (!MappedDiagnosticsContext.Contains("CommandId") && command.SendUpdatesToClient)
+                if (ProgressMessageContext.CommandModel == null)
                 {
-                    MappedDiagnosticsContext.Set("CommandId", command.Id.ToString());
+                    ProgressMessageContext.CommandModel = commandModel;
                 }
 
-                handler.Execute((TCommand)command);
-                _trackCommands.Completed(command);
+                handler.Execute(command);
+
+                _commandQueueManager.Complete(commandModel, command.CompletionMessage);
             }
-            catch (Exception e)
+            catch (CommandFailedException ex)
             {
-                _trackCommands.Failed(command, e);
+                _commandQueueManager.SetMessage(commandModel, "Failed");
+                _commandQueueManager.Fail(commandModel, ex.Message, ex);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _commandQueueManager.SetMessage(commandModel, "Failed");
+                _commandQueueManager.Fail(commandModel, "Failed", ex);
                 throw;
             }
             finally
             {
-                BroadcastCommandUpdate(command);
-                _eventAggregator.PublishEvent(new CommandExecutedEvent(command));
+                BroadcastCommandUpdate(commandModel);
 
-                if (MappedDiagnosticsContext.Get("CommandId") == command.Id.ToString())
+                _eventAggregator.PublishEvent(new CommandExecutedEvent(commandModel));
+
+                if (ProgressMessageContext.CommandModel == commandModel)
                 {
-                    MappedDiagnosticsContext.Remove("CommandId");
+                    ProgressMessageContext.CommandModel = null;
                 }
             }
 
-            _logger.Trace("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, command.Runtime.ToString(""));
+            _logger.Trace("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, commandModel.Duration.ToString());
         }
 
-
-        private void BroadcastCommandUpdate(Command command)
+        private void BroadcastCommandUpdate(CommandModel command)
         {
-            if (command.SendUpdatesToClient)
+            if (command.Body.SendUpdatesToClient)
             {
                 _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
             }
+        }
+
+        public void Handle(ApplicationStartedEvent message)
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            for (int i = 0; i < THREAD_LIMIT; i++)
+            {
+                var thread = new Thread(ExecuteCommands);
+                thread.Start();
+            }
+        }
+
+        public void Handle(ApplicationShutdownRequested message)
+        {
+            _logger.Info("Shutting down task execution");
+            _cancellationTokenSource.Cancel(true);
         }
     }
 }

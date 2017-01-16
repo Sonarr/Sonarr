@@ -1,64 +1,66 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'handlebars',
-        'underscore'
-    ], function (Marionette, Handlebars, _) {
+var Marionette = require('marionette');
+var Handlebars = require('handlebars');
+var _ = require('underscore');
+require('./FormMessage');
 
-        var _fieldBuilder = function (field) {
-            if (!field.type) {
-                return _templateRenderer.apply(field,
-                    [
-                        'Form/TextboxTemplate'
-                    ]);
-            }
+var _templateRenderer = function(templateName) {
+    var templateFunction = Marionette.TemplateCache.get(templateName);
+    return new Handlebars.SafeString(templateFunction(this));
+};
 
-            if (field.type === 'password') {
-                return _templateRenderer.apply(field,
-                    [
-                        'Form/PasswordTemplate'
-                    ]);
-            }
+var _fieldBuilder = function(field) {
+    if (!field.type) {
+        return _templateRenderer.call(field, 'Form/TextboxTemplate');
+    }
 
-            if (field.type === 'checkbox') {
-                return _templateRenderer.apply(field,
-                    [
-                        'Form/CheckboxTemplate'
-                    ]);
-            }
+    if (field.type === 'hidden') {
+        return _templateRenderer.call(field, 'Form/HiddenTemplate');
+    }
 
-            if (field.type === 'select') {
-                return _templateRenderer.apply(field,
-                    [
-                        'Form/SelectTemplate'
-                    ]);
-            }
+    if (field.type === 'url') {
+        return _templateRenderer.call(field, 'Form/UrlTemplate');
+    }
 
-            if (field.type === 'path') {
-                return _templateRenderer.apply(field,
-                    [
-                        'Form/PathTemplate'
-                    ]);
-            }
+    if (field.type === 'password') {
+        return _templateRenderer.call(field, 'Form/PasswordTemplate');
+    }
 
-            return _templateRenderer.apply(field,
-                [
-                    'Form/TextboxTemplate'
-                ]);
-        };
+    if (field.type === 'checkbox') {
+        return _templateRenderer.call(field, 'Form/CheckboxTemplate');
+    }
 
-        var _templateRenderer = function (templateName) {
-            var templateFunction = Marionette.TemplateCache.get(templateName);
-            return new Handlebars.SafeString(templateFunction(this));
-        };
+    if (field.type === 'select') {
+        return _templateRenderer.call(field, 'Form/SelectTemplate');
+    }
 
-        Handlebars.registerHelper('formBuilder', function () {
-            var ret = '';
-            _.each(this.fields, function (field) {
-                ret += _fieldBuilder(field);
-            });
+    if (field.type === 'hidden') {
+        return _templateRenderer.call(field, 'Form/HiddenTemplate');
+    }
 
-            return new Handlebars.SafeString(ret);
-        });
+    if (field.type === 'path' || field.type === 'filepath') {
+        return _templateRenderer.call(field, 'Form/PathTemplate');
+    }
+
+    if (field.type === 'tag') {
+        return _templateRenderer.call(field, 'Form/TagTemplate');
+    }
+
+    if (field.type === 'action') {
+        return _templateRenderer.call(field, 'Form/ActionTemplate');
+    }
+
+    if (field.type === 'captcha') {
+        return _templateRenderer.call(field, 'Form/CaptchaTemplate');
+    }
+
+    return _templateRenderer.call(field, 'Form/TextboxTemplate');
+};
+
+Handlebars.registerHelper('formBuilder', function() {
+    var ret = '';
+    _.each(this.fields, function(field) {
+        ret += _fieldBuilder(field);
     });
+
+    return new Handlebars.SafeString(ret);
+});

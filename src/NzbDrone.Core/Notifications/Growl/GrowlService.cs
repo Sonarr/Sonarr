@@ -1,72 +1,162 @@
-﻿using System;
+﻿using FluentValidation.Results;
+using Growl.Connector;
+using Growl.CoreLibrary;
+using NzbDrone.Common.Extensions;
+using GrowlNotification = Growl.Connector.Notification;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Growl.Connector;
-using NLog;
-using NzbDrone.Common.Instrumentation;
-using NzbDrone.Core.Messaging.Commands;
-using GrowlNotification = Growl.Connector.Notification;
 
 namespace NzbDrone.Core.Notifications.Growl
 {
     public interface IGrowlService
     {
         void SendNotification(string title, string message, string notificationTypeName, string hostname, int port, string password);
+        ValidationFailure Test(GrowlSettings settings);
     }
 
-    public class GrowlService : IGrowlService, IExecute<TestGrowlCommand>
+    public class GrowlService : IGrowlService
     {
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
+        private readonly Logger _logger;
 
+        //TODO: Change this to Sonarr, but it is a breaking change (v3)
         private readonly Application _growlApplication = new Application("NzbDrone");
-        private GrowlConnector _growlConnector;
-        private readonly List<NotificationType> _notificationTypes;
+        private readonly NotificationType[] _notificationTypes;
 
-        public GrowlService()
+        private class GrowlRequestState
         {
+            private AutoResetEvent _autoEvent = new AutoResetEvent(false);
+            private bool _isError;
+            private int _code;
+            private string _description;
+
+            public void Wait(int timeoutMs)
+            {
+                try
+                {
+                    if (!_autoEvent.WaitOne(timeoutMs))
+                    {
+                        throw new GrowlException(ErrorCode.TIMED_OUT, ErrorDescription.TIMED_OUT, null);
+                    }
+                    if (_isError)
+                    {
+                        throw new GrowlException(_code, _description, null);
+                    }
+                }
+                finally
+                {
+                    _autoEvent.Reset();
+                    _isError = false;
+                    _code = 0;
+                    _description = null;
+                }
+            }
+
+            public void Update()
+            {
+                _autoEvent.Set();
+            }
+
+            public void Update(int code, string description)
+            {
+                _code = code;
+                _description = description;
+                _isError = true;
+                _autoEvent.Set();
+            }
+        }
+
+        public GrowlService(Logger logger)
+        {
+            _logger = logger;
             _notificationTypes = GetNotificationTypes();
-            _growlApplication.Icon = "https://raw.github.com/NzbDrone/NzbDrone/master/Logo/64.png";
+
+            var logo = typeof(GrowlService).Assembly.GetManifestResourceBytes("NzbDrone.Core.Resources.Logo.64.png");
+
+            _growlApplication.Icon = new BinaryData(logo);
+        }
+
+        private GrowlConnector GetGrowlConnector(string hostname, int port, string password)
+        {
+            var growlConnector = new GrowlConnector(password, hostname, port);
+            growlConnector.OKResponse += GrowlOKResponse;
+            growlConnector.ErrorResponse += GrowlErrorResponse;
+            return growlConnector;
         }
 
         public void SendNotification(string title, string message, string notificationTypeName, string hostname, int port, string password)
         {
+            _logger.Debug("Sending Notification to: {0}:{1}", hostname, port);
+
             var notificationType = _notificationTypes.Single(n => n.Name == notificationTypeName);
-            var notification = new GrowlNotification("NzbDrone", notificationType.Name, DateTime.Now.Ticks.ToString(), title, message);
+            var notification = new GrowlNotification(_growlApplication.Name, notificationType.Name, DateTime.Now.Ticks.ToString(), title, message);
 
-            _growlConnector = new GrowlConnector(password, hostname, port);
+            var growlConnector = GetGrowlConnector(hostname, port, password);
 
-            Logger.Debug("Sending Notification to: {0}:{1}", hostname, port);
-            _growlConnector.Notify(notification);
+            var requestState = new GrowlRequestState();
+            growlConnector.Notify(notification, requestState);
+            requestState.Wait(5000);
         }
 
         private void Register(string host, int port, string password)
         {
-            Logger.Debug("Registering NzbDrone with Growl host: {0}:{1}", host, port);
-            _growlConnector = new GrowlConnector(password, host, port);
-            _growlConnector.Register(_growlApplication, _notificationTypes.ToArray());
+            _logger.Debug("Registering Sonarr with Growl host: {0}:{1}", host, port);
+
+            var growlConnector = GetGrowlConnector(host, port, password);
+
+            var requestState = new GrowlRequestState();
+            growlConnector.Register(_growlApplication, _notificationTypes, requestState);
+            requestState.Wait(5000);
         }
 
-        private List<NotificationType> GetNotificationTypes()
+        private void GrowlErrorResponse(Response response, object state)
+        {
+            var requestState = state as GrowlRequestState;
+            if (requestState != null)
+            {
+                requestState.Update(response.ErrorCode, response.ErrorDescription);
+            }
+        }
+
+        private void GrowlOKResponse(Response response, object state)
+        {
+            var requestState = state as GrowlRequestState;
+            if (requestState != null)
+            {
+                requestState.Update();
+            }
+        }
+
+        private NotificationType[] GetNotificationTypes()
         {
             var notificationTypes = new List<NotificationType>();
             notificationTypes.Add(new NotificationType("TEST", "Test"));
             notificationTypes.Add(new NotificationType("GRAB", "Episode Grabbed"));
             notificationTypes.Add(new NotificationType("DOWNLOAD", "Episode Complete"));
 
-            return notificationTypes;
+            return notificationTypes.ToArray();
         }
 
-        public void Execute(TestGrowlCommand message)
+        public ValidationFailure Test(GrowlSettings settings)
         {
-            Register(message.Host, message.Port, message.Password);
+            try
+            {
+                Register(settings.Host, settings.Port, settings.Password);
 
-            const string title = "Test Notification";
-            const string body = "This is a test message from NzbDrone";
+                const string title = "Test Notification";
+                const string body = "This is a test message from Sonarr";
 
-            Thread.Sleep(5000);
+                SendNotification(title, body, "TEST", settings.Host, settings.Port, settings.Password);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unable to send test message");
+                return new ValidationFailure("Host", "Unable to send test message");
+            }
 
-            SendNotification(title, body, "TEST", message.Host, message.Port, message.Password);
+            return null;
         }
     }
 }

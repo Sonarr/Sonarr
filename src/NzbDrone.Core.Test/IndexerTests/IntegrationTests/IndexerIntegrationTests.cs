@@ -1,105 +1,162 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
+using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Eztv;
-using NzbDrone.Core.Indexers.Newznab;
+using NzbDrone.Core.Indexers.KickassTorrents;
+using NzbDrone.Core.Indexers.Nyaa;
 using NzbDrone.Core.Indexers.Wombles;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NUnit.Framework;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Test.Common.Categories;
-using System.Linq;
 
 namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 {
     [IntegrationTest]
-    public class IndexerIntegrationTests : CoreTest<FetchFeedService>
+    public class IndexerIntegrationTests : CoreTest
     {
+        private SingleEpisodeSearchCriteria _singleSearchCriteria;
+        private AnimeEpisodeSearchCriteria _animeSearchCriteria;
+
         [SetUp]
         public void SetUp()
         {
             UseRealHttp();
+
+            _singleSearchCriteria = new SingleEpisodeSearchCriteria()
+                {
+                    SceneTitles = new List<string> { "Person of Interest" },
+                    SeasonNumber = 1,
+                    EpisodeNumber = 1
+                };
+
+            _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
+            {
+                SceneTitles = new List<string> { "Steins;Gate" },
+                AbsoluteEpisodeNumber = 1
+            };
         }
 
         [Test]
-        public void wombles_rss()
+        public void wombles_fetch_recent()
         {
-            var indexer = new Wombles();
+            var indexer = Mocker.Resolve<Wombles>();
 
             indexer.Definition = new IndexerDefinition
             {
-                Name = "Wombles",
+                Name = "MyIndexer",
                 Settings = NullConfig.Instance
             };
 
-            var result = Subject.FetchRss(indexer);
-
-            ValidateResult(result, skipSize: true, skipInfo: true);
-        }
-
-        [Test]
-        public void extv_rss()
-        {
-            var indexer = new Eztv();
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "Eztv",
-                Settings = NullConfig.Instance
-            };
-
-            var result = Subject.FetchRss(indexer);
-
-            ValidateTorrentResult(result, skipSize: false, skipInfo: true);
-        }
-
-        [Test]
-        public void nzbsorg_rss()
-        {
-            var indexer = new Newznab();
-
-            indexer.Definition = new IndexerDefinition();
-            indexer.Definition.Name = "nzbs.org";
-            indexer.Definition.Settings = new NewznabSettings
-            {
-                ApiKey = "64d61d3cfd4b75e51d01cbc7c6a78275",
-                Url = "http://nzbs.org"
-            };
-
-            var result = Subject.FetchRss(indexer);
+            var result = indexer.FetchRecent();
 
             ValidateResult(result);
         }
-        
-        private void ValidateResult(IList<ReleaseInfo> reports, bool skipSize = false, bool skipInfo = false)
+
+        [Test]
+        [ManualTest]
+        [Explicit]
+        public void kickass_fetch_recent()
         {
-            reports.Should().NotBeEmpty();
-            reports.Should().NotContain(c => string.IsNullOrWhiteSpace(c.Title));
-            reports.Should().NotContain(c => string.IsNullOrWhiteSpace(c.DownloadUrl));
-            reports.Should().OnlyContain(c => c.PublishDate.Year > 2000);
-            reports.Should().OnlyContain(c => c.DownloadUrl.StartsWith("http"));
+            var indexer = Mocker.Resolve<KickassTorrents>();
 
-            if (!skipInfo)
+            indexer.Definition = new IndexerDefinition
             {
-                reports.Should().NotContain(c => string.IsNullOrWhiteSpace(c.InfoUrl));
-            }
+                Name = "MyIndexer",
+                Settings = new KickassTorrentsSettings()
+            };
 
-            if (!skipSize)
-            {
-                reports.Should().OnlyContain(c => c.Size > 0);
-            }
+            var result = indexer.FetchRecent();
+
+            ValidateTorrentResult(result, hasSize: true);
         }
 
-        private void ValidateTorrentResult(IList<ReleaseInfo> reports, bool skipSize = false, bool skipInfo = false)
+        [Test]
+        [ManualTest]
+        [Explicit]
+        public void kickass_search_single()
+        {
+            var indexer = Mocker.Resolve<KickassTorrents>();
+
+            indexer.Definition = new IndexerDefinition
+            {
+                Name = "MyIndexer",
+                Settings = new KickassTorrentsSettings()
+            };
+
+            var result = indexer.Fetch(_singleSearchCriteria);
+
+            ValidateTorrentResult(result, hasSize: true, hasMagnet: true);
+        }
+
+        [Test]
+        public void nyaa_fetch_recent()
+        {
+            var indexer = Mocker.Resolve<Nyaa>();
+
+            indexer.Definition = new IndexerDefinition
+            {
+                Name = "MyIndexer",
+                Settings = new NyaaSettings()
+            };
+
+            var result = indexer.FetchRecent();
+
+            ValidateTorrentResult(result, hasSize: true);
+        }
+
+        [Test]
+        public void nyaa_search_single()
+        {
+            var indexer = Mocker.Resolve<Nyaa>();
+
+            indexer.Definition = new IndexerDefinition
+            {
+                Name = "MyIndexer",
+                Settings = new NyaaSettings()
+            };
+
+            var result = indexer.Fetch(_animeSearchCriteria);
+
+            ValidateTorrentResult(result, hasSize: true);
+        }
+
+
+
+        private void ValidateTorrentResult(IList<ReleaseInfo> reports, bool hasSize = false, bool hasInfoUrl = false, bool hasMagnet = false)
         {
             reports.Should().OnlyContain(c => c.GetType() == typeof(TorrentInfo));
 
-            ValidateResult(reports, skipSize, skipInfo);
+            ValidateResult(reports, hasSize, hasInfoUrl);
 
-            reports.Should().OnlyContain(c => c.DownloadUrl.EndsWith(".torrent"));
+            reports.Should().OnlyContain(c => c.DownloadProtocol == DownloadProtocol.Torrent);
 
-            reports.Cast<TorrentInfo>().Should().OnlyContain(c => c.MagnetUrl.StartsWith("magnet:"));
-            reports.Cast<TorrentInfo>().Should().NotContain(c => string.IsNullOrWhiteSpace(c.InfoHash));
+            if (hasMagnet)
+            {
+                reports.Cast<TorrentInfo>().Should().OnlyContain(c => c.MagnetUrl.StartsWith("magnet:"));
+            }
+        }
+
+        private void ValidateResult(IList<ReleaseInfo> reports, bool hasSize = false, bool hasInfoUrl = false)
+        {
+            reports.Should().NotBeEmpty();
+            reports.Should().OnlyContain(c => c.Title.IsNotNullOrWhiteSpace());
+            reports.Should().OnlyContain(c => c.PublishDate.Year > 2000);
+            reports.Should().OnlyContain(c => c.DownloadUrl.IsNotNullOrWhiteSpace());
+            reports.Should().OnlyContain(c => c.DownloadUrl.StartsWith("http"));
+
+            if (hasInfoUrl)
+            {
+                reports.Should().OnlyContain(c => c.InfoUrl.IsNotNullOrWhiteSpace());
+            }
+
+            if (hasSize)
+            {
+                reports.Should().OnlyContain(c => c.Size > 0);
+            }
         }
 
     }

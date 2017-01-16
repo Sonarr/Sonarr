@@ -1,39 +1,19 @@
-﻿﻿'use strict';
+var SeriesIndexItemView = require('../SeriesIndexItemView');
 
-define(
-    [
-        'vent',
-        'marionette'
-    ], function (vent, Marionette) {
+module.exports = SeriesIndexItemView.extend({
+    tagName  : 'li',
+    template : 'Series/Index/Posters/SeriesPostersItemViewTemplate',
 
-        return Marionette.ItemView.extend({
-            tagName : 'li',
-            template: 'Series/Index/Posters/SeriesPostersItemViewTemplate',
+    initialize : function() {
+        this.events['mouseenter .x-series-poster-container'] = 'posterHoverAction';
+        this.events['mouseleave .x-series-poster-container'] = 'posterHoverAction';
 
+        this.ui.controls = '.x-series-controls';
+        this.ui.title = '.x-title';
+    },
 
-            ui: {
-                'progressbar': '.progress .bar',
-                'controls'   : '.series-controls'
-            },
-
-            events: {
-                'click .x-edit'              : 'editSeries',
-                'click .x-remove'            : 'removeSeries',
-                'mouseenter .x-series-poster': 'posterHoverAction',
-                'mouseleave .x-series-poster': 'posterHoverAction'
-            },
-
-
-            editSeries: function () {
-                vent.trigger(vent.Commands.EditSeriesCommand, {series:this.model});
-            },
-
-            removeSeries: function () {
-                vent.trigger(vent.Commands.DeleteSeriesCommand, {series:this.model});
-            },
-
-            posterHoverAction: function () {
-                this.ui.controls.slideToggle();
-            }
-        });
-    });
+    posterHoverAction : function() {
+        this.ui.controls.slideToggle();
+        this.ui.title.slideToggle();
+    }
+});

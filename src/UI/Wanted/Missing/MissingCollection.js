@@ -1,53 +1,61 @@
-﻿'use strict';
-define(
-    [
-        'underscore',
-        'Series/EpisodeModel',
-        'backbone.pageable',
-        'Mixins/AsFilteredCollection',
-        'Mixins/AsPersistedStateCollection'
-    ], function (_, EpisodeModel, PagableCollection, AsFilteredCollection, AsPersistedStateCollection) {
-        var collection = PagableCollection.extend({
-            url  : window.NzbDrone.ApiRoot + '/wanted/missing',
-            model: EpisodeModel,
-            tableName: 'wanted.missing',
+var _ = require('underscore');
+var EpisodeModel = require('../../Series/EpisodeModel');
+var PagableCollection = require('backbone.pageable');
+var AsFilteredCollection = require('../../Mixins/AsFilteredCollection');
+var AsSortedCollection = require('../../Mixins/AsSortedCollection');
+var AsPersistedStateCollection = require('../../Mixins/AsPersistedStateCollection');
 
-            state: {
-                pageSize    : 15,
-                sortKey     : 'airDateUtc',
-                order       : 1
-            },
+var Collection = PagableCollection.extend({
+    url       : window.NzbDrone.ApiRoot + '/wanted/missing',
+    model     : EpisodeModel,
+    tableName : 'wanted.missing',
 
-            queryParams: {
-                totalPages  : null,
-                totalRecords: null,
-                pageSize    : 'pageSize',
-                sortKey     : 'sortKey',
-                order       : 'sortDir',
-                directions  : {
-                    '-1': 'asc',
-                    '1' : 'desc'
-                }
-            },
+    state : {
+        pageSize : 15,
+        sortKey  : 'airDateUtc',
+        order    : 1
+    },
 
-            filterModes: {
-                'monitored'   : ['monitored', 'true'],
-                'unmonitored' : ['monitored', 'false']
-            },
+    queryParams : {
+        totalPages   : null,
+        totalRecords : null,
+        pageSize     : 'pageSize',
+        sortKey      : 'sortKey',
+        order        : 'sortDir',
+        directions   : {
+            '-1' : 'asc',
+            '1'  : 'desc'
+        }
+    },
 
-            parseState: function (resp) {
-                return {totalRecords: resp.totalRecords};
-            },
+    filterModes : {
+        'monitored'   : [
+            'monitored',
+            'true'
+        ],
+        'unmonitored' : [
+            'monitored',
+            'false'
+        ]
+    },
 
-            parseRecords: function (resp) {
-                if (resp) {
-                    return resp.records;
-                }
+    sortMappings : {
+        'series' : { sortKey : 'series.sortTitle' }
+    },
 
-                return resp;
-            }
-        });
+    parseState : function(resp) {
+        return { totalRecords : resp.totalRecords };
+    },
 
-        collection = AsFilteredCollection.call(collection);
-        return AsPersistedStateCollection.call(collection);
-    });
+    parseRecords : function(resp) {
+        if (resp) {
+            return resp.records;
+        }
+
+        return resp;
+    }
+});
+Collection = AsFilteredCollection.call(Collection);
+Collection = AsSortedCollection.call(Collection);
+
+module.exports = AsPersistedStateCollection.call(Collection);

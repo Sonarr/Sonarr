@@ -1,36 +1,33 @@
-'use strict';
+var moment = require('moment');
+var Backgrid = require('backgrid');
+var UiSettings = require('../Shared/UiSettingsModel');
+var FormatHelpers = require('../Shared/FormatHelpers');
 
-define(
-    [
-        'backgrid',
-        'Shared/FormatHelpers'
-    ], function (Backgrid, FormatHelpers) {
-        return Backgrid.Cell.extend({
+module.exports = Backgrid.Cell.extend({
+    className : 'age-cell',
 
-            className: 'age-cell',
+    render : function() {
+        var age = this.model.get('age');
+        var ageHours = this.model.get('ageHours');
+        var ageMinutes = this.model.get('ageMinutes');
+        var published = moment(this.model.get('publishDate'));
+        var publishedFormatted = published.format('{0} {1}'.format(UiSettings.get('shortDateFormat'), UiSettings.time(true, true)));
+        var formatted = age;
+        var suffix = FormatHelpers.plural(age, 'day');
 
-            render: function () {
-                var age = this.model.get('age');
-                var ageHours = this.model.get('ageHours');
+        if (age < 2) {
+            formatted = ageHours.toFixed(1);
+            suffix = FormatHelpers.plural(Math.round(ageHours), 'hour');
+        }
 
-                if (age === 0) {
-                    this.$el.html('{0} {1}'.format(ageHours.toFixed(1), this.plural(Math.round(ageHours), 'hour')));
-                }
+        if (ageHours < 2) {
+            formatted = ageMinutes.toFixed(1);
+            suffix = FormatHelpers.plural(Math.round(ageMinutes), 'minute');
+        }
 
-                else {
-                    this.$el.html('{0} {1}'.format(age, this.plural(age, 'day')));
-                }
+        this.$el.html('<div title="{2}">{0} {1}</div>'.format(formatted, suffix, publishedFormatted));
 
-                this.delegateEvents();
-                return this;
-            },
-
-            plural: function (input, unit) {
-                if (input === 1) {
-                    return unit;
-                }
-
-                return unit + 's';
-            }
-        });
-    });
+        this.delegateEvents();
+        return this;
+    }
+});

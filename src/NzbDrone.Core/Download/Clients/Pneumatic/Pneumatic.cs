@@ -1,106 +1,151 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using FluentValidation.Results;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Indexers;
+using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients.Pneumatic
 {
-    public class Pneumatic : DownloadClientBase<FolderSettings>, IExecute<TestPneumaticCommand>
+    public class Pneumatic : DownloadClientBase<PneumaticSettings>
     {
-        private readonly IConfigService _configService;
-        private readonly IHttpProvider _httpProvider;
-        private readonly IDiskProvider _diskProvider;
+        private readonly IHttpClient _httpClient;
 
-        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
-
-        public Pneumatic(IConfigService configService, IHttpProvider httpProvider,
-                                    IDiskProvider diskProvider)
+        public Pneumatic(IHttpClient httpClient,
+                         IConfigService configService,
+                         IDiskProvider diskProvider,
+                         IRemotePathMappingService remotePathMappingService,
+                         Logger logger)
+            : base(configService, diskProvider, remotePathMappingService, logger)
         {
-            _configService = configService;
-            _httpProvider = httpProvider;
-            _diskProvider = diskProvider;
+            _httpClient = httpClient;
         }
 
-        public override string DownloadNzb(RemoteEpisode remoteEpisode)
+        public override string Name => "Pneumatic";
+
+        public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
+
+        public override string Download(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
 
             if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
             {
-                throw new NotImplementedException("Full season releases are not supported with Pneumatic.");
+                throw new NotSupportedException("Full season releases are not supported with Pneumatic.");
             }
 
-            title = FileNameBuilder.CleanFilename(title);
+            title = FileNameBuilder.CleanFileName(title);
 
             //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
-            var filename = Path.Combine(Settings.Folder, title + ".nzb");
+            var nzbFile = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
-            logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
-            _httpProvider.DownloadFile(url, filename);
+            _logger.Debug("Downloading NZB from: {0} to: {1}", url, nzbFile);
+            _httpClient.DownloadFile(url, nzbFile);
 
-            logger.Debug("NZB Download succeeded, saved to: {0}", filename);
+            _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
 
-            var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
-            _diskProvider.WriteAllText(Path.Combine(_configService.DownloadedEpisodesFolder, title + ".strm"), contents);
+            var strmFile = WriteStrmFile(title, nzbFile);
 
-            return null;
+
+            return GetDownloadClientId(strmFile);
         }
 
-        public bool IsConfigured
+        public bool IsConfigured => !string.IsNullOrWhiteSpace(Settings.NzbFolder);
+
+        public override IEnumerable<DownloadClientItem> GetItems()
         {
-            get
+            foreach (var file in _diskProvider.GetFiles(Settings.StrmFolder, SearchOption.TopDirectoryOnly))
             {
-                return !string.IsNullOrWhiteSpace(Settings.Folder);
+                if (Path.GetExtension(file) != ".strm")
+                {
+                    continue;
+                }
+
+                var title = FileNameBuilder.CleanFileName(Path.GetFileName(file));
+
+                var historyItem = new DownloadClientItem
+                {
+                    DownloadClient = Definition.Name,
+                    DownloadId = GetDownloadClientId(file),
+                    Title = title,
+
+                    TotalSize = _diskProvider.GetFileSize(file),
+
+                    OutputPath = new OsPath(file)
+                };
+
+                if (_diskProvider.IsFileLocked(file))
+                {
+                    historyItem.Status = DownloadItemStatus.Downloading;
+                }
+                else
+                {
+                    historyItem.Status = DownloadItemStatus.Completed;
+                }
+
+                yield return historyItem;
             }
         }
 
-        public override IEnumerable<QueueItem> GetQueue()
+        public override void RemoveItem(string downloadId, bool deleteData)
         {
-            return new QueueItem[0];
+            throw new NotSupportedException();
         }
 
-        public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
+        public override DownloadClientStatus GetStatus()
         {
-            return new HistoryItem[0];
+            var status = new DownloadClientStatus
+            {
+                IsLocalhost = true
+            };
+
+            return status;
         }
 
-        public override void RemoveFromQueue(string id)
+        protected override void Test(List<ValidationFailure> failures)
         {
+            failures.AddIfNotNull(TestFolder(Settings.NzbFolder, "NzbFolder"));
+            failures.AddIfNotNull(TestFolder(Settings.StrmFolder, "StrmFolder"));
         }
 
-        public override void RemoveFromHistory(string id)
+        private string WriteStrmFile(string title, string nzbFile)
         {
+            string folder;
+
+            if (Settings.StrmFolder.IsNullOrWhiteSpace())
+            {
+                folder = _configService.DownloadedEpisodesFolder;
+
+                if (folder.IsNullOrWhiteSpace())
+                {
+                    throw new DownloadClientException("Strm Folder needs to be set for Pneumatic Downloader");
+                }
+            }
+
+            else
+            {
+                folder = Settings.StrmFolder;
+            }
+
+            var contents = string.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", nzbFile, title);
+            var filename = Path.Combine(folder, title + ".strm");
+
+            _diskProvider.WriteAllText(filename, contents);
+
+            return filename;
         }
 
-        public override void RetryDownload(string id)
+        private string GetDownloadClientId(string filename)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void Test()
-        {
-            PerformTest(Settings.Folder);
-        }
-
-        private void PerformTest(string folder)
-        {
-            var testPath = Path.Combine(folder, "drone_test.txt");
-            _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-            _diskProvider.DeleteFile(testPath);
-        }
-
-        public void Execute(TestPneumaticCommand message)
-        {
-            PerformTest(message.Folder);
+            return Definition.Name + "_" + Path.GetFileName(filename) + "_" + _diskProvider.FileGetLastWrite(filename).Ticks;
         }
     }
 }

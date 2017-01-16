@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Qualities;
@@ -18,19 +20,20 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         private Series _unmonitoredSeries;
         private PagingSpec<Episode> _pagingSpec;
         private List<QualitiesBelowCutoff> _qualitiesBelowCutoff;
-
+        private List<Episode> _unairedEpisodes;
+            
         [SetUp]
         public void Setup()
         {
-            var qualityProfile = new QualityProfile 
+            var profile = new Profile 
             {  
                 Id = 1,
                 Cutoff = Quality.WEBDL480p,
-                Items = new List<QualityProfileItem> 
+                Items = new List<ProfileQualityItem> 
                 { 
-                    new QualityProfileItem { Allowed = true, Quality = Quality.SDTV },
-                    new QualityProfileItem { Allowed = true, Quality = Quality.WEBDL480p },
-                    new QualityProfileItem { Allowed = true, Quality = Quality.RAWHD }
+                    new ProfileQualityItem { Allowed = true, Quality = Quality.SDTV },
+                    new ProfileQualityItem { Allowed = true, Quality = Quality.WEBDL480p },
+                    new ProfileQualityItem { Allowed = true, Quality = Quality.RAWHD }
                 }
             };
 
@@ -39,7 +42,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                               .With(s => s.Runtime = 30)
                                               .With(s => s.Monitored = true)
                                               .With(s => s.TitleSlug = "Title3")
-                                              .With(s => s.Id = qualityProfile.Id)
+                                              .With(s => s.Id = profile.Id)
                                               .BuildNew();
 
             _unmonitoredSeries = Builder<Series>.CreateNew()
@@ -47,7 +50,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                                 .With(s => s.Runtime = 30)
                                                 .With(s => s.Monitored = false)
                                                 .With(s => s.TitleSlug = "Title2")
-                                                .With(s => s.Id = qualityProfile.Id)
+                                                .With(s => s.Id = profile.Id)
                                                 .BuildNew();
 
             _monitoredSeries.Id = Db.Insert(_monitoredSeries).Id;
@@ -63,12 +66,12 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 
             _qualitiesBelowCutoff = new List<QualitiesBelowCutoff>
                                     {
-                                        new QualitiesBelowCutoff(qualityProfile.Id, new[] {Quality.SDTV.Id})
+                                        new QualitiesBelowCutoff(profile.Id, new[] {Quality.SDTV.Id})
                                     };
 
-            var qualityMet = new EpisodeFile { Path = "a", Quality = new QualityModel { Quality = Quality.WEBDL480p } };
-            var qualityUnmet = new EpisodeFile { Path = "b", Quality = new QualityModel { Quality = Quality.SDTV } };
-            var qualityRawHD = new EpisodeFile { Path = "c", Quality = new QualityModel { Quality = Quality.RAWHD } };
+            var qualityMet = new EpisodeFile { RelativePath = "a", Quality = new QualityModel { Quality = Quality.WEBDL480p } };
+            var qualityUnmet = new EpisodeFile { RelativePath = "b", Quality = new QualityModel { Quality = Quality.SDTV } };
+            var qualityRawHD = new EpisodeFile { RelativePath = "c", Quality = new QualityModel { Quality = Quality.RAWHD } };
 
             MediaFileRepository fileRepository = Mocker.Resolve<MediaFileRepository>();
 
@@ -107,18 +110,18 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .Build();
 
 
-            var unairedEpisodes           = Builder<Episode>.CreateListOfSize(1)
+            _unairedEpisodes             = Builder<Episode>.CreateListOfSize(1)
                                            .All()
                                            .With(e => e.Id = 0)
                                            .With(e => e.SeriesId = _monitoredSeries.Id)
                                            .With(e => e.AirDateUtc = DateTime.Now.AddDays(5))
                                            .With(e => e.Monitored = true)
                                            .With(e => e.EpisodeFileId = qualityUnmet.Id)
-                                           .Build();
+                                           .Build()
+                                           .ToList();
             
             Db.InsertMany(monitoredSeriesEpisodes);
             Db.InsertMany(unmonitoredSeriesEpisodes);
-            Db.InsertMany(unairedEpisodes);
         }
 
         private void GivenMonitoredFilterExpression()
@@ -161,6 +164,19 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var spec = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false);
 
             spec.Records.Should().HaveCount(1);
+            spec.Records.Should().OnlyContain(e => e.Series.Monitored);
+        }
+
+        [Test]
+        public void should_contain_unaired_episodes_if_file_does_not_meet_cutoff()
+        {
+            Db.InsertMany(_unairedEpisodes);
+
+            GivenMonitoredFilterExpression();
+
+            var spec = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false);
+
+            spec.Records.Should().HaveCount(2);
             spec.Records.Should().OnlyContain(e => e.Series.Monitored);
         }
     }

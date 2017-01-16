@@ -28,7 +28,7 @@ namespace NzbDrone.Automation.Test
             LogManager.Configuration = new LoggingConfiguration();
             var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };
             LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Trace, consoleTarget));
         }
 
         [TestFixtureSetUp]
@@ -36,18 +36,18 @@ namespace NzbDrone.Automation.Test
         {
             driver = new FirefoxDriver();
 
-            _runner = new NzbDroneRunner();
+            _runner = new NzbDroneRunner(LogManager.GetCurrentClassLogger());
             _runner.KillAll();
             _runner.Start();
-
 
             driver.Url = "http://localhost:8989";
 
             var page = new PageBase(driver);
             page.WaitForNoSpinner();
 
-            GetPageErrors().Should().BeEmpty();
+            driver.ExecuteScript("window.NzbDrone.NameViews = true;");
 
+            GetPageErrors().Should().BeEmpty();
         }
 
         protected IEnumerable<string> GetPageErrors()

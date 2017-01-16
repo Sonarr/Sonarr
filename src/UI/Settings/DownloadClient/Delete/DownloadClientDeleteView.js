@@ -1,23 +1,19 @@
-'use strict';
-define(
-    [
-        'vent',
-        'marionette'
-    ], function (vent, Marionette) {
-        return Marionette.ItemView.extend({
-            template: 'Settings/DownloadClient/Delete/DownloadClientDeleteViewTemplate',
+var vent = require('vent');
+var Marionette = require('marionette');
 
-            events: {
-                'click .x-confirm-delete': '_delete'
-            },
+module.exports = Marionette.ItemView.extend({
+    template : 'Settings/DownloadClient/Delete/DownloadClientDeleteViewTemplate',
 
-            _delete: function () {
-                this.model.destroy({
-                    wait   : true,
-                    success: function () {
-                        vent.trigger(vent.Commands.CloseModalCommand);
-                    }
-                });
+    events : {
+        'click .x-confirm-delete' : '_delete'
+    },
+
+    _delete : function() {
+        this.model.destroy({
+            wait    : true,
+            success : function() {
+                vent.trigger(vent.Commands.CloseModalCommand);
             }
         });
-    });
+    }
+});

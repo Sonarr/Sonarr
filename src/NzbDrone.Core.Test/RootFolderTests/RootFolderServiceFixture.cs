@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.RootFolderTests
@@ -21,6 +20,10 @@ namespace NzbDrone.Core.Test.RootFolderTests
         {
             Mocker.GetMock<IDiskProvider>()
                   .Setup(m => m.FolderExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(m => m.FolderWritable(It.IsAny<string>()))
                   .Returns(true);
 
             Mocker.GetMock<IRootFolderRepository>()
@@ -61,28 +64,6 @@ namespace NzbDrone.Core.Test.RootFolderTests
             Mocker.GetMock<IRootFolderRepository>().Verify(c => c.Delete(1), Times.Once());
         }
 
-        [Test]
-        public void should_return_empty_list_when_folder_doesnt_exist()
-        {
-            WithNonExistingFolder();
-
-            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootFolder>());
-
-            const string path = "d:\\bad folder";
-
-            var result = Subject.GetUnmappedFolders(path);
-
-            result.Should().NotBeNull();
-            result.Should().BeEmpty();
-            Mocker.GetMock<IDiskProvider>().Verify(c => c.GetDirectories(It.IsAny<String>()), Times.Never());
-        }
-
-        [Test]
-        public void GetUnmappedFolders_throw_on_empty_folders()
-        {
-            Assert.Throws<ArgumentException>(() => Mocker.Resolve<RootFolderService>().GetUnmappedFolders(""));
-        }
-
         [TestCase("")]
         [TestCase(null)]
         [TestCase("BAD PATH")]
@@ -102,24 +83,25 @@ namespace NzbDrone.Core.Test.RootFolderTests
         }
 
         [Test]
-        public void should_not_include_system_files_and_folders()
+        public void should_throw_when_adding_not_writable_folder()
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetDirectories(It.IsAny<String>()))
-                  .Returns(new string[]
-                           {
-                               @"C:\30 Rock".AsOsAgnostic(),
-                               @"C:\$Recycle.Bin".AsOsAgnostic(),
-                               @"C:\.AppleDouble".AsOsAgnostic(), 
-                               @"C:\Test\.AppleDouble".AsOsAgnostic()
-                           });
+                  .Setup(m => m.FolderWritable(It.IsAny<string>()))
+                  .Returns(false);
 
-            Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.GetAllSeries())
-                  .Returns(new List<Series>());
+            Assert.Throws<UnauthorizedAccessException>(() => Subject.Add(new RootFolder { Path = @"C:\TV".AsOsAgnostic() }));
+        }
 
-            Subject.GetUnmappedFolders(@"C:\")
-                   .Should().OnlyContain(u => u.Path == @"C:\30 Rock".AsOsAgnostic());
+        [Test]
+        public void should_throw_when_same_path_as_drone_factory()
+        {
+            var path = @"C:\TV".AsOsAgnostic();
+
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.DownloadedEpisodesFolder)
+                  .Returns(path);
+
+            Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = path }));
         }
     }
 }

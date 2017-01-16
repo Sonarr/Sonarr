@@ -11,8 +11,8 @@ namespace NzbDrone.Core.Qualities
 
         public int Weight { get; set; }
 
-        public int MinSize { get; set; }
-        public int MaxSize { get; set; }
+        public double? MinSize { get; set; }
+        public double? MaxSize { get; set; }
 
         public QualityDefinition()
         {

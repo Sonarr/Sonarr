@@ -1,9 +1,6 @@
-﻿
-
-using System;
+﻿using System;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
@@ -23,7 +20,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
         private void WithoutRecycleBin()
         {
-            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(string.Empty);
         }
 
         [Test]
@@ -47,19 +44,36 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
 
-            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(path, @"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic()), Times.Once());
+            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic(), TransferMode.Move, false, true), Times.Once());
+        }
+
+        [Test]
+        public void should_use_alternative_name_if_already_exists()
+        {
+            WithRecycleBin();
+
+            var path = @"C:\Test\TV\30 Rock\S01E01.avi".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.FileExists(@"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic()))
+                .Returns(true);
+
+            Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
+
+            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\S01E01_2.avi".AsOsAgnostic(), TransferMode.Move, false, true), Times.Once());
         }
 
         [Test]
         public void should_call_fileSetLastWriteTime_for_each_file()
         {
+            WindowsOnly();
             WithRecycleBin();
             var path = @"C:\Test\TV\30 Rock\S01E01.avi".AsOsAgnostic();
 
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
 
-            Mocker.GetMock<IDiskProvider>().Verify(v => v.FileSetLastWriteTimeUtc(@"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic(), It.IsAny<DateTime>()), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.FileSetLastWriteTime(@"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic(), It.IsAny<DateTime>()), Times.Once());
         }
     }
 }

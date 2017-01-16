@@ -1,0 +1,31 @@
+<caps>
+  <server appversion="" version="0.1" />
+  <limits max="60" default="25"/>
+  <registration available="yes" open="no"/>
+  <searching>
+    <search available="yes"/>
+    <tv-search available="yes"/>
+    <movie-search available="yes"/>
+    <audio-search available="yes"/>
+  </searching>
+  <categories>
+    <category id="5000" name="TV">
+      <subcat id="5070" name="Anime"/>
+      <subcat id="5080" name="Documentary"/>
+      <subcat id="5020" name="Foreign"/>
+      <subcat id="5040" name="HD"/>
+      <subcat id="5050" name="Other"/>
+      <subcat id="5030" name="SD"/>
+      <subcat id="5060" name="Sport"/>
+      <subcat id="5010" name="WEB-DL"/>
+    </category>
+    <category id="7000" name="Other">
+      <subcat id="7010" name="Misc"/>
+    </category>
+    <category id="8000" name="Books">
+      <subcat id="8020" name="Comics"/>
+    </category>
+  </categories>
+  <groups></groups>
+  <genres></genres>
+</caps>

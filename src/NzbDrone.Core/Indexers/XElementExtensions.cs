@@ -5,15 +5,16 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.Indexers
 {
     public static class XElementExtensions
     {
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(XmlExtentions));
 
-        private static readonly Regex RemoveTimeZoneRegex = new Regex(@"\s[A-Z]{2,4}$", RegexOptions.Compiled);
+        public static readonly Regex RemoveTimeZoneRegex = new Regex(@"\s[A-Z]{2,4}$", RegexOptions.Compiled);
 
         public static string Title(this XElement item)
         {
@@ -35,28 +36,33 @@ namespace NzbDrone.Core.Indexers
             return res;
         }
 
-        public static DateTime PublishDate(this XElement item)
+        public static DateTime ParseDate(string dateString)
         {
-            string dateString = item.TryGetValue("pubDate");
-
             try
             {
                 DateTime result;
-                if (!DateTime.TryParse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal, out result))
+                if (!DateTime.TryParse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal, out result))
                 {
                     dateString = RemoveTimeZoneRegex.Replace(dateString, "");
-                    result = DateTime.Parse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
+                    result = DateTime.Parse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal);
                 }
-                return result.ToUniversalTime().Date;
+                return result.ToUniversalTime();
             }
             catch (FormatException e)
             {
-                Logger.WarnException("Unable to parse " + dateString, e);
+                Logger.Warn(e, "Unable to parse " + dateString);
                 throw;
             }
         }
 
-        public static List<String> Links(this XElement item)
+        public static DateTime PublishDate(this XElement item)
+        {
+            var dateString = item.TryGetValue("pubDate");
+
+            return ParseDate(dateString);
+        }
+
+        public static List<string> Links(this XElement item)
         {
             var elements = item.Elements("link");
 
@@ -78,11 +84,36 @@ namespace NzbDrone.Core.Indexers
             return long.Parse(item.TryGetValue("length"));
         }
 
-        private static string TryGetValue(this XElement item, string elementName, string defaultValue = "")
+        public static string TryGetValue(this XElement item, string elementName, string defaultValue = "")
         {
             var element = item.Element(elementName);
 
             return element != null ? element.Value : defaultValue;
+        }
+
+        public static T TryGetValue<T>(this XElement item, string elementName, T defaultValue)
+        {
+            var element = item.Element(elementName);
+
+            if (element == null)
+            {
+                return defaultValue;
+            }
+
+            if (element.Value.IsNullOrWhiteSpace())
+            {
+                return defaultValue;
+            }
+
+            try
+            {
+                return (T)Convert.ChangeType(element.Value, typeof(T));
+            }
+
+            catch (InvalidCastException)
+            {
+                return defaultValue;
+            }
         }
     }
 }

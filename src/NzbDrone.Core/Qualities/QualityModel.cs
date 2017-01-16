@@ -1,37 +1,32 @@
 ﻿using System;
+using Newtonsoft.Json;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Qualities
 {
     public class QualityModel : IEmbeddedDocument, IEquatable<QualityModel>
     {
         public Quality Quality { get; set; }
-        
-        public Boolean Proper { get; set; }
+        public Revision Revision { get; set; }
+
+        [JsonIgnore]
+        public QualitySource QualitySource { get; set; }
         
         public QualityModel()
-            : this(Quality.Unknown)
+            : this(Quality.Unknown, new Revision())
         {
 
         }
 
-        public QualityModel(Quality quality, Boolean proper = false)
+        public QualityModel(Quality quality, Revision revision = null)
         {
             Quality = quality;
-            Proper = proper;
+            Revision = revision ?? new Revision();
         }
-
 
         public override string ToString()
         {
-            string result = Quality.ToString();
-            if (Proper)
-            {
-                result += " Proper";
-            }
-
-            return result;
+            return string.Format("{0} {1}", Quality, Revision);
         }
 
         public override int GetHashCode()
@@ -39,7 +34,7 @@ namespace NzbDrone.Core.Qualities
             unchecked // Overflow is fine, just wrap
             {
                 int hash = 17;
-                hash = hash * 23 + Proper.GetHashCode();
+                hash = hash * 23 + Revision.GetHashCode();
                 hash = hash * 23 + Quality.GetHashCode();
                 return hash;
             }
@@ -49,7 +44,8 @@ namespace NzbDrone.Core.Qualities
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return other.Quality.Equals(Quality) && other.Proper.Equals(Proper);
+
+            return other.Quality.Equals(Quality) && other.Revision.Equals(Revision);
         }
 
         public override bool Equals(object obj)

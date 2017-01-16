@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Security.Principal;
-using System.Threading.Tasks;
 
 namespace Microsoft.AspNet.SignalR
 {

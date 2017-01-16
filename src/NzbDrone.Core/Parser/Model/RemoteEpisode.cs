@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Parser.Model
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
         public Series Series { get; set; }
         public List<Episode> Episodes { get; set; }
-        public Boolean DownloadAllowed { get; set; }
+        public bool DownloadAllowed { get; set; }
 
         public bool IsRecentEpisode()
         {

@@ -6,7 +6,6 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
-using NzbDrone.SignalR;
 
 namespace NzbDrone.Core.Test.Messaging.Commands
 {
@@ -79,8 +78,8 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         [Test]
         public void should_return_false_when_only_one_has_null_property()
         {
-            var command1 = new BroadcastSignalRMessage(null);
-            var command2 = new BroadcastSignalRMessage(new SignalRMessage());
+            var command1 = new EpisodeSearchCommand(null);
+            var command2 = new EpisodeSearchCommand(new List<int>());
 
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
         }

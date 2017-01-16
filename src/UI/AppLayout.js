@@ -1,25 +1,20 @@
-﻿define(
-    [
-        'marionette',
-        'Shared/Modal/ModalRegion',
-        'Shared/ControlPanel/ControlPanelRegion'
-    ], function (Marionette, ModalRegion, ControlPanelRegion) {
-        'use strict';
+var Marionette = require('marionette');
+var ModalRegion = require('./Shared/Modal/ModalRegion');
+var ModalRegion2 = require('./Shared/Modal/ModalRegion2');
+var ControlPanelRegion = require('./Shared/ControlPanel/ControlPanelRegion');
 
-        var Layout = Marionette.Layout.extend({
+var Layout = Marionette.Layout.extend({
+    regions : {
+        navbarRegion : '#nav-region',
+        mainRegion   : '#main-region'
+    },
 
-            regions: {
-                navbarRegion      : '#nav-region',
-                mainRegion        : '#main-region'
-            },
-
-            initialize: function () {
-                this.addRegions({
-                    modalRegion       : ModalRegion,
-                    controlPanelRegion: ControlPanelRegion
-                });
-            }
+    initialize : function() {
+        this.addRegions({
+            modalRegion        : ModalRegion,
+            modalRegion2       : ModalRegion2,
+            controlPanelRegion : ControlPanelRegion
         });
-
-        return new Layout({el: 'body'});
-    });
+    }
+});
+module.exports = new Layout({ el : 'body' });

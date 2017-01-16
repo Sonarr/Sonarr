@@ -1,30 +1,24 @@
-﻿'use strict';
-define(
-    [
-        'backbone',
-        'marionette',
-        'System/Info/About/AboutView',
-        'System/Info/DiskSpace/DiskSpaceLayout',
-        'System/Info/Health/HealthLayout'
-    ], function (Backbone,
-                 Marionette,
-                 AboutView,
-                 DiskSpaceLayout,
-                 HealthLayout) {
-        return Marionette.Layout.extend({
-            template: 'System/Info/SystemInfoLayoutTemplate',
+var Backbone = require('backbone');
+var Marionette = require('marionette');
+var AboutView = require('./About/AboutView');
+var DiskSpaceLayout = require('./DiskSpace/DiskSpaceLayout');
+var HealthLayout = require('./Health/HealthLayout');
+var MoreInfoView = require('./MoreInfo/MoreInfoView');
 
-            regions: {
-                about    : '#about',
-                diskSpace: '#diskspace',
-                health   : '#health'
-            },
+module.exports = Marionette.Layout.extend({
+    template : 'System/Info/SystemInfoLayoutTemplate',
 
-            onRender: function () {
-                this.about.show(new AboutView());
-                this.diskSpace.show(new DiskSpaceLayout());
-                this.health.show(new HealthLayout());
-            }
-        });
-    });
+    regions : {
+        about     : '#about',
+        diskSpace : '#diskspace',
+        health    : '#health',
+        moreInfo  : '#more-info'
+    },
 
+    onRender : function() {
+        this.health.show(new HealthLayout());
+        this.diskSpace.show(new DiskSpaceLayout());
+        this.about.show(new AboutView());
+        this.moreInfo.show(new MoreInfoView());
+    }
+});

@@ -1,69 +1,68 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'backbone',
-        'backgrid',
-        'Wanted/Missing/MissingLayout',
-        'Wanted/Cutoff/CutoffUnmetLayout'
-    ], function (Marionette, Backbone, Backgrid, MissingLayout, CutoffUnmetLayout) {
-        return Marionette.Layout.extend({
-            template: 'Wanted/WantedLayoutTemplate',
+var Marionette = require('marionette');
+var Backbone = require('backbone');
+var Backgrid = require('backgrid');
+var MissingLayout = require('./Missing/MissingLayout');
+var CutoffUnmetLayout = require('./Cutoff/CutoffUnmetLayout');
 
-            regions: {
-                content      : '#content'
-                //missing    : '#missing',
-                //cutoff     : '#cutoff'
-            },
+module.exports = Marionette.Layout.extend({
+    template : 'Wanted/WantedLayoutTemplate',
 
-            ui: {
-                missingTab : '.x-missing-tab',
-                cutoffTab  : '.x-cutoff-tab'
-            },
+    regions : {
+        content : '#content'
+        //missing    : '#missing',
+        //cutoff     : '#cutoff'
+    },
 
-            events: {
-                'click .x-missing-tab' : '_showMissing',
-                'click .x-cutoff-tab'  : '_showCutoffUnmet'
-            },
+    ui : {
+        missingTab : '.x-missing-tab',
+        cutoffTab  : '.x-cutoff-tab'
+    },
 
-            initialize: function (options) {
-                if (options.action) {
-                    this.action = options.action.toLowerCase();
-                }
-            },
+    events : {
+        'click .x-missing-tab' : '_showMissing',
+        'click .x-cutoff-tab'  : '_showCutoffUnmet'
+    },
 
-            onShow: function () {
-                switch (this.action) {
-                    case 'cutoff':
-                        this._showCutoffUnmet();
-                        break;
-                    default:
-                        this._showMissing();
-                }
-            },
+    initialize : function(options) {
+        if (options.action) {
+            this.action = options.action.toLowerCase();
+        }
+    },
 
-            _navigate: function (route) {
-                Backbone.history.navigate(route);
-            },
+    onShow : function() {
+        switch (this.action) {
+            case 'cutoff':
+                this._showCutoffUnmet();
+                break;
+            default:
+                this._showMissing();
+        }
+    },
 
-            _showMissing: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
-
-                this.content.show(new MissingLayout());
-                this.ui.missingTab.tab('show');
-                this._navigate('/wanted/missing');
-            },
-
-            _showCutoffUnmet: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
-
-                this.content.show(new CutoffUnmetLayout());
-                this.ui.cutoffTab.tab('show');
-                this._navigate('/wanted/cutoff');
-            }
+    _navigate : function(route) {
+        Backbone.history.navigate(route, {
+            trigger : false,
+            replace : true
         });
-    });
+    },
+
+    _showMissing : function(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        this.content.show(new MissingLayout());
+        this.ui.missingTab.tab('show');
+        this._navigate('/wanted/missing');
+    },
+
+    _showCutoffUnmet : function(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        this.content.show(new CutoffUnmetLayout());
+        this.ui.cutoffTab.tab('show');
+        this._navigate('/wanted/cutoff');
+    }
+});

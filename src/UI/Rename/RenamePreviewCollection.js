@@ -1,38 +1,34 @@
-﻿﻿'use strict';
-define(
-    [
-        'backbone',
-        'Rename/RenamePreviewModel'
-    ], function (Backbone, RenamePreviewModel) {
-        return Backbone.Collection.extend({
-            url  : window.NzbDrone.ApiRoot + '/rename',
-            model: RenamePreviewModel,
+var Backbone = require('backbone');
+var RenamePreviewModel = require('./RenamePreviewModel');
 
-            originalFetch: Backbone.Collection.prototype.fetch,
+module.exports = Backbone.Collection.extend({
+    url   : window.NzbDrone.ApiRoot + '/rename',
+    model : RenamePreviewModel,
 
-            initialize: function (options) {
-                if (!options.seriesId) {
-                    throw 'seriesId is required';
-                }
+    originalFetch : Backbone.Collection.prototype.fetch,
 
-                this.seriesId = options.seriesId;
-                this.seasonNumber = options.seasonNumber;
-            },
+    initialize : function(options) {
+        if (!options.seriesId) {
+            throw 'seriesId is required';
+        }
 
-            fetch: function (options) {
-                if (!this.seriesId) {
-                    throw 'seriesId is required';
-                }
+        this.seriesId = options.seriesId;
+        this.seasonNumber = options.seasonNumber;
+    },
 
-                options = options || {};
-                options.data = {};
-                options.data.seriesId = this.seriesId;
+    fetch : function(options) {
+        if (!this.seriesId) {
+            throw 'seriesId is required';
+        }
 
-                if (this.seasonNumber) {
-                    options.data.seasonNumber = this.seasonNumber;
-                }
+        options = options || {};
+        options.data = {};
+        options.data.seriesId = this.seriesId;
 
-                return this.originalFetch.call(this, options);
-            }
-        });
-    });
+        if (this.seasonNumber !== undefined) {
+            options.data.seasonNumber = this.seasonNumber;
+        }
+
+        return this.originalFetch.call(this, options);
+    }
+});

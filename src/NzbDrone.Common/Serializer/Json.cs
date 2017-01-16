@@ -26,6 +26,7 @@ namespace NzbDrone.Common.Serializer
             SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
             //SerializerSetting.Converters.Add(new IntConverter());
             SerializerSetting.Converters.Add(new VersionConverter());
+            SerializerSetting.Converters.Add(new HttpUriConverter());
 
             Serializer = JsonSerializer.Create(SerializerSetting);
 
@@ -48,12 +49,12 @@ namespace NzbDrone.Common.Serializer
                 result = Deserialize<T>(json);
                 return true;
             }
-            catch (JsonReaderException ex)
+            catch (JsonReaderException)
             {
                 result = default(T);
                 return false;
             }
-            catch (JsonSerializationException ex)
+            catch (JsonSerializationException)
             {
                 result = default(T);
                 return false;

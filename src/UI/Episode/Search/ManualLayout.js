@@ -1,80 +1,86 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'backgrid',
-        'Cells/FileSizeCell',
-        'Cells/QualityCell',
-        'Cells/ApprovalStatusCell',
-        'Release/DownloadReportCell',
-        'Release/AgeCell'
-    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell, AgeCell) {
+var Marionette = require('marionette');
+var Backgrid = require('backgrid');
+var ReleaseTitleCell = require('../../Cells/ReleaseTitleCell');
+var FileSizeCell = require('../../Cells/FileSizeCell');
+var QualityCell = require('../../Cells/QualityCell');
+var ApprovalStatusCell = require('../../Cells/ApprovalStatusCell');
+var DownloadReportCell = require('../../Release/DownloadReportCell');
+var AgeCell = require('../../Release/AgeCell');
+var ProtocolCell = require('../../Release/ProtocolCell');
+var PeersCell = require('../../Release/PeersCell');
 
-        return Marionette.Layout.extend({
-            template: 'Episode/Search/ManualLayoutTemplate',
+module.exports = Marionette.Layout.extend({
+    template : 'Episode/Search/ManualLayoutTemplate',
 
-            regions: {
-                grid: '#episode-release-grid'
-            },
+    regions : {
+        grid : '#episode-release-grid'
+    },
 
-            columns:
-                [
-                    {
-                        name    : 'age',
-                        label   : 'Age',
-                        sortable: true,
-                        cell    : AgeCell
-                    },
-                    {
-                        name    : 'title',
-                        label   : 'Title',
-                        sortable: true,
-                        cell    : Backgrid.StringCell.extend({ className: 'nzb-title-cell' })
-                    },
-                    {
-                        name    : 'indexer',
-                        label   : 'Indexer',
-                        sortable: true,
-                        cell    : Backgrid.StringCell
-                    },
-                    {
-                        name    : 'size',
-                        label   : 'Size',
-                        sortable: true,
-                        cell    : FileSizeCell
-                    },
-                    {
-                        name      : 'quality',
-                        label     : 'Quality',
-                        sortable  : true,
-                        cell      : QualityCell,
-                        sortValue : function (model) {
-                            return model.get('quality').quality.weight;
-                        }
-                    },
+    columns : [
+        {
+            name  : 'protocol',
+            label : 'Source',
+            cell  : ProtocolCell
+        },
+        {
+            name  : 'age',
+            label : 'Age',
+            cell  : AgeCell
+        },
+        {
+            name  : 'title',
+            label : 'Title',
+            cell  : ReleaseTitleCell
+        },
+        {
+            name  : 'indexer',
+            label : 'Indexer',
+            cell  : Backgrid.StringCell
+        },
+        {
+            name  : 'size',
+            label : 'Size',
+            cell  : FileSizeCell
+        },
+        {
+            name  : 'seeders',
+            label : 'Peers',
+            cell  : PeersCell
+        },
+        {
+            name  : 'quality',
+            label : 'Quality',
+            cell  : QualityCell
+        },
+        {
+            name      : 'rejections',
+            label     : '<i class="icon-sonarr-header-rejections" />',
+            tooltip   : 'Rejections',
+            cell      : ApprovalStatusCell,
+            sortable  : true,
+            sortType  : 'fixed',
+            direction : 'ascending',
+            title     : 'Release Rejected'
+        },
+        {
+            name      : 'download',
+            label     : '<i class="icon-sonarr-download" />',
+            tooltip   : 'Auto-Search Prioritization',
+            cell      : DownloadReportCell,
+            sortable  : true,
+            sortType  : 'fixed',
+            direction : 'ascending'
+        }
+    ],
 
-                    {
-                        name : 'rejections',
-                        label: '',
-                        cell : ApprovalStatusCell
-                    },
-                    {
-                        name : 'download',
-                        label: '',
-                        cell : DownloadReportCell
-                    }
-                ],
-
-            onShow: function () {
-                if (!this.isClosed) {
-                    this.grid.show(new Backgrid.Grid({
-                        row       : Backgrid.Row,
-                        columns   : this.columns,
-                        collection: this.collection,
-                        className : 'table table-hover'
-                    }));
-                }
-            }
-        });
-
-    });
+    onShow : function() {
+        if (!this.isClosed) {
+            this.grid.show(new Backgrid.Grid({
+                row        : Backgrid.Row,
+                columns    : this.columns,
+                collection : this.collection,
+                className  : 'table table-hover'
+            }));
+        }
+    }
+});

@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Parser.Model;
 
@@ -8,7 +8,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpgradeMediaFiles
     {
-        EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, bool copyOnly = false);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
+        public EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, bool copyOnly = false)
         {
             var moveFileResult = new EpisodeFileMoveResult();
             var existingFiles = localEpisode.Episodes
@@ -43,18 +43,26 @@ namespace NzbDrone.Core.MediaFiles
             foreach (var existingFile in existingFiles)
             {
                 var file = existingFile.First();
+                var episodeFilePath = Path.Combine(localEpisode.Series.Path, file.RelativePath);
 
-                if (_diskProvider.FileExists(file.Path))
+                if (_diskProvider.FileExists(episodeFilePath))
                 {
                     _logger.Debug("Removing existing episode file: {0}", file);
-                    _recycleBinProvider.DeleteFile(file.Path);
+                    _recycleBinProvider.DeleteFile(episodeFilePath);
                 }
 
                 moveFileResult.OldFiles.Add(file);
-                _mediaFileService.Delete(file, true);
+                _mediaFileService.Delete(file, DeleteMediaFileReason.Upgrade);
             }
 
-            moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+            if (copyOnly)
+            {
+                moveFileResult.EpisodeFile = _episodeFileMover.CopyEpisodeFile(episodeFile, localEpisode);
+            }
+            else
+            {
+                moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+            }
 
             return moveFileResult;
         }

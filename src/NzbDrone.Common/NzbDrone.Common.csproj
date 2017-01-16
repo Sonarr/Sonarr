@@ -39,35 +39,68 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.1\lib\net40\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Org.Mentalis, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNet4.SocksProxy.1.3.2.0\lib\net40\Org.Mentalis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpRaven, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpRaven.2.1.0\lib\net40\SharpRaven.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SocksWebProxy, Version=1.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNet4.SocksProxy.1.3.2.0\lib\net40\SocksWebProxy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="Loggly">
-      <HintPath>..\packages\loggly-csharp.2.3\lib\net35\Loggly.dll</HintPath>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\ICSharpCode.SharpZipLib.Patched.0.86.5\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArchiveProvider.cs" />
+    <Compile Include="ArchiveService.cs" />
     <Compile Include="Cache\Cached.cs" />
     <Compile Include="Cache\CacheManager.cs" />
+    <Compile Include="Cache\CachedDictionary.cs" />
     <Compile Include="Cache\ICached.cs" />
+    <Compile Include="Cache\ICachedDictionary.cs" />
+    <Compile Include="Cloud\SonarrCloudRequestBuilder.cs" />
     <Compile Include="Composition\Container.cs" />
-    <Compile Include="Composition\IContainer.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
-    <Compile Include="DictionaryExtensions.cs" />
+    <Compile Include="Composition\IContainer.cs" />
+    <Compile Include="ConsoleService.cs" />
+    <Compile Include="ConvertBase32.cs" />
+    <Compile Include="Crypto\HashProvider.cs" />
+    <Compile Include="Disk\FileSystemLookupService.cs" />
+    <Compile Include="Disk\DriveInfoMount.cs" />
+    <Compile Include="Disk\IMount.cs" />
+    <Compile Include="Disk\RelativeFileSystemModel.cs" />
+    <Compile Include="Disk\FileSystemModel.cs" />
+    <Compile Include="Disk\FileSystemResult.cs" />
+    <Compile Include="EnvironmentInfo\IOsVersionAdapter.cs" />
+    <Compile Include="EnvironmentInfo\IPlatformInfo.cs" />
+    <Compile Include="EnvironmentInfo\OsVersionModel.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Disk\OsPath.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
+    <Compile Include="Disk\IDiskProvider.cs" />
+    <Compile Include="Disk\DiskTransferService.cs" />
+    <Compile Include="Disk\TransferMode.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
     <Compile Include="EnsureThat\EnsureCollectionExtensions.cs" />
@@ -86,63 +119,109 @@
     <Compile Include="EnsureThat\ExpressionExtensions.cs" />
     <Compile Include="EnsureThat\Param.cs" />
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
+    <Compile Include="EnsureThat\TypeParam.cs" />
     <Compile Include="EnvironmentInfo\AppFolderFactory.cs" />
+    <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
     <Compile Include="EnvironmentInfo\BuildInfo.cs" />
-    <Compile Include="EnvironmentInfo\StartupContext.cs" />
-    <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\OsInfo.cs" />
+    <Compile Include="EnvironmentInfo\IRuntimeInfo.cs" />
+    <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
+    <Compile Include="EnvironmentInfo\StartupContext.cs" />
     <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
-    <Compile Include="Http\NzbDroneWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="IEnumerableExtensions.cs" />
-    <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
-    <Compile Include="Instrumentation\ExceptronTarget.cs" />
-    <Compile Include="Instrumentation\LogEventExtensions.cs" />
-    <Compile Include="Instrumentation\NzbDroneLogger.cs" />
-    <Compile Include="Instrumentation\LogTargets.cs" />
-    <Compile Include="Messaging\IEvent.cs" />
-    <Compile Include="Messaging\IMessage.cs" />
-    <Compile Include="PathEqualityComparer.cs" />
-    <Compile Include="Processes\INzbDroneProcessProvider.cs" />
-    <Compile Include="Processes\PidFileProvider.cs" />
-    <Compile Include="Processes\ProcessOutput.cs" />
-    <Compile Include="RateGate.cs" />
-    <Compile Include="Serializer\IntConverter.cs" />
-    <Compile Include="Services.cs" />
-    <Compile Include="Extensions\StreamExtensions.cs" />
-    <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
-    <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="EnsureThat\TypeParam.cs" />
-    <Compile Include="HashUtil.cs" />
-    <Compile Include="Instrumentation\LogglyTarget.cs" />
-    <Compile Include="Serializer\Json.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />
     <Compile Include="Expansive\PatternStyle.cs" />
     <Compile Include="Expansive\Tree.cs" />
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
-    <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
-    <Compile Include="Reflection\ReflectionExtensions.cs" />
-    <Compile Include="ServiceFactory.cs" />
+    <Compile Include="Extensions\Base64Extentions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Crypto\HashConverter.cs" />
+    <Compile Include="Extensions\Int64Extensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\UrlExtensions.cs" />
+    <Compile Include="Extensions\XmlExtentions.cs" />
+    <Compile Include="HashUtil.cs" />
+    <Compile Include="Http\Dispatchers\CurlHttpDispatcher.cs" />
+    <Compile Include="Http\Dispatchers\FallbackHttpDispatcher.cs" />
+    <Compile Include="Http\Dispatchers\IHttpDispatcher.cs" />
+    <Compile Include="Http\Dispatchers\ManagedHttpDispatcher.cs" />
+    <Compile Include="Http\Proxy\ManagedWebProxyFactory.cs" />
+    <Compile Include="Http\GZipWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Http\HttpAccept.cs" />
+    <Compile Include="Http\HttpClient.cs" />
+    <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\HttpFormData.cs" />
+    <Compile Include="Http\HttpHeader.cs" />
+    <Compile Include="Http\HttpMethod.cs" />
     <Compile Include="Http\HttpProvider.cs" />
-    <Compile Include="ConsoleService.cs" />
-    <Compile Include="PathExtensions.cs" />
-    <Compile Include="Disk\IDiskProvider.cs" />
-    <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
+    <Compile Include="Http\HttpRequest.cs" />
+    <Compile Include="Http\Proxy\HttpProxySettings.cs" />
+    <Compile Include="Http\HttpResponse.cs" />
+    <Compile Include="Http\HttpUri.cs" />
+    <Compile Include="Http\Proxy\IHttpProxySettingsProvider.cs" />
+    <Compile Include="Http\IHttpRequestInterceptor.cs" />
+    <Compile Include="Http\JsonRpcRequestBuilder.cs" />
+    <Compile Include="Http\JsonRpcResponse.cs" />
+    <Compile Include="Http\NzbDroneWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Http\HttpRequestBuilder.cs" />
+    <Compile Include="Http\HttpRequestBuilderFactory.cs" />
+    <Compile Include="Http\Proxy\ProxyType.cs" />
+    <Compile Include="Http\TooManyRequestsException.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Http\UserAgentBuilder.cs" />
+    <Compile Include="Instrumentation\CleanseLogMessage.cs" />
+    <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
+    <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
+    <Compile Include="Instrumentation\LogEventExtensions.cs" />
+    <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
+    <Compile Include="Instrumentation\NzbDroneLogger.cs" />
+    <Compile Include="Instrumentation\Sentry\SentryDebounce.cs" />
+    <Compile Include="Instrumentation\Sentry\SentryTarget.cs" />
+    <Compile Include="Instrumentation\Sentry\MachineNameUserFactory.cs" />
+    <Compile Include="Instrumentation\Sentry\SonarrJsonPacketFactory.cs" />
+    <Compile Include="Instrumentation\Sentry\SonarrSentryPacket.cs" />
+    <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
+    <Compile Include="Extensions\LevenstheinExtensions.cs" />
+    <Compile Include="Messaging\IEvent.cs" />
+    <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
+    <Compile Include="PathEqualityComparer.cs" />
+    <Compile Include="Extensions\PathExtensions.cs" />
+    <Compile Include="Processes\PidFileProvider.cs" />
+    <Compile Include="Processes\ProcessOutput.cs" />
+    <Compile Include="Processes\ProcessOutputLine.cs" />
     <Compile Include="Processes\ProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
+    <Compile Include="Reflection\ReflectionExtensions.cs" />
+    <Compile Include="Extensions\ResourceExtensions.cs" />
+    <Compile Include="Security\SecurityProtocolPolicy.cs" />
+    <Compile Include="Security\X509CertificateValidationPolicy.cs" />
+    <Compile Include="Serializer\HttpUriConverter.cs" />
+    <Compile Include="Serializer\IntConverter.cs" />
+    <Compile Include="Serializer\Json.cs" />
+    <Compile Include="ServiceFactory.cs" />
     <Compile Include="ServiceProvider.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="TinyIoC.cs" />
+    <Compile Include="TPL\Debouncer.cs" />
+    <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
+    <Compile Include="TPL\RateLimitService.cs" />
     <Compile Include="TPL\TaskExtensions.cs" />
-    <Compile Include="TryParseExtension.cs" />
+    <Compile Include="Extensions\TryParseExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="CurlSharp.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -154,14 +233,16 @@
     <Content Include="Expansive\license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Exceptron.Client\Exceptron.Client.csproj">
-      <Project>{B1784698-592E-4132-BDFA-9817409E3A96}</Project>
-      <Name>Exceptron.Client</Name>
+    <ProjectReference Include="..\ExternalModules\CurlSharp\CurlSharp\CurlSharp.csproj">
+      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
+      <Name>CurlSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogentriesNLog\LogentriesNLog.csproj">
+      <Project>{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}</Project>
+      <Name>LogentriesNLog</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

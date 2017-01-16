@@ -1,32 +1,32 @@
-﻿﻿'use strict';
+var Marionette = require('marionette');
+var DownloadClientCollection = require('./DownloadClientCollection');
+var DownloadClientCollectionView = require('./DownloadClientCollectionView');
+var DownloadHandlingView = require('./DownloadHandling/DownloadHandlingView');
+var DroneFactoryView = require('./DroneFactory/DroneFactoryView');
+var RemotePathMappingCollection = require('./RemotePathMapping/RemotePathMappingCollection');
+var RemotePathMappingCollectionView = require('./RemotePathMapping/RemotePathMappingCollectionView');
 
-define(
-    [
-        'marionette',
-        'Settings/DownloadClient/DownloadClientCollection',
-        'Settings/DownloadClient/DownloadClientCollectionView',
-        'Settings/DownloadClient/Options/DownloadClientOptionsView',
-        'Settings/DownloadClient/FailedDownloadHandling/FailedDownloadHandlingView'
-    ], function (Marionette, DownloadClientCollection, DownloadClientCollectionView, DownloadClientOptionsView, FailedDownloadHandlingView) {
+module.exports = Marionette.Layout.extend({
+    template : 'Settings/DownloadClient/DownloadClientLayoutTemplate',
 
-        return Marionette.Layout.extend({
-            template : 'Settings/DownloadClient/DownloadClientLayoutTemplate',
+    regions : {
+        downloadClients    : '#x-download-clients-region',
+        downloadHandling   : '#x-download-handling-region',
+        droneFactory       : '#x-dronefactory-region',
+        remotePathMappings : '#x-remotepath-mapping-region'
+    },
 
-            regions: {
-                downloadClients        : '#x-download-clients-region',
-                downloadClientOptions  : '#x-download-client-options-region',
-                failedDownloadHandling : '#x-failed-download-handling-region'
-            },
+    initialize : function() {
+        this.downloadClientsCollection = new DownloadClientCollection();
+        this.downloadClientsCollection.fetch();
+        this.remotePathMappingCollection = new RemotePathMappingCollection();
+        this.remotePathMappingCollection.fetch();
+    },
 
-            initialize: function () {
-                this.downloadClientCollection = new DownloadClientCollection();
-                this.downloadClientCollection.fetch();
-            },
-
-            onShow: function () {
-                this.downloadClients.show(new DownloadClientCollectionView({ collection: this.downloadClientCollection }));
-                this.downloadClientOptions.show(new DownloadClientOptionsView({ model: this.model }));
-                this.failedDownloadHandling.show(new FailedDownloadHandlingView({ model: this.model }));
-            }
-        });
-    });
+    onShow : function() {
+        this.downloadClients.show(new DownloadClientCollectionView({ collection : this.downloadClientsCollection }));
+        this.downloadHandling.show(new DownloadHandlingView({ model : this.model }));
+        this.droneFactory.show(new DroneFactoryView({ model : this.model }));
+        this.remotePathMappings.show(new RemotePathMappingCollectionView({ collection : this.remotePathMappingCollection }));
+    }
+});

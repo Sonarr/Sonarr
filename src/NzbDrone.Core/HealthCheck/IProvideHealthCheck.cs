@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace NzbDrone.Core.HealthCheck
+﻿namespace NzbDrone.Core.HealthCheck
 {
     public interface IProvideHealthCheck
     {
         HealthCheck Check();
-        Boolean CheckOnStartup { get; }
-        Boolean CheckOnConfigChange { get; }
-        Boolean CheckOnSchedule { get; }
+        bool CheckOnStartup { get; }
+        bool CheckOnConfigChange { get; }
+        bool CheckOnSchedule { get; }
     }
 }

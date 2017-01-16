@@ -1,0 +1,20 @@
+<fieldset>
+    <legend>About</legend>
+
+    <dl class="dl-horizontal info">
+        <dt>Version</dt>
+        <dd>{{version}}</dd>
+
+        {{#if isMonoRuntime}}
+        <dt>Mono Version</dt>
+        <dd>{{runtimeVersion}}</dd>
+        {{/if}}
+
+        <dt>AppData directory</dt>
+        <dd>{{appData}}</dd>
+
+        <dt>Startup directory</dt>
+        <dd>{{startupPath}}</dd>
+    </dl>
+</fieldset>
+

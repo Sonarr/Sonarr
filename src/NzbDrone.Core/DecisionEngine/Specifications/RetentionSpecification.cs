@@ -16,17 +16,16 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
+        public RejectionType Type => RejectionType.Permanent;
 
-        public string RejectionReason
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            get
+            if (subject.Release.DownloadProtocol != Indexers.DownloadProtocol.Usenet)
             {
-                return "Report past retention limit.";
+                _logger.Debug("Not checking retention requirement for non-usenet report");
+                return Decision.Accept();
             }
-        }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
-        {
             var age = subject.Release.Age;
             var retention = _configService.Retention;
 
@@ -34,10 +33,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (retention > 0 && age > retention)
             {
                 _logger.Debug("Report age: {0} rejected by user's retention limit", age);
-                return false;
+                return Decision.Reject("Older than configured retention");
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

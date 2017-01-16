@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Notifications
         List<INotification> OnGrabEnabled();
         List<INotification> OnDownloadEnabled();
         List<INotification> OnUpgradeEnabled();
+        List<INotification> OnRenameEnabled();
     }
 
     public class NotificationFactory : ProviderFactory<INotification, NotificationDefinition>, INotificationFactory
@@ -34,6 +35,21 @@ namespace NzbDrone.Core.Notifications
         public List<INotification> OnUpgradeEnabled()
         {
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnUpgrade).ToList();
+        }
+
+        public List<INotification> OnRenameEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnRename).ToList();
+        }
+
+        public override void SetProviderCharacteristics(INotification provider, NotificationDefinition definition)
+        {
+            base.SetProviderCharacteristics(provider, definition);
+
+            definition.SupportsOnGrab = provider.SupportsOnGrab;
+            definition.SupportsOnDownload = provider.SupportsOnDownload;
+            definition.SupportsOnUpgrade = provider.SupportsOnUpgrade;
+            definition.SupportsOnRename = provider.SupportsOnRename;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Annotations
         public string HelpText { get; set; }
         public string HelpLink { get; set; }
         public FieldType Type { get; set; }
+        public bool Advanced { get; set; }
         public Type SelectOptions { get; set; }
     }
 
@@ -24,6 +25,12 @@ namespace NzbDrone.Core.Annotations
         Password,
         Checkbox,
         Select,
-        Path
+        Path,
+        FilePath,
+        Hidden,
+        Tag,
+        Action,
+        Url,
+        Captcha
     }
 }

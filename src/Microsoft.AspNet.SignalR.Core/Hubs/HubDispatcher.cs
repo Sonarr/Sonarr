@@ -358,7 +358,7 @@ namespace Microsoft.AspNet.SignalR.Hubs
         private Task ExecuteHubEvent(IRequest request, string connectionId, Func<IHub, Task> action)
         {
             var hubs = GetHubs(request, connectionId).ToList();
-            var operations = hubs.Select(instance => action(instance).Catch().OrEmpty()).ToArray();
+            var operations = hubs.Select(instance => action(instance).OrEmpty().Catch()).ToArray();
 
             if (operations.Length == 0)
             {

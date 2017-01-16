@@ -1,12 +1,6 @@
-'use strict';
-define(
-    [
-        'Cells/TemplatedCell'
-    ], function (TemplatedCell) {
-        return TemplatedCell.extend({
+var TemplatedCell = require('./TemplatedCell');
 
-            className: 'series-title',
-            template : 'Cells/SeriesTitleTemplate'
-
-        });
-    });
+module.exports = TemplatedCell.extend({
+    className : 'series-title-cell',
+    template  : 'Cells/SeriesTitleTemplate'
+});

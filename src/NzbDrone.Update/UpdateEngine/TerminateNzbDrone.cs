@@ -1,6 +1,7 @@
 using System;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
 using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
@@ -8,7 +9,7 @@ namespace NzbDrone.Update.UpdateEngine
 {
     public interface ITerminateNzbDrone
     {
-        void Terminate();
+        void Terminate(int processId);
     }
 
     public class TerminateNzbDrone : ITerminateNzbDrone
@@ -24,29 +25,40 @@ namespace NzbDrone.Update.UpdateEngine
             _logger = logger;
         }
 
-        public void Terminate()
+        public void Terminate(int processId)
         {
-            _logger.Info("Stopping all running services");
-
-            if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
-                && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
+            if (OsInfo.IsWindows)
             {
-                try
-                {
-                    _logger.Info("NzbDrone Service is installed and running");
-                    _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                _logger.Info("Stopping all running services");
 
-                }
-                catch (Exception e)
+                if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
+                    && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
                 {
-                    _logger.ErrorException("couldn't stop service", e);
+                    try
+                    {
+                        _logger.Info("NzbDrone Service is installed and running");
+                        _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Error(e, "couldn't stop service");
+                    }
                 }
+
+                _logger.Info("Killing all running processes");
+
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
             }
+            else
+            {
+                _logger.Info("Killing all running processes");
 
-            _logger.Info("Killing all running processes");
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
 
-            _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
-            _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+                _processProvider.Kill(processId);
+            }
         }
     }
 }

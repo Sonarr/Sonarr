@@ -7,13 +7,7 @@ namespace NzbDrone.Core.IndexerSearch
     {
         public List<int> EpisodeIds { get; set; }
 
-        public override bool SendUpdatesToClient
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SendUpdatesToClient => true;
 
         public EpisodeSearchCommand()
         {

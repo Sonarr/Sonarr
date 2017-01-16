@@ -1,10 +1,3 @@
-﻿﻿'use strict';
-define(
-    [
-        'backbone.deepmodel'
-    ], function (DeepModel) {
-        return DeepModel.DeepModel.extend({
+var ProviderSettingsModelBase = require('../ProviderSettingsModelBase');
 
-        });
-    });
-
+module.exports = ProviderSettingsModelBase.extend({});

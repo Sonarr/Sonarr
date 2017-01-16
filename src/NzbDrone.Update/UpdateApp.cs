@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
 using NzbDrone.Common.Security;
@@ -16,7 +18,7 @@ namespace NzbDrone.Update
         private readonly IProcessProvider _processProvider;
         private static IContainer _container;
 
-        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(UpdateApp));
 
         public UpdateApp(IInstallUpdateService installUpdateService, IProcessProvider processProvider)
         {
@@ -28,47 +30,103 @@ namespace NzbDrone.Update
         {
             try
             {
-                var startupArgument = new StartupContext(args);
-                LogTargets.Register(startupArgument, true, true);
+                SecurityProtocolPolicy.Register();
+                X509CertificateValidationPolicy.Register();
 
-                Console.WriteLine("Starting NzbDrone Update Client");
+                var startupContext = new StartupContext(args);
+                NzbDroneLogger.Register(startupContext, true, true);
 
-                IgnoreCertErrorPolicy.Register();
+                Logger.Info("Starting Sonarr Update Client");
 
-                GlobalExceptionHandlers.Register();
+                _container = UpdateContainerBuilder.Build(startupContext);
 
-                _container = UpdateContainerBuilder.Build(startupArgument);
-
-                logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);
                 _container.Resolve<UpdateApp>().Start(args);
+
+                Logger.Info("Update completed successfully");
             }
             catch (Exception e)
             {
-                logger.FatalException("An error has occurred while applying update package.", e);
+                Logger.Fatal(e, "An error has occurred while applying update package.");
             }
         }
 
         public void Start(string[] args)
         {
-            var processId = ParseProcessId(args);
+            var startupContext = ParseArgs(args);
+            var targetFolder = GetInstallationDirectory(startupContext);
 
-            var exeFileInfo = new FileInfo(_processProvider.GetProcessById(processId).StartPath);
-            var targetFolder = exeFileInfo.Directory.FullName;
-
-            logger.Info("Starting update process. Target Path:{0}", targetFolder);
-            _installUpdateService.Start(targetFolder);
+            _installUpdateService.Start(targetFolder, startupContext.ProcessId);
         }
 
-        private int ParseProcessId(string[] args)
+        private UpdateStartupContext ParseArgs(string[] args)
         {
-            int id;
-            if (args == null || !Int32.TryParse(args[0], out id) || id <= 0)
+            if (args == null || !args.Any())
             {
-                throw new ArgumentOutOfRangeException("args", "Invalid process ID");
+                throw new ArgumentOutOfRangeException("args", "args must be specified");
             }
 
-            logger.Debug("NzbDrone processId:{0}", id);
+            var startupContext = new UpdateStartupContext
+                                 {
+                                     ProcessId = ParseProcessId(args[0])
+                                 };
+
+            if (OsInfo.IsNotWindows)
+            {
+                switch (args.Count())
+                {
+                    case 1:
+                        return startupContext;
+                    default:
+                        {
+                            Logger.Debug("Arguments:");
+
+                            foreach (var arg in args)
+                            {
+                                Logger.Debug("  {0}", arg);
+                            }
+
+                            startupContext.UpdateLocation = args[1];
+                            startupContext.ExecutingApplication = args[2];
+
+                            break;
+                        }
+                }
+            }
+
+            return startupContext;
+        }
+
+        private int ParseProcessId(string arg)
+        {
+            int id;
+            if (!int.TryParse(arg, out id) || id <= 0)
+            {
+                throw new ArgumentOutOfRangeException("arg", "Invalid process ID");
+            }
+
+            Logger.Debug("NzbDrone process ID: {0}", id);
             return id;
+        }
+
+        private string GetInstallationDirectory(UpdateStartupContext startupContext)
+        {
+            if (startupContext.ExecutingApplication.IsNullOrWhiteSpace())
+            {
+                Logger.Debug("Using process ID to find installation directory: {0}", startupContext.ProcessId);
+                var exeFileInfo = new FileInfo(_processProvider.GetProcessById(startupContext.ProcessId).StartPath);
+                Logger.Debug("Executable location: {0}", exeFileInfo.FullName);
+
+                return exeFileInfo.DirectoryName;
+            }
+
+            else
+            {
+                Logger.Debug("Using executing application: {0}", startupContext.ExecutingApplication);
+                var exeFileInfo = new FileInfo(startupContext.ExecutingApplication);
+                Logger.Debug("Executable location: {0}", exeFileInfo.FullName);
+
+                return exeFileInfo.DirectoryName;
+            }
         }
     }
 }

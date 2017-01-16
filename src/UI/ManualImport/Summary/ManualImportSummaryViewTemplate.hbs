@@ -1,0 +1,19 @@
+<dl class="dl-horizontal">
+
+    <dt>Path:</dt>
+    <dd>{{file}}</dd>
+
+    <dt>Series:</dt>
+    <dd>{{series.title}}</dd>
+
+    <dt>Season:</dt>
+    <dd>{{season.seasonNumber}}</dd>
+
+    {{#each episodes}}
+        <dt>Episode:</dt>
+        <dd>{{episodeNumber}} - {{title}}</dd>
+    {{/each}}
+
+    <dt>Quality:</dt>
+    <dd>{{quality.name}}</dd>
+</dl>

@@ -16,8 +16,9 @@ namespace NzbDrone.SignalR
 
         private SignalrDependencyResolver(IContainer container)
         {
-            container.RegisterSingleton(typeof(IPerformanceCounterManager), typeof(NoOpPerformanceCounterManager));
             _container = container;
+            var performanceCounterManager = new SonarrPerformanceCounterManager();
+            Register(typeof(IPerformanceCounterManager), () => performanceCounterManager);
         }
 
         public override object GetService(Type serviceType)

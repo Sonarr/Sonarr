@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.HealthCheck;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Health
 {
@@ -12,8 +11,8 @@ namespace NzbDrone.Api.Health
     {
         private readonly IHealthCheckService _healthCheckService;
 
-        public HealthModule(ICommandExecutor commandExecutor, IHealthCheckService healthCheckService)
-            : base(commandExecutor)
+        public HealthModule(IBroadcastSignalRMessage signalRBroadcaster, IHealthCheckService healthCheckService)
+            : base(signalRBroadcaster)
         {
             _healthCheckService = healthCheckService;
             GetResourceAll = GetHealth;
@@ -21,7 +20,7 @@ namespace NzbDrone.Api.Health
 
         private List<HealthResource> GetHealth()
         {
-            return ToListResource(_healthCheckService.Results);
+            return _healthCheckService.Results().ToResource();
         }
 
         public void Handle(HealthCheckCompleteEvent message)

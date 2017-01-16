@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using NzbDrone.Common;
+using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
@@ -12,17 +11,22 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
     public class SceneMappingProxy : ISceneMappingProxy
     {
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
+        private readonly IHttpRequestBuilderFactory _requestBuilder;
 
-        public SceneMappingProxy(IHttpProvider httpProvider)
+        public SceneMappingProxy(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder)
         {
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
+            _requestBuilder = requestBuilder.Services;
         }
 
         public List<SceneMapping> Fetch()
         {
-            var mappingsJson = _httpProvider.DownloadString(Services.RootUrl + "/v1/SceneMapping");
-            return Json.Deserialize<List<SceneMapping>>(mappingsJson);
+            var request = _requestBuilder.Create()
+                                         .Resource("/scenemapping")
+                                         .Build();
+
+            return _httpClient.Get<List<SceneMapping>>(request).Resource;
         }
     }
 }

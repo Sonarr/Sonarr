@@ -1,15 +1,35 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
     public static class BuildInfo
     {
-        public static Version Version
+        static BuildInfo()
         {
-            get { return Assembly.GetExecutingAssembly().GetName().Version; }
+            var assembly = Assembly.GetExecutingAssembly();
+
+            Version = assembly.GetName().Version;
+
+            var attributes = assembly.GetCustomAttributes(true);
+
+            Branch = "unknow";
+
+            var config = attributes.OfType<AssemblyConfigurationAttribute>().FirstOrDefault();
+            if (config != null)
+            {
+                Branch = config.Configuration;
+            }
+
+            Release = $"{Version}-{Branch}";
         }
+
+        public static Version Version { get; }
+        public static String Branch { get; }
+        public static string Release { get; }
 
         public static DateTime BuildDateTime
         {

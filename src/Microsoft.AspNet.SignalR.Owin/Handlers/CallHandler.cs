@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hosting;
 using Microsoft.AspNet.SignalR.Owin.Infrastructure;
@@ -65,9 +66,19 @@ namespace Microsoft.AspNet.SignalR.Owin
 
             if (!_connection.Authorize(serverRequest))
             {
-                // If we failed to authorize the request then return a 403 since the request
-                // can't do anything
-                return EndResponse(environment, 403, "Forbidden");
+                IPrincipal user = hostContext.Request.User;
+                if (user != null && user.Identity.IsAuthenticated)
+                {
+                    // If we failed to authorize the request then return a 403 since the request
+                    // can't do anything
+                    return EndResponse(environment, 403, "Forbidden");
+                }
+                else
+                {
+                    // If we failed to authorize the request and the user is not authenticated
+                    // then return a 401
+                    return EndResponse(environment, 401, "Unauthorized");
+                }
             }
             else
             {

@@ -1,36 +1,58 @@
-﻿'use strict';
+var _ = require('underscore');
+var $ = require('jquery');
+var AppLayout = require('../../../AppLayout');
+var Marionette = require('marionette');
+var EditView = require('../Edit/DownloadClientEditView');
 
-define([
-    'AppLayout',
-    'marionette',
-    'Settings/DownloadClient/Edit/DownloadClientEditView'
-], function (AppLayout, Marionette, EditView) {
+module.exports = Marionette.ItemView.extend({
+    template  : 'Settings/DownloadClient/Add/DownloadClientAddItemViewTemplate',
+    tagName   : 'li',
+    className : 'add-thingy-item',
 
-    return Marionette.ItemView.extend({
-        template: 'Settings/DownloadClient/Add/DownloadClientAddItemViewTemplate',
-        tagName : 'li',
+    events : {
+        'click .x-preset' : '_addPreset',
+        'click'           : '_add'
+    },
 
-        events: {
-            'click': '_add'
-        },
+    initialize : function(options) {
+        this.targetCollection = options.targetCollection;
+    },
 
-        initialize: function (options) {
-            this.downloadClientCollection = options.downloadClientCollection;
-        },
+    _addPreset : function(e) {
+        var presetName = $(e.target).closest('.x-preset').attr('data-id');
 
-        _add: function (e) {
-            if (this.$(e.target).hasClass('icon-info-sign')) {
-                return;
-            }
+        var presetData = _.where(this.model.get('presets'), { name : presetName })[0];
 
-            this.model.set({
-                id         : undefined,
-                name       : this.model.get('implementationName'),
-                enable     : true
-            });
+        this.model.set(presetData);
 
-            var editView = new EditView({ model: this.model, downloadClientCollection: this.downloadClientCollection });
-            AppLayout.modalRegion.show(editView);
+        this.model.set({
+            id     : undefined,
+            enable : true
+        });
+
+        var editView = new EditView({
+            model            : this.model,
+            targetCollection : this.targetCollection
+        });
+
+        AppLayout.modalRegion.show(editView);
+    },
+
+    _add : function(e) {
+        if ($(e.target).closest('.btn,.btn-group').length !== 0 && $(e.target).closest('.x-custom').length === 0) {
+            return;
         }
-    });
+
+        this.model.set({
+            id     : undefined,
+            enable : true
+        });
+
+        var editView = new EditView({
+            model            : this.model,
+            targetCollection : this.targetCollection
+        });
+
+        AppLayout.modalRegion.show(editView);
+    }
 });

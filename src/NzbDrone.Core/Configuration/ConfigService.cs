@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
-
+using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -30,14 +32,9 @@ namespace NzbDrone.Core.Configuration
             _cache = new Dictionary<string, string>();
         }
 
-        public IEnumerable<Config> All()
+        private Dictionary<string, object> AllWithDefaults()
         {
-            return _repository.All();
-        }
-
-        public Dictionary<String, Object> AllWithDefaults()
-        {
-            var dict = new Dictionary<String, Object>(StringComparer.InvariantCultureIgnoreCase);
+            var dict = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
             var type = GetType();
             var properties = type.GetProperties();
@@ -45,7 +42,6 @@ namespace NzbDrone.Core.Configuration
             foreach (var propertyInfo in properties)
             {
                 var value = propertyInfo.GetValue(this, null);
-
                 dict.Add(propertyInfo.Name, value);
             }
 
@@ -60,18 +56,25 @@ namespace NzbDrone.Core.Configuration
             {
                 object currentValue;
                 allWithDefaults.TryGetValue(configValue.Key, out currentValue);
-                if (currentValue == null) continue;
+                if (currentValue == null || configValue.Value == null) continue;
 
                 var equal = configValue.Value.ToString().Equals(currentValue.ToString());
 
                 if (!equal)
+                {
                     SetValue(configValue.Key, configValue.Value.ToString());
+                }
             }
 
             _eventAggregator.PublishEvent(new ConfigSavedEvent());
         }
 
-        public String DownloadedEpisodesFolder
+        public bool IsDefined(string key)
+        {
+            return _repository.Get(key.ToLower()) != null;
+        }
+
+        public string DownloadedEpisodesFolder
         {
             get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
 
@@ -92,73 +95,60 @@ namespace NzbDrone.Core.Configuration
 
         public string RecycleBin
         {
-            get { return GetValue("RecycleBin", String.Empty); }
+            get { return GetValue("RecycleBin", string.Empty); }
             set { SetValue("RecycleBin", value); }
         }
 
-        public string ReleaseRestrictions
-        {
-            get { return GetValue("ReleaseRestrictions", String.Empty).Trim('\r', '\n'); }
-            set { SetValue("ReleaseRestrictions", value.Trim('\r', '\n')); }
-        }
-
-        public Int32 RssSyncInterval
+        public int RssSyncInterval
         {
             get { return GetValueInt("RssSyncInterval", 15); }
 
             set { SetValue("RssSyncInterval", value); }
         }
 
-        public Boolean AutoDownloadPropers
+        public int MinimumAge
+        {
+            get { return GetValueInt("MinimumAge", 0); }
+
+            set { SetValue("MinimumAge", value); }
+        }
+
+        public bool AutoDownloadPropers
         {
             get { return GetValueBoolean("AutoDownloadPropers", true); }
 
             set { SetValue("AutoDownloadPropers", value); }
         }
 
-        public Boolean AutoRedownloadFailed
+        public bool EnableCompletedDownloadHandling
+        {
+            get { return GetValueBoolean("EnableCompletedDownloadHandling", true); }
+
+            set { SetValue("EnableCompletedDownloadHandling", value); }
+        }
+
+        public bool RemoveCompletedDownloads
+        {
+            get { return GetValueBoolean("RemoveCompletedDownloads", false); }
+
+            set { SetValue("RemoveCompletedDownloads", value); }
+        }
+
+        public bool AutoRedownloadFailed
         {
             get { return GetValueBoolean("AutoRedownloadFailed", true); }
 
             set { SetValue("AutoRedownloadFailed", value); }
         }
 
-        public Boolean RemoveFailedDownloads
+        public bool RemoveFailedDownloads
         {
             get { return GetValueBoolean("RemoveFailedDownloads", true); }
 
             set { SetValue("RemoveFailedDownloads", value); }
         }
 
-        public Int32 BlacklistGracePeriod
-        {
-            get { return GetValueInt("BlacklistGracePeriod", 2); }
-
-            set { SetValue("BlacklistGracePeriod", value); }
-        }
-
-        public Int32 BlacklistRetryInterval
-        {
-            get { return GetValueInt("BlacklistRetryInterval", 60); }
-
-            set { SetValue("BlacklistRetryInterval", value); }
-        }
-
-        public Int32 BlacklistRetryLimit
-        {
-            get { return GetValueInt("BlacklistRetryLimit", 1); }
-
-            set { SetValue("BlacklistRetryLimit", value); }
-        }
-
-        public Boolean EnableFailedDownloadHandling
-        {
-            get { return GetValueBoolean("EnableFailedDownloadHandling", true); }
-
-            set { SetValue("EnableFailedDownloadHandling", value); }
-        }
-
-        public Boolean CreateEmptySeriesFolders
+        public bool CreateEmptySeriesFolders
         {
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
 
@@ -172,64 +162,172 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("FileDate", value); }
         }
 
-        public String DownloadClientWorkingFolders
+        public string DownloadClientWorkingFolders
         {
             get { return GetValue("DownloadClientWorkingFolders", "_UNPACK_|_FAILED_"); }
             set { SetValue("DownloadClientWorkingFolders", value); }
         }
 
-        public Int32 DownloadedEpisodesScanInterval
+        public int DownloadedEpisodesScanInterval
         {
             get { return GetValueInt("DownloadedEpisodesScanInterval", 1); }
 
             set { SetValue("DownloadedEpisodesScanInterval", value); }
         }
 
-        public Boolean SkipFreeSpaceCheckWhenImporting
+        public int DownloadClientHistoryLimit
+        {
+            get { return GetValueInt("DownloadClientHistoryLimit", 30); }
+
+            set { SetValue("DownloadClientHistoryLimit", value); }
+        }
+
+        public bool SkipFreeSpaceCheckWhenImporting
         {
             get { return GetValueBoolean("SkipFreeSpaceCheckWhenImporting", false); }
 
             set { SetValue("SkipFreeSpaceCheckWhenImporting", value); }
         }
 
-        public Boolean SetPermissionsLinux
+        public bool CopyUsingHardlinks
+        {
+            get { return GetValueBoolean("CopyUsingHardlinks", true); }
+
+            set { SetValue("CopyUsingHardlinks", value); }
+        }
+
+        public bool EnableMediaInfo
+        {
+            get { return GetValueBoolean("EnableMediaInfo", true); }
+
+            set { SetValue("EnableMediaInfo", value); }
+        }
+
+        public string ExtraFileExtensions
+        {
+            get { return GetValue("ExtraFileExtensions", ""); }
+
+            set { SetValue("ExtraFileExtensions", value); }
+        }
+
+        public bool SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }
 
             set { SetValue("SetPermissionsLinux", value); }
         }
 
-        public String FileChmod
+        public string FileChmod
         {
             get { return GetValue("FileChmod", "0644"); }
 
             set { SetValue("FileChmod", value); }
         }
 
-        public String FolderChmod
+        public string FolderChmod
         {
             get { return GetValue("FolderChmod", "0755"); }
 
             set { SetValue("FolderChmod", value); }
         }
 
-        public String ChownUser
+        public string ChownUser
         {
             get { return GetValue("ChownUser", ""); }
 
             set { SetValue("ChownUser", value); }
         }
 
-        public String ChownGroup
+        public string ChownGroup
         {
             get { return GetValue("ChownGroup", ""); }
 
             set { SetValue("ChownGroup", value); }
         }
 
+        public int FirstDayOfWeek
+        {
+            get { return GetValueInt("FirstDayOfWeek", (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek); }
+
+            set { SetValue("FirstDayOfWeek", value); }
+        }
+
+        public string CalendarWeekColumnHeader
+        {
+            get { return GetValue("CalendarWeekColumnHeader", "ddd M/D"); }
+
+            set { SetValue("CalendarWeekColumnHeader", value); }
+        }
+
+        public string ShortDateFormat
+        {
+            get { return GetValue("ShortDateFormat", "MMM D YYYY"); }
+
+            set { SetValue("ShortDateFormat", value); }
+        }
+
+        public string LongDateFormat
+        {
+            get { return GetValue("LongDateFormat", "dddd, MMMM D YYYY"); }
+
+            set { SetValue("LongDateFormat", value); }
+        }
+
+        public string TimeFormat
+        {
+            get { return GetValue("TimeFormat", "h(:mm)a"); }
+
+            set { SetValue("TimeFormat", value); }
+        }
+
+        public bool ShowRelativeDates
+        {
+            get { return GetValueBoolean("ShowRelativeDates", true); }
+
+            set { SetValue("ShowRelativeDates", value); }
+        }
+
+        public bool EnableColorImpairedMode
+        {
+            get { return GetValueBoolean("EnableColorImpairedMode", false); }
+
+            set { SetValue("EnableColorImpairedMode", value); }
+        }
+
+        public bool CleanupMetadataImages
+        {
+            get { return GetValueBoolean("CleanupMetadataImages", true); }
+
+            set { SetValue("CleanupMetadataImages", value); }
+        }
+
+        public string RijndaelPassphrase => GetValue("RijndaelPassphrase", Guid.NewGuid().ToString(), true);
+
+        public string HmacPassphrase => GetValue("HmacPassphrase", Guid.NewGuid().ToString(), true);
+
+        public string RijndaelSalt => GetValue("RijndaelSalt", Guid.NewGuid().ToString(), true);
+
+        public string HmacSalt => GetValue("HmacSalt", Guid.NewGuid().ToString(), true);
+
+        public bool ProxyEnabled => GetValueBoolean("ProxyEnabled", false);
+
+        public ProxyType ProxyType => GetValueEnum<ProxyType>("ProxyType", ProxyType.Http);
+
+        public string ProxyHostname => GetValue("ProxyHostname", string.Empty);
+
+        public int ProxyPort => GetValueInt("ProxyPort", 8080);
+
+        public string ProxyUsername => GetValue("ProxyUsername", string.Empty);
+
+        public string ProxyPassword => GetValue("ProxyPassword", string.Empty);
+
+        public string ProxyBypassFilter => GetValue("ProxyBypassFilter", string.Empty);
+
+        public bool ProxyBypassLocalAddresses => GetValueBoolean("ProxyBypassLocalAddresses", true);
+
         private string GetValue(string key)
         {
-            return GetValue(key, String.Empty);
+            return GetValue(key, string.Empty);
         }
 
         private bool GetValueBoolean(string key, bool defaultValue = false)
@@ -242,7 +340,7 @@ namespace NzbDrone.Core.Configuration
             return Convert.ToInt32(GetValue(key, defaultValue));
         }
 
-        public T GetValueEnum<T>(string key, T defaultValue)
+        private T GetValueEnum<T>(string key, T defaultValue)
         {
             return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
         }
@@ -256,19 +354,22 @@ namespace NzbDrone.Core.Configuration
 
             string dbValue;
 
-            if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !String.IsNullOrEmpty(dbValue))
+            if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !string.IsNullOrEmpty(dbValue))
+            {
                 return dbValue;
+            }
 
-            _logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
+            _logger.Trace("Using default config value for '{0}' defaultValue:'{1}'", key, defaultValue);
 
             if (persist)
             {
                 SetValue(key, defaultValue.ToString());
             }
+
             return defaultValue.ToString();
         }
 
-        private void SetValue(string key, Boolean value)
+        private void SetValue(string key, bool value)
         {
             SetValue(key, value.ToString());
         }
@@ -278,30 +379,19 @@ namespace NzbDrone.Core.Configuration
             SetValue(key, value.ToString());
         }
 
-        public void SetValue(string key, string value)
+        private void SetValue(string key, Enum value)
+        {
+            SetValue(key, value.ToString().ToLower());
+        }
+
+        private void SetValue(string key, string value)
         {
             key = key.ToLowerInvariant();
 
             _logger.Trace("Writing Setting to database. Key:'{0}' Value:'{1}'", key, value);
-
-            var dbValue = _repository.Get(key);
-
-            if (dbValue == null)
-            {
-                _repository.Insert(new Config { Key = key, Value = value });
-            }
-            else
-            {
-                dbValue.Value = value;
-                _repository.Update(dbValue);
-            }
+            _repository.Upsert(key, value);
 
             ClearCache();
-        }
-
-        public void SetValue(string key, Enum value)
-        {
-            SetValue(key, value.ToString().ToLower());
         }
 
         private void EnsureCache()
@@ -310,12 +400,13 @@ namespace NzbDrone.Core.Configuration
             {
                 if (!_cache.Any())
                 {
-                    _cache = All().ToDictionary(c => c.Key.ToLower(), c => c.Value);
+                    var all = _repository.All();
+                    _cache = all.ToDictionary(c => c.Key.ToLower(), c => c.Value);
                 }
             }
         }
 
-        public static void ClearCache()
+        private static void ClearCache()
         {
             lock (_cache)
             {

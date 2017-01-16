@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common;
+using Newtonsoft.Json.Linq;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Annotations;
 
@@ -25,15 +26,16 @@ namespace NzbDrone.Api.ClientSchema
                 if (fieldAttribute != null)
                 {
 
-                    var field = new Field()
-                        {
-                            Name = propertyInfo.Name,
-                            Label = fieldAttribute.Label,
-                            HelpText = fieldAttribute.HelpText,
-                            HelpLink = fieldAttribute.HelpLink,
-                            Order = fieldAttribute.Order,
-                            Type = fieldAttribute.Type.ToString().ToLowerInvariant()
-                        };
+                    var field = new Field
+                    {
+                        Name = propertyInfo.Name,
+                        Label = fieldAttribute.Label,
+                        HelpText = fieldAttribute.HelpText,
+                        HelpLink = fieldAttribute.HelpLink,
+                        Order = fieldAttribute.Order,
+                        Advanced = fieldAttribute.Advanced,
+                        Type = fieldAttribute.Type.ToString().ToLowerInvariant()
+                    };
 
                     var value = propertyInfo.GetValue(model, null);
                     if (value != null)
@@ -50,12 +52,10 @@ namespace NzbDrone.Api.ClientSchema
                 }
             }
 
-            return result;
-
+            return result.OrderBy(r => r.Order).ToList();
         }
 
-
-        public static object ReadFormSchema(List<Field> fields, Type targetType)
+        public static object ReadFromSchema(List<Field> fields, Type targetType)
         {
             Ensure.That(targetType, () => targetType).IsNotNull();
 
@@ -71,19 +71,19 @@ namespace NzbDrone.Api.ClientSchema
                 {
                     var field = fields.Find(f => f.Name == propertyInfo.Name);
 
-                    if (propertyInfo.PropertyType == typeof(Int32))
+                    if (propertyInfo.PropertyType == typeof(int))
                     {
                         var value = Convert.ToInt32(field.Value);
                         propertyInfo.SetValue(target, value, null);
                     }
 
-                    else if (propertyInfo.PropertyType == typeof(Int64))
+                    else if (propertyInfo.PropertyType == typeof(long))
                     {
                         var value = Convert.ToInt64(field.Value);
                         propertyInfo.SetValue(target, value, null);
                     }
 
-                    else if (propertyInfo.PropertyType == typeof(Nullable<Int32>))
+                    else if (propertyInfo.PropertyType == typeof(int?))
                     {
                         var value = field.Value.ToString().ParseInt32();
                         propertyInfo.SetValue(target, value, null);
@@ -92,6 +92,40 @@ namespace NzbDrone.Api.ClientSchema
                     else if (propertyInfo.PropertyType == typeof(Nullable<Int64>))
                     {
                         var value = field.Value.ToString().ParseInt64();
+                        propertyInfo.SetValue(target, value, null);
+                    }
+
+                    else if (propertyInfo.PropertyType == typeof(IEnumerable<int>))
+                    {
+                        IEnumerable<int> value;
+
+                        if (field.Value.GetType() == typeof(JArray))
+                        {
+                            value = ((JArray)field.Value).Select(s => s.Value<int>());
+                        }
+
+                        else
+                        {
+                            value = field.Value.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => Convert.ToInt32(s));
+                        }
+
+                        propertyInfo.SetValue(target, value, null);
+                    }
+
+                    else if (propertyInfo.PropertyType == typeof(IEnumerable<string>))
+                    {
+                        IEnumerable<string> value;
+
+                        if (field.Value.GetType() == typeof(JArray))
+                        {
+                            value = ((JArray)field.Value).Select(s => s.Value<string>());
+                        }
+
+                        else
+                        {
+                            value = field.Value.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        }
+
                         propertyInfo.SetValue(target, value, null);
                     }
 
@@ -106,9 +140,9 @@ namespace NzbDrone.Api.ClientSchema
 
         }
 
-        public static T ReadFormSchema<T>(List<Field> fields)
+        public static T ReadFromSchema<T>(List<Field> fields)
         {
-            return (T)ReadFormSchema(fields, typeof(T));
+            return (T)ReadFromSchema(fields, typeof(T));
         }
 
         private static List<SelectOption> GetSelectOptions(Type selectOptions)

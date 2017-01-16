@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -22,12 +23,12 @@ namespace NzbDrone.Core.Tv
         Series FindByTitle(string title);
         Series FindByTitle(string title, int year);
         Series FindByTitleInexact(string title);
-        void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
         Series UpdateSeries(Series series);
         List<Series> UpdateSeries(List<Series> series);
         bool SeriesPathExists(string folder);
+        void RemoveAddOptions(Series series);
     }
 
     public class SeriesService : ISeriesService
@@ -68,16 +69,17 @@ namespace NzbDrone.Core.Tv
         {
             Ensure.That(newSeries, () => newSeries).IsNotNull();
 
-            if (String.IsNullOrWhiteSpace(newSeries.Path))
+            if (string.IsNullOrWhiteSpace(newSeries.Path))
             {
-                var folderName = _fileNameBuilder.GetSeriesFolder(newSeries.Title);
+                var folderName = _fileNameBuilder.GetSeriesFolder(newSeries);
                 newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);
             }
 
             _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
 
-            newSeries.Monitored = true;
-            newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
+            newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
+            newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
+            newSeries.Added = DateTime.UtcNow;
 
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
@@ -85,9 +87,9 @@ namespace NzbDrone.Core.Tv
             return newSeries;
         }
 
-        public Series FindByTvdbId(int tvdbId)
+        public Series FindByTvdbId(int tvRageId)
         {
-            return _seriesRepository.FindByTvdbId(tvdbId);
+            return _seriesRepository.FindByTvdbId(tvRageId);
         }
 
         public Series FindByTvRageId(int tvRageId)
@@ -97,71 +99,61 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitle(string title)
         {
-            title = Parser.Parser.CleanSeriesTitle(title);
-
-            var tvdbId = _sceneMappingService.GetTvDbId(title);
+            var tvdbId = _sceneMappingService.FindTvdbId(title);
 
             if (tvdbId.HasValue)
             {
-                return FindByTvdbId(tvdbId.Value);
+                return _seriesRepository.FindByTvdbId(tvdbId.Value);
             }
 
-            return _seriesRepository.FindByTitle(title);
+            return _seriesRepository.FindByTitle(title.CleanSeriesTitle());
         }
 
         public Series FindByTitleInexact(string title)
         {
             // find any series clean title within the provided release title
-            string cleanTitle = Parser.Parser.CleanSeriesTitle(title);
+            string cleanTitle = title.CleanSeriesTitle();
             var list = _seriesRepository.All().Where(s => cleanTitle.Contains(s.CleanTitle)).ToList();
             if (!list.Any())
             {
                 // no series matched
                 return null;
             }
-            else if (list.Count == 1)
+            if (list.Count == 1)
             {
                 // return the first series if there is only one 
                 return list.Single();
             }
-            else 
-            {
-                // build ordered list of series by position in the search string
-                var query = 
-                        list.Select(series => new
-                            {
-                                position = cleanTitle.IndexOf(series.CleanTitle),
-                                length = series.CleanTitle.Length,
-                                series = series
-                            })
-                            .Where(s => (s.position>=0))
-                            .ToList()
-                            .OrderBy(s => s.position)
-                            .ThenByDescending(s => s.length)
-                            .ToList();
-
-                // get the leftmost series that is the longest
-                // series are usually the first thing in release title, so we select the leftmost and longest match
-                var match = query.First().series;
-
-                _logger.Debug("Multiple series matched {0} from title {1}", match.Title, title);
-                foreach (var entry in list)
+            // build ordered list of series by position in the search string
+            var query = 
+                list.Select(series => new
                 {
-                    _logger.Debug("Multiple series match candidate: {0} cleantitle: {1}", entry.Title, entry.CleanTitle);
-                }
+                    position = cleanTitle.IndexOf(series.CleanTitle),
+                    length = series.CleanTitle.Length,
+                    series = series
+                })
+                    .Where(s => (s.position>=0))
+                    .ToList()
+                    .OrderBy(s => s.position)
+                    .ThenByDescending(s => s.length)
+                    .ToList();
 
-                return match;
+            // get the leftmost series that is the longest
+            // series are usually the first thing in release title, so we select the leftmost and longest match
+            var match = query.First().series;
+
+            _logger.Debug("Multiple series matched {0} from title {1}", match.Title, title);
+            foreach (var entry in list)
+            {
+                _logger.Debug("Multiple series match candidate: {0} cleantitle: {1}", entry.Title, entry.CleanTitle);
             }
+
+            return match;
         }
 
         public Series FindByTitle(string title, int year)
         {
-            return _seriesRepository.FindByTitle(title, year);
-        }
-
-        public void SetSeriesType(int seriesId, SeriesTypes seriesTypes)
-        {
-            _seriesRepository.SetSeriesType(seriesId, seriesTypes);
+            return _seriesRepository.FindByTitle(title.CleanSeriesTitle(), year);
         }
 
         public void DeleteSeries(int seriesId, bool deleteFiles)
@@ -191,7 +183,7 @@ namespace NzbDrone.Core.Tv
             }
 
             var updatedSeries = _seriesRepository.Update(series);
-            _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries));
+            _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries));
 
             return updatedSeries;
         }
@@ -224,6 +216,11 @@ namespace NzbDrone.Core.Tv
         public bool SeriesPathExists(string folder)
         {
             return _seriesRepository.SeriesPathExists(folder);
+        }
+
+        public void RemoveAddOptions(Series series)
+        {
+            _seriesRepository.SetFields(series, s => s.AddOptions);
         }
     }
 }

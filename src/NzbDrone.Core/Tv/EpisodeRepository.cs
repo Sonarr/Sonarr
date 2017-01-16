@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Marr.Data.QGen;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Messaging.Events;
@@ -25,7 +25,8 @@ namespace NzbDrone.Core.Tv
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
         PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
-        List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate);
+        Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
+        List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored);
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
         void SetFileId(int episodeId, int fileId);
@@ -33,10 +34,10 @@ namespace NzbDrone.Core.Tv
 
     public class EpisodeRepository : BasicRepository<Episode>, IEpisodeRepository
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
         private readonly Logger _logger;
 
-        public EpisodeRepository(IDatabase database, IEventAggregator eventAggregator, Logger logger)
+        public EpisodeRepository(IMainDatabase database, IEventAggregator eventAggregator, Logger logger)
             : base(database, eventAggregator)
         {
             _database = database;
@@ -116,7 +117,6 @@ namespace NzbDrone.Core.Tv
 
         public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials)
         {
-            var currentTime = DateTime.UtcNow;
             var startingSeasonNumber = 1;
 
             if (includeSpecials)
@@ -124,8 +124,8 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
 
-            pagingSpec.TotalRecords = EpisodesWhereCutoffUnmetQuery(pagingSpec, currentTime, qualitiesBelowCutoff, startingSeasonNumber).GetRowCount();
-            pagingSpec.Records = EpisodesWhereCutoffUnmetQuery(pagingSpec, currentTime, qualitiesBelowCutoff, startingSeasonNumber).ToList();
+            pagingSpec.TotalRecords = EpisodesWhereCutoffUnmetQuery(pagingSpec, qualitiesBelowCutoff, startingSeasonNumber).GetRowCount();
+            pagingSpec.Records = EpisodesWhereCutoffUnmetQuery(pagingSpec, qualitiesBelowCutoff, startingSeasonNumber).ToList();
 
             return pagingSpec;
         }
@@ -137,14 +137,34 @@ namespace NzbDrone.Core.Tv
                         .AndWhere(s => s.SceneEpisodeNumber == episodeNumber);
         }
 
-        public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)
+        public Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber)
         {
-            return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                        .Where<Episode>(e => e.AirDateUtc >= startDate)
-                        .AndWhere(e => e.AirDateUtc <= endDate)
-                        .AndWhere(e => e.Monitored)
-                        .AndWhere(e => e.Series.Monitored)
+            var episodes = Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.SceneAbsoluteEpisodeNumber == sceneAbsoluteEpisodeNumber)
                         .ToList();
+
+            if (episodes.Empty() || episodes.Count > 1)
+            {
+                return null;
+            }
+
+            return episodes.Single();
+        }
+
+        public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored)
+        {
+            var query = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
+                             .Where<Episode>(e => e.AirDateUtc >= startDate)
+                             .AndWhere(e => e.AirDateUtc <= endDate);
+
+
+            if (!includeUnmonitored)
+            {
+                query.AndWhere(e => e.Monitored)
+                     .AndWhere(e => e.Series.Monitored);
+            }
+
+            return query.ToList();
         }
 
         public void SetMonitoredFlat(Episode episode, bool monitored)
@@ -180,39 +200,44 @@ namespace NzbDrone.Core.Tv
                             .Where(pagingSpec.FilterExpression)
                             .AndWhere(e => e.EpisodeFileId == 0)
                             .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
-                            .AndWhere(e => e.AirDateUtc <= currentTime)
+                            .AndWhere(BuildAirDateUtcCutoffWhereClause(currentTime))
                             .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
                             .Skip(pagingSpec.PagingOffset())
                             .Take(pagingSpec.PageSize);
         }
 
-        private SortBuilder<Episode> EpisodesWhereCutoffUnmetQuery(PagingSpec<Episode> pagingSpec, DateTime currentTime, List<QualitiesBelowCutoff> qualitiesBelowCutoff, int startingSeasonNumber)
+        private SortBuilder<Episode> EpisodesWhereCutoffUnmetQuery(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, int startingSeasonNumber)
         {
             return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
                              .Join<Episode, EpisodeFile>(JoinType.Left, e => e.EpisodeFile, (e, s) => e.EpisodeFileId == s.Id)
                              .Where(pagingSpec.FilterExpression)
                              .AndWhere(e => e.EpisodeFileId != 0)
                              .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
-                             .AndWhere(e => e.AirDateUtc <= currentTime)
                              .AndWhere(BuildQualityCutoffWhereClause(qualitiesBelowCutoff))
                              .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
                              .Skip(pagingSpec.PagingOffset())
                              .Take(pagingSpec.PageSize);
         }
 
+        private string BuildAirDateUtcCutoffWhereClause(DateTime currentTime)
+        {
+            return string.Format("WHERE datetime(strftime('%s', [t0].[AirDateUtc]) + [t1].[RunTime] * 60,  'unixepoch') <= '{0}'",
+                                 currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+        }
+
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
         {
-            var clauses = new List<String>();
+            var clauses = new List<string>();
 
             foreach (var profile in qualitiesBelowCutoff)
             {
                 foreach (var belowCutoff in profile.QualityIds)
                 {
-                    clauses.Add(String.Format("([t1].[QualityProfileId] = {0} AND [t2].[Quality] LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
+                    clauses.Add(string.Format("([t1].[ProfileId] = {0} AND [t2].[Quality] LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
                 }
             }
 
-            return String.Format("({0})", String.Join(" OR ", clauses));
+            return string.Format("({0})", string.Join(" OR ", clauses));
         }
 
         private Episode FindOneByAirDate(int seriesId, string date)

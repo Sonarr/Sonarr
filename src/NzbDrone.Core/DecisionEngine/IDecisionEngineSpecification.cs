@@ -3,8 +3,10 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine
 {
-    public interface IDecisionEngineSpecification : IRejectWithReason
+    public interface IDecisionEngineSpecification
     {
-        bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria);
+        RejectionType Type { get; }
+
+        Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria);
     }
 }

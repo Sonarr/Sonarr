@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FluentValidation;
-using FluentValidation.Results;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.RootFolders;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Validation.Paths;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.RootFolders
 {
@@ -14,11 +11,14 @@ namespace NzbDrone.Api.RootFolders
         private readonly IRootFolderService _rootFolderService;
 
         public RootFolderModule(IRootFolderService rootFolderService,
-                                ICommandExecutor commandExecutor,
+                                IBroadcastSignalRMessage signalRBroadcaster,
                                 RootFolderValidator rootFolderValidator,
                                 PathExistsValidator pathExistsValidator,
-                                DroneFactoryValidator droneFactoryValidator)
-            : base(commandExecutor)
+                                DroneFactoryValidator droneFactoryValidator,
+                                MappedNetworkDriveValidator mappedNetworkDriveValidator,
+                                StartupFolderValidator startupFolderValidator,
+                                FolderWritableValidator folderWritableValidator)
+            : base(signalRBroadcaster)
         {
             _rootFolderService = rootFolderService;
 
@@ -31,23 +31,28 @@ namespace NzbDrone.Api.RootFolders
                            .Cascade(CascadeMode.StopOnFirstFailure)
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
+                           .SetValidator(droneFactoryValidator)
+                           .SetValidator(mappedNetworkDriveValidator)
+                           .SetValidator(startupFolderValidator)
                            .SetValidator(pathExistsValidator)
-                           .SetValidator(droneFactoryValidator);
+                           .SetValidator(folderWritableValidator);
         }
 
         private RootFolderResource GetRootFolder(int id)
         {
-            return _rootFolderService.Get(id).InjectTo<RootFolderResource>();
+            return _rootFolderService.Get(id).ToResource();
         }
 
         private int CreateRootFolder(RootFolderResource rootFolderResource)
         {
-            return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);
+            var model = rootFolderResource.ToModel();
+
+            return _rootFolderService.Add(model).Id;
         }
 
         private List<RootFolderResource> GetRootFolders()
         {
-            return ToListResource(_rootFolderService.AllWithUnmappedFolders);
+            return _rootFolderService.AllWithUnmappedFolders().ToResource();
         }
 
         private void DeleteFolder(int id)

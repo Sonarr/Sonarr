@@ -1,5 +1,6 @@
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -21,48 +22,50 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get { return "File size too big or small"; }
-        }
+        public RejectionType Type => RejectionType.Permanent;
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             _logger.Debug("Beginning size check for: {0}", subject);
 
             var quality = subject.ParsedEpisodeInfo.Quality.Quality;
 
-            if (quality == Quality.RAWHD)
+            if (subject.ParsedEpisodeInfo.Special)
             {
-                _logger.Debug("Raw-HD release found, skipping size check.");
-                return true;
+                _logger.Debug("Special release found, skipping size check.");
+                return Decision.Accept();
             }
 
-            if (quality == Quality.Unknown)
+            if (subject.Release.Size == 0)
             {
-                _logger.Debug("Unknown quality. skipping size check.");
-                return false;
+                _logger.Debug("Release has unknown size, skipping size check.");
+                return Decision.Accept();
             }
 
             var qualityDefinition = _qualityDefinitionService.Get(quality);
-            var minSize = qualityDefinition.MinSize.Megabytes();
-
-            //Multiply maxSize by Series.Runtime
-            minSize = minSize * subject.Series.Runtime * subject.Episodes.Count;
-
-            //If the parsed size is smaller than minSize we don't want it
-            if (subject.Release.Size < minSize)
+            if (qualityDefinition.MinSize.HasValue)
             {
-                _logger.Debug("Item: {0}, Size: {1} is smaller than minimum allowed size ({2}), rejecting.", subject, subject.Release.Size, minSize);
-                return false;
+                var minSize = qualityDefinition.MinSize.Value.Megabytes();
+
+                //Multiply maxSize by Series.Runtime
+                minSize = minSize * subject.Series.Runtime * subject.Episodes.Count;
+
+                //If the parsed size is smaller than minSize we don't want it
+                if (subject.Release.Size < minSize)
+                {
+                    var runtimeMessage = subject.Episodes.Count == 1 ? $"{subject.Series.Runtime}min" : $"{subject.Episodes.Count}x {subject.Series.Runtime}min";
+
+                    _logger.Debug("Item: {0}, Size: {1} is smaller than minimum allowed size ({2} bytes for {3}), rejecting.", subject, subject.Release.Size, minSize, runtimeMessage);
+                    return Decision.Reject("{0} is smaller than minimum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), minSize.SizeSuffix(), runtimeMessage);
+                }
             }
-            if (qualityDefinition.MaxSize == 0)
+            if (!qualityDefinition.MaxSize.HasValue || qualityDefinition.MaxSize.Value == 0)
             {
-                _logger.Debug("Max size is 0 (unlimited) - skipping check.");
+                _logger.Debug("Max size is unlimited - skipping check.");
             }
             else
             {
-                var maxSize = qualityDefinition.MaxSize.Megabytes();
+                var maxSize = qualityDefinition.MaxSize.Value.Megabytes();
 
                 //Multiply maxSize by Series.Runtime
                 maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;
@@ -86,6 +89,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     //or is the last episode in a season that has 10 or more episodes
                     if (seasonEpisodes.First().Id == episode.Id || (seasonEpisodes.Count() >= 10 && seasonEpisodes.Last().Id == episode.Id))
                     {
+                        _logger.Debug("Possible double episode, doubling allowed size.");
                         maxSize = maxSize * 2;
                     }
                 }
@@ -93,12 +97,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 //If the parsed size is greater than maxSize we don't want it
                 if (subject.Release.Size > maxSize)
                 {
-                    _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Release.Size, maxSize);
-                    return false;
+                    var runtimeMessage = subject.Episodes.Count == 1 ? $"{subject.Series.Runtime}min" : $"{subject.Episodes.Count}x {subject.Series.Runtime}min";
+
+                    _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2} for {3}), rejecting.", subject, subject.Release.Size, maxSize, runtimeMessage);
+                    return Decision.Reject("{0} is larger than maximum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), maxSize.SizeSuffix(), runtimeMessage);
                 }
             }
+
             _logger.Debug("Item: {0}, meets size constraints.", subject);
-            return true;
+            return Decision.Accept();
         }
     }
 }

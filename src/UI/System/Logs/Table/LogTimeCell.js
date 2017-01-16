@@ -1,21 +1,31 @@
-'use strict';
-define(
-    [
-        'Cells/NzbDroneCell',
-        'moment'
-    ], function (NzbDroneCell, Moment) {
-        return NzbDroneCell.extend({
+var NzbDroneCell = require('../../../Cells/NzbDroneCell');
+var moment = require('moment');
+var FormatHelpers = require('../../../Shared/FormatHelpers');
+var UiSettings = require('../../../Shared/UiSettingsModel');
 
-            className: 'log-time-cell',
+module.exports = NzbDroneCell.extend({
+    className : 'log-time-cell',
 
-            render: function () {
+    render : function() {
+        var dateStr = this._getValue();
+        var date = moment(dateStr);
+        var diff = date.diff(moment().zone(date.zone()).startOf('day'), 'days', true);
+        var result = '<span title="{0}">{1}</span>';
+        var tooltip = date.format(UiSettings.longDateTime(true));
+        var text;
 
-                var date = Moment(this._getValue());
-                this.$el.html(date.format('LT'));
-                this.$el.attr('title', date.format('LLLL'));
-                this.$el.attr('data-container', 'body');
-
-                return this;
+        if (diff > 0 && diff < 1) {
+            text = date.format(UiSettings.time(true, false));
+        } else {
+            if (UiSettings.get('showRelativeDates')) {
+                text = FormatHelpers.relativeDate(dateStr);
+            } else {
+                text = date.format(UiSettings.get('shortDateFormat'));
             }
-        });
-    });
+        }
+
+        this.$el.html(result.format(tooltip, text));
+
+        return this;
+    }
+});

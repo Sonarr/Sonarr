@@ -1,13 +1,9 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Infrastructure;
@@ -163,7 +159,7 @@ namespace Microsoft.AspNet.SignalR
         {
             // observe Exception
 #if !WINDOWS_PHONE && !SILVERLIGHT && !NETFX_CORE
-            Trace.TraceError("SignalR exception thrown by Task: {0}", exception);
+            Trace.TraceWarning("SignalR exception thrown by Task: {0}", exception);
 #endif
             handler(exception, state);
         }

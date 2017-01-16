@@ -8,7 +8,9 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SqLiteAlter.Nullify("Series", new[] { "ImdbId", "TitleSlug" });
+            Alter.Table("Series")
+                .AlterColumn("ImdbId").AsString().Nullable()
+                .AlterColumn("TitleSlug").AsString().Nullable();
         }
     }
 }

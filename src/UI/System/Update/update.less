@@ -4,11 +4,26 @@
   margin-bottom: 30px;
 
   legend {
-    margin-bottom: 5px;
-    line-height: 30px;
+    cursor        : default;
+    margin-bottom : 5px;
+    line-height   : 30px;
+    display       : inline-block;
 
     .date {
-      font-size: 16px;
+      font-size : 16px;
+      display   : inline-block;
+    }
+
+    .status {
+      margin-left    : 5px;
+      font-size      : 14px;
+      margin-top     : -3px;
+      display        : inline-block;
+      vertical-align : middle;
+    }
+
+    .install-update {
+      .clickable();
     }
   }
 
@@ -23,11 +38,6 @@
   .change {
     margin-bottom: 2px;
     font-size: 13px;
-  }
-
-  .install-update {
-    .clickable();
-    margin-left: 10px;
   }
 
   a {

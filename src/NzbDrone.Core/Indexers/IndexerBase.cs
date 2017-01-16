@@ -1,18 +1,42 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class IndexerBase<TSettings> : IIndexer where TSettings : IProviderConfig, new()
+    public abstract class IndexerBase<TSettings> : IIndexer
+        where TSettings : IProviderConfig, new()
     {
-        public Type ConfigContract
+        protected readonly IIndexerStatusService _indexerStatusService;
+        protected readonly IConfigService _configService;
+        protected readonly IParsingService _parsingService;
+        protected readonly Logger _logger;
+
+        public abstract string Name { get; }
+        public abstract DownloadProtocol Protocol { get; }
+
+        public abstract bool SupportsRss { get; }
+        public abstract bool SupportsSearch { get; }
+
+        public IndexerBase(IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
         {
-            get
-            {
-                return typeof(TSettings);
-            }
+            _indexerStatusService = indexerStatusService;
+            _configService = configService;
+            _parsingService = parsingService;
+            _logger = logger;
         }
+
+        public Type ConfigContract => typeof(TSettings);
+
+        public virtual ProviderMessage Message => null;
 
         public virtual IEnumerable<ProviderDefinition> DefaultDefinitions
         {
@@ -23,7 +47,8 @@ namespace NzbDrone.Core.Indexers
                 yield return new IndexerDefinition
                 {
                     Name = GetType().Name,
-                    Enable = config.Validate().IsValid,
+                    EnableRss = config.Validate().IsValid && SupportsRss,
+                    EnableSearch = config.Validate().IsValid && SupportsSearch,
                     Implementation = GetType().Name,
                     Settings = config
                 };
@@ -32,36 +57,58 @@ namespace NzbDrone.Core.Indexers
 
         public virtual ProviderDefinition Definition { get; set; }
 
-        public abstract DownloadProtocol Protocol { get; }
+        public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
 
-        public abstract bool SupportsPaging { get; }
-        public virtual bool SupportsSearching { get { return true; } }
+        protected TSettings Settings => (TSettings)Definition.Settings;
 
-        protected TSettings Settings
+        public abstract IList<ReleaseInfo> FetchRecent();
+        public abstract IList<ReleaseInfo> Fetch(SeasonSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(SingleEpisodeSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(DailyEpisodeSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(AnimeEpisodeSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(SpecialEpisodeSearchCriteria searchCriteria);
+
+        protected virtual IList<ReleaseInfo> CleanupReleases(IEnumerable<ReleaseInfo> releases)
         {
-            get
+            var result = releases.DistinctBy(v => v.Guid).ToList();
+
+            result.ForEach(c =>
             {
-                return (TSettings)Definition.Settings;
-            }
+                c.IndexerId = Definition.Id;
+                c.Indexer = Definition.Name;
+                c.DownloadProtocol = Protocol;
+            });
+
+            return result;
         }
 
-        public virtual IParseFeed Parser { get; private set; }
-        
-        public abstract IEnumerable<string> RecentFeed { get; }
-        public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
-        public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
-        public abstract IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
-        public abstract IEnumerable<string> GetSearchUrls(string query, int offset);
+        public ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            try
+            {
+                Test(failures);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Test aborted due to exception");
+                failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
+            }
+
+            if (Definition.Id != 0)
+            {
+                _indexerStatusService.RecordSuccess(Definition.Id);
+            }
+
+            return new ValidationResult(failures);
+        }
+
+        protected abstract void Test(List<ValidationFailure> failures);
 
         public override string ToString()
         {
             return Definition.Name;
         }
-    }
-
-    public enum DownloadProtocol
-    {
-        Usenet = 1,
-        Torrent = 2
     }
 }

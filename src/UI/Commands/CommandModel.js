@@ -1,37 +1,50 @@
-'use strict';
-define(
-    [
-        'backbone'
-    ], function (Backbone) {
-        return Backbone.Model.extend({
-            url: window.NzbDrone.ApiRoot + '/command',
+var _ = require('underscore');
+var Backbone = require('backbone');
 
-            parse: function (response) {
-                response.name = response.name.toLocaleLowerCase();
-                return response;
-            },
+module.exports = Backbone.Model.extend({
+    url : window.NzbDrone.ApiRoot + '/command',
 
-            isSameCommand: function (command) {
+    parse : function(response) {
+        response.name = response.name.toLocaleLowerCase();
+        response.body.name = response.body.name.toLocaleLowerCase();
 
-                if (command.name.toLocaleLowerCase() !== this.get('name').toLocaleLowerCase()) {
-                    return false;
-                }
+        for (var key in response.body) {
+            response[key] = response.body[key];
+        }
 
-                for (var key in command) {
-                    if (key !== 'name' && command[key] !== this.get(key)) {
+        delete response.body;
+
+        return response;
+    },
+
+    isSameCommand : function(command) {
+
+        if (command.name.toLocaleLowerCase() !== this.get('name').toLocaleLowerCase()) {
+            return false;
+        }
+
+        for (var key in command) {
+            if (key !== 'name') {
+                if (Array.isArray(command[key])) {
+                    if (_.difference(command[key], this.get(key)).length > 0) {
                         return false;
                     }
                 }
 
-                return true;
-            },
-
-            isActive: function () {
-                return this.get('state') !== 'completed' && this.get('state') !== 'failed';
-            },
-
-            isComplete: function () {
-                return this.get('state') === 'completed';
+                else if (command[key] !== this.get(key)) {
+                    return false;
+                }
             }
-        });
-    });
+        }
+
+        return true;
+    },
+
+    isActive : function() {
+        return this.get('status') !== 'completed' && this.get('status') !== 'failed';
+    },
+
+    isComplete : function() {
+        return this.get('status') === 'completed';
+    }
+});

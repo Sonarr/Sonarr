@@ -1,11 +1,6 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'Rename/RenamePreviewItemView'
-    ], function (Marionette, RenamePreviewItemView) {
-        return Marionette.CollectionView.extend({
+var Marionette = require('marionette');
+var RenamePreviewItemView = require('./RenamePreviewItemView');
 
-            itemView : RenamePreviewItemView
-        });
-    });
+module.exports = Marionette.CollectionView.extend({
+    itemView : RenamePreviewItemView
+});

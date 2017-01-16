@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
@@ -11,55 +10,28 @@ namespace NzbDrone.Core.History
 {
     public interface IHistoryRepository : IBasicRepository<History>
     {
-        void Trim();
         List<QualityModel> GetBestQualityInHistory(int episodeId);
-        List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
-        List<History> Failed();
-        List<History> Grabbed();
         History MostRecentForEpisode(int episodeId);
-        List<History> FindBySourceTitle(string sourceTitle);
+        History MostRecentForDownloadId(string downloadId);
+        List<History> FindByDownloadId(string downloadId);
+        List<History> FindDownloadHistory(int idSeriesId, QualityModel quality);
+        void DeleteForSeries(int seriesId);
     }
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
     {
-        private readonly IDatabase _database;
 
-        public HistoryRepository(IDatabase database, IEventAggregator eventAggregator)
+        public HistoryRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-            _database = database;
         }
 
-        public void Trim()
-        {
-            var cutoff = DateTime.UtcNow.AddDays(-30).Date;
-            Delete(c=> c.Date < cutoff);
-        }
 
         public List<QualityModel> GetBestQualityInHistory(int episodeId)
         {
             var history = Query.Where(c => c.EpisodeId == episodeId);
 
             return history.Select(h => h.Quality).ToList();
-        }
-
-        public List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType)
-        {
-            return Query.Join<History, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
-                        .Join<History, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
-                        .Where(h => h.Date >= startDate)
-                        .AndWhere(h => h.Date <= endDate)
-                        .AndWhere(h => h.EventType == eventType);
-        }
-
-        public List<History> Failed()
-        {
-            return Query.Where(h => h.EventType == HistoryEventType.DownloadFailed);
-        }
-
-        public List<History> Grabbed()
-        {
-            return Query.Where(h => h.EventType == HistoryEventType.Grabbed);
         }
 
         public History MostRecentForEpisode(int episodeId)
@@ -69,14 +41,32 @@ namespace NzbDrone.Core.History
                         .FirstOrDefault();
         }
 
-        public List<History> FindBySourceTitle(string sourceTitle)
+        public History MostRecentForDownloadId(string downloadId)
         {
-            return Query.Where(h => h.SourceTitle.Contains(sourceTitle));
+            return Query.Where(h => h.DownloadId == downloadId)
+             .OrderByDescending(h => h.Date)
+             .FirstOrDefault();
         }
 
-        public List<History> AllForEpisode(int episodeId)
+        public List<History> FindByDownloadId(string downloadId)
         {
-            return Query.Where(h => h.EpisodeId == episodeId);
+            return Query.Where(h => h.DownloadId == downloadId);
+        }
+
+        public List<History> FindDownloadHistory(int idSeriesId, QualityModel quality)
+        {
+            return Query.Where(h =>
+                 h.SeriesId == idSeriesId &&
+                 h.Quality == quality &&
+                 (h.EventType == HistoryEventType.Grabbed ||
+                 h.EventType == HistoryEventType.DownloadFailed ||
+                 h.EventType == HistoryEventType.DownloadFolderImported)
+                 ).ToList();
+        }
+
+        public void DeleteForSeries(int seriesId)
+        {
+            Delete(c => c.SeriesId == seriesId);
         }
 
         protected override SortBuilder<History> GetPagedQuery(QueryBuilder<History> query, PagingSpec<History> pagingSpec)

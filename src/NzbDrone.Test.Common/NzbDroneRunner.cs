@@ -5,6 +5,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
@@ -21,26 +22,26 @@ namespace NzbDrone.Test.Common
         public string AppData { get; private set; }
         public string ApiKey { get; private set; }
 
-        public NzbDroneRunner(int port = 8989)
+        public NzbDroneRunner(Logger logger, int port = 8989)
         {
-            _processProvider = new ProcessProvider();
+            _processProvider = new ProcessProvider(logger);
             _restClient = new RestClient("http://localhost:8989/api");
         }
 
         public void Start()
         {
-            AppData = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
+            AppData = Path.Combine(TestContext.CurrentContext.TestDirectory, "_intg_" + DateTime.Now.Ticks);
 
             var nzbdroneConsoleExe = "NzbDrone.Console.exe";
 
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 nzbdroneConsoleExe = "NzbDrone.exe";
             }
 
             if (BuildInfo.IsDebug)
             {
-                Start("..\\..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
+                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..\\..\\..\\..\\..\\_output\\NzbDrone.Console.exe"));
             }
             else
             {
@@ -60,6 +61,7 @@ namespace NzbDrone.Test.Common
 
                 var request = new RestRequest("system/status");
                 request.AddHeader("Authorization", ApiKey);
+                request.AddHeader("X-Api-Key", ApiKey);
 
                 var statusCall = _restClient.Get(request);
 
@@ -77,6 +79,11 @@ namespace NzbDrone.Test.Common
 
         public void KillAll()
         {
+            if (_nzbDroneProcess != null)
+            {
+                _processProvider.Kill(_nzbDroneProcess.Id);                
+            }
+
             _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
             _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
         }
@@ -84,7 +91,7 @@ namespace NzbDrone.Test.Common
         private void Start(string outputNzbdroneConsoleExe)
         {
             var args = "-nobrowser -data=\"" + AppData + "\"";
-            _nzbDroneProcess = _processProvider.Start(outputNzbdroneConsoleExe, args, OnOutputDataReceived, OnOutputDataReceived);
+            _nzbDroneProcess = _processProvider.Start(outputNzbdroneConsoleExe, args, null, OnOutputDataReceived, OnOutputDataReceived);
 
         }
 

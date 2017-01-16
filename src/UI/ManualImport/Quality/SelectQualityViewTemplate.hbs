@@ -1,0 +1,33 @@
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Quality</label>
+
+        <div class="col-sm-4">
+            <select class="form-control x-select-quality">
+                <option value="-1">Select Quality</option>
+                {{#each qualities}}
+                    <option value="{{id}}">{{name}}</option>
+                {{/each}}
+            </select>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Proper</label>
+
+        <div class="col-sm-8">
+            <div class="input-group">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" class="x-proper"/>
+                    <p>
+                        <span>Yes</span>
+                        <span>No</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"/>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

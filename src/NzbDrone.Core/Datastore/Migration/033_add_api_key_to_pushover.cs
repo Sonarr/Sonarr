@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using FluentMigrator;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -42,7 +41,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {
-                            var text = String.Format("UPDATE Notifications " +
+                            var text = string.Format("UPDATE Notifications " +
                                                      "SET Settings = '{0}'" +
                                                      "WHERE Id = {1}",
                                 settings.ToJson(), id
@@ -59,9 +58,9 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private class PushoverSettingsForV33
         {
-            public String ApiKey { get; set; }
-            public String UserKey { get; set; }
-            public Int32 Priority { get; set; }
+            public string ApiKey { get; set; }
+            public string UserKey { get; set; }
+            public int Priority { get; set; }
         }
     }
 }

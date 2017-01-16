@@ -1,0 +1,54 @@
+<div class="series-editor-footer">
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label>Monitored</label>
+
+            <select class="form-control x-action x-monitored">
+                <option value="noChange">No change</option>
+                <option value="true">Monitored</option>
+                <option value="false">Unmonitored</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Profile</label>
+
+            <select class="form-control x-action x-profiles">
+                <option value="noChange">No change</option>
+                {{#each profiles.models}}
+                    <option value="{{id}}">{{attributes.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Season Folder</label>
+
+            <select class="form-control x-action x-season-folder">
+                <option value="noChange">No change</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label>Root Folder</label>
+
+            <select class="form-control x-action x-root-folder" validation-name="RootFolderPath">
+                <option value="noChange">No change</option>
+                {{#each rootFolders}}
+                <option value="{{id}}">{{path}}</option>
+                {{/each}}
+                <option value="addNew">Add a different path</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-3 actions">
+            <label class="x-selected-count">0 series selected</label>
+            <div>
+                <button class="btn btn-primary x-action x-save">Save</button>
+                <button class="btn btn-danger x-action x-organize-files" title="Organize and rename episode files">Organize</button>
+            </div>
+        </div>
+    </div>
+</div>

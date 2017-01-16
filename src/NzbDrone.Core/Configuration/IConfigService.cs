@@ -1,47 +1,79 @@
-using System;
 using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Core.Configuration
 {
     public interface IConfigService
     {
-        IEnumerable<Config> All();
-        Dictionary<String, Object> AllWithDefaults();
         void SaveConfigDictionary(Dictionary<string, object> configValues);
 
+        bool IsDefined(string key);
+
         //Download Client
-        String DownloadedEpisodesFolder { get; set; }
-        String DownloadClientWorkingFolders { get; set; }
-        Int32 DownloadedEpisodesScanInterval { get; set; }
+        string DownloadedEpisodesFolder { get; set; }
+        string DownloadClientWorkingFolders { get; set; }
+        int DownloadedEpisodesScanInterval { get; set; }
+        int DownloadClientHistoryLimit { get; set; }
 
-        //Failed Download Handling (Download client)
-        Boolean AutoRedownloadFailed { get; set; }
-        Boolean RemoveFailedDownloads { get; set; }
-        Boolean EnableFailedDownloadHandling { get; set; }
-        Int32 BlacklistGracePeriod { get; set; }
-        Int32 BlacklistRetryInterval { get; set; }
-        Int32 BlacklistRetryLimit { get; set; }
+        //Completed/Failed Download Handling (Download client)
+        bool EnableCompletedDownloadHandling { get; set; }
+        bool RemoveCompletedDownloads { get; set; }
 
+        bool AutoRedownloadFailed { get; set; }
+        bool RemoveFailedDownloads { get; set; }
 
         //Media Management
-        Boolean AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
-        String RecycleBin { get; set; }
-        Boolean AutoDownloadPropers { get; set; }
-        Boolean CreateEmptySeriesFolders { get; set; }
+        bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
+        string RecycleBin { get; set; }
+        bool AutoDownloadPropers { get; set; }
+        bool CreateEmptySeriesFolders { get; set; }
         FileDateType FileDate { get; set; }
-        Boolean SkipFreeSpaceCheckWhenImporting { get; set; }
+        bool SkipFreeSpaceCheckWhenImporting { get; set; }
+        bool CopyUsingHardlinks { get; set; }
+        bool EnableMediaInfo { get; set; }
+        string ExtraFileExtensions { get; set; }
 
         //Permissions (Media Management)
-        Boolean SetPermissionsLinux { get; set; }
-        String FileChmod { get; set; }
-        String FolderChmod { get; set; }
-        String ChownUser { get; set; }
-        String ChownGroup { get; set; }
+        bool SetPermissionsLinux { get; set; }
+        string FileChmod { get; set; }
+        string FolderChmod { get; set; }
+        string ChownUser { get; set; }
+        string ChownGroup { get; set; }
 
         //Indexers
-        Int32 Retention { get; set; }
-        Int32 RssSyncInterval { get; set; }
-        String ReleaseRestrictions { get; set; }
+        int Retention { get; set; }
+        int RssSyncInterval { get; set; }
+        int MinimumAge { get; set; }
+
+        //UI
+        int FirstDayOfWeek { get; set; }
+        string CalendarWeekColumnHeader { get; set; }
+
+        string ShortDateFormat { get; set; }
+        string LongDateFormat { get; set; }
+        string TimeFormat { get; set; }
+        bool ShowRelativeDates { get; set; }
+        bool EnableColorImpairedMode { get; set; }
+
+        //Internal
+        bool CleanupMetadataImages { get; set; }
+
+
+        //Forms Auth
+        string RijndaelPassphrase { get; }
+        string HmacPassphrase { get; }
+        string RijndaelSalt { get; }
+        string HmacSalt { get; }
+
+        //Proxy
+        bool ProxyEnabled { get; }
+        ProxyType ProxyType { get; }
+        string ProxyHostname { get; }
+        int ProxyPort { get; }
+        string ProxyUsername { get; }
+        string ProxyPassword { get; }
+        string ProxyBypassFilter { get; }
+        bool ProxyBypassLocalAddresses { get; }
     }
 }

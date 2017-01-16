@@ -1,7 +1,6 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
@@ -18,7 +17,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [SetUp]
         public void Setup()
         {
-            namingConfig = new NamingConfig();
+            namingConfig = NamingConfig.Default;
 
             Mocker.GetMock<INamingConfigService>()
                   .Setup(c => c.GetConfig()).Returns(namingConfig);

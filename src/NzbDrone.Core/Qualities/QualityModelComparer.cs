@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NLog;
+﻿using System.Collections.Generic;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Core.Profiles;
 
 namespace NzbDrone.Core.Qualities
 {
     public class QualityModelComparer : IComparer<Quality>, IComparer<QualityModel>
     {
-        private readonly QualityProfile _qualityProfile;
+        private readonly Profile _profile;
 
-        public QualityModelComparer(QualityProfile qualityProfile)
+        public QualityModelComparer(Profile profile)
         {
-            Ensure.That(qualityProfile, () => qualityProfile).IsNotNull();
-            Ensure.That(qualityProfile.Items, () => qualityProfile.Items).HasItems();
+            Ensure.That(profile, () => profile).IsNotNull();
+            Ensure.That(profile.Items, () => profile.Items).HasItems();
 
-            _qualityProfile = qualityProfile;
+            _profile = profile;
         }
 
         public int Compare(Quality left, Quality right)
         {
-            int leftIndex = _qualityProfile.Items.FindIndex(v => v.Quality == left);
-            int rightIndex = _qualityProfile.Items.FindIndex(v => v.Quality == right);
+            int leftIndex = _profile.Items.FindIndex(v => v.Quality == left);
+            int rightIndex = _profile.Items.FindIndex(v => v.Quality == right);
 
             return leftIndex.CompareTo(rightIndex);
         }
@@ -32,7 +29,9 @@ namespace NzbDrone.Core.Qualities
             int result = Compare(left.Quality, right.Quality);
 
             if (result == 0)
-                result = left.Proper.CompareTo(right.Proper);
+            {
+                result = left.Revision.CompareTo(right.Revision);
+            }
 
             return result;
         }

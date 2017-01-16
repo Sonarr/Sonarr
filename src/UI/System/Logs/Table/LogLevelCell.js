@@ -1,18 +1,12 @@
-'use strict';
-define(
-    [
-        'Cells/NzbDroneCell'
-    ], function (NzbDroneCell) {
-        return NzbDroneCell.extend({
+var NzbDroneCell = require('../../../Cells/NzbDroneCell');
 
-            className: 'log-level-cell',
+module.exports = NzbDroneCell.extend({
+    className : 'log-level-cell',
 
-            render: function () {
+    render : function() {
+        var level = this._getValue();
+        this.$el.html('<i class="icon-sonarr-log-{0}" title="{1}"/>'.format(this._getValue().toLowerCase(), level));
 
-                var level = this._getValue();
-                this.$el.html('<i class="icon-{0}" title="{1}"/>'.format(this._getValue().toLowerCase(), level));
-
-                return this;
-            }
-        });
-    });
+        return this;
+    }
+});

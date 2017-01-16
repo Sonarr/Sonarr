@@ -1,6 +1,9 @@
 ﻿using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using System.Linq;
+using System.Data;
+using System.Collections.Generic;
+using System;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
@@ -9,52 +12,88 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            using (var transaction = MigrationHelper.BeginTransaction())
+            Execute.WithConnection(RemoveDuplicates);
+        }
+
+        private void RemoveDuplicates(IDbConnection conn, IDbTransaction tran)
+        {
+            RemoveDuplicateSeries<int>(conn, tran, "TvdbId");
+            RemoveDuplicateSeries<string>(conn, tran, "TitleSlug");
+
+            var duplicatedEpisodes = GetDuplicates<int>(conn, tran, "Episodes", "TvDbEpisodeId");
+
+            foreach (var duplicate in duplicatedEpisodes)
             {
-                RemoveDuplicateSeries<int>("TvdbId");
-                RemoveDuplicateSeries<string>("TitleSlug");
-
-                var duplicatedEpisodes = MigrationHelper.GetDuplicates<int>("Episodes", "TvDbEpisodeId");
-
-                foreach (var duplicate in duplicatedEpisodes)
+                foreach (var episodeId in duplicate.OrderBy(c => c.Key).Skip(1).Select(c => c.Key))
                 {
-                    foreach (var episodeId in duplicate.OrderBy(c => c.Key).Skip(1).Select(c => c.Key))
-                    {
-                        RemoveEpisodeRows(episodeId);
-                    }
+                    RemoveEpisodeRows(conn, tran, episodeId);
                 }
-
-                transaction.Commit();
             }
         }
 
-        private void RemoveDuplicateSeries<T>(string field)
+        private IEnumerable<IGrouping<T, KeyValuePair<int, T>>> GetDuplicates<T>(IDbConnection conn, IDbTransaction tran, string tableName, string columnName)
         {
-            var duplicatedSeries = MigrationHelper.GetDuplicates<T>("Series", field);
+            var getDuplicates = conn.CreateCommand();
+            getDuplicates.Transaction = tran;
+            getDuplicates.CommandText = string.Format("select id, {0} from {1}", columnName, tableName);
+
+            var result = new List<KeyValuePair<int, T>>();
+
+            using (var reader = getDuplicates.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    result.Add(new KeyValuePair<int, T>(reader.GetInt32(0), (T)Convert.ChangeType(reader[1], typeof(T))));
+                }
+            }
+
+            return result.GroupBy(c => c.Value).Where(g => g.Count() > 1);
+        }
+
+        private void RemoveDuplicateSeries<T>(IDbConnection conn, IDbTransaction tran, string field)
+        {
+            var duplicatedSeries = GetDuplicates<T>(conn, tran, "Series", field);
 
             foreach (var duplicate in duplicatedSeries)
             {
                 foreach (var seriesId in duplicate.OrderBy(c => c.Key).Skip(1).Select(c => c.Key))
                 {
-                    RemoveSeriesRows(seriesId);
+                    RemoveSeriesRows(conn, tran, seriesId);
                 }
             }
         }
 
-        private void RemoveSeriesRows(int seriesId)
+        private void RemoveSeriesRows(IDbConnection conn, IDbTransaction tran, int seriesId)
         {
-            MigrationHelper.ExecuteNonQuery("DELETE FROM Series WHERE Id = {0}", seriesId.ToString());
-            MigrationHelper.ExecuteNonQuery("DELETE FROM Episodes WHERE SeriesId = {0}", seriesId.ToString());
-            MigrationHelper.ExecuteNonQuery("DELETE FROM Seasons WHERE SeriesId = {0}", seriesId.ToString());
-            MigrationHelper.ExecuteNonQuery("DELETE FROM History WHERE SeriesId = {0}", seriesId.ToString());
-            MigrationHelper.ExecuteNonQuery("DELETE FROM EpisodeFiles WHERE SeriesId = {0}", seriesId.ToString());
+            var deleteCmd = conn.CreateCommand();
+            deleteCmd.Transaction = tran;
+
+            deleteCmd.CommandText = string.Format("DELETE FROM Series WHERE Id = {0}", seriesId.ToString());
+            deleteCmd.ExecuteNonQuery();
+
+            deleteCmd.CommandText = string.Format("DELETE FROM Episodes WHERE SeriesId = {0}", seriesId.ToString());
+            deleteCmd.ExecuteNonQuery();
+
+            deleteCmd.CommandText = string.Format("DELETE FROM Seasons WHERE SeriesId = {0}", seriesId.ToString());
+            deleteCmd.ExecuteNonQuery();
+
+            deleteCmd.CommandText = string.Format("DELETE FROM History WHERE SeriesId = {0}", seriesId.ToString());
+            deleteCmd.ExecuteNonQuery();
+
+            deleteCmd.CommandText = string.Format("DELETE FROM EpisodeFiles WHERE SeriesId = {0}", seriesId.ToString());
+            deleteCmd.ExecuteNonQuery();
         }
 
-        private void RemoveEpisodeRows(int episodeId)
+        private void RemoveEpisodeRows(IDbConnection conn, IDbTransaction tran, int episodeId)
         {
-            MigrationHelper.ExecuteNonQuery("DELETE FROM Episodes WHERE Id = {0}", episodeId.ToString());
-            MigrationHelper.ExecuteNonQuery("DELETE FROM History WHERE EpisodeId = {0}", episodeId.ToString());
-        }
+            var deleteCmd = conn.CreateCommand();
+            deleteCmd.Transaction = tran;
 
+            deleteCmd.CommandText = string.Format("DELETE FROM Episodes WHERE Id = {0}", episodeId.ToString());
+            deleteCmd.ExecuteNonQuery();
+
+            deleteCmd.CommandText = string.Format("DELETE FROM History WHERE EpisodeId = {0}", episodeId.ToString());
+            deleteCmd.ExecuteNonQuery();
+        }
     }
 }

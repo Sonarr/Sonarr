@@ -1,72 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
-using NLog;
-using NzbDrone.Core.Download;
+using System.Linq;
+using NzbDrone.Common.Crypto;
+using NzbDrone.Core.Download.TrackedDownloads;
+using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Queue
 {
     public interface IQueueService
     {
         List<Queue> GetQueue();
+        Queue Find(int id);
     }
 
-    public class QueueService : IQueueService
+    public class QueueService : IQueueService, IHandle<TrackedDownloadRefreshedEvent>
     {
-        private readonly IProvideDownloadClient _downloadClientProvider;
-        private readonly Logger _logger;
+        private readonly IEventAggregator _eventAggregator;
+        private static List<Queue> _queue = new List<Queue>();
 
-        public QueueService(IProvideDownloadClient downloadClientProvider, Logger logger)
+        public QueueService(IEventAggregator eventAggregator)
         {
-            _downloadClientProvider = downloadClientProvider;
-            _logger = logger;
+            _eventAggregator = eventAggregator;
         }
 
         public List<Queue> GetQueue()
         {
-            var downloadClient = _downloadClientProvider.GetDownloadClient();
+            return _queue;
+        }
 
-            if (downloadClient == null)
+        public Queue Find(int id)
+        {
+            return _queue.SingleOrDefault(q => q.Id == id);
+        }
+
+        public void Handle(TrackedDownloadRefreshedEvent message)
+        {
+            _queue = message.TrackedDownloads.OrderBy(c => c.DownloadItem.RemainingTime).SelectMany(MapQueue)
+                .ToList();
+
+            _eventAggregator.PublishEvent(new QueueUpdatedEvent());
+        }
+
+        private IEnumerable<Queue> MapQueue(TrackedDownload trackedDownload)
+        {
+            if (trackedDownload.RemoteEpisode.Episodes != null && trackedDownload.RemoteEpisode.Episodes.Any())
             {
-                _logger.Debug("Download client is not configured.");
-                return new List<Queue>();
+                foreach (var episode in trackedDownload.RemoteEpisode.Episodes)
+                {
+                    yield return MapEpisode(trackedDownload, episode);
+                }
             }
-
-            try
+            else
             {
-                var queueItems = downloadClient.GetQueue();
-
-                return MapQueue(queueItems);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("Error getting queue from download client: " + downloadClient.ToString(), ex);
-                return new List<Queue>();
+                // FIXME: Present queue items with unknown series/episodes
             }
         }
 
-        private List<Queue> MapQueue(IEnumerable<QueueItem> queueItems)
+        private Queue MapEpisode(TrackedDownload trackedDownload, Episode episode)
         {
-            var queued = new List<Queue>();
-
-            foreach (var queueItem in queueItems)
+            var queue = new Queue
             {
-                foreach (var episode in queueItem.RemoteEpisode.Episodes)
-                {
-                    var queue = new Queue();
-                    queue.Id = queueItem.Id.GetHashCode() + episode.Id;
-                    queue.Series = queueItem.RemoteEpisode.Series;
-                    queue.Episode = episode;
-                    queue.Quality = queueItem.RemoteEpisode.ParsedEpisodeInfo.Quality;
-                    queue.Title = queueItem.Title;
-                    queue.Size = queueItem.Size;
-                    queue.Sizeleft = queueItem.Sizeleft;
-                    queue.Timeleft = queueItem.Timeleft;
-                    queue.Status = queueItem.Status;
-                    queued.Add(queue);
-                }
+                Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id)),
+                Series = trackedDownload.RemoteEpisode.Series,
+                Episode = episode,
+                Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                Title = trackedDownload.DownloadItem.Title,
+                Size = trackedDownload.DownloadItem.TotalSize,
+                Sizeleft = trackedDownload.DownloadItem.RemainingSize,
+                Timeleft = trackedDownload.DownloadItem.RemainingTime,
+                Status = trackedDownload.DownloadItem.Status.ToString(),
+                TrackedDownloadStatus = trackedDownload.Status.ToString(),
+                StatusMessages = trackedDownload.StatusMessages.ToList(),
+                RemoteEpisode = trackedDownload.RemoteEpisode,
+                DownloadId = trackedDownload.DownloadItem.DownloadId,
+                Protocol = trackedDownload.Protocol
+            };
+
+            if (queue.Timeleft.HasValue)
+            {
+                queue.EstimatedCompletionTime = DateTime.UtcNow.Add(queue.Timeleft.Value);
             }
 
-            return queued;
+            return queue;
         }
     }
 }

@@ -1,14 +1,9 @@
-'use strict';
-define(
-    [
-        'backbone',
-        'api!system/status'
-    ], function (Backbone, statusData) {
+var Backbone = require('backbone');
+var ApiData = require('../Shared/ApiData');
 
-        var StatusModel = Backbone.Model.extend({
-            url: window.NzbDrone.ApiRoot + '/system/status'
-        });
+var StatusModel = Backbone.Model.extend({
+    url : window.NzbDrone.ApiRoot + '/system/status'
+});
+var instance = new StatusModel(ApiData.get('system/status'));
 
-        var instance = new StatusModel(statusData);
-        return instance;
-    });
+module.exports = instance;

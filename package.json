@@ -1,28 +1,46 @@
 {
-  "name": "NzbDrone",
-  "version": "0.0.0",
-  "description": "NZBDrone",
-  "main": "index.js",
+  "name": "Sonarr",
+  "version": "2.0.0",
+  "description": "Sonarr",
+  "main": "main.js",
   "scripts": {
-    "preinstall": "npm install grunt-cli -g"
+    "build": "gulp build",
+    "start": "gulp watch"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/NzbDrone/NzbDrone.git"
+    "url": "git://github.com/Sonarr/Sonarr.git"
   },
   "author": "",
-  "license": "BSD",
+  "license": "GPL-3.0",
   "gitHead": "9ff7aa1bf7fe38c4c5bdb92f56c8ad556916ed67",
   "readmeFilename": "readme.md",
   "dependencies": {
-    "grunt": "*",
-    "grunt-contrib-handlebars": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-contrib-less": "0.8.3",
-    "grunt-contrib-copy": "*",
-    "grunt-notify": "*",
-    "grunt-contrib-clean": "*",
-    "grunt-contrib-requirejs": "*",
-    "grunt-contrib-jshint": "*"
+    "autoprefixer-core": "5.2.1",
+    "del": "1.2.0",
+    "gulp": "3.9.0",
+    "gulp-cached": "1.1.0",
+    "gulp-concat": "2.6.0",
+    "gulp-declare": "0.3.0",
+    "gulp-handlebars": "3.0.1",
+    "gulp-jshint": "1.11.2",
+    "gulp-less": "3.0.3",
+    "gulp-livereload": "3.8.0",
+    "gulp-postcss": "6.0.0",
+    "gulp-print": "1.1.0",
+    "gulp-replace": "0.5.3",
+    "gulp-run": "1.6.8",
+    "gulp-sourcemaps": "1.5.2",
+    "gulp-stripbom": "1.0.4",
+    "gulp-webpack": "1.5.0",
+    "gulp-wrap": "0.11.0",
+    "handlebars": "3.0.3",
+    "jshint-loader": "0.8.3",
+    "jshint-stylish": "2.0.1",
+    "run-sequence": "1.1.1",
+    "streamqueue": "1.1.0",
+    "tar.gz": "0.1.1",
+    "webpack": "1.12.0",
+    "webpack-stream": "2.1.0"
   }
 }

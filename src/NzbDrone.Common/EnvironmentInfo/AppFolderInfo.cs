@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using NLog;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
@@ -15,9 +17,12 @@ namespace NzbDrone.Common.EnvironmentInfo
     {
         private readonly Environment.SpecialFolder DATA_SPECIAL_FOLDER = Environment.SpecialFolder.CommonApplicationData;
 
+
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(AppFolderInfo));
+
         public AppFolderInfo(IStartupContext startupContext)
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 DATA_SPECIAL_FOLDER = Environment.SpecialFolder.ApplicationData;
             }
@@ -25,6 +30,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             if (startupContext.Args.ContainsKey(StartupContext.APPDATA))
             {
                 AppDataFolder = startupContext.Args[StartupContext.APPDATA];
+                Logger.Info("Data directory is being overridden to [{0}]", AppDataFolder);
             }
             else
             {
@@ -35,10 +41,10 @@ namespace NzbDrone.Common.EnvironmentInfo
             TempFolder = Path.GetTempPath();
         }
 
-        public string AppDataFolder { get; private set; }
+        public string AppDataFolder { get; }
 
-        public string StartUpFolder { get; private set; }
+        public string StartUpFolder { get; }
 
-        public String TempFolder { get; private set; }
+        public string TempFolder { get; }
     }
 }

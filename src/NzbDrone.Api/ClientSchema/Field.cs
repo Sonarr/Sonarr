@@ -11,6 +11,7 @@ namespace NzbDrone.Api.ClientSchema
         public string HelpLink { get; set; }
         public object Value { get; set; }
         public string Type { get; set; }
+        public bool Advanced { get; set; }
         public List<SelectOption> SelectOptions { get; set; }
     }
 }

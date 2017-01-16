@@ -1,19 +1,14 @@
-'use strict';
-define(
-    [
-        'backgrid'
-    ], function (Backgrid) {
-        return Backgrid.Cell.extend({
+var Backgrid = require('backgrid');
 
-            className : 'season-folder-cell',
+module.exports = Backgrid.Cell.extend({
+    className : 'season-folder-cell',
 
-            render: function () {
-                this.$el.empty();
+    render : function() {
+        this.$el.empty();
 
-                var seasonFolder = this.model.get(this.column.get('name'));
-                this.$el.html(seasonFolder.toString());
+        var seasonFolder = this.model.get(this.column.get('name'));
+        this.$el.html(seasonFolder.toString());
 
-                return this;
-            }
-        });
-    });
+        return this;
+    }
+});

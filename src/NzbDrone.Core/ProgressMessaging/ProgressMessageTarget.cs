@@ -3,51 +3,43 @@ using NLog;
 using NLog.Targets;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Commands.Tracking;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.ProgressMessaging
 {
-
     public class ProgressMessageTarget : Target, IHandle<ApplicationStartedEvent>
     {
         private readonly IEventAggregator _eventAggregator;
-        private readonly ITrackCommands _trackCommands;
+        private readonly IManageCommandQueue _commandQueueManager;
         private static LoggingRule _rule;
 
-        public ProgressMessageTarget(IEventAggregator eventAggregator, ITrackCommands trackCommands)
+        public ProgressMessageTarget(IEventAggregator eventAggregator, IManageCommandQueue commandQueueManager)
         {
             _eventAggregator = eventAggregator;
-            _trackCommands = trackCommands;
+            _commandQueueManager = commandQueueManager;
         }
 
         protected override void Write(LogEventInfo logEvent)
         {
-            var command = GetCurrentCommand();
+            var command = ProgressMessageContext.CommandModel;
 
-            if (IsClientMessage(logEvent, command))
+            if (!IsClientMessage(logEvent, command)) return;
+            
+            if (!ProgressMessageContext.LockReentrancy()) return;
+            try
             {
-                command.SetMessage(logEvent.FormattedMessage);
+                _commandQueueManager.SetMessage(command, logEvent.FormattedMessage);
                 _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
             }
-        }
-
-
-        private Command GetCurrentCommand()
-        {
-            var commandId = MappedDiagnosticsContext.Get("CommandId");
-
-            if (string.IsNullOrWhiteSpace(commandId))
+            finally
             {
-                return null;
+                ProgressMessageContext.UnlockReentrancy();
             }
-
-            return _trackCommands.GetById(commandId);
         }
 
-        private bool IsClientMessage(LogEventInfo logEvent, Command command)
+        private bool IsClientMessage(LogEventInfo logEvent, CommandModel command)
         {
-            if (command == null || !command.SendUpdatesToClient)
+            if (command == null || !command.Body.SendUpdatesToClient)
             {
                 return false;
             }

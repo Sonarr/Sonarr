@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
-using NzbDrone.Common;
-using NzbDrone.Common.Disk;
+﻿using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.HealthCheck.Checks
@@ -23,7 +21,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (droneFactoryFolder.IsNullOrWhiteSpace())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Drone factory folder is not configured");
+                return new HealthCheck(GetType());
             }
 
             if (!_diskProvider.FolderExists(droneFactoryFolder))
@@ -31,13 +29,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType(), HealthCheckResult.Error, "Drone factory folder does not exist");
             }
             
-            try
-            {
-                var testPath = Path.Combine(droneFactoryFolder, "drone_test.txt");
-                _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-                _diskProvider.DeleteFile(testPath);
-            }
-            catch (Exception)
+            if (!_diskProvider.FolderWritable(droneFactoryFolder))
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to write to drone factory folder");
             }

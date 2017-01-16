@@ -1,33 +1,29 @@
-﻿using System.Linq;
-using NzbDrone.Api.Episodes;
-using NzbDrone.Api.Extensions;
+﻿using NzbDrone.Api.Episodes;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Wanted
 {
-    public class CutoffModule : NzbDroneRestModule<EpisodeResource>
+    public class CutoffModule : EpisodeModuleWithSignalR
     {
         private readonly IEpisodeCutoffService _episodeCutoffService;
-        private readonly SeriesRepository _seriesRepository;
 
-        public CutoffModule(IEpisodeCutoffService episodeCutoffService, SeriesRepository seriesRepository)
-            :base("wanted/cutoff")
+        public CutoffModule(IEpisodeCutoffService episodeCutoffService,
+                            IEpisodeService episodeService,
+                            ISeriesService seriesService,
+                            IQualityUpgradableSpecification qualityUpgradableSpecification,
+                            IBroadcastSignalRMessage signalRBroadcaster)
+            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster, "wanted/cutoff")
         {
             _episodeCutoffService = episodeCutoffService;
-            _seriesRepository = seriesRepository;
             GetResourcePaged = GetCutoffUnmetEpisodes;
         }
 
         private PagingResource<EpisodeResource> GetCutoffUnmetEpisodes(PagingResource<EpisodeResource> pagingResource)
         {
-            var pagingSpec = new PagingSpec<Episode>
-            {
-                Page = pagingResource.Page,
-                PageSize = pagingResource.PageSize,
-                SortKey = pagingResource.SortKey,
-                SortDirection = pagingResource.SortDirection
-            };
+            var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>("airDateUtc", SortDirection.Descending);
 
             if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
             {
@@ -38,9 +34,7 @@ namespace NzbDrone.Api.Wanted
                 pagingSpec.FilterExpression = v => v.Monitored == true && v.Series.Monitored == true;
             }
 
-            PagingResource<EpisodeResource> resource = ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, pagingSpec);
-
-            resource.Records = resource.Records.LoadSubtype(e => e.SeriesId, _seriesRepository).ToList();
+            var resource = ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, pagingSpec, v => MapToResource(v, true, true));
 
             return resource;
         }

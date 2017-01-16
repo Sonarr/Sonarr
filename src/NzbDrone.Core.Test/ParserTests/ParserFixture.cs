@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Parser;
@@ -21,6 +19,7 @@ namespace NzbDrone.Core.Test.ParserTests
          * The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
          * Superman.-.The.Man.of.Steel.1994-06.34.hybrid.DreamGirl-Novus-HD
          * Superman.-.The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
+         * Constantine S1-E1-WEB-DL-1080p-NZBgeek
          */
 
         [TestCase("Chuck - 4x05 - Title", "Chuck")]
@@ -35,10 +34,33 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hawaii Five 0", "hawaiifive0")]
         [TestCase("Match of the Day", "matchday")]
         [TestCase("Match of the Day 2", "matchday2")]
+        [TestCase("[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "Revenge")]
+        [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "Seed")]
+        [TestCase("Reno.911.S01.DVDRip.DD2.0.x264-DEEP", "Reno 911")]
         public void should_parse_series_name(string postTitle, string title)
         {
-            var result = Parser.Parser.ParseSeriesName(postTitle);
+            var result = Parser.Parser.ParseSeriesName(postTitle).CleanSeriesTitle();
             result.Should().Be(title.CleanSeriesTitle());
+        }
+
+        [Test]
+        public void should_remove_accents_from_title()
+        {
+            const string title = "Carniv\u00E0le";
+            
+            title.CleanSeriesTitle().Should().Be("carnivale");
+        }
+
+        [TestCase("Discovery TV - Gold Rush : 02 Road From Hell [S04].mp4")]
+        public void should_clean_up_invalid_path_characters(string postTitle)
+        {
+            Parser.Parser.ParseTitle(postTitle);
+        }
+
+        [TestCase("[scnzbefnet][509103] 2.Broke.Girls.S03E18.720p.HDTV.X264-DIMENSION", "2 Broke Girls")]
+        public void should_remove_request_info_from_title(string postTitle, string title)
+        {
+            Parser.Parser.ParseTitle(postTitle).SeriesTitle.Should().Be(title);
         }
     }
 }

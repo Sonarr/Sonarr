@@ -2,10 +2,12 @@
 using NzbDrone.Core.Notifications.Prowl;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Core.Test.NotificationTests
 {
     [Explicit]
+    [ManualTest]
     [TestFixture]
     public class ProwlProviderTest : CoreTest<ProwlService>
     {

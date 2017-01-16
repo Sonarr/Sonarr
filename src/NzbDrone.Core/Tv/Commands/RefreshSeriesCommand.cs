@@ -15,12 +15,8 @@ namespace NzbDrone.Core.Tv.Commands
             SeriesId = seriesId;
         }
 
-        public override bool SendUpdatesToClient
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SendUpdatesToClient => true;
+
+        public override bool UpdateScheduledTask => !SeriesId.HasValue;
     }
 }

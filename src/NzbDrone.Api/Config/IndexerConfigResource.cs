@@ -1,12 +1,25 @@
-﻿using System;
-using NzbDrone.Api.REST;
+﻿using NzbDrone.Api.REST;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Config
 {
     public class IndexerConfigResource : RestResource
     {
-        public Int32 Retention { get; set; }
-        public Int32 RssSyncInterval { get; set; }
-        public String ReleaseRestrictions { get; set; }
+        public int MinimumAge { get; set; }
+        public int Retention { get; set; }
+        public int RssSyncInterval { get; set; }
+    }
+
+    public static class IndexerConfigResourceMapper
+    {
+        public static IndexerConfigResource ToResource(IConfigService model)
+        {
+            return new IndexerConfigResource
+            {
+                MinimumAge = model.MinimumAge,
+                Retention = model.Retention,
+                RssSyncInterval = model.RssSyncInterval,
+            };
+        }
     }
 }

@@ -8,24 +8,23 @@ using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
 using NzbDrone.Common.Security;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Host
 {
     public static class Bootstrap
     {
         private static IContainer _container;
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(Bootstrap));
 
         public static void Start(StartupContext startupContext, IUserAlert userAlert, Action<IContainer> startCallback = null)
         {
-            LogTargets.Register(startupContext, false, true);
-
             try
             {
-                GlobalExceptionHandlers.Register();
-                IgnoreCertErrorPolicy.Register();
+                SecurityProtocolPolicy.Register();
+                X509CertificateValidationPolicy.Register();
 
-                Logger.Info("Starting NzbDrone - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);
+                Logger.Info("Starting Sonarr - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);
 
                 if (!PlatformValidation.IsValidate(userAlert))
                 {
@@ -59,6 +58,8 @@ namespace NzbDrone.Host
 
         private static void Start(ApplicationModes applicationModes, StartupContext startupContext)
         {
+            _container.Resolve<ReconfigureLogging>().Reconfigure();
+
             if (!IsInUtilityMode(applicationModes))
             {
                 if (startupContext.Flags.Contains(StartupContext.RESTART))
@@ -83,7 +84,7 @@ namespace NzbDrone.Host
             _container.Resolve<IWaitForExit>().Spin();
         }
 
-        private static void EnsureSingleInstance(bool isService, StartupContext startupContext)
+        private static void EnsureSingleInstance(bool isService, IStartupContext startupContext)
         {
             var instancePolicy = _container.Resolve<ISingleInstancePolicy>();
 
@@ -101,19 +102,19 @@ namespace NzbDrone.Host
             }
         }
 
-        private static ApplicationModes GetApplicationMode(StartupContext startupContext)
+        private static ApplicationModes GetApplicationMode(IStartupContext startupContext)
         {
             if (startupContext.Flags.Contains(StartupContext.HELP))
             {
                 return ApplicationModes.Help;
             }
 
-            if (!OsInfo.IsMono && startupContext.InstallService)
+            if (OsInfo.IsWindows && startupContext.InstallService)
             {
                 return ApplicationModes.InstallService;
             }
 
-            if (!OsInfo.IsMono && startupContext.UninstallService)
+            if (OsInfo.IsWindows && startupContext.UninstallService)
             {
                 return ApplicationModes.UninstallService;
             }

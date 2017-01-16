@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.Messaging.Commands;
 using RestSharp;
 using NzbDrone.Core.Rest;
 
@@ -12,19 +13,26 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
     public interface INotifyMyAndroidProxy
     {
         void SendNotification(string title, string message, string apiKye, NotifyMyAndroidPriority priority);
+        ValidationFailure Test(NotifyMyAndroidSettings settings);
     }
 
-    public class NotifyMyAndroidProxy : INotifyMyAndroidProxy, IExecute<TestNotifyMyAndroidCommand>
+    public class NotifyMyAndroidProxy : INotifyMyAndroidProxy
     {
+        private readonly Logger _logger;
         private const string URL = "https://www.notifymyandroid.com/publicapi";
+
+        public NotifyMyAndroidProxy(Logger logger)
+        {
+            _logger = logger;
+        }
 
         public void SendNotification(string title, string message, string apiKey, NotifyMyAndroidPriority priority)
         {
-            var client = new RestClient(URL);
+            var client = RestClientFactory.BuildClient(URL);
             var request = new RestRequest("notify", Method.POST);
             request.RequestFormat = DataFormat.Xml;
             request.AddParameter("apikey", apiKey);
-            request.AddParameter("application", "NzbDrone");
+            request.AddParameter("application", "Sonarr");
             request.AddParameter("event", title);
             request.AddParameter("description", message);
             request.AddParameter("priority", (int)priority);
@@ -35,7 +43,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
 
         private void Verify(string apiKey)
         {
-            var client = new RestClient(URL);
+            var client = RestClientFactory.BuildClient(URL);
             var request = new RestRequest("verify", Method.GET);
             request.RequestFormat = DataFormat.Xml;
             request.AddParameter("apikey", apiKey, ParameterType.GetOrPost);
@@ -56,12 +64,22 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
             }
         }
 
-        public void Execute(TestNotifyMyAndroidCommand message)
+        public ValidationFailure Test(NotifyMyAndroidSettings settings)
         {
-            const string title = "Test Notification";
-            const string body = "This is a test message from NzbDrone";
-            Verify(message.ApiKey);
-            SendNotification(title, body, message.ApiKey, (NotifyMyAndroidPriority)message.Priority);
+            try
+            {
+                const string title = "Test Notification";
+                const string body = "This is a test message from Sonarr";
+                Verify(settings.ApiKey);
+                SendNotification(title, body, settings.ApiKey, (NotifyMyAndroidPriority)settings.Priority);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Unable to send test message");
+                return new ValidationFailure("ApiKey", "Unable to send test message");
+            }
+
+            return null;
         }
     }
 }

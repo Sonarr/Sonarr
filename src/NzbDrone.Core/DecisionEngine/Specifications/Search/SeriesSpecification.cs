@@ -13,19 +13,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Wrong series";
-            }
-        }
+        public RejectionType Type => RejectionType.Permanent;
 
-        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria == null)
             {
-                return true;
+                return Decision.Accept();
             }
 
             _logger.Debug("Checking if series matches searched series");
@@ -33,10 +27,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             if (remoteEpisode.Series.Id != searchCriteria.Series.Id)
             {
                 _logger.Debug("Series {0} does not match {1}", remoteEpisode.Series, searchCriteria.Series);
-                return false;
+                return Decision.Reject("Wrong series");
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

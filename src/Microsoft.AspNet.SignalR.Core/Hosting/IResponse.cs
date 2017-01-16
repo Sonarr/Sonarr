@@ -2,7 +2,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +16,11 @@ namespace Microsoft.AspNet.SignalR.Hosting
         /// Gets a cancellation token that represents the client's lifetime.
         /// </summary>
         CancellationToken CancellationToken { get; }
+
+        /// <summary>
+        /// Gets or sets the status code of the response.
+        /// </summary>
+        int StatusCode { get; set; }
 
         /// <summary>
         /// Gets or sets the content type of the response.

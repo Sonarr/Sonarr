@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -10,16 +9,25 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex SeasonFolderRegex = new Regex(@"(\{season(\:\d+)?\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        internal static readonly Regex OriginalTokenRegex = new Regex(@"(\{original[- ._](?:title|filename)\})",
+                                                                            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public static IRuleBuilderOptions<T, string> ValidEpisodeFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
-            return ruleBuilder.SetValidator(new RegularExpressionValidator(FileNameBuilder.SeasonEpisodePatternRegex)).WithMessage("Must contain season and episode numbers");
+            return ruleBuilder.SetValidator(new ValidStandardEpisodeFormatValidator());
         }
 
         public static IRuleBuilderOptions<T, string> ValidDailyEpisodeFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
             return ruleBuilder.SetValidator(new ValidDailyEpisodeFormatValidator());
+        }
+
+        public static IRuleBuilderOptions<T, string> ValidAnimeEpisodeFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            ruleBuilder.SetValidator(new NotEmptyValidator(null));
+            return ruleBuilder.SetValidator(new ValidAnimeEpisodeFormatValidator());
         }
 
         public static IRuleBuilderOptions<T, string> ValidSeriesFolderFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
@@ -35,20 +43,66 @@ namespace NzbDrone.Core.Organizer
         }
     }
 
-    public class ValidDailyEpisodeFormatValidator : PropertyValidator
+    public class ValidStandardEpisodeFormatValidator : PropertyValidator
     {
-        public ValidDailyEpisodeFormatValidator()
-            : base("Must contain Air Date or Season and Episode")
+        public ValidStandardEpisodeFormatValidator()
+            : base("Must contain season and episode numbers OR Original Title")
         {
 
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            var value = context.PropertyValue as String;
+            var value = context.PropertyValue as string;
 
             if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
-                !FileNameBuilder.AirDateRegex.IsMatch(value))
+                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    public class ValidDailyEpisodeFormatValidator : PropertyValidator
+    {
+        public ValidDailyEpisodeFormatValidator()
+            : base("Must contain Air Date OR Season and Episode OR Original Title")
+        {
+
+        }
+
+        protected override bool IsValid(PropertyValidatorContext context)
+        {
+            var value = context.PropertyValue as string;
+
+            if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
+                !FileNameBuilder.AirDateRegex.IsMatch(value) &&
+                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    public class ValidAnimeEpisodeFormatValidator : PropertyValidator
+    {
+        public ValidAnimeEpisodeFormatValidator()
+            : base("Must contain Absolute Episode number OR Season and Episode OR Original Title")
+        {
+
+        }
+
+        protected override bool IsValid(PropertyValidatorContext context)
+        {
+            var value = context.PropertyValue as string;
+
+            if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
+                !FileNameBuilder.AbsoluteEpisodePatternRegex.IsMatch(value) &&
+                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
             {
                 return false;
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Validation.Paths;
 
@@ -12,7 +11,12 @@ namespace NzbDrone.Api.Config
         {
             SharedValidator.RuleFor(c => c.FileChmod).NotEmpty();
             SharedValidator.RuleFor(c => c.FolderChmod).NotEmpty();
-            SharedValidator.RuleFor(c => c.RecycleBin).IsValidPath().SetValidator(pathExistsValidator).When(c => !String.IsNullOrWhiteSpace(c.RecycleBin));
+            SharedValidator.RuleFor(c => c.RecycleBin).IsValidPath().SetValidator(pathExistsValidator).When(c => !string.IsNullOrWhiteSpace(c.RecycleBin));
+        }
+
+        protected override MediaManagementConfigResource ToResource(IConfigService model)
+        {
+            return MediaManagementConfigResourceMapper.ToResource(model);
         }
     }
 }

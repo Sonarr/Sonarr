@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
 
 
@@ -7,12 +6,16 @@ namespace NzbDrone.Core.MediaFiles
 {
     public static class MediaFileExtensions
     {
-        private static Dictionary<String, Quality> _fileExtensions;
+        private static Dictionary<string, Quality> _fileExtensions;
 
         static MediaFileExtensions()
         {
-            _fileExtensions = new Dictionary<String, Quality>
+            _fileExtensions = new Dictionary<string, Quality>
             {
+                //Unknown
+                { ".webm", Quality.Unknown },
+
+                //SDTV
                 { ".m4v", Quality.SDTV },
                 { ".3gp", Quality.SDTV },
                 { ".nsv", Quality.SDTV },
@@ -60,16 +63,14 @@ namespace NzbDrone.Core.MediaFiles
                 //HD
                 { ".mkv", Quality.HDTV720p },
                 { ".ts", Quality.HDTV720p },
+                { ".wtv", Quality.HDTV720p },
 
                 //Bluray
                 { ".m2ts", Quality.Bluray720p }
             };
         }
 
-        public static HashSet<String> Extensions
-        {
-            get { return new HashSet<String>(_fileExtensions.Keys); }
-        }
+        public static HashSet<string> Extensions => new HashSet<string>(_fileExtensions.Keys);
 
         public static Quality GetQualityForExtension(string extension)
         {

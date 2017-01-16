@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
-using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -45,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         public void should_return_true_for_existing_file()
         {
             _localEpisode.ExistingFile = true;
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Instrumentation;
@@ -9,7 +10,7 @@ namespace NzbDrone.Core.Rest
 {
     public static class RestSharpExtensions
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(RestSharpExtensions));
 
         public static IRestResponse ValidateResponse(this IRestResponse response, IRestClient restClient)
         {
@@ -27,13 +28,21 @@ namespace NzbDrone.Core.Rest
 
             if (response.ResponseUri == null)
             {
-                Logger.ErrorException("Error communicating with server", response.ErrorException);
+                Logger.Error(response.ErrorException, "Error communicating with server");
                 throw response.ErrorException;
             }
 
             switch (response.StatusCode)
             {
                 case HttpStatusCode.OK:
+                    {
+                        return response;
+                    }
+                case HttpStatusCode.NoContent:
+                    {
+                        return response;
+                    }
+                case HttpStatusCode.Created:
                     {
                         return response;
                     }
@@ -48,6 +57,11 @@ namespace NzbDrone.Core.Rest
         public static T Read<T>(this IRestResponse restResponse, IRestClient restClient) where T : class, new()
         {
             restResponse.ValidateResponse(restClient);
+
+            if (restResponse.Content != null)
+            {
+                Logger.Trace("Response: " + restResponse.Content);
+            }
 
             return Json.Deserialize<T>(restResponse.Content);
         }
@@ -65,6 +79,15 @@ namespace NzbDrone.Core.Rest
         public static void AddQueryString(this IRestRequest request, string name, object value)
         {
             request.AddParameter(name, value.ToString(), ParameterType.GetOrPost);
+        }
+
+        public static object GetHeaderValue(this IRestResponse response, string key)
+        {
+            var header = response.Headers.FirstOrDefault(v => v.Name == key);
+
+            if (header == null) return null;
+
+            return header.Value;
         }
     }
 }

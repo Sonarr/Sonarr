@@ -1,51 +1,53 @@
-# NzbDrone #
+# Sonarr #
 
 
-NZBDrone is a PVR for newsgroup users. It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.
+Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 
 ## Major Features Include: ##
 
-* Support for major platforms: Windows, Linux, OSX
+* Support for major platforms: Windows, Linux, OSX, Raspberry Pi, etc.
 * Automatically detects new episodes
-* can scan your existing library and then download any old seasons that are missing
-* can watch for better versions and upgrade your existing episodes. *eg. from DVD to Blu-Ray*
-* fully configurable episode renaming
-* full integration with SABNzbd
-* full integration with XBMC (notification, library update, metadata)
-* full support for specials and multi-episode releases
-* beautiful UI
+* Can scan your existing library and download any missing episodes
+* Can watch for better quality of the episodes you already have and do an automatic upgrade. *eg. from DVD to Blu-Ray*
+* Automatic failed download handling will try another release if one fails
+* Manual search so you can pick any release or to see why a release was not downloaded automatically
+* Fully configurable episode renaming
+* Full integration with SABNzbd and NzbGet
+* Full integration with XBMC, Plex (notification, library update, metadata)
+* Full support for specials and multi-episode releases
+* And a beautiful UI
 
 
-## Configuring Development Enviroment: ##
+## Configuring Development Environment: ##
 
 ### Requirements ###
-- Visual Studio 2012 ([Express Edition](http://www.microsoft.com/visualstudio/eng/products/visual-studio-express-for-web "Express Edition") might work but not tested.)
+- Visual Studio 2015 [Free Community Edition](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)
 - [Git](http://git-scm.com/downloads)
 - [NodeJS](http://nodejs.org/download/)
-- [Grunt](http://gruntjs.com/getting-started)
 
 ### Setup ###
 
 - Make sure all the required software mentioned above are installed.
 - Clone the repository into your development machine. [*info*](https://help.github.com/articles/working-with-repositories)
-- install the required Node Packages using the following command `npm install`
-- start grunt to monitor your dev environment for any changes that need post processing using `grunt` command.
+- Grab the submodules `git submodule init && git submodule update`
+- install the required Node Packages `npm install`
+- start gulp to monitor your dev environment for any changes that need post processing using `npm start` command.
 
-*Please note grunt must be running at all times while you are working with NzbDrone source files.*
+*Please note gulp must be running at all times while you are working with Sonarr client source files.*
 
 
 ### Development ###
-- Open `NzbDrone.sln` in Visual Studio 2012
+- Open `NzbDrone.sln` in Visual Studio
 - Make sure `NzbDrone.Console` is set as the startup project
 
 
 ### License ###
 * [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
-Copyright 2010-2013 
+Copyright 2010-2016
 
 
 ### Sponsors ###
 - [JetBrains](http://www.jetbrains.com/) for providing us with free licenses to their great tools
-	- [ReSharper](http://www.jetbrains.com/resharper/)
-	- [WebStorm](http://www.jetbrains.com/webstorm/)
-	- [TeamCity](http://www.jetbrains.com/teamcity/)
+    - [ReSharper](http://www.jetbrains.com/resharper/)
+    - [WebStorm](http://www.jetbrains.com/webstorm/)
+    - [TeamCity](http://www.jetbrains.com/teamcity/)

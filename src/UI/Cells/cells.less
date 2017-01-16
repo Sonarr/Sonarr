@@ -3,22 +3,40 @@
 @import "../Content/Bootstrap/buttons";
 @import "../Shared/Styles/clickable";
 @import "../Content/mixins";
+@import "../Content/variables";
 
-.table {
-
-  //table-layout: fixed;
-}
-
-.series-title {
+.series-title-cell {
   .text-overflow();
+
+  max-width: 450px;
+
+  @media @sm {
+    max-width: 250px
+  }
 }
 
 .episode-title-cell {
-  .btn-link;
   .text-overflow();
 
-  &:hover {
-    text-transform: none;
+  color: #428bca;
+  text-decoration: none;
+
+  &:focus, &:hover {
+    color: #2a6496;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  @media @lg {
+    max-width: 350px;
+  }
+
+  @media @md {
+    max-width: 250px;
+  }
+
+  @media @sm {
+    max-width: 200px;
   }
 }
 
@@ -28,10 +46,13 @@
   .text-overflow();
 }
 
+.relative-date-cell, .relative-time-cell {
+  .text-overflow();
+  cursor : default;
+}
+
 .relative-date-cell {
   width : 150px;
-  cursor: default;
-  .text-overflow();
 }
 
 .history-event-type-cell {
@@ -40,6 +61,8 @@
 
 .download-report-cell {
   .clickable();
+
+  width : 32px;
 
   i {
     .clickable();
@@ -52,9 +75,13 @@
 }
 
 .approval-status-cell {
-  widows : 10px;
+
   .popover {
     max-width : 400px;
+
+    ul {
+      margin-left: -25px;
+    }
   }
 
   i {
@@ -62,12 +89,12 @@
   }
 }
 
-td.episode-status-cell, td.quality-cell {
+td.episode-status-cell, td.quality-cell, td.history-quality-cell, td.progress-cell {
   text-align: center;
   width: 80px;
 
   .badge {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .progress {
@@ -86,30 +113,31 @@ td.episode-status-cell, td.quality-cell {
   }
 }
 
-.nzb-title-cell {
-  max-width: 600px;
+.release-title-cell {
+  max-width: 400px;
   word-wrap: break-word;
 }
 
 .episode-actions-cell {
-  width: 65px;
+  width: 55px;
 
-  li {
+  i {
     .clickable();
+    margin-left : 8px;
 
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: normal;
-    line-height: 20px;
-    color: rgb(51, 51, 51);
-    white-space: nowrap;
+    &:first-of-type {
+      margin-left : 0px;
+    }
   }
+}
 
-  li:hover {
-    text-decoration: none;
-    color: rgb(255, 255, 255);
-    background-color: rgb(0, 129, 194);
+.episode-history-details-cell {
+  width : 18px;
+}
+
+.episode-detail-modal {
+  .episode-actions-cell {
+    width : 18px;
   }
 }
 
@@ -119,25 +147,37 @@ td.episode-status-cell, td.quality-cell {
 }
 
 .timeleft-cell {
-  cursor : default;
-  width  : 80px;
+  cursor     : default;
+  width      : 80px;
+  text-align : center;
 }
 
 .queue-status-cell {
-  width: 20px;
-  text-align: center !important;
+  width      : 20px;
+  text-align : center !important;
+}
+
+.queue-actions-cell {
+  min-width  : 65px;
+  width      : 65px;
+  text-align : right !important;
+
+  i {
+    .clickable();
+    margin-left  : 1px;
+    margin-right : 1px;
+  }
 }
 
 .download-log-cell {
-  width: 80px;
+  width : 80px;
 }
 
 td.delete-episode-file-cell {
   .clickable();
 
-  text-align: center;
-  width: 20px;
-  font-size: 20px;
+  text-align : center;
+  width      : 20px;
 
   i {
     .clickable();
@@ -146,4 +186,68 @@ td.delete-episode-file-cell {
 
 .series-status-cell {
   width: 16px;
+}
+
+.episode-number-cell {
+  cursor : default;
+}
+
+.backup-type-cell {
+  width : 20px;
+}
+
+.table>tbody>tr>td, .table>thead>tr>th {
+
+  &.episode-warning-cell {
+    width         : 1px;
+    padding-left  : 0px;
+    padding-right : 0px;
+  }
+}
+
+.log-message-cell {
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+.execute-task-cell {
+  width : 28px;
+
+  i {
+    .clickable();
+  }
+}
+
+.task-interval-cell, .next-execution-cell {
+  cursor : default;
+}
+
+.task-interval-cell {
+  width : 150px;
+}
+
+.next-execution-cell {
+  width : 200px;
+}
+
+.tasks {
+  .relative-time-cell {
+    width : 200px;
+  }
+}
+
+.age-cell {
+  cursor : default;
+}
+
+.blacklist-actions-cell {
+  min-width  : 55px;
+  width      : 55px;
+  text-align : right !important;
+
+  i {
+    .clickable();
+    margin-left  : 2px;
+    margin-right : 2px;
+  }
 }

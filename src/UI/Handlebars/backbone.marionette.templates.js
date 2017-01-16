@@ -1,43 +1,36 @@
-﻿'use strict';
-define(
-    [
-        'templates',
-        'handlebars.helpers',
-        'Handlebars/Helpers/DateTime',
-        'Handlebars/Helpers/Html',
-        'Handlebars/Helpers/Numbers',
-        'Handlebars/Helpers/Episode',
-        'Handlebars/Helpers/Series',
-        'Handlebars/Helpers/Quality',
-        'Handlebars/Helpers/System',
-        'Handlebars/Helpers/EachReverse',
-        'Handlebars/Helpers/EachReverse',
-        'Handlebars/Handlebars.Debug'
-    ], function (Templates) {
-        return function () {
-            this.get = function (templateId) {
+var Handlebars = require('handlebars');
+require('handlebars.helpers');
+require('./Helpers/DateTime');
+require('./Helpers/Html');
+require('./Helpers/Numbers');
+require('./Helpers/Episode');
+require('./Helpers/Series');
+require('./Helpers/Quality');
+require('./Helpers/System');
+require('./Helpers/EachReverse');
+require('./Helpers/String');
+require('./Handlebars.Debug');
 
-                var templateKey = templateId.toLowerCase();
+module.exports = function() {
+    this.get = function(templateId) {
+        var templateKey = templateId.toLowerCase().replace('template', '');
 
-                var templateFunction = Templates[templateKey];
+        var templateFunction = window.T[templateKey];
 
-                if (!templateFunction) {
-                    throw 'couldn\'t find pre-compiled template ' + templateKey;
-                }
+        if (!templateFunction) {
+            throw 'couldn\'t find pre-compiled template ' + templateKey;
+        }
 
-                return function (data) {
-
-                    try {
-                        return templateFunction(data);
-                    }
-                    catch (error) {
-                        console.error('template render failed for ' + templateKey + ' ' + error);
-                        console.error(data);
-                        throw error;
-                    }
-                };
-            };
+        return function(data) {
+            try {
+                var wrappedTemplate = Handlebars.template.call(Handlebars, templateFunction);
+                return wrappedTemplate(data);
+            }
+            catch (error) {
+                console.error('template render failed for ' + templateKey + ' ' + error);
+                console.error(data);
+                throw error;
+            }
         };
-    });
-
-
+    };
+};

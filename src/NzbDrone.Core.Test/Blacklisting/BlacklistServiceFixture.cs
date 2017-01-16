@@ -24,25 +24,32 @@ namespace NzbDrone.Core.Test.Blacklisting
                          Quality = new QualityModel(Quality.Bluray720p),
                          SourceTitle = "series.title.s01e01",
                          DownloadClient = "SabnzbdClient",
-                         DownloadClientId = "Sabnzbd_nzo_2dfh73k"
+                         DownloadId = "Sabnzbd_nzo_2dfh73k"
                      };
 
             _event.Data.Add("publishedDate", DateTime.UtcNow.ToString("s") + "Z");
-        }
-
-        [Test]
-        public void should_trigger_redownload()
-        {
-            Subject.Handle(_event);
-
-            Mocker.GetMock<IRedownloadFailedDownloads>()
-                .Verify(v => v.Redownload(_event.SeriesId, _event.EpisodeIds), Times.Once());
+            _event.Data.Add("size", "1000");
+            _event.Data.Add("indexer", "nzbs.org");
+            _event.Data.Add("protocol", "1");
+            _event.Data.Add("message", "Marked as failed");
         }
 
         [Test]
         public void should_add_to_repository()
         {
             Subject.Handle(_event);
+
+            Mocker.GetMock<IBlacklistRepository>()
+                .Verify(v => v.Insert(It.Is<Blacklist>(b => b.EpisodeIds == _event.EpisodeIds)), Times.Once());
+        }
+
+        [Test]
+        public void should_add_to_repository_missing_size_and_protocol()
+        {
+            Subject.Handle(_event);
+
+            _event.Data.Remove("size");
+            _event.Data.Remove("protocol");
 
             Mocker.GetMock<IBlacklistRepository>()
                 .Verify(v => v.Insert(It.Is<Blacklist>(b => b.EpisodeIds == _event.EpisodeIds)), Times.Once());

@@ -1,47 +1,48 @@
 ﻿using System;
-using System.IO;
 using Newtonsoft.Json.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
-using NzbDrone.Core.Instrumentation.Extensions;
-using RestSharp;
+using NzbDrone.Common.Http;
+using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public interface ISabnzbdProxy
     {
-        SabnzbdAddResponse DownloadNzb(Stream nzb, string name, string category, int priority, SabnzbdSettings settings);
-        void RemoveFrom(string source, string id, SabnzbdSettings settings);
-        string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings);
-        SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
-        SabnzbdCategoryResponse GetCategories(SabnzbdSettings settings);
+        SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings);
+        void RemoveFrom(string source, string id,bool deleteData, SabnzbdSettings settings);
+        string GetVersion(SabnzbdSettings settings);
+        SabnzbdConfig GetConfig(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
-        SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings);
-        void RetryDownload(string id, SabnzbdSettings settings);
+        SabnzbdHistory GetHistory(int start, int limit, string category, SabnzbdSettings settings);
+        string RetryDownload(string id, SabnzbdSettings settings);
     }
 
     public class SabnzbdProxy : ISabnzbdProxy
     {
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public SabnzbdProxy(Logger logger)
+        public SabnzbdProxy(IHttpClient httpClient, Logger logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
         }
 
-        public SabnzbdAddResponse DownloadNzb(Stream nzb, string title, string category, int priority, SabnzbdSettings settings)
+        public SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings)
         {
-            var request = new RestRequest(Method.POST);
-            var action = String.Format("mode=addfile&cat={0}&priority={1}", category, priority);
+            var request = BuildRequest("addfile", settings).Post();
 
-            request.AddFile("name", nzb.ToBytes(), title, "application/x-nzb");
+            request.AddQueryParam("cat", category);
+            request.AddQueryParam("priority", priority);
+                
+            request.AddFormUpload("name", filename, nzbData, "application/x-nzb");
 
             SabnzbdAddResponse response;
 
-            if (!Json.TryDeserialize<SabnzbdAddResponse>(ProcessRequest(request, action, settings), out response))
+            if (!Json.TryDeserialize<SabnzbdAddResponse>(ProcessRequest(request, settings), out response))
             {
                 response = new SabnzbdAddResponse();
                 response.Status = true;
@@ -50,103 +51,137 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return response;
         }
 
-        public void RemoveFrom(string source, string id, SabnzbdSettings settings)
+        public void RemoveFrom(string source, string id, bool deleteData, SabnzbdSettings settings)
         {
-            var request = new RestRequest();
-            var action = String.Format("mode={0}&name=delete&del_files=1&value={1}", source, id);
+            var request = BuildRequest(source, settings);
+            request.AddQueryParam("name", "delete");
+            request.AddQueryParam("del_files", deleteData ? 1 : 0);
+            request.AddQueryParam("value", id);
 
-            ProcessRequest(request, action, settings);
+            ProcessRequest(request, settings);
         }
 
-        public string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings)
+        public string GetVersion(SabnzbdSettings settings)
         {
-            var client = BuildClient(action, settings);
-            var response = client.Execute(restRequest);
-            _logger.Trace("Response: {0}", response.Content);
+            var request = BuildRequest("version", settings);
+
+            SabnzbdVersionResponse response;
+
+            if (!Json.TryDeserialize<SabnzbdVersionResponse>(ProcessRequest(request, settings), out response))
+            {
+                response = new SabnzbdVersionResponse();
+            }
+
+            return response.Version;
+        }
+
+        public SabnzbdConfig GetConfig(SabnzbdSettings settings)
+        {
+            var request = BuildRequest("get_config", settings);
+
+            var response = Json.Deserialize<SabnzbdConfigResponse>(ProcessRequest(request, settings));
+
+            return response.Config;
+        }
+
+        public SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings)
+        {
+            var request = BuildRequest("queue", settings);
+            request.AddQueryParam("start", start);
+            request.AddQueryParam("limit", limit);
+
+            var response = ProcessRequest(request, settings);
+
+            return Json.Deserialize<SabnzbdQueue>(JObject.Parse(response).SelectToken("queue").ToString());
+        }
+
+        public SabnzbdHistory GetHistory(int start, int limit, string category, SabnzbdSettings settings)
+        {
+            var request = BuildRequest("history", settings);
+            request.AddQueryParam("start", start);
+            request.AddQueryParam("limit", limit);
+
+            if (category.IsNotNullOrWhiteSpace())
+            {
+                request.AddQueryParam("category", category);
+            }
+
+            var response = ProcessRequest(request, settings);
+
+            return Json.Deserialize<SabnzbdHistory>(JObject.Parse(response).SelectToken("history").ToString());
+        }
+
+        public string RetryDownload(string id, SabnzbdSettings settings)
+        {
+            var request = BuildRequest("retry", settings);
+            request.AddQueryParam("value", id);
+
+            SabnzbdRetryResponse response;
+
+            if (!Json.TryDeserialize<SabnzbdRetryResponse>(ProcessRequest(request, settings), out response))
+            {
+                response = new SabnzbdRetryResponse();
+                response.Status = true;
+            }
+
+            return response.Id;
+        }
+
+        private HttpRequestBuilder BuildRequest(string mode, SabnzbdSettings settings)
+        {
+            var baseUrl = string.Format(@"{0}://{1}:{2}/api",
+                                   settings.UseSsl ? "https" : "http",
+                                   settings.Host,
+                                   settings.Port);
+
+            var requestBuilder = new HttpRequestBuilder(baseUrl)
+                .Accept(HttpAccept.Json)
+                .AddQueryParam("mode", mode);
+
+            requestBuilder.LogResponseContent = true;
+
+            if (settings.ApiKey.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.AddSuffixQueryParam("apikey", settings.ApiKey);
+            }
+            else
+            {
+                requestBuilder.AddSuffixQueryParam("ma_username", settings.Username);
+                requestBuilder.AddSuffixQueryParam("ma_password", settings.Password);
+            }
+            requestBuilder.AddSuffixQueryParam("output", "json");
+
+            return requestBuilder;
+        }
+
+        private string ProcessRequest(HttpRequestBuilder requestBuilder, SabnzbdSettings settings)
+        {
+            var httpRequest = requestBuilder.Build();
+
+            HttpResponse response;
+
+            _logger.Debug("Url: {0}", httpRequest.Url);
+
+            try
+            {
+                response = _httpClient.Execute(httpRequest);
+            }
+            catch (HttpException ex)
+            {
+                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings", ex);
+            }
+            catch (WebException ex)
+            {
+                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings", ex);
+            }
 
             CheckForError(response);
 
             return response.Content;
         }
 
-        public SabnzbdVersionResponse GetVersion(SabnzbdSettings settings)
+        private void CheckForError(HttpResponse response)
         {
-            var request = new RestRequest();
-            var action = "mode=version";
-
-            SabnzbdVersionResponse response;
-
-            if (!Json.TryDeserialize<SabnzbdVersionResponse>(ProcessRequest(request, action, settings), out response))
-            {
-                response = new SabnzbdVersionResponse();
-            }
-
-            return response;
-        }
-
-        public SabnzbdCategoryResponse GetCategories(SabnzbdSettings settings)
-        {
-            var request = new RestRequest();
-            var action = "mode=get_cats";
-
-            var response = Json.Deserialize<SabnzbdCategoryResponse>(ProcessRequest(request, action, settings));
-
-            return response;
-        }
-
-        public SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings)
-        {
-            var request = new RestRequest();
-            var action = String.Format("mode=queue&start={0}&limit={1}", start, limit);
-
-            var response = ProcessRequest(request, action, settings);
-            return Json.Deserialize<SabnzbdQueue>(JObject.Parse(response).SelectToken("queue").ToString());
-        }
-
-        public SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings)
-        {
-            var request = new RestRequest();
-            var action = String.Format("mode=history&start={0}&limit={1}", start, limit);
-
-            var response = ProcessRequest(request, action, settings);
-            return Json.Deserialize<SabnzbdHistory>(JObject.Parse(response).SelectToken("history").ToString());
-        }
-
-        public void RetryDownload(string id, SabnzbdSettings settings)
-        {
-            var request = new RestRequest();
-            var action = String.Format("mode=retry&value={0}", id);
-
-            ProcessRequest(request, action, settings);
-        }
-
-        private IRestClient BuildClient(string action, SabnzbdSettings settings)
-        {
-            var protocol = settings.UseSsl ? "https" : "http";
-
-            var authentication = settings.ApiKey.IsNullOrWhiteSpace() ?
-                                 String.Format("ma_username={0}&ma_password={1}", settings.Username, settings.Password) :
-                                 String.Format("apikey={0}", settings.ApiKey);
-
-            var url = string.Format(@"{0}://{1}:{2}/api?{3}&{4}&output=json",
-                                 protocol,
-                                 settings.Host,
-                                 settings.Port,
-                                 action,
-                                 authentication);
-
-            _logger.CleansedDebug(url);
-
-            return new RestClient(url);
-        }
-
-        private void CheckForError(IRestResponse response)
-        {
-            if (response.ResponseStatus != ResponseStatus.Completed)
-            {
-                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings");
-            }
-
             SabnzbdJsonError result;
 
             if (!Json.TryDeserialize<SabnzbdJsonError>(response.Content, out result))
@@ -167,9 +202,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 result.Error = response.Content.Replace("error: ", "");
             }
-            
+
             if (result.Failed)
+            {
                 throw new DownloadClientException("Error response received from SABnzbd: {0}", result.Error);
+            }
         }
     }
 }

@@ -40,9 +40,20 @@
     padding-bottom : 20px;
 
     .series-title {
-      .label {
-        margin-left: 15px;
-        vertical-align: middle;
+      margin-top : 5px;
+
+      .labels {
+        margin-left : 10px;
+
+        .label {
+          font-size      : 12px;
+          vertical-align : middle;
+        }
+      }
+
+      .year {
+        font-style : italic;
+        color      : #aaaaaa;
       }
     }
 
@@ -56,7 +67,7 @@
       }
     }
 
-    .new-series-poster {
+    .series-poster {
       min-width  : 138px;
       min-height : 203px;
       max-width  : 138px;
@@ -73,35 +84,42 @@
     }
 
     select {
-      font-size : 16px;
-    }
-
-    .add-series {
-      margin-left : 20px;
+      font-size : 14px;
     }
 
     .checkbox {
-          margin-top : 0px;
+      margin-top : 0px;
+    }
+
+    .add {
+      i {
+        &:before {
+          color : #ffffff;
         }
-
-    .starting-season {
-      width: 140px;
-
-      &.starting-season-label {
-        display: inline-block;
       }
     }
 
-    i {
-      &:before {
-        color: #ffffff;
-      }
+    .monitor-tooltip {
+      margin-left : 5px;
     }
   }
 
   .loading-folders {
     margin : 30px 0px;
     text-align: center;
+  }
+
+  .hint {
+    color      : #999999;
+    font-style : italic;
+  }
+
+  .monitor-tooltip-contents {
+    padding-bottom : 0px;
+
+    dd {
+      padding-bottom : 8px;
+    }
   }
 }
 
@@ -124,10 +142,32 @@ li.add-new:hover {
 }
 
 .root-folders-modal {
-  overflow: visible;
+  overflow : visible;
 
   .root-folders-list {
-    overflow: auto;
-    max-height: 300px;
+    overflow-y : auto;
+    max-height : 300px;
+
+    i {
+      .clickable();
+    }
+  }
+
+  .validation-errors {
+    display : none;
+  }
+
+  .input-group {
+    .form-control {
+      background-color : white;
+    }
+  }
+
+  .root-folders {
+    margin-top : 20px;
+  }
+
+  .recent-folder {
+    .clickable();
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentMigrator;
 using NLog;
 using NzbDrone.Common.Instrumentation;
 
@@ -6,11 +7,12 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 {
     public abstract class NzbDroneMigrationBase : FluentMigrator.Migration
     {
-        private Logger _logger;
+        protected readonly Logger _logger;
+        private MigrationContext _migrationContext;
 
         protected NzbDroneMigrationBase()
         {
-            _logger = NzbDroneLogger.GetLogger();
+            _logger = NzbDroneLogger.GetLogger(this);
         }
 
         protected virtual void MainDbUpgrade()
@@ -21,19 +23,43 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
         }
 
+        public int Version
+        {
+            get
+            {
+                var migrationAttribute = (MigrationAttribute)Attribute.GetCustomAttribute(GetType(), typeof(MigrationAttribute));
+                return (int)migrationAttribute.Version;
+            }
+        }
+
+        public MigrationContext Context
+        {
+            get
+            {
+                if (_migrationContext == null)
+                {
+                    _migrationContext = (MigrationContext)ApplicationContext;
+                }
+                return _migrationContext;
+            }
+        }
+
         public override void Up()
         {
-            var context = (MigrationContext)ApplicationContext;
 
-            SqLiteAlter = context.SQLiteAlter;
-            MigrationHelper = context.MigrationHelper;
+            if (Context.BeforeMigration != null)
+            {
+                Context.BeforeMigration(this);
+            }
 
-            switch (context.MigrationType)
+            switch (Context.MigrationType)
             {
                 case MigrationType.Main:
+                    _logger.Info("Starting migration to " + Version);
                     MainDbUpgrade();
                     return;
                 case MigrationType.Log:
+                    _logger.Info("Starting migration to " + Version);
                     LogDbUpgrade();
                     return;
                 default:
@@ -42,9 +68,6 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                     return;
             }
         }
-
-        protected ISQLiteAlter SqLiteAlter { get; private set; }
-        protected ISqLiteMigrationHelper MigrationHelper { get; private set; }
 
         public override void Down()
         {

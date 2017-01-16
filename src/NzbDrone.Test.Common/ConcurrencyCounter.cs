@@ -10,7 +10,7 @@ namespace NzbDrone.Test.Common
         readonly object _mutex = new object();
         readonly Dictionary<int, int> _threads = new Dictionary<int, int>();
 
-        public int MaxThreads { get { return _threads.Count; } }
+        public int MaxThreads => _threads.Count;
 
         public ConcurrencyCounter(int items)
         {

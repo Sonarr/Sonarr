@@ -1,19 +1,36 @@
-﻿using Nancy;
+﻿using System;
+using Nancy;
 using Nancy.Bootstrapper;
-using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Api.Frontend;
 
 namespace NzbDrone.Api.Extensions.Pipelines
 {
-    public class NzbDroneVersionPipeline : IRegisterNancyPipeline
+    public class CacheHeaderPipeline : IRegisterNancyPipeline
     {
+        private readonly ICacheableSpecification _cacheableSpecification;
+
+        public CacheHeaderPipeline(ICacheableSpecification cacheableSpecification)
+        {
+            _cacheableSpecification = cacheableSpecification;
+        }
+
+        public int Order => 0;
+
         public void Register(IPipelines pipelines)
         {
-            pipelines.AfterRequest.AddItemToStartOfPipeline(Handle);
+            pipelines.AfterRequest.AddItemToStartOfPipeline((Action<NancyContext>) Handle);
         }
 
         private void Handle(NancyContext context)
         {
-            context.Response.Headers.Add("X-ApplicationVersion", BuildInfo.Version.ToString());
+            if (_cacheableSpecification.IsCacheable(context))
+            {
+                context.Response.Headers.EnableCache();
+            }
+            else
+            {
+                context.Response.Headers.DisableCache();
+            }
         }
     }
 }

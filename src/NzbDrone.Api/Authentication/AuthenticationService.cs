@@ -2,53 +2,69 @@
 using System.Linq;
 using Nancy;
 using Nancy.Authentication.Basic;
+using Nancy.Authentication.Forms;
 using Nancy.Security;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Authentication
 {
-    public interface IAuthenticationService : IUserValidator
+    public interface IAuthenticationService : IUserValidator, IUserMapper
     {
-        bool Enabled { get; }
         bool IsAuthenticated(NancyContext context);
     }
 
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IUserService _userService;
         private static readonly NzbDroneUser AnonymousUser = new NzbDroneUser { UserName = "Anonymous" };
-        private static String API_KEY;
+        
+        private static string API_KEY;
+        private static AuthenticationType AUTH_METHOD;
 
-        public AuthenticationService(IConfigFileProvider configFileProvider)
+        public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)
         {
             _configFileProvider = configFileProvider;
+            _userService = userService;
             API_KEY = configFileProvider.ApiKey;
+            AUTH_METHOD = configFileProvider.AuthenticationMethod;
         }
 
         public IUserIdentity Validate(string username, string password)
         {
-            if (!Enabled)
+            if (AUTH_METHOD == AuthenticationType.None)
             {
                 return AnonymousUser;
             }
 
-            if (_configFileProvider.Username.Equals(username) &&
-                _configFileProvider.Password.Equals(password))
+            var user = _userService.FindUser(username, password);
+
+            if (user != null)
             {
-                return new NzbDroneUser { UserName = username };
+                return new NzbDroneUser { UserName = user.Username };
             }
 
             return null;
         }
 
-        public bool Enabled
+        public IUserIdentity GetUserFromIdentifier(Guid identifier, NancyContext context)
         {
-            get
+            if (AUTH_METHOD == AuthenticationType.None)
             {
-                return _configFileProvider.AuthenticationEnabled;
+                return AnonymousUser;
             }
+
+            var user = _userService.FindUser(identifier);
+
+            if (user != null)
+            {
+                return new NzbDroneUser { UserName = user.Username };
+            }
+
+            return null;
         }
 
         public bool IsAuthenticated(NancyContext context)
@@ -60,13 +76,13 @@ namespace NzbDrone.Api.Authentication
                 return ValidApiKey(apiKey);
             }
 
+            if (AUTH_METHOD == AuthenticationType.None)
+            {
+                return true;
+            }
+
             if (context.Request.IsFeedRequest())
             {
-                if (!Enabled)
-                {
-                    return true;
-                }
-
                 if (ValidUser(context) || ValidApiKey(apiKey))
                 {
                     return true;
@@ -75,7 +91,12 @@ namespace NzbDrone.Api.Authentication
                 return false;
             }
 
-            if (!Enabled)
+            if (context.Request.IsLoginRequest())
+            {
+                return true;
+            }
+
+            if (context.Request.IsContentRequest())
             {
                 return true;
             }

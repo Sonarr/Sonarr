@@ -1,41 +1,37 @@
-﻿'use strict';
-define(
-    [
-        'underscore',
-        'marionette',
-        'Health/HealthCollection'
-    ], function (_, Marionette, HealthCollection) {
-        return Marionette.ItemView.extend({
-            tagName: 'span',
+var _ = require('underscore');
+var Marionette = require('marionette');
+var HealthCollection = require('./HealthCollection');
 
-            initialize: function () {
-                this.listenTo(HealthCollection, 'sync', this._healthSync);
-                HealthCollection.fetch();
-            },
+module.exports = Marionette.ItemView.extend({
+    tagName : 'span',
 
-            render: function () {
-                this.$el.empty();
+    initialize : function() {
+        this.listenTo(HealthCollection, 'sync', this._healthSync);
+        HealthCollection.fetch();
+    },
 
-                if (HealthCollection.length === 0) {
-                    return this;
-                }
+    render : function() {
+        this.$el.empty();
 
-                var count = HealthCollection.length;
-                var label = 'label-warning';
-                var errors = HealthCollection.some(function (model) {
-                    return model.get('type') === 'error';
-                });
+        if (HealthCollection.length === 0) {
+            return this;
+        }
 
-                if (errors) {
-                    label = 'label-danger';
-                }
-
-                this.$el.html('<span class="label {0}">{1}</span>'.format(label, count));
-                return this;
-            },
-
-            _healthSync: function () {
-                this.render();
-            }
+        var count = HealthCollection.length;
+        var label = 'label-warning';
+        var errors = HealthCollection.some(function(model) {
+            return model.get('type') === 'error';
         });
-    });
+
+        if (errors) {
+            label = 'label-danger';
+        }
+
+        this.$el.html('<span class="label {0}">{1}</span>'.format(label, count));
+        return this;
+    },
+
+    _healthSync : function() {
+        this.render();
+    }
+});

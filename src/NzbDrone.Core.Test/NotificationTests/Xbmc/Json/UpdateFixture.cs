@@ -1,10 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.Http;
 using NzbDrone.Core.Notifications.Xbmc;
+using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -13,89 +13,56 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
     [TestFixture]
     public class UpdateFixture : CoreTest<JsonApiProvider>
     {
+        private const int TVDB_ID = 5;
         private XbmcSettings _settings;
-        const string _expectedJson = "{\"jsonrpc\":\"2.0\",\"method\":\"VideoLibrary.GetTvShows\",\"params\":{\"properties\":[\"file\",\"imdbnumber\"]},\"id\":";
-
-        private const string _tvshowsResponse = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"limits\":" +
-                                        "{\"end\":5,\"start\":0,\"total\":5},\"tvshows\":[{\"file\"" +
-                                        ":\"smb://HOMESERVER/TV/7th Heaven/\",\"imdbnumber\":\"73928\"," +
-                                        "\"label\":\"7th Heaven\",\"tvshowid\":3},{\"file\":\"smb://HOMESERVER/TV/8 Simple Rules/\"" +
-                                        ",\"imdbnumber\":\"78461\",\"label\":\"8 Simple Rules\",\"tvshowid\":4},{\"file\":" +
-                                        "\"smb://HOMESERVER/TV/24-7 Penguins-Capitals- Road to the NHL Winter Classic/\",\"imdbnumber\"" +
-                                        ":\"213041\",\"label\":\"24/7 Penguins/Capitals: Road to the NHL Winter Classic\",\"tvshowid\":1}," +
-                                        "{\"file\":\"smb://HOMESERVER/TV/30 Rock/\",\"imdbnumber\":\"79488\",\"label\":\"30 Rock\",\"tvshowid\":2}" +
-                                        ",{\"file\":\"smb://HOMESERVER/TV/90210/\",\"imdbnumber\":\"82716\",\"label\":\"90210\",\"tvshowid\":5}]}}";
+        private List<TvShow> _xbmcSeries;
 
         [SetUp]
         public void Setup()
         {
-            _settings = new XbmcSettings
-            {
-                Host = "localhost",
-                Port = 8080,
-                Username = "xbmc",
-                Password = "xbmc",
-                AlwaysUpdate = false,
-                CleanLibrary = false,
-                UpdateLibrary = true
-            };
+            _settings = Builder<XbmcSettings>.CreateNew()
+                                             .Build();
 
-            Mocker.GetMock<IHttpProvider>()
-                .Setup(s => s.PostCommand(_settings.Address, _settings.Username, _settings.Password,
-                        It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "").Contains(_expectedJson.Replace(" ", "")))))
-                .Returns(_tvshowsResponse);
+            _xbmcSeries = Builder<TvShow>.CreateListOfSize(3)
+                                         .TheFirst(1)
+                                         .With(s => s.ImdbNumber = TVDB_ID.ToString())
+                                         .Build()
+                                         .ToList();
+
+            Mocker.GetMock<IXbmcJsonApiProxy>()
+                  .Setup(s => s.GetSeries(_settings))
+                  .Returns(_xbmcSeries);
+
+            Mocker.GetMock<IXbmcJsonApiProxy>()
+                  .Setup(s => s.GetActivePlayers(_settings))
+                  .Returns(new List<ActivePlayer>());
         }
 
         [Test]
         public void should_update_using_series_path()
         {
-            var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.TvdbId = 79488)
-                .With(s => s.Title = "30 Rock")
-                .Build();
+            var series = Builder<Series>.CreateNew()
+                                        .With(s => s.TvdbId = TVDB_ID)
+                                        .Build();
 
-            Mocker.GetMock<IHttpProvider>()
-                  .Setup(s => s.PostCommand(_settings.Address, _settings.Username, _settings.Password, It.Is<String>(
-                    e => e.Replace(" ", "")
-                      .Replace("\r\n", "")
-                      .Replace("\t", "")
-                      .Contains("\"params\":{\"directory\":\"smb://HOMESERVER/TV/30Rock/\"}"))))
-                  .Returns("{\"id\":55,\"jsonrpc\":\"2.0\",\"result\":\"OK\"}");
+            Subject.Update(_settings, series);
 
-            Subject.Update(_settings, fakeSeries);
-
-            Mocker.GetMock<IHttpProvider>()
-                  .Verify(s => s.PostCommand(_settings.Address, _settings.Username, _settings.Password, It.Is<String>(
-                    e => e.Replace(" ", "")
-                      .Replace("\r\n", "")
-                      .Replace("\t", "")
-                      .Contains("\"params\":{\"directory\":\"smb://HOMESERVER/TV/30Rock/\"}"))), Times.Once());
+            Mocker.GetMock<IXbmcJsonApiProxy>()
+                  .Verify(v => v.UpdateLibrary(_settings, It.IsAny<string>()), Times.Once());
         }
 
         [Test]
         public void should_update_all_paths_when_series_path_not_found()
         {
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.TvdbId = 1)
-                .With(s => s.Title = "Not 30 Rock")
-                .Build();
-
-             Mocker.GetMock<IHttpProvider>()
-                   .Setup(s => s.PostCommand(_settings.Address, _settings.Username, _settings.Password, It.Is<String>(
-                     e => !e.Replace(" ", "")
-                      .Replace("\r\n", "")
-                      .Replace("\t", "")
-                      .Contains("\"params\":{\"directory\":\"smb://HOMESERVER/TV/30Rock/\"}"))))
-                   .Returns("{\"id\":55,\"jsonrpc\":\"2.0\",\"result\":\"OK\"}");
+                                            .With(s => s.TvdbId = 1000)
+                                            .With(s => s.Title = "Not 30 Rock")
+                                            .Build();
 
              Subject.Update(_settings, fakeSeries);
 
-             Mocker.GetMock<IHttpProvider>()
-                   .Verify(s => s.PostCommand(_settings.Address, _settings.Username, _settings.Password, It.Is<String>(
-                     e => e.Replace(" ", "")
-                      .Replace("\r\n", "")
-                      .Replace("\t", "")
-                      .Contains("\"params\":{\"directory\":\"smb://HOMESERVER/TV/30Rock/\"}"))), Times.Never());
+             Mocker.GetMock<IXbmcJsonApiProxy>()
+                   .Verify(v => v.UpdateLibrary(_settings, null), Times.Once());
         }
     }
 }

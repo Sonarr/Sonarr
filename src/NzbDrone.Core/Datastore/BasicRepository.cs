@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using Marr.Data;
 using Marr.Data.QGen;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Common;
 using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Messaging.Events;
-
 
 namespace NzbDrone.Core.Datastore
 {
@@ -35,16 +35,12 @@ namespace NzbDrone.Core.Datastore
         PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec);
     }
 
-
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
         private readonly IDatabase _database;
         private readonly IEventAggregator _eventAggregator;
 
-        private IDataMapper DataMapper
-        {
-            get { return _database.GetDataMapper(); }
-        }
+        protected IDataMapper DataMapper => _database.GetDataMapper();
 
         public BasicRepository(IDatabase database, IEventAggregator eventAggregator)
         {
@@ -52,10 +48,7 @@ namespace NzbDrone.Core.Datastore
             _eventAggregator = eventAggregator;
         }
 
-        protected QueryBuilder<TModel> Query
-        {
-            get { return DataMapper.Query<TModel>(); }
-        }
+        protected QueryBuilder<TModel> Query => DataMapper.Query<TModel>();
 
         protected void Delete(Expression<Func<TModel, bool>> filter)
         {
@@ -87,12 +80,12 @@ namespace NzbDrone.Core.Datastore
         public IEnumerable<TModel> Get(IEnumerable<int> ids)
         {
             var idList = ids.ToList();
-            var query = String.Format("Id IN ({0})", String.Join(",", idList));
+            var query = string.Format("Id IN ({0})", string.Join(",", idList));
             var result = Query.Where(query).ToList();
 
             if (result.Count != idList.Count())
             {
-                throw new ApplicationException("Expected query to return {0} rows but returned {1}".Inject(idList.Count(), result.Count));
+                throw new ApplicationException($"Expected query to return {idList.Count} rows but returned {result.Count}");
             }
 
             return result;
@@ -145,7 +138,7 @@ namespace NzbDrone.Core.Datastore
         {
             using (var unitOfWork = new UnitOfWork(() => DataMapper))
             {
-                unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
 
                 foreach (var model in models)
                 {
@@ -160,7 +153,7 @@ namespace NzbDrone.Core.Datastore
         {
             using (var unitOfWork = new UnitOfWork(() => DataMapper))
             {
-                unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
 
                 foreach (var model in models)
                 {
@@ -203,7 +196,7 @@ namespace NzbDrone.Core.Datastore
         {
             using (var unitOfWork = new UnitOfWork(() => DataMapper))
             {
-                unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
 
                 foreach (var id in ids)
                 {
@@ -290,9 +283,6 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-        protected virtual bool PublishModelEvents
-        {
-            get { return false; }
-        }
+        protected virtual bool PublishModelEvents => false;
     }
 }

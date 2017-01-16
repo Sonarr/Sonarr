@@ -10,7 +10,7 @@ namespace NzbDrone
 {
     public static class WindowsApp
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(WindowsApp));
 
         public static void Main(string[] args)
         {
@@ -18,7 +18,7 @@ namespace NzbDrone
             {
                 var startupArgs = new StartupContext(args);
 
-                LogTargets.Register(startupArgs, false, true);
+                NzbDroneLogger.Register(startupArgs, false, true);
 
                 Bootstrap.Start(startupArgs, new MessageBoxUserAlert(), container =>
                 {
@@ -29,9 +29,8 @@ namespace NzbDrone
             }
             catch (Exception e)
             {
-                Logger.FatalException("EPIC FAIL: " + e.Message, e);
-                var message = string.Format("{0}: {1}", e.GetType().Name, e.Message);
-                MessageBox.Show(text: message, buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, caption: "Epic Fail!");
+                Logger.Fatal(e, "EPIC FAIL");
+                MessageBox.Show($"{e.GetType().Name}: {e.Message}", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, caption: "Epic Fail!");
             }
         }
     }

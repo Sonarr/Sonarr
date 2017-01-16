@@ -1,7 +1,7 @@
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Update.UpdateEngine
 {
@@ -13,13 +13,13 @@ namespace NzbDrone.Update.UpdateEngine
 
     public class BackupAndRestore : IBackupAndRestore
     {
-        private readonly IDiskProvider _diskProvider;
+        private readonly IDiskTransferService _diskTransferService;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly Logger _logger;
 
-        public BackupAndRestore(IDiskProvider diskProvider, IAppFolderInfo appFolderInfo, Logger logger)
+        public BackupAndRestore(IDiskTransferService diskTransferService, IAppFolderInfo appFolderInfo, Logger logger)
         {
-            _diskProvider = diskProvider;
+            _diskTransferService = diskTransferService;
             _appFolderInfo = appFolderInfo;
             _logger = logger;
         }
@@ -27,13 +27,14 @@ namespace NzbDrone.Update.UpdateEngine
         public void Backup(string source)
         {
             _logger.Info("Creating backup of existing installation");
-            _diskProvider.CopyFolder(source, _appFolderInfo.GetUpdateBackUpFolder());
+            _diskTransferService.MirrorFolder(source, _appFolderInfo.GetUpdateBackUpFolder());
         }
 
         public void Restore(string target)
         {
             _logger.Info("Attempting to rollback upgrade");
-            _diskProvider.CopyFolder(_appFolderInfo.GetUpdateBackUpFolder(), target);
+            var count = _diskTransferService.MirrorFolder(_appFolderInfo.GetUpdateBackUpFolder(), target);
+            _logger.Info("Rolled back {0} files", count);
         }
     }
 }

@@ -1,44 +1,19 @@
-﻿'use strict';
+var vent = require('vent');
+var Marionette = require('marionette');
+var AsModelBoundView = require('../../Mixins/AsModelBoundView');
+var AsValidatedView = require('../../Mixins/AsValidatedView');
+var AsEditModalView = require('../../Mixins/AsEditModalView');
 
-define(
-    [
-        'vent',
-        'marionette',
-        'Mixins/AsModelBoundView',
-        'Mixins/AsValidatedView'
-    ], function (vent, Marionette, AsModelBoundView, AsValidatedView) {
+var view = Marionette.ItemView.extend({
+    template : 'Settings/Metadata/MetadataEditViewTemplate',
 
-        var view = Marionette.ItemView.extend({
-            template: 'Settings/Metadata/MetadataEditViewTemplate',
+    _onAfterSave : function() {
+        vent.trigger(vent.Commands.CloseModalCommand);
+    }
+});
 
-            ui: {
-                activity: '.x-activity'
-            },
+AsModelBoundView.call(view);
+AsValidatedView.call(view);
+AsEditModalView.call(view);
 
-            events: {
-                'click .x-save'        : '_save'
-            },
-
-            _save: function () {
-                this.ui.activity.html('<i class="icon-nd-spinner"></i>');
-
-                var self = this;
-                var promise = this.model.save();
-
-                if (promise) {
-                    promise.done(function () {
-                        vent.trigger(vent.Commands.CloseModalCommand);
-                    });
-
-                    promise.fail(function () {
-                        self.ui.activity.empty();
-                    });
-                }
-            }
-        });
-
-        AsModelBoundView.call(view);
-        AsValidatedView.call(view);
-
-        return view;
-    });
+module.exports = view;

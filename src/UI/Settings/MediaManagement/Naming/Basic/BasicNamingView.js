@@ -1,105 +1,118 @@
-﻿'use strict';
-define(
-    [
-        'underscore',
-        'marionette',
-        'Config',
-        'Settings/MediaManagement/Naming/NamingSampleModel',
-        'Mixins/AsModelBoundView'
-    ], function (_, Marionette, Config, NamingSampleModel, AsModelBoundView) {
+var _ = require('underscore');
+var Marionette = require('marionette');
+var Config = require('../../../../Config');
+var NamingSampleModel = require('../NamingSampleModel');
+var BasicNamingModel = require('./BasicNamingModel');
+var AsModelBoundView = require('../../../../Mixins/AsModelBoundView');
 
-        var view = Marionette.ItemView.extend({
-            template: 'Settings/MediaManagement/Naming/Basic/BasicNamingViewTemplate',
+var view = Marionette.ItemView.extend({
+    template : 'Settings/MediaManagement/Naming/Basic/BasicNamingViewTemplate',
 
-            ui: {
-                namingOptions         : '.x-naming-options',
-                singleEpisodeExample  : '.x-single-episode-example',
-                multiEpisodeExample   : '.x-multi-episode-example',
-                dailyEpisodeExample   : '.x-daily-episode-example'
-            },
+    ui : {
+        namingOptions        : '.x-naming-options',
+        singleEpisodeExample : '.x-single-episode-example',
+        multiEpisodeExample  : '.x-multi-episode-example',
+        dailyEpisodeExample  : '.x-daily-episode-example'
+    },
 
-            onRender: function () {
-                this.listenTo(this.model, 'change', this._buildFormat);
-                this._buildFormat();
-            },
+    initialize : function(options) {
+        this.namingModel = options.model;
+        this.model = new BasicNamingModel();
 
-            _updateSamples: function () {
-                var data = {
-                    renameEpisodes: true,
-                    standardEpisodeFormat: this.standardEpisodeFormat,
-                    dailyEpisodeFormat: this.dailyEpisodeFormat,
-                    multiEpisodeStyle: this.model.get('multiEpisodeStyle')
-                };
+        this._parseNamingModel();
 
-                this.namingSampleModel.fetch({data: data});
-            },
+        this.listenTo(this.model, 'change', this._buildFormat);
+        this.listenTo(this.namingModel, 'sync', this._parseNamingModel);
+    },
 
-            _buildFormat: function () {
-                if (Config.getValueBoolean(Config.Keys.AdvancedSettings)) {
-                    return;
-                }
+    _parseNamingModel : function() {
+        var standardFormat = this.namingModel.get('standardEpisodeFormat');
 
-                if (_.has(this.model.changed, 'standardEpisodeFormat') || _.has(this.model.changed, 'dailyEpisodeFormat')) {
-                    return;
-                }
+        var includeSeriesTitle = standardFormat.match(/\{Series[-_. ]Title\}/i);
+        var includeEpisodeTitle = standardFormat.match(/\{Episode[-_. ]Title\}/i);
+        var includeQuality = standardFormat.match(/\{Quality[-_. ]Title\}/i);
+        var numberStyle = standardFormat.match(/s?\{season(?:\:0+)?\}[ex]\{episode(?:\:0+)?\}/i);
+        var replaceSpaces = standardFormat.indexOf(' ') === -1;
+        var separator = standardFormat.match(/\}( - |\.-\.|\.| )|( - |\.-\.|\.| )\{/i);
 
-                var standardEpisodeFormat = '';
-                var dailyEpisodeFormat = '';
+        if (separator === null || separator[1] === '.-.') {
+            separator = ' - ';
+        } else {
+            separator = separator[1];
+        }
 
-                if (this.model.get('includeSeriesTitle')) {
-                    if (this.model.get('replaceSpaces')) {
-                        standardEpisodeFormat += '{Series.Title}';
-                        dailyEpisodeFormat += '{Series.Title}';
-                    }
+        if (numberStyle === null) {
+            numberStyle = 'S{season:00}E{episode:00}';
+        } else {
+            numberStyle = numberStyle[0];
+        }
 
-                    else {
-                        standardEpisodeFormat += '{Series Title}';
-                        dailyEpisodeFormat += '{Series Title}';
-                    }
+        this.model.set({
+            includeSeriesTitle  : includeSeriesTitle !== null,
+            includeEpisodeTitle : includeEpisodeTitle !== null,
+            includeQuality      : includeQuality !== null,
+            numberStyle         : numberStyle,
+            replaceSpaces       : replaceSpaces,
+            separator           : separator
+        }, { silent : true });
+    },
 
-                    standardEpisodeFormat += this.model.get('separator');
-                    dailyEpisodeFormat += this.model.get('separator');
-                }
+    _buildFormat : function() {
+        if (Config.getValueBoolean(Config.Keys.AdvancedSettings)) {
+            return;
+        }
 
-                standardEpisodeFormat += this.model.get('numberStyle');
-                dailyEpisodeFormat += '{Air-Date}';
+        var standardEpisodeFormat = '';
+        var dailyEpisodeFormat = '';
 
-                if (this.model.get('includeEpisodeTitle')) {
-                    standardEpisodeFormat += this.model.get('separator');
-                    dailyEpisodeFormat += this.model.get('separator');
-
-                    if (this.model.get('replaceSpaces')) {
-                        standardEpisodeFormat += '{Episode.Title}';
-                        dailyEpisodeFormat += '{Episode.Title}';
-                    }
-
-                    else {
-                        standardEpisodeFormat += '{Episode Title}';
-                        dailyEpisodeFormat += '{Episode Title}';
-                    }
-                }
-
-                if (this.model.get('includeQuality')) {
-                    if (this.model.get('replaceSpaces')) {
-                        standardEpisodeFormat += ' {Quality.Title}';
-                        dailyEpisodeFormat += ' {Quality.Title}';
-                    }
-
-                    else {
-                        standardEpisodeFormat += ' {Quality Title}';
-                        dailyEpisodeFormat += ' {Quality Title}';
-                    }
-                }
-
-                if (this.model.get('replaceSpaces')) {
-                    standardEpisodeFormat = standardEpisodeFormat.replace(/\s/g, '.');
-                    dailyEpisodeFormat = dailyEpisodeFormat.replace(/\s/g, '.');
-                }
-
-                this.model.set('standardEpisodeFormat', standardEpisodeFormat);
-                this.model.set('dailyEpisodeFormat', dailyEpisodeFormat);
+        if (this.model.get('includeSeriesTitle')) {
+            if (this.model.get('replaceSpaces')) {
+                standardEpisodeFormat += '{Series.Title}';
+                dailyEpisodeFormat += '{Series.Title}';
+            } else {
+                standardEpisodeFormat += '{Series Title}';
+                dailyEpisodeFormat += '{Series Title}';
             }
-        });
 
-        return AsModelBoundView.call(view);
-    });
+            standardEpisodeFormat += this.model.get('separator');
+            dailyEpisodeFormat += this.model.get('separator');
+        }
+
+        standardEpisodeFormat += this.model.get('numberStyle');
+        dailyEpisodeFormat += '{Air-Date}';
+
+        if (this.model.get('includeEpisodeTitle')) {
+            standardEpisodeFormat += this.model.get('separator');
+            dailyEpisodeFormat += this.model.get('separator');
+
+            if (this.model.get('replaceSpaces')) {
+                standardEpisodeFormat += '{Episode.Title}';
+                dailyEpisodeFormat += '{Episode.Title}';
+            } else {
+                standardEpisodeFormat += '{Episode Title}';
+                dailyEpisodeFormat += '{Episode Title}';
+            }
+        }
+
+        if (this.model.get('includeQuality')) {
+            if (this.model.get('replaceSpaces')) {
+                standardEpisodeFormat += ' {Quality.Title}';
+                dailyEpisodeFormat += ' {Quality.Title}';
+            } else {
+                standardEpisodeFormat += ' {Quality Title}';
+                dailyEpisodeFormat += ' {Quality Title}';
+            }
+        }
+
+        if (this.model.get('replaceSpaces')) {
+            standardEpisodeFormat = standardEpisodeFormat.replace(/\s/g, '.');
+            dailyEpisodeFormat = dailyEpisodeFormat.replace(/\s/g, '.');
+        }
+
+        this.namingModel.set('standardEpisodeFormat', standardEpisodeFormat);
+        this.namingModel.set('dailyEpisodeFormat', dailyEpisodeFormat);
+        this.namingModel.set('animeEpisodeFormat', standardEpisodeFormat);
+    }
+});
+
+module.exports = AsModelBoundView.call(view);

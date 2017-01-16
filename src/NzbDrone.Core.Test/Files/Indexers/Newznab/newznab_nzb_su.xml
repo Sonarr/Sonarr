@@ -1,0 +1,1923 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:newznab="http://www.newznab.com/DTD/2010/feeds/attributes/">
+  <channel>
+    <atom:link href="http://nzb.su/api?t=tvsearch&amp;cat=5030,5040&amp;apikey=xxx" rel="self" type="application/rss+xml" />
+    <title>Nzb.su</title>
+    <description>Nzb.su Feed</description>
+    <link>http://nzb.su/</link>
+    <language>en-gb</language>
+    <webMaster>root@nzb.su (Nzb.su)</webMaster>
+    <category></category>
+    <image>
+      <url>http://nzb.su/views/images/banner.jpg</url>
+
+      <title>Nzb.su</title>
+      <link>http://nzb.su/</link>
+      <description>Visit Nzb.su - indexing usenet one part at a time</description>
+    </image>
+
+
+    <newznab:response offset="0" total="10000" />
+    <item>
+      <title>White.Collar.S03E05.720p.HDTV.X264-DIMENSION</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/24967ef4c2e26296c65d3bbfa97aa8fe</guid>
+      <link>http://nzb.su/getnzb/24967ef4c2e26296c65d3bbfa97aa8fe.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/24967ef4c2e26296c65d3bbfa97aa8fe#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 11:09:39 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>White.Collar.S03E05.720p.HDTV.X264-DIMENSION</description>
+
+      <enclosure url="http://nzb.su/getnzb/24967ef4c2e26296c65d3bbfa97aa8fe.nzb&amp;i=37292&amp;r=xxx" length="1183105773" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1183105773" />
+      <newznab:attr name="guid" value="24967ef4c2e26296c65d3bbfa97aa8fe" />
+
+
+    </item>
+    <item>
+      <title>White.Collar.S03E04.720p.HDTV.X264-DIMENSION</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/fab3bed2f4169522c3cb2ef24a6e8a5f</guid>
+      <link>http://nzb.su/getnzb/fab3bed2f4169522c3cb2ef24a6e8a5f.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/fab3bed2f4169522c3cb2ef24a6e8a5f#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 11:14:16 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>White.Collar.S03E04.720p.HDTV.X264-DIMENSION</description>
+
+      <enclosure url="http://nzb.su/getnzb/fab3bed2f4169522c3cb2ef24a6e8a5f.nzb&amp;i=37292&amp;r=xxx" length="1436708478" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1436708478" />
+      <newznab:attr name="guid" value="fab3bed2f4169522c3cb2ef24a6e8a5f" />
+
+
+    </item>
+    <item>
+      <title>White.Collar.S03E03.720p.HDTV.x264-CTU</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/ba12896db486b455706ef5f353a78e81</guid>
+      <link>http://nzb.su/getnzb/ba12896db486b455706ef5f353a78e81.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/ba12896db486b455706ef5f353a78e81#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 11:14:16 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>White.Collar.S03E03.720p.HDTV.x264-CTU</description>
+
+      <enclosure url="http://nzb.su/getnzb/ba12896db486b455706ef5f353a78e81.nzb&amp;i=37292&amp;r=xxx" length="1389273761" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1389273761" />
+      <newznab:attr name="guid" value="ba12896db486b455706ef5f353a78e81" />
+
+
+    </item>
+    <item>
+      <title>White.Collar.S03E02.720p.HDTV.X264-DIMENSION</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/79eacdb15c967465bf6667c46bcff3e4</guid>
+      <link>http://nzb.su/getnzb/79eacdb15c967465bf6667c46bcff3e4.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/79eacdb15c967465bf6667c46bcff3e4#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 11:12:43 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>White.Collar.S03E02.720p.HDTV.X264-DIMENSION</description>
+
+      <enclosure url="http://nzb.su/getnzb/79eacdb15c967465bf6667c46bcff3e4.nzb&amp;i=37292&amp;r=xxx" length="1100822886" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1100822886" />
+      <newznab:attr name="guid" value="79eacdb15c967465bf6667c46bcff3e4" />
+
+
+    </item>
+    <item>
+      <title>White.Collar.S03E07.720p.HDTV.x264-IMMERSE</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/923a97da875283a74127762c061830e1</guid>
+      <link>http://nzb.su/getnzb/923a97da875283a74127762c061830e1.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/923a97da875283a74127762c061830e1#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 11:11:13 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>White.Collar.S03E07.720p.HDTV.x264-IMMERSE</description>
+
+      <enclosure url="http://nzb.su/getnzb/923a97da875283a74127762c061830e1.nzb&amp;i=37292&amp;r=xxx" length="1099895884" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1099895884" />
+      <newznab:attr name="guid" value="923a97da875283a74127762c061830e1" />
+
+
+    </item>
+    <item>
+      <title>White.Collar.S02E14.720p.HDTV.X264-DIMENSION</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/320fe82676c117e1e9c595a4d4cce8ff</guid>
+      <link>http://nzb.su/getnzb/320fe82676c117e1e9c595a4d4cce8ff.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/320fe82676c117e1e9c595a4d4cce8ff#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 11:09:39 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>White.Collar.S02E14.720p.HDTV.X264-DIMENSION</description>
+
+      <enclosure url="http://nzb.su/getnzb/320fe82676c117e1e9c595a4d4cce8ff.nzb&amp;i=37292&amp;r=xxx" length="1380780120" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1380780120" />
+      <newznab:attr name="guid" value="320fe82676c117e1e9c595a4d4cce8ff" />
+
+
+    </item>
+    <item>
+      <title>Head Rush 2010-09-17 Human Conductions 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/07af6cf4563e3e8c76feb52401d954e2</guid>
+      <link>http://nzb.su/getnzb/07af6cf4563e3e8c76feb52401d954e2.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/07af6cf4563e3e8c76feb52401d954e2#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 10:59:04 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Head Rush 2010-09-17 Human Conductions 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/07af6cf4563e3e8c76feb52401d954e2.nzb&amp;i=37292&amp;r=xxx" length="8163031172" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="8163031172" />
+      <newznab:attr name="guid" value="07af6cf4563e3e8c76feb52401d954e2" />
+
+
+    </item>
+    <item>
+      <title>Fringe S04E13 720p WMVHD NeoDweezil</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/3c1e005678df784ae0062ac47e7b4245</guid>
+      <link>http://nzb.su/getnzb/3c1e005678df784ae0062ac47e7b4245.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/3c1e005678df784ae0062ac47e7b4245#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 10:52:11 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Fringe S04E13 720p WMVHD NeoDweezil</description>
+
+      <enclosure url="http://nzb.su/getnzb/3c1e005678df784ae0062ac47e7b4245.nzb&amp;i=37292&amp;r=xxx" length="1614456716" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1614456716" />
+      <newznab:attr name="guid" value="3c1e005678df784ae0062ac47e7b4245" />
+
+
+    </item>
+    <item>
+      <title>The.Indian.Doctor.S02E01.HDTV.x264-TLA</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/3fc0305f87d841eb20a89fac1f8fc17a</guid>
+      <link>http://nzb.su/getnzb/3fc0305f87d841eb20a89fac1f8fc17a.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/3fc0305f87d841eb20a89fac1f8fc17a#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 10:39:19 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>The.Indian.Doctor.S02E01.HDTV.x264-TLA</description>
+
+      <enclosure url="http://nzb.su/getnzb/3fc0305f87d841eb20a89fac1f8fc17a.nzb&amp;i=37292&amp;r=xxx" length="385381327" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="385381327" />
+      <newznab:attr name="guid" value="3fc0305f87d841eb20a89fac1f8fc17a" />
+
+
+    </item>
+    <item>
+      <title>Giada at Home GH0412H Pure Comfort 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/9cfb651bc08b687be3c4e7bb865a78ec</guid>
+      <link>http://nzb.su/getnzb/9cfb651bc08b687be3c4e7bb865a78ec.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/9cfb651bc08b687be3c4e7bb865a78ec#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 10:39:18 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Giada at Home GH0412H Pure Comfort 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/9cfb651bc08b687be3c4e7bb865a78ec.nzb&amp;i=37292&amp;r=xxx" length="2494720395" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2494720395" />
+      <newznab:attr name="guid" value="9cfb651bc08b687be3c4e7bb865a78ec" />
+
+
+    </item>
+    <item>
+      <title>Black Forest (2012) 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/f357688542be93d7c258557f9e1d2d52</guid>
+      <link>http://nzb.su/getnzb/f357688542be93d7c258557f9e1d2d52.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/f357688542be93d7c258557f9e1d2d52#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 10:33:46 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Black Forest (2012) 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/f357688542be93d7c258557f9e1d2d52.nzb&amp;i=37292&amp;r=xxx" length="8997812158" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="8997812158" />
+      <newznab:attr name="guid" value="f357688542be93d7c258557f9e1d2d52" />
+
+
+    </item>
+    <item>
+      <title>The.Indian.Doctor.S02E01.720p.HDTV.x264-TLA</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/8df60f1ac194cab27859d21b958704a9</guid>
+      <link>http://nzb.su/getnzb/8df60f1ac194cab27859d21b958704a9.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/8df60f1ac194cab27859d21b958704a9#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 10:21:23 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>The.Indian.Doctor.S02E01.720p.HDTV.x264-TLA</description>
+
+      <enclosure url="http://nzb.su/getnzb/8df60f1ac194cab27859d21b958704a9.nzb&amp;i=37292&amp;r=xxx" length="1165970399" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1165970399" />
+      <newznab:attr name="guid" value="8df60f1ac194cab27859d21b958704a9" />
+
+
+    </item>
+    <item>
+      <title>American Weed S01E01 Marijuana Drama 720p HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/28283f97bc847e21e19ebefecb7c20ca</guid>
+      <link>http://nzb.su/getnzb/28283f97bc847e21e19ebefecb7c20ca.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/28283f97bc847e21e19ebefecb7c20ca#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 10:11:12 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>American Weed S01E01 Marijuana Drama 720p HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/28283f97bc847e21e19ebefecb7c20ca.nzb&amp;i=37292&amp;r=xxx" length="3979356117" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="3979356117" />
+      <newznab:attr name="guid" value="28283f97bc847e21e19ebefecb7c20ca" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E10.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/e34e9d1d77795786d93b8b3b01cd53b7</guid>
+      <link>http://nzb.su/getnzb/e34e9d1d77795786d93b8b3b01cd53b7.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/e34e9d1d77795786d93b8b3b01cd53b7#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:31:29 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E10.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/e34e9d1d77795786d93b8b3b01cd53b7.nzb&amp;i=37292&amp;r=xxx" length="4111384202" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4111384202" />
+      <newznab:attr name="guid" value="e34e9d1d77795786d93b8b3b01cd53b7" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E09.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/0c3fea48354250895a2c2f218331d9c8</guid>
+      <link>http://nzb.su/getnzb/0c3fea48354250895a2c2f218331d9c8.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/0c3fea48354250895a2c2f218331d9c8#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:28:46 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E09.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/0c3fea48354250895a2c2f218331d9c8.nzb&amp;i=37292&amp;r=xxx" length="4038114579" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4038114579" />
+      <newznab:attr name="guid" value="0c3fea48354250895a2c2f218331d9c8" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E08.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/a17fad5ce97f75d13af98a956511c84e</guid>
+      <link>http://nzb.su/getnzb/a17fad5ce97f75d13af98a956511c84e.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/a17fad5ce97f75d13af98a956511c84e#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:25:55 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E08.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/a17fad5ce97f75d13af98a956511c84e.nzb&amp;i=37292&amp;r=xxx" length="4134903278" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4134903278" />
+      <newznab:attr name="guid" value="a17fad5ce97f75d13af98a956511c84e" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E07.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/f64e6740e11f03d3d793f6ec52b64ff9</guid>
+      <link>http://nzb.su/getnzb/f64e6740e11f03d3d793f6ec52b64ff9.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/f64e6740e11f03d3d793f6ec52b64ff9#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:21:36 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E07.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/f64e6740e11f03d3d793f6ec52b64ff9.nzb&amp;i=37292&amp;r=xxx" length="4127225702" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4127225702" />
+      <newznab:attr name="guid" value="f64e6740e11f03d3d793f6ec52b64ff9" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E06.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/b6aa66e8139b083073f0ca172f1998d0</guid>
+      <link>http://nzb.su/getnzb/b6aa66e8139b083073f0ca172f1998d0.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/b6aa66e8139b083073f0ca172f1998d0#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:16:57 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E06.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/b6aa66e8139b083073f0ca172f1998d0.nzb&amp;i=37292&amp;r=xxx" length="4118911898" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4118911898" />
+      <newznab:attr name="guid" value="b6aa66e8139b083073f0ca172f1998d0" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E05.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/12998f81119de5de3c3b27f345bfae39</guid>
+      <link>http://nzb.su/getnzb/12998f81119de5de3c3b27f345bfae39.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/12998f81119de5de3c3b27f345bfae39#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:11:46 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E05.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/12998f81119de5de3c3b27f345bfae39.nzb&amp;i=37292&amp;r=xxx" length="4131802216" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4131802216" />
+      <newznab:attr name="guid" value="12998f81119de5de3c3b27f345bfae39" />
+
+
+    </item>
+    <item>
+      <title>My.Kitchen.Rules.AU.S03E17.PDTV.XviD.BF1</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/453f52cd16c2b2007a9a0e8fabc61d84</guid>
+      <link>http://nzb.su/getnzb/453f52cd16c2b2007a9a0e8fabc61d84.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/453f52cd16c2b2007a9a0e8fabc61d84#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:24:25 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>My.Kitchen.Rules.AU.S03E17.PDTV.XviD.BF1</description>
+
+      <enclosure url="http://nzb.su/getnzb/453f52cd16c2b2007a9a0e8fabc61d84.nzb&amp;i=37292&amp;r=xxx" length="597432135" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="597432135" />
+      <newznab:attr name="guid" value="453f52cd16c2b2007a9a0e8fabc61d84" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E04.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/35925829150dd7f213a3dae2b185a6d1</guid>
+      <link>http://nzb.su/getnzb/35925829150dd7f213a3dae2b185a6d1.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/35925829150dd7f213a3dae2b185a6d1#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:08:45 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E04.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/35925829150dd7f213a3dae2b185a6d1.nzb&amp;i=37292&amp;r=xxx" length="4060765614" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4060765614" />
+      <newznab:attr name="guid" value="35925829150dd7f213a3dae2b185a6d1" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E03.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/ac1687c426a101f236efc30af613aff1</guid>
+      <link>http://nzb.su/getnzb/ac1687c426a101f236efc30af613aff1.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/ac1687c426a101f236efc30af613aff1#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 09:02:49 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E03.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/ac1687c426a101f236efc30af613aff1.nzb&amp;i=37292&amp;r=xxx" length="4117866856" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4117866856" />
+      <newznab:attr name="guid" value="ac1687c426a101f236efc30af613aff1" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E02.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/717b6d4423970502927f1cc8fe2a6a3b</guid>
+      <link>http://nzb.su/getnzb/717b6d4423970502927f1cc8fe2a6a3b.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/717b6d4423970502927f1cc8fe2a6a3b#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 08:58:21 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E02.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/717b6d4423970502927f1cc8fe2a6a3b.nzb&amp;i=37292&amp;r=xxx" length="4116425956" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4116425956" />
+      <newznab:attr name="guid" value="717b6d4423970502927f1cc8fe2a6a3b" />
+
+
+    </item>
+    <item>
+      <title>Space.1999.S01E01.1080p.BluRay.x264-aAF</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/14e7dc51a27d16f523d4b43c3d976eea</guid>
+      <link>http://nzb.su/getnzb/14e7dc51a27d16f523d4b43c3d976eea.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/14e7dc51a27d16f523d4b43c3d976eea#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 08:56:54 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Space.1999.S01E01.1080p.BluRay.x264-aAF</description>
+
+      <enclosure url="http://nzb.su/getnzb/14e7dc51a27d16f523d4b43c3d976eea.nzb&amp;i=37292&amp;r=xxx" length="4119439124" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4119439124" />
+      <newznab:attr name="guid" value="14e7dc51a27d16f523d4b43c3d976eea" />
+
+
+    </item>
+    <item>
+      <title>National.Geographic.Forbidden.Tomb.of.Genghis.Khan.720p.HDTV.x264-GeT</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/bd7e1fc46db570ac2e21733f34e44573</guid>
+      <link>http://nzb.su/getnzb/bd7e1fc46db570ac2e21733f34e44573.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/bd7e1fc46db570ac2e21733f34e44573#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 08:18:31 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>National.Geographic.Forbidden.Tomb.of.Genghis.Khan.720p.HDTV.x264-GeT</description>
+
+      <enclosure url="http://nzb.su/getnzb/bd7e1fc46db570ac2e21733f34e44573.nzb&amp;i=37292&amp;r=xxx" length="1491233954" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1491233954" />
+      <newznab:attr name="guid" value="bd7e1fc46db570ac2e21733f34e44573" />
+
+
+    </item>
+    <item>
+      <title>Chicago&#039;s Best - Western Suburbs 2 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/6e948865e3dd4af740a68f944e8afdd3</guid>
+      <link>http://nzb.su/getnzb/6e948865e3dd4af740a68f944e8afdd3.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/6e948865e3dd4af740a68f944e8afdd3#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 08:02:17 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Chicago&#039;s Best - Western Suburbs 2 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/6e948865e3dd4af740a68f944e8afdd3.nzb&amp;i=37292&amp;r=xxx" length="3342952444" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="3342952444" />
+      <newznab:attr name="guid" value="6e948865e3dd4af740a68f944e8afdd3" />
+
+
+    </item>
+    <item>
+      <title>Star.Wars.Episode.VI.Return.Of.The.Jedi.1983.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/d4c0b3b28421fbe9e14ea6683889b125</guid>
+      <link>http://nzb.su/getnzb/d4c0b3b28421fbe9e14ea6683889b125.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/d4c0b3b28421fbe9e14ea6683889b125#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 07:36:39 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Star.Wars.Episode.VI.Return.Of.The.Jedi.1983.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/d4c0b3b28421fbe9e14ea6683889b125.nzb&amp;i=37292&amp;r=xxx" length="18638766996" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="18638766996" />
+      <newznab:attr name="guid" value="d4c0b3b28421fbe9e14ea6683889b125" />
+
+
+    </item>
+    <item>
+      <title>Bondi.Rescue.S07E04.WS.PDTV.XviD-RTA</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/20b6cba13475fa349166a999ad924440</guid>
+      <link>http://nzb.su/getnzb/20b6cba13475fa349166a999ad924440.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/20b6cba13475fa349166a999ad924440#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 07:26:02 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Bondi.Rescue.S07E04.WS.PDTV.XviD-RTA</description>
+
+      <enclosure url="http://nzb.su/getnzb/20b6cba13475fa349166a999ad924440.nzb&amp;i=37292&amp;r=xxx" length="208815036" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="208815036" />
+      <newznab:attr name="guid" value="20b6cba13475fa349166a999ad924440" />
+
+
+    </item>
+    <item>
+      <title>Star.Wars.Episode.I.The.Phantom.Menace.1999.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/22e31ed44ff26b110f8a910beb7d6444</guid>
+      <link>http://nzb.su/getnzb/22e31ed44ff26b110f8a910beb7d6444.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/22e31ed44ff26b110f8a910beb7d6444#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 07:13:34 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Star.Wars.Episode.I.The.Phantom.Menace.1999.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/22e31ed44ff26b110f8a910beb7d6444.nzb&amp;i=37292&amp;r=xxx" length="19136504330" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="19136504330" />
+      <newznab:attr name="guid" value="22e31ed44ff26b110f8a910beb7d6444" />
+
+
+    </item>
+    <item>
+      <title>The.Biggest.Loser.Australia.s07e23.PDTV.XviD.BF1</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/c937520cb1d94bd17bc5378a0450b1a2</guid>
+      <link>http://nzb.su/getnzb/c937520cb1d94bd17bc5378a0450b1a2.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/c937520cb1d94bd17bc5378a0450b1a2#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 07:26:02 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>The.Biggest.Loser.Australia.s07e23.PDTV.XviD.BF1</description>
+
+      <enclosure url="http://nzb.su/getnzb/c937520cb1d94bd17bc5378a0450b1a2.nzb&amp;i=37292&amp;r=xxx" length="1262068295" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="1262068295" />
+      <newznab:attr name="guid" value="c937520cb1d94bd17bc5378a0450b1a2" />
+
+
+    </item>
+    <item>
+      <title>Star.Wars.Episode.II.Attack.Of.The.Clones.2002.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/a8401920efbd36e1ed518f629f06958a</guid>
+      <link>http://nzb.su/getnzb/a8401920efbd36e1ed518f629f06958a.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/a8401920efbd36e1ed518f629f06958a#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 06:46:20 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Star.Wars.Episode.II.Attack.Of.The.Clones.2002.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/a8401920efbd36e1ed518f629f06958a.nzb&amp;i=37292&amp;r=xxx" length="34421040825" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="34421040825" />
+      <newznab:attr name="guid" value="a8401920efbd36e1ed518f629f06958a" />
+
+
+    </item>
+    <item>
+      <title>The River - S01E03 - Los Ciegos - 264x720p</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/513d74cea591a23e5d9e56336117052f</guid>
+      <link>http://nzb.su/getnzb/513d74cea591a23e5d9e56336117052f.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/513d74cea591a23e5d9e56336117052f#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 10:48:45 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>The River - S01E03 - Los Ciegos - 264x720p</description>
+
+      <enclosure url="http://nzb.su/getnzb/513d74cea591a23e5d9e56336117052f.nzb&amp;i=37292&amp;r=xxx" length="1750628212" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1750628212" />
+      <newznab:attr name="guid" value="513d74cea591a23e5d9e56336117052f" />
+
+
+    </item>
+    <item>
+      <title>My.Kitchen.Rules.S03E17.WS.PDTV.x264-TASTETV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/00ef9f029b8bda6be9e095f09ce26e60</guid>
+      <link>http://nzb.su/getnzb/00ef9f029b8bda6be9e095f09ce26e60.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/00ef9f029b8bda6be9e095f09ce26e60#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 06:27:16 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>My.Kitchen.Rules.S03E17.WS.PDTV.x264-TASTETV</description>
+
+      <enclosure url="http://nzb.su/getnzb/00ef9f029b8bda6be9e095f09ce26e60.nzb&amp;i=37292&amp;r=xxx" length="441049445" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="441049445" />
+      <newznab:attr name="guid" value="00ef9f029b8bda6be9e095f09ce26e60" />
+
+
+    </item>
+    <item>
+      <title>Catch 21 2011-05-23 1080i HDTV DD2.0 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/b8f1a51e098b81010d5f493a3e02dc95</guid>
+      <link>http://nzb.su/getnzb/b8f1a51e098b81010d5f493a3e02dc95.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/b8f1a51e098b81010d5f493a3e02dc95#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 06:37:02 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Catch 21 2011-05-23 1080i HDTV DD2.0 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/b8f1a51e098b81010d5f493a3e02dc95.nzb&amp;i=37292&amp;r=xxx" length="3811337356" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="3811337356" />
+      <newznab:attr name="guid" value="b8f1a51e098b81010d5f493a3e02dc95" />
+
+
+    </item>
+    <item>
+      <title>Star.Wars.Episode.III.Revenge.Of.The.Sith.2005.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/04784d8f333181048060c2ad61d3e580</guid>
+      <link>http://nzb.su/getnzb/04784d8f333181048060c2ad61d3e580.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/04784d8f333181048060c2ad61d3e580#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:59:02 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Star.Wars.Episode.III.Revenge.Of.The.Sith.2005.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/04784d8f333181048060c2ad61d3e580.nzb&amp;i=37292&amp;r=xxx" length="44846674425" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="44846674425" />
+      <newznab:attr name="guid" value="04784d8f333181048060c2ad61d3e580" />
+
+
+    </item>
+    <item>
+      <title>Unwrapped CW1612H Easy as Pie 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/423632bf02ae6c0b1c3da3eccf79bb44</guid>
+      <link>http://nzb.su/getnzb/423632bf02ae6c0b1c3da3eccf79bb44.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/423632bf02ae6c0b1c3da3eccf79bb44#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:57:28 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Unwrapped CW1612H Easy as Pie 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/423632bf02ae6c0b1c3da3eccf79bb44.nzb&amp;i=37292&amp;r=xxx" length="5120499073" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="5120499073" />
+      <newznab:attr name="guid" value="423632bf02ae6c0b1c3da3eccf79bb44" />
+
+
+    </item>
+    <item>
+      <title>Unwrapped CW1312H Sack Lunch 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/77e1ffbc0c390300628e96b02f84d379</guid>
+      <link>http://nzb.su/getnzb/77e1ffbc0c390300628e96b02f84d379.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/77e1ffbc0c390300628e96b02f84d379#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:52:15 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Unwrapped CW1312H Sack Lunch 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/77e1ffbc0c390300628e96b02f84d379.nzb&amp;i=37292&amp;r=xxx" length="2588227644" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2588227644" />
+      <newznab:attr name="guid" value="77e1ffbc0c390300628e96b02f84d379" />
+
+
+    </item>
+    <item>
+      <title>Unforgettable S01E16 Heartbreak 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/f065d1f75d19e8e7a9073bca8c90d544</guid>
+      <link>http://nzb.su/getnzb/f065d1f75d19e8e7a9073bca8c90d544.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/f065d1f75d19e8e7a9073bca8c90d544#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:42:45 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Unforgettable S01E16 Heartbreak 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/f065d1f75d19e8e7a9073bca8c90d544.nzb&amp;i=37292&amp;r=xxx" length="5916508899" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="5916508899" />
+      <newznab:attr name="guid" value="f065d1f75d19e8e7a9073bca8c90d544" />
+
+
+    </item>
+    <item>
+      <title>This Old House S33E20 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/957b62f7489aa4bf6908c69cbd1c9898</guid>
+      <link>http://nzb.su/getnzb/957b62f7489aa4bf6908c69cbd1c9898.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/957b62f7489aa4bf6908c69cbd1c9898#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:31:06 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>This Old House S33E20 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/957b62f7489aa4bf6908c69cbd1c9898.nzb&amp;i=37292&amp;r=xxx" length="2654572133" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2654572133" />
+      <newznab:attr name="guid" value="957b62f7489aa4bf6908c69cbd1c9898" />
+
+
+    </item>
+    <item>
+      <title>Grimm S01E12 Last Grimm Standing 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/71f97967a20a74683bc15c2cb77ce699</guid>
+      <link>http://nzb.su/getnzb/71f97967a20a74683bc15c2cb77ce699.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/71f97967a20a74683bc15c2cb77ce699#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:24:06 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Grimm S01E12 Last Grimm Standing 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/71f97967a20a74683bc15c2cb77ce699.nzb&amp;i=37292&amp;r=xxx" length="5907822872" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="5907822872" />
+      <newznab:attr name="guid" value="71f97967a20a74683bc15c2cb77ce699" />
+
+
+    </item>
+    <item>
+      <title>Catch 21 2011-05-20 1080i HDTV DD2.0 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/bf0d691fd49c54b5f93c37bb4f4cd867</guid>
+      <link>http://nzb.su/getnzb/bf0d691fd49c54b5f93c37bb4f4cd867.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/bf0d691fd49c54b5f93c37bb4f4cd867#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:32:39 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Catch 21 2011-05-20 1080i HDTV DD2.0 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/bf0d691fd49c54b5f93c37bb4f4cd867.nzb&amp;i=37292&amp;r=xxx" length="2669102663" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2669102663" />
+      <newznab:attr name="guid" value="bf0d691fd49c54b5f93c37bb4f4cd867" />
+
+
+    </item>
+    <item>
+      <title>Luck.S01E05.PROPER.720p.HDTV.x264-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/f47617ed790b37ffa8cfc8be4d10f1df</guid>
+      <link>http://nzb.su/getnzb/f47617ed790b37ffa8cfc8be4d10f1df.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/f47617ed790b37ffa8cfc8be4d10f1df#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:10:07 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Luck.S01E05.PROPER.720p.HDTV.x264-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/f47617ed790b37ffa8cfc8be4d10f1df.nzb&amp;i=37292&amp;r=xxx" length="1313604628" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1313604628" />
+      <newznab:attr name="guid" value="f47617ed790b37ffa8cfc8be4d10f1df" />
+
+
+    </item>
+    <item>
+      <title>Ask This Old House S10E20 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/82167e476238b16cc1f55e942a2c0434</guid>
+      <link>http://nzb.su/getnzb/82167e476238b16cc1f55e942a2c0434.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/82167e476238b16cc1f55e942a2c0434#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:13:13 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Ask This Old House S10E20 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/82167e476238b16cc1f55e942a2c0434.nzb&amp;i=37292&amp;r=xxx" length="2626889494" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2626889494" />
+      <newznab:attr name="guid" value="82167e476238b16cc1f55e942a2c0434" />
+
+
+    </item>
+    <item>
+      <title>According to Jim S07E04 The Perfect Fight 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/d8e942fde13b65b97b9e9ad34f6c4e56</guid>
+      <link>http://nzb.su/getnzb/d8e942fde13b65b97b9e9ad34f6c4e56.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/d8e942fde13b65b97b9e9ad34f6c4e56#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:07:24 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>According to Jim S07E04 The Perfect Fight 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/d8e942fde13b65b97b9e9ad34f6c4e56.nzb&amp;i=37292&amp;r=xxx" length="2619807204" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2619807204" />
+      <newznab:attr name="guid" value="d8e942fde13b65b97b9e9ad34f6c4e56" />
+
+
+    </item>
+    <item>
+      <title>According to Jim S07E03 Safety Last 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/976cc03bb2519e27113bedafd6037619</guid>
+      <link>http://nzb.su/getnzb/976cc03bb2519e27113bedafd6037619.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/976cc03bb2519e27113bedafd6037619#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 05:00:28 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>According to Jim S07E03 Safety Last 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/976cc03bb2519e27113bedafd6037619.nzb&amp;i=37292&amp;r=xxx" length="2648721655" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2648721655" />
+      <newznab:attr name="guid" value="976cc03bb2519e27113bedafd6037619" />
+
+
+    </item>
+    <item>
+      <title>The.84th.Annual.Academy.Awards.2012.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/4e6acc683c21aa3c8f4ea8e3aa9ab3d4</guid>
+      <link>http://nzb.su/getnzb/4e6acc683c21aa3c8f4ea8e3aa9ab3d4.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/4e6acc683c21aa3c8f4ea8e3aa9ab3d4#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 04:48:41 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>The.84th.Annual.Academy.Awards.2012.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/4e6acc683c21aa3c8f4ea8e3aa9ab3d4.nzb&amp;i=37292&amp;r=xxx" length="1689283237" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="1689283237" />
+      <newznab:attr name="guid" value="4e6acc683c21aa3c8f4ea8e3aa9ab3d4" />
+
+
+    </item>
+    <item>
+      <title>A Gifted Man S01E15 In Case of Letting Go 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/148268f41d539093ca2d78ffd8682a3e</guid>
+      <link>http://nzb.su/getnzb/148268f41d539093ca2d78ffd8682a3e.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/148268f41d539093ca2d78ffd8682a3e#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 04:55:13 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>A Gifted Man S01E15 In Case of Letting Go 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/148268f41d539093ca2d78ffd8682a3e.nzb&amp;i=37292&amp;r=xxx" length="5738139409" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="5738139409" />
+      <newznab:attr name="guid" value="148268f41d539093ca2d78ffd8682a3e" />
+
+
+    </item>
+    <item>
+      <title>Star.Wars.Episode.IV.A.New.Hope.1977.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/7f52cc22f0b8e8db4d7fde708f229887</guid>
+      <link>http://nzb.su/getnzb/7f52cc22f0b8e8db4d7fde708f229887.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/7f52cc22f0b8e8db4d7fde708f229887#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 04:34:54 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Star.Wars.Episode.IV.A.New.Hope.1977.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/7f52cc22f0b8e8db4d7fde708f229887.nzb&amp;i=37292&amp;r=xxx" length="26978647316" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="26978647316" />
+      <newznab:attr name="guid" value="7f52cc22f0b8e8db4d7fde708f229887" />
+
+
+    </item>
+    <item>
+      <title>The.84th.Annual.Academy.Awards.2012.720p.HDTV.x264-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/8b4859648c0084a19f58d34b1070d705</guid>
+      <link>http://nzb.su/getnzb/8b4859648c0084a19f58d34b1070d705.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/8b4859648c0084a19f58d34b1070d705#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 04:28:30 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>The.84th.Annual.Academy.Awards.2012.720p.HDTV.x264-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/8b4859648c0084a19f58d34b1070d705.nzb&amp;i=37292&amp;r=xxx" length="3302055895" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="3302055895" />
+      <newznab:attr name="guid" value="8b4859648c0084a19f58d34b1070d705" />
+
+
+    </item>
+    <item>
+      <title>Full.Metal.Jousting.S01E03.Death.Sticks.and.a.Coffin.720p.HDTV.x264-MOMENTUM</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/2b90fc4d321c63df54f74219e1cf32c4</guid>
+      <link>http://nzb.su/getnzb/2b90fc4d321c63df54f74219e1cf32c4.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/2b90fc4d321c63df54f74219e1cf32c4#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 04:12:00 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Full.Metal.Jousting.S01E03.Death.Sticks.and.a.Coffin.720p.HDTV.x264-MOMENTUM</description>
+
+      <enclosure url="http://nzb.su/getnzb/2b90fc4d321c63df54f74219e1cf32c4.nzb&amp;i=37292&amp;r=xxx" length="1701662587" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1701662587" />
+      <newznab:attr name="guid" value="2b90fc4d321c63df54f74219e1cf32c4" />
+
+
+    </item>
+    <item>
+      <title>Full.Metal.Jousting.S01E03.Death.Sticks.and.a.Coffin.HDTV.x264-MOMENTUM</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/814b5ca4feb747d6dc975fb4c13495dc</guid>
+      <link>http://nzb.su/getnzb/814b5ca4feb747d6dc975fb4c13495dc.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/814b5ca4feb747d6dc975fb4c13495dc#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 03:39:56 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Full.Metal.Jousting.S01E03.Death.Sticks.and.a.Coffin.HDTV.x264-MOMENTUM</description>
+
+      <enclosure url="http://nzb.su/getnzb/814b5ca4feb747d6dc975fb4c13495dc.nzb&amp;i=37292&amp;r=xxx" length="504740642" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="504740642" />
+      <newznab:attr name="guid" value="814b5ca4feb747d6dc975fb4c13495dc" />
+
+
+    </item>
+    <item>
+      <title>Star.Wars.Episode.V.The.Empire.Strikes.Back.1980.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/94d016064f91a77f3afce41d3cb7fec4</guid>
+      <link>http://nzb.su/getnzb/94d016064f91a77f3afce41d3cb7fec4.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/94d016064f91a77f3afce41d3cb7fec4#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 03:34:20 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Star.Wars.Episode.V.The.Empire.Strikes.Back.1980.DTS-HD.DTS.MULTISUBS.1080p.BluRay.x264.HQ-TUSAHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/94d016064f91a77f3afce41d3cb7fec4.nzb&amp;i=37292&amp;r=xxx" length="17644641317" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="17644641317" />
+      <newznab:attr name="guid" value="94d016064f91a77f3afce41d3cb7fec4" />
+
+
+    </item>
+    <item>
+      <title>Iron.Chef.America.S10E08.Flay.vs.Hastings.HDTV.x264-MOMENTUM</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/fecfc46859bf2c451671c1865e685190</guid>
+      <link>http://nzb.su/getnzb/fecfc46859bf2c451671c1865e685190.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/fecfc46859bf2c451671c1865e685190#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 03:34:22 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Iron.Chef.America.S10E08.Flay.vs.Hastings.HDTV.x264-MOMENTUM</description>
+
+      <enclosure url="http://nzb.su/getnzb/fecfc46859bf2c451671c1865e685190.nzb&amp;i=37292&amp;r=xxx" length="452332421" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="452332421" />
+      <newznab:attr name="guid" value="fecfc46859bf2c451671c1865e685190" />
+
+
+    </item>
+    <item>
+      <title>Iron.Chef.America.S10E08.Flay.vs.Hastings.720p.HDTV.x264-MOMENTUM</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/09ece094563001dcc03765acb1b6616f</guid>
+      <link>http://nzb.su/getnzb/09ece094563001dcc03765acb1b6616f.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/09ece094563001dcc03765acb1b6616f#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 03:34:21 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Iron.Chef.America.S10E08.Flay.vs.Hastings.720p.HDTV.x264-MOMENTUM</description>
+
+      <enclosure url="http://nzb.su/getnzb/09ece094563001dcc03765acb1b6616f.nzb&amp;i=37292&amp;r=xxx" length="1560268006" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1560268006" />
+      <newznab:attr name="guid" value="09ece094563001dcc03765acb1b6616f" />
+
+
+    </item>
+    <item>
+      <title>Less.Than.Kind.S03E09.720p.HDTV.x264-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/8e2a809cb7c8ea130e99995786a96219</guid>
+      <link>http://nzb.su/getnzb/8e2a809cb7c8ea130e99995786a96219.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/8e2a809cb7c8ea130e99995786a96219#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 03:34:22 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Less.Than.Kind.S03E09.720p.HDTV.x264-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/8e2a809cb7c8ea130e99995786a96219.nzb&amp;i=37292&amp;r=xxx" length="825827070" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="825827070" />
+      <newznab:attr name="guid" value="8e2a809cb7c8ea130e99995786a96219" />
+
+
+    </item>
+    <item>
+      <title>Catch 21 2011-05-19 1080i HDTV DD2.0 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/7d9662a466f327f2dd2a2683f479d657</guid>
+      <link>http://nzb.su/getnzb/7d9662a466f327f2dd2a2683f479d657.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/7d9662a466f327f2dd2a2683f479d657#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 03:34:22 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Catch 21 2011-05-19 1080i HDTV DD2.0 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/7d9662a466f327f2dd2a2683f479d657.nzb&amp;i=37292&amp;r=xxx" length="2672575402" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2672575402" />
+      <newznab:attr name="guid" value="7d9662a466f327f2dd2a2683f479d657" />
+
+
+    </item>
+    <item>
+      <title>Less.Than.Kind.S03E09.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/b8f62815092ed06c7f38dc90e6c5bc43</guid>
+      <link>http://nzb.su/getnzb/b8f62815092ed06c7f38dc90e6c5bc43.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/b8f62815092ed06c7f38dc90e6c5bc43#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 02:28:50 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Less.Than.Kind.S03E09.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/b8f62815092ed06c7f38dc90e6c5bc43.nzb&amp;i=37292&amp;r=xxx" length="298476818" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="298476818" />
+      <newznab:attr name="guid" value="b8f62815092ed06c7f38dc90e6c5bc43" />
+
+
+    </item>
+    <item>
+      <title>Luck.S01E05.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/b134b6fb4dcd2c7a73084b43c4febb43</guid>
+      <link>http://nzb.su/getnzb/b134b6fb4dcd2c7a73084b43c4febb43.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/b134b6fb4dcd2c7a73084b43c4febb43#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 02:20:39 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Luck.S01E05.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/b134b6fb4dcd2c7a73084b43c4febb43.nzb&amp;i=37292&amp;r=xxx" length="446207188" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="446207188" />
+      <newznab:attr name="guid" value="b134b6fb4dcd2c7a73084b43c4febb43" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Kimmel.2012.02.26.After.the.Oscars.Special.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/8008065b1ba474100fa3cc7e98acd2a3</guid>
+      <link>http://nzb.su/getnzb/8008065b1ba474100fa3cc7e98acd2a3.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/8008065b1ba474100fa3cc7e98acd2a3#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 02:17:58 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Jimmy.Kimmel.2012.02.26.After.the.Oscars.Special.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/8008065b1ba474100fa3cc7e98acd2a3.nzb&amp;i=37292&amp;r=xxx" length="426980577" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="426980577" />
+      <newznab:attr name="guid" value="8008065b1ba474100fa3cc7e98acd2a3" />
+
+
+    </item>
+    <item>
+      <title>Spartacus.S02E05.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/f3ee7238c75f80524635c3e4197d9035</guid>
+      <link>http://nzb.su/getnzb/f3ee7238c75f80524635c3e4197d9035.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/f3ee7238c75f80524635c3e4197d9035#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 02:10:29 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Spartacus.S02E05.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/f3ee7238c75f80524635c3e4197d9035.nzb&amp;i=37292&amp;r=xxx" length="684156638" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="684156638" />
+      <newznab:attr name="guid" value="f3ee7238c75f80524635c3e4197d9035" />
+
+
+    </item>
+    <item>
+      <title>Jay.Leno.2012.02.22.Tim.Allen.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/08a9f199400d3d83c1f6a38379fde982</guid>
+      <link>http://nzb.su/getnzb/08a9f199400d3d83c1f6a38379fde982.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/08a9f199400d3d83c1f6a38379fde982#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 06:00:35 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jay.Leno.2012.02.22.Tim.Allen.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/08a9f199400d3d83c1f6a38379fde982.nzb&amp;i=37292&amp;r=xxx" length="1678599501" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1678599501" />
+      <newznab:attr name="guid" value="08a9f199400d3d83c1f6a38379fde982" />
+
+
+    </item>
+    <item>
+      <title>Jay.Leno.2012.02.09.Denzel.Washington.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/52ad1175fe6d34efce14379a84aed88f</guid>
+      <link>http://nzb.su/getnzb/52ad1175fe6d34efce14379a84aed88f.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/52ad1175fe6d34efce14379a84aed88f#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:59:03 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jay.Leno.2012.02.09.Denzel.Washington.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/52ad1175fe6d34efce14379a84aed88f.nzb&amp;i=37292&amp;r=xxx" length="1580010856" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1580010856" />
+      <newznab:attr name="guid" value="52ad1175fe6d34efce14379a84aed88f" />
+
+
+    </item>
+    <item>
+      <title>Jay.Leno.2012.02.21.Bill.O.Reilly.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/5d905e84d39a754f9fb659aa8187c3ab</guid>
+      <link>http://nzb.su/getnzb/5d905e84d39a754f9fb659aa8187c3ab.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/5d905e84d39a754f9fb659aa8187c3ab#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:56:10 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jay.Leno.2012.02.21.Bill.O.Reilly.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/5d905e84d39a754f9fb659aa8187c3ab.nzb&amp;i=37292&amp;r=xxx" length="1368028292" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1368028292" />
+      <newznab:attr name="guid" value="5d905e84d39a754f9fb659aa8187c3ab" />
+
+
+    </item>
+    <item>
+      <title>Jay.Leno.2012.02.02.Drew.Barrymore.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/527eed252711c8602db523da1f6ed4db</guid>
+      <link>http://nzb.su/getnzb/527eed252711c8602db523da1f6ed4db.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/527eed252711c8602db523da1f6ed4db#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:54:07 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jay.Leno.2012.02.02.Drew.Barrymore.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/527eed252711c8602db523da1f6ed4db.nzb&amp;i=37292&amp;r=xxx" length="1590950875" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1590950875" />
+      <newznab:attr name="guid" value="527eed252711c8602db523da1f6ed4db" />
+
+
+    </item>
+    <item>
+      <title>Jay.Leno.2012.02.17.Dave.Salmoni.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/3049a9e867abda77a1423fbedbabec7c</guid>
+      <link>http://nzb.su/getnzb/3049a9e867abda77a1423fbedbabec7c.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/3049a9e867abda77a1423fbedbabec7c#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:54:07 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jay.Leno.2012.02.17.Dave.Salmoni.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/3049a9e867abda77a1423fbedbabec7c.nzb&amp;i=37292&amp;r=xxx" length="1594712899" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1594712899" />
+      <newznab:attr name="guid" value="3049a9e867abda77a1423fbedbabec7c" />
+
+
+    </item>
+    <item>
+      <title>Jay.Leno.2012.02.14.Tyler.Perry.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/886721cfee04dc96c56352344103c233</guid>
+      <link>http://nzb.su/getnzb/886721cfee04dc96c56352344103c233.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/886721cfee04dc96c56352344103c233#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:48:31 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jay.Leno.2012.02.14.Tyler.Perry.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/886721cfee04dc96c56352344103c233.nzb&amp;i=37292&amp;r=xxx" length="1578945130" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1578945130" />
+      <newznab:attr name="guid" value="886721cfee04dc96c56352344103c233" />
+
+
+    </item>
+    <item>
+      <title>Jay.Leno.2012.02.06.Dwayne.Johnson.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/679282512d2678beccab18dba03a62a8</guid>
+      <link>http://nzb.su/getnzb/679282512d2678beccab18dba03a62a8.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/679282512d2678beccab18dba03a62a8#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:48:31 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jay.Leno.2012.02.06.Dwayne.Johnson.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/679282512d2678beccab18dba03a62a8.nzb&amp;i=37292&amp;r=xxx" length="1606040984" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1606040984" />
+      <newznab:attr name="guid" value="679282512d2678beccab18dba03a62a8" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.22.Alan.Alda.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/192efe2d4ee53faf05196c0212510b59</guid>
+      <link>http://nzb.su/getnzb/192efe2d4ee53faf05196c0212510b59.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/192efe2d4ee53faf05196c0212510b59#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:46:52 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.22.Alan.Alda.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/192efe2d4ee53faf05196c0212510b59.nzb&amp;i=37292&amp;r=xxx" length="1349049485" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1349049485" />
+      <newznab:attr name="guid" value="192efe2d4ee53faf05196c0212510b59" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.21.Tyler.Perry.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/088616fa4b9138149a21af9354900d98</guid>
+      <link>http://nzb.su/getnzb/088616fa4b9138149a21af9354900d98.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/088616fa4b9138149a21af9354900d98#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:46:52 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.21.Tyler.Perry.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/088616fa4b9138149a21af9354900d98.nzb&amp;i=37292&amp;r=xxx" length="1459725114" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1459725114" />
+      <newznab:attr name="guid" value="088616fa4b9138149a21af9354900d98" />
+
+
+    </item>
+    <item>
+      <title>Eastbound.and.Down.S03E02.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/eb106eb8de8f7d49259b61bab732e798</guid>
+      <link>http://nzb.su/getnzb/eb106eb8de8f7d49259b61bab732e798.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/eb106eb8de8f7d49259b61bab732e798#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:44:42 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Eastbound.and.Down.S03E02.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/eb106eb8de8f7d49259b61bab732e798.nzb&amp;i=37292&amp;r=xxx" length="299954361" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="299954361" />
+      <newznab:attr name="guid" value="eb106eb8de8f7d49259b61bab732e798" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.07.Harry.Connick.Jr.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/e0c0f698784621ca39df1d5f69e3205b</guid>
+      <link>http://nzb.su/getnzb/e0c0f698784621ca39df1d5f69e3205b.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/e0c0f698784621ca39df1d5f69e3205b#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:44:42 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.07.Harry.Connick.Jr.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/e0c0f698784621ca39df1d5f69e3205b.nzb&amp;i=37292&amp;r=xxx" length="1401222513" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1401222513" />
+      <newznab:attr name="guid" value="e0c0f698784621ca39df1d5f69e3205b" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.20.Anjelica.Houston.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/e9f9cac00055872b57b49493ed21bc02</guid>
+      <link>http://nzb.su/getnzb/e9f9cac00055872b57b49493ed21bc02.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/e9f9cac00055872b57b49493ed21bc02#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:44:42 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.20.Anjelica.Houston.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/e9f9cac00055872b57b49493ed21bc02.nzb&amp;i=37292&amp;r=xxx" length="1258126469" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1258126469" />
+      <newznab:attr name="guid" value="e9f9cac00055872b57b49493ed21bc02" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.17.Ricky.Gervais.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/0ac4fb081cfbbf5e1230109ce538ed25</guid>
+      <link>http://nzb.su/getnzb/0ac4fb081cfbbf5e1230109ce538ed25.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/0ac4fb081cfbbf5e1230109ce538ed25#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:42:59 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.17.Ricky.Gervais.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/0ac4fb081cfbbf5e1230109ce538ed25.nzb&amp;i=37292&amp;r=xxx" length="1369060291" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1369060291" />
+      <newznab:attr name="guid" value="0ac4fb081cfbbf5e1230109ce538ed25" />
+
+
+    </item>
+    <item>
+      <title>Cartoon Network Hall of Game Awards 2012 1080i HDTV DD5.1 MPEG2-TrollHD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/06b110b77e4a0e34ac3dc98d2102b8f7</guid>
+      <link>http://nzb.su/getnzb/06b110b77e4a0e34ac3dc98d2102b8f7.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/06b110b77e4a0e34ac3dc98d2102b8f7#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 02:10:29 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Cartoon Network Hall of Game Awards 2012 1080i HDTV DD5.1 MPEG2-TrollHD</description>
+
+      <enclosure url="http://nzb.su/getnzb/06b110b77e4a0e34ac3dc98d2102b8f7.nzb&amp;i=37292&amp;r=xxx" length="8498052486" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="8498052486" />
+      <newznab:attr name="guid" value="06b110b77e4a0e34ac3dc98d2102b8f7" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.15.Greg.Kinnear.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/c2d4dba128f03c050ee96e6c5afd48c7</guid>
+      <link>http://nzb.su/getnzb/c2d4dba128f03c050ee96e6c5afd48c7.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/c2d4dba128f03c050ee96e6c5afd48c7#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:42:59 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.15.Greg.Kinnear.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/c2d4dba128f03c050ee96e6c5afd48c7.nzb&amp;i=37292&amp;r=xxx" length="1374747817" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1374747817" />
+      <newznab:attr name="guid" value="c2d4dba128f03c050ee96e6c5afd48c7" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.14.Donald.Trump.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/8f5a0af48e56d4c7ce8740675336377d</guid>
+      <link>http://nzb.su/getnzb/8f5a0af48e56d4c7ce8740675336377d.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/8f5a0af48e56d4c7ce8740675336377d#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:41:19 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.14.Donald.Trump.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/8f5a0af48e56d4c7ce8740675336377d.nzb&amp;i=37292&amp;r=xxx" length="1503368146" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1503368146" />
+      <newznab:attr name="guid" value="8f5a0af48e56d4c7ce8740675336377d" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.13.Nicolas.Cage.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/20d941c07d7c45080bbd97771461a9ab</guid>
+      <link>http://nzb.su/getnzb/20d941c07d7c45080bbd97771461a9ab.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/20d941c07d7c45080bbd97771461a9ab#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:39:49 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.13.Nicolas.Cage.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/20d941c07d7c45080bbd97771461a9ab.nzb&amp;i=37292&amp;r=xxx" length="1777402933" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1777402933" />
+      <newznab:attr name="guid" value="20d941c07d7c45080bbd97771461a9ab" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.06.The.Best.Of.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/eb88e1253cfa159f75a17391f62bcf33</guid>
+      <link>http://nzb.su/getnzb/eb88e1253cfa159f75a17391f62bcf33.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/eb88e1253cfa159f75a17391f62bcf33#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:34:11 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.06.The.Best.Of.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/eb88e1253cfa159f75a17391f62bcf33.nzb&amp;i=37292&amp;r=xxx" length="1540439380" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1540439380" />
+      <newznab:attr name="guid" value="eb88e1253cfa159f75a17391f62bcf33" />
+
+
+    </item>
+    <item>
+      <title>Jimmy.Fallon.2012.02.02.Taylor.Lautner.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/c681e94346b715f485eec20ffc9844c2</guid>
+      <link>http://nzb.su/getnzb/c681e94346b715f485eec20ffc9844c2.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/c681e94346b715f485eec20ffc9844c2#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:32:29 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Jimmy.Fallon.2012.02.02.Taylor.Lautner.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/c681e94346b715f485eec20ffc9844c2.nzb&amp;i=37292&amp;r=xxx" length="1613246819" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1613246819" />
+      <newznab:attr name="guid" value="c681e94346b715f485eec20ffc9844c2" />
+
+
+    </item>
+    <item>
+      <title>The.Apprentice.US.S12E02.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/f3e00a427211bbbf667d184fcf05b94d</guid>
+      <link>http://nzb.su/getnzb/f3e00a427211bbbf667d184fcf05b94d.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/f3e00a427211bbbf667d184fcf05b94d#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:06:20 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>The.Apprentice.US.S12E02.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/f3e00a427211bbbf667d184fcf05b94d.nzb&amp;i=37292&amp;r=xxx" length="858563137" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="858563137" />
+      <newznab:attr name="guid" value="f3e00a427211bbbf667d184fcf05b94d" />
+
+
+    </item>
+    <item>
+      <title>Heartland.CA.S05E14.720p.HDTV.x264-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/cb901e996ce1286c938d9400350a2983</guid>
+      <link>http://nzb.su/getnzb/cb901e996ce1286c938d9400350a2983.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/cb901e996ce1286c938d9400350a2983#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 01:04:41 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Heartland.CA.S05E14.720p.HDTV.x264-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/cb901e996ce1286c938d9400350a2983.nzb&amp;i=37292&amp;r=xxx" length="1965793951" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1965793951" />
+      <newznab:attr name="guid" value="cb901e996ce1286c938d9400350a2983" />
+
+
+    </item>
+    <item>
+      <title>time.out.s13e03.pdtv.x264-d2v</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/1cb4b15820ea8ee09682da493216d7f0</guid>
+      <link>http://nzb.su/getnzb/1cb4b15820ea8ee09682da493216d7f0.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/1cb4b15820ea8ee09682da493216d7f0#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 00:57:29 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>time.out.s13e03.pdtv.x264-d2v</description>
+
+      <enclosure url="http://nzb.su/getnzb/1cb4b15820ea8ee09682da493216d7f0.nzb&amp;i=37292&amp;r=xxx" length="231075676" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="231075676" />
+      <newznab:attr name="guid" value="1cb4b15820ea8ee09682da493216d7f0" />
+
+
+    </item>
+    <item>
+      <title>lyxfallan.s12e04.proper.pdtv.x264-d2v</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/caf3dc9a99fc36167f49183da991e652</guid>
+      <link>http://nzb.su/getnzb/caf3dc9a99fc36167f49183da991e652.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/caf3dc9a99fc36167f49183da991e652#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 00:52:49 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>lyxfallan.s12e04.proper.pdtv.x264-d2v</description>
+
+      <enclosure url="http://nzb.su/getnzb/caf3dc9a99fc36167f49183da991e652.nzb&amp;i=37292&amp;r=xxx" length="401319344" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="401319344" />
+      <newznab:attr name="guid" value="caf3dc9a99fc36167f49183da991e652" />
+
+
+    </item>
+    <item>
+      <title>karatefylla.s02e01.pdtv.x264-d2v</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/e8a70fb2b81e715d8650bcbdef7ea55e</guid>
+      <link>http://nzb.su/getnzb/e8a70fb2b81e715d8650bcbdef7ea55e.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/e8a70fb2b81e715d8650bcbdef7ea55e#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 00:34:28 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>karatefylla.s02e01.pdtv.x264-d2v</description>
+
+      <enclosure url="http://nzb.su/getnzb/e8a70fb2b81e715d8650bcbdef7ea55e.nzb&amp;i=37292&amp;r=xxx" length="281795320" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="281795320" />
+      <newznab:attr name="guid" value="e8a70fb2b81e715d8650bcbdef7ea55e" />
+
+
+    </item>
+    <item>
+      <title>The.Walking.Dead.S02E10.iNTERNAL.720p.HDTV.x264-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/0dd3bc43ec5856a34aff3cbed4e5def3</guid>
+      <link>http://nzb.su/getnzb/0dd3bc43ec5856a34aff3cbed4e5def3.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/0dd3bc43ec5856a34aff3cbed4e5def3#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 00:30:53 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>The.Walking.Dead.S02E10.iNTERNAL.720p.HDTV.x264-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/0dd3bc43ec5856a34aff3cbed4e5def3.nzb&amp;i=37292&amp;r=xxx" length="2353536125" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2353536125" />
+      <newznab:attr name="guid" value="0dd3bc43ec5856a34aff3cbed4e5def3" />
+
+
+    </item>
+    <item>
+      <title>How.The.Celts.Saved.Britain.S01E02.BDRip.XviD-SPRiNTER</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/7e66256948969eedc50acfa16dc25336</guid>
+      <link>http://nzb.su/getnzb/7e66256948969eedc50acfa16dc25336.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/7e66256948969eedc50acfa16dc25336#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 00:02:54 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>How.The.Celts.Saved.Britain.S01E02.BDRip.XviD-SPRiNTER</description>
+
+      <enclosure url="http://nzb.su/getnzb/7e66256948969eedc50acfa16dc25336.nzb&amp;i=37292&amp;r=xxx" length="849002541" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="849002541" />
+      <newznab:attr name="guid" value="7e66256948969eedc50acfa16dc25336" />
+
+
+    </item>
+    <item>
+      <title>How.The.Celts.Saved.Britain.S01E01.BDRip.XviD-SPRiNTER</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/c3421676f28ebe6584b4ba4237d2531b</guid>
+      <link>http://nzb.su/getnzb/c3421676f28ebe6584b4ba4237d2531b.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/c3421676f28ebe6584b4ba4237d2531b#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 00:02:54 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>How.The.Celts.Saved.Britain.S01E01.BDRip.XviD-SPRiNTER</description>
+
+      <enclosure url="http://nzb.su/getnzb/c3421676f28ebe6584b4ba4237d2531b.nzb&amp;i=37292&amp;r=xxx" length="887192423" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="887192423" />
+      <newznab:attr name="guid" value="c3421676f28ebe6584b4ba4237d2531b" />
+
+
+    </item>
+    <item>
+      <title>Wanna.BEn.S02E02.PDTV.XviD-FiHTV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/a297836314a5aa5947957babc9277148</guid>
+      <link>http://nzb.su/getnzb/a297836314a5aa5947957babc9277148.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/a297836314a5aa5947957babc9277148#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:59:18 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Wanna.BEn.S02E02.PDTV.XviD-FiHTV</description>
+
+      <enclosure url="http://nzb.su/getnzb/a297836314a5aa5947957babc9277148.nzb&amp;i=37292&amp;r=xxx" length="227568600" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="227568600" />
+      <newznab:attr name="guid" value="a297836314a5aa5947957babc9277148" />
+
+
+    </item>
+    <item>
+      <title>Ax.Men.S05E07.Wake-Up.Call.720p.HDTV.x264-MOMENTUM</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/1e28429ef8dff9ef00df2927cd381177</guid>
+      <link>http://nzb.su/getnzb/1e28429ef8dff9ef00df2927cd381177.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/1e28429ef8dff9ef00df2927cd381177#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:44:08 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Ax.Men.S05E07.Wake-Up.Call.720p.HDTV.x264-MOMENTUM</description>
+
+      <enclosure url="http://nzb.su/getnzb/1e28429ef8dff9ef00df2927cd381177.nzb&amp;i=37292&amp;r=xxx" length="2186667148" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2186667148" />
+      <newznab:attr name="guid" value="1e28429ef8dff9ef00df2927cd381177" />
+
+
+    </item>
+    <item>
+      <title>Heartland.CA.S05E14.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/7726d5073f24f2ad0593cfee6619621d</guid>
+      <link>http://nzb.su/getnzb/7726d5073f24f2ad0593cfee6619621d.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/7726d5073f24f2ad0593cfee6619621d#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:38:49 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Heartland.CA.S05E14.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/7726d5073f24f2ad0593cfee6619621d.nzb&amp;i=37292&amp;r=xxx" length="424935221" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="424935221" />
+      <newznab:attr name="guid" value="7726d5073f24f2ad0593cfee6619621d" />
+
+
+    </item>
+    <item>
+      <title>Parallel Series 2 (MOTE028D)-WEB-2012-dL</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/1f182287ce20e045411648b8d60e300c</guid>
+      <link>http://nzb.su/getnzb/1f182287ce20e045411648b8d60e300c.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/1f182287ce20e045411648b8d60e300c#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:36:04 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Parallel Series 2 (MOTE028D)-WEB-2012-dL</description>
+
+      <enclosure url="http://nzb.su/getnzb/1f182287ce20e045411648b8d60e300c.nzb&amp;i=37292&amp;r=xxx" length="69466719" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="69466719" />
+      <newznab:attr name="guid" value="1f182287ce20e045411648b8d60e300c" />
+
+
+    </item>
+    <item>
+      <title>7.Days.NZ.S04E02.PDTV.XviD-FiHTV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/14542c22bbc1e1a584332ebf5f3487d4</guid>
+      <link>http://nzb.su/getnzb/14542c22bbc1e1a584332ebf5f3487d4.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/14542c22bbc1e1a584332ebf5f3487d4#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:32:11 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>7.Days.NZ.S04E02.PDTV.XviD-FiHTV</description>
+
+      <enclosure url="http://nzb.su/getnzb/14542c22bbc1e1a584332ebf5f3487d4.nzb&amp;i=37292&amp;r=xxx" length="221491594" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="221491594" />
+      <newznab:attr name="guid" value="14542c22bbc1e1a584332ebf5f3487d4" />
+
+
+    </item>
+    <item>
+      <title>Finding.Bigfoot.S02E08.Finding.Bigfoot.Special.HDTV.XviD-FQM</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/058d8b676adc765a2fc7c3260066958f</guid>
+      <link>http://nzb.su/getnzb/058d8b676adc765a2fc7c3260066958f.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/058d8b676adc765a2fc7c3260066958f#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:20:28 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Finding.Bigfoot.S02E08.Finding.Bigfoot.Special.HDTV.XviD-FQM</description>
+
+      <enclosure url="http://nzb.su/getnzb/058d8b676adc765a2fc7c3260066958f.nzb&amp;i=37292&amp;r=xxx" length="432642619" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="432642619" />
+      <newznab:attr name="guid" value="058d8b676adc765a2fc7c3260066958f" />
+
+
+    </item>
+    <item>
+      <title>Oscars.Red.Carpet.Live.2012.720p.HDTV.x264-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/5f8772bab2282f1f6938614114a71fb4</guid>
+      <link>http://nzb.su/getnzb/5f8772bab2282f1f6938614114a71fb4.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/5f8772bab2282f1f6938614114a71fb4#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:15:19 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Oscars.Red.Carpet.Live.2012.720p.HDTV.x264-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/5f8772bab2282f1f6938614114a71fb4.nzb&amp;i=37292&amp;r=xxx" length="2720842846" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2720842846" />
+      <newznab:attr name="guid" value="5f8772bab2282f1f6938614114a71fb4" />
+
+
+    </item>
+    <item>
+      <title>The.Apprentice.S12E02.720p.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/884783386e9802e6ed4ca85edf1601b5</guid>
+      <link>http://nzb.su/getnzb/884783386e9802e6ed4ca85edf1601b5.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/884783386e9802e6ed4ca85edf1601b5#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:13:20 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>The.Apprentice.S12E02.720p.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/884783386e9802e6ed4ca85edf1601b5.nzb&amp;i=37292&amp;r=xxx" length="2876436530" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2876436530" />
+      <newznab:attr name="guid" value="884783386e9802e6ed4ca85edf1601b5" />
+
+
+    </item>
+    <item>
+      <title>The.Walking.Dead.S02E10.HDTV.x264-ASAP</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/ea5a6405af227988216a5157db8229db</guid>
+      <link>http://nzb.su/getnzb/ea5a6405af227988216a5157db8229db.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/ea5a6405af227988216a5157db8229db#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:10:28 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>The.Walking.Dead.S02E10.HDTV.x264-ASAP</description>
+
+      <enclosure url="http://nzb.su/getnzb/ea5a6405af227988216a5157db8229db.nzb&amp;i=37292&amp;r=xxx" length="471600619" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="471600619" />
+      <newznab:attr name="guid" value="ea5a6405af227988216a5157db8229db" />
+
+
+    </item>
+    <item>
+      <title>The.Walking.Dead.S02E10.720p.HDTV.x264-IMMERSE</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/6860ebbe38724e58747edf7a804cbadb</guid>
+      <link>http://nzb.su/getnzb/6860ebbe38724e58747edf7a804cbadb.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/6860ebbe38724e58747edf7a804cbadb#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:10:28 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>The.Walking.Dead.S02E10.720p.HDTV.x264-IMMERSE</description>
+
+      <enclosure url="http://nzb.su/getnzb/6860ebbe38724e58747edf7a804cbadb.nzb&amp;i=37292&amp;r=xxx" length="1809734708" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1809734708" />
+      <newznab:attr name="guid" value="6860ebbe38724e58747edf7a804cbadb" />
+
+
+    </item>
+    <item>
+      <title>The.Apprentice.S12E02.HDTV.x264-BAJSKORV</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/b16397d84630fa2f6d5a140f3013a998</guid>
+      <link>http://nzb.su/getnzb/b16397d84630fa2f6d5a140f3013a998.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/b16397d84630fa2f6d5a140f3013a998#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 23:03:46 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>The.Apprentice.S12E02.HDTV.x264-BAJSKORV</description>
+
+      <enclosure url="http://nzb.su/getnzb/b16397d84630fa2f6d5a140f3013a998.nzb&amp;i=37292&amp;r=xxx" length="823859298" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="823859298" />
+      <newznab:attr name="guid" value="b16397d84630fa2f6d5a140f3013a998" />
+
+
+    </item>
+    <item>
+      <title>Ax.Men.S05E07.Wake-Up.Call.HDTV.x264-MOMENTUM</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/db7c5f361814f4a910ac0b73d30f7468</guid>
+      <link>http://nzb.su/getnzb/db7c5f361814f4a910ac0b73d30f7468.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/db7c5f361814f4a910ac0b73d30f7468#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 22:53:44 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Ax.Men.S05E07.Wake-Up.Call.HDTV.x264-MOMENTUM</description>
+
+      <enclosure url="http://nzb.su/getnzb/db7c5f361814f4a910ac0b73d30f7468.nzb&amp;i=37292&amp;r=xxx" length="699005803" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="699005803" />
+      <newznab:attr name="guid" value="db7c5f361814f4a910ac0b73d30f7468" />
+
+
+    </item>
+    <item>
+      <title>The.Amazing.Race.S20E02.HDTV.XviD-2HD</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/a3416403c5ff159657199fde24c1fb7a</guid>
+      <link>http://nzb.su/getnzb/a3416403c5ff159657199fde24c1fb7a.nzb&amp;i=37292&amp;r=xxx</link>
+      <comments>http://nzb.su/details/a3416403c5ff159657199fde24c1fb7a#comments</comments>
+      <pubDate>Sun, 26 Feb 2012 22:40:59 -0500</pubDate>
+      <category>TV &gt; SD</category>
+      <description>The.Amazing.Race.S20E02.HDTV.XviD-2HD</description>
+
+      <enclosure url="http://nzb.su/getnzb/a3416403c5ff159657199fde24c1fb7a.nzb&amp;i=37292&amp;r=xxx" length="415399111" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="415399111" />
+      <newznab:attr name="guid" value="a3416403c5ff159657199fde24c1fb7a" />
+
+
+    </item>
+
+  </channel>
+</rss>

@@ -1,9 +1,10 @@
-﻿using FluentAssertions;
-using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using FizzWare.NBuilder;
+using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.Http;
 using NzbDrone.Core.Notifications.Xbmc;
+using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -12,63 +13,53 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
     [TestFixture]
     public class GetSeriesPathFixture : CoreTest<JsonApiProvider>
     {
+        private const int TVDB_ID = 5;
         private XbmcSettings _settings;
         private Series _series;
-        private string _response;
+        private List<TvShow> _xbmcSeries;
 
         [SetUp]
         public void Setup()
         {
-            _settings = new XbmcSettings
-            {
-                Host = "localhost",
-                Port = 8080,
-                Username = "xbmc",
-                Password = "xbmc",
-                AlwaysUpdate = false,
-                CleanLibrary = false,
-                UpdateLibrary = true
-            };
+            _settings = Builder<XbmcSettings>.CreateNew()
+                                             .Build();
 
-            _response = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"limits\":" + 
-                        "{\"end\":5,\"start\":0,\"total\":5},\"tvshows\":[{\"file\"" + 
-                        ":\"smb://HOMESERVER/TV/7th Heaven/\",\"imdbnumber\":\"73928\"," +
-                        "\"label\":\"7th Heaven\",\"tvshowid\":3},{\"file\":\"smb://HOMESERVER/TV/8 Simple Rules/\"" + 
-                        ",\"imdbnumber\":\"78461\",\"label\":\"8 Simple Rules\",\"tvshowid\":4},{\"file\":" +
-                        "\"smb://HOMESERVER/TV/24-7 Penguins-Capitals- Road to the NHL Winter Classic/\",\"imdbnumber\"" +
-                        ":\"213041\",\"label\":\"24/7 Penguins/Capitals: Road to the NHL Winter Classic\",\"tvshowid\":1}," +
-                        "{\"file\":\"smb://HOMESERVER/TV/30 Rock/\",\"imdbnumber\":\"79488\",\"label\":\"30 Rock\",\"tvshowid\":2}" +
-                        ",{\"file\":\"smb://HOMESERVER/TV/90210/\",\"imdbnumber\":\"82716\",\"label\":\"90210\",\"tvshowid\":5}]}}";
+            _xbmcSeries = Builder<TvShow>.CreateListOfSize(3)
+                                         .All()
+                                         .With(s => s.ImdbNumber = "0")
+                                         .TheFirst(1)
+                                         .With(s => s.ImdbNumber = TVDB_ID.ToString())
+                                         .Build()
+                                         .ToList();
 
-            Mocker.GetMock<IHttpProvider>()
-                  .Setup(
-                      s => s.PostCommand(_settings.Address, _settings.Username, _settings.Password, It.IsAny<string>()))
-                  .Returns(_response);
+            Mocker.GetMock<IXbmcJsonApiProxy>()
+                  .Setup(s => s.GetSeries(_settings))
+                  .Returns(_xbmcSeries);
         }
 
-        private void WithMatchingTvdbId()
+        private void GivenMatchingTvdbId()
         {
             _series = new Series
                           {
-                              TvdbId = 78461,
+                              TvdbId = TVDB_ID,
                               Title = "TV Show"
                           };
         }
 
-        private void WithMatchingTitle()
+        private void GivenMatchingTitle()
         {
             _series = new Series
             {
-                TvdbId = 1,
-                Title = "30 Rock"
+                TvdbId = 1000,
+                Title = _xbmcSeries.First().Label
             };
         }
 
-        private void WithoutMatchingSeries()
+        private void GivenMatchingSeries()
         {
             _series = new Series
             {
-                TvdbId = 1,
+                TvdbId = 1000,
                 Title = "Does not exist"
             }; 
         }
@@ -76,7 +67,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         [Test]
         public void should_return_null_when_series_is_not_found()
         {
-            WithoutMatchingSeries();
+            GivenMatchingSeries();
 
             Subject.GetSeriesPath(_settings, _series).Should().BeNull();
         }
@@ -84,17 +75,32 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         [Test]
         public void should_return_path_when_tvdbId_matches()
         {
-            WithMatchingTvdbId();
+            GivenMatchingTvdbId();
 
-            Subject.GetSeriesPath(_settings, _series).Should().Be("smb://HOMESERVER/TV/8 Simple Rules/");
+            Subject.GetSeriesPath(_settings, _series).Should().Be(_xbmcSeries.First().File);
         }
 
         [Test]
         public void should_return_path_when_title_matches()
         {
-            WithMatchingTitle();
+            GivenMatchingTitle();
 
-            Subject.GetSeriesPath(_settings, _series).Should().Be("smb://HOMESERVER/TV/30 Rock/");
+            Subject.GetSeriesPath(_settings, _series).Should().Be(_xbmcSeries.First().File);
+        }
+
+        [Test]
+        public void should_not_throw_when_imdb_number_is_not_a_number()
+        {
+            GivenMatchingTvdbId();
+
+            _xbmcSeries.ForEach(s => s.ImdbNumber = "tt12345");
+            _xbmcSeries.Last().ImdbNumber = TVDB_ID.ToString();
+
+            Mocker.GetMock<IXbmcJsonApiProxy>()
+                  .Setup(s => s.GetSeries(_settings))
+                  .Returns(_xbmcSeries);
+
+            Subject.GetSeriesPath(_settings, _series).Should().NotBeNull();
         }
     }
 }

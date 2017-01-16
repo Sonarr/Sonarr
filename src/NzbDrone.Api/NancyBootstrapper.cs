@@ -1,7 +1,7 @@
-﻿using NLog;
+﻿using System.Linq;
 using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
-using NzbDrone.Api.ErrorManagement;
+using NLog;
 using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
@@ -15,17 +15,16 @@ namespace NzbDrone.Api
     public class NancyBootstrapper : TinyIoCNancyBootstrapper
     {
         private readonly TinyIoCContainer _tinyIoCContainer;
-        private readonly Logger _logger;
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(NancyBootstrapper));
 
         public NancyBootstrapper(TinyIoCContainer tinyIoCContainer)
         {
             _tinyIoCContainer = tinyIoCContainer;
-            _logger =  NzbDroneLogger.GetLogger();
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
-            _logger.Info("Starting NzbDrone API");
+            Logger.Info("Starting Web Server");
 
             if (RuntimeInfo.IsProduction)
             {
@@ -36,13 +35,11 @@ namespace NzbDrone.Api
 
             container.Resolve<DatabaseTarget>().Register();
             container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
-
-            ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }
 
         private void RegisterPipelines(IPipelines pipelines)
         {
-            var pipelineRegistrars = _tinyIoCContainer.ResolveAll<IRegisterNancyPipeline>();
+            var pipelineRegistrars = _tinyIoCContainer.ResolveAll<IRegisterNancyPipeline>().OrderBy(v => v.Order).ToList();
 
             foreach (var registerNancyPipeline in pipelineRegistrars)
             {
@@ -55,17 +52,8 @@ namespace NzbDrone.Api
             return _tinyIoCContainer;
         }
 
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration
-        {
-            get { return new DiagnosticsConfiguration { Password = @"password" }; }
-        }
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration => new DiagnosticsConfiguration { Password = @"password" };
 
-        protected override byte[] FavIcon
-        {
-            get
-            {
-                return null;
-            }
-        }
+        protected override byte[] FavIcon => null;
     }
 }

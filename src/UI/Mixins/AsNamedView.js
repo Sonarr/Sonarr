@@ -1,38 +1,31 @@
-'use strict';
+module.exports = function() {
 
-define(
-    function () {
+    window.NzbDrone.NameViews = window.NzbDrone.NameViews || !window.NzbDrone.Production;
 
-        return function () {
+    var regex = new RegExp('/', 'g');
 
-            this.viewName = function () {
-                if (this.template) {
-                    var regex = new RegExp('\/', 'g');
+    var _getViewName = function(template) {
+        if (template) {
+            return template.toLocaleLowerCase().replace('template', '').replace(regex, '-');
+        }
 
-                    return this.template
-                        .toLocaleLowerCase()
-                        .replace('template', '')
-                        .replace(regex, '-');
-                }
+        return undefined;
+    };
 
-                return undefined;
-            };
+    var originalOnRender = this.onRender;
 
-            var originalOnRender = this.onRender;
+    this.onRender = function() {
 
-            this.onRender = function () {
+        if (window.NzbDrone.NameViews) {
+            this.$el.addClass('iv-' + _getViewName(this.template));
+        }
 
-                this.$el.removeClass('iv-' + this.viewName());
-                this.$el.addClass('iv-' + this.viewName());
+        if (originalOnRender) {
+            return originalOnRender.call(this);
+        }
 
-                if (originalOnRender) {
-                    return   originalOnRender.call(this);
-                }
+        return undefined;
+    };
 
-                return undefined;
-            };
-
-            return this;
-        };
-    }
-);
+    return this;
+};

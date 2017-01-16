@@ -7,9 +7,14 @@ namespace NzbDrone.Core.ThingiProvider
         where TProviderDefinition : ModelBase,
             new()
     {
-        protected ProviderRepository(IDatabase database, IEventAggregator eventAggregator)
+        protected ProviderRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }
+
+//        public void DeleteImplementations(string implementation)
+//        {
+//            DataMapper.Delete<TProviderDefinition>(c => c.Implementation == implementation);
+//        }
     }
 }

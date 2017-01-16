@@ -7,22 +7,23 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     public class NotSampleSpecification : IDecisionEngineSpecification
     {
         private readonly Logger _logger;
-        public string RejectionReason { get { return "Sample"; } }
+
+        public RejectionType Type => RejectionType.Permanent;
 
         public NotSampleSpecification(Logger logger)
         {
             _logger = logger;
         }
 
-        public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (subject.Release.Title.ToLower().Contains("sample") && subject.Release.Size < 70.Megabytes())
             {
                 _logger.Debug("Sample release, rejecting.");
-                return false;
+                return Decision.Reject("Sample");
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLog;
-using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping
 {
-    public class HousekeepingService : IExecute<HousekeepingCommand>, IHandleAsync<ApplicationStartedEvent>
+    public class HousekeepingService : IExecute<HousekeepingCommand>
     {
         private readonly IEnumerable<IHousekeepingTask> _housekeepers;
         private readonly Logger _logger;
-        private readonly IDatabase _mainDb;
+        private readonly IMainDatabase _mainDb;
 
-        public HousekeepingService(IEnumerable<IHousekeepingTask> housekeepers, Logger logger, IDatabase mainDb)
+        public HousekeepingService(IEnumerable<IHousekeepingTask> housekeepers, IMainDatabase mainDb, Logger logger)
         {
             _housekeepers = housekeepers;
             _logger = logger;
@@ -29,25 +27,23 @@ namespace NzbDrone.Core.Housekeeping
             {
                 try
                 {
+                    _logger.Debug("Starting {0}", housekeeper.GetType().Name);
                     housekeeper.Clean();
+                    _logger.Debug("Completed {0}", housekeeper.GetType().Name);
+
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Error running housekeeping task: " + housekeeper.GetType().FullName, ex);
+                    _logger.Error(ex, "Error running housekeeping task: {0}", housekeeper.GetType().Name);
                 }
             }
 
-            // Vacuuming the log db isn't needed since that's done hourly at the TrimLogCommand.
+            // Vacuuming the log db isn't needed since that's done in a separate housekeeping task
             _logger.Debug("Compressing main database after housekeeping");
             _mainDb.Vacuum();
         }
 
         public void Execute(HousekeepingCommand message)
-        {
-            Clean();
-        }
-
-        public void HandleAsync(ApplicationStartedEvent message)
         {
             Clean();
         }

@@ -3,7 +3,6 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hosting;
 using Microsoft.AspNet.SignalR.Infrastructure;
@@ -253,7 +252,7 @@ namespace Microsoft.AspNet.SignalR.Transports
         {
             var context = (MessageContext)state;
 
-            response.TimedOut = context.Transport.IsTimedOut;
+            response.Reconnect = context.Transport.HostShutdownToken.IsCancellationRequested;
 
             Task task = TaskAsyncHelper.Empty;
 

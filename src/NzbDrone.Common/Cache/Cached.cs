@@ -67,13 +67,7 @@ namespace NzbDrone.Common.Cache
             _store.TryRemove(key, out value);
         }
 
-        public int Count
-        {
-            get
-            {
-                return _store.Count;
-            }
-        }
+        public int Count => _store.Count;
 
         public T Get(string key, Func<T> function, TimeSpan? lifeTime = null)
         {
@@ -98,6 +92,14 @@ namespace NzbDrone.Common.Cache
         public void Clear()
         {
             _store.Clear();
+        }
+
+        public void ClearExpired()
+        {
+            foreach (var cached in _store.Where(c => c.Value.IsExpired()))
+            {
+                Remove(cached.Key);
+            }
         }
 
         public ICollection<T> Values

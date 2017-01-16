@@ -57,33 +57,40 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.NetFwTypeLib">
-      <HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net40\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.2.1.0\lib\net40\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Hosting, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Hosting.2.1.0\lib\net40\Microsoft.Owin.Hosting.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nancy.Owin, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Owin.1.4.1\lib\net40\Nancy.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.1\lib\net40\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="Microsoft.Owin">
-      <HintPath>..\packages\Microsoft.Owin.1.1.0-beta2\lib\net40\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.HttpListener">
-      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.1.1.0-beta2\lib\net40\Microsoft.Owin.Host.HttpListener.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Hosting">
-      <HintPath>..\packages\Microsoft.Owin.Hosting.1.1.0-beta2\lib\net40\Microsoft.Owin.Hosting.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.0.21.1\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Owin">
-      <HintPath>..\packages\Nancy.Owin.0.21.1\lib\net40\Nancy.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    <Reference Include="Interop.NetFwTypeLib">
+      <HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -93,41 +100,38 @@
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AccessControl\FirewallAdapter.cs" />
     <Compile Include="AccessControl\NetshProvider.cs" />
+    <Compile Include="AccessControl\UrlAcl.cs" />
     <Compile Include="AccessControl\SslAdapter.cs" />
+    <Compile Include="AccessControl\UrlAclAdapter.cs" />
+    <Compile Include="ApplicationModes.cs" />
     <Compile Include="ApplicationServer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AccessControl\FirewallAdapter.cs" />
-    <Compile Include="AccessControl\UrlAclAdapter.cs" />
+    <Compile Include="Bootstrap.cs" />
     <Compile Include="BrowserService.cs" />
-    <Compile Include="Owin\MiddleWare\NzbDroneVersionMiddleWare.cs" />
-    <Compile Include="SpinService.cs" />
-    <Compile Include="SingleInstancePolicy.cs" />
     <Compile Include="IUserAlert.cs" />
+    <Compile Include="MainAppContainerBuilder.cs" />
+    <Compile Include="Owin\IHostController.cs" />
+    <Compile Include="Owin\MiddleWare\IOwinMiddleWare.cs" />
+    <Compile Include="Owin\MiddleWare\NancyMiddleWare.cs" />
+    <Compile Include="Owin\MiddleWare\NzbDroneVersionMiddleWare.cs" />
+    <Compile Include="Owin\MiddleWare\SignalRMiddleWare.cs" />
     <Compile Include="Owin\NlogTextWriter.cs" />
+    <Compile Include="Owin\OwinHostController.cs" />
     <Compile Include="Owin\OwinServiceProvider.cs" />
     <Compile Include="Owin\OwinTraceOutputFactory.cs" />
     <Compile Include="Owin\PortInUseException.cs" />
     <Compile Include="PlatformValidation.cs" />
-    <Compile Include="MainAppContainerBuilder.cs" />
-    <Compile Include="ApplicationModes.cs" />
-    <Compile Include="Bootstrap.cs" />
-    <Compile Include="Owin\MiddleWare\NancyMiddleWare.cs" />
-    <Compile Include="Owin\IHostController.cs" />
-    <Compile Include="Owin\MiddleWare\IOwinMiddleWare.cs" />
-    <Compile Include="Owin\MiddleWare\SignalRMiddleWare.cs" />
-    <Compile Include="Owin\OwinHostController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PriorityMonitor.cs" />
     <Compile Include="Router.cs" />
+    <Compile Include="SingleInstancePolicy.cs" />
+    <Compile Include="SpinService.cs" />
     <Compile Include="TerminateApplicationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +192,13 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /y "$(SolutionDir)\Libraries\Sqlite\*.*"   "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent Condition="('$(OS)' == 'Windows_NT')">
+        xcopy /s /y "$(SolutionDir)\Libraries\Sqlite\*.*"   "$(TargetDir)"
+    </PostBuildEvent>
+    <PostBuildEvent Condition="('$(OS)' != 'Windows_NT')">
+        cp -rv $(SolutionDir)Libraries\Sqlite\*.* $(TargetDir)
+    </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

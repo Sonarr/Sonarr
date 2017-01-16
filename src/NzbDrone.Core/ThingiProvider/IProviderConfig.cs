@@ -1,9 +1,9 @@
-﻿using FluentValidation.Results;
+﻿using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ThingiProvider
 {
     public interface IProviderConfig
     {
-        ValidationResult Validate();
+        NzbDroneValidationResult Validate();
     }
 }

@@ -1,13 +1,14 @@
 using NLog;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.DecisionEngine
 {
     public interface IQualityUpgradableSpecification
     {
-        bool IsUpgradable(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null);
-        bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null);
-        bool IsProperUpgrade(QualityModel currentQuality, QualityModel newQuality);
+        bool IsUpgradable(Profile profile, QualityModel currentQuality, QualityModel newQuality = null);
+        bool CutoffNotMet(Profile profile, QualityModel currentQuality, QualityModel newQuality = null);
+        bool IsRevisionUpgrade(QualityModel currentQuality, QualityModel newQuality);
     }
 
     public class QualityUpgradableSpecification : IQualityUpgradableSpecification
@@ -19,18 +20,17 @@ namespace NzbDrone.Core.DecisionEngine
             _logger = logger;
         }
 
-        public bool IsUpgradable(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
+        public bool IsUpgradable(Profile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
             if (newQuality != null)
             {
                 int compare = new QualityModelComparer(profile).Compare(newQuality, currentQuality);
                 if (compare <= 0)
                 {
-                    _logger.Debug("existing item has better or equal quality. skipping");
                     return false;
                 }
 
-                if (IsProperUpgrade(currentQuality, newQuality))
+                if (IsRevisionUpgrade(currentQuality, newQuality))
                 {
                     return true;
                 }
@@ -39,31 +39,30 @@ namespace NzbDrone.Core.DecisionEngine
             return true;
         }
 
-        public bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
+        public bool CutoffNotMet(Profile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
-            int compare = new QualityModelComparer(profile).Compare(currentQuality.Quality, profile.Cutoff);
+            var compare = new QualityModelComparer(profile).Compare(currentQuality.Quality, profile.Cutoff);
 
-            if (compare >= 0)
+            if (compare < 0)
             {
-                if (newQuality != null && IsProperUpgrade(currentQuality, newQuality))
-                {
-                    return true;
-                }
-
-                _logger.Debug("Existing item meets cut-off. skipping.");
-                return false;
+                return true;
             }
 
-            return true;
+            if (newQuality != null && IsRevisionUpgrade(currentQuality, newQuality))
+            {
+                return true;
+            }
+            
+            return false;
+
         }
 
-        public bool IsProperUpgrade(QualityModel currentQuality, QualityModel newQuality)
+        public bool IsRevisionUpgrade(QualityModel currentQuality, QualityModel newQuality)
         {
-            int compare = newQuality.Proper.CompareTo(currentQuality.Proper);
+            var compare = newQuality.Revision.CompareTo(currentQuality.Revision);
 
             if (currentQuality.Quality == newQuality.Quality && compare > 0)
             {
-                _logger.Debug("New quality is a proper for existing quality");
                 return true;
             }
 

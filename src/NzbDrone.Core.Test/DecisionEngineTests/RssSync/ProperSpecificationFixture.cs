@@ -8,6 +8,7 @@ using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
@@ -30,27 +31,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             Mocker.Resolve<QualityUpgradableSpecification>();
 
-            _firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, false), DateAdded = DateTime.Now };
-            _secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, false), DateAdded = DateTime.Now };
+            _firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, new Revision(version: 1)), DateAdded = DateTime.Now };
+            _secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, new Revision(version: 1)), DateAdded = DateTime.Now };
 
             var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
             var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = _secondFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
+                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
             _parseResultMulti = new RemoteEpisode
             {
                 Series = fakeSeries,
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) },
                 Episodes = doubleEpisodeList
             };
 
             _parseResultSingle = new RemoteEpisode
             {
                 Series = fakeSeries,
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) },
                 Episodes = singleEpisodeList
             };
         }
@@ -73,7 +74,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _firstFile.Quality.Quality = Quality.DVD;
 
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -83,7 +84,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _secondFile.Quality.Quality = Quality.DVD;
 
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -93,7 +94,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _secondFile.Quality.Quality = Quality.DVD;
 
             _secondFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -102,7 +103,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             WithFirstFileUpgradable();
 
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -111,7 +112,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             WithFirstFileUpgradable();
 
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria()).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -120,7 +121,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _firstFile.Quality.Quality = Quality.DVD;
 
             _firstFile.DateAdded = DateTime.Today;
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -131,7 +132,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _firstFile.Quality.Quality = Quality.DVD;
 
             _firstFile.DateAdded = DateTime.Today;
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
         }
     }
 }

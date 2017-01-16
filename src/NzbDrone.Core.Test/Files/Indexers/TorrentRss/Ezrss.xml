@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>ezRSS - Latest torrent releases</title>
+    <ttl>15</ttl>
+    <link>http://ezrss.it/feed/</link>
+    <image>
+      <title>ezRSS - Latest torrent releases</title>
+      <url>http://ezrss.it/images/ezrssit.png</url>
+      <link>http://ezrss.it/feed/</link>
+    </image>
+    <description>The latest 30 torrent releases.</description>
+    <item>
+      <title><![CDATA[S4C I Grombil Cyfandir Pell American Interior [PDTV - MVGROUP]]]></title>
+      <link>http://re.zoink.it/20a4ed4eFC</link>
+      <category domain="http://eztv.it/shows/187/mv-group-documentaries/"><![CDATA[TV Show / MV Group Documentaries]]></category>
+      <pubDate>Mon, 15 Sep 2014 13:39:00 -0500</pubDate>
+      <description><![CDATA[Show Name: S4C I Grombil Cyfandir Pell American Interior; Episode Title: N/A; Episode Date: ]]></description>
+      <enclosure url="http://re.zoink.it/20a4ed4eFC" length="796606175" type="application/x-bittorrent" />
+      <comments>http://eztv.it/forum/discuss/58439/</comments>
+      <guid>http://eztv.it/ep/58439/s4c-i-grombil-cyfandir-pell-american-interior-pdtv-x264-mvgroup/</guid>
+      <torrent xmlns="http://xmlns.ezrss.it/0.1/">
+        <fileName><![CDATA[S4C.I.Grombil.Cyfandir.Pell.American.Interior.PDTV.x264-MVGroup.[MVGroup.org].torrent]]></fileName>
+        <contentLength>796606175</contentLength>
+        <infoHash>20FC4FBFA88272274AC671F857CC15144E9AA83E</infoHash>
+        <magnetURI><![CDATA[magnet:?xt=urn:btih:ED6E7P5IQJZCOSWGOH4FPTAVCRHJVKB6&dn=S4C.I.Grombil.Cyfandir.Pell.American.Interior.PDTV.x264-MVGroup]]></magnetURI>
+      </torrent>
+    </item>
+    <item>
+      <title><![CDATA[Andy McNabs Tour Of Duty Series 1 - Courage Under Fire 1x6 [DVDRIP - MVGROUP]]]></title>
+      <link>http://re.zoink.it/AAa65f6eA2</link>
+      <category domain="http://eztv.it/shows/187/mv-group-documentaries/"><![CDATA[TV Show / MV Group Documentaries]]></category>
+      <pubDate>Mon, 15 Sep 2014 13:04:21 -0500</pubDate>
+      <description><![CDATA[Show Name: Andy McNabs Tour Of Duty Series 1; Episode Title: Courage Under Fire; Season: 1; Episode: 6]]></description>
+      <enclosure url="http://re.zoink.it/AAa65f6eA2" length="698999946" type="application/x-bittorrent" />
+      <comments>http://eztv.it/forum/discuss/58438/</comments>
+      <guid>http://eztv.it/ep/58438/andy-mcnabs-tour-of-duty-series-1-6of6-courage-under-fire-dvdrip-x264-mvgroup/</guid>
+      <torrent xmlns="http://xmlns.ezrss.it/0.1/">
+        <fileName><![CDATA[Andy.McNabs.Tour.Of.Duty.Series.1.6of6.Courage.Under.Fire.DVDRip.x264-MVGroup.[MVGroup.org].torrent]]></fileName>
+        <contentLength>698999946</contentLength>
+        <infoHash>AAA2038BED9EBCA2C312D1C9C3E8E024D0EB414E</infoHash>
+        <magnetURI><![CDATA[magnet:?xt=urn:btih:VKRAHC7NT26KFQYS2HE4H2HAETIOWQKO&dn=Andy.McNabs.Tour.Of.Duty.Series.1.6of6.Courage.Under.Fire.DVDRip.x264-MVGroup]]></magnetURI>
+      </torrent>
+    </item>
+    <item>
+      <title><![CDATA[So You Think You Can Drive [HDTV - MVGROUP]]]></title>
+      <link>http://re.zoink.it/54a65da3D5</link>
+      <category domain="http://eztv.it/shows/187/mv-group-documentaries/"><![CDATA[TV Show / MV Group Documentaries]]></category>
+      <pubDate>Mon, 15 Sep 2014 09:19:32 -0500</pubDate>
+      <description><![CDATA[Show Name: So You Think You Can Drive; Episode Title: N/A; Episode Date: ]]></description>
+      <enclosure url="http://re.zoink.it/54a65da3D5" length="1163302273" type="application/x-bittorrent" />
+      <comments>http://eztv.it/forum/discuss/58437/</comments>
+      <guid>http://eztv.it/ep/58437/so-you-think-you-can-drive-x264-hdtv-mvgroup/</guid>
+      <torrent xmlns="http://xmlns.ezrss.it/0.1/">
+        <fileName><![CDATA[So.You.Think.You.Can.Drive.x264.HDTV-MVGroup.[MVGroup.org].torrent]]></fileName>
+        <contentLength>1163302273</contentLength>
+        <infoHash>54D50B8352B2C54A1A3AD952269A56D2D95A3DF4</infoHash>
+        <magnetURI><![CDATA[magnet:?xt=urn:btih:KTKQXA2SWLCUUGR23FJCNGSW2LMVUPPU&dn=So.You.Think.You.Can.Drive.x264.HDTV-MVGroup]]></magnetURI>
+      </torrent>
+    </item>
+  </channel>
+</rss>

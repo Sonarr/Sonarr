@@ -1,41 +1,51 @@
-﻿'use strict';
-define(
-    [
-        'jquery',
-        'underscore',
-        'typeahead'
-    ], function ($, _) {
+var $ = require('jquery');
+require('typeahead');
 
-    $.fn.autoComplete = function (resource) {
-        $(this).typeahead({
-                hint      : true,
-                highlight : true,
-                minLength : 3,
-                items     : 20
-            },
-            {
-                name: resource.replace('/'),
-                displayKey: '',
-                source   : function (filter, callback) {
-                    $.ajax({
-                        url     : window.NzbDrone.ApiRoot + resource,
-                        dataType: 'json',
-                        type    : 'GET',
-                        data    : { query: filter },
-                        success : function (data) {
+$.fn.autoComplete = function(options) {
+    if (!options) {
+        throw 'options are required';
+    }
 
-                            var matches = [];
+    if (!options.resource) {
+        throw 'resource is required';
+    }
 
-                            $.each(data, function(i, d) {
-                                if (d.startsWith(filter)) {
-                                    matches.push({ value: d });
-                                }
-                            });
+    if (!options.query) {
+        throw 'query is required';
+    }
 
-                            callback(matches);
-                        }
-                    });
+    $(this).typeahead({
+        hint      : true,
+        highlight : true,
+        minLength : 3,
+        items     : 20
+    }, {
+        name       : options.resource.replace('/'),
+        displayKey : '',
+        source     : function(filter, callback) {
+            var data = options.data || {};
+            data[options.query] = filter;
+            $.ajax({
+                url      : window.NzbDrone.ApiRoot + options.resource,
+                dataType : 'json',
+                type     : 'GET',
+                data     : data,
+                success  : function(response) {
+                    if (options.filter) {
+                        options.filter.call(this, filter, response, callback);
+                    } else {
+                        var matches = [];
+
+                        $.each(response, function(i, d) {
+                            if (d[options.query] && d[options.property].startsWith(filter)) {
+                                matches.push({ value : d[options.property] });
+                            }
+                        });
+
+                        callback(matches);
+                    }
                 }
-        });
-    };
-});
+            });
+        }
+    });
+};

@@ -1,46 +1,69 @@
-'use strict';
-define(
-    [
-        'vent'
-    ], function (vent) {
-        return {
-            Events: {
-                ConfigUpdatedEvent: 'ConfigUpdatedEvent'
-            },
-            Keys  : {
-                DefaultQualityProfileId: 'DefaultQualityProfileId',
-                DefaultRootFolderId    : 'DefaultRootFolderId',
-                UseSeasonFolder        : 'UseSeasonFolder',
-                AdvancedSettings       : 'advancedSettings'
-            },
+var $ = require('jquery');
+var vent = require('./vent');
 
-            getValueBoolean: function (key, defaultValue) {
-                defaultValue = defaultValue || false;
+module.exports = {
+    Events : {
+        ConfigUpdatedEvent : 'ConfigUpdatedEvent'
+    },
 
-                return this.getValue(key, defaultValue.toString()) === 'true';
-            },
+    Keys : {
+        DefaultProfileId    : 'DefaultProfileId',
+        DefaultRootFolderId : 'DefaultRootFolderId',
+        UseSeasonFolder     : 'UseSeasonFolder',
+        DefaultSeriesType   : 'DefaultSeriesType',
+        MonitorEpisodes     : 'MonitorEpisodes',
+        AdvancedSettings    : 'advancedSettings'
+    },
 
-            getValue: function (key, defaultValue) {
-                var storeValue = window.localStorage.getItem(key);
+    getValueJson : function (key, defaultValue) {
+        defaultValue = defaultValue || {};
 
-                if (!storeValue) {
-                    return defaultValue;
-                }
+        var storeValue = window.localStorage.getItem(key);
 
-                return storeValue.toString();
-            },
+        if (!storeValue) {
+            return defaultValue;
+        }
 
-            setValue: function (key, value) {
+        return $.parseJSON(storeValue);
+    },
 
-                console.log('Config: [{0}] => [{1}] '.format(key, value));
+    getValueBoolean : function(key, defaultValue) {
+        defaultValue = defaultValue || false;
 
-                if (this.getValue(key) === value.toString()) {
-                    return;
-                }
+        return this.getValue(key, defaultValue.toString()) === 'true';
+    },
 
-                window.localStorage.setItem(key, value);
-                vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
+    getValue : function(key, defaultValue) {
+        var storeValue = window.localStorage.getItem(key);
 
-            }
-        };
-    });
+        if (!storeValue) {
+            return defaultValue;
+        }
+
+        return storeValue.toString();
+    },
+
+    setValueJson : function(key, value) {
+        return this.setValue(key, JSON.stringify(value));
+    },
+
+    setValue : function(key, value) {
+
+        console.log('Config: [{0}] => [{1}]'.format(key, value));
+
+        if (this.getValue(key) === value.toString()) {
+            return;
+        }
+
+        try {
+            window.localStorage.setItem(key, value);
+            vent.trigger(this.Events.ConfigUpdatedEvent, {
+                key   : key,
+                value : value
+            });
+        }
+        catch (error) {
+            console.error('Unable to save config: [{0}] => [{1}]'.format(key, value));
+        }
+    }
+};

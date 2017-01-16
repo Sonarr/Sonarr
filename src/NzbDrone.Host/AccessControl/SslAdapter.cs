@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Configuration;
@@ -32,13 +31,13 @@ namespace NzbDrone.Host.AccessControl
             if (!_configFileProvider.EnableSsl) return;
             if (IsRegistered()) return;
 
-            if (String.IsNullOrWhiteSpace(_configFileProvider.SslCertHash))
+            if (string.IsNullOrWhiteSpace(_configFileProvider.SslCertHash))
             {
                 _logger.Warn("Unable to enable SSL, SSL Cert Hash is required");
                 return;
             }
 
-            var arguments = String.Format("http add sslcert ipport=0.0.0.0:{0} certhash={1} appid={{{2}}}",
+            var arguments = string.Format("http add sslcert ipport=0.0.0.0:{0} certhash={1} appid={{{2}}}",
                                             _configFileProvider.SslPort,
                                             _configFileProvider.SslCertHash,
                                             APP_ID);
@@ -50,17 +49,17 @@ namespace NzbDrone.Host.AccessControl
         private bool IsRegistered()
         {
             var ipPort = "0.0.0.0:" + _configFileProvider.SslPort;
-            var arguments = String.Format("http show sslcert ipport={0}", ipPort);
+            var arguments = string.Format("http show sslcert ipport={0}", ipPort);
 
             var output = _netshProvider.Run(arguments);
 
             if (output == null || !output.Standard.Any()) return false;
 
-            var hashLine = output.Standard.SingleOrDefault(line => CertificateHashRegex.IsMatch(line));
+            var hashLine = output.Standard.SingleOrDefault(line => CertificateHashRegex.IsMatch(line.Content));
 
             if (hashLine != null)
             {
-                var match = CertificateHashRegex.Match(hashLine);
+                var match = CertificateHashRegex.Match(hashLine.Content);
 
                 if (match.Success)
                 {
@@ -73,13 +72,13 @@ namespace NzbDrone.Host.AccessControl
                 }
             }
 
-            return output.Standard.Any(line => line.Contains(ipPort));
+            return output.Standard.Any(line => line.Content.Contains(ipPort));
         }
 
         private void Unregister()
         {
             var ipPort = "0.0.0.0:" + _configFileProvider.SslPort;
-            var arguments = String.Format("http delete sslcert ipport={0}", ipPort);
+            var arguments = string.Format("http delete sslcert ipport={0}", ipPort);
 
             _netshProvider.Run(arguments);
         }

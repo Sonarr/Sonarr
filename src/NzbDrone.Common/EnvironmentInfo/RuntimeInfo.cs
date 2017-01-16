@@ -5,27 +5,14 @@ using System.Reflection;
 using System.Security.Principal;
 using System.ServiceProcess;
 using NLog;
-using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
-    public interface IRuntimeInfo
-    {
-        bool IsUserInteractive { get; }
-        bool IsAdmin { get; }
-        bool IsWindowsService { get; }
-        bool IsConsole { get; }
-        bool IsRunning { get; set; }
-        bool RestartPending { get; set; }
-        string ExecutingApplication { get; }
-    }
-
     public class RuntimeInfo : IRuntimeInfo
     {
         private readonly Logger _logger;
-        private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
 
-        public RuntimeInfo(Logger logger, IServiceProvider serviceProvider)
+        public RuntimeInfo(IServiceProvider serviceProvider, Logger logger)
         {
             _logger = logger;
 
@@ -34,13 +21,13 @@ namespace NzbDrone.Common.EnvironmentInfo
                                serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
                                serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending;
 
-            //Guarded to avoid issues when running in a non-managed process 
+            //Guarded to avoid issues when running in a non-managed process
             var entry = Assembly.GetEntryAssembly();
 
             if (entry != null)
             {
                 ExecutingApplication = entry.Location;
-            }            
+            }
         }
 
         static RuntimeInfo()
@@ -48,10 +35,9 @@ namespace NzbDrone.Common.EnvironmentInfo
             IsProduction = InternalIsProduction();
         }
 
-        public bool IsUserInteractive
-        {
-            get { return Environment.UserInteractive; }
-        }
+        public static bool IsUserInteractive => Environment.UserInteractive;
+
+        bool IRuntimeInfo.IsUserInteractive => IsUserInteractive;
 
         public bool IsAdmin
         {
@@ -64,7 +50,7 @@ namespace NzbDrone.Common.EnvironmentInfo
                 }
                 catch (Exception ex)
                 {
-                    _logger.WarnException("Error checking if the current user is an administrator.", ex);
+                    _logger.Warn(ex, "Error checking if the current user is an administrator.");
                     return false;
                 }
             }
@@ -72,37 +58,47 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         public bool IsWindowsService { get; private set; }
 
-        public bool IsConsole
-        { 
-            get
-            {
-                return (OsInfo.IsWindows &&
-                        IsUserInteractive &&
-                        ProcessName.Equals(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase)) ||
-                        OsInfo.IsMono;
-            } 
-        }
-
-        public bool IsRunning { get; set; }
+        public bool IsExiting { get; set; }
         public bool RestartPending { get; set; }
-        public string ExecutingApplication { get; private set; }
+        public string ExecutingApplication { get; }
 
-        public static bool IsProduction { get; private set; }
+        public static bool IsProduction { get; }
 
         private static bool InternalIsProduction()
         {
             if (BuildInfo.IsDebug || Debugger.IsAttached) return false;
-            if (BuildInfo.Version.Revision > 10000) return false; //Official builds will never have such a high revision
 
-            var lowerProcessName = ProcessName.ToLower();
-            if (lowerProcessName.Contains("vshost")) return false;
-            if (lowerProcessName.Contains("nunit")) return false;
-            if (lowerProcessName.Contains("jetbrain")) return false;
-            if (lowerProcessName.Contains("resharper")) return false;
+            //Official builds will never have such a high revision
+            if (BuildInfo.Version.Revision > 10000) return false;
 
-            string lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
+            try
+            {
+                var lowerProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
+
+                if (lowerProcessName.Contains("vshost")) return false;
+                if (lowerProcessName.Contains("nunit")) return false;
+                if (lowerProcessName.Contains("jetbrain")) return false;
+                if (lowerProcessName.Contains("resharper")) return false;
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                var currentAssemblyLocation = typeof(RuntimeInfo).Assembly.Location;
+                if (currentAssemblyLocation.ToLower().Contains("_output")) return false;
+            }
+            catch
+            {
+
+            }
+
+            var lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
             if (lowerCurrentDir.Contains("teamcity")) return false;
-            if (lowerCurrentDir.StartsWith("/run/")) return false;
+            if (lowerCurrentDir.Contains("buildagent")) return false;
+            if (lowerCurrentDir.Contains("_output")) return false;
 
             return true;
         }

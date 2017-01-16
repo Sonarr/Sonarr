@@ -2,16 +2,15 @@
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Jobs;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
     public class FixFutureRunScheduledTasks : IHousekeepingTask
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
         private readonly Logger _logger;
 
-        public FixFutureRunScheduledTasks(IDatabase database, Logger logger)
+        public FixFutureRunScheduledTasks(IMainDatabase database, Logger logger)
         {
             _database = database;
             _logger = logger;
@@ -23,8 +22,6 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
             {
                 _logger.Debug("Not running scheduled task last execution cleanup during debug");
             }
-
-            _logger.Debug("Running scheduled task last execution cleanup");
 
             var mapper = _database.GetDataMapper();
             mapper.AddParameter("time", DateTime.UtcNow);

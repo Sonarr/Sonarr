@@ -1,11 +1,7 @@
 using System;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Expansive;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using System.Text;
 
@@ -32,6 +28,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("0e895c37245186812cb08aab1529cf8ee389dd05.mkv")]
         [TestCase("08bbc153931ce3ca5fcafe1b92d3297285feb061.mkv")]
         [TestCase("185d86a343e39f3341e35c4dad3ff159")]
+        [TestCase("ah63jka93jf0jh26ahjas961.mkv")]
+        [TestCase("qrdSD3rYzWb7cPdVIGSn4E7")]
+        [TestCase("QZC4HDl7ncmzyUj9amucWe1ddKU1oFMZDd8r0dEDUsTd")]
         public void should_not_parse_crap(string title)
         {
             Parser.Parser.ParseTitle(title).Should().BeNull();
@@ -84,6 +83,12 @@ namespace NzbDrone.Core.Test.ParserTests
             }
 
             success.Should().Be(repetitions);
+        }
+
+        [TestCase("thebiggestloser1618finale")]
+        public void should_not_parse_file_name_without_proper_spacing(string fileName)
+        {
+            Parser.Parser.ParseTitle(fileName).Should().BeNull();
         }
     }
 }

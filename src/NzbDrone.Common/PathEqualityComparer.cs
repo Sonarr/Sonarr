@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common
 {
-    public class PathEqualityComparer : IEqualityComparer<String>
+    public class PathEqualityComparer : IEqualityComparer<string>
     {
         public static readonly PathEqualityComparer Instance = new PathEqualityComparer();
 
@@ -20,12 +20,12 @@ namespace NzbDrone.Common
 
         public int GetHashCode(string obj)
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsWindows)
             {
-                return obj.CleanFilePath().GetHashCode();
+                return obj.CleanFilePath().ToLower().GetHashCode();
             }
 
-            return obj.CleanFilePath().ToLower().GetHashCode();
+            return obj.CleanFilePath().GetHashCode();
         }
     }
 }

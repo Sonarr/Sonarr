@@ -1,8 +1,7 @@
-﻿using System.IO;
-using NLog;
-using NzbDrone.Common;
+﻿using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Messaging.Commands;
 
@@ -12,7 +11,7 @@ namespace NzbDrone.Core.Instrumentation
     {
     }
 
-    public class DeleteLogFilesService : IDeleteLogFilesService, IExecute<DeleteLogFilesCommand>
+    public class DeleteLogFilesService : IDeleteLogFilesService, IExecute<DeleteLogFilesCommand>, IExecute<DeleteUpdateLogFilesCommand>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IAppFolderInfo _appFolderInfo;
@@ -27,12 +26,14 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Execute(DeleteLogFilesCommand message)
         {
-            var logFiles = _diskProvider.GetFiles(_appFolderInfo.GetLogFolder(), SearchOption.TopDirectoryOnly);
+            _logger.Debug("Deleting all files in: {0}", _appFolderInfo.GetLogFolder());
+            _diskProvider.EmptyFolder(_appFolderInfo.GetLogFolder());
+        }
 
-            foreach (var logFile in logFiles)
-            {
-                _diskProvider.DeleteFile(logFile);
-            }
+        public void Execute(DeleteUpdateLogFilesCommand message)
+        {
+            _logger.Debug("Deleting all files in: {0}", _appFolderInfo.GetUpdateLogFolder());
+            _diskProvider.EmptyFolder(_appFolderInfo.GetUpdateLogFolder());
         }
     }
 }

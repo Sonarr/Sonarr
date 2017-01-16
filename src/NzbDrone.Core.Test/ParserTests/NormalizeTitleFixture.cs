@@ -1,12 +1,7 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Expansive;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -39,7 +34,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("the")]
         [TestCase("and")]
         [TestCase("or")]
-        [TestCase("a")]
         [TestCase("an")]
         [TestCase("of")]
         public void should_remove_common_words(string word)
@@ -56,7 +50,24 @@ namespace NzbDrone.Core.Test.ParserTests
 
             foreach (var s in dirtyFormat)
             {
-                var dirty = String.Format(s, word);
+                var dirty = string.Format(s, word);
+                dirty.CleanSeriesTitle().Should().Be("wordword");
+            }
+        }
+
+        [Test]
+        public void should_remove_a_from_middle_of_title()
+        {
+            var dirtyFormat = new[]
+                            {
+                                "word.{0}.word",
+                                "word {0} word",
+                                "word-{0}-word",
+                            };
+
+            foreach (var s in dirtyFormat)
+            {
+                var dirty = string.Format(s, "a");
                 dirty.CleanSeriesTitle().Should().Be("wordword");
             }
         }
@@ -81,7 +92,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             foreach (var s in dirtyFormat)
             {
-                var dirty = String.Format(s, word);
+                var dirty = string.Format(s, word);
                 dirty.CleanSeriesTitle().Should().Be(("word" + word.ToLower() + "word"));
             }
 
@@ -113,9 +124,15 @@ namespace NzbDrone.Core.Test.ParserTests
 
             foreach (var s in dirtyFormat)
             {
-                var dirty = String.Format(s, word);
+                var dirty = string.Format(s, word);
                 dirty.CleanSeriesTitle().Should().Be(word + "wordword");
             }
+        }
+
+        [Test]
+        public void should_not_clean_trailing_a()
+        {
+            "Tokyo Ghoul A".CleanSeriesTitle().Should().Be("tokyoghoula");
         }
     }
 }

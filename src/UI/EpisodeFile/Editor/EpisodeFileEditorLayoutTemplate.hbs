@@ -1,0 +1,28 @@
+<div class="modal-content">
+    <div class="edit-season-modal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+            <h3>
+                {{#if seasonNumber}}
+                    {{#if_eq seasonNumber compare="0"}}
+                        {{series.title}} - Specials
+                    {{else}}
+                        {{series.title}} - Season {{seasonNumber}}
+                    {{/if_eq}}
+                {{else}}
+                    {{series.title}}
+                {{/if}}
+            </h3>
+
+        </div>
+        <div class="modal-body">
+            <div class="x-episode-list"></div>
+            <div class="x-quality"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger x-delete-files">Delete Files</button>
+            <button class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>

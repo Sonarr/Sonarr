@@ -1,45 +1,39 @@
-﻿'use strict';
-define(
-    [
-        'vent',
-        'marionette',
-        'Mixins/AsModelBoundView'
-    ], function (vent, Marionette, AsModelBoundView) {
-        var view = Marionette.ItemView.extend({
-            template: 'Rename/RenamePreviewItemViewTemplate',
+var vent = require('vent');
+var Marionette = require('marionette');
+var AsModelBoundView = require('../Mixins/AsModelBoundView');
 
-            ui: {
-                itemDiv: '.rename-preview-item',
-                checkboxIcon: '.rename-checkbox i'
-            },
+var view = Marionette.ItemView.extend({
+    template : 'Rename/RenamePreviewItemViewTemplate',
 
-            onRender: function () {
-                this._setItemState();
-                this.listenTo(this.model, 'change', this._setItemState);
-                this.listenTo(this.model, 'rename:select', this._onRenameAll);
-            },
+    ui : {
+        itemDiv      : '.rename-preview-item',
+        checkboxIcon : '.rename-checkbox i'
+    },
 
-            _setItemState: function () {
-                var checked = this.model.get('rename');
-                this.model.trigger('rename:select', this.model, checked);
+    onRender : function() {
+        this._setItemState();
+        this.listenTo(this.model, 'change', this._setItemState);
+        this.listenTo(this.model, 'rename:select', this._onRenameAll);
+    },
 
-                if (checked) {
-                    this.ui.itemDiv.removeClass('do-not-rename');
-                    this.ui.checkboxIcon.addClass('icon-check');
-                    this.ui.checkboxIcon.removeClass('icon-check-empty');
-                }
+    _setItemState : function() {
+        var checked = this.model.get('rename');
+        this.model.trigger('rename:select', this.model, checked);
 
-                else {
-                    this.ui.itemDiv.addClass('do-not-rename');
-                    this.ui.checkboxIcon.addClass('icon-check-empty');
-                    this.ui.checkboxIcon.removeClass('icon-check');
-                }
-            },
+        if (checked) {
+            this.ui.itemDiv.removeClass('do-not-rename');
+            this.ui.checkboxIcon.addClass('icon-sonarr-checked');
+            this.ui.checkboxIcon.removeClass('icon-sonarr-unchecked');
+        } else {
+            this.ui.itemDiv.addClass('do-not-rename');
+            this.ui.checkboxIcon.addClass('icon-sonarr-unchecked');
+            this.ui.checkboxIcon.removeClass('icon-sonarr-checked');
+        }
+    },
 
-            _onRenameAll: function (model, checked) {
-                this.model.set('rename', checked);
-            }
-        });
+    _onRenameAll : function(model, checked) {
+        this.model.set('rename', checked);
+    }
+});
 
-        return AsModelBoundView.apply(view);
-    });
+module.exports = AsModelBoundView.apply(view);

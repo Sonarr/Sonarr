@@ -7,8 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Json;
 using Microsoft.AspNet.SignalR.Messaging;
@@ -146,7 +144,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
         {
             using (var stream = new MemoryStream(128))
             {
-                var bufferWriter = new BufferTextWriter((buffer, state) =>
+                var bufferWriter = new BinaryTextWriter((buffer, state) =>
                 {
                     ((MemoryStream)state).Write(buffer.Array, buffer.Offset, buffer.Count);
                 },
@@ -238,8 +236,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
 
                                                       if (command == null)
                                                       {
-                                                          var platform = (int)Environment.OSVersion.Platform;
-                                                          if (platform == 4 || platform == 6 || platform == 128)
+                                                          if (MonoUtility.IsRunningMono)
                                                           {
                                                               return;
                                                           }

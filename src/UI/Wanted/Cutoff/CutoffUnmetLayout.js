@@ -1,207 +1,188 @@
-'use strict';
-define(
-    [
-        'underscore',
-        'marionette',
-        'backgrid',
-        'Wanted/Cutoff/CutoffUnmetCollection',
-        'Cells/SeriesTitleCell',
-        'Cells/EpisodeNumberCell',
-        'Cells/EpisodeTitleCell',
-        'Cells/RelativeDateCell',
-        'Cells/EpisodeStatusCell',
-        'Shared/Grid/Pager',
-        'Shared/Toolbar/ToolbarLayout',
-        'Shared/LoadingView',
-        'Shared/Messenger',
-        'Commands/CommandController',
-        'backgrid.selectall'
-    ], function (_,
-                 Marionette,
-                 Backgrid,
-                 CutoffUnmetCollection,
-                 SeriesTitleCell,
-                 EpisodeNumberCell,
-                 EpisodeTitleCell,
-                 RelativeDateCell,
-                 EpisodeStatusCell,
-                 GridPager,
-                 ToolbarLayout,
-                 LoadingView,
-                 Messenger,
-                 CommandController) {
-        return Marionette.Layout.extend({
-            template: 'Wanted/Cutoff/CutoffUnmetLayoutTemplate',
+var _ = require('underscore');
+var Marionette = require('marionette');
+var Backgrid = require('backgrid');
+var CutoffUnmetCollection = require('./CutoffUnmetCollection');
+var SelectAllCell = require('../../Cells/SelectAllCell');
+var SeriesTitleCell = require('../../Cells/SeriesTitleCell');
+var EpisodeNumberCell = require('../../Cells/EpisodeNumberCell');
+var EpisodeTitleCell = require('../../Cells/EpisodeTitleCell');
+var RelativeDateCell = require('../../Cells/RelativeDateCell');
+var EpisodeStatusCell = require('../../Cells/EpisodeStatusCell');
+var GridPager = require('../../Shared/Grid/Pager');
+var ToolbarLayout = require('../../Shared/Toolbar/ToolbarLayout');
+var LoadingView = require('../../Shared/LoadingView');
+var Messenger = require('../../Shared/Messenger');
+var CommandController = require('../../Commands/CommandController');
+require('backgrid.selectall');
+require('../../Mixins/backbone.signalr.mixin');
 
-            regions: {
-                cutoff: '#x-cutoff-unmet',
-                toolbar: '#x-toolbar',
-                pager  : '#x-pager'
-            },
+module.exports = Marionette.Layout.extend({
+    template : 'Wanted/Cutoff/CutoffUnmetLayoutTemplate',
 
-            ui: {
-                searchSelectedButton: '.btn i.icon-search'
-            },
+    regions : {
+        cutoff  : '#x-cutoff-unmet',
+        toolbar : '#x-toolbar',
+        pager   : '#x-pager'
+    },
 
-            columns:
-                [
-                    {
-                        name      : '',
-                        cell      : 'select-row',
-                        headerCell: 'select-all',
-                        sortable  : false
-                    },
-                    {
-                        name    : 'series',
-                        label   : 'Series Title',
-                        sortable  : false,
-                        cell    : SeriesTitleCell
-                    },
-                    {
-                        name    : 'this',
-                        label   : 'Episode',
-                        sortable  : false,
-                        cell    : EpisodeNumberCell
-                    },
-                    {
-                        name    : 'this',
-                        label   : 'Episode Title',
-                        sortable  : false,
-                        cell    : EpisodeTitleCell,
-                    },
-                    {
-                        name    : 'airDateUtc',
-                        label   : 'Air Date',
-                        cell    : RelativeDateCell
-                    },
-                    {
-                        name    : 'status',
-                        label   : 'Status',
-                        cell    : EpisodeStatusCell,
-                        sortable: false
-                    }
-                ],
+    ui : {
+        searchSelectedButton : '.btn i.icon-sonarr-search'
+    },
 
-            initialize: function () {
-                this.collection = new CutoffUnmetCollection();
+    columns : [
+        {
+            name       : '',
+            cell       : SelectAllCell,
+            headerCell : 'select-all',
+            sortable   : false
+        },
+        {
+            name      : 'series',
+            label     : 'Series Title',
+            cell      : SeriesTitleCell,
+            sortValue : 'series.sortTitle'
+        },
+        {
+            name     : 'this',
+            label    : 'Episode',
+            cell     : EpisodeNumberCell,
+            sortable : false
+        },
+        {
+            name     : 'this',
+            label    : 'Episode Title',
+            cell     : EpisodeTitleCell,
+            sortable : false
+        },
+        {
+            name  : 'airDateUtc',
+            label : 'Air Date',
+            cell  : RelativeDateCell
+        },
+        {
+            name     : 'status',
+            label    : 'Status',
+            cell     : EpisodeStatusCell,
+            sortable : false
+        }
+    ],
 
-                this.listenTo(this.collection, 'sync', this._showTable);
-            },
+    initialize : function() {
+        this.collection = new CutoffUnmetCollection().bindSignalR({ updateOnly : true });
 
-            onShow: function () {
-                this.cutoff.show(new LoadingView());
-                this._showToolbar();
-                this.collection.fetch();
-            },
+        this.listenTo(this.collection, 'sync', this._showTable);
+    },
 
-            _showTable: function () {
-                this.missingGrid = new Backgrid.Grid({
-                    columns   : this.columns,
-                    collection: this.collection,
-                    className : 'table table-hover'
-                });
+    onShow : function() {
+        this.cutoff.show(new LoadingView());
+        this._showToolbar();
+        this.collection.fetch();
+    },
 
-                this.cutoff.show(this.missingGrid);
+    _showTable : function() {
+        this.cutoffGrid = new Backgrid.Grid({
+            columns    : this.columns,
+            collection : this.collection,
+            className  : 'table table-hover'
+        });
 
-                this.pager.show(new GridPager({
-                    columns   : this.columns,
-                    collection: this.collection
-                }));
-            },
+        this.cutoff.show(this.cutoffGrid);
 
-            _showToolbar: function () {
-                var leftSideButtons = {
-                    type      : 'default',
-                        storeState: false,
-                        items     :
-                    [
-                        {
-                            title: 'Search Selected',
-                            icon : 'icon-search',
-                            callback: this._searchSelected,
-                            ownerContext: this
-                        },
-                        {
-                            title: 'Season Pass',
-                            icon : 'icon-bookmark',
-                            route: 'seasonpass'
-                        }
-                    ]
-                };
-                
-                var filterOptions = {
-                    type          : 'radio',
-                    storeState    : false,
-                    menuKey       : 'wanted.filterMode',
-                    defaultAction : 'monitored',
-                    items         :
-                    [
-                        {
-                            key      : 'monitored',
-                            title    : '',
-                            tooltip  : 'Monitored Only',
-                            icon     : 'icon-nd-monitored',
-                            callback : this._setFilter
-                        },
-                        {
-                            key      : 'unmonitored',
-                            title    : '',
-                            tooltip  : 'Unmonitored Only',
-                            icon     : 'icon-nd-unmonitored',
-                            callback : this._setFilter
-                        }
-                    ]                    
-                };
+        this.pager.show(new GridPager({
+            columns    : this.columns,
+            collection : this.collection
+        }));
+    },
 
-                this.toolbar.show(new ToolbarLayout({
-                    left   :
-                        [
-                            leftSideButtons
-                        ],
-                    right  :
-                        [
-                            filterOptions
-                        ],
-                    context: this
-                }));
-
-                CommandController.bindToCommand({
-                    element: this.$('.x-toolbar-left-1 .btn i.icon-search'),
-                    command: {
-                        name: 'episodeSearch'
-                    }
-                });
-            },
-            
-            _setFilter: function(buttonContext) {
-                var mode = buttonContext.model.get('key');
-
-                this.collection.state.currentPage = 1;
-                var promise = this.collection.setFilterMode(mode);
-                
-                if (buttonContext) {
-                    buttonContext.ui.icon.spinForPromise(promise);
+    _showToolbar : function() {
+        var leftSideButtons = {
+            type       : 'default',
+            storeState : false,
+            items      : [
+                {
+                    title        : 'Search Selected',
+                    icon         : 'icon-sonarr-search',
+                    callback     : this._searchSelected,
+                    ownerContext : this,
+                    className    : 'x-search-selected'
+                },
+                {
+                    title : 'Season Pass',
+                    icon  : 'icon-sonarr-monitored',
+                    route : 'seasonpass'
                 }
-            },
+            ]
+        };
 
-            _searchSelected: function () {
-                var selected = this.missingGrid.getSelectedModels();
-
-                if (selected.length === 0) {
-                    Messenger.show({
-                        type: 'error',
-                        message: 'No episodes selected'
-                    });
-
-                    return;
+        var filterOptions = {
+            type          : 'radio',
+            storeState    : false,
+            menuKey       : 'wanted.filterMode',
+            defaultAction : 'monitored',
+            items         : [
+                {
+                    key      : 'monitored',
+                    title    : '',
+                    tooltip  : 'Monitored Only',
+                    icon     : 'icon-sonarr-monitored',
+                    callback : this._setFilter
+                },
+                {
+                    key      : 'unmonitored',
+                    title    : '',
+                    tooltip  : 'Unmonitored Only',
+                    icon     : 'icon-sonarr-unmonitored',
+                    callback : this._setFilter
                 }
+            ]
+        };
 
-                var ids = _.pluck(selected, 'id');
+        this.toolbar.show(new ToolbarLayout({
+            left    : [
+                leftSideButtons
+            ],
+            right   : [
+                filterOptions
+            ],
+            context : this
+        }));
 
-                CommandController.Execute('episodeSearch', {
-                    name    : 'episodeSearch',
-                    episodeIds: ids
-                });
+        CommandController.bindToCommand({
+            element : this.$('.x-search-selected'),
+            command : {
+                name : 'episodeSearch'
             }
         });
-    });
+    },
+
+    _setFilter : function(buttonContext) {
+        var mode = buttonContext.model.get('key');
+
+        this.collection.state.currentPage = 1;
+        var promise = this.collection.setFilterMode(mode);
+
+        if (buttonContext) {
+            buttonContext.ui.icon.spinForPromise(promise);
+        }
+    },
+
+    _searchSelected : function() {
+        var selected = this.cutoffGrid.getSelectedModels();
+
+        if (selected.length === 0) {
+            Messenger.show({
+                type    : 'error',
+                message : 'No episodes selected'
+            });
+
+            return;
+        }
+
+        var ids = _.pluck(selected, 'id');
+
+        CommandController.Execute('episodeSearch', {
+            name       : 'episodeSearch',
+            episodeIds : ids
+        });
+    }
+});
