@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public interface INzbgetProxy
     {
-        string DownloadNzb(byte[] nzbData, string title, string category, int priority, NzbgetSettings settings);
+        string DownloadNzb(byte[] nzbData, string title, string category, int priority, bool addpaused, NzbgetSettings settings);
         NzbgetGlobalStatus GetGlobalStatus(NzbgetSettings settings);
         List<NzbgetQueueItem> GetQueue(NzbgetSettings settings);
         List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings);
@@ -45,12 +45,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return version >= minimumVersion;
         }
 
-        public string DownloadNzb(byte[] nzbData, string title, string category, int priority, NzbgetSettings settings)
+        public string DownloadNzb(byte[] nzbData, string title, string category, int priority, bool addpaused, NzbgetSettings settings)
         {
             if (HasVersion(16, settings))
             {
                 var droneId = Guid.NewGuid().ToString().Replace("-", "");
-                var response = ProcessRequest<int>(settings, "append", title, nzbData, category, priority, false, false, string.Empty, 0, "all", new string[] { "drone", droneId });
+                var response = ProcessRequest<int>(settings, "append", title, nzbData, category, priority, false, addpaused, string.Empty, 0, "all", new string[] { "drone", droneId });
                 if (response <= 0)
                 {
                     return null;

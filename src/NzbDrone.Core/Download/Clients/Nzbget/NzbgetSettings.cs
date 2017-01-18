@@ -55,6 +55,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(7, Label = "Use SSL", Type = FieldType.Checkbox)]
         public bool UseSsl { get; set; }
 
+        [FieldDefinition(8, Label = "Add Paused", Type = FieldType.Checkbox)]
+        public bool AddPaused { get; set; }
+
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
