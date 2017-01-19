@@ -37,7 +37,8 @@ namespace NzbDrone.Core.RootFolders
                                                                      ".appledb",
                                                                      ".appledesktop",
                                                                      ".appledouble",
-                                                                     "@eadir"
+                                                                     "@eadir",
+                                                                     ".grab"
                                                                  };
 
 
@@ -131,8 +132,10 @@ namespace NzbDrone.Core.RootFolders
         private List<UnmappedFolder> GetUnmappedFolders(string path)
         {
             _logger.Debug("Generating list of unmapped folders");
+
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("Invalid path provided", nameof(path));
+            }
 
             var results = new List<UnmappedFolder>();
             var series = _seriesRepository.All().ToList();
@@ -143,8 +146,8 @@ namespace NzbDrone.Core.RootFolders
                 return results;
             }
 
-            var seriesFolders = _diskProvider.GetDirectories(path).ToList();
-            var unmappedFolders = seriesFolders.Except(series.Select(s => s.Path), PathEqualityComparer.Instance).ToList();
+            var possibleSeriesFolders = _diskProvider.GetDirectories(path).ToList();
+            var unmappedFolders = possibleSeriesFolders.Except(series.Select(s => s.Path), PathEqualityComparer.Instance).ToList();
 
             foreach (string unmappedFolder in unmappedFolders)
             {

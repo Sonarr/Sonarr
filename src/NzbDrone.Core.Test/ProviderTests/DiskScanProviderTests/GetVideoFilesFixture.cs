@@ -1,39 +1,47 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
 
     public class GetVideoFilesFixture : CoreTest<DiskScanService>
     {
-        private string[] _files;
+        private string[] _fileNames;
 
         [SetUp]
         public void Setup()
         {
-            _files = new[]
+            _fileNames = new[]
                         {
-                            @"C:\Test\30 Rock1.mkv",
-                            @"C:\Test\30 Rock2.avi",
-                            @"C:\Test\30 Rock3.MP4",
-                            @"C:\Test\30 Rock4.wMv",
-                            @"C:\Test\movie.exe",
-                            @"C:\Test\movie"
+                            @"30 Rock1.mkv",
+                            @"30 Rock2.avi",
+                            @"30 Rock3.MP4",
+                            @"30 Rock4.wMv",
+                            @"movie.exe",
+                            @"movie"
                         };
-
-            GivenFiles();
         }
 
-        private void GivenFiles()
+        private IEnumerable<string> GetFiles(string folder, string subFolder = "")
         {
+            return _fileNames.Select(f => Path.Combine(folder, subFolder, f));
+        }
+
+        private void GivenFiles(IEnumerable<string> files)
+        {
+            var filesToReturn = files.ToArray();
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetFiles(It.IsAny<string>(), SearchOption.AllDirectories))
-                .Returns(_files);
+                  .Setup(s => s.GetFiles(It.IsAny<string>(), SearchOption.AllDirectories))
+                  .Returns(filesToReturn);
         }
 
         [Test]
@@ -73,8 +81,31 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void should_return_video_files_only()
         {
             var path = @"C:\Test\";
+            GivenFiles(GetFiles(path));
 
             Subject.GetVideoFiles(path).Should().HaveCount(4);
+        }
+
+        [TestCase("Extras")]
+        [TestCase("@eadir")]
+        [TestCase("extrafanart")]
+        [TestCase("Plex Versions")]
+        [TestCase(".secret")]
+        [TestCase(".hidden")]
+        public void should_filter_certain_sub_folders(string subFolder)
+        {
+            var path = @"C:\Test\";
+            var files = GetFiles(path).ToList();
+            var specialFiles = GetFiles(path, subFolder).ToList();
+            var allFiles = files.Concat(specialFiles);
+
+            var series = Builder<Series>.CreateNew()
+                                        .With(s => s.Path = path)
+                                        .Build();
+
+            var filteredFiles = Subject.FilterFiles(series, allFiles);
+            filteredFiles.Should().NotContain(specialFiles);
+            filteredFiles.Count.Should().BeGreaterThan(0);
         }
     }
 }

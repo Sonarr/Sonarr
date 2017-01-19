@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.RootFolderTests
@@ -102,6 +106,49 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(path);
 
             Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = path }));
+}
+
+        [TestCase("$recycle.bin")]
+        [TestCase("system volume information")]
+        [TestCase("recycler")]
+        [TestCase("lost+found")]
+        [TestCase(".appledb")]
+        [TestCase(".appledesktop")]
+        [TestCase(".appledouble")]
+        [TestCase("@eadir")]
+        [TestCase(".grab")]
+        public void should_get_root_folder_with_subfolders_excluding_special_sub_folders(string subFolder)
+        {
+            var rootFolder = Builder<RootFolder>.CreateNew()
+                                                .With(r => r.Path = @"C:\Test\TV")
+                                                .Build();
+
+            var subFolders = new[]
+                        {
+                            "Series1",
+                            "Series2",
+                            "Series3",
+                            subFolder
+                        };
+
+            var folders = subFolders.Select(f => Path.Combine(@"C:\Test\TV", f)).ToArray();
+
+            Mocker.GetMock<IRootFolderRepository>()
+                  .Setup(s => s.Get(It.IsAny<int>()))
+                  .Returns(rootFolder);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.GetAllSeries())
+                  .Returns(new List<Series>());
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.GetDirectories(rootFolder.Path))
+                  .Returns(folders);
+
+            var unmappedFolders = Subject.Get(rootFolder.Id).UnmappedFolders;
+
+            unmappedFolders.Count.Should().BeGreaterThan(0);
+            unmappedFolders.Should().NotContain(u => u.Name == subFolder);
         }
     }
 }
