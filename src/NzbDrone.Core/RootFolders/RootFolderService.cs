@@ -134,6 +134,7 @@ namespace NzbDrone.Core.RootFolders
             _logger.Debug("Generating list of unmapped folders");
 
             if (string.IsNullOrEmpty(path))
+            {
                 throw new ArgumentException("Invalid path provided", nameof(path));
             }
 
