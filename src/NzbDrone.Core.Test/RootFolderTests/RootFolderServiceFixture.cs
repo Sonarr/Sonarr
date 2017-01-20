@@ -119,8 +119,9 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [TestCase(".grab")]
         public void should_get_root_folder_with_subfolders_excluding_special_sub_folders(string subFolder)
         {
+            var rootFolderPath = @"C:\Test\TV".AsOsAgnostic();
             var rootFolder = Builder<RootFolder>.CreateNew()
-                                                .With(r => r.Path = @"C:\Test\TV")
+                                                .With(r => r.Path = rootFolderPath)
                                                 .Build();
 
             var subFolders = new[]
@@ -131,7 +132,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                             subFolder
                         };
 
-            var folders = subFolders.Select(f => Path.Combine(@"C:\Test\TV", f)).ToArray();
+            var folders = subFolders.Select(f => Path.Combine(rootFolderPath, f)).ToArray();
 
             Mocker.GetMock<IRootFolderRepository>()
                   .Setup(s => s.Get(It.IsAny<int>()))
