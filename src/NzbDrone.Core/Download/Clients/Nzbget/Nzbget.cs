@@ -37,27 +37,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             var addpaused = Settings.AddPaused;
 
-            var response = _proxy.DownloadNzb(fileContents, filename, category, priority, addpaused, Settings);
+            var response = _proxy.DownloadNzb(fileContent, filename, category, priority, addpaused, Settings);
 
             if (response == null)
-            {
-                throw new DownloadClientException("Failed to add nzb {0}", filename);
-            }
-
-            return response;
-        }
-
-        protected override string AddFromNzbFile(RemoteMovie remoteMovie, string filename, byte[] fileContents)
-        {
-            var category = Settings.TvCategory; // TODO: Update this to MovieCategory?
-
-            var priority = Settings.RecentTvPriority;
-
-            var addpaused = Settings.AddPaused;
-
-            var response = _proxy.DownloadNzb(fileContents, filename, category, priority, addpaused, Settings);
-
-            if(response == null)
             {
                 throw new DownloadClientException("Failed to add nzb {0}", filename);
             }
