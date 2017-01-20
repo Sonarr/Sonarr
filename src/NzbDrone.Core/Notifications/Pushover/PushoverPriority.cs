@@ -2,7 +2,7 @@
 {
     public enum PushoverPriority
     {
-        Silent = -1,
+        Silent = -2,
         Quiet = -1,
         Normal = 0,
         High = 1,
