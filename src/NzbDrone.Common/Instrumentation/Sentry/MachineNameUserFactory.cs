@@ -1,4 +1,3 @@
-using System;
 using SharpRaven.Data;
 
 namespace NzbDrone.Common.Instrumentation.Sentry
@@ -7,7 +6,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
     {
         public SentryUser Create()
         {
-            return new SentryUser(Environment.MachineName);
+            return new SentryUser(HashUtil.AnonymousToken());
         }
     }
 }
