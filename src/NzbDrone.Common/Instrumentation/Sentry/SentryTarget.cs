@@ -37,10 +37,10 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             {
                 Compression = true,
                 Environment = RuntimeInfo.IsProduction ? "production" : "development",
-                Release = BuildInfo.Release
+                Release = BuildInfo.Release,
+                ErrorOnCapture = OnError
             };
 
-            _client.ErrorOnCapture = OnError;
 
             _client.Tags.Add("osfamily", OsInfo.Os.ToString());
             _client.Tags.Add("runtime", PlatformInfo.Platform.ToString().ToLower());
@@ -135,10 +135,14 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     sentryEvent.Fingerprint.Add(logEvent.Exception.GetType().FullName);
                 }
 
+                var osName = Environment.GetEnvironmentVariable("OS_NAME");
+                var osVersion = Environment.GetEnvironmentVariable("OS_VERSION");
+                var runTimeVersion = Environment.GetEnvironmentVariable("RUNTIME_VERSION");
 
-                sentryEvent.Tags.Add("os_name", Environment.GetEnvironmentVariable("OS_NAME"));
-                sentryEvent.Tags.Add("os_version", Environment.GetEnvironmentVariable("OS_VERSION"));
-                sentryEvent.Tags.Add("runtime_version", Environment.GetEnvironmentVariable("RUNTIME_VERSION"));
+
+                sentryEvent.Tags.Add("os_name", osName);
+                sentryEvent.Tags.Add("os_version", $"{osName} {osVersion}");
+                sentryEvent.Tags.Add("runtime_version", $"{PlatformInfo.Platform} {runTimeVersion}");
 
                 _client.Capture(sentryEvent);
             }
