@@ -99,7 +99,6 @@ namespace NzbDrone.Core.Test.Framework
         {
             WithTempAsAppPath();
 
-            Mocker.SetConstant<IAnnouncer>(Mocker.Resolve<MigrationLogger>());
             Mocker.SetConstant<IConnectionStringFactory>(Mocker.Resolve<ConnectionStringFactory>());
             Mocker.SetConstant<IMigrationController>(Mocker.Resolve<MigrationController>());
 

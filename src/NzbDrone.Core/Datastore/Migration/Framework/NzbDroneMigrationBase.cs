@@ -46,7 +46,6 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public override void Up()
         {
-
             if (Context.BeforeMigration != null)
             {
                 Context.BeforeMigration(this);
