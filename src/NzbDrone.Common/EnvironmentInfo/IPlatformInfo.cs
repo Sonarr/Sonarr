@@ -32,6 +32,19 @@ namespace NzbDrone.Common.EnvironmentInfo
         public static bool IsMono => Platform == PlatformType.Mono;
         public static bool IsDotNet => Platform == PlatformType.DotNet;
 
+        public static string PlatformName
+        {
+            get
+            {
+                if (IsDotNet)
+                {
+                    return ".NET";
+                }
+
+                return "Mono";
+            }
+        }
+
         public abstract Version Version { get; }
     }
 }

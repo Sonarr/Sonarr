@@ -43,7 +43,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
 
             _client.Tags.Add("osfamily", OsInfo.Os.ToString());
-            _client.Tags.Add("runtime", PlatformInfo.Platform.ToString().ToLower());
+            _client.Tags.Add("runtime", PlatformInfo.PlatformName);
             _client.Tags.Add("culture", Thread.CurrentThread.CurrentCulture.Name);
             _client.Tags.Add("branch", BuildInfo.Branch);
             _client.Tags.Add("version", BuildInfo.Version.ToString());
@@ -142,7 +142,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
                 sentryEvent.Tags.Add("os_name", osName);
                 sentryEvent.Tags.Add("os_version", $"{osName} {osVersion}");
-                sentryEvent.Tags.Add("runtime_version", $"{PlatformInfo.Platform} {runTimeVersion}");
+                sentryEvent.Tags.Add("runtime_version", $"{PlatformInfo.PlatformName} {runTimeVersion}");
 
                 _client.Capture(sentryEvent);
             }
