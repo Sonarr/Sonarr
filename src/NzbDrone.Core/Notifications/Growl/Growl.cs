@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Growl
 
         public override void OnDownload(DownloadMessage message)
         {
-            _growlService.SendNotification(EPISODE_GRABBED_TITLE, message.Message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
+            _growlService.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
         }
 
 
