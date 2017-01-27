@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         public HadoukenSettingsValidator()
         {
             RuleFor(c => c.Host).ValidHost();
-            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
 
             RuleFor(c => c.Username).NotEmpty()
                                     .WithMessage("Username must not be empty.");

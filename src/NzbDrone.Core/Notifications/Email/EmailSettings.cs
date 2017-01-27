@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Email
         public EmailSettingsValidator()
         {
             RuleFor(c => c.Server).NotEmpty();
-            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
             RuleFor(c => c.From).NotEmpty();
             RuleFor(c => c.To).NotEmpty();
         }

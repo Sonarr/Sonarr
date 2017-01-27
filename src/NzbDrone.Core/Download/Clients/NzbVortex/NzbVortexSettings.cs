@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
         public NzbVortexSettingsValidator()
         {
             RuleFor(c => c.Host).ValidHost();
-            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
 
             RuleFor(c => c.ApiKey).NotEmpty()
                                   .WithMessage("API Key is required");
