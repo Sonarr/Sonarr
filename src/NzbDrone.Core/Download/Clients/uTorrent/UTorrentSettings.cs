@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         public UTorrentSettingsValidator()
         {
             RuleFor(c => c.Host).ValidHost();
-            RuleFor(c => c.Port).InclusiveBetween(0, 65535);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
             RuleFor(c => c.TvCategory).NotEmpty();
         }
     }

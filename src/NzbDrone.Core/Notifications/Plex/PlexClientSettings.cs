@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Plex
         public PlexClientSettingsValidator()
         {
             RuleFor(c => c.Host).ValidHost();
-            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
         }
     }
 
