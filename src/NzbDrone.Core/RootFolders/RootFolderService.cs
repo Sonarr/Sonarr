@@ -160,7 +160,7 @@ namespace NzbDrone.Core.RootFolders
             results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
 
             _logger.Debug("{0} unmapped folders detected.", results.Count);
-            return results;
+            return results.OrderBy(u => u.Name, StringComparer.InvariantCultureIgnoreCase).ToList();
         }
 
         public RootFolder Get(int id)
