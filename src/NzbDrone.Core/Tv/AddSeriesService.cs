@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using NLog;
@@ -42,7 +43,7 @@ namespace NzbDrone.Core.Tv
         {
             Ensure.That(newSeries, () => newSeries).IsNotNull();
 
-            newSeries = SeriesGetSeriesInfo(newSeries);
+            newSeries = AddSkyhookData(newSeries);
 
             if (string.IsNullOrWhiteSpace(newSeries.Path))
             {
@@ -50,7 +51,11 @@ namespace NzbDrone.Core.Tv
                 newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);
             }
 
-            var validationResult =_addSeriesValidator.Validate(newSeries);
+            newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
+            newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
+            newSeries.Added = DateTime.UtcNow;
+
+            var validationResult = _addSeriesValidator.Validate(newSeries);
 
             if (!validationResult.IsValid)
             {
@@ -58,17 +63,12 @@ namespace NzbDrone.Core.Tv
             }
 
             _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
-
-            newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
-            newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
-            newSeries.Added = DateTime.UtcNow;
-
             _seriesService.AddSeries(newSeries);
 
             return newSeries;
         }
 
-        private Series SeriesGetSeriesInfo(Series newSeries)
+        private Series AddSkyhookData(Series newSeries)
         {
             Tuple<Series, List<Episode>> tuple;
 
@@ -88,14 +88,10 @@ namespace NzbDrone.Core.Tv
 
             var series = tuple.Item1;
 
-            series.Path = newSeries.Path;
-            series.RootFolderPath = newSeries.RootFolderPath;
-            series.Monitored = newSeries.Monitored;
-            series.AddOptions = newSeries.AddOptions;
-            series.ProfileId = newSeries.ProfileId;
-            series.SeasonFolder = newSeries.SeasonFolder;
-            series.SeriesType = newSeries.SeriesType;
-            series.Tags = newSeries.Tags;
+            // If seasons were passed in on the new series use them, otherwise use the seasons from Skyhook
+            newSeries.Seasons = newSeries.Seasons != null && newSeries.Seasons.Any() ? newSeries.Seasons : series.Seasons;
+
+            series.ApplyChanges(newSeries);
 
             return series;
         }

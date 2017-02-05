@@ -207,19 +207,9 @@ namespace NzbDrone.Api.Series
 
         public static Core.Tv.Series ToModel(this SeriesResource resource, Core.Tv.Series series)
         {
-            series.TvdbId = resource.TvdbId;
+            var updatedSeries = resource.ToModel();
 
-            series.Seasons = resource.Seasons.ToModel();
-            series.Path = resource.Path;
-            series.ProfileId = resource.ProfileId;
-
-            series.SeasonFolder = resource.SeasonFolder;
-            series.Monitored = resource.Monitored;
-
-            series.SeriesType = resource.SeriesType;
-            series.RootFolderPath = resource.RootFolderPath;
-            series.Tags = resource.Tags;
-            series.AddOptions = resource.AddOptions;
+            series.ApplyChanges(updatedSeries);
 
             return series;
         }
