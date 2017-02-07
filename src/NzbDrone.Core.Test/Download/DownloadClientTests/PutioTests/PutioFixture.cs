@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     {
                         HashString = "HASH",
                         IsFinished = false,
-                        Status = PutioTorrentStatus.Queued,
+                        Status = PutioTorrentStatus.InQueue,
                         Name = _title,
                         TotalSize = 1000,
                         LeftUntilDone = 1000,
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     {
                         HashString = "HASH",
                         IsFinished = false,
-                        Status = PutioTorrentStatus.Stopped,
+                        Status = PutioTorrentStatus.Error,
                         Name = _title,
                         TotalSize = 1000,
                         LeftUntilDone = 100,
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     {
                         HashString = "HASH",
                         IsFinished = true,
-                        Status = PutioTorrentStatus.Stopped,
+                        Status = PutioTorrentStatus.Completed,
                         Name = _title,
                         TotalSize = 1000,
                         LeftUntilDone = 0,
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                 .Setup(s => s.AddTorrentFromData(It.IsAny<byte[]>(), It.IsAny<PutioSettings>()))
                 .Callback(PrepareClientToReturnQueuedItem);
         }
-        
+
         protected virtual void GivenTorrents(List<PutioTorrent> torrents)
         {
             if (torrents == null)
@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
 
         protected void PrepareClientToReturnQueuedItem()
         {
-            GivenTorrents(new List<PutioTorrent> 
+            GivenTorrents(new List<PutioTorrent>
                 {
                     _queued
                 });
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
 
         protected void PrepareClientToReturnDownloadingItem()
         {
-            GivenTorrents(new List<PutioTorrent> 
+            GivenTorrents(new List<PutioTorrent>
                 {
                     _downloading
                 });
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
 
         protected void PrepareClientToReturnFailedItem()
         {
-            GivenTorrents(new List<PutioTorrent> 
+            GivenTorrents(new List<PutioTorrent>
                 {
                     _failed
                 });
@@ -287,7 +287,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
         public void GetItems_should_return_completed_item_as_downloadItemStatus(PutioTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, bool expectedReadOnly)
         {
             _completed.Status = apiStatus;
-            
+
             PrepareClientToReturnCompletedItem();
 
             var item = Subject.GetItems().Single();
@@ -313,7 +313,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
 
             _downloading.DownloadDir = @"C:/Downloads/Finished/Putio";
 
-            GivenTorrents(new List<PutioTorrent> 
+            GivenTorrents(new List<PutioTorrent>
                 {
                     _downloading
                 });

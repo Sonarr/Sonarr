@@ -114,11 +114,11 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = torrent.ErrorMessage;
                 }
-                else if (torrent.Status == "COMPLETED")
+                else if (torrent.Status == PutioTorrentStatus.Completed)
                 {
                     item.Status = DownloadItemStatus.Completed;
                 }
-                else if (torrent.Status == "IN_QUEUE")
+                else if (torrent.Status == PutioTorrentStatus.InQueue)
                 {
                     item.Status = DownloadItemStatus.Queued;
                 }
@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                // item.IsReadOnly = torrent.Status != PutioTorrentStatus.Stopped;
+                // item.IsReadOnly = torrent.Status != PutioTorrentStatus.Error;
 
                 items.Add(item);
             }
