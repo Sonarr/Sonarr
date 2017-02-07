@@ -165,6 +165,7 @@
     <Compile Include="DecisionEngineTests\SameEpisodesSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RawDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
+    <Compile Include="DiskSpace\DiskSpaceServiceFixture.cs" />
     <Compile Include="Download\CompletedDownloadServiceFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
     <Compile Include="Download\DownloadClientTests\Blackhole\ScanWatchFolderFixture.cs" />

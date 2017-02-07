@@ -42,14 +42,17 @@ namespace NzbDrone.Core.DiskSpace
 
         private IEnumerable<DiskSpace> GetSeriesFreeSpace()
         {
-            var seriesRootPaths = _seriesService.GetAllSeries().Select(s => _diskProvider.GetPathRoot(s.Path)).Distinct();
+            var seriesRootPaths = _seriesService.GetAllSeries()
+                .Where(s => _diskProvider.FolderExists(s.Path))
+                .Select(s => _diskProvider.GetPathRoot(s.Path))
+                .Distinct();
 
             return GetDiskSpace(seriesRootPaths);
         }
 
         private IEnumerable<DiskSpace> GetDroneFactoryFreeSpace()
         {
-            if (!string.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder))
+            if (_configService.DownloadedEpisodesFolder.IsNotNullOrWhiteSpace() && _diskProvider.FolderExists(_configService.DownloadedEpisodesFolder))
             {
                 return GetDiskSpace(new[] { _diskProvider.GetPathRoot(_configService.DownloadedEpisodesFolder) });
             }
