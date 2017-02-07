@@ -72,8 +72,8 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
 
-            var tries = 2;
-            var retryDelay = 100;
+            var tries = 5;
+            var retryDelay = 200;
             if (WaitForTorrent(hash, tries, retryDelay))
             {
                 _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
