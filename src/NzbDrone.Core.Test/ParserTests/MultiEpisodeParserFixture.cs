@@ -55,6 +55,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title.S6.E1-S6E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new[] { 1, 2 })]
         [TestCase("Series Title.S6.E1E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new[] { 1, 2 })]
         [TestCase("Series Title.S6.E1-E2-E3.Episode Name.1080p.WEB-DL", "Series Title", 6, new[] { 1, 2, 3 })]
+        [TestCase("Mad.Men.S05E01-E02.720p.5.1Ch.BluRay", "Mad Men", 5, new[] { 1, 2 })]
+        [TestCase("Mad.Men.S05E01-02.720p.5.1Ch.BluRay", "Mad Men", 5, new[] { 1, 2 })]
         //[TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
