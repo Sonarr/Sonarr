@@ -642,6 +642,21 @@ namespace NzbDrone.Common.Test.DiskTests
             VerifyCopyFolder(source.FullName, destination.FullName);
         }
 
+        [Test]
+        public void CopyFolder_should_ignore_nfs_temp_file()
+        {
+            WithRealDiskProvider();
+
+            var source = GetFilledTempFolder();
+
+            File.WriteAllText(Path.Combine(source.FullName, ".nfs01231232"), "SubFile1");
+
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            Subject.TransferFolder(source.FullName, destination.FullName, TransferMode.Copy);
+
+            File.Exists(Path.Combine(destination.FullName, ".nfs01231232")).Should().BeFalse();
+        }
 
         [Test]
         public void MoveFolder_should_move_folder()
@@ -719,6 +734,24 @@ namespace NzbDrone.Common.Test.DiskTests
 
             count.Should().Equals(3);
             VerifyCopyFolder(original.FullName, destination.FullName);
+        }
+
+        [Test]
+        public void MirrorFolder_should_ignore_nfs_temp_file()
+        {
+            WithRealDiskProvider();
+
+            var source = GetFilledTempFolder();
+
+            File.WriteAllText(Path.Combine(source.FullName, ".nfs01231232"), "SubFile1");
+
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            var count = Subject.MirrorFolder(source.FullName, destination.FullName);
+
+            count.Should().Equals(3);
+
+            File.Exists(Path.Combine(destination.FullName, ".nfs01231232")).Should().BeFalse();
         }
 
         [Test]
