@@ -16,6 +16,7 @@ namespace NzbDrone.Common.Test.DiskTests
         private readonly string _targetPath = @"C:\target\my.video.mkv".AsOsAgnostic();
         private readonly string _backupPath = @"C:\source\my.video.mkv.backup~".AsOsAgnostic();
         private readonly string _tempTargetPath = @"C:\target\my.video.mkv.partial~".AsOsAgnostic();
+        private readonly string _nfsFile = ".nfs01231232";
 
         [SetUp]
         public void SetUp()
@@ -642,6 +643,21 @@ namespace NzbDrone.Common.Test.DiskTests
             VerifyCopyFolder(source.FullName, destination.FullName);
         }
 
+        [Test]
+        public void CopyFolder_should_ignore_nfs_temp_file()
+        {
+            WithRealDiskProvider();
+
+            var source = GetFilledTempFolder();
+
+            File.WriteAllText(Path.Combine(source.FullName, _nfsFile), "SubFile1");
+
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            Subject.TransferFolder(source.FullName, destination.FullName, TransferMode.Copy);
+
+            File.Exists(Path.Combine(destination.FullName, _nfsFile)).Should().BeFalse();
+        }
 
         [Test]
         public void MoveFolder_should_move_folder()
@@ -705,6 +721,26 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        public void MirrorFolder_should_not_remove_nfs_files()
+        {
+            WithRealDiskProvider();
+
+            var original = GetFilledTempFolder();
+            var source = new DirectoryInfo(GetTempFilePath());
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            source.Create();
+            Subject.TransferFolder(original.FullName, destination.FullName, TransferMode.Copy);
+
+            File.WriteAllText(Path.Combine(destination.FullName, _nfsFile), "SubFile1");
+
+            var count = Subject.MirrorFolder(source.FullName, destination.FullName);
+
+            count.Should().Equals(0);
+            destination.GetFileSystemInfos().Should().HaveCount(1);
+        }
+
+        [Test]
         public void MirrorFolder_should_add_new_files()
         {
             WithRealDiskProvider();
@@ -719,6 +755,24 @@ namespace NzbDrone.Common.Test.DiskTests
 
             count.Should().Equals(3);
             VerifyCopyFolder(original.FullName, destination.FullName);
+        }
+
+        [Test]
+        public void MirrorFolder_should_ignore_nfs_temp_file()
+        {
+            WithRealDiskProvider();
+
+            var source = GetFilledTempFolder();
+
+            File.WriteAllText(Path.Combine(source.FullName, _nfsFile), "SubFile1");
+
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            var count = Subject.MirrorFolder(source.FullName, destination.FullName);
+
+            count.Should().Equals(3);
+
+            File.Exists(Path.Combine(destination.FullName, _nfsFile)).Should().BeFalse();
         }
 
         [Test]
