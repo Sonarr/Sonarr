@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             {
                 throw new IndexerException(indexerResponse, "Indexer API call returned an error [{0}]", jsonResponse.Error);
             }
-            
+
             if (jsonResponse.Result.Results == 0)
             {
                 return results;
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 var torrentInfo = new TorrentInfo();
 
                 torrentInfo.Guid = string.Format("BTN-{0}", torrent.TorrentID);
-                torrentInfo.Title = torrent.ReleaseName;
+                torrentInfo.Title = CleanReleaseName(torrent.ReleaseName);
                 torrentInfo.Size = torrent.Size;
                 torrentInfo.DownloadUrl = RegexProtocol.Replace(torrent.DownloadURL, protocol);
                 torrentInfo.InfoUrl = string.Format("{0}//broadcasthe.net/torrents.php?id={1}&torrentid={2}", protocol, torrent.GroupID, torrent.TorrentID);
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     torrentInfo.TvRageId = torrent.TvrageID.Value;
                 }
                 torrentInfo.PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).ToUniversalTime().AddSeconds(torrent.Time);
-                //torrentInfo.MagnetUrl = 
+                //torrentInfo.MagnetUrl =
                 torrentInfo.InfoHash = torrent.InfoHash;
                 torrentInfo.Seeders = torrent.Seeders;
                 torrentInfo.Peers = torrent.Leechers + torrent.Seeders;
@@ -86,6 +86,13 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             }
 
             return results;
+        }
+
+        private string CleanReleaseName(string releaseName)
+        {
+            releaseName = releaseName.Replace("\\", "");
+
+            return releaseName;
         }
     }
 }
