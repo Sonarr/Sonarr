@@ -1,6 +1,8 @@
 using System;
 using System.IO;
-using NzbDrone.Api.REST;
+using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.MediaFiles;
+using Sonarr.Http.REST;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.EpisodeFiles
@@ -22,7 +24,7 @@ namespace NzbDrone.Api.EpisodeFiles
 
     public static class EpisodeFileResourceMapper
     {
-        private static EpisodeFileResource ToResource(this Core.MediaFiles.EpisodeFile model)
+        private static EpisodeFileResource ToResource(this EpisodeFile model)
         {
             if (model == null) return null;
 
@@ -43,7 +45,7 @@ namespace NzbDrone.Api.EpisodeFiles
             };
         }
 
-        public static EpisodeFileResource ToResource(this Core.MediaFiles.EpisodeFile model, Core.Tv.Series series, Core.DecisionEngine.IQualityUpgradableSpecification qualityUpgradableSpecification)
+        public static EpisodeFileResource ToResource(this EpisodeFile model, Core.Tv.Series series, IQualityUpgradableSpecification qualityUpgradableSpecification)
         {
             if (model == null) return null;
 
@@ -59,7 +61,7 @@ namespace NzbDrone.Api.EpisodeFiles
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
                 Quality = model.Quality,
-                QualityCutoffNotMet = qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, model.Quality),
+                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.Profile.Value, model.Quality),
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
             };
         }

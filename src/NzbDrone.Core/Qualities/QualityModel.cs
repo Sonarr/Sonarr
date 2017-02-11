@@ -1,10 +1,11 @@
 using System;
+using System.Linq;
 using Newtonsoft.Json;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Qualities
 {
-    public class QualityModel : IEmbeddedDocument, IEquatable<QualityModel>
+    public class QualityModel : IEmbeddedDocument, IEquatable<QualityModel>, IComparable
     {
         public Quality Quality { get; set; }
         public Revision Revision { get; set; }
@@ -38,6 +39,45 @@ namespace NzbDrone.Core.Qualities
                 hash = hash * 23 + Quality.GetHashCode();
                 return hash;
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            var other = (QualityModel) obj;
+            var definition = Quality.DefaultQualityDefinitions.First(q => q.Quality == Quality);
+            var otherDefinition = Quality.DefaultQualityDefinitions.First(q => q.Quality == other.Quality);
+
+            if (definition.Weight > otherDefinition.Weight)
+            {
+                return 1;
+            }
+
+            if(definition.Weight < otherDefinition.Weight)
+            {
+                return -1;
+            }
+
+            if (Revision.Real > other.Revision.Real)
+            {
+                return 1;
+            }
+
+            if (Revision.Real < other.Revision.Real)
+            {
+                return -1;
+            }
+
+            if (Revision.Version > other.Revision.Version)
+            {
+                return 1;
+            }
+
+            if (Revision.Version < other.Revision.Version)
+            {
+                return -1;
+            }
+
+            return 0;
         }
 
         public bool Equals(QualityModel other)

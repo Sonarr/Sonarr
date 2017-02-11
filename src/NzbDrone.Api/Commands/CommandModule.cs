@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Validation;
+using Sonarr.Http.Extensions;
 using NzbDrone.Common;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Datastore.Events;
@@ -10,11 +9,14 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ProgressMessaging;
 using NzbDrone.SignalR;
+using Sonarr.Http;
+using Sonarr.Http.Mapping;
+using Sonarr.Http.Validation;
 
 
 namespace NzbDrone.Api.Commands
 {
-    public class CommandModule : NzbDroneRestModuleWithSignalR<CommandResource, CommandModel>, IHandle<CommandUpdatedEvent>
+    public class CommandModule : SonarrRestModuleWithSignalR<CommandResource, CommandModel>, IHandle<CommandUpdatedEvent>
     {
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly IServiceFactory _serviceFactory;

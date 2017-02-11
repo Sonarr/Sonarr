@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NzbDrone.Core.Annotations
 {
@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Annotations
     public enum FieldType
     {
         Textbox,
+        Number,
         Password,
         Checkbox,
         Select,
@@ -32,6 +33,7 @@ namespace NzbDrone.Core.Annotations
         Tag,
         Action,
         Url,
-        Captcha
+        Captcha,
+        OAuth
     }
 }

@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{7140FF1F-79BE-492F-9188-B21A050BF708}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sonarr.Api.V3</RootNamespace>
+    <AssemblyName>Sonarr.Api.V3</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\_output\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\_output\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ical.Net.2.2.32\lib\net40\antlr.runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\portable-net40+sl50+wp80+win8+wpa81\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ical.Net, Version=2.1.0.18776, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ical.Net.2.2.32\lib\net40\Ical.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Ical.Net.Collections, Version=2.1.0.18775, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ical.Net.2.2.32\lib\net40\Ical.Net.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nancy.Authentication.Basic, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Authentication.Basic.1.4.1\lib\net40\Nancy.Authentication.Basic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nancy.Authentication.Forms, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Authentication.Forms.1.4.1\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.3\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ical.Net.2.2.32\lib\net40\NodaTime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Blacklist\BlacklistModule.cs" />
+    <Compile Include="Blacklist\BlacklistResource.cs" />
+    <Compile Include="Calendar\CalendarFeedModule.cs" />
+    <Compile Include="Calendar\CalendarModule.cs" />
+    <Compile Include="Commands\CommandModule.cs" />
+    <Compile Include="Commands\CommandResource.cs" />
+    <Compile Include="EpisodeFiles\EpisodeFileListResource.cs" />
+    <Compile Include="EpisodeFiles\MediaInfoResource.cs" />
+    <Compile Include="Indexers\ReleaseModuleBase.cs" />
+    <Compile Include="Indexers\ReleasePushModule.cs" />
+    <Compile Include="Parse\ParseModule.cs" />
+    <Compile Include="Parse\ParseResource.cs" />
+    <Compile Include="ManualImport\ManualImportModule.cs" />
+    <Compile Include="ManualImport\ManualImportResource.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
+    <Compile Include="Queue\QueueActionModule.cs" />
+    <Compile Include="Queue\QueueBulkResource.cs" />
+    <Compile Include="Queue\QueueDetailsModule.cs" />
+    <Compile Include="Queue\QueueStatusModule.cs" />
+    <Compile Include="Queue\QueueStatusResource.cs" />
+    <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
+    <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
+    <Compile Include="Config\UiConfigModule.cs" />
+    <Compile Include="Config\UiConfigResource.cs" />
+    <Compile Include="Config\DownloadClientConfigModule.cs" />
+    <Compile Include="Config\DownloadClientConfigResource.cs" />
+    <Compile Include="Config\HostConfigModule.cs" />
+    <Compile Include="Config\HostConfigResource.cs" />
+    <Compile Include="Config\IndexerConfigModule.cs" />
+    <Compile Include="Config\IndexerConfigResource.cs" />
+    <Compile Include="Config\MediaManagementConfigModule.cs" />
+    <Compile Include="Config\MediaManagementConfigResource.cs" />
+    <Compile Include="Config\NamingConfigModule.cs" />
+    <Compile Include="Config\NamingConfigResource.cs" />
+    <Compile Include="Config\NamingExampleResource.cs" />
+    <Compile Include="Config\SonarrConfigModule.cs" />
+    <Compile Include="FileSystem\FileSystemModule.cs" />
+    <Compile Include="DiskSpace\DiskSpaceModule.cs" />
+    <Compile Include="DiskSpace\DiskSpaceResource.cs" />
+    <Compile Include="DownloadClient\DownloadClientModule.cs" />
+    <Compile Include="DownloadClient\DownloadClientResource.cs" />
+    <Compile Include="EpisodeFiles\EpisodeFileModule.cs" />
+    <Compile Include="EpisodeFiles\EpisodeFileResource.cs" />
+    <Compile Include="Episodes\EpisodeModule.cs" />
+    <Compile Include="Episodes\EpisodeModuleWithSignalR.cs" />
+    <Compile Include="Episodes\EpisodeResource.cs" />
+    <Compile Include="Episodes\RenameEpisodeModule.cs" />
+    <Compile Include="Episodes\RenameEpisodeResource.cs" />
+    <Compile Include="Health\HealthModule.cs" />
+    <Compile Include="Health\HealthResource.cs" />
+    <Compile Include="History\HistoryModule.cs" />
+    <Compile Include="History\HistoryResource.cs" />
+    <Compile Include="Indexers\IndexerModule.cs" />
+    <Compile Include="Indexers\IndexerResource.cs" />
+    <Compile Include="Indexers\ReleaseModule.cs" />
+    <Compile Include="Indexers\ReleaseResource.cs" />
+    <Compile Include="Logs\LogFileModule.cs" />
+    <Compile Include="Logs\LogFileModuleBase.cs" />
+    <Compile Include="Logs\LogFileResource.cs" />
+    <Compile Include="Logs\LogModule.cs" />
+    <Compile Include="Logs\LogResource.cs" />
+    <Compile Include="Logs\UpdateLogFileModule.cs" />
+    <Compile Include="MediaCovers\MediaCoverModule.cs" />
+    <Compile Include="Metadata\MetadataModule.cs" />
+    <Compile Include="Metadata\MetadataResource.cs" />
+    <Compile Include="Notifications\NotificationModule.cs" />
+    <Compile Include="Notifications\NotificationResource.cs" />
+    <Compile Include="SeasonPass\SeasonPassSeriesResource.cs" />
+    <Compile Include="Series\SeriesStatisticsResource.cs" />
+    <Compile Include="Series\SeriesEditorDeleteResource.cs" />
+    <Compile Include="Series\SeriesEditorResource.cs" />
+    <Compile Include="Series\SeriesImportModule.cs" />
+    <Compile Include="SonarrV3FeedModule.cs" />
+    <Compile Include="SonarrV3Module.cs" />
+    <Compile Include="Profiles\Languages\LanguageModule.cs" />
+    <Compile Include="Profiles\Languages\LanguageResource.cs" />
+    <Compile Include="Profiles\ProfileModule.cs" />
+    <Compile Include="Profiles\ProfileResource.cs" />
+    <Compile Include="Profiles\ProfileSchemaModule.cs" />
+    <Compile Include="Profiles\ProfileValidation.cs" />
+    <Compile Include="Profiles\Quality\QualityProfileModule.cs" />
+    <Compile Include="Profiles\Quality\QualityProfileResource.cs" />
+    <Compile Include="Profiles\Quality\QualityProfileSchemaModule.cs" />
+    <Compile Include="Profiles\Quality\QualityProfileValidation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProviderModuleBase.cs" />
+    <Compile Include="ProviderResource.cs" />
+    <Compile Include="Qualities\QualityDefinitionModule.cs" />
+    <Compile Include="Qualities\QualityDefinitionResource.cs" />
+    <Compile Include="Queue\QueueModule.cs" />
+    <Compile Include="Queue\QueueResource.cs" />
+    <Compile Include="Restrictions\RestrictionModule.cs" />
+    <Compile Include="Restrictions\RestrictionResource.cs" />
+    <Compile Include="RootFolders\RootFolderModule.cs" />
+    <Compile Include="RootFolders\RootFolderResource.cs" />
+    <Compile Include="SeasonPass\SeasonPassResource.cs" />
+    <Compile Include="Series\AlternateTitleResource.cs" />
+    <Compile Include="Series\SeasonResource.cs" />
+    <Compile Include="SeasonPass\SeasonPassModule.cs" />
+    <Compile Include="Series\SeriesEditorModule.cs" />
+    <Compile Include="Series\SeriesLookupModule.cs" />
+    <Compile Include="Series\SeriesModule.cs" />
+    <Compile Include="Series\SeriesResource.cs" />
+    <Compile Include="Series\SeasonStatisticsResource.cs" />
+    <Compile Include="System\Backup\BackupModule.cs" />
+    <Compile Include="System\Backup\BackupResource.cs" />
+    <Compile Include="System\Tasks\TaskModule.cs" />
+    <Compile Include="System\Tasks\TaskResource.cs" />
+    <Compile Include="System\SystemModule.cs" />
+    <Compile Include="Tags\TagDetailsModule.cs" />
+    <Compile Include="Tags\TagModule.cs" />
+    <Compile Include="Tags\TagDetailsResource.cs" />
+    <Compile Include="Tags\TagResource.cs" />
+    <Compile Include="Update\UpdateModule.cs" />
+    <Compile Include="Update\UpdateResource.cs" />
+    <Compile Include="Wanted\CutoffModule.cs" />
+    <Compile Include="Wanted\MissingModule.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
+      <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
+      <Name>Marr.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
+      <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
+      <Name>NzbDrone.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
+      <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
+      <Name>NzbDrone.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.SignalR\NzbDrone.SignalR.csproj">
+      <Project>{7C2CC69F-5CA0-4E5C-85CB-983F9F6C3B36}</Project>
+      <Name>NzbDrone.SignalR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj">
+      <Project>{5370BFF7-1BD7-46BC-AF06-7D9EA5CDA1D6}</Project>
+      <Name>Sonarr.Http</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Episodes\EpisodesMonitoredResource.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Notifications;
+using NzbDrone.Core.Profiles.Delay;
+using NzbDrone.Core.Restrictions;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Tags
 {
@@ -8,6 +12,7 @@ namespace NzbDrone.Core.Tags
     {
         Tag GetTag(int tagId);
         Tag GetTag(string tag);
+        TagDetails Details(int tagId);
         List<Tag> All();
         Tag Add(Tag tag);
         Tag Update(Tag tag);
@@ -18,11 +23,24 @@ namespace NzbDrone.Core.Tags
     {
         private readonly ITagRepository _repo;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IDelayProfileService _delayProfileService;
+        private readonly INotificationFactory _notificationFactory;
+        private readonly IRestrictionService _restrictionService;
+        private readonly ISeriesService _seriesService;
 
-        public TagService(ITagRepository repo, IEventAggregator eventAggregator)
+        public TagService(ITagRepository repo,
+                          IEventAggregator eventAggregator,
+                          IDelayProfileService delayProfileService,
+                          INotificationFactory notificationFactory,
+                          IRestrictionService restrictionService,
+                          ISeriesService seriesService)
         {
             _repo = repo;
             _eventAggregator = eventAggregator;
+            _delayProfileService = delayProfileService;
+            _notificationFactory = notificationFactory;
+            _restrictionService = restrictionService;
+            _seriesService = seriesService;
         }
 
         public Tag GetTag(int tagId)
@@ -42,6 +60,25 @@ namespace NzbDrone.Core.Tags
             }
         }
 
+        public TagDetails Details(int tagId)
+        {
+            var tag = GetTag(tagId);
+            var delayProfiles = _delayProfileService.AllForTag(tagId);
+            var notifications = _notificationFactory.AllForTag(tagId);
+            var restrictions = _restrictionService.AllForTag(tagId);
+            var series = _seriesService.AllForTag(tagId);
+
+            return new TagDetails
+                   {
+                       Id = tagId,
+                       Label = tag.Label,
+                       DelayProfiles = delayProfiles,
+                       Notifications = notifications,
+                       Restrictions = restrictions,
+                       Series = series
+                   };
+        }
+
         public List<Tag> All()
         {
             return _repo.All().OrderBy(t => t.Label).ToList();
@@ -49,7 +86,12 @@ namespace NzbDrone.Core.Tags
 
         public Tag Add(Tag tag)
         {
-            //TODO: check for duplicate tag by label and return that tag instead?
+            var existingTag = _repo.FindByLabel(tag.Label);
+
+            if (existingTag != null)
+            {
+                return existingTag;
+            }
 
             tag.Label = tag.Label.ToLowerInvariant();
 

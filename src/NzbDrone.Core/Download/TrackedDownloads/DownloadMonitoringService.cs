@@ -13,7 +13,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 {
     public class DownloadMonitoringService : IExecute<CheckForFinishedDownloadCommand>,
                                              IHandle<EpisodeGrabbedEvent>,
-                                             IHandle<EpisodeImportedEvent>
+                                             IHandle<EpisodeImportedEvent>,
+                                             IHandle<TrackedDownloadsRemovedEvent>
     {
         private readonly IDownloadClientStatusService _downloadClientStatusService;
         private readonly IDownloadClientFactory _downloadClientFactory;
@@ -67,10 +68,10 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 {
                     var clientTrackedDownloads = ProcessClientDownloads(downloadClient);
 
-                    // Only track completed downloads if
                     trackedDownloads.AddRange(clientTrackedDownloads.Where(DownloadIsTrackable));
                 }
 
+                _trackedDownloadService.UpdateTrackable(trackedDownloads);
                 _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownloads));
             }
             finally
@@ -92,6 +93,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
             catch (Exception ex)
             {
+                // TODO: Stop tracking items for the offline client
+
                 _downloadClientStatusService.RecordFailure(downloadClient.Definition.Id);
                 _logger.Warn(ex, "Unable to retrieve queue and history items from " + downloadClient.Definition.Name);
             }
@@ -108,7 +111,6 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
 
             return trackedDownloads;
-
         }
 
         private void RemoveCompletedDownloads(List<TrackedDownload> trackedDownloads)
@@ -133,7 +135,6 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     {
                         _completedDownloadService.Process(trackedDownload);
                     }
-
                 }
 
                 trackedDownloads.AddIfNotNull(trackedDownload);
@@ -177,6 +178,13 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         public void Handle(EpisodeImportedEvent message)
         {
             _refreshDebounce.Execute();
+        }
+
+        public void Handle(TrackedDownloadsRemovedEvent message)
+        {
+            var trackedDownloads = _trackedDownloadService.GetTrackedDownloads().Where(t => t.IsTrackable && DownloadIsTrackable(t)).ToList();
+
+            _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownloads));
         }
     }
 }

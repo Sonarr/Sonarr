@@ -25,5 +25,8 @@ namespace NzbDrone.Core.Queue
         public string DownloadId { get; set; }
         public RemoteEpisode RemoteEpisode { get; set; }
         public DownloadProtocol Protocol { get; set; }
+        public string DownloadClient { get; set; }
+        public string Indexer { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Nancy;
 using NzbDrone.Api.Episodes;
-using NzbDrone.Api.Extensions;
-using NzbDrone.Api.REST;
+using Sonarr.Http.Extensions;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
+using Sonarr.Http;
+using Sonarr.Http.REST;
 
 namespace NzbDrone.Api.History
 {
-    public class HistoryModule : NzbDroneRestModule<HistoryResource>
+    public class HistoryModule : SonarrRestModule<HistoryResource>
     {
         private readonly IHistoryService _historyService;
         private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
@@ -50,19 +51,19 @@ namespace NzbDrone.Api.History
         private PagingResource<HistoryResource> GetHistory(PagingResource<HistoryResource> pagingResource)
         {
             var episodeId = Request.Query.EpisodeId;
-
             var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, Core.History.History>("date", SortDirection.Descending);
+            var filter = pagingResource.Filters.FirstOrDefault();
 
-            if (pagingResource.FilterKey == "eventType")
+            if (filter != null && filter.Key == "eventType")
             {
-                var filterValue = (HistoryEventType)Convert.ToInt32(pagingResource.FilterValue);
-                pagingSpec.FilterExpression = v => v.EventType == filterValue;
+                var filterValue = (HistoryEventType)Convert.ToInt32(filter.Value);
+                pagingSpec.FilterExpressions.Add(v => v.EventType == filterValue);
             }
 
             if (episodeId.HasValue)
             {
                 int i = (int)episodeId;
-                pagingSpec.FilterExpression = h => h.EpisodeId == i;
+                pagingSpec.FilterExpressions.Add(h => h.EpisodeId == i);
             }
 
             return ApplyToPage(_historyService.Paged, pagingSpec, MapToResource);

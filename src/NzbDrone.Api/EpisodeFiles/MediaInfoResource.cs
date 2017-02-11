@@ -1,5 +1,5 @@
-using NzbDrone.Api.REST;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using Sonarr.Http.REST;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
