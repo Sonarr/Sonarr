@@ -57,5 +57,22 @@ namespace NzbDrone.Core.Tv
         {
             return string.Format("[{0}][{1}]", TvdbId, Title.NullSafe());
         }
+
+        public void ApplyChanges(Series otherSeries)
+        {
+            TvdbId = otherSeries.TvdbId;
+
+            Seasons = otherSeries.Seasons;
+            Path = otherSeries.Path;
+            ProfileId = otherSeries.ProfileId;
+
+            SeasonFolder = otherSeries.SeasonFolder;
+            Monitored = otherSeries.Monitored;
+
+            SeriesType = otherSeries.SeriesType;
+            RootFolderPath = otherSeries.RootFolderPath;
+            Tags = otherSeries.Tags;
+            AddOptions = otherSeries.AddOptions;
+        }
     }
 }

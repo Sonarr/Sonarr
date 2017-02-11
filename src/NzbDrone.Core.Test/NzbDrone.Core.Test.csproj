@@ -173,6 +173,9 @@
     <Compile Include="Download\DownloadClientTests\Blackhole\UsenetBlackholeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DelugeTests\DelugeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadClientFixtureBase.cs" />
+    <Compile Include="Download\DownloadClientTests\DownloadStationTests\DownloadStationFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\DownloadStationTests\SerialNumberProviderFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\DownloadStationTests\SharedFolderResolverFixture.cs" />
     <Compile Include="Download\DownloadClientTests\HadoukenTests\HadoukenFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetTests\NzbgetFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbVortexTests\NzbVortexFixture.cs" />
@@ -377,7 +380,7 @@
     <Compile Include="TvTests\RefreshSeriesServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeMonitoredServiceTests\SetEpisodeMontitoredFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\SeriesRepositoryFixture.cs" />
-    <Compile Include="TvTests\SeriesServiceTests\AddSeriesFixture.cs" />
+    <Compile Include="TvTests\AddSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateMultipleSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesTitleNormalizerFixture.cs" />

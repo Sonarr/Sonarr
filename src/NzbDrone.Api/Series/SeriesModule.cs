@@ -29,12 +29,14 @@ namespace NzbDrone.Api.Series
 
     {
         private readonly ISeriesService _seriesService;
+        private readonly IAddSeriesService _addSeriesService;
         private readonly ISeriesStatisticsService _seriesStatisticsService;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IMapCoversToLocal _coverMapper;
 
         public SeriesModule(IBroadcastSignalRMessage signalRBroadcaster,
                             ISeriesService seriesService,
+                            IAddSeriesService addSeriesService,
                             ISeriesStatisticsService seriesStatisticsService,
                             ISceneMappingService sceneMappingService,
                             IMapCoversToLocal coverMapper,
@@ -48,6 +50,7 @@ namespace NzbDrone.Api.Series
             : base(signalRBroadcaster)
         {
             _seriesService = seriesService;
+            _addSeriesService = addSeriesService;
             _seriesStatisticsService = seriesStatisticsService;
             _sceneMappingService = sceneMappingService;
 
@@ -74,7 +77,6 @@ namespace NzbDrone.Api.Series
 
             PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => s.RootFolderPath.IsNullOrWhiteSpace());
             PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => s.Path.IsNullOrWhiteSpace());
-            PostValidator.RuleFor(s => s.Title).NotEmpty();
             PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);
 
             PutValidator.RuleFor(s => s.Path).IsValidPath();
@@ -114,7 +116,7 @@ namespace NzbDrone.Api.Series
         {
             var model = seriesResource.ToModel();
 
-            return _seriesService.AddSeries(model).Id;
+            return _addSeriesService.AddSeries(model).Id;
         }
 
         private void UpdateSeries(SeriesResource seriesResource)
