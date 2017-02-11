@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.QGen;
@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored);
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
+        void SetMonitored(IEnumerable<int> ids, bool monitored);
         void SetFileId(int episodeId, int fileId);
     }
 
@@ -183,6 +184,19 @@ namespace NzbDrone.Core.Tv
             mapper.ExecuteNonQuery(sql);
         }
 
+        public void SetMonitored(IEnumerable<int> ids, bool monitored)
+        {
+            var mapper = _database.GetDataMapper();
+
+            mapper.AddParameter("monitored", monitored);
+
+            var sql = "UPDATE Episodes " +
+                      "SET Monitored = @monitored " +
+                      $"WHERE Id IN ({string.Join(", ", ids)})";
+
+            mapper.ExecuteNonQuery(sql);
+        }
+
         public void SetFileId(int episodeId, int fileId)
         {
             SetFields(new Episode { Id = episodeId, EpisodeFileId = fileId }, episode => episode.EpisodeFileId);
@@ -191,7 +205,7 @@ namespace NzbDrone.Core.Tv
         private SortBuilder<Episode> GetMissingEpisodesQuery(PagingSpec<Episode> pagingSpec, DateTime currentTime, int startingSeasonNumber)
         {
             return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                            .Where(pagingSpec.FilterExpression)
+                            .Where(pagingSpec.FilterExpressions.FirstOrDefault())
                             .AndWhere(e => e.EpisodeFileId == 0)
                             .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
                             .AndWhere(BuildAirDateUtcCutoffWhereClause(currentTime))
@@ -204,7 +218,7 @@ namespace NzbDrone.Core.Tv
         {
             return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
                              .Join<Episode, EpisodeFile>(JoinType.Left, e => e.EpisodeFile, (e, s) => e.EpisodeFileId == s.Id)
-                             .Where(pagingSpec.FilterExpression)
+                             .Where(pagingSpec.FilterExpressions.FirstOrDefault())
                              .AndWhere(e => e.EpisodeFileId != 0)
                              .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
                              .AndWhere(BuildQualityCutoffWhereClause(qualitiesBelowCutoff))

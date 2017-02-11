@@ -20,5 +20,6 @@ namespace NzbDrone.Core.ThingiProvider
         TProvider GetInstance(TProviderDefinition definition);
         ValidationResult Test(TProviderDefinition definition);
         object RequestAction(TProviderDefinition definition, string action, IDictionary<string, string> query);
+        List<TProviderDefinition> AllForTag(int tagId);
     }
 }

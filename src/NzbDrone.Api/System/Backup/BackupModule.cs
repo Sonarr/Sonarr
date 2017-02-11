@@ -2,10 +2,11 @@
 using System.IO;
 using System.Linq;
 using NzbDrone.Core.Backup;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.System.Backup
 {
-    public class BackupModule : NzbDroneRestModule<BackupResource>
+    public class BackupModule : SonarrRestModule<BackupResource>
     {
         private readonly IBackupService _backupService;
 

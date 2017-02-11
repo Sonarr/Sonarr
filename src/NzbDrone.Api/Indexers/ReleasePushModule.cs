@@ -11,6 +11,8 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
+using Sonarr.Http.Extensions;
+using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api.Indexers
 {

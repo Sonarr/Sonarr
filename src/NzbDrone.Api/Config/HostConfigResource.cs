@@ -1,4 +1,4 @@
-﻿using NzbDrone.Api.REST;
+﻿using Sonarr.Http.REST;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;

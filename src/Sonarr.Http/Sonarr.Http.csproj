@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5370BFF7-1BD7-46BC-AF06-7D9EA5CDA1D6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sonarr.Http</RootNamespace>
+    <AssemblyName>Sonarr.Http</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\portable-net40+sl50+wp80+win8+wpa81\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nancy, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nancy.Authentication.Basic, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Authentication.Basic.1.4.1\lib\net40\Nancy.Authentication.Basic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nancy.Authentication.Forms, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Authentication.Forms.1.4.1\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.3\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientSchema\FieldMapping.cs" />
+    <Compile Include="Exceptions\ApiException.cs" />
+    <Compile Include="Authentication\AuthenticationModule.cs" />
+    <Compile Include="Authentication\AuthenticationService.cs" />
+    <Compile Include="Authentication\EnableAuthInNancy.cs" />
+    <Compile Include="Authentication\LoginResource.cs" />
+    <Compile Include="Authentication\NzbDroneUser.cs" />
+    <Compile Include="ClientSchema\Field.cs" />
+    <Compile Include="ClientSchema\SchemaBuilder.cs" />
+    <Compile Include="ClientSchema\SelectOption.cs" />
+    <Compile Include="ErrorManagement\ErrorHandler.cs" />
+    <Compile Include="ErrorManagement\ErrorModel.cs" />
+    <Compile Include="ErrorManagement\SonarrErrorPipeline.cs" />
+    <Compile Include="Exceptions\InvalidApiKeyException.cs" />
+    <Compile Include="Extensions\AccessControlHeaders.cs" />
+    <Compile Include="Extensions\NancyJsonSerializer.cs" />
+    <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\IfModifiedPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\IRegisterNancyPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\RequestLoggingPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\SonarrVersionPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\UrlBasePipeline.cs" />
+    <Compile Include="Extensions\ReqResExtensions.cs" />
+    <Compile Include="Extensions\RequestExtensions.cs" />
+    <Compile Include="Frontend\CacheableSpecification.cs" />
+    <Compile Include="Frontend\InitializeJsModule.cs" />
+    <Compile Include="Frontend\Mappers\BackupFileMapper.cs" />
+    <Compile Include="Frontend\Mappers\CacheBreakerProvider.cs" />
+    <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
+    <Compile Include="Frontend\Mappers\HtmlMapperBase.cs" />
+    <Compile Include="Frontend\Mappers\IMapHttpRequestsToDisk.cs" />
+    <Compile Include="Frontend\Mappers\IndexHtmlMapper.cs" />
+    <Compile Include="Frontend\Mappers\LogFileMapper.cs" />
+    <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
+    <Compile Include="Frontend\Mappers\BrowserConfig.cs" />
+    <Compile Include="Frontend\Mappers\MediaCoverMapper.cs" />
+    <Compile Include="Frontend\Mappers\RobotsTxtMapper.cs" />
+    <Compile Include="Frontend\Mappers\ManifestMapper.cs" />
+    <Compile Include="Frontend\Mappers\StaticResourceMapper.cs" />
+    <Compile Include="Frontend\Mappers\StaticResourceMapperBase.cs" />
+    <Compile Include="Frontend\Mappers\UpdateLogFileMapper.cs" />
+    <Compile Include="Frontend\StaticResourceModule.cs" />
+    <Compile Include="Mapping\MappingValidation.cs" />
+    <Compile Include="Mapping\ResourceMappingException.cs" />
+    <Compile Include="PagingResource.cs" />
+    <Compile Include="PagingResourceFilter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceChangeMessage.cs" />
+    <Compile Include="REST\BadRequestException.cs" />
+    <Compile Include="REST\MethodNotAllowedException.cs" />
+    <Compile Include="REST\NotFoundException.cs" />
+    <Compile Include="REST\ResourceValidator.cs" />
+    <Compile Include="REST\RestModule.cs" />
+    <Compile Include="REST\RestResource.cs" />
+    <Compile Include="SonarrBootstrapper.cs" />
+    <Compile Include="SonarrRestModule.cs" />
+    <Compile Include="SonarrRestModuleWithSignalR.cs" />
+    <Compile Include="TinyIoCNancyBootstrapper.cs" />
+    <Compile Include="Validation\EmptyCollectionValidator.cs" />
+    <Compile Include="Validation\RssSyncIntervalValidator.cs" />
+    <Compile Include="Validation\RuleBuilderExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
+      <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
+      <Name>Marr.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
+      <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
+      <Name>NzbDrone.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
+      <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
+      <Name>NzbDrone.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.SignalR\NzbDrone.SignalR.csproj">
+      <Project>{7C2CC69F-5CA0-4E5C-85CB-983F9F6C3B36}</Project>
+      <Name>NzbDrone.SignalR</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

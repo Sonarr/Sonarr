@@ -6,11 +6,13 @@ using Nancy.Responses;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Organizer;
 using Nancy.ModelBinding;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
+using Sonarr.Http;
+using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api.Config
 {
-    public class NamingConfigModule : NzbDroneRestModule<NamingConfigResource>
+    public class NamingConfigModule : SonarrRestModule<NamingConfigResource>
     {
         private readonly INamingConfigService _namingConfigService;
         private readonly IFilenameSampleService _filenameSampleService;

@@ -1,4 +1,6 @@
-﻿using System.IO;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -16,6 +18,7 @@ namespace NzbDrone.Core.Test.TvTests
     {
         private Series _series;
         private MoveSeriesCommand _command;
+        private BulkMoveSeriesCommand _bulkCommand;
 
         [SetUp]
         public void Setup()
@@ -31,9 +34,26 @@ namespace NzbDrone.Core.Test.TvTests
                            DestinationPath = @"C:\Test\TV2\Series".AsOsAgnostic()
                        };
 
+            _bulkCommand = new BulkMoveSeriesCommand
+                       {
+                           Series = new List<BulkMoveSeries>
+                                    {
+                                        new BulkMoveSeries
+                                        {
+                                            SeriesId = 1,
+                                            SourcePath = @"C:\Test\TV\Series".AsOsAgnostic()
+                                        }
+                                    },
+                           DestinationRootFolder = @"C:\Test\TV2".AsOsAgnostic()
+                       };
+
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetSeries(It.IsAny<int>()))
                   .Returns(_series);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(It.IsAny<string>()))
+                  .Returns(true);
         }
 
         private void GivenFailedMove()
@@ -48,49 +68,64 @@ namespace NzbDrone.Core.Test.TvTests
         {
             GivenFailedMove();
 
-            Assert.Throws<IOException>(() => Subject.Execute(_command));
+            Subject.Execute(_command);
 
             ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]
-        public void should_no_update_series_path_on_error()
+        public void should_revert_series_path_on_error()
         {
             GivenFailedMove();
 
-            Assert.Throws<IOException>(() => Subject.Execute(_command));
+            Subject.Execute(_command);
 
             ExceptionVerification.ExpectedErrors(1);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
+                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>()), Times.Once());
+        }
+
+        [Test]
+        public void should_use_destination_path()
+        {
+            Subject.Execute(_command);
+
+            Mocker.GetMock<IDiskTransferService>()
+                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move, It.IsAny<bool>()), Times.Once());
+
+            Mocker.GetMock<IBuildFileNames>()
+                  .Verify(v => v.GetSeriesFolder(It.IsAny<Series>(), null), Times.Never());
         }
 
         [Test]
         public void should_build_new_path_when_root_folder_is_provided()
         {
-            _command.DestinationPath = null;
-            _command.DestinationRootFolder = @"C:\Test\TV3".AsOsAgnostic();
-            
-            var expectedPath = @"C:\Test\TV3\Series".AsOsAgnostic();
-
+            var seriesFolder = "Series";
+            var expectedPath = Path.Combine(_bulkCommand.DestinationRootFolder, seriesFolder);
+        
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(s => s.GetSeriesFolder(It.IsAny<Series>(), null))
-                  .Returns("Series");
+                    .Setup(s => s.GetSeriesFolder(It.IsAny<Series>(), null))
+                    .Returns(seriesFolder);
+        
+            Subject.Execute(_bulkCommand);
 
-            Subject.Execute(_command);
-
-            Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == expectedPath), It.IsAny<bool>()), Times.Once());
+            Mocker.GetMock<IDiskTransferService>()
+                  .Verify(v => v.TransferFolder(_bulkCommand.Series.First().SourcePath, expectedPath, TransferMode.Move, It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
-        public void should_use_destination_path_if_destination_root_folder_is_blank()
+        public void should_skip_series_folder_if_it_does_not_exist()
         {
-            Subject.Execute(_command);
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(It.IsAny<string>()))
+                  .Returns(false);
 
-            Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath), It.IsAny<bool>()), Times.Once());
+
+            Subject.Execute(_command);
+            
+            Mocker.GetMock<IDiskTransferService>()
+                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move, It.IsAny<bool>()), Times.Never());
 
             Mocker.GetMock<IBuildFileNames>()
                   .Verify(v => v.GetSeriesFolder(It.IsAny<Series>(), null), Times.Never());
