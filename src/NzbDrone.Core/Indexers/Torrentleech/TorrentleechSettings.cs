@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         [FieldDefinition(1, Label = "API Key")]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(2, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
+        [FieldDefinition(2, Type = FieldType.Number, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(3)]

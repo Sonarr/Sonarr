@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace NzbDrone.Common.Extensions
 {
@@ -108,5 +109,13 @@ namespace NzbDrone.Common.Extensions
         {
             return source.Select(predicate).ToList();
         }
+
+//        public static IOrderedEnumerable<TEntity> OrderBy<TEntity>(this IEnumerable<TEntity> source, string propertyName, bool descending)
+//        {
+//            var property = typeof(TEntity).GetProperty(propertyName);
+//            Func<TEntity, Object> orderByFunc = x => property.GetValue(x, null);
+//
+//            return descending ? source.OrderByDescending(orderByFunc) : source.OrderBy(orderByFunc);
+//        }
     }
 }

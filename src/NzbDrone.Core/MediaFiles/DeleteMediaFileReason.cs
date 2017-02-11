@@ -1,10 +1,11 @@
-﻿namespace NzbDrone.Core.MediaFiles
+namespace NzbDrone.Core.MediaFiles
 {
     public enum DeleteMediaFileReason
     {
         MissingFromDisk,
         Manual,
         Upgrade,
-        NoLinkedEpisodes
+        NoLinkedEpisodes,
+        ManualOverride
     }
 }

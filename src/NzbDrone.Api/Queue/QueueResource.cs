@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Api.REST;
+using Sonarr.Http.REST;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Api.Series;
 using NzbDrone.Api.Episodes;

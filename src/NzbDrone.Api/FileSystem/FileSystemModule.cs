@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Nancy;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
@@ -31,15 +31,10 @@ namespace NzbDrone.Api.FileSystem
         private Response GetContents()
         {
             var pathQuery = Request.Query.path;
-            var includeFilesQuery = Request.Query.includeFiles;
-            bool includeFiles = false;
+            var includeFiles = Request.GetBooleanQueryParameter("includeFiles");
+            var allowFoldersWithoutTrailingSlashes = Request.GetBooleanQueryParameter("allowFoldersWithoutTrailingSlashes");
 
-            if (includeFilesQuery.HasValue)
-            {
-                includeFiles = Convert.ToBoolean(includeFilesQuery.Value);
-            }
-
-            return _fileSystemLookupService.LookupContents((string)pathQuery.Value, includeFiles).AsResponse();
+            return _fileSystemLookupService.LookupContents((string)pathQuery.Value, includeFiles, allowFoldersWithoutTrailingSlashes).AsResponse();
         }
 
         private Response GetEntityType()

@@ -1,5 +1,5 @@
 ﻿using Nancy;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.SeasonPass

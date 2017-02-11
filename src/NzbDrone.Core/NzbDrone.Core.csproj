@@ -146,6 +146,11 @@
     <Compile Include="Datastore\Migration\130_episode_last_searched_time.cs" />
     <Compile Include="Datastore\Migration\129_add_relative_original_path_to_episode_file.cs" />
     <Compile Include="DecisionEngine\Specifications\AlreadyImportedSpecification.cs" />
+    <Compile Include="CustomFilters\CustomFilter.cs" />
+    <Compile Include="CustomFilters\CustomFilterRepository.cs" />
+    <Compile Include="CustomFilters\CustomFilterService.cs" />
+    <Compile Include="Datastore\Migration\126_add_custom_filters.cs" />
+    <Compile Include="Extras\Metadata\MetadataSectionType.cs" />
     <Compile Include="Indexers\SeedConfigProvider.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
@@ -235,6 +240,7 @@
     <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs" />
     <Compile Include="Datastore\Migration\120_update_series_episodes_history_indexes.cs" />
     <Compile Include="Datastore\Migration\118_add_history_eventType_index.cs" />
+    <Compile Include="Datastore\Migration\123_add_history_seriesId_index.cs" />
     <Compile Include="Datastore\Migration\045_add_indexes.cs" />
     <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
     <Compile Include="Datastore\Migration\047_add_published_date_blacklist_column.cs" />
@@ -523,6 +529,7 @@
     <Compile Include="Download\Pending\PendingReleaseReason.cs" />
     <Compile Include="Download\TrackedDownloads\DownloadMonitoringService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownload.cs" />
+    <Compile Include="Download\TrackedDownloads\TrackedDownloadsRemovedEvent.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadStatusMessage.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadRefreshedEvent.cs" />
@@ -642,6 +649,7 @@
     <Compile Include="Http\HttpProxySettingsProvider.cs" />
     <Compile Include="Http\TorcacheHttpInterceptor.cs" />
     <Compile Include="IndexerSearch\Definitions\DailySeasonSearchCriteria.cs" />
+    <Compile Include="IndexerSearch\CutoffUnmetEpisodeSearchCommand.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvSettings.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvRequestGenerator.cs" />
@@ -982,6 +990,8 @@
     <Compile Include="Qualities\QualityDetectionSource.cs" />
     <Compile Include="Qualities\QualitySource.cs" />
     <Compile Include="Qualities\Revision.cs" />
+    <Compile Include="Queue\EstimatedCompletionTimeComparer.cs" />
+    <Compile Include="Queue\TimeleftComparer.cs" />
     <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingService.cs" />
@@ -1138,6 +1148,7 @@
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
+    <Compile Include="Tags\TagDetails.cs" />
     <Compile Include="Tags\Tag.cs" />
     <Compile Include="Tags\TagRepository.cs" />
     <Compile Include="Tags\TagService.cs" />
@@ -1164,6 +1175,7 @@
     <Compile Include="Tv\AddSeriesOptions.cs" />
     <Compile Include="Tv\AddSeriesService.cs" />
     <Compile Include="Tv\AddSeriesValidator.cs" />
+    <Compile Include="Tv\Commands\BulkMoveSeriesCommand.cs" />
     <Compile Include="Tv\Commands\MoveSeriesCommand.cs" />
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\Episode.cs" />
@@ -1175,6 +1187,7 @@
     </Compile>
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\EpisodeInfoRefreshedEvent.cs" />
+    <Compile Include="Tv\Events\SeriesImportedEvent.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesDeletedEvent.cs" />
     <Compile Include="Tv\Events\SeriesEditedEvent.cs" />
@@ -1189,6 +1202,7 @@
     <Compile Include="Tv\Season.cs" />
     <Compile Include="Tv\Series.cs" />
     <Compile Include="Tv\SeriesAddedHandler.cs" />
+    <Compile Include="Tv\SeriesPathBuilder.cs" />
     <Compile Include="Tv\SeriesScannedHandler.cs" />
     <Compile Include="Tv\SeriesEditedService.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />

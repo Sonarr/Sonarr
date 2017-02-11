@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Api.ClientSchema;
-using NzbDrone.Api.REST;
+using Sonarr.Http.REST;
 using NzbDrone.Core.ThingiProvider;
+using Sonarr.Http.ClientSchema;
 
 namespace NzbDrone.Api
 {

@@ -11,6 +11,7 @@ namespace NzbDrone.Core.MediaFiles.Commands
 
         public RenameSeriesCommand()
         {
+            SeriesIds = new List<int>();
         }
     }
 }

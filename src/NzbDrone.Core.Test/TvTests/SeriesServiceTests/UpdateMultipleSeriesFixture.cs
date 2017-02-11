@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Organizer;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -31,7 +34,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         [Test]
         public void should_call_repo_updateMany()
         {
-            Subject.UpdateSeries(_series);
+            Subject.UpdateSeries(_series, false);
 
             Mocker.GetMock<ISeriesRepository>().Verify(v => v.UpdateMany(_series), Times.Once());
         }
@@ -42,13 +45,17 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             _series.ForEach(s => s.RootFolderPath = newRoot);
 
-            Subject.UpdateSeries(_series).ForEach(s => s.Path.Should().StartWith(newRoot));
+            Mocker.GetMock<IBuildSeriesPaths>()
+                  .Setup(s => s.BuildPath(It.IsAny<Series>(), false))
+                  .Returns<Series, bool>((s, u) => Path.Combine(s.RootFolderPath, s.Title));
+
+            Subject.UpdateSeries(_series, false).ForEach(s => s.Path.Should().StartWith(newRoot));
         }
 
         [Test]
         public void should_not_update_path_when_rootFolderPath_is_empty()
         {
-            Subject.UpdateSeries(_series).ForEach(s =>
+            Subject.UpdateSeries(_series, false).ForEach(s =>
             {
                 var expectedPath = _series.Single(ser => ser.Id == s.Id).Path;
                 s.Path.Should().Be(expectedPath);
@@ -67,7 +74,11 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             series.ForEach(s => s.RootFolderPath = newRoot);
 
-            Subject.UpdateSeries(series);
+            Mocker.GetMock<IBuildFileNames>()
+                  .Setup(s => s.GetSeriesFolder(It.IsAny<Series>(), (NamingConfig)null))
+                  .Returns<Series, NamingConfig>((s, n) => s.Title);
+
+            Subject.UpdateSeries(series, false);
         }
     }
 }

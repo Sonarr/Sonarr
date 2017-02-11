@@ -17,14 +17,16 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
     {
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
-
+        private readonly ISeriesService _seriesService;
         private readonly IHttpRequestBuilderFactory _requestBuilder;
 
-        public SkyHookProxy(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder, Logger logger)
+        public SkyHookProxy(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder, ISeriesService seriesService, Logger logger)
         {
             _httpClient = httpClient;
              _requestBuilder = requestBuilder.SkyHookTvdb;
             _logger = logger;
+            _seriesService = seriesService;
+            _requestBuilder = requestBuilder.SkyHookTvdb;
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
@@ -76,6 +78,12 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
                     try
                     {
+                        var existingSeries = _seriesService.FindByTvdbId(tvdbId);
+                        if (existingSeries != null)
+                        {
+                            return new List<Series> { existingSeries };
+                        }
+
                         return new List<Series> { GetSeriesInfo(tvdbId).Item1 };
                     }
                     catch (SeriesNotFoundException)
@@ -91,7 +99,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
                 var httpResponse = _httpClient.Get<List<ShowResource>>(httpRequest);
 
-                return httpResponse.Resource.SelectList(MapSeries);
+                return httpResponse.Resource.SelectList(MapSearhResult);
             }
             catch (HttpException)
             {
@@ -104,8 +112,22 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             }
         }
 
-        private static Series MapSeries(ShowResource show)
+        private Series MapSearhResult(ShowResource show)
         {
+            var series = _seriesService.FindByTvdbId(show.TvdbId);
+
+            if (series == null)
+            {
+                series = MapSeries(show);
+            }
+
+            return series;
+        }
+
+        private Series MapSeries(ShowResource show)
+        {
+
+
             var series = new Series();
             series.TvdbId = show.TvdbId;
 

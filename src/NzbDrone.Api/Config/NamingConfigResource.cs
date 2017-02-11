@@ -1,4 +1,4 @@
-﻿using NzbDrone.Api.REST;
+﻿using Sonarr.Http.REST;
 using NzbDrone.Core.Organizer;
 
 namespace NzbDrone.Api.Config

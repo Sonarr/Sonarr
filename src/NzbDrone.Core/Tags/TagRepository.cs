@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Tags
     public interface ITagRepository : IBasicRepository<Tag>
     {
         Tag GetByLabel(string label);
+        Tag FindByLabel(string label);
     }
 
     public class TagRepository : BasicRepository<Tag>, ITagRepository
@@ -27,6 +28,11 @@ namespace NzbDrone.Core.Tags
             }
 
             return model;
+        }
+
+        public Tag FindByLabel(string label)
+        {
+            return Query.Where(c => c.Label == label).SingleOrDefault();
         }
     }
 }

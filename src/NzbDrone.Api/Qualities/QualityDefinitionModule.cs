@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
+using Sonarr.Http;
+using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api.Qualities
 {
-    public class QualityDefinitionModule : NzbDroneRestModule<QualityDefinitionResource>
+    public class QualityDefinitionModule : SonarrRestModule<QualityDefinitionResource>
     {
         private readonly IQualityDefinitionService _qualityDefinitionService;
 

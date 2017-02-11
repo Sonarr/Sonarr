@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Messaging.Commands
 {
     public interface IManageCommandQueue
     {
+        List<CommandModel> PushMany<TCommand>(List<TCommand> commands) where TCommand : Command;
         CommandModel Push<TCommand>(TCommand command, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified) where TCommand : Command;
         CommandModel Push(string commandName, DateTime? lastExecutionTime, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified);
         IEnumerable<CommandModel> Queue(CancellationToken cancellationToken);
@@ -48,6 +49,47 @@ namespace NzbDrone.Core.Messaging.Commands
 
             _commandCache = cacheManager.GetCache<CommandModel>(GetType());
             _commandQueue = new BlockingCollection<CommandModel>(new CommandQueue());
+        }
+
+        public List<CommandModel> PushMany<TCommand>(List<TCommand> commands) where TCommand : Command
+        {
+            _logger.Trace("Publishing {0} commands", commands.Count);
+
+            var commandModels = new List<CommandModel>();
+            var existingCommands = _commandCache.Values.Where(q => q.Status == CommandStatus.Queued ||
+                                                              q.Status == CommandStatus.Started).ToList();
+
+            foreach (var command in commands)
+            {
+                var existing = existingCommands.SingleOrDefault(c => c.Name == command.Name && CommandEqualityComparer.Instance.Equals(c.Body, command));
+
+                if (existing != null)
+                {
+                    continue;
+                }
+
+                var commandModel = new CommandModel
+                {
+                    Name = command.Name,
+                    Body = command,
+                    QueuedAt = DateTime.UtcNow,
+                    Trigger = CommandTrigger.Unspecified,
+                    Priority = CommandPriority.Normal,
+                    Status = CommandStatus.Queued
+                };
+
+                commandModels.Add(commandModel);
+            }
+
+            _repo.InsertMany(commandModels);
+
+            foreach (var commandModel in commandModels)
+            {
+                _commandCache.Set(commandModel.Id.ToString(), commandModel);
+                _commandQueue.Add(commandModel);
+            }
+
+            return commandModels;
         }
 
         public CommandModel Push<TCommand>(TCommand command, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified) where TCommand : Command

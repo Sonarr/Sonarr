@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Marr.Data.QGen;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
@@ -11,7 +12,7 @@ using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.History
@@ -24,6 +25,8 @@ namespace NzbDrone.Core.History
         List<History> FindByEpisodeId(int episodeId);
         History MostRecentForDownloadId(string downloadId);
         History Get(int historyId);
+        List<History> GetBySeries(int seriesId, HistoryEventType? eventType);
+        List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType);
         List<History> Find(string downloadId, HistoryEventType eventType);
         List<History> FindByDownloadId(string downloadId);
         List<History> Since(DateTime date, HistoryEventType? eventType);
@@ -69,6 +72,16 @@ namespace NzbDrone.Core.History
         public History Get(int historyId)
         {
             return _historyRepository.Get(historyId);
+        }
+
+        public List<History> GetBySeries(int seriesId, HistoryEventType? eventType)
+        {
+            return _historyRepository.GetBySeries(seriesId, eventType);
+        }
+
+        public List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType)
+        {
+            return _historyRepository.GetBySeason(seriesId, seasonNumber, eventType);
         }
 
         public List<History> Find(string downloadId, HistoryEventType eventType)
@@ -244,6 +257,11 @@ namespace NzbDrone.Core.History
             if (message.Reason == DeleteMediaFileReason.NoLinkedEpisodes)
             {
                 _logger.Debug("Removing episode file from DB as part of cleanup routine, not creating history event.");
+                return;
+            }
+            else if (message.Reason == DeleteMediaFileReason.ManualOverride)
+            {
+                _logger.Debug("Removing episode file from DB as part of manual override of existing file, not creating history event.");
                 return;
             }
 
