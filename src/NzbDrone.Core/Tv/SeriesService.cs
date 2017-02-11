@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Tv
         Series GetSeries(int seriesId);
         List<Series> GetSeries(IEnumerable<int> seriesIds);
         Series AddSeries(Series newSeries);
+        List<Series> AddSeries(List<Series> newSeries);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
@@ -25,6 +26,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTitleInexact(string title);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
+        List<Series> AllForTag(int tagId);
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true);
         List<Series> UpdateSeries(List<Series> series);
         bool SeriesPathExists(string folder);
@@ -66,6 +68,14 @@ namespace NzbDrone.Core.Tv
         {
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
+
+            return newSeries;
+        }
+
+        public List<Series> AddSeries(List<Series> newSeries)
+        {
+            _seriesRepository.InsertMany(newSeries);
+            _eventAggregator.PublishEvent(new SeriesImportedEvent(newSeries.Select(s => s.Id).ToList()));
 
             return newSeries;
         }
@@ -142,6 +152,12 @@ namespace NzbDrone.Core.Tv
         public List<Series> GetAllSeries()
         {
             return _seriesRepository.All().ToList();
+        }
+
+        public List<Series> AllForTag(int tagId)
+        {
+            return GetAllSeries().Where(s => s.Tags.Contains(tagId))
+                                 .ToList();
         }
 
         // updateEpisodesToMatchSeason is an override for EpisodeMonitoredService to use so a change via Season pass doesn't get nuked by the seasons loop.

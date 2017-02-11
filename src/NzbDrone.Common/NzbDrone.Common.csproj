@@ -93,6 +93,7 @@
     <Compile Include="EnvironmentInfo\IPlatformInfo.cs" />
     <Compile Include="EnvironmentInfo\OsVersionModel.cs" />
     <Compile Include="Exceptions\SonarrStartupException.cs" />
+    <Compile Include="EnvironmentInfo\RuntimeMode.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Disk\OsPath.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />

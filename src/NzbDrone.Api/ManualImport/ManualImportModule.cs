@@ -2,10 +2,11 @@
 using System.Linq;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Qualities;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.ManualImport
 {
-    public class ManualImportModule : NzbDroneRestModule<ManualImportResource>
+    public class ManualImportModule : SonarrRestModule<ManualImportResource>
     {
         private readonly IManualImportService _manualImportService;
 

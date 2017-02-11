@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Qualities
     public interface IQualityDefinitionService
     {
         void Update(QualityDefinition qualityDefinition);
+        void UpdateMany(List<QualityDefinition> qualityDefinitions);
         List<QualityDefinition> All();
         QualityDefinition GetById(int id);
         QualityDefinition Get(Quality quality);
@@ -39,6 +40,11 @@ namespace NzbDrone.Core.Qualities
             _repo.Update(qualityDefinition);
 
             _cache.Clear();
+        }
+
+        public void UpdateMany(List<QualityDefinition> qualityDefinitions)
+        {
+            _repo.UpdateMany(qualityDefinitions);
         }
 
         public List<QualityDefinition> All()

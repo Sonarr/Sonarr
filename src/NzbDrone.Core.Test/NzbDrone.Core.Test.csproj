@@ -311,6 +311,7 @@
     <Compile Include="OrganizerTests\FileNameBuilderTests\MultiEpisodeFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheFixture.cs" />
     <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileServiceFixture.cs" />
     <Compile Include="Qualities\RevisionComparableFixture.cs" />
     <Compile Include="QueueTests\QueueServiceFixture.cs" />
     <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />

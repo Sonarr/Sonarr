@@ -81,7 +81,7 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            _logger.ProgressInfo("Scanning disk for {0}", series.Title);
+            _logger.ProgressInfo("Scanning {0}", series.Title);
 
             if (!_diskProvider.FolderExists(series.Path))
             {

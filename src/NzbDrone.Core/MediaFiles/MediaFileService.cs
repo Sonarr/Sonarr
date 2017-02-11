@@ -14,9 +14,11 @@ namespace NzbDrone.Core.MediaFiles
     {
         EpisodeFile Add(EpisodeFile episodeFile);
         void Update(EpisodeFile episodeFile);
+        void Update(List<EpisodeFile> episodeFiles);
         void Delete(EpisodeFile episodeFile, DeleteMediaFileReason reason);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
+        List<EpisodeFile> GetFiles(IEnumerable<int> ids);
         List<EpisodeFile> GetFilesWithoutMediaInfo();
         List<string> FilterExistingFiles(List<string> files, Series series);
         EpisodeFile Get(int id);
@@ -49,6 +51,11 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileRepository.Update(episodeFile);
         }
 
+        public void Update(List<EpisodeFile> episodeFiles)
+        {
+            _mediaFileRepository.UpdateMany(episodeFiles);
+        }
+
         public void Delete(EpisodeFile episodeFile, DeleteMediaFileReason reason)
         {
             //Little hack so we have the episodes and series attached for the event consumers
@@ -67,6 +74,11 @@ namespace NzbDrone.Core.MediaFiles
         public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
         {
             return _mediaFileRepository.GetFilesBySeason(seriesId, seasonNumber);
+        }
+
+        public List<EpisodeFile> GetFiles(IEnumerable<int> ids)
+        {
+            return _mediaFileRepository.Get(ids).ToList();
         }
 
         public List<EpisodeFile> GetFilesWithoutMediaInfo()

@@ -10,7 +10,6 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.Profiles
 {
     [TestFixture]
-
     public class ProfileServiceFixture : CoreTest<ProfileService>
     {
         [Test]

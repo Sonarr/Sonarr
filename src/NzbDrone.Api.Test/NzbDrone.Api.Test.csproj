@@ -90,6 +90,10 @@
       <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
       <Name>NzbDrone.Test.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj">
+      <Project>{5370BFF7-1BD7-46BC-AF06-7D9EA5CDA1D6}</Project>
+      <Name>Sonarr.Http</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NzbDrone.Test.Common\App.config">

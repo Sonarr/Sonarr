@@ -167,5 +167,11 @@ namespace NzbDrone.Core.ThingiProvider
                 _providerRepository.Delete(invalidDefinition);
             }
         }
+
+        public List<TProviderDefinition> AllForTag(int tagId)
+        {
+            return All().Where(p => p.Tags.Contains(tagId))
+                        .ToList();
+        }
     }
 }

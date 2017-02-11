@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using Nancy;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;

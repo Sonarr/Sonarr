@@ -24,16 +24,16 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             EpisodeImages = true;
         }
 
-        [FieldDefinition(0, Label = "Episode Metadata", Type = FieldType.Checkbox)]
+        [FieldDefinition(0, Label = "Episode Metadata", Type = FieldType.Checkbox, HelpText = "Season##\\filename.xml")]
         public bool EpisodeMetadata { get; set; }
 
-        [FieldDefinition(1, Label = "Series Images", Type = FieldType.Checkbox)]
+        [FieldDefinition(1, Label = "Series Images", Type = FieldType.Checkbox, HelpText = "Series Title.jpg")]
         public bool SeriesImages { get; set; }
 
-        [FieldDefinition(2, Label = "Season Images", Type = FieldType.Checkbox)]
+        [FieldDefinition(2, Label = "Season Images", Type = FieldType.Checkbox, HelpText = "Season ##.jpg")]
         public bool SeasonImages { get; set; }
 
-        [FieldDefinition(3, Label = "Episode Images", Type = FieldType.Checkbox)]
+        [FieldDefinition(3, Label = "Episode Images", Type = FieldType.Checkbox, HelpText = "Season##\\filename.jpg")]
         public bool EpisodeImages { get; set; }
         
         public bool IsValid => true;

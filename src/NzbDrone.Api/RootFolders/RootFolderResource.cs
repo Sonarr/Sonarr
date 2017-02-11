@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Sonarr.Http.REST;
 using System.Linq;
-using NzbDrone.Api.REST;
 using NzbDrone.Core.RootFolders;
 
 namespace NzbDrone.Api.RootFolders

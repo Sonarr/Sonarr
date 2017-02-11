@@ -3,10 +3,11 @@ using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.SignalR;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Health
 {
-    public class HealthModule : NzbDroneRestModuleWithSignalR<HealthResource, HealthCheck>,
+    public class HealthModule : SonarrRestModuleWithSignalR<HealthResource, HealthCheck>,
                                 IHandle<HealthCheckCompleteEvent>
     {
         private readonly IHealthCheckService _healthCheckService;

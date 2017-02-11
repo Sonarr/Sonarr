@@ -77,47 +77,35 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.SQLite, Version=1.0.84.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="Omu.ValueInjecter">
+      <HintPath>..\packages\ValueInjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Authentication\AuthenticationService.cs" />
-    <Compile Include="Authentication\EnableAuthInNancy.cs" />
-    <Compile Include="Authentication\AuthenticationModule.cs" />
-    <Compile Include="Authentication\LoginResource.cs" />
-    <Compile Include="Authentication\NzbDroneUser.cs" />
     <Compile Include="Blacklist\BlacklistModule.cs" />
     <Compile Include="Blacklist\BlacklistResource.cs" />
     <Compile Include="Calendar\CalendarFeedModule.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />
-    <Compile Include="ClientSchema\Field.cs" />
-    <Compile Include="ClientSchema\FieldDefinitionAttribute.cs" />
-    <Compile Include="ClientSchema\SchemaBuilder.cs" />
-    <Compile Include="ClientSchema\SchemaDeserializer.cs" />
-    <Compile Include="ClientSchema\SelectOption.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
-    <Compile Include="Extensions\AccessControlHeaders.cs" />
-    <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
-    <Compile Include="Extensions\Pipelines\UrlBasePipeline.cs" />
-    <Compile Include="Extensions\Pipelines\RequestLoggingPipeline.cs" />
-    <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
-    <Compile Include="Frontend\Mappers\RobotsTxtMapper.cs" />
     <Compile Include="Indexers\ReleaseModuleBase.cs" />
     <Compile Include="Indexers\ReleasePushModule.cs" />
+    <Compile Include="NzbDroneFeedModule.cs" />
     <Compile Include="Parse\ParseModule.cs" />
     <Compile Include="Parse\ParseResource.cs" />
     <Compile Include="ManualImport\ManualImportModule.cs" />
     <Compile Include="ManualImport\ManualImportResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
+    <Compile Include="ProviderModuleBase.cs" />
     <Compile Include="Queue\QueueActionModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
@@ -147,31 +135,6 @@
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Episodes\RenameEpisodeModule.cs" />
     <Compile Include="Episodes\RenameEpisodeResource.cs" />
-    <Compile Include="ErrorManagement\ApiException.cs" />
-    <Compile Include="ErrorManagement\ErrorHandler.cs" />
-    <Compile Include="ErrorManagement\ErrorModel.cs" />
-    <Compile Include="ErrorManagement\NzbDroneErrorPipeline.cs" />
-    <Compile Include="Exceptions\InvalidApiKeyException.cs" />
-    <Compile Include="Extensions\NancyJsonSerializer.cs" />
-    <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
-    <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
-    <Compile Include="Extensions\Pipelines\IfModifiedPipeline.cs" />
-    <Compile Include="Extensions\Pipelines\IRegisterNancyPipeline.cs" />
-    <Compile Include="Extensions\Pipelines\NzbDroneVersionPipeline.cs" />
-    <Compile Include="Extensions\ReqResExtensions.cs" />
-    <Compile Include="Extensions\RequestExtensions.cs" />
-    <Compile Include="Frontend\CacheableSpecification.cs" />
-    <Compile Include="Frontend\Mappers\BackupFileMapper.cs" />
-    <Compile Include="Frontend\Mappers\CacheBreakerProvider.cs" />
-    <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
-    <Compile Include="Frontend\Mappers\IMapHttpRequestsToDisk.cs" />
-    <Compile Include="Frontend\Mappers\IndexHtmlMapper.cs" />
-    <Compile Include="Frontend\Mappers\LogFileMapper.cs" />
-    <Compile Include="Frontend\Mappers\MediaCoverMapper.cs" />
-    <Compile Include="Frontend\Mappers\StaticResourceMapper.cs" />
-    <Compile Include="Frontend\Mappers\StaticResourceMapperBase.cs" />
-    <Compile Include="Frontend\Mappers\UpdateLogFileMapper.cs" />
-    <Compile Include="Frontend\StaticResourceModule.cs" />
     <Compile Include="Health\HealthModule.cs" />
     <Compile Include="Health\HealthResource.cs" />
     <Compile Include="History\HistoryModule.cs" />
@@ -189,14 +152,9 @@
     <Compile Include="MediaCovers\MediaCoverModule.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />
     <Compile Include="Metadata\MetadataResource.cs" />
-    <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="Notifications\NotificationModule.cs" />
     <Compile Include="Notifications\NotificationResource.cs" />
     <Compile Include="NzbDroneApiModule.cs" />
-    <Compile Include="NzbDroneFeedModule.cs" />
-    <Compile Include="NzbDroneRestModule.cs" />
-    <Compile Include="NzbDroneRestModuleWithSignalR.cs" />
-    <Compile Include="PagingResource.cs" />
     <Compile Include="Profiles\Languages\LanguageModule.cs" />
     <Compile Include="Profiles\Languages\LanguageResource.cs" />
     <Compile Include="Profiles\LegacyProfileModule.cs" />
@@ -205,21 +163,13 @@
     <Compile Include="Profiles\ProfileSchemaModule.cs" />
     <Compile Include="Profiles\ProfileValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProviderModuleBase.cs" />
     <Compile Include="ProviderResource.cs" />
     <Compile Include="Qualities\QualityDefinitionModule.cs" />
     <Compile Include="Qualities\QualityDefinitionResource.cs" />
     <Compile Include="Queue\QueueModule.cs" />
     <Compile Include="Queue\QueueResource.cs" />
-    <Compile Include="ResourceChangeMessage.cs" />
     <Compile Include="Restrictions\RestrictionModule.cs" />
     <Compile Include="Restrictions\RestrictionResource.cs" />
-    <Compile Include="REST\NotFoundException.cs" />
-    <Compile Include="REST\BadRequestException.cs" />
-    <Compile Include="REST\MethodNotAllowedException.cs" />
-    <Compile Include="REST\ResourceValidator.cs" />
-    <Compile Include="REST\RestModule.cs" />
-    <Compile Include="REST\RestResource.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
     <Compile Include="RootFolders\RootFolderResource.cs" />
     <Compile Include="SeasonPass\SeasonPassResource.cs" />
@@ -238,12 +188,8 @@
     <Compile Include="System\SystemModule.cs" />
     <Compile Include="Tags\TagModule.cs" />
     <Compile Include="Tags\TagResource.cs" />
-    <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
     <Compile Include="Update\UpdateResource.cs" />
-    <Compile Include="Validation\RssSyncIntervalValidator.cs" />
-    <Compile Include="Validation\EmptyCollectionValidator.cs" />
-    <Compile Include="Validation\RuleBuilderExtensions.cs" />
     <Compile Include="Wanted\CutoffModule.cs" />
     <Compile Include="Wanted\LegacyMissingModule.cs" />
     <Compile Include="Wanted\MissingModule.cs" />
@@ -270,6 +216,10 @@
     <ProjectReference Include="..\NzbDrone.SignalR\NzbDrone.SignalR.csproj">
       <Project>{7C2CC69F-5CA0-4E5C-85CB-983F9F6C3B36}</Project>
       <Name>NzbDrone.SignalR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj">
+      <Project>{5370BFF7-1BD7-46BC-AF06-7D9EA5CDA1D6}</Project>
+      <Name>Sonarr.Http</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

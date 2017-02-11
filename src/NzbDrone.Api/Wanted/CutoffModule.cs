@@ -3,6 +3,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Wanted
 {

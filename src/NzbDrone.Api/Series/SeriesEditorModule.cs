@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Nancy;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
 using NzbDrone.Core.Tv;
+using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api.Series
 {

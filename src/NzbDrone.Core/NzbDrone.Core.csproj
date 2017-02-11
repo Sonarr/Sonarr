@@ -509,6 +509,7 @@
     <Compile Include="Download\Pending\PendingReleaseReason.cs" />
     <Compile Include="Download\TrackedDownloads\DownloadMonitoringService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownload.cs" />
+    <Compile Include="Download\TrackedDownloads\TrackedDownloadsRemovedEvent.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadStatusMessage.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadRefreshedEvent.cs" />
@@ -622,6 +623,7 @@
     <Compile Include="Http\CloudFlare\CloudFlareHttpInterceptor.cs" />
     <Compile Include="Http\HttpProxySettingsProvider.cs" />
     <Compile Include="Http\TorcacheHttpInterceptor.cs" />
+    <Compile Include="IndexerSearch\CutoffUnmetEpisodeSearchCommand.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvSettings.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvRequestGenerator.cs" />
@@ -941,6 +943,8 @@
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\QualitySource.cs" />
     <Compile Include="Qualities\Revision.cs" />
+    <Compile Include="Queue\EstimatedCompletionTimeComparer.cs" />
+    <Compile Include="Queue\TimeleftComparer.cs" />
     <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingService.cs" />
@@ -1095,6 +1099,7 @@
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
+    <Compile Include="Tags\TagDetails.cs" />
     <Compile Include="Tags\Tag.cs" />
     <Compile Include="Tags\TagRepository.cs" />
     <Compile Include="Tags\TagService.cs" />
@@ -1132,6 +1137,7 @@
     </Compile>
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\EpisodeInfoRefreshedEvent.cs" />
+    <Compile Include="Tv\Events\SeriesImportedEvent.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesDeletedEvent.cs" />
     <Compile Include="Tv\Events\SeriesEditedEvent.cs" />

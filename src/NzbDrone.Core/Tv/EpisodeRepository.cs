@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored);
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
+        void SetMonitored(IEnumerable<int> ids, bool monitored);
         void SetFileId(int episodeId, int fileId);
     }
 
@@ -185,6 +186,19 @@ namespace NzbDrone.Core.Tv
                                "SET Monitored = @monitored " +
                                "WHERE SeriesId = @seriesId " +
                                "AND SeasonNumber = @seasonNumber";
+
+            mapper.ExecuteNonQuery(sql);
+        }
+
+        public void SetMonitored(IEnumerable<int> ids, bool monitored)
+        {
+            var mapper = _database.GetDataMapper();
+
+            mapper.AddParameter("monitored", monitored);
+
+            var sql = "UPDATE Episodes " +
+                      "SET Monitored = @monitored " +
+                      $"WHERE Id IN ({string.Join(", ", ids)})";
 
             mapper.ExecuteNonQuery(sql);
         }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57A04B72-8088-4F75-A582-1158CF8291F7}"
 EndProject
@@ -327,6 +327,7 @@ Global
 		{74420A79-CC16-442C-8B1E-7C1B913844F0} = {F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2955716E-0882-41EC-935D-C95694C5C30F}
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;packages\Unity.2.1.505.2\lib\NET35
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution

@@ -53,7 +53,8 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.Enable)
                   .Ignore(i => i.Protocol)
                   .Ignore(i => i.SupportsRss)
-                  .Ignore(i => i.SupportsSearch);
+                  .Ignore(i => i.SupportsSearch)
+                  .Ignore(d => d.Tags);
 
             Mapper.Entity<NotificationDefinition>().RegisterDefinition("Notifications")
                   .Ignore(i => i.SupportsOnGrab)
@@ -61,10 +62,12 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.SupportsOnUpgrade)
                   .Ignore(i => i.SupportsOnRename);
 
-            Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata");
+            Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata")
+                  .Ignore(d => d.Tags);
 
             Mapper.Entity<DownloadClientDefinition>().RegisterDefinition("DownloadClients")
-                  .Ignore(d => d.Protocol);
+                  .Ignore(d => d.Protocol)
+                  .Ignore(d => d.Tags);
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 

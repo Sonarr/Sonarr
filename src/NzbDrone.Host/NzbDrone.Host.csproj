@@ -183,6 +183,14 @@
       <Project>{7C2CC69F-5CA0-4E5C-85CB-983F9F6C3B36}</Project>
       <Name>NzbDrone.SignalR</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj">
+      <Project>{7140ff1f-79be-492f-9188-b21a050bf708}</Project>
+      <Name>Sonarr.Api.V3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj">
+      <Project>{5370bff7-1bd7-46bc-af06-7d9ea5cda1d6}</Project>
+      <Name>Sonarr.Http</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

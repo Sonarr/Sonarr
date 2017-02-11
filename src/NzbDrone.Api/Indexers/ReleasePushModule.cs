@@ -6,8 +6,9 @@ using NzbDrone.Core.Download;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
 using NLog;
+using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api.Indexers
 {
