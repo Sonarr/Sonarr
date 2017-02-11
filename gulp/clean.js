@@ -3,6 +3,6 @@ var del = require('del');
 
 var paths = require('./paths');
 
-gulp.task('clean', function(cb) {
-    del([paths.dest.root], cb);
+gulp.task('clean', function() {
+    return del([paths.dest.root]);
 });
