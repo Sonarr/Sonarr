@@ -1,0 +1,30 @@
+.inputGroupContainer {
+  flex: 1 1 auto;
+}
+
+.inputGroup {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+}
+
+.inputContainer {
+  flex: 1 1 auto;
+}
+
+.pendingChangesContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 30px;
+}
+
+.pendingChangesIcon {
+  color: $warningColor;
+  font-size: 20px;
+  line-height: 35px;
+}
+
+.helpLink {
+  margin-top: 5px;
+  line-height: 20px;
+}

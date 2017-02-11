@@ -1,0 +1,24 @@
+.group {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+/* Sizes */
+
+.small {
+  max-width: $formGroupSmallWidth;
+}
+
+.medium {
+  max-width: $formGroupMediumWidth;
+}
+
+.large {
+  max-width: $formGroupLargeWidth;
+}
+
+@media only screen and (max-width: $breakpointLarge) {
+  .group {
+    display: block;
+  }
+}

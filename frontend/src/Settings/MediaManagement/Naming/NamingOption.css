@@ -1,0 +1,66 @@
+.option {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 3px;
+  border: 1px solid $borderColor;
+
+  &:hover {
+    .token {
+      background-color: #ddd;
+    }
+
+    .example {
+      background-color: #ccc;
+    }
+  }
+}
+
+.small {
+  width: 420px;
+}
+
+.large {
+  width: 100%;
+}
+
+.token {
+  flex: 0 0 50%;
+  padding: 6px 16px;
+  background-color: #eee;
+  font-family: $monoSpaceFontFamily;
+}
+
+.example {
+  flex: 0 0 50%;
+  padding: 6px 16px;
+  background-color: #ddd;
+}
+
+.lower {
+  text-transform: lowercase;
+}
+
+.upper {
+  text-transform: uppercase;
+}
+
+.isFullFilename {
+  .token,
+  .example {
+    flex: 1 0 auto;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .option.small {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: $breakpointExtraSmall) {
+  .token,
+  .example {
+    flex: 1 0 auto;
+  }
+}

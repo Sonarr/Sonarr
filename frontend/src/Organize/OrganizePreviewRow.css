@@ -1,0 +1,20 @@
+.row {
+  display: flex;
+  margin-bottom: 5px;
+  padding: 5px 0;
+  border-bottom: 1px solid $borderColor;
+
+  &:last-of-type {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.selectedContainer {
+  margin-right: 30px;
+}
+
+.path {
+  margin-left: 10px;
+}

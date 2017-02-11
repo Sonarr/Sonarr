@@ -1,0 +1,27 @@
+.menuButton {
+  margin-right: 15px;
+  width: 30px;
+  height: 60px;
+  text-align: center;
+
+  &:hover {
+    color: $themeDarkColor;
+  }
+}
+
+.itemIcon {
+  margin-right: 8px;
+}
+
+.separator {
+  overflow: hidden;
+  height: 1px;
+  background-color: $themeDarkColor;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .menuButton {
+    margin-right: 5px;
+  }
+}
+

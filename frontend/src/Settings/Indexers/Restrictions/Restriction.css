@@ -1,0 +1,11 @@
+.restriction {
+  composes: card from 'Components/Card.css';
+
+  width: 290px;
+}
+
+.enabled {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}

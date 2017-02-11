@@ -1,0 +1,42 @@
+.message {
+  display: flex;
+  border-left: 3px solid $infoColor;
+}
+
+.iconContainer,
+.text {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2px 0;
+  color: $sidebarColor;
+}
+
+.iconContainer {
+  flex: 0 0 25px;
+  margin-left: 24px;
+  padding: 10px 0;
+}
+
+.text {
+  margin-right: 24px;
+  font-size: 13px;
+}
+
+/* Types */
+
+.error {
+  border-left-color: $dangerColor;
+}
+
+.info {
+  border-left-color: $infoColor;
+}
+
+.success {
+  border-left-color: $successColor;
+}
+
+.warning {
+  border-left-color: $warningColor;
+}

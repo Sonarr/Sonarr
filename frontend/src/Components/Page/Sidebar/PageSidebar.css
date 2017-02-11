@@ -1,0 +1,34 @@
+.sidebarContainer {
+  flex: 0 0 $sidebarWidth;
+  overflow: hidden;
+  width: $sidebarWidth;
+  background-color: $sidebarBackgroundColor;
+  transition: transform 300ms ease-in-out;
+  transform: translateX(0);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: $sidebarBackgroundColor;
+  color: $white;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .sidebarContainer {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    height: 100vh;
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 2;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+  }
+}
+

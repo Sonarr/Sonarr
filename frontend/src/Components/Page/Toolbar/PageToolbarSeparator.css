@@ -1,0 +1,12 @@
+.separator {
+  margin: 10px $toolbarSeparatorMargin;
+  height: 40px;
+  border-right: 1px solid #e5e5e5;
+  opacity: 0.35;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .separator {
+    margin: 10px 5px;
+  }
+}

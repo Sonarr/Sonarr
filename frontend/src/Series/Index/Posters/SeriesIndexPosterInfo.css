@@ -1,0 +1,6 @@
+.info {
+  background-color: $defaultColor;
+  color: $white;
+  text-align: center;
+  font-size: $smallFontSize;
+}

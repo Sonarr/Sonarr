@@ -1,0 +1,74 @@
+.container {
+  display: flex;
+}
+
+.year {
+  margin-left: 5px;
+  color: $disabledColor;
+}
+
+.poster {
+  flex: 0 0 170px;
+  margin-right: 20px;
+  height: 250px;
+}
+
+.info {
+  flex-grow: 1;
+}
+
+.overview {
+  margin-bottom: 30px;
+}
+
+.labelIcon {
+  margin-left: 8px;
+}
+
+.searchForMissingEpisodesLabelContainer {
+  display: flex;
+  margin-top: 2px;
+}
+
+.searchForMissingEpisodesLabel {
+  margin-right: 8px;
+  font-weight: normal;
+}
+
+.searchForMissingEpisodesContainer {
+  composes: container from 'Components/Form/CheckInput.css';
+
+  flex: 0 1 0;
+}
+
+.searchForMissingEpisodesInput {
+  composes: input from 'Components/Form/CheckInput.css';
+
+  margin-top: 0;
+}
+
+.modalFooter {
+  composes: modalFooter from 'Components/Modal/ModalFooter.css';
+}
+
+.addButton {
+  @add-mixin truncate;
+  composes: button from 'Components/Link/SpinnerButton.css';
+}
+
+.hideLanguageProfile {
+  composes: group from 'Components/Form/FormGroup.css';
+
+  display: none;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .modalFooter {
+    display: block;
+    text-align: center;
+  }
+
+  .addButton {
+    margin-top: 10px;
+  }
+}

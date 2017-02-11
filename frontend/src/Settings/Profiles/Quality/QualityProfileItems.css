@@ -1,0 +1,6 @@
+.qualities {
+  margin-top: 10px;
+  /* TODO: This should consider the number of qualities in the list */
+  min-height: 550px;
+  user-select: none;
+}

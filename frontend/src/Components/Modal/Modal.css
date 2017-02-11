@@ -1,0 +1,79 @@
+.modalContainer {
+  position: absolute;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+}
+
+.modalBackdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: $modalBackdropBackgroundColor;
+  opacity: 1;
+}
+
+.modal {
+  position: relative;
+  display: flex;
+  max-height: 90%;
+  border-radius: 6px;
+  opacity: 1;
+}
+
+.modalOpen {
+  /* Prevent the body from scrolling when the modal is open */
+  overflow: hidden !important;
+}
+
+/*
+ * Sizes
+ */
+
+.small {
+  composes: modal;
+
+  width: 480px;
+}
+
+.medium {
+  composes: modal;
+
+  width: 720px;
+}
+
+.large {
+  composes: modal;
+
+  width: 1080px;
+}
+
+@media only screen and (max-width: $breakpointLarge) {
+  .modal.large {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: $breakpointMedium) {
+  .modal.small,
+  .modal.medium {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .modalContainer {
+    position: fixed;
+  }
+
+  .modal.small,
+  .modal.medium,
+  .modal.large {
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+  }
+}

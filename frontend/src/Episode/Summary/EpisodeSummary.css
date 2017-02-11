@@ -1,0 +1,48 @@
+.infoTitle {
+  display: inline-block;
+  width: 100px;
+  font-weight: bold;
+}
+
+.overview,
+.files {
+  margin-top: 20px;
+}
+
+.filesHeader {
+  display: flex;
+  font-weight: bold;
+}
+
+.filesHeader {
+  display: flex;
+  margin-bottom: 10px;
+  border-bottom: 1px solid $borderColor;
+}
+
+.fileRow {
+  display: flex;
+}
+
+.path {
+  @add-mixin truncate;
+
+  flex: 1 0 1px;
+}
+
+.size,
+.quality {
+  flex: 0 0 125px;
+}
+
+.actions {
+  flex: 0 0 20px;
+  text-align: center;
+}
+
+@media only screen and (max-width: $breakpointMedium) {
+  .size,
+  .quality {
+    flex: 0 0 80px;
+  }
+}

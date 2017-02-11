@@ -1,0 +1,27 @@
+.inputContainer {
+  margin-right: 20px;
+  min-width: 150px;
+}
+
+.label {
+  margin-bottom: 3px;
+  font-weight: bold;
+}
+
+.importButtonContainer {
+  display: flex;
+  align-items: center;
+}
+
+.importButton {
+  composes: button from 'Components/Link/SpinnerButton.css';
+
+  height: 35px;
+}
+
+.loading {
+  composes: loading from 'Components/Loading/LoadingIndicator.css';
+
+  margin: 0 10px 0 12px;
+  text-align: left;
+}

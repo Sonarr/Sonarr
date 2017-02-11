@@ -1,0 +1,18 @@
+.link {
+  composes: link from 'Components/Link/Link.css';
+
+  border-bottom: 1px solid #e5e5e5;
+  color: #3a3f51;
+  font-size: 21px;
+
+  &:hover {
+    color: #616573;
+    text-decoration: none;
+  }
+}
+
+.summary {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  color: $dimColor;
+}

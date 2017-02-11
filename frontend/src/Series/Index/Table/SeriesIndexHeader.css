@@ -1,0 +1,81 @@
+.status {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 60px;
+}
+
+.sortTitle {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 4 0 110px;
+}
+
+.network {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 2 0 90px;
+}
+
+.qualityProfileId,
+.languageProfileId {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 1 0 125px;
+}
+
+.nextAiring,
+.previousAiring,
+.added {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 180px;
+}
+
+.seasonCount {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 100px;
+}
+
+.episodeProgress,
+.latestSeason {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 150px;
+}
+
+.episodeCount {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 120px;
+}
+
+.path {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 1 0 150px;
+}
+
+.sizeOnDisk {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 110px;
+}
+
+.tags {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 1 0 60px;
+}
+
+.useSceneNumbering {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 145px;
+}
+
+.actions {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 70px;
+}

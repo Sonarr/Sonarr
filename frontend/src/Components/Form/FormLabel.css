@@ -1,0 +1,22 @@
+.label {
+  display: flex;
+  justify-content: flex-end;
+  flex: 0 0 $formLabelWidth;
+  margin-right: $formLabelRightMarginWidth;
+  font-weight: bold;
+  line-height: 35px;
+}
+
+.hasError {
+  color: $dangerColor;
+}
+
+.isAdvanced {
+  color: $advancedFormLabelColor;
+}
+
+@media only screen and (max-width: $breakpointLarge) {
+  .label {
+    justify-content: flex-start;
+  }
+}

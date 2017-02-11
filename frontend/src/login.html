@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+  <!-- Chrome, Opera, and Firefox OS -->
+  <meta name="theme-color" content="#3a3f51"/>
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#3a3f51"/>
+
+  <meta name="description" content="Sonarr (Preview)">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/Content/Images/Icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Content/Images/Icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Content/Images/Icons/favicon-16x16.png">
+  <link rel="manifest" href="/Content/Images/Icons/manifest.json">
+  <link rel="mask-icon" href="/Content/Images/Icons/safari-pinned-tab.svg" color="#00ccff">
+  <link rel="shortcut icon" type="image/ico" href="/favicon.ico" data-no-hash />
+  <meta name="msapplication-config" content="/Content/Images/Icons/browserconfig.xml">
+
+  <link rel="stylesheet" type="text/css" href="/Content/styles.css">
+
+  <title>Login - Sonarr</title>
+
+  <style>
+    body {
+      background-color: #f5f7fa;
+      color: #656565;
+      font-family: "Roboto", "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .center {
+      display: flex;
+      justify-content: center;
+    }
+
+    .content {
+      flex: 0 0 325px;
+    }
+
+    .logo {
+      width: 32px;
+      height: 32px;
+    }
+
+    .panel {
+      margin-top: 50px;
+      border-radius: 4px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: center;
+      background-color: #3a3f51;
+      padding: 10px;
+      border-top-right-radius: 4px;
+      border-top-left-radius: 4px;
+    }
+
+    .panel-body {
+      background-color: #fff;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px;
+      padding: 20px;
+    }
+
+    .sign-in {
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .form-group {
+      margin: 20px 0;
+    }
+
+    .form-input {
+      box-sizing: border-box;
+      padding: 6px 16px;
+      width: 100%;
+      height: 35px;
+      border: 1px solid #dde6e9;
+      border-radius: 4px;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    }
+
+    .form-input:focus {
+      outline: 0;
+      border-color: #66afe9;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+
+    .button {
+      overflow: hidden;
+      border: 1px solid;
+      border-radius: 4px;
+      vertical-align: middle;
+      text-align: center;
+      white-space: nowrap;
+      line-height: normal;
+      border-color: #5899eb;
+      background-color: #5d9cec;
+      color: #fff;
+      width: 100%;
+      margin-top: 20px;
+      padding: 10px 0;
+    }
+
+    .button:hover {
+      text-decoration: none;
+      border-color: #3483e7;
+      background-color: #4b91ea;
+      color: #fff;
+    }
+
+    .copy {
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .remember-me-container {
+      display: flex;
+      justify-content: space-between;
+      line-height: 25px;
+    }
+
+    .remember-me {
+      font-size: 14px;
+    }
+
+    .forgot-password {
+      margin-left: auto;
+      font-size: 13px;
+      color: #909fa7;
+      text-decoration: none;
+    }
+
+    .forgot-password:focus,
+    .forgot-password:hover {
+      color: #748690;
+      text-decoration: underline;
+    }
+
+    .forgot-password:visited {
+      color: #748690;
+    }
+
+    .login-failed {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #f05050;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+<div class="center">
+  <div class="content">
+    <div class="panel">
+      <div class="panel-header">
+        <img src="/Content/Images/logo.svg" alt="Image" class="logo">
+      </div>
+
+      <div class="panel-body">
+        <div class="sign-in">
+          SIGN IN TO CONTINUE
+        </div>
+
+        <form role="form" data-parsley-validate="" novalidate="" class="mb-lg" method="POST">
+          <div class="form-group">
+            <input type="email" name="username" class="form-input" placeholder="Username" autocomplete="off" pattern=".{1,}" required title="User name is required" autoFocus="true">
+          </div>
+
+          <div class="form-group">
+            <input type="password" name="password" class="form-input" placeholder="Password" required>
+          </div>
+
+          <div class="remember-me-container">
+            <span class="remember-me">
+              <input type="checkbox" name="rememberMe" id="rememberMe" checked="checked">
+              <label for="rememberMe">Remember Me</label>
+            </span>
+
+            <a href="https://github.com/Sonarr/Sonarr/wiki/Forgot-my-Password" class="forgot-password">Forgot your password?</a>
+          </div>
+          <button type="submit" class="button">Login</button>
+
+          <div id="login-failed" class="login-failed hidden">
+            Incorrect Username or Password
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="copy">
+      <span>&copy;</span>
+      <span>2010-2017</span>
+      <span>-</span>
+      <span>Sonarr</span>
+    </div>
+  </div>
+</div>
+</body>
+
+<script type="text/javascript">
+  if (window.location.search.indexOf('loginFailed=true') > -1) {
+    var loginFailedDiv = document.getElementById('login-failed');
+
+    loginFailedDiv.classList.remove('hidden');
+  }
+</script>
+</html>

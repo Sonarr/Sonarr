@@ -1,0 +1,26 @@
+.sectionContainer {
+  display: flex;
+  flex: 1 1 10%;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.left {
+  justify-content: flex-start;
+}
+
+.center {
+  justify-content: center;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.overflowMenuItemIcon {
+  margin-right: 8px;
+}

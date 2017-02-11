@@ -1,0 +1,39 @@
+@import "Content/icons";
+
+.delete-series-modal {
+
+  i {
+    margin-right : 5px;
+    //.fa-icon-color(white);
+
+  }
+
+  .path {
+    white-space    : nowrap;
+    font-size      : 16px;
+    padding-bottom : 20px;
+  }
+
+  .delete-files-info,
+  .delete-label {
+    color : @brand-danger-dark;
+  }
+
+  .delete-files-info {
+    display : none;
+  }
+
+  .checkbox {
+    display : inline-block;
+  }
+
+  .c-checkbox:hover .check {
+    border-color : @brand-danger-dark;
+  }
+
+  input[type=checkbox]:checked + span {
+    background-color : @brand-danger-dark;
+    border-color     : @brand-danger-dark;
+  }
+
+}

@@ -1,0 +1,24 @@
+.selectedValue {
+  composes: selectedValue from './EnhancedSelectInputSelectedValue.css';
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.path {
+  @add-mixin truncate;
+
+  flex: 1 0 0;
+}
+
+.freeSpace {
+  @add-mixin truncate;
+
+  flex: 1 0 0;
+  margin-left: 15px;
+  color: $gray;
+  text-align: right;
+  font-size: $smallFontSize;
+}

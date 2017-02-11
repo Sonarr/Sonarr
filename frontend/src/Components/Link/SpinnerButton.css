@@ -1,0 +1,37 @@
+.button {
+  composes: button from 'Components/Link/Button.css';
+
+  position: relative;
+}
+
+.spinnerContainer {
+  position: absolute;
+  top: 50%;
+  left: -100%;
+  display: inline-flex;
+  visibility: hidden;
+  transition: left $defaultSpeed;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.spinner {
+  z-index: 1;
+}
+
+.label {
+  position: relative;
+  left: 0;
+  transition: left $defaultSpeed, opacity $defaultSpeed;
+}
+
+.isSpinning {
+  .spinnerContainer {
+    left: 50%;
+    visibility: visible;
+  }
+
+  .label {
+    left: 100%;
+    opacity: 0;
+  }
+}

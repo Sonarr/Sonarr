@@ -1,0 +1,18 @@
+.link {
+  composes: link from 'Components/Link/Link.css';
+
+  display: block;
+}
+
+.freeSpace,
+.unmappedFolders {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 150px;
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 45px;
+}

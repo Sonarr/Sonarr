@@ -1,0 +1,4 @@
+.row {
+  composes: link from 'Components/Link/Link.css';
+  composes: row from './TableRow.css';
+}

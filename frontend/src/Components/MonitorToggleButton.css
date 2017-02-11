@@ -1,0 +1,13 @@
+.toggleButton {
+  composes: button from 'Components/Link/IconButton.css';
+
+  padding: 0;
+  font-size: inherit;
+}
+
+.disabledButton {
+  composes: button from 'Components/Link/IconButton.css';
+
+  color: $disabledColor;
+  cursor: not-allowed;
+}

@@ -1,0 +1,34 @@
+.result {
+  display: flex;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.poster {
+  width: 35px;
+  height: 50px;
+}
+
+.titles {
+  flex: 1 1 1px;
+}
+
+.title {
+  flex: 1 1 1px;
+  margin-left: 5px;
+}
+
+.alternateTitle {
+  flex: 1 1 1px;
+  margin-left: 5px;
+  color: $disabledColor;
+  font-size: $smallFontSize;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .titles,
+  .title,
+  .alternateTitle {
+    @add-mixin truncate;
+  }
+}
