@@ -1,5 +1,4 @@
 var path = require('path');
-var stylish = require('jshint-stylish');
 var webpack = require('webpack');
 
 var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin();
