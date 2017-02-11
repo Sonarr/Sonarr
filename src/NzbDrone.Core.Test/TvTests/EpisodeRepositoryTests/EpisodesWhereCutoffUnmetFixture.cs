@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -126,12 +126,12 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 
         private void GivenMonitoredFilterExpression()
         {
-            _pagingSpec.FilterExpression = e => e.Monitored == true && e.Series.Monitored == true;
+            _pagingSpec.FilterExpressions.Add(e => e.Monitored == true && e.Series.Monitored == true);
         }
 
         private void GivenUnmonitoredFilterExpression()
         {
-            _pagingSpec.FilterExpression = e => e.Monitored == false || e.Series.Monitored == false;
+            _pagingSpec.FilterExpressions.Add(e => e.Monitored == false || e.Series.Monitored == false);
         }
 
         [Test]

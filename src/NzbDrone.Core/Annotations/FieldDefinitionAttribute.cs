@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Annotations
         Tag,
         Action,
         Url,
-        Captcha
+        Captcha,
+        OAuth
     }
 }

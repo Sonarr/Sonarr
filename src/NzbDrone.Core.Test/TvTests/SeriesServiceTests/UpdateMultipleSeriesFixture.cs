@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -42,6 +43,10 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             _series.ForEach(s => s.RootFolderPath = newRoot);
 
+            Mocker.GetMock<IBuildFileNames>()
+                  .Setup(s => s.GetSeriesFolder(It.IsAny<Series>(), (NamingConfig)null))
+                  .Returns<Series, NamingConfig>((s, n) => s.Title);
+
             Subject.UpdateSeries(_series).ForEach(s => s.Path.Should().StartWith(newRoot));
         }
 
@@ -66,6 +71,10 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 
             var newRoot = @"C:\Test\TV2".AsOsAgnostic();
             series.ForEach(s => s.RootFolderPath = newRoot);
+
+            Mocker.GetMock<IBuildFileNames>()
+                  .Setup(s => s.GetSeriesFolder(It.IsAny<Series>(), (NamingConfig)null))
+                  .Returns<Series, NamingConfig>((s, n) => s.Title);
 
             Subject.UpdateSeries(series);
         }

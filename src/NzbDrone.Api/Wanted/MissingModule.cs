@@ -1,8 +1,10 @@
-﻿using NzbDrone.Api.Episodes;
+using System.Linq;
+using NzbDrone.Api.Episodes;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Wanted
 {
@@ -20,14 +22,15 @@ namespace NzbDrone.Api.Wanted
         private PagingResource<EpisodeResource> GetMissingEpisodes(PagingResource<EpisodeResource> pagingResource)
         {
             var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>("airDateUtc", SortDirection.Descending);
+            var monitoredFilter = pagingResource.Filters.FirstOrDefault(f => f.Key == "monitored");
 
-            if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
+            if (monitoredFilter != null && monitoredFilter.Value == "false")
             {
-                pagingSpec.FilterExpression = v => v.Monitored == false || v.Series.Monitored == false;
+                pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
             }
             else
             {
-                pagingSpec.FilterExpression = v => v.Monitored == true && v.Series.Monitored == true;
+                pagingSpec.FilterExpressions.Add(v => v.Monitored == true && v.Series.Monitored == true);
             }
 
             var resource = ApplyToPage(_episodeService.EpisodesWithoutFiles, pagingSpec, v => MapToResource(v, true, false));

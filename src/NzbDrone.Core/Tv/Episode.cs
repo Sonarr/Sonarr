@@ -7,7 +7,7 @@ using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Tv
 {
-    public class Episode : ModelBase
+    public class Episode : ModelBase, IComparable
     {
         public Episode()
         {
@@ -44,6 +44,33 @@ namespace NzbDrone.Core.Tv
         public override string ToString()
         {
             return string.Format("[{0}]{1}", Id, Title.NullSafe());
+        }
+
+        public int CompareTo(object obj)
+        {
+            var other = (Episode)obj;
+
+            if (SeasonNumber > other.SeasonNumber)
+            {
+                return 1;
+            }
+
+            if (SeasonNumber < other.SeasonNumber)
+            {
+                return -1;
+            }
+
+            if (EpisodeNumber > other.EpisodeNumber)
+            {
+                return 1;
+            }
+
+            if (EpisodeNumber < other.EpisodeNumber)
+            {
+                return -1;
+            }
+
+            return 0;
         }
     }
 }

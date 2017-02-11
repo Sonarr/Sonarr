@@ -10,6 +10,8 @@ namespace NzbDrone.Common.Serializer
     {
         private static readonly JsonSerializer Serializer;
         private static readonly JsonSerializerSettings SerializerSetting;
+        private static readonly JsonSerializerSettings DeserializerSetting;
+
 
         static Json()
         {
@@ -24,22 +26,33 @@ namespace NzbDrone.Common.Serializer
 
 
             SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
-            //SerializerSetting.Converters.Add(new IntConverter());
             SerializerSetting.Converters.Add(new VersionConverter());
             SerializerSetting.Converters.Add(new HttpUriConverter());
 
             Serializer = JsonSerializer.Create(SerializerSetting);
 
+
+            DeserializerSetting = new JsonSerializerSettings
+            {
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.Indented,
+                DefaultValueHandling = DefaultValueHandling.Include,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            DeserializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            DeserializerSetting.Converters.Add(new VersionConverter());
         }
 
         public static T Deserialize<T>(string json) where T : new()
         {
-            return JsonConvert.DeserializeObject<T>(json, SerializerSetting);
+            return JsonConvert.DeserializeObject<T>(json, DeserializerSetting);
         }
 
         public static object Deserialize(string json, Type type)
         {
-            return JsonConvert.DeserializeObject(json, type, SerializerSetting);
+            return JsonConvert.DeserializeObject(json, type, DeserializerSetting);
         }
 
         public static bool TryDeserialize<T>(string json, out T result) where T : new()

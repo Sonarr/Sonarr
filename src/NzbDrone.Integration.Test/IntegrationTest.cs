@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using NLog;
+﻿using NLog;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Test.Common;
+using Sonarr.Http.ClientSchema;
 
 namespace NzbDrone.Integration.Test
 {
@@ -33,7 +33,7 @@ namespace NzbDrone.Integration.Test
                 Implementation = nameof(Newznab),
                 Name = "NewznabTest",
                 Protocol = Core.Indexers.DownloadProtocol.Usenet,
-                Fields = Api.ClientSchema.SchemaBuilder.ToSchema(new NewznabSettings())
+                Fields = SchemaBuilder.ToSchema(new NewznabSettings())
             });
         }
 

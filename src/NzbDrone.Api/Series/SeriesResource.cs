@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Api.REST;
+using Sonarr.Http.REST;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 
@@ -75,8 +75,6 @@ namespace NzbDrone.Api.Series
         public DateTime Added { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
         public Ratings Ratings { get; set; }
-
-        //TODO: Add series statistics as a property of the series (instead of individual properties)
 
         //Used to support legacy consumers
         public int QualityProfileId

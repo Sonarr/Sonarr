@@ -10,7 +10,7 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using Nancy.ModelBinding;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
 using NzbDrone.Common.Cache;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
