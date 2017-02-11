@@ -1,4 +1,0 @@
-﻿namespace NzbDrone.Api.ClientSchema
-{
-
-}

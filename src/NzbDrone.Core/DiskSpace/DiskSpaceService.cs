@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DiskSpace
@@ -19,23 +17,21 @@ namespace NzbDrone.Core.DiskSpace
     public class DiskSpaceService : IDiskSpaceService
     {
         private readonly ISeriesService _seriesService;
-        private readonly IConfigService _configService;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         private static readonly Regex _regexSpecialDrive = new Regex("^/var/lib/(docker|rancher|kubelet)(/|$)|^/(boot|etc)(/|$)|/docker(/var)?/aufs(/|$)", RegexOptions.Compiled);
 
-        public DiskSpaceService(ISeriesService seriesService, IConfigService configService, IDiskProvider diskProvider, Logger logger)
+        public DiskSpaceService(ISeriesService seriesService, IDiskProvider diskProvider, Logger logger)
         {
             _seriesService = seriesService;
-            _configService = configService;
             _diskProvider = diskProvider;
             _logger = logger;
         }
 
         public List<DiskSpace> GetFreeSpace()
         {
-            var importantRootFolders = GetSeriesRootPaths().Concat(GetDroneFactoryRootPaths()).Distinct().ToList();
+            var importantRootFolders = GetSeriesRootPaths().Distinct().ToList();
 
             var optionalRootFolders = GetFixedDisksRootPaths().Except(importantRootFolders).Distinct().ToList();
 

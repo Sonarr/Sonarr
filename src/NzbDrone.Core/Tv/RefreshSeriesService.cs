@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Tv
 
         private void RefreshSeriesInfo(Series series)
         {
-            _logger.ProgressInfo("Updating Info for {0}", series.Title);
+            _logger.ProgressInfo("Updating {0}", series.Title);
 
             Tuple<Series, List<Episode>> tuple;
 

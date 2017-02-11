@@ -110,6 +110,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     else
                     {
                         episodeFile.RelativePath = localEpisode.Series.Path.GetRelativePath(episodeFile.Path);
+
+                        // Delete existing files from the DB mapped to this path
+                        var previousFiles = _mediaFileService.GetFilesWithRelativePath(localEpisode.Series.Id, episodeFile.RelativePath);
+
+                        foreach (var previousFile in previousFiles)
+                        {
+                            _mediaFileService.Delete(previousFile, DeleteMediaFileReason.ManualOverride);
+                        }
                     }
 
                     _mediaFileService.Add(episodeFile);

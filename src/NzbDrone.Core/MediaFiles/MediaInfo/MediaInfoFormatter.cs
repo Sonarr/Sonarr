@@ -367,8 +367,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             try
             {
-                Logger.Debug("Formatting audio channels using 'AudioChannelPositions', with a value of: '{0}'", audioChannelPositions);
-
                 if (audioChannelPositions.Contains("+"))
                 {
                     return audioChannelPositions.Split('+')
@@ -385,7 +383,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
             catch (Exception e)
             {
-                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositions'");
+                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositions', with a value of: '{0}'", audioChannelPositions);
             }
 
             return null;
@@ -403,13 +401,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             try
             {
-                Logger.Debug("Formatiting audio channels using 'AudioChannelPositionsText', with a value of: '{0}'", audioChannelPositionsText);
-
                 return mediaInfo.AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
             }
             catch (Exception e)
             {
-                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositionsText'");
+                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositionsText', with a value of: '{0}'", audioChannelPositionsText);
             }
 
             return null;
@@ -421,10 +417,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (mediaInfo.SchemaRevision >= 3)
             {
-                Logger.Debug("Formatiting audio channels using 'AudioChannels', with a value of: '{0}'", audioChannels);
-
                 return audioChannels;
             }
+
+            Logger.Warn("Unable to format audio channels using 'AudioChannels', with a value of: '{0}'", audioChannels);
 
             return null;
         }

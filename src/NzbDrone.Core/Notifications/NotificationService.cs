@@ -69,22 +69,19 @@ namespace NzbDrone.Core.Notifications
 
         private bool ShouldHandleSeries(ProviderDefinition definition, Series series)
         {
-            var notificationDefinition = (NotificationDefinition)definition;
-
-            if (notificationDefinition.Tags.Empty())
+            if (definition.Tags.Empty())
             {
                 _logger.Debug("No tags set for this notification.");
                 return true;
             }
 
-            if (notificationDefinition.Tags.Intersect(series.Tags).Any())
+            if (definition.Tags.Intersect(series.Tags).Any())
             {
-                _logger.Debug("Notification and series have one or more matching tags.");
+                _logger.Debug("Notification and series have one or more intersecting tags.");
                 return true;
             }
 
-            //TODO: this message could be more clear
-            _logger.Debug("{0} does not have any tags that match {1}'s tags", notificationDefinition.Name, series.Title);
+            _logger.Debug("{0} does not have any intersecting tags with {1}. Notification will not be sent.", definition.Name, series.Title);
             return false;
         }
 

@@ -29,6 +29,7 @@ using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Authentication;
+using NzbDrone.Core.CustomFilters;
 using NzbDrone.Core.Extras.Metadata;
 using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.Extras.Others;
@@ -57,7 +58,8 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.Enable)
                   .Ignore(i => i.Protocol)
                   .Ignore(i => i.SupportsRss)
-                  .Ignore(i => i.SupportsSearch);
+                  .Ignore(i => i.SupportsSearch)
+                  .Ignore(d => d.Tags);
 
             Mapper.Entity<NotificationDefinition>().RegisterDefinition("Notifications")
                   .Ignore(i => i.SupportsOnGrab)
@@ -65,10 +67,12 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.SupportsOnUpgrade)
                   .Ignore(i => i.SupportsOnRename);
 
-            Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata");
+            Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata")
+                  .Ignore(d => d.Tags);
 
             Mapper.Entity<DownloadClientDefinition>().RegisterDefinition("DownloadClients")
-                  .Ignore(d => d.Protocol);
+                  .Ignore(d => d.Protocol)
+                  .Ignore(d => d.Tags);
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
@@ -121,6 +125,8 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<IndexerStatus>().RegisterModel("IndexerStatus");
             Mapper.Entity<DownloadClientStatus>().RegisterModel("DownloadClientStatus");
+
+            Mapper.Entity<CustomFilter>().RegisterModel("CustomFilters");
         }
 
         private static void RegisterMappers()

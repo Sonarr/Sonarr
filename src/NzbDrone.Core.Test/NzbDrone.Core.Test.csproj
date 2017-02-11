@@ -340,6 +340,7 @@
     <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheFixture.cs" />
     <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
     <Compile Include="ParserTests\ValidateParsedEpisodeInfoFixture.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileServiceFixture.cs" />
     <Compile Include="Qualities\RevisionComparableFixture.cs" />
     <Compile Include="QueueTests\QueueServiceFixture.cs" />
     <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />
@@ -420,6 +421,7 @@
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\RefreshSeriesServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeMonitoredServiceTests\SetEpisodeMontitoredFixture.cs" />
+    <Compile Include="TvTests\SeriesFolderPathBuilderFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\SeriesRepositoryFixture.cs" />
     <Compile Include="TvTests\AddSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateMultipleSeriesFixture.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sonarr.Http.REST;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
@@ -11,7 +12,7 @@ using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
-    public class EpisodeFileModule : NzbDroneRestModuleWithSignalR<EpisodeFileResource, EpisodeFile>,
+    public class EpisodeFileModule : SonarrRestModuleWithSignalR<EpisodeFileResource, EpisodeFile>,
                                  IHandle<EpisodeFileAddedEvent>
     {
         private readonly IMediaFileService _mediaFileService;

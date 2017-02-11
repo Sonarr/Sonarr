@@ -1,9 +1,15 @@
-﻿using NzbDrone.Core.Datastore;
+﻿using System.Collections.Generic;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.ThingiProvider
 {
     public abstract class ProviderDefinition : ModelBase
     {
+        protected ProviderDefinition()
+        {
+            Tags = new HashSet<int>();
+        }
+
         private IProviderConfig _settings;
 
         public string Name { get; set; }
@@ -12,6 +18,7 @@ namespace NzbDrone.Core.ThingiProvider
         public string ConfigContract { get; set; }
         public virtual bool Enable { get; set; }
         public ProviderMessage Message { get; set; }
+        public HashSet<int> Tags { get; set; }
 
         public IProviderConfig Settings
         {

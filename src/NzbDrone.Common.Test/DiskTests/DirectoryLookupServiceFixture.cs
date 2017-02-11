@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
@@ -49,7 +49,7 @@ namespace NzbDrone.Common.Test.DiskTests
                 .Setup(s => s.GetDirectoryInfos(It.IsAny<string>()))
                 .Returns(_folders);
 
-            Subject.LookupContents(root, false).Directories.Should().NotContain(Path.Combine(root, RECYCLING_BIN));
+            Subject.LookupContents(root, false, false).Directories.Should().NotContain(Path.Combine(root, RECYCLING_BIN));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace NzbDrone.Common.Test.DiskTests
                 .Setup(s => s.GetDirectoryInfos(It.IsAny<string>()))
                 .Returns(_folders);
 
-            Subject.LookupContents(root, false).Directories.Should().NotContain(Path.Combine(root, SYSTEM_VOLUME_INFORMATION));
+            Subject.LookupContents(root, false, false).Directories.Should().NotContain(Path.Combine(root, SYSTEM_VOLUME_INFORMATION));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace NzbDrone.Common.Test.DiskTests
                 .Setup(s => s.GetDirectoryInfos(It.IsAny<string>()))
                 .Returns(_folders);
 
-            var result = Subject.LookupContents(root, false);
+            var result = Subject.LookupContents(root, false, false);
             
             result.Directories.Should().HaveCount(_folders.Count - 3);
 

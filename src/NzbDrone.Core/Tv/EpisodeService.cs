@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         void UpdateEpisode(Episode episode);
         void SetEpisodeMonitored(int episodeId, bool monitored);
+        void SetMonitored(IEnumerable<int> ids, bool monitored);
         void UpdateEpisodes(List<Episode> episodes);
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end, bool includeUnmonitored);
         void InsertMany(List<Episode> episodes);
@@ -157,6 +158,11 @@ namespace NzbDrone.Core.Tv
             _episodeRepository.SetMonitoredFlat(episode, monitored);
 
             _logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
+        }
+
+        public void SetMonitored(IEnumerable<int> ids, bool monitored)
+        {
+            _episodeRepository.SetMonitored(ids, monitored);
         }
 
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)

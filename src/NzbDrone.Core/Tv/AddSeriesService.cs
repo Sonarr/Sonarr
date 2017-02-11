@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Tv
     public interface IAddSeriesService
     {
         Series AddSeries(Series newSeries);
+        List<Series> AddSeries(List<Series> newSeries);
     }
 
     public class AddSeriesService : IAddSeriesService
@@ -44,28 +45,29 @@ namespace NzbDrone.Core.Tv
             Ensure.That(newSeries, () => newSeries).IsNotNull();
 
             newSeries = AddSkyhookData(newSeries);
-
-            if (string.IsNullOrWhiteSpace(newSeries.Path))
-            {
-                var folderName = _fileNameBuilder.GetSeriesFolder(newSeries);
-                newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);
-            }
-
-            newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
-            newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
-            newSeries.Added = DateTime.UtcNow;
-
-            var validationResult = _addSeriesValidator.Validate(newSeries);
-
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
-            }
+            newSeries = SetPropertiesAndValidate(newSeries);
 
             _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
             _seriesService.AddSeries(newSeries);
 
             return newSeries;
+        }
+
+        public List<Series> AddSeries(List<Series> newSeries)
+        {
+            var added = DateTime.UtcNow;
+            var seriesToAdd = new List<Series>();
+
+            foreach (var s in newSeries)
+            {
+                // TODO: Verify if adding skyhook data will be slow
+                var series = AddSkyhookData(s);
+                series = SetPropertiesAndValidate(series);
+                series.Added = added;
+                seriesToAdd.Add(series);
+            }
+
+            return _seriesService.AddSeries(seriesToAdd);
         }
 
         private Series AddSkyhookData(Series newSeries)
@@ -94,6 +96,28 @@ namespace NzbDrone.Core.Tv
             series.ApplyChanges(newSeries);
 
             return series;
+        }
+
+        private Series SetPropertiesAndValidate(Series newSeries)
+        {
+            if (string.IsNullOrWhiteSpace(newSeries.Path))
+            {
+                var folderName = _fileNameBuilder.GetSeriesFolder(newSeries);
+                newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);
+            }
+
+            newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
+            newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
+            newSeries.Added = DateTime.UtcNow;
+
+            var validationResult = _addSeriesValidator.Validate(newSeries);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            return newSeries;
         }
     }
 }

@@ -14,6 +14,8 @@ namespace NzbDrone.Host.Owin.MiddleWare
         {
             SignalrDependencyResolver.Register(container);
 
+            // Half the default time (110s) to get under nginx's default 60 proxy_read_timeout
+            GlobalHost.Configuration.ConnectionTimeout = TimeSpan.FromSeconds(55);
             GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromMinutes(3);
         }
 

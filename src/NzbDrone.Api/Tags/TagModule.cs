@@ -3,10 +3,12 @@ using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tags;
 using NzbDrone.SignalR;
+using Sonarr.Http;
+using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api.Tags
 {
-    public class TagModule : NzbDroneRestModuleWithSignalR<TagResource, Tag>, IHandle<TagsUpdatedEvent>
+    public class TagModule : SonarrRestModuleWithSignalR<TagResource, Tag>, IHandle<TagsUpdatedEvent>
     {
         private readonly ITagService _tagService;
 

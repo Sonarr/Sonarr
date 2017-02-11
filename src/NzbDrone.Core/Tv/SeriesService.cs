@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Tv
         Series GetSeries(int seriesId);
         List<Series> GetSeries(IEnumerable<int> seriesIds);
         Series AddSeries(Series newSeries);
+        List<Series> AddSeries(List<Series> newSeries);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
@@ -22,8 +23,9 @@ namespace NzbDrone.Core.Tv
         Series FindByTitleInexact(string title);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
+        List<Series> AllForTag(int tagId);
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true);
-        List<Series> UpdateSeries(List<Series> series);
+        List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
     }
@@ -33,19 +35,19 @@ namespace NzbDrone.Core.Tv
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
         private readonly IEpisodeService _episodeService;
-        private readonly IBuildFileNames _fileNameBuilder;
+        private readonly IBuildSeriesPaths _seriesPathBuilder;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository,
                              IEventAggregator eventAggregator,
                              IEpisodeService episodeService,
-                             IBuildFileNames fileNameBuilder,
+                             IBuildSeriesPaths seriesPathBuilder,
                              Logger logger)
         {
             _seriesRepository = seriesRepository;
             _eventAggregator = eventAggregator;
             _episodeService = episodeService;
-            _fileNameBuilder = fileNameBuilder;
+            _seriesPathBuilder = seriesPathBuilder;
             _logger = logger;
         }
 
@@ -63,6 +65,14 @@ namespace NzbDrone.Core.Tv
         {
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
+
+            return newSeries;
+        }
+
+        public List<Series> AddSeries(List<Series> newSeries)
+        {
+            _seriesRepository.InsertMany(newSeries);
+            _eventAggregator.PublishEvent(new SeriesImportedEvent(newSeries.Select(s => s.Id).ToList()));
 
             return newSeries;
         }
@@ -141,6 +151,12 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.All().ToList();
         }
 
+        public List<Series> AllForTag(int tagId)
+        {
+            return GetAllSeries().Where(s => s.Tags.Contains(tagId))
+                                 .ToList();
+        }
+
         // updateEpisodesToMatchSeason is an override for EpisodeMonitoredService to use so a change via Season pass doesn't get nuked by the seasons loop.
         // TODO: Remove when seasons are split from series (or we come up with a better way to address this)
         public Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true)
@@ -163,19 +179,20 @@ namespace NzbDrone.Core.Tv
             return updatedSeries;
         }
 
-        public List<Series> UpdateSeries(List<Series> series)
+        public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder)
         {
             _logger.Debug("Updating {0} series", series.Count);
+
             foreach (var s in series)
             {
                 _logger.Trace("Updating: {0}", s.Title);
+
                 if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
-                    var folderName = new DirectoryInfo(s.Path).Name;
-                    s.Path = Path.Combine(s.RootFolderPath, folderName);
+                    s.Path = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
+
                     _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
                 }
-
                 else
                 {
                     _logger.Trace("Not changing path for: {0}", s.Title);
