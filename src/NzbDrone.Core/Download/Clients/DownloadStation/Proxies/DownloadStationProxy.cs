@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             }
             catch (DownloadClientException e)
             {
-                _logger.Debug(e);
+                _logger.Error(e);
                 return new List<DownloadStationTorrent>();
             }
         }

@@ -60,6 +60,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             var request = BuildRequest(settings, api, arguments, method);
             var response = _httpClient.Execute(request);
 
+            _logger.Debug("Trying to {0}", operation);
+
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var responseContent = Json.Deserialize<DiskStationResponse<T>>(response.Content);
@@ -75,9 +77,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                         _authenticated = false;
                         return ProcessRequest<T>(api, arguments, settings, operation, method, retries++);
                     }
-
+                    
                     var msg = $"Failed to {operation}. Reason: {responseContent.Error.GetMessage(api)}";
-                    _logger.Debug(msg);
+                    _logger.Error(msg);
 
                     throw new DownloadClientException(msg);
                 }

@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
 
-            var item = _proxy.GetTorrents(Settings).Where(t => t.Additional.Detail["uri"] == magnetLink).SingleOrDefault();
+            var item = _proxy.GetTorrents(Settings).SingleOrDefault(t => t.Additional.Detail["uri"] == magnetLink);
 
             if (item != null)
             {
