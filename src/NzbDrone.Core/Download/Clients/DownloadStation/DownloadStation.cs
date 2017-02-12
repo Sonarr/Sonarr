@@ -117,13 +117,16 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
-            if (_proxy.RemoveTorrent(ParseDownloadId(downloadId), deleteData, Settings))
+            try
             {
+                _proxy.RemoveTorrent(ParseDownloadId(downloadId), deleteData, Settings);
                 _logger.Debug("{0} removed correctly", downloadId);
                 return;
             }
-
-            _logger.Error("Failed to remove {0}", downloadId);
+            catch (DownloadClientException e)
+            {
+                _logger.Error(e);
+            }
         }
 
         protected OsPath GetOutputPath(OsPath outputPath, DownloadStationTorrent torrent, string serialNumber)
@@ -141,18 +144,17 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
-            if (_proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings))
+            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
+
+            var item = _proxy.GetTorrents(Settings).SingleOrDefault(t => t.Additional.Detail["uri"] == magnetLink);
+
+            if (item != null)
             {
-                var item = _proxy.GetTorrents(Settings).Where(t => t.Additional.Detail["uri"] == magnetLink).SingleOrDefault();
-
-                if (item != null)
-                {
-                    _logger.Debug("{0} added correctly", remoteEpisode);
-                    return CreateDownloadId(item.Id, hashedSerialNumber);
-                }
-
-                _logger.Debug("No such task {0} in Download Station", magnetLink);
+                _logger.Debug("{0} added correctly", remoteEpisode);
+                return CreateDownloadId(item.Id, hashedSerialNumber);
             }
+
+            _logger.Debug("No such task {0} in Download Station", magnetLink);
 
             throw new DownloadClientException("Failed to add magnet task to Download Station");
         }
@@ -161,20 +163,19 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
-            if (_proxy.AddTorrentFromData(fileContent, filename, GetDownloadDirectory(), Settings))
+            _proxy.AddTorrentFromData(fileContent, filename, GetDownloadDirectory(), Settings);
+
+            var items = _proxy.GetTorrents(Settings).Where(t => t.Additional.Detail["uri"] == Path.GetFileNameWithoutExtension(filename));
+
+            var item = items.SingleOrDefault();
+
+            if (item != null)
             {
-                var items = _proxy.GetTorrents(Settings).Where(t => t.Additional.Detail["uri"] == Path.GetFileNameWithoutExtension(filename));
-
-                var item = items.SingleOrDefault();
-
-                if (item != null)
-                {
-                    _logger.Debug("{0} added correctly", remoteEpisode);
-                    return CreateDownloadId(item.Id, hashedSerialNumber);
-                }
-
-                _logger.Debug("No such task {0} in Download Station", filename);
+                _logger.Debug("{0} added correctly", remoteEpisode);
+                return CreateDownloadId(item.Id, hashedSerialNumber);
             }
+
+            _logger.Debug("No such task {0} in Download Station", filename);
 
             throw new DownloadClientException("Failed to add torrent task to Download Station");
         }

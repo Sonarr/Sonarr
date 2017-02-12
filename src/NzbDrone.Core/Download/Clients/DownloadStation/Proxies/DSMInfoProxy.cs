@@ -26,14 +26,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 { "method", "getinfo" }
             };
 
-            var response = ProcessRequest<DSMInfoResponse>(DiskStationApi.DSMInfo, arguments, settings);
-
-            if (response.Success == true)
-            {
-                return response.Data.SerialNumber;
-            }
-            _logger.Debug("Failed to get Download Station serial number");
-            throw new DownloadClientException("Failed to get Download Station serial number");
+            var response = ProcessRequest<DSMInfoResponse>(DiskStationApi.DSMInfo, arguments, settings, "get serial number");
+            return response.Data.SerialNumber;
         }
     }
 }

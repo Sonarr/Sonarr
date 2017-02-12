@@ -12,9 +12,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
     {
         IEnumerable<DownloadStationTorrent> GetTorrents(DownloadStationSettings settings);
         Dictionary<string, object> GetConfig(DownloadStationSettings settings);
-        bool RemoveTorrent(string downloadId, bool deleteData, DownloadStationSettings settings);
-        bool AddTorrentFromUrl(string url, string downloadDirectory, DownloadStationSettings settings);
-        bool AddTorrentFromData(byte[] torrentData, string filename, string downloadDirectory, DownloadStationSettings settings);
+        void RemoveTorrent(string downloadId, bool deleteData, DownloadStationSettings settings);
+        void AddTorrentFromUrl(string url, string downloadDirectory, DownloadStationSettings settings);
+        void AddTorrentFromData(byte[] torrentData, string filename, string downloadDirectory, DownloadStationSettings settings);
         IEnumerable<int> GetApiVersion(DownloadStationSettings settings);
     }
 
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
         {
         }
 
-        public bool AddTorrentFromData(byte[] torrentData, string filename, string downloadDirectory, DownloadStationSettings settings)
+        public void AddTorrentFromData(byte[] torrentData, string filename, string downloadDirectory, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -40,13 +40,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             }
 
             arguments.Add("file", new Dictionary<string, object>() { { "name", filename }, { "data", torrentData } });
-
-            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, HttpMethod.POST);
-
-            return response.Success;
+           
+            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add torrent from data {filename}", HttpMethod.POST);            
         }
 
-        public bool AddTorrentFromUrl(string torrentUrl, string downloadDirectory, DownloadStationSettings settings)
+        public void AddTorrentFromUrl(string torrentUrl, string downloadDirectory, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -61,9 +59,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 arguments.Add("destination", downloadDirectory);
             }
 
-            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, HttpMethod.GET);
-
-            return response.Success;
+            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add torrent from url {torrentUrl}", HttpMethod.GET);
         }
 
         public IEnumerable<DownloadStationTorrent> GetTorrents(DownloadStationSettings settings)
@@ -76,14 +72,17 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                  { "additional", "detail,transfer" }
             };
 
-            var response = ProcessRequest<DownloadStationTaskInfoResponse>(DiskStationApi.DownloadStationTask, arguments, settings);
-
-            if (response.Success)
+            try
             {
+                var response = ProcessRequest<DownloadStationTaskInfoResponse>(DiskStationApi.DownloadStationTask, arguments, settings, "get torrents");
+
                 return response.Data.Tasks.Where(t => t.Type == DownloadStationTaskType.BT);
             }
-
-            return new List<DownloadStationTorrent>();
+            catch (DownloadClientException e)
+            {
+                _logger.Error(e);
+                return new List<DownloadStationTorrent>();
+            }
         }
 
         public Dictionary<string, object> GetConfig(DownloadStationSettings settings)
@@ -95,20 +94,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 { "method", "getconfig" }
             };
 
-            try
-            {
-                var response = ProcessRequest<Dictionary<string, object>>(DiskStationApi.DownloadStationInfo, arguments, settings);
-                return response.Data;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Failed to get config from Download Station");
+            var response = ProcessRequest<Dictionary<string, object>>(DiskStationApi.DownloadStationInfo, arguments, settings, "get config");
 
-                throw;
-            }
+            return response.Data;
         }
 
-        public bool RemoveTorrent(string downloadId, bool deleteData, DownloadStationSettings settings)
+        public void RemoveTorrent(string downloadId, bool deleteData, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -119,23 +110,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 { "force_complete", false }
             };
 
-            try
-            {
-                var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings);
-
-                if (response.Success)
-                {
-                    _logger.Trace("Item {0} removed from Download Station", downloadId);
-                }
-
-                return response.Success;
-            }
-            catch (DownloadClientException e)
-            {
-                _logger.Debug(e, "Failed to remove item {0} from Download Station", downloadId);
-
-                throw;
-            }
+            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"remove item {downloadId}");
+            _logger.Trace("Item {0} removed from Download Station", downloadId);        
         }
 
         public IEnumerable<int> GetApiVersion(DownloadStationSettings settings)
