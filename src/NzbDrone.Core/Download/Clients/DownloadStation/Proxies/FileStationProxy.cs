@@ -47,14 +47,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 { "additional", $"[\"real_path\"]" }
             };
 
-            var response = ProcessRequest<FileStationListResponse>(DiskStationApi.FileStationList, arguments, settings);
+            var response = ProcessRequest<FileStationListResponse>(DiskStationApi.FileStationList, arguments, settings, $"get info of {path}");
 
-            if (response.Success == true)
-            {
-                return response.Data.Files.First();
-            }
-
-            throw new DownloadClientException($"Failed to get info of {0}", path);
+            return response.Data.Files.First();
         }
     }
 }
