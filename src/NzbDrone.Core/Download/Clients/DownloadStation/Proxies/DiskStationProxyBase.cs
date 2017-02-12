@@ -34,14 +34,16 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
         protected DiskStationResponse<object> ProcessRequest(DiskStationApi api,
                                                                  Dictionary<string, object> arguments,
                                                                  DownloadStationSettings settings,
+                                                                 string operation,
                                                                  HttpMethod method = HttpMethod.GET)
         {
-            return ProcessRequest<object>(api, arguments, settings, method);
+            return ProcessRequest<object>(api, arguments, settings, operation, method);
         }
 
         protected DiskStationResponse<T> ProcessRequest<T>(DiskStationApi api,
                                                                Dictionary<string, object> arguments,
                                                                DownloadStationSettings settings,
+                                                               string operation,
                                                                HttpMethod method = HttpMethod.GET,
                                                                int retries = 0) where T : new()
         {
@@ -58,18 +60,28 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             var request = BuildRequest(settings, api, arguments, method);
             var response = _httpClient.Execute(request);
 
+            _logger.Debug("Trying to {0}", operation);
+
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var responseContent = Json.Deserialize<DiskStationResponse<T>>(response.Content);
 
-                if (!responseContent.Success && responseContent.Error.SessionError)
+                if (responseContent.Success)
                 {
-                    _authenticated = false;
-                    return ProcessRequest<T>(api, arguments, settings, method, retries++);
+                    return responseContent;
                 }
                 else
                 {
-                    return responseContent;
+                    if (responseContent.Error.SessionError)
+                    {
+                        _authenticated = false;
+                        return ProcessRequest<T>(api, arguments, settings, operation, method, retries++);
+                    }
+                    
+                    var msg = $"Failed to {operation}. Reason: {responseContent.Error.GetMessage(api)}";
+                    _logger.Error(msg);
+
+                    throw new DownloadClientException(msg);
                 }
             }
             else
@@ -166,42 +178,35 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                  { "query", "SYNO.API.Auth, SYNO.DownloadStation.Info, SYNO.DownloadStation.Task, SYNO.FileStation.List, SYNO.DSM.Info" },
              };
 
-            var infoResponse = ProcessRequest<DiskStationApiInfoResponse>(DiskStationApi.Info, arguments, settings);
+            var infoResponse = ProcessRequest<DiskStationApiInfoResponse>(DiskStationApi.Info, arguments, settings, "Get api version");
 
-            if (infoResponse.Success == true)
+            //TODO: Refactor this into more elegant code
+            var infoResponeDSAuth = infoResponse.Data["SYNO.API.Auth"];
+            var infoResponeDSInfo = infoResponse.Data["SYNO.DownloadStation.Info"];
+            var infoResponeDSTask = infoResponse.Data["SYNO.DownloadStation.Task"];
+            var infoResponseFSList = infoResponse.Data["SYNO.FileStation.List"];
+            var infoResponseDSMInfo = infoResponse.Data["SYNO.DSM.Info"];
+
+            Resources[DiskStationApi.Auth] = infoResponeDSAuth.Path;
+            Resources[DiskStationApi.DownloadStationInfo] = infoResponeDSInfo.Path;
+            Resources[DiskStationApi.DownloadStationTask] = infoResponeDSTask.Path;
+            Resources[DiskStationApi.FileStationList] = infoResponseFSList.Path;
+            Resources[DiskStationApi.DSMInfo] = infoResponseDSMInfo.Path;
+
+            switch (api)
             {
-                //TODO: Refactor this into more elegant code
-                var infoResponeDSAuth = infoResponse.Data["SYNO.API.Auth"];
-                var infoResponeDSInfo = infoResponse.Data["SYNO.DownloadStation.Info"];
-                var infoResponeDSTask = infoResponse.Data["SYNO.DownloadStation.Task"];
-                var infoResponseFSList = infoResponse.Data["SYNO.FileStation.List"];
-                var infoResponseDSMInfo = infoResponse.Data["SYNO.DSM.Info"];
-
-                Resources[DiskStationApi.Auth] = infoResponeDSAuth.Path;
-                Resources[DiskStationApi.DownloadStationInfo] = infoResponeDSInfo.Path;
-                Resources[DiskStationApi.DownloadStationTask] = infoResponeDSTask.Path;
-                Resources[DiskStationApi.FileStationList] = infoResponseFSList.Path;
-                Resources[DiskStationApi.DSMInfo] = infoResponseDSMInfo.Path;
-
-                switch (api)
-                {
-                    case DiskStationApi.Auth:
-                        return Enumerable.Range(infoResponeDSAuth.MinVersion, infoResponeDSAuth.MaxVersion - infoResponeDSAuth.MinVersion + 1);
-                    case DiskStationApi.DownloadStationInfo:
-                        return Enumerable.Range(infoResponeDSInfo.MinVersion, infoResponeDSInfo.MaxVersion - infoResponeDSInfo.MinVersion + 1);
-                    case DiskStationApi.DownloadStationTask:
-                        return Enumerable.Range(infoResponeDSTask.MinVersion, infoResponeDSTask.MaxVersion - infoResponeDSTask.MinVersion + 1);
-                    case DiskStationApi.FileStationList:
-                        return Enumerable.Range(infoResponseFSList.MinVersion, infoResponseFSList.MaxVersion - infoResponseFSList.MinVersion + 1);
-                    case DiskStationApi.DSMInfo:
-                        return Enumerable.Range(infoResponseDSMInfo.MinVersion, infoResponseDSMInfo.MaxVersion - infoResponseDSMInfo.MinVersion + 1);
-                    default:
-                        throw new DownloadClientException("Api not implemented");
-                }
-            }
-            else
-            {
-                throw new DownloadClientException(infoResponse.Error.GetMessage(DiskStationApi.Info));
+                case DiskStationApi.Auth:
+                    return Enumerable.Range(infoResponeDSAuth.MinVersion, infoResponeDSAuth.MaxVersion - infoResponeDSAuth.MinVersion + 1);
+                case DiskStationApi.DownloadStationInfo:
+                    return Enumerable.Range(infoResponeDSInfo.MinVersion, infoResponeDSInfo.MaxVersion - infoResponeDSInfo.MinVersion + 1);
+                case DiskStationApi.DownloadStationTask:
+                    return Enumerable.Range(infoResponeDSTask.MinVersion, infoResponeDSTask.MaxVersion - infoResponeDSTask.MinVersion + 1);
+                case DiskStationApi.FileStationList:
+                    return Enumerable.Range(infoResponseFSList.MinVersion, infoResponseFSList.MaxVersion - infoResponseFSList.MinVersion + 1);
+                case DiskStationApi.DSMInfo:
+                    return Enumerable.Range(infoResponseDSMInfo.MinVersion, infoResponseDSMInfo.MaxVersion - infoResponseDSMInfo.MinVersion + 1);
+                default:
+                    throw new DownloadClientException("Api not implemented");
             }
         }
     }
