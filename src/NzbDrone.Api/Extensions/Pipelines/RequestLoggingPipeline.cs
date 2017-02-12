@@ -39,7 +39,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
             context.Items["ApiRequestStartTime"] = DateTime.UtcNow;
 
             var reqPath = GetRequestPathAndQuery(context.Request);
-            
+
             _loggerHttp.Trace("Req: {0} [{1}] {2}", id, context.Request.Method, reqPath);
 
             return null;
@@ -80,7 +80,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
         {
             if (request.Url.Query.IsNotNullOrWhiteSpace())
             {
-                return string.Concat(request.Url.Path, "?", request.Url.Query);
+                return string.Concat(request.Url.Path, request.Url.Query);
             }
             else
             {
