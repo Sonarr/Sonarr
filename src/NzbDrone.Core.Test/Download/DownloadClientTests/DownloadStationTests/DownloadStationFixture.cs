@@ -467,7 +467,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
-        public void GetItems_should_set_outputhPath_to_base_folder_when_single_file_non_finished_torrent()
+        public void GetItems_should_set_outputPath_to_base_folder_when_single_file_non_finished_torrent()
         {
             GivenSerialNumber();
             GivenSharedFolder();
@@ -481,7 +481,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
-        public void GetItems_should_set_outputhPath_to_torrent_folder_when_multiple_files_non_finished_torrent()
+        public void GetItems_should_set_outputPath_to_torrent_folder_when_multiple_files_non_finished_torrent()
         {
             GivenSerialNumber();
             GivenSharedFolder();
@@ -495,7 +495,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
-        public void GetItems_should_set_outputhPath_to_base_folder_when_single_file_finished_torrent()
+        public void GetItems_should_set_outputPath_to_base_folder_when_single_file_finished_torrent()
         {
             GivenSerialNumber();
             GivenSharedFolder();
@@ -509,7 +509,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
-        public void GetItems_should_set_outputhPath_to_torrent_folder_when_multiple_files_finished_torrent()
+        public void GetItems_should_set_outputPath_to_torrent_folder_when_multiple_files_finished_torrent()
         {
             GivenSerialNumber();
             GivenSharedFolder();

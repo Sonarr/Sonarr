@@ -62,14 +62,19 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             {
                 var responseContent = Json.Deserialize<DiskStationResponse<T>>(response.Content);
 
-                if (!responseContent.Success && responseContent.Error.SessionError)
+                if (responseContent.Success)
                 {
-                    _authenticated = false;
-                    return ProcessRequest<T>(api, arguments, settings, method, retries++);
+                    return responseContent;
                 }
                 else
                 {
-                    return responseContent;
+                    if (responseContent.Error.SessionError)
+                    {
+                        _authenticated = false;
+                        return ProcessRequest<T>(api, arguments, settings, method, retries++);
+                    }
+
+                    throw new DownloadClientException(responseContent.Error.GetMessage(api));
                 }
             }
             else
