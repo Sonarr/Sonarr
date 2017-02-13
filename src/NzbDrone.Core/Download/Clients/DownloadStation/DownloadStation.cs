@@ -117,16 +117,13 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
-            try
+            if (deleteData)
             {
-                _proxy.RemoveTorrent(ParseDownloadId(downloadId), deleteData, Settings);
-                _logger.Debug("{0} removed correctly", downloadId);
-                return;
+                DeleteItemData(downloadId);
             }
-            catch (DownloadClientException e)
-            {
-                _logger.Error(e);
-            }
+
+            _proxy.RemoveTorrent(ParseDownloadId(downloadId), Settings);
+            _logger.Debug("{0} removed correctly", downloadId);
         }
 
         protected OsPath GetOutputPath(OsPath outputPath, DownloadStationTorrent torrent, string serialNumber)
