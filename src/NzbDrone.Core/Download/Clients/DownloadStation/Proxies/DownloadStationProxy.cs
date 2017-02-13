@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
     {
         IEnumerable<DownloadStationTorrent> GetTorrents(DownloadStationSettings settings);
         Dictionary<string, object> GetConfig(DownloadStationSettings settings);
-        void RemoveTorrent(string downloadId, bool deleteData, DownloadStationSettings settings);
+        void RemoveTorrent(string downloadId, DownloadStationSettings settings);
         void AddTorrentFromUrl(string url, string downloadDirectory, DownloadStationSettings settings);
         void AddTorrentFromData(byte[] torrentData, string filename, string downloadDirectory, DownloadStationSettings settings);
         IEnumerable<int> GetApiVersion(DownloadStationSettings settings);
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             return response.Data;
         }
 
-        public void RemoveTorrent(string downloadId, bool deleteData, DownloadStationSettings settings)
+        public void RemoveTorrent(string downloadId, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -111,7 +111,6 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             };
 
             var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"remove item {downloadId}");
-            _logger.Trace("Item {0} removed from Download Station", downloadId);        
         }
 
         public IEnumerable<int> GetApiVersion(DownloadStationSettings settings)
