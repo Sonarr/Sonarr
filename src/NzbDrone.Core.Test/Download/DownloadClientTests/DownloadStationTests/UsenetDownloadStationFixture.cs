@@ -12,11 +12,12 @@ using NzbDrone.Core.Download.Clients.DownloadStation.Proxies;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Test.Common;
+using NzbDrone.Core.Organizer;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {
     [TestFixture]
-    public class TorrentDownloadStationFixture : DownloadClientFixtureBase<TorrentDownloadStation>
+    public class UsenetDownloadStationFixture : DownloadClientFixtureBase<UsenetDownloadStation>
     {
         protected DownloadStationSettings _settings;
 
@@ -25,11 +26,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         protected DownloadStationTask _failed;
         protected DownloadStationTask _completed;
         protected DownloadStationTask _seeding;
-        protected DownloadStationTask _magnet;
-        protected DownloadStationTask _singleFile;
-        protected DownloadStationTask _multipleFiles;
-        protected DownloadStationTask _singleFileCompleted;
-        protected DownloadStationTask _multipleFilesCompleted;
 
         protected string _serialNumber = "SERIALNUMBER";
         protected string _category = "sonarr";
@@ -37,13 +33,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         protected string _defaultDestination = "somepath";
         protected OsPath _physicalPath = new OsPath("/mnt/sdb1/mydata");
 
-        protected Dictionary<string, object> _downloadStationConfigItems;
+        protected RemoteEpisode _remoteEpisode;
 
-        protected string DownloadURL => "magnet:?xt=urn:btih:5dee65101db281ac9c46344cd6b175cdcad53426&dn=download";
+        protected Dictionary<string, object> _downloadStationConfigItems;
 
         [SetUp]
         public void Setup()
         {
+            _remoteEpisode = CreateRemoteEpisode();
+
             _settings = new DownloadStationSettings()
             {
                 Host = "127.0.0.1",
@@ -60,7 +58,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id1",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Waiting,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.NZB,
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -68,7 +66,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Detail = new Dictionary<string, string>
                     {
                         { "destination","shared/folder" },
-                        { "uri", DownloadURL }
+                        { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
@@ -83,7 +81,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id2",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Finished,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.NZB,
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -91,7 +89,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Detail = new Dictionary<string, string>
                     {
                         { "destination","shared/folder" },
-                        { "uri", DownloadURL }
+                        { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
@@ -106,7 +104,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id2",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Seeding,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.NZB,
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -114,7 +112,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Detail = new Dictionary<string, string>
                     {
                         { "destination","shared/folder" },
-                        { "uri", DownloadURL }
+                        { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
@@ -129,7 +127,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id3",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Downloading,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.NZB,
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -137,7 +135,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Detail = new Dictionary<string, string>
                     {
                         { "destination","shared/folder" },
-                        { "uri", DownloadURL }
+                        { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
@@ -152,7 +150,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id4",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Error,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.NZB,
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -160,7 +158,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Detail = new Dictionary<string, string>
                     {
                         { "destination","shared/folder" },
-                        { "uri", DownloadURL }
+                        { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
@@ -169,102 +167,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     }
                 }
             };
-
-            _singleFile = new DownloadStationTask()
-            {
-                Id = "id5",
-                Size = 1000,
-                Status = DownloadStationTaskStatus.Seeding,
-                Type = DownloadStationTaskType.BT,
-                Username = "admin",
-                Title = "a.mkv",
-                Additional = new DownloadStationTaskAdditional
-                {
-                    Detail = new Dictionary<string, string>
-                    {
-                        { "destination","shared/folder" },
-                        { "uri", DownloadURL }
-                    },
-                    Transfer = new Dictionary<string, string>
-                    {
-                        { "size_downloaded", "1000"},
-                        { "speed_download", "0" }
-                    }
-                }
-            };
-
-            _multipleFiles = new DownloadStationTask()
-            {
-                Id = "id6",
-                Size = 1000,
-                Status = DownloadStationTaskStatus.Seeding,
-                Type = DownloadStationTaskType.BT,
-                Username = "admin",
-                Title = "title",
-                Additional = new DownloadStationTaskAdditional
-                {
-                    Detail = new Dictionary<string, string>
-                    {
-                        { "destination","shared/folder" },
-                        { "uri", DownloadURL }
-                    },
-                    Transfer = new Dictionary<string, string>
-                    {
-                        { "size_downloaded", "1000"},
-                        { "speed_download", "0" }
-                    }
-                }
-            };
-
-            _singleFileCompleted = new DownloadStationTask()
-            {
-                Id = "id6",
-                Size = 1000,
-                Status = DownloadStationTaskStatus.Finished,
-                Type = DownloadStationTaskType.BT,
-                Username = "admin",
-                Title = "a.mkv",
-                Additional = new DownloadStationTaskAdditional
-                {
-                    Detail = new Dictionary<string, string>
-                    {
-                        { "destination","shared/folder" },
-                        { "uri", DownloadURL }
-                    },
-                    Transfer = new Dictionary<string, string>
-                    {
-                        { "size_downloaded", "1000"},
-                        { "speed_download", "0" }
-                    }
-                }
-            };
-
-            _multipleFilesCompleted = new DownloadStationTask()
-            {
-                Id = "id6",
-                Size = 1000,
-                Status = DownloadStationTaskStatus.Finished,
-                Type = DownloadStationTaskType.BT,
-                Username = "admin",
-                Title = "title",
-                Additional = new DownloadStationTaskAdditional
-                {
-                    Detail = new Dictionary<string, string>
-                    {
-                        { "destination","shared/folder" },
-                        { "uri", DownloadURL }
-                    },
-                    Transfer = new Dictionary<string, string>
-                    {
-                        { "size_downloaded", "1000"},
-                        { "speed_download", "0" }
-                    }
-                }
-            };
-
-            Mocker.GetMock<ITorrentFileInfoReader>()
-                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<byte[]>()))
-                  .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951");
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
@@ -304,59 +206,45 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             _settings.TvDirectory = _tvDirectory;
         }
 
-        protected virtual void GivenTorrents(List<DownloadStationTask> torrents)
+        protected virtual void GivenNZBs(List<DownloadStationTask> nzbs)
         {
-            if (torrents == null)
+            if (nzbs == null)
             {
-                torrents = new List<DownloadStationTask>();
+                nzbs = new List<DownloadStationTask>();
             }
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(s => s.GetTasks(DownloadStationTaskType.BT, It.IsAny<DownloadStationSettings>()))
-                  .Returns(torrents);
+                  .Setup(s => s.GetTasks(DownloadStationTaskType.NZB, It.IsAny<DownloadStationSettings>()))
+                  .Returns(nzbs);
         }
 
         protected void PrepareClientToReturnQueuedItem()
         {
-            GivenTorrents(new List<DownloadStationTask>
+            GivenNZBs(new List<DownloadStationTask>
             {
                 _queued
             });
         }
 
         protected void GivenSuccessfulDownload()
-        {
+        {/*
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[1000]));
-
-            Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(s => s.AddTaskFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))
-                  .Callback(PrepareClientToReturnQueuedItem);
+            */
 
             Mocker.GetMock<IDownloadStationProxy>()
                   .Setup(s => s.AddTaskFromData(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))
                   .Callback(PrepareClientToReturnQueuedItem);
         }
 
-        protected override RemoteEpisode CreateRemoteEpisode()
-        {
-            var episode = base.CreateRemoteEpisode();
-
-            episode.Release.DownloadUrl = DownloadURL;
-
-            return episode;
-        }
-
-        protected int GivenAllKindOfTasks()
+        protected void GivenAllKindOfTasks()
         {
             var tasks = new List<DownloadStationTask>() { _queued, _completed, _failed, _downloading, _seeding };
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(d => d.GetTasks(DownloadStationTaskType.BT, _settings))
+                  .Setup(d => d.GetTasks(DownloadStationTaskType.NZB, _settings))
                   .Returns(tasks);
-
-            return tasks.Count;
         }
 
         [Test]
@@ -373,7 +261,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _tvDirectory, It.IsAny<DownloadStationSettings>()), Times.Once());
+                  .Verify(v => v.AddTaskFromData(It.IsAny<byte[]>(), It.IsAny<string>(), _tvDirectory, It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
         [Test]
@@ -390,7 +278,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), $"{_defaultDestination}/{_category}", It.IsAny<DownloadStationSettings>()), Times.Once());
+                  .Verify(v => v.AddTaskFromData(It.IsAny<byte[]>(), It.IsAny<string>(), $"{_defaultDestination}/{_category}", It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
         [Test]
@@ -406,7 +294,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), null, It.IsAny<DownloadStationSettings>()), Times.Once());
+                  .Verify(v => v.AddTaskFromData(It.IsAny<byte[]>(), It.IsAny<string>(), null, It.IsAny<DownloadStationSettings>()), Times.Once());
+        }
+
+        [Test]
+        public void GetItems_should_return_empty_list_if_no_tasks_available()
+        {
+            _settings.TvDirectory = @"/shared/folder/sub";
+
+            GivenSerialNumber();
+            GivenSharedFolder();
+            GivenNZBs(new List<DownloadStationTask>());
+
+            Subject.GetItems().Should().BeEmpty();
         }
 
         [Test]
@@ -416,7 +316,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             GivenSerialNumber();
             GivenSharedFolder();
-            GivenTorrents(new List<DownloadStationTask> { _completed });
+            GivenNZBs(new List<DownloadStationTask> { _completed });
 
             Subject.GetItems().Should().BeEmpty();
         }
@@ -450,7 +350,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
-        public void Download_should_throw_and_not_add_task_if_cannot_get_serial_number()
+        public void Download_should_throw_and_not_add_tasks_if_cannot_get_serial_number()
         {
             var remoteEpisode = CreateRemoteEpisode();
 
@@ -465,68 +365,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
-        public void GetItems_should_set_outputPath_to_base_folder_when_single_file_non_finished_tasks()
-        {
-            GivenSerialNumber();
-            GivenSharedFolder();
-
-            GivenTorrents(new List<DownloadStationTask>() { _singleFile });
-
-            var items = Subject.GetItems();
-
-            items.Should().HaveCount(1);
-            items.First().OutputPath.Should().Be(_physicalPath + _singleFile.Title);
-        }
-
-        [Test]
-        public void GetItems_should_set_outputPath_to_torrent_folder_when_multiple_files_non_finished_tasks()
-        {
-            GivenSerialNumber();
-            GivenSharedFolder();
-
-            GivenTorrents(new List<DownloadStationTask>() { _multipleFiles });
-
-            var items = Subject.GetItems();
-
-            items.Should().HaveCount(1);
-            items.First().OutputPath.Should().Be(_physicalPath + _multipleFiles.Title);
-        }
-
-        [Test]
-        public void GetItems_should_set_outputPath_to_base_folder_when_single_file_finished_tasks()
-        {
-            GivenSerialNumber();
-            GivenSharedFolder();
-
-            GivenTorrents(new List<DownloadStationTask>() { _singleFileCompleted });
-
-            var items = Subject.GetItems();
-
-            items.Should().HaveCount(1);
-            items.First().OutputPath.Should().Be(_physicalPath + _singleFileCompleted.Title);
-        }
-
-        [Test]
-        public void GetItems_should_set_outputPath_to_torrent_folder_when_multiple_files_finished_tasks()
-        {
-            GivenSerialNumber();
-            GivenSharedFolder();
-
-            GivenTorrents(new List<DownloadStationTask>() { _multipleFilesCompleted });
-
-            var items = Subject.GetItems();
-
-            items.Should().HaveCount(1);
-            items.First().OutputPath.Should().Be($"{_physicalPath}/{_multipleFiles.Title}");
-        }
-
-        [Test]
         public void GetItems_should_not_map_outputpath_for_queued_or_downloading_tasks()
         {
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTask>
+            GivenNZBs(new List<DownloadStationTask>
             {
                 _queued, _downloading
             });
@@ -543,7 +387,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTask>
+            GivenNZBs(new List<DownloadStationTask>
             {
                 _completed, _failed, _seeding
             });
@@ -556,7 +400,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
         [TestCase(DownloadStationTaskStatus.Downloading, DownloadItemStatus.Downloading, true)]
         [TestCase(DownloadStationTaskStatus.Finished, DownloadItemStatus.Completed, false)]
-        [TestCase(DownloadStationTaskStatus.Seeding, DownloadItemStatus.Completed, true)]
         [TestCase(DownloadStationTaskStatus.Waiting, DownloadItemStatus.Queued, true)]
         public void GetItems_should_return_readonly_expected(DownloadStationTaskStatus apiStatus, DownloadItemStatus expectedItemStatus, bool readOnlyExpected)
         {
@@ -565,7 +408,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             _queued.Status = apiStatus;
 
-            GivenTorrents(new List<DownloadStationTask>() { _queued });
+            GivenNZBs(new List<DownloadStationTask>() { _queued });
 
             var items = Subject.GetItems();
 
@@ -580,7 +423,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         [TestCase(DownloadStationTaskStatus.Finishing, DownloadItemStatus.Downloading)]
         [TestCase(DownloadStationTaskStatus.HashChecking, DownloadItemStatus.Downloading)]
         [TestCase(DownloadStationTaskStatus.Paused, DownloadItemStatus.Paused)]
-        [TestCase(DownloadStationTaskStatus.Seeding, DownloadItemStatus.Completed)]
         [TestCase(DownloadStationTaskStatus.Waiting, DownloadItemStatus.Queued)]
         public void GetItems_should_return_item_as_downloadItemStatus(DownloadStationTaskStatus apiStatus, DownloadItemStatus expectedItemStatus)
         {
@@ -589,7 +431,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             _queued.Status = apiStatus;
 
-            GivenTorrents(new List<DownloadStationTask>() { _queued });
+            GivenNZBs(new List<DownloadStationTask>() { _queued });
 
             var items = Subject.GetItems();
             items.Should().HaveCount(1);
