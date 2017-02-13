@@ -111,7 +111,6 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             };
 
             var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"remove item {downloadId}");
-            _logger.Trace("Item {0} removed from Download Station", downloadId);        
         }
 
         public IEnumerable<int> GetApiVersion(DownloadStationSettings settings)
