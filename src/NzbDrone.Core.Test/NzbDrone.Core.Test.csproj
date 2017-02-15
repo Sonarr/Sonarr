@@ -262,7 +262,6 @@
     <Compile Include="IndexerTests\TestIndexer.cs" />
     <Compile Include="IndexerTests\TestIndexerSettings.cs" />
     <Compile Include="IndexerTests\IPTorrentsTests\IPTorrentsFixture.cs" />
-    <Compile Include="IndexerTests\KickassTorrentsTests\KickassTorrentsFixture.cs" />
     <Compile Include="IndexerTests\NyaaTests\NyaaFixture.cs" />
     <Compile Include="IndexerTests\TorrentleechTests\TorrentleechFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssIndexerFixture.cs" />
@@ -436,9 +435,6 @@
     <Content Include="Files\emptyfile.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\Indexers\KickassTorrents\KickassTorrents_accents.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Files\Indexers\Newznab\newznab_caps.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -544,10 +540,6 @@
     </Content>
     <Content Include="Files\Indexers\IPTorrents\IPTorrents.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\Indexers\KickassTorrents\KickassTorrents.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
     </Content>
     <Content Include="Files\Indexers\Torrentleech\Torrentleech.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

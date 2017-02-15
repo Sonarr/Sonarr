@@ -215,7 +215,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
         [TestCase("BitMeTv/BitMeTv.xml")]
         [TestCase("Fanzub/fanzub.xml")]
-        [TestCase("KickassTorrents/KickassTorrents.xml")]
         [TestCase("IPTorrents/IPTorrents.xml")]
         [TestCase("Newznab/newznab_nzb_su.xml")]
         [TestCase("Nyaa/Nyaa.xml")]
