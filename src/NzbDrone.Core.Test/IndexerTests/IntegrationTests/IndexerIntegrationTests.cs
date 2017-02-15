@@ -4,7 +4,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.KickassTorrents;
 using NzbDrone.Core.Indexers.Nyaa;
 using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -54,42 +53,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
             var result = indexer.FetchRecent();
 
             ValidateResult(result);
-        }
-
-        [Test]
-        [ManualTest]
-        [Explicit]
-        public void kickass_fetch_recent()
-        {
-            var indexer = Mocker.Resolve<KickassTorrents>();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "MyIndexer",
-                Settings = new KickassTorrentsSettings()
-            };
-
-            var result = indexer.FetchRecent();
-
-            ValidateTorrentResult(result, hasSize: true);
-        }
-
-        [Test]
-        [ManualTest]
-        [Explicit]
-        public void kickass_search_single()
-        {
-            var indexer = Mocker.Resolve<KickassTorrents>();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "MyIndexer",
-                Settings = new KickassTorrentsSettings()
-            };
-
-            var result = indexer.Fetch(_singleSearchCriteria);
-
-            ValidateTorrentResult(result, hasSize: true, hasMagnet: true);
         }
 
         [Test]
