@@ -356,13 +356,13 @@
     <Compile Include="Download\Clients\DownloadStation\TorrentDownloadStation.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\DownloadStationProxy.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationSettings.cs" />
-    <Compile Include="Download\Clients\DownloadStation\DownloadStationTorrent.cs" />
-    <Compile Include="Download\Clients\DownloadStation\DownloadStationTorrentAdditional.cs" />
+    <Compile Include="Download\Clients\DownloadStation\DownloadStationTask.cs" />
+    <Compile Include="Download\Clients\DownloadStation\DownloadStationTaskAdditional.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\DSMInfoProxy.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\FileStationProxy.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\DiskStationProxyBase.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DiskStationAuthResponse.cs" />
-    <Compile Include="Download\Clients\DownloadStation\DownloadStationTorrentFile.cs" />
+    <Compile Include="Download\Clients\DownloadStation\DownloadStationTaskFile.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DSMInfoResponse.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\FileStationListFileInfoResponse.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\FileStationListResponse.cs" />
@@ -375,6 +375,7 @@
     <Compile Include="Download\Clients\DownloadStation\SharedFolderMapping.cs" />
     <Compile Include="Download\Clients\DownloadStation\SharedFolderResolver.cs" />
     <Compile Include="Download\Clients\DownloadStation\DiskStationApi.cs" />
+    <Compile Include="Download\Clients\DownloadStation\UsenetDownloadStation.cs" />
     <Compile Include="Download\Clients\Hadouken\Hadouken.cs" />
     <Compile Include="Download\Clients\Hadouken\HadoukenProxy.cs" />
     <Compile Include="Download\Clients\Hadouken\HadoukenSettings.cs" />

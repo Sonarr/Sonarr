@@ -20,16 +20,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
     {
         protected DownloadStationSettings _settings;
 
-        protected DownloadStationTorrent _queued;
-        protected DownloadStationTorrent _downloading;
-        protected DownloadStationTorrent _failed;
-        protected DownloadStationTorrent _completed;
-        protected DownloadStationTorrent _seeding;
-        protected DownloadStationTorrent _magnet;
-        protected DownloadStationTorrent _singleFile;
-        protected DownloadStationTorrent _multipleFiles;
-        protected DownloadStationTorrent _singleFileCompleted;
-        protected DownloadStationTorrent _multipleFilesCompleted;
+        protected DownloadStationTask _queued;
+        protected DownloadStationTask _downloading;
+        protected DownloadStationTask _failed;
+        protected DownloadStationTask _completed;
+        protected DownloadStationTask _seeding;
+        protected DownloadStationTask _magnet;
+        protected DownloadStationTask _singleFile;
+        protected DownloadStationTask _multipleFiles;
+        protected DownloadStationTask _singleFileCompleted;
+        protected DownloadStationTask _multipleFilesCompleted;
 
         protected string _serialNumber = "SERIALNUMBER";
         protected string _category = "sonarr";
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = _settings;
 
-            _queued = new DownloadStationTorrent()
+            _queued = new DownloadStationTask()
             {
                 Id = "id1",
                 Size = 1000,
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "title",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 }
             };
 
-            _completed = new DownloadStationTorrent()
+            _completed = new DownloadStationTask()
             {
                 Id = "id2",
                 Size = 1000,
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "title",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 }
             };
 
-            _seeding = new DownloadStationTorrent()
+            _seeding = new DownloadStationTask()
             {
                 Id = "id2",
                 Size = 1000,
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "title",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 }
             };
 
-            _downloading = new DownloadStationTorrent()
+            _downloading = new DownloadStationTask()
             {
                 Id = "id3",
                 Size = 1000,
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "title",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 }
             };
 
-            _failed = new DownloadStationTorrent()
+            _failed = new DownloadStationTask()
             {
                 Id = "id4",
                 Size = 1000,
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "title",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 }
             };
 
-            _singleFile = new DownloadStationTorrent()
+            _singleFile = new DownloadStationTask()
             {
                 Id = "id5",
                 Size = 1000,
@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "a.mkv",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 }
             };
 
-            _multipleFiles = new DownloadStationTorrent()
+            _multipleFiles = new DownloadStationTask()
             {
                 Id = "id6",
                 Size = 1000,
@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "title",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -216,7 +216,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 }
             };
 
-            _singleFileCompleted = new DownloadStationTorrent()
+            _singleFileCompleted = new DownloadStationTask()
             {
                 Id = "id6",
                 Size = 1000,
@@ -224,7 +224,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "a.mkv",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -239,7 +239,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 }
             };
 
-            _multipleFilesCompleted = new DownloadStationTorrent()
+            _multipleFilesCompleted = new DownloadStationTask()
             {
                 Id = "id6",
                 Size = 1000,
@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Type = DownloadStationTaskType.BT,
                 Username = "admin",
                 Title = "title",
-                Additional = new DownloadStationTorrentAdditional
+                Additional = new DownloadStationTaskAdditional
                 {
                     Detail = new Dictionary<string, string>
                     {
@@ -304,21 +304,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             _settings.TvDirectory = _tvDirectory;
         }
 
-        protected virtual void GivenTorrents(List<DownloadStationTorrent> torrents)
+        protected virtual void GivenTorrents(List<DownloadStationTask> torrents)
         {
             if (torrents == null)
             {
-                torrents = new List<DownloadStationTorrent>();
+                torrents = new List<DownloadStationTask>();
             }
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(s => s.GetTorrents(It.IsAny<DownloadStationSettings>()))
+                  .Setup(s => s.GetTasks(DownloadStationTaskType.BT, It.IsAny<DownloadStationSettings>()))
                   .Returns(torrents);
         }
 
         protected void PrepareClientToReturnQueuedItem()
         {
-            GivenTorrents(new List<DownloadStationTorrent>
+            GivenTorrents(new List<DownloadStationTask>
             {
                 _queued
             });
@@ -350,10 +350,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
         protected int GivenAllKindOfTasks()
         {
-            var tasks = new List<DownloadStationTorrent>() { _queued, _completed, _failed, _downloading, _seeding };
+            var tasks = new List<DownloadStationTask>() { _queued, _completed, _failed, _downloading, _seeding };
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(d => d.GetTorrents(_settings))
+                  .Setup(d => d.GetTasks(DownloadStationTaskType.BT, _settings))
                   .Returns(tasks);
 
             return tasks.Count;
@@ -373,7 +373,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Verify(v => v.AddTorrentFromUrl(It.IsAny<string>(), _tvDirectory, It.IsAny<DownloadStationSettings>()), Times.Once());
+                  .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _tvDirectory, It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
         [Test]
@@ -390,7 +390,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Verify(v => v.AddTorrentFromUrl(It.IsAny<string>(), $"{_defaultDestination}/{_category}", It.IsAny<DownloadStationSettings>()), Times.Once());
+                  .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), $"{_defaultDestination}/{_category}", It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
         [Test]
@@ -406,7 +406,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Verify(v => v.AddTorrentFromUrl(It.IsAny<string>(), null, It.IsAny<DownloadStationSettings>()), Times.Once());
+                  .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), null, It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
         [Test]
@@ -416,7 +416,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             GivenSerialNumber();
             GivenSharedFolder();
-            GivenTorrents(new List<DownloadStationTorrent> { _completed });
+            GivenTorrents(new List<DownloadStationTask> { _completed });
 
             Subject.GetItems().Should().BeEmpty();
         }
@@ -461,7 +461,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             Assert.Throws(Is.InstanceOf<Exception>(), () => Subject.Download(remoteEpisode));
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Verify(v => v.AddTorrentFromUrl(It.IsAny<string>(), null, _settings), Times.Never());
+                  .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), null, _settings), Times.Never());
         }
 
         [Test]
@@ -470,7 +470,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTorrent>() { _singleFile });
+            GivenTorrents(new List<DownloadStationTask>() { _singleFile });
 
             var items = Subject.GetItems();
 
@@ -484,7 +484,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTorrent>() { _multipleFiles });
+            GivenTorrents(new List<DownloadStationTask>() { _multipleFiles });
 
             var items = Subject.GetItems();
 
@@ -498,7 +498,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTorrent>() { _singleFileCompleted });
+            GivenTorrents(new List<DownloadStationTask>() { _singleFileCompleted });
 
             var items = Subject.GetItems();
 
@@ -512,7 +512,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTorrent>() { _multipleFilesCompleted });
+            GivenTorrents(new List<DownloadStationTask>() { _multipleFilesCompleted });
 
             var items = Subject.GetItems();
 
@@ -526,7 +526,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTorrent>
+            GivenTorrents(new List<DownloadStationTask>
             {
                 _queued, _downloading
             });
@@ -543,7 +543,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTorrent>
+            GivenTorrents(new List<DownloadStationTask>
             {
                 _completed, _failed, _seeding
             });
@@ -565,7 +565,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             _queued.Status = apiStatus;
 
-            GivenTorrents(new List<DownloadStationTorrent>() { _queued });
+            GivenTorrents(new List<DownloadStationTask>() { _queued });
 
             var items = Subject.GetItems();
 
@@ -589,7 +589,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             _queued.Status = apiStatus;
 
-            GivenTorrents(new List<DownloadStationTorrent>() { _queued });
+            GivenTorrents(new List<DownloadStationTask>() { _queued });
 
             var items = Subject.GetItems();
             items.Should().HaveCount(1);

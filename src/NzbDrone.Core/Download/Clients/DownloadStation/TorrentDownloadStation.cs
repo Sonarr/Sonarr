@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            var torrents = _proxy.GetTorrents(Settings);
+            var torrents = _proxy.GetTasks(DownloadStationTaskType.BT, Settings);
             var serialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
             var items = new List<DownloadClientItem>();
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             _logger.Debug("{0} removed correctly", downloadId);
         }
 
-        protected OsPath GetOutputPath(OsPath outputPath, DownloadStationTorrent torrent, string serialNumber)
+        protected OsPath GetOutputPath(OsPath outputPath, DownloadStationTask torrent, string serialNumber)
         {
             var fullPath = _sharedFolderResolver.RemapToFullPath(outputPath, Settings, serialNumber);
 
@@ -141,9 +141,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
-            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
+            _proxy.AddTaskFromUrl(magnetLink, GetDownloadDirectory(), Settings);
 
-            var item = _proxy.GetTorrents(Settings).SingleOrDefault(t => t.Additional.Detail["uri"] == magnetLink);
+            var item = _proxy.GetTasks(DownloadStationTaskType.BT, Settings).SingleOrDefault(t => t.Additional.Detail["uri"] == magnetLink);
 
             if (item != null)
             {
@@ -160,9 +160,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
-            _proxy.AddTorrentFromData(fileContent, filename, GetDownloadDirectory(), Settings);
+            _proxy.AddTaskFromData(fileContent, filename, GetDownloadDirectory(), Settings);
 
-            var items = _proxy.GetTorrents(Settings).Where(t => t.Additional.Detail["uri"] == Path.GetFileNameWithoutExtension(filename));
+            var items = _proxy.GetTasks(DownloadStationTaskType.BT, Settings).Where(t => t.Additional.Detail["uri"] == Path.GetFileNameWithoutExtension(filename));
 
             var item = items.SingleOrDefault();
 
@@ -232,12 +232,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return null;
         }
 
-        protected bool IsFinished(DownloadStationTorrent torrent)
+        protected bool IsFinished(DownloadStationTask torrent)
         {
             return torrent.Status == DownloadStationTaskStatus.Finished;
         }
 
-        protected string GetMessage(DownloadStationTorrent torrent)
+        protected string GetMessage(DownloadStationTask torrent)
         {
             if (torrent.StatusExtra != null)
             {
@@ -255,7 +255,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return null;
         }
 
-        protected DownloadItemStatus GetStatus(DownloadStationTorrent torrent)
+        protected DownloadItemStatus GetStatus(DownloadStationTask torrent)
         {
             switch (torrent.Status)
             {
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return DownloadItemStatus.Downloading;
         }
 
-        protected long GetRemainingSize(DownloadStationTorrent torrent)
+        protected long GetRemainingSize(DownloadStationTask torrent)
         {
             var downloadedString = torrent.Additional.Transfer["size_downloaded"];
             long downloadedSize;
@@ -287,7 +287,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return torrent.Size - Math.Max(0, downloadedSize);
         }
 
-        protected TimeSpan? GetRemainingTime(DownloadStationTorrent torrent)
+        protected TimeSpan? GetRemainingTime(DownloadStationTask torrent)
         {
             var speedString = torrent.Additional.Transfer["speed_download"];
             long downloadSpeed;
@@ -312,7 +312,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                _proxy.GetTorrents(Settings);
+                _proxy.GetTasks(DownloadStationTaskType.BT, Settings);
                 return null;
             }
             catch (Exception ex)
