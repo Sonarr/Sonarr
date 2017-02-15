@@ -32,6 +32,11 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     break;
             }
 
+            if (indexerResponse.HttpResponse.Headers.ContentType != null && indexerResponse.HttpResponse.Headers.ContentType.Contains("text/html"))
+            {
+                throw new IndexerException(indexerResponse, "Indexer responded with html content. Site is likely blocked or unavailable.");
+            }
+
             if (indexerResponse.Content == "Query execution was interrupted")
             {
                 throw new IndexerException(indexerResponse, "Indexer API returned an internal server error");
