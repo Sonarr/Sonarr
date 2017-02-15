@@ -92,13 +92,13 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return items;
         }
 
-        protected OsPath GetOutputPath(OsPath outputPath, DownloadStationTask torrent, string serialNumber)
+        protected OsPath GetOutputPath(OsPath outputPath, DownloadStationTask task, string serialNumber)
         {
             var fullPath = _sharedFolderResolver.RemapToFullPath(outputPath, Settings, serialNumber);
 
             var remotePath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, fullPath);
 
-            var finalPath = remotePath + torrent.Title;
+            var finalPath = remotePath + task.Title;
 
             return finalPath;
         }
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 DeleteItemData(downloadId);
             }
 
-            _proxy.RemoveTorrent(ParseDownloadId(downloadId), Settings);
+            _proxy.RemoveTask(ParseDownloadId(downloadId), Settings);
             _logger.Debug("{0} removed correctly", downloadId);
         }
 
@@ -210,35 +210,35 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return null;
         }
 
-        protected bool IsFinished(DownloadStationTask torrent)
+        protected bool IsFinished(DownloadStationTask task)
         {
-            return torrent.Status == DownloadStationTaskStatus.Finished;
+            return task.Status == DownloadStationTaskStatus.Finished;
         }
 
-        protected string GetMessage(DownloadStationTask torrent)
+        protected string GetMessage(DownloadStationTask task)
         {
-            if (torrent.StatusExtra != null)
+            if (task.StatusExtra != null)
             {
-                if (torrent.Status == DownloadStationTaskStatus.Extracting)
+                if (task.Status == DownloadStationTaskStatus.Extracting)
                 {
-                    return $"Extracting: {int.Parse(torrent.StatusExtra["unzip_progress"])}%";
+                    return $"Extracting: {int.Parse(task.StatusExtra["unzip_progress"])}%";
                 }
 
-                if (torrent.Status == DownloadStationTaskStatus.Error)
+                if (task.Status == DownloadStationTaskStatus.Error)
                 {
-                    return torrent.StatusExtra["error_detail"];
+                    return task.StatusExtra["error_detail"];
                 }
             }
 
             return null;
         }
 
-        protected DownloadItemStatus GetStatus(DownloadStationTask torrent)
+        protected DownloadItemStatus GetStatus(DownloadStationTask task)
         {
-            switch (torrent.Status)
+            switch (task.Status)
             {
                 case DownloadStationTaskStatus.Waiting:
-                    return torrent.Size == 0 || GetRemainingSize(torrent) > 0 ? DownloadItemStatus.Queued : DownloadItemStatus.Completed;
+                    return task.Size == 0 || GetRemainingSize(task) > 0 ? DownloadItemStatus.Queued : DownloadItemStatus.Completed;
                 case DownloadStationTaskStatus.Paused:
                     return DownloadItemStatus.Paused;
                 case DownloadStationTaskStatus.Finished:
@@ -251,28 +251,28 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return DownloadItemStatus.Downloading;
         }
 
-        protected long GetRemainingSize(DownloadStationTask torrent)
+        protected long GetRemainingSize(DownloadStationTask task)
         {
-            var downloadedString = torrent.Additional.Transfer["size_downloaded"];
+            var downloadedString = task.Additional.Transfer["size_downloaded"];
             long downloadedSize;
 
             if (downloadedString.IsNullOrWhiteSpace() || !long.TryParse(downloadedString, out downloadedSize))
             {
-                _logger.Debug("Torrent {0} has invalid size_downloaded: {1}", torrent.Title, downloadedString);
+                _logger.Debug("Task {0} has invalid size_downloaded: {1}", task.Title, downloadedString);
                 downloadedSize = 0;
             }
 
-            return torrent.Size - Math.Max(0, downloadedSize);
+            return task.Size - Math.Max(0, downloadedSize);
         }
 
-        protected TimeSpan? GetRemainingTime(DownloadStationTask torrent)
+        protected TimeSpan? GetRemainingTime(DownloadStationTask task)
         {
-            var speedString = torrent.Additional.Transfer["speed_download"];
+            var speedString = task.Additional.Transfer["speed_download"];
             long downloadSpeed;
 
             if (speedString.IsNullOrWhiteSpace() || !long.TryParse(speedString, out downloadSpeed))
             {
-                _logger.Debug("Torrent {0} has invalid speed_download: {1}", torrent.Title, speedString);
+                _logger.Debug("Task {0} has invalid speed_download: {1}", task.Title, speedString);
                 downloadSpeed = 0;
             }
 
@@ -281,7 +281,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 return null;
             }
 
-            var remainingSize = GetRemainingSize(torrent);
+            var remainingSize = GetRemainingSize(task);
 
             return TimeSpan.FromSeconds(remainingSize / downloadSpeed);
         }
@@ -295,7 +295,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
             catch (Exception ex)
             {
-                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of NZBs: " + ex.Message);
             }
         }
 

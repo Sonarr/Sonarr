@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 DeleteItemData(downloadId);
             }
 
-            _proxy.RemoveTorrent(ParseDownloadId(downloadId), Settings);
+            _proxy.RemoveTask(ParseDownloadId(downloadId), Settings);
             _logger.Debug("{0} removed correctly", downloadId);
         }
 
