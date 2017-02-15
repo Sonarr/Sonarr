@@ -20,18 +20,22 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected readonly IDownloadStationProxy _proxy;
         protected readonly ISharedFolderResolver _sharedFolderResolver;
         protected readonly ISerialNumberProvider _serialNumberProvider;
+        protected readonly IFileStationProxy _fileStationProxy;
 
-        public UsenetDownloadStation(IDownloadStationProxy proxy,
+        public UsenetDownloadStation(ISharedFolderResolver sharedFolderResolver,
+                                     ISerialNumberProvider serialNumberProvider,
+                                     IFileStationProxy fileStationProxy,
+                                     IDownloadStationProxy proxy,
                                      IHttpClient httpClient,
                                      IConfigService configService,
                                      IDiskProvider diskProvider,
                                      IRemotePathMappingService remotePathMappingService,
-                                     Logger logger,
-                                     ISharedFolderResolver sharedFolderResolver,
-                                     ISerialNumberProvider serialNumberProvider)
+                                     Logger logger
+                                     )
             : base(httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
+            _fileStationProxy = fileStationProxy;
             _sharedFolderResolver = sharedFolderResolver;
             _serialNumberProvider = serialNumberProvider;
         }
@@ -173,7 +177,47 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             failures.AddIfNotNull(TestConnection());
             if (failures.Any()) return;
+            failures.AddIfNotNull(TestOutputPath());
             failures.AddIfNotNull(TestGetNZB());
+        }
+
+        protected ValidationFailure TestOutputPath()
+        {
+            try
+            {
+                var downloadDir = GetDownloadDirectory();
+
+                if (downloadDir != null)
+                {
+                    var sharedFolder = downloadDir.Split('\\', '/')[0];
+                    var fieldName = Settings.TvDirectory.IsNotNullOrWhiteSpace() ? nameof(Settings.TvDirectory) : nameof(Settings.TvCategory);
+
+                    var folderInfo = _fileStationProxy.GetInfoFileOrDirectory($"/{downloadDir}", Settings);
+
+                    if (folderInfo.Additional == null)
+                    {
+                        return new NzbDroneValidationFailure(fieldName, $"Shared folder does not exist")
+                        {
+                            DetailedDescription = $"The DownloadStation does not have a Shared Folder with the name '{sharedFolder}', are you sure you specified it correctly?"
+                        };
+                    }
+
+                    if (!folderInfo.IsDir)
+                    {
+                        return new NzbDroneValidationFailure(fieldName, $"Folder does not exist")
+                        {
+                            DetailedDescription = $"The folder '{downloadDir}' does not exist, it must be created manually inside the inside the Shared Folder '{sharedFolder}'."
+                        };
+                    }
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
+            }
         }
 
         protected ValidationFailure TestConnection()
