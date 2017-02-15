@@ -23,20 +23,22 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected readonly IDownloadStationProxy _proxy;
         protected readonly ISharedFolderResolver _sharedFolderResolver;
         protected readonly ISerialNumberProvider _serialNumberProvider;
+        protected readonly IFileStationProxy _fileStationProxy;
 
-        public TorrentDownloadStation(IDownloadStationProxy proxy,
-                               ITorrentFileInfoReader torrentFileInfoReader,
-                               IHttpClient httpClient,
-                               IConfigService configService,
-                               IDiskProvider diskProvider,
-                               IRemotePathMappingService remotePathMappingService,
-                               Logger logger,
-                               ICacheManager cacheManager,
-                               ISharedFolderResolver sharedFolderResolver,
-                               ISerialNumberProvider serialNumberProvider)
+        public TorrentDownloadStation(ISharedFolderResolver sharedFolderResolver,
+                                      ISerialNumberProvider serialNumberProvider,
+                                      IFileStationProxy fileStationProxy,
+                                      IDownloadStationProxy proxy,
+                                      ITorrentFileInfoReader torrentFileInfoReader,
+                                      IHttpClient httpClient,
+                                      IConfigService configService,
+                                      IDiskProvider diskProvider,
+                                      IRemotePathMappingService remotePathMappingService,
+                                      Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
+            _fileStationProxy = fileStationProxy;
             _sharedFolderResolver = sharedFolderResolver;
             _serialNumberProvider = serialNumberProvider;
         }
@@ -181,55 +183,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             failures.AddIfNotNull(TestConnection());
             if (failures.Any()) return;
+            failures.AddIfNotNull(TestOutputPath());
             failures.AddIfNotNull(TestGetTorrents());
-        }
-
-        protected ValidationFailure TestConnection()
-        {
-            try
-            {
-                return ValidateVersion();
-            }
-            catch (DownloadClientAuthenticationException ex)
-            {
-                _logger.Error(ex, ex.Message);
-                return new NzbDroneValidationFailure("Username", "Authentication failure")
-                {
-                    DetailedDescription = $"Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing {Name} by WhiteList limitations in the {Name} configuration."
-                };
-            }
-            catch (WebException ex)
-            {
-                _logger.Error(ex);
-
-                if (ex.Status == WebExceptionStatus.ConnectFailure)
-                {
-                    return new NzbDroneValidationFailure("Host", "Unable to connect")
-                    {
-                        DetailedDescription = "Please verify the hostname and port."
-                    };
-                }
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
-            }
-        }
-
-        protected ValidationFailure ValidateVersion()
-        {
-            var versionRange = _proxy.GetApiVersion(Settings);
-
-            _logger.Debug("Download Station api version information: Min {0} - Max {1}", versionRange.Min(), versionRange.Max());
-
-            if (!versionRange.Contains(2))
-            {
-                return new ValidationFailure(string.Empty, $"Download Station API version not supported, should be at least 2. It supports from {versionRange.Min()} to {versionRange.Max()}");
-            }
-
-            return null;
         }
 
         protected bool IsFinished(DownloadStationTask torrent)
@@ -308,6 +263,93 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return TimeSpan.FromSeconds(remainingSize / downloadSpeed);
         }
 
+        protected ValidationFailure TestOutputPath()
+        {
+            try
+            {
+                var downloadDir = GetDownloadDirectory();
+
+                if (downloadDir != null)
+                {
+                    var sharedFolder = downloadDir.Split('\\', '/')[0];
+                    var fieldName = Settings.TvDirectory.IsNotNullOrWhiteSpace() ? nameof(Settings.TvDirectory) : nameof(Settings.TvCategory);
+
+                    var folderInfo = _fileStationProxy.GetInfoFileOrDirectory($"/{downloadDir}", Settings);
+
+                    if (folderInfo.Additional == null)
+                    {
+                        return new NzbDroneValidationFailure(fieldName, $"Shared folder does not exist")
+                        {
+                            DetailedDescription = $"The DownloadStation does not have a Shared Folder with the name '{sharedFolder}', are you sure you specified it correctly?"
+                        };
+                    }
+
+                    if (!folderInfo.IsDir)
+                    {
+                        return new NzbDroneValidationFailure(fieldName, $"Folder does not exist")
+                        {
+                            DetailedDescription = $"The folder '{downloadDir}' does not exist, it must be created manually inside the inside the Shared Folder '{sharedFolder}'."
+                        };
+                    }
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
+            }
+        }
+
+        protected ValidationFailure TestConnection()
+        {
+            try
+            {
+                return ValidateVersion();
+            }
+            catch (DownloadClientAuthenticationException ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return new NzbDroneValidationFailure("Username", "Authentication failure")
+                {
+                    DetailedDescription = $"Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing {Name} by WhiteList limitations in the {Name} configuration."
+                };
+            }
+            catch (WebException ex)
+            {
+                _logger.Error(ex);
+
+                if (ex.Status == WebExceptionStatus.ConnectFailure)
+                {
+                    return new NzbDroneValidationFailure("Host", "Unable to connect")
+                    {
+                        DetailedDescription = "Please verify the hostname and port."
+                    };
+                }
+                return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
+            }
+        }
+
+        protected ValidationFailure ValidateVersion()
+        {
+            var versionRange = _proxy.GetApiVersion(Settings);
+
+            _logger.Debug("Download Station api version information: Min {0} - Max {1}", versionRange.Min(), versionRange.Max());
+
+            if (!versionRange.Contains(2))
+            {
+                return new ValidationFailure(string.Empty, $"Download Station API version not supported, should be at least 2. It supports from {versionRange.Min()} to {versionRange.Max()}");
+            }
+
+            return null;
+        }
+
         protected ValidationFailure TestGetTorrents()
         {
             try
@@ -317,7 +359,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
             catch (Exception ex)
             {
-                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, $"Failed to get the list of torrents: {ex.Message}");
             }
         }
 
