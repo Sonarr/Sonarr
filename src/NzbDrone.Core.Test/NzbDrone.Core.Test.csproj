@@ -173,7 +173,7 @@
     <Compile Include="Download\DownloadClientTests\Blackhole\UsenetBlackholeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DelugeTests\DelugeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadClientFixtureBase.cs" />
-    <Compile Include="Download\DownloadClientTests\DownloadStationTests\DownloadStationFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\DownloadStationTests\TorrentDownloadStationFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\SerialNumberProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\SharedFolderResolverFixture.cs" />
     <Compile Include="Download\DownloadClientTests\HadoukenTests\HadoukenFixture.cs" />

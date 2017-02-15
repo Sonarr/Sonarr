@@ -16,7 +16,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {
     [TestFixture]
-    public class DownloadStationFixture : DownloadClientFixtureBase<DownloadStation>
+    public class TorrentDownloadStationFixture : DownloadClientFixtureBase<TorrentDownloadStation>
     {
         protected DownloadStationSettings _settings;
 
@@ -331,11 +331,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[1000]));
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))                 
+                  .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))
                   .Callback(PrepareClientToReturnQueuedItem);
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(s => s.AddTorrentFromData(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))                  
+                  .Setup(s => s.AddTorrentFromData(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))
                   .Callback(PrepareClientToReturnQueuedItem);
         }
 

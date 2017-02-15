@@ -282,6 +282,7 @@
     <Compile Include="Datastore\Migration\098_remove_titans_of_tv.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Datastore\Migration\105_rename_torrent_downloadstation.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -352,7 +353,7 @@
     <Compile Include="Download\Clients\Deluge\DelugeUpdateUIResult.cs" />
     <Compile Include="Download\Clients\DownloadClientAuthenticationException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
-    <Compile Include="Download\Clients\DownloadStation\DownloadStation.cs" />
+    <Compile Include="Download\Clients\DownloadStation\TorrentDownloadStation.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\DownloadStationProxy.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationSettings.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationTorrent.cs" />
