@@ -18,13 +18,13 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
-    public class DownloadStation : TorrentClientBase<DownloadStationSettings>
+    public class TorrentDownloadStation : TorrentClientBase<DownloadStationSettings>
     {
         protected readonly IDownloadStationProxy _proxy;
         protected readonly ISharedFolderResolver _sharedFolderResolver;
         protected readonly ISerialNumberProvider _serialNumberProvider;
 
-        public DownloadStation(IDownloadStationProxy proxy,
+        public TorrentDownloadStation(IDownloadStationProxy proxy,
                                ITorrentFileInfoReader torrentFileInfoReader,
                                IHttpClient httpClient,
                                IConfigService configService,
