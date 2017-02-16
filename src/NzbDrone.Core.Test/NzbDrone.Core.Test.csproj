@@ -419,6 +419,9 @@
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\Indexers\TorrentRss\LimeTorrents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="License.txt" />
     <None Include="Files\Indexers\BroadcastheNet\RecentFeed.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
