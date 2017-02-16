@@ -77,8 +77,8 @@ namespace NzbDrone.Core.Indexers
         {
             try
             {
-                var content = indexerResponse.Content;
-                content = ReplaceEntities.Replace(content, ReplaceEntity);
+                var content = XmlCleaner.ReplaceEntities(indexerResponse.Content);
+                content = XmlCleaner.ReplaceUnicode(content);
 
                 using (var xmlTextReader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
                 {
@@ -94,19 +94,6 @@ namespace NzbDrone.Core.Indexers
                 ex.Data.Add("ContentSample", contentSample);
 
                 throw;
-            }
-        }
-
-        protected virtual string ReplaceEntity(Match match)
-        {
-            try
-            {
-                var character = WebUtility.HtmlDecode(match.Value);
-                return string.Concat("&#", (int)character[0], ";");
-            }
-            catch
-            {
-                return match.Value;
             }
         }
 
