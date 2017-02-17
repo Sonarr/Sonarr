@@ -148,6 +148,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("RemoveFailedDownloads", value); }
         }
 
+        public bool ClearSeriesIfFolderMissing
+        {
+            get { return GetValueBoolean("ClearSeriesIfFolderMissing", false); }
+
+            set { SetValue("ClearSeriesIfFolderMissing", value); }
+        }
+
         public bool CreateEmptySeriesFolders
         {
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }

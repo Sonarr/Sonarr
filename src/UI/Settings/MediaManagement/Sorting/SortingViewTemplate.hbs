@@ -2,6 +2,29 @@
     <legend>Folders</legend>
 
     <div class="form-group">
+        <label class="col-sm-3 control-label">Clear series if folder is missing</label>
+
+        <div class="col-sm-9">
+            <div class="input-group">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="clearSeriesIfFolderMissing"/>
+
+                    <p>
+                        <span>Yes</span>
+                        <span>No</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"/>
+                </label>
+
+                <span class="help-inline-checkbox">
+                    <i class="icon-sonarr-form-info" title="Clear series episodes if series folder is missing during disk scan"/>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
         <label class="col-sm-3 control-label">Create empty series folders</label>
 
         <div class="col-sm-9">
