@@ -76,9 +76,9 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            if (_diskProvider.GetDirectories(rootFolder).Empty())
+            if (_diskProvider.GetDirectories(rootFolder).Empty() && !_configService.ClearSeriesIfFolderMissing && !_configService.CreateEmptySeriesFolders)
             {
-                _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
+                _logger.Warn("Series' root folder ({0}) is empty and no options set to create folders or clean DB.", rootFolder);
                 _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series,
                     SeriesScanSkippedReason.RootFolderIsEmpty));
                 return;
