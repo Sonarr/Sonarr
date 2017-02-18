@@ -108,11 +108,15 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            var videoFilesStopwatch = Stopwatch.StartNew();
-            var mediaFileList = FilterFiles(series, GetVideoFiles(series.Path)).ToList();
+            var mediaFileList = new List<string>();
+            if (seriesFolderAlreadyExists)
+            {
+                var videoFilesStopwatch = Stopwatch.StartNew();
+                mediaFileList = FilterFiles(series, GetVideoFiles(series.Path)).ToList();
 
-            videoFilesStopwatch.Stop();
-            _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
+                videoFilesStopwatch.Stop();
+                _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
+            }
 
             _logger.Debug("{0} Cleaning up media files in DB", series);
             _mediaFileTableCleanupService.Clean(series, mediaFileList);
