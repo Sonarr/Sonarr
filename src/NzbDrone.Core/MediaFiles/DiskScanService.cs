@@ -76,7 +76,7 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            if (_diskProvider.GetDirectories(rootFolder).Empty() && !_configService.ClearSeriesIfFolderMissing && !_configService.CreateEmptySeriesFolders)
+            if (_diskProvider.GetDirectories(rootFolder).Empty() && !_configService.UpdateSeriesIfFolderMissing && !_configService.CreateEmptySeriesFolders)
             {
                 _logger.Warn("Series' root folder ({0}) is empty and no options set to create folders or clean DB.", rootFolder);
                 _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series,
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.Debug("Series folder doesn't exist: {0}", series.Path);
                     
-                    if (!_configService.ClearSeriesIfFolderMissing)
+                    if (!_configService.UpdateSeriesIfFolderMissing)
                     {
                         _logger.Warn("Series folder skipped for scan: {0}", series.Path);
                         _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.SeriesFolderDoesNotExist));

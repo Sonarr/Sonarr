@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Principal;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -62,7 +61,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_not_scan_if_series_root_folder_is_empty_and_create_and_clear_missing_disabled()
+        public void should_not_scan_if_series_root_folder_is_empty_and_create_and_update_missing_disabled()
         {
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(It.IsAny<string>()))
@@ -110,12 +109,12 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_clean_but_not_import_if_series_folder_does_not_exist_but_clear_missing_enabled()
+        public void should_clean_but_not_import_if_series_folder_does_not_exist_but_update_missing_enabled()
         {
             GivenParentFolderExists();
 
             Mocker.GetMock<IConfigService>()
-                  .Setup(s => s.ClearSeriesIfFolderMissing)
+                  .Setup(s => s.UpdateSeriesIfFolderMissing)
                   .Returns(true);
 
             Mocker.GetMock<IDiskProvider>()
@@ -139,12 +138,12 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_clean_but_not_import_if_series_folder_does_not_exist_but_clear_missing_and_create_folder_enabled()
+        public void should_clean_but_not_import_if_series_folder_does_not_exist_but_update_missing_and_create_folder_enabled()
         {
             GivenParentFolderExists();
 
             Mocker.GetMock<IConfigService>()
-                  .Setup(s => s.ClearSeriesIfFolderMissing)
+                  .Setup(s => s.UpdateSeriesIfFolderMissing)
                   .Returns(true);
 
             Mocker.GetMock<IConfigService>()
