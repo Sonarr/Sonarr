@@ -9,7 +9,6 @@ namespace NzbDrone.Api.Config
         public bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
         public string RecycleBin { get; set; }
         public bool AutoDownloadPropers { get; set; }
-        public bool UpdateSeriesIfFolderMissing { get; set; }
         public bool CreateEmptySeriesFolders { get; set; }
         public FileDateType FileDate { get; set; }
 
@@ -34,7 +33,6 @@ namespace NzbDrone.Api.Config
                 AutoUnmonitorPreviouslyDownloadedEpisodes = model.AutoUnmonitorPreviouslyDownloadedEpisodes,
                 RecycleBin = model.RecycleBin,
                 AutoDownloadPropers = model.AutoDownloadPropers,
-                UpdateSeriesIfFolderMissing = model.UpdateSeriesIfFolderMissing,
                 CreateEmptySeriesFolders = model.CreateEmptySeriesFolders,
                 FileDate = model.FileDate,
 

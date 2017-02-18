@@ -27,7 +27,6 @@ namespace NzbDrone.Core.Configuration
         bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
         string RecycleBin { get; set; }
         bool AutoDownloadPropers { get; set; }
-        bool UpdateSeriesIfFolderMissing { get; set; }
         bool CreateEmptySeriesFolders { get; set; }
         FileDateType FileDate { get; set; }
         bool SkipFreeSpaceCheckWhenImporting { get; set; }

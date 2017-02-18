@@ -67,27 +67,23 @@ namespace NzbDrone.Core.MediaFiles
         {
             var rootFolder = _diskProvider.GetParentFolder(series.Path);
 
-            var rootFolderExists = _diskProvider.FolderExists(rootFolder);
-            if (!rootFolderExists)
+            if (!_diskProvider.FolderExists(rootFolder))
             {
                 _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series,
-                    SeriesScanSkippedReason.RootFolderDoesNotExist));
+                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderDoesNotExist));
                 return;
             }
 
-            if (_diskProvider.GetDirectories(rootFolder).Empty() && !_configService.UpdateSeriesIfFolderMissing && !_configService.CreateEmptySeriesFolders)
+            if (_diskProvider.GetDirectories(rootFolder).Empty())
             {
-                _logger.Warn("Series' root folder ({0}) is empty and no options set to create folders or clean DB.", rootFolder);
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series,
-                    SeriesScanSkippedReason.RootFolderIsEmpty));
+                _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
+                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderIsEmpty));
                 return;
             }
 
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
 
-            var seriesFolderAlreadyExists = _diskProvider.FolderExists(series.Path);
-            if (!seriesFolderAlreadyExists)
+            if (!_diskProvider.FolderExists(series.Path))
             {
                 if (_configService.CreateEmptySeriesFolders)
                 {
@@ -98,38 +94,36 @@ namespace NzbDrone.Core.MediaFiles
                 else
                 {
                     _logger.Debug("Series folder doesn't exist: {0}", series.Path);
-                    
-                    if (!_configService.UpdateSeriesIfFolderMissing)
-                    {
-                        _logger.Warn("Series folder skipped for scan: {0}", series.Path);
-                        _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.SeriesFolderDoesNotExist));
-                        return;
-                    }
                 }
+                CleanMediaFiles(series, new List<string>());
+                CompletedScanning(series);
+                return;
             }
 
-            var mediaFileList = new List<string>();
-            if (seriesFolderAlreadyExists)
-            {
-                var videoFilesStopwatch = Stopwatch.StartNew();
-                mediaFileList = FilterFiles(series, GetVideoFiles(series.Path)).ToList();
+            var videoFilesStopwatch = Stopwatch.StartNew();
+            var mediaFileList = FilterFiles(series, GetVideoFiles(series.Path)).ToList();
+            videoFilesStopwatch.Stop();
+            _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 
-                videoFilesStopwatch.Stop();
-                _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
-            }
+            CleanMediaFiles(series, mediaFileList);
 
+            var decisionsStopwatch = Stopwatch.StartNew();
+            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
+            decisionsStopwatch.Stop();
+            _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
+            _importApprovedEpisodes.Import(decisions, false);
+
+            CompletedScanning(series);
+        }
+
+        private void CleanMediaFiles(Series series, List<string> mediaFileList)
+        {
             _logger.Debug("{0} Cleaning up media files in DB", series);
             _mediaFileTableCleanupService.Clean(series, mediaFileList);
+        }
 
-            if (seriesFolderAlreadyExists)
-            {
-                var decisionsStopwatch = Stopwatch.StartNew();
-                var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
-                decisionsStopwatch.Stop();
-                _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
-                _importApprovedEpisodes.Import(decisions, false);
-            }
-
+        private void CompletedScanning(Series series)
+        {
             _logger.Info("Completed scanning disk for {0}", series.Title);
             _eventAggregator.PublishEvent(new SeriesScannedEvent(series));
         }

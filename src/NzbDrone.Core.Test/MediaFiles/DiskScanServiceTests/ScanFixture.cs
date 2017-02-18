@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_not_scan_if_series_root_folder_is_empty_and_create_and_update_missing_disabled()
+        public void should_not_scan_if_series_root_folder_is_empty()
         {
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(It.IsAny<string>()))
@@ -80,26 +80,15 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_create_series_folder_and_clean_but_not_import_if_series_folder_does_not_exist_but_create_folder_enabled()
+        public void should_clean_but_not_import_if_series_folder_does_not_exist()
         {
             GivenParentFolderExists();
-
-            Mocker.GetMock<IConfigService>()
-                  .Setup(s => s.CreateEmptySeriesFolders)
-                  .Returns(true);
-
+            
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(@"C:\Test\TV\Series"))
                   .Returns(false);
 
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetDirectories(It.IsAny<string>()))
-                  .Returns(new string[0]);
-
             Subject.Scan(_series);
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.CreateFolder(It.IsAny<string>()), Times.Once());
 
             Mocker.GetMock<IMediaFileTableCleanupService>()
                   .Verify(v => v.Clean(It.IsAny<Series>(), It.IsAny<List<string>>()), Times.Once());
@@ -109,43 +98,10 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_clean_but_not_import_if_series_folder_does_not_exist_but_update_missing_enabled()
+        public void should_create_and_clean_but_not_import_if_series_folder_does_not_exist_but_create_folder_enabled()
         {
             GivenParentFolderExists();
-
-            Mocker.GetMock<IConfigService>()
-                  .Setup(s => s.UpdateSeriesIfFolderMissing)
-                  .Returns(true);
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FolderExists(@"C:\Test\TV\Series"))
-                  .Returns(false);
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetDirectories(It.IsAny<string>()))
-                  .Returns(new string[0]);
-
-            Subject.Scan(_series);
-
-            Mocker.GetMock<IMediaFileTableCleanupService>()
-                  .Verify(v => v.Clean(It.IsAny<Series>(), It.IsAny<List<string>>()), Times.Once());
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.GetFiles(It.IsAny<string>(), It.IsAny<SearchOption>()), Times.Never());
-
-            Mocker.GetMock<IMakeImportDecision>()
-                  .Verify(v => v.GetImportDecisions(It.IsAny<List<string>>(), _series), Times.Never());
-        }
-
-        [Test]
-        public void should_clean_but_not_import_if_series_folder_does_not_exist_but_update_missing_and_create_folder_enabled()
-        {
-            GivenParentFolderExists();
-
-            Mocker.GetMock<IConfigService>()
-                  .Setup(s => s.UpdateSeriesIfFolderMissing)
-                  .Returns(true);
-
+            
             Mocker.GetMock<IConfigService>()
                   .Setup(s => s.CreateEmptySeriesFolders)
                   .Returns(true);
@@ -154,17 +110,10 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
                   .Setup(s => s.FolderExists(@"C:\Test\TV\Series"))
                   .Returns(false);
 
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetDirectories(It.IsAny<string>()))
-                  .Returns(new string[0]);
-
             Subject.Scan(_series);
 
             Mocker.GetMock<IMediaFileTableCleanupService>()
                   .Verify(v => v.Clean(It.IsAny<Series>(), It.IsAny<List<string>>()), Times.Once());
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.GetFiles(It.IsAny<string>(), It.IsAny<SearchOption>()), Times.Never());
 
             Mocker.GetMock<IMakeImportDecision>()
                   .Verify(v => v.GetImportDecisions(It.IsAny<List<string>>(), _series), Times.Never());
