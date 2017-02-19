@@ -46,11 +46,18 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             var items = new List<DownloadClientItem>();
 
             long totalRemainingSize = 0;
-            long globalSpeed = nzbTasks.Sum(n => (GetDownloadSpeed(n)));
+            long globalSpeed = nzbTasks.Where(task=> task.Status == DownloadStationTaskStatus.Downloading).Sum(downloadingTask => GetDownloadSpeed(downloadingTask));
 
             foreach (var nzb in nzbTasks)
             {
                 var outputPath = new OsPath($"/{nzb.Additional.Detail["destination"]}");
+
+                var taskRemainingSize = GetRemainingSize(nzb);
+
+                if (nzb.Status != DownloadStationTaskStatus.Paused)
+                {
+                    totalRemainingSize += taskRemainingSize;
+                }
 
                 if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
                 {
@@ -66,9 +73,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     {
                         continue;
                     }
-                }
-
-                var taskRemainingSize = GetRemainingSize(nzb);
+                }               
                 
                 var item = new DownloadClientItem()
                 {
@@ -83,12 +88,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     IsReadOnly = !IsFinished(nzb)
                 };
 
-                if (globalSpeed > 0)
+                if (item.Status != DownloadItemStatus.Paused)
                 {
-                    totalRemainingSize += taskRemainingSize;
-                    item.RemainingTime = GetRemainingTime(totalRemainingSize, globalSpeed);                    
+                    item.RemainingTime = GetRemainingTime(totalRemainingSize, globalSpeed);
                 }
-
+              
                 if (item.Status == DownloadItemStatus.Completed || item.Status == DownloadItemStatus.Failed)
                 {
                     item.OutputPath = GetOutputPath(outputPath, nzb, serialNumber);
@@ -221,7 +225,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected bool IsFinished(DownloadStationTask task)
         {
             return task.Status == DownloadStationTaskStatus.Finished;
-        }
+        }       
 
         protected string GetMessage(DownloadStationTask task)
         {
