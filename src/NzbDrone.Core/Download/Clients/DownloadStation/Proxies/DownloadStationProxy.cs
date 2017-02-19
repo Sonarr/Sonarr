@@ -10,11 +10,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 {
     public interface IDownloadStationProxy
     {
-        IEnumerable<DownloadStationTorrent> GetTorrents(DownloadStationSettings settings);
+        IEnumerable<DownloadStationTask> GetTasks(DownloadStationTaskType type, DownloadStationSettings settings);
         Dictionary<string, object> GetConfig(DownloadStationSettings settings);
-        void RemoveTorrent(string downloadId, DownloadStationSettings settings);
-        void AddTorrentFromUrl(string url, string downloadDirectory, DownloadStationSettings settings);
-        void AddTorrentFromData(byte[] torrentData, string filename, string downloadDirectory, DownloadStationSettings settings);
+        void RemoveTask(string downloadId, DownloadStationSettings settings);
+        void AddTaskFromUrl(string url, string downloadDirectory, DownloadStationSettings settings);
+        void AddTaskFromData(byte[] data, string filename, string downloadDirectory, DownloadStationSettings settings);
         IEnumerable<int> GetApiVersion(DownloadStationSettings settings);
     }
 
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
         {
         }
 
-        public void AddTorrentFromData(byte[] torrentData, string filename, string downloadDirectory, DownloadStationSettings settings)
+        public void AddTaskFromData(byte[] data, string filename, string downloadDirectory, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -39,19 +39,19 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 arguments.Add("destination", downloadDirectory);
             }
 
-            arguments.Add("file", new Dictionary<string, object>() { { "name", filename }, { "data", torrentData } });
+            arguments.Add("file", new Dictionary<string, object>() { { "name", filename }, { "data", data } });
            
-            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add torrent from data {filename}", HttpMethod.POST);            
+            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add task from data {filename}", HttpMethod.POST);            
         }
 
-        public void AddTorrentFromUrl(string torrentUrl, string downloadDirectory, DownloadStationSettings settings)
+        public void AddTaskFromUrl(string url, string downloadDirectory, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {
                 { "api", "SYNO.DownloadStation.Task" },
                 { "version", "3" },
                 { "method", "create" },
-                { "uri", torrentUrl }
+                { "uri", url }
             };
 
             if (downloadDirectory.IsNotNullOrWhiteSpace())
@@ -59,10 +59,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 arguments.Add("destination", downloadDirectory);
             }
 
-            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add torrent from url {torrentUrl}", HttpMethod.GET);
+            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add task from url {url}");
         }
 
-        public IEnumerable<DownloadStationTorrent> GetTorrents(DownloadStationSettings settings)
+        public IEnumerable<DownloadStationTask> GetTasks(DownloadStationTaskType type, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -74,14 +74,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
             try
             {
-                var response = ProcessRequest<DownloadStationTaskInfoResponse>(DiskStationApi.DownloadStationTask, arguments, settings, "get torrents");
+                var response = ProcessRequest<DownloadStationTaskInfoResponse>(DiskStationApi.DownloadStationTask, arguments, settings, "get tasks");
 
-                return response.Data.Tasks.Where(t => t.Type == DownloadStationTaskType.BT);
+                return response.Data.Tasks.Where(t => t.Type == type);
             }
             catch (DownloadClientException e)
             {
                 _logger.Error(e);
-                return new List<DownloadStationTorrent>();
+                return new List<DownloadStationTask>();
             }
         }
 
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             return response.Data;
         }
 
-        public void RemoveTorrent(string downloadId, DownloadStationSettings settings)
+        public void RemoveTask(string downloadId, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {

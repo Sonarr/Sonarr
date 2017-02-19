@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
-    public class DownloadStationTorrent
+    public class DownloadStationTask
     {
         public string Username { get; set; }
 
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         [JsonConverter(typeof(StringEnumConverter))]
         public DownloadStationTaskStatus Status { get; set; }
 
-        public DownloadStationTorrentAdditional Additional { get; set; }
+        public DownloadStationTaskAdditional Additional { get; set; }
 
         public override string ToString()
         {

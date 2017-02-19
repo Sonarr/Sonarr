@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static NzbDrone.Core.Download.Clients.DownloadStation.DownloadStationTorrent;
+using static NzbDrone.Core.Download.Clients.DownloadStation.DownloadStationTask;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
-    public class DownloadStationTorrentFile
+    public class DownloadStationTaskFile
     {
         public string FileName { get; set; }
 
