@@ -47,6 +47,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             var items = new List<DownloadClientItem>();
 
+            long totalRemainingSize = 0;
+            long globalSpeed = nzbTasks.Sum(n => (GetDownloadSpeed(n)));
+
             foreach (var nzb in nzbTasks)
             {
                 var outputPath = new OsPath($"/{nzb.Additional.Detail["destination"]}");
@@ -67,6 +70,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     }
                 }
 
+                var taskRemainingSize = GetRemainingSize(nzb);
+                
                 var item = new DownloadClientItem()
                 {
                     Category = Settings.TvCategory,
@@ -74,12 +79,17 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     DownloadId = CreateDownloadId(nzb.Id, serialNumber),
                     Title = nzb.Title,
                     TotalSize = nzb.Size,
-                    RemainingSize = GetRemainingSize(nzb),
-                    RemainingTime = GetRemainingTime(nzb),
+                    RemainingSize = taskRemainingSize,                    
                     Status = GetStatus(nzb),
                     Message = GetMessage(nzb),
                     IsReadOnly = !IsFinished(nzb)
                 };
+
+                if (globalSpeed > 0)
+                {
+                    totalRemainingSize += taskRemainingSize;
+                    item.RemainingTime = GetRemainingTime(totalRemainingSize, globalSpeed);                    
+                }
 
                 if (item.Status == DownloadItemStatus.Completed || item.Status == DownloadItemStatus.Failed)
                 {
@@ -265,7 +275,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return task.Size - Math.Max(0, downloadedSize);
         }
 
-        protected TimeSpan? GetRemainingTime(DownloadStationTask task)
+        protected long GetDownloadSpeed(DownloadStationTask task)
         {
             var speedString = task.Additional.Transfer["speed_download"];
             long downloadSpeed;
@@ -276,14 +286,19 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 downloadSpeed = 0;
             }
 
-            if (downloadSpeed <= 0)
+            return Math.Max(downloadSpeed, 0);
+        }
+
+        protected TimeSpan? GetRemainingTime(long remainingSize, long downloadSpeed)
+        {
+            if (downloadSpeed > 0)
+            {
+                return TimeSpan.FromSeconds(remainingSize / downloadSpeed);
+            }
+            else
             {
                 return null;
             }
-
-            var remainingSize = GetRemainingSize(task);
-
-            return TimeSpan.FromSeconds(remainingSize / downloadSpeed);
         }
 
         protected ValidationFailure TestGetNZB()
