@@ -249,6 +249,7 @@
     <Compile Include="Datastore\Migration\068_add_release_restrictions.cs" />
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
+    <Compile Include="Datastore\Migration\106_update_btn_url.cs" />
     <Compile Include="Datastore\Migration\096_disable_kickass.cs" />
     <Compile Include="Datastore\Migration\095_add_additional_episodes_index.cs" />
     <Compile Include="Datastore\Migration\104_remove_kickass.cs" />

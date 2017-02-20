@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         public BroadcastheNetSettings()
         {
-            BaseUrl = "http://api.btnapps.net/";
+            BaseUrl = "http://api.broadcasthe.net/";
         }
 
         [FieldDefinition(0, Label = "API URL", Advanced = true, HelpText = "Do not change this unless you know what you're doing. Since your API key will be sent to that host.")]
