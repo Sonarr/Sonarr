@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             Subject.Definition = new IndexerDefinition()
                 {
                     Name = "BroadcastheNet",
-                    Settings = new BroadcastheNetSettings() { ApiKey = "abc", BaseUrl = "https://api.btnapps.net/" }
+                    Settings = new BroadcastheNetSettings() { ApiKey = "abc", BaseUrl = "https://api.broadcasthe.net/" }
                 };
         }
 
