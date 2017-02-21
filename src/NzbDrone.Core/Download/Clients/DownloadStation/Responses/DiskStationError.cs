@@ -83,16 +83,23 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
             {
                 return AuthMessages[Code];
             }
+
             if (api == DiskStationApi.DownloadStationTask && DownloadStationTaskMessages.ContainsKey(Code))
             {
                 return DownloadStationTaskMessages[Code];
             }
+
             if (api == DiskStationApi.FileStationList && FileStationMessages.ContainsKey(Code))
             {
                 return FileStationMessages[Code];
             }
 
-            return CommonMessages[Code];
+            if (CommonMessages.ContainsKey(Code))
+            {
+                return CommonMessages[Code];
+            }
+
+            return $"{ Code } - Unknown error";
         }
     }
 }
