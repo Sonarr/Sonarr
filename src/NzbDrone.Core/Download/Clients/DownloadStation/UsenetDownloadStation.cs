@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     {
                         return new NzbDroneValidationFailure(fieldName, $"Folder does not exist")
                         {
-                            DetailedDescription = $"The folder '{downloadDir}' does not exist, it must be created manually inside the inside the Shared Folder '{sharedFolder}'."
+                            DetailedDescription = $"The folder '{downloadDir}' does not exist, it must be created manually inside the Shared Folder '{sharedFolder}'."
                         };
                     }
                 }
