@@ -5,7 +5,6 @@ using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Nyaa;
-using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -37,22 +36,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
                 SceneTitles = new List<string> { "Steins;Gate" },
                 AbsoluteEpisodeNumber = 1
             };
-        }
-
-        [Test]
-        public void wombles_fetch_recent()
-        {
-            var indexer = Mocker.Resolve<Wombles>();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "MyIndexer",
-                Settings = NullConfig.Instance
-            };
-
-            var result = indexer.FetchRecent();
-
-            ValidateResult(result);
         }
 
         [Test]

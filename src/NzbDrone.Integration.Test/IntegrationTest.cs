@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NLog;
+using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Integration.Test
@@ -24,15 +25,15 @@ namespace NzbDrone.Integration.Test
 
         protected override void InitializeTestTarget()
         {
-            // Add Wombles
             Indexers.Post(new Api.Indexers.IndexerResource
             {
-                EnableRss = true,
-                ConfigContract = "NullConfig",
-                Implementation = "Wombles",
-                Name = "Wombles",
+                EnableRss = false,
+                EnableSearch = false,
+                ConfigContract = nameof(NewznabSettings),
+                Implementation = nameof(Newznab),
+                Name = "NewznabTest",
                 Protocol = Core.Indexers.DownloadProtocol.Usenet,
-                Fields = new List<Api.ClientSchema.Field>()
+                Fields = Api.ClientSchema.SchemaBuilder.ToSchema(new NewznabSettings())
             });
         }
 
