@@ -7,6 +7,7 @@ using System.Net;
 namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
+    [Ignore("Need mock Newznab to test")]
     public class ReleaseFixture : IntegrationTest
     {
         [Test]
@@ -36,8 +37,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             // But if it didn't accept it, it would return NotFound.
             // TODO: Maybe we should create a full mock Newznab server endpoint.
             //var result = Releases.Post(new ReleaseResource { Guid = releases.First().Guid });
-            //result.Guid.Should().Be(releases.First().Guid); 
-            
+            //result.Guid.Should().Be(releases.First().Guid);
+
             var result = Releases.Post(new ReleaseResource { Guid = releases.First().Guid }, HttpStatusCode.InternalServerError);
         }
 
