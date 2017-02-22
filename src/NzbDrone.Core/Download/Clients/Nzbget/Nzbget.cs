@@ -17,6 +17,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
     public class Nzbget : UsenetClientBase<NzbgetSettings>
     {
         private readonly INzbgetProxy _proxy;
+        private readonly string[] _successStatus = { "SUCCESS", "NONE" };
+        private readonly string[] _deleteFailedStatus =  { "HEALTH", "DUPE", "SCAN", "COPY" };
 
         public Nzbget(INzbgetProxy proxy,
                       IHttpClient httpClient,
@@ -128,7 +130,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
 
             var historyItems = new List<DownloadClientItem>();
-            var successStatus = new[] { "SUCCESS", "NONE" };
 
             foreach (var item in history)
             {
@@ -141,7 +142,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
                 historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(item.DestDir));
                 historyItem.Category = item.Category;
-                historyItem.Message = string.Format("PAR Status: {0} - Unpack Status: {1} - Move Status: {2} - Script Status: {3} - Delete Status: {4} - Mark Status: {5}", item.ParStatus, item.UnpackStatus, item.MoveStatus, item.ScriptStatus, item.DeleteStatus, item.MarkStatus);
+                historyItem.Message = $"PAR Status: {item.ParStatus} - Unpack Status: {item.UnpackStatus} - Move Status: {item.MoveStatus} - Script Status: {item.ScriptStatus} - Delete Status: {item.DeleteStatus} - Mark Status: {item.MarkStatus}";
                 historyItem.Status = DownloadItemStatus.Completed;
                 historyItem.RemainingTime = TimeSpan.Zero;
 
@@ -150,7 +151,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                     continue;
                 }
 
-                if (!successStatus.Contains(item.ParStatus))
+                if (!_successStatus.Contains(item.ParStatus))
                 {
                     historyItem.Status = DownloadItemStatus.Failed;
                 }
@@ -159,24 +160,24 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 {
                     historyItem.Status = DownloadItemStatus.Warning;
                 }
-                else if (!successStatus.Contains(item.UnpackStatus))
+                else if (!_successStatus.Contains(item.UnpackStatus))
                 {
                     historyItem.Status = DownloadItemStatus.Failed;
                 }
 
-                if (!successStatus.Contains(item.MoveStatus))
+                if (!_successStatus.Contains(item.MoveStatus))
                 {
                     historyItem.Status = DownloadItemStatus.Warning;
                 }
 
-                if (!successStatus.Contains(item.ScriptStatus))
+                if (!_successStatus.Contains(item.ScriptStatus))
                 {
                     historyItem.Status = DownloadItemStatus.Failed;
                 }
 
-                if (!successStatus.Contains(item.DeleteStatus) && item.DeleteStatus.IsNotNullOrWhiteSpace())
+                if (!_successStatus.Contains(item.DeleteStatus) && item.DeleteStatus.IsNotNullOrWhiteSpace())
                 {
-                    if (item.DeleteStatus == "COPY" || item.DeleteStatus == "DUPE")
+                    if (_deleteFailedStatus.Contains(item.DeleteStatus))
                     {
                         historyItem.Status = DownloadItemStatus.Failed;
                     }
@@ -184,11 +185,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                     {
                         historyItem.Status = DownloadItemStatus.Warning;
                     }
-                }
-
-                if (item.DeleteStatus == "HEALTH")
-                {
-                    historyItem.Status = DownloadItemStatus.Failed;
                 }
 
                 historyItems.Add(historyItem);
