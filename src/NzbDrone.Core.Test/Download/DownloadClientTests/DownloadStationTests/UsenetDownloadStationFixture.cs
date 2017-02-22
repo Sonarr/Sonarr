@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id1",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Waiting,
-                Type = DownloadStationTaskType.NZB,
+                Type = DownloadStationTaskType.NZB.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id2",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Finished,
-                Type = DownloadStationTaskType.NZB,
+                Type = DownloadStationTaskType.NZB.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id2",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Seeding,
-                Type = DownloadStationTaskType.NZB,
+                Type = DownloadStationTaskType.NZB.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id3",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Downloading,
-                Type = DownloadStationTaskType.NZB,
+                Type = DownloadStationTaskType.NZB.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id4",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Error,
-                Type = DownloadStationTaskType.NZB,
+                Type = DownloadStationTaskType.NZB.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional

@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             {
                 var response = ProcessRequest<DownloadStationTaskInfoResponse>(DiskStationApi.DownloadStationTask, arguments, settings, "get tasks");
 
-                return response.Data.Tasks.Where(t => t.Type == type);
+                return response.Data.Tasks.Where(t => t.Type == type.ToString());
             }
             catch (DownloadClientException e)
             {
