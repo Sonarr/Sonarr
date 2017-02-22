@@ -45,9 +45,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public override string Name => "Download Station";
 
+        protected IEnumerable<DownloadStationTask> GetTasks()
+        {
+            return _proxy.GetTasks(Settings).Where(v => v.Type == DownloadStationTaskType.BT.ToString());
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            var torrents = _proxy.GetTasks(DownloadStationTaskType.BT, Settings);
+            var torrents = GetTasks();
             var serialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
             var items = new List<DownloadClientItem>();
@@ -145,7 +150,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             _proxy.AddTaskFromUrl(magnetLink, GetDownloadDirectory(), Settings);
 
-            var item = _proxy.GetTasks(DownloadStationTaskType.BT, Settings).SingleOrDefault(t => t.Additional.Detail["uri"] == magnetLink);
+            var item = GetTasks().SingleOrDefault(t => t.Additional.Detail["uri"] == magnetLink);
 
             if (item != null)
             {
@@ -164,7 +169,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             _proxy.AddTaskFromData(fileContent, filename, GetDownloadDirectory(), Settings);
 
-            var items = _proxy.GetTasks(DownloadStationTaskType.BT, Settings).Where(t => t.Additional.Detail["uri"] == Path.GetFileNameWithoutExtension(filename));
+            var items = GetTasks().Where(t => t.Additional.Detail["uri"] == Path.GetFileNameWithoutExtension(filename));
 
             var item = items.SingleOrDefault();
 
@@ -354,7 +359,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                _proxy.GetTasks(DownloadStationTaskType.BT, Settings);
+                GetItems();
                 return null;
             }
             catch (Exception ex)

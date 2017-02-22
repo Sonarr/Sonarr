@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 {
     public interface IDownloadStationProxy
     {
-        IEnumerable<DownloadStationTask> GetTasks(DownloadStationTaskType type, DownloadStationSettings settings);
+        IEnumerable<DownloadStationTask> GetTasks(DownloadStationSettings settings);
         Dictionary<string, object> GetConfig(DownloadStationSettings settings);
         void RemoveTask(string downloadId, DownloadStationSettings settings);
         void AddTaskFromUrl(string url, string downloadDirectory, DownloadStationSettings settings);
@@ -40,8 +40,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             }
 
             arguments.Add("file", new Dictionary<string, object>() { { "name", filename }, { "data", data } });
-           
-            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add task from data {filename}", HttpMethod.POST);            
+
+            var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add task from data {filename}", HttpMethod.POST);
         }
 
         public void AddTaskFromUrl(string url, string downloadDirectory, DownloadStationSettings settings)
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             var response = ProcessRequest(DiskStationApi.DownloadStationTask, arguments, settings, $"add task from url {url}");
         }
 
-        public IEnumerable<DownloadStationTask> GetTasks(DownloadStationTaskType type, DownloadStationSettings settings)
+        public IEnumerable<DownloadStationTask> GetTasks(DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, object>
             {
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             {
                 var response = ProcessRequest<DownloadStationTaskInfoResponse>(DiskStationApi.DownloadStationTask, arguments, settings, "get tasks");
 
-                return response.Data.Tasks.Where(t => t.Type == type.ToString());
+                return response.Data.Tasks;
             }
             catch (DownloadClientException e)
             {

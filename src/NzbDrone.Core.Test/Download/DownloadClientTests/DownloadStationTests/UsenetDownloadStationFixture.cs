@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             _settings.TvDirectory = _tvDirectory;
         }
 
-        protected virtual void GivenNZBs(List<DownloadStationTask> nzbs)
+        protected virtual void GivenTasks(List<DownloadStationTask> nzbs)
         {
             if (nzbs == null)
             {
@@ -214,13 +214,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             }
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(s => s.GetTasks(DownloadStationTaskType.NZB, It.IsAny<DownloadStationSettings>()))
+                  .Setup(s => s.GetTasks(It.IsAny<DownloadStationSettings>()))
                   .Returns(nzbs);
         }
 
         protected void PrepareClientToReturnQueuedItem()
         {
-            GivenNZBs(new List<DownloadStationTask>
+            GivenTasks(new List<DownloadStationTask>
             {
                 _queued
             });
@@ -243,7 +243,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             var tasks = new List<DownloadStationTask>() { _queued, _completed, _failed, _downloading, _seeding };
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(d => d.GetTasks(DownloadStationTaskType.NZB, _settings))
+                  .Setup(d => d.GetTasks(_settings))
                   .Returns(tasks);
         }
 
@@ -300,11 +300,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         [Test]
         public void GetItems_should_return_empty_list_if_no_tasks_available()
         {
-            _settings.TvDirectory = @"/shared/folder/sub";
-
             GivenSerialNumber();
             GivenSharedFolder();
-            GivenNZBs(new List<DownloadStationTask>());
+            GivenTasks(new List<DownloadStationTask>());
+
+            Subject.GetItems().Should().BeEmpty();
+        }
+
+        [Test]
+        public void GetItems_should_return_ignore_tasks_of_unknown_type()
+        {
+            GivenSerialNumber();
+            GivenSharedFolder();
+            GivenTasks(new List<DownloadStationTask> { _completed });
+
+            _completed.Type = "ipfs";
 
             Subject.GetItems().Should().BeEmpty();
         }
@@ -316,7 +326,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             GivenSerialNumber();
             GivenSharedFolder();
-            GivenNZBs(new List<DownloadStationTask> { _completed });
+            GivenTasks(new List<DownloadStationTask> { _completed });
 
             Subject.GetItems().Should().BeEmpty();
         }
@@ -350,7 +360,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
-        public void Download_should_throw_and_not_add_tasks_if_cannot_get_serial_number()
+        public void Download_should_throw_and_not_add_task_if_cannot_get_serial_number()
         {
             var remoteEpisode = CreateRemoteEpisode();
 
@@ -370,7 +380,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenNZBs(new List<DownloadStationTask>
+            GivenTasks(new List<DownloadStationTask>
             {
                 _queued, _downloading
             });
@@ -387,7 +397,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenNZBs(new List<DownloadStationTask>
+            GivenTasks(new List<DownloadStationTask>
             {
                 _completed, _failed, _seeding
             });
@@ -408,7 +418,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             _queued.Status = apiStatus;
 
-            GivenNZBs(new List<DownloadStationTask>() { _queued });
+            GivenTasks(new List<DownloadStationTask>() { _queued });
 
             var items = Subject.GetItems();
 
@@ -431,7 +441,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             _queued.Status = apiStatus;
 
-            GivenNZBs(new List<DownloadStationTask>() { _queued });
+            GivenTasks(new List<DownloadStationTask>() { _queued });
 
             var items = Subject.GetItems();
             items.Should().HaveCount(1);
