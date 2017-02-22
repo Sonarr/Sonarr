@@ -42,9 +42,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public override string Name => "Download Station";
 
+        protected IEnumerable<DownloadStationTask> GetTasks()
+        {
+            return _proxy.GetTasks(Settings).Where(v => v.Type == DownloadStationTaskType.NZB.ToString());
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            var nzbTasks = _proxy.GetTasks(DownloadStationTaskType.NZB, Settings);
+            var nzbTasks = GetTasks();
             var serialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
             var items = new List<DownloadClientItem>();
@@ -158,7 +163,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             _proxy.AddTaskFromData(fileContent, filename, GetDownloadDirectory(), Settings);
 
-            var items = _proxy.GetTasks(DownloadStationTaskType.NZB, Settings).Where(t => t.Additional.Detail["uri"] == filename);
+            var items = GetTasks().Where(t => t.Additional.Detail["uri"] == filename);
 
             var item = items.SingleOrDefault();
 
@@ -353,7 +358,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                _proxy.GetTasks(DownloadStationTaskType.NZB, Settings);
+                GetItems();
                 return null;
             }
             catch (Exception ex)

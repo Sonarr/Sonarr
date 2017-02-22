@@ -304,7 +304,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             _settings.TvDirectory = _tvDirectory;
         }
 
-        protected virtual void GivenTorrents(List<DownloadStationTask> torrents)
+        protected virtual void GivenTasks(List<DownloadStationTask> torrents)
         {
             if (torrents == null)
             {
@@ -312,13 +312,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             }
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(s => s.GetTasks(DownloadStationTaskType.BT, It.IsAny<DownloadStationSettings>()))
+                  .Setup(s => s.GetTasks(It.IsAny<DownloadStationSettings>()))
                   .Returns(torrents);
         }
 
         protected void PrepareClientToReturnQueuedItem()
         {
-            GivenTorrents(new List<DownloadStationTask>
+            GivenTasks(new List<DownloadStationTask>
             {
                 _queued
             });
@@ -353,7 +353,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             var tasks = new List<DownloadStationTask>() { _queued, _completed, _failed, _downloading, _seeding };
 
             Mocker.GetMock<IDownloadStationProxy>()
-                  .Setup(d => d.GetTasks(DownloadStationTaskType.BT, _settings))
+                  .Setup(d => d.GetTasks(_settings))
                   .Returns(tasks);
 
             return tasks.Count;
@@ -410,13 +410,35 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
+        public void GetItems_should_return_empty_list_if_no_tasks_available()
+        {
+            GivenSerialNumber();
+            GivenSharedFolder();
+            GivenTasks(new List<DownloadStationTask>());
+
+            Subject.GetItems().Should().BeEmpty();
+        }
+
+        [Test]
+        public void GetItems_should_return_ignore_tasks_of_unknown_type()
+        {
+            GivenSerialNumber();
+            GivenSharedFolder();
+            GivenTasks(new List<DownloadStationTask> { _completed });
+
+            _completed.Type = "ipfs";
+
+            Subject.GetItems().Should().BeEmpty();
+        }
+
+        [Test]
         public void GetItems_should_ignore_downloads_in_wrong_folder()
         {
             _settings.TvDirectory = @"/shared/folder/sub";
 
             GivenSerialNumber();
             GivenSharedFolder();
-            GivenTorrents(new List<DownloadStationTask> { _completed });
+            GivenTasks(new List<DownloadStationTask> { _completed });
 
             Subject.GetItems().Should().BeEmpty();
         }
@@ -470,7 +492,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTask>() { _singleFile });
+            GivenTasks(new List<DownloadStationTask>() { _singleFile });
 
             var items = Subject.GetItems();
 
@@ -484,7 +506,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTask>() { _multipleFiles });
+            GivenTasks(new List<DownloadStationTask>() { _multipleFiles });
 
             var items = Subject.GetItems();
 
@@ -498,7 +520,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTask>() { _singleFileCompleted });
+            GivenTasks(new List<DownloadStationTask>() { _singleFileCompleted });
 
             var items = Subject.GetItems();
 
@@ -512,7 +534,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTask>() { _multipleFilesCompleted });
+            GivenTasks(new List<DownloadStationTask>() { _multipleFilesCompleted });
 
             var items = Subject.GetItems();
 
@@ -526,7 +548,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTask>
+            GivenTasks(new List<DownloadStationTask>
             {
                 _queued, _downloading
             });
@@ -543,7 +565,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             GivenSerialNumber();
             GivenSharedFolder();
 
-            GivenTorrents(new List<DownloadStationTask>
+            GivenTasks(new List<DownloadStationTask>
             {
                 _completed, _failed, _seeding
             });
@@ -565,7 +587,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             _queued.Status = apiStatus;
 
-            GivenTorrents(new List<DownloadStationTask>() { _queued });
+            GivenTasks(new List<DownloadStationTask>() { _queued });
 
             var items = Subject.GetItems();
 
@@ -589,7 +611,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             _queued.Status = apiStatus;
 
-            GivenTorrents(new List<DownloadStationTask>() { _queued });
+            GivenTasks(new List<DownloadStationTask>() { _queued });
 
             var items = Subject.GetItems();
             items.Should().HaveCount(1);
