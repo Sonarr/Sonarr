@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
     public enum DownloadStationTaskType
     {
-        BT, NZB, http, ftp, eMule
+        BT, NZB, http, https, ftp, eMule
     }
 
     public enum DownloadStationTaskStatus
