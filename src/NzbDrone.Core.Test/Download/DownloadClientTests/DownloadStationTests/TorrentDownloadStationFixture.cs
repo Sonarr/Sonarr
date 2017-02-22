@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id1",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Waiting,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id2",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Finished,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id2",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Seeding,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id3",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Downloading,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id4",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Error,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id5",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Seeding,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "a.mkv",
                 Additional = new DownloadStationTaskAdditional
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id6",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Seeding,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id6",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Finished,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "a.mkv",
                 Additional = new DownloadStationTaskAdditional
@@ -244,7 +244,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 Id = "id6",
                 Size = 1000,
                 Status = DownloadStationTaskStatus.Finished,
-                Type = DownloadStationTaskType.BT,
+                Type = DownloadStationTaskType.BT.ToString(),
                 Username = "admin",
                 Title = "title",
                 Additional = new DownloadStationTaskAdditional
