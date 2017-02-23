@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected IEnumerable<DownloadStationTask> GetTasks()
         {
-            return _proxy.GetTasks(Settings).Where(v => v.Type == DownloadStationTaskType.NZB.ToString());
+            return _proxy.GetTasks(Settings).Where(v => v.Type.ToLower() == DownloadStationTaskType.NZB.ToString().ToLower());
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
