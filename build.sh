@@ -39,9 +39,6 @@ CleanFolder()
     find $path -name "FluentValidation.resources.dll" -exec rm "{}" \;
     find $path -name "App.config" -exec rm "{}" \;
 
-    echo "Removing .less files"
-    find $path -name "*.less" -exec rm "{}" \;
-
     echo "Removing vshost files"
     find $path -name "*.vshost.exe" -exec rm "{}" \;
 
