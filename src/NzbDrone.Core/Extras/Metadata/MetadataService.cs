@@ -27,15 +27,15 @@ namespace NzbDrone.Core.Extras.Metadata
         private readonly Logger _logger;
 
         public MetadataService(IConfigService configService,
+                               IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
                                IMetadataFactory metadataFactory,
                                ICleanMetadataService cleanMetadataService,
-                               IDiskProvider diskProvider,
                                IHttpClient httpClient,
                                IMediaFileAttributeService mediaFileAttributeService,
                                IMetadataFileService metadataFileService,
                                Logger logger)
-            : base(configService, diskTransferService, metadataFileService)
+            : base(configService, diskProvider, diskTransferService, logger)
         {
             _metadataFactory = metadataFactory;
             _cleanMetadataService = cleanMetadataService;
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Extras.Metadata
                             }
                             catch (Exception ex)
                             {
-                                _logger.Warn(ex, "Unable to move metadata file: {0}", existingFileName);
+                                _logger.Warn(ex, "Unable to move metadata file after rename: {0}", existingFileName);
                             }
                         }
                     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -15,19 +14,15 @@ namespace NzbDrone.Core.Extras.Others
     public class OtherExtraService : ExtraFileManager<OtherExtraFile>
     {
         private readonly IOtherExtraFileService _otherExtraFileService;
-        private readonly IDiskProvider _diskProvider;
-        private readonly Logger _logger;
 
         public OtherExtraService(IConfigService configService,
+                                 IDiskProvider diskProvider,
                                  IDiskTransferService diskTransferService,
                                  IOtherExtraFileService otherExtraFileService,
-                                 IDiskProvider diskProvider,
                                  Logger logger)
-            : base(configService, diskTransferService, otherExtraFileService)
+            : base(configService, diskProvider, diskTransferService, logger)
         {
             _otherExtraFileService = otherExtraFileService;
-            _diskProvider = diskProvider;
-            _logger = logger;
         }
 
         public override int Order => 2;
@@ -58,23 +53,7 @@ namespace NzbDrone.Core.Extras.Others
 
                 foreach (var extraFile in extraFilesForEpisodeFile)
                 {
-                    var existingFileName = Path.Combine(series.Path, extraFile.RelativePath);
-                    var extension = Path.GetExtension(existingFileName).TrimStart('.');
-                    var newFileName = Path.ChangeExtension(Path.Combine(series.Path, episodeFile.RelativePath), extension);
-
-                    if (newFileName.PathNotEquals(existingFileName))
-                    {
-                        try
-                        {
-                            _diskProvider.MoveFile(existingFileName, newFileName);
-                            extraFile.RelativePath = series.Path.GetRelativePath(newFileName);
-                            movedFiles.Add(extraFile);
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.Warn(ex, "Unable to move extra file: {0}", existingFileName);
-                        }
-                    }
+                    movedFiles.AddIfNotNull(MoveFile(series, episodeFile, extraFile));
                 }
             }
 
@@ -91,7 +70,7 @@ namespace NzbDrone.Core.Extras.Others
                 extension += "-orig";
             }
 
-            var extraFile = ImportFile(series, episodeFile, path, extension, readOnly);
+            var extraFile = ImportFile(series, episodeFile, path, readOnly, extension, null);
 
             _otherExtraFileService.Upsert(extraFile);
 
