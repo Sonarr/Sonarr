@@ -120,7 +120,7 @@ _tests/
 setup/Output/
 *.~is
 
-UI.Phantom/
+UI/
 
 #VS outout folders
 bin
