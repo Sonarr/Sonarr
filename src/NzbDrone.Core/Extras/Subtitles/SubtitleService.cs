@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,18 +16,16 @@ namespace NzbDrone.Core.Extras.Subtitles
     public class SubtitleService : ExtraFileManager<SubtitleFile>
     {
         private readonly ISubtitleFileService _subtitleFileService;
-        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public SubtitleService(IConfigService configService,
+                               IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
                                ISubtitleFileService subtitleFileService,
-                               IDiskProvider diskProvider,
                                Logger logger)
-            : base(configService, diskTransferService, subtitleFileService)
+            : base(configService, diskProvider, diskTransferService, logger)
         {
             _subtitleFileService = subtitleFileService;
-            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -70,25 +67,10 @@ namespace NzbDrone.Core.Extras.Subtitles
                         _logger.Warn("Multiple subtitle files found with the same language and extension for {0}", Path.Combine(series.Path, episodeFile.RelativePath));
                     }
 
-                    foreach (var extraFile in group)
+                    foreach (var subtitleFile in group)
                     {
-                        var existingFileName = Path.Combine(series.Path, extraFile.RelativePath);
-                        var extension = GetExtension(extraFile, existingFileName, copy, groupCount > 1);
-                        var newFileName = Path.ChangeExtension(Path.Combine(series.Path, episodeFile.RelativePath), extension);
-
-                        if (newFileName.PathNotEquals(existingFileName))
-                        {
-                            try
-                            {
-                                _diskProvider.MoveFile(existingFileName, newFileName);
-                                extraFile.RelativePath = series.Path.GetRelativePath(newFileName);
-                                movedFiles.Add(extraFile);
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.Warn(ex, "Unable to move subtitle file: {0}", existingFileName);
-                            }
-                        }
+                        var suffix = GetSuffix(subtitleFile.Language, copy, groupCount > 1);
+                        movedFiles.AddIfNotNull(MoveFile(series, episodeFile, subtitleFile, suffix));
 
                         copy++;
                     }
@@ -104,8 +86,10 @@ namespace NzbDrone.Core.Extras.Subtitles
         {
             if (SubtitleFileExtensions.Extensions.Contains(Path.GetExtension(path)))
             {
-                var subtitleFile = ImportFile(series, episodeFile, path, extension, readOnly);
-                subtitleFile.Language = LanguageParser.ParseSubtitleLanguage(path);
+                var language = LanguageParser.ParseSubtitleLanguage(path);
+                var suffix = GetSuffix(language, 1, false);
+                var subtitleFile = ImportFile(series, episodeFile, path, readOnly, extension, suffix);
+                subtitleFile.Language = language;
 
                 _subtitleFileService.Upsert(subtitleFile);
 
@@ -115,24 +99,24 @@ namespace NzbDrone.Core.Extras.Subtitles
             return null;
         }
 
-        private string GetExtension(SubtitleFile extraFile, string existingFileName, int copy, bool multipleCopies = false)
+        private string GetSuffix(Language language, int copy, bool multipleCopies = false)
         {
-            var fileExtension = Path.GetExtension(existingFileName);
-            var extensionBuilder = new StringBuilder();
+            var extensionBuilder = new StringBuilder(".");
 
             if (multipleCopies)
             {
                 extensionBuilder.Append(copy);
-                extensionBuilder.Append(".");
             }
 
-            if (extraFile.Language != Language.Unknown)
+            if (multipleCopies && language != Language.Unknown)
             {
-                extensionBuilder.Append(IsoLanguages.Get(extraFile.Language).TwoLetterCode);
                 extensionBuilder.Append(".");
             }
 
-            extensionBuilder.Append(fileExtension.TrimStart('.'));
+            if (language != Language.Unknown)
+            {
+                extensionBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
+            }
 
             return extensionBuilder.ToString();
         }

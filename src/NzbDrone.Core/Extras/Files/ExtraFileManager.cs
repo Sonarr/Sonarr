@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
@@ -23,16 +26,19 @@ namespace NzbDrone.Core.Extras.Files
 
     {
         private readonly IConfigService _configService;
+        private readonly IDiskProvider _diskProvider;
         private readonly IDiskTransferService _diskTransferService;
-        private readonly IExtraFileService<TExtraFile> _extraFileService;
+        private readonly Logger _logger;
 
         public ExtraFileManager(IConfigService configService,
+                                IDiskProvider diskProvider,
                                 IDiskTransferService diskTransferService,
-                                IExtraFileService<TExtraFile> extraFileService)
+                                Logger logger)
         {
             _configService = configService;
+            _diskProvider = diskProvider;
             _diskTransferService = diskTransferService;
-            _extraFileService = extraFileService;
+            _logger = logger;
         }
 
         public abstract int Order { get; }
@@ -42,10 +48,19 @@ namespace NzbDrone.Core.Extras.Files
         public abstract IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);
         public abstract ExtraFile Import(Series series, EpisodeFile episodeFile, string path, string extension, bool readOnly);
 
-        protected TExtraFile ImportFile(Series series, EpisodeFile episodeFile, string path, string extension, bool readOnly)
+        protected TExtraFile ImportFile(Series series, EpisodeFile episodeFile, string path, bool readOnly, string extension, string fileNameSuffix = null)
         {
-            var newFileName = Path.Combine(series.Path, Path.ChangeExtension(episodeFile.RelativePath, extension));
+            var newFolder = Path.GetDirectoryName(Path.Combine(series.Path, episodeFile.RelativePath));
+            var filenameBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(episodeFile.RelativePath));
 
+            if (fileNameSuffix.IsNotNullOrWhiteSpace())
+            {
+                filenameBuilder.Append(fileNameSuffix);
+            }
+
+            filenameBuilder.Append(extension);
+
+            var newFileName = Path.Combine(newFolder, filenameBuilder.ToString());
             var transferMode = TransferMode.Move;
 
             if (readOnly)
@@ -61,8 +76,41 @@ namespace NzbDrone.Core.Extras.Files
                 SeasonNumber = episodeFile.SeasonNumber,
                 EpisodeFileId = episodeFile.Id,
                 RelativePath = series.Path.GetRelativePath(newFileName),
-                Extension = Path.GetExtension(path)
+                Extension = extension
             };
+        }
+
+        protected TExtraFile MoveFile(Series series, EpisodeFile episodeFile, TExtraFile extraFile, string fileNameSuffix = null)
+        {
+            var newFolder = Path.GetDirectoryName(Path.Combine(series.Path, episodeFile.RelativePath));
+            var filenameBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(episodeFile.RelativePath));
+
+            if (fileNameSuffix.IsNotNullOrWhiteSpace())
+            {
+                filenameBuilder.Append(fileNameSuffix);
+            }
+
+            filenameBuilder.Append(extraFile.Extension);
+
+            var existingFileName = Path.Combine(series.Path, extraFile.RelativePath);
+            var newFileName = Path.Combine(newFolder, filenameBuilder.ToString());
+
+            if (newFileName.PathNotEquals(existingFileName))
+            {
+                try
+                {
+                    _diskProvider.MoveFile(existingFileName, newFileName);
+                    extraFile.RelativePath = series.Path.GetRelativePath(newFileName);
+
+                    return extraFile;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to move file after rename: {0}", existingFileName);
+                }
+            }
+
+            return null;
         }
     }
 }
