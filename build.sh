@@ -106,12 +106,8 @@ RunGulp()
     ProgressEnd 'yarn install'
 
     echo "##teamcity[progressStart 'Running gulp']"
-    CheckExitCode npm run build
+    CheckExitCode yarn run build --production
     echo "##teamcity[progressFinish 'Running gulp']"
-
-    echo "##teamcity[progressStart 'Running gulp (phantom)']"
-    CheckExitCode yarn run build -- --production
-    echo "##teamcity[progressFinish 'Running gulp (phantom)']"
 }
 
 CreateMdbs()
