@@ -197,7 +197,9 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        public string UiFolder => GetValue("UiFolder", "UI", false);
+        // public string UiFolder => GetValue("UiFolder", "UI", false);GetValue("UiFolder", "UI", false);
+        public string UiFolder => "UI";
+
 
         public bool UpdateAutomatically => GetValueBoolean("UpdateAutomatically", false, false);
 
