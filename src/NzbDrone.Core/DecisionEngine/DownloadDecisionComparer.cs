@@ -23,11 +23,11 @@ namespace NzbDrone.Core.DecisionEngine
         {
             var comparers = new List<CompareDelegate>
             {
-                CompareQuality,
+                ComparePeersIfTorrent,
+				CompareQuality,
                 CompareProtocol,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
-                ComparePeersIfTorrent,
                 CompareAgeIfUsenet,
                 CompareSize
             };
