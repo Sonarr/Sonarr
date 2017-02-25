@@ -24,7 +24,7 @@ namespace NzbDrone.Core.DecisionEngine
             var comparers = new List<CompareDelegate>
             {
                 ComparePeersIfTorrent,
-				CompareQuality,
+                CompareQuality,
                 CompareProtocol,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
