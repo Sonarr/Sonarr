@@ -41,20 +41,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ical.Net.2.2.25\lib\net40\antlr.runtime.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Ical.Net.2.2.32\lib\net40\antlr.runtime.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.6.2.1.0\lib\portable-net40+sl50+wp80+win8+wpa81\FluentValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ical.Net, Version=2.1.0.30332, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ical.Net.2.2.25\lib\net40\Ical.Net.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Ical.Net, Version=2.1.0.18776, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ical.Net.2.2.32\lib\net40\Ical.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Ical.Net.Collections, Version=2.1.0.30331, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ical.Net.2.2.25\lib\net40\Ical.Net.Collections.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Ical.Net.Collections, Version=2.1.0.18775, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ical.Net.2.2.32\lib\net40\Ical.Net.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Nancy, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
@@ -76,8 +73,7 @@
       <HintPath>..\packages\NLog.4.4.3\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ical.Net.2.2.25\lib\net40\NodaTime.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Ical.Net.2.2.32\lib\net40\NodaTime.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
