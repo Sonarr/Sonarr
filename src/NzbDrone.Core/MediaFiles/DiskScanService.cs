@@ -78,15 +78,14 @@ namespace NzbDrone.Core.MediaFiles
             {
                 _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
                 _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderIsEmpty));
-                return; 
+                return;
             }
 
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
-            
+
             if (!_diskProvider.FolderExists(series.Path))
             {
-                if (_configService.CreateEmptySeriesFolders &&
-                    _diskProvider.FolderExists(rootFolder))
+                if (_configService.CreateEmptySeriesFolders)
                 {
                     _logger.Debug("Creating missing series folder: {0}", series.Path);
                     _diskProvider.CreateFolder(series.Path);
@@ -96,27 +95,35 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.Debug("Series folder doesn't exist: {0}", series.Path);
                 }
-
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.SeriesFolderDoesNotExist));
+                CleanMediaFiles(series, new List<string>());
+                CompletedScanning(series);
                 return;
             }
 
             var videoFilesStopwatch = Stopwatch.StartNew();
             var mediaFileList = FilterFiles(series, GetVideoFiles(series.Path)).ToList();
-
             videoFilesStopwatch.Stop();
             _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 
-            _logger.Debug("{0} Cleaning up media files in DB", series);
-            _mediaFileTableCleanupService.Clean(series, mediaFileList);
-            
+            CleanMediaFiles(series, mediaFileList);
+
             var decisionsStopwatch = Stopwatch.StartNew();
             var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
             decisionsStopwatch.Stop();
             _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
-
             _importApprovedEpisodes.Import(decisions, false);
 
+            CompletedScanning(series);
+        }
+
+        private void CleanMediaFiles(Series series, List<string> mediaFileList)
+        {
+            _logger.Debug("{0} Cleaning up media files in DB", series);
+            _mediaFileTableCleanupService.Clean(series, mediaFileList);
+        }
+
+        private void CompletedScanning(Series series)
+        {
             _logger.Info("Completed scanning disk for {0}", series.Title);
             _eventAggregator.PublishEvent(new SeriesScannedEvent(series));
         }
