@@ -135,14 +135,14 @@
     <Compile Include="Expansive\Tree.cs" />
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
-    <Compile Include="Extensions\Base64Extentions.cs" />
+    <Compile Include="Extensions\Base64Extensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Crypto\HashConverter.cs" />
     <Compile Include="Extensions\Int64Extensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\UrlExtensions.cs" />
-    <Compile Include="Extensions\XmlExtentions.cs" />
+    <Compile Include="Extensions\XmlExtensions.cs" />
     <Compile Include="HashUtil.cs" />
     <Compile Include="Http\Dispatchers\CurlHttpDispatcher.cs" />
     <Compile Include="Http\Dispatchers\FallbackHttpDispatcher.cs" />
