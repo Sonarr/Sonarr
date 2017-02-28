@@ -9,14 +9,13 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerFactory : IProviderFactory<IIndexer, IndexerDefinition>
     {
-        List<IIndexer> RssEnabled();
-        List<IIndexer> SearchEnabled();
+        List<IIndexer> RssEnabled(bool filterBlockedIndexers = true);
+        List<IIndexer> SearchEnabled(bool filterBlockedIndexers = true);
     }
 
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
         private readonly IIndexerStatusService _indexerStatusService;
-        private readonly IIndexerRepository _providerRepository;
         private readonly Logger _logger;
 
         public IndexerFactory(IIndexerStatusService indexerStatusService,
@@ -28,7 +27,6 @@ namespace NzbDrone.Core.Indexers
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
             _indexerStatusService = indexerStatusService;
-            _providerRepository = providerRepository;
             _logger = logger;
         }
 
@@ -46,22 +44,28 @@ namespace NzbDrone.Core.Indexers
             definition.SupportsSearch = provider.SupportsSearch;
         }
 
-        public List<IIndexer> RssEnabled()
+        public List<IIndexer> RssEnabled(bool filterBlockedIndexers = true)
         {
             var enabledIndexers = GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableRss);
 
-            var indexers = FilterBlockedIndexers(enabledIndexers);
+            if (filterBlockedIndexers)
+            {
+                return FilterBlockedIndexers(enabledIndexers).ToList();
+            }
 
-            return indexers.ToList();
+            return enabledIndexers.ToList();
         }
 
-        public List<IIndexer> SearchEnabled()
+        public List<IIndexer> SearchEnabled(bool filterBlockedIndexers = true)
         {
             var enabledIndexers = GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableSearch);
 
-            var indexers = FilterBlockedIndexers(enabledIndexers);
+            if (filterBlockedIndexers)
+            {
+                return FilterBlockedIndexers(enabledIndexers).ToList();
+            }
 
-            return indexers.ToList();
+            return enabledIndexers.ToList();
         }
 
         private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)
