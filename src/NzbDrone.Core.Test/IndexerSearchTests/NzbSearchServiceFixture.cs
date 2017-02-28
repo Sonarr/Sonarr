@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             _mockIndexer.SetupGet(s => s.SupportsSearch).Returns(true);
 
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.SearchEnabled())
+                  .Setup(s => s.SearchEnabled(true))
                   .Returns(new List<IIndexer> { _mockIndexer.Object });
 
             Mocker.GetMock<IMakeDownloadDecision>()

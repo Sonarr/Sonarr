@@ -36,12 +36,22 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (rssEnabled.Empty())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enabled indexers do not have RSS sync enabled");
+                if (_indexerFactory.RssEnabled(false).Empty())
+                {
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enabled indexers do not have RSS sync enabled");
+                }
+
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enabled indexers with RSS sync enabled are disabled due to recent failures");
             }
 
             if (searchEnabled.Empty())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enabled indexers do not have searching enabled");
+                if (_indexerFactory.SearchEnabled(false).Empty())
+                {
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enabled indexers do not have searching enabled");
+                }
+
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enabled indexers with searching enabled are disabled due to recent failures");
             }
 
             return new HealthCheck(GetType());

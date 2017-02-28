@@ -23,25 +23,25 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Returns(new List<IIndexer> { _indexerMock.Object });
 
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.RssEnabled())
+                  .Setup(s => s.RssEnabled(true))
                   .Returns(new List<IIndexer>());
 
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.SearchEnabled())
+                  .Setup(s => s.SearchEnabled(true))
                   .Returns(new List<IIndexer>());
         }
 
         private void GivenRssEnabled()
         {
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.RssEnabled())
+                  .Setup(s => s.RssEnabled(true))
                   .Returns(new List<IIndexer> { _indexerMock.Object });
         }
 
         private void GivenSearchEnabled()
         {
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.SearchEnabled())
+                  .Setup(s => s.SearchEnabled(true))
                   .Returns(new List<IIndexer> { _indexerMock.Object });
         }
 
