@@ -2,12 +2,16 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public static class MediaInfoFormatter
     {
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(MediaInfoFormatter));
+
         public static decimal FormatAudioChannels(MediaInfoModel mediaInfo)
         {
             var audioChannelPositions = mediaInfo.AudioChannelPositions;
@@ -55,6 +59,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return mediaInfo.AudioProfile == "Layer 3" ? "MP3" : audioFormat;
             }
 
+            if (audioFormat == "DTS")
+            {
+                return "DTS";
+            }
+
+            Logger.Error("Unknown audio format: {0}", audioFormat);
             return audioFormat;
         }
 
@@ -81,6 +91,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "MPEG2";
             }
 
+            Logger.Error("Unknown video codec: {0}", videoCodec);
             return videoCodec;
         }
     }

@@ -1,91 +1,32 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
 {
     [TestFixture]
-    public class FormatVideoCodecFixture
+    public class FormatVideoCodecFixture : TestBase
     {
-        [Test]
-        public void should_default_to_x264_if_codec_is_AVC()
+        [TestCase("AVC", null, "x264")]
+        [TestCase("AVC", "source.title.x264.720p-Sonarr", "x264")]
+        [TestCase("AVC", "source.title.h264.720p-Sonarr", "h264")]
+        [TestCase("V_MPEGH/ISO/HEVC", null, "x265")]
+        [TestCase("V_MPEGH/ISO/HEVC", "source.title.x265.720p-Sonarr", "x265")]
+        [TestCase("V_MPEGH/ISO/HEVC", "source.title.h265.720p-Sonarr", "h265")]
+        [TestCase("MPEG-2 Video", null, "MPEG2")]
+        public void should_format_video_codec_with_source_title(string videoCodec, string sceneName, string expectedFormat)
         {
             var mediaInfoModel = new MediaInfoModel
             {
-                VideoCodec = "AVC"
+                VideoCodec = videoCodec
             };
 
-            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, null).Should().Be("x264");
+            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, sceneName).Should().Be(expectedFormat);
         }
 
         [Test]
-        public void should_return_to_x264_if_codec_is_AVC_and_source_title_does_not_contain_h264()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                VideoCodec = "AVC"
-            };
-
-            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, "source.title.x264.720p-Sonarr").Should().Be("x264");
-        }
-
-        [Test]
-        public void should_return_to_h264_if_codec_is_AVC_and_source_title_contains_h264()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                VideoCodec = "AVC"
-            };
-
-            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, "source.title.h264.720p-Sonarr").Should().Be("h264");
-        }
-
-        [Test]
-        public void should_default_to_x265_if_codec_is_HEVC()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                VideoCodec = "V_MPEGH/ISO/HEVC"
-            };
-
-            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, null).Should().Be("x265");
-        }
-
-        [Test]
-        public void should_return_to_x265_if_codec_is_HEVC_and_source_title_does_not_contain_h265()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                VideoCodec = "V_MPEGH/ISO/HEVC"
-            };
-
-            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, "source.title.x265.720p-Sonarr").Should().Be("x265");
-        }
-
-        [Test]
-        public void should_return_to_h265_if_codec_is_HEVC_and_source_title_contains_h265()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                VideoCodec = "V_MPEGH/ISO/HEVC"
-            };
-
-            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, "source.title.h265.720p-Sonarr").Should().Be("h265");
-        }
-
-        [Test]
-        public void should_return_to_MPEG2_if_video_codec_is_MPEG_2_Video()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                VideoCodec = "MPEG-2 Video"
-            };
-
-            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, null).Should().Be("MPEG2");
-        }
-
-        [Test]
-        public void should_return_to_video_codec_by_default()
+        public void should_return_VideoCodec_by_default()
         {
             var mediaInfoModel = new MediaInfoModel
             {
@@ -93,6 +34,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, null).Should().Be(mediaInfoModel.VideoCodec);
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
 {
     [TestFixture]
-    public class FormatAudioChannelsFixture
+    public class FormatAudioChannelsFixture : TestBase
     {
         [Test]
         public void should_subtract_one_from_AudioChannels_as_total_channels_if_LFE_in_AudioChannelPositionsText()

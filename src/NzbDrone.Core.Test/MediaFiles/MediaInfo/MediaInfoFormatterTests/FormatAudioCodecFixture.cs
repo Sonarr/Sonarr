@@ -1,32 +1,25 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
 {
     [TestFixture]
-    public class FormatAudioCodecFixture
+    public class FormatAudioCodecFixture : TestBase
     {
-        [Test]
-        public void should_return_AC3_for_AC_3()
+        [TestCase("AC-3", "AC3")]
+        [TestCase("E-AC-3", "EAC3")]
+        [TestCase("MPEG Audio", "MPEG Audio")]
+        [TestCase("DTS", "DTS")]
+        public void should_format_audio_format(string audioFormat, string expectedFormat)
         {
             var mediaInfoModel = new MediaInfoModel
             {
-                AudioFormat = "AC-3"
+                AudioFormat = audioFormat
             };
 
-            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be("AC3");
-        }
-
-        [Test]
-        public void should_return_EAC3_for_E_AC_3()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                AudioFormat = "E-AC-3"
-            };
-
-            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be("EAC3");
+            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be(expectedFormat);
         }
 
         [Test]
@@ -42,29 +35,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         }
 
         [Test]
-        public void should_return_MPEG_Audio_for_MPEG_Audio_without_Layer_3_for_the_profile()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                AudioFormat = "MPEG Audio"
-            };
-
-            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be("MPEG Audio");
-        }
-
-        [Test]
-        public void should_return_DTS_for_DTS()
-        {
-            var mediaInfoModel = new MediaInfoModel
-            {
-                AudioFormat = "DTS"
-            };
-
-            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be("DTS");
-        }
-
-        [Test]
-        public void should_default_to_AudioFormat()
+        public void should_return_AudioFormat_by_default()
         {
             var mediaInfoModel = new MediaInfoModel
             {
@@ -72,6 +43,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be(mediaInfoModel.AudioFormat);
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }
