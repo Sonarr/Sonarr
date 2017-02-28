@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             failures.AddIfNotNull(TestConnection());
             if (failures.Any()) return;
-            failures.AddIfNotNull(TestOutputPath());
+            failures.AddIfNotNull(TestOutputPath());            
             failures.AddIfNotNull(TestGetTorrents());
         }
 
@@ -272,7 +272,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                var downloadDir = GetDownloadDirectory();
+                var downloadDir = GetDefaultDir();
+
+                if (downloadDir == null)
+                {
+                    return new NzbDroneValidationFailure(string.Empty, "No default destination configured. You must manually set it up into download station settings.");
+                }
+
+                downloadDir = GetDownloadDirectory();
 
                 if (downloadDir != null)
                 {
@@ -299,6 +306,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 }
 
                 return null;
+            }
+            catch (DownloadClientAuthenticationException dcaEx) // User could not have permission to access to downloadstation
+            {
+                _logger.Error(dcaEx);
+                return new NzbDroneValidationFailure(string.Empty, dcaEx.Message);
             }
             catch (Exception ex)
             {
