@@ -380,7 +380,7 @@
     <Compile Include="TvTests\RefreshSeriesServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeMonitoredServiceTests\SetEpisodeMontitoredFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\SeriesRepositoryFixture.cs" />
-    <Compile Include="TvTests\SeriesServiceTests\AddSeriesFixture.cs" />
+    <Compile Include="TvTests\AddSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateMultipleSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesTitleNormalizerFixture.cs" />

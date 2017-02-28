@@ -67,20 +67,6 @@ namespace NzbDrone.Core.Tv
 
         public Series AddSeries(Series newSeries)
         {
-            Ensure.That(newSeries, () => newSeries).IsNotNull();
-
-            if (string.IsNullOrWhiteSpace(newSeries.Path))
-            {
-                var folderName = _fileNameBuilder.GetSeriesFolder(newSeries);
-                newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);
-            }
-
-            _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
-
-            newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
-            newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
-            newSeries.Added = DateTime.UtcNow;
-
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
 

@@ -1066,6 +1066,8 @@
     <Compile Include="TinyTwitter.cs" />
     <Compile Include="Tv\Actor.cs" />
     <Compile Include="Tv\AddSeriesOptions.cs" />
+    <Compile Include="Tv\AddSeriesService.cs" />
+    <Compile Include="Tv\AddSeriesValidator.cs" />
     <Compile Include="Tv\Commands\MoveSeriesCommand.cs" />
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\Episode.cs" />
@@ -1099,6 +1101,7 @@
     </Compile>
     <Compile Include="Tv\SeriesStatusType.cs" />
     <Compile Include="Tv\SeriesTitleNormalizer.cs" />
+    <Compile Include="Tv\SeriesTitleSlugValidator.cs" />
     <Compile Include="Tv\SeriesTypes.cs" />
     <Compile Include="Tv\ShouldRefreshSeries.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
