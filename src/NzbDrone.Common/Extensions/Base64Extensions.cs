@@ -2,7 +2,7 @@ using System;
 
 namespace NzbDrone.Common.Extensions
 {
-    public static class Base64Extentions
+    public static class Base64Extensions
     {
         public static string ToBase64(this byte[] bytes)
         {

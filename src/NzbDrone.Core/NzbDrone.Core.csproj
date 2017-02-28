@@ -548,8 +548,9 @@
     <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
     <Compile Include="HealthCheck\Checks\ImportMechanismCheck.cs" />
+    <Compile Include="HealthCheck\Checks\IndexerRssCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerStatusCheck.cs" />
-    <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
+    <Compile Include="HealthCheck\Checks\IndexerSearchCheck.cs" />
     <Compile Include="HealthCheck\Checks\MediaInfoDllCheck.cs" />
     <Compile Include="HealthCheck\Checks\MonoVersionCheck.cs" />
     <Compile Include="HealthCheck\Checks\ProxyCheck.cs" />

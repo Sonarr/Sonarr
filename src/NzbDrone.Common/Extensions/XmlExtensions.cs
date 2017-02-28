@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace NzbDrone.Common.Extensions
 {
-    public static class XmlExtentions
+    public static class XmlExtensions
     {
         public static IEnumerable<XElement> FindDecendants(this XContainer container, string localName)
         {
