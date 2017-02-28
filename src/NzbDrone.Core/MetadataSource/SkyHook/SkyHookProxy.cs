@@ -157,6 +157,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             series.Actors = show.Actors.Select(MapActors).ToList();
             series.Seasons = show.Seasons.Select(MapSeason).ToList();
             series.Images = show.Images.Select(MapImage).ToList();
+            series.Monitored = true;
 
             return series;
         }
@@ -208,7 +209,8 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return new Season
             {
                 SeasonNumber = seasonResource.SeasonNumber,
-                Images = seasonResource.Images.Select(MapImage).ToList()
+                Images = seasonResource.Images.Select(MapImage).ToList(),
+                Monitored = seasonResource.SeasonNumber > 0
             };
         }
 
