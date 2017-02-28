@@ -420,6 +420,10 @@
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\Indexers\TorrentRss\AlphaRatio.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Files\Indexers\TorrentRss\LimeTorrents.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
