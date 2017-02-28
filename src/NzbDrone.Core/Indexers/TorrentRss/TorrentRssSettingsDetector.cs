@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using NLog;
@@ -191,7 +192,10 @@ namespace NzbDrone.Core.Indexers.TorrentRss
 
         private bool IsEZTVFeed(IndexerResponse response)
         {
-            using (var xmlTextReader = XmlReader.Create(new StringReader(response.Content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse, ValidationType = ValidationType.None, IgnoreComments = true, XmlResolver = null }))
+            var content = XmlCleaner.ReplaceEntities(response.Content);
+            content = XmlCleaner.ReplaceUnicode(content);
+
+            using (var xmlTextReader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse, ValidationType = ValidationType.None, IgnoreComments = true, XmlResolver = null }))
             {
                 var document = XDocument.Load(xmlTextReader);
 

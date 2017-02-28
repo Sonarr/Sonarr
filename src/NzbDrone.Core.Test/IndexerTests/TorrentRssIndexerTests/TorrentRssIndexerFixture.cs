@@ -241,5 +241,22 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             torrentInfo.DownloadUrl.Should().Be("http://storage.animetosho.org/torrents/4b58360143d59a55cbd922397a3eaa378165f3ff/DAYS%20-%2005%20%281280x720%20HEVC2%20AAC%29.torrent");            
         }
+
+        [Test]
+        public void should_parse_recent_feed_from_AlphaRatio()
+        {
+            GivenRecentFeedResponse("TorrentRss/AlphaRatio.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(2);
+            releases.Last().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = releases.Last() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("TvHD 465860 465831 WWE.RAW.2016.11.28.720p.HDTV.x264-KYR");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://alpharatio.cc/torrents.php?action=download&authkey=private_auth_key&torrent_pass=private_torrent_pass&id=465831");
+        }
     }
 }
