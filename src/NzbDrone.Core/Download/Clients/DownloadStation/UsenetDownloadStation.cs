@@ -190,7 +190,17 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                var downloadDir = GetDownloadDirectory();
+                var downloadDir = GetDefaultDir();
+
+                if (downloadDir == null)
+                {
+                    return new NzbDroneValidationFailure(nameof(Settings.TvDirectory), "No default destination")
+                    {
+                        DetailedDescription = $"You must login into your Diskstation as {Settings.Username} and manually set it up into DownloadStation settings under BT/HTTP/FTP/NZB -> Location."
+                    };
+                }
+
+                downloadDir = GetDownloadDirectory();
 
                 if (downloadDir != null)
                 {
@@ -203,7 +213,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     {
                         return new NzbDroneValidationFailure(fieldName, $"Shared folder does not exist")
                         {
-                            DetailedDescription = $"The DownloadStation does not have a Shared Folder with the name '{sharedFolder}', are you sure you specified it correctly?"
+                            DetailedDescription = $"The Diskstation does not have a Shared Folder with the name '{sharedFolder}', are you sure you specified it correctly?"
                         };
                     }
 
@@ -217,6 +227,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 }
 
                 return null;
+            }
+            catch (DownloadClientAuthenticationException ex) // User could not have permission to access to downloadstation
+            {
+                _logger.Error(ex);
+                return new NzbDroneValidationFailure(string.Empty, ex.Message);
             }
             catch (Exception ex)
             {
