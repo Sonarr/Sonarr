@@ -194,7 +194,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
                 if (downloadDir == null)
                 {
-                    return new NzbDroneValidationFailure(string.Empty, "No default destination configured. You must manually set it up into download station settings.");
+                    return new NzbDroneValidationFailure(nameof(Settings.TvDirectory), "No default destination")
+                    {
+                        DetailedDescription = $"You must login into your Diskstation as {Settings.Username} and manually set it up into DownloadStation settings under BT -> Location."
+                    };
                 }
 
                 downloadDir = GetDownloadDirectory();
@@ -210,7 +213,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     {
                         return new NzbDroneValidationFailure(fieldName, $"Shared folder does not exist")
                         {
-                            DetailedDescription = $"The DownloadStation does not have a Shared Folder with the name '{sharedFolder}', are you sure you specified it correctly?"
+                            DetailedDescription = $"The Diskstation does not have a Shared Folder with the name '{sharedFolder}', are you sure you specified it correctly?"
                         };
                     }
 

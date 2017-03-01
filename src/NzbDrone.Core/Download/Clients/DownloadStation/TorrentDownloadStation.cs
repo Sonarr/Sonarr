@@ -276,7 +276,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
                 if (downloadDir == null)
                 {
-                    return new NzbDroneValidationFailure(string.Empty, "No default destination configured. You must manually set it up into download station settings.");
+                    return new NzbDroneValidationFailure(nameof(Settings.TvDirectory), "No default destination")
+                    {
+                        DetailedDescription = $"You must login into your Diskstation as {Settings.Username} and manually set it up into DownloadStation settings under BT -> Location."
+                    };
                 }
 
                 downloadDir = GetDownloadDirectory();
