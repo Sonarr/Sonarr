@@ -278,7 +278,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {
                     return new NzbDroneValidationFailure(nameof(Settings.TvDirectory), "No default destination")
                     {
-                        DetailedDescription = $"You must login into your Diskstation as {Settings.Username} and manually set it up into DownloadStation settings under BT -> Location."
+                        DetailedDescription = $"You must login into your Diskstation as {Settings.Username} and manually set it up into DownloadStation settings under BT/HTTP/FTP/NZB -> Location."
                     };
                 }
 
