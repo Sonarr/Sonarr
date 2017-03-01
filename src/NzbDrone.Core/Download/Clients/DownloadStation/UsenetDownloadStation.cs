@@ -197,7 +197,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     return new NzbDroneValidationFailure(string.Empty, "No default destination configured. You must manually set it up into download station settings.");
                 }
 
-                downloadDir = GetDownloadDirectory();                
+                downloadDir = GetDownloadDirectory();
 
                 if (downloadDir != null)
                 {
@@ -225,10 +225,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
                 return null;
             }
-            catch (DownloadClientAuthenticationException dcaEx) // User could not have permission to access to downloadstation
+            catch (DownloadClientAuthenticationException ex) // User could not have permission to access to downloadstation
             {
-                _logger.Error(dcaEx);
-                return new NzbDroneValidationFailure(string.Empty, dcaEx.Message);
+                _logger.Error(ex);
+                return new NzbDroneValidationFailure(string.Empty, ex.Message);
             }
             catch (Exception ex)
             {

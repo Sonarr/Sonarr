@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             failures.AddIfNotNull(TestConnection());
             if (failures.Any()) return;
-            failures.AddIfNotNull(TestOutputPath());            
+            failures.AddIfNotNull(TestOutputPath());
             failures.AddIfNotNull(TestGetTorrents());
         }
 
@@ -307,10 +307,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
                 return null;
             }
-            catch (DownloadClientAuthenticationException dcaEx) // User could not have permission to access to downloadstation
+            catch (DownloadClientAuthenticationException ex) // User could not have permission to access to downloadstation
             {
-                _logger.Error(dcaEx);
-                return new NzbDroneValidationFailure(string.Empty, dcaEx.Message);
+                _logger.Error(ex);
+                return new NzbDroneValidationFailure(string.Empty, ex.Message);
             }
             catch (Exception ex)
             {
