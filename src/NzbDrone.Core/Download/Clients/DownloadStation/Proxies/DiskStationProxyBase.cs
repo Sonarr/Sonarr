@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
         {
             if (retries == 5)
             {
-                throw new DownloadClientException("Try to process same request more than 5 times");
+                throw new DownloadClientException("Try to process request to {0} with {1} more than 5 times", api, arguments.ToJson().ToString());
             }
 
             if (!_authenticated && api != DiskStationApi.Info && api != DiskStationApi.DSMInfo)
@@ -72,15 +72,21 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 }
                 else
                 {
-                    if (responseContent.Error.SessionError)
-                    {
-                        _authenticated = false;
-                        return ProcessRequest<T>(api, arguments, settings, operation, method, retries++);
-                    }
-                    
                     var msg = $"Failed to {operation}. Reason: {responseContent.Error.GetMessage(api)}";
                     _logger.Error(msg);
 
+                    if (responseContent.Error.SessionError)
+                    {
+                        _authenticated = false;
+
+                        if (responseContent.Error.Code == 105)
+                        {
+                            throw new DownloadClientAuthenticationException(msg);
+                        }
+
+                        return ProcessRequest<T>(api, arguments, settings, operation, method, ++retries);
+                    }
+                                     
                     throw new DownloadClientException(msg);
                 }
             }
