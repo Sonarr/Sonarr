@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Processes;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 
@@ -27,6 +29,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
         public override string Name => "Custom Script";
 
         public override string Link => "https://github.com/Sonarr/Sonarr/wiki/Custom-Post-Processing-Scripts";
+
+        public override ProviderMessage Message => new ProviderMessage("Testing will execute the script with the EventType set to Test, ensure your script handles this correctly", ProviderMessageType.Warning);
+
 
         public override void OnGrab(GrabMessage message)
         {
@@ -119,7 +124,6 @@ namespace NzbDrone.Core.Notifications.CustomScript
             ExecuteScript(environmentVariables);
         }
 
-
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
@@ -129,17 +133,37 @@ namespace NzbDrone.Core.Notifications.CustomScript
                 failures.Add(new NzbDroneValidationFailure("Path", "File does not exist"));
             }
 
+            try
+            {
+                var environmentVariables = new StringDictionary();
+                environmentVariables.Add("Sonarr_EventType", "Test");
+
+                var processOutput = ExecuteScript(environmentVariables);
+
+                if (processOutput.ExitCode != 0)
+                {
+                    failures.Add(new NzbDroneValidationFailure(string.Empty, $"Script exited with code: {processOutput.ExitCode}"));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                failures.Add(new NzbDroneValidationFailure(string.Empty, ex.Message));
+            }
+
             return new ValidationResult(failures);
         }
 
-        private void ExecuteScript(StringDictionary environmentVariables)
+        private ProcessOutput ExecuteScript(StringDictionary environmentVariables)
         {
             _logger.Debug("Executing external script: {0}", Settings.Path);
 
-            var process = _processProvider.StartAndCapture(Settings.Path, Settings.Arguments, environmentVariables);
+            var processOutput = _processProvider.StartAndCapture(Settings.Path, Settings.Arguments, environmentVariables);
 
-            _logger.Debug("Executed external script: {0} - Status: {1}", Settings.Path, process.ExitCode);
-            _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", process.Lines));
+            _logger.Debug("Executed external script: {0} - Status: {1}", Settings.Path, processOutput.ExitCode);
+            _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
+
+            return processOutput;
         }
     }
 }
