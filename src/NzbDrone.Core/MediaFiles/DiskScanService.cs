@@ -133,11 +133,12 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Debug("Scanning '{0}' for video files", path);
 
             var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
+            var filesOnDisk = _diskProvider.GetFiles(path, searchOption).ToList();
 
             var mediaFileList = filesOnDisk.Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file).ToLower()))
                                            .ToList();
 
+            _logger.Trace("{0} files were found in {1}", filesOnDisk.Count, path);
             _logger.Debug("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList.ToArray();
         }
@@ -147,11 +148,12 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Debug("Scanning '{0}' for non-video files", path);
 
             var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
+            var filesOnDisk = _diskProvider.GetFiles(path, searchOption).ToList();
 
             var mediaFileList = filesOnDisk.Where(file => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(file).ToLower()))
                                            .ToList();
 
+            _logger.Trace("{0} files were found in {1}", filesOnDisk.Count, path);
             _logger.Debug("{0} non-video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList.ToArray();
         }
