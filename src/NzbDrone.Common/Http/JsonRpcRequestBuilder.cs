@@ -9,7 +9,7 @@ namespace NzbDrone.Common.Http
     public class JsonRpcRequestBuilder : HttpRequestBuilder
     {
         public static HttpAccept JsonRpcHttpAccept = new HttpAccept("application/json-rpc, application/json");
-        public static string JsonRpcContentType = "application/json-rpc";
+        public static string JsonRpcContentType = "application/json";
 
         public string JsonMethod { get; private set; }
         public List<object> JsonParameters { get; private set; }
