@@ -124,6 +124,7 @@
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
+    <Compile Include="Datastore\Migration\108_fix_metadata_file_extensionsFixture.cs" />
     <Compile Include="Datastore\Migration\106_update_btn_urlFixture.cs" />
     <Compile Include="Datastore\Migration\103_fix_metadata_file_extensionsFixture.cs" />
     <Compile Include="Datastore\Migration\099_extra_and_subtitle_filesFixture.cs" />

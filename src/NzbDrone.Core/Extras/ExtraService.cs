@@ -81,7 +81,8 @@ namespace NzbDrone.Core.Extras
                 {
                     foreach (var extraFileManager in _extraFileManagers)
                     {
-                        var extraFile = extraFileManager.Import(series, episodeFile, matchingFilename, matchingExtension, isReadOnly);
+                        var extension = Path.GetExtension(matchingFilename);
+                        var extraFile = extraFileManager.Import(series, episodeFile, matchingFilename, extension, isReadOnly);
 
                         if (extraFile != null)
                         {

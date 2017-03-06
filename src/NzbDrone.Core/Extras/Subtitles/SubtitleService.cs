@@ -101,24 +101,21 @@ namespace NzbDrone.Core.Extras.Subtitles
 
         private string GetSuffix(Language language, int copy, bool multipleCopies = false)
         {
-            var extensionBuilder = new StringBuilder(".");
+            var suffixBuilder = new StringBuilder();
 
             if (multipleCopies)
             {
-                extensionBuilder.Append(copy);
-            }
-
-            if (multipleCopies && language != Language.Unknown)
-            {
-                extensionBuilder.Append(".");
+                suffixBuilder.Append(".");
+                suffixBuilder.Append(copy);
             }
 
             if (language != Language.Unknown)
             {
-                extensionBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
+                suffixBuilder.Append(".");
+                suffixBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
             }
 
-            return extensionBuilder.ToString();
+            return suffixBuilder.ToString();
         }
     }
 }
