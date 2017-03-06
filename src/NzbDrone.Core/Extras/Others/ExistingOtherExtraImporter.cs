@@ -36,6 +36,14 @@ namespace NzbDrone.Core.Extras.Others
 
             foreach (var possibleExtraFile in filterResult.FilesOnDisk)
             {
+                var extension = Path.GetExtension(possibleExtraFile);
+
+                if (extension.IsNullOrWhiteSpace())
+                {
+                    _logger.Debug("No extension for file: {0}", possibleExtraFile);
+                    continue;
+                }
+
                 var localEpisode = _parsingService.GetLocalEpisode(possibleExtraFile, series);
 
                 if (localEpisode == null)
@@ -62,7 +70,7 @@ namespace NzbDrone.Core.Extras.Others
                     SeasonNumber = localEpisode.SeasonNumber,
                     EpisodeFileId = localEpisode.Episodes.First().EpisodeFileId,
                     RelativePath = series.Path.GetRelativePath(possibleExtraFile),
-                    Extension = Path.GetExtension(possibleExtraFile)
+                    Extension = extension
                 };
 
                 extraFiles.Add(extraFile);
