@@ -11,6 +11,28 @@ namespace NzbDrone.Core.Test.Datastore.Migration
     public class fix_extra_file_extensionsFixture : MigrationTest<fix_extra_file_extension>
     {
         [Test]
+        public void should_extra_files_that_do_not_have_an_extension()
+        {
+            var db = WithMigrationTestDb(c =>
+            {
+                c.Insert.IntoTable("ExtraFiles").Row(new
+                {
+                    SeriesId = 1,
+                    SeasonNumber = 1,
+                    EpisodeFileId = 1,
+                    RelativePath = "Series.Title.S01E01",
+                    Added = "2016-05-30 20:23:02.3725923",
+                    LastUpdated = "2016-05-30 20:23:02.3725923",
+                    Extension = ""
+                });
+            });
+
+            var items = db.Query("Select * from ExtraFiles");
+
+            items.Should().BeEmpty();
+        }
+
+        [Test]
         public void should_fix_double_extension()
         {
             var db = WithMigrationTestDb(c =>
