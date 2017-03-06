@@ -90,6 +90,7 @@ namespace NzbDrone.Core.Extras.Files
                 filenameBuilder.Append(fileNameSuffix);
             }
 
+            filenameBuilder.Append(".");
             filenameBuilder.Append(extraFile.Extension);
 
             var existingFileName = Path.Combine(series.Path, extraFile.RelativePath);
