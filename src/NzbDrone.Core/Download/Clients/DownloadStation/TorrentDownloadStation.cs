@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
-using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -20,7 +19,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
     public class TorrentDownloadStation : TorrentClientBase<DownloadStationSettings>
     {
-        protected readonly IDownloadStationProxy _proxy;
+        protected readonly IDownloadStationInfoProxy _dsInfoProxy;
+        protected readonly IDownloadStationTaskProxy _dsTaskProxy;
         protected readonly ISharedFolderResolver _sharedFolderResolver;
         protected readonly ISerialNumberProvider _serialNumberProvider;
         protected readonly IFileStationProxy _fileStationProxy;
@@ -28,7 +28,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         public TorrentDownloadStation(ISharedFolderResolver sharedFolderResolver,
                                       ISerialNumberProvider serialNumberProvider,
                                       IFileStationProxy fileStationProxy,
-                                      IDownloadStationProxy proxy,
+                                      IDownloadStationInfoProxy dsInfoProxy,
+                                      IDownloadStationTaskProxy dsTaskProxy,
                                       ITorrentFileInfoReader torrentFileInfoReader,
                                       IHttpClient httpClient,
                                       IConfigService configService,
@@ -37,7 +38,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                                       Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
-            _proxy = proxy;
+            _dsInfoProxy = dsInfoProxy;
+            _dsTaskProxy = dsTaskProxy;
             _fileStationProxy = fileStationProxy;
             _sharedFolderResolver = sharedFolderResolver;
             _serialNumberProvider = serialNumberProvider;
@@ -47,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected IEnumerable<DownloadStationTask> GetTasks()
         {
-            return _proxy.GetTasks(Settings).Where(v => v.Type.ToLower() == DownloadStationTaskType.BT.ToString().ToLower());
+            return _dsTaskProxy.GetTasks(Settings).Where(v => v.Type.ToLower() == DownloadStationTaskType.BT.ToString().ToLower());
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
@@ -129,7 +131,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 DeleteItemData(downloadId);
             }
 
-            _proxy.RemoveTask(ParseDownloadId(downloadId), Settings);
+            _dsTaskProxy.RemoveTask(ParseDownloadId(downloadId), Settings);
             _logger.Debug("{0} removed correctly", downloadId);
         }
 
@@ -148,7 +150,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
-            _proxy.AddTaskFromUrl(magnetLink, GetDownloadDirectory(), Settings);
+            _dsTaskProxy.AddTaskFromUrl(magnetLink, GetDownloadDirectory(), Settings);
 
             var item = GetTasks().SingleOrDefault(t => t.Additional.Detail["uri"] == magnetLink);
 
@@ -167,7 +169,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
 
-            _proxy.AddTaskFromData(fileContent, filename, GetDownloadDirectory(), Settings);
+            _dsTaskProxy.AddTaskFromData(fileContent, filename, GetDownloadDirectory(), Settings);
 
             var items = GetTasks().Where(t => t.Additional.Detail["uri"] == Path.GetFileNameWithoutExtension(filename));
 
@@ -358,13 +360,13 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected ValidationFailure ValidateVersion()
         {
-            var versionRange = _proxy.GetApiVersion(Settings);
+            var info = _dsTaskProxy.GetApiInfo(Settings);
 
-            _logger.Debug("Download Station api version information: Min {0} - Max {1}", versionRange.Min(), versionRange.Max());
+            _logger.Debug("Download Station api version information: Min {0} - Max {1}", info.MinVersion, info.MaxVersion);
 
-            if (!versionRange.Contains(2))
+            if (info.MinVersion > 2 || info.MaxVersion < 2)
             {
-                return new ValidationFailure(string.Empty, $"Download Station API version not supported, should be at least 2. It supports from {versionRange.Min()} to {versionRange.Max()}");
+                return new ValidationFailure(string.Empty, $"Download Station API version not supported, should be at least 2. It supports from {info.MinVersion} to {info.MaxVersion}");
             }
 
             return null;
@@ -395,7 +397,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected string GetDefaultDir()
         {
-            var config = _proxy.GetConfig(Settings);
+            var config = _dsInfoProxy.GetConfig(Settings);
 
             var path = config["default_destination"] as string;
 

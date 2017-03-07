@@ -1,63 +1,77 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 {
-    public abstract class DiskStationProxyBase
+    public interface IDiskStationProxy
     {
-        private static readonly Dictionary<DiskStationApi, string> Resources;
+        DiskStationApiInfo GetApiInfo(DownloadStationSettings settings);
+    }
+
+    public abstract class DiskStationProxyBase : IDiskStationProxy
+    {
+        protected readonly Logger _logger;
 
         private readonly IHttpClient _httpClient;
-        protected readonly Logger _logger;
-        private bool _authenticated;
+        private readonly ICached<DiskStationApiInfo> _infoCache;
+        private readonly ICached<string> _sessionCache;
+        private readonly DiskStationApi _apiType;
+        private readonly string _apiName;
+
+        private static readonly DiskStationApiInfo _apiInfo;
 
         static DiskStationProxyBase()
         {
-            Resources = new Dictionary<DiskStationApi, string>
+            _apiInfo = new DiskStationApiInfo()
             {
-                { DiskStationApi.Info, "query.cgi" }
+                Type = DiskStationApi.Info,
+                Name = "SYNO.API.Info",
+                Path = "query.cgi",
+                MaxVersion = 1,
+                MinVersion = 1,
+                NeedsAuthentication = false
             };
         }
 
-        public DiskStationProxyBase(IHttpClient httpClient, Logger logger)
+        public DiskStationProxyBase(DiskStationApi apiType,
+                                    string apiName,
+                                    IHttpClient httpClient,
+                                    ICacheManager cacheManager,
+                                    Logger logger)
         {
             _httpClient = httpClient;
             _logger = logger;
+            _infoCache = cacheManager.GetCache<DiskStationApiInfo>(typeof(DiskStationProxyBase), "apiInfo");
+            _sessionCache = cacheManager.GetCache<string>(typeof(DiskStationProxyBase), "sessions");
+            _apiType = apiType;
+            _apiName = apiName;
         }
 
-
-        protected DiskStationResponse<object> ProcessRequest(DiskStationApi api,
-                                                                 Dictionary<string, object> arguments,
-                                                                 DownloadStationSettings settings,
-                                                                 string operation,
-                                                                 HttpMethod method = HttpMethod.GET)
+        private string GenerateSessionCacheKey(DownloadStationSettings settings)
         {
-            return ProcessRequest<object>(api, arguments, settings, operation, method);
+            return $"{settings.Username}@{settings.Host}:{settings.Port}";
         }
 
-        protected DiskStationResponse<T> ProcessRequest<T>(DiskStationApi api,
-                                                               Dictionary<string, object> arguments,
-                                                               DownloadStationSettings settings,
-                                                               string operation,
-                                                               HttpMethod method = HttpMethod.GET,
-                                                               int retries = 0) where T : new()
+        protected DiskStationResponse<T> ProcessRequest<T>(HttpRequestBuilder requestBuilder,
+                                                         string operation,
+                                                         DownloadStationSettings settings) where T : new()
         {
-            if (retries == 5)
-            {
-                throw new DownloadClientException("Try to process request to {0} with {1} more than 5 times", api, arguments.ToJson().ToString());
-            }
+            return ProcessRequest<T>(requestBuilder, operation, _apiType, settings);
+        }
 
-            if (!_authenticated && api != DiskStationApi.Info && api != DiskStationApi.DSMInfo)
-            {
-                AuthenticateClient(settings);
-            }
-
-            var request = BuildRequest(settings, api, arguments, method);
+        private DiskStationResponse<T> ProcessRequest<T>(HttpRequestBuilder requestBuilder,
+                                                         string operation,
+                                                         DiskStationApi api,
+                                                         DownloadStationSettings settings) where T : new()
+        {
+            var request = requestBuilder.Build();
             var response = _httpClient.Execute(request);
 
             _logger.Debug("Trying to {0}", operation);
@@ -77,16 +91,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
                     if (responseContent.Error.SessionError)
                     {
-                        _authenticated = false;
+                        _sessionCache.Remove(GenerateSessionCacheKey(settings));
 
                         if (responseContent.Error.Code == 105)
                         {
                             throw new DownloadClientAuthenticationException(msg);
                         }
-
-                        return ProcessRequest<T>(api, arguments, settings, operation, method, ++retries);
                     }
-                                     
+
                     throw new DownloadClientException(msg);
                 }
             }
@@ -96,124 +108,126 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             }
         }
 
-        private void AuthenticateClient(DownloadStationSettings settings)
+        private string AuthenticateClient(DownloadStationSettings settings)
         {
-            var arguments = new Dictionary<string, object>
-            {
-                 { "api", "SYNO.API.Auth" },
-                 { "version", "1" },
-                 { "method", "login" },
-                 { "account", settings.Username },
-                 { "passwd", settings.Password },
-                 { "format", "cookie" },
-                 { "session", "DownloadStation" },
-             };
+            var authInfo = GetApiInfo(DiskStationApi.Auth, settings);
 
-            var authLoginRequest = BuildRequest(settings, DiskStationApi.Auth, arguments, HttpMethod.GET);
-            authLoginRequest.StoreResponseCookie = true;
+            var requestBuilder = BuildRequest(settings, authInfo, "login", 2);
+            requestBuilder.AddQueryParam("account", settings.Username);
+            requestBuilder.AddQueryParam("passwd", settings.Password);
+            requestBuilder.AddQueryParam("format", "sid");
+            requestBuilder.AddQueryParam("session", Guid.NewGuid().ToString());
 
-            var response = _httpClient.Execute(authLoginRequest);
+            var authResponse = ProcessRequest<DiskStationAuthResponse>(requestBuilder, "login", DiskStationApi.Auth, settings);
 
-            var downloadStationResponse = Json.Deserialize<DiskStationResponse<DiskStationAuthResponse>>(response.Content);
-
-            var authResponse = Json.Deserialize<DiskStationResponse<DiskStationAuthResponse>>(response.Content);
-
-            _authenticated = authResponse.Success;
-
-            if (!_authenticated)
-            {
-                throw new DownloadClientAuthenticationException(downloadStationResponse.Error.GetMessage(DiskStationApi.Auth));
-            }
+            return authResponse.Data.SId;
         }
 
-        private HttpRequest BuildRequest(DownloadStationSettings settings, DiskStationApi api, Dictionary<string, object> arguments, HttpMethod method)
+        protected HttpRequestBuilder BuildRequest(DownloadStationSettings settings, string methodName, int apiVersion, HttpMethod httpVerb = HttpMethod.GET)
         {
-            if (!Resources.ContainsKey(api))
-            {
-                GetApiVersion(settings, api);
-            }
+            var info = GetApiInfo(_apiType, settings);
 
-            var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port).Resource($"webapi/{Resources[api]}");
-            requestBuilder.Method = method;
+            return BuildRequest(settings, info, methodName, apiVersion, httpVerb);
+        }
+
+        private HttpRequestBuilder BuildRequest(DownloadStationSettings settings, DiskStationApiInfo apiInfo, string methodName, int apiVersion, HttpMethod httpVerb = HttpMethod.GET)
+        {
+            var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port).Resource($"webapi/{apiInfo.Path}");
+            requestBuilder.Method = httpVerb;
             requestBuilder.LogResponseContent = true;
             requestBuilder.SuppressHttpError = true;
             requestBuilder.AllowAutoRedirect = false;
+            requestBuilder.Headers.ContentType = "application/json";
 
-            if (requestBuilder.Method == HttpMethod.POST)
+            if (apiVersion < apiInfo.MinVersion || apiVersion > apiInfo.MaxVersion)
             {
-                if (api == DiskStationApi.DownloadStationTask && arguments.ContainsKey("file"))
-                {
-                    requestBuilder.Headers.ContentType = "multipart/form-data";
+                throw new ArgumentOutOfRangeException(nameof(apiVersion));
+            }
 
-                    foreach (var arg in arguments)
-                    {
-                        if (arg.Key == "file")
-                        {
-                            Dictionary<string, object> file = (Dictionary<string, object>)arg.Value;
-                            requestBuilder.AddFormUpload(arg.Key, file["name"].ToString(), (byte[])file["data"]);
-                        }
-                        else
-                        {
-                            requestBuilder.AddFormParameter(arg.Key, arg.Value);
-                        }
-                    }
-                }
-                else
+            if (httpVerb == HttpMethod.POST)
+            {
+                if (apiInfo.NeedsAuthentication)
                 {
-                    requestBuilder.Headers.ContentType = "application/json";
+                    requestBuilder.AddFormParameter("_sid", _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6)));
                 }
+
+                requestBuilder.AddFormParameter("api", apiInfo.Name);
+                requestBuilder.AddFormParameter("version", apiVersion);
+                requestBuilder.AddFormParameter("method", methodName);
             }
             else
             {
-                foreach (var arg in arguments)
+                if (apiInfo.NeedsAuthentication)
                 {
-                    requestBuilder.AddQueryParam(arg.Key, arg.Value);
+                    requestBuilder.AddQueryParam("_sid", _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6)));
+                }
+
+                requestBuilder.AddQueryParam("api", apiInfo.Name);
+                requestBuilder.AddQueryParam("version", apiVersion);
+                requestBuilder.AddQueryParam("method", methodName);
+            }
+
+            return requestBuilder;
+        }
+
+        private string GenerateInfoCacheKey(DownloadStationSettings settings, DiskStationApi api)
+        {
+            return $"{settings.Host}:{settings.Port}->{api}";
+        }
+
+        private void UpdateApiInfo(DownloadStationSettings settings)
+        {
+            var apis = new Dictionary<string, DiskStationApi>()
+            {
+                { "SYNO.API.Auth", DiskStationApi.Auth },
+                { _apiName, _apiType }
+            };
+
+            var requestBuilder = BuildRequest(settings, _apiInfo, "query", _apiInfo.MinVersion);
+            requestBuilder.AddQueryParam("query", string.Join(",", apis.Keys));
+
+            var infoResponse = ProcessRequest<DiskStationApiInfoResponse>(requestBuilder, "get api info", _apiInfo.Type, settings);
+
+            foreach (var data in infoResponse.Data)
+            {
+                if (apis.ContainsKey(data.Key))
+                {
+                    data.Value.Name = data.Key;
+                    data.Value.Type = apis[data.Key];
+                    data.Value.NeedsAuthentication = apis[data.Key] != DiskStationApi.Auth;
+
+                    _infoCache.Set(GenerateInfoCacheKey(settings, apis[data.Key]), data.Value, TimeSpan.FromHours(1));
+                }
+            }
+        }
+
+        private DiskStationApiInfo GetApiInfo(DiskStationApi api, DownloadStationSettings settings)
+        {
+            if (api == DiskStationApi.Info)
+            {
+                return _apiInfo;
+            }
+
+            var key = GenerateInfoCacheKey(settings, api);
+            var info = _infoCache.Find(key);
+
+            if (info == null)
+            {
+                UpdateApiInfo(settings);
+                info = _infoCache.Find(key);
+
+                if (info == null)
+                {
+                    throw new DownloadClientException("Info of {0} not found on {1}:{2}", api, settings.Host, settings.Port);
                 }
             }
 
-            return requestBuilder.Build();
+            return info;
         }
 
-        protected IEnumerable<int> GetApiVersion(DownloadStationSettings settings, DiskStationApi api)
+        public DiskStationApiInfo GetApiInfo(DownloadStationSettings settings)
         {
-            var arguments = new Dictionary<string, object>
-            {
-                 { "api", "SYNO.API.Info" },
-                 { "version", "1" },
-                 { "method", "query" },
-                 { "query", "SYNO.API.Auth, SYNO.DownloadStation.Info, SYNO.DownloadStation.Task, SYNO.FileStation.List, SYNO.DSM.Info" },
-             };
-
-            var infoResponse = ProcessRequest<DiskStationApiInfoResponse>(DiskStationApi.Info, arguments, settings, "Get api version");
-
-            //TODO: Refactor this into more elegant code
-            var infoResponeDSAuth = infoResponse.Data["SYNO.API.Auth"];
-            var infoResponeDSInfo = infoResponse.Data["SYNO.DownloadStation.Info"];
-            var infoResponeDSTask = infoResponse.Data["SYNO.DownloadStation.Task"];
-            var infoResponseFSList = infoResponse.Data["SYNO.FileStation.List"];
-            var infoResponseDSMInfo = infoResponse.Data["SYNO.DSM.Info"];
-
-            Resources[DiskStationApi.Auth] = infoResponeDSAuth.Path;
-            Resources[DiskStationApi.DownloadStationInfo] = infoResponeDSInfo.Path;
-            Resources[DiskStationApi.DownloadStationTask] = infoResponeDSTask.Path;
-            Resources[DiskStationApi.FileStationList] = infoResponseFSList.Path;
-            Resources[DiskStationApi.DSMInfo] = infoResponseDSMInfo.Path;
-
-            switch (api)
-            {
-                case DiskStationApi.Auth:
-                    return Enumerable.Range(infoResponeDSAuth.MinVersion, infoResponeDSAuth.MaxVersion - infoResponeDSAuth.MinVersion + 1);
-                case DiskStationApi.DownloadStationInfo:
-                    return Enumerable.Range(infoResponeDSInfo.MinVersion, infoResponeDSInfo.MaxVersion - infoResponeDSInfo.MinVersion + 1);
-                case DiskStationApi.DownloadStationTask:
-                    return Enumerable.Range(infoResponeDSTask.MinVersion, infoResponeDSTask.MaxVersion - infoResponeDSTask.MinVersion + 1);
-                case DiskStationApi.FileStationList:
-                    return Enumerable.Range(infoResponseFSList.MinVersion, infoResponseFSList.MaxVersion - infoResponseFSList.MinVersion + 1);
-                case DiskStationApi.DSMInfo:
-                    return Enumerable.Range(infoResponseDSMInfo.MinVersion, infoResponseDSMInfo.MaxVersion - infoResponseDSMInfo.MinVersion + 1);
-                default:
-                    throw new DownloadClientException("Api not implemented");
-            }
+            return GetApiInfo(_apiType, settings);
         }
     }
 }
