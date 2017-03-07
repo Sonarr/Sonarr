@@ -275,7 +275,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 { "default_destination", _defaultDestination },
             };
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationInfoProxy>()
               .Setup(v => v.GetConfig(It.IsAny<DownloadStationSettings>()))
               .Returns(_downloadStationConfigItems);
         }
@@ -311,7 +311,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 torrents = new List<DownloadStationTask>();
             }
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Setup(s => s.GetTasks(It.IsAny<DownloadStationSettings>()))
                   .Returns(torrents);
         }
@@ -330,11 +330,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[1000]));
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Setup(s => s.AddTaskFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))
                   .Callback(PrepareClientToReturnQueuedItem);
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Setup(s => s.AddTaskFromData(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))
                   .Callback(PrepareClientToReturnQueuedItem);
         }
@@ -352,7 +352,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         {
             var tasks = new List<DownloadStationTask>() { _queued, _completed, _failed, _downloading, _seeding };
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Setup(d => d.GetTasks(_settings))
                   .Returns(tasks);
 
@@ -372,7 +372,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             id.Should().NotBeNullOrEmpty();
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _tvDirectory, It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
@@ -389,7 +389,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             id.Should().NotBeNullOrEmpty();
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), $"{_defaultDestination}/{_category}", It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
@@ -405,7 +405,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             id.Should().NotBeNullOrEmpty();
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), null, It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
@@ -482,7 +482,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             Assert.Throws(Is.InstanceOf<Exception>(), () => Subject.Download(remoteEpisode));
 
-            Mocker.GetMock<IDownloadStationProxy>()
+            Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), null, _settings), Times.Never());
         }
 
