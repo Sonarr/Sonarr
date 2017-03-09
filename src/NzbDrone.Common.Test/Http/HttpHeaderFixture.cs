@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using NzbDrone.Common.Http;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace NzbDrone.Common.Test.Http
 {
@@ -35,6 +36,18 @@ namespace NzbDrone.Common.Test.Http
 
             Action action = () => httpheader.GetEncodingFromContentType();
             action.ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
+        public void should_parse_cookie_with_trailing_semi_colon()
+        {
+            var cookies = HttpHeader.ParseCookies("uid=123456; pass=123456b2f3abcde42ac3a123f3f1fc9f;");
+
+            cookies.Count.Should().Be(2);
+            cookies.First().Key.Should().Be("uid");
+            cookies.First().Value.Should().Be("123456");
+            cookies.Last().Key.Should().Be("pass");
+            cookies.Last().Value.Should().Be("123456b2f3abcde42ac3a123f3f1fc9f");
         }
     }
 }

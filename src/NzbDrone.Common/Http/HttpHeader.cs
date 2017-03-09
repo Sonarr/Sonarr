@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -169,7 +169,7 @@ namespace NzbDrone.Common.Http
 
         public static List<KeyValuePair<string, string>> ParseCookies(string cookies)
         {
-            return cookies.Split(';')
+            return cookies.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
                           .Select(v => v.Trim().Split('='))
                           .Select(v => new KeyValuePair<string, string>(v[0], v[1]))
                           .ToList();
