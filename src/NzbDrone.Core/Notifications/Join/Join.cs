@@ -17,9 +17,9 @@ namespace NzbDrone.Core.Notifications.Join
 
         public override string Link => "https://joaoapps.com/join/";
 
-        public override void OnGrab(GrabMessage grabMessage)
+        public override void OnGrab(GrabMessage message)
         {
-            _proxy.SendNotification(EPISODE_GRABBED_TITLE_BRANDED, Message.Message, Settings);
+            _proxy.SendNotification(EPISODE_GRABBED_TITLE_BRANDED, message.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
