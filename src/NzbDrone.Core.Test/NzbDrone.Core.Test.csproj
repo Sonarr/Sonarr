@@ -159,6 +159,7 @@
     <Compile Include="DecisionEngineTests\MinimumAgeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RetentionSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RssSync\DelaySpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\RssSync\DeletedEpisodeFileSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RssSync\ProperSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\Search\SeriesSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\SameEpisodesSpecificationFixture.cs" />

@@ -8,6 +8,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     {
         private readonly Logger _logger;
 
+        public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
         public NotSampleSpecification(Logger logger)

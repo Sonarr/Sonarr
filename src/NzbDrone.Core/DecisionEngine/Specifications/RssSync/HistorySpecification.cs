@@ -26,6 +26,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             _logger = logger;
         }
 
+        public SpecificationPriority Priority => SpecificationPriority.Database;
         public RejectionType Type => RejectionType.Permanent;
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                     {
                         if (recent)
                         {
-                            return Decision.Reject("Recent grab event in history already meets cutoff: {0}", mostRecent.Quality);  
+                            return Decision.Reject("Recent grab event in history already meets cutoff: {0}", mostRecent.Quality);
                         }
 
                         return Decision.Reject("CDH is disabled and grab event in history already meets cutoff: {0}", mostRecent.Quality);

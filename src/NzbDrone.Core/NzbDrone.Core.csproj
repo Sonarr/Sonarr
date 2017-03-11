@@ -315,6 +315,7 @@
     <Compile Include="DecisionEngine\Rejection.cs" />
     <Compile Include="DecisionEngine\RejectionType.cs" />
     <Compile Include="DecisionEngine\SameEpisodesSpecification.cs" />
+    <Compile Include="DecisionEngine\SpecificationPriority.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AnimeVersionUpgradeSpecification.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\DelaySpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\DeletedEpisodeFileSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\MonitoredEpisodeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\ProperSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
