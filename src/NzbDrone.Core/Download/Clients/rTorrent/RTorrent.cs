@@ -39,50 +39,29 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            _proxy.AddTorrentFromUrl(magnetLink, Settings);
+            var priority = (RTorrentPriority)(remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority);
 
-            // Download the magnet to the appropriate directory.
-            _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
-            SetPriority(remoteEpisode, hash);
-            SetDownloadDirectory(hash);
-
-            _proxy.StartTorrent(hash, Settings);
+            _proxy.AddTorrentFromUrl(magnetLink, Settings.TvCategory, priority, Settings.TvDirectory, Settings);
 
             var tries = 10;
             var retryDelay = 500;
 
             // Wait a bit for the magnet to be resolved.
-            if (!WaitForTorrent(hash, tries - 2, retryDelay))
+            if (!WaitForTorrent(hash, tries, retryDelay))
             {
-                // Once the magnet meta download finishes, rTorrent replaces it with the actual torrent download with default settings.
-                // Schedule an event to apply the appropriate settings when that happens.
-                var priority = (RTorrentPriority)(remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority);
-                _proxy.SetDeferredMagnetProperties(hash, Settings.TvCategory, Settings.TvDirectory, priority, Settings);
+                _logger.Warn("rTorrent could not resolve magnet within {0} seconds, download may remain stuck: {1}.", tries * retryDelay / 1000, magnetLink);
 
-                // Wait a bit longer for the magnet to be resolved.
-                if (!WaitForTorrent(hash, 2, retryDelay))
-                {
-                    // The SetDeferredMagnetProperties will try set the label, priority & directory when rtorrent finishes the magnet, unless rtorrent restarts before that happens.
-
-                    _logger.Warn("rTorrent could not resolve magnet within {0} seconds, download may remain stuck: {1}.", tries * retryDelay / 1000, magnetLink);
-
-                    return hash;
-                }
+                return hash;
             }
-
-            // Make sure the label is set and the torrent started, because we can't rely on SetDeferredMagnetProperties for magnets that get resolved quickly.
-            _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
-            SetPriority(remoteEpisode, hash);
-            SetDownloadDirectory(hash);
-
-            _proxy.StartTorrent(hash, Settings);
 
             return hash;
         }
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            _proxy.AddTorrentFromFile(filename, fileContent, Settings);
+            var priority = (RTorrentPriority)(remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority);
+
+            _proxy.AddTorrentFromFile(filename, fileContent, Settings.TvCategory, priority, Settings.TvDirectory, Settings);
 
             var tries = 10;
             var retryDelay = 500;
@@ -92,12 +71,6 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed");
             }
-
-            _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
-            SetPriority(remoteEpisode, hash);
-            SetDownloadDirectory(hash);
-
-            _proxy.StartTorrent(hash, Settings);
 
             return hash;
         }
@@ -236,20 +209,6 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
 
             return result.Errors.First();
-        }
-
-        private void SetPriority(RemoteEpisode remoteEpisode, string hash)
-        {
-            var priority = (RTorrentPriority)(remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority);
-            _proxy.SetTorrentPriority(hash, priority, Settings);
-        }
-
-        private void SetDownloadDirectory(string hash)
-        {
-            if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
-            {
-                _proxy.SetTorrentDownloadDirectory(hash, Settings.TvDirectory, Settings);
-            }
         }
 
         private bool WaitForTorrent(string hash, int tries, int retryDelay)

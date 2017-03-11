@@ -54,11 +54,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.RTorrentTests
         protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<IRTorrentProxy>()
-                  .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<RTorrentSettings>()))
+                  .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<RTorrentPriority>(), It.IsAny<string>(), It.IsAny<RTorrentSettings>()))
                   .Callback(PrepareClientToReturnCompletedItem);
 
             Mocker.GetMock<IRTorrentProxy>()
-                  .Setup(s => s.AddTorrentFromFile(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<RTorrentSettings>()))
+                  .Setup(s => s.AddTorrentFromFile(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<RTorrentPriority>(), It.IsAny<string>(), It.IsAny<RTorrentSettings>()))
                   .Callback(PrepareClientToReturnCompletedItem);
 
 
