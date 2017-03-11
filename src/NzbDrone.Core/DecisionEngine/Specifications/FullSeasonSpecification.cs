@@ -19,6 +19,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _episodeService = episodeService;
         }
 
+        public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)

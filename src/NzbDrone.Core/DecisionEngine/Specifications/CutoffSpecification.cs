@@ -16,6 +16,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
+        public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 }
 
                 _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
-                
+
                 if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
                     _logger.Debug("Cutoff already met, rejecting.");

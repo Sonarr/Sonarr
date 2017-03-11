@@ -13,12 +13,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
+        public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var wantedLanguage = subject.Series.Profile.Value.Language;
-            
+
             _logger.Debug("Checking if report meets language requirements. {0}", subject.ParsedEpisodeInfo.Language);
 
             if (subject.ParsedEpisodeInfo.Language != wantedLanguage)

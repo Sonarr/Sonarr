@@ -7,6 +7,8 @@ namespace NzbDrone.Core.DecisionEngine
     {
         RejectionType Type { get; }
 
+        SpecificationPriority Priority { get; }
+
         Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria);
     }
 }
