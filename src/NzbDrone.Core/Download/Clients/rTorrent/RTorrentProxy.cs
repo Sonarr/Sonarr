@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             if (directory.IsNotNullOrWhiteSpace())
             {
-                result.Add("d.directory.set=" + label);
+                result.Add("d.directory.set=" + directory);
             }
 
             return result.ToArray();
