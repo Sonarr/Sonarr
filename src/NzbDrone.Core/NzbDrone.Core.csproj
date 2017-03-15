@@ -345,7 +345,7 @@
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeSearchMatchSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\Search\TorrentSeedingSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\TorrentSeedingSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\SameEpisodesGrabSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RawDiskSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
@@ -630,6 +630,7 @@
     <Compile Include="Indexers\IIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\IIndexerSettings.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
+    <Compile Include="Indexers\IndexerDefaults.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerFactory.cs" />
     <Compile Include="Indexers\IndexerPageableRequest.cs" />
@@ -645,6 +646,7 @@
     <Compile Include="Indexers\IPTorrents\IPTorrentsRequestGenerator.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrents.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrentsSettings.cs" />
+    <Compile Include="Indexers\ITorrentIndexerSettings.cs" />
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabCapabilities.cs" />
     <Compile Include="Indexers\Newznab\NewznabCapabilitiesProvider.cs" />
