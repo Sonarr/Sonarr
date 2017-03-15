@@ -1,8 +1,9 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Validation;
 
@@ -46,9 +47,17 @@ namespace NzbDrone.Core.Indexers.Torznab
         }
     }
 
-    public class TorznabSettings : NewznabSettings
+    public class TorznabSettings : NewznabSettings, ITorrentIndexerSettings
     {
         private static readonly TorznabSettingsValidator Validator = new TorznabSettingsValidator();
+
+        public TorznabSettings()
+        {
+            MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
+        }
+
+        [FieldDefinition(5, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
+        public int MinimumSeeders { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {

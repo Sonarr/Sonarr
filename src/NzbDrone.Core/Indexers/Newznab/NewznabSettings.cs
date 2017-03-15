@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation;
@@ -78,6 +78,9 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         [FieldDefinition(4, Label = "Additional Parameters", HelpText = "Additional Newznab parameters", Advanced = true)]
         public string AdditionalParameters { get; set; }
+
+        // Field 5 is used by TorznabSettings MinimumSeeders
+        // If you need to add another field here, update TorznabSettings as well and this comment
 
         public virtual NzbDroneValidationResult Validate()
         {
