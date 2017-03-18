@@ -220,10 +220,18 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (!completeDir.IsRooted)
             {
-                var queue = _proxy.GetQueue(0, 1, Settings);
-                var defaultRootFolder = new OsPath(queue.DefaultRootFolder);
+                if (HasVersion(2, 0))
+                {
+                    var status = _proxy.GetFullStatus(Settings);
+                    completeDir = new OsPath(status.CompleteDir);
+                }
+                else
+                {
+                    var queue = _proxy.GetQueue(0, 1, Settings);
+                    var defaultRootFolder = new OsPath(queue.DefaultRootFolder);
 
-                completeDir = defaultRootFolder + completeDir;
+                    completeDir = defaultRootFolder + completeDir;
+                }
             }
 
             foreach (var category in config.Categories)

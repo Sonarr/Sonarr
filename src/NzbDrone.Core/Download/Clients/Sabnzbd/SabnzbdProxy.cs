@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         void RemoveFrom(string source, string id,bool deleteData, SabnzbdSettings settings);
         string GetVersion(SabnzbdSettings settings);
         SabnzbdConfig GetConfig(SabnzbdSettings settings);
+        SabnzbdFullStatus GetFullStatus(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
         SabnzbdHistory GetHistory(int start, int limit, string category, SabnzbdSettings settings);
         string RetryDownload(string id, SabnzbdSettings settings);
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             request.AddQueryParam("cat", category);
             request.AddQueryParam("priority", priority);
-                
+
             request.AddFormUpload("name", filename, nzbData, "application/x-nzb");
 
             SabnzbdAddResponse response;
@@ -82,6 +83,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var response = Json.Deserialize<SabnzbdConfigResponse>(ProcessRequest(request, settings));
 
             return response.Config;
+        }
+
+        public SabnzbdFullStatus GetFullStatus(SabnzbdSettings settings)
+        {
+            var request = BuildRequest("fullstatus", settings);
+            request.AddQueryParam("skip_dashboard", "1");
+
+            var response = Json.Deserialize<SabnzbdFullStatusResponse>(ProcessRequest(request, settings));
+
+            return response.Status;
         }
 
         public SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings)
