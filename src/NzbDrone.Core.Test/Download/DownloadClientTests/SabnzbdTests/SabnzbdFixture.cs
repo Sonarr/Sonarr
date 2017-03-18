@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         private SabnzbdHistory _failed;
         private SabnzbdHistory _completed;
         private SabnzbdConfig _config;
+        private SabnzbdFullStatus _fullStatus;
 
         [SetUp]
         public void Setup()
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                         {
                             Status = SabnzbdDownloadStatus.Failed,
                             Size = 1000,
-                            Category = "tv", 
+                            Category = "tv",
                             Id = "sabnzbd_nzb12345",
                             Title = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE"
                         }
@@ -80,7 +81,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                         {
                             Status = SabnzbdDownloadStatus.Completed,
                             Size = 1000,
-                            Category = "tv", 
+                            Category = "tv",
                             Id = "sabnzbd_nzb12345",
                             Title = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE",
                             Storage = "/remote/mount/vv/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE"
@@ -103,6 +104,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             Mocker.GetMock<ISabnzbdProxy>()
                 .Setup(s => s.GetConfig(It.IsAny<SabnzbdSettings>()))
                 .Returns(_config);
+
+            _fullStatus = new SabnzbdFullStatus
+                {
+                    CompleteDir = @"Y:\nzbget\root\complete".AsOsAgnostic()
+                };
+
+            Mocker.GetMock<ISabnzbdProxy>()
+                .Setup(s => s.GetFullStatus(It.IsAny<SabnzbdSettings>()))
+                .Returns(_fullStatus);
         }
 
         protected void GivenFailedDownload()
@@ -166,7 +176,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
             GivenQueue(_queued);
             GivenHistory(null);
-            
+
             var result = Subject.GetItems().Single();
 
             VerifyQueued(result);
@@ -386,23 +396,44 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             result.OutputPath.Should().Be(@"C:\sorted\somewhere\asdfasdf\asdfasdf.mkv".AsOsAgnostic());
         }
 
-        [TestCase(@"Y:\nzbget\root", @"completed\downloads", @"vv", @"Y:\nzbget\root\completed\downloads\vv")]
-        [TestCase(@"Y:\nzbget\root", @"completed", @"vv", @"Y:\nzbget\root\completed\vv")]
-        [TestCase(@"/nzbget/root", @"completed/downloads", @"vv", @"/nzbget/root/completed/downloads/vv")]
-        [TestCase(@"/nzbget/root", @"completed", @"vv", @"/nzbget/root/completed/vv")]
-        public void should_return_status_with_outputdir(string rootFolder, string completeDir, string categoryDir, string expectedDir)
+        [TestCase(@"Y:\nzbget\root", @"completed\downloads", @"vv", @"Y:\nzbget\root\completed\downloads", @"Y:\nzbget\root\completed\downloads\vv")]
+        [TestCase(@"Y:\nzbget\root", @"completed", @"vv", @"Y:\nzbget\root\completed", @"Y:\nzbget\root\completed\vv")]
+        [TestCase(@"/nzbget/root", @"completed/downloads", @"vv", @"/nzbget/root/completed/downloads", @"/nzbget/root/completed/downloads/vv")]
+        [TestCase(@"/nzbget/root", @"completed", @"vv", @"/nzbget/root/completed", @"/nzbget/root/completed/vv")]
+        public void should_return_status_with_outputdir_for_version_lt_2(string rootFolder, string completeDir, string categoryDir, string fullCompleteDir, string fullCategoryDir)
         {
+            _fullStatus.CompleteDir = null;
             _queued.DefaultRootFolder = rootFolder;
             _config.Misc.complete_dir = completeDir;
             _config.Categories.First().Dir = categoryDir;
-            
+
             GivenQueue(null);
 
             var result = Subject.GetStatus();
 
             result.IsLocalhost.Should().BeTrue();
             result.OutputRootFolders.Should().NotBeNull();
-            result.OutputRootFolders.First().Should().Be(expectedDir);
+            result.OutputRootFolders.First().Should().Be(fullCategoryDir);
+        }
+
+        [TestCase(@"Y:\nzbget\root", @"completed\downloads", @"vv", @"Y:\nzbget\root\completed\downloads", @"Y:\nzbget\root\completed\downloads\vv")]
+        [TestCase(@"Y:\nzbget\root", @"completed", @"vv", @"Y:\nzbget\root\completed", @"Y:\nzbget\root\completed\vv")]
+        [TestCase(@"/nzbget/root", @"completed/downloads", @"vv", @"/nzbget/root/completed/downloads", @"/nzbget/root/completed/downloads/vv")]
+        [TestCase(@"/nzbget/root", @"completed", @"vv", @"/nzbget/root/completed", @"/nzbget/root/completed/vv")]
+        public void should_return_status_with_outputdir_for_version_gte_2(string rootFolder, string completeDir, string categoryDir, string fullCompleteDir, string fullCategoryDir)
+        {
+            _fullStatus.CompleteDir = fullCompleteDir;
+            _queued.DefaultRootFolder = null;
+            _config.Misc.complete_dir = completeDir;
+            _config.Categories.First().Dir = categoryDir;
+
+            GivenQueue(null);
+
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeTrue();
+            result.OutputRootFolders.Should().NotBeNull();
+            result.OutputRootFolders.First().Should().Be(fullCategoryDir);
         }
 
         [Test]

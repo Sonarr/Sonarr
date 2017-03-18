@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Download
         public ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
-            
+
             try
             {
                 Test(failures);
