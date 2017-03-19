@@ -293,6 +293,11 @@ namespace NzbDrone.Core.Parser
 
             series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
 
+            if (series == null && parsedEpisodeInfo.SeriesTitleInfo.Year > 0)
+            {
+                series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, parsedEpisodeInfo.SeriesTitleInfo.Year);
+            }
+
             if (series == null && tvdbId > 0)
             {
                 //TODO: If series is found by TvdbId, we should report it as a scene naming exception, since it will fail to import
