@@ -115,6 +115,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 .Returns(_fullStatus);
         }
 
+        protected void GivenVersion(string version)
+        {
+            Mocker.GetMock<ISabnzbdProxy>()
+                .Setup(s => s.GetVersion(It.IsAny<SabnzbdSettings>()))
+                .Returns(version);
+        }
+
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<ISabnzbdProxy>()
@@ -407,6 +414,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.complete_dir = completeDir;
             _config.Categories.First().Dir = categoryDir;
 
+            GivenVersion("1.2.1");
             GivenQueue(null);
 
             var result = Subject.GetStatus();
@@ -427,6 +435,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.complete_dir = completeDir;
             _config.Categories.First().Dir = categoryDir;
 
+            GivenVersion("2.0.0beta1");
             GivenQueue(null);
 
             var result = Subject.GetStatus();
