@@ -189,6 +189,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public int Open(Stream stream)
         {
+            if (stream.Length < 1024)
+            {
+                return 0;
+            }
+
             var isValid = (int)MediaInfo_Open_Buffer_Init(_handle, stream.Length, 0);
             if (isValid == 1)
             {
@@ -203,7 +208,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     totalRead += bufferRead;
 
                     var status = (BufferStatus)MediaInfo_Open_Buffer_Continue(_handle, buffer, (IntPtr)bufferRead);
-                    
+
                     if (status.HasFlag(BufferStatus.Finalized) || status <= 0 || bufferRead == 0)
                     {
                         Logger.Trace("Read file offset {0}-{1} ({2} bytes)", seekStart, stream.Position, stream.Position - seekStart);
