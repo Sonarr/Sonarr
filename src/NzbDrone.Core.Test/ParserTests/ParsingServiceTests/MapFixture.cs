@@ -39,6 +39,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             _parsedEpisodeInfo = new ParsedEpisodeInfo
             {
                 SeriesTitle = _series.Title,
+                SeriesTitleInfo = new SeriesTitleInfo(),
                 SeasonNumber = 1,
                 EpisodeNumbers = new[] { 1 }
             };
@@ -148,6 +149,28 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.FindByTitle(It.IsAny<string>()), Times.Once());
+        }
+
+        [Test]
+        public void should_FindByTitle_using_year_when_FindByTitle_matching_fails()
+        {
+            GivenParseResultSeriesDoesntMatchSearchCriteria();
+
+            _parsedEpisodeInfo.SeriesTitleInfo = new SeriesTitleInfo
+            {
+                Title = "Series Title 2017",
+                TitleWithoutYear = "Series Title",
+                Year = 2017
+            };
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.FindByTitle(_parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, _parsedEpisodeInfo.SeriesTitleInfo.Year))
+                  .Returns(_series);
+
+            Subject.Map(_parsedEpisodeInfo, 10, 10, _singleEpisodeSearchCriteria);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.FindByTitle(It.IsAny<string>(), It.IsAny<int>()), Times.Once());
         }
 
         [Test]
