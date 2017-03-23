@@ -1,9 +1,12 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Xml;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 {
@@ -63,6 +66,36 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             caps.DefaultPageSize.Should().Be(100);
             caps.MaxPageSize.Should().Be(100);
+        }
+
+        [Test]
+        public void should_throw_if_failed_to_get()
+        {
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Throws<Exception>();
+
+            Assert.Throws<Exception>(() => Subject.GetCapabilities(_settings));
+        }
+
+        [Test]
+        public void should_throw_if_xml_invalid()
+        {
+            GivenCapsResponse(_caps.Replace("<limits", "<>"));
+
+            Assert.Throws<XmlException>(() => Subject.GetCapabilities(_settings));
+        }
+
+        [Test]
+        public void should_not_throw_on_xml_data_unexpected()
+        {
+            GivenCapsResponse(_caps.Replace("5030", "asdf"));
+
+            var result = Subject.GetCapabilities(_settings);
+
+            result.Should().NotBeNull();
+
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }
