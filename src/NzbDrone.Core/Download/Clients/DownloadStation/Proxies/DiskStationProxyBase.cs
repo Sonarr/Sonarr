@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             requestBuilder.AddQueryParam("account", settings.Username);
             requestBuilder.AddQueryParam("passwd", settings.Password);
             requestBuilder.AddQueryParam("format", "sid");
-            requestBuilder.AddQueryParam("session", Guid.NewGuid().ToString());
+            requestBuilder.AddQueryParam("session", "DownloadStation");
 
             var authResponse = ProcessRequest<DiskStationAuthResponse>(requestBuilder, "login", DiskStationApi.Auth, settings);
 
