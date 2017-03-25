@@ -80,6 +80,29 @@
     <div class="form-group">
         <label class="col-sm-3 control-label">Import Extra Files</label>
 
+        <div class="col-sm-9">
+            <div class="input-group">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="importExtraFiles" class="x-import-extra-files"/>
+
+                    <p>
+                        <span>Yes</span>
+                        <span>No</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"/>
+                </label>
+
+                <span class="help-inline-checkbox">
+                    <i class="icon-sonarr-form-info" title="Import matching extra files (subtitles, nfo, etc) after importing an episode file"/>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group x-extra-file-extensions">
+        <label class="col-sm-3 control-label">Extra File Extensions</label>
+
         <div class="col-sm-1 col-sm-push-5 help-inline">
             <i class="icon-sonarr-form-info" title="Comma separated list of extra files to import, ie sub,nfo (.nfo will be imported as .nfo-orig)"/>
         </div>
