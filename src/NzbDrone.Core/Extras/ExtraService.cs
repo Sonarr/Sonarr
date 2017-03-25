@@ -57,6 +57,11 @@ namespace NzbDrone.Core.Extras
                 extraFileManager.CreateAfterEpisodeImport(series, episodeFile);
             }
 
+            if (!_configService.ImportExtraFiles)
+            {
+                return;
+            }
+
             var sourcePath = localEpisode.Path;
             var sourceFolder = _diskProvider.GetParentFolder(sourcePath);
             var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
