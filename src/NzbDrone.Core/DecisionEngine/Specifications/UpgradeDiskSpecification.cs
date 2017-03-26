@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -22,6 +22,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
+                if(file == null)
+                {
+                    _logger.Debug("File is no longer avaialble, skipping this file.");
+                    continue;
+                }
+
                 _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
 
                 if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, file.Quality, subject.ParsedEpisodeInfo.Quality))
