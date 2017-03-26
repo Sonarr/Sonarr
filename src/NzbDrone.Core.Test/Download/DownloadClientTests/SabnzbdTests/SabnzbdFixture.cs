@@ -102,6 +102,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 };
 
             Mocker.GetMock<ISabnzbdProxy>()
+                  .Setup(v => v.GetVersion(It.IsAny<SabnzbdSettings>()))
+                  .Returns("1.2.3");
+
+            Mocker.GetMock<ISabnzbdProxy>()
                 .Setup(s => s.GetConfig(It.IsAny<SabnzbdSettings>()))
                 .Returns(_config);
 
@@ -489,6 +493,74 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
             result.IsValid.Should().BeTrue();
             result.HasWarnings.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_test_success_if_tv_sorting_disabled()
+        {
+            _config.Misc.enable_tv_sorting = false;
+            _config.Misc.tv_categories = null;
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_test_failed_if_tv_sorting_null()
+        {
+            _config.Misc.enable_tv_sorting = true;
+            _config.Misc.tv_categories = null;
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_test_failed_if_tv_sorting_empty()
+        {
+            _config.Misc.enable_tv_sorting = true;
+            _config.Misc.tv_categories = new string[0];
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_test_success_if_tv_sorting_contains_different_category()
+        {
+            _config.Misc.enable_tv_sorting = true;
+            _config.Misc.tv_categories = new[] { "tv-custom" };
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_test_failed_if_tv_sorting_contains_category()
+        {
+            _config.Misc.enable_tv_sorting = true;
+            _config.Misc.tv_categories = new[] { "tv" };
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_test_failed_if_tv_sorting_default_category()
+        {
+            Subject.Definition.Settings.As<SabnzbdSettings>().TvCategory = null;
+
+            _config.Misc.enable_tv_sorting = true;
+            _config.Misc.tv_categories = new[] { "Default" };
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeFalse();
         }
     }
 }

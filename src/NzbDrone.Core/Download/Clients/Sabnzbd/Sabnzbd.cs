@@ -451,50 +451,47 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     };
                 }
             }
-
-            if (config.Misc.enable_tv_sorting)
+            if (config.Misc.enable_tv_sorting && ContainsCategory(config.Misc.tv_categories, Settings.TvCategory))
             {
-                if (!config.Misc.tv_categories.Any<string>() ||
-                    config.Misc.tv_categories.Contains(Settings.TvCategory) ||
-                    (Settings.TvCategory.IsNullOrWhiteSpace() && config.Misc.tv_categories.Contains("Default")))
+                return new NzbDroneValidationFailure("TvCategory", "Disable TV Sorting")
                 {
-                    return new NzbDroneValidationFailure("TvCategory", "Disable TV Sorting")
-                    {
-                        InfoLink = string.Format("http://{0}:{1}/sabnzbd/config/sorting/", Settings.Host, Settings.Port),
-                        DetailedDescription = "You must disable Sabnzbd TV Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
-                    };
-                }
+                    InfoLink = string.Format("http://{0}:{1}/sabnzbd/config/sorting/", Settings.Host, Settings.Port),
+                    DetailedDescription = "You must disable Sabnzbd TV Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
+                };
             }
-
-            if (config.Misc.enable_movie_sorting)
+            if (config.Misc.enable_movie_sorting && ContainsCategory(config.Misc.movie_categories, Settings.TvCategory))
             {
-                if (!config.Misc.movie_categories.Any<string>() ||
-                    config.Misc.movie_categories.Contains(Settings.TvCategory) ||
-                    (Settings.TvCategory.IsNullOrWhiteSpace() && config.Misc.movie_categories.Contains("Default")))
+                return new NzbDroneValidationFailure("TvCategory", "Disable Movie Sorting")
                 {
-                    return new NzbDroneValidationFailure("TvCategory", "Disable Movie Sorting")
-                    {
-                        InfoLink = string.Format("http://{0}:{1}/sabnzbd/config/sorting/", Settings.Host, Settings.Port),
-                        DetailedDescription = "You must disable Sabnzbd Movie Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
-                    };
-                }
+                    InfoLink = string.Format("http://{0}:{1}/sabnzbd/config/sorting/", Settings.Host, Settings.Port),
+                    DetailedDescription = "You must disable Sabnzbd Movie Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
+                };
             }
-
-            if (config.Misc.enable_date_sorting)
+            if (config.Misc.enable_date_sorting && ContainsCategory(config.Misc.date_categories, Settings.TvCategory))
             {
-                if (!config.Misc.date_categories.Any<string>() ||
-                    config.Misc.date_categories.Contains(Settings.TvCategory) ||
-                    (Settings.TvCategory.IsNullOrWhiteSpace() && config.Misc.date_categories.Contains("Default")))
+                return new NzbDroneValidationFailure("TvCategory", "Disable Date Sorting")
                 {
-                    return new NzbDroneValidationFailure("TvCategory", "Disable Date Sorting")
-                    {
-                        InfoLink = string.Format("http://{0}:{1}/sabnzbd/config/sorting/", Settings.Host, Settings.Port),
-                        DetailedDescription = "You must disable Sabnzbd Date Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
-                    };
-                }
+                    InfoLink = string.Format("http://{0}:{1}/sabnzbd/config/sorting/", Settings.Host, Settings.Port),
+                    DetailedDescription = "You must disable Sabnzbd Date Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
+                };
             }
 
             return null;
+        }
+
+        private bool ContainsCategory(IEnumerable<string> categories, string category)
+        {
+            if (categories == null || categories.Empty())
+            {
+                return true;
+            }
+
+            if (category.IsNullOrWhiteSpace())
+            {
+                category = "Default";
+            }
+
+            return categories.Contains(category);
         }
     }
 }
