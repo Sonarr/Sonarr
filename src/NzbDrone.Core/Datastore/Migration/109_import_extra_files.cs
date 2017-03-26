@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Datastore.Migration
                             using (var insertCmd = conn.CreateCommand())
                             {
                                 insertCmd.Transaction = tran;
-                                insertCmd.CommandText = "INSERT INTO Config (Key, Value) VALUES('importextrafiles', 1)";
+                                insertCmd.CommandText = "INSERT INTO Config (Key, Value) VALUES('importextrafiles', 'True')";
                                 insertCmd.ExecuteNonQuery();
                             }
                         }
