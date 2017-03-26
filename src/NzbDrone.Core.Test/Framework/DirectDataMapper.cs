@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Test.Framework
     {
         List<Dictionary<string, object>> Query(string sql);
         List<T> Query<T>(string sql) where T : new();
+        T QueryScalar<T>(string sql);
     }
 
     public class DirectDataMapper : IDirectDataMapper
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Test.Framework
             _providerFactory = dataMapper.ProviderFactory;
             _connectionString = dataMapper.ConnectionString;
         }
-        
+
         private DbConnection OpenConnection()
         {
             var connection = _providerFactory.CreateConnection();
@@ -60,6 +61,13 @@ namespace NzbDrone.Core.Test.Framework
             var dataTable = GetDataTable(sql);
 
             return dataTable.Rows.Cast<DataRow>().Select(MapToObject<T>).ToList();
+        }
+
+        public T QueryScalar<T>(string sql)
+        {
+            var dataTable = GetDataTable(sql);
+
+            return dataTable.Rows.Cast<DataRow>().Select(d => MapValue(d, 0, typeof(T))).Cast<T>().FirstOrDefault();
         }
 
         protected Dictionary<string, object> MapToDictionary(DataRow dataRow)
@@ -107,24 +115,29 @@ namespace NzbDrone.Core.Test.Framework
                     propertyType = propertyType.GetGenericArguments()[0];
                 }
 
-                object value;
-                if (dataRow.ItemArray[i] == DBNull.Value)
-                {
-                    value = null;
-                }
-                else if (dataRow.Table.Columns[i].DataType == typeof(string) && propertyType != typeof(string))
-                {
-                    value = Json.Deserialize((string)dataRow.ItemArray[i], propertyType);
-                }
-                else
-                {
-                    value = Convert.ChangeType(dataRow.ItemArray[i], propertyType);
-                }
+                object value = MapValue(dataRow, i, propertyType);
+
 
                 propertyInfo.SetValue(item, value, null);
             }
 
             return item;
+        }
+
+        private object MapValue(DataRow dataRow, int i, Type targetType)
+        {
+            if (dataRow.ItemArray[i] == DBNull.Value)
+            {
+                return null;
+            }
+            else if (dataRow.Table.Columns[i].DataType == typeof(string) && targetType != typeof(string))
+            {
+                return Json.Deserialize((string)dataRow.ItemArray[i], targetType);
+            }
+            else
+            {
+                return Convert.ChangeType(dataRow.ItemArray[i], targetType);
+            }
         }
     }
 }
