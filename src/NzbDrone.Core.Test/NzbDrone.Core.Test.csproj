@@ -290,6 +290,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
+    <Compile Include="MediaFiles\MediaFileDeletionService\DeleteEpisodeFileFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatAudioCodecFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatVideoCodecFixture.cs" />
