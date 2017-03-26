@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Configuration
 
         public string ExtraFileExtensions
         {
-            get { return GetValue("ExtraFileExtensions", ""); }
+            get { return GetValue("ExtraFileExtensions", "srt"); }
 
             set { SetValue("ExtraFileExtensions", value); }
         }

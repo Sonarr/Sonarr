@@ -248,6 +248,7 @@
     <Compile Include="Datastore\Migration\068_add_release_restrictions.cs" />
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
+    <Compile Include="Datastore\Migration\110_fix_extra_files_config.cs" />
     <Compile Include="Datastore\Migration\109_import_extra_files.cs" />
     <Compile Include="Datastore\Migration\108_fix_extra_file_extension.cs" />
     <Compile Include="Datastore\Migration\107_remove_wombles.cs" />
