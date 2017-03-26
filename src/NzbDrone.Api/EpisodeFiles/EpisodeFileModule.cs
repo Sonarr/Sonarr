@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using NLog;
-using NzbDrone.Api.REST;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.SignalR;
+using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
@@ -18,27 +15,21 @@ namespace NzbDrone.Api.EpisodeFiles
                                  IHandle<EpisodeFileAddedEvent>
     {
         private readonly IMediaFileService _mediaFileService;
-        private readonly IDiskProvider _diskProvider;
-        private readonly IRecycleBinProvider _recycleBinProvider;
+        private readonly IDeleteMediaFiles _mediaFileDeletionService;
         private readonly ISeriesService _seriesService;
         private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
-        private readonly Logger _logger;
 
         public EpisodeFileModule(IBroadcastSignalRMessage signalRBroadcaster,
                              IMediaFileService mediaFileService,
-                             IDiskProvider diskProvider,
-                             IRecycleBinProvider recycleBinProvider,
+                             IDeleteMediaFiles mediaFileDeletionService,
                              ISeriesService seriesService,
-                             IQualityUpgradableSpecification qualityUpgradableSpecification,
-                             Logger logger)
+                             IQualityUpgradableSpecification qualityUpgradableSpecification)
             : base(signalRBroadcaster)
         {
             _mediaFileService = mediaFileService;
-            _diskProvider = diskProvider;
-            _recycleBinProvider = recycleBinProvider;
+            _mediaFileDeletionService = mediaFileDeletionService;
             _seriesService = seriesService;
             _qualityUpgradableSpecification = qualityUpgradableSpecification;
-            _logger = logger;
             GetResourceById = GetEpisodeFile;
             GetResourceAll = GetEpisodeFiles;
             UpdateResource = SetQuality;
@@ -77,13 +68,15 @@ namespace NzbDrone.Api.EpisodeFiles
         private void DeleteEpisodeFile(int id)
         {
             var episodeFile = _mediaFileService.Get(id);
-            var series = _seriesService.GetSeries(episodeFile.SeriesId);
-            var fullPath = Path.Combine(series.Path, episodeFile.RelativePath);
-            var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(fullPath));
 
-            _logger.Info("Deleting episode file: {0}", fullPath);
-            _recycleBinProvider.DeleteFile(fullPath, subfolder);
-            _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
+            if (episodeFile == null)
+            {
+                throw new NzbDroneClientException(HttpStatusCode.NotFound, "Episode file not found");
+            }
+
+            var series = _seriesService.GetSeries(episodeFile.SeriesId);
+
+            _mediaFileDeletionService.DeleteEpisodeFile(series, episodeFile);
         }
 
         public void Handle(EpisodeFileAddedEvent message)

@@ -20,7 +20,7 @@ namespace NzbDrone.Core.MediaFiles
         void Cleanup();
     }
 
-    public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>, IExecute<CleanUpRecycleBinCommand>, IRecycleBinProvider
+    public class RecycleBinProvider : IExecute<CleanUpRecycleBinCommand>, IRecycleBinProvider
     {
         private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
@@ -190,17 +190,6 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             _logger.Debug("Recycling Bin has been cleaned up.");
-        }
-
-        public void HandleAsync(SeriesDeletedEvent message)
-        {
-            if (message.DeleteFiles)
-            {
-                if (_diskProvider.FolderExists(message.Series.Path))
-                {
-                    DeleteFolder(message.Series.Path);
-                }
-            }
         }
 
         public void Execute(CleanUpRecycleBinCommand message)

@@ -176,7 +176,7 @@ module.exports = Marionette.Layout.extend({
             if (reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
                 var episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, episodeFileId);
 
-                episodeFile.destroy();
+                episodeFile.destroy({ wait: true });
             }
         });
 

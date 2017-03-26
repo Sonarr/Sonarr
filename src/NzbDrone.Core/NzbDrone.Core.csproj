@@ -777,6 +777,7 @@
     <Compile Include="MediaFiles\Events\SeriesScannedEvent.cs" />
     <Compile Include="MediaFiles\FileDateType.cs" />
     <Compile Include="MediaFiles\MediaFileAttributeService.cs" />
+    <Compile Include="MediaFiles\MediaFileDeletionService.cs" />
     <Compile Include="MediaFiles\MediaFileExtensions.cs" />
     <Compile Include="MediaFiles\MediaFileRepository.cs" />
     <Compile Include="MediaFiles\MediaFileService.cs">
