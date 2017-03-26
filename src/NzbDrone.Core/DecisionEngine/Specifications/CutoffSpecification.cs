@@ -24,7 +24,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 if (file == null)
                 {
-                    _logger.Debug("File is no longer avaialble, skipping this file.");
+                    _logger.Debug("File is no longer available, skipping this file.");
                     continue;
                 }
 
