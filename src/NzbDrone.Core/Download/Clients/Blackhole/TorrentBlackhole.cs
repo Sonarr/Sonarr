@@ -103,8 +103,8 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
                     Status = item.Status,
 
-                    CanBeDeleted = !Settings.ReadOnly,
-                    CanBeRemovedFromClient = !Settings.ReadOnly
+                    CanMoveFiles = !Settings.ReadOnly,
+                    CanBeRemoved = !Settings.ReadOnly
                 };
             }
         }

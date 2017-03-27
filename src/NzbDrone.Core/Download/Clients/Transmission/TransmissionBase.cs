@@ -90,13 +90,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                          torrent.Status == TransmissionTorrentStatus.SeedingWait)
                 {
                     item.Status = DownloadItemStatus.Completed;
-                    item.CanBeDeleted = true;
                 }
                 else if (torrent.IsFinished && torrent.Status != TransmissionTorrentStatus.Check &&
                          torrent.Status != TransmissionTorrentStatus.CheckWait)
                 {
                     item.Status = DownloadItemStatus.Completed;
-                    item.CanBeDeleted = true;
                 }
                 else if (torrent.Status == TransmissionTorrentStatus.Queued)
                 {
@@ -107,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.CanBeRemovedFromClient = torrent.Status == TransmissionTorrentStatus.Stopped;
+                item.CanMoveFiles = item.CanBeRemoved = torrent.Status == TransmissionTorrentStatus.Stopped;
 
                 items.Add(item);
             }

@@ -90,8 +90,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     RemainingTime = GetRemainingTime(torrent),
                     Status = GetStatus(torrent),
                     Message = GetMessage(torrent),
-                    CanBeDeleted = IsCompleted(torrent),
-                    CanBeRemovedFromClient = IsFinished(torrent)
+                    CanMoveFiles = IsCompleted(torrent),
+                    CanBeRemoved = IsFinished(torrent)
                 };
 
                 if (item.Status == DownloadItemStatus.Completed || item.Status == DownloadItemStatus.Failed)
