@@ -99,7 +99,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     RemainingSize = taskRemainingSize,
                     Status = GetStatus(nzb),
                     Message = GetMessage(nzb),
-                    IsReadOnly = !IsFinished(nzb)
+                    CanBeRemovedFromClient = IsFinished(nzb),
+                    CanBeDeleted = IsCompleted(nzb)
                 };
 
                 if (item.Status != DownloadItemStatus.Paused)
@@ -296,6 +297,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return task.Status == DownloadStationTaskStatus.Finished;
         }
 
+        protected bool IsCompleted(DownloadStationTask task)
+        {
+            return task.Status == DownloadStationTaskStatus.Seeding || IsFinished(task);
+        }
+        
         protected string GetMessage(DownloadStationTask task)
         {
             if (task.StatusExtra != null)

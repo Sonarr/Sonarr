@@ -21,7 +21,10 @@ namespace NzbDrone.Core.Download
 
         public DownloadItemStatus Status { get; set; }
         public bool IsEncrypted { get; set; }
-        public bool IsReadOnly { get; set; }
+        //public bool IsReadOnly { get; set; }
+
+        public bool CanBeDeleted { get; set; }
+        public bool CanBeRemovedFromClient { get; set; }
 
         public bool Removed { get; set; }
     }

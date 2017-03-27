@@ -123,6 +123,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 else if (torrent.IsFinished && torrent.State != DelugeTorrentStatus.Checking)
                 {
                     item.Status = DownloadItemStatus.Completed;
+                    item.CanBeDeleted = true;
                 }
                 else if (torrent.State == DelugeTorrentStatus.Queued)
                 {
@@ -138,14 +139,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 }
 
                 // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met. This allows drone to delete the torrent as appropriate.
-                if (torrent.IsAutoManaged && torrent.StopAtRatio && torrent.Ratio >= torrent.StopRatio && torrent.State == DelugeTorrentStatus.Paused)
-                {
-                    item.IsReadOnly = false;
-                }
-                else
-                {
-                    item.IsReadOnly = true;
-                }
+                item.CanBeRemovedFromClient = (torrent.IsAutoManaged && torrent.StopAtRatio && torrent.Ratio >= torrent.StopRatio && torrent.State == DelugeTorrentStatus.Paused);
 
                 items.Add(item);
             }
@@ -178,7 +172,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
             }
-            
+
             return status;
         }
 

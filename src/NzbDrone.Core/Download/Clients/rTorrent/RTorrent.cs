@@ -114,12 +114,17 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                         item.RemainingTime = TimeSpan.Zero;
                     }
 
-                    if (torrent.IsFinished) item.Status = DownloadItemStatus.Completed;
+                    if (torrent.IsFinished)
+                    {
+                        item.Status = DownloadItemStatus.Completed;
+                        item.CanBeDeleted = true;
+                    }
                     else if (torrent.IsActive) item.Status = DownloadItemStatus.Downloading;
                     else if (!torrent.IsActive) item.Status = DownloadItemStatus.Paused;
 
                     // No stop ratio data is present, so do not delete
-                    item.IsReadOnly = true;
+                    item.CanBeRemovedFromClient = false;
+
 
                     items.Add(item);
                 }

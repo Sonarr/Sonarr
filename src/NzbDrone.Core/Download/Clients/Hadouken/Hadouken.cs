@@ -83,6 +83,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                 else if (torrent.IsFinished && torrent.State != HadoukenTorrentState.CheckingFiles)
                 {
                     item.Status = DownloadItemStatus.Completed;
+                    item.CanBeDeleted = true;
                 }
                 else if (torrent.State == HadoukenTorrentState.QueuedForChecking)
                 {
@@ -97,14 +98,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                if (torrent.IsFinished && torrent.State == HadoukenTorrentState.Paused)
-                {
-                    item.IsReadOnly = false;
-                }
-                else
-                {
-                    item.IsReadOnly = true;
-                }
+                item.CanBeRemovedFromClient = (torrent.IsFinished && torrent.State == HadoukenTorrentState.Paused);
 
                 items.Add(item);
             }
@@ -170,7 +164,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
                 if (version < new Version("5.1"))
                 {
-                    return new ValidationFailure(string.Empty, "Old Hadouken client with unsupported API, need 5.1 or higher");                    
+                    return new ValidationFailure(string.Empty, "Old Hadouken client with unsupported API, need 5.1 or higher");
                 }
             }
             catch (DownloadClientAuthenticationException ex)

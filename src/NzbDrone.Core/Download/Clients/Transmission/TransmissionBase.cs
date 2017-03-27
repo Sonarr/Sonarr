@@ -90,11 +90,13 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                          torrent.Status == TransmissionTorrentStatus.SeedingWait)
                 {
                     item.Status = DownloadItemStatus.Completed;
+                    item.CanBeDeleted = true;
                 }
                 else if (torrent.IsFinished && torrent.Status != TransmissionTorrentStatus.Check &&
                          torrent.Status != TransmissionTorrentStatus.CheckWait)
                 {
                     item.Status = DownloadItemStatus.Completed;
+                    item.CanBeDeleted = true;
                 }
                 else if (torrent.Status == TransmissionTorrentStatus.Queued)
                 {
@@ -105,7 +107,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.IsReadOnly = torrent.Status != TransmissionTorrentStatus.Stopped;
+                item.CanBeRemovedFromClient = torrent.Status == TransmissionTorrentStatus.Stopped;
 
                 items.Add(item);
             }
@@ -122,7 +124,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var config = _proxy.GetConfig(Settings);
             var destDir = config.GetValueOrDefault("download-dir") as string;
-            
+
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
                 destDir = string.Format("{0}/.{1}", destDir, Settings.TvCategory);

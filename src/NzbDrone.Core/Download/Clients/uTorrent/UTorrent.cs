@@ -150,6 +150,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                          torrent.Status.HasFlag(UTorrentTorrentStatus.Checked) && torrent.Remaining == 0 && torrent.Progress == 1.0)
                 {
                     item.Status = DownloadItemStatus.Completed;
+                    item.CanBeDeleted = true;
                 }
                 else if (torrent.Status.HasFlag(UTorrentTorrentStatus.Paused))
                 {
@@ -165,7 +166,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 }
 
                 // 'Started' without 'Queued' is when the torrent is 'forced seeding'
-                item.IsReadOnly = torrent.Status.HasFlag(UTorrentTorrentStatus.Queued) || torrent.Status.HasFlag(UTorrentTorrentStatus.Started);
+                item.CanBeRemovedFromClient = !(torrent.Status.HasFlag(UTorrentTorrentStatus.Queued) || torrent.Status.HasFlag(UTorrentTorrentStatus.Started));
 
                 queueItems.Add(item);
             }
