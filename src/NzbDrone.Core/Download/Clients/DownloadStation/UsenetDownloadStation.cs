@@ -99,9 +99,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     RemainingSize = taskRemainingSize,
                     Status = GetStatus(nzb),
                     Message = GetMessage(nzb),
-                    CanBeRemoved = IsFinished(nzb),
-                    CanMoveFiles = IsFinished(nzb)
                 };
+
+                item.CanBeRemoved = item.CanMoveFiles = IsFinished(nzb);
 
                 if (item.Status != DownloadItemStatus.Paused)
                 {
