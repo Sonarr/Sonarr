@@ -408,10 +408,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             items.Should().OnlyContain(v => !v.OutputPath.IsEmpty);
         }
 
-        [TestCase(DownloadStationTaskStatus.Downloading, DownloadItemStatus.Downloading, true)]
-        [TestCase(DownloadStationTaskStatus.Finished, DownloadItemStatus.Completed, false)]
-        [TestCase(DownloadStationTaskStatus.Waiting, DownloadItemStatus.Queued, true)]
-        public void GetItems_should_return_readonly_expected(DownloadStationTaskStatus apiStatus, DownloadItemStatus expectedItemStatus, bool readOnlyExpected)
+        [TestCase(DownloadStationTaskStatus.Downloading, DownloadItemStatus.Downloading, false)]
+        [TestCase(DownloadStationTaskStatus.Finished, DownloadItemStatus.Completed, true)]
+        [TestCase(DownloadStationTaskStatus.Waiting, DownloadItemStatus.Queued, false)]
+        [TestCase(DownloadStationTaskStatus.Seeding, DownloadItemStatus.Completed, false)]
+        public void GetItems_should_return_can_be_removed_expected(DownloadStationTaskStatus apiStatus, DownloadItemStatus expectedItemStatus, bool canBeRemovedExpected)
         {
             GivenSerialNumber();
             GivenSharedFolder();
@@ -423,7 +424,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             var items = Subject.GetItems();
 
             items.Should().HaveCount(1);
-            items.First().IsReadOnly.Should().Be(readOnlyExpected);
+            items.First().CanBeRemoved.Should().Be(canBeRemovedExpected);
+            items.First().CanMoveFiles.Should().Be(canBeRemovedExpected);
         }
 
         [TestCase(DownloadStationTaskStatus.Downloading, DownloadItemStatus.Downloading)]

@@ -292,12 +292,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
             item.Status.Should().Be(expectedItemStatus);
         }
 
-        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checking, DownloadItemStatus.Queued, false)]
-        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked, DownloadItemStatus.Completed, false)]
-        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Queued, DownloadItemStatus.Completed, true)]
-        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Started, DownloadItemStatus.Completed, true)]
-        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Queued | UTorrentTorrentStatus.Paused, DownloadItemStatus.Completed, true)]
-        public void GetItems_should_return_completed_item_as_downloadItemStatus(UTorrentTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, bool expectedReadOnly)
+        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checking, DownloadItemStatus.Queued, true)]
+        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked, DownloadItemStatus.Completed, true)]
+        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Queued, DownloadItemStatus.Completed, false)]
+        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Started, DownloadItemStatus.Completed, false)]
+        [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Queued | UTorrentTorrentStatus.Paused, DownloadItemStatus.Completed, false)]
+        public void GetItems_should_return_completed_item_as_downloadItemStatus(UTorrentTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, bool expectedValue)
         {
             _completed.Status = apiStatus;
 
@@ -306,7 +306,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
             var item = Subject.GetItems().Single();
 
             item.Status.Should().Be(expectedItemStatus);
-            item.IsReadOnly.Should().Be(expectedReadOnly);
+            item.CanBeRemoved.Should().Be(expectedValue);
+            item.CanMoveFiles.Should().Be(expectedValue);
         }
 
         [Test]

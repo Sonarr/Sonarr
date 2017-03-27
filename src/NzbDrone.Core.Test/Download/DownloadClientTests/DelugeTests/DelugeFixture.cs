@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
                 .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951".ToLower())
                 .Callback(PrepareClientToReturnQueuedItem);
         }
-        
+
         protected virtual void GivenTorrents(List<DelugeTorrent> torrents)
         {
             if (torrents == null)
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
 
         protected void PrepareClientToReturnQueuedItem()
         {
-            GivenTorrents(new List<DelugeTorrent> 
+            GivenTorrents(new List<DelugeTorrent>
                 {
                     _queued
                 });
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
 
         protected void PrepareClientToReturnDownloadingItem()
         {
-            GivenTorrents(new List<DelugeTorrent> 
+            GivenTorrents(new List<DelugeTorrent>
                 {
                     _downloading
                 });
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
 
         protected void PrepareClientToReturnFailedItem()
         {
-            GivenTorrents(new List<DelugeTorrent> 
+            GivenTorrents(new List<DelugeTorrent>
                 {
                     _failed
                 });
@@ -248,11 +248,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
             item.Status.Should().Be(expectedItemStatus);
         }
 
-        [TestCase(DelugeTorrentStatus.Paused, DownloadItemStatus.Completed, true)]
-        [TestCase(DelugeTorrentStatus.Checking, DownloadItemStatus.Downloading, true)]
-        [TestCase(DelugeTorrentStatus.Queued, DownloadItemStatus.Completed, true)]
-        [TestCase(DelugeTorrentStatus.Seeding, DownloadItemStatus.Completed, true)]
-        public void GetItems_should_return_completed_item_as_downloadItemStatus(string apiStatus, DownloadItemStatus expectedItemStatus, bool expectedReadOnly)
+        [TestCase(DelugeTorrentStatus.Paused, DownloadItemStatus.Completed, false)]
+        [TestCase(DelugeTorrentStatus.Checking, DownloadItemStatus.Downloading, false)]
+        [TestCase(DelugeTorrentStatus.Queued, DownloadItemStatus.Completed, false)]
+        [TestCase(DelugeTorrentStatus.Seeding, DownloadItemStatus.Completed, false)]
+        public void GetItems_should_return_completed_item_as_downloadItemStatus(string apiStatus, DownloadItemStatus expectedItemStatus, bool expectedValue)
         {
             _completed.State = apiStatus;
 
@@ -261,11 +261,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
             var item = Subject.GetItems().Single();
 
             item.Status.Should().Be(expectedItemStatus);
-            item.IsReadOnly.Should().Be(expectedReadOnly);
+            item.CanBeRemoved.Should().Be(expectedValue);
+            item.CanMoveFiles.Should().Be(expectedValue);
         }
 
         [Test]
-        public void GetItems_should_check_share_ratio_for_readonly()
+        public void GetItems_should_check_share_ratio_for_moveFiles_and_remove()
         {
             _completed.State = DelugeTorrentStatus.Paused;
             _completed.IsAutoManaged = true;
@@ -278,7 +279,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
             var item = Subject.GetItems().Single();
 
             item.Status.Should().Be(DownloadItemStatus.Completed);
-            item.IsReadOnly.Should().BeFalse();
+            item.CanMoveFiles.Should().BeTrue();
+            item.CanBeRemoved.Should().BeTrue();
         }
 
         [Test]

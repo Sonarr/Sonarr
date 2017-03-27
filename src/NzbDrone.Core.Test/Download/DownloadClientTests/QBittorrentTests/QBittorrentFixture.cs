@@ -311,7 +311,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
-        public void should_be_read_only_if_max_ratio_not_reached()
+        public void should_not_be_removed_if_max_ratio_not_reached()
         {
             GivenMaxRatio(1.0f);
 
@@ -330,11 +330,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             GivenTorrents(new List<QBittorrentTorrent> { torrent });
 
             var item = Subject.GetItems().Single();
-            item.IsReadOnly.Should().BeTrue();
+            item.CanBeRemoved.Should().BeFalse();
         }
 
         [Test]
-        public void should_be_read_only_if_max_ratio_reached_and_not_paused()
+        public void should_not_be_removed_if_max_ratio_reached_and_not_paused()
         {
             GivenMaxRatio(1.0f);
 
@@ -353,11 +353,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             GivenTorrents(new List<QBittorrentTorrent> { torrent });
 
             var item = Subject.GetItems().Single();
-            item.IsReadOnly.Should().BeTrue();
+            item.CanBeRemoved.Should().BeFalse();
         }
 
         [Test]
-        public void should_be_read_only_if_max_ratio_is_not_set()
+        public void should_not_be_removed_if_max_ratio_is_not_set()
         {
             GivenMaxRatio(1.0f, false);
 
@@ -376,11 +376,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             GivenTorrents(new List<QBittorrentTorrent> { torrent });
 
             var item = Subject.GetItems().Single();
-            item.IsReadOnly.Should().BeTrue();
+            item.CanBeRemoved.Should().BeFalse();
         }
 
         [Test]
-        public void should_not_be_read_only_if_max_ratio_reached_and_paused()
+        public void should_be_removed_if_max_ratio_reached_and_paused()
         {
             GivenMaxRatio(1.0f);
 
@@ -399,7 +399,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             GivenTorrents(new List<QBittorrentTorrent> { torrent });
 
             var item = Subject.GetItems().Single();
-            item.IsReadOnly.Should().BeFalse();
+            item.CanBeRemoved.Should().BeTrue();
         }
 
         [Test]
