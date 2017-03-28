@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         private void RemoveCompletedDownloads(List<TrackedDownload> trackedDownloads)
         {
-            foreach (var trackedDownload in trackedDownloads.Where(c => !c.DownloadItem.CanBeRemoved && c.State == TrackedDownloadStage.Imported))
+            foreach (var trackedDownload in trackedDownloads.Where(c => c.DownloadItem.CanBeRemoved && c.State == TrackedDownloadStage.Imported))
             {
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
             }
