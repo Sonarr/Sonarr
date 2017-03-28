@@ -311,7 +311,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
-        public void should_not_be_removed_if_max_ratio_not_reached()
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_not_reached()
         {
             GivenMaxRatio(1.0f);
 
@@ -331,10 +331,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
         }
 
         [Test]
-        public void should_not_be_removed_if_max_ratio_reached_and_not_paused()
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_reached_and_not_paused()
         {
             GivenMaxRatio(1.0f);
 
@@ -354,10 +355,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
         }
 
         [Test]
-        public void should_not_be_removed_if_max_ratio_is_not_set()
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_is_not_set()
         {
             GivenMaxRatio(1.0f, false);
 
@@ -377,10 +379,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
         }
 
         [Test]
-        public void should_be_removed_if_max_ratio_reached_and_paused()
+        public void should_be_removable_and_should_allow_move_files_if_max_ratio_reached_and_paused()
         {
             GivenMaxRatio(1.0f);
 
@@ -400,6 +403,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
         }
 
         [Test]
