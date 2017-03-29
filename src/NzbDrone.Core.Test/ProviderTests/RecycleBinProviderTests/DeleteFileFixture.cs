@@ -75,5 +75,17 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.GetMock<IDiskProvider>().Verify(v => v.FileSetLastWriteTime(@"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic(), It.IsAny<DateTime>()), Times.Once());
         }
+
+        [Test]
+        public void should_use_subfolder_when_passed_in()
+        {
+            WithRecycleBin();
+
+            var path = @"C:\Test\TV\30 Rock\S01E01.avi".AsOsAgnostic();
+
+            Mocker.Resolve<RecycleBinProvider>().DeleteFile(path, "30 Rock");
+
+            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\30 Rock\S01E01.avi".AsOsAgnostic(), TransferMode.Move, false, true), Times.Once());
+        }
     }
 }

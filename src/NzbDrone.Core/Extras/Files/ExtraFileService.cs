@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
@@ -129,7 +130,8 @@ namespace NzbDrone.Core.Extras.Files
                         else
                         {
                             // Send extra files to the recycling bin so they can be recovered if necessary
-                            _recycleBinProvider.DeleteFile(path);
+                            var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
+                            _recycleBinProvider.DeleteFile(path, subfolder);
                         }
                     }
                 }

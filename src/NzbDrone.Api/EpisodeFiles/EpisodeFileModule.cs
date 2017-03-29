@@ -2,6 +2,8 @@
 using System.IO;
 using NLog;
 using NzbDrone.Api.REST;
+using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
@@ -16,6 +18,7 @@ namespace NzbDrone.Api.EpisodeFiles
                                  IHandle<EpisodeFileAddedEvent>
     {
         private readonly IMediaFileService _mediaFileService;
+        private readonly IDiskProvider _diskProvider;
         private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly ISeriesService _seriesService;
         private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
@@ -23,6 +26,7 @@ namespace NzbDrone.Api.EpisodeFiles
 
         public EpisodeFileModule(IBroadcastSignalRMessage signalRBroadcaster,
                              IMediaFileService mediaFileService,
+                             IDiskProvider diskProvider,
                              IRecycleBinProvider recycleBinProvider,
                              ISeriesService seriesService,
                              IQualityUpgradableSpecification qualityUpgradableSpecification,
@@ -30,6 +34,7 @@ namespace NzbDrone.Api.EpisodeFiles
             : base(signalRBroadcaster)
         {
             _mediaFileService = mediaFileService;
+            _diskProvider = diskProvider;
             _recycleBinProvider = recycleBinProvider;
             _seriesService = seriesService;
             _qualityUpgradableSpecification = qualityUpgradableSpecification;
@@ -74,9 +79,10 @@ namespace NzbDrone.Api.EpisodeFiles
             var episodeFile = _mediaFileService.Get(id);
             var series = _seriesService.GetSeries(episodeFile.SeriesId);
             var fullPath = Path.Combine(series.Path, episodeFile.RelativePath);
+            var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(fullPath));
 
             _logger.Info("Deleting episode file: {0}", fullPath);
-            _recycleBinProvider.DeleteFile(fullPath);
+            _recycleBinProvider.DeleteFile(fullPath, subfolder);
             _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
         }
 
