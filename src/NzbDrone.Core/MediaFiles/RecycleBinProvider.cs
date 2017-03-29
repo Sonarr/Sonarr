@@ -15,7 +15,7 @@ namespace NzbDrone.Core.MediaFiles
     public interface IRecycleBinProvider
     {
         void DeleteFolder(string path);
-        void DeleteFile(string path);
+        void DeleteFile(string path, string subfolder = "");
         void Empty();
         void Cleanup();
     }
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        public void DeleteFile(string path)
+        public void DeleteFile(string path, string subfolder = "")
         {
             _logger.Debug("Attempting to send '{0}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
@@ -94,7 +94,10 @@ namespace NzbDrone.Core.MediaFiles
             else
             {
                 var fileInfo = new FileInfo(path);
-                var destination = Path.Combine(recyclingBin, fileInfo.Name);
+                var destinationFolder = Path.Combine(recyclingBin, subfolder);
+                var destination = Path.Combine(destinationFolder, fileInfo.Name);
+
+                _diskProvider.CreateFolder(destinationFolder);
 
                 var index = 1;
                 while (_diskProvider.FileExists(destination))
@@ -102,11 +105,11 @@ namespace NzbDrone.Core.MediaFiles
                     index++;
                     if (fileInfo.Extension.IsNullOrWhiteSpace())
                     {
-                        destination = Path.Combine(recyclingBin, fileInfo.Name + "_" + index);
+                        destination = Path.Combine(destinationFolder, fileInfo.Name + "_" + index);
                     }
                     else
                     {
-                        destination = Path.Combine(recyclingBin, Path.GetFileNameWithoutExtension(fileInfo.Name) + "_" + index + fileInfo.Extension);
+                        destination = Path.Combine(destinationFolder, Path.GetFileNameWithoutExtension(fileInfo.Name) + "_" + index + fileInfo.Extension);
                     }
                 }
 
