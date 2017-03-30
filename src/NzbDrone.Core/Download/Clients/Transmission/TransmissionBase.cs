@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.IsReadOnly = torrent.Status != TransmissionTorrentStatus.Stopped;
+                item.CanMoveFiles = item.CanBeRemoved = torrent.Status == TransmissionTorrentStatus.Stopped;
 
                 items.Add(item);
             }
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var config = _proxy.GetConfig(Settings);
             var destDir = config.GetValueOrDefault("download-dir") as string;
-            
+
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
                 destDir = string.Format("{0}/.{1}", destDir, Settings.TvCategory);

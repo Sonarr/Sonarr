@@ -68,7 +68,10 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
                     OutputPath = item.OutputPath,
 
-                    Status = item.Status
+                    Status = item.Status,
+
+                    CanBeRemoved = true,
+                    CanMoveFiles = true
                 };
             }
         }

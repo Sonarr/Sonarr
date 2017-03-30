@@ -251,7 +251,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 {
                     if (_downloadedEpisodesImportService.ShouldDeleteFolder(
                             new DirectoryInfo(trackedDownload.DownloadItem.OutputPath.FullPath),
-                            trackedDownload.RemoteEpisode.Series) && !trackedDownload.DownloadItem.IsReadOnly)
+                            trackedDownload.RemoteEpisode.Series) && trackedDownload.DownloadItem.CanMoveFiles)
                     {
                         _diskProvider.DeleteFolder(trackedDownload.DownloadItem.OutputPath.FullPath, true);
                     }

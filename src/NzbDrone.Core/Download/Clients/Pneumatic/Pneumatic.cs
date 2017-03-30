@@ -77,6 +77,9 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
                     DownloadId = GetDownloadClientId(file),
                     Title = title,
 
+                    CanBeRemoved = true,
+                    CanMoveFiles = true,
+
                     TotalSize = _diskProvider.GetFileSize(file),
 
                     OutputPath = new OsPath(file)

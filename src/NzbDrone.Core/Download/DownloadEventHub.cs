@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download
         {
             if (!_configService.RemoveCompletedDownloads ||
                 message.TrackedDownload.DownloadItem.Removed ||
-                message.TrackedDownload.DownloadItem.IsReadOnly ||
+                !message.TrackedDownload.DownloadItem.CanBeRemoved ||
                 message.TrackedDownload.DownloadItem.Status == DownloadItemStatus.Downloading)
             {
                 return;
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Download
         {
             var trackedDownload = message.TrackedDownload;
 
-            if (trackedDownload == null || trackedDownload.DownloadItem.IsReadOnly || _configService.RemoveFailedDownloads == false)
+            if (trackedDownload == null || !trackedDownload.DownloadItem.CanBeRemoved || _configService.RemoveFailedDownloads == false)
             {
                 return;
             }
