@@ -127,6 +127,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("this.is.not.happening.2015.0308-yestv", "this is not happening 2015", 3, 8)]
         [TestCase("Jeopardy - S2016E231", "Jeopardy", 2016, 231)]
         [TestCase("Jeopardy - 2016x231", "Jeopardy", 2016, 231)]
+        [TestCase("Shortland.Street.S26E022.HDTV.x264-FiHTV", "Shortland Street", 26, 22)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
