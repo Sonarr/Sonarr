@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Marr.Data;
@@ -31,10 +32,13 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .CreateNew()
                 .Build();
 
-
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.FileExists(It.IsAny<string>()))
                 .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(c => c.GetParentFolder(It.IsAny<string>()))
+                .Returns<string>(c => Path.GetDirectoryName(c));
         }
 
         private void GivenSingleEpisodeWithSingleEpisodeFile()
