@@ -90,7 +90,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     {
                         default:
                         case ImportMode.Auto:
-                            copyOnly = downloadClientItem != null && downloadClientItem.IsReadOnly;
+                            copyOnly = downloadClientItem != null && !downloadClientItem.CanMoveFiles;
                             break;
                         case ImportMode.Move:
                             copyOnly = false;
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (downloadClientItem != null)
                     {
-                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadId, downloadClientItem.IsReadOnly));
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadId));//, !downloadClientItem.CanMoveFiles));
                     }
                     else
                     {

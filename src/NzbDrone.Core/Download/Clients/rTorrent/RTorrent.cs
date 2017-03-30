@@ -107,19 +107,31 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                     item.RemainingSize = torrent.RemainingSize;
                     item.Category = torrent.Category;
 
-                    if (torrent.DownRate > 0) {
+                    if (torrent.DownRate > 0)
+                    {
                         var secondsLeft = torrent.RemainingSize / torrent.DownRate;
                         item.RemainingTime = TimeSpan.FromSeconds(secondsLeft);
-                    } else {
+                    }
+                    else
+                    {
                         item.RemainingTime = TimeSpan.Zero;
                     }
 
-                    if (torrent.IsFinished) item.Status = DownloadItemStatus.Completed;
-                    else if (torrent.IsActive) item.Status = DownloadItemStatus.Downloading;
-                    else if (!torrent.IsActive) item.Status = DownloadItemStatus.Paused;
+                    if (torrent.IsFinished)
+                    {
+                        item.Status = DownloadItemStatus.Completed;
+                    }
+                    else if (torrent.IsActive)
+                    {
+                        item.Status = DownloadItemStatus.Downloading;
+                    }
+                    else if (!torrent.IsActive)
+                    {
+                        item.Status = DownloadItemStatus.Paused;
+                    }
 
                     // No stop ratio data is present, so do not delete
-                    item.IsReadOnly = true;
+                    item.CanMoveFiles = item.CanBeRemoved = false;
 
                     items.Add(item);
                 }

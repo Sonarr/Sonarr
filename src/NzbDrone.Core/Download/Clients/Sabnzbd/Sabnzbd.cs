@@ -78,6 +78,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 queueItem.TotalSize = (long)(sabQueueItem.Size * 1024 * 1024);
                 queueItem.RemainingSize = (long)(sabQueueItem.Sizeleft * 1024 * 1024);
                 queueItem.RemainingTime = sabQueueItem.Timeleft;
+                queueItem.CanBeRemoved = true;
+                queueItem.CanMoveFiles = true;
 
                 if (sabQueue.Paused || sabQueueItem.Status == SabnzbdDownloadStatus.Paused)
                 {
