@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Notifications.Plex
         string Version(PlexServerSettings settings);
         List<PlexPreference> Preferences(PlexServerSettings settings);
         int? GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings);
+        string Authenticate(PlexServerSettings settings);
     }
 
     public class PlexServerProxy : IPlexServerProxy
@@ -162,7 +163,7 @@ namespace NzbDrone.Core.Notifications.Plex
             return items.First().Id;
         }
 
-        private string Authenticate(PlexServerSettings settings)
+        public string Authenticate(PlexServerSettings settings)
         {
             var request = GetPlexTvRequest("users/sign_in.json", Method.POST);
             var client = GetPlexTvClient(settings.Username, settings.Password); 
@@ -221,6 +222,13 @@ namespace NzbDrone.Core.Notifications.Plex
 
         private string GetAuthenticationToken(PlexServerSettings settings)
         {
+            // TODO: v3 Remove authentication by stored username and password.
+
+            if (settings.AuthToken.IsNotNullOrWhiteSpace())
+            {
+                return settings.AuthToken;
+            }
+
             var token = _authCache.Get(settings.Username + settings.Password, () => Authenticate(settings));
 
             if (token.IsNullOrWhiteSpace())

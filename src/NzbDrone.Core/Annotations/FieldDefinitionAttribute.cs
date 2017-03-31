@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Annotations
         public FieldDefinitionAttribute(int order)
         {
             Order = order;
+            Persisted = true;
         }
 
         public int Order { get; private set; }
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.Annotations
         public string HelpLink { get; set; }
         public FieldType Type { get; set; }
         public bool Advanced { get; set; }
+        public bool Persisted { get; set; }
         public Type SelectOptions { get; set; }
     }
 

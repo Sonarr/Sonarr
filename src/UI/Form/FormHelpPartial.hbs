@@ -1,4 +1,7 @@
 <span class="col-sm-1 help-inline">
+    {{#unless persisted}}
+        <i class="icon-sonarr-form-info" title="Will not be stored in the database"/>
+    {{/unless}}
     {{#if helpText}}
         <i class="icon-sonarr-form-info" title="{{helpText}}"/>
     {{/if}}

@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(1, 65535);
+            RuleFor(c => c.AuthToken).NotEmpty();
         }
     }
 
@@ -30,17 +31,22 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        //TODO: Change username and password to token and get a plex.tv OAuth token properly
-        [FieldDefinition(2, Label = "Username")]
+        [FieldDefinition(2, Label = "Username", Persisted = false)]
         public string Username { get; set; }
 
-        [FieldDefinition(3, Label = "Password", Type = FieldType.Password)]
+        [FieldDefinition(3, Label = "Password", Type = FieldType.Password, Persisted = false)]
         public string Password { get; set; }
 
-        [FieldDefinition(4, Label = "Update Library", Type = FieldType.Checkbox)]
+        [FieldDefinition(4, Label = "AuthToken", Advanced = true)]
+        public string AuthToken { get; set; }
+
+        [FieldDefinition(5, Label = "Get Auth Token", Type = FieldType.Action, Persisted = false)]
+        public string Authenticate { get; set; }
+
+        [FieldDefinition(6, Label = "Update Library", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(5, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
+        [FieldDefinition(7, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
         public bool UseSsl { get; set; }
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host);

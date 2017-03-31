@@ -12,6 +12,7 @@ namespace NzbDrone.Api.ClientSchema
         public object Value { get; set; }
         public string Type { get; set; }
         public bool Advanced { get; set; }
+        public bool Persisted { get; set; }
         public List<SelectOption> SelectOptions { get; set; }
     }
 }
