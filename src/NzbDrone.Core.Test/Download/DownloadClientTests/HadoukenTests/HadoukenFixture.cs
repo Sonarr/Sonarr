@@ -190,6 +190,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
             PrepareClientToReturnCompletedItem();
             var item = Subject.GetItems().Single();
             VerifyCompleted(item);
+
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
         }
 
         [Test]
@@ -298,7 +301,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
                .Returns("hash");
 
             var result = Subject.Download(remoteEpisode);
-            
+
             Assert.IsFalse(result.Any(c => char.IsLower(c)));
         }
 

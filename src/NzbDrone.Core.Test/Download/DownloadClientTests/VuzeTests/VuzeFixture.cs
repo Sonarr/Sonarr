@@ -43,6 +43,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
             PrepareClientToReturnCompletedItem();
             var item = Subject.GetItems().Single();
             VerifyCompleted(item);
+
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
         }
 
         [Test]

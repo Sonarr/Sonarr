@@ -222,6 +222,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
             PrepareClientToReturnCompletedItem();
             var item = Subject.GetItems().Single();
             VerifyCompleted(item);
+
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
         }
 
         [Test]

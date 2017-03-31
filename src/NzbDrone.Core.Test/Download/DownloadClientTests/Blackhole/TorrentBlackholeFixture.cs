@@ -99,6 +99,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var result = Subject.GetItems().Single();
 
             VerifyCompleted(result);
+
+            result.CanBeRemoved.Should().BeFalse();
+            result.CanMoveFiles.Should().BeFalse();
         }
 
         [Test]
