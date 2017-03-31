@@ -83,8 +83,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.TotalSize = totalSize;
                 queueItem.Category = item.Category;
                 queueItem.DownloadClient = Definition.Name;
-                queueItem.CanMoveFiles = true;
-                queueItem.CanBeRemoved = true;
 
                 if (globalStatus.DownloadPaused || remainingSize == pausedSize && remainingSize != 0)
                 {
@@ -147,6 +145,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.Message = $"PAR Status: {item.ParStatus} - Unpack Status: {item.UnpackStatus} - Move Status: {item.MoveStatus} - Script Status: {item.ScriptStatus} - Delete Status: {item.DeleteStatus} - Mark Status: {item.MarkStatus}";
                 historyItem.Status = DownloadItemStatus.Completed;
                 historyItem.RemainingTime = TimeSpan.Zero;
+                historyItem.CanMoveFiles = true;
+                historyItem.CanBeRemoved = true;
 
                 if (item.DeleteStatus == "MANUAL")
                 {
