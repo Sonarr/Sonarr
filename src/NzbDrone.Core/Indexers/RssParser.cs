@@ -63,6 +63,11 @@ namespace NzbDrone.Core.Indexers
 
                     releases.AddIfNotNull(reportInfo);
                 }
+                catch (UnsupportedFeedException itemEx)
+                {
+                    itemEx.Data.Add("Item", item.Title());
+                    throw;
+                }
                 catch (Exception itemEx)
                 {
                     itemEx.Data.Add("Item", item.Title());

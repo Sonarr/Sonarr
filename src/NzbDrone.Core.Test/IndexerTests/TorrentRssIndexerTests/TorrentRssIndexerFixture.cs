@@ -5,9 +5,11 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Indexers.TorrentRss;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {
@@ -48,7 +50,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             releases.Should().HaveCount(50);
             releases.First().Should().BeOfType<TorrentInfo>();
-            
+
             var torrentInfo = (TorrentInfo)releases.First();
 
             torrentInfo.Title.Should().Be("Conan.2015.02.05.Jeff.Bridges.720p.HDTV.X264-CROOKS");
@@ -239,7 +241,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             torrentInfo.Title.Should().Be("DAYS - 05 (1280x720 HEVC2 AAC).mkv");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
-            torrentInfo.DownloadUrl.Should().Be("http://storage.animetosho.org/torrents/4b58360143d59a55cbd922397a3eaa378165f3ff/DAYS%20-%2005%20%281280x720%20HEVC2%20AAC%29.torrent");            
+            torrentInfo.DownloadUrl.Should().Be("http://storage.animetosho.org/torrents/4b58360143d59a55cbd922397a3eaa378165f3ff/DAYS%20-%2005%20%281280x720%20HEVC2%20AAC%29.torrent");
         }
 
         [Test]
@@ -257,6 +259,19 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Title.Should().Be("TvHD 465860 465831 WWE.RAW.2016.11.28.720p.HDTV.x264-KYR");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             torrentInfo.DownloadUrl.Should().Be("https://alpharatio.cc/torrents.php?action=download&authkey=private_auth_key&torrent_pass=private_torrent_pass&id=465831");
+        }
+
+        [Test]
+        public void should_record_indexer_failure_if_unsupported_feed()
+        {
+            GivenRecentFeedResponse("TorrentRss/invalid/TorrentDay_NoPubDate.xml");
+
+            Subject.FetchRecent().Should().BeEmpty();
+
+            Mocker.GetMock<IIndexerStatusService>()
+                  .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.Zero), Times.Once());
+
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }
