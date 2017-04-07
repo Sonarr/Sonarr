@@ -110,9 +110,6 @@ namespace NzbDrone.Update.UpdateEngine
 
                 try
                 {
-                    _logger.Info("Emptying installation folder");
-                    _diskProvider.EmptyFolder(installationFolder);
-
                     _logger.Info("Copying new files to target folder");
                     _diskTransferService.MirrorFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder);
 
