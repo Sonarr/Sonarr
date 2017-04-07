@@ -287,9 +287,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var ex = Assert.Throws<UnsupportedFeedException>(() => Subject.Detect(_indexerSettings));
 
-            ex.Message.Should().Contain("Empty feed");
-
-            ExceptionVerification.ExpectedErrors(1);
+            ex.Message.Should().Contain("Rss feed must have a pubDate");
         }
 
         [TestCase("Torrentleech/Torrentleech.xml")]
