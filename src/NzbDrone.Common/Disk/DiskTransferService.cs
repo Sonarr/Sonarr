@@ -590,7 +590,7 @@ namespace NzbDrone.Common.Disk
 
         private bool ShouldIgnore(FileInfo file)
         {
-            if (file.Name.StartsWith(".nfs"))
+            if (file.Name.StartsWith(".nfs") || file.Name == "debug.log" || file.Name.EndsWith(".socket"))
             {
                 _logger.Trace("Ignoring file {0}", file.FullName);
                 return true;
