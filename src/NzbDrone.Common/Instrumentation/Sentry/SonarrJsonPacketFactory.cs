@@ -6,6 +6,13 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 {
     public class SonarrJsonPacketFactory : IJsonPacketFactory
     {
+        private readonly SentryPacketCleanser _cleanser;
+
+        public SonarrJsonPacketFactory()
+        {
+            _cleanser = new SentryPacketCleanser();
+        }
+
         private static string ShortenPath(string path)
         {
 
@@ -37,6 +44,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                         frame.Filename = ShortenPath(frame.Filename);
                     }
                 }
+
+                _cleanser.CleansePacket(packet);
             }
             catch (Exception)
             {
@@ -45,7 +54,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
             return packet;
         }
-
 
         [Obsolete]
         public JsonPacket Create(string project, SentryMessage message, ErrorLevel level = ErrorLevel.Info, IDictionary<string, string> tags = null,

@@ -243,6 +243,7 @@ namespace NzbDrone.Core.Indexers
             catch (CloudFlareCaptchaException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
+                ex.WithData("FeedUrl", url);
                 if (ex.IsExpired)
                 {
                     _logger.Error(ex, "Expired CAPTCHA token for {0}, please refresh in indexer settings.", this);
@@ -257,11 +258,11 @@ namespace NzbDrone.Core.Indexers
                 _indexerStatusService.RecordFailure(Definition.Id);
                 _logger.Warn(ex, "{0}", url);
             }
-            catch (Exception feedEx)
+            catch (Exception ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
-                feedEx.Data.Add("FeedUrl", url);
-                _logger.Error(feedEx, "An error occurred while processing feed. {0}", url);
+                ex.WithData("FeedUrl", url);
+                _logger.Error(ex, "An error occurred while processing feed. {0}", url);
             }
 
             return CleanupReleases(releases);

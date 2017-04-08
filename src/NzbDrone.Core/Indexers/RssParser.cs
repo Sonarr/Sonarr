@@ -65,12 +65,14 @@ namespace NzbDrone.Core.Indexers
                 }
                 catch (UnsupportedFeedException itemEx)
                 {
-                    itemEx.Data.Add("Item", item.Title());
+                    itemEx.WithData("FeedUrl", indexerResponse.Request.Url);
+                    itemEx.WithData("ItemTitle", item.Title());
                     throw;
                 }
                 catch (Exception itemEx)
                 {
-                    itemEx.Data.Add("Item", item.Title());
+                    itemEx.WithData("FeedUrl", indexerResponse.Request.Url);
+                    itemEx.WithData("ItemTitle", item.Title());
                     _logger.Error(itemEx, "An error occurred while processing feed item from {0}", indexerResponse.Request.Url);
                 }
             }
@@ -95,8 +97,7 @@ namespace NzbDrone.Core.Indexers
                 var contentSample = indexerResponse.Content.Substring(0, Math.Min(indexerResponse.Content.Length, 512));
                 _logger.Debug("Truncated response content (originally {0} characters): {1}", indexerResponse.Content.Length, contentSample);
 
-                ex.Data.Add("ContentLength", indexerResponse.Content.Length);
-                ex.Data.Add("ContentSample", contentSample);
+                ex.WithData(indexerResponse.HttpResponse);
 
                 throw;
             }

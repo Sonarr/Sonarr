@@ -40,23 +40,31 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         {
             _logger.Debug("Evaluating TorrentRss feed '{0}'", indexerSettings.BaseUrl);
 
-            var requestGenerator = new TorrentRssIndexerRequestGenerator { Settings = indexerSettings };
-            var request = requestGenerator.GetRecentRequests().GetAllTiers().First().First();
-
-            HttpResponse httpResponse = null;
             try
             {
-                httpResponse = _httpClient.Execute(request.HttpRequest);
+                var requestGenerator = new TorrentRssIndexerRequestGenerator { Settings = indexerSettings };
+                var request = requestGenerator.GetRecentRequests().GetAllTiers().First().First();
+
+                HttpResponse httpResponse = null;
+                try
+                {
+                    httpResponse = _httpClient.Execute(request.HttpRequest);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, string.Format("Unable to connect to indexer {0}: {1}", request.Url, ex.Message));
+                    return null;
+                }
+
+                var indexerResponse = new IndexerResponse(request, httpResponse);
+                return GetParserSettings(indexerResponse, indexerSettings);
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, string.Format("Unable to connect to indexer {0}: {1}", request.Url, ex.Message));
-                return null;
+                ex.WithData("FeedUrl", indexerSettings.BaseUrl);
+                throw;
             }
-
-            var indexerResponse = new IndexerResponse(request, httpResponse);
-            return GetParserSettings(indexerResponse, indexerSettings);
-        }
+    }
 
         private TorrentRssIndexerParserSettings GetParserSettings(IndexerResponse response, TorrentRssIndexerSettings indexerSettings)
         {
@@ -140,7 +148,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
                 _logger.Trace("Feed doesn't have Seeders in Description, disabling option.");
                 parser.ParseSeedersInDescription = settings.ParseSeedersInDescription = false;
             }
-            
+
             if (!releases.Any(r => r.Size < ValidSizeThreshold))
             {
                 _logger.Trace("Feed has valid size in enclosure.");

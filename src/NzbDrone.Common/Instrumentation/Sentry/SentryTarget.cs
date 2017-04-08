@@ -111,18 +111,10 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     return;
                 }
 
-                var extras = logEvent.Properties.ToDictionary(x => x.Key.ToString(), x => CleanseLogMessage.Cleanse(x.Value.ToString()));
+                var extras = logEvent.Properties.ToDictionary(x => x.Key.ToString(), x => x.Value.ToString());
                 _client.Logger = logEvent.LoggerName;
 
-                string cleansedMessage = CleanseLogMessage.Cleanse(logEvent.Message);
-                string cleansedFormattedMessage = cleansedMessage;
-
-                if (logEvent.Parameters != null)
-                {
-                    cleansedFormattedMessage = CleanseLogMessage.Cleanse(string.Format(logEvent.Message, logEvent.Parameters));
-                }
-
-                var sentryMessage = new SentryMessage(cleansedFormattedMessage);
+                var sentryMessage = new SentryMessage(logEvent.Message, logEvent.Parameters);
 
                 var sentryEvent = new SentryEvent(logEvent.Exception)
                 {
@@ -133,7 +125,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     {
                         logEvent.Level.ToString(),
                         logEvent.LoggerName,
-                        cleansedMessage
+                        logEvent.Message
                     }
                 };
 
