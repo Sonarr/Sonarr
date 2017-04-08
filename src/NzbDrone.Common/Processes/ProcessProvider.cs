@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common.Processes
@@ -129,7 +130,25 @@ namespace NzbDrone.Common.Processes
             {
                 foreach (DictionaryEntry environmentVariable in environmentVariables)
                 {
-                    startInfo.EnvironmentVariables.Add(environmentVariable.Key.ToString(), environmentVariable.Value.ToString());
+                    try
+                    {
+                        _logger.Trace("Setting environment variable '{0}' to '{1}'", environmentVariable.Key, environmentVariable.Value);
+                        startInfo.EnvironmentVariables.Add(environmentVariable.Key.ToString(), environmentVariable.Value.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        if (environmentVariable.Value == null)
+                        {
+                            _logger.Error(e, "Unable to set environment variable '{0}', value is null", environmentVariable.Key);
+                        }
+
+                        else
+                        {
+                            _logger.Error(e, "Unable to set environment variable '{0}'", environmentVariable.Key);
+                        }
+
+                        throw;
+                    }
                 }
             }
 
