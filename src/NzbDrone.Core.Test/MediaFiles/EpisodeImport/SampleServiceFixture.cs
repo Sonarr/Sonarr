@@ -122,6 +122,24 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
+        public void should_return_false_if_runtime_greater_than_anime_short_minimum()
+        {
+            _series.Runtime = 2;
+            GivenRuntime(60);
+
+            ShouldBeFalse();
+        }
+
+        [Test]
+        public void should_return_true_if_runtime_less_than_anime_short_minimum()
+        {
+            _series.Runtime = 2;
+            GivenRuntime(10);
+
+            ShouldBeTrue();
+        }
+
+        [Test]
         public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_acceptable_size()
         {
             Mocker.GetMock<IVideoFileInfoReader>()

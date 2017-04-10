@@ -100,6 +100,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         private int GetMinimumAllowedRuntime(Series series)
         {
+            //Anime short - 15 seconds
+            if (series.Runtime <= 3)
+            {
+                return 15;
+            }
+
             //Webisodes - 90 seconds
             if (series.Runtime <= 10)
             {
