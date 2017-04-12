@@ -196,6 +196,22 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
+        public void post_processing_item_should_have_required_properties()
+        {
+            _queued.ActiveDownloads = 1;
+
+            GivenQueue(_queued);
+            GivenHistory(null);
+
+            _queued.RemainingSizeLo = 0;
+
+            var result = Subject.GetItems().Single();
+
+            result.CanBeRemoved.Should().BeTrue();
+            result.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
         public void completed_download_should_have_required_properties()
         {
             GivenQueue(null);

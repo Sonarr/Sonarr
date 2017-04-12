@@ -83,6 +83,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.TotalSize = totalSize;
                 queueItem.Category = item.Category;
                 queueItem.DownloadClient = Definition.Name;
+                queueItem.CanMoveFiles = true;
+                queueItem.CanBeRemoved = true;
 
                 if (globalStatus.DownloadPaused || remainingSize == pausedSize && remainingSize != 0)
                 {
