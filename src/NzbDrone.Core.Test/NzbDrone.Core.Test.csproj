@@ -383,6 +383,7 @@
     <Compile Include="TvTests\SeriesServiceTests\UpdateMultipleSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesTitleNormalizerFixture.cs" />
+    <Compile Include="TvTests\SeriesTitleSlugValidatorFixture.cs" />
     <Compile Include="TvTests\ShouldRefreshSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />

@@ -1,4 +1,6 @@
-﻿using FluentValidation.Validators;
+﻿using System.Linq;
+using FluentValidation.Validators;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Tv
 {
@@ -16,10 +18,13 @@ namespace NzbDrone.Core.Tv
         {
             if (context.PropertyValue == null) return true;
 
+
             dynamic instance = context.ParentContext.InstanceToValidate;
             var instanceId = (int)instance.Id;
 
-            return !_seriesService.GetAllSeries().Exists(s => s.TitleSlug.Equals(context.PropertyValue.ToString()) && s.Id != instanceId);
+            return !_seriesService.GetAllSeries().Where(s => s.TitleSlug.IsNotNullOrWhiteSpace())
+                                                 .ToList()
+                                                 .Exists(s => s.TitleSlug.Equals(context.PropertyValue.ToString()) && s.Id != instanceId);
         }
     }
 }
