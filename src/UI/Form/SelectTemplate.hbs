@@ -2,7 +2,7 @@
     <label class="col-sm-3 control-label">{{label}}</label>
 
     <div class="col-sm-5">
-        <select name="fields.{{order}}.value" class="form-control">
+        <select name="fields.{{order}}.value" validation-name="{{name}}" class="form-control">
             {{#each selectOptions}}
                 <option value="{{value}}">{{name}}</option>
             {{/each}}

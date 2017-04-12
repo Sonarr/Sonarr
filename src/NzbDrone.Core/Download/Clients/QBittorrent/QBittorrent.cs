@@ -55,17 +55,31 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
 
-            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+            try
             {
-                _proxy.SetTorrentLabel(hash.ToLower(), Settings.TvCategory, Settings);
+                if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+                {
+                    _proxy.SetTorrentLabel(hash.ToLower(), Settings.TvCategory, Settings);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Failed to set the torrent label for {0}.", filename);
             }
 
-            var isRecentEpisode = remoteEpisode.IsRecentEpisode();
-
-            if (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First ||
-                !isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First)
+            try
             {
-                _proxy.MoveTorrentToTopInQueue(hash.ToLower(), Settings);
+                var isRecentEpisode = remoteEpisode.IsRecentEpisode();
+
+                if (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First ||
+                    !isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First)
+                {
+                    _proxy.MoveTorrentToTopInQueue(hash.ToLower(), Settings);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Failed to set the torrent priority for {0}.", filename);
             }
 
             return hash;
@@ -177,6 +191,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             failures.AddIfNotNull(TestConnection());
             if (failures.Any()) return;
+            failures.AddIfNotNull(TestPrioritySupport());
             failures.AddIfNotNull(TestGetTorrents());
         }
 
@@ -243,6 +258,41 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     };
                 }
                 return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+            }
+
+            return null;
+        }
+
+        private ValidationFailure TestPrioritySupport()
+        {
+            var recentPriorityDefault = Settings.RecentTvPriority == (int)QBittorrentPriority.Last;
+            var olderPriorityDefault = Settings.OlderTvPriority == (int)QBittorrentPriority.Last;
+
+            if (olderPriorityDefault && recentPriorityDefault)
+            {
+                return null;
+            }
+
+            try
+            {
+                var config = _proxy.GetConfig(Settings);
+
+                if (!config.QueueingEnabled)
+                {
+                    if (!recentPriorityDefault)
+                    {
+                        return new NzbDroneValidationFailure(nameof(Settings.RecentTvPriority), "Queueing not enabled") { DetailedDescription = "Torrent Queueing is not enabled in your qBittorrent settings. Enable it in qBittorrent or select 'Last' as priority." };
+                    }
+                    else if (!olderPriorityDefault)
+                    {
+                        return new NzbDroneValidationFailure(nameof(Settings.OlderTvPriority), "Queueing not enabled") { DetailedDescription = "Torrent Queueing is not enabled in your qBittorrent settings. Enable it in qBittorrent or select 'Last' as priority." };
+                    }
+                }
             }
             catch (Exception ex)
             {

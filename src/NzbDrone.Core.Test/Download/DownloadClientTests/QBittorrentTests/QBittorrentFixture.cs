@@ -89,6 +89,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                 });
         }
 
+        protected void GivenHighPriority()
+        {
+            Subject.Definition.Settings.As<QBittorrentSettings>().OlderTvPriority = (int)QBittorrentPriority.First;
+            Subject.Definition.Settings.As<QBittorrentSettings>().RecentTvPriority = (int)QBittorrentPriority.First;
+        }
+
         protected void GivenMaxRatio(float maxRatio, bool removeOnMaxRatio = true)
         {
             Mocker.GetMock<IQBittorrentProxy>()
@@ -263,6 +269,39 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             var id = Subject.Download(remoteEpisode);
 
             id.Should().Be(expectedHash);
+        }
+
+        [Test]
+        public void Download_should_set_top_priority()
+        {
+            GivenHighPriority();
+            GivenSuccessfulDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            var id = Subject.Download(remoteEpisode);
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                  .Verify(v => v.MoveTorrentToTopInQueue(It.IsAny<string>(), It.IsAny<QBittorrentSettings>()), Times.Once());
+        }
+
+        [Test]
+        public void Download_should_not_fail_if_top_priority_not_available()
+        {
+            GivenHighPriority();
+            GivenSuccessfulDownload();
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                  .Setup(v => v.MoveTorrentToTopInQueue(It.IsAny<string>(), It.IsAny<QBittorrentSettings>()))
+                  .Throws(new HttpException(new HttpResponse(new HttpRequest("http://me.local/"), new HttpHeader(), new byte[0], System.Net.HttpStatusCode.Forbidden)));
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            var id = Subject.Download(remoteEpisode);
+
+            id.Should().NotBeNullOrEmpty();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

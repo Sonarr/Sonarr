@@ -16,5 +16,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         [JsonProperty(PropertyName = "max_ratio_act")]
         public bool RemoveOnMaxRatio { get; set; } // Action performed when a torrent reaches the maximum share ratio. [false = pause, true = remove]
+
+        [JsonProperty(PropertyName = "queueing_enabled")]
+        public bool QueueingEnabled { get; set; } = true;
     }
 }
