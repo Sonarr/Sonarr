@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using FluentAssertions;
@@ -107,6 +107,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbVortexTests
             var result = Subject.GetItems().Single();
 
             VerifyQueued(result);
+
+            result.CanBeRemoved.Should().BeTrue();
+            result.CanMoveFiles.Should().BeTrue();
         }
 
         [Test]
@@ -118,6 +121,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbVortexTests
             var result = Subject.GetItems().Single();
 
             VerifyPaused(result);
+
+            result.CanBeRemoved.Should().BeTrue();
+            result.CanMoveFiles.Should().BeTrue();
         }
 
         [Test]
@@ -129,6 +135,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbVortexTests
             var result = Subject.GetItems().Single();
 
             VerifyDownloading(result);
+
+            result.CanBeRemoved.Should().BeTrue();
+            result.CanMoveFiles.Should().BeTrue();
         }
 
         [Test]
@@ -152,6 +161,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbVortexTests
             var result = Subject.GetItems().Single();
 
             VerifyFailed(result);
+
+            result.CanBeRemoved.Should().BeTrue();
+            result.CanMoveFiles.Should().BeTrue();
         }
 
         [Test]
