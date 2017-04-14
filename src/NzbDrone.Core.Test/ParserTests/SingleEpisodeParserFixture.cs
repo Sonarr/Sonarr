@@ -128,6 +128,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Jeopardy - S2016E231", "Jeopardy", 2016, 231)]
         [TestCase("Jeopardy - 2016x231", "Jeopardy", 2016, 231)]
         [TestCase("Shortland.Street.S26E022.HDTV.x264-FiHTV", "Shortland Street", 26, 22)]
+        [TestCase("Super.Potatoes.S01.Ep06.1080p.BluRay.DTS.x264-MiR", "Super Potatoes", 1, 6)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
