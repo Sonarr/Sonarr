@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using NLog;
 using NzbDrone.Common;
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
                 handler.Execute(command);
 
-                _commandQueueManager.Complete(commandModel, command.CompletionMessage);
+                _commandQueueManager.Complete(commandModel, command.CompletionMessage ?? commandModel.Message);
             }
             catch (CommandFailedException ex)
             {

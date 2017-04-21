@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Messaging.Commands
         private readonly Logger _logger;
 
         private readonly ICached<CommandModel> _commandCache;
-        private readonly BlockingCollection<CommandModel> _commandQueue; 
+        private readonly BlockingCollection<CommandModel> _commandQueue;
 
         public CommandQueueManager(ICommandRepository repo, 
                                    IServiceFactory serviceFactory,

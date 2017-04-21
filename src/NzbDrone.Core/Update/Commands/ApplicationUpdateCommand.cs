@@ -6,6 +6,6 @@ namespace NzbDrone.Core.Update.Commands
     {
         public override bool SendUpdatesToClient => true;
 
-        public override string CompletionMessage => "Restarting Sonarr to apply updates";
+        public override string CompletionMessage => null;
     }
 }
