@@ -26,7 +26,19 @@ namespace NzbDrone.Core.Download.Clients.Vuze
 
         protected override OsPath GetOutputPath(OsPath outputPath, TransmissionTorrent torrent)
         {
-            _logger.Debug("Vuze output directory: {0}", outputPath);
+            // Vuze has similar behavior as uTorrent:
+            // - A multi-file torrent is downloaded in a job folder and 'outputPath' points to that directory directly.
+            // - A single-file torrent is downloaded in the root folder and 'outputPath' poinst to that root folder.
+            // We have to make sure the return value points to the job folder OR file.
+            if (outputPath == null || outputPath.FileName == torrent.Name)
+            {
+                _logger.Trace("Vuze output directory: {0}", outputPath);
+            }
+            else
+            {
+                outputPath = outputPath + torrent.Name;
+                _logger.Trace("Vuze output file: {0}", outputPath);
+            }
 
             return outputPath;
         }

@@ -298,7 +298,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
         }
 
         [Test]
-        public void should_have_correct_output_directory()
+        public void should_have_correct_output_directory_for_multifile_torrents()
         {
             WindowsOnly();
 
@@ -313,6 +313,26 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
 
             items.Should().HaveCount(1);
             items.First().OutputPath.Should().Be(@"C:\Downloads\" + _title);
+        }
+
+        [Test]
+        public void should_have_correct_output_directory_for_singlefile_torrents()
+        {
+            WindowsOnly();
+
+            var fileName = _title + ".mkv";
+            _downloading.Name = fileName;
+            _downloading.DownloadDir = @"C:/Downloads";
+
+            GivenTorrents(new List<TransmissionTorrent>
+                {
+                    _downloading
+                });
+
+            var items = Subject.GetItems().ToList();
+
+            items.Should().HaveCount(1);
+            items.First().OutputPath.Should().Be(@"C:\Downloads\" + fileName);
         }
 
     }
