@@ -13,6 +13,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
     [TestFixture]
     public class VuzeFixture : TransmissionFixtureBase<Vuze>
     {
+        [SetUp]
+        public void Setup_Vuze()
+        {
+            // Vuze never sets isFinished.
+            _completed.IsFinished = false;
+        }
+
         [Test]
         public void queued_item_should_have_required_properties()
         {
@@ -150,8 +157,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
         [TestCase(TransmissionTorrentStatus.Check, DownloadItemStatus.Downloading)]
         [TestCase(TransmissionTorrentStatus.Queued, DownloadItemStatus.Queued)]
         [TestCase(TransmissionTorrentStatus.Downloading, DownloadItemStatus.Downloading)]
-        [TestCase(TransmissionTorrentStatus.SeedingWait, DownloadItemStatus.Completed)]
-        [TestCase(TransmissionTorrentStatus.Seeding, DownloadItemStatus.Completed)]
+        [TestCase(TransmissionTorrentStatus.SeedingWait, DownloadItemStatus.Downloading)]
+        [TestCase(TransmissionTorrentStatus.Seeding, DownloadItemStatus.Downloading)]
         public void GetItems_should_return_queued_item_as_downloadItemStatus(TransmissionTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus)
         {
             _queued.Status = apiStatus;
@@ -165,7 +172,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
 
         [TestCase(TransmissionTorrentStatus.Queued, DownloadItemStatus.Queued)]
         [TestCase(TransmissionTorrentStatus.Downloading, DownloadItemStatus.Downloading)]
-        [TestCase(TransmissionTorrentStatus.Seeding, DownloadItemStatus.Completed)]
+        [TestCase(TransmissionTorrentStatus.Seeding, DownloadItemStatus.Downloading)]
         public void GetItems_should_return_downloading_item_as_downloadItemStatus(TransmissionTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus)
         {
             _downloading.Status = apiStatus;
@@ -180,7 +187,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
         [TestCase(TransmissionTorrentStatus.Stopped, DownloadItemStatus.Completed, true)]
         [TestCase(TransmissionTorrentStatus.CheckWait, DownloadItemStatus.Downloading, false)]
         [TestCase(TransmissionTorrentStatus.Check, DownloadItemStatus.Downloading, false)]
-        [TestCase(TransmissionTorrentStatus.Queued, DownloadItemStatus.Completed, false)]
+        [TestCase(TransmissionTorrentStatus.Queued, DownloadItemStatus.Queued, false)]
         [TestCase(TransmissionTorrentStatus.SeedingWait, DownloadItemStatus.Completed, false)]
         [TestCase(TransmissionTorrentStatus.Seeding, DownloadItemStatus.Completed, false)]
         public void GetItems_should_return_completed_item_as_downloadItemStatus(TransmissionTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, bool expectedValue)

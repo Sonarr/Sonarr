@@ -86,8 +86,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = torrent.ErrorString;
                 }
-                else if (torrent.Status == TransmissionTorrentStatus.Seeding ||
-                         torrent.Status == TransmissionTorrentStatus.SeedingWait)
+                else if (torrent.LeftUntilDone == 0 && (torrent.Status == TransmissionTorrentStatus.Stopped ||
+                                                        torrent.Status == TransmissionTorrentStatus.Seeding ||
+                                                        torrent.Status == TransmissionTorrentStatus.SeedingWait))
                 {
                     item.Status = DownloadItemStatus.Completed;
                 }
