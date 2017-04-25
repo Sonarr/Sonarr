@@ -92,9 +92,9 @@ module.exports = function() {
 
         if (error.infoLink) {
             if (error.detailedDescription) {
-                errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-sonarr-external-link" title="' + error.detailedDescription + '"></i></a>';
+                errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-sonarr-form-external-link" title="' + error.detailedDescription + '"></i></a>';
             } else {
-                errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-sonarr-external-link"></i></a>';
+                errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-sonarr-form-external-link"></i></a>';
             }
         } else if (error.detailedDescription) {
             errorMessage += ' <i class="icon-sonarr-form-info" title="' + error.detailedDescription + '"></i>';
