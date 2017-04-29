@@ -25,7 +25,7 @@ gulp.task('copyHtml', function () {
 });
 
 gulp.task('copyContent', function () {
-  return gulp.src([paths.src.content + '**/*.*', '!**/*.less'])
+  return gulp.src([paths.src.content + '**/*.*', '!**/*.less', '!**/*.css'])
     .pipe(gulp.dest(paths.dest.content))
     .pipe(livereload());
 });
