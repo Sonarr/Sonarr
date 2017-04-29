@@ -11,12 +11,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     public class FullSeasonSpecification : IDecisionEngineSpecification
     {
         private readonly Logger _logger;
-        private readonly IEpisodeService _episodeService;
 
-        public FullSeasonSpecification(Logger logger, IEpisodeService episodeService)
+        public FullSeasonSpecification(Logger logger)
         {
             _logger = logger;
-            _episodeService = episodeService;
         }
 
         public SpecificationPriority Priority => SpecificationPriority.Default;
