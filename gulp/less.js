@@ -5,7 +5,7 @@ var postcss = require('gulp-postcss');
 var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('autoprefixer-core');
 var livereload = require('gulp-livereload');
-
+var cleancss = require('gulp-clean-css');
 var print = require('gulp-print');
 var paths = require('./paths');
 var errorHandler = require('./errorHandler');
@@ -33,12 +33,13 @@ gulp.task('less', function() {
         .pipe(sourcemaps.init())
         .pipe(less({
             dumpLineNumbers : 'false',
-            compress        : true,
-            yuicompress     : true,
+            compress        : false,
+            yuicompress     : false,
             ieCompat        : true,
             strictImports   : true
         }))
         .pipe(postcss([ autoprefixer({ browsers: ['last 2 versions'] }) ]))
+        .pipe(cleancss())
         .on('error', errorHandler.onError)
         .pipe(sourcemaps.write(paths.dest.content))
         .pipe(gulp.dest(paths.dest.content))
