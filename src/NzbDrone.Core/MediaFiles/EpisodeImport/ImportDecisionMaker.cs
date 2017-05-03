@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     public interface IMakeImportDecision
     {
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series);
-        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, ParsedEpisodeInfo folderInfo, bool sceneSource);
+        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource);
     }
 
     public class ImportDecisionMaker : IMakeImportDecision
@@ -50,10 +51,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series)
         {
-            return GetImportDecisions(videoFiles, series, null, false);
+            return GetImportDecisions(videoFiles, series, null, null, false);
         }
 
-        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, ParsedEpisodeInfo folderInfo, bool sceneSource)
+        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource)
         {
             var newFiles = _mediaFileService.FilterExistingFiles(videoFiles.ToList(), series);
 
@@ -64,13 +65,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             foreach (var file in newFiles)
             {
-                decisions.AddIfNotNull(GetDecision(file, series, folderInfo, sceneSource, shouldUseFolderName));
+                decisions.AddIfNotNull(GetDecision(file, series, downloadClientItem, folderInfo, sceneSource, shouldUseFolderName));
             }
 
             return decisions;
         }
 
-        private ImportDecision GetDecision(string file, Series series, ParsedEpisodeInfo folderInfo, bool sceneSource, bool shouldUseFolderName)
+        private ImportDecision GetDecision(string file, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource, bool shouldUseFolderName)
         {
             ImportDecision decision = null;
 
@@ -97,7 +98,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     }
                     else
                     {
-                        decision = GetDecision(localEpisode);
+                        decision = GetDecision(localEpisode, downloadClientItem);
                     }
                 }
 
@@ -120,19 +121,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             return decision;
         }
 
-        private ImportDecision GetDecision(LocalEpisode localEpisode)
+        private ImportDecision GetDecision(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
-            var reasons = _specifications.Select(c => EvaluateSpec(c, localEpisode))
+            var reasons = _specifications.Select(c => EvaluateSpec(c, localEpisode, downloadClientItem))
                                          .Where(c => c != null);
 
             return new ImportDecision(localEpisode, reasons.ToArray());
         }
 
-        private Rejection EvaluateSpec(IImportDecisionEngineSpecification spec, LocalEpisode localEpisode)
+        private Rejection EvaluateSpec(IImportDecisionEngineSpecification spec, LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             try
             {
-                var result = spec.IsSatisfiedBy(localEpisode);
+                var result = spec.IsSatisfiedBy(localEpisode, downloadClientItem);
 
                 if (!result.Accepted)
                 {

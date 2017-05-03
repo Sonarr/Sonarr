@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_true_if_not_in_working_folder()
         {
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddHours(-1));
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow);
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddDays(-5));
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
     }
 }

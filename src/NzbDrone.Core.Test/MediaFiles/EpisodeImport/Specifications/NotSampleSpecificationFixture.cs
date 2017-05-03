@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         public void should_return_true_for_existing_file()
         {
             _localEpisode.ExistingFile = true;
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

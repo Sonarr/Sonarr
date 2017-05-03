@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenFileSize(100.Megabytes());
             GivenFreeSpace(80.Megabytes());
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenFileSize(100.Megabytes());
             GivenFreeSpace(150.Megabytes());
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenFileSize(100.Megabytes());
             GivenFreeSpace(1.Gigabytes());
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenFileSize(100.Megabytes());
             GivenFreeSpace(1.Gigabytes());
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(v => v.GetAvailableSpace(_rootFolder), Times.Once());
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenFileSize(100.Megabytes());
             GivenFreeSpace(null);
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.GetAvailableSpace(It.IsAny<string>()))
                   .Throws(new TestException());
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
             ExceptionVerification.ExpectedErrors(1);
         }
 
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         {
             _localEpisode.ExistingFile = true;
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(s => s.GetAvailableSpace(It.IsAny<string>()), Times.Never());
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.GetAvailableSpace(It.IsAny<string>()))
                   .Returns(freeSpace);
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.SkipFreeSpaceCheckWhenImporting)
                   .Returns(true);
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

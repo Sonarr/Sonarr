@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .Build()
                                                      .ToList();
 
-            Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
     }
 }
