@@ -283,6 +283,7 @@
     <Compile Include="MediaFiles\EpisodeImport\SampleServiceFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecificationFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\GrabbedReleaseQualityFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\MatchesFolderSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecificationFixture.cs" />
