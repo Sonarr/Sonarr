@@ -91,16 +91,17 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         [Test]
         public void should_call_all_specifications()
         {
+            var downloadClientItem = Builder<DownloadClientItem>.CreateNew().Build();
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            Subject.GetImportDecisions(_videoFiles, new Series(), new DownloadClientItem(), null, false);
+            Subject.GetImportDecisions(_videoFiles, new Series(), downloadClientItem, null, false);
 
-            _fail1.Verify(c => c.IsSatisfiedBy(_localEpisode, null), Times.Once());
-            _fail2.Verify(c => c.IsSatisfiedBy(_localEpisode, null), Times.Once());
-            _fail3.Verify(c => c.IsSatisfiedBy(_localEpisode, null), Times.Once());
-            _pass1.Verify(c => c.IsSatisfiedBy(_localEpisode, null), Times.Once());
-            _pass2.Verify(c => c.IsSatisfiedBy(_localEpisode, null), Times.Once());
-            _pass3.Verify(c => c.IsSatisfiedBy(_localEpisode, null), Times.Once());
+            _fail1.Verify(c => c.IsSatisfiedBy(_localEpisode, downloadClientItem), Times.Once());
+            _fail2.Verify(c => c.IsSatisfiedBy(_localEpisode, downloadClientItem), Times.Once());
+            _fail3.Verify(c => c.IsSatisfiedBy(_localEpisode, downloadClientItem), Times.Once());
+            _pass1.Verify(c => c.IsSatisfiedBy(_localEpisode, downloadClientItem), Times.Once());
+            _pass2.Verify(c => c.IsSatisfiedBy(_localEpisode, downloadClientItem), Times.Once());
+            _pass3.Verify(c => c.IsSatisfiedBy(_localEpisode, downloadClientItem), Times.Once());
         }
 
         [Test]
