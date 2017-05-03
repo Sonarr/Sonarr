@@ -9,7 +9,6 @@ using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 {
@@ -23,13 +22,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         public void Setup()
         {
             _localEpisode = Builder<LocalEpisode>.CreateNew()
-                                                 .With(l => l.Path = @"C:\Test\Unsorted\Series.Title.S01E01.720p.HDTV-Sonarr\S01E05.mkv".AsOsAgnostic())
                                                  .With(l => l.Quality = new QualityModel(Quality.Bluray720p))
-                                                 .With(l => l.ParsedEpisodeInfo =
-                                                     Builder<ParsedEpisodeInfo>.CreateNew()
-                                                                               .With(p => p.EpisodeNumbers = new[] {5})
-                                                                               .With(p => p.FullSeason = false)
-                                                                               .Build())
                                                  .Build();
 
             _downloadClientItem = Builder<DownloadClientItem>.CreateNew()
@@ -41,11 +34,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             Mocker.GetMock<IHistoryService>()
                   .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
                   .Returns(history);
-
         }
 
         [Test]
-        public void should_be_accepted_when_downloadClientItem_is_ull()
+        public void should_be_accepted_when_downloadClientItem_is_null()
         {
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
