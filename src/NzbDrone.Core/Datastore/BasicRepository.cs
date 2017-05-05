@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Get(int id)
         {
-            var model = Query.Where(c => c.Id == id).SingleOrDefault();
+            var model = Query.SingleOrDefault(c => c.Id == id);
 
             if (model == null)
             {
