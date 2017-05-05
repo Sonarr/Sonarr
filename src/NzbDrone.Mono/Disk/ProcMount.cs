@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Mono.Unix;
 using NzbDrone.Common.Disk;
@@ -16,6 +16,7 @@ namespace NzbDrone.Mono.Disk
             Name = name;
             RootDirectory = mount;
             DriveFormat = type;
+            MountOptions = options;
 
             _unixDriveInfo = new UnixDriveInfo(mount);
         }
@@ -27,6 +28,8 @@ namespace NzbDrone.Mono.Disk
         public DriveType DriveType { get; private set; }
 
         public bool IsReady => _unixDriveInfo.IsReady;
+
+        public Dictionary<string, string> MountOptions { get; private set; }
 
         public string Name { get; private set; }
 
