@@ -20,11 +20,14 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
         private Mock<ISceneMappingProvider> _provider1;
         private Mock<ISceneMappingProvider> _provider2;
-            
+
         [SetUp]
         public void Setup()
         {
-            _fakeMappings = Builder<SceneMapping>.CreateListOfSize(5).BuildListOfNew();
+            _fakeMappings = Builder<SceneMapping>.CreateListOfSize(5)
+                                                 .All()
+                                                 .With(v => v.FilterRegex = null)
+                                                 .BuildListOfNew();
 
             _fakeMappings[0].SearchTerm = "Words";
             _fakeMappings[1].SearchTerm = "That";
@@ -193,7 +196,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
 
             var tvdbId = Subject.FindTvdbId(parseTitle);
-            var seasonNumber = Subject.GetSceneSeasonNumber(parseTitle);
+            var seasonNumber = Subject.GetSceneSeasonNumber(parseTitle, null);
 
             tvdbId.Should().Be(100);
             seasonNumber.Should().Be(expectedSeasonNumber);
@@ -312,6 +315,35 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             Subject.GetSceneNames(100, new List<int> { 2 }, new List<int> { 2 }).Should().BeEmpty();
             Subject.GetSceneNames(100, new List<int> { 3 }, new List<int> { 3 }).Should().BeEmpty();
             Subject.GetSceneNames(100, new List<int> { 4 }, new List<int> { 4 }).Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_filter_by_regex()
+        {
+            var mappings = new List<SceneMapping>
+            {
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 100 },
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 101, FilterRegex="-Viva$" }
+            };
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+
+            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva").Should().Be(101);
+            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-DMO").Should().Be(100);
+        }
+
+        [Test]
+        public void should_throw_if_multiple_mappings()
+        {
+            var mappings = new List<SceneMapping>
+            {
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 100 },
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 101 }
+            };
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+
+            Assert.Throws<InvalidSceneMappingException>(() => Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva"));
         }
 
         private void AssertNoUpdate()

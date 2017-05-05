@@ -140,6 +140,7 @@
     <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
+    <Compile Include="DataAugmentation\Scene\InvalidSceneMappingException.cs" />
     <Compile Include="DataAugmentation\Scene\ISceneMappingProvider.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingProxy.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\102_add_language_to_episodeFiles_history_and_blacklist.cs" />
+    <Compile Include="Datastore\Migration\112_added_regex_to_scenemapping.cs" />
     <Compile Include="Datastore\Migration\110_fix_extra_files_config.cs" />
     <Compile Include="Datastore\Migration\109_import_extra_files.cs" />
     <Compile Include="Datastore\Migration\108_fix_extra_file_extension.cs" />

@@ -8,17 +8,18 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using System.Collections.Generic;
 using NzbDrone.Core.Tv.Events;
+using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
         List<string> GetSceneNames(int tvdbId, List<int> seasonNumbers, List<int> sceneSeasonNumbers);
-        int? FindTvdbId(string title);
+        int? FindTvdbId(string sceneTitle, string releaseTitle);
         List<SceneMapping> FindByTvdbId(int tvdbId);
-        SceneMapping FindSceneMapping(string title);
-        int? GetSceneSeasonNumber(string title);
-        int? GetTvdbSeasonNumber(string title);
+        SceneMapping FindSceneMapping(string sceneTitle, string releaseTitle);
+        int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle);
+        int? GetTvdbSeasonNumber(string seriesTitle, string releaseTitle);
         int? GetSceneSeasonNumber(int tvdbId, int seasonNumber);
     }
 
@@ -65,14 +66,14 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return FilterNonEnglish(names);
         }
 
-        public int? FindTvdbId(string title)
+        public int? FindTvdbId(string seriesTitle)
         {
-            var mapping = FindMapping(title);
+            return FindTvdbId(seriesTitle, null);
+        }
 
-            if (mapping == null)
-                return null;
-
-            return mapping.TvdbId;
+        public int? FindTvdbId(string seriesTitle, string releaseTitle)
+        {
+            return FindSceneMapping(seriesTitle, releaseTitle)?.TvdbId;
         }
 
         public List<SceneMapping> FindByTvdbId(int tvdbId)
@@ -92,33 +93,31 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mappings;
         }
 
-        public SceneMapping FindSceneMapping(string title)
+        public SceneMapping FindSceneMapping(string seriesTitle, string releaseTitle)
         {
-            return FindMapping(title);
-        }
+            var mappings = FindMappings(seriesTitle, releaseTitle);
 
-        public int? GetSceneSeasonNumber(string title)
-        {
-            var mapping = FindMapping(title);
-
-            if (mapping == null)
+            if (mappings == null)
             {
                 return null;
             }
 
-            return mapping.SceneSeasonNumber;
-        }
-
-        public int? GetTvdbSeasonNumber(string title)
-        {
-            var mapping = FindMapping(title);
-
-            if (mapping == null)
+            if (mappings.Count <= 1)
             {
-                return null;
+                return mappings.FirstOrDefault();
             }
 
-            return mapping.SeasonNumber;
+            throw new InvalidSceneMappingException(mappings);
+        }
+
+        public int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle)
+        {
+            return FindSceneMapping(seriesTitle, releaseTitle)?.SceneSeasonNumber;
+        }
+
+        public int? GetTvdbSeasonNumber(string seriesTitle, string releaseTitle)
+        {
+            return FindSceneMapping(seriesTitle, releaseTitle)?.SeasonNumber;
         }
 
         public int? GetSceneSeasonNumber(int tvdbId, int seasonNumber)
@@ -184,44 +183,48 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                     _logger.Error(ex, "Failed to Update Scene Mappings.");
                 }
             }
-            
+
             RefreshCache();
 
             _eventAggregator.PublishEvent(new SceneMappingsUpdatedEvent());
         }
 
-        private SceneMapping FindMapping(string title)
+        private List<SceneMapping> FindMappings(string seriesTitle, string releaseTitle)
         {
             if (_getTvdbIdCache.Count == 0)
             {
                 RefreshCache();
             }
 
-            var candidates = _getTvdbIdCache.Find(title.CleanSeriesTitle());
+            var candidates = _getTvdbIdCache.Find(seriesTitle.CleanSeriesTitle());
 
             if (candidates == null)
             {
                 return null;
             }
 
-            if (candidates.Count == 1)
+            candidates = FilterSceneMappings(candidates, releaseTitle);
+
+            if (candidates.Count <= 1)
             {
-                return candidates.First();
+                return candidates;
             }
 
             var exactMatch = candidates.OrderByDescending(v => v.SeasonNumber)
-                                       .FirstOrDefault(v => v.Title == title);
+                                       .Where(v => v.Title == seriesTitle)
+                                       .ToList();
 
-            if (exactMatch != null)
+            if (exactMatch.Any())
             {
                 return exactMatch;
             }
 
-            var closestMatch = candidates.OrderBy(v => title.LevenshteinDistance(v.Title, 10, 1, 10))
+            var closestMatch = candidates.OrderBy(v => seriesTitle.LevenshteinDistance(v.Title, 10, 1, 10))
                                          .ThenByDescending(v => v.SeasonNumber)
                                          .First();
 
-            return closestMatch;
+
+            return candidates.Where(v => v.Title == closestMatch.Title).ToList();
         }
 
         private void RefreshCache()
@@ -230,6 +233,26 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
             _getTvdbIdCache.Update(mappings.GroupBy(v => v.ParseTerm).ToDictionary(v => v.Key, v => v.ToList()));
             _findByTvdbIdCache.Update(mappings.GroupBy(v => v.TvdbId).ToDictionary(v => v.Key.ToString(), v => v.ToList()));
+        }
+
+        private List<SceneMapping> FilterSceneMappings(List<SceneMapping> candidates, string releaseTitle)
+        {
+            var filteredCandidates = candidates.Where(v => v.FilterRegex.IsNotNullOrWhiteSpace()).ToList();
+            var normalCandidates = candidates.Except(filteredCandidates).ToList();
+
+            if (releaseTitle.IsNullOrWhiteSpace())
+            {
+                return normalCandidates;
+            }
+
+            filteredCandidates = filteredCandidates.Where(v => Regex.IsMatch(releaseTitle, v.FilterRegex)).ToList();
+
+            if (filteredCandidates.Any())
+            {
+                return filteredCandidates;
+            }
+
+            return normalCandidates;
         }
 
         private List<string> FilterNonEnglish(List<string> titles)

@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             GivenMatchByTvRageId();
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(v => v.FindTvdbId(It.IsAny<string>()))
+                  .Setup(v => v.FindTvdbId(It.IsAny<string>(), It.IsAny<string>()))
                   .Returns(10);
 
             var result = Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId);
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         public void should_use_tvdbid_matching_when_alias_is_found()
         {
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.FindTvdbId(It.IsAny<string>()))
+                  .Setup(s => s.FindTvdbId(It.IsAny<string>(), It.IsAny<string>()))
                   .Returns(_series.TvdbId);
 
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _singleEpisodeSearchCriteria);

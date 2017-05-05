@@ -35,21 +35,18 @@ namespace NzbDrone.Core.Tv
     {
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
-        private readonly ISceneMappingService _sceneMappingService;
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _fileNameBuilder;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository,
                              IEventAggregator eventAggregator,
-                             ISceneMappingService sceneMappingService,
                              IEpisodeService episodeService,
                              IBuildFileNames fileNameBuilder,
                              Logger logger)
         {
             _seriesRepository = seriesRepository;
             _eventAggregator = eventAggregator;
-            _sceneMappingService = sceneMappingService;
             _episodeService = episodeService;
             _fileNameBuilder = fileNameBuilder;
             _logger = logger;
@@ -85,13 +82,6 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitle(string title)
         {
-            var tvdbId = _sceneMappingService.FindTvdbId(title);
-
-            if (tvdbId.HasValue)
-            {
-                return _seriesRepository.FindByTvdbId(tvdbId.Value);
-            }
-
             return _seriesRepository.FindByTitle(title.CleanSeriesTitle());
         }
 
@@ -107,11 +97,11 @@ namespace NzbDrone.Core.Tv
             }
             if (list.Count == 1)
             {
-                // return the first series if there is only one 
+                // return the first series if there is only one
                 return list.Single();
             }
             // build ordered list of series by position in the search string
-            var query = 
+            var query =
                 list.Select(series => new
                 {
                     position = cleanTitle.IndexOf(series.CleanTitle),
@@ -192,7 +182,7 @@ namespace NzbDrone.Core.Tv
                     _logger.Trace("Not changing path for: {0}", s.Title);
                 }
             }
-            
+
             _seriesRepository.UpdateMany(series);
             _logger.Debug("{0} series updated", series.Count);
 

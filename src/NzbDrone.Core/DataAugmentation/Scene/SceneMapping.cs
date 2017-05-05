@@ -17,6 +17,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         public int? SeasonNumber { get; set; }
 
         public int? SceneSeasonNumber { get; set; }
+
+        public string FilterRegex { get; set; }
+
         public string Type { get; set; }
     }
 }

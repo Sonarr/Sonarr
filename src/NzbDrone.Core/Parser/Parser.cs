@@ -316,9 +316,9 @@ namespace NzbDrone.Core.Parser
                     Logger.Debug("Reversed name detected. Converted to '{0}'", title);
                 }
 
-                var simpleTitle = SimpleTitleRegex.Replace(title, string.Empty);
+                title = RemoveFileExtension(title);
 
-                simpleTitle = RemoveFileExtension(simpleTitle);
+                var simpleTitle = SimpleTitleRegex.Replace(title, string.Empty);
 
                 // TODO: Quick fix stripping [url] - prefixes.
                 simpleTitle = WebsitePrefixRegex.Replace(simpleTitle, string.Empty);
@@ -355,7 +355,7 @@ namespace NzbDrone.Core.Parser
                         Logger.Trace(regex);
                         try
                         {
-                            var result = ParseMatchCollection(match);
+                            var result = ParseMatchCollection(match, title);
 
                             if (result != null)
                             {
@@ -522,7 +522,7 @@ namespace NzbDrone.Core.Parser
             return seriesTitleInfo;
         }
 
-        private static ParsedEpisodeInfo ParseMatchCollection(MatchCollection matchCollection)
+        private static ParsedEpisodeInfo ParseMatchCollection(MatchCollection matchCollection, string title)
         {
             var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ').Replace('_', ' ');
             seriesName = RequestInfoRegex.Replace(seriesName, "").Trim(' ');
@@ -551,6 +551,7 @@ namespace NzbDrone.Core.Parser
 
                 result = new ParsedEpisodeInfo
                 {
+                    ReleaseTitle = title,
                     SeasonNumber = seasons.First(),
                     EpisodeNumbers = new int[0],
                     AbsoluteEpisodeNumbers = new int[0]
@@ -644,6 +645,7 @@ namespace NzbDrone.Core.Parser
 
                 result = new ParsedEpisodeInfo
                 {
+                    ReleaseTitle = title,
                     AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
                 };
             }
