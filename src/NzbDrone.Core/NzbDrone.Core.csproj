@@ -1063,6 +1063,11 @@
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
+    <Compile Include="SkyhookNotifications\SkyhookNotification.cs" />
+    <Compile Include="SkyhookNotifications\SkyhookNotificationService.cs" />
+    <Compile Include="SkyhookNotifications\SkyhookNotificationType.cs" />
+    <Compile Include="SkyhookNotifications\SkyhookNotificationProxy.cs" />
+    <Compile Include="SkyhookNotifications\SubstituteUrlService.cs" />
     <Compile Include="Tags\Tag.cs" />
     <Compile Include="Tags\TagRepository.cs" />
     <Compile Include="Tags\TagService.cs" />

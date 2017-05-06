@@ -2,7 +2,9 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.SkyhookNotifications;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
@@ -15,17 +17,20 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
+        private readonly ISubstituteIndexerUrl _substituteIndexerUrl;
         private readonly IIndexerStatusService _indexerStatusService;
         private readonly Logger _logger;
 
-        public IndexerFactory(IIndexerStatusService indexerStatusService,
+        public IndexerFactory(ISubstituteIndexerUrl replaceIndexerUrl,
+                              IIndexerStatusService indexerStatusService,
                               IIndexerRepository providerRepository,
                               IEnumerable<IIndexer> providers,
-                              IContainer container, 
+                              IContainer container,
                               IEventAggregator eventAggregator,
                               Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
+            _substituteIndexerUrl = replaceIndexerUrl;
             _indexerStatusService = indexerStatusService;
             _logger = logger;
         }
@@ -50,7 +55,7 @@ namespace NzbDrone.Core.Indexers
 
             if (filterBlockedIndexers)
             {
-                return FilterBlockedIndexers(enabledIndexers).ToList();
+                return FilterBlockedIndexers(SubstituteIndexerUrls(enabledIndexers)).ToList();
             }
 
             return enabledIndexers.ToList();
@@ -62,10 +67,29 @@ namespace NzbDrone.Core.Indexers
 
             if (filterBlockedIndexers)
             {
-                return FilterBlockedIndexers(enabledIndexers).ToList();
+                return FilterBlockedIndexers(SubstituteIndexerUrls(enabledIndexers)).ToList();
             }
 
             return enabledIndexers.ToList();
+        }
+
+        private IEnumerable<IIndexer> SubstituteIndexerUrls(IEnumerable<IIndexer> indexers)
+        {
+            foreach (var indexer in indexers)
+            {
+                var settings = (IIndexerSettings)indexer.Definition.Settings;
+                if (settings.BaseUrl.IsNotNullOrWhiteSpace())
+                {
+                    var newBaseUrl = _substituteIndexerUrl.SubstituteUrl(settings.BaseUrl);
+                    if (newBaseUrl != settings.BaseUrl)
+                    {
+                        _logger.Debug("Substituted indexer {0} url {1} with {2} since services blacklisted it.", indexer.Definition.Name, settings.BaseUrl, newBaseUrl);
+                        settings.BaseUrl = newBaseUrl;
+                    }
+                }
+
+                yield return indexer;
+            }
         }
 
         private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)

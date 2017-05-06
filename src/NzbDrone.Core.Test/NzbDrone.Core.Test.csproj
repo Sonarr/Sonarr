@@ -366,6 +366,7 @@
     <Compile Include="Qualities\QualityModelComparerFixture.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
+    <Compile Include="SkyhookNotifications\SkyhookNotificationServiceFixture.cs" />
     <Compile Include="ThingiProvider\ProviderBaseFixture.cs" />
     <Compile Include="ThingiProviderTests\NullConfigFixture.cs" />
     <Compile Include="TvTests\EpisodeServiceTests\FindEpisodeByTitleFixture.cs" />
