@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
                     Name = "Torznab",
                     Settings = new TorznabSettings()
                         {
-                            Url = "http://indexer.local/",
+                            BaseUrl = "http://indexer.local/",
                             Categories = new int[] { 1 }
                         }
                 };
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
-            
+
             var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(5);

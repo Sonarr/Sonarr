@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         }
     }
 
-    public class BitMeTvSettings : IProviderConfig
+    public class BitMeTvSettings : IIndexerSettings
     {
         private static readonly BitMeTvSettingsValidator Validator = new BitMeTvSettingsValidator();
 

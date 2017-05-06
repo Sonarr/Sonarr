@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         }
     }
 
-    public class BroadcastheNetSettings : IProviderConfig
+    public class BroadcastheNetSettings : IIndexerSettings
     {
         private static readonly BroadcastheNetSettingsValidator Validator = new BroadcastheNetSettingsValidator();
 

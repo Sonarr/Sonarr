@@ -13,7 +13,7 @@ using NzbDrone.Core.ThingiProvider;
 namespace NzbDrone.Core.Indexers
 {
     public abstract class IndexerBase<TSettings> : IIndexer
-        where TSettings : IProviderConfig, new()
+        where TSettings : IIndexerSettings, new()
     {
         protected readonly IIndexerStatusService _indexerStatusService;
         protected readonly IConfigService _configService;

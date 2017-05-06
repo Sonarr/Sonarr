@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         }
     }
 
-    public class TorrentleechSettings : IProviderConfig
+    public class TorrentleechSettings : IIndexerSettings
     {
         private static readonly TorrentleechSettingsValidator Validator = new TorrentleechSettingsValidator();
 

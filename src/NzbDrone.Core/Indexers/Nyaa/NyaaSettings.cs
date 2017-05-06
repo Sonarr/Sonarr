@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
         }
     }
 
-    public class NyaaSettings : IProviderConfig
+    public class NyaaSettings : IIndexerSettings
     {
         private static readonly NyaaSettingsValidator Validator = new NyaaSettingsValidator();
 

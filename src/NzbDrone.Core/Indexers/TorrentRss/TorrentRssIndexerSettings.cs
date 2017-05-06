@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         }
     }
 
-    public class TorrentRssIndexerSettings : IProviderConfig
+    public class TorrentRssIndexerSettings : IIndexerSettings
     {
         private static readonly TorrentRssIndexerSettingsValidator validator = new TorrentRssIndexerSettingsValidator();
 

@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         }
     }
 
-    public class OmgwtfnzbsSettings : IProviderConfig
+    public class OmgwtfnzbsSettings : IIndexerSettings
     {
         private static readonly OmgwtfnzbsSettingsValidator Validator = new OmgwtfnzbsSettingsValidator();
 
@@ -23,6 +23,9 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         {
             Delay = 30;
         }
+
+        // Unused since Omg has a hardcoded url.
+        public string BaseUrl { get; set; }
 
         [FieldDefinition(0, Label = "Username")]
         public string Username { get; set; }

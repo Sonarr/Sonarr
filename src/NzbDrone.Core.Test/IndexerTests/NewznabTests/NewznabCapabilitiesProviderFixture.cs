@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         {
             _settings = new NewznabSettings()
             {
-                Url = "http://indxer.local"
+                BaseUrl = "http://indxer.local"
             };
 
             _caps = ReadAllText("Files/Indexers/Newznab/newznab_caps.xml");

@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
         }
     }
 
-    public class FanzubSettings : IProviderConfig
+    public class FanzubSettings : IIndexerSettings
     {
         private static readonly FanzubSettingsValidator Validator = new FanzubSettingsValidator();
 

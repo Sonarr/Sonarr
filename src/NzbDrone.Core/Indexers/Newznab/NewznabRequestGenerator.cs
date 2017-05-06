@@ -249,7 +249,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             var categoriesQuery = string.Join(",", categories.Distinct());
 
-            var baseUrl = string.Format("{0}/api?t={1}&cat={2}&extended=1{3}", Settings.Url.TrimEnd('/'), searchType, categoriesQuery, Settings.AdditionalParameters);
+            var baseUrl = string.Format("{0}/api?t={1}&cat={2}&extended=1{3}", Settings.BaseUrl.TrimEnd('/'), searchType, categoriesQuery, Settings.AdditionalParameters);
 
             if (Settings.ApiKey.IsNotNullOrWhiteSpace())
             {

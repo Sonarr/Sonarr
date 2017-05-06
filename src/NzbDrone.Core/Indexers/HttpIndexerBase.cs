@@ -17,7 +17,7 @@ using NzbDrone.Core.ThingiProvider;
 namespace NzbDrone.Core.Indexers
 {
     public abstract class HttpIndexerBase<TSettings> : IndexerBase<TSettings>
-        where TSettings : IProviderConfig, new()
+        where TSettings : IIndexerSettings, new()
     {
         protected const int MaxNumResultsPerQuery = 1000;
 

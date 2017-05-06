@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 
         private TorznabSettings GetSettings(string url, params int[] categories)
         {
-            var settings = new TorznabSettings { Url = url };
+            var settings = new TorznabSettings { BaseUrl = url };
 
             if (categories.Any())
             {

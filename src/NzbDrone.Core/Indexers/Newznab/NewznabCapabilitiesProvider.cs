@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             var capabilities = new NewznabCapabilities();
 
-            var url = string.Format("{0}/api?t=caps", indexerSettings.Url.TrimEnd('/'));
+            var url = string.Format("{0}/api?t=caps", indexerSettings.BaseUrl.TrimEnd('/'));
 
             if (indexerSettings.ApiKey.IsNotNullOrWhiteSpace())
             {
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, "Failed to get newznab api capabilities from {0}", indexerSettings.Url);
+                _logger.Debug(ex, "Failed to get newznab api capabilities from {0}", indexerSettings.BaseUrl);
                 throw;
             }
 
@@ -68,14 +68,14 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             catch (XmlException ex)
             {
-                _logger.Debug(ex, "Failed to parse newznab api capabilities for {0}.", indexerSettings.Url);
+                _logger.Debug(ex, "Failed to parse newznab api capabilities for {0}.", indexerSettings.BaseUrl);
 
                 ex.WithData(response);
                 throw;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Failed to determine newznab api capabilities for {0}, using the defaults instead till Sonarr restarts.", indexerSettings.Url);
+                _logger.Error(ex, "Failed to determine newznab api capabilities for {0}, using the defaults instead till Sonarr restarts.", indexerSettings.BaseUrl);
             }
 
             return capabilities;

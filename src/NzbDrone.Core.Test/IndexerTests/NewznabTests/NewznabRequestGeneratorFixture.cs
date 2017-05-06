@@ -20,10 +20,10 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         {
             Subject.Settings = new NewznabSettings()
             {
-                 Url = "http://127.0.0.1:1234/",
-                 Categories = new [] { 1, 2 },
-                 AnimeCategories = new [] { 3, 4 },
-                 ApiKey = "abcd",
+                BaseUrl = "http://127.0.0.1:1234/",
+                Categories = new [] { 1, 2 },
+                AnimeCategories = new [] { 3, 4 },
+                ApiKey = "abcd",
             };
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             page.Url.FullUri.Should().Contain("&cat=3,4&");
         }
-        
+
         [Test]
         public void should_use_mode_search_for_anime()
         {

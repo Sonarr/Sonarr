@@ -15,12 +15,12 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var setting = new NewznabSettings()
             {
                 ApiKey = "",
-                Url = url
+                BaseUrl = url
             };
 
 
             setting.Validate().IsValid.Should().BeFalse();
-            setting.Validate().Errors.Should().Contain(c => c.PropertyName == "ApiKey");
+            setting.Validate().Errors.Should().Contain(c => c.PropertyName == nameof(NewznabSettings.ApiKey));
 
         }
 
@@ -32,13 +32,13 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var setting = new NewznabSettings
             {
                 ApiKey = "",
-                Url = url
+                BaseUrl = url
             };
 
 
             setting.Validate().IsValid.Should().BeFalse();
-            setting.Validate().Errors.Should().NotContain(c => c.PropertyName == "ApiKey");
-            setting.Validate().Errors.Should().Contain(c => c.PropertyName == "Url");
+            setting.Validate().Errors.Should().NotContain(c => c.PropertyName == nameof(NewznabSettings.ApiKey));
+            setting.Validate().Errors.Should().Contain(c => c.PropertyName == nameof(NewznabSettings.BaseUrl));
 
         }
 
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var setting = new NewznabSettings()
             {
                 ApiKey = "",
-                Url = url
+                BaseUrl = url
             };
 
 

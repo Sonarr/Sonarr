@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.IndexerTests.IPTorrentsTests
             Subject.Definition = new IndexerDefinition()
                                     {
                                         Name = "IPTorrents",
-                                        Settings = new IPTorrentsSettings() {  Url = "http://fake.com/" }
+                                        Settings = new IPTorrentsSettings() {  BaseUrl = "http://fake.com/" }
                                     };
         }
 
