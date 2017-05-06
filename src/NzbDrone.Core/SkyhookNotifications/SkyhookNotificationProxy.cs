@@ -29,6 +29,17 @@ namespace NzbDrone.Core.SkyhookNotifications
 
         public List<SkyhookNotification> GetNotifications()
         {
+            return new List<SkyhookNotification>
+            {
+                new SkyhookNotification
+                {
+                    Type = SkyhookNotificationType.UrlBlacklist,
+                    Title = "Nyaa Indexer shut down",
+                    Message = "Official news is that Nyaa shut down and the domain will expire in a few months, therefore the indexer is forcibly disabled in Sonarr. If a substitute comes available you can update the url in the indexer settings.",
+                    RegexMatch = @"://www\.nyaa\.se(/|$)"
+                }
+            };
+            /*
             var notificationsRequest = _requestBuilder.Create()
                                                       .Resource("/notifications")
                                                       .AddQueryParam("version", BuildInfo.Version)
@@ -44,7 +55,7 @@ namespace NzbDrone.Core.SkyhookNotifications
             {
                 _logger.Warn(ex, "Failed to get information update from {0}", notificationsRequest.Url.Host);
                 return new List<SkyhookNotification>();
-            }
+            }*/
         }
     }
 }
