@@ -10,13 +10,13 @@ namespace NzbDrone.Mono.Disk
     {
         private readonly UnixDriveInfo _unixDriveInfo;
 
-        public ProcMount(DriveType driveType, string name, string mount, string type, Dictionary<string, string> options)
+        public ProcMount(DriveType driveType, string name, string mount, string type, MountOptions mountOptions)
         {
             DriveType = driveType;
             Name = name;
             RootDirectory = mount;
             DriveFormat = type;
-            MountOptions = options;
+            MountOptions = mountOptions;
 
             _unixDriveInfo = new UnixDriveInfo(mount);
         }
@@ -29,7 +29,7 @@ namespace NzbDrone.Mono.Disk
 
         public bool IsReady => _unixDriveInfo.IsReady;
 
-        public Dictionary<string, string> MountOptions { get; private set; }
+        public MountOptions MountOptions { get; private set; }
 
         public string Name { get; private set; }
 

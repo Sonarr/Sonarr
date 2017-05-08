@@ -21,7 +21,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             var mounts = _seriesService.GetAllSeries()
                                        .Select(series => _diskProvider.GetMount(series.Path))
                                        .DistinctBy(m => m.RootDirectory)
-                                       .Where(m => m.MountOptions != null && m.MountOptions.ContainsKey("ro"))
+                                       .Where(m => m.MountOptions != null && m.MountOptions.IsReadOnly)
                                        .ToList();
 
             if (mounts.Any())

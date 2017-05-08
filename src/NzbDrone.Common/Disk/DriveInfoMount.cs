@@ -9,11 +9,11 @@ namespace NzbDrone.Common.Disk
         private readonly DriveInfo _driveInfo;
         private readonly DriveType _driveType;
 
-        public DriveInfoMount(DriveInfo driveInfo, DriveType driveType = DriveType.Unknown, Dictionary<string,string> options = null)
+        public DriveInfoMount(DriveInfo driveInfo, DriveType driveType = DriveType.Unknown, MountOptions mountOptions = null)
         {
             _driveInfo = driveInfo;
             _driveType = driveType;
-            MountOptions = options;
+            MountOptions = mountOptions;
         }
 
         public long AvailableFreeSpace => _driveInfo.AvailableFreeSpace;
@@ -35,7 +35,7 @@ namespace NzbDrone.Common.Disk
 
         public bool IsReady => _driveInfo.IsReady;
 
-        public Dictionary<string, string> MountOptions { get; private set; }
+        public MountOptions MountOptions { get; private set; }
 
         public string Name => _driveInfo.Name;
 

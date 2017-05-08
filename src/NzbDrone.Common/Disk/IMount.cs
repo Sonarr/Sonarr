@@ -9,7 +9,7 @@ namespace NzbDrone.Common.Disk
         string DriveFormat { get; }
         DriveType DriveType { get; }
         bool IsReady { get; }
-        Dictionary<string,string> MountOptions { get; }
+        MountOptions MountOptions { get; }
         string Name { get; }
         string RootDirectory { get; }
         long TotalFreeSpace { get; }
