@@ -86,13 +86,14 @@ namespace NzbDrone.Mono.Disk
 
         public override List<IMount> GetMounts()
         {
-            var procMounts = _procMountProvider.GetMounts();
-
-            return GetDriveInfoMounts().GroupJoin(procMounts, d => d.RootDirectory.FullName, m => m.RootDirectory, (d, m) => new DriveInfoMount(d, FindDriveType.Find(d.DriveFormat), m.FirstOrDefault()?.MountOptions))
-                                       .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable)
-                                       .Concat(procMounts)
-                                       .DistinctBy(v => v.RootDirectory)
-                                       .ToList();
+            return _procMountProvider.GetMounts()
+                                     .Concat(GetDriveInfoMounts()
+                                                 .Select(d => new DriveInfoMount(d, FindDriveType.Find(d.DriveFormat)))
+                                                 .Where(d => d.DriveType == DriveType.Fixed ||
+                                                             d.DriveType == DriveType.Network || d.DriveType ==
+                                                             DriveType.Removable))
+                                     .DistinctBy(v => v.RootDirectory)
+                                     .ToList();
         }
 
         public override long? GetTotalSize(string path)
