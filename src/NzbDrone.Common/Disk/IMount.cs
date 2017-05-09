@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace NzbDrone.Common.Disk
@@ -8,6 +9,7 @@ namespace NzbDrone.Common.Disk
         string DriveFormat { get; }
         DriveType DriveType { get; }
         bool IsReady { get; }
+        MountOptions MountOptions { get; }
         string Name { get; }
         string RootDirectory { get; }
         long TotalFreeSpace { get; }

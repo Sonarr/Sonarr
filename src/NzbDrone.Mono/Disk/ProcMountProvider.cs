@@ -130,7 +130,7 @@ namespace NzbDrone.Mono.Disk
                 driveType = DriveType.Network;
             }
 
-            return new ProcMount(driveType, name, mount, type, options);
+            return new ProcMount(driveType, name, mount, type, new MountOptions(options));
         }
 
         private Dictionary<string, string> ParseOptions(string options)
