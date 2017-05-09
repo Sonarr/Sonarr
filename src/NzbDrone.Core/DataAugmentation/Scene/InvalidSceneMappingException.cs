@@ -16,7 +16,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         private static string FormatMessage(IEnumerable<SceneMapping> mappings)
         {
-            return string.Format("Scene Mappings contains a conflict for tvdbids {0}, please notify Sonarr developers", mappings.Select(v => v.TvdbId));
+            return string.Format("Scene Mappings contains a conflict for tvdbids {0}. Please notify Sonarr developers.", string.Join(",", mappings.Select(v => v.TvdbId.ToString())));
         }
     }
 }
