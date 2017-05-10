@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.IndexerSearch
             }
             else
             {
-                throw new ArgumentOutOfRangeException("AbsoluteEpisodeNumber", "Can not search for an episode without an absolute episode number");
+                throw new ArgumentOutOfRangeException("AbsoluteEpisodeNumber", $"Can not search for {series.Title} - S{episode.SeasonNumber:00}E{episode.EpisodeNumber:00} it does not have an absolute episode number");
             }
 
             return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
