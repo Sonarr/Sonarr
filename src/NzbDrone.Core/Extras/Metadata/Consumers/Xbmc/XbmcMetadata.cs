@@ -251,7 +251,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         video.Add(new XElement("framerate", episodeFile.MediaInfo.VideoFps));
                         video.Add(new XElement("height", episodeFile.MediaInfo.Height));
                         video.Add(new XElement("scantype", episodeFile.MediaInfo.ScanType));
-                        video.Add(new XElement("width", episodeFile.MediaInfo.Height));
+                        video.Add(new XElement("width", episodeFile.MediaInfo.Width));
 
                         if (episodeFile.MediaInfo.RunTime != null)
                         {
