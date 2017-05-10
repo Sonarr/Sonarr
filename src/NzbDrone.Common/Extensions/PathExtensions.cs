@@ -80,11 +80,11 @@ namespace NzbDrone.Common.Extensions
 
         public static bool IsParentPath(this string parentPath, string childPath)
         {
-            if (parentPath != "/")
+            if (parentPath != "/" && !parentPath.EndsWith(":\\"))
             {
                 parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);
             }
-            if (childPath != "/")
+            if (childPath != "/" && !parentPath.EndsWith(":\\"))
             {
                 childPath = childPath.TrimEnd(Path.DirectorySeparatorChar);
             }

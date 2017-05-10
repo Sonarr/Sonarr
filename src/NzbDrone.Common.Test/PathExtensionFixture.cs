@@ -86,7 +86,7 @@ namespace NzbDrone.Common.Test
         {
             first.AsOsAgnostic().PathEquals(second.AsOsAgnostic()).Should().BeFalse();
         }
-        
+
         [Test]
         public void should_return_false_when_not_a_child()
         {
@@ -113,6 +113,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\Test\", @"C:\Test\mydir")]
         [TestCase(@"C:\Test\", @"C:\Test\mydir\")]
         [TestCase(@"C:\Test", @"C:\Test\30.Rock.S01E01.Pilot.avi")]
+        [TestCase(@"C:\", @"C:\Test\30.Rock.S01E01.Pilot.avi")]
         public void path_should_be_parent(string parentPath, string childPath)
         {
             parentPath.AsOsAgnostic().IsParentPath(childPath.AsOsAgnostic()).Should().BeTrue();
