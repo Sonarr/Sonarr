@@ -105,13 +105,13 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return items;
         }
 
-        public override DownloadClientStatus GetStatus()
+        public override DownloadClientInfo GetStatus()
         {
             try
             {
                 var path = GetDownloadDirectory();
 
-                return new DownloadClientStatus
+                return new DownloadClientInfo
                 {
                     IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
                     OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(path)) }

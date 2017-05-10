@@ -12,6 +12,6 @@ namespace NzbDrone.Core.Download
         string Download(RemoteEpisode remoteEpisode);
         IEnumerable<DownloadClientItem> GetItems();
         void RemoveItem(string downloadId, bool deleteData);
-        DownloadClientStatus GetStatus();
+        DownloadClientInfo GetStatus();
     }
 }

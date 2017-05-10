@@ -214,13 +214,13 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _proxy.RemoveItem(downloadId, Settings);
         }
 
-        public override DownloadClientStatus GetStatus()
+        public override DownloadClientInfo GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
 
             var category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
 
-            var status = new DownloadClientStatus
+            var status = new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
             };

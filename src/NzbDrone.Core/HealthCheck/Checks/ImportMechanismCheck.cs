@@ -91,6 +91,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
     public class ImportMechanismCheckStatus
     {
         public IDownloadClient DownloadClient { get; set; }
-        public DownloadClientStatus Status { get; set; }
+        public DownloadClientInfo Status { get; set; }
     }
 }

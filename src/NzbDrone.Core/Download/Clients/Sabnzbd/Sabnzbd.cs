@@ -250,7 +250,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
-        public override DownloadClientStatus GetStatus()
+        public override DownloadClientInfo GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
             var categories = GetCategories(config).ToArray();
@@ -262,7 +262,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 category = categories.FirstOrDefault(v => v.Name == "*");
             }
 
-            var status = new DownloadClientStatus
+            var status = new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
             };

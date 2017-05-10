@@ -412,9 +412,7 @@
     <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
     <Compile Include="Download\Clients\NzbVortex\JsonConverters\NzbVortexLoginResultTypeConverter.cs" />
     <Compile Include="Download\Clients\NzbVortex\JsonConverters\NzbVortexResultTypeConverter.cs" />
-    <Compile Include="Download\Clients\NzbVortex\NzbVortex.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Download\Clients\NzbVortex\NzbVortex.cs" />
     <Compile Include="Download\Clients\NzbVortex\NzbVortexGroup.cs" />
     <Compile Include="Download\Clients\NzbVortex\NzbVortexNotLoggedInException.cs" />
     <Compile Include="Download\Clients\NzbVortex\NzbVortexAuthenticationException.cs" />
@@ -510,7 +508,7 @@
     <Compile Include="Download\DownloadClientItem.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientRepository.cs" />
-    <Compile Include="Download\DownloadClientStatus.cs" />
+    <Compile Include="Download\DownloadClientInfo.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
     <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\DownloadItemStatus.cs" />

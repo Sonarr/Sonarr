@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             _proxy.RemoveTorrent(downloadId.ToLower(), deleteData, Settings);
         }
 
-        public override DownloadClientStatus GetStatus()
+        public override DownloadClientInfo GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
             var destDir = config.GetValueOrDefault("download-dir") as string;
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 destDir = string.Format("{0}/.{1}", destDir, Settings.TvCategory);
             }
 
-            return new DownloadClientStatus
+            return new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
                 OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(destDir)) }

@@ -174,13 +174,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             _proxy.RemoveTorrent(hash.ToLower(), deleteData, Settings);
         }
 
-        public override DownloadClientStatus GetStatus()
+        public override DownloadClientInfo GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
 
             var destDir = new OsPath(config.SavePath);
 
-            return new DownloadClientStatus
+            return new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
                 OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) }

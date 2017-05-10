@@ -156,11 +156,11 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             _proxy.RemoveTorrent(downloadId, Settings);
         }
 
-        public override DownloadClientStatus GetStatus()
+        public override DownloadClientInfo GetStatus()
         {
             // XXX: This function's correctness has not been considered
 
-            var status = new DownloadClientStatus
+            var status = new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
             };

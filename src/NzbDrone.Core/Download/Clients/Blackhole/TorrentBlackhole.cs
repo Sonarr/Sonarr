@@ -119,9 +119,9 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             DeleteItemData(downloadId);
         }
 
-        public override DownloadClientStatus GetStatus()
+        public override DownloadClientInfo GetStatus()
         {
-            return new DownloadClientStatus
+            return new DownloadClientInfo
             {
                 IsLocalhost = true,
                 OutputRootFolders = new List<OsPath> { new OsPath(Settings.WatchFolder) }
