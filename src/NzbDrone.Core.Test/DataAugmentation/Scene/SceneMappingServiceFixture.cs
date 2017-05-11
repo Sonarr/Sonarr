@@ -346,6 +346,20 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             Assert.Throws<InvalidSceneMappingException>(() => Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva"));
         }
 
+        [Test]
+        public void should_not_throw_if_multiple_mappings_with_same_tvdbid()
+        {
+            var mappings = new List<SceneMapping>
+            {
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 100 },
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 100 }
+            };
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+
+            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva").Should().Be(100);
+        }
+
         private void AssertNoUpdate()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());

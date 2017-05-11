@@ -102,9 +102,11 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                 return null;
             }
 
-            if (mappings.Count <= 1)
+            var distinctMappings = mappings.DistinctBy(v => v.TvdbId).ToList();
+
+            if (distinctMappings.Count <= 1)
             {
-                return mappings.FirstOrDefault();
+                return distinctMappings.FirstOrDefault();
             }
 
             throw new InvalidSceneMappingException(mappings);
