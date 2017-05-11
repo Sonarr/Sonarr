@@ -49,6 +49,7 @@ module.exports = {
       'typeahead': 'JsLibraries/typeahead',
       'zero.clipboard': 'JsLibraries/zero.clipboard',
       'bootstrap.tagsinput': 'JsLibraries/bootstrap.tagsinput',
+      'jdu': 'JsLibraries/jdu',
       'libs': 'JsLibraries/'
     }
   },

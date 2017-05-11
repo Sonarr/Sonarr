@@ -30,6 +30,7 @@ require.config({
         'jquery'                  : 'JsLibraries/jquery',
         'typeahead'               : 'JsLibraries/typeahead',
         'zero.clipboard'          : 'JsLibraries/zero.clipboard',
+        'jdu'                     : 'JsLibraries/jdu',
         'libs'                    : 'JsLibraries/'
     },
 
