@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             Mocker.GetMock<IIndexerStatusService>()
                 .Setup(v => v.GetBlockedIndexers())
-                .Returns(new List<IndexerStatus> { new IndexerStatus { IndexerId = 1, DisabledTill = DateTime.UtcNow.AddHours(2) } });
+                .Returns(new List<IndexerStatus> { new IndexerStatus { ProviderId = 1, DisabledTill = DateTime.UtcNow.AddHours(2) } });
 
             GivenPendingRelease();
 

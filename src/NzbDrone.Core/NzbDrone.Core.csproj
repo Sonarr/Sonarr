@@ -251,6 +251,7 @@
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\102_add_language_to_episodeFiles_history_and_blacklist.cs" />
     <Compile Include="Datastore\Migration\113_consolidate_indexer_baseurl.cs" />
+    <Compile Include="Datastore\Migration\114_rename_indexer_status_id.cs" />
     <Compile Include="Datastore\Migration\112_added_regex_to_scenemapping.cs" />
     <Compile Include="Datastore\Migration\110_fix_extra_files_config.cs" />
     <Compile Include="Datastore\Migration\109_import_extra_files.cs" />

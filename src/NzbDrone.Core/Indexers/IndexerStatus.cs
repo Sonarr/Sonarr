@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Indexers
 {
     public class IndexerStatus : ModelBase
     {
-        public int IndexerId { get; set; }
+        public int ProviderId { get; set; }
 
         public DateTime? InitialFailure { get; set; }
         public DateTime? MostRecentFailure { get; set; }

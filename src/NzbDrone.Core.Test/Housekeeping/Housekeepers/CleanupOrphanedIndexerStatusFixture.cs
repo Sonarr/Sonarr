@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_delete_orphaned_indexerstatus()
         {
             var status = Builder<IndexerStatus>.CreateNew()
-                                               .With(h => h.IndexerId = _indexer.Id)
+                                               .With(h => h.ProviderId = _indexer.Id)
                                                .BuildNew();
             Db.Insert(status);
 
@@ -42,13 +42,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             GivenIndexer();
 
             var status = Builder<IndexerStatus>.CreateNew()
-                                               .With(h => h.IndexerId = _indexer.Id)
+                                               .With(h => h.ProviderId = _indexer.Id)
                                                .BuildNew();
             Db.Insert(status);
 
             Subject.Clean();
             AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(h => h.IndexerId == _indexer.Id);
+            AllStoredModels.Should().Contain(h => h.ProviderId == _indexer.Id);
         }
     }
 }

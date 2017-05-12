@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Indexers
 
         private IndexerStatus GetIndexerStatus(int indexerId)
         {
-            return _indexerStatusRepository.FindByIndexerId(indexerId) ?? new IndexerStatus { IndexerId = indexerId };
+            return _indexerStatusRepository.FindByIndexerId(indexerId) ?? new IndexerStatus { ProviderId = indexerId };
         }
 
         private TimeSpan CalculateBackOffPeriod(IndexerStatus status)

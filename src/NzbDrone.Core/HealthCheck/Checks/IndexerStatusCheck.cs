@@ -21,7 +21,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             var enabledIndexers = _indexerFactory.GetAvailableProviders();
             var backOffIndexers = enabledIndexers.Join(_indexerStatusService.GetBlockedIndexers(),
                     i => i.Definition.Id,
-                    s => s.IndexerId,
+                    s => s.ProviderId,
                     (i, s) => new { Indexer = i, Status = s })
                 .Where(v => (v.Status.MostRecentFailure - v.Status.InitialFailure) > TimeSpan.FromHours(1))
                 .ToList();

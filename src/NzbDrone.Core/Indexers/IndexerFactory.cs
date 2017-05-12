@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Indexers
 
         private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)
         {
-            var blockedIndexers = _indexerStatusService.GetBlockedIndexers().ToDictionary(v => v.IndexerId, v => v);
+            var blockedIndexers = _indexerStatusService.GetBlockedIndexers().ToDictionary(v => v.ProviderId, v => v);
 
             foreach (var indexer in indexers)
             {

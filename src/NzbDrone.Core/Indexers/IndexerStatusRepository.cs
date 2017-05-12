@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Indexers
 
         public IndexerStatus FindByIndexerId(int indexerId)
         {
-            return Query.Where(c => c.IndexerId == indexerId).SingleOrDefault();
+            return Query.Where(c => c.ProviderId == indexerId).SingleOrDefault();
         }
     }
 }

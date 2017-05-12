@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             {
                 _blockedIndexers.Add(new IndexerStatus
                     {
-                        IndexerId = id,
+                        ProviderId = id,
                         InitialFailure = DateTime.UtcNow.AddHours(-failureHours),
                         MostRecentFailure = DateTime.UtcNow.AddHours(-0.1),
                         EscalationLevel = 5,

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                                      WHERE Id IN (
                                      SELECT IndexerStatus.Id FROM IndexerStatus
                                      LEFT OUTER JOIN Indexers
-                                     ON IndexerStatus.IndexerId = Indexers.Id
+                                     ON IndexerStatus.ProviderId = Indexers.Id
                                      WHERE Indexers.Id IS NULL)");
         }
     }

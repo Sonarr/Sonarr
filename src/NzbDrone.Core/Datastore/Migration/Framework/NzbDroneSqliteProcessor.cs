@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using FluentMigrator;
@@ -7,6 +8,7 @@ using FluentMigrator.Model;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Generators.SQLite;
 using FluentMigrator.Runner.Processors.SQLite;
+using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -62,6 +64,46 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             ProcessAlterTable(tableDefinition);
         }
 
+        public override void Process(RenameColumnExpression expression)
+        {
+            var tableDefinition = GetTableSchema(expression.TableName);
+
+            var oldColumnDefinitions = tableDefinition.Columns.ToList();
+            var columnDefinitions = tableDefinition.Columns.ToList();
+            var columnIndex = columnDefinitions.FindIndex(c => c.Name == expression.OldName);
+
+            if (columnIndex == -1)
+            {
+                throw new ApplicationException(string.Format("Column {0} does not exist on table {1}.", expression.OldName, expression.TableName));
+            }
+
+            if (columnDefinitions.Any(c => c.Name == expression.NewName))
+            {
+                throw new ApplicationException(string.Format("Column {0} already exists on table {1}.", expression.NewName, expression.TableName));
+            }
+
+            oldColumnDefinitions[columnIndex] = (ColumnDefinition)columnDefinitions[columnIndex].Clone();
+            columnDefinitions[columnIndex].Name = expression.NewName;
+
+            foreach (var index in tableDefinition.Indexes)
+            {
+                if (index.Name.StartsWith("IX_"))
+                {
+                    index.Name = Regex.Replace(index.Name, "(?<=_)" + Regex.Escape(expression.OldName) + "(?=_|$)", Regex.Escape(expression.NewName));
+                }
+
+                foreach (var column in index.Columns)
+                {
+                    if (column.Name == expression.OldName)
+                    {
+                        column.Name = expression.NewName;
+                    }
+                }
+            }
+
+            ProcessAlterTable(tableDefinition, oldColumnDefinitions);
+        }
+
         protected virtual TableDefinition GetTableSchema(string tableName)
         {
             var schemaDumper = new  SqliteSchemaDumper(this, Announcer);
@@ -70,7 +112,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return schema.Single(v => v.Name == tableName);
         }
 
-        protected virtual void ProcessAlterTable(TableDefinition tableDefinition)
+        protected virtual void ProcessAlterTable(TableDefinition tableDefinition, List<ColumnDefinition> oldColumnDefinitions = null)
         {
             var tableName = tableDefinition.Name;
             var tempTableName = tableName + "_temp";
@@ -83,11 +125,12 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             // What is the cleanest way to do this? Add function to Generator?
             var quoter = new SQLiteQuoter();
-            var columnsToTransfer = string.Join(", ", tableDefinition.Columns.Select(c => quoter.QuoteColumnName(c.Name)));
+            var columnsToInsert = string.Join(", ", tableDefinition.Columns.Select(c => quoter.QuoteColumnName(c.Name)));
+            var columnsToFetch = string.Join(", ", (oldColumnDefinitions ?? tableDefinition.Columns).Select(c => quoter.QuoteColumnName(c.Name)));
 
             Process(new CreateTableExpression() { TableName = tempTableName, Columns = tableDefinition.Columns.ToList() });
 
-            Process(string.Format("INSERT INTO {0} SELECT {1} FROM {2}", quoter.QuoteTableName(tempTableName), columnsToTransfer, quoter.QuoteTableName(tableName)));
+            Process(string.Format("INSERT INTO {0} ({1}) SELECT {2} FROM {3}", quoter.QuoteTableName(tempTableName), columnsToInsert, columnsToFetch, quoter.QuoteTableName(tableName)));
 
             Process(new DeleteTableExpression() { TableName = tableName });
 
