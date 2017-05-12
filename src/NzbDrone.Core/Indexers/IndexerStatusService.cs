@@ -18,8 +18,8 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerStatusService : ProviderStatusServiceBase<IIndexer, IndexerStatus>, IIndexerStatusService
     {
-        public IndexerStatusService(IIndexerStatusRepository providerStatusRepository, Logger logger)
-            : base(providerStatusRepository, logger)
+        public IndexerStatusService(IIndexerStatusRepository providerStatusRepository, IEventAggregator eventAggregator, Logger logger)
+            : base(providerStatusRepository, eventAggregator, logger)
         {
 
         }

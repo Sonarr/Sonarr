@@ -178,6 +178,7 @@
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\SharedFolderResolverFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\UsenetDownloadStationFixture.cs" />
     <Compile Include="Download\DownloadClientTests\HadoukenTests\HadoukenFixture.cs" />
+    <Compile Include="Download\DownloadClientStatusServiceFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetTests\NzbgetFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbVortexTests\NzbVortexFixture.cs" />
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
@@ -369,7 +370,8 @@
     <Compile Include="Qualities\QualityModelComparerFixture.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
-    <Compile Include="ThingiProvider\ProviderBaseFixture.cs" />
+    <Compile Include="ThingiProviderTests\ProviderStatusServiceFixture.cs" />
+    <Compile Include="ThingiProviderTests\ProviderBaseFixture.cs" />
     <Compile Include="ThingiProviderTests\NullConfigFixture.cs" />
     <Compile Include="TvTests\EpisodeServiceTests\FindEpisodeByTitleFixture.cs" />
     <Compile Include="TvTests\EpisodeServiceTests\HandleEpisodeFileDeletedFixture.cs" />

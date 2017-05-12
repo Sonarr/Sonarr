@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.SupportsOnDownload)
                   .Ignore(i => i.SupportsOnUpgrade)
                   .Ignore(i => i.SupportsOnRename);
-            
+
             Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata");
 
             Mapper.Entity<DownloadClientDefinition>().RegisterDefinition("DownloadClients")
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(f => f.Path)
                   .Relationships.AutoMapICollectionOrComplexProperties()
                   .For("Episodes")
-                  .LazyLoad(condition: parent => parent.Id > 0, 
+                  .LazyLoad(condition: parent => parent.Id > 0,
                             query: (db, parent) => db.Query<Episode>().Where(c => c.EpisodeFileId == parent.Id).ToList())
                   .HasOne(file => file.Series, file => file.SeriesId);
 
@@ -116,6 +116,7 @@ namespace NzbDrone.Core.Datastore
                 .Ignore(c => c.Message);
 
             Mapper.Entity<IndexerStatus>().RegisterModel("IndexerStatus");
+            Mapper.Entity<DownloadClientStatus>().RegisterModel("DownloadClientStatus");
         }
 
         private static void RegisterMappers()

@@ -33,16 +33,19 @@ namespace NzbDrone.Core.ThingiProvider.Status
                                                                      24 * 60 * 60
                                                                  };
 
-        private static readonly int MaximumEscalationLevel = EscalationBackOffPeriods.Length - 1;
-
         protected readonly object _syncRoot = new object();
 
         protected readonly IProviderStatusRepository<TModel> _providerStatusRepository;
+        protected readonly IEventAggregator _eventAggregator;
         protected readonly Logger _logger;
 
-        public ProviderStatusServiceBase(IProviderStatusRepository<TModel> providerStatusRepository, Logger logger)
+        protected int MaximumEscalationLevel { get; set; } = EscalationBackOffPeriods.Length - 1;
+        protected TimeSpan MinimumTimeSinceInitialFailure { get; set; } = TimeSpan.Zero;
+
+        public ProviderStatusServiceBase(IProviderStatusRepository<TModel> providerStatusRepository, IEventAggregator eventAggregator, Logger logger)
         {
             _providerStatusRepository = providerStatusRepository;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -78,6 +81,8 @@ namespace NzbDrone.Core.ThingiProvider.Status
                 status.DisabledTill = null;
 
                 _providerStatusRepository.Upsert(status);
+
+                _eventAggregator.PublishEvent(new ProviderStatusChangedEvent<TProvider>(providerId, status));
             }
         }
 
@@ -108,9 +113,14 @@ namespace NzbDrone.Core.ThingiProvider.Status
                     }
                 }
 
-                status.DisabledTill = now + CalculateBackOffPeriod(status);
+                if (status.InitialFailure.Value + MinimumTimeSinceInitialFailure <= now || minimumBackOff != TimeSpan.Zero)
+                {
+                    status.DisabledTill = now + CalculateBackOffPeriod(status);
+                }
 
                 _providerStatusRepository.Upsert(status);
+
+                _eventAggregator.PublishEvent(new ProviderStatusChangedEvent<TProvider>(providerId, status));
             }
         }
 

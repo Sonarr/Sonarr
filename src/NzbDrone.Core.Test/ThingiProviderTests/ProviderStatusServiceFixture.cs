@@ -2,13 +2,37 @@
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using NLog;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.ThingiProvider.Status;
 
-namespace NzbDrone.Core.Test.IndexerTests
+namespace NzbDrone.Core.Test.ThingiProviderTests
 {
-    public class IndexerStatusServiceFixture : CoreTest<IndexerStatusService>
+    public class MockProviderStatus : ProviderStatusBase
+    {
+    }
+
+    public interface IMockProvider : IProvider
+    {
+    }
+
+    public interface IMockProviderStatusRepository : IProviderStatusRepository<MockProviderStatus>
+    {
+    }
+
+    public class MockProviderStatusService : ProviderStatusServiceBase<IMockProvider, MockProviderStatus>
+    {
+        public MockProviderStatusService(IMockProviderStatusRepository providerStatusRepository, IEventAggregator eventAggregator, Logger logger)
+            : base(providerStatusRepository, eventAggregator, logger)
+        {
+
+        }
+    }
+
+    public class ProviderStatusServiceFixture : CoreTest<MockProviderStatusService>
     {
         private DateTime _epoch;
 
@@ -18,33 +42,33 @@ namespace NzbDrone.Core.Test.IndexerTests
             _epoch = DateTime.UtcNow;
         }
 
-        private void WithStatus(IndexerStatus status)
+        private void WithStatus(MockProviderStatus status)
         {
-            Mocker.GetMock<IIndexerStatusRepository>()
+            Mocker.GetMock<IMockProviderStatusRepository>()
                 .Setup(v => v.FindByProviderId(1))
                 .Returns(status);
 
-            Mocker.GetMock<IIndexerStatusRepository>()
+            Mocker.GetMock<IMockProviderStatusRepository>()
                 .Setup(v => v.All())
                 .Returns(new[] { status });
         }
 
         private void VerifyUpdate()
         {
-            Mocker.GetMock<IIndexerStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<IndexerStatus>()), Times.Once());
+            Mocker.GetMock<IMockProviderStatusRepository>()
+                .Verify(v => v.Upsert(It.IsAny<MockProviderStatus>()), Times.Once());
         }
 
         private void VerifyNoUpdate()
         {
-            Mocker.GetMock<IIndexerStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<IndexerStatus>()), Times.Never());
+            Mocker.GetMock<IMockProviderStatusRepository>()
+                .Verify(v => v.Upsert(It.IsAny<MockProviderStatus>()), Times.Never());
         }
 
         [Test]
         public void should_start_backoff_on_first_failure()
         {
-            WithStatus(new IndexerStatus());
+            WithStatus(new MockProviderStatus());
 
             Subject.RecordFailure(1);
 
@@ -59,7 +83,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         [Test]
         public void should_cancel_backoff_on_success()
         {
-            WithStatus(new IndexerStatus { EscalationLevel = 2 });
+            WithStatus(new MockProviderStatus { EscalationLevel = 2 });
 
             Subject.RecordSuccess(1);
 
@@ -72,7 +96,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         [Test]
         public void should_not_store_update_if_already_okay()
         {
-            WithStatus(new IndexerStatus { EscalationLevel = 0 });
+            WithStatus(new MockProviderStatus { EscalationLevel = 0 });
 
             Subject.RecordSuccess(1);
 
@@ -82,7 +106,12 @@ namespace NzbDrone.Core.Test.IndexerTests
         [Test]
         public void should_preserve_escalation_on_intermittent_success()
         {
-            WithStatus(new IndexerStatus { MostRecentFailure = _epoch - TimeSpan.FromSeconds(4), EscalationLevel = 3 });
+            WithStatus(new MockProviderStatus
+            {
+                InitialFailure = _epoch - TimeSpan.FromSeconds(20),
+                MostRecentFailure = _epoch - TimeSpan.FromSeconds(4),
+                EscalationLevel = 3
+            });
 
             Subject.RecordSuccess(1);
             Subject.RecordSuccess(1);

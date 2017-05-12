@@ -293,6 +293,7 @@
     </Compile>
     <Compile Include="Datastore\Migration\105_rename_torrent_downloadstation.cs" />
     <Compile Include="Datastore\Migration\111_create_language_profiles.cs" />
+    <Compile Include="Datastore\Migration\115_add_downloadclient_status.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -494,7 +495,10 @@
     <Compile Include="Download\Clients\uTorrent\UTorrentTorrentStatus.cs" />
     <Compile Include="Download\Clients\Vuze\Vuze.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />
+    <Compile Include="Download\DownloadClientStatus.cs" />
     <Compile Include="Download\DownloadEventHub.cs" />
+    <Compile Include="Download\DownloadClientStatusRepository.cs" />
+    <Compile Include="Download\DownloadClientStatusService.cs" />
     <Compile Include="Download\TrackedDownloads\DownloadMonitoringService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownload.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadService.cs" />
@@ -557,6 +561,7 @@
     <Compile Include="HealthCheck\CheckHealthCommand.cs" />
     <Compile Include="HealthCheck\Checks\AppDataLocationCheck.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
+    <Compile Include="HealthCheck\Checks\DownloadClientStatusCheck.cs" />
     <Compile Include="HealthCheck\Checks\MountCheck.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
     <Compile Include="HealthCheck\Checks\ImportMechanismCheck.cs" />
@@ -582,6 +587,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupAbsolutePathMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedDownloadClientStatus.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedIndexerStatus.cs" />
@@ -1073,6 +1079,7 @@
     <Compile Include="Tags\TagService.cs" />
     <Compile Include="Tags\TagsUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
+    <Compile Include="ThingiProvider\Events\ProviderStatusChangedEvent.cs" />
     <Compile Include="ThingiProvider\Events\ProviderDeletedEvent.cs" />
     <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />
