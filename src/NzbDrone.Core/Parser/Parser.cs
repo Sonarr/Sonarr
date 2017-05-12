@@ -316,9 +316,9 @@ namespace NzbDrone.Core.Parser
                     Logger.Debug("Reversed name detected. Converted to '{0}'", title);
                 }
 
-                title = RemoveFileExtension(title);
+                var releaseTitle = RemoveFileExtension(title);
 
-                var simpleTitle = SimpleTitleRegex.Replace(title, string.Empty);
+                var simpleTitle = SimpleTitleRegex.Replace(releaseTitle, string.Empty);
 
                 // TODO: Quick fix stripping [url] - prefixes.
                 simpleTitle = WebsitePrefixRegex.Replace(simpleTitle, string.Empty);
@@ -365,13 +365,13 @@ namespace NzbDrone.Core.Parser
                                     result.Special = true;
                                 }
 
-                                result.Language = LanguageParser.ParseLanguage(title);
+                                result.Language = LanguageParser.ParseLanguage(releaseTitle);
                                 Logger.Debug("Language parsed: {0}", result.Language);
 
                                 result.Quality = QualityParser.ParseQuality(title);
                                 Logger.Debug("Quality parsed: {0}", result.Quality);
 
-                                result.ReleaseGroup = ParseReleaseGroup(title);
+                                result.ReleaseGroup = ParseReleaseGroup(releaseTitle);
 
                                 var subGroup = GetSubGroup(match);
                                 if (!subGroup.IsNullOrWhiteSpace())
@@ -522,7 +522,7 @@ namespace NzbDrone.Core.Parser
             return seriesTitleInfo;
         }
 
-        private static ParsedEpisodeInfo ParseMatchCollection(MatchCollection matchCollection, string title)
+        private static ParsedEpisodeInfo ParseMatchCollection(MatchCollection matchCollection, string releaseTitle)
         {
             var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ').Replace('_', ' ');
             seriesName = RequestInfoRegex.Replace(seriesName, "").Trim(' ');
@@ -551,7 +551,7 @@ namespace NzbDrone.Core.Parser
 
                 result = new ParsedEpisodeInfo
                 {
-                    ReleaseTitle = title,
+                    ReleaseTitle = releaseTitle,
                     SeasonNumber = seasons.First(),
                     EpisodeNumbers = new int[0],
                     AbsoluteEpisodeNumbers = new int[0]
@@ -645,7 +645,7 @@ namespace NzbDrone.Core.Parser
 
                 result = new ParsedEpisodeInfo
                 {
-                    ReleaseTitle = title,
+                    ReleaseTitle = releaseTitle,
                     AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
                 };
             }
