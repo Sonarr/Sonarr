@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Returns(_indexers);
 
             Mocker.GetMock<IIndexerStatusService>()
-                   .Setup(v => v.GetBlockedIndexers())
+                   .Setup(v => v.GetBlockedProviders())
                    .Returns(_blockedIndexers);
         }
 

@@ -96,11 +96,6 @@ namespace NzbDrone.Core.Indexers
                 failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
             }
 
-            if (Definition.Id != 0)
-            {
-                _indexerStatusService.RecordSuccess(Definition.Id);
-            }
-
             return new ValidationResult(failures);
         }
 

@@ -76,7 +76,7 @@ namespace NzbDrone.Core.ThingiProvider
             return definitions;
         }
 
-        public ValidationResult Test(TProviderDefinition definition)
+        public virtual ValidationResult Test(TProviderDefinition definition)
         {
             return GetInstance(definition).Test();
         }

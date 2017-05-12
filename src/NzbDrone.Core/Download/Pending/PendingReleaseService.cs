@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Download.Pending
 
         private List<ReleaseInfo> FilterBlockedIndexers(List<ReleaseInfo> releases)
         {
-            var blockedIndexers = new HashSet<int>(_indexerStatusService.GetBlockedIndexers().Select(v => v.ProviderId));
+            var blockedIndexers = new HashSet<int>(_indexerStatusService.GetBlockedProviders().Select(v => v.ProviderId));
 
             return releases.Where(release => !blockedIndexers.Contains(release.IndexerId)).ToList();
         }

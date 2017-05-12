@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Messaging.Events;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.Indexers
         public IndexerFactory(IIndexerStatusService indexerStatusService,
                               IIndexerRepository providerRepository,
                               IEnumerable<IIndexer> providers,
-                              IContainer container, 
+                              IContainer container,
                               IEventAggregator eventAggregator,
                               Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
@@ -70,7 +71,7 @@ namespace NzbDrone.Core.Indexers
 
         private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)
         {
-            var blockedIndexers = _indexerStatusService.GetBlockedIndexers().ToDictionary(v => v.ProviderId, v => v);
+            var blockedIndexers = _indexerStatusService.GetBlockedProviders().ToDictionary(v => v.ProviderId, v => v);
 
             foreach (var indexer in indexers)
             {
@@ -83,6 +84,18 @@ namespace NzbDrone.Core.Indexers
 
                 yield return indexer;
             }
+        }
+
+        public override ValidationResult Test(IndexerDefinition definition)
+        {
+            var result = base.Test(definition);
+
+            if (result == null && definition.Id != 0)
+            {
+                _indexerStatusService.RecordSuccess(definition.Id);
+            }
+
+            return result;
         }
     }
 }

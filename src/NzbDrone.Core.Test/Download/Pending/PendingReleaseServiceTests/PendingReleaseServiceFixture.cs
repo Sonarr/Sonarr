@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         public void should_not_ignore_pending_items_from_available_indexer()
         {
             Mocker.GetMock<IIndexerStatusService>()
-                .Setup(v => v.GetBlockedIndexers())
+                .Setup(v => v.GetBlockedProviders())
                 .Returns(new List<IndexerStatus>());
 
             GivenPendingRelease();
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         public void should_ignore_pending_items_from_unavailable_indexer()
         {
             Mocker.GetMock<IIndexerStatusService>()
-                .Setup(v => v.GetBlockedIndexers())
+                .Setup(v => v.GetBlockedProviders())
                 .Returns(new List<IndexerStatus> { new IndexerStatus { ProviderId = 1, DisabledTill = DateTime.UtcNow.AddHours(2) } });
 
             GivenPendingRelease();
