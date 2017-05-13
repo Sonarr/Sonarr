@@ -35,7 +35,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     Status = v.GetStatus()
                 }).ToList();
             }
-            catch (DownloadClientException)
+            catch (Exception)
             {
                 // One or more download clients failed, assume the health is okay and verify later
                 return new HealthCheck(GetType());

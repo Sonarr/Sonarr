@@ -42,21 +42,6 @@ namespace NzbDrone.Core.Test.IndexerTests
         }
 
         [Test]
-        public void should_start_backoff_on_first_failure()
-        {
-            WithStatus(new IndexerStatus());
-
-            Subject.RecordFailure(1);
-
-            VerifyUpdate();
-
-            var status = Subject.GetBlockedProviders().FirstOrDefault();
-            status.Should().NotBeNull();
-            status.DisabledTill.Should().HaveValue();
-            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), 500);
-        }
-
-        [Test]
         public void should_cancel_backoff_on_success()
         {
             WithStatus(new IndexerStatus { EscalationLevel = 2 });
@@ -77,21 +62,6 @@ namespace NzbDrone.Core.Test.IndexerTests
             Subject.RecordSuccess(1);
 
             VerifyNoUpdate();
-        }
-
-        [Test]
-        public void should_preserve_escalation_on_intermittent_success()
-        {
-            WithStatus(new IndexerStatus { MostRecentFailure = _epoch - TimeSpan.FromSeconds(4), EscalationLevel = 3 });
-
-            Subject.RecordSuccess(1);
-            Subject.RecordSuccess(1);
-            Subject.RecordFailure(1);
-
-            var status = Subject.GetBlockedProviders().FirstOrDefault();
-            status.Should().NotBeNull();
-            status.DisabledTill.Should().HaveValue();
-            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(15), 500);
         }
     }
 }

@@ -57,13 +57,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             Subject.Check().ShouldBeOk();
         }
-        [Test]
-        public void should_not_return_error_when_indexer_failed_less_than_an_hour()
-        {
-            GivenIndexer(1, 0.1, 0.5);
-
-            Subject.Check().ShouldBeOk();
-        }
 
         [Test]
         public void should_return_warning_if_indexer_unavailable()

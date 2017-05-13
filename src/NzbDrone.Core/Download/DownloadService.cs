@@ -21,18 +21,21 @@ namespace NzbDrone.Core.Download
     public class DownloadService : IDownloadService
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
+        private readonly IDownloadClientStatusService _downloadClientStatusService;
         private readonly IIndexerStatusService _indexerStatusService;
         private readonly IRateLimitService _rateLimitService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public DownloadService(IProvideDownloadClient downloadClientProvider,
-            IIndexerStatusService indexerStatusService,
-            IRateLimitService rateLimitService,
-            IEventAggregator eventAggregator,
-            Logger logger)
+                               IDownloadClientStatusService downloadClientStatusService,
+                               IIndexerStatusService indexerStatusService,
+                               IRateLimitService rateLimitService,
+                               IEventAggregator eventAggregator,
+                               Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
+            _downloadClientStatusService = downloadClientStatusService;
             _indexerStatusService = indexerStatusService;
             _rateLimitService = rateLimitService;
             _eventAggregator = eventAggregator;
@@ -64,6 +67,7 @@ namespace NzbDrone.Core.Download
             try
             {
                 downloadClientId = downloadClient.Download(remoteEpisode);
+                _downloadClientStatusService.RecordSuccess(downloadClient.Definition.Id);
                 _indexerStatusService.RecordSuccess(remoteEpisode.Release.IndexerId);
             }
             catch (ReleaseDownloadException ex)

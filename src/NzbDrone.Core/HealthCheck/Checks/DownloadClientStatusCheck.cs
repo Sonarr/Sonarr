@@ -23,7 +23,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     i => i.Definition.Id,
                     s => s.ProviderId,
                     (i, s) => new { Provider = i, Status = s })
-                .Where(v => (v.Status.MostRecentFailure - v.Status.InitialFailure) > TimeSpan.FromHours(1))
                 .ToList();
 
             if (backOffProviders.Empty())
