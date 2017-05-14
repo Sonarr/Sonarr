@@ -62,6 +62,17 @@ namespace NzbDrone.Core.Messaging.Events
                 }
             }
 
+            foreach (var handler in _serviceFactory.BuildAll<IHandleAsync<IEvent>>())
+            {
+                var handlerLocal = handler;
+
+                _taskFactory.StartNew(() =>
+                {
+                    handlerLocal.HandleAsync(@event);
+                }, TaskCreationOptions.PreferFairness)
+                .LogExceptions();
+            }
+
             foreach (var handler in _serviceFactory.BuildAll<IHandleAsync<TEvent>>())
             {
                 var handlerLocal = handler;

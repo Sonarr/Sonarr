@@ -60,6 +60,11 @@ namespace NzbDrone.Common.Reflection
             return (T)attribute;
         }
 
+        public static T[] GetAttributes<T>(this MemberInfo member) where T : Attribute
+        {
+            return member.GetCustomAttributes(typeof(T), false).OfType<T>().ToArray();
+        }
+
         public static Type FindTypeByName(this Assembly assembly, string name)
         {
             return assembly.GetTypes().SingleOrDefault(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));

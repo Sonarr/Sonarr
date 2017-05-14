@@ -4,10 +4,12 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(ConfigFileSavedEvent))]
     public class UpdateCheck : HealthCheckBase
     {
         private readonly IDiskProvider _diskProvider;
@@ -66,7 +68,5 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             return new HealthCheck(GetType());
         }
-
-        public override bool CheckOnConfigChange => false;
     }
 }

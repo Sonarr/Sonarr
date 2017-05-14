@@ -4,7 +4,6 @@
     {
         HealthCheck Check();
         bool CheckOnStartup { get; }
-        bool CheckOnConfigChange { get; }
         bool CheckOnSchedule { get; }
     }
 }

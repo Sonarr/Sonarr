@@ -6,8 +6,6 @@
 
         public virtual bool CheckOnStartup => true;
 
-        public virtual bool CheckOnConfigChange => true;
-
         public virtual bool CheckOnSchedule => true;
     }
 }

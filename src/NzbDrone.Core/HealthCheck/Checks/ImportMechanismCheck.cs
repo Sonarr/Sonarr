@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
+using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(ProviderUpdatedEvent<IDownloadClient>))]
+    [CheckOn(typeof(ProviderDeletedEvent<IDownloadClient>))]
+    [CheckOn(typeof(ConfigSavedEvent))]
     public class ImportMechanismCheck : HealthCheckBase
     {
         private readonly IConfigService _configService;

@@ -20,7 +20,5 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             return new HealthCheck(GetType());
         }
-
-        public override bool CheckOnConfigChange => false;
     }
 }

@@ -577,6 +577,7 @@
     <Compile Include="HealthCheck\HealthCheckBase.cs" />
     <Compile Include="HealthCheck\HealthCheckCompleteEvent.cs" />
     <Compile Include="HealthCheck\HealthCheckService.cs" />
+    <Compile Include="HealthCheck\CheckOnAttribute.cs" />
     <Compile Include="HealthCheck\IProvideHealthCheck.cs" />
     <Compile Include="History\History.cs" />
     <Compile Include="History\HistoryRepository.cs" />

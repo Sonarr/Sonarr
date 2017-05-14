@@ -1,9 +1,12 @@
 ﻿using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(SeriesDeletedEvent))]
+    [CheckOn(typeof(SeriesMovedEvent))]
     public class RootFolderCheck : HealthCheckBase
     {
         private readonly ISeriesService _seriesService;
@@ -36,7 +39,5 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             return new HealthCheck(GetType());
         }
-
-        public override bool CheckOnConfigChange => false;
     }
 }

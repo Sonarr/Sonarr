@@ -2,9 +2,13 @@
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(ProviderUpdatedEvent<IDownloadClient>))]
+    [CheckOn(typeof(ProviderDeletedEvent<IDownloadClient>))]
+    [CheckOn(typeof(ProviderStatusChangedEvent<IDownloadClient>))]
     public class DownloadClientStatusCheck : HealthCheckBase
     {
         private readonly IDownloadClientFactory _providerFactory;

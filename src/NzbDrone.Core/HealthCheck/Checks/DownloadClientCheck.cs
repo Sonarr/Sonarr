@@ -2,9 +2,12 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(ProviderUpdatedEvent<IDownloadClient>))]
+    [CheckOn(typeof(ProviderDeletedEvent<IDownloadClient>))]
     public class DownloadClientCheck : HealthCheckBase
     {
         private readonly IProvideDownloadClient _downloadClientProvider;

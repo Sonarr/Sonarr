@@ -1,9 +1,11 @@
 ﻿using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Configuration.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(ConfigSavedEvent))]
     public class DroneFactoryCheck : HealthCheckBase
     {
         private readonly IConfigService _configService;
@@ -28,7 +30,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error, "Drone factory folder does not exist");
             }
-            
+
             if (!_diskProvider.FolderWritable(droneFactoryFolder))
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to write to drone factory folder");
