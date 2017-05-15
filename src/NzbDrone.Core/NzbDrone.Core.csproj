@@ -293,6 +293,7 @@
     </Compile>
     <Compile Include="Datastore\Migration\105_rename_torrent_downloadstation.cs" />
     <Compile Include="Datastore\Migration\111_create_language_profiles.cs" />
+    <Compile Include="Datastore\Migration\115_add_scene_number_override_flag.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
