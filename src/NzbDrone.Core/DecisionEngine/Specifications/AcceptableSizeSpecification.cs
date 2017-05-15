@@ -77,7 +77,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     List<Episode> seasonEpisodes;
 
                     var seasonSearchCriteria = searchCriteria as SeasonSearchCriteria;
-                    if (seasonSearchCriteria != null && !seasonSearchCriteria.Series.UseSceneNumbering && seasonSearchCriteria.Episodes.Any(v => v.Id == episode.Id))
+                    if (seasonSearchCriteria != null && !seasonSearchCriteria.Series.ActuallyUseSceneNumbering && seasonSearchCriteria.Episodes.Any(v => v.Id == episode.Id))
                     {
                         seasonEpisodes = (searchCriteria as SeasonSearchCriteria).Episodes;
                     }

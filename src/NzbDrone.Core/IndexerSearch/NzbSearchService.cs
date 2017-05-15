@@ -66,12 +66,15 @@ namespace NzbDrone.Core.IndexerSearch
 
                 return SearchDaily(series, episode, userInvokedSearch);
             }
-            if (series.SeriesType == SeriesTypes.Anime)
+
+            // The anime type just does absolute searching, so don't use it if we're not using scene numbering.
+            if (series.SeriesType == SeriesTypes.Anime && series.ActuallyUseSceneNumbering)
             {
                 return SearchAnime(series, episode, userInvokedSearch);
             }
 
-            if (episode.SeasonNumber == 0)
+            // S00Eyy is a common pattern so don't use special if we're ignoring scene numbering.
+            if (episode.SeasonNumber == 0 && series.ActuallyUseSceneNumbering)
             {
                 // search for special episodes in season 0 
                 return SearchSpecial(series, new List<Episode> { episode }, userInvokedSearch);
@@ -103,7 +106,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             var downloadDecisions = new List<DownloadDecision>();
 
-            if (series.UseSceneNumbering)
+            if (series.ActuallyUseSceneNumbering)
             {
                 var sceneSeasonGroups = episodes.GroupBy(v =>
                 {
@@ -162,7 +165,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var searchSpec = Get<SingleEpisodeSearchCriteria>(series, new List<Episode> { episode }, userInvokedSearch);
 
-            if (series.UseSceneNumbering && episode.SceneSeasonNumber.HasValue && episode.SceneEpisodeNumber.HasValue)
+            if (series.ActuallyUseSceneNumbering && episode.SceneSeasonNumber.HasValue && episode.SceneEpisodeNumber.HasValue)
             {
                 searchSpec.EpisodeNumber = episode.SceneEpisodeNumber.Value;
                 searchSpec.SeasonNumber = episode.SceneSeasonNumber.Value;
