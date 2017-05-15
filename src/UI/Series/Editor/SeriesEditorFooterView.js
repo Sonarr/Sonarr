@@ -11,13 +11,14 @@ module.exports = Marionette.ItemView.extend({
     template : 'Series/Editor/SeriesEditorFooterViewTemplate',
 
     ui : {
-        monitored           : '.x-monitored',
-        profile             : '.x-profiles',
-        seasonFolder        : '.x-season-folder',
-        rootFolder          : '.x-root-folder',
-        selectedCount       : '.x-selected-count',
-        container           : '.series-editor-footer',
-        actions             : '.x-action'
+        monitored            : '.x-monitored',
+        profile              : '.x-profiles',
+        seasonFolder         : '.x-season-folder',
+        rootFolder           : '.x-root-folder',
+        selectedCount        : '.x-selected-count',
+        container            : '.series-editor-footer',
+        actions              : '.x-action',
+        ignoreSceneNumbering : '.x-ignore-scene'
     },
 
     events : {
@@ -56,6 +57,7 @@ module.exports = Marionette.ItemView.extend({
         var profile = this.ui.profile.val();
         var seasonFolder = this.ui.seasonFolder.val();
         var rootFolder = this.ui.rootFolder.val();
+        var ignoreSceneNumbering = this.ui.ignoreSceneNumbering.val();
 
         _.each(selected, function(model) {
             if (monitored === 'true') {
@@ -78,6 +80,12 @@ module.exports = Marionette.ItemView.extend({
                 var rootFolderPath = RootFolders.get(parseInt(rootFolder, 10));
 
                 model.set('rootFolderPath', rootFolderPath.get('path'));
+            }
+
+            if (ignoreSceneNumbering === 'true') {
+              model.set('ignoreSceneNumbering', true);
+            } else if (ignoreSceneNumbering === 'false') {
+              model.set('ignoreSceneNumbering', false);
             }
 
             model.edited = true;
