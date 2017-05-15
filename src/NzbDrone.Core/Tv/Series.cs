@@ -37,11 +37,11 @@ namespace NzbDrone.Core.Tv
         public SeriesTypes SeriesType { get; set; }
         public string Network { get; set; }
 
-        protected bool _UseSceneNumbering;
-        protected bool _IgnoreSceneNumbering = false;
-        public bool UseSceneNumbering {
-            get { return _UseSceneNumbering && !_IgnoreSceneNumbering; }
-            set { _UseSceneNumbering = value; }
+        public bool IgnoreSceneNumbering { get; set; }
+        public bool UseSceneNumbering { get; set; }
+        public bool ActuallyUseSceneNumbering
+        {
+            get { return UseSceneNumbering && !IgnoreSceneNumbering; }
         }
 
         public string TitleSlug { get; set; }
@@ -80,6 +80,7 @@ namespace NzbDrone.Core.Tv
             RootFolderPath = otherSeries.RootFolderPath;
             Tags = otherSeries.Tags;
             AddOptions = otherSeries.AddOptions;
+            IgnoreSceneNumbering = otherSeries.IgnoreSceneNumbering;
         }
     }
 }
