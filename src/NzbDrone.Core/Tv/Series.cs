@@ -36,7 +36,14 @@ namespace NzbDrone.Core.Tv
         public List<MediaCover.MediaCover> Images { get; set; }
         public SeriesTypes SeriesType { get; set; }
         public string Network { get; set; }
-        public bool UseSceneNumbering { get; set; }
+
+        protected bool _UseSceneNumbering;
+        protected bool _IgnoreSceneNumbering = false;
+        public bool UseSceneNumbering {
+            get { return _UseSceneNumbering && !_IgnoreSceneNumbering; }
+            set { _UseSceneNumbering = value; }
+        }
+
         public string TitleSlug { get; set; }
         public string Path { get; set; }
         public int Year { get; set; }
