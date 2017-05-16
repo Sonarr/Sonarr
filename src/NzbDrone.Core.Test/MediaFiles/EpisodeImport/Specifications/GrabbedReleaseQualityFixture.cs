@@ -64,6 +64,21 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
+        public void should_be_accepted_if_grabbed_history_is_for_a_season_pack()
+        {
+            var history = Builder<History.History>.CreateListOfSize(1)
+                                                  .All()
+                                                  .With(h => h.EventType = HistoryEventType.Grabbed)
+                                                  .With(h => h.Quality = _localEpisode.Quality)
+                                                  .With(h => h.SourceTitle = "Series.Title.S01.720p.HDTV.x264-RlsGroup")
+                                                  .BuildList();
+
+            GivenHistory(history);
+
+            Subject.IsSatisfiedBy(_localEpisode, _downloadClientItem).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_be_accepted_if_grabbed_history_quality_matches()
         {
             var history = Builder<History.History>.CreateListOfSize(1)
