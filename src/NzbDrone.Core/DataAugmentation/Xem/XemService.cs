@@ -223,7 +223,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 return;
             }
 
-            if (!_cache.Find(message.Series.TvdbId.ToString()) && !message.Series.UseSceneNumbering)
+            if (!_cache.Find(message.Series.TvdbId.ToString()) && !message.Series.ActuallyUseSceneNumbering)
             {
                 _logger.Debug("Scene numbering is not available for {0} [{1}]", message.Series.Title, message.Series.TvdbId);
                 return;

@@ -58,6 +58,7 @@ namespace NzbDrone.Api.Series
         public bool Monitored { get; set; }
 
         public bool UseSceneNumbering { get; set; }
+        public bool IgnoreSceneNumbering { get; set; }
         public int Runtime { get; set; }
         public int TvdbId { get; set; }
         public int TvRageId { get; set; }
@@ -131,6 +132,7 @@ namespace NzbDrone.Api.Series
                 Monitored = model.Monitored,
 
                 UseSceneNumbering = model.UseSceneNumbering,
+                IgnoreSceneNumbering = model.IgnoreSceneNumbering,
                 Runtime = model.Runtime,
                 TvdbId = model.TvdbId,
                 TvRageId = model.TvRageId,
@@ -185,6 +187,7 @@ namespace NzbDrone.Api.Series
                 Monitored = resource.Monitored,
 
                 UseSceneNumbering = resource.UseSceneNumbering,
+                IgnoreSceneNumbering = resource.IgnoreSceneNumbering,
                 Runtime = resource.Runtime,
                 TvdbId = resource.TvdbId,
                 TvRageId = resource.TvRageId,

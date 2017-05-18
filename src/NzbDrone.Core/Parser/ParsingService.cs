@@ -430,7 +430,7 @@ namespace NzbDrone.Core.Parser
 
             foreach (var episodeNumber in parsedEpisodeInfo.EpisodeNumbers)
             {
-                if (series.UseSceneNumbering && sceneSource)
+                if (series.ActuallyUseSceneNumbering && sceneSource)
                 {
                     List<Episode> episodes = new List<Episode>();
 
