@@ -5,6 +5,7 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
@@ -46,7 +47,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             foreach (var item in grabbedHistory)
             {
-                if (item.Quality != localEpisode.Quality)
+                if (item.Quality.Quality != Quality.Unknown && item.Quality != localEpisode.Quality)
                 {
                     _logger.Debug("Quality for grabbed release ({0}) does not match the quality of the file ({1})", item.Quality, localEpisode.Quality);
                     return Decision.Reject("File quality does not match quality of the grabbed release");

@@ -79,6 +79,20 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
+        public void should_be_accepted_if_grabbed_history_quality_is_unknown()
+        {
+            var history = Builder<History.History>.CreateListOfSize(1)
+                                                  .All()
+                                                  .With(h => h.EventType = HistoryEventType.Grabbed)
+                                                  .With(h => h.Quality = new QualityModel(Quality.Unknown))
+                                                  .BuildList();
+
+            GivenHistory(history);
+
+            Subject.IsSatisfiedBy(_localEpisode, _downloadClientItem).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_be_accepted_if_grabbed_history_quality_matches()
         {
             var history = Builder<History.History>.CreateListOfSize(1)
