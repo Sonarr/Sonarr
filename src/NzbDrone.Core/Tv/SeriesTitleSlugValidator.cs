@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Tv
         private readonly ISeriesService _seriesService;
 
         public SeriesTitleSlugValidator(ISeriesService seriesService)
-            : base("Title slug is in use by another series with a similar name")
+            : base("Title slug '{slug}' is in use by series '{seriesTitle}'")
         {
             _seriesService = seriesService;
         }
@@ -21,10 +21,22 @@ namespace NzbDrone.Core.Tv
 
             dynamic instance = context.ParentContext.InstanceToValidate;
             var instanceId = (int)instance.Id;
+            var slug = context.PropertyValue.ToString();
 
-            return !_seriesService.GetAllSeries().Where(s => s.TitleSlug.IsNotNullOrWhiteSpace())
-                                                 .ToList()
-                                                 .Exists(s => s.TitleSlug.Equals(context.PropertyValue.ToString()) && s.Id != instanceId);
+            var conflictingSeries = _seriesService.GetAllSeries()
+                                                  .FirstOrDefault(s => s.TitleSlug.IsNotNullOrWhiteSpace() &&
+                                                              s.TitleSlug.Equals(context.PropertyValue.ToString()) &&
+                                                              s.Id != instanceId);
+
+            if (conflictingSeries == null)
+            {
+                return true;
+            }
+
+            context.MessageFormatter.AppendArgument("slug", slug);
+            context.MessageFormatter.AppendArgument("seriesTitle", conflictingSeries.Title);
+
+            return false;
         }
     }
 }
