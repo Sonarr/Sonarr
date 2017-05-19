@@ -291,7 +291,9 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
-    <Compile Include="MediaFiles\MediaInfo\FormattedAudioChannelsFixture.cs" />
+    <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatAudioCodecFixture.cs" />
+    <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatVideoCodecFixture.cs" />
+    <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatAudioChannelsFixture.cs" />
     <Compile Include="Messaging\Commands\CommandQueueManagerFixture.cs" />
     <Compile Include="MetadataSource\SkyHook\SkyHookProxySearchFixture.cs" />
     <Compile Include="MetadataSource\SearchSeriesComparerFixture.cs" />

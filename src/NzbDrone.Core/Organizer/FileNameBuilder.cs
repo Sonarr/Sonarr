@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -9,6 +9,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -445,75 +446,14 @@ namespace NzbDrone.Core.Organizer
         {
             if (episodeFile.MediaInfo == null) return;
 
-            string videoCodec;
-            switch (episodeFile.MediaInfo.VideoCodec)
-            {
-                case "AVC":
-                    if (episodeFile.SceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(episodeFile.SceneName).Contains("h264"))
-                    {
-                        videoCodec = "h264";
-                    }
-                    else
-                    {
-                        videoCodec = "x264";
-                    }
-                    break;
-
-                case "V_MPEGH/ISO/HEVC":
-                    if (episodeFile.SceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(episodeFile.SceneName).Contains("h265"))
-                    {
-                        videoCodec = "h265";
-                    }
-                    else
-                    {
-                        videoCodec = "x265";
-                    }
-                    break;
-
-                case "MPEG-2 Video":
-                    videoCodec = "MPEG2";
-                    break;
-
-                default:
-                    videoCodec = episodeFile.MediaInfo.VideoCodec;
-                    break;
-            }
-
-            string audioCodec;
-            switch (episodeFile.MediaInfo.AudioFormat)
-            {
-                case "AC-3":
-                    audioCodec = "AC3";
-                    break;
-
-                case "E-AC-3":
-                    audioCodec = "EAC3";
-                    break;
-
-                case "MPEG Audio":
-                    if (episodeFile.MediaInfo.AudioProfile == "Layer 3")
-                    {
-                        audioCodec = "MP3";
-                    }
-                    else
-                    {
-                        audioCodec = episodeFile.MediaInfo.AudioFormat;
-                    }
-                    break;
-
-                case "DTS":
-                    audioCodec = episodeFile.MediaInfo.AudioFormat;
-                    break;
-
-                default:
-                    audioCodec = episodeFile.MediaInfo.AudioFormat;
-                    break;
-            }
+            var videoCodec =  MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, episodeFile.SceneName);
+            var audioCodec =  MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo);
+            var audioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo);
 
             var mediaInfoAudioLanguages = GetLanguagesToken(episodeFile.MediaInfo.AudioLanguages);
             if (!mediaInfoAudioLanguages.IsNullOrWhiteSpace())
             {
-                mediaInfoAudioLanguages = string.Format("[{0}]", mediaInfoAudioLanguages);
+                mediaInfoAudioLanguages = $"[{mediaInfoAudioLanguages}]";
             }
 
             if (mediaInfoAudioLanguages == "[EN]")
@@ -524,12 +464,12 @@ namespace NzbDrone.Core.Organizer
             var mediaInfoSubtitleLanguages = GetLanguagesToken(episodeFile.MediaInfo.Subtitles);
             if (!mediaInfoSubtitleLanguages.IsNullOrWhiteSpace())
             {
-                mediaInfoSubtitleLanguages = string.Format("[{0}]", mediaInfoSubtitleLanguages);
+                mediaInfoSubtitleLanguages = $"[{mediaInfoSubtitleLanguages}]";
             }
 
             var videoBitDepth = episodeFile.MediaInfo.VideoBitDepth > 0 ? episodeFile.MediaInfo.VideoBitDepth.ToString() : string.Empty;
-            var audioChannels = episodeFile.MediaInfo.FormattedAudioChannels > 0 ?
-                                episodeFile.MediaInfo.FormattedAudioChannels.ToString("F1", CultureInfo.InvariantCulture) :
+            var audioChannelsFormatted = audioChannels > 0 ?
+                                audioChannels.ToString("F1", CultureInfo.InvariantCulture) :
                                 string.Empty;
 
             tokenHandlers["{MediaInfo Video}"] = m => videoCodec;
@@ -538,11 +478,11 @@ namespace NzbDrone.Core.Organizer
 
             tokenHandlers["{MediaInfo Audio}"] = m => audioCodec;
             tokenHandlers["{MediaInfo AudioCodec}"] = m => audioCodec;
-            tokenHandlers["{MediaInfo AudioChannels}"] = m => audioChannels;
+            tokenHandlers["{MediaInfo AudioChannels}"] = m => audioChannelsFormatted;
 
-            tokenHandlers["{MediaInfo Simple}"] = m => string.Format("{0} {1}", videoCodec, audioCodec);
+            tokenHandlers["{MediaInfo Simple}"] = m => $"{videoCodec} {audioCodec}";
 
-            tokenHandlers["{MediaInfo Full}"] = m => string.Format("{0} {1}{2} {3}", videoCodec, audioCodec, mediaInfoAudioLanguages, mediaInfoSubtitleLanguages);
+            tokenHandlers["{MediaInfo Full}"] = m => $"{videoCodec} {audioCodec}{mediaInfoAudioLanguages} {mediaInfoSubtitleLanguages}";
         }
 
         private string GetLanguagesToken(string mediaInfoLanguages)

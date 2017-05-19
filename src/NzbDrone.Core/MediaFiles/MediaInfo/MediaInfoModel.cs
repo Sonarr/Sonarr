@@ -27,33 +27,5 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         public string Subtitles { get; set; }
         public string ScanType { get; set; }
         public int SchemaRevision { get; set; }
-
-        [JsonIgnore]
-        public decimal FormattedAudioChannels
-        {
-            get
-            {
-                if (AudioChannelPositions.IsNullOrWhiteSpace())
-                {
-                    if (AudioChannelPositionsText.IsNullOrWhiteSpace())
-                    {
-                        if (SchemaRevision >= 3)
-                        {
-                            return AudioChannels;
-                        }
-
-                        return 0;
-                    }
-
-                    return AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? AudioChannels - 1 + 0.1m : AudioChannels;
-                }
-
-                return AudioChannelPositions.Replace("Object Based / ", "")
-                                            .Split(new string[] { " / " }, StringSplitOptions.None)
-                                            .First()
-                                            .Split('/')
-                                            .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
-            }
-        }
     }
 }

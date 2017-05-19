@@ -783,6 +783,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
+    <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatter.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoLib.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
     <Compile Include="MediaFiles\MediaInfo\UpdateMediaInfoService.cs" />

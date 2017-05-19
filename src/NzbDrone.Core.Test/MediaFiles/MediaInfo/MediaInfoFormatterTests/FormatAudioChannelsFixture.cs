@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
+namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
 {
     [TestFixture]
-    public class FormattedAudioChannelsFixture
+    public class FormatAudioChannelsFixture : TestBase
     {
         [Test]
         public void should_subtract_one_from_AudioChannels_as_total_channels_if_LFE_in_AudioChannelPositionsText()
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 AudioChannelPositionsText = "Front: L C R, Side: L R, LFE"
             };
 
-            mediaInfoModel.FormattedAudioChannels.Should().Be(5.1m);
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(5.1m);
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 AudioChannelPositionsText = "Front: L R"
             };
 
-            mediaInfoModel.FormattedAudioChannels.Should().Be(2);
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(2);
         }
 
         [Test]
@@ -44,7 +45,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 SchemaRevision = 2
             };
 
-            mediaInfoModel.FormattedAudioChannels.Should().Be(0);
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(0);
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 SchemaRevision = 3
             };
 
-            mediaInfoModel.FormattedAudioChannels.Should().Be(2);
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(2);
         }
 
         [Test]
@@ -72,7 +73,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 SchemaRevision = 3
             };
 
-            mediaInfoModel.FormattedAudioChannels.Should().Be(2);
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(2);
         }
 
         [Test]
@@ -86,7 +87,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 SchemaRevision = 3
             };
 
-            mediaInfoModel.FormattedAudioChannels.Should().Be(5.1m);
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(5.1m);
         }
 
         [Test]
@@ -100,7 +101,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 SchemaRevision = 3
             };
 
-            mediaInfoModel.FormattedAudioChannels.Should().Be(7.1m);
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(7.1m);
         }
 
         [Test]
@@ -114,7 +115,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 SchemaRevision = 3
             };
 
-            mediaInfoModel.FormattedAudioChannels.Should().Be(7.1m);
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(7.1m);
         }
     }
 }
