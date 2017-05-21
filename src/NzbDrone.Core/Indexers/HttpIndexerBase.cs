@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Indexers
                             }
                         }
 
-                        releases.AddRange(pagedReleases);
+                        releases.AddRange(pagedReleases.Where(IsValidRelease));
                     }
 
                     if (releases.Any())
@@ -266,6 +266,16 @@ namespace NzbDrone.Core.Indexers
             }
 
             return CleanupReleases(releases);
+        }
+
+        protected virtual bool IsValidRelease(ReleaseInfo release)
+        {
+            if (release.DownloadUrl.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            return true;
         }
 
         protected virtual bool IsFullPage(IList<ReleaseInfo> page)

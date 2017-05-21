@@ -19,6 +19,11 @@ namespace NzbDrone.Core.Indexers
     public class RssParser : IParseIndexerResponse
     {
         private static readonly Regex ReplaceEntities = new Regex("&[a-z]+;", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        public const string NzbEnclosureMimeType = "application/x-nzb";
+        public const string TorrentEnclosureMimeType = "application/x-bittorrent";
+        public const string MagnetEnclosureMimeType = "application/x-bittorrent;x-scheme-handler/magnet";
+        public static readonly string[] UsenetEnclosureMimeTypes = new[] { NzbEnclosureMimeType };
+        public static readonly string[] TorrentEnclosureMimeTypes = new[] { TorrentEnclosureMimeType, MagnetEnclosureMimeType };
 
         protected readonly Logger _logger;
 
@@ -32,7 +37,7 @@ namespace NzbDrone.Core.Indexers
         // Parse "Size: 1.3 GB" or "1.3 GB" parts in the description element and use that as Size.
         public bool ParseSizeInDescription { get; set; }
 
-        public string PreferredEnclosureMimeType { get; set; }
+        public string[] PreferredEnclosureMimeTypes { get; set; }
 
         private IndexerResponse _indexerResponse;
 
@@ -53,7 +58,7 @@ namespace NzbDrone.Core.Indexers
             }
 
             var document = LoadXmlDocument(indexerResponse);
-            var items = GetItems(document);
+            var items = GetItems(document).ToList();
 
             foreach (var item in items)
             {
@@ -75,6 +80,11 @@ namespace NzbDrone.Core.Indexers
                     itemEx.WithData("ItemTitle", item.Title());
                     _logger.Error(itemEx, "An error occurred while processing feed item from {0}", indexerResponse.Request.Url);
                 }
+            }
+
+            if (!PostProcess(indexerResponse, items, releases))
+            {
+                return new List<ReleaseInfo>();
             }
 
             return releases;
@@ -124,6 +134,11 @@ namespace NzbDrone.Core.Indexers
             return true;
         }
 
+        protected virtual bool PostProcess(IndexerResponse indexerResponse, List<XElement> elements, List<ReleaseInfo> releases)
+        {
+            return true;
+        }
+
         protected ReleaseInfo ProcessItem(XElement item)
         {
             var releaseInfo = CreateNewReleaseInfo();
@@ -132,7 +147,7 @@ namespace NzbDrone.Core.Indexers
 
             _logger.Trace("Parsed: {0}", releaseInfo.Title);
 
-            return PostProcess(item, releaseInfo);
+            return PostProcessItem(item, releaseInfo);
         }
 
         protected virtual ReleaseInfo ProcessItem(XElement item, ReleaseInfo releaseInfo)
@@ -156,7 +171,7 @@ namespace NzbDrone.Core.Indexers
             return releaseInfo;
         }
 
-        protected virtual ReleaseInfo PostProcess(XElement item, ReleaseInfo releaseInfo)
+        protected virtual ReleaseInfo PostProcessItem(XElement item, ReleaseInfo releaseInfo)
         {
             return releaseInfo;
         }
@@ -187,7 +202,8 @@ namespace NzbDrone.Core.Indexers
         {
             if (UseEnclosureUrl)
             {
-                return ParseUrl((string)GetEnclosure(item).Attribute("url"));
+                var enclosure = GetEnclosure(item);
+                return enclosure != null ? ParseUrl(enclosure.Url) : null;
             }
 
             return ParseUrl((string)item.Element("link"));
@@ -228,37 +244,59 @@ namespace NzbDrone.Core.Indexers
 
             if (enclosure != null)
             {
-                return (long)enclosure.Attribute("length");
+                return enclosure.Length;
             }
 
             return 0;
         }
 
-        protected virtual XElement GetEnclosure(XElement item)
+        protected virtual RssEnclosure[] GetEnclosures(XElement item)
         {
-            var enclosures = item.Elements("enclosure").ToArray();
+            var enclosures = item.Elements("enclosure")
+                                 .Select(v  => new RssEnclosure
+                                 {
+                                     Url = v.Attribute("url").Value,
+                                     Type = v.Attribute("type").Value,
+                                     Length = (long)v.Attribute("length")
+                                 })
+                                 .ToArray();
 
+            return enclosures;
+        }
+
+        protected RssEnclosure GetEnclosure(XElement item, bool enforceMimeType = true)
+        {
+            var enclosures = GetEnclosures(item);
+
+            return GetEnclosure(enclosures, enforceMimeType);
+        }
+
+        protected virtual RssEnclosure GetEnclosure(RssEnclosure[] enclosures, bool enforceMimeType = true)
+        {
             if (enclosures.Length == 0)
             {
                 return null;
             }
 
-            if (enclosures.Length == 1)
+            if (PreferredEnclosureMimeTypes != null)
             {
-                return enclosures.First();
-            }
-
-            if (PreferredEnclosureMimeType != null)
-            {
-                var preferredEnclosure = enclosures.FirstOrDefault(v => v.Attribute("type").Value == PreferredEnclosureMimeType);
-
-                if (preferredEnclosure != null)
+                foreach (var preferredEnclosureType in PreferredEnclosureMimeTypes)
                 {
-                    return preferredEnclosure;
+                    var preferredEnclosure = enclosures.FirstOrDefault(v => v.Type == preferredEnclosureType);
+
+                    if (preferredEnclosure != null)
+                    {
+                        return preferredEnclosure;
+                    }
+                }
+
+                if (enforceMimeType)
+                {
+                    return null;
                 }
             }
 
-            return item.Elements("enclosure").SingleOrDefault();
+            return enclosures.SingleOrDefault();
         }
 
         protected IEnumerable<XElement> GetItems(XDocument document)

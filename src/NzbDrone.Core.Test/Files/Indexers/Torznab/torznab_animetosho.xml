@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:newznab="http://www.newznab.com/DTD/2010/feeds/attributes/" xmlns:torznab="http://torznab.com/schemas/2015/feed">
+  <channel>
+    <atom:link href="https://localhost/feed/rssx" rel="self" type="application/rss+xml" />
+    <title>Anime Tosho</title>
+    <link>https://localhost/</link>
+    <description>Latest releases feed</description>
+    <language>en-gb</language>
+    <ttl>30</ttl>
+    <lastBuildDate>Wed, 17 May 2017 20:36:06 +0000</lastBuildDate>
+    <newznab:response offset="0"/>
+    <item>
+      <title>[finFAGs]_Frame_Arms_Girl_07_(1280x720_TV_AAC)_[1262B6F7].mkv</title>
+      <pubDate>Wed, 17 May 2017 20:36:06 +0000</pubDate>
+      <guid isPermaLink="true">https://localhost/view/123451</guid>
+      <category>Anime</category>
+      <description><![CDATA[<strong>Total Size</strong>: 301.8 MB<br />]]></description>
+      <link>https://localhost/view/finfags-_frame_arms_girl_07_-1280x720_tv_aac-_-1262b6f7-mkv.123451</link>
+      <comments>https://localhost/view/finfags-_frame_arms_girl_07_-1280x720_tv_aac-_-1262b6f7-mkv.123451</comments>
+      <enclosure url="http://storage.localhost/torrents/123451.torrent" type="application/x-bittorrent" length="0" />
+      <source url="http://www.tokyotosho.info/details.php?id=123451">TokyoTosho</source>
+
+      <newznab:attr name="category" value="5070" />
+      <newznab:attr name="category" value="100001" />
+      <newznab:attr name="files" value="1" />
+      <newznab:attr name="size" value="316477946" />
+
+      <torznab:attr name="files" value="1" />
+      <torznab:attr name="size" value="316477946" />
+      <torznab:attr name="category" value="5070" />
+      <torznab:attr name="category" value="100001" />
+      <torznab:attr name="infohash" value="2d69a861bef5a9f2cdf791b7328e37b7953205e1" />
+      <torznab:attr name="magneturl" value="magnet:?xt=urn:btih:VU2QYN66WU7FTPXSG3TFDRXW6KTEBPBF" />
+    </item>
+    <item>
+      <title>[HorribleSubs] Frame Arms Girl - 07 [720p].mkv</title>
+      <pubDate>Mon, 15 May 2017 19:15:56 +0000</pubDate>
+      <guid isPermaLink="true">https://localhost/view/123452</guid>
+      <category>Anime</category>
+      <description><![CDATA[<strong>Total Size</strong>: 452.0 MB<br />]]></description>
+      <link>https://localhost/view/horriblesubs-frame-arms-girl-07-720p-mkv.123452</link>
+      <comments>https://localhost/view/horriblesubs-frame-arms-girl-07-720p-mkv.123452</comments>
+      <enclosure url="http://storage.localhost/torrents/123452.torrent" type="application/x-bittorrent" length="0" />
+      <enclosure url="http://storage.localhost/nzb/123452.nzb" type="application/x-nzb" length="0" />
+      <source url="http://www.tokyotosho.info/details.php?id=123452">TokyoTosho</source>
+
+      <newznab:attr name="category" value="5070" />
+      <newznab:attr name="category" value="100001" />
+      <newznab:attr name="files" value="1" />
+      <newznab:attr name="size" value="473987489" />
+
+      <torznab:attr name="files" value="1" />
+      <torznab:attr name="size" value="473987489" />
+      <torznab:attr name="category" value="5070" />
+      <torznab:attr name="category" value="100001" />
+      <torznab:attr name="infohash" value="bff4afebcd50c21949ed6a06323d2120c649bd82" />
+      <torznab:attr name="magneturl" value="magnet:?xt=urn:btih:5QK77JL7LZVIMEGKJ5VVAMMR5EEQMMSN" />
+    </item>
+  </channel>
+</rss>

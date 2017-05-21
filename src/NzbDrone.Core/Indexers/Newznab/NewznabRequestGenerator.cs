@@ -104,6 +104,10 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 pageableRequests.Add(GetPagedRequests(MaxPages, Settings.Categories.Concat(Settings.AnimeCategories), "tvsearch", ""));
             }
+            else if (capabilities.SupportedSearchParameters != null)
+            {
+                pageableRequests.Add(GetPagedRequests(MaxPages, Settings.AnimeCategories, "search", ""));
+            }
 
             return pageableRequests;
         }
@@ -249,7 +253,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             var categoriesQuery = string.Join(",", categories.Distinct());
 
-            var baseUrl = string.Format("{0}/api?t={1}&cat={2}&extended=1{3}", Settings.BaseUrl.TrimEnd('/'), searchType, categoriesQuery, Settings.AdditionalParameters);
+            var baseUrl = string.Format("{0}{1}?t={2}&cat={3}&extended=1{4}", Settings.BaseUrl.TrimEnd('/'), Settings.ApiPath.TrimEnd('/'), searchType, categoriesQuery, Settings.AdditionalParameters);
 
             if (Settings.ApiKey.IsNotNullOrWhiteSpace())
             {

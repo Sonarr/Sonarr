@@ -98,6 +98,37 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
         }
 
         [Test]
+        public void should_parse_recent_feed_from_torznab_animetosho()
+        {
+            var recentFeed = ReadAllText(@"Files/Indexers/Torznab/torznab_animetosho.xml");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(2);
+
+            releases.First().Should().BeOfType<TorrentInfo>();
+            var releaseInfo = releases.First() as TorrentInfo;
+
+            releaseInfo.Title.Should().Be("[finFAGs]_Frame_Arms_Girl_07_(1280x720_TV_AAC)_[1262B6F7].mkv");
+            releaseInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            releaseInfo.DownloadUrl.Should().Be("http://storage.localhost/torrents/123451.torrent");
+            releaseInfo.InfoUrl.Should().Be("https://localhost/view/finfags-_frame_arms_girl_07_-1280x720_tv_aac-_-1262b6f7-mkv.123451");
+            releaseInfo.CommentUrl.Should().Be("https://localhost/view/finfags-_frame_arms_girl_07_-1280x720_tv_aac-_-1262b6f7-mkv.123451");
+            releaseInfo.Indexer.Should().Be(Subject.Definition.Name);
+            releaseInfo.PublishDate.Should().Be(DateTime.Parse("Wed, 17 May 2017 20:36:06 +0000").ToUniversalTime());
+            releaseInfo.Size.Should().Be(316477946);
+            releaseInfo.TvdbId.Should().Be(0);
+            releaseInfo.TvRageId.Should().Be(0);
+            releaseInfo.InfoHash.Should().Be("2d69a861bef5a9f2cdf791b7328e37b7953205e1");
+            releaseInfo.Seeders.Should().BeNull();
+            releaseInfo.Peers.Should().BeNull();
+        }
+
+        [Test]
         public void should_use_pagesize_reported_by_caps()
         {
             _caps.MaxPageSize = 30;

@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Indexers
 
         public TorrentRssParser()
         {
-            PreferredEnclosureMimeType = "application/x-bittorrent";
+            PreferredEnclosureMimeTypes = TorrentEnclosureMimeTypes;
         }
 
         public IEnumerable<XElement> GetItems(IndexerResponse indexerResponse)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Common.Extensions;
@@ -10,6 +11,11 @@ namespace NzbDrone.Core.Indexers.Torznab
     public class TorznabRssParser : TorrentRssParser
     {
         public const string ns = "{http://torznab.com/schemas/2015/feed}";
+
+        public TorznabRssParser()
+        {
+            UseEnclosureUrl = true;
+        }
 
         protected override bool PreProcess(IndexerResponse indexerResponse)
         {
@@ -36,6 +42,24 @@ namespace NzbDrone.Core.Indexers.Torznab
             throw new TorznabException("Torznab error detected: {0}", errorMessage);
         }
 
+        protected override bool PostProcess(IndexerResponse indexerResponse, List<XElement> items, List<ReleaseInfo> releases)
+        {
+            var enclosureTypes = items.SelectMany(GetEnclosures).Select(v => v.Type).Distinct().ToArray();
+            if (enclosureTypes.Any() && enclosureTypes.Intersect(PreferredEnclosureMimeTypes).Empty())
+            {
+                if (enclosureTypes.Intersect(UsenetEnclosureMimeTypes).Any())
+                {
+                    _logger.Warn("Feed does not contain {0}, found {1}, did you intend to add a Newznab indexer?", TorrentEnclosureMimeType, enclosureTypes[0]);
+                }
+                else
+                {
+                    _logger.Warn("Feed does not contain {0}, found {1}.", TorrentEnclosureMimeType, enclosureTypes[0]);
+                }
+            }
+
+            return true;
+        }
+
         protected override ReleaseInfo ProcessItem(XElement item, ReleaseInfo releaseInfo)
         {
             var torrentInfo = base.ProcessItem(item, releaseInfo) as TorrentInfo;
@@ -45,18 +69,6 @@ namespace NzbDrone.Core.Indexers.Torznab
 
             return torrentInfo;
         }
-
-        protected override ReleaseInfo PostProcess(XElement item, ReleaseInfo releaseInfo)
-        {
-            var enclosureType = item.Element("enclosure").Attribute("type").Value;
-            if (!enclosureType.Contains("application/x-bittorrent"))
-            {
-                throw new UnsupportedFeedException("Feed contains {0} instead of application/x-bittorrent", enclosureType);
-            }
-
-            return base.PostProcess(item, releaseInfo);
-        }
-
 
         protected override string GetInfoUrl(XElement item)
         {

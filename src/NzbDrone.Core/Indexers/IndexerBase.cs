@@ -74,6 +74,7 @@ namespace NzbDrone.Core.Indexers
 
             result.ForEach(c =>
             {
+                c.Guid = string.Concat(Definition.Id, "_", c.Guid);
                 c.IndexerId = Definition.Id;
                 c.Indexer = Definition.Name;
                 c.DownloadProtocol = Protocol;
