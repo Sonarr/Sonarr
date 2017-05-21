@@ -53,7 +53,7 @@ namespace NzbDrone.Api.Indexers
 
         private Response DownloadRelease(ReleaseResource release)
         {
-            var remoteEpisode = _remoteEpisodeCache.Find(release.Guid);
+            var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
             if (remoteEpisode == null)
             {
@@ -113,8 +113,14 @@ namespace NzbDrone.Api.Indexers
 
         protected override ReleaseResource MapDecision(DownloadDecision decision, int initialWeight)
         {
-            _remoteEpisodeCache.Set(decision.RemoteEpisode.Release.Guid, decision.RemoteEpisode, TimeSpan.FromMinutes(30));
-           return base.MapDecision(decision, initialWeight);
+            var resource = base.MapDecision(decision, initialWeight);
+            _remoteEpisodeCache.Set(GetCacheKey(resource), decision.RemoteEpisode, TimeSpan.FromMinutes(30));
+            return resource;
+        }
+
+        private string GetCacheKey(ReleaseResource resource)
+        {
+            return string.Concat(resource.IndexerId, "_", resource.Guid);
         }
     }
 }
