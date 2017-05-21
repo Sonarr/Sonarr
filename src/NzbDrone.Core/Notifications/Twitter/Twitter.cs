@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Notifications.Twitter
 
         public override void OnGrab(GrabMessage message)
         {
-            _twitterService.SendNotification($"Grabbed: {message.Message}", Settings);
+            _twitterService.SendNotification($"[Sonarr] Grabbed: {message.Message}", Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            _twitterService.SendNotification($"Imported: {message.Message}", Settings);
+            _twitterService.SendNotification($"[Sonarr] Imported: {message.Message}", Settings);
         }
 
         public override object RequestAction(string action, IDictionary<string, string> query)
