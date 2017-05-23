@@ -61,7 +61,15 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                     if (episode == null)
                     {
-                        _logger.Debug("Information hasn't been added to TheTVDB yet, skipping.");
+                        _logger.Debug("Information hasn't been added to TheTVDB yet, skipping");
+                        continue;
+                    }
+
+                    if (mapping.Scene.Absolute == 0 &&
+                        mapping.Scene.Season == 0 &&
+                        mapping.Scene.Episode == 0)
+                    {
+                        _logger.Debug("Mapping for {0} S{1:00}E{2:00} is invalid, skipping", series, mapping.Tvdb.Season, mapping.Tvdb.Episode);
                         continue;
                     }
 

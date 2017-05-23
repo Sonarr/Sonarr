@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DataAugmentation.Xem;
 using NzbDrone.Core.DataAugmentation.Xem.Model;
 using NzbDrone.Core.Test.Framework;
@@ -97,7 +98,6 @@ namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
                 Tvdb  = new XemValues { Absolute = tvdbAbsolute, Season = tvdbSeason, Episode = tvdbEpisode },
             });
         }
-
 
         [Test]
         public void should_not_fetch_scenenumbering_if_not_listed()
@@ -307,6 +307,20 @@ namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
             episode.UnverifiedSceneNumbering.Should().BeFalse();
             episode.SceneSeasonNumber.Should().NotHaveValue();
             episode.SceneEpisodeNumber.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void should_skip_mapping_when_scene_information_is_all_zero()
+        {
+            GivenTvdbMappings();
+
+            AddTvdbMapping(0, 0, 0, 8, 3, 1); // 3x01 -> 3x01
+            AddTvdbMapping(0, 0, 0, 9, 3, 2); // 3x02 -> 3x02
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(e => e.Any(c => c.SceneAbsoluteEpisodeNumber == 0 && c.SceneSeasonNumber == 0 && c.SceneEpisodeNumber == 0))), Times.Never());
         }
     }
 }
