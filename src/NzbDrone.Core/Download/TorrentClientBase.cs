@@ -133,7 +133,9 @@ namespace NzbDrone.Core.Download
 
                 var response = _httpClient.Get(request);
 
-                if (response.StatusCode == HttpStatusCode.SeeOther || response.StatusCode == HttpStatusCode.Found)
+                if (response.StatusCode == HttpStatusCode.MovedPermanently ||
+                    response.StatusCode == HttpStatusCode.Found ||
+                    response.StatusCode == HttpStatusCode.SeeOther)
                 {
                     var locationHeader = response.Headers.GetSingleValue("Location");
 
