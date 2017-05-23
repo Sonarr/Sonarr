@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -142,7 +142,21 @@ namespace NzbDrone.Core.Configuration
 
         public bool LaunchBrowser => GetValueBoolean("LaunchBrowser", true);
 
-        public string ApiKey => GetValue("ApiKey", GenerateApiKey());
+        public string ApiKey
+        {
+            get
+            {
+                var apiKey = GetValue("ApiKey", GenerateApiKey());
+
+                if (apiKey.IsNullOrWhiteSpace())
+                {
+                    apiKey = GenerateApiKey();
+                    SetValue("ApiKey", apiKey);
+                }
+
+                return apiKey;
+            }
+        }
 
         public AuthenticationType AuthenticationMethod
         {
