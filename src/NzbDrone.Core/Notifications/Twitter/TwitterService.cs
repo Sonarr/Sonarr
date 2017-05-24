@@ -83,9 +83,19 @@ namespace NzbDrone.Core.Notifications.Twitter
 
                 if (settings.DirectMessage)
                 {
-                    twitter.DirectMessage(message, settings.Mention);
-                }
+                    if(settings.Mention.Contains(","))
+					{
+						var recipients = settings.Mention.Replace(" ",string.Empty).Split(',');
 
+						foreach(var recipient in recipients)
+						{
+							twitter.DirectMessage(message,recipient);
+						}
+					}
+					else
+					{
+						twitter.DirectMessage(message, settings.Mention);	
+					}
                 else
                 {
                     if (settings.Mention.IsNotNullOrWhiteSpace())
