@@ -19,7 +19,6 @@ src/**/[Oo]bj/
 *.meta
 *.obj
 *.pch
-*.pdb
 *.pgc
 *.pgd
 *.rsp
@@ -98,7 +97,6 @@ App_Data/*.ldf
 *.orig
 
 # Tools
-_NCrunch_*
 _TeamCity*
 
 # Sonarr

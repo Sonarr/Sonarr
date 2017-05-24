@@ -25,10 +25,10 @@ namespace NzbDrone.Core.Indexers.Nyaa
         }
 
         [FieldDefinition(0, Label = "Website URL")]
-        public string BaseUrl { get; set; }
+        public string BaseUrl { get; }
 
         [FieldDefinition(1, Label = "Additional Parameters", Advanced = true, HelpText = "Please note if you change the category you will have to add required/restricted rules about the subgroups to avoid foreign language releases.")]
-        public string AdditionalParameters { get; set; }
+        public string AdditionalParameters { get; }
 
         [FieldDefinition(2, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
