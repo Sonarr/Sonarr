@@ -34,10 +34,9 @@ namespace NzbDrone.Core.Tv
 
                 if (monitoringOptions.IgnoreEpisodesWithFiles)
                 {
-                    _logger.Debug("Ignoring Episodes with Files");
+                    _logger.Debug("Unmonitoring Episodes with Files");
                     ToggleEpisodesMonitoredState(episodes.Where(e => e.HasFile), false);
                 }
-
                 else
                 {
                     _logger.Debug("Monitoring Episodes with Files");
@@ -46,10 +45,9 @@ namespace NzbDrone.Core.Tv
 
                 if (monitoringOptions.IgnoreEpisodesWithoutFiles)
                 {
-                    _logger.Debug("Ignoring Episodes without Files");
+                    _logger.Debug("Unmonitoring Episodes without Files");
                     ToggleEpisodesMonitoredState(episodes.Where(e => !e.HasFile && e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow)), false);
                 }
-
                 else
                 {
                     _logger.Debug("Monitoring Episodes without Files");
@@ -62,31 +60,21 @@ namespace NzbDrone.Core.Tv
                 {
                     var season = s;
 
-                    if (season.Monitored)
+                    // If the season is unmonitored we should unmonitor all episodes in that season
+
+                    if (!season.Monitored)
                     {
-                        if (!monitoringOptions.IgnoreEpisodesWithFiles && !monitoringOptions.IgnoreEpisodesWithoutFiles)
-                        {
-                            ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), true);
-                        }
+                        _logger.Debug("Unmonitoring all episodes in season {0}", season.SeasonNumber);
+                        ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);
                     }
 
-                    else
-                    {
-                        if (!monitoringOptions.IgnoreEpisodesWithFiles && !monitoringOptions.IgnoreEpisodesWithoutFiles)
-                        {
-                            ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);
-                        }
-
-                        else if (season.SeasonNumber == 0)
-                        {
-                            ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);
-                        }
-                    }
+                    // If the season is not the latest season and all it's episodes are unmonitored the season will be unmonitored
 
                     if (season.SeasonNumber < lastSeason)
                     {
                         if (episodes.Where(e => e.SeasonNumber == season.SeasonNumber).All(e => !e.Monitored))
                         {
+                            _logger.Debug("Unmonitoring season {0} because all episodes are not monitored", season.SeasonNumber);
                             season.Monitored = false;
                         }
                     }

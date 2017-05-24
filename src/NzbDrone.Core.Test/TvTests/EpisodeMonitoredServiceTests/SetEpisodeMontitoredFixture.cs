@@ -194,6 +194,46 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                   .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => !e.Monitored))));
         }
 
+        [Test]
+        public void should_should_not_monitor_episodes_if_season_is_not_monitored()
+        {
+            _series = Builder<Series>.CreateNew()
+                                     .With(s => s.Seasons = Builder<Season>.CreateListOfSize(2)
+                                                                           .TheFirst(1)
+                                                                           .With(n => n.Monitored = true)
+                                                                           .TheLast(1)
+                                                                           .With(n => n.Monitored = false)
+                                                                           .Build()
+                                                                           .ToList())
+                                     .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(10)
+                                           .All()
+                                           .With(e => e.Monitored = true)
+                                           .With(e => e.EpisodeFileId = 0)
+                                           .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-7))
+                                           .TheFirst(5)
+                                           .With(e => e.SeasonNumber = 1)
+                                           .TheLast(5)
+                                           .With(e => e.SeasonNumber = 2)
+                                           .BuildList();
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(s => s.GetEpisodeBySeries(It.IsAny<int>()))
+                  .Returns(episodes);
+
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions
+                                                       {
+                                                           IgnoreEpisodesWithFiles = true,
+                                                           IgnoreEpisodesWithoutFiles = false
+                                                       });
+
+            VerifyMonitored(e => e.SeasonNumber == 1);
+            VerifyNotMonitored(e => e.SeasonNumber == 2);
+            VerifySeasonMonitored(s => s.SeasonNumber == 1);
+            VerifySeasonNotMonitored(s => s.SeasonNumber == 2);
+        }
+
         private void VerifyMonitored(Func<Episode, bool> predicate)
         {
             Mocker.GetMock<IEpisodeService>()
