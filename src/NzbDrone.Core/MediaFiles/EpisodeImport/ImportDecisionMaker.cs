@@ -118,6 +118,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 decision = new ImportDecision(localEpisode, new Rejection("Unexpected error processing file"));
             }
 
+            if (decision == null)
+            {
+                _logger.Error("Unable to make a decision on {0}", file);
+            }
+
             return decision;
         }
 
