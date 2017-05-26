@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     Id = ">=" + (LastRecentTorrentID.Value - 100)
                 }));
             }
-            
+
             pageableRequests.AddTier(GetPagedRequests(MaxPages, new BroadcastheNetTorrentQuery()
             {
                 Age = "<=86400"
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
                 {
                     parameters.Category = "Season";
-                    parameters.Name = string.Format("Season {0}", seasonNumber);
+                    parameters.Name = string.Format("Season {0}%", seasonNumber);
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
 
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters = parameters.Clone();
 
                     parameters.Category = "Season";
-                    parameters.Name = string.Format("Season {0}", seasonNumber);
+                    parameters.Name = string.Format("Season {0}%", seasonNumber);
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
