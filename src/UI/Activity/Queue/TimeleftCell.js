@@ -35,7 +35,7 @@ module.exports = NzbDroneCell.extend({
                     var formattedTime = '{0}:{1}:{2}'.format(hours, minutes, seconds);
 
                     if (days > 0) {
-                        formattedTime = days + '.' + formattedTime;
+                        formattedTime = days + 'd ' + formattedTime;
                     }
 
                     this.$el.html('<span title="{1} / {2}">{0}</span>'.format(formattedTime, remainingSize, totalSize));

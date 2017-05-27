@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Download.Pending
 
             var nextRssSync = new Lazy<DateTime>(() => _taskManager.GetNextExecution(typeof(RssSyncCommand)));
 
-            foreach (var pendingRelease in GetPendingReleases())
+            foreach (var pendingRelease in GetPendingReleases().Where(p => p.Reason != PendingReleaseReason.Fallback))
             {
                 foreach (var episode in pendingRelease.RemoteEpisode.Episodes)
                 {
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Download.Pending
                                     RemoteEpisode = pendingRelease.RemoteEpisode,
                                     Timeleft = timeleft,
                                     EstimatedCompletionTime = ect,
-                                    Status = pendingRelease.Reason == PendingReleaseReason.Delay ? "Pending" : "DownloadClientUnavailable",
+                                    Status = pendingRelease.Reason.ToString(),
                                     Protocol = pendingRelease.RemoteEpisode.Release.DownloadProtocol
                                 };
 

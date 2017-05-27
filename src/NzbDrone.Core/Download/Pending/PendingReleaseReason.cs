@@ -3,6 +3,7 @@
     public enum PendingReleaseReason
     {
         Delay = 0,
-        StoreAndForward = 1
+        DownloadClientUnavailable = 1,
+        Fallback = 2
     }
 }

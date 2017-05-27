@@ -39,16 +39,17 @@ namespace NzbDrone.Core.Download
             var grabbed = new List<DownloadDecision>();
             var pending = new List<DownloadDecision>();
             var storedUsenet = new List<DownloadDecision>();
+            var fallbackUsenet = new List<DownloadDecision>();
             var storedTorrent = new List<DownloadDecision>();
+            var fallbackTorrent = new List<DownloadDecision>();
 
             foreach (var report in prioritizedDecisions)
             {
                 var remoteEpisode = report.RemoteEpisode;
                 var downloadProtocol = report.RemoteEpisode.Release.DownloadProtocol;
-                var episodeIds = remoteEpisode.Episodes.Select(e => e.Id).ToList();
 
                 // Skip if already grabbed
-                if (IsGrabbed(grabbed, report))
+                if (IsEpisodeProcessed(grabbed, report))
                 {
                     continue;
                 }
@@ -60,25 +61,37 @@ namespace NzbDrone.Core.Download
                     continue;
                 }
 
-                if (pending.SelectMany(r => r.RemoteEpisode.Episodes)
-                        .Select(e => e.Id)
-                        .ToList()
-                        .Intersect(episodeIds)
-                        .Any())
+                if (IsEpisodeProcessed(pending, report))
                 {
                     continue;
                 }
 
-                if (downloadProtocol == DownloadProtocol.Usenet && storedUsenet.Any())
+                if (downloadProtocol == DownloadProtocol.Usenet)
                 {
-                    storedUsenet.Add(report);
-                    continue;
+                    if (IsEpisodeProcessed(storedUsenet, report))
+                    {
+                        fallbackUsenet.Add(report);
+                        continue;
+                    }
+                    else if (storedUsenet.Any())
+                    {
+                        storedUsenet.Add(report);
+                        continue;
+                    }
                 }
 
-                if (downloadProtocol == DownloadProtocol.Torrent && storedTorrent.Any())
+                if (downloadProtocol == DownloadProtocol.Torrent)
                 {
-                    storedTorrent.Add(report);
-                    continue;
+                    if (IsEpisodeProcessed(storedTorrent, report))
+                    {
+                        fallbackTorrent.Add(report);
+                        continue;
+                    }
+                    else if (storedTorrent.Any())
+                    {
+                        storedTorrent.Add(report);
+                        continue;
+                    }
                 }
 
                 try
@@ -105,8 +118,10 @@ namespace NzbDrone.Core.Download
                 }
             }
 
-            pending.AddRange(ProcessFailedGrabs(grabbed, storedUsenet));
-            pending.AddRange(ProcessFailedGrabs(grabbed, storedTorrent));
+            pending.AddRange(ProcessFailedGrabs(grabbed, storedUsenet, PendingReleaseReason.DownloadClientUnavailable));
+            pending.AddRange(ProcessFailedGrabs(grabbed, fallbackUsenet, PendingReleaseReason.Fallback));
+            pending.AddRange(ProcessFailedGrabs(grabbed, storedTorrent, PendingReleaseReason.DownloadClientUnavailable));
+            pending.AddRange(ProcessFailedGrabs(grabbed, fallbackTorrent, PendingReleaseReason.Fallback));
 
             return new ProcessedDecisions(grabbed, pending, decisions.Where(d => d.Rejected).ToList());
         }
@@ -117,26 +132,26 @@ namespace NzbDrone.Core.Download
             return decisions.Where(c => (c.Approved || c.TemporarilyRejected) && c.RemoteEpisode.Episodes.Any()).ToList();
         }
 
-        private bool IsGrabbed(List<DownloadDecision> grabbed, DownloadDecision report)
+        private bool IsEpisodeProcessed(List<DownloadDecision> decisions, DownloadDecision report)
         {
             var episodeIds = report.RemoteEpisode.Episodes.Select(e => e.Id).ToList();
 
-            return grabbed.SelectMany(r => r.RemoteEpisode.Episodes)
-                          .Select(e => e.Id)
-                          .ToList()
-                          .Intersect(episodeIds)
-                          .Any();
+            return decisions.SelectMany(r => r.RemoteEpisode.Episodes)
+                            .Select(e => e.Id)
+                            .ToList()
+                            .Intersect(episodeIds)
+                            .Any();
         }
 
-        private List<DownloadDecision> ProcessFailedGrabs(List<DownloadDecision> grabbed, List<DownloadDecision> failed)
+        private List<DownloadDecision> ProcessFailedGrabs(List<DownloadDecision> grabbed, List<DownloadDecision> failed, PendingReleaseReason reason)
         {
             var pending = new List<DownloadDecision>();
 
             foreach (var report in failed)
             {
-                if (!IsGrabbed(grabbed, report))
+                if (!IsEpisodeProcessed(grabbed, report))
                 {
-                    _pendingReleaseService.Add(report, PendingReleaseReason.StoreAndForward);
+                    _pendingReleaseService.Add(report, reason);
                     pending.Add(report);
                 }
             }
