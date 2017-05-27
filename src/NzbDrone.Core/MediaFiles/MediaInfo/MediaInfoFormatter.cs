@@ -54,6 +54,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "EAC3";
             }
 
+            if (audioFormat == "AAC")
+            {
+                return "AAC";
+            }
+
             if (audioFormat == "MPEG Audio")
             {
                 return mediaInfo.AudioProfile == "Layer 3" ? "MP3" : audioFormat;
