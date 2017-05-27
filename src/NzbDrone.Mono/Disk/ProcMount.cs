@@ -45,7 +45,7 @@ namespace NzbDrone.Mono.Disk
         {
             get
             {
-                if (VolumeLabel.IsNullOrWhiteSpace())
+                if (VolumeLabel.IsNullOrWhiteSpace() || VolumeLabel.StartsWith("UUID="))
                 {
                     return Name;
                 }
