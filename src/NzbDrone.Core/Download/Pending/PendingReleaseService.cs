@@ -76,13 +76,31 @@ namespace NzbDrone.Core.Download.Pending
                                                              .Intersect(episodeIds)
                                                              .Any());
 
-            if (existingReports.Any(MatchingReleasePredicate(decision.RemoteEpisode.Release)))
+            var matchingReports = existingReports.Where(MatchingReleasePredicate(decision.RemoteEpisode.Release)).ToList();
+
+            if (matchingReports.Any())
             {
-                _logger.Debug("This release is already pending, not adding again");
-                return;
+                var sameReason = true;
+
+                foreach (var matchingReport in matchingReports)
+                {
+                    if (matchingReport.Reason != reason)
+                    {
+                        _logger.Debug("This release is already pending with reason {0}, changing to {1}", matchingReport.Reason, reason);
+                        matchingReport.Reason = reason;
+                        _repository.Update(matchingReport);
+                        sameReason = false;
+                    }
+                }
+
+                if (sameReason)
+                {
+                    _logger.Debug("This release is already pending with reason {0}, not adding again", reason);
+                    return;
+                }
             }
 
-            _logger.Debug("Adding release to pending releases");
+            _logger.Debug("Adding release to pending releases with reason {0}", reason);
             Insert(decision, reason);
         }
 

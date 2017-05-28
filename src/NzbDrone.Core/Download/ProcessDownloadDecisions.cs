@@ -38,10 +38,10 @@ namespace NzbDrone.Core.Download
             var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(qualifiedReports);
             var grabbed = new List<DownloadDecision>();
             var pending = new List<DownloadDecision>();
-            var storedUsenet = new List<DownloadDecision>();
-            var fallbackUsenet = new List<DownloadDecision>();
-            var storedTorrent = new List<DownloadDecision>();
-            var fallbackTorrent = new List<DownloadDecision>();
+            var failed = new List<DownloadDecision>();
+
+            var usenetFailed = false;
+            var torrentFailed = false;
 
             foreach (var report in prioritizedDecisions)
             {
@@ -61,37 +61,10 @@ namespace NzbDrone.Core.Download
                     continue;
                 }
 
-                if (IsEpisodeProcessed(pending, report))
+                if (downloadProtocol == DownloadProtocol.Usenet && usenetFailed ||
+                    downloadProtocol == DownloadProtocol.Torrent && torrentFailed)
                 {
-                    continue;
-                }
-
-                if (downloadProtocol == DownloadProtocol.Usenet)
-                {
-                    if (IsEpisodeProcessed(storedUsenet, report))
-                    {
-                        fallbackUsenet.Add(report);
-                        continue;
-                    }
-                    else if (storedUsenet.Any())
-                    {
-                        storedUsenet.Add(report);
-                        continue;
-                    }
-                }
-
-                if (downloadProtocol == DownloadProtocol.Torrent)
-                {
-                    if (IsEpisodeProcessed(storedTorrent, report))
-                    {
-                        fallbackTorrent.Add(report);
-                        continue;
-                    }
-                    else if (storedTorrent.Any())
-                    {
-                        storedTorrent.Add(report);
-                        continue;
-                    }
+                    failed.Add(report);
                 }
 
                 try
@@ -102,14 +75,15 @@ namespace NzbDrone.Core.Download
                 catch (DownloadClientUnavailableException e)
                 {
                     _logger.Debug("Failed to send release to download client, storing until later");
+                    failed.Add(report);
 
-                    if (downloadProtocol == DownloadProtocol.Torrent)
+                    if (downloadProtocol == DownloadProtocol.Usenet)
                     {
-                        storedTorrent.Add(report);
+                        usenetFailed = true;
                     }
-                    else
+                    else if (downloadProtocol == DownloadProtocol.Torrent)
                     {
-                        storedUsenet.Add(report);
+                        torrentFailed = true;
                     }
                 }
                 catch (Exception e)
@@ -118,10 +92,7 @@ namespace NzbDrone.Core.Download
                 }
             }
 
-            pending.AddRange(ProcessFailedGrabs(grabbed, storedUsenet, PendingReleaseReason.DownloadClientUnavailable));
-            pending.AddRange(ProcessFailedGrabs(grabbed, fallbackUsenet, PendingReleaseReason.Fallback));
-            pending.AddRange(ProcessFailedGrabs(grabbed, storedTorrent, PendingReleaseReason.DownloadClientUnavailable));
-            pending.AddRange(ProcessFailedGrabs(grabbed, fallbackTorrent, PendingReleaseReason.Fallback));
+            pending.AddRange(ProcessFailedGrabs(grabbed, failed));
 
             return new ProcessedDecisions(grabbed, pending, decisions.Where(d => d.Rejected).ToList());
         }
@@ -132,27 +103,49 @@ namespace NzbDrone.Core.Download
             return decisions.Where(c => (c.Approved || c.TemporarilyRejected) && c.RemoteEpisode.Episodes.Any()).ToList();
         }
 
-        private bool IsEpisodeProcessed(List<DownloadDecision> decisions, DownloadDecision report)
+        private bool IsEpisodeProcessed(List<DownloadDecision> decisions, DownloadDecision report, bool sameProtocol = false)
         {
             var episodeIds = report.RemoteEpisode.Episodes.Select(e => e.Id).ToList();
+            var filteredDecisions = sameProtocol
+                ? decisions.Where(d => d.RemoteEpisode.Release.DownloadProtocol == report.RemoteEpisode.Release.DownloadProtocol)
+                           .ToList()
+                : decisions;
 
-            return decisions.SelectMany(r => r.RemoteEpisode.Episodes)
+            return filteredDecisions.SelectMany(r => r.RemoteEpisode.Episodes)
                             .Select(e => e.Id)
                             .ToList()
                             .Intersect(episodeIds)
                             .Any();
         }
 
-        private List<DownloadDecision> ProcessFailedGrabs(List<DownloadDecision> grabbed, List<DownloadDecision> failed, PendingReleaseReason reason)
+        private List<DownloadDecision> ProcessFailedGrabs(List<DownloadDecision> grabbed, List<DownloadDecision> failed)
         {
             var pending = new List<DownloadDecision>();
+            var stored = new List<DownloadDecision>();
 
             foreach (var report in failed)
             {
-                if (!IsEpisodeProcessed(grabbed, report))
+                // If a release was already grabbed with matching episodes we should store it as a fallback
+                // and filter it out the next time it is processed incase a higher quality release failed to
+                // add to the download client, but a lower quality release was sent to another client
+                // If the release wasn't grabbed already, but was already stored, store it as a fallback,
+                // otherwise store it as DownloadClientUnavailable.
+
+                if (IsEpisodeProcessed(grabbed, report))
                 {
-                    _pendingReleaseService.Add(report, reason);
+                    _pendingReleaseService.Add(report, PendingReleaseReason.Fallback);
                     pending.Add(report);
+                }
+                else if (IsEpisodeProcessed(stored, report))
+                {
+                    _pendingReleaseService.Add(report, PendingReleaseReason.Fallback);
+                    pending.Add(report);
+                }
+                else
+                {
+                    _pendingReleaseService.Add(report, PendingReleaseReason.DownloadClientUnavailable);
+                    pending.Add(report);
+                    stored.Add(report);
                 }
             }
 
