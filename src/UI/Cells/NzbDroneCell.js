@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Backgrid = require('backgrid');
 var Backbone = require('backbone');
 
@@ -18,6 +19,25 @@ module.exports = Backgrid.Cell.extend({
                 }
             });
         }
+
+        this.render = _.wrap(this.render, this._renderDecorator);
+    },
+
+    _renderDecorator : function(renderInner) {
+        var el = this.$el;
+
+        if (this.$el.hasClass('editable')) {
+            el.empty();
+            el.html('<div class="cell-edit-decorator"></div>');
+
+            this.$el = el.find('.cell-edit-decorator').first();
+            renderInner.call(this);
+            this.$el = el;
+        } else {
+            renderInner.call(this);
+        }
+
+        return this;
     },
 
     _refresh : function() {
