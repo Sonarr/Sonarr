@@ -103,15 +103,11 @@ namespace NzbDrone.Core.Download
             return decisions.Where(c => (c.Approved || c.TemporarilyRejected) && c.RemoteEpisode.Episodes.Any()).ToList();
         }
 
-        private bool IsEpisodeProcessed(List<DownloadDecision> decisions, DownloadDecision report, bool sameProtocol = false)
+        private bool IsEpisodeProcessed(List<DownloadDecision> decisions, DownloadDecision report)
         {
             var episodeIds = report.RemoteEpisode.Episodes.Select(e => e.Id).ToList();
-            var filteredDecisions = sameProtocol
-                ? decisions.Where(d => d.RemoteEpisode.Release.DownloadProtocol == report.RemoteEpisode.Release.DownloadProtocol)
-                           .ToList()
-                : decisions;
 
-            return filteredDecisions.SelectMany(r => r.RemoteEpisode.Episodes)
+            return decisions.SelectMany(r => r.RemoteEpisode.Episodes)
                             .Select(e => e.Id)
                             .ToList()
                             .Intersect(episodeIds)
