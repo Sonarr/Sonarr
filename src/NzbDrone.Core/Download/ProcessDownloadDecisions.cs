@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Download
                     _downloadService.DownloadReport(remoteEpisode);
                     grabbed.Add(report);
                 }
-                catch (Exception ex)
+                catch (DownloadClientException ex)
                 {
                     if (ex is DownloadClientUnavailableException || ex is DownloadClientAuthenticationException)
                     {
@@ -88,10 +88,10 @@ namespace NzbDrone.Core.Download
                         {
                             torrentFailed = true;
                         }
-
-                        continue;
                     }
-
+                }
+                catch (Exception ex)
+                {
                     _logger.Warn(ex, "Couldn't add report to download queue. " + remoteEpisode);
                 }
             }
