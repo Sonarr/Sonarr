@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download.Clients;
@@ -72,23 +73,26 @@ namespace NzbDrone.Core.Download
                     _downloadService.DownloadReport(remoteEpisode);
                     grabbed.Add(report);
                 }
-                catch (DownloadClientUnavailableException e)
+                catch (Exception ex)
                 {
-                    _logger.Debug("Failed to send release to download client, storing until later");
-                    failed.Add(report);
+                    if (ex is DownloadClientUnavailableException || ex is DownloadClientAuthenticationException)
+                    {
+                        _logger.Debug("Failed to send release to download client, storing until later");
+                        failed.Add(report);
 
-                    if (downloadProtocol == DownloadProtocol.Usenet)
-                    {
-                        usenetFailed = true;
+                        if (downloadProtocol == DownloadProtocol.Usenet)
+                        {
+                            usenetFailed = true;
+                        }
+                        else if (downloadProtocol == DownloadProtocol.Torrent)
+                        {
+                            torrentFailed = true;
+                        }
+
+                        continue;
                     }
-                    else if (downloadProtocol == DownloadProtocol.Torrent)
-                    {
-                        torrentFailed = true;
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.Warn(e, "Couldn't add report to download queue. " + remoteEpisode);
+
+                    _logger.Warn(ex, "Couldn't add report to download queue. " + remoteEpisode);
                 }
             }
 
