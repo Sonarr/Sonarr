@@ -244,7 +244,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 }
                 catch (WebException ex)
                 {
-                    throw new DownloadClientException("Unable to connect to uTorrent, please check your settings", ex);
+                    throw new DownloadClientUnavailableException("Unable to connect to uTorrent, please check your settings", ex);
                 }
 
                 cookies = response.GetCookies();

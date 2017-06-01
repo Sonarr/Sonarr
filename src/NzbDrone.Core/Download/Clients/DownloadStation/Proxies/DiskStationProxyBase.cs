@@ -72,7 +72,20 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                                                          DownloadStationSettings settings) where T : new()
         {
             var request = requestBuilder.Build();
-            var response = _httpClient.Execute(request);
+            HttpResponse response;
+
+            try
+            {
+                response = _httpClient.Execute(request);
+            }
+            catch (HttpException ex)
+            {
+                throw new DownloadClientException("Unable to connect to Diskstation, please check your settings", ex);
+            }
+            catch (WebException ex)
+            {
+                throw new DownloadClientUnavailableException("Unable to connect to Diskstation, please check your settings", ex);
+            }
 
             _logger.Debug("Trying to {0}", operation);
 

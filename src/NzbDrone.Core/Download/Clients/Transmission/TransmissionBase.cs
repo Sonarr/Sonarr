@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -211,17 +211,14 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     DetailedDescription = string.Format("Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing {0} by WhiteList limitations in the {0} configuration.", Name)
                 };
             }
-            catch (WebException ex)
+            catch (DownloadClientUnavailableException ex)
             {
                 _logger.Error(ex);
-                if (ex.Status == WebExceptionStatus.ConnectFailure)
+
+                return new NzbDroneValidationFailure("Host", "Unable to connect")
                 {
-                    return new NzbDroneValidationFailure("Host", "Unable to connect")
-                    {
-                        DetailedDescription = "Please verify the hostname and port."
-                    };
-                }
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+                    DetailedDescription = "Please verify the hostname and port."
+                };
             }
             catch (Exception ex)
             {

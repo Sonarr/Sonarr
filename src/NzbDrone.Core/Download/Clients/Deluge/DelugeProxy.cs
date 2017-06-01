@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (WebException ex)
             {
-                throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
+                throw new DownloadClientUnavailableException("Unable to connect to Deluge, please check your settings", ex);
             }
         }
 
