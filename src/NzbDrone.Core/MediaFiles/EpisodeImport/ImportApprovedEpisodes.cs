@@ -120,19 +120,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         _extraService.ImportExtraFiles(localEpisode, episodeFile, copyOnly);
                     }
 
-                    if (downloadClientItem != null)
-                    {
-                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadId));
-                    }
-                    else
-                    {
-                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload));
-                    }
-
-                    if (newDownload)
-                    {
-                        _eventAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode, episodeFile, oldFiles));
-                    }
+                    _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, oldFiles, newDownload, downloadClientItem));
                 }
                 catch (Exception e)
                 {

@@ -9,7 +9,9 @@ namespace NzbDrone.Core.Notifications
         public string Message { get; set; }
         public Series Series { get; set; }
         public RemoteEpisode Episode { get; set; }
-        public QualityModel Quality { get; set; }   
+        public QualityModel Quality { get; set; }
+        public string DownloadClient { get; set; }
+        public string DownloadId { get; set; }
 
         public override string ToString()
         {
