@@ -1,4 +1,6 @@
-﻿using NzbDrone.Common.Messaging;
+﻿using System.Collections.Generic;
+using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.Events
@@ -7,24 +9,23 @@ namespace NzbDrone.Core.MediaFiles.Events
     {
         public LocalEpisode EpisodeInfo { get; private set; }
         public EpisodeFile ImportedEpisode { get; private set; }
+        public List<EpisodeFile> OldFiles { get; private set; }
         public bool NewDownload { get; private set; }
         public string DownloadClient { get; private set; }
         public string DownloadId { get; private set; }
 
-        public EpisodeImportedEvent(LocalEpisode episodeInfo, EpisodeFile importedEpisode, bool newDownload)
+        public EpisodeImportedEvent(LocalEpisode episodeInfo, EpisodeFile importedEpisode, List<EpisodeFile> oldFiles, bool newDownload, DownloadClientItem downloadClientItem)
         {
             EpisodeInfo = episodeInfo;
             ImportedEpisode = importedEpisode;
+            OldFiles = oldFiles;
             NewDownload = newDownload;
-        }
 
-        public EpisodeImportedEvent(LocalEpisode episodeInfo, EpisodeFile importedEpisode, bool newDownload, string downloadClient, string downloadId)
-        {
-            EpisodeInfo = episodeInfo;
-            ImportedEpisode = importedEpisode;
-            NewDownload = newDownload;
-            DownloadClient = downloadClient;
-            DownloadId = downloadId;
+            if (downloadClientItem != null)
+            {
+                DownloadClient = downloadClientItem.DownloadClient;
+                DownloadId = downloadClientItem.DownloadId;
+            }
         }
     }
 }

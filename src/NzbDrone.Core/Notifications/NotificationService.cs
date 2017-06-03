@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Notifications
 {
     public class NotificationService
         : IHandle<EpisodeGrabbedEvent>,
-          IHandle<EpisodeDownloadedEvent>,
+          IHandle<EpisodeImportedEvent>,
           IHandle<SeriesRenamedEvent>
     {
         private readonly INotificationFactory _notificationFactory;
@@ -95,7 +95,9 @@ namespace NzbDrone.Core.Notifications
                 Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality),
                 Series = message.Episode.Series,
                 Quality = message.Episode.ParsedEpisodeInfo.Quality,
-                Episode = message.Episode
+                Episode = message.Episode,
+                DownloadClient = message.DownloadClient,
+                DownloadId = message.DownloadId
             };
 
             foreach (var notification in _notificationFactory.OnGrabEnabled())
@@ -113,20 +115,29 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(EpisodeDownloadedEvent message)
+        public void Handle(EpisodeImportedEvent message)
         {
-            var downloadMessage = new DownloadMessage();
-            downloadMessage.Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.Quality);
-            downloadMessage.Series = message.Episode.Series;
-            downloadMessage.EpisodeFile = message.EpisodeFile;
-            downloadMessage.OldFiles = message.OldFiles;
-            downloadMessage.SourcePath = message.Episode.Path;
+            if (!message.NewDownload)
+            {
+                return;
+            }
+
+            var downloadMessage = new DownloadMessage
+            {
+                Message = GetMessage(message.EpisodeInfo.Series, message.EpisodeInfo.Episodes, message.EpisodeInfo.Quality),
+                Series = message.EpisodeInfo.Series,
+                EpisodeFile = message.ImportedEpisode,
+                OldFiles = message.OldFiles,
+                SourcePath = message.EpisodeInfo.Path,
+                DownloadClient = message.DownloadClient,
+                DownloadId = message.DownloadId
+            };
 
             foreach (var notification in _notificationFactory.OnDownloadEnabled())
             {
                 try
                 {
-                    if (ShouldHandleSeries(notification.Definition, message.Episode.Series))
+                    if (ShouldHandleSeries(notification.Definition, message.EpisodeInfo.Series))
                     {
                         if (downloadMessage.OldFiles.Empty() || ((NotificationDefinition)notification.Definition).OnUpgrade)
                         {

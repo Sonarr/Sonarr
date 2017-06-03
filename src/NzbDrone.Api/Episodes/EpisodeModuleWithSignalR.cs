@@ -14,7 +14,7 @@ namespace NzbDrone.Api.Episodes
 {
     public abstract class EpisodeModuleWithSignalR : NzbDroneRestModuleWithSignalR<EpisodeResource, Episode>,
         IHandle<EpisodeGrabbedEvent>,
-        IHandle<EpisodeDownloadedEvent>
+        IHandle<EpisodeImportedEvent>
     {
         protected readonly IEpisodeService _episodeService;
         protected readonly ISeriesService _seriesService;
@@ -115,9 +115,14 @@ namespace NzbDrone.Api.Episodes
             }
         }
 
-        public void Handle(EpisodeDownloadedEvent message)
+        public void Handle(EpisodeImportedEvent message)
         {
-            foreach (var episode in message.Episode.Episodes)
+            if (!message.NewDownload)
+            {
+                return;
+            }
+
+            foreach (var episode in message.EpisodeInfo.Episodes)
             {
                 BroadcastResourceChange(ModelAction.Updated, episode.Id);
             }

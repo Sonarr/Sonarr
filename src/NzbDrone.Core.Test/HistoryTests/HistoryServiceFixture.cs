@@ -13,6 +13,7 @@ using NzbDrone.Core.Qualities;
 using System.Collections.Generic;
 using NzbDrone.Core.Test.Qualities;
 using FluentAssertions;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.HistoryTests
@@ -81,7 +82,13 @@ namespace NzbDrone.Core.Test.HistoryTests
                                    Path = @"C:\Test\Unsorted\Series.s01e01.mkv"
                                };
 
-            Subject.Handle(new EpisodeImportedEvent(localEpisode, episodeFile, true, "sab", "abcd"));
+            var downloadClientItem = new DownloadClientItem
+                                     {
+                                         DownloadClient = "sab",
+                                         DownloadId = "abcd"
+                                     };
+
+            Subject.Handle(new EpisodeImportedEvent(localEpisode, episodeFile, new List<EpisodeFile>(), true, downloadClientItem));
 
             Mocker.GetMock<IHistoryRepository>()
                 .Verify(v => v.Insert(It.Is<History.History>(h => h.SourceTitle == Path.GetFileNameWithoutExtension(localEpisode.Path))));
