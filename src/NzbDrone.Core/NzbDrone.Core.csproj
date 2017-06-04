@@ -287,6 +287,7 @@
     <Compile Include="Datastore\Migration\092_add_unverifiedscenenumbering.cs" />
     <Compile Include="Datastore\Migration\100_add_scene_season_number.cs" />
     <Compile Include="Datastore\Migration\099_extra_and_subtitle_files.cs" />
+    <Compile Include="Datastore\Migration\097_add_release_to_pending_releases.cs" />
     <Compile Include="Datastore\Migration\094_add_tvmazeid.cs" />
     <Compile Include="Datastore\Migration\098_remove_titans_of_tv.cs">
       <SubType>Code</SubType>
@@ -365,6 +366,7 @@
     <Compile Include="Download\Clients\Deluge\DelugePriority.cs" />
     <Compile Include="Download\Clients\Deluge\DelugeUpdateUIResult.cs" />
     <Compile Include="Download\Clients\DownloadClientAuthenticationException.cs" />
+    <Compile Include="Download\Clients\DownloadClientUnavailableException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\DownloadStationInfoProxy.cs" />
     <Compile Include="Download\Clients\DownloadStation\TorrentDownloadStation.cs" />
@@ -499,6 +501,7 @@
     <Compile Include="Download\DownloadEventHub.cs" />
     <Compile Include="Download\DownloadClientStatusRepository.cs" />
     <Compile Include="Download\DownloadClientStatusService.cs" />
+    <Compile Include="Download\Pending\PendingReleaseReason.cs" />
     <Compile Include="Download\TrackedDownloads\DownloadMonitoringService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownload.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadService.cs" />
@@ -594,6 +597,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedIndexerStatus.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupDownloadClientUnavailablePendingReleases.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupUnusedTags.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleases.cs" />
     <Compile Include="Housekeeping\Housekeepers\DeleteBadMediaCovers.cs" />

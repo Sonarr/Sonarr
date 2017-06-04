@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         [Test]
         public void should_add()
         {
-            Subject.Add(_temporarilyRejected);
+            Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyInsert();
         }
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate);
 
-            Subject.Add(_temporarilyRejected);
+            Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyNoInsert();
         }
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             GivenHeldRelease(_release.Title + "-RP", _release.Indexer, _release.PublishDate);
 
-            Subject.Add(_temporarilyRejected);
+            Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyInsert();
         }
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             GivenHeldRelease(_release.Title, "AnotherIndexer", _release.PublishDate);
 
-            Subject.Add(_temporarilyRejected);
+            Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyInsert();
         }
@@ -142,7 +142,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate.AddHours(1));
 
-            Subject.Add(_temporarilyRejected);
+            Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyInsert();
         }

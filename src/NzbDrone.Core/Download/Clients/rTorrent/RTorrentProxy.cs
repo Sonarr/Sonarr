@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+using System.Runtime.InteropServices.ComTypes;
 using NLog;
 using NzbDrone.Common.Extensions;
 using CookComputing.XmlRpc;
@@ -54,8 +56,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             _logger.Debug("Executing remote method: system.client_version");
 
             var client = BuildClient(settings);
-
-            var version = client.GetVersion();
+            var version = ExecuteRequest(() => client.GetVersion());
 
             return version;
         }
@@ -65,20 +66,22 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             _logger.Debug("Executing remote method: d.multicall2");
 
             var client = BuildClient(settings);
-            var ret = client.TorrentMulticall("", "",
-                "d.name=", // string
-                "d.hash=", // string
-                "d.base_path=", // string
-                "d.custom1=", // string (label)
-                "d.size_bytes=", // long
-                "d.left_bytes=", // long
-                "d.down.rate=", // long (in bytes / s)
-                "d.ratio=", // long
-                "d.is_open=", // long
-                "d.is_active=", // long
-                "d.complete="); //long
+            var ret = ExecuteRequest(() => client.TorrentMulticall("", "",
+                    "d.name=", // string
+                    "d.hash=", // string
+                    "d.base_path=", // string
+                    "d.custom1=", // string (label)
+                    "d.size_bytes=", // long
+                    "d.left_bytes=", // long
+                    "d.down.rate=", // long (in bytes / s)
+                    "d.ratio=", // long
+                    "d.is_open=", // long
+                    "d.is_active=", // long
+                    "d.complete=") //long
+            );
 
             var items = new List<RTorrentTorrent>();
+
             foreach (object[] torrent in ret)
             {
                 var labelDecoded = System.Web.HttpUtility.UrlDecode((string) torrent[3]);
@@ -107,8 +110,8 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             _logger.Debug("Executing remote method: load.normal");
 
             var client = BuildClient(settings);
+            var response = ExecuteRequest(() => client.LoadStart("", torrentUrl, GetCommands(label, priority, directory)));
 
-            var response = client.LoadStart("", torrentUrl, GetCommands(label, priority, directory));
             if (response != 0)
             {
                 throw new DownloadClientException("Could not add torrent: {0}.", torrentUrl);
@@ -120,8 +123,8 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             _logger.Debug("Executing remote method: load.raw");
 
             var client = BuildClient(settings);
+            var response = ExecuteRequest(() => client.LoadRawStart("", fileContent, GetCommands(label, priority, directory)));
 
-            var response = client.LoadRawStart("", fileContent, GetCommands(label, priority, directory));
             if (response != 0)
             {
                 throw new DownloadClientException("Could not add torrent: {0}.", fileName);
@@ -133,11 +136,36 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             _logger.Debug("Executing remote method: d.erase");
 
             var client = BuildClient(settings);
+            var response = ExecuteRequest(() => client.Remove(hash));
 
-            var response = client.Remove(hash);
             if (response != 0)
             {
                 throw new DownloadClientException("Could not remove torrent: {0}.", hash);
+            }
+        }
+
+        public bool HasHashTorrent(string hash, RTorrentSettings settings)
+        {
+            _logger.Debug("Executing remote method: d.name");
+
+            var client = BuildClient(settings);
+
+            try
+            {
+                var name = ExecuteRequest(() => client.GetName(hash));
+
+                if (name.IsNullOrWhiteSpace())
+                {
+                    return false;
+                }
+
+                var metaTorrent = name == (hash + ".meta");
+
+                return !metaTorrent;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
@@ -163,25 +191,6 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             return result.ToArray();
         }
 
-        public bool HasHashTorrent(string hash, RTorrentSettings settings)
-        {
-            _logger.Debug("Executing remote method: d.name");
-
-            var client = BuildClient(settings);
-
-            try
-            {
-                var name = client.GetName(hash);
-                if (name.IsNullOrWhiteSpace()) return false;
-                bool metaTorrent = name == (hash + ".meta");
-                return !metaTorrent;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         private IRTorrent BuildClient(RTorrentSettings settings)
         {
             var client = XmlRpcProxyGen.Create<IRTorrent>();
@@ -200,6 +209,22 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
 
             return client;
+        }
+
+        private T ExecuteRequest<T>(Func<T> task)
+        {
+            try
+            {
+                return task();
+            }
+            catch (XmlRpcServerException ex)
+            {
+                throw new DownloadClientException("Unable to connect to rTorrent, please check your settings", ex);
+            }
+            catch (WebException ex)
+            {
+                throw new DownloadClientUnavailableException("Unable to connect to rTorrent, please check your settings", ex);
+            }
         }
     }
 }

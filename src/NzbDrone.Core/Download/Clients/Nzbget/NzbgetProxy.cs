@@ -235,14 +235,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    throw new DownloadClientException("Authentication failed for NzbGet, please check your settings", ex);
+                    throw new DownloadClientAuthenticationException("Authentication failed for NzbGet, please check your settings", ex);
                 }
 
                 throw new DownloadClientException("Unable to connect to NzbGet. " + ex.Message, ex);
             }
             catch (WebException ex)
             {
-                throw new DownloadClientException("Unable to connect to NzbGet. " + ex.Message, ex);
+                throw new DownloadClientUnavailableException("Unable to connect to NzbGet. " + ex.Message, ex);
             }
 
             var result = Json.Deserialize<JsonRpcResponse<T>>(response.Content);

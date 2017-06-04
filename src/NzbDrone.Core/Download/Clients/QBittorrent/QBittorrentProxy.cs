@@ -225,7 +225,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 }
                 catch (WebException ex)
                 {
-                    throw new DownloadClientException("Failed to connect to qBitTorrent, please check your settings.", ex);
+                    throw new DownloadClientUnavailableException("Failed to connect to qBitTorrent, please check your settings.", ex);
                 }
 
                 if (response.Content != "Ok.") // returns "Fails." on bad login

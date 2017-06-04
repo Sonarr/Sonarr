@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             catch (WebException ex)
             {
-                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings", ex);
+                throw new DownloadClientUnavailableException("Unable to connect to SABnzbd, please check your settings", ex);
             }
 
             CheckForError(response);

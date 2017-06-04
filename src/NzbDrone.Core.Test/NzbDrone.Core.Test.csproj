@@ -237,6 +237,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedIndexerStatusFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFilesFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupDownloadClientUnavailablePendingReleasesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupUnusedTagsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleasesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasksFixture.cs" />

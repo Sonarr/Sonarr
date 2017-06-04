@@ -77,7 +77,21 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             requestBuilder.Headers.Add("Accept-Encoding", "gzip,deflate");
 
             var httpRequest = requestBuilder.Build();
-            var response = _httpClient.Execute(httpRequest);
+            HttpResponse response;
+
+            try
+            {
+                response = _httpClient.Execute(httpRequest);
+            }
+            catch (HttpException ex)
+            {
+                throw new DownloadClientException("Unable to connect to Hadouken, please check your settings", ex);
+            }
+            catch (WebException ex)
+            {
+                throw new DownloadClientUnavailableException("Unable to connect to Hadouken, please check your settings", ex);
+            }
+
             var result = Json.Deserialize<JsonRpcResponse<T>>(response.Content);
 
             if (result.Error != null)
