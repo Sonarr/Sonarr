@@ -66,6 +66,7 @@ namespace NzbDrone.Core.Download
                     downloadProtocol == DownloadProtocol.Torrent && torrentFailed)
                 {
                     failed.Add(report);
+                    continue;
                 }
 
                 try

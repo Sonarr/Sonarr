@@ -6,7 +6,9 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
@@ -35,7 +37,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
                             .Build();
         }
 
-        private RemoteEpisode GetRemoteEpisode(List<Episode> episodes, QualityModel quality)
+        private RemoteEpisode GetRemoteEpisode(List<Episode> episodes, QualityModel quality, DownloadProtocol downloadProtocol = DownloadProtocol.Usenet)
         {
             var remoteEpisode = new RemoteEpisode();
             remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
@@ -45,6 +47,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             remoteEpisode.Episodes.AddRange(episodes);
 
             remoteEpisode.Release = new ReleaseInfo();
+            remoteEpisode.Release.DownloadProtocol = downloadProtocol;
             remoteEpisode.Release.PublishDate = DateTime.UtcNow;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
@@ -192,7 +195,6 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
-            decisions.Add(new DownloadDecision(remoteEpisode));
 
             Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>()), Times.Never());
@@ -224,6 +226,42 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
 
             Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IPendingReleaseService>().Verify(v => v.Add(It.IsAny<DownloadDecision>(), It.IsAny<PendingReleaseReason>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_add_to_failed_if_already_failed_for_that_protocol()
+        {
+            var episodes = new List<Episode> { GetEpisode(1) };
+            var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode));
+            decisions.Add(new DownloadDecision(remoteEpisode));
+
+            Mocker.GetMock<IDownloadService>().Setup(s => s.DownloadReport(It.IsAny<RemoteEpisode>()))
+                  .Throws(new DownloadClientUnavailableException("Download client failed"));
+
+            Subject.ProcessDecisions(decisions);
+            Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>()), Times.Once());
+        }
+
+        [Test]
+        public void should_not_add_to_failed_if_failed_for_a_different_protocol()
+        {
+            var episodes = new List<Episode> { GetEpisode(1) };
+            var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p), DownloadProtocol.Usenet);
+            var remoteEpisode2 = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p), DownloadProtocol.Torrent);
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            Mocker.GetMock<IDownloadService>().Setup(s => s.DownloadReport(It.Is<RemoteEpisode>(r => r.Release.DownloadProtocol == DownloadProtocol.Usenet)))
+                  .Throws(new DownloadClientUnavailableException("Download client failed"));
+
+            Subject.ProcessDecisions(decisions);
+            Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.Is<RemoteEpisode>(r => r.Release.DownloadProtocol == DownloadProtocol.Usenet)), Times.Once());
+            Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.Is<RemoteEpisode>(r => r.Release.DownloadProtocol == DownloadProtocol.Torrent)), Times.Once());
         }
     }
 }
