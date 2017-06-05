@@ -11,6 +11,11 @@ namespace NzbDrone.Core.Notifications.Plex.Models
 
     public class PlexSection
     {
+        public PlexSection()
+        {
+            Locations = new List<PlexSectionLocation>();
+        }
+
         [JsonProperty("key")]
         public int Id { get; set; }
 
@@ -23,6 +28,11 @@ namespace NzbDrone.Core.Notifications.Plex.Models
 
     public class PlexSectionsContainer
     {
+        public PlexSectionsContainer()
+        {
+            Sections = new List<PlexSection>();
+        }
+
         [JsonProperty("Directory")]
         public List<PlexSection> Sections { get; set; }
     }
