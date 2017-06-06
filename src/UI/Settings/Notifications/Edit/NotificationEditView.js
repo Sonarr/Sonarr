@@ -91,8 +91,9 @@ var view = Marionette.ItemView.extend({
         this.ui.indicator.show();
 
         var self = this;
+        var callbackUrl = window.location.origin + window.NzbDrone.UrlBase + '/oauth.html';
 
-        var promise = this.model.requestAction('startOAuth', { callbackUrl: window.location.origin + '/oauth.html' })
+        var promise = this.model.requestAction('startOAuth', { callbackUrl: callbackUrl })
             .then(function(response) {
                 return self._showOAuthWindow(response.oauthUrl);
             })
