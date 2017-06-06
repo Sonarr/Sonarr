@@ -32,6 +32,7 @@ namespace NzbDrone.Core.History
                                   IHandle<EpisodeImportedEvent>,
                                   IHandle<DownloadFailedEvent>,
                                   IHandle<EpisodeFileDeletedEvent>,
+                                  IHandle<EpisodeFileRenamedEvent>,
                                   IHandle<SeriesDeletedEvent>
     {
         private readonly IHistoryRepository _historyRepository;
@@ -252,6 +253,34 @@ namespace NzbDrone.Core.History
                 };
 
                 history.Data.Add("Reason", message.Reason.ToString());
+
+                _historyRepository.Insert(history);
+            }
+        }
+
+        public void Handle(EpisodeFileRenamedEvent message)
+        {
+            var sourcePath = message.OriginalPath;
+            var sourceRelativePath = message.Series.Path.GetRelativePath(message.OriginalPath);
+            var path = Path.Combine(message.Series.Path, message.EpisodeFile.RelativePath);
+            var relativePath = message.EpisodeFile.RelativePath;
+
+            foreach (var episode in message.EpisodeFile.Episodes.Value)
+            {
+                var history = new History
+                {
+                    EventType = HistoryEventType.EpisodeFileRenamed,
+                    Date = DateTime.UtcNow,
+                    Quality = message.EpisodeFile.Quality,
+                    SourceTitle = message.OriginalPath,
+                    SeriesId = message.EpisodeFile.SeriesId,
+                    EpisodeId = episode.Id,
+                };
+
+                history.Data.Add("SourcePath", sourcePath);
+                history.Data.Add("SourceRelativePath", sourceRelativePath);
+                history.Data.Add("Path", path);
+                history.Data.Add("RelativePath", relativePath);
 
                 _historyRepository.Insert(history);
             }
