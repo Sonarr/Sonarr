@@ -5,6 +5,7 @@ var EpisodeFileModel = require('../../Series/EpisodeFileModel');
 var EpisodeFileCollection = require('../../Series/EpisodeFileCollection');
 var FileSizeCell = require('../../Cells/FileSizeCell');
 var QualityCell = require('../../Cells/QualityCell');
+var FileLinkCell = require('../../Cells/FileLinkCell');
 var DeleteEpisodeFileCell = require('../../Cells/DeleteEpisodeFileCell');
 var NoFileView = require('./NoFileView');
 var LoadingView = require('../../Shared/LoadingView');
@@ -36,6 +37,12 @@ module.exports = Marionette.Layout.extend({
             cell     : QualityCell,
             sortable : false,
             editable : true
+        },
+        {
+            name     : 'this',
+            label    : '',
+            cell     : FileLinkCell,
+            sortable : false
         },
         {
             name     : 'this',
