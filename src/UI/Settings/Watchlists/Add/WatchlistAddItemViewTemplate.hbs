@@ -1,0 +1,30 @@
+<div class="add-thingy">
+    <div>
+        {{implementationName}}
+    </div>
+    <div class="pull-right">
+        {{#if_gt presets.length compare=0}}
+        <button class="btn btn-xs btn-default x-custom">
+            Custom
+        </button>
+        <div class="btn-group">
+            <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                Presets
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                {{#each presets}}
+                <li class="x-preset" data-id="{{name}}">
+                    <a>{{name}}</a>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/if_gt}}
+        {{#if infoLink}}
+        <a class="btn btn-xs btn-default x-info" href="{{infoLink}}">
+            <i class="icon-sonarr-form-info"/>
+        </a>
+        {{/if}}
+    </div>
+</div>
