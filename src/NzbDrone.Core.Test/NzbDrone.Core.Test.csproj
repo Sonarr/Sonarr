@@ -187,6 +187,7 @@
     <Compile Include="Download\DownloadClientTests\QBittorrentTests\QBittorrentFixture.cs" />
     <Compile Include="Download\DownloadClientTests\SabnzbdTests\JsonConvertersTests\SabnzbdQueueTimeConverterFixture.cs" />
     <Compile Include="Download\DownloadClientTests\SabnzbdTests\SabnzbdFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\PutioTests\PutioFixture.cs" />
     <Compile Include="Download\DownloadClientTests\TransmissionTests\TransmissionFixture.cs" />
     <Compile Include="Download\DownloadClientTests\TransmissionTests\TransmissionFixtureBase.cs" />
     <Compile Include="Download\DownloadClientTests\UTorrentTests\UTorrentFixture.cs" />
