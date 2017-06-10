@@ -20,15 +20,24 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         public void Register(IPipelines pipelines)
         {
-            pipelines.BeforeRequest.AddItemToStartOfPipeline((Func<NancyContext, Response>) Handle);
+            if (_urlBase.IsNotNullOrWhiteSpace())
+            {
+                pipelines.BeforeRequest.AddItemToStartOfPipeline((Func<NancyContext, Response>) Handle);
+            }
         }
 
         private Response Handle(NancyContext context)
         {
+            var basePath = context.Request.Url.BasePath;
 
-            if (_urlBase.IsNotNullOrWhiteSpace() && _urlBase != context.Request.Url.BasePath)
+            if (basePath.IsNullOrWhiteSpace())
             {
                 return new RedirectResponse($"{_urlBase}{context.Request.Path}{context.Request.Url.Query}");
+            }
+
+            if (_urlBase != basePath)
+            {
+                return new NotFoundResponse();
             }
 
             return null;
