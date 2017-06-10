@@ -320,12 +320,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
             catch (DownloadClientAuthenticationException ex) // User could not have permission to access to downloadstation
             {
-                _logger.Error(ex);
+                _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure(string.Empty, ex.Message);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, "Error testing Torrent Download Station");
                 return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
             }
         }
@@ -346,7 +346,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
             catch (WebException ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, "Unable to connect to Torrent Download Station");
 
                 if (ex.Status == WebExceptionStatus.ConnectFailure)
                 {
@@ -359,7 +359,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, "Error testing Torrent Download Station");
                 return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
             }
         }

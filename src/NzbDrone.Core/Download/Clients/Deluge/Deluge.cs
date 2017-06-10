@@ -191,12 +191,13 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (DownloadClientAuthenticationException ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, ex.Message);
+
                 return new NzbDroneValidationFailure("Password", "Authentication failed");
             }
             catch (WebException ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, "Unble to test connection");
                 switch (ex.Status)
                 {
                     case WebExceptionStatus.ConnectFailure:
@@ -220,7 +221,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, "Failed to test connection");
                 return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
 
@@ -271,7 +272,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, "Unable to get torrents");
                 return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 

@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             catch (DownloadClientException ex)
             {
-                _logger.Warn("Couldn't get download queue. {0}", ex.Message);
+                _logger.Warn(ex, "Couldn't get download queue. {0}", ex.Message);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -120,7 +120,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             catch (DownloadClientException ex)
             {
-                _logger.Error(ex);
+                _logger.Warn(ex, "Couldn't get download queue. {0}", ex.Message);
+
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -388,7 +389,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, ex.Message);
                 return new ValidationFailure("Host", "Unable to connect to SABnzbd");
             }
         }

@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Messaging.Commands
             }
             catch (ThreadAbortException ex)
             {
-                _logger.Error(ex);
+                _logger.Error(ex, "Thread aborted");
                 Thread.ResetAbort();
             }
             catch (Exception ex)
