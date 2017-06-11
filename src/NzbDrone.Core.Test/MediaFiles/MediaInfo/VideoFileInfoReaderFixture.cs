@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -30,10 +30,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
         {
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "Files", "Media", "H264_sample.mp4");
 
-            Subject.GetRunTime(path).Seconds.Should().Be(10);
-
+            Subject.GetRunTime(path).Value.Seconds.Should().Be(10);
         }
-
 
         [Test]
         public void get_info()
@@ -86,7 +84,6 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.VideoCodec.Should().Be("AVC");
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
-
         }
 
         [Test]

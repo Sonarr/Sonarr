@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IDetectSample
     {
-        bool IsSample(Series series, QualityModel quality, string path, long size, bool isSpecial);
+        DetectSampleResult IsSample(Series series, string path, bool isSpecial);
     }
 
     public class DetectSample : IDetectSample
@@ -18,22 +16,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly Logger _logger;
 
-        private static List<Quality> _largeSampleSizeQualities = new List<Quality> { Quality.HDTV1080p, Quality.WEBDL1080p, Quality.Bluray1080p };
-
         public DetectSample(IVideoFileInfoReader videoFileInfoReader, Logger logger)
         {
             _videoFileInfoReader = videoFileInfoReader;
             _logger = logger;
         }
 
-        public static long SampleSizeLimit => 70.Megabytes();
-
-        public bool IsSample(Series series, QualityModel quality, string path, long size, bool isSpecial)
+        public DetectSampleResult IsSample(Series series, string path, bool isSpecial)
         {
             if (isSpecial)
             {
                 _logger.Debug("Special, skipping sample check");
-                return false;
+                return DetectSampleResult.NotSample;
             }
 
             var extension = Path.GetExtension(path);
@@ -41,61 +35,39 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             if (extension != null && extension.Equals(".flv", StringComparison.InvariantCultureIgnoreCase))
             {
                 _logger.Debug("Skipping sample check for .flv file");
-                return false;
+                return DetectSampleResult.NotSample;
             }
 
             if (extension != null && extension.Equals(".strm", StringComparison.InvariantCultureIgnoreCase))
             {
                 _logger.Debug("Skipping sample check for .strm file");
-                return false;
+                return DetectSampleResult.NotSample;
             }
 
-            try
+            var runTime = _videoFileInfoReader.GetRunTime(path);
+
+            if (!runTime.HasValue)
             {
-                var runTime = _videoFileInfoReader.GetRunTime(path);
-                var minimumRuntime = GetMinimumAllowedRuntime(series);
-
-                if (runTime.TotalMinutes.Equals(0))
-                {
-                    _logger.Error("[{0}] has a runtime of 0, is it a valid video file?", path);
-                    return true;
-                }
-
-                if (runTime.TotalSeconds < minimumRuntime)
-                {
-                    _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {2} seconds", path, runTime, minimumRuntime);
-                    return true;
-                }
+                _logger.Error("Failed to get runtime from the file, make sure mediainfo is available");
+                return DetectSampleResult.Indeterminate;
             }
 
-            catch (DllNotFoundException)
-            {
-                _logger.Debug("Falling back to file size detection");
+            var minimumRuntime = GetMinimumAllowedRuntime(series);
 
-                return CheckSize(size, quality);
+            if (runTime.Value.TotalMinutes.Equals(0))
+            {
+                _logger.Error("[{0}] has a runtime of 0, is it a valid video file?", path);
+                return DetectSampleResult.Sample;
+            }
+
+            if (runTime.Value.TotalSeconds < minimumRuntime)
+            {
+                _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {2} seconds", path, runTime, minimumRuntime);
+                return DetectSampleResult.Sample;
             }
 
             _logger.Debug("Runtime is over 90 seconds");
-            return false;
-        }
-
-        private bool CheckSize(long size, QualityModel quality)
-        {
-            {
-                if (size < SampleSizeLimit * 2)
-                {
-                    _logger.Debug("1080p file is less than sample limit");
-                    return true;
-                }
-            }
-
-            if (size < SampleSizeLimit)
-            {
-                _logger.Debug("File is less than sample limit");
-                return true;
-            }
-
-            return false;
+            return DetectSampleResult.NotSample;
         }
 
         private int GetMinimumAllowedRuntime(Series series)

@@ -745,6 +745,7 @@
     <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />
     <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
     <Compile Include="MediaFiles\Commands\DownloadedEpisodesScanCommand.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\DetectSampleResult.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportMode.cs" />
     <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />

@@ -284,7 +284,7 @@
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingServiceTests\MoveEpisodeFileFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMakerFixture.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\SampleServiceFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\DetectSampleFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecificationFixture.cs" />
