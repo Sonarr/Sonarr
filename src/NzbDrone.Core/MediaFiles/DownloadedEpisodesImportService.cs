@@ -113,10 +113,7 @@ namespace NzbDrone.Core.MediaFiles
                     return false;
                 }
 
-                var size = _diskProvider.GetFileSize(videoFile);
-                var quality = QualityParser.ParseQuality(videoFile);
-
-                if (!_detectSample.IsSample(series, quality, videoFile, size, episodeParseResult.IsPossibleSpecialEpisode))
+                if (_detectSample.IsSample(series, videoFile, episodeParseResult.IsPossibleSpecialEpisode) != DetectSampleResult.Sample)
                 {
                     _logger.Warn("Non-sample file detected: [{0}]", videoFile);
                     return false;

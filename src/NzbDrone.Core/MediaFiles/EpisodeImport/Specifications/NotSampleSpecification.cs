@@ -26,14 +26,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             }
 
             var sample = _detectSample.IsSample(localEpisode.Series,
-                                                localEpisode.Quality,
                                                 localEpisode.Path,
-                                                localEpisode.Size,
                                                 localEpisode.IsSpecial);
 
-            if (sample)
+            if (sample == DetectSampleResult.Sample)
             {
                 return Decision.Reject("Sample");
+            }
+
+            else if (sample == DetectSampleResult.Indeterminate)
+            {
+                return Decision.Reject("Unable to determine if file is a sample");
             }
 
             return Decision.Accept();

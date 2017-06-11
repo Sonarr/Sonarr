@@ -9,7 +9,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
     public interface IVideoFileInfoReader
     {
         MediaInfoModel GetMediaInfo(string filename);
-        TimeSpan GetRunTime(string filename);
+        TimeSpan? GetRunTime(string filename);
     }
 
     public class VideoFileInfoReader : IVideoFileInfoReader
@@ -181,16 +181,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return null;
         }
 
-        public TimeSpan GetRunTime(string filename)
+        public TimeSpan? GetRunTime(string filename)
         {
             var info = GetMediaInfo(filename);
 
-            if (info == null)
-            {
-                return new TimeSpan();
-            }
-
-            return info.RunTime;
+            return info?.RunTime;
         }
 
         private TimeSpan GetBestRuntime(int audio, int video, int general)

@@ -170,11 +170,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             return videoFiles.Count(file =>
             {
-                var size = _diskProvider.GetFileSize(file);
-                var fileQuality = QualityParser.ParseQuality(file);
-                var sample = _detectSample.IsSample(series, GetQuality(folderInfo, fileQuality, series), file, size, folderInfo.IsPossibleSpecialEpisode);
+                var sample = _detectSample.IsSample(series, file, folderInfo.IsPossibleSpecialEpisode);
 
-                if (sample)
+                if (sample == DetectSampleResult.Sample)
                 {
                     return false;
                 }
