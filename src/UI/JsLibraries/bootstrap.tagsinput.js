@@ -11,11 +11,17 @@
     itemText: function(item) {
       return this.itemValue(item);
     },
+    itemTitle: function(item) {
+      return null;
+    },
     freeInput: true,
     addOnBlur: true,
     maxTags: undefined,
     maxChars: undefined,
     confirmKeys: [13, 44],
+    delimiter: ',',
+    delimiterRegex: null,
+    cancelConfirmKeysOnEmpty: true,
     onTagExists: function(item, $tag) {
       $tag.hide().fadeIn();
     },
@@ -41,10 +47,8 @@
     this.$container = $('<div class="bootstrap-tagsinput"></div>');
     this.$input = $('<input type="text" placeholder="' + this.placeholderText + '"/>').appendTo(this.$container);
 
-    this.$element.after(this.$container);
+    this.$element.before(this.$container);
 
-//    var inputWidth = (this.inputSize < 3 ? 3 : this.inputSize) + "em";
-//    this.$input.get(0).style.cssText = "width: " + inputWidth + " !important;";
     this.build(options);
   }
 
@@ -55,7 +59,7 @@
      * Adds the given item as a new tag. Pass true to dontPushVal to prevent
      * updating the elements val()
      */
-    add: function(item, dontPushVal) {
+    add: function(item, dontPushVal, options) {
       var self = this;
 
       if (self.options.maxTags && self.itemsArray.length >= self.options.maxTags)
@@ -83,7 +87,8 @@
         self.remove(self.itemsArray[0]);
 
       if (typeof item === "string" && this.$element[0].tagName === 'INPUT') {
-        var items = item.split(',');
+        var delimiter = (self.options.delimiterRegex) ? self.options.delimiterRegex : self.options.delimiter;
+        var items = item.split(delimiter);
         if (items.length > 1) {
           for (var i = 0; i < items.length; i++) {
             this.add(items[i], true);
@@ -97,7 +102,8 @@
 
       var itemValue = self.options.itemValue(item),
           itemText = self.options.itemText(item),
-          tagClass = self.options.tagClass(item);
+          tagClass = self.options.tagClass(item),
+          itemTitle = self.options.itemTitle(item);
 
       // Ignore items allready added
       var existing = $.grep(self.itemsArray, function(item) { return self.options.itemValue(item) === itemValue; } )[0];
@@ -115,7 +121,7 @@
         return;
 
       // raise beforeItemAdd arg
-      var beforeItemAddEvent = $.Event('beforeItemAdd', { item: item, cancel: false });
+      var beforeItemAddEvent = $.Event('beforeItemAdd', { item: item, cancel: false, options: options});
       self.$element.trigger(beforeItemAddEvent);
       if (beforeItemAddEvent.cancel)
         return;
@@ -124,7 +130,8 @@
       self.itemsArray.push(item);
 
       // add a tag element
-      var $tag = $('<span class="tag ' + htmlEncode(tagClass) + '">' + htmlEncode(itemText) + '<span data-role="remove"></span></span>');
+
+      var $tag = $('<span class="tag ' + htmlEncode(tagClass) + (itemTitle !== null ? ('" title="' + itemTitle) : '') + '">' + htmlEncode(itemText) + '<span data-role="remove"></span></span>');
       $tag.data('item', item);
       self.findInputWrapper().before($tag);
       $tag.after(' ');
@@ -144,14 +151,14 @@
       if (self.options.maxTags === self.itemsArray.length || self.items().toString().length === self.options.maxInputLength)
         self.$container.addClass('bootstrap-tagsinput-max');
 
-      self.$element.trigger($.Event('itemAdded', { item: item }));
+      self.$element.trigger($.Event('itemAdded', { item: item, options: options }));
     },
 
     /**
      * Removes the given item. Pass true to dontPushVal to prevent updating the
      * elements val()
      */
-    remove: function(item, dontPushVal) {
+    remove: function(item, dontPushVal, options) {
       var self = this;
 
       if (self.objectItems) {
@@ -164,7 +171,7 @@
       }
 
       if (item) {
-        var beforeItemRemoveEvent = $.Event('beforeItemRemove', { item: item, cancel: false });
+        var beforeItemRemoveEvent = $.Event('beforeItemRemove', { item: item, cancel: false, options: options });
         self.$element.trigger(beforeItemRemoveEvent);
         if (beforeItemRemoveEvent.cancel)
           return;
@@ -182,7 +189,7 @@
       if (self.options.maxTags > self.itemsArray.length)
         self.$container.removeClass('bootstrap-tagsinput-max');
 
-      self.$element.trigger($.Event('itemRemoved',  { item: item }));
+      self.$element.trigger($.Event('itemRemoved',  { item: item, options: options }));
     },
 
     /**
@@ -261,7 +268,7 @@
       makeOptionItemFunction(self.options, 'itemValue');
       makeOptionItemFunction(self.options, 'itemText');
       makeOptionFunction(self.options, 'tagClass');
-      
+
       // Typeahead Bootstrap version 2.3.2
       if (self.options.typeahead) {
         var typeahead = self.options.typeahead || {};
@@ -299,6 +306,7 @@
           },
           updater: function (text) {
             self.add(this.map[text]);
+            return this.map[text];
           },
           matcher: function (text) {
             return (text.toLowerCase().indexOf(this.query.trim().toLowerCase()) !== -1);
@@ -315,11 +323,21 @@
 
       // typeahead.js
       if (self.options.typeaheadjs) {
-          var typeaheadjs = self.options.typeaheadjs || {};
-          
-          self.$input.typeahead(null, typeaheadjs).on('typeahead:selected', $.proxy(function (obj, datum) {
-            if (typeaheadjs.valueKey)
-              self.add(datum[typeaheadjs.valueKey]);
+          var typeaheadConfig = null;
+          var typeaheadDatasets = {};
+
+          // Determine if main configurations were passed or simply a dataset
+          var typeaheadjs = self.options.typeaheadjs;
+          if ($.isArray(typeaheadjs)) {
+            typeaheadConfig = typeaheadjs[0];
+            typeaheadDatasets = typeaheadjs[1];
+          } else {
+            typeaheadDatasets = typeaheadjs;
+          }
+
+          self.$input.typeahead(typeaheadConfig, typeaheadDatasets).on('typeahead:selected', $.proxy(function (obj, datum) {
+            if (typeaheadDatasets.valueKey)
+              self.add(datum[typeaheadDatasets.valueKey]);
             else
               self.add(datum);
             self.$input.typeahead('val', '');
@@ -343,7 +361,7 @@
               }
           }, self));
         }
-        
+
 
       self.$container.on('keydown', 'input', $.proxy(function(event) {
         var $input = $(event.target),
@@ -359,7 +377,7 @@
           case 8:
             if (doGetCaretPosition($input[0]) === 0) {
               var prev = $inputWrapper.prev();
-              if (prev) {
+              if (prev.length) {
                 self.remove(prev.data('item'));
               }
             }
@@ -369,7 +387,7 @@
           case 46:
             if (doGetCaretPosition($input[0]) === 0) {
               var next = $inputWrapper.next();
-              if (next) {
+              if (next.length) {
                 self.remove(next.data('item'));
               }
             }
@@ -415,9 +433,16 @@
          var text = $input.val(),
          maxLengthReached = self.options.maxChars && text.length >= self.options.maxChars;
          if (self.options.freeInput && (keyCombinationInList(event, self.options.confirmKeys) || maxLengthReached)) {
-            self.add(maxLengthReached ? text.substr(0, self.options.maxChars) : text);
-            $input.val('');
-            event.preventDefault();
+            // Only attempt to add a tag if there is data in the field
+            if (text.length !== 0) {
+               self.add(maxLengthReached ? text.substr(0, self.options.maxChars) : text);
+               $input.val('');
+            }
+
+            // If the field is empty, let the event triggered fire as usual
+            if (self.options.cancelConfirmKeysOnEmpty === false) {
+               event.preventDefault();
+            }
          }
 
          // Reset internal input's size
@@ -493,7 +518,7 @@
   /**
    * Register JQuery plugin
    */
-  $.fn.tagsinput = function(arg1, arg2) {
+  $.fn.tagsinput = function(arg1, arg2, arg3) {
     var results = [];
 
     this.each(function() {
@@ -516,7 +541,11 @@
           results.push(tagsinput);
       } else if(tagsinput[arg1] !== undefined) {
           // Invoke function on existing tags input
-          var retVal = tagsinput[arg1](arg2);
+            if(tagsinput[arg1].length === 3 && arg3 !== undefined){
+               var retVal = tagsinput[arg1](arg2, null, arg3);
+            }else{
+               var retVal = tagsinput[arg1](arg2);
+            }
           if (retVal !== undefined)
               results.push(retVal);
       }
@@ -579,7 +608,7 @@
   }
 
   /**
-    * Returns boolean indicates whether user has pressed an expected key combination. 
+    * Returns boolean indicates whether user has pressed an expected key combination.
     * @param object keyPressEvent: JavaScript event object, refer
     *     http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/ecma-script-binding.html
     * @param object lookupList: expected key combinations, as in:
