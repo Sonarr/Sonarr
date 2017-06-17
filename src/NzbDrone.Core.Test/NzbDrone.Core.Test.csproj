@@ -165,6 +165,7 @@
     <Compile Include="DecisionEngineTests\Search\SeriesSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\SameEpisodesSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RawDiskSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\BlockedIndexerSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DiskSpace\DiskSpaceServiceFixture.cs" />
     <Compile Include="Download\CompletedDownloadServiceFixture.cs" />

@@ -350,6 +350,7 @@
     <Compile Include="DecisionEngine\Specifications\TorrentSeedingSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\SameEpisodesGrabSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RawDiskSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\BlockedIndexerSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
