@@ -64,6 +64,8 @@ namespace NzbDrone.Api.Authentication
                     new DefaultHmacProvider(new PassphraseKeyGenerator(_configService.HmacPassphrase, Encoding.ASCII.GetBytes(_configService.HmacSalt)))
                 );
 
+            FormsAuthentication.FormsAuthenticationCookieName = "_ncfa_sonarr";
+
             FormsAuthentication.Enable(pipelines, new FormsAuthenticationConfiguration
             {
                 RedirectUrl = _configFileProvider.UrlBase + "/login",
