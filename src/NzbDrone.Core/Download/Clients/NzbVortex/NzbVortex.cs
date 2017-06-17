@@ -47,17 +47,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            List<NzbVortexQueueItem> vortexQueue;
-
-            try
-            {
-                vortexQueue = _proxy.GetQueue(30, Settings);
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.Warn("Couldn't get download queue. {0}", ex.Message);
-                return Enumerable.Empty<DownloadClientItem>();
-            }
+            var vortexQueue = _proxy.GetQueue(30, Settings);
 
             var queueItems = new List<DownloadClientItem>();
 

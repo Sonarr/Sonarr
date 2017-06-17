@@ -72,42 +72,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            List<UTorrentTorrent> torrents;
-
-            try
-            {
-                var cacheKey = string.Format("{0}:{1}:{2}", Settings.Host, Settings.Port, Settings.TvCategory);
-                var cache = _torrentCache.Find(cacheKey);
-
-                var response = _proxy.GetTorrents(cache == null ? null : cache.CacheID, Settings);
-
-                if (cache != null && response.Torrents == null)
-                {
-                    var removedAndUpdated = new HashSet<string>(response.TorrentsChanged.Select(v => v.Hash).Concat(response.TorrentsRemoved));
-
-                    torrents = cache.Torrents
-                        .Where(v => !removedAndUpdated.Contains(v.Hash))
-                        .Concat(response.TorrentsChanged)
-                        .ToList();
-                }
-                else
-                {
-                    torrents = response.Torrents;
-                }
-
-                cache = new UTorrentTorrentCache
-                {
-                    CacheID = response.CacheNumber,
-                    Torrents = torrents
-                };
-
-                _torrentCache.Set(cacheKey, cache, TimeSpan.FromMinutes(15));
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.Error(ex, ex.Message);
-                return Enumerable.Empty<DownloadClientItem>();
-            }
+            var torrents = GetTorrents();
 
             var queueItems = new List<DownloadClientItem>();
 
@@ -171,6 +136,40 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
 
             return queueItems;
+        }
+
+        private List<UTorrentTorrent> GetTorrents()
+        {
+            List<UTorrentTorrent> torrents;
+
+            var cacheKey = string.Format("{0}:{1}:{2}", Settings.Host, Settings.Port, Settings.TvCategory);
+            var cache = _torrentCache.Find(cacheKey);
+
+            var response = _proxy.GetTorrents(cache == null ? null : cache.CacheID, Settings);
+
+            if (cache != null && response.Torrents == null)
+            {
+                var removedAndUpdated = new HashSet<string>(response.TorrentsChanged.Select(v => v.Hash).Concat(response.TorrentsRemoved));
+
+                torrents = cache.Torrents
+                    .Where(v => !removedAndUpdated.Contains(v.Hash))
+                    .Concat(response.TorrentsChanged)
+                    .ToList();
+            }
+            else
+            {
+                torrents = response.Torrents;
+            }
+
+            cache = new UTorrentTorrentCache
+            {
+                CacheID = response.CacheNumber,
+                Torrents = torrents
+            };
+
+            _torrentCache.Set(cacheKey, cache, TimeSpan.FromMinutes(15));
+
+            return torrents;
         }
 
         public override void RemoveItem(string downloadId, bool deleteData)

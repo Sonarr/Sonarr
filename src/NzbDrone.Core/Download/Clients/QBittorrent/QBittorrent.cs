@@ -89,19 +89,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            QBittorrentPreferences config;
-            List<QBittorrentTorrent> torrents;
-
-            try
-            {
-                config = _proxy.GetConfig(Settings);
-                torrents = _proxy.GetTorrents(Settings);
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.Error(ex, ex.Message);
-                return Enumerable.Empty<DownloadClientItem>();
-            }
+            var config = _proxy.GetConfig(Settings);
+            var torrents = _proxy.GetTorrents(Settings);
 
             var queueItems = new List<DownloadClientItem>();
 

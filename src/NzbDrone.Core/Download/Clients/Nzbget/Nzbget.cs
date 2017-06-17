@@ -51,19 +51,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         private IEnumerable<DownloadClientItem> GetQueue()
         {
-            NzbgetGlobalStatus globalStatus;
-            List<NzbgetQueueItem> queue;
-
-            try
-            {
-                globalStatus = _proxy.GetGlobalStatus(Settings);
-                queue = _proxy.GetQueue(Settings);
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.Error(ex, ex.Message);
-                return Enumerable.Empty<DownloadClientItem>();
-            }
+            var globalStatus = _proxy.GetGlobalStatus(Settings);
+            var queue = _proxy.GetQueue(Settings);
 
             var queueItems = new List<DownloadClientItem>();
 
@@ -119,17 +108,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         private IEnumerable<DownloadClientItem> GetHistory()
         {
-            List<NzbgetHistoryItem> history;
-
-            try
-            {
-                history = _proxy.GetHistory(Settings).Take(_configService.DownloadClientHistoryLimit).ToList();
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.Error(ex, ex.Message);
-                return Enumerable.Empty<DownloadClientItem>();
-            }
+            var history = _proxy.GetHistory(Settings).Take(_configService.DownloadClientHistoryLimit).ToList();
 
             var historyItems = new List<DownloadClientItem>();
 

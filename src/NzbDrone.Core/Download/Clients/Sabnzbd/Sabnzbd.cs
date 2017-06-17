@@ -112,18 +112,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private IEnumerable<DownloadClientItem> GetHistory()
         {
-            SabnzbdHistory sabHistory;
-
-            try
-            {
-                sabHistory = _proxy.GetHistory(0, _configService.DownloadClientHistoryLimit, Settings.TvCategory, Settings);
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.Warn(ex, "Couldn't get download queue. {0}", ex.Message);
-
-                return Enumerable.Empty<DownloadClientItem>();
-            }
+            var sabHistory = _proxy.GetHistory(0, _configService.DownloadClientHistoryLimit, Settings.TvCategory, Settings);
 
             var historyItems = new List<DownloadClientItem>();
 
@@ -189,7 +178,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     }
                 }
 
-                
+
                 historyItems.Add(historyItem);
             }
 

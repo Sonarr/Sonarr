@@ -33,17 +33,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            List<TransmissionTorrent> torrents;
-
-            try
-            {
-                torrents = _proxy.GetTorrents(Settings);
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.Error(ex, ex.Message);
-                return Enumerable.Empty<DownloadClientItem>();
-            }
+            var torrents = _proxy.GetTorrents(Settings);
 
             var items = new List<DownloadClientItem>();
 

@@ -81,21 +81,13 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             IEnumerable<DelugeTorrent> torrents;
 
-            try
+            if (!Settings.TvCategory.IsNullOrWhiteSpace())
             {
-                if (!Settings.TvCategory.IsNullOrWhiteSpace())
-                {
-                    torrents = _proxy.GetTorrentsByLabel(Settings.TvCategory, Settings);
-                }
-                else
-                {
-                    torrents = _proxy.GetTorrents(Settings);
-                }
+                torrents = _proxy.GetTorrentsByLabel(Settings.TvCategory, Settings);
             }
-            catch (DownloadClientException ex)
+            else
             {
-                _logger.Error(ex, "Couldn't get list of torrents");
-                return Enumerable.Empty<DownloadClientItem>();
+                torrents = _proxy.GetTorrents(Settings);
             }
 
             var items = new List<DownloadClientItem>();

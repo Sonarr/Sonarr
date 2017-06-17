@@ -35,17 +35,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            HadoukenTorrent[] torrents;
-
-            try
-            {
-                torrents = _proxy.GetTorrents(Settings);
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.ErrorException(ex.Message, ex);
-                return Enumerable.Empty<DownloadClientItem>();
-            }
+            var torrents = _proxy.GetTorrents(Settings);
 
             var items = new List<DownloadClientItem>();
 
