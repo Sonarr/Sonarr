@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.Download
             _epoch = DateTime.UtcNow;
         }
 
-        private void WithStatus(DownloadClientStatus status)
+        private DownloadClientStatus WithStatus(DownloadClientStatus status)
         {
             Mocker.GetMock<IDownloadClientStatusRepository>()
                 .Setup(v => v.FindByProviderId(1))
@@ -27,6 +27,8 @@ namespace NzbDrone.Core.Test.Download
             Mocker.GetMock<IDownloadClientStatusRepository>()
                 .Setup(v => v.All())
                 .Returns(new[] { status });
+
+            return status;
         }
 
         private void VerifyUpdate()
@@ -75,6 +77,54 @@ namespace NzbDrone.Core.Test.Download
 
             var status = Subject.GetBlockedProviders().FirstOrDefault();
             status.Should().NotBeNull();
+        }
+
+        [Test]
+        public void should_not_escalate_further_till_after_5_minutes_since_initial_failure()
+        {
+            var origStatus = WithStatus(new DownloadClientStatus
+            {
+                InitialFailure = _epoch - TimeSpan.FromMinutes(4),
+                MostRecentFailure = _epoch - TimeSpan.FromSeconds(4),
+                EscalationLevel = 3
+            });
+
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+
+            var status = Subject.GetBlockedProviders().FirstOrDefault();
+            status.Should().BeNull();
+
+            origStatus.EscalationLevel.Should().Be(3);
+        }
+
+        [Test]
+        public void should_escalate_further_after_5_minutes_since_initial_failure()
+        {
+            WithStatus(new DownloadClientStatus
+            {
+                InitialFailure = _epoch - TimeSpan.FromMinutes(6),
+                MostRecentFailure = _epoch - TimeSpan.FromSeconds(120),
+                EscalationLevel = 3
+            });
+
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+
+            var status = Subject.GetBlockedProviders().FirstOrDefault();
+            status.Should().NotBeNull();
+
+            status.EscalationLevel.Should().BeGreaterThan(3);
         }
 
         [Test]

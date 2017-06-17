@@ -93,14 +93,18 @@ namespace NzbDrone.Core.ThingiProvider.Status
                 var status = GetProviderStatus(providerId);
 
                 var now = DateTime.UtcNow;
+                status.MostRecentFailure = now;
 
                 if (status.EscalationLevel == 0)
                 {
                     status.InitialFailure = now;
+                    status.EscalationLevel = 1;
+                    escalate = false;
                 }
 
-                status.MostRecentFailure = now;
-                if (escalate)
+                var inGracePeriod = (status.InitialFailure.Value + MinimumTimeSinceInitialFailure) > now;
+
+                if (escalate && !inGracePeriod)
                 {
                     status.EscalationLevel = Math.Min(MaximumEscalationLevel, status.EscalationLevel + 1);
                 }
@@ -113,7 +117,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
                     }
                 }
 
-                if (status.InitialFailure.Value + MinimumTimeSinceInitialFailure <= now || minimumBackOff != TimeSpan.Zero)
+                if (!inGracePeriod || minimumBackOff != TimeSpan.Zero)
                 {
                     status.DisabledTill = now + CalculateBackOffPeriod(status);
                 }
