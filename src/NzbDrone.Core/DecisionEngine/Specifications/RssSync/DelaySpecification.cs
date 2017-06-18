@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -73,8 +73,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
 
             // If quality meets or exceeds the best allowed quality in the profile accept it immediately
-            var bestQualityInProfile = new QualityModel(profile.LastAllowedQuality());
-            var isBestInProfile = comparer.Compare(subject.ParsedEpisodeInfo.Quality, bestQualityInProfile) >= 0;
+            var bestQualityInProfile = profile.LastAllowedQuality();
+            var isBestInProfile = comparer.Compare(subject.ParsedEpisodeInfo.Quality.Quality, bestQualityInProfile) >= 0;
             var isBestInProfileLanguage = comparerLanguage.Compare(subject.ParsedEpisodeInfo.Language, languageProfile.LastAllowedLanguage()) >= 0;
 
             if (isBestInProfile && isBestInProfileLanguage && isPreferredProtocol)

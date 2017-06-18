@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.Datastore
             var profile = new Profile
                 {
                     Name = "Test",
-                    Cutoff = Quality.WEBDL720p,
+                    Cutoff = Quality.WEBDL720p.Id,
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                 };
 
