@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var profile = new Profile 
             {  
                 Id = 1,
-                Cutoff = Quality.WEBDL480p,
+                Cutoff = Quality.WEBDL480p.Id,
                 Items = new List<ProfileQualityItem> 
                 { 
                     new ProfileQualityItem { Allowed = true, Quality = Quality.SDTV },

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.CutoffNotMet(
                 new Profile 
                 { 
-                    Cutoff = Quality.Bluray1080p, 
+                    Cutoff = Quality.Bluray1080p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
                 },
                 new LanguageProfile
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.CutoffNotMet(
                 new Profile
                 {
-                    Cutoff = Quality.HDTV720p, 
+                    Cutoff = Quality.HDTV720p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
                 },
                 new LanguageProfile
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.CutoffNotMet(
                 new Profile 
                 { 
-                    Cutoff = Quality.HDTV720p, 
+                    Cutoff = Quality.HDTV720p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
                 },
                 new LanguageProfile
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.CutoffNotMet(
                 new Profile 
                 { 
-                    Cutoff = Quality.HDTV720p, 
+                    Cutoff = Quality.HDTV720p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
                 },
                 new LanguageProfile
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.CutoffNotMet(
                 new Profile 
                 {
-                    Cutoff = Quality.HDTV720p, 
+                    Cutoff = Quality.HDTV720p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
                 },
                 new LanguageProfile
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Profile _profile = new Profile
                 {
-                    Cutoff = Quality.HDTV720p,
+                    Cutoff = Quality.HDTV720p.Id,
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                 };
 
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Profile _profile = new Profile
             {
-                Cutoff = Quality.HDTV720p,
+                Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
             };
 
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Profile _profile = new Profile
             {
-                Cutoff = Quality.HDTV720p,
+                Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
             };
 
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Profile _profile = new Profile
             {
-                Cutoff = Quality.HDTV720p,
+                Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
             };
 
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Profile _profile = new Profile
             {
-                Cutoff = Quality.HDTV720p,
+                Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
             };
 

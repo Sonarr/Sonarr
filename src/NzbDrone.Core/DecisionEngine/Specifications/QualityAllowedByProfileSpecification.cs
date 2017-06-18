@@ -1,3 +1,4 @@
+﻿using System;
 using NLog;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -19,7 +20,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             _logger.Debug("Checking if report meets quality requirements. {0}", subject.ParsedEpisodeInfo.Quality);
-            if (!subject.Series.Profile.Value.Items.Exists(v => v.Allowed && v.Quality == subject.ParsedEpisodeInfo.Quality.Quality))
+
+            var profile = subject.Series.Profile.Value;
+            var qualityIndex = profile.GetIndex(subject.ParsedEpisodeInfo.Quality.Quality);
+            var qualityOrGroup = profile.Items[qualityIndex.Index];
+
+            if (!qualityOrGroup.Allowed)
             {
                 _logger.Debug("Quality {0} rejected by Series' quality profile", subject.ParsedEpisodeInfo.Quality);
                 return Decision.Reject("{0} is not wanted in profile", subject.ParsedEpisodeInfo.Quality.Quality);

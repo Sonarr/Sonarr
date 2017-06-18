@@ -27,7 +27,7 @@ namespace NzbDrone.Api.Profiles
                 .ToList();
 
             var profile = new Profile();
-            profile.Cutoff = Quality.Unknown;
+            profile.Cutoff = Quality.Unknown.Id;
             profile.Items = items;
 
             return new List<ProfileResource> { profile.ToResource() };

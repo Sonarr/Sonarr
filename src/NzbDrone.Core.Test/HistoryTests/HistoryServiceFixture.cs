@@ -30,13 +30,13 @@ namespace NzbDrone.Core.Test.HistoryTests
         {
             _profile = new Profile
                 {
-                    Cutoff = Quality.WEBDL720p,
+                    Cutoff = Quality.WEBDL720p.Id,
                     Items = QualityFixture.GetDefaultQualities(),
                 };
 
             _profileCustom = new Profile
                 {
-                    Cutoff = Quality.WEBDL720p, 
+                    Cutoff = Quality.WEBDL720p.Id, 
                     Items = QualityFixture.GetDefaultQualities(Quality.DVD),
 
                 };

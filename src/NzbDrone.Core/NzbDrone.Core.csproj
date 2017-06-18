@@ -307,6 +307,7 @@
     <Compile Include="Datastore\Migration\111_create_language_profiles.cs" />
     <Compile Include="Datastore\Migration\115_add_downloadclient_status.cs" />
     <Compile Include="Datastore\Migration\121_update_animetosho_url.cs" />
+    <Compile Include="Datastore\Migration\117_add_webrip_and_br480_qualites_in_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -990,6 +991,7 @@
     <Compile Include="Profiles\Qualities\ProfileQualityItem.cs" />
     <Compile Include="Profiles\Qualities\ProfileRepository.cs" />
     <Compile Include="Profiles\Qualities\ProfileService.cs" />
+    <Compile Include="Profiles\Qualities\QualityIndex.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\QualityDetectionSource.cs" />
     <Compile Include="Qualities\QualitySource.cs" />
