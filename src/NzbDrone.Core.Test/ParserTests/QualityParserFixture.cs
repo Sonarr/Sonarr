@@ -99,6 +99,13 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.WEBDL480p, proper);
         }
 
+        [TestCase("Clarissa.Explains.It.All.S02E10.480p.HULU.WEBRip.x264-Puffin", false)]
+        [TestCase("Duck.Dynasty.S10E14.Techs.And.Balances.480p.AE.WEBRip.AAC2.0.x264-SEA", false)]
+        public void should_parse_webrip480p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.WEBRip480p, proper);
+        }
+
         [TestCase("Dexter - S01E01 - Title [HDTV]", false)]
         [TestCase("Dexter - S01E01 - Title [HDTV-720p]", false)]
         [TestCase("Pawn Stars S04E87 REPACK 720p HDTV x264 aAF", true)]
@@ -133,7 +140,6 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.HDTV1080p, proper);
         }
 
-        [TestCase("Arrested.Development.S04E01.720p.WEBRip.AAC2.0.x264-NFRiP", false)]
         [TestCase("Vanguard S01E04 Mexicos Death Train 720p WEB DL", false)]
         [TestCase("Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264", false)]
         [TestCase("Castle S04E22 720p WEB DL DD5 1 H 264 NFHD", false)]
@@ -155,7 +161,14 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
         }
 
-        [TestCase("Arrested.Development.S04E01.iNTERNAL.1080p.WEBRip.x264-QRUS", false)]
+        [TestCase("Arrested.Development.S04E01.720p.WEBRip.AAC2.0.x264-NFRiP", false)]
+        [TestCase("American.Gods.S01E07.A.Prayer.For.Mad.Sweeney.720p.AMZN.WEBRip.DD5.1.x264-NTb", false)]
+        [TestCase("LEGO.Star.Wars.The.Freemaker.Adventures.S07E01.A.New.Home.720p.DSNY.WEBRip.AAC2.0.x264-TVSmash", false)]
+        public void should_parse_webrip720p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.WEBRip720p, proper);
+        }
+
         [TestCase("CSI NY S09E03 1080p WEB DL DD5 1 H264 NFHD", false)]
         [TestCase("Two and a Half Men S10E03 1080p WEB DL DD5 1 H 264 NFHD", false)]
         [TestCase("Criminal.Minds.S08E01.1080p.WEB-DL.DD5.1.H264-NFHD", false)]
@@ -178,10 +191,15 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
         }
 
-        [TestCase("CASANOVA S01E01.2160P AMZN WEBRIP DD2.0 HI10P X264-TROLLUHD", false)]
-        [TestCase("JUST ADD MAGIC S01E01.2160P AMZN WEBRIP DD2.0 X264-TROLLUHD", false)]
-        [TestCase("The.Man.In.The.High.Castle.S01E01.2160p.AMZN.WEBRip.DD2.0.Hi10p.X264-TrollUHD", false)]
-        [TestCase("The Man In the High Castle S01E01 2160p AMZN WEBRip DD2.0 Hi10P x264-TrollUHD", false)]
+        [TestCase("Arrested.Development.S04E01.iNTERNAL.1080p.WEBRip.x264-QRUS", false)]
+        [TestCase("Blue.Bloods.S07E20.1080p.AMZN.WEBRip.DDP5.1.x264-ViSUM ac3.(NLsub)", false)]
+        [TestCase("Better.Call.Saul.S03E09.1080p.NF.WEBRip.DD5.1.x264-ViSUM", false)]
+        public void should_parse_webrip1080p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.WEBRip1080p, proper);
+        }
+
+        
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.x264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.h264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.PROPER.h264-spamTV", true)]
@@ -190,6 +208,17 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
+        }
+
+        [TestCase("CASANOVA S01E01.2160P AMZN WEBRIP DD2.0 HI10P X264-TROLLUHD", false)]
+        [TestCase("JUST ADD MAGIC S01E01.2160P AMZN WEBRIP DD2.0 X264-TROLLUHD", false)]
+        [TestCase("The.Man.In.The.High.Castle.S01E01.2160p.AMZN.WEBRip.DD2.0.Hi10p.X264-TrollUHD", false)]
+        [TestCase("The Man In the High Castle S01E01 2160p AMZN WEBRip DD2.0 Hi10P x264-TrollUHD", false)]
+        [TestCase("House.of.Cards.US.S05E08.Chapter.60.2160p.NF.WEBRip.DD5.1.x264-NTb.NLsubs", false)]
+        [TestCase("Bill Nye Saves the World S01 2160p Netflix WEBRip DD5.1 x264-TrollUHD", false)]
+        public void should_parse_webrip2160p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.WEBRip2160p, proper);
         }
 
         [TestCase("WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", false)]

@@ -19,14 +19,12 @@ namespace NzbDrone.Core.Tv
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IProfileService _profileService;
         private readonly ILanguageProfileService _languageProfileService;
-        private readonly Logger _logger;
 
         public EpisodeCutoffService(IEpisodeRepository episodeRepository, IProfileService profileService, ILanguageProfileService languageProfileService, Logger logger)
         {
             _episodeRepository = episodeRepository;
             _profileService = profileService;
             _languageProfileService = languageProfileService;
-            _logger = logger;
         }
 
         public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec)
@@ -39,11 +37,12 @@ namespace NzbDrone.Core.Tv
             //Get all items less than the cutoff
             foreach (var profile in profiles)
             {
-                var cutoffIndex = profile.Items.FindIndex(v => v.Quality == profile.Cutoff);
-                var belowCutoff = profile.Items.Take(cutoffIndex).ToList();
+                var cutoffIndex = profile.GetIndex(profile.Cutoff);
+                var belowCutoff = profile.Items.Take(cutoffIndex.Index).ToList();
+
                 if (belowCutoff.Any())
                 {
-                    qualitiesBelowCutoff.Add(new QualitiesBelowCutoff(profile.Id, belowCutoff.Select(i => i.Quality.Id)));
+                    qualitiesBelowCutoff.Add(new QualitiesBelowCutoff(profile.Id, belowCutoff.SelectMany(i => i.GetQualities().Select(q => q.Id))));
                 }
             }
 

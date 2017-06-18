@@ -5,8 +5,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Qualities;
-using System.Collections.Generic;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
@@ -23,7 +21,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             var qualityComparer = new QualityModelComparer(localEpisode.Series.Profile);
             var languageComparer = new LanguageComparer(localEpisode.Series.LanguageProfile);
-            var profile = localEpisode.Series.Profile.Value;
             
             if (localEpisode.Episodes.Any(e => e.EpisodeFileId != 0 && qualityComparer.Compare(e.EpisodeFile.Value.Quality, localEpisode.Quality) > 0))
             {

@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Profiles.Qualities
                             .ToList();
 
             var profile = new Profile { Name = name, 
-                Cutoff = cutoff, 
+                Cutoff = (int)cutoff, 
                 Items = items, 
             };
 
