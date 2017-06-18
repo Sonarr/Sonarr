@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             };
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p })
+                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p.Id })
                          .With(c => c.Path = @"C:\Series\My.Series".AsOsAgnostic())
                          .Build();
 

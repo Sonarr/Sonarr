@@ -103,6 +103,8 @@
     <Compile Include="Profiles\Language\LanguageProfileResource.cs" />
     <Compile Include="Profiles\Language\LanguageProfileSchemaModule.cs" />
     <Compile Include="Profiles\Language\LanguageValidator.cs" />
+    <Compile Include="Profiles\Quality\QualityItemsValidator.cs" />
+    <Compile Include="Profiles\Quality\QualityCutoffValidator.cs" />
     <Compile Include="Queue\QueueActionModule.cs" />
     <Compile Include="Queue\QueueBulkResource.cs" />
     <Compile Include="Queue\QueueDetailsModule.cs" />
@@ -165,7 +167,6 @@
     <Compile Include="Profiles\Quality\QualityProfileModule.cs" />
     <Compile Include="Profiles\Quality\QualityProfileResource.cs" />
     <Compile Include="Profiles\Quality\QualityProfileSchemaModule.cs" />
-    <Compile Include="Profiles\Quality\QualityProfileValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderModuleBase.cs" />
     <Compile Include="ProviderResource.cs" />
