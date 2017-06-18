@@ -7,11 +7,9 @@ import QualityProfiles from './QualityProfiles';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.advancedSettings,
     (state) => state.settings.qualityProfiles,
-    (advancedSettings, qualityProfiles) => {
+    (qualityProfiles) => {
       return {
-        advancedSettings,
         ...qualityProfiles
       };
     }

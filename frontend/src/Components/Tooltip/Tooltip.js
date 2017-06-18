@@ -83,6 +83,7 @@ class Tooltip extends Component {
 
   render() {
     const {
+      className,
       anchor,
       tooltip,
       kind,
@@ -97,6 +98,7 @@ class Tooltip extends Component {
         {...tetherOptions[position]}
       >
         <span
+          className={className}
           // onClick={this.onClick}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
@@ -137,6 +139,7 @@ class Tooltip extends Component {
 }
 
 Tooltip.propTypes = {
+  className: PropTypes.string,
   anchor: PropTypes.node.isRequired,
   tooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   kind: PropTypes.oneOf([kinds.DEFAULT, kinds.INVERSE]),

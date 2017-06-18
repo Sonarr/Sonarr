@@ -7,8 +7,8 @@ import DragPreviewLayer from 'Components/DragPreviewLayer';
 import QualityProfileItem from './QualityProfileItem';
 import styles from './QualityProfileItemDragPreview.css';
 
-const formGroupSmallWidth = parseInt(dimensions.formGroupSmallWidth);
-const formLabelWidth = parseInt(dimensions.formLabelWidth);
+const formGroupExtraSmallWidth = parseInt(dimensions.formGroupExtraSmallWidth);
+const formLabelSmallWidth = parseInt(dimensions.formLabelSmallWidth);
 const formLabelRightMarginWidth = parseInt(dimensions.formLabelRightMarginWidth);
 const dragHandleWidth = parseInt(dimensions.dragHandleWidth);
 
@@ -40,7 +40,7 @@ class QualityProfileItemDragPreview extends Component {
     // list item and the preview is wider than the drag handle.
 
     const { x, y } = currentOffset;
-    const handleOffset = formGroupSmallWidth - formLabelWidth - formLabelRightMarginWidth - dragHandleWidth;
+    const handleOffset = formGroupExtraSmallWidth - formLabelSmallWidth - formLabelRightMarginWidth - dragHandleWidth;
     const transform = `translate3d(${x - handleOffset}px, ${y}px, 0)`;
 
     const style = {
@@ -51,11 +51,14 @@ class QualityProfileItemDragPreview extends Component {
     };
 
     const {
+      editGroups,
+      groupId,
       qualityId,
       name,
-      allowed,
-      sortIndex
+      allowed
     } = item;
+
+    // TODO: Show a different preview for groups
 
     return (
       <DragPreviewLayer>
@@ -64,10 +67,11 @@ class QualityProfileItemDragPreview extends Component {
           style={style}
         >
           <QualityProfileItem
-            qualityId={qualityId}
+            editGroups={editGroups}
+            isPreview={true}
+            qualityId={groupId || qualityId}
             name={name}
             allowed={allowed}
-            sortIndex={sortIndex}
             isDragging={false}
           />
         </div>

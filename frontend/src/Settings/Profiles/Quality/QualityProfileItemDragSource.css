@@ -1,10 +1,10 @@
 .qualityProfileItemDragSource {
-  padding: 4px 0;
+  padding: $qualityProfileItemDragSourcePadding 0;
 }
 
 .qualityProfileItemPlaceholder {
   width: 100%;
-  height: 36px;
+  height: $qualityProfileItemHeight;
   border: 1px dotted #aaa;
   border-radius: 4px;
 }

@@ -5,23 +5,54 @@
   border: 1px solid #aaa;
   border-radius: 4px;
   background: #fafafa;
+
+  &.isInGroup {
+    border-style: dashed;
+  }
 }
 
-.checkContainer {
+.checkInputContainer {
   position: relative;
   margin-right: 4px;
-  margin-bottom: 7px;
+  margin-bottom: 5px;
   margin-left: 8px;
 }
 
-.qualityName {
+.checkInput {
+  composes: input from 'Components/Form/CheckInput.css';
+
+  margin-top: 5px;
+}
+
+.qualityNameContainer {
   display: flex;
   flex-grow: 1;
   margin-bottom: 0;
   margin-left: 2px;
   font-weight: normal;
-  line-height: 36px;
+  line-height: $qualityProfileItemHeight;
   cursor: pointer;
+}
+
+.qualityName {
+  &.isInGroup {
+    margin-left: 14px;
+  }
+
+  &.notAllowed {
+    color: #c6c6c6;
+  }
+}
+
+.createGroupButton {
+  composes: buton from 'Components/Link/IconButton.css';
+
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 5px;
+  margin-left: 8px;
+  width: 20px;
 }
 
 .dragHandle {
@@ -41,4 +72,14 @@
 
 .isDragging {
   opacity: 0.25;
+}
+
+.isPreview {
+  .qualityName {
+    margin-left: 14px;
+
+    &.isInGroup {
+      margin-left: 28px;
+    }
+  }
 }

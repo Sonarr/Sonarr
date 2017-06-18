@@ -17,3 +17,10 @@
   flex-wrap: wrap;
   margin-top: 5px;
 }
+
+.tooltipLabel {
+  composes: label from 'Components/Label.css';
+
+  margin: 0;
+  border: none;
+}

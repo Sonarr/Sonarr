@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { kinds } from 'Helpers/Props';
+import { kinds, tooltipPositions } from 'Helpers/Props';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import Tooltip from 'Components/Tooltip/Tooltip';
 import EditQualityProfileModalConnector from './EditQualityProfileModalConnector';
 import styles from './QualityProfile.css';
 
@@ -75,16 +76,54 @@ class QualityProfile extends Component {
                 return null;
               }
 
-              const isCutoff = item.quality.id === cutoff.id;
+              if (item.quality) {
+                const isCutoff = item.quality.id === cutoff;
+
+                return (
+                  <Label
+                    key={item.quality.id}
+                    kind={isCutoff ? kinds.INFO : kinds.default}
+                    title={isCutoff ? 'Cutoff' : null}
+                  >
+                    {item.quality.name}
+                  </Label>
+                );
+              }
+
+              const isCutoff = item.id === cutoff;
 
               return (
-                <Label
-                  key={item.quality.id}
-                  kind={isCutoff ? kinds.INFO : kinds.default}
-                  title={isCutoff ? 'Cutoff' : null}
-                >
-                  {item.quality.name}
-                </Label>
+                <Tooltip
+                  key={item.id}
+                  className={styles.tooltipLabel}
+                  anchor={
+                    <Label
+                      kind={isCutoff ? kinds.INFO : kinds.default}
+                      title={isCutoff ? 'Cutoff' : null}
+                    >
+                      {item.name}
+                    </Label>
+                  }
+                  tooltip={
+                    <div>
+                      {
+                        item.items.map((groupItem) => {
+                          return (
+                            <Label
+                              key={groupItem.quality.id}
+                              kind={isCutoff ? kinds.INFO : kinds.default}
+                              title={isCutoff ? 'Cutoff' : null}
+                            >
+                              {groupItem.quality.name}
+                            </Label>
+                          );
+                        })
+                      }
+                    </div>
+                  }
+                  kind={kinds.INVERSE}
+                  position={tooltipPositions.TOP}
+                />
               );
             })
           }
@@ -115,7 +154,7 @@ class QualityProfile extends Component {
 QualityProfile.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  cutoff: PropTypes.object.isRequired,
+  cutoff: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   isDeleting: PropTypes.bool.isRequired,
   onConfirmDeleteQualityProfile: PropTypes.func.isRequired
