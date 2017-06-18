@@ -21,6 +21,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            var profile = subject.Series.Profile.Value;
+
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
                 if (file == null)
@@ -30,14 +32,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 }
                 _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
-                if (!_upgradableSpecification.CutoffNotMet(subject.Series.Profile, 
+                if (!_upgradableSpecification.CutoffNotMet(profile, 
                                                            subject.Series.LanguageProfile, 
                                                            file.Quality, 
                                                            file.Language, 
                                                            subject.ParsedEpisodeInfo.Quality))
                 {
                     _logger.Debug("Cutoff already met, rejecting.");
-                    return Decision.Reject("Existing file meets cutoff: {0} - {1}", subject.Series.Profile.Value.Cutoff, subject.Series.LanguageProfile.Value.Cutoff);
+
+                    var qualityCutoffIndex = profile.GetIndex(profile.Cutoff);
+                    var qualityCutoff = profile.Items[qualityCutoffIndex.Index];
+
+                    return Decision.Reject("Existing file meets cutoff: {0} - {1}", qualityCutoff, subject.Series.LanguageProfile.Value.Cutoff);
                 }
             }
 

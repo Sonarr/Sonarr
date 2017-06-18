@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
@@ -45,9 +45,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
+            var profile = localEpisode.Series.Profile.Value;
+            var qualityComparer = new QualityModelComparer(profile);
+
             foreach (var item in grabbedHistory)
             {
-                if (item.Quality.Quality != Quality.Unknown && item.Quality != localEpisode.Quality)
+                if (item.Quality.Quality != Quality.Unknown &&
+                    qualityComparer.Compare(localEpisode.Quality.Quality, item.Quality.Quality) != 0)
                 {
                     _logger.Debug("Quality for grabbed release ({0}) does not match the quality of the file ({1})", item.Quality, localEpisode.Quality);
                     return Decision.Reject("File quality does not match quality of the grabbed release");
