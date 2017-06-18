@@ -55,7 +55,7 @@ namespace NzbDrone.Core.DecisionEngine
         public bool IsUpgradable(Profile profile, LanguageProfile languageProfile, QualityModel currentQuality, Language currentLanguage, QualityModel newQuality, Language newLanguage)
         {          
             // If qualities are the same then check language
-            if (newQuality != null && currentQuality == newQuality)
+            if (newQuality != null && new QualityModelComparer(profile).Compare(newQuality, currentQuality) == 0)
             {
                 return IsLanguageUpgradable(languageProfile, currentLanguage, newLanguage);
             }
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.DecisionEngine
 
         public bool QualityCutoffNotMet(Profile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
-            var qualityCompare = new QualityModelComparer(profile).Compare(currentQuality.Quality, profile.Cutoff);
+            var qualityCompare = new QualityModelComparer(profile).Compare(currentQuality.Quality.Id, profile.Cutoff);
 
             if (qualityCompare < 0)
             {
@@ -116,6 +116,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             var compare = newQuality.Revision.CompareTo(currentQuality.Revision);
 
+            // Comparing the quality directly because we don't want to upgrade to a proper for a webrip from a webdl or vice versa
             if (currentQuality.Quality == newQuality.Quality && compare > 0)
             {
                 _logger.Debug("New quality is a better revision for existing quality");

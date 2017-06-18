@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Profiles.Qualities;
 using Sonarr.Http;
-using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api.Profiles
 {

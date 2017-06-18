@@ -135,6 +135,7 @@
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
+    <Compile Include="Datastore\Migration\117_add_webrip_qualites_in_profileFixture.cs" />
     <Compile Include="Datastore\Migration\108_fix_metadata_file_extensionsFixture.cs" />
     <Compile Include="Datastore\Migration\109_import_extra_files_configFixture.cs" />
     <Compile Include="Datastore\Migration\110_fix_extra_files_configFixture.cs" />
@@ -343,6 +344,7 @@
     <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
     <Compile Include="ParserTests\ValidateParsedEpisodeInfoFixture.cs" />
     <Compile Include="Profiles\Delay\DelayProfileServiceFixture.cs" />
+    <Compile Include="Profiles\Qualities\QualityIndexCompareToFixture.cs" />
     <Compile Include="Qualities\RevisionComparableFixture.cs" />
     <Compile Include="QueueTests\QueueServiceFixture.cs" />
     <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />

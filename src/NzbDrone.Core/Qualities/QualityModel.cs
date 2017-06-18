@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Qualities
                 return 1;
             }
 
-            if(definition.Weight < otherDefinition.Weight)
+            if (definition.Weight < otherDefinition.Weight)
             {
                 return -1;
             }

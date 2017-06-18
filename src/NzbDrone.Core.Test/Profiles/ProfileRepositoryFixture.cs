@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.Profiles
             var profile = new Profile
                 {
                     Items = Qualities.QualityFixture.GetDefaultQualities(Quality.Bluray1080p, Quality.DVD, Quality.HDTV720p),
-                    Cutoff = Quality.Bluray1080p,
+                    Cutoff = Quality.Bluray1080p.Id,
                     Name = "TestProfile"
                 };
 
