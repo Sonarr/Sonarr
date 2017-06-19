@@ -88,11 +88,15 @@ namespace NzbDrone.Host
         {
             var instancePolicy = _container.Resolve<ISingleInstancePolicy>();
 
-            if (isService)
+            if (startupContext.Flags.Contains(StartupContext.TERMINATE))
             {
                 instancePolicy.KillAllOtherInstance();
             }
-            else if (startupContext.Flags.Contains(StartupContext.TERMINATE))
+            else if (startupContext.Args.ContainsKey(StartupContext.APPDATA))
+            {
+                instancePolicy.WarnIfAlreadyRunning();
+            }
+            else if (isService)
             {
                 instancePolicy.KillAllOtherInstance();
             }
