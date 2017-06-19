@@ -23,7 +23,8 @@ module.exports = TemplatedCell.extend({
     },
 
     _remove : function() {
-        var showBlacklist = this.model.get('status') !== 'Pending';
+        var status = this.model.get('status');
+        var showBlacklist = status !== 'Delay' && status !== 'DownloadClientUnavailable';
 
         vent.trigger(vent.Commands.OpenModalCommand, new RemoveFromQueueView({
             model         : this.model,
