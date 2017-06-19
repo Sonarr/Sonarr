@@ -181,11 +181,14 @@ namespace NzbDrone.Core.Indexers.Torznab
 
         protected string TryGetTorznabAttribute(XElement item, string key, string defaultValue = "")
         {
-            var attr = item.Elements(ns + "attr").FirstOrDefault(e => e.Attribute("name").Value.Equals(key, StringComparison.CurrentCultureIgnoreCase));
-
-            if (attr != null)
+            var attrElement = item.Elements(ns + "attr").FirstOrDefault(e => e.Attribute("name").Value.Equals(key, StringComparison.OrdinalIgnoreCase));
+            if (attrElement != null)
             {
-                return attr.Attribute("value").Value;
+                var attrValue = attrElement.Attribute("value");
+                if (attrValue != null)
+                {
+                    return attrValue.Value;
+                }
             }
 
             return defaultValue;
