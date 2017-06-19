@@ -14,7 +14,7 @@ module.exports = NzbDroneCell.extend({
             var ect = this.cellValue.get('estimatedCompletionTime');
             var time = '{0} at {1}'.format(FormatHelpers.relativeDate(ect), moment(ect).format(UiSettingsModel.time(true, false)));
 
-            if (status === 'pending') {
+            if (status === 'delay') {
                 this.$el.html('<div title="Delaying download till {0}">-</div>'.format(time));
             } else if (status === 'downloadclientunavailable') {
                 this.$el.html('<div title="Retrying download at {0}">-</div>'.format(time));
