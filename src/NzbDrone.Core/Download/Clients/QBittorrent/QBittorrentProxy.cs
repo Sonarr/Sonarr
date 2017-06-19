@@ -156,6 +156,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             AuthenticateClient(requestBuilder, settings);
 
             var request = requestBuilder.Build();
+            request.LogResponseContent = true;
 
             HttpResponse response;
             try
