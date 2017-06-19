@@ -5,8 +5,8 @@ module.exports = Backgrid.Cell.extend({
 
     render : function() {
         if (this.model.get('protocol') === 'torrent') {
-            var seeders = this.model.get('seeders') || 0;
-            var leechers = this.model.get('leechers') || 0;
+            var seeders = this.model.get('seeders');
+            var leechers = this.model.get('leechers');
 
             var level = 'danger';
 
@@ -18,7 +18,19 @@ module.exports = Backgrid.Cell.extend({
                 level = 'primary';
             }
 
-            this.$el.html('<div class="label label-{2}" title="{0} seeders, {1} leechers">{0} / {1}</div>'.format(seeders, leechers, level));
+            var txtSeeders = seeders;
+            var txtLeechers = leechers;
+            if (typeof seeders === 'undefined') {
+                txtSeeders = 'unknown';
+                seeders = '-';
+            }
+
+            if (typeof leechers === 'undefined') {
+                txtLeechers = 'unknown';
+                leechers = '-';
+            }
+
+            this.$el.html('<div class="label label-{0}" title="{1} seeders, {2} leechers">{3} / {4}</div>'.format(level, txtSeeders, txtLeechers, seeders, leechers));
         }
 
         this.delegateEvents();
