@@ -10,6 +10,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
@@ -136,11 +137,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             Mocker.GetMock<IVideoFileInfoReader>()
                   .Setup(s => s.GetRunTime(It.IsAny<string>()))
-                  .Throws<DllNotFoundException>();
+                  .Returns((TimeSpan?)null);
 
             Subject.IsSample(_localEpisode.Series,
                              _localEpisode.Path,
                              _localEpisode.IsSpecial).Should().Be(DetectSampleResult.Indeterminate);
+
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]
