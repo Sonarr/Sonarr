@@ -1,5 +1,8 @@
 var Marionette = require('marionette');
 var NzbDroneCell = require('../../Cells/NzbDroneCell');
+var moment = require('moment');
+var UiSettingsModel = require('../../Shared/UiSettingsModel');
+var FormatHelpers = require('../../Shared/FormatHelpers');
 
 module.exports = NzbDroneCell.extend({
     className : 'queue-status-cell',
@@ -31,9 +34,11 @@ module.exports = NzbDroneCell.extend({
                 title = 'Downloaded';
             }
 
-            if (status === 'pending') {
+            if (status === 'delay') {
                 icon = 'icon-sonarr-pending';
-                title = 'Pending';
+                var ect = this.cellValue.get('estimatedCompletionTime');
+                var time = '{0} at {1}'.format(FormatHelpers.relativeDate(ect), moment(ect).format(UiSettingsModel.time(true, false)));
+                title = 'Download delayed till {0}'.format(time);
             }
 
             if (status === 'downloadclientunavailable') {
