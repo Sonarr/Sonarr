@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 return metadata;
             }
 
-            if (filename.Equals("tvshow.nfo", StringComparison.InvariantCultureIgnoreCase))
+            if (filename.Equals("tvshow.nfo", StringComparison.OrdinalIgnoreCase))
             {
                 metadata.Type = MetadataType.SeriesMetadata;
                 return metadata;
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
             if (parseResult != null &&
                 !parseResult.FullSeason &&
-                Path.GetExtension(filename) == ".nfo")
+                Path.GetExtension(filename).Equals(".nfo", StringComparison.OrdinalIgnoreCase))
             {
                 metadata.Type = MetadataType.EpisodeMetadata;
                 return metadata;
