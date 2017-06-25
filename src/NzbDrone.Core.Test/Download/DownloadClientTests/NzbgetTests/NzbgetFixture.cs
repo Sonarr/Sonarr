@@ -414,5 +414,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 
             error.IsValid.Should().Be(expected);
         }
+
+        [TestCase("0", false)]
+        [TestCase("1", true)]
+        [TestCase(" 7", false)]
+        [TestCase("5000000", false)]
+        public void should_test_keephistory(string keephistory, bool expected)
+        {
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetConfig(It.IsAny<NzbgetSettings>()))
+                .Returns(new Dictionary<string, string> { { "KeepHistory", keephistory } });
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().Be(expected);
+        }
     }
 }

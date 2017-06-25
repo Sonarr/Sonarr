@@ -297,12 +297,21 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var config = _proxy.GetConfig(Settings);
 
             var keepHistory = config.GetValueOrDefault("KeepHistory");
-            if (keepHistory == "0")
+            int value;
+            if (int.TryParse(keepHistory, out value) || value == 0)
             {
                 return new NzbDroneValidationFailure(string.Empty, "NzbGet setting KeepHistory should be greater than 0")
                 {
                     InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
                     DetailedDescription = "NzbGet setting KeepHistory is set to 0. Which prevents Sonarr from seeing completed downloads."
+                };
+            }
+            else if (value > 25000)
+            {
+                return new NzbDroneValidationFailure(string.Empty, "NzbGet setting KeepHistory should be less than 25000")
+                {
+                    InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    DetailedDescription = "NzbGet setting KeepHistory is set too high."
                 };
             }
 
