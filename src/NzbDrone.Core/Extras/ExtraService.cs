@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Extras
                                                                      .Select(e => e.Trim(' ', '.'))
                                                                      .ToList();
 
-            var matchingFilenames = files.Where(f => Path.GetFileNameWithoutExtension(f).StartsWith(sourceFileName));
+            var matchingFilenames = files.Where(f => Path.GetFileNameWithoutExtension(f).StartsWith(sourceFileName, StringComparison.InvariantCultureIgnoreCase));
 
             foreach (var matchingFilename in matchingFilenames)
             {
