@@ -1,8 +1,10 @@
-﻿namespace NzbDrone.Core.Notifications.Webhook
+﻿using NzbDrone.Common.Http;
+
+namespace NzbDrone.Core.Notifications.Webhook
 {
     public enum WebhookMethod
     {
-        POST = RestSharp.Method.POST,
-        PUT = RestSharp.Method.PUT
+        POST = HttpMethod.POST,
+        PUT = HttpMethod.PUT
     }
 }

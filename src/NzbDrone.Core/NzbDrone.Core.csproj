@@ -905,12 +905,16 @@
     <Compile Include="Notifications\Telegram\TelegramSettings.cs" />
     <Compile Include="Notifications\Twitter\OAuthToken.cs" />
     <Compile Include="Notifications\Twitter\TwitterException.cs" />
+    <Compile Include="Notifications\Webhook\WebhookRelease.cs" />
+    <Compile Include="Notifications\Webhook\WebhookEpisodeFile.cs" />
     <Compile Include="Notifications\Webhook\WebhookEpisode.cs" />
     <Compile Include="Notifications\Webhook\WebhookException.cs" />
+    <Compile Include="Notifications\Webhook\WebhookGrabPayload.cs" />
+    <Compile Include="Notifications\Webhook\WebhookImportPayload.cs" />
     <Compile Include="Notifications\Webhook\WebhookMethod.cs" />
     <Compile Include="Notifications\Webhook\WebhookPayload.cs" />
     <Compile Include="Notifications\Webhook\WebhookSeries.cs" />
-    <Compile Include="Notifications\Webhook\WebhookService.cs" />
+    <Compile Include="Notifications\Webhook\WebhookProxy.cs" />
     <Compile Include="Notifications\Webhook\WebhookSettings.cs" />
     <Compile Include="Notifications\Webhook\Webhook.cs" />
     <Compile Include="Organizer\NamingConfigRepository.cs" />
