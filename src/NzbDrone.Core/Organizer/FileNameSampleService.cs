@@ -41,19 +41,19 @@ namespace NzbDrone.Core.Organizer
             _standardSeries = new Series
             {
                 SeriesType = SeriesTypes.Standard,
-                Title = "Series Title (2010)"
+                Title = "The Series Title (2010)"
             };
 
             _dailySeries = new Series
             {
                 SeriesType = SeriesTypes.Daily,
-                Title = "Series Title (2010)"
+                Title = "The Series Title (2010)"
             };
 
             _animeSeries = new Series
             {
                 SeriesType = SeriesTypes.Anime,
-                Title = "Series Title (2010)"
+                Title = "The Series Title (2010)"
             };
 
             _episode1 = new Episode
