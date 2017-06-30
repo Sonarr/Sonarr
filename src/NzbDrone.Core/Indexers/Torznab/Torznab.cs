@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             get
             {
                 yield return GetDefinition("HD4Free.xyz", GetSettings("http://hd4free.xyz"));
+                yield return GetDefinition("AnimeTosho Torrents", GetSettings("https://animetosho.org", apiPath: @"/feed/nabapi", categories: new int[0], animeCategories: new[] { 5070 }));
             }
         }
 
@@ -64,13 +65,23 @@ namespace NzbDrone.Core.Indexers.Torznab
                    };
         }
 
-        private TorznabSettings GetSettings(string url, params int[] categories)
+        private TorznabSettings GetSettings(string url, string apiPath = null, int[] categories = null, int[] animeCategories = null)
         {
             var settings = new TorznabSettings { BaseUrl = url };
 
-            if (categories.Any())
+            if (categories != null)
             {
                 settings.Categories = categories;
+            }
+
+            if (animeCategories != null)
+            {
+                settings.AnimeCategories = animeCategories;
+            }
+
+            if (apiPath.IsNotNullOrWhiteSpace())
+            {
+                settings.ApiPath = apiPath;
             }
 
             return settings;
