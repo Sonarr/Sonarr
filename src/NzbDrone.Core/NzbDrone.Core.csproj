@@ -249,6 +249,7 @@
     <Compile Include="Datastore\Migration\068_add_release_restrictions.cs" />
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
+    <Compile Include="Datastore\Migration\116_disable_nyaa.cs" />
     <Compile Include="Datastore\Migration\102_add_language_to_episodeFiles_history_and_blacklist.cs" />
     <Compile Include="Datastore\Migration\113_consolidate_indexer_baseurl.cs" />
     <Compile Include="Datastore\Migration\114_rename_indexer_status_id.cs" />
