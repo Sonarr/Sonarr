@@ -293,7 +293,7 @@ namespace NzbDrone.Core.Organizer
         {
             tokenHandlers["{Series Title}"] = m => series.Title;
             tokenHandlers["{Series CleanTitle}"] = m => CleanTitle(series.Title);
-            tokenHandlers["{Series Title The}"] = m => TitleThe(series.Title);
+            tokenHandlers["{Series TitleThe}"] = m => TitleThe(series.Title);
         }
 
         private string AddSeasonEpisodeNumberingTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes, NamingConfig namingConfig)
