@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Organizer
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
 
-        private static readonly string[] TitlePrefixes = { "The ", "An ", "A " };
+        private static readonly Regex TitlePrefixRegex = new Regex(@"^(The|An|A) (.*?)( \(.*?\))?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
@@ -257,16 +257,7 @@ namespace NzbDrone.Core.Organizer
 
         public static string TitleThe(string title)
         {
-            foreach (string prefix in TitlePrefixes)
-            {
-                if (title.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
-                {
-                    title = title.Substring(prefix.Length) + ", " + prefix.Trim();
-                    break;
-                }
-            }
-
-            return title.Trim();
+            return TitlePrefixRegex.Replace(title, "$2, $1$3");
         }
 
         public static string CleanFileName(string name, bool replace = true)

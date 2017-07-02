@@ -50,6 +50,12 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("The Mist", "Mist, The")]
         [TestCase("A Place to Call Home", "Place to Call Home, A")]
         [TestCase("An Adventure in Space and Time", "Adventure in Space and Time, An")]
+        [TestCase("The Flash (2010)", "Flash, The (2010)")]
+        [TestCase("A League Of Their Own (AU)", "League Of Their Own, A (AU)")]
+        [TestCase("The Fixer (ZH) (2015)", "Fixer, The (ZH) (2015)")]
+        [TestCase("The Sixth Sense 2 (Thai)", "Sixth Sense 2, The (Thai)")]
+        [TestCase("The Amazing Race (Latin America)", "Amazing Race, The (Latin America)")]
+        [TestCase("The Rat Pack (A&E)", "Rat Pack, The (A&E)")]
         //[TestCase("", "")]
         public void should_get_expected_title_back(string title, string expected)
         {
