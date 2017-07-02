@@ -59,5 +59,18 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
                    .Should().Be(expected);
         }
+
+        [TestCase("A")]
+        [TestCase("Anne")]
+        [TestCase("Theodore")]
+        [TestCase("3%")]
+        public void should_not_change_title(string title)
+        {
+            _series.Title = title;
+            _namingConfig.StandardEpisodeFormat = "{Series TitleThe}";
+
+            Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
+                   .Should().Be(title);
+        }
     }
 }
