@@ -102,18 +102,18 @@ namespace NzbDrone.Core.Tv
         {
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
-        
-        public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle) 
+
+        public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle)
         {
             // TODO: can replace this search mechanism with something smarter/faster/better
-            var normalizedReleaseTitle = Parser.Parser.NormalizeEpisodeTitle(releaseTitle).Replace(".", " ");
+            var normalizedReleaseTitle = Parser.NormalizeParsedTitle.NormalizeEpisodeTitle(releaseTitle).Replace(".", " ");
             var episodes = _episodeRepository.GetEpisodes(seriesId, seasonNumber);
 
             var matches = episodes.Select(
                 episode => new
                            {
-                               Position = normalizedReleaseTitle.IndexOf(Parser.Parser.NormalizeEpisodeTitle(episode.Title), StringComparison.CurrentCultureIgnoreCase),
-                               Length = Parser.Parser.NormalizeEpisodeTitle(episode.Title).Length,
+                               Position = normalizedReleaseTitle.IndexOf(Parser.NormalizeParsedTitle.NormalizeEpisodeTitle(episode.Title), StringComparison.CurrentCultureIgnoreCase),
+                               Length = Parser.NormalizeParsedTitle.NormalizeEpisodeTitle(episode.Title).Length,
                                Episode = episode
                            })
                                 .Where(e => e.Episode.Title.Length > 0 && e.Position >= 0)

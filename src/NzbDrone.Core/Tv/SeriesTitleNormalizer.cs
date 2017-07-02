@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Tv
                 return PreComputedTitles[tvdbId];
             }
 
-            return Parser.Parser.NormalizeTitle(title).ToLower();
+            return Parser.NormalizeParsedTitle.NormalizeTitle(title).ToLower();
         }
     }
 }

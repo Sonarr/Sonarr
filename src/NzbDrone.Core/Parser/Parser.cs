@@ -234,9 +234,6 @@ namespace NzbDrone.Core.Parser
         //Regex to detect whether the title was reversed.
         private static readonly Regex ReversedTitleRegex = new Regex(@"[-._ ](p027|p0801|\d{2}E\d{2}S)[-._ ]", RegexOptions.Compiled);
 
-        private static readonly Regex NormalizeRegex = new Regex(@"((?:\b|_)(?<!^)(a(?!$)|an|the|and|or|of)(?:\b|_))|\W|_",
-                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
         private static readonly Regex FileExtensionRegex = new Regex(@"\.[a-z0-9]{2,4}$",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -266,12 +263,6 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-        private static readonly Regex WordDelimiterRegex = new Regex(@"(\s|\.|,|_|-|=|\|)+", RegexOptions.Compiled);
-        private static readonly Regex PunctuationRegex = new Regex(@"[^\w\s]", RegexOptions.Compiled);
-        private static readonly Regex CommonWordRegex = new Regex(@"\b(a|an|the|and|or|of)\b\s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition|christmas)\b\s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        private static readonly Regex DuplicateSpacesRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
 
         private static readonly Regex RequestInfoRegex = new Regex(@"\[.+?\]", RegexOptions.Compiled);
 
@@ -416,41 +407,10 @@ namespace NzbDrone.Core.Parser
 
             if (parseResult == null)
             {
-                return CleanSeriesTitle(title);
+                return title.CleanSeriesTitle();
             }
 
             return parseResult.SeriesTitle;
-        }
-
-        public static string CleanSeriesTitle(this string title)
-        {
-            long number = 0;
-
-            //If Title only contains numbers return it as is.
-            if (long.TryParse(title, out number))
-                return title;
-
-            return NormalizeRegex.Replace(title, string.Empty).ToLower().RemoveAccent();
-        }
-
-        public static string NormalizeEpisodeTitle(string title)
-        {
-            title = SpecialEpisodeWordRegex.Replace(title, string.Empty);
-            title = PunctuationRegex.Replace(title, " ");
-            title = DuplicateSpacesRegex.Replace(title, " ");
-
-            return title.Trim()
-                        .ToLower();
-        }
-
-        public static string NormalizeTitle(string title)
-        {
-            title = WordDelimiterRegex.Replace(title, " ");
-            title = PunctuationRegex.Replace(title, string.Empty);
-            title = CommonWordRegex.Replace(title, string.Empty);
-            title = DuplicateSpacesRegex.Replace(title, " ");
-
-            return title.Trim().ToLower();
         }
 
         public static string ParseReleaseGroup(string title)

@@ -134,5 +134,23 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             "Tokyo Ghoul A".CleanSeriesTitle().Should().Be("tokyoghoula");
         }
+
+        [TestCase("A 120% deal", "a120percentdeal")]
+        [TestCase("The z0%e", "thez0e")]
+        [TestCase("That f$%king mess", "thatfkingmess")]
+        public void should_replace_percentage_character(string title, string normalizedTitle)
+        {
+            title.CleanSeriesTitle().Should().Be(normalizedTitle);
+        }
+
+        [TestCase("@midnight", "atmidnight")]
+        [TestCase("Murder @ 9", "murderat9")]
+        [TestCase("T@gged", "tagged")]
+        [TestCase("PUCHIM@S", "puchimas")]
+        [TestCase("Live@Much", "liveamuch")] // liveatmuch
+        public void should_replace_at_character(string title, string normalizedTitle)
+        {
+            title.CleanSeriesTitle().Should().Be(normalizedTitle);
+        }
     }
 }

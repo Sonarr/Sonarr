@@ -121,7 +121,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
             series.ImdbId = show.ImdbId;
             series.Title = show.Title;
-            series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.Title);
+            series.CleanTitle = Parser.NormalizeParsedTitle.CleanSeriesTitle(show.Title);
             series.SortTitle = SeriesTitleNormalizer.Normalize(show.Title, show.TvdbId);
 
             if (show.FirstAired != null)
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             {
                 series.Certification = show.ContentRating.ToUpper();
             }
-            
+
             series.Actors = show.Actors.Select(MapActors).ToList();
             series.Seasons = show.Seasons.Select(MapSeason).ToList();
             series.Images = show.Images.Select(MapImage).ToList();

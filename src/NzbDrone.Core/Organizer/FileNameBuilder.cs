@@ -59,9 +59,6 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
         private static readonly Regex TrimSeparatorsRegex = new Regex(@"[- ._]$", RegexOptions.Compiled);
 
-        private static readonly Regex ScenifyRemoveChars = new Regex(@"(?<=\s)(,|<|>|\/|\\|;|:|'|""|\||`|~|!|\?|@|$|%|^|\*|-|_|=){1}(?=\s)|('|:|\?|,)(?=(?:(?:s|m)\s)|\s|$)|(\(|\)|\[|\]|\{|\})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex ScenifyReplaceChars = new Regex(@"[\/]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         //TODO: Support Written numbers (One, Two, etc) and Roman Numerals (I, II, III etc)
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"(?:\(\d+\)|(Part|Pt\.?)\s?\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -131,7 +128,7 @@ namespace NzbDrone.Core.Organizer
             AddEpisodeFileTokens(tokenHandlers, episodeFile);
             AddQualityTokens(tokenHandlers, series, episodeFile);
             AddMediaInfoTokens(tokenHandlers, episodeFile);
-            
+
             var fileName = ReplaceTokens(pattern, tokenHandlers, namingConfig).Trim();
             fileName = FileNameCleanupRegex.Replace(fileName, match => match.Captures[0].Value[0].ToString());
             fileName = TrimSeparatorsRegex.Replace(fileName, string.Empty);
@@ -246,15 +243,6 @@ namespace NzbDrone.Core.Organizer
             return CleanFolderName(ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers, namingConfig));
         }
 
-        public static string CleanTitle(string title)
-        {
-            title = title.Replace("&", "and");
-            title = ScenifyReplaceChars.Replace(title, " ");
-            title = ScenifyRemoveChars.Replace(title, string.Empty);
-
-            return title;
-        }
-
         public static string TitleThe(string title)
         {
             return TitlePrefixRegex.Replace(title, "$2, $1$3");
@@ -283,7 +271,7 @@ namespace NzbDrone.Core.Organizer
         private void AddSeriesTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)
         {
             tokenHandlers["{Series Title}"] = m => series.Title;
-            tokenHandlers["{Series CleanTitle}"] = m => CleanTitle(series.Title);
+            tokenHandlers["{Series CleanTitle}"] = m => NormalizeOfficialTitle.ScenifyTitle(series.Title);
             tokenHandlers["{Series TitleThe}"] = m => TitleThe(series.Title);
         }
 
@@ -428,7 +416,7 @@ namespace NzbDrone.Core.Organizer
             }
 
             tokenHandlers["{Episode Title}"] = m => GetEpisodeTitle(episodes, "+");
-            tokenHandlers["{Episode CleanTitle}"] = m => CleanTitle(GetEpisodeTitle(episodes, "and"));
+            tokenHandlers["{Episode CleanTitle}"] = m => NormalizeOfficialTitle.ScenifyTitle(GetEpisodeTitle(episodes, "and"));
         }
 
         private void AddEpisodeFileTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)

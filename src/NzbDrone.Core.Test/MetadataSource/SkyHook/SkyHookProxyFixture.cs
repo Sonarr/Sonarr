@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         {
             series.Should().NotBeNull();
             series.Title.Should().NotBeNullOrWhiteSpace();
-            series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
+            series.CleanTitle.Should().Be(Parser.NormalizeParsedTitle.CleanSeriesTitle(series.Title));
             series.SortTitle.Should().Be(SeriesTitleNormalizer.Normalize(series.Title, series.TvdbId));
             series.Overview.Should().NotBeNullOrWhiteSpace();
             series.AirTime.Should().NotBeNullOrWhiteSpace();
