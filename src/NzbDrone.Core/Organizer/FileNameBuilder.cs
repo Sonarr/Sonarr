@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Organizer
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
 
-        private static readonly Regex TitlePrefixRegex = new Regex(@"^(The|An|A) (.*?)( \(.*?\))?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex TitlePrefixRegex = new Regex(@"^(The|An|A) (.*?)((?: *\([^)]+\))*)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,

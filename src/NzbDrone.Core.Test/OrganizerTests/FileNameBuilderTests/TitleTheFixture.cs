@@ -56,6 +56,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("The Sixth Sense 2 (Thai)", "Sixth Sense 2, The (Thai)")]
         [TestCase("The Amazing Race (Latin America)", "Amazing Race, The (Latin America)")]
         [TestCase("The Rat Pack (A&E)", "Rat Pack, The (A&E)")]
+        [TestCase("The Climax: I (Almost) Got Away With It (2016)", "Climax- I (Almost) Got Away With It, The (2016)")]
         //[TestCase("", "")]
         public void should_get_expected_title_back(string title, string expected)
         {
