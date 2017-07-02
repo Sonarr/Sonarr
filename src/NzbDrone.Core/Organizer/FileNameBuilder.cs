@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Organizer
 
         public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>[- ._])(Clean)?Title\})",
+        public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>[- ._])(Clean)?Title(The)?\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
@@ -66,6 +66,8 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"(?:\(\d+\)|(Part|Pt\.?)\s?\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
+
+        private static readonly Regex TitlePrefixRegex = new Regex(@"^(The|An|A) (.*?)((?: *\([^)]+\))*)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
@@ -253,6 +255,11 @@ namespace NzbDrone.Core.Organizer
             return title;
         }
 
+        public static string TitleThe(string title)
+        {
+            return TitlePrefixRegex.Replace(title, "$2, $1$3");
+        }
+
         public static string CleanFileName(string name, bool replace = true)
         {
             string result = name;
@@ -277,6 +284,7 @@ namespace NzbDrone.Core.Organizer
         {
             tokenHandlers["{Series Title}"] = m => series.Title;
             tokenHandlers["{Series CleanTitle}"] = m => CleanTitle(series.Title);
+            tokenHandlers["{Series TitleThe}"] = m => TitleThe(series.Title);
         }
 
         private string AddSeasonEpisodeNumberingTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes, NamingConfig namingConfig)

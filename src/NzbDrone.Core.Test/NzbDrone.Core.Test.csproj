@@ -308,6 +308,7 @@
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\MultiEpisodeFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheFixture.cs" />
     <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
     <Compile Include="Qualities\RevisionComparableFixture.cs" />
     <Compile Include="QueueTests\QueueServiceFixture.cs" />
