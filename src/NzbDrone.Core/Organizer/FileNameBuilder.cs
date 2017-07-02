@@ -67,6 +67,8 @@ namespace NzbDrone.Core.Organizer
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
 
+        private static readonly string[] TitlePrefixes = { "The ", "An ", "A " };
+
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
                                ICacheManager cacheManager,
@@ -255,8 +257,7 @@ namespace NzbDrone.Core.Organizer
 
         public static string TitleThe(string title)
         {
-            string[] prefixes = { "The ", "An ", "A " };
-            foreach (string prefix in prefixes)
+            foreach (string prefix in TitlePrefixes)
             {
                 int prefix_length = prefix.Length;
                 if (prefix.ToLower() == title.Substring(0, prefix_length).ToLower())
