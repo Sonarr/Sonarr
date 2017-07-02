@@ -259,10 +259,9 @@ namespace NzbDrone.Core.Organizer
         {
             foreach (string prefix in TitlePrefixes)
             {
-                int prefix_length = prefix.Length;
-                if (prefix.ToLower() == title.Substring(0, prefix_length).ToLower())
+                if (title.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                 {
-                    title = title.Substring(prefix_length) + ", " + prefix.Trim();
+                    title = title.Substring(prefix.Length) + ", " + prefix.Trim();
                     break;
                 }
             }
