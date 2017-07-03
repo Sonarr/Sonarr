@@ -48,14 +48,6 @@ namespace NzbDrone.Core.DiskSpace
                 .Distinct();
         }
 
-        private IEnumerable<string> GetDroneFactoryRootPaths()
-        {
-            if (_configService.DownloadedEpisodesFolder.IsNotNullOrWhiteSpace() && _diskProvider.FolderExists(_configService.DownloadedEpisodesFolder))
-            {
-                yield return _configService.DownloadedEpisodesFolder;
-            }
-        }
-
         private IEnumerable<string> GetFixedDisksRootPaths()
         {
             return _diskProvider.GetMounts()
