@@ -11,9 +11,7 @@ namespace NzbDrone.Core.Configuration
         bool IsDefined(string key);
 
         //Download Client
-        string DownloadedEpisodesFolder { get; set; }
         string DownloadClientWorkingFolders { get; set; }
-        int DownloadedEpisodesScanInterval { get; set; }
         int DownloadClientHistoryLimit { get; set; }
 
         //Completed/Failed Download Handling (Download client)

@@ -572,10 +572,8 @@
     <Compile Include="HealthCheck\Checks\AppDataLocationCheck.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientStatusCheck.cs" />
-    <Compile Include="HealthCheck\Checks\DeprecatedDroneFactoryCheck.cs" />
     <Compile Include="HealthCheck\Checks\MonoTlsCheck.cs" />
     <Compile Include="HealthCheck\Checks\MountCheck.cs" />
-    <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
     <Compile Include="HealthCheck\Checks\ImportMechanismCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerRssCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerStatusCheck.cs" />
@@ -1191,7 +1189,6 @@
     <Compile Include="Validation\NzbDroneValidationResult.cs" />
     <Compile Include="Validation\NzbDroneValidationState.cs" />
     <Compile Include="Validation\Paths\MappedNetworkDriveValidator.cs" />
-    <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
     <Compile Include="Validation\Paths\FolderWritableValidator.cs" />
     <Compile Include="Validation\Paths\PathExistsValidator.cs" />
     <Compile Include="Validation\Paths\PathValidator.cs" />

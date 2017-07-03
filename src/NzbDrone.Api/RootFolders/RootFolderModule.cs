@@ -16,7 +16,6 @@ namespace NzbDrone.Api.RootFolders
                                 IBroadcastSignalRMessage signalRBroadcaster,
                                 RootFolderValidator rootFolderValidator,
                                 PathExistsValidator pathExistsValidator,
-                                DroneFactoryValidator droneFactoryValidator,
                                 MappedNetworkDriveValidator mappedNetworkDriveValidator,
                                 StartupFolderValidator startupFolderValidator,
                                 FolderWritableValidator folderWritableValidator)
@@ -33,7 +32,6 @@ namespace NzbDrone.Api.RootFolders
                            .Cascade(CascadeMode.StopOnFirstFailure)
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
-                           .SetValidator(droneFactoryValidator)
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(startupFolderValidator)
                            .SetValidator(pathExistsValidator)

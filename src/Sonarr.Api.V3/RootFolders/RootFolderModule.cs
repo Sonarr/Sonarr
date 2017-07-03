@@ -15,7 +15,6 @@ namespace Sonarr.Api.V3.RootFolders
                                 IBroadcastSignalRMessage signalRBroadcaster,
                                 RootFolderValidator rootFolderValidator,
                                 PathExistsValidator pathExistsValidator,
-                                DroneFactoryValidator droneFactoryValidator,
                                 MappedNetworkDriveValidator mappedNetworkDriveValidator)
             : base(signalRBroadcaster)
         {
@@ -30,7 +29,6 @@ namespace Sonarr.Api.V3.RootFolders
                            .Cascade(CascadeMode.StopOnFirstFailure)
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
-                           .SetValidator(droneFactoryValidator)
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(pathExistsValidator);
         }

@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Pneumatic;
 using NzbDrone.Core.Parser.Model;
@@ -19,7 +18,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         private const string _nzbUrl = "http://www.nzbs.com/url";
         private const string _title = "30.Rock.S01E05.hdtv.xvid-LoL";
         private string _pneumaticFolder;
-        private string _sabDrop;
+        private string _strmFolder;
         private string _nzbPath;
         private RemoteEpisode _remoteEpisode;
 
@@ -29,9 +28,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             _pneumaticFolder = @"d:\nzb\pneumatic\".AsOsAgnostic();
 
             _nzbPath = Path.Combine(_pneumaticFolder, _title + ".nzb").AsOsAgnostic();
-            _sabDrop = @"d:\unsorted tv\".AsOsAgnostic();
-
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder).Returns(_sabDrop);
+            _strmFolder = @"d:\unsorted tv\".AsOsAgnostic();
 
             _remoteEpisode = new RemoteEpisode();
             _remoteEpisode.Release = new ReleaseInfo();
@@ -44,7 +41,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = new PneumaticSettings
             {
-                NzbFolder = _pneumaticFolder
+                NzbFolder = _pneumaticFolder,
+                StrmFolder = _strmFolder
             };
         }
 
@@ -60,7 +58,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
         }
-
 
         [Test]
         public void should_throw_on_failed_download()
