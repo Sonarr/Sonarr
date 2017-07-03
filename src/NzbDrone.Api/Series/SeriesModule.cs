@@ -48,7 +48,6 @@ namespace NzbDrone.Api.Series
                             RootFolderValidator rootFolderValidator,
                             SeriesPathValidator seriesPathValidator,
                             SeriesExistsValidator seriesExistsValidator,
-                            DroneFactoryValidator droneFactoryValidator,
                             SeriesAncestorValidator seriesAncestorValidator,
                             SystemFolderValidator systemFolderValidator,
                             ProfileExistsValidator profileExistsValidator,
@@ -78,7 +77,6 @@ namespace NzbDrone.Api.Series
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
                            .SetValidator(seriesPathValidator)
-                           .SetValidator(droneFactoryValidator)
                            .SetValidator(seriesAncestorValidator)
                            .SetValidator(systemFolderValidator)
                            .When(s => !s.Path.IsNullOrWhiteSpace());

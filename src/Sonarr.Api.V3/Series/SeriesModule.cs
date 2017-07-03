@@ -52,7 +52,6 @@ namespace Sonarr.Api.V3.Series
                             MappedNetworkDriveValidator mappedNetworkDriveValidator,
                             SeriesPathValidator seriesPathValidator,
                             SeriesExistsValidator seriesExistsValidator,
-                            DroneFactoryValidator droneFactoryValidator,
                             SeriesAncestorValidator seriesAncestorValidator,
                             SystemFolderValidator systemFolderValidator,
                             ProfileExistsValidator profileExistsValidator,
@@ -83,7 +82,6 @@ namespace Sonarr.Api.V3.Series
                            .SetValidator(rootFolderValidator)
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(seriesPathValidator)
-                           .SetValidator(droneFactoryValidator)
                            .SetValidator(seriesAncestorValidator)
                            .SetValidator(systemFolderValidator)
                            .When(s => !s.Path.IsNullOrWhiteSpace());

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -11,7 +11,6 @@ using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.Housekeeping;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Commands;
@@ -74,13 +73,7 @@ namespace NzbDrone.Core.Jobs
                     { 
                         Interval = GetRssSyncInterval(),
                         TypeName = typeof(RssSyncCommand).FullName
-                    },
-
-                    new ScheduledTask
-                    { 
-                        Interval = _configService.DownloadedEpisodesScanInterval,
-                        TypeName = typeof(DownloadedEpisodesScanCommand).FullName
-                    },
+                    }
                 };
 
             var currentTasks = _scheduledTaskRepository.All().ToList();
@@ -144,10 +137,7 @@ namespace NzbDrone.Core.Jobs
             var rss = _scheduledTaskRepository.GetDefinition(typeof(RssSyncCommand));
             rss.Interval = _configService.RssSyncInterval;
 
-            var downloadedEpisodes = _scheduledTaskRepository.GetDefinition(typeof(DownloadedEpisodesScanCommand));
-            downloadedEpisodes.Interval = _configService.DownloadedEpisodesScanInterval;
-
-            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask> { rss, downloadedEpisodes });
+            _scheduledTaskRepository.Update(rss);
         }
     }
 }

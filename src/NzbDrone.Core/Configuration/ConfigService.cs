@@ -74,13 +74,6 @@ namespace NzbDrone.Core.Configuration
             return _repository.Get(key.ToLower()) != null;
         }
 
-        public string DownloadedEpisodesFolder
-        {
-            get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
-
-            set { SetValue(ConfigKey.DownloadedEpisodesFolder.ToString(), value); }
-        }
-
         public bool AutoUnmonitorPreviouslyDownloadedEpisodes
         {
             get { return GetValueBoolean("AutoUnmonitorPreviouslyDownloadedEpisodes"); }
@@ -179,13 +172,6 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValue("DownloadClientWorkingFolders", "_UNPACK_|_FAILED_"); }
             set { SetValue("DownloadClientWorkingFolders", value); }
-        }
-
-        public int DownloadedEpisodesScanInterval
-        {
-            get { return GetValueInt("DownloadedEpisodesScanInterval", 1); }
-
-            set { SetValue("DownloadedEpisodesScanInterval", value); }
         }
 
         public int DownloadClientHistoryLimit

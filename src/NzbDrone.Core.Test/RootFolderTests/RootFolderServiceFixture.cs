@@ -96,18 +96,6 @@ namespace NzbDrone.Core.Test.RootFolderTests
             Assert.Throws<UnauthorizedAccessException>(() => Subject.Add(new RootFolder { Path = @"C:\TV".AsOsAgnostic() }));
         }
 
-        [Test]
-        public void should_throw_when_same_path_as_drone_factory()
-        {
-            var path = @"C:\TV".AsOsAgnostic();
-
-            Mocker.GetMock<IConfigService>()
-                  .SetupGet(s => s.DownloadedEpisodesFolder)
-                  .Returns(path);
-
-            Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = path }));
-}
-
         [TestCase("$recycle.bin")]
         [TestCase("system volume information")]
         [TestCase("recycler")]
