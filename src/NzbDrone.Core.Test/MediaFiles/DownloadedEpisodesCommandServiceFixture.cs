@@ -1,10 +1,10 @@
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles;
@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Test.MediaFiles
     [TestFixture]
     public class DownloadedEpisodesCommandServiceFixture : CoreTest<DownloadedEpisodesCommandService>
     {
-        private string _droneFactory = "c:\\drop\\".AsOsAgnostic();
         private string _downloadFolder = "c:\\drop_other\\Show.S01E01\\".AsOsAgnostic();
         private string _downloadFile = "c:\\drop_other\\Show.S01E01.mkv".AsOsAgnostic();
 
@@ -29,9 +28,6 @@ namespace NzbDrone.Core.Test.MediaFiles
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder)
-                  .Returns(_droneFactory);
-
             Mocker.GetMock<IDownloadedEpisodesImportService>()
                 .Setup(v => v.ProcessRootFolder(It.IsAny<DirectoryInfo>()))
                 .Returns(new List<ImportResult>());
@@ -77,33 +73,11 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        public void should_process_dronefactory_if_path_is_not_specified()
-        {
-            GivenExistingFolder(_droneFactory);
-
-            Subject.Execute(new DownloadedEpisodesScanCommand());
-
-            Mocker.GetMock<IDownloadedEpisodesImportService>().Verify(c => c.ProcessRootFolder(It.IsAny<DirectoryInfo>()), Times.Once());
-        }
-
-        [Test]
         public void should_skip_import_if_dronefactory_doesnt_exist()
         {
-            Subject.Execute(new DownloadedEpisodesScanCommand());
+            Assert.Throws<ArgumentException>(() => Subject.Execute(new DownloadedEpisodesScanCommand()));
 
             Mocker.GetMock<IDownloadedEpisodesImportService>().Verify(c => c.ProcessRootFolder(It.IsAny<DirectoryInfo>()), Times.Never());
-
-            ExceptionVerification.ExpectedWarns(1);
-        }
-
-        [Test]
-        public void should_ignore_downloadclientid_if_path_is_not_specified()
-        {
-            GivenExistingFolder(_droneFactory);
-
-            Subject.Execute(new DownloadedEpisodesScanCommand() { DownloadClientId = "sab1" });
-
-            Mocker.GetMock<IDownloadedEpisodesImportService>().Verify(c => c.ProcessRootFolder(It.IsAny<DirectoryInfo>()), Times.Once());
         }
 
         [Test]
