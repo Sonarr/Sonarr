@@ -80,14 +80,6 @@ namespace NzbDrone.Core.Download
                     return;
                 }
 
-                var downloadedEpisodesFolder = new OsPath(_configService.DownloadedEpisodesFolder);
-
-                if (downloadedEpisodesFolder.Contains(downloadItemOutputPath))
-                {
-                    trackedDownload.Warn("Intermediate Download path inside drone factory, Skipping.");
-                    return;
-                }
-
                 var series = _parsingService.GetSeries(trackedDownload.DownloadItem.Title);
 
                 if (series == null)

@@ -107,11 +107,6 @@ namespace NzbDrone.Core.RootFolders
                 throw new InvalidOperationException("Recent directory already exists.");
             }
 
-            if (_configService.DownloadedEpisodesFolder.IsNotNullOrWhiteSpace() && _configService.DownloadedEpisodesFolder.PathEquals(rootFolder.Path))
-            {
-                throw new InvalidOperationException("Drone Factory folder cannot be used.");
-            }
-
             if (!_diskProvider.FolderWritable(rootFolder.Path))
             {
                 throw new UnauthorizedAccessException(string.Format("Root folder path '{0}' is not writable by user '{1}'", rootFolder.Path, Environment.UserName));

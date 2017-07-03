@@ -50,7 +50,6 @@ namespace Sonarr.Api.V3.Series
                             RootFolderValidator rootFolderValidator,
                             SeriesPathValidator seriesPathValidator,
                             SeriesExistsValidator seriesExistsValidator,
-                            DroneFactoryValidator droneFactoryValidator,
                             SeriesAncestorValidator seriesAncestorValidator,
                             SystemFolderValidator systemFolderValidator,
                             ProfileExistsValidator profileExistsValidator,
@@ -79,7 +78,6 @@ namespace Sonarr.Api.V3.Series
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
                            .SetValidator(seriesPathValidator)
-                           .SetValidator(droneFactoryValidator)
                            .SetValidator(seriesAncestorValidator)
                            .SetValidator(systemFolderValidator)
                            .When(s => !s.Path.IsNullOrWhiteSpace());
