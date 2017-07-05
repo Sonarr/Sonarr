@@ -12,6 +12,9 @@ namespace NzbDrone.Core.Notifications.Slack.Payloads
         [JsonProperty("icon_emoji")]
         public string IconEmoji { get; set; }
 
+        [JsonProperty("icon_url")]
+        public string IconUrl { get; set; }
+
         public List<Attachment> Attachments { get; set; }
     }
 }

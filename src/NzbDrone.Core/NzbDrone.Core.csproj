@@ -896,6 +896,7 @@
     <Compile Include="Notifications\Slack\Payloads\SlackPayload.cs" />
     <Compile Include="Notifications\Slack\Slack.cs" />
     <Compile Include="Notifications\Slack\SlackExeption.cs" />
+    <Compile Include="Notifications\Slack\SlackProxy.cs" />
     <Compile Include="Notifications\Slack\SlackSettings.cs" />
     <Compile Include="Notifications\Synology\SynologyException.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
