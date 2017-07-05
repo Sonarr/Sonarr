@@ -115,14 +115,17 @@ namespace NzbDrone.Core.Notifications.Slack
                 Attachments = attachments
             };
 
-            // Set the correct icon based on the value
-            if (icon.StartsWith(":") && icon.EndsWith(":"))
+            if (icon.IsNotNullOrWhiteSpace())
             {
-                payload.IconEmoji = icon; 
-            }
-            else if (icon.IsNotNullOrWhiteSpace())
-            {
-                payload.IconUrl = icon;
+                // Set the correct icon based on the value
+                if (icon.StartsWith(":") && icon.EndsWith(":"))
+                {
+                    payload.IconEmoji = icon;
+                }
+                else
+                {
+                    payload.IconUrl = icon;
+                }
             }
 
             return payload;
