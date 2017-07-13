@@ -166,7 +166,7 @@ namespace NzbDrone.Api.Indexers
             model.DownloadProtocol = resource.DownloadProtocol;
             model.TvdbId = resource.TvdbId;
             model.TvRageId = resource.TvRageId;
-            model.PublishDate = resource.PublishDate;
+            model.PublishDate = resource.PublishDate.ToUniversalTime();
 
             return model;
         }
