@@ -44,6 +44,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         {
             var audioFormat = mediaInfo.AudioFormat;
 
+            if (audioFormat.IsNullOrWhiteSpace())
+            {
+                return audioFormat;
+            }
+
             if (audioFormat == "AC-3")
             {
                 return "AC3";
@@ -77,6 +82,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         {
             var videoCodec = mediaInfo.VideoCodec;
 
+            if (videoCodec.IsNullOrWhiteSpace())
+            {
+                return videoCodec;
+            }
+
             if (videoCodec == "AVC")
             {
                 return sceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(sceneName).Contains("h264")
@@ -94,6 +104,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             if (videoCodec == "MPEG-2 Video")
             {
                 return "MPEG2";
+            }
+
+            if (videoCodec.Equals("XviD", StringComparison.OrdinalIgnoreCase))
+            {
+                return "XviD";
             }
 
             Logger.Error("Unknown video codec: {0}", videoCodec);
