@@ -74,6 +74,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "DTS";
             }
 
+            if (audioFormat.Equals("FLAC", StringComparison.OrdinalIgnoreCase))
+            {
+                return "FLAC";
+            }
+
             Logger.Error("Unknown audio format: {0}", audioFormat);
             return audioFormat;
         }
