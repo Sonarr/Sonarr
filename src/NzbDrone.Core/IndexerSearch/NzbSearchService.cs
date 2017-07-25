@@ -237,9 +237,12 @@ namespace NzbDrone.Core.IndexerSearch
                                                            episodes.Select(e => e.SeasonNumber).Distinct().ToList(),
                                                            episodes.Select(e => e.SceneSeasonNumber ?? e.SeasonNumber).Distinct().ToList());
 
-            spec.Episodes = episodes;
+            if (!spec.SceneTitles.Contains(series.Title))
+            {
+                spec.SceneTitles.Add(series.Title);
+            }
 
-            spec.SceneTitles.Add(series.Title);
+            spec.Episodes = episodes;
             spec.UserInvokedSearch = userInvokedSearch;
 
             return spec;

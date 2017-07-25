@@ -19,7 +19,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         public virtual bool MonitoredEpisodesOnly { get; set; }
         public virtual bool UserInvokedSearch { get; set; }
 
-        public List<string> QueryTitles => SceneTitles.Select(GetQueryTitle).ToList();
+        public List<string> QueryTitles => SceneTitles.Select(GetQueryTitle).Distinct().ToList();
 
         public static string GetQueryTitle(string title)
         {
