@@ -26,7 +26,7 @@ module.exports = {
         var tryingToReconnect = false;
         var messengerId = 'signalR';
 
-        this.signalRconnection = $.connection(StatusModel.get('urlBase') + '/signalr');
+        this.signalRconnection = $.connection(StatusModel.get('urlBase') + '/signalr', { apiKey: window.NzbDrone.ApiKey });
 
         this.signalRconnection.stateChanged(function(change) {
             console.debug('SignalR: [{0}]'.format(getStatus(change.newState)));
