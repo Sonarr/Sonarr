@@ -68,14 +68,14 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             catch (XmlException ex)
             {
-                _logger.Debug(ex, "Failed to parse newznab api capabilities for {0}.", indexerSettings.BaseUrl);
+                _logger.Debug(ex, "Failed to parse newznab api capabilities for {0}", indexerSettings.BaseUrl);
 
                 ex.WithData(response);
                 throw;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Failed to determine newznab api capabilities for {0}, using the defaults instead till Sonarr restarts.", indexerSettings.BaseUrl);
+                _logger.Error(ex, "Failed to determine newznab api capabilities for {0}, using the defaults instead till Sonarr restarts", indexerSettings.BaseUrl);
             }
 
             return capabilities;
