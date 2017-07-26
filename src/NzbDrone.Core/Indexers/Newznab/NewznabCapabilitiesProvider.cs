@@ -85,7 +85,19 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             var capabilities = new NewznabCapabilities();
 
-            var xmlRoot = XDocument.Parse(response.Content).Element("caps");
+            var xDoc = XDocument.Parse(response.Content);
+
+            if (xDoc == null)
+            {
+                throw new XmlException("Invalid XML");
+            }
+
+            var xmlRoot = xDoc.Element("caps");
+
+            if (xmlRoot == null)
+            {
+                throw new XmlException("Unexpected XML");
+            }
 
             var xmlLimits = xmlRoot.Element("limits");
             if (xmlLimits != null)
