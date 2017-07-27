@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,6 +11,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Blackhole;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
@@ -41,6 +43,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.OpenWriteStream(It.IsAny<string>()))
                 .Returns(() => new FileStream(GetTempFilePath(), FileMode.Create));
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.FilterFiles(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+                  .Returns<string, IEnumerable<string>>((b, s) => s.ToList());
         }
 
         protected void GivenFailedDownload()

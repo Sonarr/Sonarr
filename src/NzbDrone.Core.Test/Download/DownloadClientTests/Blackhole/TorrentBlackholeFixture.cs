@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,6 +11,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Blackhole;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Test.Common;
@@ -48,6 +50,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             Mocker.GetMock<ITorrentFileInfoReader>()
                 .Setup(c => c.GetHashFromTorrentFile(It.IsAny<byte[]>()))
                 .Returns("myhash");
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.FilterFiles(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+                  .Returns<string, IEnumerable<string>>((b, s) => s.ToList());
         }
 
         protected void GivenFailedDownload()
