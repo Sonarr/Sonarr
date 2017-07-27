@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         protected override void Test(List<ValidationFailure> failures)
         {
             base.Test(failures);
-
+            if (failures.Any()) return;
             failures.AddIfNotNull(TestCapabilities());
         }
 
