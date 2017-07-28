@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Host;
 
@@ -11,6 +12,14 @@ namespace NzbDrone.Console
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(ConsoleApp));
 
+        private enum ExitCodes : int
+        {
+            Normal = 0,
+            UnknownFailure = 1,
+            RecoverableFailure = 2,
+            NonRecoverableFailure = 3
+        }
+
         public static void Main(string[] args)
         {
             try
@@ -19,30 +28,61 @@ namespace NzbDrone.Console
                 NzbDroneLogger.Register(startupArgs, false, true);
                 Bootstrap.Start(startupArgs, new ConsoleAlerts());
             }
-            catch (SocketException exception)
+            catch (SonarrStartupException ex)
             {
                 System.Console.WriteLine("");
                 System.Console.WriteLine("");
-                Logger.Fatal(exception.Message + ". This can happen if another instance of Sonarr is already running another application is using the same port (default: 8989) or the user has insufficient permissions");
-                System.Console.WriteLine("Press enter to exit...");
-                System.Console.ReadLine();
-                Environment.Exit(1);
+                Logger.Fatal(ex, "EPIC FAIL!");
+                Exit(ExitCodes.NonRecoverableFailure);
             }
-            catch (Exception e)
+            catch (SocketException ex)
             {
                 System.Console.WriteLine("");
                 System.Console.WriteLine("");
-                Logger.Fatal(e, "EPIC FAIL!");
-                System.Console.WriteLine("Press enter to exit...");
-                System.Console.ReadLine();
-                Environment.Exit(1);
+                Logger.Fatal(ex.Message + ". This can happen if another instance of Sonarr is already running another application is using the same port (default: 8989) or the user has insufficient permissions");
+                Exit(ExitCodes.RecoverableFailure);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine("");
+                System.Console.WriteLine("");
+                Logger.Fatal(ex, "EPIC FAIL!");
+                Exit(ExitCodes.UnknownFailure);
             }
 
             Logger.Info("Exiting main.");
 
+            Exit(ExitCodes.Normal);
+        }
+
+        private static void Exit(ExitCodes exitCode)
+        {
+            LogManager.Flush();
+
+            if (exitCode != ExitCodes.Normal)
+            {
+                System.Console.WriteLine("Press enter to exit...");
+
+                System.Threading.Thread.Sleep(1000);
+
+                if (exitCode == ExitCodes.NonRecoverableFailure)
+                {
+                    System.Console.WriteLine("Non-recoverable failure, waiting for user intervention...");
+                    for (int i = 0; i < 3600; i++)
+                    {
+                        System.Threading.Thread.Sleep(1000);
+
+                        if (System.Console.KeyAvailable) break;
+                    }
+                }
+
+                // Please note that ReadLine silently succeeds if there is no console, KeyAvailable does not.
+                System.Console.ReadLine();
+            }
+
             //Need this to terminate on mono (thanks nlog)
             LogManager.Configuration = null;
-            Environment.Exit(0);
+            Environment.Exit((int)exitCode);
         }
     }
 }
