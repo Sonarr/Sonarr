@@ -73,7 +73,19 @@ namespace NzbDrone.Common.Http.Dispatchers
 
                 if (httpWebResponse == null)
                 {
-                    throw;
+                    // The default messages for WebException on mono are pretty horrible.
+                    if (e.Status == WebExceptionStatus.NameResolutionFailure)
+                    {
+                        throw new WebException($"DNS Name Resolution Failure: '{webRequest.RequestUri.Host}'", e.Status);
+                    }
+                    else if (OsInfo.IsNotWindows)
+                    {
+                        throw new WebException($"{e.Message}: '{webRequest.RequestUri}'", e.Status);
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
 
