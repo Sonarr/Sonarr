@@ -30,6 +30,8 @@ namespace NzbDrone.Core.Backup
             var backupConnectionStringBuilder = new SQLiteConnectionStringBuilder(sourceConnectionString);
 
             backupConnectionStringBuilder.DataSource = Path.Combine(targetDirectory, Path.GetFileName(backupConnectionStringBuilder.DataSource));
+            // We MUST use journal mode instead of WAL coz WAL has issues when page sizes change. This should also automatically deal with the -journal and -wal files during restore.
+            backupConnectionStringBuilder.JournalMode = SQLiteJournalModeEnum.Truncate;
 
             using (var sourceConnection = (SQLiteConnection)SQLiteFactory.Instance.CreateConnection())
             using (var backupConnection = (SQLiteConnection)SQLiteFactory.Instance.CreateConnection())
@@ -42,22 +44,15 @@ namespace NzbDrone.Core.Backup
 
                 sourceConnection.BackupDatabase(backupConnection, "main", "main", -1, null, 500);
 
-                // Make sure there are no lingering connections so the wal gets truncated.
+                // The backup changes the journal_mode, force it to truncate again.
+                using (var command = backupConnection.CreateCommand())
+                {
+                    command.CommandText = "pragma journal_mode=truncate";
+                    command.ExecuteNonQuery();
+                }
+
+                // Make sure there are no lingering connections.
                 SQLiteConnection.ClearAllPools();
-            }
-
-            var backupWalPath = backupConnectionStringBuilder.DataSource + "-wal";
-            if (backupConnectionStringBuilder.JournalMode == SQLiteJournalModeEnum.Wal && !File.Exists(backupWalPath))
-            {
-                // Make sure the wal gets created in the backup so users are less likely to make an error during restore.
-                File.WriteAllBytes(backupWalPath, new byte[0]);
-            }
-
-            var backupJournalPath = backupConnectionStringBuilder.DataSource + "-journal";
-            if (backupConnectionStringBuilder.JournalMode != SQLiteJournalModeEnum.Wal && !File.Exists(backupJournalPath))
-            {
-                // Make sure the journal gets created in the backup so users are less likely to make an error during restore.
-                File.WriteAllBytes(backupJournalPath, new byte[0]);
             }
         }
     }
