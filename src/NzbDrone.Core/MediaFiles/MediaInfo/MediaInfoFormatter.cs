@@ -40,7 +40,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                                         .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
         }
 
-        public static string FormatAudioCodec(MediaInfoModel mediaInfo)
+        public static string FormatAudioCodec(MediaInfoModel mediaInfo, string sceneName)
         {
             var audioFormat = mediaInfo.AudioFormat;
 
@@ -79,7 +79,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "FLAC";
             }
 
-            Logger.Error("Unknown audio format: {0}", audioFormat);
+            if (audioFormat.Equals("Vorbis", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Vorbis";
+            }
+
+            Logger.Error(new Exception(), "Unknown audio format: {0} in {1}. Please notify Sonarr developers.", audioFormat, sceneName);
             return audioFormat;
         }
 
@@ -111,12 +116,22 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "MPEG2";
             }
 
-            if (videoCodec.Equals("XviD", StringComparison.OrdinalIgnoreCase))
+            if (videoCodec.StartsWith("XviD", StringComparison.OrdinalIgnoreCase))
             {
                 return "XviD";
             }
 
-            Logger.Error("Unknown video codec: {0}", videoCodec);
+            if (videoCodec.StartsWith("DivX", StringComparison.OrdinalIgnoreCase))
+            {
+                return "DivX";
+            }
+
+            if (videoCodec.Equals("VC-1", StringComparison.OrdinalIgnoreCase))
+            {
+                return "VC1";
+            }
+
+            Logger.Error(new Exception(), "Unknown video codec: {0} in {1}. Please notify Sonarr developers.", videoCodec, sceneName);
             return videoCodec;
         }
     }

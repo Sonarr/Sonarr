@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
     [TestFixture]
     public class FormatAudioCodecFixture : TestBase
     {
+        private static string sceneName = "My.Series.S01E01-Sonarr";
+
         [TestCase("AC-3", "AC3")]
         [TestCase("E-AC-3", "EAC3")]
         [TestCase("MPEG Audio", "MPEG Audio")]
@@ -19,7 +21,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
                 AudioFormat = audioFormat
             };
 
-            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be(expectedFormat);
+            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel, sceneName).Should().Be(expectedFormat);
         }
 
         [Test]
@@ -31,7 +33,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
                 AudioProfile = "Layer 3"
             };
 
-            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be("MP3");
+            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel, sceneName).Should().Be("MP3");
         }
 
         [Test]
@@ -42,7 +44,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
                 AudioFormat = "Other Audio Format"
             };
 
-            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel).Should().Be(mediaInfoModel.AudioFormat);
+            MediaInfoFormatter.FormatAudioCodec(mediaInfoModel, sceneName).Should().Be(mediaInfoModel.AudioFormat);
             ExceptionVerification.ExpectedErrors(1);
         }
     }
