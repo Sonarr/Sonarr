@@ -242,13 +242,15 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
                     if (episodeFile.MediaInfo != null)
                     {
+                        var sceneName = episodeFile.GetSceneOrFileName();
+
                         var fileInfo = new XElement("fileinfo");
                         var streamDetails = new XElement("streamdetails");
 
                         var video = new XElement("video");
                         video.Add(new XElement("aspect", (float)episodeFile.MediaInfo.Width / (float)episodeFile.MediaInfo.Height));
                         video.Add(new XElement("bitrate", episodeFile.MediaInfo.VideoBitrate));
-                        video.Add(new XElement("codec", MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, episodeFile.SceneName)));
+                        video.Add(new XElement("codec", MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, sceneName)));
                         video.Add(new XElement("framerate", episodeFile.MediaInfo.VideoFps));
                         video.Add(new XElement("height", episodeFile.MediaInfo.Height));
                         video.Add(new XElement("scantype", episodeFile.MediaInfo.ScanType));
@@ -265,7 +267,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         var audio = new XElement("audio");
                         audio.Add(new XElement("bitrate", episodeFile.MediaInfo.AudioBitrate));
                         audio.Add(new XElement("channels", episodeFile.MediaInfo.AudioChannels));
-                        audio.Add(new XElement("codec", MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, episodeFile.SceneName)));
+                        audio.Add(new XElement("codec", MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, sceneName)));
                         audio.Add(new XElement("language", episodeFile.MediaInfo.AudioLanguages));
                         streamDetails.Add(audio);
 

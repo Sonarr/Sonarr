@@ -454,8 +454,10 @@ namespace NzbDrone.Core.Organizer
         {
             if (episodeFile.MediaInfo == null) return;
 
-            var videoCodec =  MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, episodeFile.SceneName);
-            var audioCodec =  MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, episodeFile.SceneName);
+            var sceneName = episodeFile.GetSceneOrFileName();
+
+            var videoCodec =  MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, sceneName);
+            var audioCodec =  MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, sceneName);
             var audioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo);
 
             var mediaInfoAudioLanguages = GetLanguagesToken(episodeFile.MediaInfo.AudioLanguages);

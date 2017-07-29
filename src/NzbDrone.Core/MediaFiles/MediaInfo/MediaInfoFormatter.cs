@@ -84,6 +84,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "Vorbis";
             }
 
+            if (audioFormat.Equals("Opus", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Opus";
+            }
+
             Logger.Error(new UnknownCodecException(audioFormat, sceneName), "Unknown audio format: {0} in '{1}'. Please notify Sonarr developers.", audioFormat, sceneName);
             return audioFormat;
         }
@@ -106,7 +111,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (videoCodec == "V_MPEGH/ISO/HEVC" || videoCodec == "HEVC")
             {
-                return sceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(sceneName).Contains("h265")
+                return sceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(sceneName).ContainsIgnoreCase("h265")
                     ? "h265"
                     : "x265";
             }
@@ -114,6 +119,13 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             if (videoCodec == "MPEG-2 Video")
             {
                 return "MPEG2";
+            }
+
+            if (videoCodec == "MPEG-4 Visual")
+            {
+                return sceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(sceneName).ContainsIgnoreCase("DivX")
+                    ? "DivX"
+                    : "XviD";
             }
 
             if (videoCodec.StartsWith("XviD", StringComparison.OrdinalIgnoreCase))
