@@ -109,7 +109,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                 return distinctMappings.FirstOrDefault();
             }
 
-            throw new InvalidSceneMappingException(mappings);
+            throw new InvalidSceneMappingException(mappings, releaseTitle);
         }
 
         public int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle)
