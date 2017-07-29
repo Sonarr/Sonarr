@@ -84,7 +84,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "Vorbis";
             }
 
-            Logger.Error(new Exception(), "Unknown audio format: {0} in {1}. Please notify Sonarr developers.", audioFormat, sceneName);
+            Logger.Error(new UnknownCodecException(audioFormat, sceneName), "Unknown audio format: {0} in '{1}'. Please notify Sonarr developers.", audioFormat, sceneName);
             return audioFormat;
         }
 
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     : "x264";
             }
 
-            if (videoCodec == "V_MPEGH/ISO/HEVC")
+            if (videoCodec == "V_MPEGH/ISO/HEVC" || videoCodec == "HEVC")
             {
                 return sceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(sceneName).Contains("h265")
                     ? "h265"
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "VC1";
             }
 
-            Logger.Error(new Exception(), "Unknown video codec: {0} in {1}. Please notify Sonarr developers.", videoCodec, sceneName);
+            Logger.Error(new UnknownCodecException(videoCodec, sceneName), "Unknown video codec: {0} in '{1}'. Please notify Sonarr developers.", videoCodec, sceneName);
             return videoCodec;
         }
     }

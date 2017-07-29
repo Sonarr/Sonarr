@@ -807,6 +807,7 @@
     <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatter.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoLib.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
+    <Compile Include="MediaFiles\MediaInfo\UnknownCodecException.cs" />
     <Compile Include="MediaFiles\MediaInfo\UpdateMediaInfoService.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
     <Compile Include="MediaFiles\RecycleBinProvider.cs" />
