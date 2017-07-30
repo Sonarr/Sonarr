@@ -177,7 +177,8 @@
     <Compile Include="Http\UserAgentBuilder.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\CleansingJsonVisitor.cs" />
-    <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
+    <Compile Include="Instrumentation\Extensions\LoggerExtensions.cs" />
+    <Compile Include="Instrumentation\Extensions\SentryLoggerExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\LogEventExtensions.cs" />
     <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />

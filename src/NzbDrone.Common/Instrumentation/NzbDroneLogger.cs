@@ -109,9 +109,13 @@ namespace NzbDrone.Common.Instrumentation
                 Layout = "${message}"
             };
 
-            var loggingRule = new LoggingRule("*", updateClient ? LogLevel.Trace : LogLevel.Error, target);
+            var loggingRule = new LoggingRule("*", updateClient ? LogLevel.Trace : LogLevel.Warn, target);
             LogManager.Configuration.AddTarget("sentryTarget", target);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
+
+            // Events logged to Sentry go only to Sentry.
+            var loggingRuleSentry = new LoggingRule("Sentry", LogLevel.Debug, target) { Final = true };
+            LogManager.Configuration.LoggingRules.Insert(0, loggingRuleSentry);
         }
 
         private static void RegisterDebugger()

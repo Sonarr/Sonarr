@@ -104,54 +104,44 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     int.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "PlayTime"), out audioRuntime);
                     int.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out generalRuntime);
 
-                    string aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate");
-                    int aBindex = aBitRate.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
-                    if (aBindex > 0)
-                    {
-                        aBitRate = aBitRate.Remove(aBindex);
-                    }
+                    string aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
 
                     int.TryParse(aBitRate, out audioBitRate);
                     int.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
 
 
-                    string audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
-                    int aCindex = audioChannelsStr.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
-
-                    if (aCindex > 0)
-                    {
-                        audioChannelsStr = audioChannelsStr.Remove(aCindex);
-                    }
+                    string audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
 
                     var audioChannelPositions = mediaInfo.Get(StreamKind.Audio, 0, "ChannelPositions/String2");
                     var audioChannelPositionsText = mediaInfo.Get(StreamKind.Audio, 0, "ChannelPositions");
 
                     string audioLanguages = mediaInfo.Get(StreamKind.General, 0, "Audio_Language_List");
-                    string audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile");
 
-                    int aPindex = audioProfile.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
-
-                    if (aPindex > 0)
-                    {
-                        audioProfile = audioProfile.Remove(aPindex);
-                    }
+                    string videoProfile = mediaInfo.Get(StreamKind.Video, 0, "Format_Profile").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
+                    string audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
 
                     int.TryParse(audioChannelsStr, out audioChannels);
                     var mediaInfoModel = new MediaInfoModel
                     {
-                        VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "Codec/String"),
+                        ContainerFormat = mediaInfo.Get(StreamKind.General, 0, "Format"),
+                        VideoFormat = mediaInfo.Get(StreamKind.Video, 0, "Format"),
+                        VideoCodecID = mediaInfo.Get(StreamKind.Video, 0, "CodecID"),
+                        VideoProfile = videoProfile,
+                        VideoCodecLibrary = mediaInfo.Get(StreamKind.Video, 0, "Encoded_Library"),
                         VideoBitrate = videoBitRate,
                         VideoBitDepth = videoBitDepth,
                         Height = height,
                         Width = width,
                         AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
+                        AudioCodecID = mediaInfo.Get(StreamKind.Audio, 0, "CodecID"),
+                        AudioProfile = audioProfile,
+                        AudioCodecLibrary = mediaInfo.Get(StreamKind.Audio, 0, "Encoded_Library"),
                         AudioBitrate = audioBitRate,
                         RunTime = GetBestRuntime(audioRuntime, videoRuntime, generalRuntime),
                         AudioStreamCount = streamCount,
                         AudioChannels = audioChannels,
                         AudioChannelPositions = audioChannelPositions,
                         AudioChannelPositionsText = audioChannelPositionsText,
-                        AudioProfile = audioProfile.Trim(),
                         VideoFps = videoFrameRate,
                         AudioLanguages = audioLanguages,
                         Subtitles = subtitles,

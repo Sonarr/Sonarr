@@ -41,11 +41,12 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         {
             var mediaInfoModel = new MediaInfoModel
             {
-                AudioFormat = "Other Audio Format"
+                AudioFormat = "Other Audio Format",
+                AudioCodecID = "Other Audio Codec"
             };
 
             MediaInfoFormatter.FormatAudioCodec(mediaInfoModel, sceneName).Should().Be(mediaInfoModel.AudioFormat);
-            ExceptionVerification.ExpectedErrors(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

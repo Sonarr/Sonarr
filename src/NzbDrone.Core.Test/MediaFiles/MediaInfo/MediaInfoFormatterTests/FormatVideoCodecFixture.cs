@@ -26,15 +26,15 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         }
 
         [Test]
-        public void should_return_VideoCodec_by_default()
+        public void should_return_VideoFormat_by_default()
         {
             var mediaInfoModel = new MediaInfoModel
             {
-                VideoCodec = "VideoCodec"
+                VideoFormat = "VideoCodec"
             };
 
-            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, null).Should().Be(mediaInfoModel.VideoCodec);
-            ExceptionVerification.ExpectedErrors(1);
+            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, null).Should().Be(mediaInfoModel.VideoFormat);
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

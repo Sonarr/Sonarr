@@ -78,6 +78,16 @@ namespace NzbDrone.Common.Extensions
             return !string.IsNullOrWhiteSpace(text);
         }
 
+        public static bool StartsWithIgnoreCase(this string text, string startsWith)
+        {
+            return text.StartsWith(startsWith, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool EqualsIgnoreCase(this string text, string equals)
+        {
+            return text.Equals(equals, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool ContainsIgnoreCase(this string text, string contains)
         {
             return text.IndexOf(contains, StringComparison.InvariantCultureIgnoreCase) > -1;
