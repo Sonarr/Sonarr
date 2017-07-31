@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -61,6 +62,11 @@ namespace NzbDrone.Common.Extensions
                 text = text.Substring(0, text.Length - postfix.Length);
 
             return text;
+        }
+
+        public static string Join(this IEnumerable<string> values, string separator)
+        {
+            return string.Join(separator, values);
         }
 
         public static string CleanSpaces(this string text)

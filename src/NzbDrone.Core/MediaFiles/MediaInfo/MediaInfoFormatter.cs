@@ -96,10 +96,30 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     return "MP3";
                 }
 
-                if (mediaInfo.AudioProfile == "Layer 2")
+                if (mediaInfo.AudioCodecID == "A_MPEG/L2" || mediaInfo.AudioProfile == "Layer 2")
                 {
                     return "MP2";
                 }
+            }
+
+            if (audioFormat.EqualsIgnoreCase("PCM"))
+            {
+                return "PCM";
+            }
+
+            if (audioFormat.EqualsIgnoreCase("TrueHD"))
+            {
+                return "TrueHD";
+            }
+
+            if (audioFormat.EqualsIgnoreCase("Vorbis"))
+            {
+                return "Vorbis";
+            }
+
+            if (audioFormat == "WMA")
+            {
+                return "WMA";
             }
 
             Logger.Debug()
@@ -184,7 +204,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return videoFormat;
             }
 
-            if (videoFormat == "AVC")
+            if (videoFormat == "AVC" || videoFormat == "V.MPEG4/ISO/AVC")
             {
                 if (videoCodecLibrary.StartsWithIgnoreCase("x264"))
                 {
@@ -192,6 +212,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 }
 
                 return GetSceneNameMatch(sceneName, "AVC", "h264");
+            }
+
+            if (videoFormat.EqualsIgnoreCase("DivX"))
+            {
+                return "DivX";
             }
 
             if (videoFormat == "HEVC")
@@ -202,6 +227,19 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 }
 
                 return GetSceneNameMatch(sceneName, "HEVC", "h265");
+            }
+
+            if (videoFormat == "MPEG Video")
+            {
+                if (videoCodecID == "2" || videoCodecID == "V_MPEG2")
+                {
+                    return "MPEG2";
+                }
+
+                if (videoCodecID.IsNullOrWhiteSpace())
+                {
+                    return "MPEG";
+                }
             }
 
             if (videoFormat == "MPEG-2 Video")
@@ -222,6 +260,21 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 {
                     return "DivX";
                 }
+            }
+
+            if (videoFormat == "VC-1")
+            {
+                return "VC1";
+            }
+
+            if (videoFormat == "WMV2")
+            {
+                return "WMV";
+            }
+
+            if (videoFormat.EqualsIgnoreCase("XviD"))
+            {
+                return "XviD";
             }
 
             Logger.Debug()

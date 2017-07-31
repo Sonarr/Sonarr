@@ -95,7 +95,14 @@ namespace NzbDrone.Common.Http.Dispatchers
             {
                 if (responseStream != null)
                 {
-                    data = responseStream.ToBytes();
+                    try
+                    {
+                        data = responseStream.ToBytes();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new WebException("Failed to read complete http response", ex, WebExceptionStatus.ReceiveFailure, httpWebResponse);
+                    }
                 }
             }
 

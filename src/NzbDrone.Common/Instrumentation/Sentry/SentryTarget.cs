@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -139,6 +140,14 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 var extras = logEvent.Properties.ToDictionary(x => x.Key.ToString(), x => x.Value.ToString());
                 extras.Remove("Sentry");
                 _client.Logger = logEvent.LoggerName;
+
+                if (logEvent.Exception != null)
+                {
+                    foreach (DictionaryEntry data in logEvent.Exception.Data)
+                    {
+                        extras.Add(data.Key.ToString(), data.Value.ToString());
+                    }
+                }
 
                 var sentryMessage = new SentryMessage(logEvent.Message, logEvent.Parameters);
 
