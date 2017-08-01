@@ -61,7 +61,7 @@ namespace NzbDrone.Common.Test.Http
 
             response.Content.Should().NotBeNullOrWhiteSpace();
         }
-        
+
         [Test]
         public void should_execute_https_get()
         {
@@ -140,6 +140,33 @@ namespace NzbDrone.Common.Test.Http
             request.AllowAutoRedirect = true;
 
             Subject.Get(request);
+
+            ExceptionVerification.ExpectedErrors(0);
+        }
+
+        [Test]
+        public void should_follow_redirects_to_https()
+        {
+            var request = new HttpRequestBuilder($"http://{_httpBinHost}/redirect-to")
+                .AddQueryParam("url", $"https://sonarr.tv/")
+                .Build();
+            request.AllowAutoRedirect = true;
+
+            var response = Subject.Get(request);
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.Content.Should().Contain("Sonarr");
+
+            ExceptionVerification.ExpectedErrors(0);
+        }
+
+        [Test]
+        public void should_throw_on_too_many_redirects()
+        {
+            var request = new HttpRequest($"http://{_httpBinHost}/redirect/4");
+            request.AllowAutoRedirect = true;
+
+            Assert.Throws<WebException>(() => Subject.Get(request));
 
             ExceptionVerification.ExpectedErrors(0);
         }

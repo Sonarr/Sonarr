@@ -32,7 +32,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             webRequest.Method = request.Method.ToString();
             webRequest.UserAgent = _userAgentBuilder.GetUserAgent(request.UseSimplifiedUserAgent);
             webRequest.KeepAlive = request.ConnectionKeepAlive;
-            webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
+            webRequest.AllowAutoRedirect = false;
             webRequest.CookieContainer = cookies;
 
             if (request.RequestTimeout != TimeSpan.Zero)
