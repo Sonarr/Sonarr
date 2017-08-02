@@ -172,6 +172,7 @@
     <Compile Include="Http\HttpRequestBuilder.cs" />
     <Compile Include="Http\HttpRequestBuilderFactory.cs" />
     <Compile Include="Http\Proxy\ProxyType.cs" />
+    <Compile Include="Http\TlsFailureException.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Http\UserAgentBuilder.cs" />
