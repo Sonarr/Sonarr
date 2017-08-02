@@ -78,7 +78,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                     {
                         throw new WebException($"DNS Name Resolution Failure: '{webRequest.RequestUri.Host}'", e.Status);
                     }
-                    else if (e.Status == WebExceptionStatus.SendFailure && e.ToString().Contains("The authentication or decryption has failed."))
+                    else if (e.ToString().Contains("The authentication or decryption has failed."))
                     {
                         throw new TlsFailureException(webRequest, e);
                     }
