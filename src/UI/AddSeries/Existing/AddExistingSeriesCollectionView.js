@@ -30,7 +30,7 @@ module.exports = Marionette.CompositeView.extend({
 
         if (model) {
             var currentIndex = index;
-            var termSearch = model.get('folder').name
+            var termSearch = model.get('folder').name;
             if (model.get('folder').id != null) {
                 termSearch = "tvdb:" + model.get('folder').id;
             }
