@@ -30,9 +30,12 @@ module.exports = Marionette.CompositeView.extend({
 
         if (model) {
             var currentIndex = index;
-            var folderName = model.get('folder').name;
+            var termSearch = model.get('folder').name
+            if (model.get('folder').id != null) {
+                termSearch = "tvdb:" + model.get('folder').id;
+            }
             this.addItemView(model, this.getItemView(), index);
-            this.children.findByModel(model).search({ term : folderName }).always(function() {
+            this.children.findByModel(model).search({ term : termSearch }).always(function() {
                 if (!self.isClosed) {
                     self._showAndSearch(currentIndex + 1);
                 }

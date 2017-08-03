@@ -130,6 +130,30 @@ namespace NzbDrone.Core.RootFolders
             _rootFolderRepository.Delete(id);
         }
 
+        private String getTheTvIdFromNfo(DirectoryInfo di)
+        {
+            String returnValue = null;
+            var fileNfoName = Path.Combine(di.FullName, "tvshow.nfo");
+            if (_diskProvider.FileExists(fileNfoName))
+            {
+                try
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(File.Open(fileNfoName, FileMode.Open));
+                    XmlNode node = doc.DocumentElement.SelectSingleNode("/tvshow/id");
+                    if (node != null)
+                    {
+                        returnValue = node.InnerText;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Unable to get TheTVId From nfo");
+                }
+            }
+            return returnValue;
+        }
+
         private List<UnmappedFolder> GetUnmappedFolders(string path)
         {
             _logger.Debug("Generating list of unmapped folders");
@@ -154,34 +178,7 @@ namespace NzbDrone.Core.RootFolders
             foreach (string unmappedFolder in unmappedFolders)
             {
                 var di = new DirectoryInfo(unmappedFolder.Normalize());
-                var fileNfoName = String.Format("{0}\\tvshow.nfo", di.FullName);
-                if (File.Exists(fileNfoName))
-                {
-                    try
-                    {
-                        XmlDocument doc = new XmlDocument();
-                        doc.Load(File.Open(fileNfoName, FileMode.Open));
-                        XmlNode node = doc.DocumentElement.SelectSingleNode("/tvshow/id");
-                        if (node == null)
-                        {
-                            results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
-                        }
-                        else
-                        {
-                            String tvid = node.InnerText;
-                            results.Add(new UnmappedFolder { Name = String.Format("tvdb:{0}", tvid), Path = di.FullName });
-                        }
-                    }
-                    catch (XmlException ex)
-                    {
-                        results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
-                    }
-                    
-                }
-                else
-                {
-                    results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
-                }
+                results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName, Id = getTheTvIdFromNfo(di) });
             }
 
             var setToRemove = SpecialFolders;
