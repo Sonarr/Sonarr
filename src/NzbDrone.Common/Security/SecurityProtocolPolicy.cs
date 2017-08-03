@@ -2,7 +2,6 @@
 using System.Net;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.Security
@@ -19,11 +18,6 @@ namespace NzbDrone.Common.Security
             if (OsInfo.IsNotWindows)
             {
                 // This was never meant to be used on mono, and will cause issues with mono 5 and higher if btls is enabled.
-                // Instead, force TLS provider to legacy for now due to conflict between btls and mediainfo, unless the user explicitly specified it.
-                if (Environment.GetEnvironmentVariable("MONO_TLS_PROVIDER").IsNullOrWhiteSpace())
-                {
-                    Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "legacy");
-                }
                 return;
             }
 
