@@ -89,6 +89,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "FLAC";
             }
 
+            if (audioFormat.Trim().EqualsIgnoreCase("mp3"))
+            {
+                return "MP3";
+            }
+
             if (audioFormat.EqualsIgnoreCase("MPEG Audio"))
             {
                 if (mediaInfo.AudioCodecID == "55" || mediaInfo.AudioCodecID == "A_MPEG/L3" || mediaInfo.AudioProfile == "Layer 3")
@@ -100,6 +105,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 {
                     return "MP2";
                 }
+            }
+
+            if (audioFormat.EqualsIgnoreCase("Opus"))
+            {
+                return "Opus";
             }
 
             if (audioFormat.EqualsIgnoreCase("PCM"))
@@ -214,7 +224,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return GetSceneNameMatch(sceneName, "AVC", "h264");
             }
 
-            if (videoFormat.EqualsIgnoreCase("DivX"))
+            if (videoFormat.EqualsIgnoreCase("DivX") || videoFormat.EqualsIgnoreCase("div3"))
             {
                 return "DivX";
             }
@@ -265,6 +275,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             if (videoFormat == "VC-1")
             {
                 return "VC1";
+            }
+
+            if (videoFormat.EqualsIgnoreCase("VP6") || videoFormat.EqualsIgnoreCase("VP7") ||
+                videoFormat.EqualsIgnoreCase("VP8") || videoFormat.EqualsIgnoreCase("VP9"))
+            {
+                return videoFormat.ToUpperInvariant();
             }
 
             if (videoFormat == "WMV2")

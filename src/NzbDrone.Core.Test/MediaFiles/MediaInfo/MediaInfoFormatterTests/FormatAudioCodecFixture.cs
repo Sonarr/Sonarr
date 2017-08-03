@@ -30,6 +30,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("TrueHD, A_TRUEHD, , ", "", "TrueHD")]
         [TestCase("WMA, 161, , ", "Droned.wmv", "WMA")]
         [TestCase("WMA, 162, Pro, ", "B.N.S04E18.720p.WEB-DL", "WMA")]
+        [TestCase("Opus, A_OPUS, , ", "Roadkill Ep3x11 - YouTube.webm", "Opus")]
+        [TestCase("mp3 , 0, , ", "climbing.mp4", "MP3")]
         public void should_format_audio_format(string audioFormatPack, string sceneName, string expectedFormat)
         {
             var split = audioFormatPack.Split(new string[] { ", " }, System.StringSplitOptions.None);

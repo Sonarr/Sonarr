@@ -34,6 +34,11 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("V.MPEG4/ISO/AVC, V.MPEG4/ISO/AVC, , ", "pd.2015.S03E08.720p.iP.WEBRip.AAC2.0.H264-BTW", "h264")]
         [TestCase("WMV2, WMV2, , ", "Droned.wmv", "WMV")]
         [TestCase("xvid, xvid, , ", "", "XviD")]
+        [TestCase("div3, div3, , ", "spsm.dvdrip.divx.avi'.", "DivX")]
+        [TestCase("VP6, 4, , ", "Top Gear - S12E01 - Lorries - SD TV.flv", "VP6")]
+        [TestCase("VP7, VP70, General, ", "Sweet Seymour.avi", "VP7")]
+        [TestCase("VP8, V_VP8, , ", "Dick.mkv", "VP8")]
+        [TestCase("VP9, V_VP9, , ", "Roadkill Ep3x11 - YouTube.webm", "VP9")]
         public void should_format_video_format(string videoFormatPack, string sceneName, string expectedFormat)
         {
             var split = videoFormatPack.Split(new string[] { ", " }, System.StringSplitOptions.None);
