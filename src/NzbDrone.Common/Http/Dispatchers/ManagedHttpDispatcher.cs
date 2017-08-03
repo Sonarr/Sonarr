@@ -47,19 +47,19 @@ namespace NzbDrone.Common.Http.Dispatchers
                 AddRequestHeaders(webRequest, request.Headers);
             }
 
-            if (request.ContentData != null)
-            {
-                webRequest.ContentLength = request.ContentData.Length;
-                using (var writeStream = webRequest.GetRequestStream())
-                {
-                    writeStream.Write(request.ContentData, 0, request.ContentData.Length);
-                }
-            }
-
             HttpWebResponse httpWebResponse;
 
             try
             {
+                if (request.ContentData != null)
+                {
+                    webRequest.ContentLength = request.ContentData.Length;
+                    using (var writeStream = webRequest.GetRequestStream())
+                    {
+                        writeStream.Write(request.ContentData, 0, request.ContentData.Length);
+                    }
+                }
+
                 httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
             }
             catch (WebException e)
@@ -78,13 +78,17 @@ namespace NzbDrone.Common.Http.Dispatchers
                     {
                         throw new WebException($"DNS Name Resolution Failure: '{webRequest.RequestUri.Host}'", e.Status);
                     }
+                    else if (e.ToString().Contains("TLS Support not"))
+                    {
+                        throw new TlsFailureException(webRequest, e);
+                    }
                     else if (e.ToString().Contains("The authentication or decryption has failed."))
                     {
                         throw new TlsFailureException(webRequest, e);
                     }
                     else if (OsInfo.IsNotWindows)
                     {
-                        throw new WebException($"{e.Message}: '{webRequest.RequestUri}'", e.Status);
+                        throw new WebException($"{e.Message}: '{webRequest.RequestUri}'", e, e.Status, e.Response);
                     }
                     else
                     {
