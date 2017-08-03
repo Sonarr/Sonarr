@@ -8,6 +8,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
+using System.Xml;
 
 namespace NzbDrone.Core.RootFolders
 {
@@ -153,7 +154,34 @@ namespace NzbDrone.Core.RootFolders
             foreach (string unmappedFolder in unmappedFolders)
             {
                 var di = new DirectoryInfo(unmappedFolder.Normalize());
-                results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
+                var fileNfoName = String.Format("{0}\\tvshow.nfo", di.FullName);
+                if (File.Exists(fileNfoName))
+                {
+                    try
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(File.Open(fileNfoName, FileMode.Open));
+                        XmlNode node = doc.DocumentElement.SelectSingleNode("/tvshow/id");
+                        if (node == null)
+                        {
+                            results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
+                        }
+                        else
+                        {
+                            String tvid = node.InnerText;
+                            results.Add(new UnmappedFolder { Name = String.Format("tvdb:{0}", tvid), Path = di.FullName });
+                        }
+                    }
+                    catch (XmlException ex)
+                    {
+                        results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
+                    }
+                    
+                }
+                else
+                {
+                    results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
+                }
             }
 
             var setToRemove = SpecialFolders;
