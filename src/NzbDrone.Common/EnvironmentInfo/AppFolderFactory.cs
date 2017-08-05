@@ -3,6 +3,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.EnvironmentInfo
@@ -32,6 +33,11 @@ namespace NzbDrone.Common.EnvironmentInfo
             if (OsInfo.IsWindows)
             {
                 SetPermissions();
+            }
+
+            if (!_diskProvider.FolderWritable(_appFolderInfo.AppDataFolder))
+            {
+                throw new SonarrStartupException("AppFolder {0} is not writable", _appFolderInfo.AppDataFolder);
             }
         }
 

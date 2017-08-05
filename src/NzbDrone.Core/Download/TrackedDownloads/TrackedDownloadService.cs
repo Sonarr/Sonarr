@@ -43,6 +43,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
             if (existingItem != null && existingItem.State != TrackedDownloadStage.Downloading)
             {
+                LogItemChange(existingItem, existingItem.DownloadItem, downloadItem);
+
                 existingItem.DownloadItem = downloadItem;
                 return existingItem;
             }
@@ -87,6 +89,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
                 if (trackedDownload.RemoteEpisode == null)
                 {
+                    _logger.Trace("No Episode found for download '{0}', not tracking.", trackedDownload.DownloadItem.Title);
+
                     return null;
                 }
             }
@@ -96,8 +100,27 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 return null;
             }
 
+            LogItemChange(trackedDownload, existingItem?.DownloadItem, trackedDownload.DownloadItem);
+
             _cache.Set(trackedDownload.DownloadItem.DownloadId, trackedDownload);
             return trackedDownload;
+        }
+
+        private void LogItemChange(TrackedDownload trackedDownload, DownloadClientItem existingItem, DownloadClientItem downloadItem)
+        {
+            if (existingItem == null ||
+                existingItem.Status != downloadItem.Status ||
+                existingItem.CanBeRemoved != downloadItem.CanBeRemoved ||
+                existingItem.CanMoveFiles != downloadItem.CanMoveFiles)
+            {
+                _logger.Debug("Tracking '{0}:{1}': ClientState={2}{3} SonarrStage={4} Episode='{5}' OutputPath={6}.",
+                    downloadItem.DownloadClient, downloadItem.Title,
+                    downloadItem.Status, downloadItem.CanBeRemoved ? "" :
+                                         downloadItem.CanMoveFiles ? " (busy)" : " (readonly)",
+                    trackedDownload.State,
+                    trackedDownload.RemoteEpisode?.ParsedEpisodeInfo,
+                    downloadItem.OutputPath);
+            }
         }
 
         private static TrackedDownloadStage GetStateFromHistory(HistoryEventType eventType)

@@ -25,7 +25,6 @@ namespace NzbDrone.Core.Datastore
             _datamapperFactory = datamapperFactory;
         }
 
-
         public IDataMapper GetDataMapper()
         {
             return _datamapperFactory();

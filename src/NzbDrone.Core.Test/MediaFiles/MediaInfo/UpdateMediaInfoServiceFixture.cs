@@ -60,7 +60,33 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 .All()
                 .With(v => v.RelativePath = "media.mkv")
                 .TheFirst(1)
-                .With(v => v.MediaInfo = new MediaInfoModel { SchemaRevision = 3 })
+                .With(v => v.MediaInfo = new MediaInfoModel { SchemaRevision = UpdateMediaInfoService.CURRENT_MEDIA_INFO_SCHEMA_REVISION })
+                .BuildList();
+
+            Mocker.GetMock<IMediaFileService>()
+                  .Setup(v => v.GetFilesBySeries(1))
+                  .Returns(episodeFiles);
+
+            GivenFileExists();
+            GivenSuccessfulScan();
+
+            Subject.Handle(new SeriesScannedEvent(_series));
+
+            Mocker.GetMock<IVideoFileInfoReader>()
+                  .Verify(v => v.GetMediaInfo(Path.Combine(_series.Path, "media.mkv")), Times.Exactly(2));
+
+            Mocker.GetMock<IMediaFileService>()
+                  .Verify(v => v.Update(It.IsAny<EpisodeFile>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_skip_not_yet_date_media_info()
+        {
+            var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(3)
+                .All()
+                .With(v => v.RelativePath = "media.mkv")
+                .TheFirst(1)
+                .With(v => v.MediaInfo = new MediaInfoModel { SchemaRevision = UpdateMediaInfoService.MINIMUM_MEDIA_INFO_SCHEMA_REVISION })
                 .BuildList();
 
             Mocker.GetMock<IMediaFileService>()

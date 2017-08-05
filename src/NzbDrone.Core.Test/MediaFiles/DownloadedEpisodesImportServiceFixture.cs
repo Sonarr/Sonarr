@@ -2,9 +2,12 @@
 using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
@@ -13,8 +16,6 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using FluentAssertions;
-using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.Test.MediaFiles
 {
@@ -25,11 +26,16 @@ namespace NzbDrone.Core.Test.MediaFiles
         private string[] _subFolders = new[] { "c:\\root\\foldername".AsOsAgnostic() };
         private string[] _videoFiles = new[] { "c:\\root\\foldername\\30.rock.s01e01.ext".AsOsAgnostic() };
 
+        private TrackedDownload _trackedDownload;
+
         [SetUp]
         public void Setup()
         {
             Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
                   .Returns(_videoFiles);
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.FilterFiles(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+                  .Returns<string, IEnumerable<string>>((b,s) => s.ToList());
 
             Mocker.GetMock<IDiskProvider>().Setup(c => c.GetDirectories(It.IsAny<string>()))
                   .Returns(_subFolders);
@@ -40,6 +46,23 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null, ImportMode.Auto))
                   .Returns(new List<ImportResult>());
+
+
+            var downloadItem = Builder<DownloadClientItem>.CreateNew()
+                .With(v => v.DownloadId = "sab1")
+                .With(v => v.Status = DownloadItemStatus.Downloading)
+                .Build();
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                .With(v => v.Series = new Series())
+                .Build();
+
+            _trackedDownload = new TrackedDownload
+            {
+                DownloadItem = downloadItem,
+                RemoteEpisode = remoteEpisode,
+                State = TrackedDownloadStage.Downloading
+            };
         }
 
         private void GivenValidSeries()
@@ -47,6 +70,29 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetSeries(It.IsAny<string>()))
                   .Returns(Builder<Series>.CreateNew().Build());
+        }
+
+        private void GivenSuccessfulImport()
+        {
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode));
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Setup(s => s.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), null, true))
+                  .Returns(imported);
+
+            Mocker.GetMock<IImportApprovedEpisodes>()
+                  .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), It.IsAny<bool>(), It.IsAny<DownloadClientItem>(), It.IsAny<ImportMode>()))
+                  .Returns(imported.Select(i => new ImportResult(i)).ToList())
+                  .Callback(() => WasImportedResponse());
+        }
+
+        private void WasImportedResponse()
+        {
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
+                  .Returns(new string[0]);
         }
 
         [Test]
@@ -352,6 +398,51 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Returns(15.Megabytes());
 
             Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(It.IsAny<string>(), true), Times.Never());
+        }
+
+        [Test]
+        public void should_not_delete_folder_after_import()
+        {
+            GivenValidSeries();
+
+            GivenSuccessfulImport();
+
+            _trackedDownload.DownloadItem.CanMoveFiles = false;
+
+            Subject.ProcessPath(_droneFactory, ImportMode.Auto, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(It.IsAny<string>(), true), Times.Never());
+        }
+
+        [Test]
+        public void should_delete_folder_if_importmode_move()
+        {
+            GivenValidSeries();
+
+            GivenSuccessfulImport();
+
+            _trackedDownload.DownloadItem.CanMoveFiles = false;
+
+            Subject.ProcessPath(_droneFactory, ImportMode.Move, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(It.IsAny<string>(), true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_delete_folder_if_importmode_copy()
+        {
+            GivenValidSeries();
+
+            GivenSuccessfulImport();
+
+            _trackedDownload.DownloadItem.CanMoveFiles = true;
+
+            Subject.ProcessPath(_droneFactory, ImportMode.Copy, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.DeleteFolder(It.IsAny<string>(), true), Times.Never());

@@ -101,3 +101,22 @@
     {{/with}}
 </dl>
 {{/if_eq}}
+
+{{#if_eq eventType compare="episodeFileRenamed"}}
+<dl class="dl-horizontal">
+
+    <dt>Source Path:</dt>
+    <dd>{{sourceTitle}}</dd>
+
+    {{#with data}}
+    <dt>Source Relative Path:</dt>
+    <dd>{{sourceRelativePath}}</dd>
+
+    <dt>Path:</dt>
+    <dd>{{path}}</dd>
+
+    <dt>Relative Path:</dt>
+    <dd>{{relativePath}}</dd>
+    {{/with}}
+</dl>
+{{/if_eq}}

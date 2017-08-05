@@ -11,6 +11,11 @@ namespace NzbDrone.Common.Extensions
                 return false;
             }
 
+            if (path.StartsWith(" ") || path.EndsWith(" "))
+            {
+                return false;
+            }
+
             Uri uri;
             if (!Uri.TryCreate(path, UriKind.Absolute, out uri))
             {

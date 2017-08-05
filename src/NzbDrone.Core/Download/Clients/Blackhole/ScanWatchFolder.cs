@@ -1,15 +1,15 @@
-﻿using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace NzbDrone.Core.Download.Clients.Blackhole
 {
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
         {
             var newWatchItems = new Dictionary<string, WatchFolderItem>();
             var lastWatchItems = _watchFolderItemCache.Get(watchFolder, () => newWatchItems);
-            
+
             foreach (var newWatchItem in GetDownloadItems(watchFolder, lastWatchItems, waitPeriod))
             {
                 newWatchItems[newWatchItem.DownloadId] = newWatchItem;
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
         private IEnumerable<WatchFolderItem> GetDownloadItems(string watchFolder, Dictionary<string, WatchFolderItem> lastWatchItems, TimeSpan waitPeriod)
         {
-            foreach (var folder in _diskProvider.GetDirectories(watchFolder))
+            foreach (var folder in _diskScanService.FilterFiles(watchFolder, _diskProvider.GetDirectories(watchFolder)))
             {
                 var title = FileNameBuilder.CleanFileName(Path.GetFileName(folder));
 
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                 yield return newWatchItem;
             }
 
-            foreach (var videoFile in _diskScanService.GetVideoFiles(watchFolder, false))
+            foreach (var videoFile in _diskScanService.FilterFiles(watchFolder, _diskScanService.GetVideoFiles(watchFolder, false)))
             {
                 var title = FileNameBuilder.CleanFileName(Path.GetFileName(videoFile));
 

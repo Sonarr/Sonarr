@@ -124,6 +124,7 @@
     <Compile Include="Backup\Backup.cs" />
     <Compile Include="Backup\BackupCommand.cs" />
     <Compile Include="Backup\BackupService.cs" />
+    <Compile Include="Backup\MakeDatabaseBackup.cs" />
     <Compile Include="Blacklisting\Blacklist.cs" />
     <Compile Include="Blacklisting\BlacklistRepository.cs" />
     <Compile Include="Blacklisting\BlacklistService.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Datastore\Migration\068_add_release_restrictions.cs" />
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
+    <Compile Include="Datastore\Migration\116_disable_nyaa.cs" />
     <Compile Include="Datastore\Migration\102_add_language_to_episodeFiles_history_and_blacklist.cs" />
     <Compile Include="Datastore\Migration\113_consolidate_indexer_baseurl.cs" />
     <Compile Include="Datastore\Migration\114_rename_indexer_status_id.cs" />
@@ -567,6 +569,7 @@
     <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientStatusCheck.cs" />
     <Compile Include="HealthCheck\Checks\DeprecatedDroneFactoryCheck.cs" />
+    <Compile Include="HealthCheck\Checks\MonoTlsCheck.cs" />
     <Compile Include="HealthCheck\Checks\MountCheck.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
     <Compile Include="HealthCheck\Checks\ImportMechanismCheck.cs" />
@@ -785,6 +788,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UnverifiedSceneNumberingSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecification.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileAddedEvent.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeFileRenamedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFolderCreatedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
@@ -894,6 +898,7 @@
     <Compile Include="Notifications\Slack\Payloads\SlackPayload.cs" />
     <Compile Include="Notifications\Slack\Slack.cs" />
     <Compile Include="Notifications\Slack\SlackExeption.cs" />
+    <Compile Include="Notifications\Slack\SlackProxy.cs" />
     <Compile Include="Notifications\Slack\SlackSettings.cs" />
     <Compile Include="Notifications\Synology\SynologyException.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
@@ -905,12 +910,16 @@
     <Compile Include="Notifications\Telegram\TelegramSettings.cs" />
     <Compile Include="Notifications\Twitter\OAuthToken.cs" />
     <Compile Include="Notifications\Twitter\TwitterException.cs" />
+    <Compile Include="Notifications\Webhook\WebhookRelease.cs" />
+    <Compile Include="Notifications\Webhook\WebhookEpisodeFile.cs" />
     <Compile Include="Notifications\Webhook\WebhookEpisode.cs" />
     <Compile Include="Notifications\Webhook\WebhookException.cs" />
+    <Compile Include="Notifications\Webhook\WebhookGrabPayload.cs" />
+    <Compile Include="Notifications\Webhook\WebhookImportPayload.cs" />
     <Compile Include="Notifications\Webhook\WebhookMethod.cs" />
     <Compile Include="Notifications\Webhook\WebhookPayload.cs" />
     <Compile Include="Notifications\Webhook\WebhookSeries.cs" />
-    <Compile Include="Notifications\Webhook\WebhookService.cs" />
+    <Compile Include="Notifications\Webhook\WebhookProxy.cs" />
     <Compile Include="Notifications\Webhook\WebhookSettings.cs" />
     <Compile Include="Notifications\Webhook\Webhook.cs" />
     <Compile Include="Organizer\NamingConfigRepository.cs" />

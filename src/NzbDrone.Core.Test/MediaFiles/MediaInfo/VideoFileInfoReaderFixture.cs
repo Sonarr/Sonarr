@@ -40,18 +40,23 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 
             var info = Subject.GetMediaInfo(path);
 
-
+            info.VideoCodec.Should().BeNull();
+            info.VideoFormat.Should().Be("AVC");
+            info.VideoCodecID.Should().Be("avc1");
+            info.VideoProfile.Should().Be("Baseline@L2.1");
+            info.VideoCodecLibrary.Should().Be("");
+            info.AudioFormat.Should().Be("AAC");
+            info.AudioCodecID.Should().Be("40");
+            info.AudioProfile.Should().Be("LC");
+            info.AudioCodecLibrary.Should().Be("");
             info.AudioBitrate.Should().Be(128000);
             info.AudioChannels.Should().Be(2);
-            info.AudioFormat.Should().Be("AAC");
             info.AudioLanguages.Should().Be("English");
-            info.AudioProfile.Should().Be("LC");
             info.Height.Should().Be(320);
             info.RunTime.Seconds.Should().Be(10);
             info.ScanType.Should().Be("Progressive");
             info.Subtitles.Should().Be("");
             info.VideoBitrate.Should().Be(193329);
-            info.VideoCodec.Should().Be("AVC");
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
 
@@ -71,17 +76,23 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 
             var info = Subject.GetMediaInfo(path);
 
+            info.VideoCodec.Should().BeNull();
+            info.VideoFormat.Should().Be("AVC");
+            info.VideoCodecID.Should().Be("avc1");
+            info.VideoProfile.Should().Be("Baseline@L2.1");
+            info.VideoCodecLibrary.Should().Be("");
+            info.AudioFormat.Should().Be("AAC");
+            info.AudioCodecID.Should().Be("40");
+            info.AudioProfile.Should().Be("LC");
+            info.AudioCodecLibrary.Should().Be("");
             info.AudioBitrate.Should().Be(128000);
             info.AudioChannels.Should().Be(2);
-            info.AudioFormat.Should().Be("AAC");
             info.AudioLanguages.Should().Be("English");
-            info.AudioProfile.Should().Be("LC");
             info.Height.Should().Be(320);
             info.RunTime.Seconds.Should().Be(10);
             info.ScanType.Should().Be("Progressive");
             info.Subtitles.Should().Be("");
             info.VideoBitrate.Should().Be(193329);
-            info.VideoCodec.Should().Be("AVC");
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
         }

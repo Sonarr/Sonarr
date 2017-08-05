@@ -18,7 +18,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        private const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 3;
+        public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 3;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 4;
 
         public UpdateMediaInfoService(IDiskProvider diskProvider,
                                 IMediaFileService mediaFileService,
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             var allMediaFiles = _mediaFileService.GetFilesBySeries(message.Series.Id);
-            var filteredMediaFiles = allMediaFiles.Where(c => c.MediaInfo == null || c.MediaInfo.SchemaRevision < CURRENT_MEDIA_INFO_SCHEMA_REVISION).ToList();
+            var filteredMediaFiles = allMediaFiles.Where(c => c.MediaInfo == null || c.MediaInfo.SchemaRevision < MINIMUM_MEDIA_INFO_SCHEMA_REVISION).ToList();
 
             UpdateMediaInfo(message.Series, filteredMediaFiles);
         }

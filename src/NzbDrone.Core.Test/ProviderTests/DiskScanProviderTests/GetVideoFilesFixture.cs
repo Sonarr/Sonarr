@@ -92,6 +92,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         [TestCase("Plex Versions")]
         [TestCase(".secret")]
         [TestCase(".hidden")]
+        [TestCase(".unwanted")]
         public void should_filter_certain_sub_folders(string subFolder)
         {
             var path = @"C:\Test\";
@@ -99,11 +100,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var specialFiles = GetFiles(path, subFolder).ToList();
             var allFiles = files.Concat(specialFiles);
 
-            var series = Builder<Series>.CreateNew()
-                                        .With(s => s.Path = path)
-                                        .Build();
-
-            var filteredFiles = Subject.FilterFiles(series, allFiles);
+            var filteredFiles = Subject.FilterFiles(path, allFiles);
             filteredFiles.Should().NotContain(specialFiles);
             filteredFiles.Count.Should().BeGreaterThan(0);
         }

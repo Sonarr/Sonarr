@@ -315,6 +315,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private Version ParseVersion(string version)
         {
+            if (version.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             var parsed = VersionRegex.Match(version);
 
             int major;
@@ -352,7 +357,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (version == null)
                 {
-                    return new ValidationFailure("Version", "Unknown Version: " + version);
+                    return new ValidationFailure("Version", "Unknown Version: " + rawVersion);
                 }
 
                 if (rawVersion.Equals("develop", StringComparison.InvariantCultureIgnoreCase))

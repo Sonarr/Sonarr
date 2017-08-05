@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -71,6 +72,11 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
         private static List<string> GetFingerPrint(LogEventInfo logEvent)
         {
+            if (logEvent.Properties.ContainsKey("Sentry"))
+            {
+                return ((string[])logEvent.Properties["Sentry"]).ToList();
+            }
+
             var fingerPrint = new List<string>
             {
                 logEvent.Level.Ordinal.ToString(),
@@ -94,13 +100,33 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             return fingerPrint;
         }
 
+        private bool IsSentryMessage(LogEventInfo logEvent)
+        {
+            if (logEvent.Properties.ContainsKey("Sentry"))
+            {
+                return logEvent.Properties["Sentry"] != null;
+            }
+
+            if (logEvent.Level >= LogLevel.Error && logEvent.Exception != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
 
         protected override void Write(LogEventInfo logEvent)
         {
+            if (_unauthorized)
+            {
+                return;
+            }
+
             try
             {
                 // don't report non-critical events without exceptions
-                if (logEvent.Exception == null || _unauthorized)
+                if (!IsSentryMessage(logEvent))
                 {
                     return;
                 }
@@ -112,7 +138,16 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 }
 
                 var extras = logEvent.Properties.ToDictionary(x => x.Key.ToString(), x => x.Value.ToString());
+                extras.Remove("Sentry");
                 _client.Logger = logEvent.LoggerName;
+
+                if (logEvent.Exception != null)
+                {
+                    foreach (DictionaryEntry data in logEvent.Exception.Data)
+                    {
+                        extras.Add(data.Key.ToString(), data.Value.ToString());
+                    }
+                }
 
                 var sentryMessage = new SentryMessage(logEvent.Message, logEvent.Parameters);
 
@@ -134,10 +169,15 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     sentryEvent.Fingerprint.Add(logEvent.Exception.GetType().FullName);
                 }
 
+                if (logEvent.Properties.ContainsKey("Sentry"))
+                {
+                    sentryEvent.Fingerprint.Clear();
+                    Array.ForEach((string[])logEvent.Properties["Sentry"], sentryEvent.Fingerprint.Add);
+                }
+
                 var osName = Environment.GetEnvironmentVariable("OS_NAME");
                 var osVersion = Environment.GetEnvironmentVariable("OS_VERSION");
                 var runTimeVersion = Environment.GetEnvironmentVariable("RUNTIME_VERSION");
-
 
                 sentryEvent.Tags.Add("os_name", osName);
                 sentryEvent.Tags.Add("os_version", $"{osName} {osVersion}");

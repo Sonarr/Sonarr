@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                 return distinctMappings.FirstOrDefault();
             }
 
-            throw new InvalidSceneMappingException(mappings);
+            throw new InvalidSceneMappingException(mappings, releaseTitle);
         }
 
         public int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle)
@@ -177,12 +177,12 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                     }
                     else
                     {
-                        _logger.Warn("Received empty list of mapping. will not update.");
+                        _logger.Warn("Received empty list of mapping. will not update");
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Failed to Update Scene Mappings.");
+                    _logger.Error(ex, "Failed to Update Scene Mappings");
                 }
             }
 

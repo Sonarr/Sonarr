@@ -4,9 +4,11 @@ using System.Threading;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
 using NzbDrone.Common.Security;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 
@@ -49,9 +51,13 @@ namespace NzbDrone.Host
                     SpinToExit(appMode);
                 }
             }
-            catch (TerminateApplicationException e)
+            catch (InvalidConfigFileException ex)
             {
-                Logger.Info(e.Message);
+                throw new SonarrStartupException(ex);
+            }
+            catch (TerminateApplicationException ex)
+            {
+                Logger.Info(ex.Message);
                 LogManager.Configuration = null;
             }
         }

@@ -38,7 +38,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                 _caBundleFilePath = _caBundleFileName;
             }
         }
-        
+
         public CurlHttpDispatcher(IHttpProxySettingsProvider proxySettingsProvider, IUserAgentBuilder userAgentBuilder, Logger logger)
         {
             _proxySettingsProvider = proxySettingsProvider;
@@ -107,7 +107,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                             throw new NotSupportedException($"HttpCurl method {request.Method} not supported");
                     }
                     curlEasy.UserAgent = _userAgentBuilder.GetUserAgent(request.UseSimplifiedUserAgent);
-                    curlEasy.FollowLocation = request.AllowAutoRedirect;
+                    curlEasy.FollowLocation = false;
 
                     if (request.RequestTimeout != TimeSpan.Zero)
                     {

@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Download
                 {
                     if (ex is DownloadClientUnavailableException || ex is DownloadClientAuthenticationException)
                     {
-                        _logger.Debug("Failed to send release to download client, storing until later");
+                        _logger.Debug(ex, "Failed to send release to download client, storing until later. " + remoteEpisode);
                         failed.Add(report);
 
                         if (downloadProtocol == DownloadProtocol.Usenet)

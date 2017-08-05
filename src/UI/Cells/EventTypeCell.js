@@ -31,6 +31,10 @@ module.exports = NzbDroneCell.extend({
                     icon = 'icon-sonarr-deleted';
                     toolTip = 'Episode file deleted';
                     break;
+                case 'episodeFileRenamed':
+                    icon = 'icon-sonarr-rename';
+                    toolTip = 'Episode file renamed';
+                    break;
                 default:
                     icon = 'icon-sonarr-unknown';
                     toolTip = 'unknown event';

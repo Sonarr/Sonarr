@@ -92,6 +92,7 @@
     <Compile Include="EnvironmentInfo\IOsVersionAdapter.cs" />
     <Compile Include="EnvironmentInfo\IPlatformInfo.cs" />
     <Compile Include="EnvironmentInfo\OsVersionModel.cs" />
+    <Compile Include="Exceptions\SonarrStartupException.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Disk\OsPath.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
@@ -171,12 +172,14 @@
     <Compile Include="Http\HttpRequestBuilder.cs" />
     <Compile Include="Http\HttpRequestBuilderFactory.cs" />
     <Compile Include="Http\Proxy\ProxyType.cs" />
+    <Compile Include="Http\TlsFailureException.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Http\UserAgentBuilder.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\CleansingJsonVisitor.cs" />
-    <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
+    <Compile Include="Instrumentation\Extensions\LoggerExtensions.cs" />
+    <Compile Include="Instrumentation\Extensions\SentryLoggerExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\LogEventExtensions.cs" />
     <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />

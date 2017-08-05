@@ -9,12 +9,20 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public class MediaInfoModel : IEmbeddedDocument
     {
+        public string ContainerFormat { get; set; }
+        // Deprecated according to MediaInfo
         public string VideoCodec { get; set; }
+        public string VideoFormat { get; set; }
+        public string VideoCodecID { get; set; }
+        public string VideoProfile { get; set; }
+        public string VideoCodecLibrary { get; set; }
         public int VideoBitrate { get; set; }
         public int VideoBitDepth { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public string AudioFormat { get; set; }
+        public string AudioCodecID { get; set; }
+        public string AudioCodecLibrary { get; set; }
         public int AudioBitrate { get; set; }
         public TimeSpan RunTime { get; set; }
         public int AudioStreamCount { get; set; }

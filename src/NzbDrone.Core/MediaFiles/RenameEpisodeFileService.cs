@@ -125,6 +125,8 @@ namespace NzbDrone.Core.MediaFiles
                     renamed.Add(episodeFile);
 
                     _logger.Debug("Renamed episode file: {0}", episodeFile);
+
+                    _eventAggregator.PublishEvent(new EpisodeFileRenamedEvent(series, episodeFile, episodeFilePath));
                 }
                 catch (SameFilenameException ex)
                 {

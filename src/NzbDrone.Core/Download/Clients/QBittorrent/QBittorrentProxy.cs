@@ -72,7 +72,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormParameter("urls", torrentUrl);
 
-            ProcessRequest<object>(request, settings);
+            var result = ProcessRequest(request, settings);
+
+            // Note: Older qbit versions returned nothing, so we can't do != "Ok." here.
+            if (result == "Fails.")
+            {
+                throw new DownloadClientException("Download client failed to add torrent by url");
+            }
         }
 
         public void AddTorrentFromFile(string fileName, Byte[] fileContent, QBittorrentSettings settings)
@@ -81,7 +87,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormUpload("torrents", fileName, fileContent);
 
-            ProcessRequest<object>(request, settings);
+            var result = ProcessRequest(request, settings);
+
+            // Note: Current qbit versions return nothing, so we can't do != "Ok." here.
+            if (result == "Fails.")
+            {
+                throw new DownloadClientException("Download client failed to add torrent");
+            }
         }
 
         public void RemoveTorrent(string hash, Boolean removeData, QBittorrentSettings settings)
@@ -90,7 +102,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormParameter("hashes", hash);
 
-            ProcessRequest<object>(request, settings);
+            ProcessRequest(request, settings);
         }
 
         public void SetTorrentLabel(string hash, string label, QBittorrentSettings settings)
@@ -101,7 +113,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                         .AddFormParameter("category", label);
             try
             {
-                ProcessRequest<object>(setCategoryRequest, settings);
+                ProcessRequest(setCategoryRequest, settings);
             }
             catch(DownloadClientException ex)
             {
@@ -112,7 +124,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                                 .Post()
                                                                 .AddFormParameter("hashes", hash)
                                                                 .AddFormParameter("label", label);
-                    ProcessRequest<object>(setLabelRequest, settings);
+
+                    ProcessRequest(setLabelRequest, settings);
                 }
             }
         }
@@ -125,7 +138,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             try
             {
-                var response = ProcessRequest<object>(request, settings);
+                ProcessRequest(request, settings);
             }
             catch (DownloadClientException ex)
             {
@@ -152,6 +165,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         private TResult ProcessRequest<TResult>(HttpRequestBuilder requestBuilder, QBittorrentSettings settings)
             where TResult : new()
+        {
+            var responseContent = ProcessRequest(requestBuilder, settings);
+
+            return Json.Deserialize<TResult>(responseContent);
+        }
+
+        private string ProcessRequest(HttpRequestBuilder requestBuilder, QBittorrentSettings settings)
         {
             AuthenticateClient(requestBuilder, settings);
 
@@ -185,7 +205,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 throw new DownloadClientException("Failed to connect to qBitTorrent, please check your settings.", ex);
             }
 
-            return Json.Deserialize<TResult>(response.Content);
+            return response.Content;
         }
 
         private void AuthenticateClient(HttpRequestBuilder requestBuilder, QBittorrentSettings settings, bool reauthenticate = false)

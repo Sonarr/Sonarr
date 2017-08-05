@@ -57,6 +57,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var actualHash = _proxy.AddTorrentFromFile(filename, fileContent, Settings);
 
+            if (actualHash.IsNullOrWhiteSpace())
+            {
+                throw new DownloadClientException("Deluge failed to add torrent " + filename);
+            }
+
             if (!Settings.TvCategory.IsNullOrWhiteSpace())
             {
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);

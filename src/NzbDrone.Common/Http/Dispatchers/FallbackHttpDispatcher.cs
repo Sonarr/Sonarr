@@ -34,18 +34,11 @@ namespace NzbDrone.Common.Http.Dispatchers
                     {
                         return _managedDispatcher.GetResponse(request, cookies);
                     }
-                    catch (Exception ex)
+                    catch (TlsFailureException)
                     {
-                        if (ex.ToString().Contains("The authentication or decryption has failed."))
-                        {
-                            _logger.Debug("https request failed in tls error for {0}, trying curl fallback.", request.Url.Host);
+                        _logger.Debug("https request failed in tls error for {0}, trying curl fallback.", request.Url.Host);
 
-                            _curlTLSFallbackCache.Set(request.Url.Host, true);
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        _curlTLSFallbackCache.Set(request.Url.Host, true);
                     }
                 }
 

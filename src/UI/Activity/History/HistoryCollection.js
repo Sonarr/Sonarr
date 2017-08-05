@@ -46,6 +46,10 @@ var Collection = PageableCollection.extend({
         'deleted'  : [
             'eventType',
             '5'
+        ],
+        'renamed'  : [
+            'eventType',
+            '6'
         ]
     },
 
