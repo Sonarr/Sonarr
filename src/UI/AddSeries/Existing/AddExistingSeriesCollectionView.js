@@ -31,7 +31,7 @@ module.exports = Marionette.CompositeView.extend({
         if (model) {
             var currentIndex = index;
             var termSearch = model.get('folder').name;
-            if (model.get('folder').id !== null) {
+            if (typeof model.get('folder').id !== "undefined") {
                 termSearch = "tvdb:" + model.get('folder').id;
             }
             this.addItemView(model, this.getItemView(), index);
