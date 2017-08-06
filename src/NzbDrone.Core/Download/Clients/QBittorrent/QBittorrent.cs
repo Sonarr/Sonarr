@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 {
                     case "error": // some error occurred, applies to paused torrents
                         item.Status = DownloadItemStatus.Failed;
-                        item.Message = "QBittorrent is reporting an error";
+                        item.Message = "qBittorrent is reporting an error";
                         break;
 
                     case "pausedDL": // torrent is paused and has NOT finished downloading
@@ -222,7 +222,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 var config = _proxy.GetConfig(Settings);
                 if (config.MaxRatioEnabled && config.RemoveOnMaxRatio)
                 {
-                    return new NzbDroneValidationFailure(String.Empty, "QBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
+                    return new NzbDroneValidationFailure(String.Empty, "qBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
                     {
                         DetailedDescription = "Sonarr will be unable to perform Completed Download Handling as configured. You can fix this in qBittorrent ('Tools -> Options...' in the menu) by changing 'Options -> BitTorrent -> Share Ratio Limiting' from 'Remove them' to 'Pause them'."
                     };
