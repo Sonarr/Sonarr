@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.Download
         {
             var mock = WithUsenetClient();
             mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()));
-            
+
             Subject.DownloadReport(_parseResult);
 
             VerifyEventPublished<EpisodeGrabbedEvent>();
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.Download
         {
             var mock = WithUsenetClient();
             mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()));
-            
+
             Subject.DownloadReport(_parseResult);
 
             mock.Verify(s => s.Download(It.IsAny<RemoteEpisode>()), Times.Once());
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.Download
             var mock = WithUsenetClient();
             mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()))
                 .Callback<RemoteEpisode>(v => {
-                    throw new ReleaseDownloadException(v.Release, "Error", new WebException()); 
+                    throw new ReleaseDownloadException(v.Release, "Error", new WebException());
                 });
 
             Assert.Throws<ReleaseDownloadException>(() => Subject.DownloadReport(_parseResult));
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Test.Download
             var mock = WithUsenetClient();
             mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()))
                 .Callback<RemoteEpisode>(v => {
-                    throw new ReleaseDownloadException(v.Release, "Error", new TooManyRequestsException(request, response)); 
+                    throw new ReleaseDownloadException(v.Release, "Error", new TooManyRequestsException(request, response));
                 });
 
             Assert.Throws<ReleaseDownloadException>(() => Subject.DownloadReport(_parseResult));
@@ -182,12 +182,10 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_attempt_download_if_client_isnt_configure()
         {
-            Subject.DownloadReport(_parseResult);
+            Assert.Throws<DownloadClientUnavailableException>(() => Subject.DownloadReport(_parseResult));
 
             Mocker.GetMock<IDownloadClient>().Verify(c => c.Download(It.IsAny<RemoteEpisode>()), Times.Never());
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
-
-            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
