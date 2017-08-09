@@ -52,36 +52,33 @@ namespace NzbDrone.Common.Http
 
         public HttpResponse Execute(HttpRequest request)
         {
-            var autoRedirectCount = 0;
-            var autoRedirectChain = new List<string>();
-            autoRedirectChain.Add(request.Url.ToString());
-
             var response = ExecuteRequest(request);
 
-            while (response.StatusCode == HttpStatusCode.Moved ||
-                   response.StatusCode == HttpStatusCode.MovedPermanently ||
-                   response.StatusCode == HttpStatusCode.Found)
+            if (request.AllowAutoRedirect && response.HasHttpRedirect)
             {
-                if (request.AllowAutoRedirect)
+                var autoRedirectChain = new List<string>();
+                autoRedirectChain.Add(request.Url.ToString());
+
+                do
                 {
                     request.Url += new HttpUri(response.Headers.GetSingleValue("Location"));
                     autoRedirectChain.Add(request.Url.ToString());
 
                     _logger.Trace("Redirected to {0}", request.Url);
 
-                    autoRedirectCount++;
-                    if (autoRedirectCount > 3)
+                    if (autoRedirectChain.Count > 3)
                     {
                         throw new WebException($"Too many automatic redirections were attempted for {autoRedirectChain.Join(" -> ")}", WebExceptionStatus.ProtocolError);
                     }
 
                     response = ExecuteRequest(request);
                 }
-                else if (!RuntimeInfo.IsProduction)
-                {
-                    _logger.Error("Server requested a redirect to [{0}]. Update the request URL to avoid this redirect.", response.Headers["Location"]);
-                    break;
-                }
+                while (response.HasHttpRedirect);
+            }
+
+            if (response.HasHttpRedirect && !RuntimeInfo.IsProduction)
+            {
+                _logger.Error("Server requested a redirect to [{0}] while in developer mode. Update the request URL to avoid this redirect.", response.Headers["Location"]);
             }
 
             if (!request.SuppressHttpError && response.HasHttpError)
