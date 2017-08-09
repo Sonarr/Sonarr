@@ -5,6 +5,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.TPL;
+using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
@@ -52,8 +53,7 @@ namespace NzbDrone.Core.Download
 
             if (downloadClient == null)
             {
-                _logger.Warn("{0} Download client isn't configured yet.", remoteEpisode.Release.DownloadProtocol);
-                return;
+                throw new DownloadClientUnavailableException($"{remoteEpisode.Release.DownloadProtocol} Download client isn't configured yet");
             }
 
             // Limit grabs to 2 per second.
