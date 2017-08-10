@@ -35,12 +35,13 @@ namespace NzbDrone.Core.DiskSpace
 
         public List<DiskSpace> GetFreeSpace()
         {
-            var rootPaths = new List<string>();
-            rootPaths.AddRange(GetSeriesRootPaths());
-            rootPaths.AddRange(GetDroneFactoryRootPaths());
-            rootPaths.AddRange(GetFixedDisksRootPaths());
+            var importantRootFolders = GetSeriesRootPaths().Concat(GetDroneFactoryRootPaths()).Distinct().ToList();
 
-            return GetDiskSpace(rootPaths.Distinct()).ToList();
+            var optionalRootFolders = GetFixedDisksRootPaths().Except(importantRootFolders).Distinct().ToList();
+
+            var diskSpace = GetDiskSpace(importantRootFolders).Concat(GetDiskSpace(optionalRootFolders, true)).ToList();
+
+            return diskSpace;
         }
 
         private IEnumerable<string> GetSeriesRootPaths()
