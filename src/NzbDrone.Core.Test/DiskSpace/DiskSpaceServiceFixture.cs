@@ -133,6 +133,7 @@ namespace NzbDrone.Core.Test.DiskSpace
 
         [TestCase("/boot")]
         [TestCase("/var/lib/rancher")]
+        [TestCase("/var/lib/rancher/volumes")]
         [TestCase("/var/lib/kubelet")]
         [TestCase("/var/lib/docker")]
         [TestCase("/some/place/docker/aufs")]

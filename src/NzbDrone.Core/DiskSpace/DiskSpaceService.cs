@@ -23,7 +23,7 @@ namespace NzbDrone.Core.DiskSpace
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        private static readonly Regex _regexSpecialDrive = new Regex("^/var/lib/(docker|rancher|kubelet)$|^/boot$|docker(/var)?/aufs", RegexOptions.Compiled);
+        private static readonly Regex _regexSpecialDrive = new Regex("^/var/lib/(docker|rancher|kubelet)(/|$)|^/boot(/|$)|/docker(/var)?/aufs(/|$)", RegexOptions.Compiled);
 
         public DiskSpaceService(ISeriesService seriesService, IConfigService configService, IDiskProvider diskProvider, Logger logger)
         {
