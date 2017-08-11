@@ -24,6 +24,7 @@
         Flemish = 19,
         Greek = 20,
         Korean = 21,
-        Hungarian = 22
+        Hungarian = 22,
+        Hebrew = 23
     }
 }

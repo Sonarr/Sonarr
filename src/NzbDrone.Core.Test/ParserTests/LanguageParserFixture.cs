@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Castle.2009.S01E14.HDTV.XviD.HUNDUB-LOL", Language.Hungarian)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL", Language.Hungarian)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD.HUN-LOL", Language.Hungarian)]
+        [TestCase("Avatar.The.Last.Airbender.S01-03.DVDRip.HebDub",Language.Hebrew)]
         public void should_parse_language(string postTitle, Language language)
         {
             var result = LanguageParser.ParseLanguage(postTitle);
