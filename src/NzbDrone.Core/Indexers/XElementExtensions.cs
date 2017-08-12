@@ -84,9 +84,21 @@ namespace NzbDrone.Core.Indexers
             return long.Parse(item.TryGetValue("length"));
         }
 
-        public static string TryGetValue(this XElement item, string elementName, string defaultValue = "")
+        public static string TryGetValue(this XElement item, string elementName, string defaultValue = "", bool ignoreCase = false)
         {
             var element = item.Element(elementName);
+
+            if (ignoreCase && element == null)
+            {
+                foreach (XElement elem in item.Elements())
+                {
+                    if (String.Equals(elem.Name.LocalName, elementName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        element = elem;
+                        break;
+                    }
+                }
+            }
 
             return element != null ? element.Value : defaultValue;
         }
