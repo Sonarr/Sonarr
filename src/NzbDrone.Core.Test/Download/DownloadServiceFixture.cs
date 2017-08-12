@@ -180,6 +180,21 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
+        public void Download_report_should_not_trigger_indexer_backoff_on_indexer_404_error()
+        {
+            var mock = WithUsenetClient();
+            mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()))
+                .Callback<RemoteEpisode>(v => {
+                    throw new ReleaseUnavailableException(v.Release, "Error", new WebException());
+                });
+
+            Assert.Throws<ReleaseUnavailableException>(() => Subject.DownloadReport(_parseResult));
+
+            Mocker.GetMock<IIndexerStatusService>()
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Never());
+        }
+
+        [Test]
         public void should_not_attempt_download_if_client_isnt_configure()
         {
             Assert.Throws<DownloadClientUnavailableException>(() => Subject.DownloadReport(_parseResult));
