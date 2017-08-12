@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Download
             _httpClient = httpClient;
             _torrentFileInfoReader = torrentFileInfoReader;
         }
-        
+
         public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
 
         public virtual bool PreferTorrentFile => false;
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Download
             {
                 magnetUrl = torrentInfo.MagnetUrl;
             }
-            
+
             if (PreferTorrentFile)
             {
                 if (torrentUrl.IsNotNullOrWhiteSpace())
@@ -160,6 +160,12 @@ namespace NzbDrone.Core.Download
             }
             catch (HttpException ex)
             {
+                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    _logger.Error(ex, "Downloading torrent file for episode '{0}' failed since it no longer exists ({1})", remoteEpisode.Release.Title, torrentUrl);
+                    throw new ReleaseUnavailableException(remoteEpisode.Release, "Downloading torrent failed", ex);
+                }
+
                 if ((int)ex.Response.StatusCode == 429)
                 {
                     _logger.Error("API Grab Limit reached for {0}", torrentUrl);
