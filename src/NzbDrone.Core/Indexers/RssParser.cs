@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual DateTime GetPublishDate(XElement item)
         {
-            var dateString = item.TryGetValue("pubDate");
+            var dateString = item.TryGetValue("pubDate", ignoreCase: true);
 
             if (dateString.IsNullOrWhiteSpace())
             {
