@@ -355,7 +355,7 @@ namespace NzbDrone.Core.Parser
                         Logger.Trace(regex);
                         try
                         {
-                            var result = ParseMatchCollection(match, title);
+                            var result = ParseMatchCollection(match, releaseTitle);
 
                             if (result != null)
                             {

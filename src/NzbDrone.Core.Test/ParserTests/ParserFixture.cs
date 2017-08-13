@@ -72,5 +72,13 @@ namespace NzbDrone.Core.Test.ParserTests
             Parser.Parser.ParseTitle(title).Quality.Quality.Should().NotBe(Quality.Unknown);
             Parser.Parser.ParseTitle(title).Quality.QualitySource.Should().Be(QualitySource.Extension);
         }
+
+
+        [TestCase("Revolution.S01E02.Chained.Heat.mkv", "Revolution.S01E02.Chained.Heat")]
+        public void should_parse_releasetitle(string path, string releaseTitle)
+        {
+            var result = Parser.Parser.ParseTitle(path);
+            result.ReleaseTitle.Should().Be(releaseTitle);
+        }
     }
 }
