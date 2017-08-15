@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         private string GetHashedSerialNumber(DownloadStationSettings settings)
         {
-            var serialNumber = _proxy.GetSerialNumber(settings);
+            var serialNumber = _proxy.GetInfo(settings).SerialNumber;
             return HashConverter.GetHash(serialNumber).ToHexString();
         }
     }
