@@ -262,6 +262,33 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         }
 
         [Test]
+        public void should_parse_recent_feed_from_EveolutionWorld_without_size()
+        {
+            Subject.Definition.Settings.As<TorrentRssIndexerSettings>().AllowZeroSize = true;
+            GivenRecentFeedResponse("TorrentRss/EvolutionWorld.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(2);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = releases.First() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("[TVShow --> TVShow Bluray 720p] Fargo S01 Complete Season 1 720p BRRip DD5.1 x264-PSYPHER [SEEDERS (3)/LEECHERS (0)]");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("http://ew.pw/download.php?id=dea071a7a62a0d662538d46402fb112f30b8c9fa&f=Fargo%20S01%20Complete%20Season%201%20720p%20BRRip%20DD5.1%20x264-PSYPHER.torrent&auth=secret");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("2017-08-13T22:21:43Z").ToUniversalTime());
+            torrentInfo.Size.Should().Be(0);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().NotHaveValue();
+            torrentInfo.Seeders.Should().NotHaveValue();
+        }
+
+        [Test]
         public void should_record_indexer_failure_if_unsupported_feed()
         {
             GivenRecentFeedResponse("TorrentRss/invalid/TorrentDay_NoPubDate.xml");

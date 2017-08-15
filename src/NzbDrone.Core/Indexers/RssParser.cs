@@ -343,6 +343,11 @@ namespace NzbDrone.Core.Indexers
 
         public static long ParseSize(string sizeString, bool defaultToBinaryPrefix)
         {
+            if (sizeString.IsNullOrWhiteSpace())
+            {
+                return 0;
+            }
+
             if (sizeString.All(char.IsDigit))
             {
                 return long.Parse(sizeString);
