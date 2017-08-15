@@ -12,6 +12,7 @@ using NzbDrone.Core.Download.Clients.DownloadStation.Proxies;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Test.Common;
+using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {
@@ -280,6 +281,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
               .Returns(_downloadStationConfigItems);
         }
 
+        protected void GivenApiVersions()
+        {
+            Mocker.GetMock<IDownloadStationTaskProxy>()
+                .Setup(s => s.GetApiInfo(It.IsAny<DownloadStationSettings>()))
+                .Returns(new DiskStationApiInfo() { Name = "Task", MinVersion = 1, MaxVersion = 2 });
+
+            Mocker.GetMock<IDownloadStationInfoProxy>()
+                .Setup(s => s.GetApiInfo(It.IsAny<DownloadStationSettings>()))
+                .Returns(new DiskStationApiInfo() { Name = "Info", MinVersion = 1, MaxVersion = 3 });
+
+            Mocker.GetMock<IFileStationProxy>()
+                .Setup(s => s.GetApiInfo(It.IsAny<DownloadStationSettings>()))
+                .Returns(new DiskStationApiInfo() { Name = "File", MinVersion = 1, MaxVersion = 2 });
+        }
+
         protected void GivenSharedFolder()
         {
             Mocker.GetMock<ISharedFolderResolver>()
@@ -357,6 +373,26 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                   .Returns(tasks);
 
             return tasks.Count;
+        }
+
+
+        protected void GivenDSMVersion(string version)
+        {
+            Mocker.GetMock<IDSMInfoProxy>()
+                .Setup(d => d.GetInfo(It.IsAny<DownloadStationSettings>()))
+                .Returns(new DSMInfoResponse() { Version = version });
+        }
+
+        [TestCase("DSM 6.0.0", 0)]
+        [TestCase("DSM 5.0.0", 1)]
+        public void TestConnection_should_return_validation_failure_as_expected(string version, int count)
+        {
+            GivenApiVersions();
+            GivenDSMVersion(version);
+
+            var result = Subject.Test();
+
+            result.Errors.Should().HaveCount(count);
         }
 
         [Test]

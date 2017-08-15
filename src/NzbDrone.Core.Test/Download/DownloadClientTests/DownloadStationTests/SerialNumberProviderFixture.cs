@@ -7,6 +7,7 @@ using NzbDrone.Core.Download.Clients.DownloadStation;
 using NzbDrone.Core.Download.Clients.DownloadStation.Proxies;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {
@@ -24,14 +25,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         private void GivenValidResponse()
         {
             Mocker.GetMock<IDSMInfoProxy>()
-                  .Setup(d => d.GetSerialNumber(It.IsAny<DownloadStationSettings>()))
-                  .Returns("serial");
+                  .Setup(d => d.GetInfo(It.IsAny<DownloadStationSettings>()))
+                  .Returns(new DSMInfoResponse() { SerialNumber = "serial", Version = "DSM 6.0.1" });
         }
 
         private void GivenInvalidResponse()
         {
             Mocker.GetMock<IDSMInfoProxy>()
-                  .Setup(d => d.GetSerialNumber(It.IsAny<DownloadStationSettings>()))
+                  .Setup(d => d.GetInfo(It.IsAny<DownloadStationSettings>()))
                   .Throws(new DownloadClientException("Serial response invalid"));
         }
 
@@ -46,7 +47,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             serial.Should().Be("50DE66B735D30738618568294742FCF1DFA52A47");
 
             Mocker.GetMock<IDSMInfoProxy>()
-                  .Verify(d => d.GetSerialNumber(It.IsAny<DownloadStationSettings>()), Times.Once());
+                  .Verify(d => d.GetInfo(It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
         [Test]
@@ -60,7 +61,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             serial2.Should().Be(serial1);
 
             Mocker.GetMock<IDSMInfoProxy>()
-                  .Verify(d => d.GetSerialNumber(It.IsAny<DownloadStationSettings>()), Times.Once());
+                  .Verify(d => d.GetInfo(It.IsAny<DownloadStationSettings>()), Times.Once());
         }
 
         [Test]

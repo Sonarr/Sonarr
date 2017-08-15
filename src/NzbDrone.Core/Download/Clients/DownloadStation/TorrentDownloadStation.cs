@@ -14,6 +14,7 @@ using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
+using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
@@ -24,12 +25,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected readonly ISharedFolderResolver _sharedFolderResolver;
         protected readonly ISerialNumberProvider _serialNumberProvider;
         protected readonly IFileStationProxy _fileStationProxy;
+        protected readonly IDSMInfoProxy _dsmInfoProxy;
 
         public TorrentDownloadStation(ISharedFolderResolver sharedFolderResolver,
                                       ISerialNumberProvider serialNumberProvider,
                                       IFileStationProxy fileStationProxy,
                                       IDownloadStationInfoProxy dsInfoProxy,
                                       IDownloadStationTaskProxy dsTaskProxy,
+                                      IDSMInfoProxy dsmInfoProxy,
                                       ITorrentFileInfoReader torrentFileInfoReader,
                                       IHttpClient httpClient,
                                       IConfigService configService,
@@ -43,6 +46,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             _fileStationProxy = fileStationProxy;
             _sharedFolderResolver = sharedFolderResolver;
             _serialNumberProvider = serialNumberProvider;
+            _dsmInfoProxy = dsmInfoProxy;
         }
 
         public override string Name => "Download Station";
@@ -191,6 +195,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             failures.AddIfNotNull(TestConnection());
             if (failures.Any()) return;
+            failures.AddIfNotNull(TestDSMVersion());
             failures.AddIfNotNull(TestOutputPath());
             failures.AddIfNotNull(TestGetTorrents());
         }
@@ -334,7 +339,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                return ValidateVersion();
+                return ValidateProxiesVersion();
             }
             catch (DownloadClientAuthenticationException ex)
             {
@@ -364,15 +369,38 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
         }
 
-        protected ValidationFailure ValidateVersion()
+        protected ValidationFailure TestDSMVersion()
         {
-            var info = _dsTaskProxy.GetApiInfo(Settings);
+            var info = _dsmInfoProxy.GetInfo(Settings);
 
-            _logger.Debug("Download Station api version information: Min {0} - Max {1}", info.MinVersion, info.MaxVersion);
+            Regex regex = new Regex(@"(\bDSM\b (?<version>[\d.-]*)){1}");
 
-            if (info.MinVersion > 2 || info.MaxVersion < 2)
+            var dsmVersion = regex.Match(info.Version).Groups["version"].Value;
+
+            var version = new Version(dsmVersion);
+
+            return version < new Version(6, 0, 0) ? new ValidationFailure(string.Empty, $"DSM Version {version} not supported. It should be 6 or above.") : null;
+        }
+
+        protected ValidationFailure ValidateProxiesVersion()
+        {
+            var expectedVersions = new List<ExpectedVersion>()
             {
-                return new ValidationFailure(string.Empty, $"Download Station API version not supported, should be at least 2. It supports from {info.MinVersion} to {info.MaxVersion}");
+                new ExpectedVersion { Version = 2, Proxy = _dsTaskProxy },
+                new ExpectedVersion { Version = 2, Proxy = _fileStationProxy },
+                new ExpectedVersion { Version = 1, Proxy = _dsInfoProxy }
+            };
+
+            foreach (var expectedVersion in expectedVersions)
+            {
+                DiskStationApiInfo apiInfo = expectedVersion.Proxy.GetApiInfo(Settings);
+
+                _logger.Debug("{1} api version information: Min {1} - Max {2} - Expected {3}", apiInfo.Name, apiInfo.MinVersion, apiInfo.MaxVersion, expectedVersion.Version);
+
+                if (apiInfo.MinVersion > expectedVersion.Version || apiInfo.MaxVersion < expectedVersion.Version)
+                {
+                    return new ValidationFailure(string.Empty, $"{apiInfo.Name} API version not supported, should be at least {expectedVersion.Version}. It supports from {apiInfo.MinVersion} to {apiInfo.MaxVersion}");
+                }
             }
 
             return null;

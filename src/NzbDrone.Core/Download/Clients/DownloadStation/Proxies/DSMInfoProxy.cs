@@ -7,9 +7,9 @@ using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 {
-    public interface IDSMInfoProxy
+    public interface IDSMInfoProxy : IDiskStationProxy
     {
-        string GetSerialNumber(DownloadStationSettings settings);
+        DSMInfoResponse GetInfo(DownloadStationSettings settings);
     }
 
     public class DSMInfoProxy : DiskStationProxyBase, IDSMInfoProxy
@@ -19,15 +19,15 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
         {
         }
 
-        public string GetSerialNumber(DownloadStationSettings settings)
+        public DSMInfoResponse GetInfo(DownloadStationSettings settings)
         {
             var info = GetApiInfo(settings);
 
             var requestBuilder = BuildRequest(settings, "getinfo", info.MinVersion);
 
-            var response = ProcessRequest<DSMInfoResponse>(requestBuilder, "get serial number", settings);
+            var response = ProcessRequest<DSMInfoResponse>(requestBuilder, "get info", settings);
 
-            return response.Data.SerialNumber;
+            return response.Data;
         }
     }
 }
