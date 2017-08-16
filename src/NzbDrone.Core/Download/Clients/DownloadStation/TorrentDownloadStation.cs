@@ -373,13 +373,13 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var info = _dsmInfoProxy.GetInfo(Settings);
 
-            Regex regex = new Regex(@"(\bDSM\b (?<version>[\d.-]*)){1}");
+            Regex regex = new Regex(@"(\bDSM\b (?<version>[\d.]*)){1}");
 
             var dsmVersion = regex.Match(info.Version).Groups["version"].Value;
 
             var version = new Version(dsmVersion);
 
-            return version < new Version(6, 0, 0) ? new ValidationFailure(string.Empty, $"DSM Version {version} not supported. It should be 6 or above.") : null;
+            return version < new Version(6, 0, 0) ? new NzbDroneValidationFailure(string.Empty, $"DSM Version {version} not fully supported. We recommend version 6.0.0 or above.") { IsWarning = true } : null;
         }
 
         protected ValidationFailure ValidateProxiesVersion()
