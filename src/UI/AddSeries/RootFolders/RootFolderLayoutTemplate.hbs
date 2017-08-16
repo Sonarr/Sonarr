@@ -1,21 +1,28 @@
 <div class="modal-content">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">&times;</button>
         <h3>Select Folder</h3>
     </div>
     <div class="modal-body root-folders-modal">
         <div class="validation-errors"></div>
-        <div class="alert alert-info">Enter the path that contains some or all of your TV series, you will be able to choose which series you want to import<button type="button" class="close" data-dismiss="alert">×</button></div>
+        <div class="alert alert-info">
+            Enter the path that contains some or all of your TV series, you will be able to choose which series you want to import
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+        </div>
 
         <div class="row">
             <div class="form-group">
-
                 <div class="col-md-12">
-
                     <div class="input-group">
-                        <span class="input-group-addon">&nbsp;<i class="icon-sonarr-folder-open"></i></span>
-                        <input class="form-control x-path" type="text" validation-name="path" placeholder="Enter path to folder that contains your shows">
-                        <span class="input-group-btn"><button class="btn btn-success x-add"><i class="icon-sonarr-ok"/></button></span>
+                        <span class="input-group-addon">
+                            <i class="icon-sonarr-folder-open" aria-hidden="true"></i>
+                        </span>
+                        <input class="form-control x-path" type="text" validation-name="path" placeholder="Enter a path to a folder that contains your shows">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success x-add" title="Add folder path">
+                                <i class="icon-sonarr-ok" aria-hidden="true"></i>
+                            </button>
+                        </span>
                     </div>
                 </div>
             </div>

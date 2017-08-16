@@ -6,8 +6,9 @@
 </div>{{/if}}
 <div class="x-search-bar">
     <div class="input-group input-group-lg add-series-search">
-        <span class="input-group-addon"><i class="icon-sonarr-search"/></span>
-
+        <span class="input-group-addon">
+            <i class="icon-sonarr-search" aria-hidden="true"></i>
+        </span>
         {{#if folder}}
         <input type="text" class="form-control x-series-search" value="{{folder.name}}">
         {{else}}
@@ -19,6 +20,6 @@
     <div id="search-result" class="result-list col-md-12"/>
 </div>
 <div class="btn btn-block text-center new-series-loadmore x-load-more" style="display: none;">
-    <i class="icon-sonarr-load-more"/>
+    <i class="icon-sonarr-load-more" aria-hidden="true"></i>
     more
 </div>
