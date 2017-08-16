@@ -399,7 +399,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
                 if (apiInfo.MinVersion > expectedVersion.Version || apiInfo.MaxVersion < expectedVersion.Version)
                 {
-                    return new ValidationFailure(string.Empty, $"{apiInfo.Name} API version not supported, should be at least {expectedVersion.Version}. It supports from {apiInfo.MinVersion} to {apiInfo.MaxVersion}");
+                    return new NzbDroneValidationFailure(string.Empty, $"{apiInfo.Name} API version not supported, should be at least {expectedVersion.Version}. It supports from {apiInfo.MinVersion} to {apiInfo.MaxVersion}");
                 }
             }
 
