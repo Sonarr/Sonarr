@@ -39,7 +39,7 @@ module.exports = function() {
             icon.attr('data-idle-icon', iconClass);
             icon.removeClass(iconClass);
             icon.addClass('fa-spin-overlay');
-            icon.html('<i class="' + iconClass + '" /><span><i class="fa-spin icon-sonarr-spinner" /></span>');
+            icon.html('<i class="' + iconClass + '"></i><span><i class="fa-spin icon-sonarr-spinner" aria-hidden="true"></i></span>');
         }
 
         return this;

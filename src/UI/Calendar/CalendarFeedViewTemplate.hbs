@@ -1,6 +1,6 @@
 <div class="modal-content">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="close">&times;</button>
         <h3>Sonarr Calendar feed</h3>
     </div>
     <div class="modal-body edit-series-modal">
@@ -79,8 +79,12 @@
                     <div class="input-group ical-url">
                         <input type="text" class="form-control x-ical-url" readonly="readonly" />
                         <div class="input-group-btn">
-                            <button class="btn btn-icon-only x-ical-copy"><i class="icon-sonarr-copy"></i></button>
-                            <button class="btn btn-icon-only no-router x-ical-webcal" title="Subscribe" target="_blank"><i class="icon-sonarr-calendar-o"></i></button>
+                            <button class="btn btn-icon-only x-ical-copy" title="Copy calendar feed URL">
+                                <i class="icon-sonarr-copy"></i>
+                            </button>
+                            <button class="btn btn-icon-only no-router x-ical-webcal" title="Subscribe" target="_blank">
+                                <i class="icon-sonarr-calendar-o"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
