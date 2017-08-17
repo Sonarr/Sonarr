@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         }
 
         [Test]
-        public void should_return_version(string versionExpected)
+        public void should_return_version()
         {
             GivenValidResponse();
 
