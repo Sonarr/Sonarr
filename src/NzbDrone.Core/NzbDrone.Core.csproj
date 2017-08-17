@@ -371,6 +371,7 @@
     <Compile Include="Download\Clients\DownloadClientAuthenticationException.cs" />
     <Compile Include="Download\Clients\DownloadClientUnavailableException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
+    <Compile Include="Download\Clients\DownloadStation\DSMInfoProvider.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\DownloadStationInfoProxy.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\ExpectedVersion.cs" />
     <Compile Include="Download\Clients\DownloadStation\TorrentDownloadStation.cs" />
@@ -391,7 +392,6 @@
     <Compile Include="Download\Clients\DownloadStation\Responses\DiskStationResponse.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskInfoResponse.cs" />
     <Compile Include="Download\Clients\DownloadStation\DiskStationApiInfo.cs" />
-    <Compile Include="Download\Clients\DownloadStation\SerialNumberProvider.cs" />
     <Compile Include="Download\Clients\DownloadStation\SharedFolderMapping.cs" />
     <Compile Include="Download\Clients\DownloadStation\SharedFolderResolver.cs" />
     <Compile Include="Download\Clients\DownloadStation\DiskStationApi.cs" />
