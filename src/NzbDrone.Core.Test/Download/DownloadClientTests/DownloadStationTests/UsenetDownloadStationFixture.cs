@@ -182,6 +182,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
               .Returns(_downloadStationConfigItems);
         }
 
+        protected void GivenApiVersions()
+        {
+            Mocker.GetMock<IDownloadStationTaskProxy>()
+                .Setup(s => s.GetApiInfo(It.IsAny<DownloadStationSettings>()))
+                .Returns(new DiskStationApiInfo() { Name = "Task", MinVersion = 1, MaxVersion = 2 });
+
+            Mocker.GetMock<IDownloadStationInfoProxy>()
+                .Setup(s => s.GetApiInfo(It.IsAny<DownloadStationSettings>()))
+                .Returns(new DiskStationApiInfo() { Name = "Info", MinVersion = 1, MaxVersion = 3 });
+
+            Mocker.GetMock<IFileStationProxy>()
+                .Setup(s => s.GetApiInfo(It.IsAny<DownloadStationSettings>()))
+                .Returns(new DiskStationApiInfo() { Name = "File", MinVersion = 1, MaxVersion = 2 });
+        }
+
         protected void GivenSharedFolder()
         {
             Mocker.GetMock<ISharedFolderResolver>()
@@ -245,6 +260,25 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Setup(d => d.GetTasks(_settings))
                   .Returns(tasks);
+		}
+
+ 		protected void GivenDSMVersion(string version)
+        {
+            Mocker.GetMock<IDSMInfoProvider>()
+                .Setup(d => d.GetDSMVersion(It.IsAny<DownloadStationSettings>()))
+                .Returns(new Version(version));
+        }
+
+        [TestCase("6.0.0", 0)]
+        [TestCase("5.0.0", 1)]
+        public void TestConnection_should_return_validation_failure_as_expected(string version, int count)
+        {
+            GivenApiVersions();
+            GivenDSMVersion(version);
+
+            var result = Subject.Test();
+
+            result.Errors.Should().HaveCount(count);
         }
 
         [Test]
