@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var info = GetInfo(settings);
 
-            Regex regex = new Regex(@"(\bDSM\b (?<version>[\d.]*)){1}");
+            Regex regex = new Regex(@"DSM (?<version>[\d.]*)");
 
             var dsmVersion = regex.Match(info.Version).Groups["version"].Value;
 
