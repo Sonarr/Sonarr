@@ -12,7 +12,7 @@ using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {
     [TestFixture]
-    public class SerialNumberProviderFixture : CoreTest<SerialNumberProvider>
+    public class DSMInfoProviderFixture : CoreTest<DSMInfoProvider>
     {
         protected DownloadStationSettings _settings;
 
@@ -34,6 +34,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
             Mocker.GetMock<IDSMInfoProxy>()
                   .Setup(d => d.GetInfo(It.IsAny<DownloadStationSettings>()))
                   .Throws(new DownloadClientException("Serial response invalid"));
+        }
+
+        [Test]
+        public void should_return_version(string versionExpected)
+        {
+            GivenValidResponse();
+
+            var version = Subject.GetDSMVersion(_settings);
+
+            version.Should().Be(new Version("6.0.1"));
         }
 
         [Test]

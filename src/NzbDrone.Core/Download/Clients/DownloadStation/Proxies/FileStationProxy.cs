@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -18,11 +17,17 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
     public class FileStationProxy : DiskStationProxyBase, IFileStationProxy
     {
-        public FileStationProxy(IHttpClient httpClient, ICacheManager cacheManager, Logger logger)
+        private IDSMInfoProvider _dsmInfoProvider;
+
+        public FileStationProxy(IDSMInfoProvider dsmInfoProvider,
+                                IHttpClient httpClient,
+                                ICacheManager cacheManager,
+                                Logger logger)
             : base(DiskStationApi.FileStationList, "SYNO.FileStation.List", httpClient, cacheManager, logger)
         {
+            _dsmInfoProvider = dsmInfoProvider;
         }
-        
+
         public SharedFolderMapping GetSharedFolderMapping(string sharedFolder, DownloadStationSettings settings)
         {
             var info = GetInfoFileOrDirectory(sharedFolder, settings);
@@ -34,13 +39,16 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
         public FileStationListFileInfoResponse GetInfoFileOrDirectory(string path, DownloadStationSettings settings)
         {
-            var requestBuilder = BuildRequest(settings, "getinfo", 2);
+            var dsmVersion = _dsmInfoProvider.GetDSMVersion(settings);
+
+            var requestBuilder = BuildRequest(settings, "getinfo", dsmVersion >= new Version(6, 0, 0) ? 2 : 1);
             requestBuilder.AddQueryParam("path", new[] { path }.ToJson());
             requestBuilder.AddQueryParam("additional", "[\"real_path\"]");
 
             var response = ProcessRequest<FileStationListResponse>(requestBuilder, $"get info of {path}", settings);
 
             return response.Data.Files.First();
+
         }
     }
 }
