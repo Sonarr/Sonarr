@@ -20,11 +20,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected readonly IDownloadStationInfoProxy _dsInfoProxy;
         protected readonly IDownloadStationTaskProxy _dsTaskProxy;
         protected readonly ISharedFolderResolver _sharedFolderResolver;
-        protected readonly ISerialNumberProvider _serialNumberProvider;
+        protected readonly IDSMInfoProvider _dsmInfoProvider;
         protected readonly IFileStationProxy _fileStationProxy;
 
         public UsenetDownloadStation(ISharedFolderResolver sharedFolderResolver,
-                                     ISerialNumberProvider serialNumberProvider,
+                                     IDSMInfoProvider dsmInfoProvider,
                                      IFileStationProxy fileStationProxy,
                                      IDownloadStationInfoProxy dsInfoProxy,
                                      IDownloadStationTaskProxy dsTaskProxy,
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             _dsTaskProxy = dsTaskProxy;
             _fileStationProxy = fileStationProxy;
             _sharedFolderResolver = sharedFolderResolver;
-            _serialNumberProvider = serialNumberProvider;
+            _dsmInfoProvider = dsmInfoProvider;
         }
 
         public override string Name => "Download Station";
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             var nzbTasks = GetTasks();
-            var serialNumber = _serialNumberProvider.GetSerialNumber(Settings);
+            var serialNumber = _dsmInfoProvider.GetSerialNumber(Settings);
 
             var items = new List<DownloadClientItem>();
 
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
-            var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
+            var hashedSerialNumber = _dsmInfoProvider.GetSerialNumber(Settings);
 
             _dsTaskProxy.AddTaskFromData(fileContent, filename, GetDownloadDirectory(), Settings);
 
@@ -186,6 +186,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             failures.AddIfNotNull(TestConnection());
             if (failures.Any()) return;
+            failures.AddIfNotNull(TestDSMVersion());
             failures.AddIfNotNull(TestOutputPath());
             failures.AddIfNotNull(TestGetNZB());
         }
@@ -217,7 +218,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     {
                         return new NzbDroneValidationFailure(fieldName, $"Shared folder does not exist")
                         {
-                            DetailedDescription = $"The Diskstation does not have a Shared Folder with the name '{sharedFolder}', are you sure you specified it correctly?"
+                            DetailedDescription = $"The Diskstation does not have a Shared Folder with the name '{downloadDir}', are you sure you specified it correctly?"
                         };
                     }
 
@@ -248,7 +249,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                return ValidateVersion();
+                return TestProxiesVersions();
             }
             catch (DownloadClientAuthenticationException ex)
             {
@@ -269,24 +270,48 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                         DetailedDescription = "Please verify the hostname and port."
                     };
                 }
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error testing Torrent Download Station");
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
             }
         }
-
-        protected ValidationFailure ValidateVersion()
+        
+        protected ValidationFailure TestDSMVersion()
         {
-            var info = _dsTaskProxy.GetApiInfo(Settings);
+            var dsmversion = _dsmInfoProvider.GetDSMVersion(Settings);
 
-            _logger.Debug("Download Station api version information: Min {0} - Max {1}", info.MinVersion, info.MaxVersion);
-
-            if (info.MinVersion > 2 || info.MaxVersion < 2)
+            if (dsmversion < new Version(6, 0, 0))
             {
-                return new ValidationFailure(string.Empty, $"Download Station API version not supported, should be at least 2. It supports from {info.MinVersion} to {info.MaxVersion}");
+                return new NzbDroneValidationFailure(string.Empty, $"DSM Version {dsmversion} not fully supported. We recommend version 6.0.0 or above.") { IsWarning = true };
+            }
+
+            return null;
+        }
+
+        protected ValidationFailure TestProxiesVersions()
+        {
+            var dsmVersion = _dsmInfoProvider.GetDSMVersion(Settings);
+
+            var expectedVersions = new List<ExpectedVersion>()
+            {
+                new ExpectedVersion { Version = 2, Proxy = _dsTaskProxy },
+                new ExpectedVersion { Version = (dsmVersion >= new Version(6,0,0))? 2 : 1, Proxy = _fileStationProxy },
+                new ExpectedVersion { Version = 1, Proxy = _dsInfoProxy }
+            };
+
+            foreach (var expectedVersion in expectedVersions)
+            {
+                DiskStationApiInfo apiInfo = expectedVersion.Proxy.GetApiInfo(Settings);
+
+                _logger.Debug("{1} api version information: Min {1} - Max {2} - Expected {3}", apiInfo.Name, apiInfo.MinVersion, apiInfo.MaxVersion, expectedVersion.Version);
+
+                if (apiInfo.MinVersion > expectedVersion.Version || apiInfo.MaxVersion < expectedVersion.Version)
+                {
+                    return new NzbDroneValidationFailure(string.Empty, $"{apiInfo.Name} API version not supported, should be at least {expectedVersion.Version}. It supports from {apiInfo.MinVersion} to {apiInfo.MaxVersion}");
+                }
             }
 
             return null;
@@ -377,7 +402,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
             catch (Exception ex)
             {
-                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of NZBs: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, $"Failed to get the list of NZBs: {ex.Message}");
             }
         }
 

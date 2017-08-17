@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
         protected void GivenSerialNumber()
         {
-            Mocker.GetMock<ISerialNumberProvider>()
+            Mocker.GetMock<IDSMInfoProvider>()
                 .Setup(s => s.GetSerialNumber(It.IsAny<DownloadStationSettings>()))
                 .Returns(_serialNumber);
         }
@@ -348,7 +348,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         [Test]
         public void GetItems_should_throw_if_serial_number_unavailable()
         {
-            Mocker.GetMock<ISerialNumberProvider>()
+            Mocker.GetMock<IDSMInfoProvider>()
                   .Setup(s => s.GetSerialNumber(_settings))
                   .Throws(new ApplicationException("Some unknown exception, HttpException or DownloadClientException"));
 
@@ -364,7 +364,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         {
             var remoteEpisode = CreateRemoteEpisode();
 
-            Mocker.GetMock<ISerialNumberProvider>()
+            Mocker.GetMock<IDSMInfoProvider>()
                   .Setup(s => s.GetSerialNumber(_settings))
                   .Throws(new ApplicationException("Some unknown exception, HttpException or DownloadClientException"));
 

@@ -14,7 +14,6 @@ using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
-using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
@@ -23,16 +22,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected readonly IDownloadStationInfoProxy _dsInfoProxy;
         protected readonly IDownloadStationTaskProxy _dsTaskProxy;
         protected readonly ISharedFolderResolver _sharedFolderResolver;
-        protected readonly ISerialNumberProvider _serialNumberProvider;
+        protected readonly IDSMInfoProvider _dsmInfoProvider;
         protected readonly IFileStationProxy _fileStationProxy;
-        protected readonly IDSMInfoProxy _dsmInfoProxy;
-
+        
         public TorrentDownloadStation(ISharedFolderResolver sharedFolderResolver,
-                                      ISerialNumberProvider serialNumberProvider,
+                                      IDSMInfoProvider dsmInfoProvider,
                                       IFileStationProxy fileStationProxy,
                                       IDownloadStationInfoProxy dsInfoProxy,
                                       IDownloadStationTaskProxy dsTaskProxy,
-                                      IDSMInfoProxy dsmInfoProxy,
                                       ITorrentFileInfoReader torrentFileInfoReader,
                                       IHttpClient httpClient,
                                       IConfigService configService,
@@ -45,8 +42,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             _dsTaskProxy = dsTaskProxy;
             _fileStationProxy = fileStationProxy;
             _sharedFolderResolver = sharedFolderResolver;
-            _serialNumberProvider = serialNumberProvider;
-            _dsmInfoProxy = dsmInfoProxy;
+            _dsmInfoProvider = dsmInfoProvider;
         }
 
         public override string Name => "Download Station";
@@ -59,7 +55,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             var torrents = GetTasks();
-            var serialNumber = _serialNumberProvider.GetSerialNumber(Settings);
+            var serialNumber = _dsmInfoProvider.GetSerialNumber(Settings);
 
             var items = new List<DownloadClientItem>();
 
@@ -153,7 +149,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
+            var hashedSerialNumber = _dsmInfoProvider.GetSerialNumber(Settings);
 
             _dsTaskProxy.AddTaskFromUrl(magnetLink, GetDownloadDirectory(), Settings);
 
@@ -172,7 +168,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            var hashedSerialNumber = _serialNumberProvider.GetSerialNumber(Settings);
+            var hashedSerialNumber = _dsmInfoProvider.GetSerialNumber(Settings);
 
             _dsTaskProxy.AddTaskFromData(fileContent, filename, GetDownloadDirectory(), Settings);
 
@@ -308,7 +304,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     {
                         return new NzbDroneValidationFailure(fieldName, $"Shared folder does not exist")
                         {
-                            DetailedDescription = $"The Diskstation does not have a Shared Folder with the name '{sharedFolder}', are you sure you specified it correctly?"
+                            DetailedDescription = $"The Diskstation does not have a Shared Folder with the name '{downloadDir}', are you sure you specified it correctly?"
                         };
                     }
 
@@ -339,7 +335,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                return ValidateProxiesVersion();
+                return TestProxiesVersions();
             }
             catch (DownloadClientAuthenticationException ex)
             {
@@ -368,26 +364,27 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 return new NzbDroneValidationFailure(string.Empty, $"Unknown exception: {ex.Message}");
             }
         }
-
+        
         protected ValidationFailure TestDSMVersion()
         {
-            var info = _dsmInfoProxy.GetInfo(Settings);
+            var dsmversion = _dsmInfoProvider.GetDSMVersion(Settings);
 
-            Regex regex = new Regex(@"(\bDSM\b (?<version>[\d.]*)){1}");
+            if (dsmversion < new Version(6, 0, 0))
+            {
+                return new NzbDroneValidationFailure(string.Empty, $"DSM Version {dsmversion} not fully supported. We recommend version 6.0.0 or above.") { IsWarning = true };
+            }
 
-            var dsmVersion = regex.Match(info.Version).Groups["version"].Value;
-
-            var version = new Version(dsmVersion);
-
-            return version < new Version(6, 0, 0) ? new NzbDroneValidationFailure(string.Empty, $"DSM Version {version} not fully supported. We recommend version 6.0.0 or above.") { IsWarning = true } : null;
+            return null;
         }
 
-        protected ValidationFailure ValidateProxiesVersion()
+        protected ValidationFailure TestProxiesVersions()
         {
+            var dsmVersion = _dsmInfoProvider.GetDSMVersion(Settings);
+
             var expectedVersions = new List<ExpectedVersion>()
             {
                 new ExpectedVersion { Version = 2, Proxy = _dsTaskProxy },
-                new ExpectedVersion { Version = 2, Proxy = _fileStationProxy },
+                new ExpectedVersion { Version = (dsmVersion >= new Version(6,0,0))? 2 : 1, Proxy = _fileStationProxy },
                 new ExpectedVersion { Version = 1, Proxy = _dsInfoProxy }
             };
 
