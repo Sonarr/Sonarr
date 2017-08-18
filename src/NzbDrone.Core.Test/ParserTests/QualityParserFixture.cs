@@ -178,6 +178,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.x264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.h264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.PROPER.h264-spamTV", true)]
+        [TestCase("House.of.Cards.US.s05e13.4K.UHD.WEB.DL", false)]
+        [TestCase("House.of.Cards.US.s05e13.UHD.4K.WEB.DL", false)]
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
@@ -213,6 +215,13 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);
+        }
+
+        [TestCase("House.of.Cards.US.s05e13.4K.UHD.Bluray", false)]
+        [TestCase("House.of.Cards.US.s05e13.UHD.4K.Bluray", false)]
+        public void should_parse_bluray2160p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.Bluray2160p, proper);
         }
 
         [TestCase("POI S02E11 1080i HDTV DD5.1 MPEG2-TrollHD", false)]
