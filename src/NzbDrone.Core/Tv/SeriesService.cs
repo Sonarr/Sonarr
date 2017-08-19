@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Tv
             {
                 var storedSeason = storedSeries.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);
 
-                if (storedSeason != null &&season.Monitored != storedSeason.Monitored && updateEpisodesToMatchSeason)
+                if (storedSeason != null && season.Monitored != storedSeason.Monitored && updateEpisodesToMatchSeason)
                 {
                     _episodeService.SetEpisodeMonitoredBySeason(series.Id, season.SeasonNumber, season.Monitored);
                 }
