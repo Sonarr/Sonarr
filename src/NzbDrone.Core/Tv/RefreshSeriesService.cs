@@ -146,12 +146,18 @@ namespace NzbDrone.Core.Tv
 
         public void Execute(RefreshSeriesCommand message)
         {
-            _eventAggregator.PublishEvent(new SeriesRefreshStartingEvent(message.Trigger == CommandTrigger.Manual));
+            var manualTrigger = message.Trigger == CommandTrigger.Manual;
+            _eventAggregator.PublishEvent(new SeriesRefreshStartingEvent(manualTrigger));
 
             if (message.SeriesId.HasValue)
             {
                 var series = _seriesService.GetSeries(message.SeriesId.Value);
-                RefreshSeriesInfo(series);
+
+                // Only refresh automatically if the triggering manually or refreshed more than 1 hour ago
+                if (manualTrigger || series.LastInfoSync < DateTime.UtcNow.AddHours(-1))
+                {
+                    RefreshSeriesInfo(series);
+                }
             }
             else
             {
@@ -159,7 +165,7 @@ namespace NzbDrone.Core.Tv
 
                 foreach (var series in allSeries)
                 {
-                    if (message.Trigger == CommandTrigger.Manual || _checkIfSeriesShouldBeRefreshed.ShouldRefresh(series))
+                    if (manualTrigger || _checkIfSeriesShouldBeRefreshed.ShouldRefresh(series))
                     {
                         try
                         {
@@ -175,7 +181,7 @@ namespace NzbDrone.Core.Tv
                     {
                         try
                         {
-                            _logger.Info("Skipping refresh of series: {0}", series.Title);
+                            _logger.Info("Skipping refresh of series: {0}", series);
                             _diskScanService.Scan(series);
                         }
                         catch (Exception e)
