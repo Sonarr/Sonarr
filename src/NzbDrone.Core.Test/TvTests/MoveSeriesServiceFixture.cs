@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.TvTests
             ExceptionVerification.ExpectedErrors(1);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.IsAny<Series>()), Times.Never());
+                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.TvTests
             Subject.Execute(_command);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == expectedPath)), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == expectedPath), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test.TvTests
             Subject.Execute(_command);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath)), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Path == _command.DestinationPath), It.IsAny<bool>()), Times.Once());
 
             Mocker.GetMock<IBuildFileNames>()
                   .Verify(v => v.GetSeriesFolder(It.IsAny<Series>(), null), Times.Never());
