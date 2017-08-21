@@ -49,6 +49,15 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 _proxy.MoveTorrentToTopInQueue(hash, Settings);
             }
 
+            if (Settings.AddStopped)
+            {
+                _proxy.StopTorrent(hash, Settings);
+            }
+            else
+            {
+                _proxy.StartTorrent(hash, Settings);
+            }
+
             return hash;
         }
 
@@ -63,6 +72,15 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 !isRecentEpisode && Settings.OlderTvPriority == (int)UTorrentPriority.First)
             {
                 _proxy.MoveTorrentToTopInQueue(hash, Settings);
+            }
+
+            if (Settings.AddStopped)
+            {
+                _proxy.StopTorrent(hash, Settings);
+            }
+            else
+            {
+                _proxy.StartTorrent(hash, Settings);
             }
 
             return hash;
