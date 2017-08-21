@@ -57,28 +57,12 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
-        public void should_reject_when_title_is_a_placeholder()
+        public void should_accept_when_did_not_air_recently_but_title_is_TBA()
         {
-            _localEpisode.Episodes.First().Title = $"Episode {_localEpisode.Episodes.First().EpisodeNumber}";
+            _localEpisode.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-7);
+            _localEpisode.Episodes.First().Title = "TBA";
 
-            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
-        }
-
-        [Test]
-        public void should_reject_when_title_is_a_two_digit_placeholder()
-        {
-            _localEpisode.Episodes.First().Title = $"Episode {_localEpisode.Episodes.First().EpisodeNumber:00}";
-
-            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
-        }
-
-        [Test]
-        public void should_accept_when_did_not_air_recently_but_title_is_null()
-        {
-            _localEpisode.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(7);
-            _localEpisode.Episodes.First().Title = null;
-
-            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

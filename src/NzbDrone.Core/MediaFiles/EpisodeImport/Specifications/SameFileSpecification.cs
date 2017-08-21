@@ -14,6 +14,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             _logger = logger;
         }
+
+        public RejectionType Type => RejectionType.Permanent;
+
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             var episodeFiles = localEpisode.Episodes.Where(e => e.EpisodeFileId != 0).Select(e => e.EpisodeFile).ToList();
