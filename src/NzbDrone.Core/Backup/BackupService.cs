@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Backup
                 {
                     backups.AddRange(GetBackupFiles(folder).Select(b => new Backup
                                                                         {
-                                                                            Path = Path.GetFileName(b),
+                                                                            Name = Path.GetFileName(b),
                                                                             Type = backupType,
                                                                             Time = _diskProvider.FileGetLastWrite(b)
                                                                         }));
