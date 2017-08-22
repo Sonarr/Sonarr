@@ -1,5 +1,6 @@
 ﻿using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Series;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Api.Parse
@@ -18,7 +19,8 @@ namespace NzbDrone.Api.Parse
         private ParseResource Parse()
         {
             var title = Request.Query.Title.Value as string;
-            var parsedEpisodeInfo = Parser.ParseTitle(title);
+            var path = Request.Query.Path.Value as string;
+            var parsedEpisodeInfo = path.IsNotNullOrWhiteSpace() ? Parser.ParsePath(path) : Parser.ParseTitle(title);
 
             if (parsedEpisodeInfo == null)
             {
