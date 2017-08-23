@@ -40,8 +40,11 @@ VersionInfoVersion={#BuildNumber}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "windowsService"; Description: "Install as a Windows Service"
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"
+Name: "windowsService"; Description: "Install Windows Service (Starts when the computer starts)"; GroupDescription: "Start automatically"; Flags: exclusive
+Name: "startupShortcut"; Description: "Create shortcut in Startup folder (Starts when you log into Windows)"; GroupDescription: "Start automatically"; Flags: exclusive unchecked
+Name: "none"; Description: "Do not start automatically"; GroupDescription: "Start automatically"; Flags: exclusive unchecked
+
 
 [Files]
 Source: "..\_output\NzbDrone.exe"; DestDir: "{app}"; Flags: ignoreversion  
@@ -51,10 +54,13 @@ Source: "..\_output\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs cr
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Parameters: "/icon"
 Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Parameters: "/icon"
+Name: "{userstartup}\{#AppName}"; Filename: "{app}\NzbDrone.exe"; WorkingDir: "{app}"; Tasks: startupShortcut
 
 [Run]
-Filename: "{app}\nzbdrone.console.exe"; Parameters: "/u"; Flags: waituntilterminated;
-Filename: "{app}\nzbdrone.console.exe"; Parameters: "/i"; Flags: waituntilterminated; Tasks: windowsService
+Filename: "{app}\nzbdrone.console.exe"; Parameters: "/u"; Flags: runhidden waituntilterminated;
+Filename: "{app}\nzbdrone.console.exe"; Parameters: "/i"; Flags: runhidden waituntilterminated; Tasks: windowsService
+Filename: "{app}\NzbDrone.exe"; Description: "Open Sonarr"; Flags: postinstall skipifsilent nowait; Tasks: windowsService;
+Filename: "{app}\NzbDrone.exe"; Description: "Start Sonarr"; Flags: postinstall skipifsilent nowait; Tasks: startupShortcut none;
 
 [UninstallRun]
 Filename: "{app}\nzbdrone.console.exe"; Parameters: "/u"; Flags: waituntilterminated skipifdoesntexist
