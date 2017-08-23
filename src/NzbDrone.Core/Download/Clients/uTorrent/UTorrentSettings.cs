@@ -47,8 +47,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         [FieldDefinition(6, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(UTorrentPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public int OlderTvPriority { get; set; }
 
-        [FieldDefinition(7, Label = "Add Stopped", Type = FieldType.Checkbox, SelectOptions = typeof(UTorrentPriority), HelpText = "Torrents will need to be started manually in uTorrent")]
-        public bool AddStopped { get; set; }
+        [FieldDefinition(7, Label = "Initial State", Type = FieldType.Select, SelectOptions = typeof(UTorrentState), HelpText = "Initial state for torrents added to uTorrent")]
+        public int IntialState { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
