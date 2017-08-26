@@ -36,7 +36,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             return audioChannelPositions.Replace("Object Based / ", "")
-                                        .Split(new string[] { " / " }, StringSplitOptions.None)
+                                        .Split(new string[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
                                         .First()
                                         .Split('/')
                                         .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
