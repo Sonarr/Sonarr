@@ -301,6 +301,9 @@
     <Compile Include="MediaFiles\DownloadedEpisodesCommandServiceFixture.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingServiceTests\MoveEpisodeFileFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateEpisodesFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateQualityFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\Augmenters\Quality\AugmentQualityFromMediaInfoFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMakerFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\DetectSampleFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\EpisodeTitleSpecificationFixture.cs" />

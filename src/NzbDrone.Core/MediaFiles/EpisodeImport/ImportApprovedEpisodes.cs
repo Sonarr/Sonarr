@@ -83,7 +83,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.MediaInfo = localEpisode.MediaInfo;
                     episodeFile.SeasonNumber = localEpisode.SeasonNumber;
                     episodeFile.Episodes = localEpisode.Episodes;
-                    episodeFile.ReleaseGroup = localEpisode.ParsedEpisodeInfo.ReleaseGroup;
+                    episodeFile.ReleaseGroup = localEpisode.ReleaseGroup;
 
                     bool copyOnly;
                     switch (importMode)

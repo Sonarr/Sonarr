@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            var folderInfo = Parser.Parser.ParseTitle(dirInfo.Name);
+            var folderInfo = localEpisode.FileEpisodeInfo;
 
             if (folderInfo != null && folderInfo.IsPossibleSceneSeasonSpecial)
             {
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            var unexpected = localEpisode.ParsedEpisodeInfo.EpisodeNumbers.Where(f => !folderInfo.EpisodeNumbers.Contains(f)).ToList();
+            var unexpected = localEpisode.FileEpisodeInfo.EpisodeNumbers.Where(f => !folderInfo.EpisodeNumbers.Contains(f)).ToList();
 
             if (unexpected.Any())
             {
