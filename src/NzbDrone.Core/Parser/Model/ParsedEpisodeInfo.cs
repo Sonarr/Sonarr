@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Qualities;
 
@@ -16,9 +16,11 @@ namespace NzbDrone.Core.Parser.Model
         public string AirDate { get; set; }
         public Language Language { get; set; }
         public bool FullSeason { get; set; }
+        public bool IsPartialSeason { get; set; }
         public bool Special { get; set; }
         public string ReleaseGroup { get; set; }
         public string ReleaseHash { get; set; }
+        public int SeasonPart { get; set; }
 
         public ParsedEpisodeInfo()
         {

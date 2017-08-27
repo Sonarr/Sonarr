@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
 
@@ -52,6 +52,19 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
 
             result.Should().BeNull();
+        }
+
+        [TestCase("The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb", "The Ranch 2016", 2, 1)]
+        public void should_parse_partial_season_release(string postTitle, string title, int season, int seasonPart)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.SeasonNumber.Should().Be(season);
+            result.SeriesTitle.Should().Be(title);
+            result.EpisodeNumbers.Should().BeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
+            result.IsPartialSeason.Should().BeTrue();
+            result.SeasonPart.Should().Be(seasonPart);
         }
     }
 }

@@ -94,7 +94,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (localEpisode.Episodes.Empty())
                     {
-                        decision = new ImportDecision(localEpisode, new Rejection("Invalid season or episode"));
+                        if (localEpisode.ParsedEpisodeInfo.IsPartialSeason)
+                        {
+                            decision = new ImportDecision(localEpisode, new Rejection("Partial season packs are not supported"));
+                        }
+                        else
+                        {
+                            decision = new ImportDecision(localEpisode, new Rejection("Invalid season or episode"));
+                        }
                     }
                     else
                     {
