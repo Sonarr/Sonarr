@@ -9,30 +9,17 @@ namespace NzbDrone.Common.Serializer
     public static class Json
     {
         private static readonly JsonSerializer Serializer;
-        private static readonly JsonSerializerSettings SerializerSetting;
-        private static readonly JsonSerializerSettings DeserializerSetting;
-
+        private static readonly JsonSerializerSettings SerializerSettings;
 
         static Json()
         {
-            SerializerSetting = new JsonSerializerSettings
-                        {
-                            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                            NullValueHandling = NullValueHandling.Ignore,
-                            Formatting = Formatting.Indented,
-                            DefaultValueHandling = DefaultValueHandling.Include,
-                            ContractResolver = new CamelCasePropertyNamesContractResolver()
-                        };
+            SerializerSettings = GetSerializerSettings();
+            Serializer = JsonSerializer.Create(SerializerSettings);
+        }
 
-
-            SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
-            SerializerSetting.Converters.Add(new VersionConverter());
-            SerializerSetting.Converters.Add(new HttpUriConverter());
-
-            Serializer = JsonSerializer.Create(SerializerSetting);
-
-
-            DeserializerSetting = new JsonSerializerSettings
+        public static JsonSerializerSettings GetSerializerSettings()
+        {
+            var serializerSettings = new JsonSerializerSettings
             {
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 NullValueHandling = NullValueHandling.Ignore,
@@ -41,18 +28,21 @@ namespace NzbDrone.Common.Serializer
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            DeserializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
-            DeserializerSetting.Converters.Add(new VersionConverter());
+            serializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            serializerSettings.Converters.Add(new VersionConverter());
+            serializerSettings.Converters.Add(new HttpUriConverter());
+
+            return serializerSettings;
         }
 
         public static T Deserialize<T>(string json) where T : new()
         {
-            return JsonConvert.DeserializeObject<T>(json, DeserializerSetting);
+            return JsonConvert.DeserializeObject<T>(json, SerializerSettings);
         }
 
         public static object Deserialize(string json, Type type)
         {
-            return JsonConvert.DeserializeObject(json, type, DeserializerSetting);
+            return JsonConvert.DeserializeObject(json, type, SerializerSettings);
         }
 
         public static bool TryDeserialize<T>(string json, out T result) where T : new()
@@ -76,7 +66,7 @@ namespace NzbDrone.Common.Serializer
 
         public static string ToJson(this object obj)
         {
-            return JsonConvert.SerializeObject(obj, SerializerSetting);
+            return JsonConvert.SerializeObject(obj, SerializerSettings);
         }
 
         public static void Serialize<TModel>(TModel model, TextWriter outputStream)
