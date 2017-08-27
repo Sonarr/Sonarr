@@ -81,7 +81,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 queueItem.CanBeRemoved = true;
                 queueItem.CanMoveFiles = true;
 
-                if (sabQueue.Paused || sabQueueItem.Status == SabnzbdDownloadStatus.Paused)
+                if ((sabQueue.Paused && sabQueueItem.Priority != SabnzbdPriority.Force) ||
+                    sabQueueItem.Status == SabnzbdDownloadStatus.Paused)
                 {
                     queueItem.Status = DownloadItemStatus.Paused;
 
