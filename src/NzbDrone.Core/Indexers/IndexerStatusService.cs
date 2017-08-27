@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NLog;
+﻿using NLog;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.ThingiProvider.Events;
 using NzbDrone.Core.ThingiProvider.Status;
 
 namespace NzbDrone.Core.Indexers

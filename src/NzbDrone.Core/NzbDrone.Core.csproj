@@ -607,6 +607,9 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupUnusedTags.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleases.cs" />
     <Compile Include="Housekeeping\Housekeepers\DeleteBadMediaCovers.cs" />
+    <Compile Include="Housekeeping\Housekeepers\FixFutureDownloadClientStatusTimes.cs" />
+    <Compile Include="Housekeeping\Housekeepers\FixFutureProviderStatusTimes.cs" />
+    <Compile Include="Housekeeping\Housekeepers\FixFutureIndexerStatusTimes.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
     <Compile Include="Housekeeping\Housekeepers\TrimLogDatabase.cs" />
     <Compile Include="Housekeeping\Housekeepers\UpdateCleanTitleForSeries.cs" />
@@ -1108,6 +1111,7 @@
     <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="ThingiProvider\ProviderMessage.cs" />
     <Compile Include="ThingiProvider\ProviderRepository.cs" />
+    <Compile Include="ThingiProvider\Status\EscalationBackOff.cs" />
     <Compile Include="ThingiProvider\Status\ProviderStatusBase.cs" />
     <Compile Include="ThingiProvider\Status\ProviderStatusRepository.cs" />
     <Compile Include="ThingiProvider\Status\ProviderStatusServiceBase.cs" />

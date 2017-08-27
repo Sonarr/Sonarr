@@ -241,7 +241,8 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupDownloadClientUnavailablePendingReleasesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupUnusedTagsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleasesFixture.cs" />
-    <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasksFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\FixFutureDownloadClientStatusTimesFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\FixFutureIndexerStatusTimesFixture.cs" />
     <Compile Include="Http\HttpProxySettingsProviderFixture.cs" />
     <Compile Include="Http\TorCacheHttpRequestInterceptorFixture.cs" />
     <Compile Include="IndexerSearchTests\SeriesSearchServiceFixture.cs" />
