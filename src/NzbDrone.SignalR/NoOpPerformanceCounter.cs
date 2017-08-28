@@ -1,8 +1,7 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.md in the project root for license information.
+﻿using System.Diagnostics;
+using Microsoft.AspNet.SignalR.Infrastructure;
 
-using System.Diagnostics;
-
-namespace Microsoft.AspNet.SignalR.Infrastructure
+namespace NzbDrone.SignalR
 {
     public class NoOpPerformanceCounter : IPerformanceCounter
     {
@@ -42,7 +41,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
 
         public void RemoveInstance()
         {
-            
+
         }
 
         public CounterSample NextSample()
