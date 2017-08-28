@@ -26,10 +26,11 @@ namespace NzbDrone.Host.Owin.MiddleWare
             _versionHeader = new KeyValuePair<string, string[]>("X-ApplicationVersion",
                new[] { BuildInfo.Version.ToString() });
         }
-        public override Task Invoke(IOwinContext context)
+
+        public override async Task Invoke(IOwinContext context)
         {
             context.Response.Headers.Add(_versionHeader);
-            return Next.Invoke(context);
+            await Next.Invoke(context);
         }
     }
 }
