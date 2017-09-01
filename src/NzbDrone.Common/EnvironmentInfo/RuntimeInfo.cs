@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Security.Principal;
 using System.ServiceProcess;
 using NLog;
+using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
@@ -27,6 +28,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             if (entry != null)
             {
                 ExecutingApplication = entry.Location;
+                IsWindowsTray = entry.ManifestModule.Name == $"{ProcessProvider.NZB_DRONE_PROCESS_NAME}.exe";
             }
         }
 
@@ -102,5 +104,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             return true;
         }
+
+        public bool IsWindowsTray { get; private set; }
     }
 }
