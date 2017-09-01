@@ -1,5 +1,7 @@
-﻿using NLog;
+using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Composition;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Host
 {
@@ -8,14 +10,19 @@ namespace NzbDrone.Host
         private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;
         private readonly IServiceProvider _serviceProvider;
         private readonly IConsoleService _consoleService;
+        private readonly IContainer _container;
         private readonly Logger _logger;
 
-        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider,
-                        IConsoleService consoleService, Logger logger)
+        public Router(INzbDroneServiceFactory nzbDroneServiceFactory,
+                      IServiceProvider serviceProvider,
+                      IConsoleService consoleService,
+                      IContainer container,
+                      Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
             _consoleService = consoleService;
+            _container = container;
             _logger = logger;
         }
 
@@ -28,14 +35,20 @@ namespace NzbDrone.Host
                 case ApplicationModes.Service:
                     {
                         _logger.Debug("Service selected");
+
+                        DbFactory.RegisterDatabase(_container);
                         _serviceProvider.Run(_nzbDroneServiceFactory.Build());
+
                         break;
                     }
-
+                     
                 case ApplicationModes.Interactive:
                     {
                         _logger.Debug("Console selected");
+
+                        DbFactory.RegisterDatabase(_container);
                         _nzbDroneServiceFactory.Start();
+
                         break;
                     }
                 case ApplicationModes.InstallService:

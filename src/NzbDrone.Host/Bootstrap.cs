@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading;
 using NLog;
@@ -9,7 +9,6 @@ using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
 using NzbDrone.Common.Security;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Host
@@ -76,7 +75,6 @@ namespace NzbDrone.Host
                 EnsureSingleInstance(applicationModes == ApplicationModes.Service, startupContext);
             }
 
-            DbFactory.RegisterDatabase(_container);
             _container.Resolve<Router>().Route(applicationModes);
         }
 
