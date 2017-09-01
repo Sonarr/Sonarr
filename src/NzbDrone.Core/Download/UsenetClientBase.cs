@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Download
         {
             _httpClient = httpClient;
         }
-        
+
         public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
 
         protected abstract string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent);
@@ -46,6 +46,12 @@ namespace NzbDrone.Core.Download
             }
             catch (HttpException ex)
             {
+                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    _logger.Error(ex, "Downloading nzb file for episode '{0}' failed since it no longer exists ({1})", remoteEpisode.Release.Title, url);
+                    throw new ReleaseUnavailableException(remoteEpisode.Release, "Downloading torrent failed", ex);
+                }
+
                 if ((int)ex.Response.StatusCode == 429)
                 {
                     _logger.Error("API Grab Limit reached for {0}", url);

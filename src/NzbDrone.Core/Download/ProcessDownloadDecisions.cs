@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Download
@@ -40,6 +41,7 @@ namespace NzbDrone.Core.Download
             var grabbed = new List<DownloadDecision>();
             var pending = new List<DownloadDecision>();
             var failed = new List<DownloadDecision>();
+            var rejected = decisions.Where(d => d.Rejected).ToList();
 
             var usenetFailed = false;
             var torrentFailed = false;
@@ -74,6 +76,11 @@ namespace NzbDrone.Core.Download
                     _downloadService.DownloadReport(remoteEpisode);
                     grabbed.Add(report);
                 }
+                catch (ReleaseUnavailableException)
+                {
+                    _logger.Warn("Failed to download release from indexer, no longer available. " + remoteEpisode);
+                    rejected.Add(report);
+                }
                 catch (Exception ex)
                 {
                     if (ex is DownloadClientUnavailableException || ex is DownloadClientAuthenticationException)
@@ -99,7 +106,7 @@ namespace NzbDrone.Core.Download
 
             pending.AddRange(ProcessFailedGrabs(grabbed, failed));
 
-            return new ProcessedDecisions(grabbed, pending, decisions.Where(d => d.Rejected).ToList());
+            return new ProcessedDecisions(grabbed, pending, rejected);
         }
 
         internal List<DownloadDecision> GetQualifiedReports(IEnumerable<DownloadDecision> decisions)
