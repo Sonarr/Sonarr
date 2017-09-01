@@ -444,6 +444,7 @@
     <Compile Include="Download\Clients\Pneumatic\Pneumatic.cs" />
     <Compile Include="Download\Clients\Pneumatic\PneumaticSettings.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrentPreferences.cs" />
+    <Compile Include="Download\Clients\QBittorrent\QBittorrentState.cs" />
     <Compile Include="Download\Clients\rTorrent\RTorrentDirectoryValidator.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrent.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrentPriority.cs" />

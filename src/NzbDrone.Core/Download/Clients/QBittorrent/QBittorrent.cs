@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Common.Disk;
@@ -48,6 +48,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 _proxy.MoveTorrentToTopInQueue(hash.ToLower(), Settings);
             }
 
+            SetInitialState(hash.ToLower());
+
             return hash;
         }
 
@@ -81,6 +83,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 _logger.Warn(ex, "Failed to set the torrent priority for {0}.", filename);
             }
+
+            SetInitialState(hash);
 
             return hash;
         }
@@ -305,6 +309,29 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
 
             return null;
+        }
+
+        private void SetInitialState(string hash)
+        {
+            try
+            {
+                switch ((QBittorrentState)Settings.InitialState)
+                {
+                    case QBittorrentState.ForceStart:
+                        _proxy.SetForceStart(hash, true, Settings);
+                        break;
+                    case QBittorrentState.Start:
+                        _proxy.ResumeTorrent(hash, Settings);
+                        break;
+                    case QBittorrentState.Pause:
+                        _proxy.PauseTorrent(hash, Settings);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Failed to set inital state for {0}.", hash);
+            }
         }
     }
 }

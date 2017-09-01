@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using NLog;
@@ -23,6 +23,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         void RemoveTorrent(string hash, Boolean removeData, QBittorrentSettings settings);
         void SetTorrentLabel(string hash, string label, QBittorrentSettings settings);
         void MoveTorrentToTopInQueue(string hash, QBittorrentSettings settings);
+        void PauseTorrent(string hash, QBittorrentSettings settings);
+        void ResumeTorrent(string hash, QBittorrentSettings settings);
+        void SetForceStart(string hash, bool enabled, QBittorrentSettings settings);
     }
 
     public class QBittorrentProxy : IQBittorrentProxy
@@ -152,6 +155,34 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 throw;
             }
 
+        }
+
+        public void PauseTorrent(string hash, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/command/pause")
+                                                .Post()
+                                                .AddFormParameter("hash", hash);
+
+            ProcessRequest(request, settings);
+        }
+
+        public void ResumeTorrent(string hash, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/command/resume")
+                                                .Post()
+                                                .AddFormParameter("hash", hash);
+
+            ProcessRequest(request, settings);
+        }
+
+        public void SetForceStart(string hash, bool enabled, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/command/setForceStart")
+                                                .Post()
+                                                .AddFormParameter("hashes", hash)
+                                                .AddFormParameter("value", enabled ? "true": "false");
+
+            ProcessRequest(request, settings);
         }
 
         private HttpRequestBuilder BuildRequest(QBittorrentSettings settings)
