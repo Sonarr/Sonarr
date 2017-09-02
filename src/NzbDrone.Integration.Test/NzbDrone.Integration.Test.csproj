@@ -107,7 +107,8 @@
     <Compile Include="ApiTests\FileSystemFixture.cs" />
     <Compile Include="ApiTests\ReleasePushFixture.cs" />
     <Compile Include="ApiTests\SeriesLookupFixture.cs" />
-    <Compile Include="ApiTests\WantedFixture.cs" />
+    <Compile Include="ApiTests\WantedTests\CutoffUnmetFixture.cs" />
+    <Compile Include="ApiTests\WantedTests\MissingFixture.cs" />
     <Compile Include="Client\ClientBase.cs" />
     <Compile Include="Client\EpisodeClient.cs" />
     <Compile Include="Client\IndexerClient.cs" />
