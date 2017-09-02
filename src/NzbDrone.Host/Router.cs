@@ -1,8 +1,6 @@
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Host
 {
@@ -12,21 +10,18 @@ namespace NzbDrone.Host
         private readonly IServiceProvider _serviceProvider;
         private readonly IConsoleService _consoleService;
         private readonly IRuntimeInfo _runtimeInfo;
-        private readonly IContainer _container;
         private readonly Logger _logger;
 
         public Router(INzbDroneServiceFactory nzbDroneServiceFactory,
                       IServiceProvider serviceProvider,
                       IConsoleService consoleService,
                       IRuntimeInfo runtimeInfo,
-                      IContainer container,
                       Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
             _consoleService = consoleService;
             _runtimeInfo = runtimeInfo;
-            _container = container;
             _logger = logger;
         }
 
@@ -40,7 +35,6 @@ namespace NzbDrone.Host
                     {
                         _logger.Debug("Service selected");
 
-                        DbFactory.RegisterDatabase(_container);
                         _serviceProvider.Run(_nzbDroneServiceFactory.Build());
 
                         break;
@@ -50,7 +44,6 @@ namespace NzbDrone.Host
                     {
                         _logger.Debug(_runtimeInfo.IsWindowsTray ? "Tray selected" : "Console selected");
 
-                        DbFactory.RegisterDatabase(_container);
                         _nzbDroneServiceFactory.Start();
 
                         break;
