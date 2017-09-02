@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -10,6 +10,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
     public interface IProviderStatusServiceBase<TModel>
         where TModel : ProviderStatusBase, new()
     {
+        bool IsDisabled(int providerId);
         List<TModel> GetBlockedProviders();
         void RecordSuccess(int providerId);
         void RecordFailure(int providerId, TimeSpan minimumBackOff = default(TimeSpan));
@@ -34,6 +35,11 @@ namespace NzbDrone.Core.ThingiProvider.Status
             _providerStatusRepository = providerStatusRepository;
             _eventAggregator = eventAggregator;
             _logger = logger;
+        }
+
+        public bool IsDisabled(int providerId)
+        {
+            return GetProviderStatus(providerId).IsDisabled();
         }
 
         public virtual List<TModel> GetBlockedProviders()
