@@ -194,6 +194,7 @@
     <Compile Include="Download\DownloadClientTests\VuzeTests\VuzeFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
+    <Compile Include="Download\NzbValidationServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\PendingReleaseServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemovePendingFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
@@ -570,6 +571,24 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Files\Nzbs\NoGroupInFile.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Nzbs\NoSegmentsInFile.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Nzbs\NoSegmentInSegments.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Nzbs\NotNzb.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Nzbs\NoFiles.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Nzbs\NoGroupInGroups.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\TestArchive.tar.gz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -588,6 +607,9 @@
     <Content Include="Files\Xem\Names.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Files\Nzbs\ValidNzb.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -507,6 +507,8 @@
     <Compile Include="Download\DownloadEventHub.cs" />
     <Compile Include="Download\DownloadClientStatusRepository.cs" />
     <Compile Include="Download\DownloadClientStatusService.cs" />
+    <Compile Include="Download\InvalidNzbException.cs" />
+    <Compile Include="Download\NzbValidationService.cs" />
     <Compile Include="Download\Pending\PendingReleaseReason.cs" />
     <Compile Include="Download\TrackedDownloads\DownloadMonitoringService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownload.cs" />

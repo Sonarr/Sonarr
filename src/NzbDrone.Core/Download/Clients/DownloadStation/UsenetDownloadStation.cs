@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -32,9 +32,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                                      IConfigService configService,
                                      IDiskProvider diskProvider,
                                      IRemotePathMappingService remotePathMappingService,
+                                     IValidateNzbs nzbValidationService,
                                      Logger logger
                                      )
-            : base(httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger)
         {
             _dsInfoProxy = dsInfoProxy;
             _dsTaskProxy = dsTaskProxy;
