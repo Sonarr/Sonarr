@@ -97,6 +97,7 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestException.cs" />
+    <Compile Include="TestLogOutput.cs" />
     <Compile Include="TestValidator.cs" />
   </ItemGroup>
   <ItemGroup>

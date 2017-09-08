@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -20,14 +22,50 @@ namespace NzbDrone.Test.Common
             if (LogManager.Configuration == null || LogManager.Configuration.AllTargets.None(c => c is ExceptionVerification))
             {
                 LogManager.Configuration = new LoggingConfiguration();
-                var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };
-                LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
+
+                var logOutput = TestLogOutput.Console;
+                Enum.TryParse<TestLogOutput>(Environment.GetEnvironmentVariable("SONARR_TESTS_LOG_OUTPUT"), out logOutput);
+
+                switch (logOutput)
+                {
+                    case TestLogOutput.Console:
+                        RegisterConsoleLogger();
+                        break;
+                    case TestLogOutput.File:
+                        RegisterFileLogger();
+                        break;
+                }
 
                 RegisterExceptionVerification();
 
                 LogManager.ReconfigExistingLoggers();
             }
+        }
+
+        private static void RegisterConsoleLogger()
+        {
+            var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };
+            LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
+        }
+
+        private static void RegisterFileLogger()
+        {
+            const string layout = @"${level}|${message}${onexception:inner=${newline}${newline}${exception:format=ToString}${newline}}";
+
+            var fileTarget = new FileTarget();
+
+            fileTarget.Name = "Test File Logger";
+            fileTarget.FileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestLog.txt");
+            fileTarget.AutoFlush = false;
+            fileTarget.KeepFileOpen = true;
+            fileTarget.ConcurrentWrites = true;
+            fileTarget.ConcurrentWriteAttemptDelay = 50;
+            fileTarget.ConcurrentWriteAttempts = 10;
+            fileTarget.Layout = layout;
+
+            LogManager.Configuration.AddTarget(fileTarget.GetType().Name, fileTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
         }
 
         private static void RegisterExceptionVerification()
@@ -42,6 +80,7 @@ namespace NzbDrone.Test.Common
         {
             InitLogging();
             ExceptionVerification.Reset();
+            TestLogger.Info("--- Start: {0} ---", TestContext.CurrentContext.Test.FullName);
         }
 
         [TearDown]
@@ -53,6 +92,8 @@ namespace NzbDrone.Test.Common
             {
                 ExceptionVerification.AssertNoUnexpectedLogs();
             }
+
+            TestLogger.Info("--- End: {0} ---", TestContext.CurrentContext.Test.FullName);
         }
     }
 }
