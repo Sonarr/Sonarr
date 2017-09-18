@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -31,7 +31,7 @@ namespace NzbDrone.Common.Processes
                 return;
             }
 
-            var filename = Path.Combine(_appFolderInfo.AppDataFolder, "nzbdrone.pid");
+            var filename = Path.Combine(_appFolderInfo.AppDataFolder, "sonarr.pid");
             try
             {
                 File.WriteAllText(filename, _processProvider.GetCurrentProcessId().ToString());

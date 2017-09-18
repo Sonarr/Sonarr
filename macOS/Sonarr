@@ -4,7 +4,7 @@
 DIR=$(cd "$(dirname "$0")"; pwd)
 
 #change these values to match your app
-EXE_PATH="$DIR/NzbDrone.exe"
+EXE_PATH="$DIR/Sonarr.exe"
 APPNAME="Sonarr"
  
 #set up environment
@@ -31,8 +31,8 @@ fi
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:$HOME/lib:/usr/local/lib:/lib:/usr/lib"
 
 #mono version check
-REQUIRED_MAJOR=3
-REQUIRED_MINOR=10
+REQUIRED_MAJOR=4
+REQUIRED_MINOR=6
  
 VERSION_TITLE="Cannot launch $APPNAME"
 VERSION_MSG="$APPNAME requires Mono Runtime Environment(MRE) $REQUIRED_MAJOR.$REQUIRED_MINOR or later."

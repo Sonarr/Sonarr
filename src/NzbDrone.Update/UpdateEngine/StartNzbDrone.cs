@@ -57,17 +57,17 @@ namespace NzbDrone.Update.UpdateEngine
         private void StartService()
         {
             _logger.Info("Starting NzbDrone service");
-            _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
+            _serviceProvider.Start(ServiceProvider.SERVICE_NAME);
         }
 
         private void StartWinform(string installationFolder)
         {
-            Start(installationFolder, "NzbDrone.exe");
+            Start(installationFolder, "Sonarr.exe");
         }
 
         private void StartConsole(string installationFolder)
         {
-            Start(installationFolder, "NzbDrone.Console.exe");
+            Start(installationFolder, "Sonarr.Console.exe");
         }
 
         private void Start(string installationFolder, string fileName)

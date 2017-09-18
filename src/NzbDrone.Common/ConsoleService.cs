@@ -21,8 +21,8 @@ namespace NzbDrone.Common
             Console.WriteLine();
             Console.WriteLine("     Usage: {0} <command> ", Process.GetCurrentProcess().MainModule.ModuleName);
             Console.WriteLine("     Commands:");
-            Console.WriteLine("                 /{0} Install the application as a Windows Service ({1}).", StartupContext.INSTALL_SERVICE, ServiceProvider.NZBDRONE_SERVICE_NAME);
-            Console.WriteLine("                 /{0} Uninstall already installed Windows Service ({1}).", StartupContext.UNINSTALL_SERVICE, ServiceProvider.NZBDRONE_SERVICE_NAME);
+            Console.WriteLine("                 /{0} Install the application as a Windows Service ({1}).", StartupContext.INSTALL_SERVICE, ServiceProvider.SERVICE_NAME);
+            Console.WriteLine("                 /{0} Uninstall already installed Windows Service ({1}).", StartupContext.UNINSTALL_SERVICE, ServiceProvider.SERVICE_NAME);
             Console.WriteLine("                 /{0} Don't open Sonarr in a browser", StartupContext.NO_BROWSER);
             Console.WriteLine("                 /{0} Start Sonarr terminating any other instances", StartupContext.TERMINATE);
             Console.WriteLine("                 /{0}=path Path to use as the AppData location (stores database, config, logs, etc)", StartupContext.APPDATA);
@@ -31,12 +31,12 @@ namespace NzbDrone.Common
 
         public void PrintServiceAlreadyExist()
         {
-            Console.WriteLine("A service with the same name ({0}) already exists. Aborting installation", ServiceProvider.NZBDRONE_SERVICE_NAME);
+            Console.WriteLine("A service with the same name ({0}) already exists. Aborting installation", ServiceProvider.SERVICE_NAME);
         }
 
         public void PrintServiceDoesNotExist()
         {
-            Console.WriteLine("Can't find service ({0})", ServiceProvider.NZBDRONE_SERVICE_NAME);
+            Console.WriteLine("Can't find service ({0})", ServiceProvider.SERVICE_NAME);
         }
     }
 }

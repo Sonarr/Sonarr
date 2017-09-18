@@ -28,13 +28,13 @@ namespace NzbDrone.Update.UpdateEngine
                 return AppType.Normal;
             }
 
-            if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
-                && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
+            if (_serviceProvider.ServiceExist(ServiceProvider.SERVICE_NAME)
+                && _serviceProvider.IsServiceRunning(ServiceProvider.SERVICE_NAME))
             {
                 return AppType.Service;
             }
 
-            if (_processProvider.Exists(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME))
+            if (_processProvider.Exists(ProcessProvider.SONARR_CONSOLE_PROCESS_NAME))
             {
                 return AppType.Console;
             }

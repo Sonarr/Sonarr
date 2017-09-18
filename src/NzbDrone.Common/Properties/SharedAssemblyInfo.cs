@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("debug")]
 
 [assembly: AssemblyCompany("sonarr.tv")]
-[assembly: AssemblyProduct("NzbDrone")]
+[assembly: AssemblyProduct("Sonarr")]
 [assembly: AssemblyCopyright("GNU General Public v3")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
