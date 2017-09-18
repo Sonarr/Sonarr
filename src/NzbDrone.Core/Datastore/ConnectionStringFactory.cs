@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Datastore
     {
         public ConnectionStringFactory(IAppFolderInfo appFolderInfo)
         {
-            MainDbConnectionString = GetConnectionString(appFolderInfo.GetNzbDroneDatabase());
+            MainDbConnectionString = GetConnectionString(appFolderInfo.GetDatabase());
             LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase());
         }
 
