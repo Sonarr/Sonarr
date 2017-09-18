@@ -22,7 +22,7 @@ namespace NzbDrone.Update.UpdateEngine
         {
             try
             {
-                var targetExecutable = Path.Combine(targetFolder, "NzbDrone.exe");
+                var targetExecutable = Path.Combine(targetFolder, "Sonarr.exe");
 
                 if (File.Exists(targetExecutable))
                 {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -32,20 +32,15 @@ namespace NzbDrone.Test.Common
         {
             AppData = Path.Combine(TestContext.CurrentContext.TestDirectory, "_intg_" + DateTime.Now.Ticks);
 
-            var nzbdroneConsoleExe = "NzbDrone.Console.exe";
-
-            if (OsInfo.IsNotWindows)
-            {
-                nzbdroneConsoleExe = "NzbDrone.exe";
-            }
+            var sonarrConsoleExe = OsInfo.IsWindows ? "Sonarr.Console.exe" : "Sonarr.exe";
 
             if (BuildInfo.IsDebug)
             {
-                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..\\..\\..\\..\\..\\_output\\NzbDrone.Console.exe"));
+                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..\\..\\..\\..\\..\\_output\\Sonarr.Console.exe"));
             }
             else
             {
-                Start(Path.Combine("bin", nzbdroneConsoleExe));
+                Start(Path.Combine("bin", sonarrConsoleExe));
             }
 
             while (true)
@@ -84,8 +79,8 @@ namespace NzbDrone.Test.Common
                 _processProvider.Kill(_nzbDroneProcess.Id);                
             }
 
-            _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
-            _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+            _processProvider.KillAll(ProcessProvider.SONARR_CONSOLE_PROCESS_NAME);
+            _processProvider.KillAll(ProcessProvider.SONARR_PROCESS_NAME);
         }
 
         private void Start(string outputNzbdroneConsoleExe)

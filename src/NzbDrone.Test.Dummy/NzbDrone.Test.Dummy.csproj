@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NzbDrone.Test.Dummy</RootNamespace>
-    <AssemblyName>NzbDrone.Test.Dummy</AssemblyName>
+    <AssemblyName>Sonarr.Test.Dummy</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

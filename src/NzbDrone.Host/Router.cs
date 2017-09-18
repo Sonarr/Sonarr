@@ -51,27 +51,27 @@ namespace NzbDrone.Host
                 case ApplicationModes.InstallService:
                     {
                         _logger.Debug("Install Service selected");
-                        if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
+                        if (_serviceProvider.ServiceExist(ServiceProvider.SERVICE_NAME))
                         {
                             _consoleService.PrintServiceAlreadyExist();
                         }
                         else
                         {
-                            _serviceProvider.Install(ServiceProvider.NZBDRONE_SERVICE_NAME);
-                            _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                            _serviceProvider.Install(ServiceProvider.SERVICE_NAME);
+                            _serviceProvider.Start(ServiceProvider.SERVICE_NAME);
                         }
                         break;
                     }
                 case ApplicationModes.UninstallService:
                     {
                         _logger.Debug("Uninstall Service selected");
-                        if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
+                        if (!_serviceProvider.ServiceExist(ServiceProvider.SERVICE_NAME))
                         {
                             _consoleService.PrintServiceDoesNotExist();
                         }
                         else
                         {
-                            _serviceProvider.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                            _serviceProvider.UnInstall(ServiceProvider.SERVICE_NAME);
                         }
 
                         break;

@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Lifecycle
 
             if (_runtimeInfo.IsWindowsService)
             {
-                _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                _serviceProvider.Stop(ServiceProvider.SERVICE_NAME);
             }
         }
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Lifecycle
 
             if (_runtimeInfo.IsWindowsService)
             {
-                _serviceProvider.Restart(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                _serviceProvider.Restart(ServiceProvider.SERVICE_NAME);
             }
         }
 
