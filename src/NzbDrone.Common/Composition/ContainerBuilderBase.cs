@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,8 +18,8 @@ namespace NzbDrone.Common.Composition
         {
             _loadedTypes = new List<Type>();
 
-            assemblies.Add(OsInfo.IsWindows ? "NzbDrone.Windows" : "NzbDrone.Mono");
-            assemblies.Add("NzbDrone.Common");
+            assemblies.Add(OsInfo.IsWindows ? "Sonarr.Windows" : "Sonarr.Mono");
+            assemblies.Add("Sonarr.Common");
 
             foreach (var assembly in assemblies)
             {
