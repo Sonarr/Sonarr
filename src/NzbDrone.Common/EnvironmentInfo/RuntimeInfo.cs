@@ -20,8 +20,8 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             IsWindowsService = !IsUserInteractive &&
                                OsInfo.IsWindows &&
-                               serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
-                               serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending;
+                               serviceProvider.ServiceExist(ServiceProvider.SERVICE_NAME) &&
+                               serviceProvider.GetStatus(ServiceProvider.SERVICE_NAME) == ServiceControllerStatus.StartPending;
 
             //Guarded to avoid issues when running in a non-managed process
             var entry = Assembly.GetEntryAssembly();
@@ -29,7 +29,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             if (entry != null)
             {
                 ExecutingApplication = entry.Location;
-                IsWindowsTray = entry.ManifestModule.Name == $"{ProcessProvider.NZB_DRONE_PROCESS_NAME}.exe";
+                IsWindowsTray = entry.ManifestModule.Name == $"{ProcessProvider.SONARR_PROCESS_NAME}.exe";
             }
         }
 
@@ -76,7 +76,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             {
                 if (OsInfo.IsWindows)
                 {
-                    return IsUserInteractive && Process.GetCurrentProcess().ProcessName.Equals(ProcessProvider.NZB_DRONE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase);
+                    return IsUserInteractive && Process.GetCurrentProcess().ProcessName.Equals(ProcessProvider.SONARR_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase);
                 }
 
                 return false;

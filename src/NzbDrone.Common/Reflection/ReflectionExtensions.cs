@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,7 +7,7 @@ namespace NzbDrone.Common.Reflection
 {
     public static class ReflectionExtensions
     {
-        public static readonly Assembly CoreAssembly = Assembly.Load("NzbDrone.Core");
+        public static readonly Assembly CoreAssembly = Assembly.Load("Sonarr.Core");
 
         public static List<PropertyInfo> GetSimpleProperties(this Type type)
         {
