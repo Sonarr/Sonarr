@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common.Processes
@@ -36,8 +35,8 @@ namespace NzbDrone.Common.Processes
     {
         private readonly Logger _logger;
 
-        public const string NZB_DRONE_PROCESS_NAME = "NzbDrone";
-        public const string NZB_DRONE_CONSOLE_PROCESS_NAME = "NzbDrone.Console";
+        public const string SONARR_PROCESS_NAME = "Sonarr";
+        public const string SONARR_CONSOLE_PROCESS_NAME = "Sonarr.Console";
 
         public ProcessProvider(Logger logger)
         {
