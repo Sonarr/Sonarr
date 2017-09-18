@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Nancy.Bootstrapper;
 using Sonarr.Http;
 using NzbDrone.Common.Composition;
@@ -14,10 +14,10 @@ namespace NzbDrone.Host
         {
             var assemblies = new List<string>
                              {
-                                 "NzbDrone.Host",
-                                 "NzbDrone.Core",
-                                 "NzbDrone.Api",
-                                 "NzbDrone.SignalR",
+                                 "Sonarr.Host",
+                                 "Sonarr.Core",
+                                 "Sonarr.Api",
+                                 "Sonarr.SignalR",
                                  "Sonarr.Api.V3",
                                  "Sonarr.Http"
                              };

@@ -76,8 +76,8 @@ namespace NzbDrone.Common.Test
         [ManualTest]
         public void UnInstallService()
         {
-            Subject.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
-            Subject.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME).Should().BeFalse();
+            Subject.UnInstall(ServiceProvider.SERVICE_NAME);
+            Subject.ServiceExist(ServiceProvider.SERVICE_NAME).Should().BeFalse();
         }
 
         [Test]

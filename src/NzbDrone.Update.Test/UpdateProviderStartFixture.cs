@@ -1,4 +1,4 @@
-﻿/*
+/*
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,14 +42,14 @@ namespace NzbDrone.Update.Test
         private void WithInstalledService()
         {
             Mocker.GetMock<IServiceProvider>()
-              .Setup(c => c.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
+              .Setup(c => c.ServiceExist(ServiceProvider.SERVICE_NAME))
               .Returns(true);
         }
 
         private void WithServiceRunning(bool state)
         {
             Mocker.GetMock<IServiceProvider>()
-                .Setup(c => c.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME)).Returns(state);
+                .Setup(c => c.IsServiceRunning(ServiceProvider.SERVICE_NAME)).Returns(state);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace NzbDrone.Update.Test
             Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
-            Mocker.GetMock<IServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
+            Mocker.GetMock<IServiceProvider>().Verify(c => c.Stop(ServiceProvider.SERVICE_NAME), Times.Once());
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace NzbDrone.Update.Test
             Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
-            Mocker.GetMock<IServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Never());
+            Mocker.GetMock<IServiceProvider>().Verify(c => c.Stop(ServiceProvider.SERVICE_NAME), Times.Never());
         }
 
         [Test]
@@ -220,7 +220,7 @@ namespace NzbDrone.Update.Test
         private void VerifyServiceRestart()
         {
             Mocker.GetMock<IServiceProvider>()
-                .Verify(c => c.Start(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
+                .Verify(c => c.Start(ServiceProvider.SERVICE_NAME), Times.Once());
 
             Mocker.GetMock<IProcessProvider>()
                 .Verify(c => c.Start(It.IsAny<string>()), Times.Never());
@@ -232,7 +232,7 @@ namespace NzbDrone.Update.Test
                 .Verify(c => c.Start(It.IsAny<string>()), Times.Never());
 
             Mocker.GetMock<IProcessProvider>()
-                .Verify(c => c.Start(TARGET_FOLDER + "NzbDrone.exe"), Times.Once());
+                .Verify(c => c.Start(TARGET_FOLDER + "Sonarr.exe"), Times.Once());
         }
 
 
