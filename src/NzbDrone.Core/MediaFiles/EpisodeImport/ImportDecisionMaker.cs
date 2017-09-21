@@ -129,6 +129,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             {
                 _logger.Error("Unable to make a decision on {0}", file);
             }
+            else if (decision.Rejections.Any())
+            {
+                _logger.Debug("File rejected for the following reasons: {0}", string.Join(", ", decision.Rejections));
+            }
+            else
+            {
+                _logger.Debug("File accepted");
+            }
 
             return decision;
         }
