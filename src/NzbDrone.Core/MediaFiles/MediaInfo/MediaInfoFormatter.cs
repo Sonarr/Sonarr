@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -35,11 +35,17 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return mediaInfo.AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
             }
 
+            if (audioChannelPositions.Contains("+"))
+            {
+                return audioChannelPositions.Split('+')
+                                            .Sum(s => decimal.Parse(s.Trim(), CultureInfo.InvariantCulture));
+            }
+
             return audioChannelPositions.Replace("Object Based / ", "")
-                                        .Split(new string[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
-                                        .First()
-                                        .Split('/')
-                                        .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
+                                            .Split(new string[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
+                                            .First()
+                                            .Split('/')
+                                            .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
         }
 
         public static string FormatAudioCodec(MediaInfoModel mediaInfo, string sceneName)
