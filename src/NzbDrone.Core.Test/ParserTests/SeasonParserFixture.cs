@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
 
@@ -34,14 +34,20 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeTrue();
         }
 
-        [TestCase("Acropolis Now S05 EXTRAS DVDRip XviD RUNNER")]
-        [TestCase("Punky Brewster S01 EXTRAS DVDRip XviD RUNNER")]
-        [TestCase("Instant Star S03 EXTRAS DVDRip XviD OSiTV")]
-        public void should_parse_season_extras(string postTitle)
+        [TestCase("Acropolis Now S05 EXTRAS DVDRip XviD RUNNER", "Acropolis Now", 5)]
+        [TestCase("Punky Brewster S01 EXTRAS DVDRip XviD RUNNER", "Punky Brewster", 1)]
+        [TestCase("Instant Star S03 EXTRAS DVDRip XviD OSiTV", "Instant Star", 3)]
+        [TestCase("The.Flash.S03.Extras.01.Deleted.Scenes.720p", "The Flash", 3)]
+        [TestCase("The.Flash.S03.Extras.02.720p", "The Flash", 3)]
+        public void should_parse_season_extras(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-
-            result.Should().BeNull();
+            result.SeasonNumber.Should().Be(season);
+            result.SeriesTitle.Should().Be(title);
+            result.EpisodeNumbers.Should().BeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeTrue();
+            result.IsSeasonExtra.Should().BeTrue();
         }
 
         [TestCase("Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD")]

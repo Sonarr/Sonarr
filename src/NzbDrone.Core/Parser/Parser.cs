@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -602,9 +602,12 @@ namespace NzbDrone.Core.Parser
 
                     if (!episodeCaptures.Any() && !absoluteEpisodeCaptures.Any())
                     {
-                        //Check to see if this is an "Extras" or "SUBPACK" release, if it is, return NULL
-                        //Todo: Set a "Extras" flag in EpisodeParseResult if we want to download them ever
-                        if (!matchCollection[0].Groups["extras"].Value.IsNullOrWhiteSpace()) return null;
+                        //Check to see if this is an "Extras" or "SUBPACK" release, if it is, set
+                        // IsSeasonExtra so they can be filtered out
+                        if (!matchCollection[0].Groups["extras"].Value.IsNullOrWhiteSpace())
+                        {
+                            result.IsSeasonExtra = true;
+                        }
 
                         // Partial season packs will have a seasonpart group so they can be differentiated
                         // from a full season/single episode release

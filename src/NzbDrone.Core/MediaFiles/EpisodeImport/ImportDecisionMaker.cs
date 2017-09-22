@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -97,6 +97,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         if (localEpisode.ParsedEpisodeInfo.IsPartialSeason)
                         {
                             decision = new ImportDecision(localEpisode, new Rejection("Partial season packs are not supported"));
+                        }
+                        else if (localEpisode.ParsedEpisodeInfo.IsSeasonExtra)
+                        {
+                            decision = new ImportDecision(localEpisode, new Rejection("Extras are not supported"));
                         }
                         else
                         {
