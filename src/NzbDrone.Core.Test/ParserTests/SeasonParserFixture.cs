@@ -50,14 +50,18 @@ namespace NzbDrone.Core.Test.ParserTests
             result.IsSeasonExtra.Should().BeTrue();
         }
 
-        [TestCase("Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD")]
-        [TestCase("The.Middle.S02.SUBPACK.DVDRip.XviD-REWARD")]
-        [TestCase("CSI.S11.SUBPACK.DVDRip.XviD-REWARD")]
-        public void should_parse_season_subpack(string postTitle)
+        [TestCase("Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD", "Lie to Me", 3)]
+        [TestCase("The.Middle.S02.SUBPACK.DVDRip.XviD-REWARD", "The Middle", 2)]
+        [TestCase("CSI.S11.SUBPACK.DVDRip.XviD-REWARD", "CSI", 11)]
+        public void should_parse_season_subpack(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-
-            result.Should().BeNull();
+            result.SeasonNumber.Should().Be(season);
+            result.SeriesTitle.Should().Be(title);
+            result.EpisodeNumbers.Should().BeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeTrue();
+            result.IsSeasonExtra.Should().BeTrue();
         }
 
         [TestCase("The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb", "The Ranch 2016", 2, 1)]
