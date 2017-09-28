@@ -160,7 +160,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             {
                 if (apiInfo.NeedsAuthentication)
                 {
-                    requestBuilder.AddFormParameter("_sid", _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6)));
+                    var sid = _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6));
+                    _logger.Debug("DownloadStation Session sid={0}", sid);
+                    requestBuilder.AddFormParameter("_sid", sid);
                 }
 
                 requestBuilder.AddFormParameter("api", apiInfo.Name);
@@ -171,7 +173,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             {
                 if (apiInfo.NeedsAuthentication)
                 {
-                    requestBuilder.AddQueryParam("_sid", _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6)));
+                    var sid = _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6));
+                    _logger.Debug("DownloadStation Session sid={0}", sid);
+                    requestBuilder.AddQueryParam("_sid", sid);
                 }
 
                 requestBuilder.AddQueryParam("api", apiInfo.Name);
