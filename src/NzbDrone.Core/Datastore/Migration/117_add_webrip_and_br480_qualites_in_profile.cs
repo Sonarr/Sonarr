@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using FluentMigrator;
@@ -9,7 +9,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 namespace NzbDrone.Core.Datastore.Migration
 {
     [Migration(117)]
-    public class add_webrip_qualites_in_profile : NzbDroneMigrationBase
+    public class add_webrip_and_br480_qualites_in_profile : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
         {
@@ -21,35 +21,36 @@ namespace NzbDrone.Core.Datastore.Migration
             var updater = new ProfileUpdater116(conn, tran);
 
             updater.CreateGroupAt(8, 1000, "WEB 480p", new[] {12, 8}); // Group WEBRip480p with WEBDL480p
-            updater.CreateGroupAt(5, 1001, "WEB 720p", new[] {14, 5}); // Group WEBRip720p with WEBDL720p
-            updater.CreateGroupAt(3, 1002, "WEB 1080p", new[] {15, 3}); // Group WEBRip1080p with WEBDL1080p
-            updater.CreateGroupAt(18, 1003, "WEB 2160p", new[] {17, 18}); // Group WEBRip2160p with WEBDL2160p
+            updater.CreateGroupAt(2, 1001, "DVD", new[] {2, 13}); // Group Bluray480p with DVD
+            updater.CreateGroupAt(5, 1002, "WEB 720p", new[] {14, 5}); // Group WEBRip720p with WEBDL720p
+            updater.CreateGroupAt(3, 1003, "WEB 1080p", new[] {15, 3}); // Group WEBRip1080p with WEBDL1080p
+            updater.CreateGroupAt(18, 1004, "WEB 2160p", new[] {17, 18}); // Group WEBRip2160p with WEBDL2160p
 
             updater.Commit();
         }
     }
 
-    public class Profile116
+    public class Profile117
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Cutoff { get; set; }
-        public List<ProfileItem116> Items { get; set; }
+        public List<ProfileItem117> Items { get; set; }
     }
 
-    public class ProfileItem116
+    public class ProfileItem117
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int Id { get; set; }
 
         public string Name { get; set; }
         public int? Quality { get; set; }
-        public List<ProfileItem116> Items { get; set; }
+        public List<ProfileItem117> Items { get; set; }
         public bool Allowed { get; set; }
 
-        public ProfileItem116()
+        public ProfileItem117()
         {
-            Items = new List<ProfileItem116>();
+            Items = new List<ProfileItem117>();
         }
     }
 
@@ -58,8 +59,8 @@ namespace NzbDrone.Core.Datastore.Migration
         private readonly IDbConnection _connection;
         private readonly IDbTransaction _transaction;
 
-        private List<Profile116> _profiles;
-        private HashSet<Profile116> _changedProfiles = new HashSet<Profile116>();
+        private List<Profile117> _profiles;
+        private HashSet<Profile117> _changedProfiles = new HashSet<Profile117>();
 
         public ProfileUpdater116(IDbConnection conn, IDbTransaction tran)
         {
@@ -100,12 +101,12 @@ namespace NzbDrone.Core.Datastore.Migration
                 {
                     var findQuality = profile.Items[findIndex];
 
-                    profile.Items.Insert(findIndex, new ProfileItem116
+                    profile.Items.Insert(findIndex, new ProfileItem117
                     {
                         Id = groupId,
                         Name = name,
                         Quality = null,
-                        Items = qualities.Select(q => new ProfileItem116
+                        Items = qualities.Select(q => new ProfileItem117
                                                         {
                                                             Quality = q,
                                                             Allowed = findQuality.Allowed
@@ -117,12 +118,12 @@ namespace NzbDrone.Core.Datastore.Migration
                 {
                     // If the ID isn't found for some reason (mangled migration 71?)
 
-                    profile.Items.Add(new ProfileItem116
+                    profile.Items.Add(new ProfileItem117
                     {
                         Id = groupId,
                         Name = name,
                         Quality = null,
-                        Items = qualities.Select(q => new ProfileItem116
+                        Items = qualities.Select(q => new ProfileItem117
                                                     {
                                                         Quality = q,
                                                         Allowed = false
@@ -150,9 +151,9 @@ namespace NzbDrone.Core.Datastore.Migration
             }
         }
 
-        private List<Profile116> GetProfiles()
+        private List<Profile117> GetProfiles()
         {
-            var profiles = new List<Profile116>();
+            var profiles = new List<Profile117>();
 
             using (var getProfilesCmd = _connection.CreateCommand())
             {
@@ -163,12 +164,12 @@ namespace NzbDrone.Core.Datastore.Migration
                 {
                     while (profileReader.Read())
                     {
-                        profiles.Add(new Profile116
+                        profiles.Add(new Profile117
                                      {
                                          Id = profileReader.GetInt32(0),
                                          Name = profileReader.GetString(1),
                                          Cutoff = profileReader.GetInt32(2),
-                                         Items = Json.Deserialize<List<ProfileItem116>>(profileReader.GetString(3))
+                                         Items = Json.Deserialize<List<ProfileItem117>>(profileReader.GetString(3))
                                      });
                     }
                 }

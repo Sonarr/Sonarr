@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { Quality.SDTV },
             new object[] { Quality.DVD },
             new object[] { Quality.WEBDL480p },
+            new object[] { Quality.Bluray480p },
             new object[] { Quality.HDTV720p },
             new object[] { Quality.HDTV1080p },
             new object[] { Quality.HDTV2160p },
@@ -67,22 +68,12 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.SDTV, proper);
         }
 
-        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3-REPACK.-HELLYWOOD.avi", true)]
         [TestCase("The.Shield.S01E13.NTSC.x264-CtrlSD", false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.X-viD.AC3.-HELLYWOOD", false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", false)]
         [TestCase("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", false)]
         [TestCase("The.Girls.Next.Door.S03E06.DVD.Rip.XviD-WiDE", false)]
         [TestCase("the.shield.1x13.circles.ws.xvidvd-tns", false)]
         [TestCase("the_x-files.9x18.sunshine_days.ac3.ws_dvdrip_xvid-fov.avi", false)]
         [TestCase("[FroZen] Miyuki - 23 [DVD][7F6170E6]", false)]
-        [TestCase("Hannibal.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
-        [TestCase("Hannibal.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
-        [TestCase("Heidi Girl of the Alps (BD)(640x480(RAW) (BATCH 1) (1-13)", false)]
-        [TestCase("[Doki] Clannad - 02 (848x480 XviD BD MP3) [95360783]", false)]
         public void should_parse_dvd_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.DVD, proper);
@@ -97,6 +88,21 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_webdl480p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL480p, proper);
+        }
+
+        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3-REPACK.-HELLYWOOD.avi", true)]
+        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", false)]
+        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.X-viD.AC3.-HELLYWOOD", false)]
+        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", false)]
+        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", false)]
+        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", false)]
+        [TestCase("Hannibal.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
+        [TestCase("Hannibal.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
+        [TestCase("Heidi Girl of the Alps (BD)(640x480(RAW) (BATCH 1) (1-13)", false)]
+        [TestCase("[Doki] Clannad - 02 (848x480 XviD BD MP3) [95360783]", false)]
+        public void should_parse_bluray480p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.Bluray480p, proper);
         }
 
         [TestCase("Clarissa.Explains.It.All.S02E10.480p.HULU.WEBRip.x264-Puffin", false)]

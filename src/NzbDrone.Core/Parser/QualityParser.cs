@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Parser
                 {
                     if (codecRegex.Groups["xvid"].Success || codecRegex.Groups["divx"].Success)
                     {
-                        result.Quality = Quality.DVD;
+                        result.Quality = Quality.Bluray480p;
                         return result;
                     }
 
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Parser
 
                     if (resolution == Resolution.R480P || resolution == Resolution.R576p)
                     {
-                        result.Quality = Quality.DVD;
+                        result.Quality = Quality.Bluray480p;
                         return result;
                     }
 
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Parser
                             result.Quality = Quality.Bluray1080p;
                             return result;
                         default:
-                            result.Quality = Quality.DVD;
+                            result.Quality = Quality.Bluray480p;
                             return result;
                     }
                 }
