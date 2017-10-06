@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -122,9 +122,34 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, oldFiles, newDownload, downloadClientItem));
                 }
+                catch (DirectoryNotFoundException e)
+                {
+                    _logger.Warn(e, "Couldn't import episode " + localEpisode);
+
+                    var errorMessage = "Failed to import episode";
+                    if (e.Message.Contains("Root folder"))
+                    {
+                        errorMessage += ", Root folder missing.";
+                    }
+
+                    importResults.Add(new ImportResult(importDecision, errorMessage));
+                }
+                catch (IOException e)
+                {
+                    _logger.Warn(e, "Couldn't import episode " + localEpisode);
+
+                    var errorMessage = "Failed to import episode";
+                    if (e.Message.Contains("Destination already exists."))
+                    {
+                        errorMessage += ", Destination already exists.";
+                    }
+
+                    importResults.Add(new ImportResult(importDecision, errorMessage));
+                }
                 catch (Exception e)
                 {
                     _logger.Warn(e, "Couldn't import episode " + localEpisode);
+
                     importResults.Add(new ImportResult(importDecision, "Failed to import episode"));
                 }
             }
