@@ -782,6 +782,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Manual\ManualImportService.cs" />
     <Compile Include="MediaFiles\EpisodeImport\DetectSample.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Manual\ManuallyImportedFile.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\RootFolderNotFoundException.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\GrabbedReleaseQualitySpecification.cs" />
