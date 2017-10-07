@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Indexers.HDBits
         Mpeg2 = 2,
         Vc1 = 3,
         Xvid = 4.
-        HEVC = 5
+        Hevc = 5
     }
 
     public enum HdBitsMedium
