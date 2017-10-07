@@ -83,6 +83,17 @@ BuildWithXbuild()
     CheckExitCode xbuild /p:Configuration=Release /p:Platform=x86 /t:Build /p:AllowedReferenceRelatedFileExtensions=.pdb $slnFile
 }
 
+LintUI()
+{
+    ProgressStart 'ESLint'
+    CheckExitCode yarn eslint
+    ProgressEnd 'ESLint'
+
+    ProgressStart 'Stylelint'
+    CheckExitCode yarn stylelint
+    ProgressEnd 'Stylelint'
+}
+
 Build()
 {
     ProgressStart 'Build'
@@ -111,6 +122,8 @@ RunGulp()
     yarn install
     #npm-cache install npm || CheckExitCode npm install --no-optional --no-bin-links
     ProgressEnd 'npm install'
+
+    LintUI
 
     ProgressStart 'Running gulp'
     CheckExitCode npm run build -- --production
