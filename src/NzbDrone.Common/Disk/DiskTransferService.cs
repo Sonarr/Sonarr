@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -340,7 +340,7 @@ namespace NzbDrone.Common.Disk
                 }
                 else
                 {
-                    throw new IOException(string.Format("Destination already exists. [{0}] to [{1}]", sourcePath, targetPath));
+                    throw new DestinationAlreadyExistsIOException(string.Format("Destination already exists. [{0}] to [{1}]", sourcePath, targetPath));
                 }
             }
         }

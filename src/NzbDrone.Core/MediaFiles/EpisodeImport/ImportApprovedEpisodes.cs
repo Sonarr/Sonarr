@@ -12,7 +12,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Extras;
-
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
@@ -122,34 +122,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, oldFiles, newDownload, downloadClientItem));
                 }
-                catch (DirectoryNotFoundException e)
+                catch (RootFolderNotFoundException e)
                 {
                     _logger.Warn(e, "Couldn't import episode " + localEpisode);
-
-                    var errorMessage = "Failed to import episode";
-                    if (e.Message.Contains("Root folder"))
-                    {
-                        errorMessage += ", Root folder missing.";
-                    }
-
-                    importResults.Add(new ImportResult(importDecision, errorMessage));
+                    importResults.Add(new ImportResult(importDecision, "Failed to import episode, Root folder missing."));
                 }
-                catch (IOException e)
+                catch (DestinationAlreadyExistsIOException e)
                 {
                     _logger.Warn(e, "Couldn't import episode " + localEpisode);
-
-                    var errorMessage = "Failed to import episode";
-                    if (e.Message.Contains("Destination already exists."))
-                    {
-                        errorMessage += ", Destination already exists.";
-                    }
-
-                    importResults.Add(new ImportResult(importDecision, errorMessage));
+                    importResults.Add(new ImportResult(importDecision, "Failed to import episode, Destination already exists."));
                 }
                 catch (Exception e)
                 {
                     _logger.Warn(e, "Couldn't import episode " + localEpisode);
-
                     importResults.Add(new ImportResult(importDecision, "Failed to import episode"));
                 }
             }
