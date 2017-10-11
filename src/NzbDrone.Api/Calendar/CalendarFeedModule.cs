@@ -1,4 +1,4 @@
-﻿using Nancy;
+using Nancy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,8 +92,6 @@ namespace NzbDrone.Api.Calendar
                 ProductId = "-//sonarr.tv//Sonarr//EN"
             };
 
-
-
             foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
             {
                 if (premiersOnly && (episode.SeasonNumber == 0 || episode.EpisodeNumber != 1))
@@ -114,7 +112,7 @@ namespace NzbDrone.Api.Calendar
 
                 if (asAllDay)
                 {
-                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value) { HasTime = false };
+                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value.ToLocalTime()) { HasTime = false };
                 }
                 else
                 {
