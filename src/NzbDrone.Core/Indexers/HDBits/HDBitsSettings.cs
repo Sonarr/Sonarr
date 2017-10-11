@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Indexers.HDBits
         H264 = 1,
         Mpeg2 = 2,
         Vc1 = 3,
-        Xvid = 4.
+        Xvid = 4,
         Hevc = 5
     }
 
