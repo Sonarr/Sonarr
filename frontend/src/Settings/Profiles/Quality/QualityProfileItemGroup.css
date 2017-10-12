@@ -1,0 +1,105 @@
+.qualityProfileItemGroup {
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: #fafafa;
+
+  &.editGroups {
+    background: #fcfcfc;
+  }
+}
+
+.qualityProfileItemGroupInfo {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.checkInputContainer {
+  composes: checkInputContainer from './QualityProfileItem.css';
+
+  display: flex;
+  align-items: center;
+}
+
+.checkInput {
+  composes: checkInput from './QualityProfileItem.css';
+}
+
+.nameInput {
+  composes: text from 'Components/Form/TextInput.css';
+
+  margin-top: 4px;
+  margin-right: 10px;
+}
+
+.nameContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.name {
+  flex-shrink: 0;
+
+  &.notAllowed {
+    color: #c6c6c6;
+  }
+}
+
+.groupQualities {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  margin: 2px 0 2px 10px;
+}
+
+.qualityNameContainer {
+  display: flex;
+  align-items: stretch;
+  flex-grow: 1;
+  margin-bottom: 0;
+  margin-left: 2px;
+  font-weight: normal;
+}
+
+.qualityNameLabel {
+  composes: qualityNameContainer;
+
+  cursor: pointer;
+}
+
+.deleteGroupButton {
+  composes: buton from 'Components/Link/IconButton.css';
+
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 5px;
+  margin-left: 8px;
+  width: 20px;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: auto;
+  width: $dragHandleWidth;
+  text-align: center;
+  cursor: grab;
+}
+
+.dragIcon {
+  top: 0;
+}
+
+.isDragging {
+  opacity: 0.25;
+}
+
+.items {
+  margin: 0 50px 0 35px;
+}

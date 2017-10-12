@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             _profile = new Profile
                        {
                            Name = "Test",
-                           Cutoff = Quality.HDTV720p,
+                           Cutoff = Quality.HDTV720p.Id,
                            Items = new List<ProfileQualityItem>
                                    {
                                        new ProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p },

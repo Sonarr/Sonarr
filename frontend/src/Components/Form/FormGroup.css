@@ -5,6 +5,10 @@
 
 /* Sizes */
 
+.extraSmall {
+  max-width: $formGroupExtraSmallWidth;
+}
+
 .small {
   max-width: $formGroupSmallWidth;
 }

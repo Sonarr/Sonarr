@@ -8,6 +8,29 @@ import { fetchQualityProfileSchema, setQualityProfileValue, saveQualityProfile }
 import connectSection from 'Store/connectSection';
 import EditQualityProfileModalContent from './EditQualityProfileModalContent';
 
+function getQualityItemGroupId(qualityProfile) {
+  // Get items with an `id` and filter out null/undefined values
+  const ids = _.filter(_.map(qualityProfile.items.value, 'id'), (i) => i != null);
+
+  return Math.max(1000, ...ids) + 1;
+}
+
+function parseIndex(index) {
+  const split = index.split('.');
+
+  if (split.length === 1) {
+    return [
+      null,
+      parseInt(split[0]) - 1
+    ];
+  }
+
+  return [
+    parseInt(split[0]) - 1,
+    parseInt(split[1]) - 1
+  ];
+}
+
 function createQualitiesSelector() {
   return createSelector(
     createProviderSettingsSelector(),
@@ -17,12 +40,19 @@ function createQualitiesSelector() {
         return [];
       }
 
-      return _.reduceRight(items.value, (result, { allowed, quality }) => {
+      return _.reduceRight(items.value, (result, { allowed, id, name, quality }) => {
         if (allowed) {
-          result.push({
-            key: quality.id,
-            value: quality.name
-          });
+          if (id) {
+            result.push({
+              key: id,
+              value: name
+            });
+          } else {
+            result.push({
+              key: quality.id,
+              value: quality.name
+            });
+          }
         }
 
         return result;
@@ -61,8 +91,10 @@ class EditQualityProfileModalContentConnector extends Component {
     super(props, context);
 
     this.state = {
-      dragIndex: null,
-      dropIndex: null
+      dragQualityIndex: null,
+      dropQualityIndex: null,
+      dropPosition: null,
+      editGroups: true
     };
   }
 
@@ -79,6 +111,33 @@ class EditQualityProfileModalContentConnector extends Component {
   }
 
   //
+  // Control
+
+  ensureCutoff = (qualityProfile) => {
+    const cutoff = qualityProfile.cutoff.value;
+
+    const cutoffItem = _.find(qualityProfile.items.value, (i) => {
+      if (!cutoff) {
+        return false;
+      }
+
+      return i.id === cutoff || (i.quality && i.quality.id === cutoff);
+    });
+
+    // If the cutoff isn't allowed anymore or there isn't a cutoff set one
+    if (!cutoff || !cutoffItem || !cutoffItem.allowed) {
+      const firstAllowed = _.find(qualityProfile.items.value, { allowed: true });
+      let cutoffId = null;
+
+      if (firstAllowed) {
+        cutoffId = firstAllowed.quality ? firstAllowed.quality.id : firstAllowed.id;
+      }
+
+      this.props.setQualityProfileValue({ name: 'cutoff', value: cutoffId });
+    }
+  }
+
+  //
   // Listeners
 
   onInputChange = ({ name, value }) => {
@@ -87,9 +146,17 @@ class EditQualityProfileModalContentConnector extends Component {
 
   onCutoffChange = ({ name, value }) => {
     const id = parseInt(value);
-    const item = _.find(this.props.item.items.value, (i) => i.quality.id === id);
+    const item = _.find(this.props.item.items.value, (i) => {
+      if (i.quality) {
+        return i.quality.id === id;
+      }
 
-    this.props.setQualityProfileValue({ name, value: item.quality });
+      return i.id === id;
+    });
+
+    const cutoffId = item.quality ? item.quality.id : item.id;
+
+    this.props.setQualityProfileValue({ name, value: cutoffId });
   }
 
   onSavePress = () => {
@@ -98,56 +165,237 @@ class EditQualityProfileModalContentConnector extends Component {
 
   onQualityProfileItemAllowedChange = (id, allowed) => {
     const qualityProfile = _.cloneDeep(this.props.item);
+    const items = qualityProfile.items.value;
+    const item = _.find(qualityProfile.items.value, (i) => i.quality && i.quality.id === id);
 
-    const item = _.find(qualityProfile.items.value, (i) => i.quality.id === id);
     item.allowed = allowed;
 
     this.props.setQualityProfileValue({
       name: 'items',
-      value: qualityProfile.items.value
+      value: items
     });
 
-    const cutoff = qualityProfile.cutoff.value;
-
-    // If the cutoff isn't allowed anymore or there isn't a cutoff set one
-    if (!cutoff || !_.find(qualityProfile.items.value, (i) => i.quality.id === cutoff.id).allowed) {
-      const firstAllowed = _.find(qualityProfile.items.value, { allowed: true });
-
-      this.props.setQualityProfileValue({ name: 'cutoff', value: firstAllowed ? firstAllowed.quality : null });
-    }
+    this.ensureCutoff(qualityProfile);
   }
 
-  onQualityProfileItemDragMove = (dragIndex, dropIndex) => {
-    if (this.state.dragIndex !== dragIndex || this.state.dropIndex !== dropIndex) {
+  onItemGroupAllowedChange = (id, allowed) => {
+    const qualityProfile = _.cloneDeep(this.props.item);
+    const items = qualityProfile.items.value;
+    const item = _.find(qualityProfile.items.value, (i) => i.id === id);
+
+    item.allowed = allowed;
+
+    // Update each item in the group (for consistency only)
+    item.items.forEach((i) => {
+      i.allowed = allowed;
+    });
+
+    this.props.setQualityProfileValue({
+      name: 'items',
+      value: items
+    });
+
+    this.ensureCutoff(qualityProfile);
+  }
+
+  onItemGroupNameChange = (id, name) => {
+    const qualityProfile = _.cloneDeep(this.props.item);
+    const items = qualityProfile.items.value;
+    const group = _.find(items, (i) => i.id === id);
+
+    group.name = name;
+
+    this.props.setQualityProfileValue({
+      name: 'items',
+      value: items
+    });
+  }
+
+  onCreateGroupPress = (id) => {
+    const qualityProfile = _.cloneDeep(this.props.item);
+    const items = qualityProfile.items.value;
+    const item = _.find(items, (i) => i.quality && i.quality.id === id);
+    const index = items.indexOf(item);
+    const groupId = getQualityItemGroupId(qualityProfile);
+
+    const group = {
+      id: groupId,
+      name: item.quality.name,
+      allowed: item.allowed,
+      items: [
+        item
+      ]
+    };
+
+    // Add the group in the same location the quality item was in.
+    items.splice(index, 1, group);
+
+    this.props.setQualityProfileValue({
+      name: 'items',
+      value: items
+    });
+
+    this.ensureCutoff(qualityProfile);
+  }
+
+  onDeleteGroupPress = (id) => {
+    const qualityProfile = _.cloneDeep(this.props.item);
+    const items = qualityProfile.items.value;
+    const group = _.find(items, (i) => i.id === id);
+    const index = items.indexOf(group);
+
+    // Add the items in the same location the group was in
+    items.splice(index, 1, ...group.items);
+
+    this.props.setQualityProfileValue({
+      name: 'items',
+      value: items
+    });
+
+    this.ensureCutoff(qualityProfile);
+  }
+
+  onQualityProfileItemDragMove = (options) => {
+    const {
+      dragQualityIndex,
+      dropQualityIndex,
+      dropPosition
+    } = options;
+
+    const [dragGroupIndex, dragItemIndex] = parseIndex(dragQualityIndex);
+    const [dropGroupIndex, dropItemIndex] = parseIndex(dropQualityIndex);
+
+    if (
+      (dropPosition === 'below' && dropItemIndex - 1 === dragItemIndex) ||
+      (dropPosition === 'above' && dropItemIndex + 1 === dragItemIndex)
+    ) {
+      if (
+        this.state.dragQualityIndex != null &&
+        this.state.dropQualityIndex != null &&
+        this.state.dropPosition != null
+      ) {
+        this.setState({
+          dragQualityIndex: null,
+          dropQualityIndex: null,
+          dropPosition: null
+        });
+      }
+
+      return;
+    }
+
+    let adjustedDropQualityIndex = dropQualityIndex;
+
+    // Correct dragging out of a group to the position above
+    if (
+      dropPosition === 'above' &&
+      dragGroupIndex !== dropGroupIndex &&
+      dropGroupIndex != null
+    ) {
+      // Add 1 to the group index and 2 to the item index so it's inserted above in the correct group
+      adjustedDropQualityIndex = `${dropGroupIndex + 1}.${dropItemIndex + 2}`;
+    }
+
+    // Correct inserting above outside a group
+    if (
+      dropPosition === 'above' &&
+      dragGroupIndex !== dropGroupIndex &&
+      dropGroupIndex == null
+    ) {
+      // Add 2 to the item index so it's entered in the correct place
+      adjustedDropQualityIndex = `${dropItemIndex + 2}`;
+    }
+
+    // Correct inserting below a quality within the same group (when moving a lower item)
+    if (
+      dropPosition === 'below' &&
+      dragGroupIndex === dropGroupIndex &&
+      dropGroupIndex != null &&
+      dragItemIndex < dropItemIndex
+    ) {
+      // Add 1 to the group index leave the item index
+      adjustedDropQualityIndex = `${dropGroupIndex + 1}.${dropItemIndex}`;
+    }
+
+    // Correct inserting below a quality outside a group (when moving a lower item)
+    if (
+      dropPosition === 'below' &&
+      dragGroupIndex === dropGroupIndex &&
+      dropGroupIndex == null &&
+      dragItemIndex < dropItemIndex
+    ) {
+      // Leave the item index so it's inserted below the item
+      adjustedDropQualityIndex = `${dropItemIndex}`;
+    }
+
+    if (
+      dragQualityIndex !== this.state.dragQualityIndex ||
+      adjustedDropQualityIndex !== this.state.dropQualityIndex ||
+      dropPosition !== this.state.dropPosition
+    ) {
       this.setState({
-        dragIndex,
-        dropIndex
+        dragQualityIndex,
+        dropQualityIndex: adjustedDropQualityIndex,
+        dropPosition
       });
     }
   }
 
-  onQualityProfileItemDragEnd = ({ id }, didDrop) => {
+  onQualityProfileItemDragEnd = (didDrop) => {
     const {
-      dragIndex,
-      dropIndex
+      dragQualityIndex,
+      dropQualityIndex
     } = this.state;
 
-    if (didDrop && dropIndex !== null) {
+    if (didDrop && dropQualityIndex != null) {
       const qualityProfile = _.cloneDeep(this.props.item);
+      const items = qualityProfile.items.value;
+      const [dragGroupIndex, dragItemIndex] = parseIndex(dragQualityIndex);
+      const [dropGroupIndex, dropItemIndex] = parseIndex(dropQualityIndex);
 
-      const items = qualityProfile.items.value.splice(dragIndex, 1);
-      qualityProfile.items.value.splice(dropIndex, 0, items[0]);
+      let item = null;
+      let dropGroup = null;
+
+      // Get the group before moving anything so we know the correct place to drop it.
+      if (dropGroupIndex != null) {
+        dropGroup = items[dropGroupIndex];
+      }
+
+      if (dragGroupIndex == null) {
+        item = items.splice(dragItemIndex, 1)[0];
+      } else {
+        const group = items[dragGroupIndex];
+        item = group.items.splice(dragItemIndex, 1)[0];
+
+        // If the group is now empty, destroy it.
+        if (!group.items.length) {
+          items.splice(dragGroupIndex, 1);
+        }
+      }
+
+      if (dropGroupIndex == null) {
+        items.splice(dropItemIndex, 0, item);
+      } else {
+        dropGroup.items.splice(dropItemIndex, 0, item);
+      }
 
       this.props.setQualityProfileValue({
         name: 'items',
-        value: qualityProfile.items.value
+        value: items
       });
+
+      this.ensureCutoff(qualityProfile);
     }
 
     this.setState({
-      dragIndex: null,
-      dropIndex: null
+      dragQualityIndex: null,
+      dropQualityIndex: null,
+      dropPosition: null
     });
+  }
+
+  onToggleEditGroupsMode = () => {
+    this.setState({ editGroups: !this.state.editGroups });
   }
 
   //
@@ -165,9 +413,14 @@ class EditQualityProfileModalContentConnector extends Component {
         onSavePress={this.onSavePress}
         onInputChange={this.onInputChange}
         onCutoffChange={this.onCutoffChange}
+        onCreateGroupPress={this.onCreateGroupPress}
+        onDeleteGroupPress={this.onDeleteGroupPress}
         onQualityProfileItemAllowedChange={this.onQualityProfileItemAllowedChange}
+        onItemGroupAllowedChange={this.onItemGroupAllowedChange}
+        onItemGroupNameChange={this.onItemGroupNameChange}
         onQualityProfileItemDragMove={this.onQualityProfileItemDragMove}
         onQualityProfileItemDragEnd={this.onQualityProfileItemDragEnd}
+        onToggleEditGroupsMode={this.onToggleEditGroupsMode}
       />
     );
   }

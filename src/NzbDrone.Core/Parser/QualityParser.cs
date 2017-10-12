@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,7 +16,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
                                                                 (?<bluray>BluRay|Blu-Ray|HDDVD|BD)|
-                                                                (?<webdl>WEB[-_. ]DL|WEBDL|WebRip|AmazonHD|iTunesHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])|
+                                                                (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])|
+                                                                (?<webrip>WebRip)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRip)|
                                                                 (?<brrip>BRRip)|
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Parser
                 {
                     if (codecRegex.Groups["xvid"].Success || codecRegex.Groups["divx"].Success)
                     {
-                        result.Quality = Quality.DVD;
+                        result.Quality = Quality.Bluray480p;
                         return result;
                     }
 
@@ -94,7 +95,7 @@ namespace NzbDrone.Core.Parser
 
                     if (resolution == Resolution.R480P || resolution == Resolution.R576p)
                     {
-                        result.Quality = Quality.DVD;
+                        result.Quality = Quality.Bluray480p;
                         return result;
                     }
 
@@ -129,6 +130,30 @@ namespace NzbDrone.Core.Parser
                     }
 
                     result.Quality = Quality.WEBDL480p;
+                    return result;
+                }
+
+                if (sourceMatch.Groups["webrip"].Success)
+                {
+                    if (resolution == Resolution.R2160p)
+                    {
+                        result.Quality = Quality.WEBRip2160p;
+                        return result;
+                    }
+
+                    if (resolution == Resolution.R1080p)
+                    {
+                        result.Quality = Quality.WEBRip1080p;
+                        return result;
+                    }
+
+                    if (resolution == Resolution.R720p)
+                    {
+                        result.Quality = Quality.WEBRip720p;
+                        return result;
+                    }
+
+                    result.Quality = Quality.WEBRip480p;
                     return result;
                 }
 
@@ -174,7 +199,7 @@ namespace NzbDrone.Core.Parser
                             result.Quality = Quality.Bluray1080p;
                             return result;
                         default:
-                            result.Quality = Quality.DVD;
+                            result.Quality = Quality.Bluray480p;
                             return result;
                     }
                 }

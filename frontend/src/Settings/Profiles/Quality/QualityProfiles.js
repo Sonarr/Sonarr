@@ -91,7 +91,6 @@ class QualityProfiles extends Component {
 }
 
 QualityProfiles.propTypes = {
-  advancedSettings: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   isDeleting: PropTypes.bool.isRequired,

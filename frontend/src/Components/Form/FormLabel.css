@@ -1,7 +1,6 @@
 .label {
   display: flex;
   justify-content: flex-end;
-  flex: 0 0 $formLabelWidth;
   margin-right: $formLabelRightMarginWidth;
   font-weight: bold;
   line-height: 35px;
@@ -19,4 +18,12 @@
   .label {
     justify-content: flex-start;
   }
+}
+
+.small {
+  flex: 0 0 $formLabelSmallWidth;
+}
+
+.large {
+  flex: 0 0 $formLabelLargeWidth;
 }

@@ -1,5 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Measure from 'react-measure';
+import { icons, kinds, sizes } from 'Helpers/Props';
+import Icon from 'Components/Icon';
+import Button from 'Components/Link/Button';
 import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
@@ -10,25 +14,68 @@ import styles from './QualityProfileItems.css';
 class QualityProfileItems extends Component {
 
   //
+  // Lifecycle
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      qualitiesHeight: 0,
+      qualitiesHeightEditGroups: 0
+    };
+  }
+
+  componentDidMount() {
+    this.props.onToggleEditGroupsMode();
+  }
+
+  //
+  // Listeners
+
+  onMeasure = ({ height }) => {
+    if (this.props.editGroups) {
+      this.setState({
+        qualitiesHeightEditGroups: height
+      });
+    } else {
+      this.setState({ qualitiesHeight: height });
+    }
+  }
+
+  onToggleEditGroupsMode = () => {
+    this.props.onToggleEditGroupsMode();
+  }
+
+  //
   // Render
 
   render() {
     const {
-      dragIndex,
-      dropIndex,
+      editGroups,
+      dropQualityIndex,
+      dropPosition,
       qualityProfileItems,
       errors,
       warnings,
       ...otherProps
     } = this.props;
 
-    const isDragging = dropIndex !== null;
-    const isDraggingUp = isDragging && dropIndex > dragIndex;
-    const isDraggingDown = isDragging && dropIndex < dragIndex;
+    const {
+      qualitiesHeight,
+      qualitiesHeightEditGroups
+    } = this.state;
+
+    const isDragging = dropQualityIndex !== null;
+    const isDraggingUp = isDragging && dropPosition === 'above';
+    const isDraggingDown = isDragging && dropPosition === 'below';
+    const minHeight = editGroups ? qualitiesHeightEditGroups : qualitiesHeight;
 
     return (
-      <FormGroup>
-        <FormLabel>Qualities</FormLabel>
+      <FormGroup size={sizes.EXTRA_SMALL}>
+        <FormLabel size={sizes.SMALL}>
+          Qualities
+        </FormLabel>
+
         <div>
           <FormInputHelpText
             text="Qualities higher in the list are more preferred. Only checked qualities are wanted"
@@ -60,27 +107,59 @@ class QualityProfileItems extends Component {
             })
           }
 
-          <div className={styles.qualities}>
-            {
-              qualityProfileItems.map(({ allowed, quality }, index) => {
-                return (
-                  <QualityProfileItemDragSource
-                    key={quality.id}
-                    qualityId={quality.id}
-                    name={quality.name}
-                    allowed={allowed}
-                    sortIndex={index}
-                    isDragging={isDragging}
-                    isDraggingUp={isDraggingUp}
-                    isDraggingDown={isDraggingDown}
-                    {...otherProps}
-                  />
-                );
-              }).reverse()
-            }
+          <Button
+            className={styles.editGroupsButton}
+            kind={kinds.PRIMARY}
+            onPress={this.onToggleEditGroupsMode}
+          >
+            <div>
+              <Icon
+                className={styles.editGroupsButtonIcon}
+                name={editGroups ? icons.REORDER : icons.GROUP}
+              />
 
-            <QualityProfileItemDragPreview />
-          </div>
+              {
+                editGroups ? 'Done Editing Groups' : 'Edit Groups'
+              }
+            </div>
+          </Button>
+
+          <Measure
+            whitelist={['height']}
+            includeMargin={false}
+            onMeasure={this.onMeasure}
+          >
+            <div
+              className={styles.qualities}
+              style={{ minHeight: `${minHeight}px` }}
+            >
+              {
+                qualityProfileItems.map(({ id, name, allowed, quality, items }, index) => {
+                  const identifier = quality ? quality.id : id;
+
+                  return (
+                    <QualityProfileItemDragSource
+                      key={identifier}
+                      editGroups={editGroups}
+                      groupId={id}
+                      qualityId={quality && quality.id}
+                      name={quality ? quality.name : name}
+                      allowed={allowed}
+                      items={items}
+                      qualityIndex={`${index + 1}`}
+                      isInGroup={false}
+                      isDragging={isDragging}
+                      isDraggingUp={isDraggingUp}
+                      isDraggingDown={isDraggingDown}
+                      {...otherProps}
+                    />
+                  );
+                }).reverse()
+              }
+
+              <QualityProfileItemDragPreview />
+            </div>
+          </Measure>
         </div>
       </FormGroup>
     );
@@ -88,11 +167,14 @@ class QualityProfileItems extends Component {
 }
 
 QualityProfileItems.propTypes = {
-  dragIndex: PropTypes.number,
-  dropIndex: PropTypes.number,
+  editGroups: PropTypes.bool.isRequired,
+  dragQualityIndex: PropTypes.string,
+  dropQualityIndex: PropTypes.string,
+  dropPosition: PropTypes.string,
   qualityProfileItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   errors: PropTypes.arrayOf(PropTypes.object),
-  warnings: PropTypes.arrayOf(PropTypes.object)
+  warnings: PropTypes.arrayOf(PropTypes.object),
+  onToggleEditGroupsMode: PropTypes.func.isRequired
 };
 
 QualityProfileItems.defaultProps = {

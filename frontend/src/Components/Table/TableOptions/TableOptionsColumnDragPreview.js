@@ -8,7 +8,7 @@ import TableOptionsColumn from './TableOptionsColumn';
 import styles from './TableOptionsColumnDragPreview.css';
 
 const formGroupSmallWidth = parseInt(dimensions.formGroupSmallWidth);
-const formLabelWidth = parseInt(dimensions.formLabelWidth);
+const formLabelLargeWidth = parseInt(dimensions.formLabelLargeWidth);
 const formLabelRightMarginWidth = parseInt(dimensions.formLabelRightMarginWidth);
 const dragHandleWidth = parseInt(dimensions.dragHandleWidth);
 
@@ -40,7 +40,7 @@ class TableOptionsColumnDragPreview extends Component {
     // list item and the preview is wider than the drag handle.
 
     const { x, y } = currentOffset;
-    const handleOffset = formGroupSmallWidth - formLabelWidth - formLabelRightMarginWidth - dragHandleWidth;
+    const handleOffset = formGroupSmallWidth - formLabelLargeWidth - formLabelRightMarginWidth - dragHandleWidth;
     const transform = `translate3d(${x - handleOffset}px, ${y}px, 0)`;
 
     const style = {

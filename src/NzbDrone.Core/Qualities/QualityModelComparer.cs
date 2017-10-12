@@ -16,17 +16,35 @@ namespace NzbDrone.Core.Qualities
             _profile = profile;
         }
 
+        public int Compare(int left, int right, bool respectGroupOrder = false)
+        {
+            var leftIndex = _profile.GetIndex(left);
+            var rightIndex = _profile.GetIndex(right);
+
+            return leftIndex.CompareTo(rightIndex, respectGroupOrder);
+        }
+
         public int Compare(Quality left, Quality right)
         {
-            int leftIndex = _profile.Items.FindIndex(v => v.Quality == left);
-            int rightIndex = _profile.Items.FindIndex(v => v.Quality == right);
+            return Compare(left, right, false);
+        }
 
-            return leftIndex.CompareTo(rightIndex);
+        public int Compare(Quality left, Quality right, bool respectGroupOrder)
+        {
+            var leftIndex = _profile.GetIndex(left);
+            var rightIndex = _profile.GetIndex(right);
+
+            return leftIndex.CompareTo(rightIndex, respectGroupOrder);
         }
 
         public int Compare(QualityModel left, QualityModel right)
         {
-            int result = Compare(left.Quality, right.Quality);
+            return Compare(left, right, false);
+        }
+
+        public int Compare(QualityModel left, QualityModel right, bool respectGroupOrder)
+        {
+            int result = Compare(left.Quality, right.Quality, respectGroupOrder);
 
             if (result == 0)
             {

@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_when_quality_in_queue_is_lower()
         {
-            _series.Profile.Value.Cutoff = Quality.Bluray1080p;
+            _series.Profile.Value.Cutoff = Quality.Bluray1080p.Id;
             _series.LanguageProfile.Value.Cutoff = Language.Spanish;
 
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_when_quality_in_queue_is_lower_but_language_is_higher()
         {
-            _series.Profile.Value.Cutoff = Quality.Bluray1080p;
+            _series.Profile.Value.Cutoff = Quality.Bluray1080p.Id;
             _series.LanguageProfile.Value.Cutoff = Language.Spanish;
 
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_when_quality_in_queue_is_better()
         {
-            _series.Profile.Value.Cutoff = Quality.Bluray1080p;
+            _series.Profile.Value.Cutoff = Quality.Bluray1080p.Id;
 
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
@@ -294,7 +294,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_if_quality_and_language_in_queue_meets_cutoff()
         {
-            _series.Profile.Value.Cutoff = _remoteEpisode.ParsedEpisodeInfo.Quality.Quality;
+            _series.Profile.Value.Cutoff = _remoteEpisode.ParsedEpisodeInfo.Quality.Quality.Id;
 
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)

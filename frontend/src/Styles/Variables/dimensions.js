@@ -19,16 +19,21 @@ module.exports = {
   breakpointSmall: '768px',
   breakpointMedium: '992px',
   breakpointLarge: '1200px',
+  breakpointExtraLarge: '1450px',
 
   // Form
+  formGroupExtraSmallWidth: '550px',
   formGroupSmallWidth: '650px',
   formGroupMediumWidth: '800px',
   formGroupLargeWidth: '1200px',
-  formLabelWidth: '250px',
+  formLabelSmallWidth: '150px',
+  formLabelLargeWidth: '250px',
   formLabelRightMarginWidth: '20px',
 
   // Drag
   dragHandleWidth: '40px',
+  qualityProfileItemHeight: '30px',
+  qualityProfileItemDragSourcePadding: '4px',
 
   // Progress Bar
   progressBarSmallHeight: '5px',
@@ -37,6 +42,9 @@ module.exports = {
 
   // Jump Bar
   jumpBarItemHeight: '25px',
+
+  // Modal
+  modalBodyPadding: '30px',
 
   // Series
   seriesIndexColumnPadding: '20px',

@@ -8,14 +8,21 @@ namespace Sonarr.Api.V3.Profiles.Quality
     public class QualityProfileResource : RestResource
     {
         public string Name { get; set; }
-        public NzbDrone.Core.Qualities.Quality Cutoff { get; set; }
+        public int Cutoff { get; set; }
         public List<QualityProfileQualityItemResource> Items { get; set; }
     }
 
     public class QualityProfileQualityItemResource : RestResource
     {
+        public string Name { get; set; }
         public NzbDrone.Core.Qualities.Quality Quality { get; set; }
+        public List<QualityProfileQualityItemResource> Items { get; set; }
         public bool Allowed { get; set; }
+
+        public QualityProfileQualityItemResource()
+        {
+            Items = new List<QualityProfileQualityItemResource>();
+        }
     }
 
     public static class ProfileResourceMapper
@@ -27,7 +34,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
             return new QualityProfileResource
             {
                 Id = model.Id,
-
                 Name = model.Name,
                 Cutoff = model.Cutoff,
                 Items = model.Items.ConvertAll(ToResource),
@@ -40,7 +46,10 @@ namespace Sonarr.Api.V3.Profiles.Quality
 
             return new QualityProfileQualityItemResource
             {
+                Id = model.Id,
+                Name = model.Name,
                 Quality = model.Quality,
+                Items = model.Items.ConvertAll(ToResource),
                 Allowed = model.Allowed
             };
         }
@@ -52,9 +61,8 @@ namespace Sonarr.Api.V3.Profiles.Quality
             return new Profile
             {
                 Id = resource.Id,
-
                 Name = resource.Name,
-                Cutoff = (NzbDrone.Core.Qualities.Quality)resource.Cutoff.Id,
+                Cutoff = resource.Cutoff,
                 Items = resource.Items.ConvertAll(ToModel)
             };
         }
@@ -65,7 +73,10 @@ namespace Sonarr.Api.V3.Profiles.Quality
 
             return new ProfileQualityItem
             {
-                Quality = (NzbDrone.Core.Qualities.Quality)resource.Quality.Id,
+                Id = resource.Id,
+                Name = resource.Name,
+                Quality = resource.Quality != null ? (NzbDrone.Core.Qualities.Quality)resource.Quality.Id : null,
+                Items = resource.Items.ConvertAll(ToModel),
                 Allowed = resource.Allowed
             };
         }

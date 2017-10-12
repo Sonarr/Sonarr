@@ -1,5 +1,3 @@
-$modalBodyPadding: 30px;
-
 .modalBody {
   flex: 1 0 1px;
   padding: $modalBodyPadding;

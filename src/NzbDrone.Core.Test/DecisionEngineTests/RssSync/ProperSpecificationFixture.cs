@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = _secondFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p })
+                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p.Id })
                          .Build();
 
             _parseResultMulti = new RemoteEpisode

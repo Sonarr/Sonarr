@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var languages = Languages.LanguageFixture.GetDefaultLanguages(Language.English, Language.Spanish);
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p, Items = Qualities.QualityFixture.GetDefaultQualities()})
+                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p.Id, Items = Qualities.QualityFixture.GetDefaultQualities()})
                          .With(l => l.LanguageProfile = new LanguageProfile { Cutoff = Language.Spanish, Languages = languages })
                          .Build();
 
