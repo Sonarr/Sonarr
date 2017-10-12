@@ -52,6 +52,9 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex HighDefPdtvRegex = new Regex(@"hr[-_. ]ws", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex RemuxRegex = new Regex(@"\b(?<remux>(BD)?Remux)\b",
+                                                        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public static QualityModel ParseQuality(string name)
         {
             Logger.Debug("Trying to parse quality for {0}", name);
@@ -69,6 +72,16 @@ namespace NzbDrone.Core.Parser
             var sourceMatch = SourceRegex.Matches(normalizedName).OfType<Match>().LastOrDefault();
             var resolution = ParseResolution(normalizedName);
             var codecRegex = CodecRegex.Match(normalizedName);
+
+            if (RemuxRegex.IsMatch(normalizedName) && sourceMatch?.Groups["webdl"].Success != true && sourceMatch?.Groups["hdtv"].Success != true)
+            {
+
+                if (resolution == Resolution.R1080p)
+                {
+                    result.Quality = Quality.REMUX1080p;
+                    return result;
+                }
+            }
 
             if (sourceMatch != null && sourceMatch.Success)
             {
