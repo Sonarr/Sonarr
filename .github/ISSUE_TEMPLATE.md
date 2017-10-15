@@ -10,23 +10,19 @@ Please use https://forums.sonarr.tv/ for support. Support requests or questions 
 
 ## Bug Report
 **Sonarr Version:**
+
 **Operating System:**
+
 **.net Framework (Windows) or mono (macOS/Linux) Version:**
+
 **Link to Log Files (debug or trace):**
+
 **Browser (for UI bugs):**
 
-### Steps to reproduce
-1.
-
-### Current Behavior
-
-
-### Expected Behavior
-
+### Additional Information
 
 ## Feature Request
 
-###What problem are you looking to solve
+### What problem are you looking to solve
 
-###Other Information
-
+### Other Information
