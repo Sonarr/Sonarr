@@ -42,6 +42,20 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             var delay = delayProfile.GetProtocolDelay(subject.Release.DownloadProtocol);
             var isPreferredProtocol = subject.Release.DownloadProtocol == delayProfile.PreferredProtocol;
 
+            // Preferred word count
+            var title = subject.Release.Title;
+            var preferredWords = subject.Movie.Profile.Value.PreferredTags;
+            var preferredCount = 0;
+            if (preferredWords == null)
+            {
+                preferredCount = 1;
+                _logger.Debug("Preferred words is null, setting preffered count to 1.");
+            }
+            else
+            {
+                preferredCount = preferredWords.AsEnumerable().Count(w => title.ToLower().Contains(w.ToLower()));
+            }
+
             if (delay == 0)
             {
                 _logger.Debug("Profile does not require a waiting period before download for {0}.", subject.Release.DownloadProtocol);
@@ -50,7 +64,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             var comparer = new QualityModelComparer(profile);
 
-            if (isPreferredProtocol)
+            if (isPreferredProtocol && (preferredcount > 0 || preferredWords == null))
             {
                 foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
                 {
@@ -62,7 +76,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                         if (revisionUpgrade)
                         {
-                            _logger.Debug("New quality is a better revision for existing quality, skipping delay");
+                            _logger.Debug("New quality is a better revision for existing quality and preferred word count is {0}, skipping delay", preferredcount);
                             return Decision.Accept();
                         }
                     }
@@ -73,9 +87,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             var bestQualityInProfile = new QualityModel(profile.LastAllowedQuality());
             var isBestInProfile = comparer.Compare(subject.ParsedEpisodeInfo.Quality, bestQualityInProfile) >= 0;
 
-            if (isBestInProfile && isPreferredProtocol)
+            if (isBestInProfile && isPreferredProtocol && (preferredcount > 0  || preferredWords == null))
             {
-                _logger.Debug("Quality is highest in profile for preferred protocol, will not delay");
+                _logger.Debug("Quality is highest in profile for preferred protocol and preferred word count is {0}, will not delay",num);
                 return Decision.Accept();
             }
 
@@ -90,7 +104,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (subject.Release.AgeMinutes < delay)
             {
-                _logger.Debug("Waiting for better quality release, There is a {0} minute delay on {1}", delay, subject.Release.DownloadProtocol);
+                _logger.Debug("Quality is highest in profile for preferred protocol and preferred word count is {0}, will not delay.", preferredcount);
                 return Decision.Reject("Waiting for better quality release");
             }
 

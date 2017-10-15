@@ -4,11 +4,23 @@ var LanguageCollection = require('../Language/LanguageCollection');
 var Config = require('../../../Config');
 var AsModelBoundView = require('../../../Mixins/AsModelBoundView');
 var AsValidatedView = require('../../../Mixins/AsValidatedView');
+require('../../../Mixins/TagInput');
+require('bootstrap');
+require('bootstrap.tagsinput');
 
 var view = Marionette.ItemView.extend({
     template : 'Settings/Profile/Edit/EditProfileViewTemplate',
 
-    ui : { cutoff : '.x-cutoff' },
+    ui : { cutoff : '.x-cutoff',
+ 					preferred : '.x-preferred'},
+
+    onRender : function() {
+        this.ui.preferred.tagsinput({
+            trimValue : true,
+            allowDuplicates: true,
+            tagClass  : 'label label-success'
+        });
+    },
 
     templateHelpers : function() {
         return {
