@@ -24,6 +24,7 @@ namespace NzbDrone.Core.DecisionEngine
             var comparers = new List<CompareDelegate>
             {
                 CompareQuality,
+                ComparePreferredWords,
                 CompareProtocol,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
@@ -60,6 +61,25 @@ namespace NzbDrone.Core.DecisionEngine
             return CompareAll(CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == remoteEpisode.ParsedEpisodeInfo.Quality.Quality)),
                            CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Real),
                            CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version));
+        }
+
+        private int ComparePreferredWords(DownloadDecision x, DownloadDecision y)
+        {
+            return CompareBy(x.RemoteMovie, y.RemoteMovie, remoteMovie =>
+            {
+                var title = remoteMovie.Release.Title;
+                remoteMovie.Movie.Profile.LazyLoad();
+                var preferredWords = remoteMovie.Movie.Profile.Value.PreferredTags;
+
+                if (preferredWords == null)
+                {
+                    return 0;
+                }
+
+                var num = preferredWords.AsEnumerable().Count(w => title.ToLower().Contains(w.ToLower()));
+
+                return num;
+            });
         }
 
         private int CompareProtocol(DownloadDecision x, DownloadDecision y)

@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Profiles
         public string Name { get; set; }
         public Quality Cutoff { get; set; }
         public List<ProfileQualityItem> Items { get; set; }
+        public List<string> PreferredTags { get; set; }
         public Language Language { get; set; }
 
         public Quality LastAllowedQuality()

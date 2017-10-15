@@ -11,6 +11,7 @@ namespace NzbDrone.Api.Profiles
     {
         public string Name { get; set; }
         public Quality Cutoff { get; set; }
+        public string PreferredTags { get; set; }
         public List<ProfileQualityItemResource> Items { get; set; }
         public Language Language { get; set; }
     }
@@ -33,6 +34,7 @@ namespace NzbDrone.Api.Profiles
 
                 Name = model.Name,
                 Cutoff = model.Cutoff,
+                PreferredTags = model.PreferredTags != null ? string.Join(",", model.PreferredTags) : "",
                 Items = model.Items.ConvertAll(ToResource),
                 Language = model.Language
             };
@@ -59,6 +61,7 @@ namespace NzbDrone.Api.Profiles
 
                 Name = resource.Name,
                 Cutoff = (Quality)resource.Cutoff.Id,
+                PreferredTags = resource.PreferredTags.Split(',').ToList(),
                 Items = resource.Items.ConvertAll(ToModel),
                 Language = resource.Language
             };
