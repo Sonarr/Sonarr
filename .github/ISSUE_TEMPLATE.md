@@ -9,6 +9,9 @@ Before opening a new issue, please ensure:
 Please use https://forums.sonarr.tv/ for support. Support requests or questions will be redirected to the forums and the issue will be closed.
 
 ## Bug Report
+
+### System Information/Logs
+
 **Sonarr Version:**
 
 **Operating System:**
