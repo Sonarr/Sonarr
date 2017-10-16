@@ -6,7 +6,7 @@
 #define AppURL "https://sonarr.tv/"
 #define ForumsURL "https://forums.sonarr.tv/"
 #define AppExeName "Sonarr.exe"
-#define BuildNumber "2.0"
+#define BuildNumber "3.0"
 #define BuildNumber GetEnv('BUILD_NUMBER')
 #define BranchName GetEnv('BRANCH')
 
