@@ -29,7 +29,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             if (entry != null)
             {
                 ExecutingApplication = entry.Location;
-                IsWindowsTray = entry.ManifestModule.Name == $"{ProcessProvider.SONARR_PROCESS_NAME}.exe";
+                IsWindowsTray = OsInfo.IsWindows && entry.ManifestModule.Name == $"{ProcessProvider.SONARR_PROCESS_NAME}.exe";
             }
         }
 

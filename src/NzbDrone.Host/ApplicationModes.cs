@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Host
+namespace NzbDrone.Host
 {
     public enum ApplicationModes
     {
@@ -7,5 +7,6 @@
         InstallService,
         UninstallService,
         Service,
+        RegisterUrl
     }
 }

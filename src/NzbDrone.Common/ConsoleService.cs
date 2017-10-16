@@ -21,8 +21,14 @@ namespace NzbDrone.Common
             Console.WriteLine();
             Console.WriteLine("     Usage: {0} <command> ", Process.GetCurrentProcess().MainModule.ModuleName);
             Console.WriteLine("     Commands:");
-            Console.WriteLine("                 /{0} Install the application as a Windows Service ({1}).", StartupContext.INSTALL_SERVICE, ServiceProvider.SERVICE_NAME);
-            Console.WriteLine("                 /{0} Uninstall already installed Windows Service ({1}).", StartupContext.UNINSTALL_SERVICE, ServiceProvider.SERVICE_NAME);
+
+            if (OsInfo.IsWindows)
+            {
+                Console.WriteLine("                 /{0} Install the application as a Windows Service ({1}).", StartupContext.INSTALL_SERVICE, ServiceProvider.SERVICE_NAME);
+                Console.WriteLine("                 /{0} Uninstall already installed Windows Service ({1}).", StartupContext.UNINSTALL_SERVICE, ServiceProvider.SERVICE_NAME);
+                Console.WriteLine("                 /{0} Register URL and open firewall port (allows access from other devices on your network).", StartupContext.REGISTER_URL);
+            }
+
             Console.WriteLine("                 /{0} Don't open Sonarr in a browser", StartupContext.NO_BROWSER);
             Console.WriteLine("                 /{0} Start Sonarr terminating any other instances", StartupContext.TERMINATE);
             Console.WriteLine("                 /{0}=path Path to use as the AppData location (stores database, config, logs, etc)", StartupContext.APPDATA);

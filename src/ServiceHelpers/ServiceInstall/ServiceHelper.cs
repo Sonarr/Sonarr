@@ -50,13 +50,11 @@ namespace ServiceInstall
             process.BeginOutputReadLine();
 
             process.WaitForExit();
-
         }
 
         private static void OnDataReceived(object sender, DataReceivedEventArgs e)
         {
             Console.WriteLine(e.Data);
         }
-
     }
 }
