@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Common
@@ -14,13 +15,14 @@ namespace NzbDrone.Common
         bool ServiceExist(string name);
         bool IsServiceRunning(string name);
         void Install(string serviceName);
-        void UnInstall(string serviceName);
+        void Uninstall(string serviceName);
         void Run(ServiceBase service);
         ServiceController GetService(string serviceName);
         void Stop(string serviceName);
         void Start(string serviceName);
         ServiceControllerStatus GetStatus(string serviceName);
         void Restart(string serviceName);
+        void SetPermissions(string serviceName);
     }
 
     public class ServiceProvider : IServiceProvider
@@ -29,7 +31,6 @@ namespace NzbDrone.Common
 
         private readonly IProcessProvider _processProvider;
         private readonly Logger _logger;
-
 
         public ServiceProvider(IProcessProvider processProvider, Logger logger)
         {
@@ -66,7 +67,7 @@ namespace NzbDrone.Common
 
             var installer = new ServiceProcessInstaller
                                 {
-                                    Account = ServiceAccount.LocalSystem
+                                    Account = ServiceAccount.LocalService
                                 };
 
             var serviceInstaller = new ServiceInstaller();
@@ -89,7 +90,7 @@ namespace NzbDrone.Common
             _logger.Info("Service Has installed successfully.");
         }
 
-        public virtual void UnInstall(string serviceName)
+        public virtual void Uninstall(string serviceName)
         {
             _logger.Info("Uninstalling {0} service", serviceName);
 
@@ -188,6 +189,43 @@ namespace NzbDrone.Common
             var args = string.Format("/C net.exe stop \"{0}\" && net.exe start \"{0}\"", serviceName);
 
             _processProvider.Start("cmd.exe", args);
+        }
+
+        public void SetPermissions(string serviceName)
+        {
+            var dacls = GetServiceDacls(serviceName);
+            SetServiceDacls(serviceName, dacls);
+        }
+
+        private string GetServiceDacls(string serviceName)
+        {
+            var output = _processProvider.StartAndCapture("sc.exe", $"sdshow {serviceName}");
+
+            var dacls = output.Standard.Select(s => s.Content).Where(s => s.IsNotNullOrWhiteSpace()).ToList();
+
+            if (dacls.Count == 1)
+            {
+                return dacls[0];
+            }
+
+            throw new ArgumentException("Invalid DACL output");
+        }
+
+        private void SetServiceDacls(string serviceName, string dacls)
+        {
+            const string authenticatedUsersDacl = "(A;;CCLCSWRPWPLOCRRC;;;AU)";
+
+            if (dacls.Contains(authenticatedUsersDacl))
+            {
+                // Permssions already set
+                return;
+            }
+
+            var indexOfS = dacls.IndexOf("S:", StringComparison.InvariantCultureIgnoreCase);
+
+            dacls = indexOfS == -1 ? $"{dacls}{authenticatedUsersDacl}" : dacls.Insert(indexOfS, authenticatedUsersDacl);
+
+            _processProvider.Start("sc.exe", $"sdset {serviceName} {dacls}").WaitForExit();
         }
     }
 }
