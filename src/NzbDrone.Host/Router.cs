@@ -1,6 +1,9 @@
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
+using NzbDrone.Host.AccessControl;
+using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
 namespace NzbDrone.Host
 {
@@ -10,18 +13,24 @@ namespace NzbDrone.Host
         private readonly IServiceProvider _serviceProvider;
         private readonly IConsoleService _consoleService;
         private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IProcessProvider _processProvider;
+        private readonly IRemoteAccessAdapter _remoteAccessAdapter;
         private readonly Logger _logger;
 
         public Router(INzbDroneServiceFactory nzbDroneServiceFactory,
                       IServiceProvider serviceProvider,
                       IConsoleService consoleService,
                       IRuntimeInfo runtimeInfo,
+                      IProcessProvider processProvider,
+                      IRemoteAccessAdapter remoteAccessAdapter,
                       Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
             _consoleService = consoleService;
             _runtimeInfo = runtimeInfo;
+            _processProvider = processProvider;
+            _remoteAccessAdapter = remoteAccessAdapter;
             _logger = logger;
         }
 
@@ -57,8 +66,13 @@ namespace NzbDrone.Host
                         }
                         else
                         {
+                            _remoteAccessAdapter.MakeAccessible(true);
                             _serviceProvider.Install(ServiceProvider.SERVICE_NAME);
-                            _serviceProvider.Start(ServiceProvider.SERVICE_NAME);
+                            _serviceProvider.SetPermissions(ServiceProvider.SERVICE_NAME);
+
+                            // Start the service and exit.
+                            // Ensures that there isn't an instance of Sonarr already running that the service account cannot stop.
+                            _processProvider.SpawnNewProcess("sc.exe", $"start {ServiceProvider.SERVICE_NAME}", null, true);
                         }
                         break;
                     }
@@ -71,8 +85,15 @@ namespace NzbDrone.Host
                         }
                         else
                         {
-                            _serviceProvider.UnInstall(ServiceProvider.SERVICE_NAME);
+                            _serviceProvider.Uninstall(ServiceProvider.SERVICE_NAME);
                         }
+
+                        break;
+                    }
+                case ApplicationModes.RegisterUrl:
+                    {
+                        _logger.Debug("Regiser URL selected");
+                        _remoteAccessAdapter.MakeAccessible(false);
 
                         break;
                     }

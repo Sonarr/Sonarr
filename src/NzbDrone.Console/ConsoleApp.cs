@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Net.Sockets;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Host;
+using NzbDrone.Host.AccessControl;
 
 namespace NzbDrone.Console
 {
@@ -50,6 +51,13 @@ namespace NzbDrone.Console
                 Logger.Fatal(ex.Message + ". This can happen if another instance of Sonarr is already running another application is using the same port (default: 8989) or the user has insufficient permissions");
                 Exit(ExitCodes.RecoverableFailure);
             }
+            catch (RemoteAccessException ex)
+            {
+                System.Console.WriteLine("");
+                System.Console.WriteLine("");
+                Logger.Fatal(ex, "EPIC FAIL!");
+                Exit(ExitCodes.Normal);
+            }
             catch (Exception ex)
             {
                 System.Console.WriteLine("");
@@ -57,7 +65,7 @@ namespace NzbDrone.Console
                 Logger.Fatal(ex, "EPIC FAIL!");
                 Exit(ExitCodes.UnknownFailure);
             }
-
+            
             Logger.Info("Exiting main.");
 
             Exit(ExitCodes.Normal);

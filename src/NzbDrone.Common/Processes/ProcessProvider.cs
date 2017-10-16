@@ -27,7 +27,7 @@ namespace NzbDrone.Common.Processes
         bool Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
         Process Start(string path, string args = null, StringDictionary environmentVariables = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
-        Process SpawnNewProcess(string path, string args = null, StringDictionary environmentVariables = null);
+        Process SpawnNewProcess(string path, string args = null, StringDictionary environmentVariables = null, bool noWindow = false);
         ProcessOutput StartAndCapture(string path, string args = null, StringDictionary environmentVariables = null);
     }
 
@@ -190,7 +190,7 @@ namespace NzbDrone.Common.Processes
             return process;
         }
 
-        public Process SpawnNewProcess(string path, string args = null, StringDictionary environmentVariables = null)
+        public Process SpawnNewProcess(string path, string args = null, StringDictionary environmentVariables = null, bool noWindow = false)
         {
             if (PlatformInfo.IsMono && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -201,6 +201,9 @@ namespace NzbDrone.Common.Processes
             _logger.Debug("Starting {0} {1}", path, args);
 
             var startInfo = new ProcessStartInfo(path, args);
+            startInfo.CreateNoWindow = noWindow;
+            startInfo.UseShellExecute = !noWindow;
+
             var process = new Process
             {
                 StartInfo = startInfo
