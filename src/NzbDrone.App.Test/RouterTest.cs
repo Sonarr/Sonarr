@@ -1,4 +1,4 @@
-﻿using System.ServiceProcess;
+using System.ServiceProcess;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -42,13 +42,13 @@ namespace NzbDrone.App.Test
         public void Route_should_call_uninstall_service_when_application_mode_is_uninstall()
         {
             var serviceProviderMock = Mocker.GetMock<IServiceProvider>();
-            serviceProviderMock.Setup(c => c.UnInstall(ServiceProvider.SERVICE_NAME));
+            serviceProviderMock.Setup(c => c.Uninstall(ServiceProvider.SERVICE_NAME));
             Mocker.GetMock<IRuntimeInfo>().SetupGet(c => c.IsUserInteractive).Returns(true);
             serviceProviderMock.Setup(c => c.ServiceExist(ServiceProvider.SERVICE_NAME)).Returns(true);
 
             Subject.Route(ApplicationModes.UninstallService);
 
-            serviceProviderMock.Verify(c => c.UnInstall(ServiceProvider.SERVICE_NAME), Times.Once());
+            serviceProviderMock.Verify(c => c.Uninstall(ServiceProvider.SERVICE_NAME), Times.Once());
         }
 
         [Test]

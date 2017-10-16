@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
@@ -6,8 +6,10 @@ namespace NzbDrone.Common.EnvironmentInfo
     {
         HashSet<string> Flags { get; }
         Dictionary<string, string> Args { get; }
+        bool Help { get; }
         bool InstallService { get; }
         bool UninstallService { get; }
+        bool RegisterUrl { get; }
 
         string PreservedArguments { get; }
     }
@@ -21,6 +23,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public const string HELP = "?";
         public const string TERMINATE = "terminateexisting";
         public const string RESTART = "restart";
+        public const string REGISTER_URL = "registerurl";
 
         public StartupContext(params string[] args)
         {
@@ -47,9 +50,10 @@ namespace NzbDrone.Common.EnvironmentInfo
         public HashSet<string> Flags { get; private set; }
         public Dictionary<string, string> Args { get; private set; }
 
+        public bool Help => Flags.Contains(HELP);
         public bool InstallService => Flags.Contains(INSTALL_SERVICE);
-
         public bool UninstallService => Flags.Contains(UNINSTALL_SERVICE);
+        public bool RegisterUrl => Flags.Contains(REGISTER_URL);
 
         public string PreservedArguments
         {

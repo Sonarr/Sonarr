@@ -125,6 +125,8 @@
     </Compile>
     <Compile Include="AccessControl\FirewallAdapter.cs" />
     <Compile Include="AccessControl\NetshProvider.cs" />
+    <Compile Include="AccessControl\RemoteAccessAdapter.cs" />
+    <Compile Include="AccessControl\RemoteAccessException.cs" />
     <Compile Include="AccessControl\UrlAcl.cs" />
     <Compile Include="AccessControl\SslAdapter.cs" />
     <Compile Include="AccessControl\UrlAclAdapter.cs" />
