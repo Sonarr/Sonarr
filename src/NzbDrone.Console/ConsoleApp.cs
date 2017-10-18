@@ -57,7 +57,7 @@ namespace NzbDrone.Console
 
         private static void Exit(ExitCodes exitCode)
         {
-            LogManager.Flush();
+            LogManager.Shutdown();
 
             if (exitCode != ExitCodes.Normal)
             {
@@ -80,8 +80,6 @@ namespace NzbDrone.Console
                 System.Console.ReadLine();
             }
 
-            //Need this to terminate on mono (thanks nlog)
-            LogManager.Configuration = null;
             Environment.Exit((int)exitCode);
         }
     }
