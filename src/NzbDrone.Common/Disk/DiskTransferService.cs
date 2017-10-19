@@ -340,7 +340,7 @@ namespace NzbDrone.Common.Disk
                 }
                 else
                 {
-                    throw new DestinationAlreadyExistsIOException(string.Format("Destination already exists. [{0}] to [{1}]", sourcePath, targetPath));
+                    throw new DestinationAlreadyExistsException(string.Format("Destination already exists. [{0}] to [{1}]", sourcePath, targetPath));
                 }
             }
         }

@@ -4,25 +4,25 @@ using System.Runtime.Serialization;
 
 namespace NzbDrone.Common
 {
-    public class DestinationAlreadyExistsIOException : IOException
+    public class DestinationAlreadyExistsException : IOException
     {
-        public DestinationAlreadyExistsIOException()
+        public DestinationAlreadyExistsException()
         {
         }
 
-        public DestinationAlreadyExistsIOException(string message) : base(message)
+        public DestinationAlreadyExistsException(string message) : base(message)
         {
         }
 
-        public DestinationAlreadyExistsIOException(string message, int hresult) : base(message, hresult)
+        public DestinationAlreadyExistsException(string message, int hresult) : base(message, hresult)
         {
         }
 
-        public DestinationAlreadyExistsIOException(string message, Exception innerException) : base(message, innerException)
+        public DestinationAlreadyExistsException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        protected DestinationAlreadyExistsIOException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected DestinationAlreadyExistsException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
