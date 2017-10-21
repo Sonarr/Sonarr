@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Release_Size", remoteEpisode.Release.Size.ToString());
             environmentVariables.Add("Sonarr_Release_Quality", remoteEpisode.ParsedEpisodeInfo.Quality.Quality.Name);
             environmentVariables.Add("Sonarr_Release_QualityVersion", remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version.ToString());
-            environmentVariables.Add("Sonarr_Release_ReleaseGroup", releaseGroup);
+            environmentVariables.Add("Sonarr_Release_ReleaseGroup", releaseGroup ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Client", message.DownloadClient ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
 
