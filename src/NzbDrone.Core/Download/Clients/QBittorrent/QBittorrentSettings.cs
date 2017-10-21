@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         public QBittorrentSettings()
         {
             Host = "localhost";
-            Port = 9091;
+            Port = 8080;
             TvCategory = "tv-sonarr";
         }
 
