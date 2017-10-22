@@ -126,7 +126,7 @@
     <Compile Include="EnvironmentInfo\IRuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\StartupContext.cs" />
-    <Compile Include="Exceptions\NotParentException.cs" />
+    <Compile Include="Disk\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />
