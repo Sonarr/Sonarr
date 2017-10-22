@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +25,7 @@ namespace NzbDrone.Core.History
         History Get(int historyId);
         List<History> Find(string downloadId, HistoryEventType eventType);
         List<History> FindByDownloadId(string downloadId);
+        List<History> Since(DateTime date, HistoryEventType? eventType);
     }
 
     public class HistoryService : IHistoryService,
@@ -289,6 +290,11 @@ namespace NzbDrone.Core.History
         public void Handle(SeriesDeletedEvent message)
         {
             _historyRepository.DeleteForSeries(message.Series.Id);
+        }
+
+        public List<History> Since(DateTime date, HistoryEventType? eventType)
+        {
+            return _historyRepository.Since(date, eventType);
         }
     }
 }
