@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         public UTorrentSettings()
         {
             Host = "localhost";
-            Port = 9091;
+            Port = 8080;
             TvCategory = "tv-sonarr";
         }
 
