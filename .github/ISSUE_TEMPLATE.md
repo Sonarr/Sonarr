@@ -35,6 +35,6 @@ Remove if not opening a feature request
 
 ## Feature Request
 
-### What problem are you looking to solve
+### What problem are you looking to solve?
 
 ### Other Information
