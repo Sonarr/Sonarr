@@ -39,35 +39,6 @@ namespace NzbDrone.Core.Download
                 {
                     throw new InvalidNzbException("No files", filename);
                 }
-
-                foreach (var file in files)
-                {
-                    var groups = file.Element(ns + "groups");
-                    var segments = file.Element(ns + "segments");
-
-                    if (groups == null)
-                    {
-                        throw new InvalidNzbException("No groups", filename);
-                    }
-
-                    if (segments == null)
-                    {
-                        throw new InvalidNzbException("No segments", filename);
-                    }
-
-                    var groupCount = groups.Elements(ns + "group").Count();
-                    var segmentCount = segments.Elements(ns + "segment").Count();
-
-                    if (groupCount == 0)
-                    {
-                        throw new InvalidNzbException("Groups are empty", filename);
-                    }
-
-                    if (segmentCount == 0)
-                    {
-                        throw new InvalidNzbException("Segments are empty", filename);
-                    }
-                }
             }
         }
     }

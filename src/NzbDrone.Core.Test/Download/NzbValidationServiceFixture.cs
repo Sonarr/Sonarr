@@ -32,42 +32,6 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
-        public void should_throw_when_no_groups_in_file()
-        {
-            var filename = "NoGroupInFile";
-            var fileContent = GivenNzbFile(filename);
-
-            Assert.Throws<InvalidNzbException>(() => Subject.Validate(filename, fileContent));
-        }
-
-        [Test]
-        public void should_throw_when_no_group_in_groups()
-        {
-            var filename = "NoGroupInGroups";
-            var fileContent = GivenNzbFile(filename);
-
-            Assert.Throws<InvalidNzbException>(() => Subject.Validate(filename, fileContent));
-        }
-
-        [Test]
-        public void should_throw_when_no_segments_in_file()
-        {
-            var filename = "NoSegmentsInFile";
-            var fileContent = GivenNzbFile(filename);
-
-            Assert.Throws<InvalidNzbException>(() => Subject.Validate(filename, fileContent));
-        }
-
-        [Test]
-        public void should_throw_when_no_segment_in_segments()
-        {
-            var filename = "NoSegmentInSegments";
-            var fileContent = GivenNzbFile(filename);
-
-            Assert.Throws<InvalidNzbException>(() => Subject.Validate(filename, fileContent));
-        }
-
-        [Test]
         public void should_validate_nzb()
         {
             var filename = "ValidNzb";

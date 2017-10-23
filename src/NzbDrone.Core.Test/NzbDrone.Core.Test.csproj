@@ -571,22 +571,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Files\Nzbs\NoGroupInFile.nzb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\Nzbs\NoSegmentsInFile.nzb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\Nzbs\NoSegmentInSegments.nzb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Files\Nzbs\NotNzb.nzb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Files\Nzbs\NoFiles.nzb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\Nzbs\NoGroupInGroups.nzb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Files\TestArchive.tar.gz">
