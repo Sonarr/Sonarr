@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             _remoteEpisode.Series = _series;
             _remoteEpisode.ParsedEpisodeInfo = _parsedEpisodeInfo;
             _remoteEpisode.Release = _release;
-            
+
             _temporarilyRejected = new DownloadDecision(_remoteEpisode, new Rejection("Temp Rejected", RejectionType.Temporary));
 
             Mocker.GetMock<IPendingReleaseRepository>()
@@ -72,6 +72,10 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetSeries(It.IsAny<int>()))
                   .Returns(_series);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.GetSeries(It.IsAny<IEnumerable<int>>()))
+                  .Returns(new List<Series> { _series });
 
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetEpisodes(It.IsAny<ParsedEpisodeInfo>(), _series, true, null))
