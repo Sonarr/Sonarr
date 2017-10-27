@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
@@ -6,6 +6,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using RestSharp;
 using NzbDrone.Core.Rest;
+using System.Web;
 
 namespace NzbDrone.Core.Notifications.Telegram
 {
@@ -28,13 +29,13 @@ namespace NzbDrone.Core.Notifications.Telegram
         public void SendNotification(string title, string message, TelegramSettings settings)
         {
             //Format text to add the title before and bold using markdown
-            var text = $"*{title}*\n{message}";
+            var text = $"<b>{HttpUtility.HtmlEncode(title)}</b>\n{HttpUtility.HtmlEncode(message)}";
             var client = RestClientFactory.BuildClient(URL);
             var request = new RestRequest("bot{token}/sendmessage", Method.POST);
 
             request.AddUrlSegment("token", settings.BotToken);
             request.AddParameter("chat_id", settings.ChatId);
-            request.AddParameter("parse_mode", "Markdown");
+            request.AddParameter("parse_mode", "HTML");
             request.AddParameter("text", text);
 
             client.ExecuteAndValidate(request);
