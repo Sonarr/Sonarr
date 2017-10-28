@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -190,7 +190,7 @@ namespace NzbDrone.Common.Disk
             File.Delete(path);
         }
 
-        public void CopyFile(string source, string destination, bool overwrite = false)
+        public virtual void CopyFile(string source, string destination, bool overwrite = false)
         {
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(destination, () => destination).IsValidPath();

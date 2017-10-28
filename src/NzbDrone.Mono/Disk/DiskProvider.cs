@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Mono.Unix;
 using Mono.Unix.Native;
 using NLog;
@@ -27,6 +29,30 @@ namespace NzbDrone.Mono.Disk
         {
             _procMountProvider = procMountProvider;
             _symLinkResolver = symLinkResolver;
+        }
+
+        public override void CopyFile(string source, string destination, bool overwrite = false)
+        {
+            try
+            {
+                var argArray = new[] { "--reflink=auto", source, destination };
+                var realArgs = string.Join(" ", argArray.Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => "\"" + x + "\""));
+                var cp = Process.Start("cp", realArgs);
+
+                var cpTimeout = GetMount(destination).DriveType == DriveType.Network || GetMount(source).DriveType == DriveType.Network
+                    ? 10000
+                    : Timeout.Infinite;
+                var cpDidExit = cp.WaitForExit(cpTimeout);
+
+                // If cp exited non-zero or the destination file doesn't exist, throw an exception.
+                if (!cpDidExit || cp.ExitCode != 0 || !File.Exists(destination))
+                    throw new ApplicationException("cp did not exit, returned non-zero, or destination file does not exist after exit.");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, string.Format("Reflink '{0}' to '{1}' failed.", source, destination));
+                base.CopyFile(source, destination, overwrite);
+            }
         }
 
         public override IMount GetMount(string path)
