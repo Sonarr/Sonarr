@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using System.Net;
 
 namespace NzbDrone.Common.Http
 {
@@ -75,6 +76,16 @@ namespace NzbDrone.Common.Http
         {
             var encoding = HttpHeader.GetEncodingFromContentType(Headers.ContentType);
             ContentData = encoding.GetBytes(data);
+        }
+
+        public void SetNetworkCredential(NetworkCredential networkCredential)
+        {
+            if (networkCredential != null)
+            {
+                var authInfo = networkCredential.UserName + ":" + networkCredential.Password;
+                authInfo = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(authInfo));
+                Headers.Set("Authorization", "Basic " + authInfo);
+            }
         }
     }
 }
