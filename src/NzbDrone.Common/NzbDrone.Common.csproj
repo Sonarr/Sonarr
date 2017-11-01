@@ -44,7 +44,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.3\lib\net40\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.4.12\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Org.Mentalis, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNet4.SocksProxy.1.3.4.0\lib\net40\Org.Mentalis.dll</HintPath>
@@ -92,6 +92,7 @@
     <Compile Include="EnvironmentInfo\IOsVersionAdapter.cs" />
     <Compile Include="EnvironmentInfo\IPlatformInfo.cs" />
     <Compile Include="EnvironmentInfo\OsVersionModel.cs" />
+    <Compile Include="Disk\DestinationAlreadyExistsException.cs" />
     <Compile Include="Exceptions\SonarrStartupException.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Disk\OsPath.cs" />
@@ -125,7 +126,7 @@
     <Compile Include="EnvironmentInfo\IRuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\StartupContext.cs" />
-    <Compile Include="Exceptions\NotParentException.cs" />
+    <Compile Include="Disk\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />

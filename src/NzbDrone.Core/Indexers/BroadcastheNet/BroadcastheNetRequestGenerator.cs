@@ -56,14 +56,17 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
 
-                foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
+                if (searchCriteria.UserInvokedSearch)
                 {
-                    parameters = parameters.Clone();
+                    foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
+                    {
+                        parameters = parameters.Clone();
 
-                    parameters.Category = "Season";
-                    parameters.Name = string.Format("Season {0}", seasonNumber);
+                        parameters.Category = "Season";
+                        parameters.Name = string.Format("Season {0}%", seasonNumber);
 
-                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+                        pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+                    }
                 }
             }
 

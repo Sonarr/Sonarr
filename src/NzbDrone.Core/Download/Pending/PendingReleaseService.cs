@@ -21,12 +21,13 @@ namespace NzbDrone.Core.Download.Pending
     public interface IPendingReleaseService
     {
         void Add(DownloadDecision decision, PendingReleaseReason reason);
+        void AddMany(List<Tuple<DownloadDecision, PendingReleaseReason>> decisions);
         List<ReleaseInfo> GetPending();
         List<RemoteEpisode> GetPendingRemoteEpisodes(int seriesId);
         List<Queue.Queue> GetPendingQueue();
         Queue.Queue FindPendingQueueItem(int queueId);
         void RemovePendingQueueItems(int queueId);
-        RemoteEpisode OldestPendingRelease(int seriesId, IEnumerable<int> episodeIds);
+        RemoteEpisode OldestPendingRelease(int seriesId, int[] episodeIds);
     }
 
     public class PendingReleaseService : IPendingReleaseService,
@@ -68,8 +69,27 @@ namespace NzbDrone.Core.Download.Pending
 
         public void Add(DownloadDecision decision, PendingReleaseReason reason)
         {
-            var alreadyPending = GetPendingReleases();
+            var alreadyPending = _repository.AllBySeriesId(decision.RemoteEpisode.Series.Id);
 
+            alreadyPending = IncludeRemoteEpisodes(alreadyPending);
+
+            Add(alreadyPending, decision, reason);
+        }
+
+        public void AddMany(List<Tuple<DownloadDecision, PendingReleaseReason>> decisions)
+        {
+            var alreadyPending = decisions.Select(v => v.Item1.RemoteEpisode.Series.Id).Distinct().SelectMany(_repository.AllBySeriesId).ToList();
+
+            alreadyPending = IncludeRemoteEpisodes(alreadyPending);
+
+            foreach (var pair in decisions)
+            {
+                Add(alreadyPending, pair.Item1, pair.Item2);
+            }
+        }
+
+        private void Add(List<PendingRelease> alreadyPending, DownloadDecision decision, PendingReleaseReason reason)
+        {
             var episodeIds = decision.RemoteEpisode.Episodes.Select(e => e.Id);
 
             var existingReports = alreadyPending.Where(r => r.RemoteEpisode.Episodes.Select(e => e.Id)
@@ -80,24 +100,31 @@ namespace NzbDrone.Core.Download.Pending
 
             if (matchingReports.Any())
             {
-                var sameReason = true;
+                var matchingReport = matchingReports.First();
 
-                foreach (var matchingReport in matchingReports)
+                if (matchingReport.Reason != reason)
                 {
-                    if (matchingReport.Reason != reason)
+                    _logger.Debug("The release {0} is already pending with reason {1}, changing to {2}", decision.RemoteEpisode, matchingReport.Reason, reason);
+                    matchingReport.Reason = reason;
+                    _repository.Update(matchingReport);
+                }
+                else
+                {
+                    _logger.Debug("The release {0} is already pending with reason {1}, not adding again", decision.RemoteEpisode, reason);
+                }
+
+                if (matchingReports.Count() > 1)
+                {
+                    _logger.Debug("The release {0} had {1} duplicate pending, removing duplicates.", decision.RemoteEpisode, matchingReports.Count() - 1);
+
+                    foreach (var duplicate in matchingReports.Skip(1))
                     {
-                        _logger.Debug("The release {0} is already pending with reason {1}, changing to {2}", decision.RemoteEpisode, matchingReport.Reason, reason);
-                        matchingReport.Reason = reason;
-                        _repository.Update(matchingReport);
-                        sameReason = false;
+                        _repository.Delete(duplicate.Id);
+                        alreadyPending.Remove(duplicate);
                     }
                 }
 
-                if (sameReason)
-                {
-                    _logger.Debug("The release {0} is already pending with reason {1}, not adding again", decision.RemoteEpisode, reason);
-                    return;
-                }
+                return;
             }
 
             _logger.Debug("Adding release {0} to pending releases with reason {1}", decision.RemoteEpisode, reason);
@@ -125,7 +152,7 @@ namespace NzbDrone.Core.Download.Pending
 
         public List<RemoteEpisode> GetPendingRemoteEpisodes(int seriesId)
         {
-            return _repository.AllBySeriesId(seriesId).Select(GetRemoteEpisode).ToList();
+            return IncludeRemoteEpisodes(_repository.AllBySeriesId(seriesId)).Select(v => v.RemoteEpisode).ToList();
         }
 
         public List<Queue.Queue> GetPendingQueue()
@@ -134,7 +161,8 @@ namespace NzbDrone.Core.Download.Pending
 
             var nextRssSync = new Lazy<DateTime>(() => _taskManager.GetNextExecution(typeof(RssSyncCommand)));
 
-            foreach (var pendingRelease in GetPendingReleases().Where(p => p.Reason != PendingReleaseReason.Fallback))
+            var pendingReleases = IncludeRemoteEpisodes(_repository.WithoutFallback());
+            foreach (var pendingRelease in pendingReleases)
             {
                 foreach (var episode in pendingRelease.RemoteEpisode.Episodes)
                 {
@@ -206,47 +234,53 @@ namespace NzbDrone.Core.Download.Pending
             _repository.DeleteMany(releasesToRemove.Select(c => c.Id));
         }
 
-        public RemoteEpisode OldestPendingRelease(int seriesId, IEnumerable<int> episodeIds)
+        public RemoteEpisode OldestPendingRelease(int seriesId, int[] episodeIds)
         {
-            return GetPendingRemoteEpisodes(seriesId).Where(r => r.Episodes.Select(e => e.Id).Intersect(episodeIds).Any())
-                                                     .OrderByDescending(p => p.Release.AgeHours)
-                                                     .FirstOrDefault();
+            var seriesReleases = GetPendingReleases(seriesId);
+
+            return seriesReleases.Select(r => r.RemoteEpisode)
+                                 .Where(r => r.Episodes.Select(e => e.Id).Intersect(episodeIds).Any())
+                                 .OrderByDescending(p => p.Release.AgeHours)
+                                 .FirstOrDefault();
         }
 
         private List<PendingRelease> GetPendingReleases()
         {
+            return IncludeRemoteEpisodes(_repository.All().ToList());
+        }
+
+        private List<PendingRelease> GetPendingReleases(int seriesId)
+        {
+            return IncludeRemoteEpisodes(_repository.AllBySeriesId(seriesId).ToList());
+        }
+
+        private List<PendingRelease> IncludeRemoteEpisodes(List<PendingRelease> releases)
+        {
             var result = new List<PendingRelease>();
+            var seriesMap = _seriesService.GetSeries(releases.Select(v => v.SeriesId).Distinct())
+                                          .ToDictionary(v => v.Id);
 
-            foreach (var release in _repository.All())
+            foreach (var release in releases)
             {
-                var remoteEpisode = GetRemoteEpisode(release);
+                var series = seriesMap.GetValueOrDefault(release.SeriesId);
 
-                if (remoteEpisode == null) continue;
+                // Just in case the series was removed, but wasn't cleaned up yet (housekeeper will clean it up)
+                if (series == null) return null;
 
-                release.RemoteEpisode = remoteEpisode;
+                var episodes = _parsingService.GetEpisodes(release.ParsedEpisodeInfo, series, true);
+
+                release.RemoteEpisode = new RemoteEpisode
+                {
+                    Series = series,
+                    Episodes = episodes,
+                    ParsedEpisodeInfo = release.ParsedEpisodeInfo,
+                    Release = release.Release
+                };
 
                 result.Add(release);
             }
 
             return result;
-        }
-
-        private RemoteEpisode GetRemoteEpisode(PendingRelease release)
-        {
-            var series = _seriesService.GetSeries(release.SeriesId);
-
-            //Just in case the series was removed, but wasn't cleaned up yet (housekeeper will clean it up)
-            if (series == null) return null;
-
-            var episodes = _parsingService.GetEpisodes(release.ParsedEpisodeInfo, series, true);
-
-            return new RemoteEpisode
-            {
-                Series = series,
-                Episodes = episodes,
-                ParsedEpisodeInfo = release.ParsedEpisodeInfo,
-                Release = release.Release
-            };
         }
 
         private void Insert(DownloadDecision decision, PendingReleaseReason reason)
@@ -288,7 +322,7 @@ namespace NzbDrone.Core.Download.Pending
 
         private void RemoveGrabbed(RemoteEpisode remoteEpisode)
         {
-            var pendingReleases = GetPendingReleases();
+            var pendingReleases = GetPendingReleases(remoteEpisode.Series.Id);
             var episodeIds = remoteEpisode.Episodes.Select(e => e.Id);
 
             var existingReports = pendingReleases.Where(r => r.RemoteEpisode.Episodes.Select(e => e.Id)

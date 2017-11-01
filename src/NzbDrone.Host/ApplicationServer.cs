@@ -65,6 +65,8 @@ namespace NzbDrone.Host
             {
                 _browserService.LaunchWebUI();
             }
+
+            _container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
         }
 
         protected override void OnStop()

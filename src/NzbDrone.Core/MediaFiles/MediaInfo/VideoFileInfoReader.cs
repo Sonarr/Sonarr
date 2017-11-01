@@ -17,6 +17,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
+        public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 3;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 4;
 
         public VideoFileInfoReader(IDiskProvider diskProvider, Logger logger)
         {
@@ -145,7 +147,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         VideoFps = videoFrameRate,
                         AudioLanguages = audioLanguages,
                         Subtitles = subtitles,
-                        ScanType = scanType
+                        ScanType = scanType,
+                        SchemaRevision = CURRENT_MEDIA_INFO_SCHEMA_REVISION
                     };
 
                     return mediaInfoModel;

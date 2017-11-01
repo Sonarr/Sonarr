@@ -81,7 +81,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.3\lib\net40\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.4.12\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="OAuth">
       <HintPath>..\packages\OAuth.1.0.3\lib\net40\OAuth.dll</HintPath>
@@ -224,6 +224,7 @@
     <Compile Include="Datastore\Migration\042_add_download_clients_table.cs" />
     <Compile Include="Datastore\Migration\043_convert_config_to_download_clients.cs" />
     <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs" />
+    <Compile Include="Datastore\Migration\118_add_history_eventType_index.cs" />
     <Compile Include="Datastore\Migration\045_add_indexes.cs" />
     <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
     <Compile Include="Datastore\Migration\047_add_published_date_blacklist_column.cs" />
@@ -538,6 +539,7 @@
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
+    <Compile Include="Exceptions\ReleaseUnavailableException.cs" />
     <Compile Include="Exceptions\SeriesNotFoundException.cs" />
     <Compile Include="Exceptions\ReleaseDownloadException.cs" />
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
@@ -782,6 +784,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Manual\ManualImportService.cs" />
     <Compile Include="MediaFiles\EpisodeImport\DetectSample.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Manual\ManuallyImportedFile.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\RootFolderNotFoundException.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\GrabbedReleaseQualitySpecification.cs" />

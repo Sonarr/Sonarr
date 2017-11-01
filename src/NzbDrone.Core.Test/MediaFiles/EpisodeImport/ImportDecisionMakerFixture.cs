@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             _quality = new QualityModel(Quality.DVD);
 
             _localEpisode = new LocalEpisode
-            { 
+            {
                 Series = _series,
                 Quality = _quality,
                 Episodes = new List<Episode> { new Episode() },
@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             Mocker.GetMock<IParsingService>()
                   .Setup(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>()))
-                  .Returns(new LocalEpisode() { Path = "test" });
+                  .Returns(new LocalEpisode() { Path = "test", ParsedEpisodeInfo = new ParsedEpisodeInfo { } });
 
             _videoFiles = new List<string>
                 {

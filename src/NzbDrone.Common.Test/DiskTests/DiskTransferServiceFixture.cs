@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Moq;
@@ -238,7 +238,7 @@ namespace NzbDrone.Common.Test.DiskTests
 
             WithExistingFile(_targetPath);
 
-            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move, false));
+            Assert.Throws<DestinationAlreadyExistsException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move, false));
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(v => v.DeleteFile(_targetPath), Times.Never());

@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Disk
@@ -340,7 +341,7 @@ namespace NzbDrone.Common.Disk
                 }
                 else
                 {
-                    throw new IOException(string.Format("Destination already exists. [{0}] to [{1}]", sourcePath, targetPath));
+                    throw new DestinationAlreadyExistsException($"Destination {targetPath} already exists.");
                 }
             }
         }

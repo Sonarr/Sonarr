@@ -34,7 +34,6 @@ namespace NzbDrone.Api
             RegisterPipelines(pipelines);
 
             container.Resolve<DatabaseTarget>().Register();
-            container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
         }
 
         private void RegisterPipelines(IPipelines pipelines)
