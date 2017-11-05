@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using FluentValidation;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
@@ -19,6 +20,10 @@ namespace NzbDrone.Core.Indexers.BitMeTv
                 .Matches(@"pass=[0-9a-f]{32}", RegexOptions.IgnoreCase)
                 .WithMessage("Wrong pattern")
                 .AsWarning();
+
+            RuleFor(c => c.SeedRatio)
+                .Must(c => c.IsNullOrWhiteSpace() || double.TryParse(c, out var _))
+                .WithMessage("Seed ratio must be a valid decimal number");
         }
     }
 
@@ -46,6 +51,9 @@ namespace NzbDrone.Core.Indexers.BitMeTv
 
         [FieldDefinition(4, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
+
+        [FieldDefinition(5, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
+        public string SeedRatio { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
