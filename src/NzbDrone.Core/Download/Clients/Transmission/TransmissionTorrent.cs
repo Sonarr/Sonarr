@@ -23,5 +23,11 @@
         public int SecondsDownloading { get; set; }
 
         public string ErrorString { get; set; }
+
+        public long DownloadedEver { get; set; }
+
+        public long UploadedEver { get; set; }
+
+        public long SeedRatioLimit { get; set; }
     }
 }

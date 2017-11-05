@@ -142,7 +142,9 @@
     <Compile Include="Configuration\Events\ConfigSavedEvent.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
+    <Compile Include="Configuration\ISeedConfigProvider.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
+    <Compile Include="Configuration\SeedConfigProvider.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />

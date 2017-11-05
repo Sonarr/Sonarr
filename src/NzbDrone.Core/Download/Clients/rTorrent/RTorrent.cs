@@ -104,6 +104,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 item.TotalSize = torrent.TotalSize;
                 item.RemainingSize = torrent.RemainingSize;
                 item.Category = torrent.Category;
+                item.SeedRatio = torrent.Ratio;
 
                 if (torrent.DownRate > 0)
                 {
