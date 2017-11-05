@@ -231,6 +231,23 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             {
                 _proxy.MoveTorrentToTopInQueue(hash, Settings);
             }
+
+            if (Settings.SeedIdleTime.HasValue || Settings.SeedRatio.IsNotNullOrWhiteSpace())
+            {
+                var seedingConfig = new TorrentSeedConfiguration();
+
+                if (Settings.SeedRatio.IsNotNullOrWhiteSpace())
+                {
+                    seedingConfig.Ratio = double.Parse(Settings.SeedRatio);
+                }
+
+                if (Settings.SeedIdleTime.HasValue)
+                {
+                    seedingConfig.SeedTime = TimeSpan.FromMinutes(Settings.SeedIdleTime.Value);
+                }
+
+                _proxy.SetTorrentSeedingConfiguration(hash, seedingConfig, Settings);
+            }
         }
     }
 }
