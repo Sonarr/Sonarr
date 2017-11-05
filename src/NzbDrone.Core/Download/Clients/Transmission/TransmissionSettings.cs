@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 .When(c => c.TvDirectory.IsNotNullOrWhiteSpace())
                 .WithMessage("Cannot use Category and Directory");
 
-            RuleFor(c => c.SeedIdleTime).GreaterThanOrEqualTo(0);
+            RuleFor(c => c.SeedIdleTime).GreaterThan(0);
             RuleFor(c => c.SeedRatio)
                 .Must(c => c.IsNullOrWhiteSpace() || double.TryParse(c, out var _))
                 .WithMessage("Seed ratio must be a valid decimal number");
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldDefinition(10, Label = "Seed Idle Time", Type = FieldType.Textbox, HelpText = "Optional, the time (in minutes) a torrent should idle before stopping")]
         public int? SeedIdleTime { get; set; }
 
-        [FieldDefinition(11, Label = "Seed Ratio", Type = FieldType.Textbox, HelpText = "Optional, set the ratio a torrent should reach before stopping")]
+        [FieldDefinition(11, Label = "Seed Ratio", Type = FieldType.Textbox, HelpText = "Optional, the ratio a torrent should reach before stopping")]
         public string SeedRatio { get; set; }
 
         public NzbDroneValidationResult Validate()
