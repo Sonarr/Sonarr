@@ -130,13 +130,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
 
-            var isRecentEpisode = remoteEpisode.IsRecentEpisode();
-
-            if (isRecentEpisode && Settings.RecentTvPriority == (int)TransmissionPriority.First ||
-                !isRecentEpisode && Settings.OlderTvPriority == (int)TransmissionPriority.First)
-            {
-                _proxy.MoveTorrentToTopInQueue(hash, Settings);
-            }
+            ApplySettingsToTorrent(remoteEpisode, hash);
 
             return hash;
         }
@@ -145,13 +139,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
 
-            var isRecentEpisode = remoteEpisode.IsRecentEpisode();
-
-            if (isRecentEpisode && Settings.RecentTvPriority == (int)TransmissionPriority.First ||
-                !isRecentEpisode && Settings.OlderTvPriority == (int)TransmissionPriority.First)
-            {
-                _proxy.MoveTorrentToTopInQueue(hash, Settings);
-            }
+            ApplySettingsToTorrent(remoteEpisode, hash);
 
             return hash;
         }
@@ -232,6 +220,34 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
 
             return null;
+        }
+
+        private void ApplySettingsToTorrent(RemoteEpisode remoteEpisode, string hash)
+        {
+            var isRecentEpisode = remoteEpisode.IsRecentEpisode();
+
+            if (isRecentEpisode && Settings.RecentTvPriority == (int)TransmissionPriority.First ||
+                !isRecentEpisode && Settings.OlderTvPriority == (int)TransmissionPriority.First)
+            {
+                _proxy.MoveTorrentToTopInQueue(hash, Settings);
+            }
+
+            if (Settings.SeedIdleTime.HasValue || Settings.SeedRatio.IsNotNullOrWhiteSpace())
+            {
+                var seedingConfig = new TorrentSeedConfiguration();
+
+                if (Settings.SeedRatio.IsNotNullOrWhiteSpace())
+                {
+                    seedingConfig.Ratio = double.Parse(Settings.SeedRatio);
+                }
+
+                if (Settings.SeedIdleTime.HasValue)
+                {
+                    seedingConfig.SeedTime = TimeSpan.FromMinutes(Settings.SeedIdleTime.Value);
+                }
+
+                _proxy.SetTorrentSeedingConfiguration(hash, seedingConfig, Settings);
+            }
         }
     }
 }
