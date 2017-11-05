@@ -108,6 +108,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 item.DownloadClient = Definition.Name;
                 item.RemainingSize = (long)(torrent.Size * (1.0 - torrent.Progress));
                 item.RemainingTime = GetRemainingTime(torrent);
+                item.SeedRatio = torrent.Ratio;
 
                 item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
 

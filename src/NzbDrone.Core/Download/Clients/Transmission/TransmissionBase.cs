@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -66,6 +65,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 item.OutputPath = GetOutputPath(outputPath, torrent);
                 item.TotalSize = torrent.TotalSize;
                 item.RemainingSize = torrent.LeftUntilDone;
+                item.SeedRatio = torrent.DownloadedEver <= 0 ? 0 :
+                    (double) torrent.UploadedEver / torrent.DownloadedEver;
+
                 if (torrent.Eta >= 0)
                 {
                     item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
@@ -96,7 +98,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.CanMoveFiles = item.CanBeRemoved = torrent.Status == TransmissionTorrentStatus.Stopped;
+                item.CanMoveFiles = item.CanBeRemoved =
+                    torrent.Status == TransmissionTorrentStatus.Stopped &&
+                    item.SeedRatio >= torrent.SeedRatioLimit;
 
                 items.Add(item);
             }
@@ -129,6 +133,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
+            _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -144,6 +149,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
+            _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -174,17 +180,13 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             {
                 return Settings.TvDirectory;
             }
-            else if (Settings.TvCategory.IsNotNullOrWhiteSpace())
-            {
-                var config = _proxy.GetConfig(Settings);
-                var destDir = (string)config.GetValueOrDefault("download-dir");
 
-                return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
-            }
-            else
-            {
-                return null;
-            }
+            if (!Settings.TvCategory.IsNotNullOrWhiteSpace()) return null;
+
+            var config = _proxy.GetConfig(Settings);
+            var destDir = (string)config.GetValueOrDefault("download-dir");
+
+            return $"{destDir.TrimEnd('/')}/{Settings.TvCategory}";
         }
 
         protected ValidationFailure TestConnection()
