@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Download
         public long TotalSize { get; set; }
         public long RemainingSize { get; set; }
         public TimeSpan? RemainingTime { get; set; }
+        public double? SeedRatio { get; set; }
 
         public OsPath OutputPath { get; set; }
         public string Message { get; set; }
