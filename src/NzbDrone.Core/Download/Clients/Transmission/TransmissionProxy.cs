@@ -165,7 +165,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 "leftUntilDone",
                 "isFinished",
                 "eta",
-                "errorString"
+                "errorString",
+                "uploadedEver",
+                "downloadedEver"
             };
             
             var arguments = new Dictionary<string, object>();

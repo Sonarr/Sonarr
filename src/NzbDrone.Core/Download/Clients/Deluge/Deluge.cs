@@ -109,6 +109,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadPath));
                 item.OutputPath = outputPath + torrent.Name;
                 item.RemainingSize = torrent.Size - torrent.BytesDownloaded;
+                item.SeedRatio = torrent.Ratio;
 
                 try
                 {

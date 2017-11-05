@@ -138,6 +138,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                     TotalSize = Convert.ToInt64(item[3]),
                     Progress = Convert.ToDouble(item[4]),
                     DownloadedBytes = Convert.ToInt64(item[5]),
+                    UploadedBytes = Convert.ToInt64(item[6]),
                     DownloadRate = Convert.ToInt64(item[9]),
                     Label = Convert.ToString(item[11]),
                     Error = Convert.ToString(item[21]),

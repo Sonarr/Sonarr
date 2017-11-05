@@ -23,5 +23,9 @@
         public int SecondsDownloading { get; set; }
 
         public string ErrorString { get; set; }
+
+        public long DownloadedEver { get; set; }
+
+        public long UploadedEver { get; set; }
     }
 }
