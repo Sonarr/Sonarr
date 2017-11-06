@@ -946,9 +946,13 @@
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\QualitySource.cs" />
     <Compile Include="Qualities\Revision.cs" />
-    <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
-    <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />
-    <Compile Include="RemotePathMappings\RemotePathMappingService.cs" />
+    <Compile Include="TransferProviders\CustomTransferProvider.cs" />
+    <Compile Include="TransferProviders\ITransferProvider.cs" />
+    <Compile Include="TransferProviders\IVirtualDiskProvider.cs" />
+    <Compile Include="TransferProviders\MountTransferProvider.cs" />
+    <Compile Include="TransferProviders\old\RemotePathMapping.cs" />
+    <Compile Include="TransferProviders\old\RemotePathMappingRepository.cs" />
+    <Compile Include="TransferProviders\old\RemotePathMappingService.cs" />
     <Compile Include="MediaFiles\TorrentInfo\TorrentFileInfoReader.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
     <Compile Include="Notifications\Email\Email.cs">
@@ -1122,6 +1126,7 @@
     <Compile Include="ThingiProvider\Status\ProviderStatusRepository.cs" />
     <Compile Include="ThingiProvider\Status\ProviderStatusServiceBase.cs" />
     <Compile Include="TinyTwitter.cs" />
+    <Compile Include="TransferProviders\TransferProviderFactory.cs" />
     <Compile Include="Tv\Actor.cs" />
     <Compile Include="Tv\AddSeriesOptions.cs" />
     <Compile Include="Tv\AddSeriesService.cs" />
