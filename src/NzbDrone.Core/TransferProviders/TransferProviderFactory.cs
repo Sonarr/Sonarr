@@ -11,34 +11,8 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.TransferProviders
 {
-    public class TransferProviderDefinition : ProviderDefinition
-    {
-    }
-
     public interface ITransferProviderFactory : IProviderFactory<ITransferProvider, TransferProviderDefinition>
     {
-    }
-
-    public abstract class TransferProviderBase<TSettings> : ITransferProvider where TSettings : IProviderConfig, new()
-    {
-        public abstract string Name { get; }
-
-        public Type ConfigContract => typeof(TSettings);
-
-        public virtual ProviderMessage Message => null;
-
-        public IEnumerable<ProviderDefinition> DefaultDefinitions => new List<ProviderDefinition>();
-        public ProviderDefinition Definition { get; set; }
-        public abstract ValidationResult Test();
-
-        public abstract string Link { get; }
-
-        public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
-    }
-
-    public interface ITransferProviderRepository : IProviderRepository<TransferProviderDefinition>
-    {
-
     }
 
     public class TransferProviderFactory : ProviderFactory<ITransferProvider, TransferProviderDefinition>, ITransferProviderFactory

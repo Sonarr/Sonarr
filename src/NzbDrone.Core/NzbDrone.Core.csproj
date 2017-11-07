@@ -946,10 +946,14 @@
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\QualitySource.cs" />
     <Compile Include="Qualities\Revision.cs" />
-    <Compile Include="TransferProviders\CustomTransferProvider.cs" />
+    <Compile Include="TransferProviders\Providers\DefaultTransfer.cs" />
+    <Compile Include="TransferProviders\Providers\Dummy.cs" />
+    <Compile Include="TransferProviders\TransferProviderDefinition.cs" />
+    <Compile Include="TransferProviders\TransferProviderRepository.cs" />
+    <Compile Include="TransferProviders\Providers\CustomTransfer.cs" />
     <Compile Include="TransferProviders\ITransferProvider.cs" />
     <Compile Include="TransferProviders\IVirtualDiskProvider.cs" />
-    <Compile Include="TransferProviders\MountTransferProvider.cs" />
+    <Compile Include="TransferProviders\Providers\MountTransfer.cs" />
     <Compile Include="TransferProviders\old\RemotePathMapping.cs" />
     <Compile Include="TransferProviders\old\RemotePathMappingRepository.cs" />
     <Compile Include="TransferProviders\old\RemotePathMappingService.cs" />
@@ -1126,7 +1130,10 @@
     <Compile Include="ThingiProvider\Status\ProviderStatusRepository.cs" />
     <Compile Include="ThingiProvider\Status\ProviderStatusServiceBase.cs" />
     <Compile Include="TinyTwitter.cs" />
+    <Compile Include="TransferProviders\TransferProviderBase.cs" />
     <Compile Include="TransferProviders\TransferProviderFactory.cs" />
+    <Compile Include="TransferProviders\TransferProviderService.cs" />
+    <Compile Include="TransferProviders\TransferTask.cs" />
     <Compile Include="Tv\Actor.cs" />
     <Compile Include="Tv\AddSeriesOptions.cs" />
     <Compile Include="Tv\AddSeriesService.cs" />
