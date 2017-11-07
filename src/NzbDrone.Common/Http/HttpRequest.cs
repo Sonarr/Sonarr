@@ -78,14 +78,11 @@ namespace NzbDrone.Common.Http
             ContentData = encoding.GetBytes(data);
         }
 
-        public void SetNetworkCredential(NetworkCredential networkCredential)
+        public void AddBasicAuthentication(string username, string password)
         {
-            if (networkCredential != null)
-            {
-                var authInfo = networkCredential.UserName + ":" + networkCredential.Password;
-                authInfo = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(authInfo));
-                Headers.Set("Authorization", "Basic " + authInfo);
-            }
+            var authInfo = username + ":" + password;
+            authInfo = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(authInfo));
+            Headers.Set("Authorization", "Basic " + authInfo);
         }
     }
 }

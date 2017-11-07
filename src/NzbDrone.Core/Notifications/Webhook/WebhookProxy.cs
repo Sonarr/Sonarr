@@ -34,8 +34,7 @@ namespace NzbDrone.Core.Notifications.Webhook
 
                 if (!String.IsNullOrEmpty(settings.Username) || !String.IsNullOrEmpty(settings.Password))
                 {
-                    var networkCredential = new NetworkCredential(settings.Username, settings.Password);
-                    request.SetNetworkCredential(networkCredential);
+                    request.AddBasicAuthentication(settings.Username, settings.Password);
                 }
                 _httpClient.Execute(request);
             }
