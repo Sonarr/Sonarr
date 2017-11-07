@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 
         public TorrentleechSettings()
         {
-            BaseUrl = "http://rss.torrentleech.org";
+            BaseUrl = "https://www.torrentleech.org";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
         }
 
@@ -31,6 +31,28 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 
         [FieldDefinition(2, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
+
+        [FieldDefinition(3, Label = "Username")]
+        public string Username { get; set; }
+
+        [FieldDefinition(4, Label = "Password", Type = FieldType.Password)]
+        public string Password { get; set; }
+
+        public string LoginUrl
+        {
+            get
+            {
+                return $"{BaseUrl}/user/account/login/";
+            }
+        }
+
+        public string RequestUrl
+        {
+            get
+            {
+                return $"{BaseUrl}/torrents/browse/index/query/";
+            }
+        }
 
         public NzbDroneValidationResult Validate()
         {
