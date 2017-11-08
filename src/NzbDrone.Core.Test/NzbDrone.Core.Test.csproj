@@ -190,6 +190,7 @@
     <Compile Include="DiskSpace\DiskSpaceServiceFixture.cs" />
     <Compile Include="Download\CompletedDownloadServiceFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
+    <Compile Include="Download\DownloadClientProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\Blackhole\ScanWatchFolderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\Blackhole\TorrentBlackholeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\Blackhole\UsenetBlackholeFixture.cs" />
