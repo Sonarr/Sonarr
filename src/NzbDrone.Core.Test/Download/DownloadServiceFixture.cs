@@ -205,18 +205,26 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
-        public void should_not_attempt_download_if_client_is_disabled()
+        public void should_attempt_download_even_if_client_is_disabled()
         {
-            WithUsenetClient();
+            var mockUsenet = WithUsenetClient();
 
             Mocker.GetMock<IDownloadClientStatusService>()
-                  .Setup(v => v.IsDisabled(It.IsAny<int>()))
-                  .Returns(true);
+                  .Setup(v => v.GetBlockedProviders())
+                  .Returns(new List<DownloadClientStatus>
+                  {
+                      new DownloadClientStatus
+                      {
+                          ProviderId = _downloadClients.First().Definition.Id,
+                          DisabledTill = DateTime.UtcNow.AddHours(3)
+                      }
+                  });
 
-            Assert.Throws<DownloadClientUnavailableException>(() => Subject.DownloadReport(_parseResult));
+            Subject.DownloadReport(_parseResult);
 
-            Mocker.GetMock<IDownloadClient>().Verify(c => c.Download(It.IsAny<RemoteEpisode>()), Times.Never());
-            VerifyEventNotPublished<EpisodeGrabbedEvent>();
+            Mocker.GetMock<IDownloadClientStatusService>().Verify(c => c.GetBlockedProviders(), Times.Never());
+            mockUsenet.Verify(c => c.Download(It.IsAny<RemoteEpisode>()), Times.Once());
+            VerifyEventPublished<EpisodeGrabbedEvent>();
         }
 
         [Test]
