@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -92,6 +92,10 @@ namespace NzbDrone.Core.Parser
 
                 //Episodes with a title, 4 digit season number, Single episodes (2016x05, etc) & Multi-episode (2016x05x06, 2016x05-06, 2016x05 x06, etc)
                 new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+(?<season>(?<!\d+)(?:\d{4})(?!\d+))(?:x|\Wx|_){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:\-|x|\Wx|_){1,2}(?<episode>\d{2,3}(?!\d+)))*)\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Partial season pack
+                new Regex(@"^(?<title>.+?)(?:\W+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<seasonpart>\d{1,2}(?!\d+)))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Mini-Series with year in title, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
@@ -355,7 +359,7 @@ namespace NzbDrone.Core.Parser
                         Logger.Trace(regex);
                         try
                         {
-                            var result = ParseMatchCollection(match, title);
+                            var result = ParseMatchCollection(match, releaseTitle);
 
                             if (result != null)
                             {
@@ -598,11 +602,26 @@ namespace NzbDrone.Core.Parser
 
                     if (!episodeCaptures.Any() && !absoluteEpisodeCaptures.Any())
                     {
-                        //Check to see if this is an "Extras" or "SUBPACK" release, if it is, return NULL
-                        //Todo: Set a "Extras" flag in EpisodeParseResult if we want to download them ever
-                        if (!matchCollection[0].Groups["extras"].Value.IsNullOrWhiteSpace()) return null;
+                        //Check to see if this is an "Extras" or "SUBPACK" release, if it is, set
+                        // IsSeasonExtra so they can be filtered out
+                        if (!matchCollection[0].Groups["extras"].Value.IsNullOrWhiteSpace())
+                        {
+                            result.IsSeasonExtra = true;
+                        }
 
-                        result.FullSeason = true;
+                        // Partial season packs will have a seasonpart group so they can be differentiated
+                        // from a full season/single episode release
+                        var seasonPart = matchCollection[0].Groups["seasonpart"].Value;
+
+                        if (seasonPart.IsNotNullOrWhiteSpace())
+                        {
+                            result.SeasonPart = Convert.ToInt32(seasonPart);
+                            result.IsPartialSeason = true;
+                        }
+                        else
+                        {
+                            result.FullSeason = true;
+                        }
                     }
                 }
 

@@ -11,8 +11,12 @@ namespace NzbDrone.Core.Parser
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(LanguageParser));
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)",
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static readonly Regex CaseSensitiveLanguageRegex = new Regex(@"(?<lithuanian>\bLT\b)|(?<czech>\bCZ\b)",
+                                                                RegexOptions.Compiled);
+
 
         private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -77,31 +81,15 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("hungarian"))
                 return Language.Hungarian;
 
-            var match = LanguageRegex.Match(title);
+            if (lowerTitle.Contains("hebrew"))
+                return Language.Hebrew;
 
-            if (match.Groups["italian"].Captures.Cast<Capture>().Any())
-                return Language.Italian;
+            var regexLanguage = RegexLanguage(title);
 
-            if (match.Groups["german"].Captures.Cast<Capture>().Any())
-                return Language.German;
-
-            if (match.Groups["flemish"].Captures.Cast<Capture>().Any())
-                return Language.Flemish;
-
-            if (match.Groups["greek"].Captures.Cast<Capture>().Any())
-                return Language.Greek;
-
-            if (match.Groups["french"].Success)
-                return Language.French;
-
-            if (match.Groups["russian"].Success)
-                return Language.Russian;
-
-            if (match.Groups["dutch"].Success)
-                return Language.Dutch;
-
-            if (match.Groups["hungarian"].Success)
-                return Language.Hungarian;
+            if (regexLanguage != Language.Unknown)
+            {
+                return regexLanguage;
+            }
 
             return Language.English;
         }
@@ -137,6 +125,50 @@ namespace NzbDrone.Core.Parser
             {
                 Logger.Debug(ex, "Failed parsing language from subtitle file: {0}", fileName);
             }
+
+            return Language.Unknown;
+        }
+
+        private static Language RegexLanguage(string title)
+        {
+            // Case sensitive
+            var caseSensitiveMatch = CaseSensitiveLanguageRegex.Match(title);
+
+            if (caseSensitiveMatch.Groups["lithuanian"].Captures.Cast<Capture>().Any())
+                return Language.Lithuanian;
+
+            if (caseSensitiveMatch.Groups["czech"].Captures.Cast<Capture>().Any())
+                return Language.Czech;
+
+            // Case insensitive
+            var match = LanguageRegex.Match(title);
+
+            if (match.Groups["italian"].Captures.Cast<Capture>().Any())
+                return Language.Italian;
+
+            if (match.Groups["german"].Captures.Cast<Capture>().Any())
+                return Language.German;
+
+            if (match.Groups["flemish"].Captures.Cast<Capture>().Any())
+                return Language.Flemish;
+
+            if (match.Groups["greek"].Captures.Cast<Capture>().Any())
+                return Language.Greek;
+
+            if (match.Groups["french"].Success)
+                return Language.French;
+
+            if (match.Groups["russian"].Success)
+                return Language.Russian;
+
+            if (match.Groups["dutch"].Success)
+                return Language.Dutch;
+
+            if (match.Groups["hungarian"].Success)
+                return Language.Hungarian;
+
+            if (match.Groups["hebrew"].Success)
+                return Language.Hebrew;
 
             return Language.Unknown;
         }

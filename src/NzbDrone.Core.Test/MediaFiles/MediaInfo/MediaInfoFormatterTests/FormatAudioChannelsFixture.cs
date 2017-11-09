@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Test.Common;
@@ -105,6 +105,20 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         }
 
         [Test]
+        public void should_skip_empty_groups_in_AudioChannelPositions()
+        {
+            var mediaInfoModel = new MediaInfoModel
+            {
+                AudioChannels = 2,
+                AudioChannelPositions = " / 2/0/0.0",
+                AudioChannelPositionsText = null,
+                SchemaRevision = 3
+            };
+
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(2);
+        }
+
+        [Test]
         public void should_sum_first_series_of_numbers_from_AudioChannelPositions()
         {
             var mediaInfoModel = new MediaInfoModel
@@ -116,6 +130,20 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(7.1m);
+        }
+
+        [Test]
+        public void should_sum_dual_mono_representation_AudioChannelPositions()
+        {
+            var mediaInfoModel = new MediaInfoModel
+            {
+                AudioChannels = 2,
+                AudioChannelPositions = "1+1",
+                AudioChannelPositionsText = null,
+                SchemaRevision = 3
+            };
+
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(2.0m);
         }
     }
 }

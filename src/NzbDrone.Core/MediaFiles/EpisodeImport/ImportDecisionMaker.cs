@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -94,7 +94,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (localEpisode.Episodes.Empty())
                     {
-                        decision = new ImportDecision(localEpisode, new Rejection("Invalid season or episode"));
+                        if (localEpisode.ParsedEpisodeInfo.IsPartialSeason)
+                        {
+                            decision = new ImportDecision(localEpisode, new Rejection("Partial season packs are not supported"));
+                        }
+                        else if (localEpisode.ParsedEpisodeInfo.IsSeasonExtra)
+                        {
+                            decision = new ImportDecision(localEpisode, new Rejection("Extras are not supported"));
+                        }
+                        else
+                        {
+                            decision = new ImportDecision(localEpisode, new Rejection("Invalid season or episode"));
+                        }
                     }
                     else
                     {
@@ -121,6 +132,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             if (decision == null)
             {
                 _logger.Error("Unable to make a decision on {0}", file);
+            }
+            else if (decision.Rejections.Any())
+            {
+                _logger.Debug("File rejected for the following reasons: {0}", string.Join(", ", decision.Rejections));
+            }
+            else
+            {
+                _logger.Debug("File accepted");
             }
 
             return decision;

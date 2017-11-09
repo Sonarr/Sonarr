@@ -1,9 +1,10 @@
-﻿using Nancy;
+using Nancy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ical.Net;
 using Ical.Net.DataTypes;
+using Ical.Net.General;
 using Ical.Net.Interfaces.Serialization;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.iCalendar.Factory;
@@ -92,7 +93,9 @@ namespace NzbDrone.Api.Calendar
                 ProductId = "-//sonarr.tv//Sonarr//EN"
             };
 
-
+            var calendarName = "Sonarr TV Schedule";
+            calendar.AddProperty(new CalendarProperty("NAME", calendarName));
+            calendar.AddProperty(new CalendarProperty("X-WR-CALNAME", calendarName));
 
             foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
             {
@@ -114,7 +117,7 @@ namespace NzbDrone.Api.Calendar
 
                 if (asAllDay)
                 {
-                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value) { HasTime = false };
+                    occurrence.Start = new CalDateTime(episode.AirDateUtc.Value.ToLocalTime()) { HasTime = false };
                 }
                 else
                 {

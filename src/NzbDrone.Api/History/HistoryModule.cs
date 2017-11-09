@@ -1,7 +1,10 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Nancy;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Api.REST;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
@@ -25,6 +28,7 @@ namespace NzbDrone.Api.History
             _failedDownloadService = failedDownloadService;
             GetResourcePaged = GetHistory;
 
+            Get["/since"] = x => GetHistorySince();
             Post["/failed"] = x => MarkAsFailed();
         }
 
@@ -62,6 +66,27 @@ namespace NzbDrone.Api.History
             }
 
             return ApplyToPage(_historyService.Paged, pagingSpec, MapToResource);
+        }
+
+        private List<HistoryResource> GetHistorySince()
+        {
+            var queryDate = Request.Query.Date;
+            var queryEventType = Request.Query.EventType;
+
+            if (!queryDate.HasValue)
+            {
+                throw new BadRequestException("date is missing");
+            }
+
+            DateTime date = DateTime.Parse(queryDate.Value);
+            HistoryEventType? eventType = null;
+
+            if (queryEventType.HasValue)
+            {
+                eventType = (HistoryEventType)Convert.ToInt32(queryEventType.Value);
+            }
+
+            return _historyService.Since(date, eventType).Select(MapToResource).ToList();
         }
 
         private Response MarkAsFailed()

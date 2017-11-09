@@ -62,11 +62,7 @@ namespace NzbDrone.Core.MediaFiles
                 _diskProvider.FolderSetLastWriteTime(destination, DateTime.UtcNow);
                 foreach (var file in _diskProvider.GetFiles(destination, SearchOption.AllDirectories))
                 {
-                    if (OsInfo.IsWindows)
-                    {
-                        //TODO: Better fix than this for non-Windows?
-                        _diskProvider.FileSetLastWriteTime(file, DateTime.UtcNow);
-                    }
+                    SetLastWriteTime(file, DateTime.UtcNow);
                 }
 
                 _logger.Debug("Folder has been moved to the recycling bin: {0}", destination);
@@ -123,12 +119,8 @@ namespace NzbDrone.Core.MediaFiles
                     _logger.Error(e, "Unable to move '{0}' to the recycling bin: '{1}'", path, destination);
                     throw;
                 }
-                
-                //TODO: Better fix than this for non-Windows?
-                if (OsInfo.IsWindows)
-                {
-                    _diskProvider.FileSetLastWriteTime(destination, DateTime.UtcNow);
-                }
+
+                SetLastWriteTime(destination, DateTime.UtcNow);
 
                 _logger.Debug("File has been moved to the recycling bin: {0}", destination);
             }
@@ -190,6 +182,18 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             _logger.Debug("Recycling Bin has been cleaned up.");
+        }
+
+        private void SetLastWriteTime(string file, DateTime dateTime)
+        {
+            // Swallow any IOException that may be thrown due to "Invalid parameter"
+            try
+            {
+                _diskProvider.FileSetLastWriteTime(file, dateTime);
+            }
+            catch (IOException)
+            {
+            }
         }
 
         public void Execute(CleanUpRecycleBinCommand message)

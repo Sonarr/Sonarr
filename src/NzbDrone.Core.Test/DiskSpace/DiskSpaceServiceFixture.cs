@@ -130,5 +130,26 @@ namespace NzbDrone.Core.Test.DiskSpace
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.GetAvailableSpace(It.IsAny<string>()), Times.Never());
         }
+
+        [TestCase("/boot")]
+        [TestCase("/var/lib/rancher")]
+        [TestCase("/var/lib/rancher/volumes")]
+        [TestCase("/var/lib/kubelet")]
+        [TestCase("/var/lib/docker")]
+        [TestCase("/some/place/docker/aufs")]
+        public void should_not_check_diskspace_for_irrelevant_mounts(string path)
+        {
+            var mount = new Mock<IMount>();
+            mount.SetupGet(v => v.RootDirectory).Returns(path);
+            mount.SetupGet(v => v.DriveType).Returns(System.IO.DriveType.Fixed);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.GetMounts())
+                  .Returns(new List<IMount> { mount.Object });
+
+            var freeSpace = Subject.GetFreeSpace();
+
+            freeSpace.Should().BeEmpty();
+        }
     }
 }

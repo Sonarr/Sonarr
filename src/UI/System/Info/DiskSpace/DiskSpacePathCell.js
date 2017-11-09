@@ -11,7 +11,7 @@ module.exports = Backgrid.Cell.extend({
 
         var contents = path;
 
-        if (label) {
+        if (label && label !== path && !label.startsWith("UUID=")) {
             contents += ' ({0})'.format(label);
         }
 

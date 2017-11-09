@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         void RemoveTorrent(string hash, bool removeData, UTorrentSettings settings);
         void SetTorrentLabel(string hash, string label, UTorrentSettings settings);
         void MoveTorrentToTopInQueue(string hash, UTorrentSettings settings);
+        void SetState(string hash, UTorrentState state, UTorrentSettings settings);
     }
 
     public class UTorrentProxy : IUTorrentProxy
@@ -152,6 +153,15 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             var requestBuilder = BuildRequest(settings)
                 .AddQueryParam("action", "queuetop")
+                .AddQueryParam("hash", hash);
+
+            ProcessRequest(requestBuilder, settings);
+        }
+
+        public void SetState(string hash, UTorrentState state, UTorrentSettings settings)
+        {
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", state.ToString().ToLowerInvariant())
                 .AddQueryParam("hash", hash);
 
             ProcessRequest(requestBuilder, settings);

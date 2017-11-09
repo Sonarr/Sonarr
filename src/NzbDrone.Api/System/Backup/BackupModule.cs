@@ -21,9 +21,9 @@ namespace NzbDrone.Api.System.Backup
 
             return backups.Select(b => new BackupResource
                                        {
-                                           Id = b.Path.GetHashCode(),
-                                           Name = Path.GetFileName(b.Path),
-                                           Path = b.Path,
+                                           Id = b.Name.GetHashCode(),
+                                           Name = b.Name,
+                                           Path = $"/backup/{b.Type.ToString().ToLower()}/{b.Name}",
                                            Type = b.Type,
                                            Time = b.Time
                                        }).ToList();

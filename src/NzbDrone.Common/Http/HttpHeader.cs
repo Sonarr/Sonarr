@@ -37,7 +37,7 @@ namespace NzbDrone.Common.Http
             }
             if (values.Length > 1)
             {
-                throw new ApplicationException(string.Format("Expected {0} to occur only once.", key));
+                throw new ApplicationException($"Expected {key} to occur only once, but was {values.Join("|")}.");
             }
 
             return values[0];
@@ -54,7 +54,7 @@ namespace NzbDrone.Common.Http
             return converter(value);
         }
         protected void SetSingleValue(string key, string value)
-        {            
+        {
             if (value == null)
             {
                 Remove(key);

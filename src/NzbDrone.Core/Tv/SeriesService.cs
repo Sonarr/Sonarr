@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTitleInexact(string title);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
-        Series UpdateSeries(Series series);
+        Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true);
         List<Series> UpdateSeries(List<Series> series);
         bool SeriesPathExists(string folder);
         void RemoveAddOptions(Series series);
@@ -144,7 +144,9 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.All().ToList();
         }
 
-        public Series UpdateSeries(Series series)
+        // updateEpisodesToMatchSeason is an override for EpisodeMonitoredService to use so a change via Season pass doesn't get nuked by the seasons loop.
+        // TODO: Remove when seasons are split from series (or we come up with a better way to address this)
+        public Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true)
         {
             var storedSeries = GetSeries(series.Id);
 
@@ -152,7 +154,7 @@ namespace NzbDrone.Core.Tv
             {
                 var storedSeason = storedSeries.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);
 
-                if (storedSeason != null && season.Monitored != storedSeason.Monitored)
+                if (storedSeason != null && season.Monitored != storedSeason.Monitored && updateEpisodesToMatchSeason)
                 {
                     _episodeService.SetEpisodeMonitoredBySeason(series.Id, season.SeasonNumber, season.Monitored);
                 }

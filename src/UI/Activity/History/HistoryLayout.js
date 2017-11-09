@@ -129,6 +129,13 @@ module.exports = Marionette.Layout.extend({
                     tooltip  : 'Deleted',
                     icon     : 'icon-sonarr-deleted',
                     callback : this._setFilter
+                },
+                {
+                    key      : 'renamed',
+                    title    : '',
+                    tooltip  : 'Renamed',
+                    icon     : 'icon-sonarr-rename',
+                    callback : this._setFilter
                 }
             ]
         };

@@ -2,6 +2,7 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 
 namespace NzbDrone.Common.Processes
 {
@@ -38,7 +39,7 @@ namespace NzbDrone.Common.Processes
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to write PID file {0}", filename);
-                throw;
+                throw new SonarrStartupException(ex, "Unable to write PID file {0}", filename);
             }
         }
     }

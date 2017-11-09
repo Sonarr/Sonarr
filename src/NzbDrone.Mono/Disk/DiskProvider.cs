@@ -40,24 +40,15 @@ namespace NzbDrone.Mono.Disk
         {
             Ensure.That(path, () => path).IsValidPath();
 
-            try
-            {
-                var mount = GetMount(path);
+            var mount = GetMount(path);
 
-                if (mount == null)
-                {
-                    Logger.Debug("Unable to get free space for '{0}', unable to find suitable drive", path);
-                    return null;
-                }
-
-                return mount.AvailableFreeSpace;
-            }
-            catch (InvalidOperationException ex)
+            if (mount == null)
             {
-                Logger.Error(ex, "Couldn't get free space for {0}", path);
+                Logger.Debug("Unable to get free space for '{0}', unable to find suitable drive", path);
+                return null;
             }
 
-            return null;
+            return mount.AvailableFreeSpace;
         }
 
         public override void InheritFolderPermissions(string filename)
@@ -100,20 +91,9 @@ namespace NzbDrone.Mono.Disk
         {
             Ensure.That(path, () => path).IsValidPath();
 
-            try
-            {
-                var mount = GetMount(path);
+            var mount = GetMount(path);
 
-                if (mount == null) return null;
-
-                return mount.TotalSize;
-            }
-            catch (InvalidOperationException e)
-            {
-                Logger.Error(e, "Couldn't get total space for {0}", path);
-            }
-
-            return null;
+            return mount?.TotalSize;
         }
 
         public override bool TryCreateHardLink(string source, string destination)

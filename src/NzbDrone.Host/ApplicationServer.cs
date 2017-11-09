@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.ServiceProcess;
 using NLog;
+using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Host.Owin;
@@ -22,6 +24,7 @@ namespace NzbDrone.Host
         private readonly IHostController _hostController;
         private readonly IStartupContext _startupContext;
         private readonly IBrowserService _browserService;
+        private readonly IContainer _container;
         private readonly Logger _logger;
 
         public NzbDroneServiceFactory(IConfigFileProvider configFileProvider,
@@ -29,6 +32,7 @@ namespace NzbDrone.Host
                                       IRuntimeInfo runtimeInfo,
                                       IStartupContext startupContext,
                                       IBrowserService browserService,
+                                      IContainer container,
                                       Logger logger)
         {
             _configFileProvider = configFileProvider;
@@ -36,6 +40,7 @@ namespace NzbDrone.Host
             _runtimeInfo = runtimeInfo;
             _startupContext = startupContext;
             _browserService = browserService;
+            _container = container;
             _logger = logger;
         }
 
@@ -52,6 +57,7 @@ namespace NzbDrone.Host
             }
 
             _runtimeInfo.IsExiting = false;
+            DbFactory.RegisterDatabase(_container);
             _hostController.StartServer();
 
             if (!_startupContext.Flags.Contains(StartupContext.NO_BROWSER)
@@ -59,6 +65,8 @@ namespace NzbDrone.Host
             {
                 _browserService.LaunchWebUI();
             }
+
+            _container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
         }
 
         protected override void OnStop()

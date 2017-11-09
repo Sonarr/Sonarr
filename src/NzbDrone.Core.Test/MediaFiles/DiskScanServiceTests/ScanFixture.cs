@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -261,6 +261,22 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
                            Path.Combine(_series.Path, ".@__THUMB", "file2.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, ".hidden", "file2.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_scan_files_that_start_with_period()
+        {
+            GivenSeriesFolder();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "Season 1", ".s01e01.mkv").AsOsAgnostic()
                        });
 
             Subject.Scan(_series);

@@ -180,6 +180,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
         public override List<ImageFileResult> SeriesImages(Series series)
         {
+            if (!Settings.SeriesImages)
+            {
+                return new List<ImageFileResult>();
+            }
+
             var image = series.Images.SingleOrDefault(c => c.CoverType == MediaCoverTypes.Poster) ?? series.Images.FirstOrDefault();
             if (image == null)
             {
@@ -195,6 +200,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
         public override List<ImageFileResult> SeasonImages(Series series, Season season)
         {
+            if (!Settings.SeasonImages)
+            {
+                return new List<ImageFileResult>();
+            }
+
             var seasonFolders = GetSeasonFolders(series);
 
             string seasonFolder;
@@ -220,6 +230,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
         public override List<ImageFileResult> EpisodeImages(Series series, EpisodeFile episodeFile)
         {
+            if (!Settings.EpisodeImages)
+            {
+                return new List<ImageFileResult>();
+            }
+
             var screenshot = episodeFile.Episodes.Value.First().Images.SingleOrDefault(i => i.CoverType == MediaCoverTypes.Screenshot);
 
             if (screenshot == null)

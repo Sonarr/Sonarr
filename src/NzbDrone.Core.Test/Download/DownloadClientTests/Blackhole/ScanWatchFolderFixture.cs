@@ -1,15 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download;
-using NzbDrone.Test.Common;
-using System.Threading;
-using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Download.Clients.Blackhole;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 {
@@ -18,7 +20,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
     {
         protected readonly string _title = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE";
         protected string _completedDownloadFolder = @"c:\blackhole\completed".AsOsAgnostic();
-        
+
         protected void GivenCompletedItem()
         {
             var targetDir = Path.Combine(_completedDownloadFolder, _title);
@@ -33,6 +35,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetFileSize(It.IsAny<string>()))
                 .Returns(1000000);
+
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.FilterFiles(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+                  .Returns<string, IEnumerable<string>>((b, s) => s.ToList());
         }
 
         protected void GivenChangedItem()
@@ -43,7 +48,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
                 .Setup(c => c.GetFileSize(It.IsAny<string>()))
                 .Returns(currentSize + 1);
         }
-        
+
         private void VerifySingleItem(DownloadItemStatus status)
         {
             var items = Subject.GetItems(_completedDownloadFolder, TimeSpan.FromMilliseconds(50)).ToList();

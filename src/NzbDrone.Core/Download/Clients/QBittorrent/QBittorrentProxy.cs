@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using NLog;
@@ -23,6 +23,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         void RemoveTorrent(string hash, Boolean removeData, QBittorrentSettings settings);
         void SetTorrentLabel(string hash, string label, QBittorrentSettings settings);
         void MoveTorrentToTopInQueue(string hash, QBittorrentSettings settings);
+        void PauseTorrent(string hash, QBittorrentSettings settings);
+        void ResumeTorrent(string hash, QBittorrentSettings settings);
+        void SetForceStart(string hash, bool enabled, QBittorrentSettings settings);
     }
 
     public class QBittorrentProxy : IQBittorrentProxy
@@ -72,7 +75,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormParameter("urls", torrentUrl);
 
-            ProcessRequest<object>(request, settings);
+            var result = ProcessRequest(request, settings);
+
+            // Note: Older qbit versions returned nothing, so we can't do != "Ok." here.
+            if (result == "Fails.")
+            {
+                throw new DownloadClientException("Download client failed to add torrent by url");
+            }
         }
 
         public void AddTorrentFromFile(string fileName, Byte[] fileContent, QBittorrentSettings settings)
@@ -81,7 +90,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormUpload("torrents", fileName, fileContent);
 
-            ProcessRequest<object>(request, settings);
+            var result = ProcessRequest(request, settings);
+
+            // Note: Current qbit versions return nothing, so we can't do != "Ok." here.
+            if (result == "Fails.")
+            {
+                throw new DownloadClientException("Download client failed to add torrent");
+            }
         }
 
         public void RemoveTorrent(string hash, Boolean removeData, QBittorrentSettings settings)
@@ -90,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormParameter("hashes", hash);
 
-            ProcessRequest<object>(request, settings);
+            ProcessRequest(request, settings);
         }
 
         public void SetTorrentLabel(string hash, string label, QBittorrentSettings settings)
@@ -101,18 +116,19 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                         .AddFormParameter("category", label);
             try
             {
-                ProcessRequest<object>(setCategoryRequest, settings);
+                ProcessRequest(setCategoryRequest, settings);
             }
             catch(DownloadClientException ex)
             {
-                // if setCategory fails due to method not being found, then try older setLabel command for qbittorent < v.3.3.5
+                // if setCategory fails due to method not being found, then try older setLabel command for qBittorrent < v.3.3.5
                 if (ex.InnerException is HttpException && (ex.InnerException as HttpException).Response.StatusCode == HttpStatusCode.NotFound)
                 {
                     var setLabelRequest = BuildRequest(settings).Resource("/command/setLabel")
                                                                 .Post()
                                                                 .AddFormParameter("hashes", hash)
                                                                 .AddFormParameter("label", label);
-                    ProcessRequest<object>(setLabelRequest, settings);
+
+                    ProcessRequest(setLabelRequest, settings);
                 }
             }
         }
@@ -125,7 +141,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             try
             {
-                var response = ProcessRequest<object>(request, settings);
+                ProcessRequest(request, settings);
             }
             catch (DownloadClientException ex)
             {
@@ -141,6 +157,34 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         }
 
+        public void PauseTorrent(string hash, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/command/pause")
+                                                .Post()
+                                                .AddFormParameter("hash", hash);
+
+            ProcessRequest(request, settings);
+        }
+
+        public void ResumeTorrent(string hash, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/command/resume")
+                                                .Post()
+                                                .AddFormParameter("hash", hash);
+
+            ProcessRequest(request, settings);
+        }
+
+        public void SetForceStart(string hash, bool enabled, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/command/setForceStart")
+                                                .Post()
+                                                .AddFormParameter("hashes", hash)
+                                                .AddFormParameter("value", enabled ? "true": "false");
+
+            ProcessRequest(request, settings);
+        }
+
         private HttpRequestBuilder BuildRequest(QBittorrentSettings settings)
         {
             var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port);
@@ -152,6 +196,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         private TResult ProcessRequest<TResult>(HttpRequestBuilder requestBuilder, QBittorrentSettings settings)
             where TResult : new()
+        {
+            var responseContent = ProcessRequest(requestBuilder, settings);
+
+            return Json.Deserialize<TResult>(responseContent);
+        }
+
+        private string ProcessRequest(HttpRequestBuilder requestBuilder, QBittorrentSettings settings)
         {
             AuthenticateClient(requestBuilder, settings);
 
@@ -177,15 +228,15 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 }
                 else
                 {
-                    throw new DownloadClientException("Failed to connect to qBitTorrent, check your settings.", ex);
+                    throw new DownloadClientException("Failed to connect to qBittorrent, check your settings.", ex);
                 }
             }
             catch (WebException ex)
             {
-                throw new DownloadClientException("Failed to connect to qBitTorrent, please check your settings.", ex);
+                throw new DownloadClientException("Failed to connect to qBittorrent, please check your settings.", ex);
             }
 
-            return Json.Deserialize<TResult>(response.Content);
+            return response.Content;
         }
 
         private void AuthenticateClient(HttpRequestBuilder requestBuilder, QBittorrentSettings settings, bool reauthenticate = false)
@@ -219,23 +270,23 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     _logger.Debug("qbitTorrent authentication failed.");
                     if (ex.Response.StatusCode == HttpStatusCode.Forbidden)
                     {
-                        throw new DownloadClientAuthenticationException("Failed to authenticate with qbitTorrent.", ex);
+                        throw new DownloadClientAuthenticationException("Failed to authenticate with qBittorrent.", ex);
                     }
 
-                    throw new DownloadClientException("Failed to connect to qBitTorrent, please check your settings.", ex);
+                    throw new DownloadClientException("Failed to connect to qBittorrent, please check your settings.", ex);
                 }
                 catch (WebException ex)
                 {
-                    throw new DownloadClientUnavailableException("Failed to connect to qBitTorrent, please check your settings.", ex);
+                    throw new DownloadClientUnavailableException("Failed to connect to qBittorrent, please check your settings.", ex);
                 }
 
                 if (response.Content != "Ok.") // returns "Fails." on bad login
                 {
                     _logger.Debug("qbitTorrent authentication failed.");
-                    throw new DownloadClientAuthenticationException("Failed to authenticate with qbitTorrent.");
+                    throw new DownloadClientAuthenticationException("Failed to authenticate with qBittorrent.");
                 }
 
-                _logger.Debug("qbitTorrent authentication succeeded.");
+                _logger.Debug("qBittorrent authentication succeeded.");
 
                 cookies = response.GetCookies();
 

@@ -8,6 +8,7 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
@@ -178,7 +179,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         }
 
         [Test]
-        public void should_return_an_empty_list_when_none_are_appproved()
+        public void should_return_an_empty_list_when_none_are_approved()
         {
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(null, new Rejection("Failure!")));
@@ -262,6 +263,27 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.Is<RemoteEpisode>(r => r.Release.DownloadProtocol == DownloadProtocol.Usenet)), Times.Once());
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.Is<RemoteEpisode>(r => r.Release.DownloadProtocol == DownloadProtocol.Torrent)), Times.Once());
+        }
+
+        [Test]
+        public void should_add_to_rejected_if_release_unavailable_on_indexer()
+        {
+            var episodes = new List<Episode> { GetEpisode(1) };
+            var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode));
+
+            Mocker.GetMock<IDownloadService>()
+                  .Setup(s => s.DownloadReport(It.IsAny<RemoteEpisode>()))
+                  .Throws(new ReleaseUnavailableException(remoteEpisode.Release, "That 404 Error is not just a Quirk"));
+
+            var result = Subject.ProcessDecisions(decisions);
+
+            result.Grabbed.Should().BeEmpty();
+            result.Rejected.Should().NotBeEmpty();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

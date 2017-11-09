@@ -32,7 +32,7 @@ namespace NzbDrone.Host.AccessControl
         }
 
         private List<UrlAcl> InternalUrls { get; }
-        private List<UrlAcl> RegisteredUrls { get; } 
+        private List<UrlAcl> RegisteredUrls { get; set; } 
 
         private static readonly Regex UrlAclRegex = new Regex(@"(?<scheme>https?)\:\/\/(?<address>.+?)\:(?<port>\d+)/(?<urlbase>.+)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -49,11 +49,16 @@ namespace NzbDrone.Host.AccessControl
             _logger = logger;
 
             InternalUrls = new List<UrlAcl>();
-            RegisteredUrls = GetRegisteredUrls();
+            RegisteredUrls = new List<UrlAcl>();
         }
 
         public void ConfigureUrls()
         {
+            if (RegisteredUrls.Empty())
+            {
+                GetRegisteredUrls();
+            }
+
             var localHostHttpUrls = BuildUrlAcls("http", "localhost", _configFileProvider.Port);
             var interfaceHttpUrls = BuildUrlAcls("http", _configFileProvider.BindAddress, _configFileProvider.Port);
 
@@ -128,19 +133,24 @@ namespace NzbDrone.Host.AccessControl
                                       c.UrlBase == urlAcl.UrlBase);
         }
 
-        private List<UrlAcl> GetRegisteredUrls()
+        private void GetRegisteredUrls()
         {
             if (OsInfo.IsNotWindows)
             {
-                return new List<UrlAcl>();
+                return;
+            }
+
+            if (RegisteredUrls.Any())
+            {
+                return;
             }
 
             var arguments = string.Format("http show urlacl");
             var output = _netshProvider.Run(arguments);
 
-            if (output == null || !output.Standard.Any()) return new List<UrlAcl>();
+            if (output == null || !output.Standard.Any()) return;
 
-            return output.Standard.Select(line =>
+            RegisteredUrls = output.Standard.Select(line =>
             {
                 var match = UrlAclRegex.Match(line.Content);
 

@@ -49,6 +49,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 _proxy.MoveTorrentToTopInQueue(hash, Settings);
             }
 
+            _proxy.SetState(hash, (UTorrentState)Settings.IntialState, Settings);
+
             return hash;
         }
 
@@ -64,6 +66,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             {
                 _proxy.MoveTorrentToTopInQueue(hash, Settings);
             }
+
+            _proxy.SetState(hash, (UTorrentState)Settings.IntialState, Settings);
 
             return hash;
         }

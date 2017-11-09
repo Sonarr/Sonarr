@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -9,8 +10,8 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Validation;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
@@ -296,13 +297,22 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var config = _proxy.GetConfig(Settings);
 
-            var keepHistory = config.GetValueOrDefault("KeepHistory");
-            if (keepHistory == "0")
+            var keepHistory = config.GetValueOrDefault("KeepHistory", "7");
+            int value;
+            if (!int.TryParse(keepHistory, NumberStyles.None, CultureInfo.InvariantCulture, out value) || value == 0)
             {
                 return new NzbDroneValidationFailure(string.Empty, "NzbGet setting KeepHistory should be greater than 0")
                 {
                     InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
                     DetailedDescription = "NzbGet setting KeepHistory is set to 0. Which prevents Sonarr from seeing completed downloads."
+                };
+            }
+            else if (value > 25000)
+            {
+                return new NzbDroneValidationFailure(string.Empty, "NzbGet setting KeepHistory should be less than 25000")
+                {
+                    InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    DetailedDescription = "NzbGet setting KeepHistory is set too high."
                 };
             }
 

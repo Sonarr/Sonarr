@@ -1,8 +1,9 @@
-﻿using System.IO;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles
@@ -39,13 +40,22 @@ namespace NzbDrone.Core.MediaFiles
             var existingFiles = localEpisode.Episodes
                                             .Where(e => e.EpisodeFileId > 0)
                                             .Select(e => e.EpisodeFile.Value)
-                                            .GroupBy(e => e.Id);
+                                            .GroupBy(e => e.Id)
+                                            .ToList();
+
+            var rootFolder = _diskProvider.GetParentFolder(localEpisode.Series.Path);
+
+            // If there are existing episode files and the root folder is missing, throw, so the old file isn't left behind during the import process.
+            if (existingFiles.Any() && !_diskProvider.FolderExists(rootFolder))
+            {
+                throw new RootFolderNotFoundException($"Root folder '{rootFolder}' was not found.");
+            }
 
             foreach (var existingFile in existingFiles)
             {
                 var file = existingFile.First();
                 var episodeFilePath = Path.Combine(localEpisode.Series.Path, file.RelativePath);
-                var subfolder = _diskProvider.GetParentFolder(localEpisode.Series.Path).GetRelativePath(_diskProvider.GetParentFolder(episodeFilePath));
+                var subfolder = rootFolder.GetRelativePath(_diskProvider.GetParentFolder(episodeFilePath));
 
                 if (_diskProvider.FileExists(episodeFilePath))
                 {

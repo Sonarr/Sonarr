@@ -48,6 +48,7 @@ namespace NzbDrone.Integration.Test
         public NotificationClient Notifications;
         public ClientBase<ProfileResource> Profiles;
         public ReleaseClient Releases;
+        public ReleasePushClient ReleasePush;
         public ClientBase<RootFolderResource> RootFolders;
         public SeriesClient Series;
         public ClientBase<TagResource> Tags;
@@ -108,6 +109,7 @@ namespace NzbDrone.Integration.Test
             Notifications = new NotificationClient(RestClient, ApiKey);
             Profiles = new ClientBase<ProfileResource>(RestClient, ApiKey);
             Releases = new ReleaseClient(RestClient, ApiKey);
+            ReleasePush = new ReleasePushClient(RestClient, ApiKey);
             RootFolders = new ClientBase<RootFolderResource>(RestClient, ApiKey);
             Series = new SeriesClient(RestClient, ApiKey);
             Tags = new ClientBase<TagResource>(RestClient, ApiKey);
@@ -272,7 +274,7 @@ namespace NzbDrone.Integration.Test
 
                 Commands.PostAndWait(new CommandResource { Name = "refreshseries", Body = new RefreshSeriesCommand(series.Id) });
                 Commands.WaitAll();
-                
+
                 result = Episodes.GetEpisodesInSeries(series.Id).Single(v => v.SeasonNumber == season && v.EpisodeNumber == episode);
 
                 result.EpisodeFile.Should().NotBeNull();

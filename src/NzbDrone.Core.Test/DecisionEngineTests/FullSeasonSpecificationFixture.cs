@@ -49,27 +49,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = false;
             _remoteEpisode.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(+2);
-            Mocker.Resolve<FullSeasonSpecification>().IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_if_all_episodes_have_aired()
         {
-            Mocker.Resolve<FullSeasonSpecification>().IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_false_if_one_episode_has_not_aired()
         {
             _remoteEpisode.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(+2);
-            Mocker.Resolve<FullSeasonSpecification>().IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_if_an_episode_does_not_have_an_air_date()
         {
             _remoteEpisode.Episodes.Last().AirDateUtc = null;
-            Mocker.Resolve<FullSeasonSpecification>().IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
     }
 }

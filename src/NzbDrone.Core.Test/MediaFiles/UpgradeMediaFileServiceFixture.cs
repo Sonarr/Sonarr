@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -33,12 +34,16 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .Build();
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.FileExists(It.IsAny<string>()))
-                .Returns(true);
+                  .Setup(c => c.FolderExists(Directory.GetParent(_localEpisode.Series.Path).FullName))
+                  .Returns(true);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.GetParentFolder(It.IsAny<string>()))
-                .Returns<string>(c => Path.GetDirectoryName(c));
+                  .Setup(c => c.FileExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.GetParentFolder(It.IsAny<string>()))
+                  .Returns<string>(c => Path.GetDirectoryName(c));
         }
 
         private void GivenSingleEpisodeWithSingleEpisodeFile()
@@ -174,6 +179,20 @@ namespace NzbDrone.Core.Test.MediaFiles
             GivenMultipleEpisodesWithMultipleEpisodeFiles();
 
             Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode).OldFiles.Count.Should().Be(2);
+        }
+
+        [Test]
+        public void should_throw_if_there_are_existing_episode_files_and_the_root_folder_is_missing()
+        {
+            GivenSingleEpisodeWithSingleEpisodeFile();
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.FolderExists(Directory.GetParent(_localEpisode.Series.Path).FullName))
+                  .Returns(false);
+
+            Assert.Throws<RootFolderNotFoundException>(() => Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode));
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_localEpisode.Episodes.Single().EpisodeFile.Value, DeleteMediaFileReason.Upgrade), Times.Never());
         }
     }
 }

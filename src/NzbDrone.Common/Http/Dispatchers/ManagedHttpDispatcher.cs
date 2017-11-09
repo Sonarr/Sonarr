@@ -32,7 +32,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             webRequest.Method = request.Method.ToString();
             webRequest.UserAgent = _userAgentBuilder.GetUserAgent(request.UseSimplifiedUserAgent);
             webRequest.KeepAlive = request.ConnectionKeepAlive;
-            webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
+            webRequest.AllowAutoRedirect = false;
             webRequest.CookieContainer = cookies;
 
             if (request.RequestTimeout != TimeSpan.Zero)
@@ -47,19 +47,19 @@ namespace NzbDrone.Common.Http.Dispatchers
                 AddRequestHeaders(webRequest, request.Headers);
             }
 
-            if (request.ContentData != null)
-            {
-                webRequest.ContentLength = request.ContentData.Length;
-                using (var writeStream = webRequest.GetRequestStream())
-                {
-                    writeStream.Write(request.ContentData, 0, request.ContentData.Length);
-                }
-            }
-
             HttpWebResponse httpWebResponse;
 
             try
             {
+                if (request.ContentData != null)
+                {
+                    webRequest.ContentLength = request.ContentData.Length;
+                    using (var writeStream = webRequest.GetRequestStream())
+                    {
+                        writeStream.Write(request.ContentData, 0, request.ContentData.Length);
+                    }
+                }
+
                 httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
             }
             catch (WebException e)
@@ -73,7 +73,27 @@ namespace NzbDrone.Common.Http.Dispatchers
 
                 if (httpWebResponse == null)
                 {
-                    throw;
+                    // The default messages for WebException on mono are pretty horrible.
+                    if (e.Status == WebExceptionStatus.NameResolutionFailure)
+                    {
+                        throw new WebException($"DNS Name Resolution Failure: '{webRequest.RequestUri.Host}'", e.Status);
+                    }
+                    else if (e.ToString().Contains("TLS Support not"))
+                    {
+                        throw new TlsFailureException(webRequest, e);
+                    }
+                    else if (e.ToString().Contains("The authentication or decryption has failed."))
+                    {
+                        throw new TlsFailureException(webRequest, e);
+                    }
+                    else if (OsInfo.IsNotWindows)
+                    {
+                        throw new WebException($"{e.Message}: '{webRequest.RequestUri}'", e, e.Status, e.Response);
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
 
@@ -83,7 +103,14 @@ namespace NzbDrone.Common.Http.Dispatchers
             {
                 if (responseStream != null)
                 {
-                    data = responseStream.ToBytes();
+                    try
+                    {
+                        data = responseStream.ToBytes();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new WebException("Failed to read complete http response", ex, WebExceptionStatus.ReceiveFailure, httpWebResponse);
+                    }
                 }
             }
 

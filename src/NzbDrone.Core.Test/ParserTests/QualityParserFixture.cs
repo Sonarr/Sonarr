@@ -92,6 +92,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Glee.S04E10.Glee.Actually.480p.WEB-DL.x264-mSD", false)]
         [TestCase("The.Big.Bang.Theory.S06E11.The.Santa.Simulation.480p.WEB-DL.x264-mSD", false)]
         [TestCase("Da.Vincis.Demons.S02E04.480p.WEB.DL.nSD.x264-NhaNc3", false)]
+        [TestCase("Incorporated.S01E08.Das.geloeschte.Ich.German.Dubbed.DL.AmazonHD.x264-TVS", false)]
+        [TestCase("Haters.Back.Off.S01E04.Rod.Trip.mit.meinem.Onkel.German.DL.NetflixUHD.x264", false)]
         public void should_parse_webdl480p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL480p, proper);
@@ -145,6 +147,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Castle.S06E23.720p.WebHD.h264-euHD", false)]
         [TestCase("The.Nightly.Show.2016.03.14.720p.WEB.x264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.720p.WEB.h264-spamTV", false)]
+        [TestCase("Incorporated.S01E08.Das.geloeschte.Ich.German.DD51.Dubbed.DL.720p.AmazonHD.x264-TVS", false)]
+        [TestCase("Marco.Polo.S01E11.One.Hundred.Eyes.2015.German.DD51.DL.720p.NetflixUHD.x264.NewUp.by.Wunschtante", false)]
+        [TestCase("Hush 2016 German DD51 DL 720p NetflixHD x264-TVS", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
@@ -166,6 +171,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S06E08 No One PROPER 1080p WEB DD5 1 H 264-EXCLUSIVE", true)]
         [TestCase("Series Title S06E08 No One PROPER 1080p WEB H 264-EXCLUSIVE", true)]
         [TestCase("The.Simpsons.S25E21.Pay.Pal.1080p.WEB-DL.DD5.1.H.264-NTb", false)]
+        [TestCase("Incorporated.S01E08.Das.geloeschte.Ich.German.DD51.Dubbed.DL.1080p.AmazonHD.x264-TVS", false)]
+        [TestCase("Death.Note.2017.German.DD51.DL.1080p.NetflixHD.x264-TVS", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -178,6 +185,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.x264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.h264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.PROPER.h264-spamTV", true)]
+        [TestCase("House.of.Cards.US.s05e13.4K.UHD.WEB.DL", false)]
+        [TestCase("House.of.Cards.US.s05e13.UHD.4K.WEB.DL", false)]
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
@@ -213,6 +222,13 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);
+        }
+
+        [TestCase("House.of.Cards.US.s05e13.4K.UHD.Bluray", false)]
+        [TestCase("House.of.Cards.US.s05e13.UHD.4K.Bluray", false)]
+        public void should_parse_bluray2160p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.Bluray2160p, proper);
         }
 
         [TestCase("POI S02E11 1080i HDTV DD5.1 MPEG2-TrollHD", false)]

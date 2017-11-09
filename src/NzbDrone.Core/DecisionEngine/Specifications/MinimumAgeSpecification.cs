@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -29,6 +30,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             var age = subject.Release.AgeMinutes;
             var minimumAge = _configService.MinimumAge;
+            var ageRounded = Math.Round(age, 1);
 
             if (minimumAge == 0)
             {
@@ -37,15 +39,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
 
 
-            _logger.Debug("Checking if report meets minimum age requirements. {0}", age);
+            _logger.Debug("Checking if report meets minimum age requirements. {0}", ageRounded);
 
             if (age < minimumAge)
             {
-                _logger.Debug("Only {0} minutes old, minimum age is {1} minutes", age, minimumAge);
-                return Decision.Reject("Only {0} minutes old, minimum age is {1} minutes", age, minimumAge);
+                _logger.Debug("Only {0} minutes old, minimum age is {1} minutes", ageRounded, minimumAge);
+                return Decision.Reject("Only {0} minutes old, minimum age is {1} minutes", ageRounded, minimumAge);
             }
 
-            _logger.Debug("Release is {0} minutes old, greater than minimum age of {1} minutes", age, minimumAge);
+            _logger.Debug("Release is {0} minutes old, greater than minimum age of {1} minutes", ageRounded, minimumAge);
 
             return Decision.Accept();
         }

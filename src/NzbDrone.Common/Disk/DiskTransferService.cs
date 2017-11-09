@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Disk
@@ -223,7 +224,7 @@ namespace NzbDrone.Common.Disk
                     _diskProvider.MoveFile(sourcePath, tempPath, true);
                     try
                     {
-                        ClearTargetPath(targetPath, overwrite);
+                        ClearTargetPath(sourcePath, targetPath, overwrite);
 
                         _diskProvider.MoveFile(tempPath, targetPath);
 
@@ -253,7 +254,7 @@ namespace NzbDrone.Common.Disk
                 throw new IOException(string.Format("Destination cannot be a child of the source [{0}] => [{1}]", sourcePath, targetPath));
             }
 
-            ClearTargetPath(targetPath, overwrite);
+            ClearTargetPath(sourcePath, targetPath, overwrite);
 
             if (mode.HasFlag(TransferMode.HardLink))
             {
@@ -330,7 +331,7 @@ namespace NzbDrone.Common.Disk
             return TransferMode.None;
         }
 
-        private void ClearTargetPath(string targetPath, bool overwrite)
+        private void ClearTargetPath(string sourcePath, string targetPath, bool overwrite)
         {
             if (_diskProvider.FileExists(targetPath))
             {
@@ -340,7 +341,7 @@ namespace NzbDrone.Common.Disk
                 }
                 else
                 {
-                    throw new IOException(string.Format("Destination already exists [{0}]", targetPath));
+                    throw new DestinationAlreadyExistsException($"Destination {targetPath} already exists.");
                 }
             }
         }

@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.MediaFiles
         public bool ShouldDeleteFolder(DirectoryInfo directoryInfo, Series series)
         {
             var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
-            var rarFiles = _diskProvider.GetFiles(directoryInfo.FullName, SearchOption.AllDirectories).Where(f => Path.GetExtension(f) == ".rar");
+            var rarFiles = _diskProvider.GetFiles(directoryInfo.FullName, SearchOption.AllDirectories).Where(f => Path.GetExtension(f).Equals(".rar", StringComparison.OrdinalIgnoreCase));
 
             foreach (var videoFile in videoFiles)
             {
@@ -163,7 +164,7 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.Debug("{0} folder quality: {1}", cleanedUpName, folderInfo.Quality);
             }
 
-            var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
+            var videoFiles = _diskScanService.FilterFiles(directoryInfo.FullName, _diskScanService.GetVideoFiles(directoryInfo.FullName));
 
             if (downloadClientItem == null)
             {
@@ -182,7 +183,12 @@ namespace NzbDrone.Core.MediaFiles
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, downloadClientItem, folderInfo, true);
             var importResults = _importApprovedEpisodes.Import(decisions, true, downloadClientItem, importMode);
 
-            if ((downloadClientItem == null || downloadClientItem.CanMoveFiles) &&
+            if (importMode == ImportMode.Auto)
+            {
+                importMode = (downloadClientItem == null || downloadClientItem.CanMoveFiles) ? ImportMode.Move : ImportMode.Copy;
+            }
+
+            if (importMode == ImportMode.Move &&
                 importResults.Any(i => i.Result == ImportResultType.Imported) &&
                 ShouldDeleteFolder(directoryInfo, series))
             {

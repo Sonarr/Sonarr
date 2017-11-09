@@ -35,7 +35,7 @@ namespace NzbDrone.Common.Http
 
         private string _content;
 
-        public string Content 
+        public string Content
         {
             get
             {
@@ -50,6 +50,10 @@ namespace NzbDrone.Common.Http
 
 
         public bool HasHttpError => (int)StatusCode >= 400;
+
+        public bool HasHttpRedirect => StatusCode == HttpStatusCode.Moved ||
+                                       StatusCode == HttpStatusCode.MovedPermanently ||
+                                       StatusCode == HttpStatusCode.Found;
 
         public Dictionary<string, string> GetCookies()
         {

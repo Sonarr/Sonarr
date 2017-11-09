@@ -7,6 +7,7 @@ using System.Net;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http.Dispatchers;
 using NzbDrone.Common.TPL;
 
@@ -51,6 +52,54 @@ namespace NzbDrone.Common.Http
 
         public HttpResponse Execute(HttpRequest request)
         {
+            var response = ExecuteRequest(request);
+
+            if (request.AllowAutoRedirect && response.HasHttpRedirect)
+            {
+                var autoRedirectChain = new List<string>();
+                autoRedirectChain.Add(request.Url.ToString());
+
+                do
+                {
+                    request.Url += new HttpUri(response.Headers.GetSingleValue("Location"));
+                    autoRedirectChain.Add(request.Url.ToString());
+
+                    _logger.Trace("Redirected to {0}", request.Url);
+
+                    if (autoRedirectChain.Count > 3)
+                    {
+                        throw new WebException($"Too many automatic redirections were attempted for {autoRedirectChain.Join(" -> ")}", WebExceptionStatus.ProtocolError);
+                    }
+
+                    response = ExecuteRequest(request);
+                }
+                while (response.HasHttpRedirect);
+            }
+
+            if (response.HasHttpRedirect && !RuntimeInfo.IsProduction)
+            {
+                _logger.Error("Server requested a redirect to [{0}] while in developer mode. Update the request URL to avoid this redirect.", response.Headers["Location"]);
+            }
+
+            if (!request.SuppressHttpError && response.HasHttpError)
+            {
+                _logger.Warn("HTTP Error - {0}", response);
+
+                if ((int)response.StatusCode == 429)
+                {
+                    throw new TooManyRequestsException(request, response);
+                }
+                else
+                {
+                    throw new HttpException(request, response);
+                }
+            }
+
+            return response;
+        }
+
+        private HttpResponse ExecuteRequest(HttpRequest request)
+        {
             foreach (var interceptor in _requestInterceptors)
             {
                 request = interceptor.PreRequest(request);
@@ -83,28 +132,6 @@ namespace NzbDrone.Common.Http
             if (request.LogResponseContent)
             {
                 _logger.Trace("Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
-            }
-
-            if (!RuntimeInfo.IsProduction &&
-                (response.StatusCode == HttpStatusCode.Moved ||
-                 response.StatusCode == HttpStatusCode.MovedPermanently ||
-                 response.StatusCode == HttpStatusCode.Found))
-            {
-                _logger.Error("Server requested a redirect to [{0}]. Update the request URL to avoid this redirect.", response.Headers["Location"]);
-            }
-
-            if (!request.SuppressHttpError && response.HasHttpError)
-            {
-                _logger.Warn("HTTP Error - {0}", response);
-
-                if ((int)response.StatusCode == 429)
-                {
-                    throw new TooManyRequestsException(request, response);
-                }
-                else
-                {
-                    throw new HttpException(request, response);
-                }
             }
 
             return response;

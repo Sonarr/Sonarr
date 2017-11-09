@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Tv
                 _episodeService.UpdateEpisodes(episodes);
             }
 
-            _seriesService.UpdateSeries(series);
+            _seriesService.UpdateSeries(series, false);
         }
 
         private void ToggleEpisodesMonitoredState(IEnumerable<Episode> episodes, bool monitored)

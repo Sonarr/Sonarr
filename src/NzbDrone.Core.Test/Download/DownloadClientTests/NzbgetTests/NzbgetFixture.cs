@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         private NzbgetQueueItem _queued;
         private NzbgetHistoryItem _failed;
         private NzbgetHistoryItem _completed;
+        private Dictionary<string, string> _configItems;
 
         [SetUp]
         public void Setup()
@@ -80,13 +81,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                     DownloadRate = 7000000
                 });
 
-            var configItems = new Dictionary<string, string>();
-            configItems.Add("Category1.Name", "tv");
-            configItems.Add("Category1.DestDir", @"/remote/mount/tv");
+
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
+                .Returns("14.0");
+
+            _configItems = new Dictionary<string, string>();
+            _configItems.Add("Category1.Name", "tv");
+            _configItems.Add("Category1.DestDir", @"/remote/mount/tv");
 
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(v => v.GetConfig(It.IsAny<NzbgetSettings>()))
-                .Returns(configItems);
+                .Returns(_configItems);
         }
 
         protected void GivenFailedDownload()
@@ -409,6 +415,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
                 .Returns(version);
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().Be(expected);
+        }
+
+        [TestCase("0", false)]
+        [TestCase("1", true)]
+        [TestCase(" 7", false)]
+        [TestCase("5000000", false)]
+        public void should_test_keephistory(string keephistory, bool expected)
+        {
+            _configItems["KeepHistory"] = keephistory;
 
             var error = Subject.Test();
 

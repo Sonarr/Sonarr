@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Extras.Others
         public override ExtraFile Import(Series series, EpisodeFile episodeFile, string path, string extension, bool readOnly)
         {
             // If the extension is .nfo we need to change it to .nfo-orig
-            if (Path.GetExtension(path).Equals(".nfo"))
+            if (Path.GetExtension(path).Equals(".nfo", StringComparison.OrdinalIgnoreCase))
             {
                 extension += "-orig";
             }

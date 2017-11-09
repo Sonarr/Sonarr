@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -63,6 +64,11 @@ namespace NzbDrone.Common.Extensions
             return text;
         }
 
+        public static string Join(this IEnumerable<string> values, string separator)
+        {
+            return string.Join(separator, values);
+        }
+
         public static string CleanSpaces(this string text)
         {
             return CollapseSpace.Replace(text, " ").Trim();
@@ -76,6 +82,16 @@ namespace NzbDrone.Common.Extensions
         public static bool IsNotNullOrWhiteSpace(this string text)
         {
             return !string.IsNullOrWhiteSpace(text);
+        }
+
+        public static bool StartsWithIgnoreCase(this string text, string startsWith)
+        {
+            return text.StartsWith(startsWith, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool EqualsIgnoreCase(this string text, string equals)
+        {
+            return text.Equals(equals, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool ContainsIgnoreCase(this string text, string contains)
