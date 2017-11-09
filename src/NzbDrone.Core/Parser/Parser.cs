@@ -262,6 +262,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex CleanTorrentSuffixRegex = new Regex(@"\[(?:ettv|rartv|rarbg|cttv)\]$",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex CleanQualityBracketsRegex = new Regex(@"\[[a-z0-9 ._-]+\]$",
+                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)(?<!WEB-DL|480p|720p|1080p|2160p)(?:\b|[-._ ])",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -328,6 +331,16 @@ namespace NzbDrone.Core.Parser
                 simpleTitle = WebsitePrefixRegex.Replace(simpleTitle, string.Empty);
 
                 simpleTitle = CleanTorrentSuffixRegex.Replace(simpleTitle, string.Empty);
+
+                simpleTitle = CleanQualityBracketsRegex.Replace(simpleTitle, m =>
+                {
+                    if (QualityParser.ParseQualityName(m.Value).Quality != Qualities.Quality.Unknown)
+                    {
+                        return string.Empty;
+                    }
+
+                    return m.Value;
+                });
 
                 var airDateMatch = AirDateRegex.Match(simpleTitle);
                 if (airDateMatch.Success)

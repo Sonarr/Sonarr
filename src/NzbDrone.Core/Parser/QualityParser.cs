@@ -57,6 +57,29 @@ namespace NzbDrone.Core.Parser
             Logger.Debug("Trying to parse quality for {0}", name);
 
             name = name.Trim();
+
+            var result = ParseQualityName(name);
+
+            //Based on extension
+            if (result.Quality == Quality.Unknown && !name.ContainsInvalidPathChars())
+            {
+                try
+                {
+                    result.Quality = MediaFileExtensions.GetQualityForExtension(Path.GetExtension(name));
+                    result.QualitySource = QualitySource.Extension;
+                }
+                catch (ArgumentException)
+                {
+                    //Swallow exception for cases where string contains illegal
+                    //path characters.
+                }
+            }
+
+            return result;
+        }
+
+        public static QualityModel ParseQualityName(string name)
+        {
             var normalizedName = name.Replace('_', ' ').Trim().ToLower();
             var result = ParseQualityModifiers(name, normalizedName);
 
@@ -296,21 +319,6 @@ namespace NzbDrone.Core.Parser
             if (otherSourceMatch != Quality.Unknown)
             {
                 result.Quality = otherSourceMatch;
-            }
-
-            //Based on extension
-            if (result.Quality == Quality.Unknown && !name.ContainsInvalidPathChars())
-            {
-                try
-                {
-                    result.Quality = MediaFileExtensions.GetQualityForExtension(Path.GetExtension(name));
-                    result.QualitySource = QualitySource.Extension;
-                }
-                catch (ArgumentException)
-                {
-                    //Swallow exception for cases where string contains illegal
-                    //path characters.
-                }
             }
 
             return result;
