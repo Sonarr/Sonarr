@@ -152,6 +152,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
             if (series == null)
             {
+                var relativeParseInfo = Parser.Parser.ParsePath(relativeFile);
+
+                if (relativeParseInfo != null)
+                {
+                    series = _seriesService.FindByTitle(relativeParseInfo.SeriesTitle);
+                }
+            }
+
+            if (series == null)
+            {
                 var localEpisode = new LocalEpisode();
                 localEpisode.Path = file;
                 localEpisode.Quality = QualityParser.ParseQuality(file);
