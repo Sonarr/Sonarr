@@ -39,6 +39,7 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.AnimeEpisodeFormat).ValidAnimeEpisodeFormat();
             SharedValidator.RuleFor(c => c.SeriesFolderFormat).ValidSeriesFolderFormat();
             SharedValidator.RuleFor(c => c.SeasonFolderFormat).ValidSeasonFolderFormat();
+            SharedValidator.RuleFor(c => c.SpecialsSeasonFolderFormat).NotEmpty();
         }
 
         private void UpdateNamingConfig(NamingConfigResource resource)
@@ -106,6 +107,10 @@ namespace NzbDrone.Api.Config
             sampleResource.SeasonFolderExample = nameSpec.SeasonFolderFormat.IsNullOrWhiteSpace()
                 ? "Invalid format"
                 : _filenameSampleService.GetSeasonFolderSample(nameSpec);
+
+            sampleResource.SpecialsSeasonFolderExample = nameSpec.SpecialsSeasonFolderFormat.IsNullOrWhiteSpace()
+                ? "Invalid format"
+                : _filenameSampleService.GetSpecialsSeasonFolderSample(nameSpec);
 
             return sampleResource.AsResponse();
         }

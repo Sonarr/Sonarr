@@ -9,17 +9,18 @@ module.exports = (function() {
     var view = Marionette.Layout.extend({
         template                            : 'Settings/MediaManagement/Naming/NamingViewTemplate',
         ui                                  : {
-            namingOptions            : '.x-naming-options',
-            renameEpisodesCheckbox   : '.x-rename-episodes',
-            singleEpisodeExample     : '.x-single-episode-example',
-            multiEpisodeExample      : '.x-multi-episode-example',
-            dailyEpisodeExample      : '.x-daily-episode-example',
-            animeEpisodeExample      : '.x-anime-episode-example',
-            animeMultiEpisodeExample : '.x-anime-multi-episode-example',
-            namingTokenHelper        : '.x-naming-token-helper',
-            multiEpisodeStyle        : '.x-multi-episode-style',
-            seriesFolderExample      : '.x-series-folder-example',
-            seasonFolderExample      : '.x-season-folder-example'
+            namingOptions               : '.x-naming-options',
+            renameEpisodesCheckbox      : '.x-rename-episodes',
+            singleEpisodeExample        : '.x-single-episode-example',
+            multiEpisodeExample         : '.x-multi-episode-example',
+            dailyEpisodeExample         : '.x-daily-episode-example',
+            animeEpisodeExample         : '.x-anime-episode-example',
+            animeMultiEpisodeExample    : '.x-anime-multi-episode-example',
+            namingTokenHelper           : '.x-naming-token-helper',
+            multiEpisodeStyle           : '.x-multi-episode-style',
+            seriesFolderExample         : '.x-series-folder-example',
+            seasonFolderExample         : '.x-season-folder-example',
+            specialsSeasonFolderExample : '.x-specials-season-folder-example'
         },
         events                              : {
             "change .x-rename-episodes"      : '_setFailedDownloadOptionsVisibility',
@@ -58,6 +59,7 @@ module.exports = (function() {
             this.ui.animeMultiEpisodeExample.html(this.namingSampleModel.get('animeMultiEpisodeExample'));
             this.ui.seriesFolderExample.html(this.namingSampleModel.get('seriesFolderExample'));
             this.ui.seasonFolderExample.html(this.namingSampleModel.get('seasonFolderExample'));
+            this.ui.specialsSeasonFolderExample.html(this.namingSampleModel.get('specialsSeasonFolderExample'));
         },
         _addToken                           : function(e) {
             e.preventDefault();
