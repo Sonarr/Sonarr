@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Organizer
         SampleResult GetAnimeMultiEpisodeSample(NamingConfig nameSpec);
         string GetSeriesFolderSample(NamingConfig nameSpec);
         string GetSeasonFolderSample(NamingConfig nameSpec);
+        string GetSpecialsSeasonFolderSample(NamingConfig nameSpec);
     }
 
     public class FileNameSampleService : IFilenameSampleService
@@ -225,6 +226,11 @@ namespace NzbDrone.Core.Organizer
         public string GetSeasonFolderSample(NamingConfig nameSpec)
         {
             return _buildFileNames.GetSeasonFolder(_standardSeries, _episode1.SeasonNumber, nameSpec);
+        }
+
+        public string GetSpecialsSeasonFolderSample(NamingConfig nameSpec)
+        {
+            return _buildFileNames.GetSeasonFolder(_standardSeries, 0, nameSpec);
         }
 
         private string BuildSample(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig nameSpec)

@@ -154,18 +154,11 @@ namespace NzbDrone.Core.Organizer
 
             if (series.SeasonFolder)
             {
-                if (seasonNumber == 0)
-                {
-                    path = Path.Combine(path, "Specials");
-                }
-                else
-                {
-                    var seasonFolder = GetSeasonFolder(series, seasonNumber);
+                var seasonFolder = GetSeasonFolder(series, seasonNumber);
 
-                    seasonFolder = CleanFileName(seasonFolder);
+                seasonFolder = CleanFileName(seasonFolder);
 
-                    path = Path.Combine(path, seasonFolder);
-                }
+                path = Path.Combine(path, seasonFolder);
             }
 
             return path;
@@ -243,7 +236,11 @@ namespace NzbDrone.Core.Organizer
             AddSeriesTokens(tokenHandlers, series);
             AddSeasonTokens(tokenHandlers, seasonNumber);
 
-            return CleanFolderName(ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers, namingConfig));
+            var format = seasonNumber == 0
+                ? namingConfig.SpecialsSeasonFolderFormat
+                : namingConfig.SeasonFolderFormat;
+
+            return CleanFolderName(ReplaceTokens(format, tokenHandlers, namingConfig));
         }
 
         public static string CleanTitle(string title)

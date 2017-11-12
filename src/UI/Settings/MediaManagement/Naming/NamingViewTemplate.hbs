@@ -188,6 +188,26 @@
         </div>
     </div>
 
+    <div class="form-group advanced-setting">
+        <label class="col-sm-3 control-label">Specials Season Folder Format</label>
+
+        <div class="col-sm-8">
+            <div class="input-group x-helper-input">
+                <input type="text" class="form-control naming-format" name="specialsSeasonFolderFormat" data-onkeyup="true"/>
+                <div class="input-group-btn btn-group x-naming-token-helper">
+                    <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-sonarr-add"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {{> SeriesTitleNamingPartial}}
+                        {{> SeasonNamingPartial}}
+                        {{> SeparatorNamingPartial}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="x-naming-options">
         <div class="form-group">
             <label class="col-sm-3 control-label">Multi-Episode Style</label>
@@ -257,6 +277,14 @@
 
         <div class="col-sm-8">
             <p class="form-control-static x-season-folder-example naming-example"></p>
+        </div>
+    </div>
+
+    <div class="form-group advanced-setting">
+        <label class="col-sm-3 control-label">Specials Season Folder Example</label>
+
+        <div class="col-sm-8">
+            <p class="form-control-static x-specials-season-folder-example naming-example"></p>
         </div>
     </div>
 </fieldset>
