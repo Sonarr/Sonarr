@@ -118,9 +118,15 @@ namespace NzbDrone.Core.Organizer
                 pattern = namingConfig.DailyEpisodeFormat;
             }
 
-            if (series.SeriesType == SeriesTypes.Anime && episodes.All(e => e.AbsoluteEpisodeNumber.HasValue))
+            if (series.SeriesType == SeriesTypes.Anime)
             {
-                pattern = namingConfig.AnimeEpisodeFormat;
+                // Only require anime episodes to have absolute numbering
+                // when the anime formatting uses absolute numbers.
+                if (!namingConfig.AnimeEpisodeFormat.Contains("{absolute") ||
+                    episodes.All(e => e.AbsoluteEpisodeNumber.HasValue))
+                {
+                    pattern = namingConfig.AnimeEpisodeFormat;
+                }
             }
 
             pattern = AddSeasonEpisodeNumberingTokens(pattern, tokenHandlers, episodes, namingConfig);

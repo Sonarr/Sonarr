@@ -410,6 +410,32 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         [Test]
+        public void should_use_anime_formatting_when_anime_does_not_use_absolute_numbering()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _episode1.AbsoluteEpisodeNumber = null;
+
+            _namingConfig.AnimeEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}";
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                .Should().Be("South.Park.S15E06");
+        }
+
+        [Test]
+        public void should_use_standard_formatting_when_anime_uses_absolute_numbering_and_has_no_absolute_number()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _episode1.AbsoluteEpisodeNumber = null;
+
+            _namingConfig.AnimeEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{absolute:00}";
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                .Should().Be("South.Park.S15E06.City.Sushi");
+        }
+
+        [Test]
         public void should_replace_standard_numbering_when_series_is_anime()
         {
             _series.SeriesType = SeriesTypes.Anime;
