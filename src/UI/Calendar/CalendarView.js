@@ -151,7 +151,7 @@ module.exports = Marionette.ItemView.extend({
             var seriesTitle = model.get('series').title;
             var start = model.get('airDateUtc');
             var runtime = model.get('series').runtime;
-            var end = moment(start).add('minutes', runtime).toISOString();
+            var end = moment(start).add(runtime, 'minutes').toISOString();
 
             var event = {
                 title       : seriesTitle,

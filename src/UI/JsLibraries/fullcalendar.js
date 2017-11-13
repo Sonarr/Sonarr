@@ -914,12 +914,7 @@ function makeMoment(args, parseAsUTC, parseZone) {
 				mom._ambigZone = true;
 			}
 			else if (isSingleString) {
-				if (mom.utcOffset) {
 					mom.utcOffset(input); // if not a valid zone, will assign UTC
-				}
-				else {
-					mom.zone(input); // for moment-pre-2.9
-				}
 			}
 		}
 	}
