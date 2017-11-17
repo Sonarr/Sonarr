@@ -34,9 +34,25 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_from_path(string path, int season, int episode)
         {
             var result = Parser.Parser.ParsePath(path.AsOsAgnostic());
+
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers[0].Should().Be(episode);
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
+
+            ExceptionVerification.IgnoreWarns();
+        }
+
+        [TestCase("01-03\\The Series Title (2010) - 1x01-02-03 - Episode Title HDTV-720p Proper", "The Series Title (2010)", 1, new [] { 1, 2, 3 })]
+        public void should_parse_multi_episode_from_path(string path, string title, int season, int[] episodes)
+        {
+            var result = Parser.Parser.ParsePath(path.AsOsAgnostic());
+
+            result.SeriesTitle.Should().Be(title);
+            result.EpisodeNumbers.Should().HaveCount(episodes.Length);
+            result.SeasonNumber.Should().Be(season);
+            result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.FullSeason.Should().BeFalse();
 
