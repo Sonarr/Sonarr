@@ -35,6 +35,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var actualHash = _proxy.AddTorrentFromMagnet(magnetLink, Settings);
 
+            if (actualHash.IsNullOrWhiteSpace())
+            {
+                throw new DownloadClientException("Deluge failed to add magnet " + magenetLink);
+            }
+
             if (!Settings.TvCategory.IsNullOrWhiteSpace())
             {
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
