@@ -1,6 +1,7 @@
 ﻿using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Rest;
+using System;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {
@@ -30,6 +31,10 @@ namespace NzbDrone.Core.Notifications.Webhook
                 request.Headers.ContentType = "application/json";
                 request.SetContent(body.ToJson());
 
+                if (!String.IsNullOrEmpty(settings.Username) || !String.IsNullOrEmpty(settings.Password))
+                {
+                    request.AddBasicAuthentication(settings.Username, settings.Password);
+                }
                 _httpClient.Execute(request);
             }
             catch (RestException ex)
