@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             _mockIndexer.SetupGet(s => s.SupportsSearch).Returns(true);
 
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.SearchEnabled(true))
+                  .Setup(s => s.AutomaticSearchEnabled(true))
                   .Returns(new List<IIndexer> { _mockIndexer.Object });
 
             Mocker.GetMock<IMakeDownloadDecision>()
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.EpisodeSearch(_xemEpisodes.First(), true);
+            Subject.EpisodeSearch(_xemEpisodes.First(), true, false);
 
             var criteria = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
 
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 1, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true, false);
 
             var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
 
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 2, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, 2, false, true, false);
 
             var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
 
@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 4, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, 4, false, true, false);
 
             var criteria1 = allCriteria.OfType<SeasonSearchCriteria>().ToList();
             var criteria2 = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 7, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, 7, false, true, false);
 
             var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
 
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var seasonNumber = 1;
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true, true);
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true, true, false);
 
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
@@ -239,7 +239,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var seasonNumber = 1;
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, false, true, false);
 
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
@@ -256,7 +256,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var seasonNumber = 1;
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true, true);
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true, true, false);
 
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
@@ -274,7 +274,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 1, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true, false);
 
             var criteria = allCriteria.OfType<DailySeasonSearchCriteria>().ToList();
 
@@ -293,7 +293,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 1, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true, false);
 
             var criteria1 = allCriteria.OfType<DailySeasonSearchCriteria>().ToList();
             var criteria2 = allCriteria.OfType<DailyEpisodeSearchCriteria>().ToList();
@@ -316,7 +316,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 1, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true, false);
 
             var criteria1 = allCriteria.OfType<DailySeasonSearchCriteria>().ToList();
             var criteria2 = allCriteria.OfType<DailyEpisodeSearchCriteria>().ToList();
@@ -332,7 +332,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 7, false, true);
+            Subject.SeasonSearch(_xemSeries.Id, 7, false, true, false);
 
             Mocker.GetMock<ISceneMappingService>()
                   .Verify(v => v.GetSceneNames(_xemSeries.Id, It.Is<List<int>>(l => l.Contains(7)), It.Is<List<int>>(l => l.Contains(7))), Times.Once());
