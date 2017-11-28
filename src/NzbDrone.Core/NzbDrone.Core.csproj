@@ -232,6 +232,7 @@
     <Compile Include="Datastore\Migration\043_convert_config_to_download_clients.cs" />
     <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs" />
     <Compile Include="Datastore\Migration\120_update_series_episodes_history_indexes.cs" />
+    <Compile Include="Datastore\Migration\119_separate_automatic_and_interactive_searches.cs" />
     <Compile Include="Datastore\Migration\118_add_history_eventType_index.cs" />
     <Compile Include="Datastore\Migration\045_add_indexes.cs" />
     <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />

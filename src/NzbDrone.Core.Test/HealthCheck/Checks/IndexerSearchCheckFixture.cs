@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.HealthCheck.Checks;
@@ -20,7 +20,11 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Returns(new List<IIndexer>());
 
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.SearchEnabled(It.IsAny<bool>()))
+                  .Setup(s => s.AutomaticSearchEnabled(It.IsAny<bool>()))
+                  .Returns(new List<IIndexer>());
+
+            Mocker.GetMock<IIndexerFactory>()
+                  .Setup(s => s.InteractiveSearchEnabled(It.IsAny<bool>()))
                   .Returns(new List<IIndexer>());
         }
 
@@ -35,17 +39,28 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Returns(new List<IIndexer> { _indexerMock.Object });
         }
 
-        private void GivenSearchEnabled()
+        private void GivenAutomaticSearchEnabled()
         {
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.SearchEnabled(It.IsAny<bool>()))
+                  .Setup(s => s.AutomaticSearchEnabled(It.IsAny<bool>()))
+                  .Returns(new List<IIndexer> { _indexerMock.Object });
+        }
+
+        private void GivenInteractiveSearchEnabled()
+        {
+            Mocker.GetMock<IIndexerFactory>()
+                  .Setup(s => s.InteractiveSearchEnabled(It.IsAny<bool>()))
                   .Returns(new List<IIndexer> { _indexerMock.Object });
         }
 
         private void GivenSearchFiltered()
         {
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.SearchEnabled(false))
+                  .Setup(s => s.AutomaticSearchEnabled(false))
+                  .Returns(new List<IIndexer> { _indexerMock.Object });
+
+            Mocker.GetMock<IIndexerFactory>()
+                  .Setup(s => s.InteractiveSearchEnabled(false))
                   .Returns(new List<IIndexer> { _indexerMock.Object });
         }
 
@@ -64,12 +79,31 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         }
 
         [Test]
-        public void should_return_ok_when_search_is_enabled()
+        public void should_return_ok_when_automatic_and__search_is_enabled()
         {
             GivenIndexer(false, true);
-            GivenSearchEnabled();
+            GivenAutomaticSearchEnabled();
+            GivenInteractiveSearchEnabled();
 
             Subject.Check().ShouldBeOk();
+        }
+
+        [Test]
+        public void should_return_warning_when_only_automatic_search_is_enabled()
+        {
+            GivenIndexer(false, true);
+            GivenAutomaticSearchEnabled();
+
+            Subject.Check().ShouldBeWarning();
+        }
+
+        [Test]
+        public void should_return_warning_when_only_interactive_search_is_enabled()
+        {
+            GivenIndexer(false, true);
+            GivenInteractiveSearchEnabled();
+
+            Subject.Check().ShouldBeWarning();
         }
 
         [Test]
@@ -79,6 +113,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Subject.Check().ShouldBeWarning();
         }
+
 
         [Test]
         public void should_return_filter_warning_if_search_is_enabled_but_filtered()

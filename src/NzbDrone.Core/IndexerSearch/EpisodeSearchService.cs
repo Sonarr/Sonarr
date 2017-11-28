@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         try
                         {
-                            decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true, userInvokedSearch);
+                            decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true, userInvokedSearch, false);
                         }
                         catch (Exception ex)
                         {
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         try
                         {
-                            decisions = _nzbSearchService.EpisodeSearch(season.First(), userInvokedSearch);
+                            decisions = _nzbSearchService.EpisodeSearch(season.First(), userInvokedSearch, false);
                         }
                         catch (Exception ex)
                         {
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
             foreach (var episodeId in message.EpisodeIds)
             {
-                var decisions = _nzbSearchService.EpisodeSearch(episodeId, message.Trigger == CommandTrigger.Manual);
+                var decisions = _nzbSearchService.EpisodeSearch(episodeId, message.Trigger == CommandTrigger.Manual, false);
                 var processed = _processDownloadDecisions.ProcessDecisions(decisions);
 
                 _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", processed.Grabbed.Count);
