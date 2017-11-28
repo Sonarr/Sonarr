@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
@@ -67,7 +67,8 @@ namespace NzbDrone.Core.Indexers.Newznab
             return new IndexerDefinition
                    {
                        EnableRss = false,
-                       EnableSearch = false,
+                       EnableAutomaticSearch = false,
+                       EnableInteractiveSearch = false,
                        Name = name,
                        Implementation = GetType().Name,
                        Settings = settings,
