@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Download;
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.IndexerSearch
                     continue;
                 }
 
-                var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, message.Trigger == CommandTrigger.Manual);
+                var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, message.Trigger == CommandTrigger.Manual, false);
                 downloadedCount += _processDownloadDecisions.ProcessDecisions(decisions).Grabbed.Count;
             }
 

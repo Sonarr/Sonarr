@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                   .Returns(_series);
 
             Mocker.GetMock<ISearchForNzb>()
-                  .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<int>(), false, true))
+                  .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<int>(), false, true, false))
                   .Returns(new List<DownloadDecision>());
 
             Mocker.GetMock<IProcessDownloadDecisions>()
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             Subject.Execute(new SeriesSearchCommand { SeriesId = _series.Id, Trigger = CommandTrigger.Manual });
 
             Mocker.GetMock<ISearchForNzb>()
-                .Verify(v => v.SeasonSearch(_series.Id, It.IsAny<int>(), false, true), Times.Exactly(_series.Seasons.Count(s => s.Monitored)));
+                .Verify(v => v.SeasonSearch(_series.Id, It.IsAny<int>(), false, true, false), Times.Exactly(_series.Seasons.Count(s => s.Monitored)));
         }
 
         [Test]
@@ -68,9 +68,9 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                               };
 
             Mocker.GetMock<ISearchForNzb>()
-                  .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<int>(), false, true))
+                  .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<int>(), false, true, false))
                   .Returns(new List<DownloadDecision>())
-                  .Callback<int, int, bool, bool>((seriesId, seasonNumber, missingOnly, userInvokedSearch) => seasonOrder.Add(seasonNumber));
+                  .Callback<int, int, bool, bool, bool>((seriesId, seasonNumber, missingOnly, userInvokedSearch, interactiveSearch) => seasonOrder.Add(seasonNumber));
 
             Subject.Execute(new SeriesSearchCommand { SeriesId = _series.Id, Trigger = CommandTrigger.Manual });
 

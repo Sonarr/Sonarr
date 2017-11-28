@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using Nancy;
@@ -89,7 +89,7 @@ namespace NzbDrone.Api.Indexers
         {
             try
             {
-                var decisions = _nzbSearchService.EpisodeSearch(episodeId, true);
+                var decisions = _nzbSearchService.EpisodeSearch(episodeId, true, true);
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);
