@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using NLog;
 
@@ -28,9 +28,9 @@ namespace NzbDrone.Core.Tv
                 return true;
             }
 
-            if (series.LastInfoSync >= DateTime.UtcNow.AddHours(-1))
+            if (series.LastInfoSync >= DateTime.UtcNow.AddHours(-6))
             {
-                _logger.Trace("Series {0} last updated less than 1 hour ago, should not be refreshed.", series.Title);
+                _logger.Trace("Series {0} last updated less than 6 hours ago, should not be refreshed.", series.Title);
                 return false;
             }
 
