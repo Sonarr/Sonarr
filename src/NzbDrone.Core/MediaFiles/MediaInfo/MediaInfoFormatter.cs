@@ -26,14 +26,20 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 {
                     if (mediaInfo.SchemaRevision >= 3)
                     {
+                        Logger.Debug("Formatiting audio channels using 'AudioChannels', with a value of: '{0}'", audioChannels);
+
                         return audioChannels;
                     }
 
                     return 0;
                 }
 
+                Logger.Debug("Formatiting audio channels using 'AudioChannelPositionsText', with a value of: '{0}'", audioChannelPositionsText);
+
                 return mediaInfo.AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
             }
+
+            Logger.Debug("Formatiting audio channels using 'AudioChannelPositions', with a value of: '{0}'", audioChannelPositions);
 
             if (audioChannelPositions.Contains("+"))
             {
