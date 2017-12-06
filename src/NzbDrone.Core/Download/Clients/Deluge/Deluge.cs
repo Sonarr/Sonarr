@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             if (actualHash.IsNullOrWhiteSpace())
             {
-                throw new DownloadClientException("Deluge failed to add magnet " + magenetLink);
+                throw new DownloadClientException("Deluge failed to add magnet " + magnetLink);
             }
 
             if (!Settings.TvCategory.IsNullOrWhiteSpace())
