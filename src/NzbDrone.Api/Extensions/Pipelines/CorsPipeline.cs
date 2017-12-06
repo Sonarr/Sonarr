@@ -12,7 +12,22 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         public void Register(IPipelines pipelines)
         {
+            pipelines.BeforeRequest.AddItemToEndOfPipeline(HandleRequest);
             pipelines.AfterRequest.AddItemToEndOfPipeline(HandleResponse);
+        }
+
+        private Response HandleRequest(NancyContext context)
+        {
+            if (context == null || context.Request.Method != "OPTIONS")
+            {
+                return null;
+            }
+
+            var response = new Response()
+                .WithStatusCode(HttpStatusCode.OK)
+                .WithContentType("");
+            ApplyResponseHeaders(response, context.Request);
+            return response;
         }
 
         private void HandleResponse(NancyContext context)
@@ -45,18 +60,21 @@ namespace NzbDrone.Api.Extensions.Pipelines
         {
             response.Headers.Add(AccessControlHeaders.AllowOrigin, allowOrigin);
 
-            if (response.Headers.ContainsKey("Allow"))
+            if (request.Method == "OPTIONS")
             {
-                allowedMethods = response.Headers["Allow"];
-            }
+                if (response.Headers.ContainsKey("Allow"))
+                {
+                    allowedMethods = response.Headers["Allow"];
+                }
 
-            response.Headers.Add(AccessControlHeaders.AllowMethods, allowedMethods);
+                response.Headers.Add(AccessControlHeaders.AllowMethods, allowedMethods);
 
-            if (request.Headers[AccessControlHeaders.RequestHeaders].Any())
-            {
-                var requestedHeaders = request.Headers[AccessControlHeaders.RequestHeaders].Join(", ");
+                if (request.Headers[AccessControlHeaders.RequestHeaders].Any())
+                {
+                    var requestedHeaders = request.Headers[AccessControlHeaders.RequestHeaders].Join(", ");
 
-                response.Headers.Add(AccessControlHeaders.AllowHeaders, requestedHeaders);
+                    response.Headers.Add(AccessControlHeaders.AllowHeaders, requestedHeaders);
+                }
             }
         }
     }
