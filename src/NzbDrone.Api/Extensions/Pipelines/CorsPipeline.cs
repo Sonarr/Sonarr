@@ -2,6 +2,7 @@
 using System.Linq;
 using Nancy;
 using Nancy.Bootstrapper;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Api.Extensions.Pipelines
 {
@@ -11,10 +12,10 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         public void Register(IPipelines pipelines)
         {
-            pipelines.AfterRequest.AddItemToEndOfPipeline((Action<NancyContext>) Handle);
+            pipelines.AfterRequest.AddItemToEndOfPipeline(HandleResponse);
         }
 
-        private void Handle(NancyContext context)
+        private void HandleResponse(NancyContext context)
         {
             if (context == null || context.Response.Headers.ContainsKey(AccessControlHeaders.AllowOrigin))
             {
@@ -26,20 +27,35 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         private static void ApplyResponseHeaders(Response response, Request request)
         {
-            var allowedMethods = "GET, OPTIONS, PATCH, POST, PUT, DELETE";
+            if (request.IsApiRequest())
+            {
+                // Allow Cross-Origin access to the API since it's protected with the apikey, and nothing else.
+                ApplyCorsResponseHeaders(response, request, "*", "GET, OPTIONS, PATCH, POST, PUT, DELETE");
+            }
+            else if (request.IsSharedContentRequest())
+            {
+                // Allow Cross-Origin access to specific shared content such as mediacovers and images.
+                ApplyCorsResponseHeaders(response, request, "*", "GET, OPTIONS");
+            }
+
+            // Disallow Cross-Origin access for any other route.
+        }
+
+        private static void ApplyCorsResponseHeaders(Response response, Request request, string allowOrigin, string allowedMethods)
+        {
+            response.Headers.Add(AccessControlHeaders.AllowOrigin, allowOrigin);
 
             if (response.Headers.ContainsKey("Allow"))
             {
                 allowedMethods = response.Headers["Allow"];
             }
-            
-            var requestedHeaders = string.Join(", ", request.Headers[AccessControlHeaders.RequestHeaders]);
 
-            response.Headers.Add(AccessControlHeaders.AllowOrigin, "*");
             response.Headers.Add(AccessControlHeaders.AllowMethods, allowedMethods);
 
             if (request.Headers[AccessControlHeaders.RequestHeaders].Any())
             {
+                var requestedHeaders = request.Headers[AccessControlHeaders.RequestHeaders].Join(", ");
+
                 response.Headers.Add(AccessControlHeaders.AllowHeaders, requestedHeaders);
             }
         }
