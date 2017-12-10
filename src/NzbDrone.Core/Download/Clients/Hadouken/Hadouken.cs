@@ -63,7 +63,8 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                     RemainingTime = eta,
                     Title = torrent.Name,
                     TotalSize = torrent.TotalSize,
-                    SeedRatio = (double) torrent.UploadedBytes / torrent.DownloadedBytes
+                    SeedRatio = torrent.DownloadedBytes <= 0 ? 0 :
+                        (double) torrent.UploadedBytes / torrent.DownloadedBytes
                 };
 
                 if (!string.IsNullOrEmpty(torrent.Error))

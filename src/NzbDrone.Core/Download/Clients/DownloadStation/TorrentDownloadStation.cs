@@ -287,7 +287,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 return new Nullable<double>();
             }
 
-            return (double) uploaded / downloaded;
+            return downloaded <= 0 ? 0 : (double) uploaded / downloaded;
         }
 
         protected ValidationFailure TestOutputPath()
