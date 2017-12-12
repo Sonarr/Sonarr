@@ -49,7 +49,11 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         public override bool CanHandle(string resourceUrl)
         {
-            return !resourceUrl.Contains(".") && !resourceUrl.StartsWith("/login");
+            resourceUrl = resourceUrl.ToLowerInvariant();
+
+            return !resourceUrl.StartsWith("/content") &&
+                   !resourceUrl.Contains(".") &&
+                   !resourceUrl.StartsWith("/login");
         }
 
         public override Response GetResponse(string resourceUrl)

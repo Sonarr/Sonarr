@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nancy.Responses;
 using NLog;
 using Nancy;
 using NzbDrone.Api.Frontend.Mappers;
