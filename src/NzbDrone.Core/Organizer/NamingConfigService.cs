@@ -21,8 +21,16 @@ namespace NzbDrone.Core.Organizer
 
             if (config == null)
             {
-                _repository.Insert(NamingConfig.Default);
-                config = _repository.Single();
+                lock (_repository)
+                {
+                    config = _repository.SingleOrDefault();
+
+                    if (config == null)
+                    {
+                        _repository.Insert(NamingConfig.Default);
+                        config = _repository.Single();
+                    }
+                }
             }
 
             return config;
