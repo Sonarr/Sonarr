@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.TransferProviders
@@ -19,8 +20,10 @@ namespace NzbDrone.Core.TransferProviders
         public ProviderDefinition Definition { get; set; }
         public abstract ValidationResult Test();
 
-        public abstract string Link { get; }
-
         public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
+
+        public abstract bool IsAvailable(DownloadClientPath item);
+
+        public abstract IVirtualDiskProvider GetFileSystemWrapper(DownloadClientPath item, string tempPath = null);
     }
 }

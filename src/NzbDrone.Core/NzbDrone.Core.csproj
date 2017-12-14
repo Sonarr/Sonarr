@@ -503,6 +503,7 @@
     <Compile Include="Download\Clients\uTorrent\UTorrentTorrentStatus.cs" />
     <Compile Include="Download\Clients\Vuze\Vuze.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />
+    <Compile Include="Download\DownloadClientPath.cs" />
     <Compile Include="Download\DownloadClientStatus.cs" />
     <Compile Include="Download\DownloadEventHub.cs" />
     <Compile Include="Download\DownloadClientStatusRepository.cs" />
@@ -947,7 +948,10 @@
     <Compile Include="Qualities\QualitySource.cs" />
     <Compile Include="Qualities\Revision.cs" />
     <Compile Include="TransferProviders\Providers\DefaultTransfer.cs" />
+    <Compile Include="TransferProviders\Providers\DirectVirtualDiskProvider.cs" />
     <Compile Include="TransferProviders\Providers\Dummy.cs" />
+    <Compile Include="TransferProviders\Providers\EmptyVirtualDiskProvider.cs" />
+    <Compile Include="TransferProviders\Providers\MountVirtualDiskProvider.cs" />
     <Compile Include="TransferProviders\TransferProviderDefinition.cs" />
     <Compile Include="TransferProviders\TransferProviderRepository.cs" />
     <Compile Include="TransferProviders\Providers\CustomTransfer.cs" />

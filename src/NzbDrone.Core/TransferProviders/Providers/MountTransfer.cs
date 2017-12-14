@@ -1,6 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common.Disk;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
@@ -21,18 +25,51 @@ namespace NzbDrone.Core.TransferProviders.Providers
 
     public class MountTransfer : TransferProviderBase<MountSettings>
     {
-        public override string Link
-        {
-            get { throw new NotImplementedException(); }
-        }
+        private readonly Logger _logger;
+        private readonly IDiskProvider _diskProvider;
+        private readonly IDiskTransferService _transferService;
 
-        public override string Name
+        public override string Name => "Mount";
+
+        public MountTransfer(IDiskTransferService transferService, IDiskProvider diskProvider, Logger logger)
         {
-            get { throw new NotImplementedException(); }
+            _logger = logger;
+            _diskProvider = diskProvider;
+            _transferService = transferService;
         }
 
         public override ValidationResult Test()
         {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsAvailable(DownloadClientPath item)
+        {
+            if (item == null) return false;
+
+            var path = ResolvePath(item);
+
+            return _diskProvider.FolderExists(path) || _diskProvider.FileExists(path);
+        }
+
+        // TODO: Give MountVirtualDiskProvider the tempPath.
+        public override IVirtualDiskProvider GetFileSystemWrapper(DownloadClientPath item, string tempPath = null)
+        {
+            var path = ResolvePath(item);
+
+            if (_diskProvider.FolderExists(path) || _diskProvider.FileExists(path))
+            {
+                // Expose a virtual filesystem with only that directory/file in it.
+                // This allows the caller to delete the directory if desired, but not it's siblings.
+                return new MountVirtualDiskProvider(_diskProvider, _transferService, Path.GetDirectoryName(path), path);
+            }
+
+            return new EmptyVirtualDiskProvider();
+        }
+
+        protected string ResolvePath(DownloadClientPath path)
+        {
+            // Same logic as RemotePathMapping service.
             throw new NotImplementedException();
         }
     }

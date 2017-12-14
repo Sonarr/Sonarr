@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NzbDrone.Common.Disk;
@@ -15,6 +16,9 @@ namespace NzbDrone.Core.TransferProviders
 
         // Returns recursive list of all files in the 'volume'/'filesystem'/'dataset' (whatever we want to call it).
         string[] GetFiles();
+
+        // Opens a readable stream.
+        Stream OpenFile(string vfsFilePath);
 
         // Copies file from the virtual filesystem to the actual one.
         TransferTask CopyFile(string vfsSourcePath, string destinationPath);
