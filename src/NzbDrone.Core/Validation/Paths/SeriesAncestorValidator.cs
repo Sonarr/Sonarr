@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentValidation.Validators;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Validation.Paths
         private readonly ISeriesService _seriesService;
 
         public SeriesAncestorValidator(ISeriesService seriesService)
-            : base("Path is an ancestor of an existing path")
+            : base("Path is an ancestor of an existing series")
         {
             _seriesService = seriesService;
         }

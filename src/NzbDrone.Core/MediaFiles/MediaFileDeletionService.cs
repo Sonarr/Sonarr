@@ -21,16 +21,19 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDiskProvider _diskProvider;
         private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly IMediaFileService _mediaFileService;
+        private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
         public MediaFileDeletionService(IDiskProvider diskProvider,
                                         IRecycleBinProvider recycleBinProvider,
                                         IMediaFileService mediaFileService,
+                                        ISeriesService seriesService,
                                         Logger logger)
         {
             _diskProvider = diskProvider;
             _recycleBinProvider = recycleBinProvider;
             _mediaFileService = mediaFileService;
+            _seriesService = seriesService;
             _logger = logger;
         }
 
@@ -76,6 +79,26 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (message.DeleteFiles)
             {
+                var series = message.Series;
+                var allSeries = _seriesService.GetAllSeries();
+
+                foreach (var s in allSeries)
+                {
+                    if (s.Id == series.Id) continue;
+
+                    if (series.Path.IsParentPath(s.Path))
+                    {
+                        _logger.Error("Series path: '{0}' is a parent of another series, not deleting files.", series.Path);
+                        return;
+                    }
+
+                    if (series.Path.PathEquals(s.Path))
+                    {
+                        _logger.Error("Series path: '{0}' is the same as another series, not deleting files.", series.Path);
+                        return;
+                    }
+                }
+
                 if (_diskProvider.FolderExists(message.Series.Path))
                 {
                     _recycleBinProvider.DeleteFolder(message.Series.Path);

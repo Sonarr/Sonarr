@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
@@ -45,6 +45,7 @@ namespace NzbDrone.Api.Series
                             SeriesExistsValidator seriesExistsValidator,
                             DroneFactoryValidator droneFactoryValidator,
                             SeriesAncestorValidator seriesAncestorValidator,
+                            SystemFolderValidator systemFolderValidator,
                             ProfileExistsValidator profileExistsValidator
             )
             : base(signalRBroadcaster)
@@ -71,6 +72,7 @@ namespace NzbDrone.Api.Series
                            .SetValidator(seriesPathValidator)
                            .SetValidator(droneFactoryValidator)
                            .SetValidator(seriesAncestorValidator)
+                           .SetValidator(systemFolderValidator)
                            .When(s => !s.Path.IsNullOrWhiteSpace());
 
             SharedValidator.RuleFor(s => s.ProfileId).SetValidator(profileExistsValidator);
