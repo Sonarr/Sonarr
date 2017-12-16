@@ -10,7 +10,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
-using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.NzbVortex
 {
@@ -22,10 +21,9 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
                        IHttpClient httpClient,
                        IConfigService configService,
                        IDiskProvider diskProvider,
-                       IRemotePathMappingService remotePathMappingService,
                        IValidateNzbs nzbValidationService,
                        Logger logger)
-            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger)
+            : base(httpClient, configService, diskProvider, nzbValidationService, logger)
         {
             _proxy = proxy;
         }
@@ -88,7 +86,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
                         break;
                 }
 
-                queueItem.OutputPath = GetOutputPath(vortexQueueItem, queueItem);
+                queueItem.OutputPath = new DownloadClientPath(Definition.Id, GetOutputPath(vortexQueueItem, queueItem));
 
                 if (vortexQueueItem.State == NzbVortexStateType.PasswordRequest)
                 {
@@ -221,7 +219,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
 
         private OsPath GetOutputPath(NzbVortexQueueItem vortexQueueItem, DownloadClientItem queueItem)
         {
-            var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(vortexQueueItem.DestinationPath));
+            var outputPath = new OsPath(vortexQueueItem.DestinationPath);
 
             if (outputPath.FileName == vortexQueueItem.UiTitle)
             {

@@ -11,7 +11,6 @@ using NzbDrone.Core.Validation;
 namespace NzbDrone.Core.TransferProviders.Providers
 {
     // Indicates that the remote path is mounted locally, and thus should honor the DownloadItem isReadonly flag and may transfer slowly.
-
     public class MountSettings : IProviderConfig
     {
         public string DownloadClientPath { get; set; }
@@ -48,6 +47,10 @@ namespace NzbDrone.Core.TransferProviders.Providers
             if (item == null) return false;
 
             var path = ResolvePath(item);
+            if (path == null)
+            {
+                return false;
+            }
 
             return _diskProvider.FolderExists(path) || _diskProvider.FileExists(path);
         }
@@ -69,8 +72,15 @@ namespace NzbDrone.Core.TransferProviders.Providers
 
         protected string ResolvePath(DownloadClientPath path)
         {
-            // Same logic as RemotePathMapping service.
-            throw new NotImplementedException();
+            var remotePath = path.Path;
+            if (new OsPath(Settings.DownloadClientPath).Contains(remotePath))
+            {
+                var localPath = new OsPath(Settings.MountPath) + (remotePath - new OsPath(Settings.DownloadClientPath));
+
+                return localPath.FullPath;
+            }
+
+            return null;
         }
     }
 }

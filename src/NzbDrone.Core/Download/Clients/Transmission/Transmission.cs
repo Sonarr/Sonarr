@@ -6,7 +6,6 @@ using NzbDrone.Core.Configuration;
 using NLog;
 using FluentValidation.Results;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
 {
@@ -17,9 +16,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                             IHttpClient httpClient,
                             IConfigService configService,
                             IDiskProvider diskProvider,
-                            IRemotePathMappingService remotePathMappingService,
                             Logger logger)
-            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, logger)
         {
         }
 

@@ -949,7 +949,6 @@
     <Compile Include="Qualities\Revision.cs" />
     <Compile Include="TransferProviders\Providers\DefaultTransfer.cs" />
     <Compile Include="TransferProviders\Providers\DirectVirtualDiskProvider.cs" />
-    <Compile Include="TransferProviders\Providers\Dummy.cs" />
     <Compile Include="TransferProviders\Providers\EmptyVirtualDiskProvider.cs" />
     <Compile Include="TransferProviders\Providers\MountVirtualDiskProvider.cs" />
     <Compile Include="TransferProviders\TransferProviderDefinition.cs" />
@@ -958,9 +957,6 @@
     <Compile Include="TransferProviders\ITransferProvider.cs" />
     <Compile Include="TransferProviders\IVirtualDiskProvider.cs" />
     <Compile Include="TransferProviders\Providers\MountTransfer.cs" />
-    <Compile Include="TransferProviders\old\RemotePathMapping.cs" />
-    <Compile Include="TransferProviders\old\RemotePathMappingRepository.cs" />
-    <Compile Include="TransferProviders\old\RemotePathMappingService.cs" />
     <Compile Include="MediaFiles\TorrentInfo\TorrentFileInfoReader.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
     <Compile Include="Notifications\Email\Email.cs">

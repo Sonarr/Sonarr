@@ -10,7 +10,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
@@ -24,9 +23,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             IHttpClient httpClient,
             IConfigService configService,
             IDiskProvider diskProvider,
-            IRemotePathMappingService remotePathMappingService,
             Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, logger)
         {
             _proxy = proxy;
         }
@@ -54,8 +52,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     if (!directories.Contains(Settings.TvCategory)) continue;
                 }
 
-                outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
-
                 var item = new DownloadClientItem();
                 item.DownloadId = torrent.HashString.ToUpper();
                 item.Category = Settings.TvCategory;
@@ -63,7 +59,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
                 item.DownloadClient = Definition.Name;
 
-                item.OutputPath = GetOutputPath(outputPath, torrent);
+                item.OutputPath = new DownloadClientPath(Definition.Id, GetOutputPath(outputPath, torrent));
                 item.TotalSize = torrent.TotalSize;
                 item.RemainingSize = torrent.LeftUntilDone;
                 if (torrent.Eta >= 0)
@@ -122,7 +118,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
-                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(destDir)) }
+                OutputRootFolders = new List<DownloadClientPath> { new DownloadClientPath(Definition.Id, new OsPath(destDir)) }
             };
         }
 

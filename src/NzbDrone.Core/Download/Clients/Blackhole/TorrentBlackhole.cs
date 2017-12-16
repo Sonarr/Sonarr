@@ -11,7 +11,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download.Clients.Blackhole
@@ -29,9 +28,8 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                                 IHttpClient httpClient,
                                 IConfigService configService,
                                 IDiskProvider diskProvider,
-                                IRemotePathMappingService remotePathMappingService,
                                 Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, logger)
         {
             _scanWatchFolder = scanWatchFolder;
 
@@ -99,7 +97,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                     TotalSize = item.TotalSize,
                     RemainingTime = item.RemainingTime,
 
-                    OutputPath = item.OutputPath,
+                    OutputPath = new DownloadClientPath(Definition.Id, item.OutputPath),
 
                     Status = item.Status,
 
@@ -124,7 +122,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             return new DownloadClientInfo
             {
                 IsLocalhost = true,
-                OutputRootFolders = new List<OsPath> { new OsPath(Settings.WatchFolder) }
+                OutputRootFolders = new List<DownloadClientPath> { new DownloadClientPath(Definition.Id, new OsPath(Settings.WatchFolder)) }
             };
         }
 

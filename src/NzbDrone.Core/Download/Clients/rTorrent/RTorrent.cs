@@ -13,7 +13,6 @@ using FluentValidation.Results;
 using NzbDrone.Core.Download.Clients.rTorrent;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download.Clients.RTorrent
@@ -28,10 +27,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                         IHttpClient httpClient,
                         IConfigService configService,
                         IDiskProvider diskProvider,
-                        IRemotePathMappingService remotePathMappingService,
                         IRTorrentDirectoryValidator rTorrentDirectoryValidator,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, logger)
         {
             _proxy = proxy;
             _rTorrentDirectoryValidator = rTorrentDirectoryValidator;
@@ -100,7 +98,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 item.DownloadClient = Definition.Name;
                 item.Title = torrent.Name;
                 item.DownloadId = torrent.Hash;
-                item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.Path));
+                item.OutputPath = new DownloadClientPath(Definition.Id, new OsPath(torrent.Path));
                 item.TotalSize = torrent.TotalSize;
                 item.RemainingSize = torrent.RemainingSize;
                 item.Category = torrent.Category;

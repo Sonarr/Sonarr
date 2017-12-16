@@ -10,7 +10,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
-using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -22,10 +21,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                        IHttpClient httpClient,
                        IConfigService configService,
                        IDiskProvider diskProvider,
-                       IRemotePathMappingService remotePathMappingService,
                        IValidateNzbs nzbValidationService,
                        Logger logger)
-            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger)
+            : base(httpClient, configService, diskProvider, nzbValidationService, logger)
         {
             _proxy = proxy;
         }
@@ -163,23 +161,22 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     historyItem.Status = DownloadItemStatus.Downloading;
                 }
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(sabHistoryItem.Storage));
+                var outputPath = new OsPath(sabHistoryItem.Storage);
 
                 if (!outputPath.IsEmpty)
                 {
-                    historyItem.OutputPath = outputPath;
-
                     var parent = outputPath.Directory;
                     while (!parent.IsEmpty)
                     {
                         if (parent.FileName == sabHistoryItem.Title)
                         {
-                            historyItem.OutputPath = parent;
+                            outputPath = parent;
                         }
                         parent = parent.Directory;
                     }
-                }
 
+                    historyItem.OutputPath = new DownloadClientPath(Definition.Id, outputPath);
+                }
 
                 historyItems.Add(historyItem);
             }
@@ -261,7 +258,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (category != null)
             {
-                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, category.FullPath) };
+                status.OutputRootFolders = new List<DownloadClientPath> { new DownloadClientPath(Definition.Id, category.FullPath) };
             }
 
             return status;

@@ -11,7 +11,6 @@ using NzbDrone.Core.Validation;
 using NLog;
 using FluentValidation.Results;
 using System.Net;
-using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
 {
@@ -24,9 +23,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                       IHttpClient httpClient,
                       IConfigService configService,
                       IDiskProvider diskProvider,
-                      IRemotePathMappingService remotePathMappingService,
                       Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, logger)
         {
             _proxy = proxy;
         }
@@ -106,8 +104,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
                 item.DownloadClient = Definition.Name;
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadPath));
-                item.OutputPath = outputPath + torrent.Name;
+                var outputPath = new OsPath(torrent.DownloadPath) + torrent.Name;
+                item.OutputPath = new DownloadClientPath(Definition.Id, outputPath);
                 item.RemainingSize = torrent.Size - torrent.BytesDownloaded;
 
                 try
@@ -176,7 +174,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             if (!destDir.IsEmpty)
             {
-                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
+                status.OutputRootFolders = new List<DownloadClientPath> { new DownloadClientPath(Definition.Id, destDir) };
             }
 
             return status;

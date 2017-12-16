@@ -8,7 +8,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 
@@ -21,9 +20,8 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
         public Pneumatic(IHttpClient httpClient,
                          IConfigService configService,
                          IDiskProvider diskProvider,
-                         IRemotePathMappingService remotePathMappingService,
                          Logger logger)
-            : base(configService, diskProvider, remotePathMappingService, logger)
+            : base(configService, diskProvider, logger)
         {
             _httpClient = httpClient;
         }
@@ -82,7 +80,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
                     TotalSize = _diskProvider.GetFileSize(file),
 
-                    OutputPath = new OsPath(file)
+                    OutputPath = new DownloadClientPath(Definition.Id, new OsPath(file))
                 };
 
                 if (_diskProvider.IsFileLocked(file))

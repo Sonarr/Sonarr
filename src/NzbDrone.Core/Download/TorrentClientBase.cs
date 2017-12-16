@@ -12,7 +12,6 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Configuration;
 using NLog;
-using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download
 {
@@ -26,9 +25,8 @@ namespace NzbDrone.Core.Download
                                     IHttpClient httpClient,
                                     IConfigService configService,
                                     IDiskProvider diskProvider,
-                                    IRemotePathMappingService remotePathMappingService,
                                     Logger logger)
-            : base(configService, diskProvider, remotePathMappingService, logger)
+            : base(configService, diskProvider, logger)
         {
             _httpClient = httpClient;
             _torrentFileInfoReader = torrentFileInfoReader;

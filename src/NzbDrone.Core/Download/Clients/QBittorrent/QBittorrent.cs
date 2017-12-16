@@ -11,7 +11,6 @@ using NzbDrone.Core.Validation;
 using FluentValidation.Results;
 using System.Net;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
 {
@@ -24,9 +23,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                            IHttpClient httpClient,
                            IConfigService configService,
                            IDiskProvider diskProvider,
-                           IRemotePathMappingService remotePathMappingService,
                            Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, logger)
         {
             _proxy = proxy;
         }
@@ -109,16 +107,17 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 item.RemainingSize = (long)(torrent.Size * (1.0 - torrent.Progress));
                 item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
 
-                item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
+                var outputPath = new OsPath(torrent.SavePath);
+                if (!outputPath.IsEmpty && outputPath.FileName != torrent.Name)
+                {
+                    outputPath += torrent.Name;
+                }
+                item.OutputPath = new DownloadClientPath(Definition.Id, outputPath);
 
                 // Avoid removing torrents that haven't reached the global max ratio.
                 // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
                 item.CanMoveFiles = item.CanBeRemoved = (!config.MaxRatioEnabled || config.MaxRatio <= torrent.Ratio) && torrent.State == "pausedUP";
 
-                if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
-                {
-                    item.OutputPath += torrent.Name;
-                }
 
                 switch (torrent.State)
                 {
@@ -176,7 +175,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
-                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) }
+                OutputRootFolders = new List<DownloadClientPath> { new DownloadClientPath(Definition.Id, destDir) }
             };
         }
 

@@ -8,7 +8,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
@@ -19,7 +18,6 @@ namespace NzbDrone.Core.Download
     {
         protected readonly IConfigService _configService;
         protected readonly IDiskProvider _diskProvider;
-        protected readonly IRemotePathMappingService _remotePathMappingService;
         protected readonly Logger _logger;
 
         public abstract string Name { get; }
@@ -36,14 +34,12 @@ namespace NzbDrone.Core.Download
 
         protected TSettings Settings => (TSettings)Definition.Settings;
 
-        protected DownloadClientBase(IConfigService configService, 
-            IDiskProvider diskProvider, 
-            IRemotePathMappingService remotePathMappingService,
+        protected DownloadClientBase(IConfigService configService,
+            IDiskProvider diskProvider,
             Logger logger)
         {
             _configService = configService;
             _diskProvider = diskProvider;
-            _remotePathMappingService = remotePathMappingService;
             _logger = logger;
         }
 
@@ -76,6 +72,9 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
+            // FIXME: Doesn't work if remote.
+            throw new NotSupportedException();
+            /*
             if (item.OutputPath.IsEmpty)
             {
                 _logger.Trace("[{0}] Doesn't have an outputPath, skipping delete data.", item.Title);
@@ -104,7 +103,7 @@ namespace NzbDrone.Core.Download
             catch (Exception ex)
             {
                 _logger.Warn(ex, string.Format("[{0}] Error occurred while trying to delete data from '{1}'.", item.Title, item.OutputPath));
-            }
+            }*/
         }
 
         public ValidationResult Test()

@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Download
         public long RemainingSize { get; set; }
         public TimeSpan? RemainingTime { get; set; }
 
-        public OsPath OutputPath { get; set; }
+        public DownloadClientPath OutputPath { get; set; }
         public string Message { get; set; }
 
         public DownloadItemStatus Status { get; set; }

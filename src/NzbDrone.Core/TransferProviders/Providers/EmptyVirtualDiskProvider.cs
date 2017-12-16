@@ -8,7 +8,6 @@ namespace NzbDrone.Core.TransferProviders.Providers
     {
         public bool SupportStreaming => true;
 
-
         public string[] GetFiles()
         {
             return new string[0];

@@ -15,7 +15,6 @@ using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -105,8 +104,7 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<PendingRelease>().RegisterModel("PendingReleases")
                   .Ignore(e => e.RemoteEpisode);
-
-            Mapper.Entity<RemotePathMapping>().RegisterModel("RemotePathMappings");
+            
             Mapper.Entity<Tag>().RegisterModel("Tags");
             Mapper.Entity<Restriction>().RegisterModel("Restrictions");
 

@@ -10,7 +10,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
@@ -25,10 +24,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                       IHttpClient httpClient,
                       IConfigService configService,
                       IDiskProvider diskProvider,
-                      IRemotePathMappingService remotePathMappingService,
                       IValidateNzbs nzbValidationService,
                       Logger logger)
-            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger)
+            : base(httpClient, configService, diskProvider, nzbValidationService, logger)
         {
             _proxy = proxy;
         }
@@ -123,7 +121,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.DownloadId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
                 historyItem.Title = item.Name;
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
-                historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(item.DestDir));
+                historyItem.OutputPath = new DownloadClientPath(Definition.Id, new OsPath(item.DestDir));
                 historyItem.Category = item.Category;
                 historyItem.Message = $"PAR Status: {item.ParStatus} - Unpack Status: {item.UnpackStatus} - Move Status: {item.MoveStatus} - Script Status: {item.ScriptStatus} - Delete Status: {item.DeleteStatus} - Mark Status: {item.MarkStatus}";
                 historyItem.Status = DownloadItemStatus.Completed;
@@ -208,7 +206,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             if (category != null)
             {
-                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(category.DestDir)) };
+                status.OutputRootFolders = new List<DownloadClientPath> { new DownloadClientPath(Definition.Id, new OsPath(category.DestDir)) };
             }
 
             return status;

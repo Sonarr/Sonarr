@@ -10,7 +10,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.DownloadStation.Proxies;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
@@ -31,11 +30,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                                      IHttpClient httpClient,
                                      IConfigService configService,
                                      IDiskProvider diskProvider,
-                                     IRemotePathMappingService remotePathMappingService,
                                      IValidateNzbs nzbValidationService,
                                      Logger logger
                                      )
-            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger)
+            : base(httpClient, configService, diskProvider, nzbValidationService, logger)
         {
             _dsInfoProxy = dsInfoProxy;
             _dsTaskProxy = dsTaskProxy;
@@ -111,7 +109,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
                 if (item.Status == DownloadItemStatus.Completed || item.Status == DownloadItemStatus.Failed)
                 {
-                    item.OutputPath = GetOutputPath(outputPath, nzb, serialNumber);
+                    item.OutputPath = new DownloadClientPath(Definition.Id, GetOutputPath(outputPath, nzb, serialNumber));
                 }
 
                 items.Add(item);
@@ -124,7 +122,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var fullPath = _sharedFolderResolver.RemapToFullPath(outputPath, Settings, serialNumber);
 
-            var remotePath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, fullPath);
+            var remotePath = fullPath;
 
             var finalPath = remotePath + task.Title;
 
@@ -140,7 +138,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 return new DownloadClientInfo
                 {
                     IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
-                    OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(path)) }
+                    OutputRootFolders = new List<DownloadClientPath> { new DownloadClientPath(Definition.Id, new OsPath(path)) }
                 };
             }
             catch (DownloadClientException e)

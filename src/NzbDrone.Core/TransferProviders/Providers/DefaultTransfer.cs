@@ -73,7 +73,7 @@ namespace NzbDrone.Core.TransferProviders.Providers
 
         protected string ResolvePath(DownloadClientPath path)
         {
-            return path.Path;
+            return path.Path.FullPath;
         }
     }
 }
