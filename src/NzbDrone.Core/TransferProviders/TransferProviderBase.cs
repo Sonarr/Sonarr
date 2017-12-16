@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.ThingiProvider;
 
@@ -21,5 +22,21 @@ namespace NzbDrone.Core.TransferProviders
 
         public abstract bool IsAvailable(DownloadClientPath item);
         public abstract IVirtualDiskProvider GetFileSystemWrapper(DownloadClientPath item, string tempPath = null);
+
+
+
+        protected static string ResolvePath(OsPath path, string currentParent, string newParent)
+        {
+            var currentParentPath = new OsPath(currentParent);
+            var newParentPath = new OsPath(newParent);
+            if (!currentParentPath.Contains(path))
+            {
+                return null;
+            }
+
+            var newPath = newParentPath + (path - currentParentPath);
+
+            return newPath.FullPath;
+        }
     }
 }

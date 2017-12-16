@@ -72,15 +72,7 @@ namespace NzbDrone.Core.TransferProviders.Providers
 
         protected string ResolvePath(DownloadClientPath path)
         {
-            var remotePath = path.Path;
-            if (new OsPath(Settings.DownloadClientPath).Contains(remotePath))
-            {
-                var localPath = new OsPath(Settings.MountPath) + (remotePath - new OsPath(Settings.DownloadClientPath));
-
-                return localPath.FullPath;
-            }
-
-            return null;
+            return ResolvePath(path.Path, Settings.DownloadClientPath, Settings.MountPath);
         }
     }
 }
