@@ -46,11 +46,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         Paused,
         Finishing,
         Finished,
-        HashChecking,
+        Hash_Checking,
         Seeding,
-        FileHostingWaiting,
+        FileHosting_Waiting,
         Extracting,
-        Error
+        Error,
+        Captcha_Needed
     }
 
     public enum DownloadStationPriority
