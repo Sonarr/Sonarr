@@ -604,11 +604,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
         [TestCase(DownloadStationTaskStatus.Extracting, DownloadItemStatus.Downloading)]
         [TestCase(DownloadStationTaskStatus.Finished, DownloadItemStatus.Completed)]
         [TestCase(DownloadStationTaskStatus.Finishing, DownloadItemStatus.Downloading)]
-        [TestCase(DownloadStationTaskStatus.Hash_Checking, DownloadItemStatus.Downloading)]
-        [TestCase(DownloadStationTaskStatus.Captcha_Needed, DownloadItemStatus.Downloading)]
+        [TestCase(DownloadStationTaskStatus.HashChecking, DownloadItemStatus.Downloading)]
+        [TestCase(DownloadStationTaskStatus.CaptchaNeeded, DownloadItemStatus.Downloading)]
         [TestCase(DownloadStationTaskStatus.Paused, DownloadItemStatus.Paused)]
         [TestCase(DownloadStationTaskStatus.Seeding, DownloadItemStatus.Completed)]
-        [TestCase(DownloadStationTaskStatus.FileHosting_Waiting, DownloadItemStatus.Queued)]
+        [TestCase(DownloadStationTaskStatus.FileHostingWaiting, DownloadItemStatus.Queued)]
         [TestCase(DownloadStationTaskStatus.Waiting, DownloadItemStatus.Queued)]
         public void GetItems_should_return_item_as_downloadItemStatus(DownloadStationTaskStatus apiStatus, DownloadItemStatus expectedItemStatus)
         {

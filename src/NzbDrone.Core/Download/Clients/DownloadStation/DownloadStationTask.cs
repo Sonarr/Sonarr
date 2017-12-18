@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         [JsonProperty(PropertyName = "status_extra")]
         public Dictionary<string, string> StatusExtra { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(DownloadStationsTaskStatusJsonConverter))]
         public DownloadStationTaskStatus Status { get; set; }
 
         public DownloadStationTaskAdditional Additional { get; set; }
@@ -46,12 +47,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         Paused,
         Finishing,
         Finished,
-        Hash_Checking,
+        HashChecking,
         Seeding,
-        FileHosting_Waiting,
+        FileHostingWaiting,
         Extracting,
         Error,
-        Captcha_Needed
+        CaptchaNeeded
     }
 
     public enum DownloadStationPriority
