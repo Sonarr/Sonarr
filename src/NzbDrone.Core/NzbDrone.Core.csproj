@@ -579,7 +579,6 @@
     <Compile Include="HealthCheck\Checks\MonoTlsCheck.cs" />
     <Compile Include="HealthCheck\Checks\MountCheck.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
-    <Compile Include="HealthCheck\Checks\ImportMechanismCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerRssCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerStatusCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerSearchCheck.cs" />
