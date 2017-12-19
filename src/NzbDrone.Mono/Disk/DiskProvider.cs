@@ -114,7 +114,8 @@ namespace NzbDrone.Mono.Disk
                 }
 
                 if (isSameDir)
-                { // We're in the same dir, so we can preserve relative symlinks.
+                {
+                    // We're in the same dir, so we can preserve relative symlinks.
                     newFile.CreateSymbolicLinkTo(symlinkInfo.ContentsPath);
                 }
                 else
@@ -142,7 +143,8 @@ namespace NzbDrone.Mono.Disk
                 var newFile = new UnixSymbolicLinkInfo(destination);
 
                 if (isSameDir)
-                { // We're in the same dir, so we can preserve relative symlinks.
+                {
+                    // We're in the same dir, so we can preserve relative symlinks.
                     newFile.CreateSymbolicLinkTo(symlinkInfo.ContentsPath);
                 }
                 else
