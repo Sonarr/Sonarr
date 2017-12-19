@@ -373,6 +373,7 @@
     <Compile Include="Download\Clients\DownloadClientUnavailableException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\DownloadStationInfoProxy.cs" />
+    <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationsTaskStatusJsonConverter.cs" />
     <Compile Include="Download\Clients\DownloadStation\TorrentDownloadStation.cs" />
     <Compile Include="Download\Clients\DownloadStation\Proxies\DownloadStationTaskProxy.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationSettings.cs" />
