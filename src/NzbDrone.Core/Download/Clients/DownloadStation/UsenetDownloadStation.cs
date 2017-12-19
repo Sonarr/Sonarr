@@ -315,7 +315,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             switch (task.Status)
             {
+                case DownloadStationTaskStatus.Unknown:
                 case DownloadStationTaskStatus.Waiting:
+                case DownloadStationTaskStatus.FilehostingWaiting:
                     return task.Size == 0 || GetRemainingSize(task) > 0 ? DownloadItemStatus.Queued : DownloadItemStatus.Completed;
                 case DownloadStationTaskStatus.Paused:
                     return DownloadItemStatus.Paused;
