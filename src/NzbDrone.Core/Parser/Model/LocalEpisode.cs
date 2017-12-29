@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.MediaFiles.MediaInfo;
@@ -26,7 +27,19 @@ namespace NzbDrone.Core.Parser.Model
         { 
             get
             {
-                return Episodes.Select(c => c.SeasonNumber).Distinct().Single();
+                var seasons = Episodes.Select(c => c.SeasonNumber).Distinct().ToList();
+
+                if (seasons.Empty())
+                {
+                    throw new InvalidSeasonException("Expected one season, but found none");
+                }
+
+                if (seasons.Count > 1)
+                {
+                    throw new InvalidSeasonException("Expected one season, but found {0} ({1})", seasons.Count, string.Join(", ", seasons));
+                }
+
+                return seasons.Single();
             } 
         }
 

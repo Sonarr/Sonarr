@@ -936,6 +936,7 @@
     <Compile Include="Notifications\Twitter\Twitter.cs" />
     <Compile Include="Notifications\Twitter\TwitterService.cs" />
     <Compile Include="Notifications\Twitter\TwitterSettings.cs" />
+    <Compile Include="Parser\InvalidSeasonException.cs" />
     <Compile Include="Parser\IsoLanguage.cs" />
     <Compile Include="Parser\IsoLanguages.cs" />
     <Compile Include="Parser\LanguageParser.cs" />
