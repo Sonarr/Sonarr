@@ -24,12 +24,12 @@ namespace NzbDrone.Core.Download
 
                 if (nzb == null)
                 {
-                    throw new InvalidNzbException("No Root element", filename);
+                    throw new InvalidNzbException("Invalid NZB: No Root element [{0}]", filename);
                 }
 
                 if (!nzb.Name.LocalName.Equals("nzb"))
                 {
-                    throw new InvalidNzbException("Invalid root element", filename);
+                    throw new InvalidNzbException("Invalid NZB: Unexpected root element. Expected 'nzb' found '{0}' [{1}]", nzb.Name.LocalName, filename);
                 }
 
                 var ns = nzb.Name.Namespace;
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download
 
                 if (files.Empty())
                 {
-                    throw new InvalidNzbException("No files", filename);
+                    throw new InvalidNzbException("Invalid NZB: No files [{0}]", filename);
                 }
             }
         }

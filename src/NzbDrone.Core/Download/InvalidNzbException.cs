@@ -20,10 +20,5 @@ namespace NzbDrone.Core.Download
         public InvalidNzbException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        public InvalidNzbException(string message, string nzbName)
-            : base($"{message} [{0}]", nzbName)
-        {
-        }
     }
 }
