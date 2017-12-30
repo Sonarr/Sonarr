@@ -14,6 +14,7 @@ module.exports = Marionette.ItemView.extend({
         monitored           : '.x-monitored',
         profile             : '.x-profiles',
         seasonFolder        : '.x-season-folder',
+        useSceneNumbering   : '.x-use-scene-numbering',
         rootFolder          : '.x-root-folder',
         selectedCount       : '.x-selected-count',
         container           : '.series-editor-footer',
@@ -55,6 +56,7 @@ module.exports = Marionette.ItemView.extend({
         var monitored = this.ui.monitored.val();
         var profile = this.ui.profile.val();
         var seasonFolder = this.ui.seasonFolder.val();
+        var useSceneNumbering = this.ui.useSceneNumbering.val();
         var rootFolder = this.ui.rootFolder.val();
 
         _.each(selected, function(model) {
@@ -72,6 +74,12 @@ module.exports = Marionette.ItemView.extend({
                 model.set('seasonFolder', true);
             } else if (seasonFolder === 'false') {
                 model.set('seasonFolder', false);
+            }
+
+            if (useSceneNumbering === 'true') {
+                model.set('useSceneNumbering', true);
+            } else if (useSceneNumbering === 'false') {
+                model.set('useSceneNumbering', false);
             }
 
             if (rootFolder !== 'noChange') {

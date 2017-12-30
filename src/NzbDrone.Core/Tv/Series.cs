@@ -68,6 +68,7 @@ namespace NzbDrone.Core.Tv
 
             SeasonFolder = otherSeries.SeasonFolder;
             Monitored = otherSeries.Monitored;
+            UseSceneNumbering = otherSeries.UseSceneNumbering;
 
             SeriesType = otherSeries.SeriesType;
             RootFolderPath = otherSeries.RootFolderPath;
