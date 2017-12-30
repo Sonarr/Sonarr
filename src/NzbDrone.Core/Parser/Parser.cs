@@ -213,6 +213,16 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
+
+        private static readonly Regex[] SpecialEpisodeTitleRegex = new Regex[]
+            {
+                new Regex(@"\.S\d+E00\.(?<episodetitle>.+?)(?:\.(?:720p|1080p|HDTV|WEB|WEBRip|WEB-DL)\.|$)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                new Regex(@"\.S\d+\.Special\.(?<episodetitle>.+?)(?:\.(?:720p|1080p|HDTV|WEB|WEBRip|WEB-DL)\.|$)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled)
+            };
+
         private static readonly Regex[] RejectHashedReleasesRegex = new Regex[]
             {
                 // Generic match for md5 and mixed-case hashes.
@@ -456,7 +466,19 @@ namespace NzbDrone.Core.Parser
 
         public static string NormalizeEpisodeTitle(string title)
         {
-            title = SpecialEpisodeWordRegex.Replace(title, string.Empty);
+            var match = SpecialEpisodeTitleRegex
+                .Select(v => v.Match(title))
+                .Where(v => v.Success)
+                .FirstOrDefault();
+
+            if (match != null)
+            {
+                title = match.Groups["episodetitle"].Value;
+            }
+
+            // Disabled, Until we run into specific testcases for the removal of these words.
+            //title = SpecialEpisodeWordRegex.Replace(title, string.Empty);
+
             title = PunctuationRegex.Replace(title, " ");
             title = DuplicateSpacesRegex.Replace(title, " ");
 

@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
 
-        [TestCase("Dr.S11E00.A.Chrismas.Carol.Special.720p.HDTV-FieldOfView")]
+        [TestCase("Dr.S11E00.A.Christmas.Carol.Special.720p.HDTV-FieldOfView")]
         public void IsPossibleSpecialEpisode_should_be_true_if_e00_special(string title)
         {
             Parser.Parser.ParseTitle(title).IsPossibleSpecialEpisode.Should().BeTrue();

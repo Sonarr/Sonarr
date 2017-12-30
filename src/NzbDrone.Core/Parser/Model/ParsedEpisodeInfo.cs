@@ -68,6 +68,18 @@ namespace NzbDrone.Core.Parser.Model
             //TODO: Is there a better way?
             private set {}
         }
+        public bool IsPossibleSceneSeasonSpecial
+        {
+            get
+            {
+                // SxxE00 episodes
+                return SeasonNumber != 0 && EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0;
+            }
+
+            //This prevents manually downloading a release from blowing up in mono
+            //TODO: Is there a better way?
+            private set { }
+        }
 
         public override string ToString()
         {

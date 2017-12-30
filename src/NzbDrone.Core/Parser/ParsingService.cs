@@ -60,7 +60,11 @@ namespace NzbDrone.Core.Parser
                 parsedEpisodeInfo = Parser.ParsePath(filename);
             }
 
-            if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
+            if (parsedEpisodeInfo != null && parsedEpisodeInfo.IsPossibleSceneSeasonSpecial && GetStandardEpisodes(series, parsedEpisodeInfo, true, null).Any())
+            {
+                // SxxE00 episodes are sometimes mapped via TheXEM, don't use episode title parsing in that case.
+            }
+            else if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
             {
                 var title = Path.GetFileNameWithoutExtension(filename);
                 var specialEpisodeInfo = ParseSpecialEpisodeTitle(title, series);
