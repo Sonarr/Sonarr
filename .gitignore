@@ -130,9 +130,9 @@ output/*
 
 #OS X metadata files
 ._*
+.DS_Store
 
 _start
 _temp_*/**/*
 
 src/.idea/
-.DS_Store
