@@ -65,7 +65,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                     if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
                     {
-                        var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(report.Title, report.TvdbId, report.TvRageId, searchCriteria);
+                        var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, report.Title, report.TvdbId, report.TvRageId, searchCriteria);
 
                         if (specialEpisodeInfo != null)
                         {

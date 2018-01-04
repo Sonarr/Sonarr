@@ -57,16 +57,28 @@ namespace NzbDrone.Core.Parser.Model
         {
             get
             {
-                // if we don't have eny episode numbers we are likely a special episode and need to do a search by episode title
+                // if we don't have any episode numbers we are likely a special episode and need to do a search by episode title
                 return (AirDate.IsNullOrWhiteSpace() &&
                        SeriesTitle.IsNullOrWhiteSpace() &&
-                       (EpisodeNumbers.Length == 0 || SeasonNumber == 0) ||
-                       !SeriesTitle.IsNullOrWhiteSpace() && Special);
+                       (EpisodeNumbers.Length == 0 || SeasonNumber == 0) || !SeriesTitle.IsNullOrWhiteSpace() && Special) ||
+                       EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0;
             }
 
             //This prevents manually downloading a release from blowing up in mono
             //TODO: Is there a better way?
             private set {}
+        }
+        public bool IsPossibleSceneSeasonSpecial
+        {
+            get
+            {
+                // SxxE00 episodes
+                return SeasonNumber != 0 && EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0;
+            }
+
+            //This prevents manually downloading a release from blowing up in mono
+            //TODO: Is there a better way?
+            private set { }
         }
 
         public override string ToString()
