@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Parser
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvdbId, int tvRageId, SearchCriteriaBase searchCriteria = null);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int seriesId, IEnumerable<int> episodeIds);
         List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource, SearchCriteriaBase searchCriteria = null);
-        ParsedEpisodeInfo ParseSpecialEpisodeTitle(string releaseTitle, int tvdbId, int tvRageId, SearchCriteriaBase searchCriteria = null);
+        ParsedEpisodeInfo ParseSpecialEpisodeTitle(ParsedEpisodeInfo parsedEpisodeInfo, string releaseTitle, int tvdbId, int tvRageId, SearchCriteriaBase searchCriteria = null);
     }
 
     public class ParsingService : IParsingService
@@ -60,14 +60,10 @@ namespace NzbDrone.Core.Parser
                 parsedEpisodeInfo = Parser.ParsePath(filename);
             }
 
-            if (parsedEpisodeInfo != null && parsedEpisodeInfo.IsPossibleSceneSeasonSpecial && GetStandardEpisodes(series, parsedEpisodeInfo, true, null).Any())
-            {
-                // SxxE00 episodes are sometimes mapped via TheXEM, don't use episode title parsing in that case.
-            }
-            else if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
+            if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
             {
                 var title = Path.GetFileNameWithoutExtension(filename);
-                var specialEpisodeInfo = ParseSpecialEpisodeTitle(title, series);
+                var specialEpisodeInfo = ParseSpecialEpisodeTitle(parsedEpisodeInfo, title, series);
 
                 if (specialEpisodeInfo != null)
                 {
@@ -188,18 +184,18 @@ namespace NzbDrone.Core.Parser
             return GetStandardEpisodes(series, parsedEpisodeInfo, sceneSource, searchCriteria);
         }
 
-        public ParsedEpisodeInfo ParseSpecialEpisodeTitle(string releaseTitle, int tvdbId, int tvRageId, SearchCriteriaBase searchCriteria = null)
+        public ParsedEpisodeInfo ParseSpecialEpisodeTitle(ParsedEpisodeInfo parsedEpisodeInfo, string releaseTitle, int tvdbId, int tvRageId, SearchCriteriaBase searchCriteria = null)
         {
             if (searchCriteria != null)
             {
                 if (tvdbId != 0 && tvdbId == searchCriteria.Series.TvdbId)
                 {
-                    return ParseSpecialEpisodeTitle(releaseTitle, searchCriteria.Series);
+                    return ParseSpecialEpisodeTitle(parsedEpisodeInfo, releaseTitle, searchCriteria.Series);
                 }
 
                 if (tvRageId != 0 && tvRageId == searchCriteria.Series.TvRageId)
                 {
-                    return ParseSpecialEpisodeTitle(releaseTitle, searchCriteria.Series);
+                    return ParseSpecialEpisodeTitle(parsedEpisodeInfo, releaseTitle, searchCriteria.Series);
                 }
             }
 
@@ -226,11 +222,20 @@ namespace NzbDrone.Core.Parser
                 return null;
             }
 
-            return ParseSpecialEpisodeTitle(releaseTitle, series);
+            return ParseSpecialEpisodeTitle(parsedEpisodeInfo, releaseTitle, series);
         }
 
-        private ParsedEpisodeInfo ParseSpecialEpisodeTitle(string releaseTitle, Series series)
+        private ParsedEpisodeInfo ParseSpecialEpisodeTitle(ParsedEpisodeInfo parsedEpisodeInfo, string releaseTitle, Series series)
         {
+            // SxxE00 episodes are sometimes mapped via TheXEM, don't use episode title parsing in that case.
+            if (parsedEpisodeInfo != null && parsedEpisodeInfo.IsPossibleSceneSeasonSpecial && series.UseSceneNumbering)
+            {
+                if (_episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber, 0).Any())
+                {
+                    return parsedEpisodeInfo;
+                }
+            }
+
             // find special episode in series season 0
             var episode = _episodeService.FindEpisodeByTitle(series.Id, 0, releaseTitle);
 
