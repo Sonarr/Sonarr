@@ -29,6 +29,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                              Title = "Dexter.S08E01.EDITED.WEBRip.x264-KYR"
                                          }
                            };
+
+            Mocker.SetConstant<ITermMatcher>(Mocker.Resolve<TermMatcher>());
         }
 
         private void GivenRestictions(string required, string ignored)
@@ -122,6 +124,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                            });
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [TestCase("/WEB/", true)]
+        [TestCase("/WEB\b/", false)]
+        [TestCase("/WEb/", false)]
+        [TestCase(@"/\.WEB/", true)]
+        public void should_match_perl_regex(string pattern, bool expected)
+        {
+            GivenRestictions(pattern, null);
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().Be(expected);
         }
     }
 }

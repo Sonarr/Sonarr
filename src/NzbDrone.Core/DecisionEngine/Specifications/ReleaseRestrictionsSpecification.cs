@@ -11,13 +11,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class ReleaseRestrictionsSpecification : IDecisionEngineSpecification
     {
-        private readonly IRestrictionService _restrictionService;
         private readonly Logger _logger;
+        private readonly IRestrictionService _restrictionService;
+        private readonly ITermMatcher _termMatcher;
 
-        public ReleaseRestrictionsSpecification(IRestrictionService restrictionService, Logger logger)
+        public ReleaseRestrictionsSpecification(ITermMatcher termMatcher, IRestrictionService restrictionService, Logger logger)
         {
-            _restrictionService = restrictionService;
             _logger = logger;
+            _restrictionService = restrictionService;
+            _termMatcher = termMatcher;
         }
 
         public SpecificationPriority Priority => SpecificationPriority.Default;
@@ -63,9 +65,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             return Decision.Accept();
         }
 
-        private static List<string> ContainsAny(List<string> terms, string title)
+        private List<string> ContainsAny(List<string> terms, string title)
         {
-            return terms.Where(t => title.ToLowerInvariant().Contains(t.ToLowerInvariant())).ToList();
+            return terms.Where(t => _termMatcher.IsMatch(t, title)).ToList();
         }
     }
 }

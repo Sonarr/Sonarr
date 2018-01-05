@@ -1085,9 +1085,11 @@
     <Compile Include="Queue\Queue.cs" />
     <Compile Include="Queue\QueueService.cs" />
     <Compile Include="Queue\QueueUpdatedEvent.cs" />
+    <Compile Include="Restrictions\PerlRegexFactory.cs" />
     <Compile Include="Restrictions\Restriction.cs" />
     <Compile Include="Restrictions\RestrictionRepository.cs" />
     <Compile Include="Restrictions\RestrictionService.cs" />
+    <Compile Include="Restrictions\TermMatcher.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="Rest\RestClientFactory.cs" />
     <Compile Include="Rest\RestException.cs" />
