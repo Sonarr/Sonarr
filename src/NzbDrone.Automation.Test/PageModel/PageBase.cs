@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
@@ -25,6 +25,11 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(timeout));
             return wait.Until(d => d.FindElement(by));
+        }
+
+        public bool Displayed(By by)
+        {
+            return _driver.FindElement(by).Displayed;
         }
 
         public void WaitForNoSpinner(int timeout = 30)

@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var _ = require('underscore');
 var vent = require('../../vent');
+var Backbone = require('backbone');
 var Marionette = require('marionette');
 var Backgrid = require('backgrid');
 var MissingCollection = require('./MissingCollection');
@@ -15,6 +16,7 @@ var ToolbarLayout = require('../../Shared/Toolbar/ToolbarLayout');
 var LoadingView = require('../../Shared/LoadingView');
 var Messenger = require('../../Shared/Messenger');
 var CommandController = require('../../Commands/CommandController');
+var DownloadClientSettingsModel = require('../../Settings/DownloadClient/DownloadClientSettingsModel');
 
 require('backgrid.selectall');
 require('../../Mixins/backbone.signalr.mixin');
@@ -77,8 +79,16 @@ module.exports = Marionette.Layout.extend({
     },
 
     onShow : function() {
+        var self = this;
+
+        this.downloadClientSettings = new DownloadClientSettingsModel();
         this.missing.show(new LoadingView());
-        this._showToolbar();
+
+        Backbone.$.when(this.downloadClientSettings.fetch()).done(function() {
+            self.droneFolder = self.downloadClientSettings.attributes.downloadedEpisodesFolder;
+            self._showToolbar();
+        });
+
         this.collection.fetch();
     },
 
@@ -131,12 +141,6 @@ module.exports = Marionette.Layout.extend({
                     route : 'seasonpass'
                 },
                 {
-                    title      : 'Rescan Drone Factory Folder',
-                    icon       : 'icon-sonarr-refresh',
-                    command    : 'downloadedepisodesscan',
-                    properties : { sendUpdates : true }
-                },
-                {
                     title        : 'Manual Import',
                     icon         : 'icon-sonarr-search-manual',
                     callback     : this._manualImport,
@@ -144,6 +148,16 @@ module.exports = Marionette.Layout.extend({
                 }
             ]
         };
+
+        if (this.droneFolder) {
+            leftSideButtons.items.splice(4, 0, {
+                title      : 'Rescan Drone Factory Folder',
+                icon       : 'icon-sonarr-refresh',
+                command    : 'downloadedepisodesscan',
+                properties : { sendUpdates : true }
+            });
+        }
+
         var filterOptions = {
             type          : 'radio',
             storeState    : false,
