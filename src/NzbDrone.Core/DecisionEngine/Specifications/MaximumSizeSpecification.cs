@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using NLog;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Configuration;
-using NLog;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
@@ -26,7 +23,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var size = subject.Release.Size;
-            var maximumSize = _configService.MaximumSize;
+            var maximumSize = _configService.MaximumSize.Megabytes();
 
             if (maximumSize == 0)
             {
@@ -34,11 +31,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Accept();
             }
 
-            _logger.Debug("Checking if report meets maximum size requirements. {0}", size);
+            _logger.Debug("Checking if report meets maximum size requirements. {0}", size.SizeSuffix());
 
             if (size > maximumSize)
             {
-                var message = $"{size} too big, maximumn size is {maximumSize} MB";
+                var message = $"{size.SizeSuffix()} is too big, maximumn size is {maximumSize.SizeSuffix()}";
 
                 _logger.Debug(message);
                 return Decision.Reject(message);

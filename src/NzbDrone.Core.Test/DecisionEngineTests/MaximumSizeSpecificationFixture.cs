@@ -4,10 +4,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -28,7 +24,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithSize(int size)
         {
-            _remoteEpisode.Release.Size = size;
+            _remoteEpisode.Release.Size = size * 1024 * 1024;
         }
 
         [Test]
@@ -49,7 +45,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
-        public void should_return_true_when_size_is_equal_than_maximum_size()
+        [Test]
+        public void should_return_true_when_size_is_equals_to_maximum_size()
         {
             WithMaximumSize(2000);
             WithSize(2000);
