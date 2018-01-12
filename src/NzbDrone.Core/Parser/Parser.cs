@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes without a title, Multi (S01E04E05, 1x04x05, etc)
-                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_]|[ex])(?<episode>\d{2,3}(?!\d+))){2,})",
+                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_]|[ex]){1,2}(?<episode>\d{2,3}(?!\d+))){2,})",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes without a title, Single (S01E05, 1x05)
