@@ -146,6 +146,7 @@
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\AnimeVersionUpgradeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\FullSeasonSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\MaximumSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\ProtocolSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\DownloadDecisionMakerFixture.cs" />

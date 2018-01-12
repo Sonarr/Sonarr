@@ -332,6 +332,7 @@
     <Compile Include="DecisionEngine\Specifications\AnimeVersionUpgradeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\FullSeasonSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\MaximumSizeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\ProtocolSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QueueSpecification.cs" />
