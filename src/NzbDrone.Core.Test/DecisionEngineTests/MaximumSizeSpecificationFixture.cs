@@ -62,5 +62,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
+
+        [Test]
+        public void should_return_true_when_size_is_zero()
+        {
+            WithMaximumSize(2000);
+            WithSize(0);
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
     }
 }

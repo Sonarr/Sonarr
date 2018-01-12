@@ -31,7 +31,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Accept();
             }
 
-            _logger.Debug("Checking if report meets maximum size requirements. {0}", size.SizeSuffix());
+            if (subject.Release.Size == 0)
+            {
+                _logger.Debug("Release has unknown size, skipping size check.");
+                return Decision.Accept();
+            }
+
+            _logger.Debug("Checking if release meets maximum size requirements. {0}", size.SizeSuffix());
 
             if (size > maximumSize)
             {
