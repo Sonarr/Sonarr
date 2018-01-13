@@ -12,10 +12,10 @@ namespace NzbDrone.Common.Extensions
     {
         private const string APP_CONFIG_FILE = "config.xml";
         private const string DB = "sonarr.db";
+        private const string DB_RESTORE = "sonarr.restore";
         private const string LOG_DB = "logs.db";
         private const string NLOG_CONFIG_FILE = "nlog.config";
         private const string UPDATE_CLIENT_EXE = "Sonarr.Update.exe";
-        private const string BACKUP_FOLDER = "Backups";
 
         private static readonly string UPDATE_SANDBOX_FOLDER_NAME = "sonarr_update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_PACKAGE_FOLDER_NAME = "Sonarr" + Path.DirectorySeparatorChar;
@@ -256,14 +256,14 @@ namespace NzbDrone.Common.Extensions
             return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_CLIENT_EXE);
         }
 
-        public static string GetBackupFolder(this IAppFolderInfo appFolderInfo)
-        {
-            return Path.Combine(GetAppDataPath(appFolderInfo), BACKUP_FOLDER);
-        }
-
         public static string GetDatabase(this IAppFolderInfo appFolderInfo)
         {
             return Path.Combine(GetAppDataPath(appFolderInfo), DB);
+        }
+
+        public static string GetDatabaseRestore(this IAppFolderInfo appFolderInfo)
+        {
+            return Path.Combine(GetAppDataPath(appFolderInfo), DB_RESTORE);
         }
 
         public static string GetLogDatabase(this IAppFolderInfo appFolderInfo)
