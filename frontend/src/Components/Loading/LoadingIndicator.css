@@ -1,0 +1,49 @@
+.loading {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.rippleContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.ripple:nth-child(0) {
+  animation-delay: -0.8s;
+}
+
+.ripple:nth-child(1) {
+  animation-delay: -0.6s;
+}
+
+.ripple:nth-child(2) {
+  animation-delay: -0.4s;
+}
+
+.ripple:nth-child(3) {
+  animation-delay: -0.2s;
+}
+
+.ripple {
+  position: absolute;
+  border: 2px solid #3a3f51;
+  border-radius: 100%;
+  animation: rippleContainer 1.25s 0s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
+  animation-fill-mode: both;
+}
+
+@keyframes rippleContainer {
+  0% {
+    opacity: 1;
+    transform: scale(0.1);
+  }
+
+  70% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

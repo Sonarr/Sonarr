@@ -1,0 +1,15 @@
+.danger {
+  color: $dangerColor;
+}
+
+.default {
+  color: inherit;
+}
+
+.success {
+  color: $successColor;
+}
+
+.warning {
+  color: $warningColor;
+}

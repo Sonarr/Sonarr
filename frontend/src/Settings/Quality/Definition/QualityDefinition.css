@@ -1,0 +1,93 @@
+.qualityDefinition {
+  display: flex;
+  align-content: stretch;
+  margin: 5px 0;
+  padding-top: 5px;
+  height: 45px;
+  border-top: 1px solid $borderColor;
+}
+
+.quality,
+.title {
+  flex: 0 1 250px;
+  padding-right: 20px;
+  line-height: 40px;
+}
+
+.sizeLimit {
+  flex: 0 1 500px;
+  padding-right: 30px;
+}
+
+.slider {
+  width: 100%;
+  height: 20px;
+}
+
+.bar {
+  top: 9px;
+  margin: 0 5px;
+  height: 3px;
+  background-color: $sliderAccentColor;
+  box-shadow: 0 0 0 #000;
+
+  &:nth-child(odd) {
+    background-color: #ddd;
+  }
+}
+
+.handle {
+  top: 1px;
+  z-index: 0 !important;
+  width: 18px;
+  height: 18px;
+  border: 3px solid $sliderAccentColor;
+  border-radius: 50%;
+  background-color: $white;
+  text-align: center;
+  cursor: pointer;
+}
+
+.sizes {
+  display: flex;
+  justify-content: space-between;
+}
+
+.megabytesPerMinute {
+  display: flex;
+  justify-content: space-between;
+  flex: 0 0 250px;
+}
+
+.sizeInput {
+  composes: text from 'Components/Form/TextInput.css';
+
+  display: inline-block;
+  margin-left: 5px;
+  padding: 6px;
+  width: 75px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .qualityDefinition {
+    flex-wrap: wrap;
+    height: auto;
+
+    &:first-child {
+      border-top: none;
+    }
+  }
+
+  .qualityDefinition:first-child {
+    border-top: none;
+  }
+
+  .quality {
+    font-weight: bold;
+    line-height: inherit;
+  }
+
+  .sizeLimit {
+    margin-top: 10px;
+  }
+}

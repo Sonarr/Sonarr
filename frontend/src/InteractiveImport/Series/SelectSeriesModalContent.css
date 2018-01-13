@@ -1,0 +1,18 @@
+.modalBody {
+  composes: modalBody from 'Components/Modal/ModalBody.css';
+
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.filterInput {
+  composes: text from 'Components/Form/TextInput.css';
+
+  flex: 0 0 auto;
+  margin-bottom: 20px;
+}
+
+.scroller {
+  flex: 1 1 auto;
+}

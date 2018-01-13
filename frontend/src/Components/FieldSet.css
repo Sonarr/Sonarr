@@ -1,0 +1,19 @@
+.fieldSet {
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+}
+
+.legend {
+  display: block;
+  margin-bottom: 21px;
+  padding: 0;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #e5e5e5;
+  color: #3a3f51;
+  font-size: 21px;
+  line-height: inherit;
+}

@@ -1,0 +1,23 @@
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  padding: 15px 30px;
+  border-top: 1px solid $borderColor;
+
+  a,
+  button {
+    margin-left: 10px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .modalFooter {
+    padding: 15px;
+  }
+}

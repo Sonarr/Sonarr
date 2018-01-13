@@ -1,0 +1,53 @@
+.header {
+  display: flex;
+}
+
+.navigationButtons {
+  flex: 1 1 33%;
+  text-align: left;
+}
+
+.todayButton {
+  composes: button from 'Components/Link/Button.css';
+
+  margin-left: 5px;
+}
+
+.titleDesktop,
+.titleMobile {
+  text-align: center;
+  font-size: 18px;
+}
+
+.titleMobile {
+  margin-bottom: 5px;
+}
+
+.viewButtonsContainer {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1 1 33%;
+}
+
+.viewMenu {
+  composes: menu from 'Components/Menu/Menu.css';
+
+  line-height: 31px;
+}
+
+.loading {
+  composes: loading from 'Components/Loading/LoadingIndicator.css';
+
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .navigationButtons {
+    flex: 1 0 50%;
+  }
+
+  .viewButtonsContainer {
+    flex: 0 0 100px;
+  }
+}

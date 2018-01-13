@@ -1,0 +1,14 @@
+.days {
+  display: flex;
+  border-right: 1px solid $borderColor;
+}
+
+.day,
+.week,
+.forecast {
+  flex-wrap: nowrap;
+}
+
+.month {
+  flex-wrap: wrap;
+}

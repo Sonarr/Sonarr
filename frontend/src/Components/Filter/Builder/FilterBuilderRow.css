@@ -1,0 +1,32 @@
+.filterRow {
+  display: flex;
+  margin-bottom: 5px;
+
+  &:hover {
+    background-color: $tableRowHoverBackgroundColor;
+  }
+}
+
+.inputContainer {
+  flex: 0 1 200px;
+  margin-right: 10px;
+}
+
+.valueInputContainer {
+  flex: 0 1 300px;
+  margin-right: 10px;
+}
+
+.actionsContainer {
+  display: flex;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .filterRow {
+    display: block;
+  }
+
+  .inputContainer {
+    margin-bottom: 10px;
+  }
+}

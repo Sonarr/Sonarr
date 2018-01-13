@@ -1,0 +1,17 @@
+.delayProfileDragSource {
+  padding: 4px 0;
+}
+
+.delayProfilePlaceholder {
+  width: 100%;
+  height: 30px;
+  border-bottom: 1px dotted #aaa;
+}
+
+.delayProfilePlaceholderBefore {
+  margin-bottom: 8px;
+}
+
+.delayProfilePlaceholderAfter {
+  margin-top: 8px;
+}

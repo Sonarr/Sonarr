@@ -1,0 +1,14 @@
+.jumpBarItem {
+  flex: 1 0 $jumpBarItemHeight;
+  border-bottom: 1px solid $borderColor;
+  text-align: center;
+  font-weight: bold;
+
+  &:hover {
+    color: #777;
+  }
+
+  &:last-child {
+    border: none;
+  }
+}

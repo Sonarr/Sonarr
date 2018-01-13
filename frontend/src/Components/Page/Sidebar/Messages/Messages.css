@@ -1,0 +1,11 @@
+.messages {
+  margin-top: auto;
+  margin-bottom: 20px;
+  padding-top: 20px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .messages {
+    margin-bottom: 0;
+  }
+}

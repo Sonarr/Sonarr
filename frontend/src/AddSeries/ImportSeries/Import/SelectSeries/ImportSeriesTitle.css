@@ -1,0 +1,17 @@
+.titleContainer {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  margin-right: 5px;
+}
+
+.year {
+  margin-left: 5px;
+  color: $disabledColor;
+}
+
+.existing {
+  margin-left: 5px;
+}

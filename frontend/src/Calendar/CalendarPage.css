@@ -1,0 +1,14 @@
+.calendarPageBody {
+  composes: contentBody from 'Components/Page/PageContentBody.css';
+
+  display: flex;
+}
+
+.calendarInnerPageBody {
+  composes: innerContentBody from 'Components/Page/PageContentBody.css';
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+}

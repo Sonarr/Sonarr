@@ -1,0 +1,8 @@
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-x: hidden;
+  width: 100%;
+}

@@ -1,0 +1,23 @@
+.downloadClient {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 120px;
+}
+
+.indexer {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 80px;
+}
+
+.releaseGroup {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 110px;
+}
+
+.details {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 30px;
+}

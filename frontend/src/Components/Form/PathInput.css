@@ -1,0 +1,68 @@
+.path {
+  composes: input from 'Components/Form/Input.css';
+}
+
+.hasError {
+  composes: hasError from 'Components/Form/Input.css';
+}
+
+.hasWarning {
+  composes: hasWarning from 'Components/Form/Input.css';
+}
+
+.hasFileBrowser {
+  composes: hasButton from 'Components/Form/Input.css';
+}
+
+.pathInputWrapper {
+  display: flex;
+}
+
+.pathInputContainer {
+  position: relative;
+  flex-grow: 1;
+}
+
+.pathContainer {
+  @add-mixin scrollbar;
+  @add-mixin scrollbarTrack;
+  @add-mixin scrollbarThumb;
+}
+
+.pathInputContainerOpen {
+  .pathContainer {
+    position: absolute;
+    z-index: 1;
+    overflow-y: auto;
+    max-height: 200px;
+    width: 100%;
+    border: 1px solid $inputBorderColor;
+    border-radius: 4px;
+    background-color: $white;
+    box-shadow: inset 0 1px 1px $inputBoxShadowColor;
+  }
+}
+
+.pathList {
+  margin: 5px 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.pathListItem {
+  padding: 0 16px;
+}
+
+.pathMatch {
+  font-weight: bold;
+}
+
+.pathHighlighted {
+  background-color: $menuItemHoverBackgroundColor;
+}
+
+.fileBrowserButton {
+  composes: button from './FormInputButton.css';
+
+  height: 35px;
+}

@@ -1,0 +1,20 @@
+.optionText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 0 0;
+
+  &.isMobile {
+    display: block;
+
+    .freeSpace {
+      margin-left: 0;
+    }
+  }
+}
+
+.freeSpace {
+  margin-left: 15px;
+  color: $gray;
+  font-size: $smallFontSize;
+}

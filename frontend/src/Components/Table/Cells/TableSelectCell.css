@@ -1,0 +1,11 @@
+.selectCell {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 30px;
+}
+
+.input {
+  composes: input from 'Components/Form/CheckInput.css';
+
+  margin: 0;
+}

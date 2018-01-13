@@ -1,0 +1,20 @@
+.restrictions {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.addRestriction {
+  composes: restriction from './Restriction.css';
+
+  background-color: $cardAlternateBackgroundColor;
+  color: $gray;
+  text-align: center;
+}
+
+.center {
+  display: inline-block;
+  padding: 5px 20px 0;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  background-color: $white;
+}

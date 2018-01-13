@@ -1,0 +1,119 @@
+.button {
+  composes: link from './Link.css';
+
+  overflow: hidden;
+  border: 1px solid;
+  border-radius: 4px;
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
+  line-height: normal;
+
+  &:global(.isDisabled) {
+    opacity: 0.65;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.danger {
+  border-color: $dangerBorderColor;
+  background-color: $dangerBackgroundColor;
+  color: $white;
+
+  &:hover {
+    border-color: $dangerHoverBorderColor;
+    background-color: $dangerHoverBackgroundColor;
+    color: $white;
+  }
+}
+
+.default {
+  border-color: $defaultBorderColor;
+  background-color: $defaultBackgroundColor;
+  color: $defaultColor;
+
+  &:hover {
+    border-color: $defaultHoverBorderColor;
+    background-color: $defaultHoverBackgroundColor;
+    color: $defaultColor;
+  }
+}
+
+.primary {
+  border-color: $primaryBorderColor;
+  background-color: $primaryBackgroundColor;
+  color: $white;
+
+  &:hover {
+    border-color: $primaryHoverBorderColor;
+    background-color: $primaryHoverBackgroundColor;
+    color: $white;
+  }
+}
+
+.success {
+  border-color: $successBorderColor;
+  background-color: $successBackgroundColor;
+  color: $white;
+
+  &:hover {
+    border-color: $successHoverBorderColor;
+    background-color: $successHoverBackgroundColor;
+    color: $white;
+  }
+}
+
+.warning {
+  border-color: $warningBorderColor;
+  background-color: $warningBackgroundColor;
+  color: $white;
+
+  &:hover {
+    border-color: $warningHoverBorderColor;
+    background-color: $warningHoverBackgroundColor;
+    color: $white;
+  }
+}
+
+/*
+ * Sizes
+ */
+
+.small {
+  padding: 1px 5px;
+  font-size: $smallFontSize;
+}
+
+.medium {
+  padding: 6px 16px;
+  font-size: $defaultFontSize;
+}
+
+.large {
+  padding: 10px 20px;
+  font-size: $largeFontSize;
+}
+
+/*
+ * Sizes
+*/
+
+.left {
+  margin-left: -1px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.center {
+  margin-left: -1px;
+  border-radius: 0;
+}
+
+.right {
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
