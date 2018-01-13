@@ -1,0 +1,5 @@
+.separator {
+  overflow: hidden;
+  height: 1px;
+  background-color: $themeDarkColor;
+}

@@ -1,0 +1,16 @@
+.labelContainer {
+  margin-bottom: 20px;
+}
+
+.label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.labelInputContainer {
+  width: 300px;
+}
+
+.rows {
+  margin-bottom: 100px;
+}

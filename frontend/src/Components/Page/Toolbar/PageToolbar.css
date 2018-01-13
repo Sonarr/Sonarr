@@ -1,0 +1,16 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  padding: 0 20px;
+  height: $toolbarHeight;
+  background-color: $toolbarBackgroundColor;
+  color: $toolbarColor;
+  line-height: 60px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .toolbar {
+    padding: 0 10px;
+  }
+}

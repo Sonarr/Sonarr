@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -40,7 +40,7 @@ namespace NzbDrone.Common.Serializer
         {
             try
             {
-                return JsonConvert.DeserializeObject<T>(json, SerializerSetting);
+                return JsonConvert.DeserializeObject<T>(json, SerializerSettings);
             }
             catch (JsonReaderException ex)
             {
@@ -52,7 +52,7 @@ namespace NzbDrone.Common.Serializer
         {
             try
             {
-                return JsonConvert.DeserializeObject(json, type, SerializerSetting);
+                return JsonConvert.DeserializeObject(json, type, SerializerSettings);
             }
             catch (JsonReaderException ex)
             {

@@ -1,0 +1,157 @@
+.innerContentBody {
+  padding: 0;
+}
+
+.header {
+  position: relative;
+  width: 100%;
+  height: 425px;
+}
+
+.backdrop {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+
+.backdropOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: $black;
+  opacity: 0.7;
+}
+
+.headerContent {
+  display: flex;
+  padding: 30px;
+  width: 100%;
+  height: 100%;
+  color: $white;
+}
+
+.poster {
+  flex-shrink: 0;
+  margin-right: 35px;
+  width: 250px;
+  height: 368px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  flex: 0 0 auto;
+}
+
+.titleContainer {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.title {
+  font-weight: 300;
+  font-size: 50px;
+  line-height: 50px;
+}
+
+.toggleMonitoredContainer {
+  align-self: center;
+  margin-right: 10px;
+}
+
+.monitorToggleButton {
+  composes: toggleButton from 'Components/MonitorToggleButton.css';
+
+  width: 40px;
+
+  &:hover {
+    color: $iconButtonHoverLightColor;
+  }
+}
+
+.alternateTitlesIconContainer {
+  align-self: flex-end;
+  margin-left: 20px;
+}
+
+.seriesNavigationButtons {
+  white-space: no-wrap;
+}
+
+.seriesNavigationButton {
+  composes: button from 'Components/Link/IconButton.css';
+
+  margin-left: 5px;
+  color: #e1e2e3;
+  white-space: nowrap;
+
+  &:hover {
+    color: $iconButtonHoverLightColor;
+  }
+}
+
+.details {
+  font-weight: 300;
+  font-size: 20px;
+}
+
+.runtime {
+  margin-right: 15px;
+}
+
+.detailsLabel {
+  composes: label from 'Components/Label.css';
+
+  margin: 5px 10px 5px 0;
+}
+
+.path,
+.sizeOnDisk,
+.qualityProfileName,
+.network,
+.links,
+.tags {
+  margin-left: 8px;
+  font-weight: 300;
+  font-size: 17px;
+}
+
+.path {
+  vertical-align: text-top;
+  font-size: $defaultFontSize;
+  font-family: $monoSpaceFontFamily;
+}
+
+.overview {
+  flex: 1 0 auto;
+  min-height: 0;
+}
+
+.contentContainer {
+  padding: 20px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .contentContainer {
+    padding: 20px 0;
+  }
+
+  .headerContent {
+    padding: 15px;
+  }
+}
+
+@media only screen and (max-width: $breakpointLarge) {
+  .poster {
+    display: none;
+  }
+}

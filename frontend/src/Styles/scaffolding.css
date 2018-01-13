@@ -1,0 +1,45 @@
+/* stylelint-disable */
+* {
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline: none;
+}
+/* stylelint-enable */
+
+html,
+body {
+  color: #515253;
+  font-family: 'Roboto', 'open sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.528571429; /* 20/14 */
+}
+
+/* Override normalize */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  margin: 0;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 1.528571429; /* 20/14 */
+}
+
+/* Better defaults for unordererd lists */
+
+ul {
+  margin: 0;
+  padding-left: 20px;
+}

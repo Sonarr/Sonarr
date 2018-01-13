@@ -1,0 +1,102 @@
+.label {
+  display: inline-block;
+  margin: 2px;
+  border: 1px solid;
+  border-radius: 2px;
+  color: $white;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  cursor: default;
+}
+
+/** Kinds **/
+
+.danger {
+  border-color: $dangerColor;
+  background-color: $dangerColor;
+
+  &.outline {
+    color: $dangerColor;
+  }
+}
+
+.default {
+  border-color: $themeLightColor;
+  background-color: $themeLightColor;
+
+  &.outline {
+    color: $themeLightColor;
+  }
+}
+
+.info {
+  border-color: $infoColor;
+  background-color: $infoColor;
+
+  &.outline {
+    color: $infoColor;
+  }
+}
+
+.inverse {
+  border-color: $gray;
+  background-color: $gray;
+  color: $defaultColor;
+
+  &.outline {
+    background-color: $defaultColor !important;
+    color: $gray;
+  }
+}
+
+.primary {
+  border-color: $primaryColor;
+  background-color: $primaryColor;
+
+  &.outline {
+    color: $primaryColor;
+  }
+}
+
+.success {
+  border-color: $successColor;
+  background-color: $successColor;
+
+  &.outline {
+    color: $successColor;
+  }
+}
+
+.warning {
+  border-color: $warningColor;
+  background-color: $warningColor;
+
+  &.outline {
+    color: $warningColor;
+  }
+}
+
+/** Sizes **/
+
+.small {
+  padding: 1px 3px;
+  font-size: 11px;
+}
+
+.medium {
+  padding: 2px 5px;
+  font-size: 12px;
+}
+
+.large {
+  padding: 3px 7px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/** Outline **/
+
+.outline {
+  background-color: $white;
+}

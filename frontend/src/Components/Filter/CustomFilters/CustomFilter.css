@@ -1,0 +1,17 @@
+.customFilter {
+  display: flex;
+  margin-bottom: 5px;
+  padding: 5px;
+
+  &:hover {
+    background-color: $tableRowHoverBackgroundColor;
+  }
+}
+
+.label {
+  flex: 0 1 300px;
+}
+
+.actions {
+  flex: 0 0 60px;
+}

@@ -1,0 +1,49 @@
+.inputGroupContainer {
+  flex: 1 1 auto;
+}
+
+.inputGroup {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+}
+
+.inputContainer {
+  position: relative;
+  flex: 1 1 auto;
+}
+
+.inputUnit {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  margin-top: 7px;
+  width: 75px;
+  color: #c6c6c6;
+  text-align: right;
+  pointer-events: none;
+  user-select: none;
+}
+
+.inputUnitNumber {
+  composes: inputUnit;
+
+  right: 40px;
+}
+
+.pendingChangesContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 30px;
+}
+
+.pendingChangesIcon {
+  color: $warningColor;
+  font-size: 20px;
+  line-height: 35px;
+}
+
+.helpLink {
+  margin-top: 5px;
+  line-height: 20px;
+}

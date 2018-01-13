@@ -1,0 +1,21 @@
+.circularProgressBarContainer {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+}
+
+.circularProgressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+  transform-origin: center center;
+}
+
+.circularProgressBarText {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+}

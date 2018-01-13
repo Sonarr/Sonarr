@@ -1,0 +1,18 @@
+.groups {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.namingSelectContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.namingSelect {
+  composes: select from 'Components/Form/SelectInput.css';
+
+  margin-left: 10px;
+  width: 200px;
+}

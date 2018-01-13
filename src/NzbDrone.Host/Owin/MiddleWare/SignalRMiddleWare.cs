@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNet.SignalR;
 using NzbDrone.Common.Composition;
 using NzbDrone.SignalR;
@@ -22,7 +22,7 @@ namespace NzbDrone.Host.Owin.MiddleWare
 
         public void Attach(IAppBuilder appBuilder)
         {
-            appBuilder.MapConnection("/signalr", typeof(NzbDronePersistentConnection), new ConnectionConfiguration());
+            appBuilder.MapSignalR("/signalr", typeof(NzbDronePersistentConnection), new ConnectionConfiguration());
         }
     }
 }

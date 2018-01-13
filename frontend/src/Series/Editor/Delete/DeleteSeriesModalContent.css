@@ -1,0 +1,13 @@
+.message {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.pathContainer {
+  margin-left: 5px;
+}
+
+.path {
+  margin-left: 5px;
+  color: $dangerColor;
+}

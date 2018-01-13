@@ -1,0 +1,18 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.main {
+  position: relative; /* need this to position inner content - is this really needed? */
+  display: flex;
+  flex: 1 1 auto;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .page {
+    flex-grow: 1;
+    height: initial;
+  }
+}

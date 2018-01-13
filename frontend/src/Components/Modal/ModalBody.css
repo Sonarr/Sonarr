@@ -1,0 +1,12 @@
+.modalBody {
+  flex: 1 0 1px;
+  padding: $modalBodyPadding;
+}
+
+.modalScroller {
+  flex-grow: 1;
+}
+
+.innerModalBody {
+  padding: $modalBodyPadding;
+}

@@ -1,0 +1,8 @@
+.calendar {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.calendarContent {
+  width: 100%;
+}

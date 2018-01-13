@@ -1,0 +1,24 @@
+.additionalInfo {
+  flex-grow: 1;
+  color: #777;
+}
+
+.steps {
+  margin-top: 20px;
+}
+
+.step {
+  display: flex;
+  font-size: $largeFontSize;
+  line-height: 20px;
+}
+
+.stepState {
+  margin-right: 8px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  composes: modalFooter from 'Components/Modal/ModalFooter.css';
+
+  flex-wrap: wrap;
+}

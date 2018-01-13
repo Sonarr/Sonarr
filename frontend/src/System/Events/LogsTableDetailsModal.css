@@ -1,0 +1,17 @@
+.detailsText {
+  composes: scroller from 'Components/Scroller/Scroller.css';
+
+  display: block;
+  margin: 0 0 10.5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  color: #3a3f51;
+  white-space: pre;
+  word-wrap: break-word;
+  word-break: break-all;
+  font-size: 13px;
+  font-family: $monoSpaceFontFamily;
+  line-height: 1.52857143;
+}

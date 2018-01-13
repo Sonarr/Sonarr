@@ -1,0 +1,18 @@
+.title {
+  line-height: $lineHeight;
+}
+
+.title {
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .title {
+    @add-mixin truncate;
+
+    float: left;
+    clear: left;
+    width: 160px;
+    text-align: right;
+  }
+}

@@ -1,0 +1,22 @@
+.jumpBar {
+  display: flex;
+  align-content: stretch;
+  align-items: stretch;
+  align-self: stretch;
+  justify-content: center;
+  flex: 0 0 30px;
+}
+
+.jumpBarItems {
+  display: flex;
+  justify-content: space-around;
+  flex: 0 0 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .jumpBar {
+    display: none;
+  }
+}

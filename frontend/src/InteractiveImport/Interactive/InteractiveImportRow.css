@@ -1,0 +1,18 @@
+.relativePath {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  word-break: break-all;
+}
+
+.quality,
+.language {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  text-align: center;
+}
+
+.label {
+  composes: label from 'Components/Label.css';
+
+  cursor: pointer;
+}

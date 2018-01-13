@@ -1,0 +1,31 @@
+.alert {
+  display: block;
+  margin: 5px;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.danger {
+  border-color: $alertDangerBorderColor;
+  background-color: $alertDangerBackgroundColor;
+  color: $alertDangerColor;
+}
+
+.info {
+  border-color: $alertInfoBorderColor;
+  background-color: $alertInfoBackgroundColor;
+  color: $alertInfoColor;
+}
+
+.success {
+  border-color: $alertSuccessBorderColor;
+  background-color: $alertSuccessBackgroundColor;
+  color: $alertSuccessColor;
+}
+
+.warning {
+  border-color: $alertWarningBorderColor;
+  background-color: $alertWarningBackgroundColor;
+  color: $alertWarningColor;
+}

@@ -1,0 +1,60 @@
+.header {
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: $headerHeight;
+  background-color: #23b7e5;
+  color: $white;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  flex: 0 0 $sidebarWidth;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+}
+
+.sidebarToggleContainer {
+  display: none;
+  justify-content: center;
+  flex: 0 0 45px;
+  margin-right: 14px;
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.donate {
+  composes: link from 'Components/Link/Link.css';
+
+  width: 30px;
+  color: $themeRed;
+  text-align: center;
+  line-height: 60px;
+
+  &:hover {
+    color: #9c1f30;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .logoContainer {
+    flex: 0 0 60px;
+  }
+
+  .sidebarToggleContainer {
+    display: flex;
+  }
+
+  .donate {
+    display: none;
+  }
+}
