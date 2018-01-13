@@ -9,6 +9,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly Logger _logger;
         private readonly StackFrameHelper _stackFrameHelper;
 
+        public override bool CheckOnSchedule => false;
+
         public MonoDebugCheck(Logger logger, StackFrameHelper stackFrameHelper)
         {
             _logger = logger;
