@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -67,7 +67,12 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 6*60, TypeName = typeof(CheckHealthCommand).FullName},
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 24*60, TypeName = typeof(HousekeepingCommand).FullName},
-                    new ScheduledTask{ Interval = 7*24*60, TypeName = typeof(BackupCommand).FullName},
+
+                    new ScheduledTask
+                    {
+                        Interval = GetBackupInterval(),
+                        TypeName = typeof(BackupCommand).FullName
+                    },
 
                     new ScheduledTask
                     { 
@@ -102,6 +107,13 @@ namespace NzbDrone.Core.Jobs
 
                 _scheduledTaskRepository.Upsert(currentDefinition);
             }
+        }
+
+        private int GetBackupInterval()
+        {
+            var interval = _configService.BackupInterval;
+
+            return interval * 60 * 24;
         }
 
         private int GetRssSyncInterval()

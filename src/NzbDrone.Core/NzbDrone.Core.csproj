@@ -125,6 +125,7 @@
     <Compile Include="Backup\BackupCommand.cs" />
     <Compile Include="Backup\BackupService.cs" />
     <Compile Include="Backup\MakeDatabaseBackup.cs" />
+    <Compile Include="Backup\RestoreBackupFailedException.cs" />
     <Compile Include="Blacklisting\Blacklist.cs" />
     <Compile Include="Blacklisting\BlacklistRepository.cs" />
     <Compile Include="Blacklisting\BlacklistService.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Datastore\Converters\UtcConverter.cs" />
     <Compile Include="Datastore\CorruptDatabaseException.cs" />
     <Compile Include="Datastore\Database.cs" />
+    <Compile Include="Datastore\DatabaseRestorationService.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Events\ModelEvent.cs" />
     <Compile Include="Datastore\Extensions\MappingExtensions.cs" />

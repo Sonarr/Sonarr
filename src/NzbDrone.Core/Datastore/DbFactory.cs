@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data.SQLite;
 using Marr.Data;
 using Marr.Data.Reflection;
@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Datastore
         private readonly IMigrationController _migrationController;
         private readonly IConnectionStringFactory _connectionStringFactory;
         private readonly IDiskProvider _diskProvider;
+        private readonly IRestoreDatabase _restoreDatabaseService;
 
         static DbFactory()
         {
@@ -54,11 +55,13 @@ namespace NzbDrone.Core.Datastore
 
         public DbFactory(IMigrationController migrationController,
                          IConnectionStringFactory connectionStringFactory,
-                         IDiskProvider diskProvider)
+                         IDiskProvider diskProvider,
+                         IRestoreDatabase restoreDatabaseService)
         {
             _migrationController = migrationController;
             _connectionStringFactory = connectionStringFactory;
             _diskProvider = diskProvider;
+            _restoreDatabaseService = restoreDatabaseService;
         }
 
         public IDatabase Create(MigrationType migrationType = MigrationType.Main)
@@ -70,61 +73,26 @@ namespace NzbDrone.Core.Datastore
         {
             string connectionString;
 
-
             switch (migrationContext.MigrationType)
             {
                 case MigrationType.Main:
                     {
                         connectionString = _connectionStringFactory.MainDbConnectionString;
+                        CreateMain(connectionString, migrationContext);
+
                         break;
                     }
                 case MigrationType.Log:
                     {
                         connectionString = _connectionStringFactory.LogDbConnectionString;
+                        CreateLog(connectionString, migrationContext);
+
                         break;
                     }
                 default:
                     {
                         throw new ArgumentException("Invalid MigrationType");
                     }
-            }
-
-            try
-            {
-                _migrationController.Migrate(connectionString, migrationContext);
-            }
-            catch (SQLiteException ex)
-            {
-                var fileName = _connectionStringFactory.GetDatabasePath(connectionString);
-
-                if (migrationContext.MigrationType == MigrationType.Log)
-                {
-                    Logger.Error(ex, "Logging database is corrupt, attempting to recreate it automatically");
-
-                    try
-                    {
-                        _diskProvider.DeleteFile(fileName + "-shm");
-                        _diskProvider.DeleteFile(fileName + "-wal");
-                        _diskProvider.DeleteFile(fileName + "-journal");
-                        _diskProvider.DeleteFile(fileName);
-                    }
-                    catch (Exception)
-                    {
-                        Logger.Error("Unable to recreate logging database automatically. It will need to be removed manually.");
-                    }
-
-                    _migrationController.Migrate(connectionString, migrationContext);
-                }
-
-                else
-                {
-                    if (OsInfo.IsOsx)
-                    {
-                        throw new CorruptDatabaseException("Database file: {0} is corrupt, restore from backup if available. See: https://github.com/Sonarr/Sonarr/wiki/FAQ#i-use-sonarr-on-a-mac-and-it-suddenly-stopped-working-what-happened", ex, fileName);
-                    }
-
-                    throw new CorruptDatabaseException("Database file: {0} is corrupt, restore from backup if available. See: https://github.com/Sonarr/Sonarr/wiki/FAQ#i-am-getting-an-error-database-disk-image-is-malformed", ex, fileName);
-                }
             }
 
             var db = new Database(migrationContext.MigrationType.ToString(), () =>
@@ -138,6 +106,54 @@ namespace NzbDrone.Core.Datastore
                 });
 
             return db;
+        }
+
+        private void CreateMain(string connectionString, MigrationContext migrationContext)
+        {
+            try
+            {
+                _restoreDatabaseService.Restore();
+                _migrationController.Migrate(connectionString, migrationContext);
+            }
+            catch (SQLiteException e)
+            {
+                var fileName = _connectionStringFactory.GetDatabasePath(connectionString);
+
+                if (OsInfo.IsOsx)
+                {
+                    throw new CorruptDatabaseException("Database file: {0} is corrupt, restore from backup if available. See: https://github.com/Sonarr/Sonarr/wiki/FAQ#i-use-sonarr-on-a-mac-and-it-suddenly-stopped-working-what-happened", e, fileName);
+                }
+
+                throw new CorruptDatabaseException("Database file: {0} is corrupt, restore from backup if available. See: https://github.com/Sonarr/Sonarr/wiki/FAQ#i-am-getting-an-error-database-disk-image-is-malformed", e, fileName);
+            }
+        }
+
+        private void CreateLog(string connectionString, MigrationContext migrationContext)
+        {
+            try
+            {
+                _migrationController.Migrate(connectionString, migrationContext);
+            }
+            catch (SQLiteException e)
+            {
+                var fileName = _connectionStringFactory.GetDatabasePath(connectionString);
+
+                Logger.Error(e, "Logging database is corrupt, attempting to recreate it automatically");
+
+                try
+                {
+                    _diskProvider.DeleteFile(fileName + "-shm");
+                    _diskProvider.DeleteFile(fileName + "-wal");
+                    _diskProvider.DeleteFile(fileName + "-journal");
+                    _diskProvider.DeleteFile(fileName);
+                }
+                catch (Exception)
+                {
+                    Logger.Error("Unable to recreate logging database automatically. It will need to be removed manually.");
+                }
+
+                _migrationController.Migrate(connectionString, migrationContext);
+            }
         }
     }
 }
