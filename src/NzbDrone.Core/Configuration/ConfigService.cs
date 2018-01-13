@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
@@ -330,6 +329,12 @@ namespace NzbDrone.Core.Configuration
         public string ProxyBypassFilter => GetValue("ProxyBypassFilter", string.Empty);
 
         public bool ProxyBypassLocalAddresses => GetValueBoolean("ProxyBypassLocalAddresses", true);
+
+        public string BackupFolder => GetValue("BackupFolder", "Backups");
+
+        public int BackupInterval => GetValueInt("BackupInterval", 7);
+
+        public int BackupRetention => GetValueInt("BackupRetention", 28);
 
         private string GetValue(string key)
         {
