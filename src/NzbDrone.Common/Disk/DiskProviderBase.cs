@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -472,6 +472,14 @@ namespace NzbDrone.Common.Disk
                 {
                     DeleteFolder(subfolder, false);
                 }
+            }
+        }
+
+        public void SaveStream(Stream stream, string path)
+        {
+            using (var fileStream = OpenWriteStream(path))
+            {
+                stream.CopyTo(fileStream);
             }
         }
     }

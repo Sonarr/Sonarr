@@ -76,5 +76,10 @@ namespace NzbDrone.Core.Configuration
         string ProxyPassword { get; }
         string ProxyBypassFilter { get; }
         bool ProxyBypassLocalAddresses { get; }
+
+        // Backups
+        string BackupFolder { get; }
+        int BackupInterval { get; }
+        int BackupRetention { get; }
     }
 }
