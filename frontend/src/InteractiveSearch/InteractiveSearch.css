@@ -1,0 +1,9 @@
+.filterMenuContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.filteredMessage {
+  margin-top: 10px;
+}

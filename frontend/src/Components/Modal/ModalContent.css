@@ -1,0 +1,23 @@
+.modalContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  background-color: $modalBackgroundColor;
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+
+  &:hover {
+    color: $modalCloseButtonHoverColor;
+  }
+}

@@ -1,0 +1,13 @@
+.dayOfWeek {
+  flex: 1 0 14.28%;
+  background-color: #e4eaec;
+  text-align: center;
+}
+
+.isSingleDay {
+  width: 100%;
+}
+
+.isToday {
+  background-color: $calendarTodayBackgroundColor;
+}

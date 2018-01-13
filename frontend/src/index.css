@@ -1,0 +1,15 @@
+html,
+body {
+  height: 100%; /* needed for proper layout */
+}
+
+body {
+  overflow: hidden;
+  background-color: #f5f7fa;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  body {
+    overflow-y: auto;
+  }
+}

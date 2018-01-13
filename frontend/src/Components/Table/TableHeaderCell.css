@@ -1,0 +1,16 @@
+.headerCell {
+  padding: 8px;
+  border: none !important;
+  text-align: left;
+  font-weight: bold;
+}
+
+.sortIcon {
+  margin-left: 10px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .headerCell {
+    white-space: nowrap;
+  }
+}

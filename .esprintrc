@@ -1,0 +1,9 @@
+{
+  "paths": [
+    "frontend/src/**/*.js"
+  ],
+  "ignored": [
+    "**/node_modules/**/*"
+  ],
+  "port": 5004
+}

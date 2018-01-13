@@ -1,0 +1,32 @@
+.toolbarButton {
+  composes: link from 'Components/Link/Link.css';
+
+  width: $toolbarButtonWidth;
+  text-align: center;
+
+  &:hover {
+    color: $toobarButtonHoverColor;
+  }
+
+  &.isDisabled {
+    color: $disabledColor;
+  }
+}
+
+.isDisabled {
+  color: $disabledColor;
+}
+
+.labelContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 16px;
+}
+
+.label {
+  padding: 0 3px;
+  color: $toolbarLabelColor;
+  font-size: $extraSmallFontSize;
+  line-height: calc($extraSmallFontSize + 1px);
+}

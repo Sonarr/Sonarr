@@ -1,0 +1,19 @@
+.menuItem {
+  @add-mixin truncate;
+
+  display: block;
+  flex-shrink: 0;
+  padding: 10px 20px;
+  min-width: 150px;
+  max-width: 250px;
+  background-color: $toolbarMenuItemBackgroundColor;
+  color: $menuItemColor;
+  line-height: 20px;
+
+  &:hover,
+  &:focus {
+    background-color: $toolbarMenuItemHoverBackgroundColor;
+    color: $menuItemHoverColor;
+    text-decoration: none;
+  }
+}

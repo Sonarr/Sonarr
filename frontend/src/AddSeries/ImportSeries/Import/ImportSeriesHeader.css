@@ -1,0 +1,45 @@
+.folder {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 1 0 200px;
+}
+
+.monitor {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 1 200px;
+  min-width: 185px;
+}
+
+.qualityProfile,
+.languageProfile {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 1 250px;
+  min-width: 170px;
+}
+
+.seriesType {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 1 200px;
+  min-width: 120px;
+}
+
+.seasonFolder {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 1 150px;
+  min-width: 120px;
+}
+
+.series {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 1 400px;
+  min-width: 300px;
+}
+
+.detailsIcon {
+  margin-left: 8px;
+}

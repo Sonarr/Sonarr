@@ -1,0 +1,18 @@
+.formGroupsContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.formGroupWrapper {
+  flex: 0 0 calc($formGroupSmallWidth - 100px);
+}
+
+.deleteButtonContainer {
+  margin-right: auto;
+}
+
+@media only screen and (max-width: $breakpointLarge) {
+  .formGroupsContainer {
+    display: block;
+  }
+}

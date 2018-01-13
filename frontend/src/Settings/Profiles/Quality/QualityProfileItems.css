@@ -1,0 +1,15 @@
+.editGroupsButton {
+  composes: button from 'Components/Link/Button.css';
+
+  margin-top: 10px;
+}
+
+.editGroupsButtonIcon {
+  margin-right: 8px;
+}
+
+.qualities {
+  margin-top: 10px;
+  transition: min-height 200ms;
+  user-select: none;
+}

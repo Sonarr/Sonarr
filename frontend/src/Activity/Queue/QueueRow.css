@@ -1,0 +1,23 @@
+.quality {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 150px;
+}
+
+.protocol {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 100px;
+}
+
+.progress {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 150px;
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 70px;
+}

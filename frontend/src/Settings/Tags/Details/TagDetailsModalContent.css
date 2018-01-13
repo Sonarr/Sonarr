@@ -1,0 +1,26 @@
+.items {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  flex: 0 0 100%;
+}
+
+.restriction {
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid $borderColor;
+
+  &:last-child {
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+}
+
+.deleteButton {
+  composes: button from 'Components/Link/Button.css';
+
+  margin-right: auto;
+}
