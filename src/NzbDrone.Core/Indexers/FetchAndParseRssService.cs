@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
@@ -52,6 +52,8 @@ namespace NzbDrone.Core.Indexers
 
                              lock (result)
                              {
+                                 _logger.Debug("Found {0} from {1}", indexerReports.Count, indexer.Name);
+
                                  result.AddRange(indexerReports);
                              }
                          }
