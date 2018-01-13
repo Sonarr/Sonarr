@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
@@ -62,7 +62,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldDefinition(8, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(TransmissionPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public int OlderTvPriority { get; set; }
 
-        [FieldDefinition(9, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(9, Label = "Add Paused", Type = FieldType.Checkbox)]
+        public bool AddPaused { get; set; }
+
+        [FieldDefinition(10, Label = "Use SSL", Type = FieldType.Checkbox)]
         public bool UseSsl { get; set; }
 
         public NzbDroneValidationResult Validate()
