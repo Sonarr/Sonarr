@@ -1,0 +1,17 @@
+.metadata {
+  composes: card from 'Components/Card.css';
+
+  width: 290px;
+}
+
+.name {
+  margin-bottom: 20px;
+  font-weight: 300;
+  font-size: 24px;
+}
+
+.label {
+  composes: label from 'Components/Label.css';
+
+  width: 100%;
+}

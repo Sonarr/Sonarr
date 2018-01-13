@@ -1,0 +1,41 @@
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  width: 100%;
+  cursor: default;
+
+  &:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+.isSelected {
+  background-color: #e2e2e2;
+
+  &.isMobile {
+    background-color: inherit;
+
+    .iconContainer {
+      color: $primaryColor;
+    }
+  }
+}
+
+.isDisabled {
+  background-color: #aaa;
+}
+
+.isHidden {
+  display: none;
+}
+
+.isMobile {
+  height: 50px;
+  border-bottom: 1px solid $borderColor;
+
+  &:last-child {
+    border: none;
+  }
+}

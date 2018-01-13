@@ -1,0 +1,51 @@
+.pageContentBodyWrapper {
+  display: flex;
+  flex: 1 0 1px;
+  overflow: hidden;
+}
+
+.contentBody {
+  composes: contentBody from 'Components/Page/PageContentBody.css';
+
+  display: flex;
+  flex-direction: column;
+}
+
+.postersInnerContentBody {
+  composes: innerContentBody from 'Components/Page/PageContentBody.css';
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  /* 5px less padding than normal to handle poster's 5px margin */
+  padding: calc($pageContentBodyPadding - 5px);
+}
+
+.tableInnerContentBody {
+  composes: innerContentBody from 'Components/Page/PageContentBody.css';
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.contentBodyContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .pageContentBodyWrapper {
+    flex-basis: auto;
+  }
+
+  .contentBody {
+    flex-basis: 1px;
+  }
+
+  .postersInnerContentBody {
+    padding: calc($pageContentBodyPaddingSmallScreen - 5px);
+  }
+}

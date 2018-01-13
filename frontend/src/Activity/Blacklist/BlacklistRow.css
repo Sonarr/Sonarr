@@ -1,0 +1,18 @@
+.language,
+.quality {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 100px;
+}
+
+.indexer {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 80px;
+}
+
+.details {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 30px;
+}

@@ -1,0 +1,30 @@
+.input {
+  padding: 6px 16px;
+  width: 100%;
+  height: 35px;
+  border: 1px solid $inputBorderColor;
+  border-radius: 4px;
+  background-color: $white;
+  box-shadow: inset 0 1px 1px $inputBoxShadowColor;
+
+  &:focus {
+    outline: 0;
+    border-color: $inputFocusBorderColor;
+    box-shadow: inset 0 1px 1px $inputBoxShadowColor, 0 0 8px $inputFocusBoxShadowColor;
+  }
+}
+
+.hasError {
+  border-color: $inputErrorBorderColor;
+  box-shadow: inset 0 1px 1px $inputBoxShadowColor, 0 0 8px $inputErrorBoxShadowColor;
+}
+
+.hasWarning {
+  border-color: $inputWarningBorderColor;
+  box-shadow: inset 0 1px 1px $inputBoxShadowColor, 0 0 8px $inputWarningBoxShadowColor;
+}
+
+.hasButton {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}

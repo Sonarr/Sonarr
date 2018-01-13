@@ -1,0 +1,12 @@
+{
+  "js": {
+    "indent_size": 2,
+    "indent_char": " ",
+    "indent_level": 2,
+    "indent_with_tabs": false,
+    "preserve_newlines": true,
+    "brace_style": "collapse",
+    "max_preserve_newlines": 2,
+    "jslint_happy": true
+  }
+}

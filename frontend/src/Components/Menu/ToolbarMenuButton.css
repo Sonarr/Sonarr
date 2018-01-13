@@ -1,0 +1,11 @@
+.menuButton {
+  composes: menuButton from './MenuButton.css';
+
+  width: $toolbarButtonWidth;
+  height: $toolbarHeight;
+  text-align: center;
+}
+
+.label {
+  composes: label from 'Components/Page/Toolbar/PageToolbarButton.css';
+}

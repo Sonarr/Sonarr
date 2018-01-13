@@ -1,0 +1,39 @@
+.helpText {
+  margin-top: 5px;
+  color: $helpTextColor;
+  line-height: 20px;
+}
+
+.isError {
+  color: $dangerColor;
+
+  .link {
+    color: $dangerColor;
+
+    &:hover {
+      color: #e01313;
+    }
+  }
+}
+
+.isWarning {
+  color: $warningColor;
+
+  .link {
+    color: $warningColor;
+
+    &:hover {
+      color: #e36c00;
+    }
+  }
+}
+
+.isCheckInput {
+  padding-left: 30px;
+}
+
+.link {
+  composes: link from 'Components/Link/Link.css';
+
+  margin-left: 5px;
+}

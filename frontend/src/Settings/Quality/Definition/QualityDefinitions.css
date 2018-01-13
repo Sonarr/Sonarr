@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  font-weight: bold;
+}
+
+.quality,
+.title {
+  flex: 0 1 250px;
+}
+
+.sizeLimit {
+  flex: 0 1 500px;
+}
+
+.megabytesPerMinute {
+  flex: 0 0 250px;
+}
+
+.sizeLimitHelpTextContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  max-width: 1000px;
+}
+
+.sizeLimitHelpText {
+  max-width: 500px;
+  color: $helpTextColor;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .header {
+    display: none;
+  }
+
+  .definitions {
+    &:first-child {
+      border-top: none;
+    }
+  }
+}

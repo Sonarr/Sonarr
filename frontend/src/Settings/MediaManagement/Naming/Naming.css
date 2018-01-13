@@ -1,0 +1,5 @@
+.namingInput {
+  composes: text from 'Components/Form/TextInput.css';
+
+  font-family: $monoSpaceFontFamily;
+}

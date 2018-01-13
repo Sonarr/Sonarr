@@ -1,0 +1,31 @@
+.button {
+  composes: toolbarButton from 'Components/Page/Toolbar/PageToolbarButton.css';
+
+  position: relative;
+}
+
+.labelContainer {
+  composes: labelContainer from 'Components/Page/Toolbar/PageToolbarButton.css';
+}
+
+.label {
+  composes: label from 'Components/Page/Toolbar/PageToolbarButton.css';
+}
+
+.indicatorContainer {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+}
+
+.indicatorBackground {
+  color: $themeDarkColor;
+}
+
+.enabled {
+  color: $successColor;
+}
+
+.disabled {
+  color: $dangerColor;
+}

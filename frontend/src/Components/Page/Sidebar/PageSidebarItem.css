@@ -1,0 +1,48 @@
+.item {
+  border-left: 3px solid transparent;
+  color: $sidebarColor;
+  transition: border-left 0.3s ease-in-out;
+}
+
+.isActiveItem {
+  border-left: 3px solid $themeBlue;
+}
+
+.link {
+  display: block;
+  padding: 12px 24px;
+  color: $sidebarColor;
+
+  &:hover,
+  &:focus {
+    color: $themeBlue;
+    text-decoration: none;
+  }
+}
+
+.childLink {
+  composes: link;
+
+  padding: 10px 24px;
+}
+
+.isActiveLink {
+  color: $themeBlue;
+}
+
+.isActiveParentLink {
+  background-color: $sidebarActiveBackgroundColor;
+}
+
+.iconContainer {
+  display: inline-block;
+  width: 25px;
+}
+
+.noIcon {
+  margin-left: 25px;
+}
+
+.status {
+  float: right;
+}

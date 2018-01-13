@@ -1,0 +1,16 @@
+.tableContainer {
+  overflow-x: auto;
+}
+
+.table {
+  max-width: 100%;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .tableContainer {
+    overflow-y: hidden;
+    width: 100%;
+  }
+}

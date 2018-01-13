@@ -1,0 +1,12 @@
+.infos {
+  display: flex;
+  flex: 0 0 250px;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .infos {
+    margin-left: 0;
+  }
+}

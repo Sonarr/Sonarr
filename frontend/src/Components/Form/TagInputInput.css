@@ -1,0 +1,6 @@
+.inputContainer {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 6px 16px;
+  cursor: default;
+}

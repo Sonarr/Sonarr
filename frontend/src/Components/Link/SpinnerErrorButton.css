@@ -1,0 +1,23 @@
+.iconContainer {
+  composes: spinnerContainer from 'Components/Link/SpinnerButton.css';
+}
+
+.icon {
+  z-index: 1;
+}
+
+.label {
+  composes: label from 'Components/Link/SpinnerButton.css';
+}
+
+.showIcon {
+  .iconContainer {
+    left: 50%;
+    visibility: visible;
+  }
+
+  .label {
+    left: 100%;
+    opacity: 0;
+  }
+}

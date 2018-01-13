@@ -1,0 +1,23 @@
+.remotePathMapping {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 10px;
+  height: 30px;
+  border-bottom: 1px solid $borderColor;
+  line-height: 30px;
+}
+
+.host {
+  flex: 0 0 300px;
+}
+
+.path {
+  flex: 0 0 400px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1 0 auto;
+  padding-right: 10px;
+}

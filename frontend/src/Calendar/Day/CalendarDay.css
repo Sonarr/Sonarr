@@ -1,0 +1,25 @@
+.day {
+  flex: 1 0 14.28%;
+  overflow: hidden;
+  min-height: 70px;
+  border-bottom: 1px solid $borderColor;
+  border-left: 1px solid $borderColor;
+}
+
+.isSingleDay {
+  width: 100%;
+}
+
+.dayOfMonth {
+  padding-right: 5px;
+  border-bottom: 1px solid $borderColor;
+  text-align: right;
+}
+
+.isToday {
+  background-color: $calendarTodayBackgroundColor;
+}
+
+.isDifferentMonth {
+  color: $disabledColor;
+}

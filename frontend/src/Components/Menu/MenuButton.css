@@ -1,0 +1,19 @@
+.menuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  &::after {
+    margin-left: 5px;
+    content: '\25BE';
+  }
+
+  &:hover {
+    color: $toobarButtonHoverColor;
+  }
+}
+
+.isDisabled {
+  color: $disabledColor;
+}

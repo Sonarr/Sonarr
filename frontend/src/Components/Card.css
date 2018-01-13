@@ -1,0 +1,19 @@
+.card {
+  position: relative;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: $white;
+  box-shadow: 0 0 10px 1px $cardShadowColor;
+  color: $defaultColor;
+}
+
+.underlay {
+  @add-mixin cover;
+}
+
+.overlay {
+  @add-mixin linkOverlay;
+
+  position: relative;
+}

@@ -1,0 +1,83 @@
+$hoverScale: 1.05;
+
+.container {
+  padding: 10px;
+}
+
+.content {
+  transition: all 200ms ease-in;
+
+  &:hover {
+    z-index: 2;
+    box-shadow: 0 0 12px $black;
+    transition: all 200ms ease-in;
+
+    .controls {
+      opacity: 0.9;
+      transition: opacity 200ms linear 150ms;
+    }
+  }
+}
+
+.posterContainer {
+  position: relative;
+}
+
+.link {
+  composes: link from 'Components/Link/Link.css';
+
+  display: block;
+  background-color: $defaultColor;
+}
+
+.nextAiring {
+  background-color: #fafbfc;
+  text-align: center;
+  font-size: $smallFontSize;
+}
+
+.title {
+  @add-mixin truncate;
+
+  background-color: #fafbfc;
+  text-align: center;
+  font-size: $smallFontSize;
+}
+
+.ended {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-width: 0 25px 25px 0;
+  border-style: solid;
+  border-color: transparent $dangerColor transparent transparent;
+  color: $white;
+}
+
+.controls {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  border-radius: 4px;
+  background-color: #4f566f;
+  color: $white;
+  font-size: $smallFontSize;
+  opacity: 0;
+  transition: opacity 0;
+}
+
+.action {
+  composes: button from 'Components/Link/IconButton.css';
+
+  &:hover {
+    color: #ccc;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .container {
+    padding: 5px;
+  }
+}

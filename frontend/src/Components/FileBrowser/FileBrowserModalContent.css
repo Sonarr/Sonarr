@@ -1,0 +1,21 @@
+.modalBody {
+  composes: modalBody from 'Components/Modal/ModalBody.css';
+
+  display: flex;
+  flex-direction: column;
+}
+
+.pathInput {
+  composes: pathInputWrapper from 'Components/Form/PathInput.css';
+
+  flex: 0 0 auto;
+}
+
+.scroller {
+  margin-top: 20px;
+}
+
+.loading {
+  display: inline-block;
+  margin-right: auto;
+}

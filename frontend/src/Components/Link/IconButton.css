@@ -1,0 +1,20 @@
+.button {
+  composes: link from 'Components/Link/Link.css';
+
+  margin: 0 2px;
+  width: 22px;
+  border-radius: 4px;
+  background-color: transparent;
+  text-align: center;
+  font-size: inherit;
+
+  &:hover {
+    border: none;
+    background-color: inherit;
+    color: $iconButtonHoverColor;
+  }
+
+  &.isDisabled {
+    color: $iconButtonDisabledColor;
+  }
+}

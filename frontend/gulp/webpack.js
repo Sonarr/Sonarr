@@ -1,14 +1,9 @@
-const _ = require('lodash');
 const gulp = require('gulp');
-const simpleVars = require('postcss-simple-vars');
-const nested = require('postcss-nested');
-const autoprefixer = require('autoprefixer');
 const webpackStream = require('webpack-stream');
 const livereload = require('gulp-livereload');
 const path = require('path');
 const webpack = require('webpack');
 const errorHandler = require('./helpers/errorHandler');
-const reload = require('require-nocache')(module);
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const uiFolder = 'UI';
@@ -18,12 +13,19 @@ const isProduction = process.argv.indexOf('--production') > -1;
 console.log('ROOT:', root);
 console.log('isProduction:', isProduction);
 
-const cssVariables = [
+const cssVarsFiles = [
   '../src/Styles/Variables/colors',
   '../src/Styles/Variables/dimensions',
   '../src/Styles/Variables/fonts',
   '../src/Styles/Variables/animations'
 ].map(require.resolve);
+
+const extractCSSPlugin = new ExtractTextPlugin({
+  filename: path.join('_output', uiFolder, 'Content', 'styles.css'),
+  allChunks: true,
+  disable: false,
+  ignoreOrder: true
+});
 
 const config = {
   devtool: '#source-map',
@@ -39,21 +41,26 @@ const config = {
     index: 'index.js'
   },
   resolve: {
-    root: [
+    modules: [
       root,
       path.join(root, 'Shims'),
-      path.join(root, 'JsLibraries')
-    ]
+      'node_modules'
+    ],
+    alias: {
+      jquery: 'jquery/src/jquery'
+    }
   },
   output: {
     filename: path.join('_output', uiFolder, '[name].js'),
-    sourceMapFilename: path.join('_output', uiFolder, '[file].map')
+    sourceMapFilename: '[file].map'
   },
   plugins: [
-    new ExtractTextPlugin(path.join('_output', uiFolder, 'Content', 'styles.css'), { allChunks: true }),
+    extractCSSPlugin,
+
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor'
     }),
+
     new webpack.DefinePlugin({
       __DEV__: !isProduction,
       'process.env': {
@@ -62,22 +69,23 @@ const config = {
     })
   ],
   resolveLoader: {
-    modulesDirectories: [
+    modules: [
       'node_modules',
-      'gulp/webpack/'
+      'frontend/gulp/webpack/'
     ]
   },
-  eslint: {
-    formatter: function(results) {
-      return JSON.stringify(results);
-    }
-  },
+  // TODO: Do we need this loader?
+  // eslint: {
+  //   formatter: function(results) {
+  //     return JSON.stringify(results);
+  //   }
+  // },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js?$/,
         exclude: /(node_modules|JsLibraries)/,
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
           plugins: ['transform-class-properties'],
           presets: ['es2015', 'decorators-legacy', 'react', 'stage-2'],
@@ -93,51 +101,80 @@ const config = {
       {
         test: /\.css$/,
         exclude: /(node_modules|globals.css)/,
-        loader: ExtractTextPlugin.extract('style', 'css-loader?modules&importLoaders=1&sourceMap&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader')
+        use: extractCSSPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-variables-loader',
+              options: {
+                cssVarsFiles
+              }
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 1,
+                localIdentName: '[name]-[local]-[hash:base64:5]',
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                config: {
+                  ctx: {
+                    cssVarsFiles
+                  },
+                  path: 'frontend/postcss.config.js'
+                }
+              }
+            }
+          ]
+        })
       },
 
       // Global styles
       {
         test: /\.css$/,
         include: /(node_modules|globals.css)/,
-        loader: 'style!css-loader'
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader'
+          }
+        ]
       },
 
       // Fonts
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url?limit=10240&mimetype=application/font-woff&emitFile=false&name=Content/Fonts/[name].[ext]'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10240,
+              mimetype: 'application/font-woff',
+              emitFile: false,
+              name: 'Content/Fonts/[name].[ext]'
+            }
+          }
+        ]
       },
+
       {
         test: /\.(ttf|eot|eot?#iefix|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader?emitFile=false&name=Content/Fonts/[name].[ext]'
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              emitFile: false,
+              name: 'Content/Fonts/[name].[ext]'
+            }
+          }
+        ]
       }
     ]
-  },
-  postcss: function(wpack) {
-    cssVariables.forEach(wpack.addDependency);
-
-    return [
-      simpleVars({
-        variables: function() {
-          return cssVariables.reduce(function(obj, vars) {
-            return _.extend(obj, reload(vars));
-          }, {});
-        }
-      }),
-      nested(),
-      autoprefixer({
-        browsers: [
-          'Chrome >= 30',
-          'Firefox >= 30',
-          'Safari >= 6',
-          'Edge >= 12',
-          'Explorer >= 10',
-          'iOS >= 7',
-          'Android >= 4.4'
-        ]
-      })
-    ];
   }
 };
 

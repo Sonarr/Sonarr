@@ -1,0 +1,26 @@
+.contentFooter {
+  display: flex;
+  flex: 0 0 auto;
+  padding: 20px;
+  background-color: #f1f1f1;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .contentFooter {
+    display: block;
+
+    div {
+      margin-top: 10px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: $breakpointLarge) {
+  .contentFooter {
+    flex-wrap: wrap;
+  }
+}

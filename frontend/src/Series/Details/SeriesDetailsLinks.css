@@ -1,0 +1,13 @@
+.links {
+  margin: 0;
+}
+
+.link {
+  white-space: nowrap;
+}
+
+.linkLabel {
+  composes: label from 'Components/Label.css';
+
+  cursor: pointer;
+}

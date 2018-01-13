@@ -1,0 +1,74 @@
+.filterContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.filterText {
+  margin-left: 5px;
+  font-size: $largeFontSize;
+}
+
+.footer {
+  composes: modalFooter from 'Components/Modal/ModalFooter.css';
+
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.leftButtons,
+.centerButtons,
+.rightButtons {
+  display: flex;
+  flex: 1 0 33%;
+  flex-wrap: wrap;
+}
+
+.centerButtons {
+  justify-content: center;
+}
+
+.rightButtons {
+  justify-content: flex-end;
+}
+
+.importMode {
+  composes: select from 'Components/Form/SelectInput.css';
+
+  width: auto;
+}
+
+.errorMessage {
+  color: $dangerColor;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .footer {
+    .leftButtons,
+    .centerButtons,
+    .rightButtons {
+      flex-direction: column;
+    }
+
+    .leftButtons {
+      align-items: flex-start;
+    }
+
+    .centerButtons {
+      align-items: center;
+    }
+
+    .rightButtons {
+      align-items: flex-end;
+    }
+
+    a,
+    button {
+      margin-left: 0;
+
+      &:first-child {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
