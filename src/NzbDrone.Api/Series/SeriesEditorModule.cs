@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Nancy;
 using NzbDrone.Api.Extensions;
@@ -24,7 +24,7 @@ namespace NzbDrone.Api.Series
             var series = resources.Select(seriesResource => seriesResource.ToModel(_seriesService.GetSeries(seriesResource.Id))).ToList();
 
             return _seriesService.UpdateSeries(series)
-                                 .ToResource()
+                                 .ToResource(false)
                                  .AsResponse(HttpStatusCode.Accepted);
         }
     }
