@@ -1,4 +1,5 @@
-﻿using Nancy;
+using System.Threading.Tasks;
+using Nancy;
 using Nancy.Routing;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -81,14 +82,14 @@ namespace Sonarr.Api.V3.System
 
         private Response Shutdown()
         {
-            _lifecycleService.Shutdown();
-            return "".AsResponse();
+            Task.Factory.StartNew(() => _lifecycleService.Shutdown());
+            return new { ShuttingDown = true }.AsResponse();
         }
 
         private Response Restart()
         {
-            _lifecycleService.Restart();
-            return "".AsResponse();
+            Task.Factory.StartNew(() => _lifecycleService.Restart());
+            return new { Restarting = true }.AsResponse();
         }
     }
 }
