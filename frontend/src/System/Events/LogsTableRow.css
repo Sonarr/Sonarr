@@ -1,0 +1,35 @@
+.level {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 20px;
+}
+
+.info {
+  color: #1e90ff;
+}
+
+.debug {
+  color: #808080;
+}
+
+.trace {
+  color: #d3d3d3;
+}
+
+.warn {
+  color: $warningColor;
+}
+
+.error {
+  color: $dangerColor;
+}
+
+.fatal {
+  color: $purple;
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 45px;
+}

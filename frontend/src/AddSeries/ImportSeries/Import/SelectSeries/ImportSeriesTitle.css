@@ -1,0 +1,20 @@
+.titleContainer {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  overflow: hidden;
+}
+
+.title {
+  @add-mixin truncate;
+}
+
+.year {
+  margin-right: 5px;
+  margin-left: 5px;
+  color: $disabledColor;
+}
+
+.existing {
+  margin-left: 5px;
+}

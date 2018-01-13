@@ -1,0 +1,138 @@
+.cell {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  display: flex;
+  align-items: center;
+}
+
+.status {
+  composes: cell;
+
+  flex: 0 0 60px;
+}
+
+.sortTitle {
+  composes: cell;
+
+  flex: 4 0 110px;
+}
+
+.banner {
+  flex: 0 0 379px;
+}
+
+.link {
+  composes: link from 'Components/Link/Link.css';
+
+  position: relative;
+  display: block;
+  height: 70px;
+  background-color: $defaultColor;
+}
+
+.bannerImage {
+  width: 379px;
+  height: 70px;
+}
+
+.overlayTitle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  color: $offWhite;
+  text-align: center;
+  font-size: 20px;
+}
+
+.network {
+  composes: cell;
+
+  flex: 2 0 90px;
+}
+
+.qualityProfileId,
+.languageProfileId {
+  composes: cell;
+
+  flex: 1 0 125px;
+}
+
+.nextAiring,
+.previousAiring,
+.added,
+.genres {
+  composes: cell;
+
+  flex: 0 0 180px;
+}
+
+.seasonCount,
+.certification {
+  composes: cell;
+
+  flex: 0 0 100px;
+}
+
+.episodeProgress,
+.latestSeason {
+  composes: cell;
+
+  display: flex;
+  justify-content: center;
+  flex: 0 0 150px;
+  flex-direction: column;
+}
+
+.episodeCount {
+  composes: cell;
+
+  flex: 0 0 130px;
+}
+
+.path {
+  composes: cell;
+
+  flex: 1 0 150px;
+}
+
+.sizeOnDisk {
+  composes: cell;
+
+  flex: 0 0 120px;
+}
+
+.ratings {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 80px;
+}
+
+.tags {
+  composes: cell;
+
+  flex: 1 0 60px;
+}
+
+.useSceneNumbering {
+  composes: cell;
+
+  flex: 0 0 145px;
+}
+
+.actions {
+  composes: cell;
+
+  flex: 0 1 90px;
+}
+
+.checkInput {
+  composes: input from 'Components/Form/CheckInput.css';
+
+  margin-top: 0;
+}

@@ -1,0 +1,11 @@
+.cell {
+  padding: 8px;
+  border-top: 1px solid #eee;
+  line-height: 1.52857143;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .cell {
+    white-space: nowrap;
+  }
+}

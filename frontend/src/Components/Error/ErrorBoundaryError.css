@@ -1,0 +1,38 @@
+.container {
+  text-align: center;
+}
+
+.message {
+  margin: 50px 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: 36px;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.image {
+  height: 350px;
+}
+
+.details {
+  margin: 20px;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+@media only screen and (max-width: $breakpointMedium) {
+  .image {
+    height: 250px;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .image {
+    height: 150px;
+  }
+}

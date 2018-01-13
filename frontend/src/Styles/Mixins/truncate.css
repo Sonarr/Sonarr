@@ -1,0 +1,18 @@
+/**
+ * From: https://github.com/suitcss/utils-text/blob/master/lib/text.css
+ *
+ * Text truncation
+ *
+ * Prevent text from wrapping onto multiple lines, and truncate with an
+ * ellipsis.
+ *
+ * 1. Ensure that the node has a maximum width after which truncation can
+ *    occur.
+ */
+
+@define-mixin truncate {
+  overflow: hidden !important;
+  max-width: 100%; /* 1 */
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}

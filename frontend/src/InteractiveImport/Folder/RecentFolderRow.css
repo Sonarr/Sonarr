@@ -1,0 +1,5 @@
+.actions {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 40px;
+}

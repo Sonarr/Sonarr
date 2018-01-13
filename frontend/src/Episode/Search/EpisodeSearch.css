@@ -1,0 +1,16 @@
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 10px;
+}
+
+.button {
+  composes: button from 'Components/Link/Button.css';
+
+  width: 300px;
+}
+
+.buttonIcon {
+  margin-right: 5px;
+}

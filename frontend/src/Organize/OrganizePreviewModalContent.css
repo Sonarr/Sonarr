@@ -1,0 +1,24 @@
+.path {
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.episodeFormat {
+  margin-left: 5px;
+  font-family: $monoSpaceFontFamily;
+}
+
+.previews {
+  margin-top: 10px;
+}
+
+.selectAllInputContainer {
+  margin-right: auto;
+  line-height: 30px;
+}
+
+.selectAllInput {
+  composes: input from 'Components/Form/CheckInput.css';
+
+  margin: 0;
+}

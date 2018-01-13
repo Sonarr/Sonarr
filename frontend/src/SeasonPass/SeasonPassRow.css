@@ -1,0 +1,20 @@
+.status,
+.monitored {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 50px;
+}
+
+.title {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 1px;
+  white-space: nowrap;
+}
+
+.seasons {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  display: flex;
+  flex-wrap: wrap;
+}

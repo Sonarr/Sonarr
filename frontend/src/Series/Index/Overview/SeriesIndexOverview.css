@@ -1,0 +1,96 @@
+$hoverScale: 1.05;
+
+.container {
+  &:hover {
+    .content {
+      background-color: $tableRowHoverBackgroundColor;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-grow: 1;
+}
+
+.poster {
+  position: relative;
+}
+
+.posterContainer {
+  position: relative;
+}
+
+.link {
+  composes: link from 'Components/Link/Link.css';
+
+  display: block;
+  color: $defaultColor;
+
+  &:hover {
+    color: $defaultColor;
+    text-decoration: none;
+  }
+}
+
+.ended {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-width: 0 25px 25px 0;
+  border-style: solid;
+  border-color: transparent $dangerColor transparent transparent;
+  color: $white;
+}
+
+.info {
+  display: flex;
+  flex: 1 0 1px;
+  flex-direction: column;
+  overflow: hidden;
+  padding-left: 10px;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  margin-bottom: 10px;
+  line-height: 32px;
+}
+
+.title {
+  @add-mixin truncate;
+  composes: link;
+
+  flex: 1 0 1px;
+  font-weight: 300;
+  font-size: 30px;
+}
+
+.actions {
+  white-space: nowrap;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  flex: 1 0 auto;
+}
+
+.overview {
+  composes: link;
+
+  flex: 0 1 1000px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .overview {
+    display: none;
+  }
+}
