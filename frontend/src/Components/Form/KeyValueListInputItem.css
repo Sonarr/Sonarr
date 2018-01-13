@@ -1,0 +1,14 @@
+.itemContainer {
+  display: flex;
+  margin-bottom: 3px;
+  border-bottom: 1px solid $inputBorderColor;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.keyInput,
+.valueInput {
+  border: none;
+}

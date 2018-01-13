@@ -1,0 +1,10 @@
+require('./build.js');
+require('./clean.js');
+require('./copy.js');
+require('./handlebars.js');
+require('./imageMin.js');
+require('./less.js');
+require('./start.js');
+require('./stripBom.js');
+require('./watch.js');
+require('./webpack.js');

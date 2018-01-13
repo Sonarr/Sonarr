@@ -1,0 +1,10 @@
+.infoRow {
+  flex: 0 0 $seriesIndexOverviewInfoRowHeight;
+  margin: 2px 0;
+}
+
+.icon {
+  margin-right: 5px;
+  width: 25px !important;
+  text-align: center;
+}

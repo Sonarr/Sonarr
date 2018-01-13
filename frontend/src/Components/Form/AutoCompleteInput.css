@@ -1,0 +1,58 @@
+.input {
+  composes: input from 'Components/Form/Input.css';
+}
+
+.hasError {
+  composes: hasError from 'Components/Form/Input.css';
+}
+
+.hasWarning {
+  composes: hasWarning from 'Components/Form/Input.css';
+}
+
+.inputWrapper {
+  display: flex;
+}
+
+.inputContainer {
+  position: relative;
+  flex-grow: 1;
+}
+
+.container {
+  @add-mixin scrollbar;
+  @add-mixin scrollbarTrack;
+  @add-mixin scrollbarThumb;
+}
+
+.inputContainerOpen {
+  .container {
+    position: absolute;
+    z-index: 1;
+    overflow-y: auto;
+    max-height: 200px;
+    width: 100%;
+    border: 1px solid $inputBorderColor;
+    border-radius: 4px;
+    background-color: $white;
+    box-shadow: inset 0 1px 1px $inputBoxShadowColor;
+  }
+}
+
+.list {
+  margin: 5px 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.listItem {
+  padding: 0 16px;
+}
+
+.match {
+  font-weight: bold;
+}
+
+.highlighted {
+  background-color: $menuItemHoverBackgroundColor;
+}

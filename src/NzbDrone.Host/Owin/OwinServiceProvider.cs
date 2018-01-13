@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -70,7 +70,7 @@ namespace NzbDrone.Host.Owin
 
         private void BuildApp(IAppBuilder appBuilder)
         {
-            appBuilder.Properties["host.AppName"] = "NzbDrone";
+            appBuilder.Properties["host.AppName"] = "Sonarr";
 
             foreach (var middleWare in _owinMiddleWares.OrderBy(c => c.Order))
             {

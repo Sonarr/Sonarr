@@ -1,0 +1,14 @@
+.row {
+  display: flex;
+  transition: background-color 500ms;
+
+  &:hover {
+    background-color: #fafbfc;
+  }
+}
+
+@media only screen and (max-width: $breakpointMedium) {
+  .row {
+    overflow-x: visible !important;
+  }
+}

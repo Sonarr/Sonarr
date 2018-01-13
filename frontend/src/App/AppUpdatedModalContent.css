@@ -1,0 +1,15 @@
+.version {
+  margin: 0 3px;
+  font-weight: bold;
+}
+
+.maintenance {
+  margin-top: 20px;
+}
+
+.changes {
+  margin-top: 20px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 18px;
+}

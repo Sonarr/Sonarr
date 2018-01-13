@@ -1,0 +1,57 @@
+.updateAvailable {
+  display: flex;
+}
+
+.upToDate {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.upToDateIcon {
+  color: #37bc9b;
+  font-size: 30px;
+}
+
+.upToDateMessage {
+  padding-left: 5px;
+  font-size: 18px;
+  line-height: 30px;
+}
+
+.loading {
+  composes: loading from 'Components/Loading/LoadingIndicator.css';
+
+  margin-top: 5px;
+  margin-left: auto;
+}
+
+.update {
+  margin-top: 20px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.version {
+  font-size: 21px;
+}
+
+.space {
+  padding: 0 5px;
+}
+
+.date {
+  font-size: 16px;
+}
+
+.branch {
+  composes: label from 'Components/Label.css';
+
+  margin-left: 10px;
+  font-size: 14px;
+}

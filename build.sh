@@ -90,16 +90,16 @@ Build()
 
 RunGulp()
 {
-    echo "##teamcity[progressStart 'npm install']"
-    npm-cache install npm || CheckExitCode npm install --no-optional --no-bin-links
-    echo "##teamcity[progressFinish 'npm install']"
+    ProgressStart 'yarn install'
+    yarn install
+    ProgressEnd 'yarn install'
 
     echo "##teamcity[progressStart 'Running gulp']"
     CheckExitCode npm run build
     echo "##teamcity[progressFinish 'Running gulp']"
 
     echo "##teamcity[progressStart 'Running gulp (phantom)']"
-    CheckExitCode npm run build -- --phantom --production
+    CheckExitCode yarn run build -- --production
     echo "##teamcity[progressFinish 'Running gulp (phantom)']"
 }
 

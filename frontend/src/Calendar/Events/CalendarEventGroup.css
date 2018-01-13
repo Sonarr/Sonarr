@@ -1,0 +1,82 @@
+.eventGroup {
+  overflow-x: hidden;
+  margin: 4px 2px;
+  padding: 5px;
+  border-bottom: 1px solid $borderColor;
+  border-left: 4px solid $borderColor;
+  font-size: 12px;
+}
+
+.info,
+.airingInfo {
+  display: flex;
+}
+
+.seriesTitle {
+  @add-mixin truncate;
+
+  flex: 1 0 1px;
+  margin-right: 10px;
+  color: #3a3f51;
+  font-size: 14px;
+}
+
+.airTime {
+  flex: 1 0 1px;
+}
+
+.episodeInfo {
+  margin-left: 10px;
+}
+
+.absoluteEpisodeNumber {
+  margin-left: 3px;
+}
+
+.expandContainerInline {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1 0 20px;
+}
+
+.expandContainer,
+.collapseContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.collapseContainer {
+  margin-bottom: 5px;
+}
+
+.statusIcon {
+  margin-left: 3px;
+}
+
+/*
+ * Status
+ */
+
+.downloaded {
+  composes: downloaded from 'Calendar/Events/CalendarEvent.css';
+}
+
+.downloading {
+  composes: downloading from 'Calendar/Events/CalendarEvent.css';
+}
+
+.unmonitored {
+  composes: unmonitored from 'Calendar/Events/CalendarEvent.css';
+}
+
+.onAir {
+  composes: onAir from 'Calendar/Events/CalendarEvent.css';
+}
+
+.missing {
+  composes: missing from 'Calendar/Events/CalendarEvent.css';
+}
+
+.premiere {
+  composes: premiere from 'Calendar/Events/CalendarEvent.css';
+}

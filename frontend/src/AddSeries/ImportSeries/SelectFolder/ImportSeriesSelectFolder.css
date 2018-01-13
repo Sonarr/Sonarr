@@ -1,0 +1,32 @@
+.header {
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: 300;
+  font-size: 36px;
+}
+
+.tips {
+  font-size: 20px;
+}
+
+.tip {
+  font-size: $defaultFontSize;
+}
+
+.code {
+  font-size: 12px;
+  font-family: $monoSpaceFontFamily;
+}
+
+.recentFolders {
+  margin-top: 40px;
+}
+
+.startImport {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.importButtonIcon {
+  margin-right: 8px;
+}

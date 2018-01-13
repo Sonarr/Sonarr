@@ -1,0 +1,6 @@
+.episodeSearchCell {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  width: 70px;
+  white-space: nowrap;
+}

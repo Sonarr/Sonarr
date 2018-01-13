@@ -1,0 +1,15 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+
+.isSelected {
+  visibility: visible;
+  margin-left: 20px;
+}
+
+.isNotSelected {
+  visibility: hidden;
+  margin-left: 20px;
+}

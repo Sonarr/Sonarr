@@ -1,0 +1,13 @@
+.description {
+  line-height: $lineHeight;
+}
+
+.description {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  .description {
+    margin-left: 180px;
+  }
+}

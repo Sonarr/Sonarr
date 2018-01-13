@@ -1,0 +1,44 @@
+.seriesTitle {
+  margin-left: 5px;
+}
+
+.separator {
+  margin: 0 5px;
+}
+
+.tabs {
+  margin-top: -32px;
+}
+
+.tabList {
+  margin: 0;
+  padding: 0;
+}
+
+.tab {
+  position: relative;
+  bottom: -1px;
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-top: none;
+  list-style: none;
+  cursor: pointer;
+}
+
+.selectedTab {
+  border-color: $borderColor;
+  border-radius: 0 0 5px 5px;
+  background-color: rgba(239, 239, 239, 0.4);
+  color: $black;
+}
+
+.tabContent {
+  margin-top: 20px;
+}
+
+.openSeriesButton {
+  composes: button from 'Components/Link/Button.css';
+
+  margin-right: auto;
+}

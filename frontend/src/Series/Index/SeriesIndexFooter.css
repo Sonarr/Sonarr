@@ -1,0 +1,66 @@
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  font-size: $smallFontSize;
+}
+
+.legendItem {
+  display: flex;
+  margin-bottom: 4px;
+  line-height: 16px;
+}
+
+.legendItemColor {
+  margin-right: 8px;
+  width: 30px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.continuing {
+  composes: legendItemColor;
+
+  background-color: $primaryColor;
+}
+
+.ended {
+  composes: legendItemColor;
+
+  background-color: $successColor;
+}
+
+.missingMonitored {
+  composes: legendItemColor;
+
+  background-color: $dangerColor;
+}
+
+.missingUnmonitored {
+  composes: legendItemColor;
+
+  background-color: $warningColor;
+}
+
+.statistics {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+@media (max-width: $breakpointLarge) {
+  .statistics {
+    display: block;
+  }
+}
+
+@media (max-width: $breakpointSmall) {
+  .footer {
+    display: block;
+  }
+
+  .statistics {
+    display: flex;
+    margin-top: 20px;
+  }
+}

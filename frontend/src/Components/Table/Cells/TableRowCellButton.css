@@ -1,0 +1,4 @@
+.cell {
+  composes: cell from './TableRowCell.css';
+  composes: link from 'Components/Link/Link.css';
+}

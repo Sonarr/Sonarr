@@ -1,0 +1,14 @@
+.container {
+  text-align: center;
+}
+
+.message {
+  margin: 50px 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: 36px;
+}
+
+.image {
+  height: 350px;
+}

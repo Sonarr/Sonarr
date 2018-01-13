@@ -1,0 +1,31 @@
+.languageProfile {
+  composes: card from 'Components/Card.css';
+
+  width: 300px;
+}
+
+.nameContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  @add-mixin truncate;
+
+  margin-bottom: 20px;
+  font-weight: 300;
+  font-size: 24px;
+}
+
+.cloneButton {
+  composes: button from 'Components/Link/IconButton.css';
+
+  height: 36px;
+}
+
+.languages {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  pointer-events: all;
+}
