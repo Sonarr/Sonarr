@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
@@ -48,5 +48,6 @@ namespace NzbDrone.Common.Disk
         List<DirectoryInfo> GetDirectoryInfos(string path);
         List<FileInfo> GetFileInfos(string path);
         void RemoveEmptySubfolders(string path);
+        void SaveStream(Stream stream, string path);
     }
 }
