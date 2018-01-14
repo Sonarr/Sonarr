@@ -13,8 +13,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         private readonly IBuildFileNames _buildFileNames;
         private readonly Logger _logger;
 
-        public RejectionType Type => RejectionType.Temporary;
-
         public EpisodeTitleSpecification(IBuildFileNames buildFileNames, Logger logger)
         {
             _buildFileNames = buildFileNames;
