@@ -22,8 +22,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
         }
 
-        public RejectionType Type => RejectionType.Permanent;
-
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (_configService.SkipFreeSpaceCheckWhenImporting)
