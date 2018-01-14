@@ -115,6 +115,16 @@
     <Compile Include="DataAugmentation\Scene\SceneMappingServiceFixture.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxyFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
+    <Compile Include="Datastore\Converters\UtcConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\TimeSpanConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\QualityIntConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\OsPathConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\Int32ConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\GuidConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\EnumIntConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\DoubleConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\CommandConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\BooleanIntConverterFixture.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverterFixture.cs" />
     <Compile Include="Datastore\DatabaseFixture.cs" />
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />

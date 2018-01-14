@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
 
@@ -23,17 +23,7 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public object FromDB(ColumnMap map, object dbValue)
         {
-            if (dbValue == DBNull.Value)
-            {
-                return DBNull.Value;
-            }
-
-            if (dbValue is int)
-            {
-                return dbValue;
-            }
-
-            return Convert.ToInt32(dbValue);
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)
