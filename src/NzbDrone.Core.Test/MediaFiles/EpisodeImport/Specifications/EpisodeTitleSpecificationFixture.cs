@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -38,6 +39,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                     Episodes = episodes,
                                     Series = _series
                                 };
+
+            Mocker.GetMock<IBuildFileNames>()
+                  .Setup(s => s.RequiresEpisodeTitle(_series, episodes))
+                  .Returns(true);
         }
 
         [Test]
@@ -61,6 +66,18 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         {
             _localEpisode.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-7);
             _localEpisode.Episodes.First().Title = "TBA";
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_accept_when_episode_title_is_not_required()
+        {
+            _localEpisode.Episodes.First().Title = "TBA";
+
+            Mocker.GetMock<IBuildFileNames>()
+                  .Setup(s => s.RequiresEpisodeTitle(_series, _localEpisode.Episodes))
+                  .Returns(false);
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }

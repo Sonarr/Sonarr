@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Organizer
         private readonly IQualityDefinitionService _qualityDefinitionService;
         private readonly ICached<EpisodeFormat[]> _episodeFormatCache;
         private readonly ICached<AbsoluteEpisodeFormat[]> _absoluteEpisodeFormatCache;
+        private readonly ICached<bool> _requiresEpisodeTitleCache;
         private readonly Logger _logger;
 
         private static readonly Regex TitleRegex = new Regex(@"\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9]+))?(?<suffix>[- ._)\]]*)\}",
@@ -79,6 +80,7 @@ namespace NzbDrone.Core.Organizer
             _qualityDefinitionService = qualityDefinitionService;
             _episodeFormatCache = cacheManager.GetCache<EpisodeFormat[]>(GetType(), "episodeFormat");
             _absoluteEpisodeFormatCache = cacheManager.GetCache<AbsoluteEpisodeFormat[]>(GetType(), "absoluteEpisodeFormat");
+            _requiresEpisodeTitleCache = cacheManager.GetCache<bool>(GetType(), "requiresEpisodeTitle");
             _logger = logger;
         }
 
@@ -296,20 +298,23 @@ namespace NzbDrone.Core.Organizer
                 pattern = namingConfig.AnimeEpisodeFormat;
             }
 
-            var matches = TitleRegex.Matches(pattern);
-
-            foreach (Match match in matches)
+            return _requiresEpisodeTitleCache.Get(pattern, () =>
             {
-                var token = match.Groups["token"].Value;
+                var matches = TitleRegex.Matches(pattern);
 
-                if (FileNameBuilderTokenEqualityComparer.Instance.Equals(token, "{Episode Title}") ||
-                    FileNameBuilderTokenEqualityComparer.Instance.Equals(token, "{Episode CleanTitle}"))
+                foreach (Match match in matches)
                 {
-                    return true;
-                }
-            }
+                    var token = match.Groups["token"].Value;
 
-            return false;
+                    if (FileNameBuilderTokenEqualityComparer.Instance.Equals(token, "{Episode Title}") ||
+                        FileNameBuilderTokenEqualityComparer.Instance.Equals(token, "{Episode CleanTitle}"))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
         }
 
         private void AddSeriesTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)

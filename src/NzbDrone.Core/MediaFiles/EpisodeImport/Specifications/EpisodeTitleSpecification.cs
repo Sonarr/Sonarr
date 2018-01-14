@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
@@ -22,7 +22,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         }
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
-
+            if (!_buildFileNames.RequiresEpisodeTitle(localEpisode.Series, localEpisode.Episodes))
+            {
+                _logger.Debug("File name format does not require episode title, skipping check");
+                return Decision.Accept();
+            }
 
             foreach (var episode in localEpisode.Episodes)
             {
