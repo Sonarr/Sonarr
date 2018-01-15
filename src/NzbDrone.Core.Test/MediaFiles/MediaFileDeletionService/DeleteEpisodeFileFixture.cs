@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -63,9 +63,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
         [Test]
         public void should_throw_if_root_folder_does_not_exist()
         {
-            ExceptionVerification.ExpectedWarns(1);
-
             Assert.Throws<NzbDroneClientException>(() => Subject.DeleteEpisodeFile(_series, _episodeFile));
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -73,9 +72,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
         {
             GivenRootFolderExists();
 
-            ExceptionVerification.ExpectedWarns(1);
-
             Assert.Throws<NzbDroneClientException>(() => Subject.DeleteEpisodeFile(_series, _episodeFile));
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
