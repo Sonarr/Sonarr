@@ -19,7 +19,6 @@ namespace Marr.Data.Reflection
             var key = entityType.FullName + name;
             if (!MemberCache.TryGetValue(key, out member))
             {
-                var test = entityType.GetMembers();
                 member = entityType.GetMember(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)[0];
                 MemberCache[key] = member;
             }
