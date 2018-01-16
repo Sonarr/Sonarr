@@ -87,7 +87,7 @@ namespace NzbDrone.Api.Series
 
         private SeriesResource GetSeries(int id)
         {
-            var includeSeasonImages = Request.GetBooleanQueryParameter("includeSeasonImages");
+            var includeSeasonImages = Request != null && Request.GetBooleanQueryParameter("includeSeasonImages");
 
             var series = _seriesService.GetSeries(id);
             return MapToResource(series, includeSeasonImages);
