@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using NLog;
@@ -42,7 +43,7 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         public override bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/MediaCover");
+            return resourceUrl.StartsWith("/MediaCover", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

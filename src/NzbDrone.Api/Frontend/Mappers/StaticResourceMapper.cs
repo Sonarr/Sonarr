@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -28,7 +29,9 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         public override bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/Content") ||
+            resourceUrl = resourceUrl.ToLowerInvariant();
+
+            return resourceUrl.StartsWith("/content") ||
                    resourceUrl.EndsWith(".js") ||
                    resourceUrl.EndsWith(".map") ||
                    resourceUrl.EndsWith(".css") ||

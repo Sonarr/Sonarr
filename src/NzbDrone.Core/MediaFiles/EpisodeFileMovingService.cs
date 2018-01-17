@@ -12,7 +12,7 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
-using NzbDrone.Common;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (!_diskProvider.FolderExists(rootFolder))
             {
-                throw new EpisodeImport.RootFolderNotFoundException(string.Format("Root folder '{0}' was not found.", rootFolder));
+                throw new RootFolderNotFoundException(string.Format("Root folder '{0}' was not found.", rootFolder));
             }
 
             var changed = false;

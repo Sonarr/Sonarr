@@ -45,7 +45,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
                 if (parts.Length >= 2)
                 {
                     var key = parts[0];
-                    var value = parts[1];
+                    var value = parts[1].Trim('"');
 
                     if (!string.IsNullOrWhiteSpace(value))
                     {

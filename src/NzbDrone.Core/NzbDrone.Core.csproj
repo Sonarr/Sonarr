@@ -507,6 +507,8 @@
     <Compile Include="Download\DownloadEventHub.cs" />
     <Compile Include="Download\DownloadClientStatusRepository.cs" />
     <Compile Include="Download\DownloadClientStatusService.cs" />
+    <Compile Include="Download\InvalidNzbException.cs" />
+    <Compile Include="Download\NzbValidationService.cs" />
     <Compile Include="Download\Pending\PendingReleaseReason.cs" />
     <Compile Include="Download\TrackedDownloads\DownloadMonitoringService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownload.cs" />
@@ -585,6 +587,7 @@
     <Compile Include="HealthCheck\Checks\ProxyCheck.cs" />
     <Compile Include="HealthCheck\Checks\RootFolderCheck.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
+    <Compile Include="HealthCheck\EventDrivenHealthCheck.cs" />
     <Compile Include="HealthCheck\HealthCheck.cs" />
     <Compile Include="HealthCheck\HealthCheckBase.cs" />
     <Compile Include="HealthCheck\HealthCheckCompleteEvent.cs" />
@@ -799,6 +802,7 @@
     <Compile Include="MediaFiles\Events\EpisodeFileRenamedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFolderCreatedEvent.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeImportFailedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesScanSkippedEvent.cs" />
@@ -934,6 +938,7 @@
     <Compile Include="Notifications\Twitter\Twitter.cs" />
     <Compile Include="Notifications\Twitter\TwitterService.cs" />
     <Compile Include="Notifications\Twitter\TwitterSettings.cs" />
+    <Compile Include="Parser\InvalidSeasonException.cs" />
     <Compile Include="Parser\IsoLanguage.cs" />
     <Compile Include="Parser\IsoLanguages.cs" />
     <Compile Include="Parser\LanguageParser.cs" />
@@ -1180,6 +1185,7 @@
     <Compile Include="Validation\NzbDroneValidationFailure.cs" />
     <Compile Include="Validation\NzbDroneValidationResult.cs" />
     <Compile Include="Validation\NzbDroneValidationState.cs" />
+    <Compile Include="Validation\Paths\SystemFolderValidator.cs" />
     <Compile Include="Validation\Paths\MappedNetworkDriveValidator.cs" />
     <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
     <Compile Include="Validation\Paths\FolderWritableValidator.cs" />

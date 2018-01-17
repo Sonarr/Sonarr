@@ -26,8 +26,12 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:\W*S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
-                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+)))+)",
+                //Episodes without a title, Multi (S01E04E05, 1x04x05, etc)
+                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_]|[ex])(?<episode>\d{2,3}(?!\d+))){2,})",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Episodes without a title, Single (S01E05, 1x05)
+                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_ ]?[ex])(?<episode>\d{2,3}(?!\d+))))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - [SubGroup] Title Episode Absolute Episode Number ([SubGroup] Series Title Episode 01)
@@ -262,6 +266,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex CleanTorrentSuffixRegex = new Regex(@"\[(?:ettv|rartv|rarbg|cttv)\]$",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex CleanQualityBracketsRegex = new Regex(@"\[[a-z0-9 ._-]+\]$",
+                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)(?<!WEB-DL|480p|720p|1080p|2160p)(?:\b|[-._ ])",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -328,6 +335,16 @@ namespace NzbDrone.Core.Parser
                 simpleTitle = WebsitePrefixRegex.Replace(simpleTitle, string.Empty);
 
                 simpleTitle = CleanTorrentSuffixRegex.Replace(simpleTitle, string.Empty);
+
+                simpleTitle = CleanQualityBracketsRegex.Replace(simpleTitle, m =>
+                {
+                    if (QualityParser.ParseQualityName(m.Value).Quality != Qualities.Quality.Unknown)
+                    {
+                        return string.Empty;
+                    }
+
+                    return m.Value;
+                });
 
                 var airDateMatch = AirDateRegex.Match(simpleTitle);
                 if (airDateMatch.Success)

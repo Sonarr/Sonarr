@@ -33,7 +33,8 @@ namespace NzbDrone.Api.Extensions.Pipelines
             try
             {
                 if (
-                   !response.ContentType.Contains("image")
+                   response.Contents != Response.NoBody
+                && !response.ContentType.Contains("image")
                 && !response.ContentType.Contains("font")
                 && request.Headers.AcceptEncoding.Any(x => x.Contains("gzip"))
                 && !AlreadyGzipEncoded(response)

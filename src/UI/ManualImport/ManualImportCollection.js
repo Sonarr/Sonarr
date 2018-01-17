@@ -36,6 +36,12 @@ var Collection = PageableCollection.extend({
     },
 
     sortMappings : {
+        relativePath : {
+            sortValue : function(model, attr, order) {
+                return model.get(attr).toLowerCase();
+            }
+        },
+
         series : {
             sortValue : function(model, attr, order) {
                 var series = model.get(attr);

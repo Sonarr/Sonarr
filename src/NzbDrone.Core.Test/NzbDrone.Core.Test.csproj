@@ -176,6 +176,7 @@
     <Compile Include="Download\DownloadClientTests\Blackhole\UsenetBlackholeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DelugeTests\DelugeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadClientFixtureBase.cs" />
+    <Compile Include="Download\DownloadClientTests\DownloadStationTests\DownloadStationsTaskStatusJsonConverterFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\TorrentDownloadStationFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\SerialNumberProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\SharedFolderResolverFixture.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Download\DownloadClientTests\VuzeTests\VuzeFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
+    <Compile Include="Download\NzbValidationServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\PendingReleaseServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemovePendingFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
@@ -401,6 +403,7 @@
     <Compile Include="TvTests\ShouldRefreshSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
+    <Compile Include="ValidationTests\SystemFolderValidatorFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -571,6 +574,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Files\Nzbs\NotNzb.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Nzbs\NoFiles.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\TestArchive.tar.gz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -589,6 +598,9 @@
     <Content Include="Files\Xem\Names.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Files\Nzbs\ValidNzb.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

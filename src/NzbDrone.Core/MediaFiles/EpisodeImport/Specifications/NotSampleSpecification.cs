@@ -1,6 +1,8 @@
-﻿using NLog;
+using System;
+using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
@@ -25,18 +27,23 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            var sample = _detectSample.IsSample(localEpisode.Series,
-                                                localEpisode.Path,
-                                                localEpisode.IsSpecial);
-
-            if (sample == DetectSampleResult.Sample)
+            try
             {
-                return Decision.Reject("Sample");
+                var sample = _detectSample.IsSample(localEpisode.Series, localEpisode.Path, localEpisode.IsSpecial);
+
+                if (sample == DetectSampleResult.Sample)
+                {
+                    return Decision.Reject("Sample");
+                }
+
+                else if (sample == DetectSampleResult.Indeterminate)
+                {
+                    return Decision.Reject("Unable to determine if file is a sample");
+                }
             }
-
-            else if (sample == DetectSampleResult.Indeterminate)
+            catch (InvalidSeasonException e)
             {
-                return Decision.Reject("Unable to determine if file is a sample");
+                _logger.Warn(e, "Invalid season detected during sample check");
             }
 
             return Decision.Accept();

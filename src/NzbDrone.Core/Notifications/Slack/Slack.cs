@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
 using NLog;
@@ -107,6 +107,7 @@ namespace NzbDrone.Core.Notifications.Slack
         private SlackPayload CreatePayload(string message, List<Attachment> attachments = null)
         {
             var icon = Settings.Icon;
+            var channel = Settings.Channel;
 
             var payload = new SlackPayload
             {
@@ -126,6 +127,11 @@ namespace NzbDrone.Core.Notifications.Slack
                 {
                     payload.IconUrl = icon;
                 }
+            }
+
+            if (channel.IsNotNullOrWhiteSpace())
+            {
+                payload.Channel = channel;
             }
 
             return payload;

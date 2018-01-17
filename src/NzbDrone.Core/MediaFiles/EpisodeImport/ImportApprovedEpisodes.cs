@@ -125,6 +125,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 catch (RootFolderNotFoundException e)
                 {
                     _logger.Warn(e, "Couldn't import episode " + localEpisode);
+                    _eventAggregator.PublishEvent(new EpisodeImportFailedEvent(e, localEpisode, newDownload, downloadClientItem));
+
                     importResults.Add(new ImportResult(importDecision, "Failed to import episode, Root folder missing."));
                 }
                 catch (DestinationAlreadyExistsException e)
