@@ -155,8 +155,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
             if (indexer.Settings is ITorrentIndexerSettings indexerSettings)
             {
-                var ratio = double.Parse(indexerSettings.SeedRatio);
-                hasFinishedSeeding = download.DownloadItem.SeedRatio >= ratio;
+                hasFinishedSeeding = download.DownloadItem.SeedRatio >= indexerSettings.SeedRatio;
             }
 
             return (download.DownloadItem.CanBeRemoved || hasFinishedSeeding) &&

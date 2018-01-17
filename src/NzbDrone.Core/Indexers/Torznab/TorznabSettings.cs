@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             RuleFor(c => c.AdditionalParameters).Matches(AdditionalParametersRegex)
                                                 .When(c => !c.AdditionalParameters.IsNullOrWhiteSpace());
 
-            RuleFor(c => c.SeedRatio)
+            RuleFor(c => c.UiSeedRatio)
                 .Must(c => c.IsNullOrWhiteSpace() || double.TryParse(c, out var _))
                 .WithMessage("Seed ratio must be a valid decimal number");
         }
@@ -55,6 +55,8 @@ namespace NzbDrone.Core.Indexers.Torznab
     public class TorznabSettings : NewznabSettings, ITorrentIndexerSettings
     {
         private static readonly TorznabSettingsValidator Validator = new TorznabSettingsValidator();
+
+        public double SeedRatio { get; set; }
 
         public TorznabSettings()
         {
@@ -65,7 +67,11 @@ namespace NzbDrone.Core.Indexers.Torznab
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(7, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
-        public string SeedRatio { get; set; }
+        public string UiSeedRatio
+        {
+            get => SeedRatio.ToString();
+            set => SeedRatio = double.Parse(value);
+        }
 
         public override NzbDroneValidationResult Validate()
         {

@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
             RuleFor(c => c.BaseUrl).ValidRootUrl();
             RuleFor(c => c.ApiKey).NotEmpty();
 
-            RuleFor(c => c.SeedRatio)
+            RuleFor(c => c.UiSeedRatio)
                 .Must(c => c.IsNullOrWhiteSpace() || double.TryParse(c, out var _))
                 .WithMessage("Seed ratio must be a valid decimal number");
         }
@@ -21,6 +21,8 @@ namespace NzbDrone.Core.Indexers.Torrentleech
     public class TorrentleechSettings : ITorrentIndexerSettings
     {
         private static readonly TorrentleechSettingsValidator Validator = new TorrentleechSettingsValidator();
+
+        public double SeedRatio { get; set; }
 
         public TorrentleechSettings()
         {
@@ -38,7 +40,11 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(3, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
-        public string SeedRatio { get; set; }
+        public string UiSeedRatio
+        {
+            get => SeedRatio.ToString();
+            set => SeedRatio = double.Parse(value);
+        }
 
         public NzbDroneValidationResult Validate()
         {

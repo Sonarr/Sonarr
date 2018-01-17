@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
             RuleFor(c => c.BaseUrl).ValidRootUrl();
             RuleFor(c => c.AdditionalParameters).Matches("(&[a-z]+=[a-z0-9_]+)*", RegexOptions.IgnoreCase);
 
-            RuleFor(c => c.SeedRatio)
+            RuleFor(c => c.UiSeedRatio)
                 .Must(c => c.IsNullOrWhiteSpace() || double.TryParse(c, out var _))
                 .WithMessage("Seed ratio must be a valid decimal number");
         }
@@ -22,6 +22,8 @@ namespace NzbDrone.Core.Indexers.Nyaa
     public class NyaaSettings : ITorrentIndexerSettings
     {
         private static readonly NyaaSettingsValidator Validator = new NyaaSettingsValidator();
+
+        public double SeedRatio { get; set; }
 
         public NyaaSettings()
         {
@@ -40,7 +42,11 @@ namespace NzbDrone.Core.Indexers.Nyaa
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(3, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
-        public string SeedRatio { get; set; }
+        public string UiSeedRatio
+        {
+            get => SeedRatio.ToString();
+            set => SeedRatio = double.Parse(value);
+        }
 
         public NzbDroneValidationResult Validate()
         {

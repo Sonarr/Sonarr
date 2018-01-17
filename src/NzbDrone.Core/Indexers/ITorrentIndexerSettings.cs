@@ -4,6 +4,6 @@
     {
         int MinimumSeeders { get; set; }
 
-        string SeedRatio { get; set; }
+        double SeedRatio { get; set; }
     }
 }
