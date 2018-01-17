@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 return download.DownloadItem.CanBeRemoved && download.State == TrackedDownloadStage.Imported;
             }
 
-            var indexer = _indexerFactory.All().First(i => i.Name == historyItem.Data["indexer"]);
+            var indexer = _indexerFactory.All().First(i => i.Id == int.Parse(historyItem.Data["indexerId"]));
             if (indexer == null)
             {
                 return download.DownloadItem.CanBeRemoved && download.State == TrackedDownloadStage.Imported;
