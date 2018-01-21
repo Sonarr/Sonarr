@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.TvTests
 
         private void GivenSeriesLastRefreshedRecently()
         {
-            _series.LastInfoSync = DateTime.UtcNow.AddHours(-1);
+            _series.LastInfoSync = DateTime.UtcNow.AddMinutes(-30);
         }
 
         private void GivenRecentlyAired()
