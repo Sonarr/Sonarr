@@ -3,6 +3,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
@@ -10,10 +11,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
     public class MatchesFolderSpecification : IImportDecisionEngineSpecification
     {
         private readonly Logger _logger;
+        private readonly IParsingService _parsingService;
 
-        public MatchesFolderSpecification(Logger logger)
+        public MatchesFolderSpecification(ParsingService parsingService, Logger logger)
         {
             _logger = logger;
+            _parsingService = parsingService;
         }
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
@@ -30,6 +33,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             }
 
             var folderInfo = Parser.Parser.ParseTitle(dirInfo.Name);
+
+            if (folderInfo != null && folderInfo.IsPossibleSceneSeasonSpecial)
+            {
+                folderInfo = _parsingService.ParseSpecialEpisodeTitle(folderInfo, dirInfo.Name, localEpisode.Series.TvdbId, 0);
+            }
 
             if (folderInfo == null)
             {
