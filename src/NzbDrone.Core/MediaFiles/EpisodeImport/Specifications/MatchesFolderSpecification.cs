@@ -13,7 +13,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         private readonly Logger _logger;
         private readonly IParsingService _parsingService;
 
-        public MatchesFolderSpecification(ParsingService parsingService, Logger logger)
+        public MatchesFolderSpecification(IParsingService parsingService, Logger logger)
         {
             _logger = logger;
             _parsingService = parsingService;
