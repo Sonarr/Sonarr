@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -f /proc/1/comm ] && [ "`cat /proc/1/comm`" = "systemd" ]; then
+  rm -f /etc/init.d/sonarr
+  systemctl stop sonarr.service
+  systemctl disable sonarr.service
+fi
