@@ -1,0 +1,2 @@
+sonarr_bin/* /opt/sonarr
+debian/sonarr.service /lib/systemd/system

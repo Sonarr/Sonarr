@@ -248,7 +248,7 @@ PackageTests()
     fi
 
     cp $outputFolder/*.dll $testPackageFolder
-    cp ./*.sh $testPackageFolder
+    cp ./test.sh $testPackageFolder
 
     echo "Creating MDBs for tests"
     CreateMdbs $testPackageFolder
@@ -284,12 +284,21 @@ CleanupWindowsPackage()
 
 PublishArtifacts()
 {
+    ProgressStart 'Publishing Artifacts'
+
+    # Tests
     echo "##teamcity[publishArtifacts '_tests/** => tests.zip']"
+
+    # Releases
     echo "##teamcity[publishArtifacts '$outputFolder/** => Sonarr.$BRANCH.$BUILD_NUMBER.windows.zip!Sonarr']"
     echo "##teamcity[publishArtifacts '$outputFolderLinux/** => Sonarr.$BRANCH.$BUILD_NUMBER.linux.tar.gz!Sonarr']"
     echo "##teamcity[publishArtifacts '$outputFolderMacOS/** => Sonarr.$BRANCH.$BUILD_NUMBER.macos.tar.gz!Sonarr']"
     echo "##teamcity[publishArtifacts '$outputFolderMacOSApp/** => Sonarr.$BRANCH.$BUILD_NUMBER.macos.zip']"
-    echo "##teamcity[publishArtifacts 'debian => debian.zip/debian']"
+    
+    # Debian Package
+    echo "##teamcity[publishArtifacts 'distribution/** => distribution.zip']"
+    
+    ProgressEnd 'Publishing Artifacts'
 }
 
 # Use mono or .net depending on OS
