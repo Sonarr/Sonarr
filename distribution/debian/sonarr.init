@@ -1,0 +1,76 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          sonarr
+# Required-Start:    $local_fs $network $remote_fs
+# Required-Stop:     $local_fs $network $remote_fs
+# Should-Start:      $NetworkManager
+# Should-Stop:       $NetworkManager
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts instance of Sonarr
+# Description:       Starts instance of Sonarr using start-stop-daemon
+### END INIT INFO
+    
+############### BEGIN ARGUMENTS ##################
+# path to app
+APP_PATH=/usr/lib/sonarr
+   
+# user
+RUN_AS=sonarr
+    
+# path to mono bin
+DAEMON=mono
+
+# options for mono
+DAEMON_OPTS="--debug"
+
+# Path to store PID file
+PID_PATH=/var/run/sonarr
+
+# Sonarr arguments
+EXE_ARGS="/data=/var/lib/sonarr"
+############### END ARGUMENTS ##################
+
+mkdir -p ${PID_PATH}
+PID_FILE=${PID_PATH}/sonarr.pid
+EXE_NAME=`basename ${APP_PATH}/Sonarr.exe`
+DESC=`basename ${APP_PATH}/Sonarr.exe`
+SONARR_PID=`ps auxf | grep $EXENAME | grep -v grep | awk '{print $2}'`
+
+test -x $DAEMON || { echo "$DAEMON must be executable."; exit 1; }
+    
+set -e
+
+echo $SONARR_PID > $PID_FILE
+    
+case "$1" in
+start)
+    if [ -z "${SONARR_PID}" ]; then
+        echo "Starting $DESC"
+        rm ${PID_FILE} || return 1
+        install -d --mode=0755 -o $RUN_AS $PID_PATH || return 1
+        start-stop-daemon -d $APP_PATH -c $RUN_AS --start --background --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS $EXE_NAME $EXE_ARGS
+    else
+        echo "${DESC} already running."
+    fi
+    ;;
+stop)
+    echo "Stopping $DESC"
+    echo $SONARR_PID > $PID_FILE
+    start-stop-daemon --stop --pidfile $PID_FILE --retry 15
+    ;;
+
+restart|force-reload)
+    echo "Restarting $DESC"
+    start-stop-daemon --stop --pidfile $PID_FILE --retry 15
+    start-stop-daemon -d $APP_PATH -c $RUN_AS --start --background --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS $EXENAME
+    ;;
+*)
+     echo "Usage: `basename $0` {start|stop|restart|force-reload}" >&2    
+     exit 1
+    ;;   
+    
+esac
+
+exit 0

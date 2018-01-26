@@ -1,0 +1,3 @@
+sonarr_bin/* /usr/lib/sonarr
+debian/sonarr.service /lib/systemd/system
+debian/sonarr.init /etc/init.d

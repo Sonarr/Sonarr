@@ -1,0 +1,42 @@
+USER="sonarr"
+
+# Add User
+
+if ! getent passwd "$USER" >/dev/null; then
+  adduser --quiet --system --shell /bin/bash --home /var/lib/sonarr --group "$USER"
+fi
+
+if ! getent group "$USER" >/dev/null; then
+  groupadd "$USER"
+  usermod -a -G "$USER" "$USER"
+fi
+
+# Create home directory
+
+if [ ! -d /var/lib/sonarr ]
+then
+  mkdir -p /var/lib/sonarr
+  chown $USER:$USER /var/lib/sonarr
+fi
+
+# Set permissions on /usr/lib/sonarr
+
+chown -R $USER:$USER /usr/lib/sonarr
+
+# Start Sonarr automatically
+
+if [ -f /proc/1/comm ]; then
+  if [ "`cat /proc/1/comm`" = "systemd" ]; then
+    # Remove init.d script
+    rm -f /etc/init.d/sonarr
+
+    # Enable and start systemd service
+    systemctl enable sonarr.service
+    systemctl start sonarr.service
+  else
+    if [ -e "/etc/init.d/sonarr" ] && [ "`cat /proc/1/comm`" = "init" ] && [ -f /sbin/start ]; then
+      # start fails if already running
+      start sonarr || :
+    fi
+  fi
+fi
