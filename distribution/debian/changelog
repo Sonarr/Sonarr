@@ -1,0 +1,5 @@
+sonarr ({version}) {branch}; urgency=low
+
+  * Automatic Release.
+
+ -- Sonarr <hello@sonarr.tv>  Sun, 28 Jan 2018 00:00:00 -0700
