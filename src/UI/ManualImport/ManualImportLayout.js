@@ -4,6 +4,7 @@ var Marionette = require('marionette');
 var Backgrid = require('backgrid');
 var CommandController = require('../Commands/CommandController');
 var EmptyView = require('./EmptyView');
+var ErrorView = require('./ErrorView');
 var SelectFolderView = require('./Folder/SelectFolderView');
 var LoadingView = require('../Shared/LoadingView');
 var ManualImportRow = require('./ManualImportRow');
@@ -122,8 +123,11 @@ module.exports = Marionette.Layout.extend({
     },
 
     _loadCollection : function () {
+        var self = this;
         this.manualImportCollection = new ManualImportCollection({ folder: this.folder, downloadId: this.downloadId });
-        this.manualImportCollection.fetch();
+        this.manualImportCollection.fetch().fail(function () {
+            self.workspace.show(new ErrorView());
+        });
 
         this.listenTo(this.manualImportCollection, 'sync', this._showTable);
         this.listenTo(this.manualImportCollection, 'backgrid:selected', this._updateButtons);
