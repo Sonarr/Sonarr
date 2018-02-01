@@ -62,7 +62,6 @@ namespace NzbDrone.Core.Validation.Paths
                                   "/boot",
                                   "/lib",
                                   "/sbin",
-                                  "/srv",
                                   "/proc"
                               };
 
