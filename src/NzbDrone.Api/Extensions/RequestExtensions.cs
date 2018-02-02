@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Nancy;
 
 namespace NzbDrone.Api.Extensions
@@ -41,6 +41,18 @@ namespace NzbDrone.Api.Extensions
         {
             return request.Path.StartsWith("/MediaCover/", StringComparison.InvariantCultureIgnoreCase) ||
                    request.Path.StartsWith("/Content/Images/", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool GetBooleanQueryParameter(this Request request, string parameter, bool defaultValue = false)
+        {
+            var parameterValue = request.Query[parameter];
+
+            if (parameterValue.HasValue)
+            {
+                return bool.Parse(parameterValue.Value);
+            }
+
+            return defaultValue;
         }
     }
 }

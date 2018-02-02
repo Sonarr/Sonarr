@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Collections.Generic;
 using NzbDrone.Common.Extensions;
@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("filename", torrentUrl);
+            arguments.Add("paused", settings.AddPaused);
 
             if (!downloadDirectory.IsNullOrWhiteSpace())
             {
@@ -64,6 +65,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("metainfo", Convert.ToBase64String(torrentData));
+            arguments.Add("paused", settings.AddPaused);
 
             if (!downloadDirectory.IsNullOrWhiteSpace())
             {

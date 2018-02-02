@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
 
@@ -25,6 +25,11 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public object ToDB(object clrValue)
         {
+            if (clrValue == null)
+            {
+                return DBNull.Value;
+            }
+
             var value = clrValue;
 
             return value.ToString();

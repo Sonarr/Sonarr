@@ -332,6 +332,7 @@
     <Compile Include="DecisionEngine\Specifications\AnimeVersionUpgradeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\FullSeasonSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\MaximumSizeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\ProtocolSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QueueSpecification.cs" />
@@ -345,7 +346,6 @@
     <Compile Include="DecisionEngine\Specifications\RssSync\DeletedEpisodeFileSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\MonitoredEpisodeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\ProperSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\EpisodeRequestedSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
@@ -788,6 +788,7 @@
     <Compile Include="MediaFiles\EpisodeImport\DetectSample.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Manual\ManuallyImportedFile.cs" />
     <Compile Include="MediaFiles\EpisodeImport\RootFolderNotFoundException.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\EpisodeTitleSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\GrabbedReleaseQualitySpecification.cs" />

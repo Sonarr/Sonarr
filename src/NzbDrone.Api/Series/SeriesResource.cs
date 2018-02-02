@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.REST;
@@ -97,7 +97,7 @@ namespace NzbDrone.Api.Series
 
     public static class SeriesResourceMapper
     {
-        public static SeriesResource ToResource(this Core.Tv.Series model)
+        public static SeriesResource ToResource(this Core.Tv.Series model, bool includeSeasonImages = false)
         {
             if (model == null) return null;
 
@@ -121,7 +121,7 @@ namespace NzbDrone.Api.Series
                 AirTime = model.AirTime,
                 Images = model.Images,
                 
-                Seasons = model.Seasons.ToResource(),
+                Seasons = model.Seasons.ToResource(includeSeasonImages),
                 Year = model.Year,
                 
                 Path = model.Path,
@@ -214,9 +214,9 @@ namespace NzbDrone.Api.Series
             return series;
         }
 
-        public static List<SeriesResource> ToResource(this IEnumerable<Core.Tv.Series> series)
+        public static List<SeriesResource> ToResource(this IEnumerable<Core.Tv.Series> series, bool includeSeasonImages)
         {
-            return series.Select(ToResource).ToList();
+            return series.Select(s => ToResource(s, includeSeasonImages)).ToList();
         }
     }
 }

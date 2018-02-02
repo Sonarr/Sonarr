@@ -102,11 +102,11 @@ namespace NzbDrone.Core.Tv
         {
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
-        
-        public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle) 
+
+        public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle)
         {
             // TODO: can replace this search mechanism with something smarter/faster/better
-            var normalizedReleaseTitle = Parser.Parser.NormalizeEpisodeTitle(releaseTitle).Replace(".", " ");
+            var normalizedReleaseTitle = Parser.Parser.NormalizeEpisodeTitle(releaseTitle);
             var episodes = _episodeRepository.GetEpisodes(seriesId, seasonNumber);
 
             var matches = episodes.Select(

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
@@ -15,22 +15,17 @@ namespace NzbDrone.Core.Datastore.Converters
                 return TimeSpan.Zero;
             }
 
-            return TimeSpan.Parse(context.DbValue.ToString());
+            if (context.DbValue is TimeSpan)
+            {
+                return context.DbValue;
+            }
+
+            return TimeSpan.Parse(context.DbValue.ToString(), CultureInfo.InvariantCulture);
         }
 
         public object FromDB(ColumnMap map, object dbValue)
         {
-            if (dbValue == DBNull.Value)
-            {
-                return DBNull.Value;
-            }
-
-            if (dbValue is TimeSpan)
-            {
-                return dbValue;
-            }
-
-            return TimeSpan.Parse(dbValue.ToString(), CultureInfo.InvariantCulture);
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)
