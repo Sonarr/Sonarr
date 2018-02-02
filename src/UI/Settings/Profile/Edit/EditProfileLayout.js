@@ -103,6 +103,7 @@ var view = Marionette.Layout.extend({
 
     _updateDisableStatus : function() {
         if (this._isQualityInUse()) {
+            this.ui.deleteButton.attr('disabled', 'disabled');
             this.ui.deleteButton.addClass('disabled');
             this.ui.deleteButton.attr('title', 'Can\'t delete a profile that is attached to a series.');
         } else {
