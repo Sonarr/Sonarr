@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
 using NzbDrone.Core.Qualities;
@@ -27,9 +27,9 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public object ToDB(object clrValue)
         {
-            if(clrValue == DBNull.Value) return 0;
+            if (clrValue == DBNull.Value) return 0;
 
-            if(clrValue as Quality == null)
+            if (clrValue as Quality == null)
             {
                 throw new InvalidOperationException("Attempted to save a quality that isn't really a quality");
             }

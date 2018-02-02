@@ -40,7 +40,7 @@ module.exports = {
             return 'in ' + date.fromNow(true);
         }
 
-        if (date.isBefore(moment().add('years', -1))) {
+        if (date.isBefore(moment().add(-1, 'years'))) {
             return date.format(UiSettings.get('shortDateFormat'));
         }
 

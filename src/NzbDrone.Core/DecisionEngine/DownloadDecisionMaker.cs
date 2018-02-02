@@ -58,6 +58,7 @@ namespace NzbDrone.Core.DecisionEngine
             {
                 DownloadDecision decision = null;
                 _logger.ProgressTrace("Processing release {0}/{1}", reportNumber, reports.Count);
+                _logger.Debug("Processing release '{0}' from '{1}'", report.Title, report.Indexer);
 
                 try
                 {
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                     if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
                     {
-                        var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(report.Title, report.TvdbId, report.TvRageId, searchCriteria);
+                        var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, report.Title, report.TvdbId, report.TvRageId, searchCriteria);
 
                         if (specialEpisodeInfo != null)
                         {

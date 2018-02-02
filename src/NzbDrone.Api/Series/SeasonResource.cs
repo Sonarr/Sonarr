@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 namespace NzbDrone.Api.Series
 {
@@ -8,18 +9,20 @@ namespace NzbDrone.Api.Series
         public int SeasonNumber { get; set; }
         public bool Monitored { get; set; }
         public SeasonStatisticsResource Statistics { get; set; }
+        public List<MediaCover> Images { get; set; }
     }
 
     public static class SeasonResourceMapper
     {
-        public static SeasonResource ToResource(this Season model)
+        public static SeasonResource ToResource(this Season model, bool includeImages = false)
         {
             if (model == null) return null;
 
             return new SeasonResource
             {
                 SeasonNumber = model.SeasonNumber,
-                Monitored = model.Monitored
+                Monitored = model.Monitored,
+                Images = includeImages ? model.Images : null
             };
         }
 
@@ -30,13 +33,14 @@ namespace NzbDrone.Api.Series
             return new Season
             {
                 SeasonNumber = resource.SeasonNumber,
-                Monitored = resource.Monitored
+                Monitored = resource.Monitored,
+                Images = resource.Images
             };
         }
 
-        public static List<SeasonResource> ToResource(this IEnumerable<Season> models)
+        public static List<SeasonResource> ToResource(this IEnumerable<Season> models, bool includeImages = false)
         {
-            return models.Select(ToResource).ToList();
+            return models.Select(s => ToResource(s, includeImages)).ToList();
         }
 
         public static List<Season> ToModel(this IEnumerable<SeasonResource> resources)

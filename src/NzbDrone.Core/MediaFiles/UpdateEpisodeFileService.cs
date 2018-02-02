@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
@@ -25,6 +26,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IConfigService _configService;
         private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
+        private static readonly DateTime EpochTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public UpdateEpisodeFileService(IDiskProvider diskProvider,
                                         IConfigService configService,
@@ -77,6 +79,75 @@ namespace NzbDrone.Core.MediaFiles
             return false;
         }
 
+        private bool ChangeFileDateToLocalAirDate(string filePath, string fileDate, string fileTime)
+        {
+            DateTime airDate;
+
+            if (DateTime.TryParse(fileDate + ' ' + fileTime, out airDate))
+            {
+                // avoiding false +ve checks and set date skewing by not using UTC (Windows)
+                DateTime oldDateTime = _diskProvider.FileGetLastWrite(filePath);
+
+                if (OsInfo.IsNotWindows && airDate < EpochTime)
+                {
+                    _logger.Debug("Setting date of file to 1970-01-01 as actual airdate is before that time and will not be set properly");
+                    airDate = EpochTime;
+                }
+
+                if (!DateTime.Equals(airDate, oldDateTime))
+                {
+                    try
+                    {
+                        _diskProvider.FileSetLastWriteTime(filePath, airDate);
+                        _logger.Debug("Date of file [{0}] changed from '{1}' to '{2}'", filePath, oldDateTime, airDate);
+
+                        return true;
+                    }
+
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
+                    }
+                }
+            }
+
+            else
+            {
+                _logger.Debug("Could not create valid date to change file [{0}]", filePath);
+            }
+
+            return false;
+        }
+
+        private bool ChangeFileDateToUtcAirDate(string filePath, DateTime airDateUtc)
+        {
+            DateTime oldLastWrite = _diskProvider.FileGetLastWrite(filePath);
+
+            if (OsInfo.IsNotWindows && airDateUtc < EpochTime)
+            {
+                _logger.Debug("Setting date of file to 1970-01-01 as actual airdate is before that time and will not be set properly");
+                airDateUtc = EpochTime;
+            }
+
+            if (!DateTime.Equals(airDateUtc, oldLastWrite))
+            {
+                try
+                {
+                    _diskProvider.FileSetLastWriteTime(filePath, airDateUtc);
+                    _logger.Debug("Date of file [{0}] changed from '{1}' to '{2}'", filePath, oldLastWrite, airDateUtc);
+
+                    return true;
+                }
+
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
+                }
+            }
+
+            return false;
+        }
+
         public void Handle(SeriesScannedEvent message)
         {
             if (_configService.FileDate == FileDateType.None)
@@ -111,63 +182,6 @@ namespace NzbDrone.Core.MediaFiles
             {
                 _logger.ProgressDebug("No file dates changed for {0}", message.Series.Title);
             }
-        }
-
-        private bool ChangeFileDateToLocalAirDate(string filePath, string fileDate, string fileTime)
-        {
-            DateTime airDate;
-
-            if (DateTime.TryParse(fileDate + ' ' + fileTime, out airDate))
-            {
-                // avoiding false +ve checks and set date skewing by not using UTC (Windows)
-                DateTime oldDateTime = _diskProvider.FileGetLastWrite(filePath);
-
-                if (!DateTime.Equals(airDate, oldDateTime))
-                {
-                    try
-                    {
-                        _diskProvider.FileSetLastWriteTime(filePath, airDate);
-                        _logger.Debug("Date of file [{0}] changed from '{1}' to '{2}'", filePath, oldDateTime, airDate);
-
-                        return true;
-                    }
-
-                    catch (Exception ex)
-                    {
-                        _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
-                    }
-                }
-            }
-
-            else
-            {
-                _logger.Debug("Could not create valid date to change file [{0}]", filePath);
-            }
-
-            return false;
-        }
-
-        private bool ChangeFileDateToUtcAirDate(string filePath, DateTime airDateUtc)
-        {
-            DateTime oldLastWrite = _diskProvider.FileGetLastWrite(filePath);
-
-            if (!DateTime.Equals(airDateUtc, oldLastWrite))
-            {
-                try
-                {
-                    _diskProvider.FileSetLastWriteTime(filePath, airDateUtc);
-                    _logger.Debug("Date of file [{0}] changed from '{1}' to '{2}'", filePath, oldLastWrite, airDateUtc);
-
-                    return true;
-                }
-
-                catch (Exception ex)
-                {
-                    _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
-                }
-            }
-
-            return false;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -32,9 +32,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                                      IConfigService configService,
                                      IDiskProvider diskProvider,
                                      IRemotePathMappingService remotePathMappingService,
+                                     IValidateNzbs nzbValidationService,
                                      Logger logger
                                      )
-            : base(httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger)
         {
             _dsInfoProxy = dsInfoProxy;
             _dsTaskProxy = dsTaskProxy;
@@ -314,7 +315,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             switch (task.Status)
             {
+                case DownloadStationTaskStatus.Unknown:
                 case DownloadStationTaskStatus.Waiting:
+                case DownloadStationTaskStatus.FilehostingWaiting:
                     return task.Size == 0 || GetRemainingSize(task) > 0 ? DownloadItemStatus.Queued : DownloadItemStatus.Completed;
                 case DownloadStationTaskStatus.Paused:
                     return DownloadItemStatus.Paused;

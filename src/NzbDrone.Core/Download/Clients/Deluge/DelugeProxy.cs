@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -84,21 +84,33 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         public string AddTorrentFromMagnet(string magnetLink, DelugeSettings settings)
         {
-            var response = ProcessRequest<string>(settings, "core.add_torrent_magnet", magnetLink, new JObject());
+            var options = new
+                          {
+                              add_paused = settings.AddPaused,
+                              remove_at_ratio = false
+                          };
+
+            var response = ProcessRequest<string>(settings, "core.add_torrent_magnet", magnetLink, options);
 
             return response;
         }
 
         public string AddTorrentFromFile(string filename, byte[] fileContent, DelugeSettings settings)
         {
-            var response = ProcessRequest<string>(settings, "core.add_torrent_file", filename, fileContent, new JObject());
+            var options = new
+                          {
+                              add_paused = settings.AddPaused,
+                              remove_at_ratio = false
+                          };
+
+            var response = ProcessRequest<string>(settings, "core.add_torrent_file", filename, fileContent, options);
 
             return response;
         }
 
-        public bool RemoveTorrent(string hashString, bool removeData, DelugeSettings settings)
+        public bool RemoveTorrent(string hash, bool removeData, DelugeSettings settings)
         {
-            var response = ProcessRequest<bool>(settings, "core.remove_torrent", hashString, removeData);
+            var response = ProcessRequest<bool>(settings, "core.remove_torrent", hash, removeData);
 
             return response;
         }

@@ -9,7 +9,7 @@ module.exports = NzbDroneCell.extend({
     render : function() {
         var dateStr = this._getValue();
         var date = moment(dateStr);
-        var diff = date.diff(moment().zone(date.zone()).startOf('day'), 'days', true);
+        var diff = date.diff(moment().utcOffset(date.utcOffset()).startOf('day'), 'days', true);
         var result = '<span title="{0}">{1}</span>';
         var tooltip = date.format(UiSettings.longDateTime(true));
         var text;

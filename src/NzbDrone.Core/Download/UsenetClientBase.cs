@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Exceptions;
@@ -16,15 +16,18 @@ namespace NzbDrone.Core.Download
         where TSettings : IProviderConfig, new()
     {
         protected readonly IHttpClient _httpClient;
+        private readonly IValidateNzbs _nzbValidationService;
 
         protected UsenetClientBase(IHttpClient httpClient,
                                    IConfigService configService,
                                    IDiskProvider diskProvider,
                                    IRemotePathMappingService remotePathMappingService,
+                                   IValidateNzbs nzbValidationService,
                                    Logger logger)
             : base(configService, diskProvider, remotePathMappingService, logger)
         {
             _httpClient = httpClient;
+            _nzbValidationService = nzbValidationService;
         }
 
         public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
@@ -69,6 +72,8 @@ namespace NzbDrone.Core.Download
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading nzb failed", ex);
             }
+
+            _nzbValidationService.Validate(filename, nzbData);
 
             _logger.Info("Adding report [{0}] to the queue.", remoteEpisode.Release.Title);
             return AddFromNzbFile(remoteEpisode, filename, nzbData);

@@ -64,13 +64,16 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
         public void should_throw_if_root_folder_does_not_exist()
         {
             Assert.Throws<NzbDroneClientException>(() => Subject.DeleteEpisodeFile(_series, _episodeFile));
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
         public void should_should_throw_if_root_folder_is_empty()
         {
             GivenRootFolderExists();
+
             Assert.Throws<NzbDroneClientException>(() => Subject.DeleteEpisodeFile(_series, _episodeFile));
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

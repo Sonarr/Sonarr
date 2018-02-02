@@ -40,8 +40,6 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
 
-            _proxy.SetTorrentConfiguration(actualHash, "remove_at_ratio", false, Settings);
-
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
             if (isRecentEpisode && Settings.RecentTvPriority == (int)DelugePriority.First ||
@@ -66,8 +64,6 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
-
-            _proxy.SetTorrentConfiguration(actualHash, "remove_at_ratio", false, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 

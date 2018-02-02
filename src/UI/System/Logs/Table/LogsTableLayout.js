@@ -8,6 +8,7 @@ var GridPager = require('../../../Shared/Grid/Pager');
 var LogCollection = require('../LogsCollection');
 var ToolbarLayout = require('../../../Shared/Toolbar/ToolbarLayout');
 var LoadingView = require('../../../Shared/LoadingView');
+var ErrorView = require('../../../Shared/ErrorView');
 require('../../../jQuery/jquery.spin');
 
 module.exports = Marionette.Layout.extend({
@@ -57,6 +58,7 @@ module.exports = Marionette.Layout.extend({
         this.collection = new LogCollection();
 
         this.listenTo(this.collection, 'sync', this._showTable);
+        this.listenTo(this.collection, 'error', this._showTableError);
         this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
     },
 
@@ -66,6 +68,13 @@ module.exports = Marionette.Layout.extend({
 
     onShow : function() {
         this._showToolbar();
+    },
+
+    _showTableError : function() {
+        this.grid.show(new ErrorView({
+            title:   "Oh snap!",
+            message: "Failed to load logs, your ad blocker might be blocking the api calls."
+        }));
     },
 
     _showTable : function() {

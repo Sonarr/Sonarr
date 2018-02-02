@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                   .Returns(remoteEpisode);
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(s => s.ParseSpecialEpisodeTitle(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), null))
+                  .Setup(s => s.ParseSpecialEpisodeTitle(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), null))
                   .Returns(remoteEpisode.ParsedEpisodeInfo);
 
             var client = new DownloadClientDefinition()

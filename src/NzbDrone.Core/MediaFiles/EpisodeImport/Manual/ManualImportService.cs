@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -205,10 +205,23 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 item.Series = decision.LocalEpisode.Series;
             }
 
-            if (decision.LocalEpisode.Episodes.Any())
+            if (decision.LocalEpisode.Episodes.Any() && decision.LocalEpisode.Episodes.Select(c => c.SeasonNumber).Distinct().Count() == 1)
             {
-                item.SeasonNumber = decision.LocalEpisode.SeasonNumber;
-                item.Episodes = decision.LocalEpisode.Episodes;
+                var seasons = decision.LocalEpisode.Episodes.Select(c => c.SeasonNumber).Distinct().ToList();
+
+                if (seasons.Empty())
+                {
+                    _logger.Warn("Expected one season, but found none for: {0}", decision.LocalEpisode.Path);
+                }
+                else if (seasons.Count > 1)
+                {
+                    _logger.Warn("Expected one season, but found {0} ({1}) for: {2}", seasons.Count, string.Join(", ", seasons), decision.LocalEpisode.Path);
+                }
+                else
+                {
+                    item.SeasonNumber = decision.LocalEpisode.SeasonNumber;
+                    item.Episodes = decision.LocalEpisode.Episodes;
+                }
             }
 
             item.Quality = decision.LocalEpisode.Quality;

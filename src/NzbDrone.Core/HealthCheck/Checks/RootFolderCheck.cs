@@ -1,5 +1,6 @@
-﻿using System.Linq;
+using System.Linq;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -7,6 +8,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
 {
     [CheckOn(typeof(SeriesDeletedEvent))]
     [CheckOn(typeof(SeriesMovedEvent))]
+    [CheckOn(typeof(EpisodeImportedEvent), CheckOnCondition.FailedOnly)]
+    [CheckOn(typeof(EpisodeImportFailedEvent), CheckOnCondition.SuccessfulOnly)]
     public class RootFolderCheck : HealthCheckBase
     {
         private readonly ISeriesService _seriesService;

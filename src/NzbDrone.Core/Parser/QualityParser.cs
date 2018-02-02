@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -213,6 +213,18 @@ namespace NzbDrone.Core.Parser
                     sourceMatch.Groups["dsr"].Success ||
                     sourceMatch.Groups["tvrip"].Success)
                 {
+                    if (resolution == Resolution.R1080p || normalizedName.Contains("1080p"))
+                    {
+                        result.Quality = Quality.HDTV1080p;
+                        return result;
+                    }
+
+                    if (resolution == Resolution.R720p || normalizedName.Contains("720p"))
+                    {
+                        result.Quality = Quality.HDTV720p;
+                        return result;
+                    }
+
                     if (HighDefPdtvRegex.IsMatch(normalizedName))
                     {
                         result.Quality = Quality.HDTV720p;

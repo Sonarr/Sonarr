@@ -29,7 +29,7 @@ namespace NzbDrone.Core.HealthCheck
         private readonly IProvideHealthCheck[] _healthChecks;
         private readonly IProvideHealthCheck[] _startupHealthChecks;
         private readonly IProvideHealthCheck[] _scheduledHealthChecks;
-        private readonly Dictionary<Type, IProvideHealthCheck[]> _eventDrivenHealthChecks;
+        private readonly Dictionary<Type, EventDrivenHealthCheck[]> _eventDrivenHealthChecks;
         private readonly IEventAggregator _eventAggregator;
         private readonly ICacheManager _cacheManager;
         private readonly Logger _logger;
@@ -58,10 +58,10 @@ namespace NzbDrone.Core.HealthCheck
             return _healthCheckResults.Values.ToList();
         }
 
-        private Dictionary<Type, IProvideHealthCheck[]> GetEventDrivenHealthChecks()
+        private Dictionary<Type, EventDrivenHealthCheck[]> GetEventDrivenHealthChecks()
         {
             return _healthChecks
-                .SelectMany(h => h.GetType().GetAttributes<CheckOnAttribute>().Select(a => Tuple.Create(a.EventType, h)))
+                .SelectMany(h => h.GetType().GetAttributes<CheckOnAttribute>().Select(a => Tuple.Create(a.EventType, new EventDrivenHealthCheck(h, a.Condition))))
                 .GroupBy(t => t.Item1, t => t.Item2)
                 .ToDictionary(g => g.Key, g => g.ToArray());
         }
@@ -111,15 +111,43 @@ namespace NzbDrone.Core.HealthCheck
                 return;
             }
 
-            IProvideHealthCheck[] checks;
+            EventDrivenHealthCheck[] checks;
             if (!_eventDrivenHealthChecks.TryGetValue(message.GetType(), out checks))
             {
                 return;
             }
 
+            var filteredChecks = new List<IProvideHealthCheck>();
+            var healthCheckResults = _healthCheckResults.Values.ToList();
+
+            foreach (var eventDrivenHealthCheck in checks)
+            {
+                if (eventDrivenHealthCheck.Condition == CheckOnCondition.Always)
+                {
+                    filteredChecks.Add(eventDrivenHealthCheck.HealthCheck);
+                    continue;
+                }
+
+                var healthCheckType = eventDrivenHealthCheck.HealthCheck.GetType();
+
+                if (eventDrivenHealthCheck.Condition == CheckOnCondition.FailedOnly &&
+                    healthCheckResults.Any(r => r.Source == healthCheckType))
+                {
+                    filteredChecks.Add(eventDrivenHealthCheck.HealthCheck);
+                    continue;
+                }
+
+                if (eventDrivenHealthCheck.Condition == CheckOnCondition.SuccessfulOnly &&
+                         healthCheckResults.None(r => r.Source == healthCheckType))
+                {
+                    filteredChecks.Add(eventDrivenHealthCheck.HealthCheck);
+                }
+            }
+
+
             // TODO: Add debounce
 
-            PerformHealthCheck(checks);
+            PerformHealthCheck(filteredChecks.ToArray());
         }
     }
 }

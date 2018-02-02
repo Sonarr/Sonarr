@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaCover;
@@ -45,6 +46,7 @@ namespace NzbDrone.Api.Series
                             SeriesExistsValidator seriesExistsValidator,
                             DroneFactoryValidator droneFactoryValidator,
                             SeriesAncestorValidator seriesAncestorValidator,
+                            SystemFolderValidator systemFolderValidator,
                             ProfileExistsValidator profileExistsValidator
             )
             : base(signalRBroadcaster)
@@ -71,6 +73,7 @@ namespace NzbDrone.Api.Series
                            .SetValidator(seriesPathValidator)
                            .SetValidator(droneFactoryValidator)
                            .SetValidator(seriesAncestorValidator)
+                           .SetValidator(systemFolderValidator)
                            .When(s => !s.Path.IsNullOrWhiteSpace());
 
             SharedValidator.RuleFor(s => s.ProfileId).SetValidator(profileExistsValidator);
@@ -84,26 +87,17 @@ namespace NzbDrone.Api.Series
 
         private SeriesResource GetSeries(int id)
         {
+            var includeSeasonImages = Context != null && Request.GetBooleanQueryParameter("includeSeasonImages");
+
             var series = _seriesService.GetSeries(id);
-            return MapToResource(series);
-        }
-
-        private SeriesResource MapToResource(Core.Tv.Series series)
-        {
-            if (series == null) return null;
-
-            var resource = series.ToResource();
-            MapCoversToLocal(resource);
-            FetchAndLinkSeriesStatistics(resource);
-            PopulateAlternateTitles(resource);
-
-            return resource;
+            return MapToResource(series, includeSeasonImages);
         }
 
         private List<SeriesResource> AllSeries()
         {
+            var includeSeasonImages = Request.GetBooleanQueryParameter("includeSeasonImages");
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
-            var seriesResources = _seriesService.GetAllSeries().ToResource();
+            var seriesResources = _seriesService.GetAllSeries().Select(s => s.ToResource(includeSeasonImages)).ToList();
 
             MapCoversToLocal(seriesResources.ToArray());
             LinkSeriesStatistics(seriesResources, seriesStats);
@@ -139,6 +133,18 @@ namespace NzbDrone.Api.Series
             }
 
             _seriesService.DeleteSeries(id, deleteFiles);
+        }
+
+        private SeriesResource MapToResource(Core.Tv.Series series, bool includeSeasonImages)
+        {
+            if (series == null) return null;
+
+            var resource = series.ToResource(includeSeasonImages);
+            MapCoversToLocal(resource);
+            FetchAndLinkSeriesStatistics(resource);
+            PopulateAlternateTitles(resource);
+
+            return resource;
         }
 
         private void MapCoversToLocal(params SeriesResource[] series)

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using NzbDrone.Common.Extensions;
 
@@ -9,6 +9,7 @@ namespace NzbDrone.Mono.Disk
         private static readonly Dictionary<string, DriveType> DriveTypeMap = new Dictionary<string, DriveType>
                                                                                   {
                                                                                       { "afpfs", DriveType.Network },
+                                                                                      { "apfs", DriveType.Fixed },
                                                                                       { "zfs", DriveType.Fixed }
                                                                                   };
 

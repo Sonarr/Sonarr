@@ -26,8 +26,12 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:\W*S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
-                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+)))+)",
+                //Episodes without a title, Multi (S01E04E05, 1x04x05, etc)
+                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_]|[ex]){1,2}(?<episode>\d{2,3}(?!\d+))){2,})",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Episodes without a title, Single (S01E05, 1x05)
+                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_ ]?[ex])(?<episode>\d{2,3}(?!\d+))))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - [SubGroup] Title Episode Absolute Episode Number ([SubGroup] Series Title Episode 01)
@@ -209,6 +213,16 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
+
+        private static readonly Regex[] SpecialEpisodeTitleRegex = new Regex[]
+            {
+                new Regex(@"\.S\d+E00\.(?<episodetitle>.+?)(?:\.(?:720p|1080p|HDTV|WEB|WEBRip|WEB-DL)\.|$)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                new Regex(@"\.S\d+\.Special\.(?<episodetitle>.+?)(?:\.(?:720p|1080p|HDTV|WEB|WEBRip|WEB-DL)\.|$)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled)
+            };
+
         private static readonly Regex[] RejectHashedReleasesRegex = new Regex[]
             {
                 // Generic match for md5 and mixed-case hashes.
@@ -256,7 +270,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex SixDigitAirDateRegex = new Regex(@"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])",
                                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex CleanReleaseGroupRegex = new Regex(@"^(.*?[-._ ](S\d+E\d+)[-._ ])|(-(RP|1|NZBGeek|Obfuscated|Scrambled|sample))+$",
+        private static readonly Regex CleanReleaseGroupRegex = new Regex(@"^(.*?[-._ ](S\d+E\d+)[-._ ])|(-(RP|1|NZBGeek|Obfuscated|Scrambled|sample|Pre|postbot))+$",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex CleanTorrentSuffixRegex = new Regex(@"\[(?:ettv|rartv|rarbg|cttv)\]$",
@@ -452,7 +466,19 @@ namespace NzbDrone.Core.Parser
 
         public static string NormalizeEpisodeTitle(string title)
         {
-            title = SpecialEpisodeWordRegex.Replace(title, string.Empty);
+            var match = SpecialEpisodeTitleRegex
+                .Select(v => v.Match(title))
+                .Where(v => v.Success)
+                .FirstOrDefault();
+
+            if (match != null)
+            {
+                title = match.Groups["episodetitle"].Value;
+            }
+
+            // Disabled, Until we run into specific testcases for the removal of these words.
+            //title = SpecialEpisodeWordRegex.Replace(title, string.Empty);
+
             title = PunctuationRegex.Replace(title, " ");
             title = DuplicateSpacesRegex.Replace(title, " ");
 

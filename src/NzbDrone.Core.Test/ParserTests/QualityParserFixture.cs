@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
@@ -117,6 +117,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Eveyuu] No Game No Life - 10 [Hi10P 1280x720 H264][10B23BD8]", false)]
         [TestCase("Hells.Kitchen.US.S12E17.HR.WS.PDTV.X264-DIMENSION", false)]
         [TestCase("Survivorman.The.Lost.Pilots.Summer.HR.WS.PDTV.x264-DHD", false)]
+        [TestCase("Victoria S01E07 - Motor zmen (CZ)[TvRip][HEVC][720p]", false)]
         public void should_parse_hdtv720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV720p, proper);
@@ -128,6 +129,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("DEXTER.S07E01.ARE.YOU.1080P.HDTV.proper.X264-QCF", true)]
         [TestCase("Dexter - S01E01 - Title [HDTV-1080p]", false)]
         [TestCase("[HorribleSubs] Yowamushi Pedal - 32 [1080p]", false)]
+        [TestCase("Victoria S01E07 - Motor zmen (CZ)[TvRip][HEVC][1080p]", false)]
         public void should_parse_hdtv1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV1080p, proper);
