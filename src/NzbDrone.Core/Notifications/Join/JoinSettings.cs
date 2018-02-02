@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Join
         public JoinSettingsValidator()
         {
             RuleFor(s => s.ApiKey).NotEmpty();
-            RuleFor(s => s.DeviceIds).Matches(@"\A\S+\z").When(s => !string.IsNullOrEmpty(s.DeviceIds));
+            RuleFor(s => s.DeviceIds).Empty().WithMessage("Use Device Names instead");
         }
     }
 
@@ -21,8 +21,11 @@ namespace NzbDrone.Core.Notifications.Join
         [FieldDefinition(0, Label = "API Key", HelpText = "The API Key from your Join account settings (click Join API button).", HelpLink = "https://joinjoaomgcd.appspot.com/")]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(1, Label = "Device IDs", HelpText = "Comma separated list of Device IDs you'd like to send notifications to. If unset, all devices will receive notifications.", HelpLink = "https://joinjoaomgcd.appspot.com/")]
+        [FieldDefinition(1, Label = "Device IDs", HelpText = "Deprecated, use Device Names instead. Comma separated list of Device IDs you'd like to send notifications to. If unset, all devices will receive notifications.")]
         public string DeviceIds { get; set; }
+
+        [FieldDefinition(2, Label = "Device Names", HelpText = "Comma separated list of full or partial device names you'd like to send notifications to. If unset, all devices will receive notifications.", HelpLink = "https://joaoapps.com/join/api/")]
+        public string DeviceNames { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

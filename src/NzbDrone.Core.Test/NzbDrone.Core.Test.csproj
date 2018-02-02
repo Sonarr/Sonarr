@@ -115,6 +115,16 @@
     <Compile Include="DataAugmentation\Scene\SceneMappingServiceFixture.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxyFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
+    <Compile Include="Datastore\Converters\UtcConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\TimeSpanConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\QualityIntConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\OsPathConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\Int32ConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\GuidConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\EnumIntConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\DoubleConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\CommandConverterFixture.cs" />
+    <Compile Include="Datastore\Converters\BooleanIntConverterFixture.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverterFixture.cs" />
     <Compile Include="Datastore\DatabaseFixture.cs" />
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
@@ -146,6 +156,7 @@
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\AnimeVersionUpgradeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\FullSeasonSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\MaximumSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\ProtocolSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\DownloadDecisionMakerFixture.cs" />
@@ -176,6 +187,7 @@
     <Compile Include="Download\DownloadClientTests\Blackhole\UsenetBlackholeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DelugeTests\DelugeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadClientFixtureBase.cs" />
+    <Compile Include="Download\DownloadClientTests\DownloadStationTests\DownloadStationsTaskStatusJsonConverterFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\TorrentDownloadStationFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\SerialNumberProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadStationTests\SharedFolderResolverFixture.cs" />
@@ -195,6 +207,7 @@
     <Compile Include="Download\DownloadClientTests\VuzeTests\VuzeFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
+    <Compile Include="Download\NzbValidationServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\PendingReleaseServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemovePendingFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
@@ -287,6 +300,7 @@
     <Compile Include="MediaFiles\EpisodeFileMovingServiceTests\MoveEpisodeFileFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMakerFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\DetectSampleFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\EpisodeTitleSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecificationFixture.cs" />
@@ -307,6 +321,7 @@
     <Compile Include="MetadataSource\SkyHook\SkyHookProxyFixture.cs" />
     <Compile Include="NotificationTests\NotificationBaseFixture.cs" />
     <Compile Include="NotificationTests\SynologyIndexerFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\RequiresEpisodeTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\MultiEpisodeFixture.cs" />
@@ -401,6 +416,7 @@
     <Compile Include="TvTests\ShouldRefreshSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
+    <Compile Include="ValidationTests\SystemFolderValidatorFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -571,6 +587,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Files\Nzbs\NotNzb.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Nzbs\NoFiles.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\TestArchive.tar.gz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -589,6 +611,9 @@
     <Content Include="Files\Xem\Names.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Files\Nzbs\ValidNzb.nzb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

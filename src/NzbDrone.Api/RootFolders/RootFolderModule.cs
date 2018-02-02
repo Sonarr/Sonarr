@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Validation.Paths;
@@ -17,7 +17,9 @@ namespace NzbDrone.Api.RootFolders
                                 DroneFactoryValidator droneFactoryValidator,
                                 MappedNetworkDriveValidator mappedNetworkDriveValidator,
                                 StartupFolderValidator startupFolderValidator,
-                                FolderWritableValidator folderWritableValidator)
+                                SystemFolderValidator systemFolderValidator,
+                                FolderWritableValidator folderWritableValidator
+            )
             : base(signalRBroadcaster)
         {
             _rootFolderService = rootFolderService;
@@ -35,6 +37,7 @@ namespace NzbDrone.Api.RootFolders
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(startupFolderValidator)
                            .SetValidator(pathExistsValidator)
+                           .SetValidator(systemFolderValidator)
                            .SetValidator(folderWritableValidator);
         }
 

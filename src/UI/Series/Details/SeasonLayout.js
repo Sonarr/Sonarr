@@ -214,8 +214,8 @@ module.exports = Marionette.Layout.extend({
     },
 
     _shouldShowEpisodes : function() {
-        var startDate = moment().add('month', -1);
-        var endDate = moment().add('year', 1);
+        var startDate = moment().add(-1, 'month');
+        var endDate = moment().add(1, 'year');
 
         return this.episodeCollection.some(function(episode) {
             var airDate = episode.get('airDateUtc');

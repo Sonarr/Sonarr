@@ -212,6 +212,7 @@
     <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Serializer\Json.cs" />
     <Compile Include="Serializer\JsonVisitor.cs" />
+    <Compile Include="Serializer\UnderscoreStringEnumConverter.cs" />
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

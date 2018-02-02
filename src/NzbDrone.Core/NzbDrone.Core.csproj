@@ -332,6 +332,7 @@
     <Compile Include="DecisionEngine\Specifications\AnimeVersionUpgradeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\FullSeasonSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\MaximumSizeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\ProtocolSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QueueSpecification.cs" />
@@ -345,7 +346,6 @@
     <Compile Include="DecisionEngine\Specifications\RssSync\DeletedEpisodeFileSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\MonitoredEpisodeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\ProperSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\EpisodeRequestedSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
@@ -507,6 +507,8 @@
     <Compile Include="Download\DownloadEventHub.cs" />
     <Compile Include="Download\DownloadClientStatusRepository.cs" />
     <Compile Include="Download\DownloadClientStatusService.cs" />
+    <Compile Include="Download\InvalidNzbException.cs" />
+    <Compile Include="Download\NzbValidationService.cs" />
     <Compile Include="Download\Pending\PendingReleaseReason.cs" />
     <Compile Include="Download\TrackedDownloads\DownloadMonitoringService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownload.cs" />
@@ -585,6 +587,7 @@
     <Compile Include="HealthCheck\Checks\ProxyCheck.cs" />
     <Compile Include="HealthCheck\Checks\RootFolderCheck.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
+    <Compile Include="HealthCheck\EventDrivenHealthCheck.cs" />
     <Compile Include="HealthCheck\HealthCheck.cs" />
     <Compile Include="HealthCheck\HealthCheckBase.cs" />
     <Compile Include="HealthCheck\HealthCheckCompleteEvent.cs" />
@@ -785,6 +788,7 @@
     <Compile Include="MediaFiles\EpisodeImport\DetectSample.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Manual\ManuallyImportedFile.cs" />
     <Compile Include="MediaFiles\EpisodeImport\RootFolderNotFoundException.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\EpisodeTitleSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\GrabbedReleaseQualitySpecification.cs" />
@@ -799,6 +803,7 @@
     <Compile Include="MediaFiles\Events\EpisodeFileRenamedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFolderCreatedEvent.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeImportFailedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesScanSkippedEvent.cs" />
@@ -934,6 +939,7 @@
     <Compile Include="Notifications\Twitter\Twitter.cs" />
     <Compile Include="Notifications\Twitter\TwitterService.cs" />
     <Compile Include="Notifications\Twitter\TwitterSettings.cs" />
+    <Compile Include="Parser\InvalidSeasonException.cs" />
     <Compile Include="Parser\IsoLanguage.cs" />
     <Compile Include="Parser\IsoLanguages.cs" />
     <Compile Include="Parser\LanguageParser.cs" />
@@ -1180,6 +1186,7 @@
     <Compile Include="Validation\NzbDroneValidationFailure.cs" />
     <Compile Include="Validation\NzbDroneValidationResult.cs" />
     <Compile Include="Validation\NzbDroneValidationState.cs" />
+    <Compile Include="Validation\Paths\SystemFolderValidator.cs" />
     <Compile Include="Validation\Paths\MappedNetworkDriveValidator.cs" />
     <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
     <Compile Include="Validation\Paths\FolderWritableValidator.cs" />

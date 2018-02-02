@@ -56,11 +56,6 @@ namespace NzbDrone.Core.Download
                 throw new DownloadClientUnavailableException($"{remoteEpisode.Release.DownloadProtocol} Download client isn't configured yet");
             }
 
-            if (_downloadClientStatusService.IsDisabled(downloadClient.Definition.Id))
-            {
-                throw new DownloadClientUnavailableException($"{downloadClient.Name} is disabled due to recent failues");
-            }
-
             // Limit grabs to 2 per second.
             if (remoteEpisode.Release.DownloadUrl.IsNotNullOrWhiteSpace() && !remoteEpisode.Release.DownloadUrl.StartsWith("magnet:"))
             {

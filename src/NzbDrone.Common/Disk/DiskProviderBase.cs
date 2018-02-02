@@ -200,6 +200,11 @@ namespace NzbDrone.Common.Disk
                 throw new IOException(string.Format("Source and destination can't be the same {0}", source));
             }
 
+            CopyFileInternal(source, destination, overwrite);
+        }
+
+        protected virtual void CopyFileInternal(string source, string destination, bool overwrite = false)
+        {
             File.Copy(source, destination, overwrite);
         }
 
@@ -219,6 +224,11 @@ namespace NzbDrone.Common.Disk
             }
 
             RemoveReadOnly(source);
+            MoveFileInternal(source, destination);
+        }
+
+        protected virtual void MoveFileInternal(string source, string destination)
+        {
             File.Move(source, destination);
         }
 

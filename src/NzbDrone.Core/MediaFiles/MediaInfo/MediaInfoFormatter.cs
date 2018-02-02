@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
 using NLog.Fluent;
 using NzbDrone.Common.Extensions;
@@ -16,36 +17,19 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public static decimal FormatAudioChannels(MediaInfoModel mediaInfo)
         {
-            var audioChannelPositions = mediaInfo.AudioChannelPositions;
-            var audioChannelPositionsText = mediaInfo.AudioChannelPositionsText;
-            var audioChannels = mediaInfo.AudioChannels;
+            var audioChannels = FormatAudioChannelsFromAudioChannelPositions(mediaInfo);
 
-            if (audioChannelPositions.IsNullOrWhiteSpace())
+            if (audioChannels == null)
             {
-                if (audioChannelPositionsText.IsNullOrWhiteSpace())
-                {
-                    if (mediaInfo.SchemaRevision >= 3)
-                    {
-                        return audioChannels;
-                    }
-
-                    return 0;
-                }
-
-                return mediaInfo.AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
+                audioChannels = FormatAudioChannelsFromAudioChannelPositionsText(mediaInfo);
             }
 
-            if (audioChannelPositions.Contains("+"))
+            if (audioChannels == null)
             {
-                return audioChannelPositions.Split('+')
-                                            .Sum(s => decimal.Parse(s.Trim(), CultureInfo.InvariantCulture));
+                audioChannels = FormatAudioChannelsFromAudioChannels(mediaInfo);
             }
 
-            return audioChannelPositions.Replace("Object Based / ", "")
-                                            .Split(new string[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
-                                            .First()
-                                            .Split('/')
-                                            .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
+            return audioChannels ?? 0;
         }
 
         public static string FormatAudioCodec(MediaInfoModel mediaInfo, string sceneName)
@@ -352,6 +336,79 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             return videoCodec;
+        }
+
+        private static decimal? FormatAudioChannelsFromAudioChannelPositions(MediaInfoModel mediaInfo)
+        {
+            var audioChannelPositions = mediaInfo.AudioChannelPositions;
+
+            if (audioChannelPositions.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            try
+            {
+                Logger.Debug("Formatiting audio channels using 'AudioChannelPositions', with a value of: '{0}'", audioChannelPositions);
+
+                if (audioChannelPositions.Contains("+"))
+                {
+                    return audioChannelPositions.Split('+')
+                                                .Sum(s => decimal.Parse(s.Trim(), CultureInfo.InvariantCulture));
+                }
+
+
+                return Regex.Replace(audioChannelPositions, @"^\d+\sobjects", "", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                                            .Replace("Object Based / ", "")
+                                            .Split(new string[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
+                                            .FirstOrDefault()
+                                           ?.Split('/')
+                                            .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
+            }
+            catch (Exception e)
+            {
+                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositions'");
+            }
+
+            return null;
+        }
+
+        private static decimal? FormatAudioChannelsFromAudioChannelPositionsText(MediaInfoModel mediaInfo)
+        {
+            var audioChannelPositionsText = mediaInfo.AudioChannelPositionsText;
+            var audioChannels = mediaInfo.AudioChannels;
+
+            if (audioChannelPositionsText.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            try
+            {
+                Logger.Debug("Formatiting audio channels using 'AudioChannelPositionsText', with a value of: '{0}'", audioChannelPositionsText);
+
+                return mediaInfo.AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
+            }
+            catch (Exception e)
+            {
+                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositionsText'");
+            }
+
+            return null;
+        }
+
+        private static decimal? FormatAudioChannelsFromAudioChannels(MediaInfoModel mediaInfo)
+        {
+            var audioChannels = mediaInfo.AudioChannels;
+
+            if (mediaInfo.SchemaRevision >= 3)
+            {
+                Logger.Debug("Formatiting audio channels using 'AudioChannels', with a value of: '{0}'", audioChannels);
+
+                return audioChannels;
+            }
+
+            return null;
         }
 
         private static string GetSceneNameMatch(string sceneName, params string[] tokens)

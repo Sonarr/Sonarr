@@ -2,6 +2,7 @@
 using System.Linq;
 using Nancy;
 using Nancy.Bootstrapper;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Api.Extensions.Pipelines
 {
@@ -11,10 +12,25 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         public void Register(IPipelines pipelines)
         {
-            pipelines.AfterRequest.AddItemToEndOfPipeline((Action<NancyContext>) Handle);
+            pipelines.BeforeRequest.AddItemToEndOfPipeline(HandleRequest);
+            pipelines.AfterRequest.AddItemToEndOfPipeline(HandleResponse);
         }
 
-        private void Handle(NancyContext context)
+        private Response HandleRequest(NancyContext context)
+        {
+            if (context == null || context.Request.Method != "OPTIONS")
+            {
+                return null;
+            }
+
+            var response = new Response()
+                .WithStatusCode(HttpStatusCode.OK)
+                .WithContentType("");
+            ApplyResponseHeaders(response, context.Request);
+            return response;
+        }
+
+        private void HandleResponse(NancyContext context)
         {
             if (context == null || context.Response.Headers.ContainsKey(AccessControlHeaders.AllowOrigin))
             {
@@ -26,21 +42,39 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         private static void ApplyResponseHeaders(Response response, Request request)
         {
-            var allowedMethods = "GET, OPTIONS, PATCH, POST, PUT, DELETE";
-
-            if (response.Headers.ContainsKey("Allow"))
+            if (request.IsApiRequest())
             {
-                allowedMethods = response.Headers["Allow"];
+                // Allow Cross-Origin access to the API since it's protected with the apikey, and nothing else.
+                ApplyCorsResponseHeaders(response, request, "*", "GET, OPTIONS, PATCH, POST, PUT, DELETE");
             }
-            
-            var requestedHeaders = string.Join(", ", request.Headers[AccessControlHeaders.RequestHeaders]);
-
-            response.Headers.Add(AccessControlHeaders.AllowOrigin, "*");
-            response.Headers.Add(AccessControlHeaders.AllowMethods, allowedMethods);
-
-            if (request.Headers[AccessControlHeaders.RequestHeaders].Any())
+            else if (request.IsSharedContentRequest())
             {
-                response.Headers.Add(AccessControlHeaders.AllowHeaders, requestedHeaders);
+                // Allow Cross-Origin access to specific shared content such as mediacovers and images.
+                ApplyCorsResponseHeaders(response, request, "*", "GET, OPTIONS");
+            }
+
+            // Disallow Cross-Origin access for any other route.
+        }
+
+        private static void ApplyCorsResponseHeaders(Response response, Request request, string allowOrigin, string allowedMethods)
+        {
+            response.Headers.Add(AccessControlHeaders.AllowOrigin, allowOrigin);
+
+            if (request.Method == "OPTIONS")
+            {
+                if (response.Headers.ContainsKey("Allow"))
+                {
+                    allowedMethods = response.Headers["Allow"];
+                }
+
+                response.Headers.Add(AccessControlHeaders.AllowMethods, allowedMethods);
+
+                if (request.Headers[AccessControlHeaders.RequestHeaders].Any())
+                {
+                    var requestedHeaders = request.Headers[AccessControlHeaders.RequestHeaders].Join(", ");
+
+                    response.Headers.Add(AccessControlHeaders.AllowHeaders, requestedHeaders);
+                }
             }
         }
     }

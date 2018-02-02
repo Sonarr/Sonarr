@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Organizer
         BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
         string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null);
+        bool RequiresEpisodeTitle(Series series, List<Episode> episodes);
     }
 
     public class FileNameBuilder : IBuildFileNames
@@ -31,6 +32,7 @@ namespace NzbDrone.Core.Organizer
         private readonly IQualityDefinitionService _qualityDefinitionService;
         private readonly ICached<EpisodeFormat[]> _episodeFormatCache;
         private readonly ICached<AbsoluteEpisodeFormat[]> _absoluteEpisodeFormatCache;
+        private readonly ICached<bool> _requiresEpisodeTitleCache;
         private readonly Logger _logger;
 
         private static readonly Regex TitleRegex = new Regex(@"\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9]+))?(?<suffix>[- ._)\]]*)\}",
@@ -78,6 +80,7 @@ namespace NzbDrone.Core.Organizer
             _qualityDefinitionService = qualityDefinitionService;
             _episodeFormatCache = cacheManager.GetCache<EpisodeFormat[]>(GetType(), "episodeFormat");
             _absoluteEpisodeFormatCache = cacheManager.GetCache<AbsoluteEpisodeFormat[]>(GetType(), "absoluteEpisodeFormat");
+            _requiresEpisodeTitleCache = cacheManager.GetCache<bool>(GetType(), "requiresEpisodeTitle");
             _logger = logger;
         }
 
@@ -278,6 +281,40 @@ namespace NzbDrone.Core.Organizer
         {
             name = FileNameCleanupRegex.Replace(name, match => match.Captures[0].Value[0].ToString());
             return name.Trim(' ', '.');
+        }
+
+        public bool RequiresEpisodeTitle(Series series, List<Episode> episodes)
+        {
+            var namingConfig = _namingConfigService.GetConfig();
+            var pattern = namingConfig.StandardEpisodeFormat;
+
+            if (series.SeriesType == SeriesTypes.Daily)
+            {
+                pattern = namingConfig.DailyEpisodeFormat;
+            }
+
+            if (series.SeriesType == SeriesTypes.Anime && episodes.All(e => e.AbsoluteEpisodeNumber.HasValue))
+            {
+                pattern = namingConfig.AnimeEpisodeFormat;
+            }
+
+            return _requiresEpisodeTitleCache.Get(pattern, () =>
+            {
+                var matches = TitleRegex.Matches(pattern);
+
+                foreach (Match match in matches)
+                {
+                    var token = match.Groups["token"].Value;
+
+                    if (FileNameBuilderTokenEqualityComparer.Instance.Equals(token, "{Episode Title}") ||
+                        FileNameBuilderTokenEqualityComparer.Instance.Equals(token, "{Episode CleanTitle}"))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
         }
 
         private void AddSeriesTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)

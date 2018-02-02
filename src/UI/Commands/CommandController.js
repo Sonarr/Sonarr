@@ -20,7 +20,7 @@ var singleton = function() {
             var attr = _.extend({ name : name.toLocaleLowerCase() }, properties);
             var commandModel = new CommandModel(attr);
 
-            if (this._lastCommand.command && this._lastCommand.command.isSameCommand(attr) && moment().add('seconds', -5).isBefore(this._lastCommand.time)) {
+            if (this._lastCommand.command && this._lastCommand.command.isSameCommand(attr) && moment().add(-5, 'seconds').isBefore(this._lastCommand.time)) {
 
                 Messenger.show({
                     message   : 'Please wait at least 5 seconds before running this command again',
