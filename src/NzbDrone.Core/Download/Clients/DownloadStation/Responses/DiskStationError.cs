@@ -47,6 +47,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
 
             FileStationMessages = new Dictionary<int, string>
             {
+                { 160, "Permission denied. Give your user access to FileStation."},
                 { 400, "Invalid parameter of file operation" },
                 { 401, "Unknown error of file operation" },
                 { 402, "System is too busy" },
