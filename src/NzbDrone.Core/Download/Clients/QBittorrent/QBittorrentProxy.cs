@@ -75,6 +75,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormParameter("urls", torrentUrl);
 
+            if (settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                request.AddFormParameter("category", settings.TvCategory);
+            }
+
             var result = ProcessRequest(request, settings);
 
             // Note: Older qbit versions returned nothing, so we can't do != "Ok." here.
@@ -104,6 +109,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var request = BuildRequest(settings).Resource(removeData ? "/command/deletePerm" : "/command/delete")
                                                 .Post()
                                                 .AddFormParameter("hashes", hash);
+
+            if (settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                request.AddFormParameter("category", settings.TvCategory);
+            }
 
             ProcessRequest(request, settings);
         }
