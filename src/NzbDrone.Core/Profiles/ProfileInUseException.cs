@@ -1,13 +1,13 @@
-﻿using NzbDrone.Common.Exceptions;
+using System.Net;
+using NzbDrone.Core.Exceptions;
 
 namespace NzbDrone.Core.Profiles
 {
-    public class ProfileInUseException : NzbDroneException
+    public class ProfileInUseException : NzbDroneClientException
     {
-        public ProfileInUseException(int profileId)
-            : base("Profile [{0}] is in use.", profileId)
+        public ProfileInUseException(string name)
+            : base(HttpStatusCode.BadRequest, "Profile [{0}] is in use.", name)
         {
-
         }
     }
 }

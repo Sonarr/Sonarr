@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Lifecycle;
@@ -46,7 +46,8 @@ namespace NzbDrone.Core.Profiles
         {
             if (_seriesService.GetAllSeries().Any(c => c.ProfileId == id))
             {
-                throw new ProfileInUseException(id);
+                var profile = _profileRepository.Get(id);
+                throw new ProfileInUseException(profile.Name);
             }
 
             _profileRepository.Delete(id);
