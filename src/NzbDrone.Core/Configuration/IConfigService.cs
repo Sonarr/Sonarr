@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Common.Http.Proxy;
 
@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Configuration
         string RecycleBin { get; set; }
         bool AutoDownloadPropers { get; set; }
         bool CreateEmptySeriesFolders { get; set; }
+        bool DeleteEmptyFolders { get; set; }
         FileDateType FileDate { get; set; }
         bool SkipFreeSpaceCheckWhenImporting { get; set; }
         bool CopyUsingHardlinks { get; set; }

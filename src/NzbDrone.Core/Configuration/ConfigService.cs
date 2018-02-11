@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -159,6 +159,13 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
 
             set { SetValue("CreateEmptySeriesFolders", value); }
+        }
+
+        public bool DeleteEmptyFolders
+        {
+            get { return GetValueBoolean("DeleteEmptyFolders", false); }
+
+            set { SetValue("DeleteEmptyFolders", value); }
         }
 
         public FileDateType FileDate

@@ -191,10 +191,16 @@ namespace NzbDrone.Core.MediaFiles
 
         private void RemoveEmptySeriesFolder(string path)
         {
-            if (_diskProvider.GetFiles(path, SearchOption.AllDirectories).Empty() &&
-                !_configService.CreateEmptySeriesFolders)
+            if (_configService.DeleteEmptyFolders)
             {
-                _diskProvider.DeleteFolder(path, true);
+                if (_diskProvider.GetFiles(path, SearchOption.AllDirectories).Empty())
+                {
+                    _diskProvider.DeleteFolder(path, true);
+                }
+                else
+                {
+                    _diskProvider.RemoveEmptySubfolders(path);
+                }
             }
         }
 

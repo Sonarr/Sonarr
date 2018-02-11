@@ -1,4 +1,4 @@
-﻿using NzbDrone.Api.REST;
+using NzbDrone.Api.REST;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 
@@ -10,6 +10,7 @@ namespace NzbDrone.Api.Config
         public string RecycleBin { get; set; }
         public bool AutoDownloadPropers { get; set; }
         public bool CreateEmptySeriesFolders { get; set; }
+        public bool DeleteEmptyFolders { get; set; }
         public FileDateType FileDate { get; set; }
 
         public bool SetPermissionsLinux { get; set; }
@@ -35,6 +36,7 @@ namespace NzbDrone.Api.Config
                 RecycleBin = model.RecycleBin,
                 AutoDownloadPropers = model.AutoDownloadPropers,
                 CreateEmptySeriesFolders = model.CreateEmptySeriesFolders,
+                DeleteEmptyFolders = model.DeleteEmptyFolders,
                 FileDate = model.FileDate,
 
                 SetPermissionsLinux = model.SetPermissionsLinux,
