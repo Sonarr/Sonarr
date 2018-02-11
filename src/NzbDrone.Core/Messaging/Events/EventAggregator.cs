@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common;
@@ -48,7 +49,11 @@ namespace NzbDrone.Core.Messaging.Events
 
 
             //call synchronous handlers first.
-            foreach (var handler in _serviceFactory.BuildAll<IHandle<TEvent>>())
+            var handlers = _serviceFactory.BuildAll<IHandle<TEvent>>()
+                                          .OrderBy(GetEventHandleOrder)
+                                          .ToList();
+
+            foreach (var handler in handlers)
             {
                 try
                 {
@@ -95,6 +100,26 @@ namespace NzbDrone.Core.Messaging.Events
             }
 
             return string.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
+        }
+
+        private int GetEventHandleOrder<TEvent>(IHandle<TEvent> eventHandler) where TEvent : class, IEvent
+        {
+            // TODO: Convert "Handle" to nameof(eventHandler.Handle) after .net 4.5
+            var method = eventHandler.GetType().GetMethod("Handle", new Type[] {typeof(TEvent)});
+
+            if (method == null)
+            {
+                return (int) EventHandleOrder.Any;
+            }
+
+            var attribute = method.GetCustomAttributes(typeof(EventHandleOrderAttribute), true).FirstOrDefault() as EventHandleOrderAttribute;
+
+            if (attribute == null)
+            {
+                return (int) EventHandleOrder.Any;
+            }
+
+            return (int)attribute.EventHandleOrder;
         }
     }
 }

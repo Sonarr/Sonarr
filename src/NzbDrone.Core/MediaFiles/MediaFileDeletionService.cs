@@ -4,7 +4,10 @@ using System.Net;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
@@ -16,24 +19,29 @@ namespace NzbDrone.Core.MediaFiles
         void DeleteEpisodeFile(Series series, EpisodeFile episodeFile);
     }
 
-    public class MediaFileDeletionService : IDeleteMediaFiles, IHandleAsync<SeriesDeletedEvent>
+    public class MediaFileDeletionService : IDeleteMediaFiles,
+                                            IHandleAsync<SeriesDeletedEvent>,
+                                            IHandle<EpisodeFileDeletedEvent>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly IMediaFileService _mediaFileService;
         private readonly ISeriesService _seriesService;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public MediaFileDeletionService(IDiskProvider diskProvider,
                                         IRecycleBinProvider recycleBinProvider,
                                         IMediaFileService mediaFileService,
                                         ISeriesService seriesService,
+                                        IConfigService configService,
                                         Logger logger)
         {
             _diskProvider = diskProvider;
             _recycleBinProvider = recycleBinProvider;
             _mediaFileService = mediaFileService;
             _seriesService = seriesService;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -103,6 +111,19 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _recycleBinProvider.DeleteFolder(message.Series.Path);
                 }
+            }
+        }
+
+        [EventHandleOrder(EventHandleOrder.Last)]
+        public void Handle(EpisodeFileDeletedEvent message)
+        {
+            var series = message.EpisodeFile.Series.Value;
+            var path = series.Path;
+
+            if (_diskProvider.GetFiles(path, SearchOption.AllDirectories).Empty() &&
+                !_configService.CreateEmptySeriesFolders)
+            {
+                _diskProvider.DeleteFolder(path, true);
             }
         }
     }

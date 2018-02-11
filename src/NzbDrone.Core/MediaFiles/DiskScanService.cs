@@ -95,8 +95,10 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.Debug("Series folder doesn't exist: {0}", series.Path);
                 }
+
                 CleanMediaFiles(series, new List<string>());
                 CompletedScanning(series);
+
                 return;
             }
 
@@ -113,6 +115,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
             _importApprovedEpisodes.Import(decisions, false);
 
+            RemoveEmptySeriesFolder(series.Path);
             CompletedScanning(series);
         }
 
@@ -183,6 +186,15 @@ namespace NzbDrone.Core.MediaFiles
 
                 _logger.Warn(ex, "Unable to apply permissions to: " + path);
                 _logger.Debug(ex, ex.Message);
+            }
+        }
+
+        private void RemoveEmptySeriesFolder(string path)
+        {
+            if (_diskProvider.GetFiles(path, SearchOption.AllDirectories).Empty() &&
+                !_configService.CreateEmptySeriesFolders)
+            {
+                _diskProvider.DeleteFolder(path, true);
             }
         }
 

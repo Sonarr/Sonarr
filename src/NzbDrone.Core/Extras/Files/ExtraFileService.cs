@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Extras.Files
 
     public abstract class ExtraFileService<TExtraFile> : IExtraFileService<TExtraFile>,
                                                          IHandleAsync<SeriesDeletedEvent>,
-                                                         IHandleAsync<EpisodeFileDeletedEvent>
+                                                         IHandle<EpisodeFileDeletedEvent>
         where TExtraFile : ExtraFile, new()
     {
         private readonly IExtraFileRepository<TExtraFile> _repository;
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Extras.Files
             _repository.DeleteForSeries(message.Series.Id);
         }
 
-        public void HandleAsync(EpisodeFileDeletedEvent message)
+        public void Handle(EpisodeFileDeletedEvent message)
         {
             var episodeFile = message.EpisodeFile;
 
