@@ -104,6 +104,7 @@
     <Compile Include="ClientSchema\SelectOption.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
+    <Compile Include="EpisodeFiles\MediaInfoResource.cs" />
     <Compile Include="Extensions\AccessControlHeaders.cs" />
     <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
     <Compile Include="Extensions\Pipelines\UrlBasePipeline.cs" />

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Qualities;
@@ -15,6 +15,7 @@ namespace NzbDrone.Api.EpisodeFiles
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
         public QualityModel Quality { get; set; }
+        public MediaInfoResource MediaInfo { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
     }
@@ -37,6 +38,7 @@ namespace NzbDrone.Api.EpisodeFiles
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
                 Quality = model.Quality,
+                MediaInfo = model.MediaInfo.ToResource(model.SceneName)
                 //QualityCutoffNotMet
             };
         }
@@ -57,7 +59,8 @@ namespace NzbDrone.Api.EpisodeFiles
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
                 Quality = model.Quality,
-                QualityCutoffNotMet = qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, model.Quality)
+                QualityCutoffNotMet = qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, model.Quality),
+                MediaInfo = model.MediaInfo.ToResource(model.SceneName),
             };
         }
     }
