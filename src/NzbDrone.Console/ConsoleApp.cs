@@ -25,7 +25,15 @@ namespace NzbDrone.Console
             try
             {
                 var startupArgs = new StartupContext(args);
-                NzbDroneLogger.Register(startupArgs, false, true);
+                try
+                {
+                    NzbDroneLogger.Register(startupArgs, false, true);
+                }
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine("NLog Exception: " + ex.ToString());
+                    throw;
+                }
                 Bootstrap.Start(startupArgs, new ConsoleAlerts());
             }
             catch (SonarrStartupException ex)
