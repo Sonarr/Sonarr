@@ -117,7 +117,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
-                        _extraService.ImportExtraFiles(localEpisode, episodeFile, copyOnly);
+                        _extraService.ImportEpisode(localEpisode, episodeFile, copyOnly);
                     }
 
                     _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, oldFiles, newDownload, downloadClientItem));

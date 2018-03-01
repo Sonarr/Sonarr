@@ -65,12 +65,6 @@ namespace NzbDrone.Core.Extras.Others
 
         public override ExtraFile Import(Series series, EpisodeFile episodeFile, string path, string extension, bool readOnly)
         {
-            // If the extension is .nfo we need to change it to .nfo-orig
-            if (Path.GetExtension(path).Equals(".nfo", StringComparison.OrdinalIgnoreCase))
-            {
-                extension += "-orig";
-            }
-
             var extraFile = ImportFile(series, episodeFile, path, readOnly, extension, null);
 
             _otherExtraFileService.Upsert(extraFile);
