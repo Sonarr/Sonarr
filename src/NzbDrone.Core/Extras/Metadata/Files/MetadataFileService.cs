@@ -16,7 +16,5 @@ namespace NzbDrone.Core.Extras.Metadata.Files
             : base(repository, seriesService, diskProvider, recycleBinProvider, logger)
         {
         }
-
-        public override bool PermanentlyDelete => true;
     }
 }
