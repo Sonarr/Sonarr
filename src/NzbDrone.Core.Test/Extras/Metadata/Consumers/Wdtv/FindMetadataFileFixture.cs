@@ -8,7 +8,7 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.Metadata.Consumers.Wdtv
+namespace NzbDrone.Core.Test.Extras.Metadata.Consumers.Wdtv
 {
     [TestFixture]
     public class FindMetadataFileFixture : CoreTest<WdtvMetadata>
