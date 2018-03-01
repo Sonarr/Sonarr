@@ -554,6 +554,7 @@
     <Compile Include="Extras\IImportExistingExtraFiles.cs" />
     <Compile Include="Extras\ImportExistingExtraFileFilterResult.cs" />
     <Compile Include="Extras\ImportExistingExtraFilesBase.cs" />
+    <Compile Include="Extras\Metadata\Consumers\Xbmc\XbmcNfoDetector.cs" />
     <Compile Include="Extras\Metadata\Files\MetadataFile.cs" />
     <Compile Include="Extras\Metadata\Files\MetadataFileRepository.cs" />
     <Compile Include="Extras\Metadata\Files\MetadataFileService.cs" />
@@ -562,6 +563,7 @@
     <Compile Include="Extras\Others\OtherExtraFileService.cs" />
     <Compile Include="Extras\Others\OtherExtraFile.cs" />
     <Compile Include="Extras\Others\OtherExtraService.cs" />
+    <Compile Include="Extras\Others\OtherExtraFileRenamer.cs" />
     <Compile Include="Extras\Subtitles\ExistingSubtitleImporter.cs" />
     <Compile Include="Extras\Subtitles\SubtitleFileRepository.cs" />
     <Compile Include="Extras\Subtitles\SubtitleFileService.cs" />

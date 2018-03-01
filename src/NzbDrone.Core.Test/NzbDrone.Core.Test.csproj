@@ -220,6 +220,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Download\TrackedDownloads\TrackedDownloadServiceFixture.cs" />
+    <Compile Include="Extras\Metadata\Consumers\Xbmc\FindMetadataFileFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
@@ -340,8 +341,8 @@
     <Compile Include="Messaging\Commands\CommandEqualityComparerFixture.cs" />
     <Compile Include="Messaging\Commands\CommandExecutorFixture.cs" />
     <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
-    <Compile Include="Metadata\Consumers\Roksbox\FindMetadataFileFixture.cs" />
-    <Compile Include="Metadata\Consumers\Wdtv\FindMetadataFileFixture.cs" />
+    <Compile Include="Extras\Metadata\Consumers\Roksbox\FindMetadataFileFixture.cs" />
+    <Compile Include="Extras\Metadata\Consumers\Wdtv\FindMetadataFileFixture.cs" />
     <Compile Include="NotificationTests\PlexClientServiceTest.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />

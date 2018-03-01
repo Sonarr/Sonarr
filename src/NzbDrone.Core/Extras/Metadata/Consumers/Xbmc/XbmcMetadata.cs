@@ -18,14 +18,17 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 {
     public class XbmcMetadata : MetadataBase<XbmcMetadataSettings>
     {
-        private readonly IMapCoversToLocal _mediaCoverService;
         private readonly Logger _logger;
+        private readonly IMapCoversToLocal _mediaCoverService;
+        private readonly IDetectXbmcNfo _detectNfo;
 
-        public XbmcMetadata(IMapCoversToLocal mediaCoverService,
+        public XbmcMetadata(IDetectXbmcNfo detectNfo,
+                            IMapCoversToLocal mediaCoverService,
                             Logger logger)
         {
-            _mediaCoverService = mediaCoverService;
             _logger = logger;
+            _mediaCoverService = mediaCoverService;
+            _detectNfo = detectNfo;
         }
 
         private static readonly Regex SeriesImagesRegex = new Regex(@"^(?<type>poster|banner|fanart)\.(?:png|jpg)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -114,7 +117,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
             if (parseResult != null &&
                 !parseResult.FullSeason &&
-                Path.GetExtension(filename).Equals(".nfo", StringComparison.OrdinalIgnoreCase))
+                Path.GetExtension(filename).Equals(".nfo", StringComparison.OrdinalIgnoreCase) &&
+                _detectNfo.IsXbmcNfoFile(path))
             {
                 metadata.Type = MetadataType.EpisodeMetadata;
                 return metadata;
@@ -294,6 +298,9 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 }
             }
 
+
+            RenameExistingNfo(GetEpisodeMetadataFilename(episodeFile.RelativePath));
+
             return new MetadataFileResult(GetEpisodeMetadataFilename(episodeFile.RelativePath), xmlResult.Trim(Environment.NewLine.ToCharArray()));
         }
 
@@ -371,6 +378,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
                 yield return new ImageFileResult(filename, image.Url);
             }
+        }
+
+        private void RenameExistingNfo(string nfoFilePath)
+        {
+
         }
 
         private string GetEpisodeMetadataFilename(string episodeFilePath)
