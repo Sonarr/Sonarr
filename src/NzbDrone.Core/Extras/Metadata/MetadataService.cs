@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Extras.Metadata
     {
         private readonly IMetadataFactory _metadataFactory;
         private readonly ICleanMetadataService _cleanMetadataService;
+        private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpClient _httpClient;
@@ -29,6 +30,7 @@ namespace NzbDrone.Core.Extras.Metadata
         public MetadataService(IConfigService configService,
                                IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
+                               IRecycleBinProvider recycleBinProvider,
                                IMetadataFactory metadataFactory,
                                ICleanMetadataService cleanMetadataService,
                                IHttpClient httpClient,
@@ -39,6 +41,7 @@ namespace NzbDrone.Core.Extras.Metadata
         {
             _metadataFactory = metadataFactory;
             _cleanMetadataService = cleanMetadataService;
+            _recycleBinProvider = recycleBinProvider;
             _diskTransferService = diskTransferService;
             _diskProvider = diskProvider;
             _httpClient = httpClient;
@@ -443,11 +446,11 @@ namespace NzbDrone.Core.Extras.Metadata
 
                 _logger.Debug("Removing duplicate Metadata file: {0}", path);
 
-                _diskProvider.DeleteFile(path);
+                var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
+                _recycleBinProvider.DeleteFile(path, subfolder);
                 _metadataFileService.Delete(file.Id);
             }
 
-            
             return matchingMetadataFiles.First();
         }
     }

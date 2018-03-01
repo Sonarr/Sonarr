@@ -49,8 +49,6 @@ namespace NzbDrone.Core.Extras.Files
             _logger = logger;
         }
 
-        public virtual bool PermanentlyDelete => false;
-
         public List<TExtraFile> GetFilesBySeries(int seriesId)
         {
             return _repository.GetFilesBySeries(seriesId);
@@ -122,17 +120,9 @@ namespace NzbDrone.Core.Extras.Files
 
                     if (_diskProvider.FileExists(path))
                     {
-                        if (PermanentlyDelete)
-                        {
-                            _diskProvider.DeleteFile(path);
-                        }
-
-                        else
-                        {
-                            // Send extra files to the recycling bin so they can be recovered if necessary
-                            var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
-                            _recycleBinProvider.DeleteFile(path, subfolder);
-                        }
+                        // Send to the recycling bin so they can be recovered if necessary
+                        var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
+                        _recycleBinProvider.DeleteFile(path, subfolder);
                     }
                 }
             }
