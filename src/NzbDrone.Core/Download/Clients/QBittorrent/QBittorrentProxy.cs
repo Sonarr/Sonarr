@@ -97,6 +97,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             var result = ProcessRequest(request, settings);
 
+            if (settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                request.AddFormParameter("category", settings.TvCategory);
+            }
+
             // Note: Current qbit versions return nothing, so we can't do != "Ok." here.
             if (result == "Fails.")
             {
@@ -109,11 +114,6 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var request = BuildRequest(settings).Resource(removeData ? "/command/deletePerm" : "/command/delete")
                                                 .Post()
                                                 .AddFormParameter("hashes", hash);
-
-            if (settings.TvCategory.IsNotNullOrWhiteSpace())
-            {
-                request.AddFormParameter("category", settings.TvCategory);
-            }
 
             ProcessRequest(request, settings);
         }
