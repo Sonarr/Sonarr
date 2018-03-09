@@ -8,7 +8,8 @@ namespace NzbDrone.Core.Tv
                                                                      {
                                                                          { 281588, "a to z" },
                                                                          { 266757, "ad trials triumph early church" },
-                                                                         { 289260, "ad bible continues"}
+                                                                         { 289260, "ad bible continues"},
+                                                                         { 328534, "ap bio"}
                                                                      };
 
         public static string Normalize(string title, int tvdbId)
