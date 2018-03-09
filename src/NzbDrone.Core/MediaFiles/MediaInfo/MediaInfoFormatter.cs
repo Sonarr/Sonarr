@@ -349,7 +349,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             try
             {
-                Logger.Debug("Formatiting audio channels using 'AudioChannelPositions', with a value of: '{0}'", audioChannelPositions);
+                Logger.Debug("Formatting audio channels using 'AudioChannelPositions', with a value of: '{0}'", audioChannelPositions);
 
                 if (audioChannelPositions.Contains("+"))
                 {
