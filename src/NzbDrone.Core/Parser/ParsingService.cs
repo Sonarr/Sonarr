@@ -363,13 +363,13 @@ namespace NzbDrone.Core.Parser
 
             foreach (var absoluteEpisodeNumber in parsedEpisodeInfo.AbsoluteEpisodeNumbers)
             {
-                Episode episode = null;
+                var episodes = new List<Episode>();
 
                 if (parsedEpisodeInfo.Special)
                 {
-                    episode = _episodeService.FindEpisode(series.Id, 0, absoluteEpisodeNumber);
+                    var episode = _episodeService.FindEpisode(series.Id, 0, absoluteEpisodeNumber);
+                    episodes.AddIfNotNull(episode);
                 }
-
                 else if (sceneSource)
                 {
                     // Is there a reason why we excluded season 1 from this handling before?
@@ -377,31 +377,33 @@ namespace NzbDrone.Core.Parser
                     // If this needs to be reverted tests will need to be added
                     if (sceneSeasonNumber.HasValue)
                     {
-                        var episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
+                        episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
 
-                        if (episodes.Count == 1)
+                        if (episodes.Empty())
                         {
-                            episode = episodes.First();
-                        }
-
-                        if (episode == null)
-                        {
-                            episode = _episodeService.FindEpisode(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
+                            var episode = _episodeService.FindEpisode(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
+                            episodes.AddIfNotNull(episode);
                         }
                     }
-
                     else
                     {
-                        episode = _episodeService.FindEpisodeBySceneNumbering(series.Id, absoluteEpisodeNumber);
+                        episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, absoluteEpisodeNumber);
+
+                        // Don't allow multiple results without a scene name mapping.
+                        if (episodes.Count > 1)
+                        {
+                            episodes.Clear();
+                        }
                     }
                 }
 
-                if (episode == null)
+                if (episodes.Empty())
                 {
-                    episode = _episodeService.FindEpisode(series.Id, absoluteEpisodeNumber);
+                    var episode = _episodeService.FindEpisode(series.Id, absoluteEpisodeNumber);
+                    episodes.AddIfNotNull(episode);
                 }
 
-                if (episode != null)
+                foreach (var episode in episodes)
                 {
                     _logger.Debug("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
                                 absoluteEpisodeNumber,
