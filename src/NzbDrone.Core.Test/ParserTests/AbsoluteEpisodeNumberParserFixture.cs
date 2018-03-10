@@ -85,6 +85,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Cthuyuu] Taimadou Gakuen 35 Shiken Shoutai - 03 [720p H264 AAC][8AD82C3A]", "Taimadou Gakuen 35 Shiken Shoutai", 3, 0, 0)]
         [TestCase("Dragon Ball Super Episode 56 [VOSTFR V2][720p][AAC]-Mystic Z-Team", "Dragon Ball Super", 56, 0, 0)]
         [TestCase("[Mystic Z-Team] Dragon Ball Super Episode 69 [VOSTFR_Finale][1080p][AAC].mp4", "Dragon Ball Super", 69, 0, 0)]
+        [TestCase("[Shark-Raws] Crayon Shin-chan #957 (NBN 1280x720 x264 AAC).mp4", "Crayon Shin-chan", 957, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
