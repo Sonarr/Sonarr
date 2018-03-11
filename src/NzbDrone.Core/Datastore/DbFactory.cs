@@ -27,8 +27,18 @@ namespace NzbDrone.Core.Datastore
 
         static DbFactory()
         {
+            InitializeEnvironment();
+
             MapRepository.Instance.ReflectionStrategy = new SimpleReflectionStrategy();
             TableMapping.Map();
+        }
+
+        private static void InitializeEnvironment()
+        {
+            // Speed up sqlite3 initialization since we don't use the config file and can't rely on preloading.
+            Environment.SetEnvironmentVariable("No_Expand", "true");
+            Environment.SetEnvironmentVariable("No_SQLiteXmlConfigFile", "true");
+            Environment.SetEnvironmentVariable("No_PreLoadSQLite", "true");
         }
 
         public static void RegisterDatabase(IContainer container)
