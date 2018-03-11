@@ -68,6 +68,20 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            foreach (var queryTitle in searchCriteria.QueryTitles)
+            {
+                pageableRequests.Add(GetPagedRequests(string.Format("{0}+{1}",
+                    queryTitle,
+                    searchCriteria.Year)));
+            }
+
+            return pageableRequests;
+        }
+
         public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
             return new IndexerPageableRequestChain();
