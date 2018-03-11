@@ -146,6 +146,17 @@ namespace NzbDrone.Core.Indexers.Newznab
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            AddTvIdPageableRequests(pageableRequests, MaxPages, Settings.Categories, searchCriteria,
+                string.Format("&season={0}",
+                searchCriteria.Year));
+
+            return pageableRequests;
+        }
+
         public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();

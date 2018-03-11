@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Indexers.BitMeTv
     public class BitMeTvRequestGenerator : IIndexerRequestGenerator
     {
         public BitMeTvSettings Settings { get; set; }
-        
+
         public virtual IndexerPageableRequestChain GetRecentRequests()
         {
             var pageableRequests = new IndexerPageableRequestChain();
@@ -28,6 +28,11 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         }
 
         public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
         {
             return new IndexerPageableRequestChain();
         }

@@ -127,6 +127,34 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            var parameters = new BroadcastheNetTorrentQuery();
+            if (AddSeriesSearchParameters(parameters, searchCriteria))
+            {
+                parameters.Category = "Episode";
+                parameters.Name = string.Format("{0}%", searchCriteria.Year);
+
+                pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+
+                pageableRequests.AddTier();
+
+                foreach (var episode in searchCriteria.Episodes)
+                {
+                    parameters = parameters.Clone();
+
+                    parameters.Category = "Episode";
+                    parameters.Name = string.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+                }
+            }
+
+            return pageableRequests;
+        }
+
         public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
