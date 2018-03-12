@@ -7,7 +7,6 @@ namespace NzbDrone.Core.Tv
         private readonly static Dictionary<int, string> PreComputedTitles = new Dictionary<int, string>
                                                                      {
                                                                          { 281588, "a to z" },
-                                                                         { 266757, "ad trials triumph early church" },
                                                                          { 289260, "ad bible continues"},
                                                                          { 328534, "ap bio"}
                                                                      };
