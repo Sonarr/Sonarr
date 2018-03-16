@@ -294,7 +294,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.FindEpisodesBySceneNumbering(It.IsAny<int>(), seasonNumber, It.IsAny<int>()))
-                  .Returns(Builder<Episode>.CreateListOfSize(0).Build().ToList());
+                  .Returns(new List<Episode>());
 
             Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
 
