@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Clipboard from 'Clipboard';
+import Clipboard from 'clipboard';
 import { icons, kinds } from 'Helpers/Props';
 import getUniqueElememtId from 'Utilities/getUniqueElementId';
 import Icon from 'Components/Icon';

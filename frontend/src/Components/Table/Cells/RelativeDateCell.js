@@ -3,7 +3,7 @@ import React from 'react';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import TableRowCell from './TableRowCell';
-import styles from './relativeDateCell.css';
+import styles from './RelativeDateCell.css';
 
 function RelativeDateCell(props) {
   const {
