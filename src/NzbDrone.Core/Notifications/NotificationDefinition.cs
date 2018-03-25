@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Notifications
 
         public bool OnGrab { get; set; }
         public bool OnDownload { get; set; }
+        public bool OnFailed { get; set; }
         public bool OnUpgrade { get; set; }
         public bool OnRename { get; set; }
         public bool SupportsOnGrab { get; set; }

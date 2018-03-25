@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Notifications
     {
         List<INotification> OnGrabEnabled();
         List<INotification> OnDownloadEnabled();
+        List<INotification> OnFailedEnabled();
         List<INotification> OnUpgradeEnabled();
         List<INotification> OnRenameEnabled();
     }
@@ -30,6 +31,11 @@ namespace NzbDrone.Core.Notifications
         public List<INotification> OnDownloadEnabled()
         {
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnDownload).ToList();
+        }
+
+        public List<INotification> OnFailedEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnFailed.ToList();
         }
 
         public List<INotification> OnUpgradeEnabled()

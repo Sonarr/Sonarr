@@ -42,9 +42,15 @@ namespace NzbDrone.Core.Notifications
 
         }
 
+        public virtual void OnFailed(FailedMessage message)
+        {
+
+        }
+
         public bool SupportsOnGrab => HasConcreteImplementation("OnGrab");
         public bool SupportsOnRename => HasConcreteImplementation("OnRename");
         public bool SupportsOnDownload => HasConcreteImplementation("OnDownload");
+        public bool SupportsOnFailed => HasConcreteImplementation("OnFailed");
         public bool SupportsOnUpgrade => SupportsOnDownload;
 
         protected TSettings Settings => (TSettings)Definition.Settings;

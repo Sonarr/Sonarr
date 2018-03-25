@@ -62,6 +62,23 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnFailed(DownloadMessage message)
+        {
+            var attachments = new List<Attachment>
+                                {
+                                    new Attachment
+                                    {
+                                        Fallback = message.Message,
+                                        Title = message.Series.Title,
+                                        Text = message.Message,
+                                        Color = "good"
+                                    }
+                                };
+            var payload = CreatePayload("Failed", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override void OnRename(Series series)
         {
             var attachments = new List<Attachment>
