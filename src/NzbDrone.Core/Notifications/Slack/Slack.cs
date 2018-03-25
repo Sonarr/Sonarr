@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
-        public override void OnFailed(DownloadMessage message)
+        public override void OnFailed(FailedMessage message)
         {
             var attachments = new List<Attachment>
                                 {
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Notifications.Slack
                                         Color = "good"
                                     }
                                 };
-            var payload = CreatePayload("Failed", attachments);
+            var payload = CreatePayload($"Failed: {message.Message}", attachments);
 
             _proxy.SendPayload(payload, Settings);
         }
