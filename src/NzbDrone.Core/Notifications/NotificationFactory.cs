@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Notifications
 
         public List<INotification> OnFailedEnabled()
         {
-            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnFailed.ToList();
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnFailed).ToList();
         }
 
         public List<INotification> OnUpgradeEnabled()
