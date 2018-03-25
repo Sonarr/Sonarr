@@ -54,6 +54,7 @@ namespace NzbDrone.Core.Notifications
 
             definition.SupportsOnGrab = provider.SupportsOnGrab;
             definition.SupportsOnDownload = provider.SupportsOnDownload;
+            definition.SupportsOnFailed = provider.SupportsOnFailed;
             definition.SupportsOnUpgrade = provider.SupportsOnUpgrade;
             definition.SupportsOnRename = provider.SupportsOnRename;
         }

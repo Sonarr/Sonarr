@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Notifications
     public class NotificationService
         : IHandle<EpisodeGrabbedEvent>,
           IHandle<EpisodeImportedEvent>,
+          IHandle<DownloadFailedEvent>,
           IHandle<SeriesRenamedEvent>
     {
         private readonly INotificationFactory _notificationFactory;
@@ -152,6 +153,13 @@ namespace NzbDrone.Core.Notifications
                 }
             }
         }
+
+        public void Handle(DownloadFailedEvent message)
+        {
+            throw new NotImplementedException();
+        }
+        
+
 
         public void Handle(SeriesRenamedEvent message)
         {

@@ -1,4 +1,6 @@
-﻿using NzbDrone.Core.Parser.Model;
+﻿using System;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 

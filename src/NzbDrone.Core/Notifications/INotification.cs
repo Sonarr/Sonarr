@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Notifications
         void OnRename(Series series);
         bool SupportsOnGrab { get; }
         bool SupportsOnDownload { get; }
+        bool SupportsOnFailed { get; }
         bool SupportsOnUpgrade { get; }
         bool SupportsOnRename { get; }
     }
