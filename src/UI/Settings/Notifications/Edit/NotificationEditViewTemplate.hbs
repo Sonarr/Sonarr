@@ -61,6 +61,24 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                    <div class="input-group">
+                            <label class="checkbox toggle well">
+                                    <input type="checkbox" name="onFailed" {{#unless supportsOnFailed}}disabled="disabled"{{/unless}}/>
+                                <p>
+                                    <span>Yes</span>
+                                    <span>No</span>
+                                </p>
+
+                                <div class="btn btn-primary slide-button"/>
+                           </label>
+
+                        <span class="help-inline-checkbox">
+                            <i class="icon-sonarr-form-info" title="Be notfied when episodes are failing to download and/or when they have been marked manually as failed"/>
+                        </span>
+                    </div>
+            </div>
+
             <div class="form-group x-on-upgrade">
                 <label class="col-sm-3 control-label">On Upgrade</label>
 
