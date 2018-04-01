@@ -339,6 +339,28 @@ namespace NzbDrone.Common.Test.Http
         }
 
         [Test]
+        public void should_clear_request_cookie()
+        {
+            var requestSet = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestSet.Cookies.Add("my", "cookie");
+            requestSet.AllowAutoRedirect = false;
+            requestSet.StoreRequestCookie = true;
+            requestSet.StoreResponseCookie = false;
+
+            var responseSet = Subject.Get<HttpCookieResource>(requestSet);
+
+            var requestClear = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestClear.Cookies.Add("my", null);
+            requestClear.AllowAutoRedirect = false;
+            requestClear.StoreRequestCookie = true;
+            requestClear.StoreResponseCookie = false;
+
+            var responseClear = Subject.Get<HttpCookieResource>(requestClear);
+
+            responseClear.Resource.Cookies.Should().BeEmpty();
+        }
+
+        [Test]
         public void should_not_store_response_cookie()
         {
             var requestSet = new HttpRequest($"http://{_httpBinHost}/cookies/set?my=cookie");

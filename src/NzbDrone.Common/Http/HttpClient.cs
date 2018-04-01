@@ -153,12 +153,23 @@ namespace NzbDrone.Common.Http
                 {
                     foreach (var pair in request.Cookies)
                     {
-                        var cookie = new Cookie(pair.Key, pair.Value, "/")
+                        Cookie cookie;
+                        if (pair.Value == null)
                         {
-                            // Use Now rather than UtcNow to work around Mono cookie expiry bug.
-                            // See https://gist.github.com/ta264/7822b1424f72e5b4c961
-                            Expires = DateTime.Now.AddHours(1)
-                        };
+                            cookie = new Cookie(pair.Key, "", "/")
+                            {
+                                Expires = DateTime.Now.AddDays(-1)
+                            };
+                        }
+                        else
+                        {
+                            cookie = new Cookie(pair.Key, pair.Value, "/")
+                            {
+                                // Use Now rather than UtcNow to work around Mono cookie expiry bug.
+                                // See https://gist.github.com/ta264/7822b1424f72e5b4c961
+                                Expires = DateTime.Now.AddHours(1)
+                            };
+                        }
 
                         sourceContainer.Add((Uri)request.Url, cookie);
 
