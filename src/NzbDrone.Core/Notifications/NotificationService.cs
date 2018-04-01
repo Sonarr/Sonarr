@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(DownloadFailedEvent message)
         {
-            throw new NotImplementedException();
+            //TODO: Make the Handle.
         }
         
 
