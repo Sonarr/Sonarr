@@ -13,17 +13,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
 
             var width = localEpisode.MediaInfo.Width;
 
-            if (width > 1920)
+            if (width >= 3200)
             {
                 return AugmentQualityResult.ResolutionOnly(2160, Confidence.MediaInfo);
             }
 
-            if (width > 1280)
+            if (width >= 1800)
             {
                 return AugmentQualityResult.ResolutionOnly(1080, Confidence.MediaInfo);
             }
 
-            if (width > 854)
+            if (width >= 1200)
             {
                 return AugmentQualityResult.ResolutionOnly(720, Confidence.MediaInfo);
             }

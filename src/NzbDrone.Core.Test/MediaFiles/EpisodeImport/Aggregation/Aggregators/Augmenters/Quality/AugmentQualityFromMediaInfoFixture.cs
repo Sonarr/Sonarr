@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
         }
 
         [Test]
-        public void should_return_null_if_media_info__width_is_zero()
+        public void should_return_null_if_media_info_width_is_zero()
         {
             var mediaInfo = Builder<MediaInfoModel>.CreateNew()
                                                    .With(m => m.Width = 0)
@@ -35,11 +35,24 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
             Subject.AugmentQuality(localEpisode).Should().Be(null);
         }
 
-        [Test]
-        public void should_have_2160_resolution_if_width_is_over_1920()
+        [TestCase(4096, 2160)] // True 4K
+        [TestCase(4000, 2160)]
+        [TestCase(3840, 2160)] // 4K UHD
+        [TestCase(3200, 2160)]
+        [TestCase(2000, 1080)]
+        [TestCase(1920, 1080)] // Full HD
+        [TestCase(1800, 1080)]
+        [TestCase(1490, 720)]
+        [TestCase(1280, 720)] // HD
+        [TestCase(1200, 720)]
+        [TestCase(800, 480)]
+        [TestCase(720, 480)] // SDTV
+        [TestCase(600, 480)]
+        [TestCase(100, 480)]
+        public void should_return_closest_resolution(int mediaInfoWidth, int expectedResolution)
         {
             var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.Width = 3840)
+                                                   .With(m => m.Width = mediaInfoWidth)
                                                    .Build();
 
             var localEpisode = Builder<LocalEpisode>.CreateNew()
@@ -49,58 +62,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
             var result = Subject.AugmentQuality(localEpisode);
 
             result.Should().NotBe(null);
-            result.Resolution.Should().Be(2160);
-        }
-
-        [Test]
-        public void should_have_1080_resolution_if_width_is_over_1280()
-        {
-            var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.Width = 1920)
-                                                   .Build();
-
-            var localEpisode = Builder<LocalEpisode>.CreateNew()
-                                                    .With(l => l.MediaInfo = mediaInfo)
-                                                    .Build();
-
-            var result = Subject.AugmentQuality(localEpisode);
-
-            result.Should().NotBe(null);
-            result.Resolution.Should().Be(1080);
-        }
-
-        [Test]
-        public void should_have_720_resolution_if_width_is_over_854()
-        {
-            var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.Width = 1280)
-                                                   .Build();
-
-            var localEpisode = Builder<LocalEpisode>.CreateNew()
-                                                    .With(l => l.MediaInfo = mediaInfo)
-                                                    .Build();
-
-            var result = Subject.AugmentQuality(localEpisode);
-
-            result.Should().NotBe(null);
-            result.Resolution.Should().Be(720);
-        }
-
-        [Test]
-        public void should_have_480_resolution_if_width_is_over_0()
-        {
-            var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.Width = 640)
-                                                   .Build();
-
-            var localEpisode = Builder<LocalEpisode>.CreateNew()
-                                                    .With(l => l.MediaInfo = mediaInfo)
-                                                    .Build();
-
-            var result = Subject.AugmentQuality(localEpisode);
-
-            result.Should().NotBe(null);
-            result.Resolution.Should().Be(480);
+            result.Resolution.Should().Be(expectedResolution);
         }
     }
 }
