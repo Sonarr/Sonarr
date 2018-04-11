@@ -298,6 +298,7 @@
     <Compile Include="Datastore\Migration\105_rename_torrent_downloadstation.cs" />
     <Compile Include="Datastore\Migration\111_create_language_profiles.cs" />
     <Compile Include="Datastore\Migration\115_add_downloadclient_status.cs" />
+    <Compile Include="Datastore\Migration\121_update_animetosho_url.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />

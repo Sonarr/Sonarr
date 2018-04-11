@@ -148,6 +148,7 @@
     <Compile Include="Datastore\Migration\079_dedupe_tagsFixture.cs" />
     <Compile Include="Datastore\Migration\075_force_lib_updateFixture.cs" />
     <Compile Include="Datastore\Migration\090_update_kickass_urlFixture.cs" />
+    <Compile Include="Datastore\Migration\121_update_animetosho_urlFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\ToSortDirectionFixture.cs" />
