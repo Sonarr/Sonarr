@@ -3,7 +3,7 @@ Before opening a new issue, please ensure:
 - You use the forums for support/questions
 - You search for existing bugs/feature requests
 - Remove extraneous template details
-- Do not prefix title with type of issue (Feature Request, Bug, etc. The appropriate labels will be added during triage.
+- Do not prefix title with type of issue (Feature Request, Bug, etc.) The appropriate labels will be added during triage.
 -->
 
 ## Support / Questions
