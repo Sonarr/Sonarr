@@ -71,6 +71,8 @@ namespace NzbDrone.Core.Qualities
         //public static Quality Bluray480p  { get { return new Quality(13, "Bluray-480p"); } }
         //public static Quality WEBRip720p  { get { return new Quality(14, "WEBRip-720p"); } }
         //public static Quality WEBRip1080p { get { return new Quality(15, "WEBRip-1080p"); } }
+        public static Quality REMUX1080p => new Quality(11, "REMUX-1080p");
+
         public static Quality HDTV2160p => new Quality(16, "HDTV-2160p");
         //public static Quality WEBRip2160p { get { return new Quality(17, "WEBRip-2160p"); } }
         public static Quality WEBDL2160p => new Quality(18, "WEBDL-2160p");
@@ -91,6 +93,7 @@ namespace NzbDrone.Core.Qualities
                 WEBDL480p,
                 HDTV1080p,
                 RAWHD,
+                REMUX1080p,
                 HDTV2160p,
                 WEBDL2160p,
                 Bluray2160p,
@@ -115,9 +118,10 @@ namespace NzbDrone.Core.Qualities
                 new QualityDefinition(Quality.Bluray720p)  { Weight = 9,  MinSize = 0, MaxSize = 100 },
                 new QualityDefinition(Quality.WEBDL1080p)  { Weight = 10, MinSize = 0, MaxSize = 100 },
                 new QualityDefinition(Quality.Bluray1080p) { Weight = 11, MinSize = 0, MaxSize = 100 },
-                new QualityDefinition(Quality.HDTV2160p)   { Weight = 12, MinSize = 0, MaxSize = null },
-                new QualityDefinition(Quality.WEBDL2160p)  { Weight = 13, MinSize = 0, MaxSize = null },
-                new QualityDefinition(Quality.Bluray2160p) { Weight = 14, MinSize = 0, MaxSize = null },
+                new QualityDefinition(Quality.REMUX1080p)   { Weight = 12, MinSize = 0, MaxSize = null },
+                new QualityDefinition(Quality.HDTV2160p)   { Weight = 13, MinSize = 0, MaxSize = null },
+                new QualityDefinition(Quality.WEBDL2160p)  { Weight = 14, MinSize = 0, MaxSize = null },
+                new QualityDefinition(Quality.Bluray2160p) { Weight = 15, MinSize = 0, MaxSize = null },
             };
         }
 
