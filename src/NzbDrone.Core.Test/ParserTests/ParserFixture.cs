@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_quality_from_extension(string title)
         {
             Parser.Parser.ParseTitle(title).Quality.Quality.Should().NotBe(Quality.Unknown);
-            Parser.Parser.ParseTitle(title).Quality.QualitySource.Should().Be(QualitySource.Extension);
+            Parser.Parser.ParseTitle(title).Quality.QualityDetectionSource.Should().Be(QualityDetectionSource.Extension);
         }
 
 

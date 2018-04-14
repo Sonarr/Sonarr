@@ -1,4 +1,4 @@
-﻿using FizzWare.NBuilder;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                 Path = @"C:\Test\30 Rock\30.rock.s01e01.avi".AsOsAgnostic(),
                 Size = 100,
                 Series = Builder<Series>.CreateNew().Build(),
-                ParsedEpisodeInfo = new ParsedEpisodeInfo
+                FileEpisodeInfo = new ParsedEpisodeInfo
                                     {
                                         FullSeason = false
                                     }
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_false_when_file_contains_the_full_season()
         {
-            _localEpisode.ParsedEpisodeInfo.FullSeason = true;
+            _localEpisode.FileEpisodeInfo.FullSeason = true;
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }

@@ -4,7 +4,9 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Files;
+using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Subtitles
@@ -12,16 +14,16 @@ namespace NzbDrone.Core.Extras.Subtitles
     public class ExistingSubtitleImporter : ImportExistingExtraFilesBase<SubtitleFile>
     {
         private readonly IExtraFileService<SubtitleFile> _subtitleFileService;
-        private readonly IParsingService _parsingService;
+        private readonly IAugmentingService _augmentingService;
         private readonly Logger _logger;
 
         public ExistingSubtitleImporter(IExtraFileService<SubtitleFile> subtitleFileService,
-                                        IParsingService parsingService,
+                                        IAugmentingService augmentingService,
                                         Logger logger)
             : base (subtitleFileService)
         {
             _subtitleFileService = subtitleFileService;
-            _parsingService = parsingService;
+            _augmentingService = augmentingService;
             _logger = logger;
         }
 
@@ -40,11 +42,20 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                 if (SubtitleFileExtensions.Extensions.Contains(extension))
                 {
-                    var localEpisode = _parsingService.GetLocalEpisode(possibleSubtitleFile, series);
-
-                    if (localEpisode == null)
+                    var localEpisode = new LocalEpisode
                     {
-                        _logger.Debug("Unable to parse subtitle file: {0}", possibleSubtitleFile);
+                        FileEpisodeInfo = Parser.Parser.ParsePath(possibleSubtitleFile),
+                        Series = series,
+                        Path = possibleSubtitleFile
+                    };
+
+                    try
+                    {
+                        _augmentingService.Augment(localEpisode, false);
+                    }
+                    catch (AugmentingFailedException ex)
+                    {
+                        _logger.Debug("Unable to parse extra file: {0}", possibleSubtitleFile);
                         continue;
                     }
 

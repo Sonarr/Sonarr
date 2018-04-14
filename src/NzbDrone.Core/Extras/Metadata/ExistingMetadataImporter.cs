@@ -6,7 +6,9 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Files;
 using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.Extras.Subtitles;
+using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Metadata
@@ -14,18 +16,18 @@ namespace NzbDrone.Core.Extras.Metadata
     public class ExistingMetadataImporter : ImportExistingExtraFilesBase<MetadataFile>
     {
         private readonly IExtraFileService<MetadataFile> _metadataFileService;
-        private readonly IParsingService _parsingService;
+        private readonly IAugmentingService _augmentingService;
         private readonly Logger _logger;
         private readonly List<IMetadata> _consumers;
 
         public ExistingMetadataImporter(IExtraFileService<MetadataFile> metadataFileService,
                                         IEnumerable<IMetadata> consumers,
-                                        IParsingService parsingService,
+                                        IAugmentingService augmentingService,
                                         Logger logger)
         : base(metadataFileService)
         {
             _metadataFileService = metadataFileService;
-            _parsingService = parsingService;
+            _augmentingService = augmentingService;
             _logger = logger;
             _consumers = consumers.ToList();
         }
@@ -60,9 +62,18 @@ namespace NzbDrone.Core.Extras.Metadata
                     if (metadata.Type == MetadataType.EpisodeImage ||
                         metadata.Type == MetadataType.EpisodeMetadata)
                     {
-                        var localEpisode = _parsingService.GetLocalEpisode(possibleMetadataFile, series);
+                        var localEpisode = new LocalEpisode
+                        {
+                            FileEpisodeInfo = Parser.Parser.ParsePath(possibleMetadataFile),
+                            Series = series,
+                            Path = possibleMetadataFile
+                        };
 
-                        if (localEpisode == null)
+                        try
+                        {
+                            _augmentingService.Augment(localEpisode, false);
+                        }
+                        catch (AugmentingFailedException ex)
                         {
                             _logger.Debug("Unable to parse extra file: {0}", possibleMetadataFile);
                             continue;

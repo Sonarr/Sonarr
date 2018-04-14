@@ -44,6 +44,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 return DetectSampleResult.NotSample;
             }
 
+            // TODO: Use MediaInfo from the import process, no need to re-process the file again here
             var runTime = _videoFileInfoReader.GetRunTime(path);
 
             if (!runTime.HasValue)

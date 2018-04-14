@@ -1,9 +1,13 @@
-﻿namespace NzbDrone.Core.Qualities
+namespace NzbDrone.Core.Qualities
 {
     public enum QualitySource
     {
-        Name,
-        Extension,
-        MediaInfo
+        Unknown,
+        Television,
+        TelevisionRaw,
+        Web,
+        WebRip,
+        DVD,
+        Bluray
     }
 }

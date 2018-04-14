@@ -156,14 +156,7 @@ namespace NzbDrone.Core.MediaFiles
                 return new List<ImportResult>();
             }
 
-            var cleanedUpName = GetCleanedUpFolderName(directoryInfo.Name);
             var folderInfo = Parser.Parser.ParseTitle(directoryInfo.Name);
-
-            if (folderInfo != null)
-            {
-                _logger.Debug("{0} folder quality: {1}", cleanedUpName, folderInfo.Quality);
-            }
-
             var videoFiles = _diskScanService.FilterFiles(directoryInfo.FullName, _diskScanService.GetVideoFiles(directoryInfo.FullName));
 
             if (downloadClientItem == null)

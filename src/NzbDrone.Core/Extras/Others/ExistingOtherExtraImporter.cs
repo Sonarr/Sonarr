@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Files;
+using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Others
@@ -12,16 +15,16 @@ namespace NzbDrone.Core.Extras.Others
     public class ExistingOtherExtraImporter : ImportExistingExtraFilesBase<OtherExtraFile>
     {
         private readonly IExtraFileService<OtherExtraFile> _otherExtraFileService;
-        private readonly IParsingService _parsingService;
+        private readonly IAugmentingService _augmentingService;
         private readonly Logger _logger;
 
         public ExistingOtherExtraImporter(IExtraFileService<OtherExtraFile> otherExtraFileService,
-                                          IParsingService parsingService,
+                                          IAugmentingService augmentingService,
                                           Logger logger)
             : base(otherExtraFileService)
         {
             _otherExtraFileService = otherExtraFileService;
-            _parsingService = parsingService;
+            _augmentingService = augmentingService;
             _logger = logger;
         }
 
@@ -44,9 +47,18 @@ namespace NzbDrone.Core.Extras.Others
                     continue;
                 }
 
-                var localEpisode = _parsingService.GetLocalEpisode(possibleExtraFile, series);
+                var localEpisode = new LocalEpisode
+                                   {
+                                       FileEpisodeInfo = Parser.Parser.ParsePath(possibleExtraFile),
+                                       Series = series,
+                                       Path = possibleExtraFile
+                                   };
 
-                if (localEpisode == null)
+                try
+                {
+                    _augmentingService.Augment(localEpisode, false);
+                }
+                catch (AugmentingFailedException ex)
                 {
                     _logger.Debug("Unable to parse extra file: {0}", possibleExtraFile);
                     continue;
