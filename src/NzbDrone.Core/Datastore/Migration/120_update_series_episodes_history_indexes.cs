@@ -8,7 +8,6 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Create.Index().OnTable("Series").OnColumn("TvdbId").Ascending();
             Create.Index().OnTable("Episodes").OnColumn("SeriesId").Ascending()
                                               .OnColumn("AirDate").Ascending();
 
