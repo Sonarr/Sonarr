@@ -32,7 +32,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            var folderInfo = localEpisode.FileEpisodeInfo;
+            var folderInfo = localEpisode.FolderEpisodeInfo;
 
             if (folderInfo != null && folderInfo.IsPossibleSceneSeasonSpecial)
             {
