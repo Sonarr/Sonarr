@@ -73,7 +73,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                                        DownloadClientEpisodeInfo = downloadClientItemInfo,
                                        FolderEpisodeInfo = folderInfo,
                                        Path = file,
-                                       SceneSource = sceneSource
+                                       SceneSource = sceneSource,
+                                       ExistingFile = series.Path.IsParentPath(file)
                                    };
 
                 decisions.AddIfNotNull(GetDecision(localEpisode, downloadClientItem, nonSampleVideoFileCount > 1));

@@ -54,6 +54,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>())).Returns(Decision.Reject("_fail3"));
 
             _series = Builder<Series>.CreateNew()
+                                     .With(e => e.Path = @"C:\Test\Series".AsOsAgnostic())
                                      .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                      .Build();
 
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenAugmentationSuccess();
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            Subject.GetImportDecisions(_videoFiles, new Series(), downloadClientItem, null, false);
+            Subject.GetImportDecisions(_videoFiles, _series, downloadClientItem, null, false);
 
             _fail1.Verify(c => c.IsSatisfiedBy(It.IsAny<LocalEpisode>(), downloadClientItem), Times.Once());
             _fail2.Verify(c => c.IsSatisfiedBy(It.IsAny<LocalEpisode>(), downloadClientItem), Times.Once());
@@ -116,7 +117,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             GivenSpecifications(_fail1);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series());
+            var result = Subject.GetImportDecisions(_videoFiles, _series);
 
             result.Single().Approved.Should().BeFalse();
         }
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             GivenSpecifications(_pass1, _fail1, _pass2, _pass3);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series());
+            var result = Subject.GetImportDecisions(_videoFiles, _series);
 
             result.Single().Approved.Should().BeFalse();
         }
@@ -137,7 +138,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenAugmentationSuccess();
             GivenSpecifications(_pass1, _pass2, _pass3);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series());
+            var result = Subject.GetImportDecisions(_videoFiles, _series);
 
             result.Single().Approved.Should().BeTrue();
         }
@@ -148,7 +149,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenAugmentationSuccess();
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series());
+            var result = Subject.GetImportDecisions(_videoFiles, _series);
             result.Single().Rejections.Should().HaveCount(3);
         }
 
