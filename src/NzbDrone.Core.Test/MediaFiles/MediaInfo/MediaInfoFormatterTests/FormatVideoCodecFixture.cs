@@ -58,6 +58,26 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, sceneName).Should().Be(expectedFormat);
         }
 
+        [TestCase("AVC, AVC, , x264", "Some.Video.S01E01.h264", "x264")] // Force mediainfo tag
+        [TestCase("HEVC, HEVC, , x265", "Some.Video.S01E01.h265", "x265")] // Force mediainfo tag
+        [TestCase("AVC, AVC, , ", "Some.Video.S01E01.x264", "x264")] // Not seen in practice, but honor tag if otherwise unknown
+        [TestCase("HEVC, HEVC, , ", "Some.Video.S01E01.x265", "x265")] // Not seen in practice, but honor tag if otherwise unknown
+        [TestCase("AVC, AVC, , ", "Some.Video.S01E01", "h264")] // Default value
+        [TestCase("HEVC, HEVC, , ", "Some.Video.S01E01", "h265")] // Default value
+        public void should_format_video_format_fallbacks(string videoFormatPack, string sceneName, string expectedFormat)
+        {
+            var split = videoFormatPack.Split(new string[] { ", " }, System.StringSplitOptions.None);
+            var mediaInfoModel = new MediaInfoModel
+            {
+                VideoFormat = split[0],
+                VideoCodecID = split[1],
+                VideoProfile = split[2],
+                VideoCodecLibrary = split[3]
+            };
+
+            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, sceneName).Should().Be(expectedFormat);
+        }
+
         [TestCase("MPEG-4 Visual, 20, , Intel(R) MPEG-4 encoder based on Intel(R) IPP 6.1 build 137.20[6.1.137.763]", "", "")]
         public void should_warn_on_unknown_video_format(string videoFormatPack, string sceneName, string expectedFormat)
         {

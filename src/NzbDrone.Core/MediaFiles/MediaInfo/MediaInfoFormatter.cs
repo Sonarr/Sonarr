@@ -218,7 +218,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     return "x264";
                 }
 
-                return GetSceneNameMatch(sceneName, "AVC", "h264");
+                return GetSceneNameMatch(sceneName, "AVC", "x264", "h264");
             }
 
             if (videoFormat == "HEVC" || videoFormat == "V_MPEGH/ISO/HEVC")
@@ -228,7 +228,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     return "x265";
                 }
 
-                return GetSceneNameMatch(sceneName, "HEVC", "h265");
+                return GetSceneNameMatch(sceneName, "HEVC", "x265", "h265");
             }
 
             if (videoFormat == "MPEG Video")
