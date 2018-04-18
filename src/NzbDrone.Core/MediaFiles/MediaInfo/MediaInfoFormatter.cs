@@ -199,9 +199,16 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             var videoProfile = mediaInfo.VideoProfile ?? string.Empty;
             var videoCodecLibrary = mediaInfo.VideoCodecLibrary ?? string.Empty;
 
+            var result = videoFormat;
+
             if (videoFormat.IsNullOrWhiteSpace())
             {
-                return videoFormat;
+                return result;
+            }
+
+            if (videoFormat == "x264")
+            {
+                return "x264";
             }
 
             if (videoFormat == "AVC" || videoFormat == "V.MPEG4/ISO/AVC")
@@ -214,12 +221,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return GetSceneNameMatch(sceneName, "AVC", "h264");
             }
 
-            if (videoFormat.EqualsIgnoreCase("DivX") || videoFormat.EqualsIgnoreCase("div3"))
-            {
-                return "DivX";
-            }
-
-            if (videoFormat == "HEVC")
+            if (videoFormat == "HEVC" || videoFormat == "V_MPEGH/ISO/HEVC")
             {
                 if (videoCodecLibrary.StartsWithIgnoreCase("x265"))
                 {
@@ -249,16 +251,27 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (videoFormat == "MPEG-4 Visual")
             {
-                if (videoCodecID.ContainsIgnoreCase("XVID"))
+                if (videoCodecID.ContainsIgnoreCase("XVID") ||
+                    videoCodecLibrary.StartsWithIgnoreCase("XviD"))
                 {
                     return "XviD";
                 }
 
                 if (videoCodecID.ContainsIgnoreCase("DIV3") ||
                     videoCodecID.ContainsIgnoreCase("DIVX") ||
-                    videoCodecID.ContainsIgnoreCase("DX50"))
+                    videoCodecID.ContainsIgnoreCase("DX50") ||
+                    videoCodecLibrary.StartsWithIgnoreCase("DivX"))
                 {
                     return "DivX";
+                }
+            }
+
+            if (videoFormat == "MPEG-4 Visual" || videoFormat == "mp4v")
+            {
+                result = GetSceneNameMatch(sceneName, "XviD", "DivX", "");
+                if (result.IsNotNullOrWhiteSpace())
+                {
+                    return result;
                 }
             }
 
@@ -278,6 +291,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "WMV";
             }
 
+            if (videoFormat.EqualsIgnoreCase("DivX") || videoFormat.EqualsIgnoreCase("div3"))
+            {
+                return "DivX";
+            }
+
             if (videoFormat.EqualsIgnoreCase("XviD"))
             {
                 return "XviD";
@@ -288,7 +306,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                   .WriteSentryWarn("UnknownVideoFormat", mediaInfo.ContainerFormat, videoFormat, videoCodecID)
                   .Write();
 
-            return videoFormat;
+            return result;
         }
 
         public static string FormatVideoCodecLegacy(MediaInfoModel mediaInfo, string sceneName)
@@ -413,7 +431,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         private static string GetSceneNameMatch(string sceneName, params string[] tokens)
         {
-            sceneName = sceneName.IsNotNullOrWhiteSpace() ? Path.GetFileNameWithoutExtension(sceneName) : string.Empty;
+            sceneName = sceneName.IsNotNullOrWhiteSpace() ? Parser.Parser.RemoveFileExtension(sceneName) : string.Empty;
 
             foreach (var token in tokens)
             {
