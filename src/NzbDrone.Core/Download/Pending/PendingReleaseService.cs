@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Marr.Data;
 using NLog;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Extensions;
@@ -66,69 +67,74 @@ namespace NzbDrone.Core.Download.Pending
             _logger = logger;
         }
 
-
         public void Add(DownloadDecision decision, PendingReleaseReason reason)
         {
-            var alreadyPending = _repository.AllBySeriesId(decision.RemoteEpisode.Series.Id);
-
-            alreadyPending = IncludeRemoteEpisodes(alreadyPending);
-
-            Add(alreadyPending, decision, reason);
+            AddMany(new List<Tuple<DownloadDecision, PendingReleaseReason>> { Tuple.Create(decision, reason) });
         }
 
         public void AddMany(List<Tuple<DownloadDecision, PendingReleaseReason>> decisions)
         {
-            var alreadyPending = decisions.Select(v => v.Item1.RemoteEpisode.Series.Id).Distinct().SelectMany(_repository.AllBySeriesId).ToList();
-
-            alreadyPending = IncludeRemoteEpisodes(alreadyPending);
-
-            foreach (var pair in decisions)
+            foreach (var seriesDecisions in decisions.GroupBy(v => v.Item1.RemoteEpisode.Series.Id))
             {
-                Add(alreadyPending, pair.Item1, pair.Item2);
+                var series = seriesDecisions.First().Item1.RemoteEpisode.Series;
+                var alreadyPending = _repository.AllBySeriesId(series.Id);
+
+                alreadyPending = IncludeRemoteEpisodes(alreadyPending, seriesDecisions.ToDictionaryIgnoreDuplicates(v => v.Item1.RemoteEpisode.Release.Title, v => v.Item1.RemoteEpisode));
+                var alreadyPendingByEpisode = CreateEpisodeLookup(alreadyPending);
+
+                foreach (var pair in seriesDecisions)
+                {
+                    var decision = pair.Item1;
+                    var reason = pair.Item2;
+
+                    var episodeIds = decision.RemoteEpisode.Episodes.Select(e => e.Id);
+
+                    var existingReports = episodeIds.SelectMany(v => alreadyPendingByEpisode[v] ?? Enumerable.Empty<PendingRelease>())
+                                                    .Distinct().ToList();
+
+                    var matchingReports = existingReports.Where(MatchingReleasePredicate(decision.RemoteEpisode.Release)).ToList();
+
+                    if (matchingReports.Any())
+                    {
+                        var matchingReport = matchingReports.First();
+
+                        if (matchingReport.Reason != reason)
+                        {
+                            _logger.Debug("The release {0} is already pending with reason {1}, changing to {2}", decision.RemoteEpisode, matchingReport.Reason, reason);
+                            matchingReport.Reason = reason;
+                            _repository.Update(matchingReport);
+                        }
+                        else
+                        {
+                            _logger.Debug("The release {0} is already pending with reason {1}, not adding again", decision.RemoteEpisode, reason);
+                        }
+
+                        if (matchingReports.Count() > 1)
+                        {
+                            _logger.Debug("The release {0} had {1} duplicate pending, removing duplicates.", decision.RemoteEpisode, matchingReports.Count() - 1);
+
+                            foreach (var duplicate in matchingReports.Skip(1))
+                            {
+                                _repository.Delete(duplicate.Id);
+                                alreadyPending.Remove(duplicate);
+                                alreadyPendingByEpisode = CreateEpisodeLookup(alreadyPending);
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    _logger.Debug("Adding release {0} to pending releases with reason {1}", decision.RemoteEpisode, reason);
+                    Insert(decision, reason);
+                }
             }
         }
 
-        private void Add(List<PendingRelease> alreadyPending, DownloadDecision decision, PendingReleaseReason reason)
+        private ILookup<int, PendingRelease> CreateEpisodeLookup(IEnumerable<PendingRelease> alreadyPending)
         {
-            var episodeIds = decision.RemoteEpisode.Episodes.Select(e => e.Id);
-
-            var existingReports = alreadyPending.Where(r => r.RemoteEpisode.Episodes.Select(e => e.Id)
-                                                             .Intersect(episodeIds)
-                                                             .Any());
-
-            var matchingReports = existingReports.Where(MatchingReleasePredicate(decision.RemoteEpisode.Release)).ToList();
-
-            if (matchingReports.Any())
-            {
-                var matchingReport = matchingReports.First();
-
-                if (matchingReport.Reason != reason)
-                {
-                    _logger.Debug("The release {0} is already pending with reason {1}, changing to {2}", decision.RemoteEpisode, matchingReport.Reason, reason);
-                    matchingReport.Reason = reason;
-                    _repository.Update(matchingReport);
-                }
-                else
-                {
-                    _logger.Debug("The release {0} is already pending with reason {1}, not adding again", decision.RemoteEpisode, reason);
-                }
-
-                if (matchingReports.Count() > 1)
-                {
-                    _logger.Debug("The release {0} had {1} duplicate pending, removing duplicates.", decision.RemoteEpisode, matchingReports.Count() - 1);
-
-                    foreach (var duplicate in matchingReports.Skip(1))
-                    {
-                        _repository.Delete(duplicate.Id);
-                        alreadyPending.Remove(duplicate);
-                    }
-                }
-
-                return;
-            }
-
-            _logger.Debug("Adding release {0} to pending releases with reason {1}", decision.RemoteEpisode, reason);
-            Insert(decision, reason);
+            return alreadyPending.SelectMany(v => v.RemoteEpisode.Episodes
+                                    .Select(d => new { Episode = d, PendingRelease = v }))
+                                 .ToLookup(v => v.Episode.Id, v => v.PendingRelease);
         }
 
         public List<ReleaseInfo> GetPending()
@@ -254,11 +260,27 @@ namespace NzbDrone.Core.Download.Pending
             return IncludeRemoteEpisodes(_repository.AllBySeriesId(seriesId).ToList());
         }
 
-        private List<PendingRelease> IncludeRemoteEpisodes(List<PendingRelease> releases)
+        private List<PendingRelease> IncludeRemoteEpisodes(List<PendingRelease> releases, Dictionary<string, RemoteEpisode> knownRemoteEpisodes = null)
         {
             var result = new List<PendingRelease>();
-            var seriesMap = _seriesService.GetSeries(releases.Select(v => v.SeriesId).Distinct())
-                                          .ToDictionary(v => v.Id);
+
+            var seriesMap = new Dictionary<int, Series>();
+
+            if (knownRemoteEpisodes != null)
+            {
+                foreach (var series in knownRemoteEpisodes.Values.Select(v => v.Series))
+                {
+                    if (!seriesMap.ContainsKey(series.Id))
+                    {
+                        seriesMap[series.Id] = series;
+                    }
+                }
+            }
+
+            foreach (var series in _seriesService.GetSeries(releases.Select(v => v.SeriesId).Distinct().Where(v => !seriesMap.ContainsKey(v))))
+            {
+                seriesMap[series.Id] = series;
+            }
 
             foreach (var release in releases)
             {
@@ -267,7 +289,17 @@ namespace NzbDrone.Core.Download.Pending
                 // Just in case the series was removed, but wasn't cleaned up yet (housekeeper will clean it up)
                 if (series == null) return null;
 
-                var episodes = _parsingService.GetEpisodes(release.ParsedEpisodeInfo, series, true);
+                List<Episode> episodes;
+
+                RemoteEpisode knownRemoteEpisode;
+                if (knownRemoteEpisodes != null && knownRemoteEpisodes.TryGetValue(release.Release.Title, out knownRemoteEpisode))
+                {
+                    episodes = knownRemoteEpisode.Episodes;
+                }
+                else
+                {
+                    episodes = _parsingService.GetEpisodes(release.ParsedEpisodeInfo, series, true);
+                }
 
                 release.RemoteEpisode = new RemoteEpisode
                 {

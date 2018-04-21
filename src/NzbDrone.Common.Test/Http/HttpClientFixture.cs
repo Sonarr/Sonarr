@@ -286,18 +286,95 @@ namespace NzbDrone.Common.Test.Http
         }
 
         [Test]
+        public void should_not_store_request_cookie()
+        {
+            var requestGet = new HttpRequest($"http://{_httpBinHost}/get");
+            requestGet.Cookies.Add("my", "cookie");
+            requestGet.AllowAutoRedirect = false;
+            requestGet.StoreRequestCookie = false;
+            requestGet.StoreResponseCookie = false;
+            var responseGet = Subject.Get<HttpBinResource>(requestGet);
+
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestCookies.AllowAutoRedirect = false;
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
+
+            responseCookies.Resource.Cookies.Should().BeEmpty();
+
+            ExceptionVerification.IgnoreErrors();
+        }
+
+        [Test]
+        public void should_store_request_cookie()
+        {
+            var requestGet = new HttpRequest($"http://{_httpBinHost}/get");
+            requestGet.Cookies.Add("my", "cookie");
+            requestGet.AllowAutoRedirect = false;
+            requestGet.StoreRequestCookie.Should().BeTrue();
+            requestGet.StoreResponseCookie = false;
+            var responseGet = Subject.Get<HttpBinResource>(requestGet);
+
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestCookies.AllowAutoRedirect = false;
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
+
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
+
+            ExceptionVerification.IgnoreErrors();
+        }
+
+        [Test]
+        public void should_delete_request_cookie()
+        {
+            var requestDelete = new HttpRequest($"http://{_httpBinHost}/cookies/delete?my");
+            requestDelete.Cookies.Add("my", "cookie");
+            requestDelete.AllowAutoRedirect = true;
+            requestDelete.StoreRequestCookie = false;
+            requestDelete.StoreResponseCookie = false;
+
+            // Delete and redirect since that's the only way to check the internal temporary cookie container
+            var responseCookies = Subject.Get<HttpCookieResource>(requestDelete);
+
+            responseCookies.Resource.Cookies.Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_clear_request_cookie()
+        {
+            var requestSet = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestSet.Cookies.Add("my", "cookie");
+            requestSet.AllowAutoRedirect = false;
+            requestSet.StoreRequestCookie = true;
+            requestSet.StoreResponseCookie = false;
+
+            var responseSet = Subject.Get<HttpCookieResource>(requestSet);
+
+            var requestClear = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestClear.Cookies.Add("my", null);
+            requestClear.AllowAutoRedirect = false;
+            requestClear.StoreRequestCookie = true;
+            requestClear.StoreResponseCookie = false;
+
+            var responseClear = Subject.Get<HttpCookieResource>(requestClear);
+
+            responseClear.Resource.Cookies.Should().BeEmpty();
+        }
+
+        [Test]
         public void should_not_store_response_cookie()
         {
             var requestSet = new HttpRequest($"http://{_httpBinHost}/cookies/set?my=cookie");
             requestSet.AllowAutoRedirect = false;
+            requestSet.StoreRequestCookie = false;
+            requestSet.StoreResponseCookie.Should().BeFalse();
 
             var responseSet = Subject.Get(requestSet);
 
-            var request = new HttpRequest($"http://{_httpBinHost}/get");
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
 
-            var response = Subject.Get<HttpBinResource>(request);
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
 
-            response.Resource.Headers.Should().NotContainKey("Cookie");
+            responseCookies.Resource.Cookies.Should().BeEmpty();
 
             ExceptionVerification.IgnoreErrors();
         }
@@ -307,19 +384,31 @@ namespace NzbDrone.Common.Test.Http
         {
             var requestSet = new HttpRequest($"http://{_httpBinHost}/cookies/set?my=cookie");
             requestSet.AllowAutoRedirect = false;
+            requestSet.StoreRequestCookie = false;
             requestSet.StoreResponseCookie = true;
 
             var responseSet = Subject.Get(requestSet);
 
-            var request = new HttpRequest($"http://{_httpBinHost}/get");
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
 
-            var response = Subject.Get<HttpBinResource>(request);
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
 
-            response.Resource.Headers.Should().ContainKey("Cookie");
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
 
-            var cookie = response.Resource.Headers["Cookie"].ToString();
+            ExceptionVerification.IgnoreErrors();
+        }
 
-            cookie.Should().Contain("my=cookie");
+        [Test]
+        public void should_temp_store_response_cookie()
+        {
+            var requestSet = new HttpRequest($"http://{_httpBinHost}/cookies/set?my=cookie");
+            requestSet.AllowAutoRedirect = true;
+            requestSet.StoreRequestCookie = false;
+            requestSet.StoreResponseCookie.Should().BeFalse();
+            var responseSet = Subject.Get<HttpCookieResource>(requestSet);
+
+            // Set and redirect since that's the only way to check the internal temporary cookie container
+            responseSet.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
 
             ExceptionVerification.IgnoreErrors();
         }
@@ -328,21 +417,129 @@ namespace NzbDrone.Common.Test.Http
         public void should_overwrite_response_cookie()
         {
             var requestSet = new HttpRequest($"http://{_httpBinHost}/cookies/set?my=cookie");
+            requestSet.Cookies.Add("my", "oldcookie");
             requestSet.AllowAutoRedirect = false;
+            requestSet.StoreRequestCookie = false;
             requestSet.StoreResponseCookie = true;
-            requestSet.Cookies["my"] = "oldcookie";
 
             var responseSet = Subject.Get(requestSet);
 
-            var request = new HttpRequest($"http://{_httpBinHost}/get");
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
 
-            var response = Subject.Get<HttpBinResource>(request);
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
 
-            response.Resource.Headers.Should().ContainKey("Cookie");
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
 
-            var cookie = response.Resource.Headers["Cookie"].ToString();
+            ExceptionVerification.IgnoreErrors();
+        }
 
-            cookie.Should().Contain("my=cookie");
+        [Test]
+        public void should_overwrite_temp_response_cookie()
+        {
+            var requestSet = new HttpRequest($"http://{_httpBinHost}/cookies/set?my=cookie");
+            requestSet.Cookies.Add("my", "oldcookie");
+            requestSet.AllowAutoRedirect = true;
+            requestSet.StoreRequestCookie = true;
+            requestSet.StoreResponseCookie = false;
+
+            var responseSet = Subject.Get<HttpCookieResource>(requestSet);
+
+            responseSet.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
+
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
+
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "oldcookie");
+
+            ExceptionVerification.IgnoreErrors();
+        }
+
+        [Test]
+        public void should_not_delete_response_cookie()
+        {
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestCookies.Cookies.Add("my", "cookie");
+            requestCookies.AllowAutoRedirect = false;
+            requestCookies.StoreRequestCookie = true;
+            requestCookies.StoreResponseCookie = false;
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
+
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
+
+            var requestDelete = new HttpRequest($"http://{_httpBinHost}/cookies/delete?my");
+            requestDelete.AllowAutoRedirect = false;
+            requestDelete.StoreRequestCookie = false;
+            requestDelete.StoreResponseCookie = false;
+
+            var responseDelete = Subject.Get(requestDelete);
+
+            requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestCookies.StoreRequestCookie = false;
+            requestCookies.StoreResponseCookie = false;
+
+            responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
+
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
+
+            ExceptionVerification.IgnoreErrors();
+        }
+
+        [Test]
+        public void should_delete_response_cookie()
+        {
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestCookies.Cookies.Add("my", "cookie");
+            requestCookies.AllowAutoRedirect = false;
+            requestCookies.StoreRequestCookie = true;
+            requestCookies.StoreResponseCookie = false;
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
+
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
+
+            var requestDelete = new HttpRequest($"http://{_httpBinHost}/cookies/delete?my");
+            requestDelete.AllowAutoRedirect = false;
+            requestDelete.StoreRequestCookie = false;
+            requestDelete.StoreResponseCookie = true;
+
+            var responseDelete = Subject.Get(requestDelete);
+
+            requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestCookies.StoreRequestCookie = false;
+            requestCookies.StoreResponseCookie = false;
+
+            responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
+
+            responseCookies.Resource.Cookies.Should().BeEmpty();
+
+            ExceptionVerification.IgnoreErrors();
+        }
+
+        [Test]
+        public void should_delete_temp_response_cookie()
+        {
+            var requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestCookies.Cookies.Add("my", "cookie");
+            requestCookies.AllowAutoRedirect = false;
+            requestCookies.StoreRequestCookie = true;
+            requestCookies.StoreResponseCookie = false;
+            var responseCookies = Subject.Get<HttpCookieResource>(requestCookies);
+
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
+
+            var requestDelete = new HttpRequest($"http://{_httpBinHost}/cookies/delete?my");
+            requestDelete.AllowAutoRedirect = true;
+            requestDelete.StoreRequestCookie = false;
+            requestDelete.StoreResponseCookie = false;
+            var responseDelete = Subject.Get<HttpCookieResource>(requestDelete);
+
+            responseDelete.Resource.Cookies.Should().BeEmpty();
+
+            requestCookies = new HttpRequest($"http://{_httpBinHost}/cookies");
+            requestCookies.StoreRequestCookie = false;
+            requestCookies.StoreResponseCookie = false;
+
+            responseCookies.Resource.Cookies.Should().HaveCount(1).And.Contain("my", "cookie");
 
             ExceptionVerification.IgnoreErrors();
         }
@@ -453,5 +650,10 @@ namespace NzbDrone.Common.Test.Http
         public string Origin { get; set; }
         public string Url { get; set; }
         public string Data { get; set; }
+    }
+
+    public class HttpCookieResource
+    {
+        public Dictionary<string, string> Cookies { get; set; }
     }
 }

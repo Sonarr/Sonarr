@@ -152,6 +152,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Incorporated.S01E08.Das.geloeschte.Ich.German.DD51.Dubbed.DL.720p.AmazonHD.x264-TVS", false)]
         [TestCase("Marco.Polo.S01E11.One.Hundred.Eyes.2015.German.DD51.DL.720p.NetflixUHD.x264.NewUp.by.Wunschtante", false)]
         [TestCase("Hush 2016 German DD51 DL 720p NetflixHD x264-TVS", false)]
+        [TestCase("Community.6x10.Basic.RV.Repair.and.Palmistry.ITA.ENG.720p.WEB-DLMux.H.264-GiuseppeTnT", false)]
+        [TestCase("Community.6x11.Modern.Espionage.ITA.ENG.720p.WEB.DLMux.H.264-GiuseppeTnT", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
@@ -281,7 +283,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-REPACK-TLA")]
         public void should_parse_quality_from_name(string title)
         {
-            QualityParser.ParseQuality(title).QualitySource.Should().Be(QualitySource.Name);
+            QualityParser.ParseQuality(title).QualityDetectionSource.Should().Be(QualityDetectionSource.Name);
         }
 
         [TestCase("Revolution.S01E02.Chained.Heat.mkv")]
@@ -290,7 +292,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[CR] Sailor Moon - 004 [48CE2D0F].avi")]
         public void should_parse_quality_from_extension(string title)
         {
-            QualityParser.ParseQuality(title).QualitySource.Should().Be(QualitySource.Extension);
+            QualityParser.ParseQuality(title).QualityDetectionSource.Should().Be(QualityDetectionSource.Extension);
         }
 
         private void ParseAndVerifyQuality(string title, Quality quality, bool proper)

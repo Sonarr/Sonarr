@@ -71,7 +71,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 //Multiply maxSize by Series.Runtime
                 maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;
 
-                if (subject.Episodes.Count == 1)
+                if (subject.Episodes.Count == 1 && subject.Series.SeriesType == SeriesTypes.Standard)
                 {
                     Episode episode = subject.Episodes.First();
                     List<Episode> seasonEpisodes;
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     var seasonSearchCriteria = searchCriteria as SeasonSearchCriteria;
                     if (seasonSearchCriteria != null && !seasonSearchCriteria.Series.UseSceneNumbering && seasonSearchCriteria.Episodes.Any(v => v.Id == episode.Id))
                     {
-                        seasonEpisodes = (searchCriteria as SeasonSearchCriteria).Episodes;
+                        seasonEpisodes = seasonSearchCriteria.Episodes;
                     }
                     else
                     {

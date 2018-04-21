@@ -83,7 +83,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.MediaInfo = localEpisode.MediaInfo;
                     episodeFile.SeasonNumber = localEpisode.SeasonNumber;
                     episodeFile.Episodes = localEpisode.Episodes;
-                    episodeFile.ReleaseGroup = localEpisode.ParsedEpisodeInfo.ReleaseGroup;
+                    episodeFile.ReleaseGroup = localEpisode.ReleaseGroup;
 
                     bool copyOnly;
                     switch (importMode)
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
-                        _extraService.ImportExtraFiles(localEpisode, episodeFile, copyOnly);
+                        _extraService.ImportEpisode(localEpisode, episodeFile, copyOnly);
                     }
 
                     _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, oldFiles, newDownload, downloadClientItem));

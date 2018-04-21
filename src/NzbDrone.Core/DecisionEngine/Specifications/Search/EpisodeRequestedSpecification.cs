@@ -31,7 +31,25 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             if (!criteriaEpisodes.Intersect(remoteEpisodes).Any())
             {
                 _logger.Debug("Release rejected since the episode wasn't requested: {0}", remoteEpisode.ParsedEpisodeInfo);
-                return Decision.Reject("Episode wasn't requested");
+
+                if (remoteEpisodes.Any())
+                {
+                    var episodes = remoteEpisode.Episodes.OrderBy(v => v.SeasonNumber).ThenBy(v => v.EpisodeNumber).ToList();
+
+                    if (episodes.Count > 1)
+                    {
+                        return Decision.Reject($"Episode wasn't requested: {episodes.First().SeasonNumber}x{episodes.First().EpisodeNumber}-{episodes.Last().EpisodeNumber}");
+                    }
+                    else
+                    {
+                        return Decision.Reject($"Episode wasn't requested: {episodes.First().SeasonNumber}x{episodes.First().EpisodeNumber}");
+                    }
+                }
+                else
+                {
+                    return Decision.Reject("Episode wasn't requested");
+                }
+
             }
 
             return Decision.Accept();

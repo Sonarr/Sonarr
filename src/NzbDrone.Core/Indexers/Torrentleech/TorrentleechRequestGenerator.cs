@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
     public class TorrentleechRequestGenerator : IIndexerRequestGenerator
     {
         public TorrentleechSettings Settings { get; set; }
-        
+
         public virtual IndexerPageableRequestChain GetRecentRequests()
         {
             var pageableRequests = new IndexerPageableRequestChain();
@@ -28,6 +28,11 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         }
 
         public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
         {
             return new IndexerPageableRequestChain();
         }

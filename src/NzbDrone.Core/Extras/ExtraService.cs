@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Extras
 {
     public interface IExtraService
     {
-        void ImportExtraFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly);
+        void ImportEpisode(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly);
     }
 
     public class ExtraService : IExtraService,
@@ -48,15 +48,15 @@ namespace NzbDrone.Core.Extras
             _logger = logger;
         }
 
-        public void ImportExtraFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly)
+        public void ImportEpisode(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly)
         {
-            var series = localEpisode.Series;
+            ImportExtraFiles(localEpisode, episodeFile, isReadOnly);
+            
+            CreateAfterImport(localEpisode.Series, episodeFile);
+        }
 
-            foreach (var extraFileManager in _extraFileManagers)
-            {
-                extraFileManager.CreateAfterEpisodeImport(series, episodeFile);
-            }
-
+        private void ImportExtraFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly)
+        {
             if (!_configService.ImportExtraFiles)
             {
                 return;
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Extras
                     foreach (var extraFileManager in _extraFileManagers)
                     {
                         var extension = Path.GetExtension(matchingFilename);
-                        var extraFile = extraFileManager.Import(series, episodeFile, matchingFilename, extension, isReadOnly);
+                        var extraFile = extraFileManager.Import(localEpisode.Series, episodeFile, matchingFilename, extension, isReadOnly);
 
                         if (extraFile != null)
                         {
@@ -99,6 +99,14 @@ namespace NzbDrone.Core.Extras
                 {
                     _logger.Warn(ex, "Failed to import extra file: {0}", matchingFilename);
                 }
+            }
+        }
+
+        private void CreateAfterImport(Series series, EpisodeFile episodeFile)
+        {
+            foreach (var extraFileManager in _extraFileManagers)
+            {
+                extraFileManager.CreateAfterEpisodeImport(series, episodeFile);
             }
         }
 

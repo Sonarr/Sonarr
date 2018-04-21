@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common;
@@ -13,12 +15,38 @@ namespace NzbDrone.Core.Messaging.Events
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
         private readonly TaskFactory _taskFactory;
+        private readonly Dictionary<string, object> _eventSubscribers;
+
+        private class EventSubscribers<TEvent> where TEvent : class, IEvent
+        {
+            private IServiceFactory _serviceFactory;
+
+            public IHandle<TEvent>[] _syncHandlers;
+            public IHandleAsync<TEvent>[] _asyncHandlers;
+            public IHandleAsync<IEvent>[] _globalHandlers;
+
+            public EventSubscribers(IServiceFactory serviceFactory)
+            {
+                _serviceFactory = serviceFactory;
+
+                _syncHandlers = serviceFactory.BuildAll<IHandle<TEvent>>()
+                                              .OrderBy(GetEventHandleOrder)
+                                              .ToArray();
+
+                _globalHandlers = serviceFactory.BuildAll<IHandleAsync<IEvent>>()
+                                              .ToArray();
+
+                _asyncHandlers = serviceFactory.BuildAll<IHandleAsync<TEvent>>()
+                                               .ToArray();
+            }
+        }
 
         public EventAggregator(Logger logger, IServiceFactory serviceFactory)
         {
             _logger = logger;
             _serviceFactory = serviceFactory;
             _taskFactory = new TaskFactory();
+            _eventSubscribers = new Dictionary<string, object>();
         }
 
         public void PublishEvent<TEvent>(TEvent @event) where TEvent : class, IEvent
@@ -46,9 +74,21 @@ namespace NzbDrone.Core.Messaging.Events
 
             _logger.Trace("Publishing {0}", eventName);
 
+            EventSubscribers<TEvent> subscribers;
+            lock (_eventSubscribers)
+            {
+                object target;
+                if (!_eventSubscribers.TryGetValue(eventName, out target))
+                {
+                    _eventSubscribers[eventName] = target = new EventSubscribers<TEvent>(_serviceFactory);
+                }
+
+                subscribers = target as EventSubscribers<TEvent>;
+            }
 
             //call synchronous handlers first.
-            foreach (var handler in _serviceFactory.BuildAll<IHandle<TEvent>>())
+            var handlers = subscribers._syncHandlers;
+            foreach (var handler in handlers)
             {
                 try
                 {
@@ -62,7 +102,7 @@ namespace NzbDrone.Core.Messaging.Events
                 }
             }
 
-            foreach (var handler in _serviceFactory.BuildAll<IHandleAsync<IEvent>>())
+            foreach (var handler in subscribers._globalHandlers)
             {
                 var handlerLocal = handler;
 
@@ -73,7 +113,7 @@ namespace NzbDrone.Core.Messaging.Events
                 .LogExceptions();
             }
 
-            foreach (var handler in _serviceFactory.BuildAll<IHandleAsync<TEvent>>())
+            foreach (var handler in subscribers._asyncHandlers)
             {
                 var handlerLocal = handler;
 
@@ -95,6 +135,26 @@ namespace NzbDrone.Core.Messaging.Events
             }
 
             return string.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
+        }
+
+        internal static int GetEventHandleOrder<TEvent>(IHandle<TEvent> eventHandler) where TEvent : class, IEvent
+        {
+            // TODO: Convert "Handle" to nameof(eventHandler.Handle) after .net 4.5
+            var method = eventHandler.GetType().GetMethod("Handle", new Type[] {typeof(TEvent)});
+
+            if (method == null)
+            {
+                return (int) EventHandleOrder.Any;
+            }
+
+            var attribute = method.GetCustomAttributes(typeof(EventHandleOrderAttribute), true).FirstOrDefault() as EventHandleOrderAttribute;
+
+            if (attribute == null)
+            {
+                return (int) EventHandleOrder.Any;
+            }
+
+            return (int)attribute.EventHandleOrder;
         }
     }
 }

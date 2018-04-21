@@ -51,7 +51,7 @@ namespace NzbDrone.Common.Instrumentation.Extensions
             return logBuilder.LoggerName(logEvent.LoggerName)
                              .TimeStamp(logEvent.TimeStamp)
                              .Message(logEvent.Message, logEvent.Parameters)
-                             .Properties((Dictionary<object, object>)logEvent.Properties)
+                             .Properties(logEvent.Properties.ToDictionary(v => v.Key, v => v.Value))
                              .Exception(logEvent.Exception);
         }
     }

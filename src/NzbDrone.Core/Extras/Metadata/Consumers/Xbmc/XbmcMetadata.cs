@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.MediaCover;
@@ -18,14 +19,20 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 {
     public class XbmcMetadata : MetadataBase<XbmcMetadataSettings>
     {
-        private readonly IMapCoversToLocal _mediaCoverService;
         private readonly Logger _logger;
+        private readonly IMapCoversToLocal _mediaCoverService;
+        private readonly IDetectXbmcNfo _detectNfo;
+        private readonly IDiskProvider _diskProvider;
 
-        public XbmcMetadata(IMapCoversToLocal mediaCoverService,
+        public XbmcMetadata(IDetectXbmcNfo detectNfo,
+                            IDiskProvider diskProvider,
+                            IMapCoversToLocal mediaCoverService,
                             Logger logger)
         {
-            _mediaCoverService = mediaCoverService;
             _logger = logger;
+            _mediaCoverService = mediaCoverService;
+            _diskProvider = diskProvider;
+            _detectNfo = detectNfo;
         }
 
         private static readonly Regex SeriesImagesRegex = new Regex(@"^(?<type>poster|banner|fanart)\.(?:png|jpg)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -114,7 +121,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
             if (parseResult != null &&
                 !parseResult.FullSeason &&
-                Path.GetExtension(filename).Equals(".nfo", StringComparison.OrdinalIgnoreCase))
+                Path.GetExtension(filename).Equals(".nfo", StringComparison.OrdinalIgnoreCase) &&
+                _detectNfo.IsXbmcNfoFile(path))
             {
                 metadata.Type = MetadataType.EpisodeMetadata;
                 return metadata;
@@ -199,6 +207,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
             _logger.Debug("Generating Episode Metadata for: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
 
+            var watched = GetExistingWatchedStatus(series, episodeFile.RelativePath);
+
             var xmlResult = string.Empty;
             foreach (var episode in episodeFile.Episodes.Value)
             {
@@ -233,7 +243,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         details.Add(new XElement("thumb", image.Url));
                     }
 
-                    details.Add(new XElement("watched", "false"));
+                    details.Add(new XElement("watched", watched));
 
                     if (episode.Ratings != null && episode.Ratings.Votes > 0)
                     {
@@ -381,6 +391,20 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
         private string GetEpisodeImageFilename(string episodeFilePath)
         {
             return Path.ChangeExtension(episodeFilePath, "").Trim('.') + "-thumb.jpg";
+        }
+
+        private bool GetExistingWatchedStatus(Series series, string episodeFilePath)
+        {
+            var fullPath = Path.Combine(series.Path, GetEpisodeMetadataFilename(episodeFilePath));
+
+            if (!_diskProvider.FileExists(fullPath))
+            {
+                return false;
+            }
+
+            var fileContent = _diskProvider.ReadAllText(fullPath);
+
+            return Regex.IsMatch(fileContent, "<watched>true</watched>");
         }
     }
 }

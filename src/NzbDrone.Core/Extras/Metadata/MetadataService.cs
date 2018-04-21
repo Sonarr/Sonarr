@@ -10,6 +10,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Extras.Files;
 using NzbDrone.Core.Extras.Metadata.Files;
+using NzbDrone.Core.Extras.Others;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
@@ -19,6 +20,8 @@ namespace NzbDrone.Core.Extras.Metadata
     {
         private readonly IMetadataFactory _metadataFactory;
         private readonly ICleanMetadataService _cleanMetadataService;
+        private readonly IRecycleBinProvider _recycleBinProvider;
+        private readonly IOtherExtraFileRenamer _otherExtraFileRenamer;
         private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpClient _httpClient;
@@ -29,6 +32,8 @@ namespace NzbDrone.Core.Extras.Metadata
         public MetadataService(IConfigService configService,
                                IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
+                               IRecycleBinProvider recycleBinProvider,
+                               IOtherExtraFileRenamer otherExtraFileRenamer,
                                IMetadataFactory metadataFactory,
                                ICleanMetadataService cleanMetadataService,
                                IHttpClient httpClient,
@@ -39,6 +44,8 @@ namespace NzbDrone.Core.Extras.Metadata
         {
             _metadataFactory = metadataFactory;
             _cleanMetadataService = cleanMetadataService;
+            _otherExtraFileRenamer = otherExtraFileRenamer;
+            _recycleBinProvider = recycleBinProvider;
             _diskTransferService = diskTransferService;
             _diskProvider = diskProvider;
             _httpClient = httpClient;
@@ -88,7 +95,6 @@ namespace NzbDrone.Core.Extras.Metadata
 
             foreach (var consumer in _metadataFactory.Enabled())
             {
-
                 files.AddIfNotNull(ProcessEpisodeMetadata(consumer, series, episodeFile, new List<MetadataFile>()));
                 files.AddRange(ProcessEpisodeImages(consumer, series, episodeFile, new List<MetadataFile>()));
             }
@@ -235,6 +241,8 @@ namespace NzbDrone.Core.Extras.Metadata
 
             var fullPath = Path.Combine(series.Path, episodeMetadata.RelativePath);
 
+            _otherExtraFileRenamer.RenameOtherExtraFile(series, fullPath);
+
             var existingMetadata = GetMetadataFile(series, existingMetadataFiles, c => c.Type == MetadataType.EpisodeMetadata &&
                                                                                   c.EpisodeFileId == episodeFile.Id);
 
@@ -289,6 +297,8 @@ namespace NzbDrone.Core.Extras.Metadata
                     continue;
                 }
 
+                _otherExtraFileRenamer.RenameOtherExtraFile(series, fullPath);
+
                 var metadata = GetMetadataFile(series, existingMetadataFiles, c => c.Type == MetadataType.SeriesImage &&
                                                                               c.RelativePath == image.RelativePath) ??
                                new MetadataFile
@@ -323,6 +333,8 @@ namespace NzbDrone.Core.Extras.Metadata
                         _logger.Debug("Season image already exists: {0}", fullPath);
                         continue;
                     }
+
+                    _otherExtraFileRenamer.RenameOtherExtraFile(series, fullPath);
 
                     var metadata = GetMetadataFile(series, existingMetadataFiles, c => c.Type == MetadataType.SeasonImage &&
                                                                                   c.SeasonNumber == season.SeasonNumber &&
@@ -359,6 +371,8 @@ namespace NzbDrone.Core.Extras.Metadata
                     _logger.Debug("Episode image already exists: {0}", fullPath);
                     continue;
                 }
+
+                _otherExtraFileRenamer.RenameOtherExtraFile(series, fullPath);
 
                 var existingMetadata = GetMetadataFile(series, existingMetadataFiles, c => c.Type == MetadataType.EpisodeImage &&
                                                                                       c.EpisodeFileId == episodeFile.Id);
@@ -443,11 +457,11 @@ namespace NzbDrone.Core.Extras.Metadata
 
                 _logger.Debug("Removing duplicate Metadata file: {0}", path);
 
-                _diskProvider.DeleteFile(path);
+                var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
+                _recycleBinProvider.DeleteFile(path, subfolder);
                 _metadataFileService.Delete(file.Id);
             }
 
-            
             return matchingMetadataFiles.First();
         }
     }

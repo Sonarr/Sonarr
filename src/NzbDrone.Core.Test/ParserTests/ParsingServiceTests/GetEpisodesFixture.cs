@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DataAugmentation.Scene;
@@ -116,6 +117,10 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         public void should_use_search_criteria_episode_when_it_matches_absolute()
         {
             GivenAbsoluteNumberingSeries();
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(s => s.FindEpisodesBySceneNumbering(It.IsAny<int>(), It.IsAny<int>()))
+                  .Returns(new List<Episode>());
 
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _singleEpisodeSearchCriteria);
 
@@ -253,7 +258,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(2)]
-        public void should_find_episode_by_season_and_absolute_episode_number_when_scene_absolute_episode_number_returns_multiple_results(int seasonNumber)
+        public void should_return_episodes_when_scene_absolute_episode_number_returns_multiple_results(int seasonNumber)
         {
             GivenAbsoluteNumberingSeries();
 
@@ -264,6 +269,32 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.FindEpisodesBySceneNumbering(It.IsAny<int>(), seasonNumber, It.IsAny<int>()))
                   .Returns(Builder<Episode>.CreateListOfSize(5).Build().ToList());
+
+            var result = Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            result.Should().HaveCount(5);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisodesBySceneNumbering(It.IsAny<int>(), seasonNumber, It.IsAny<int>()), Times.Once());
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisode(It.IsAny<int>(), seasonNumber, It.IsAny<int>()), Times.Never());
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void should_find_episode_by_season_and_absolute_episode_number_when_scene_absolute_episode_number_returns_no_results(int seasonNumber)
+        {
+            GivenAbsoluteNumberingSeries();
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.GetSceneSeasonNumber(_parsedEpisodeInfo.SeriesTitle, It.IsAny<string>()))
+                  .Returns(seasonNumber);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(s => s.FindEpisodesBySceneNumbering(It.IsAny<int>(), seasonNumber, It.IsAny<int>()))
+                  .Returns(new List<Episode>());
 
             Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
 

@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 yield return GetDefinition("PFmonkey", GetSettings("https://www.pfmonkey.com"));
                 yield return GetDefinition("SimplyNZBs", GetSettings("https://simplynzbs.com"));
                 yield return GetDefinition("Usenet Crawler", GetSettings("https://www.usenet-crawler.com"));
-                yield return GetDefinition("AnimeTosho Usenet", GetSettings("https://animetosho.org", apiPath: @"/feed/nabapi", categories: new int[0], animeCategories: new[] { 5070 }));
+                yield return GetDefinition("AnimeTosho Usenet", GetSettings("https://feed.animetosho.org", apiPath: @"/nabapi", categories: new int[0], animeCategories: new[] { 5070 }));
             }
         }
 

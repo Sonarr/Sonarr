@@ -44,6 +44,11 @@ namespace NzbDrone.Core.Indexers.Fanzub
             return new IndexerPageableRequestChain();
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
         public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();

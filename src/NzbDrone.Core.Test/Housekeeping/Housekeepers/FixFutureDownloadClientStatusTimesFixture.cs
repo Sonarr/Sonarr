@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             Mocker.GetMock<IDownloadClientStatusRepository>()
                   .Verify(v => v.UpdateMany(
                           It.Is<List<DownloadClientStatus>>(i => i.All(
-                              s => s.DisabledTill.Value < DateTime.UtcNow.AddMinutes(disabledTillTime)))
+                              s => s.DisabledTill.Value <= DateTime.UtcNow.AddMinutes(disabledTillTime)))
                       )
                   );
         }

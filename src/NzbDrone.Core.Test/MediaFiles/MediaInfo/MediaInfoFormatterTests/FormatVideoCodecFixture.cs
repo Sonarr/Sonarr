@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("V_MPEGH/ISO/HEVC", "source.title.x265.720p-Sonarr", "x265")]
         [TestCase("V_MPEGH/ISO/HEVC", "source.title.h265.720p-Sonarr", "h265")]
         [TestCase("MPEG-2 Video", null, "MPEG2")]
-        public void should_format_video_codec_with_source_title(string videoCodec, string sceneName, string expectedFormat)
+        public void should_format_video_codec_with_source_title_legacy(string videoCodec, string sceneName, string expectedFormat)
         {
             var mediaInfoModel = new MediaInfoModel
             {
@@ -39,6 +39,11 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("VP7, VP70, General, ", "Sweet Seymour.avi", "VP7")]
         [TestCase("VP8, V_VP8, , ", "Dick.mkv", "VP8")]
         [TestCase("VP9, V_VP9, , ", "Roadkill Ep3x11 - YouTube.webm", "VP9")]
+        [TestCase("x264, x264, , ", "Ghost Advent - S04E05 - Stanley Hotel SDTV.avi", "x264")]
+        [TestCase("V_MPEGH/ISO/HEVC, V_MPEGH/ISO/HEVC, , ", "The BBT S11E12 The Matrimonial Metric 1080p 10bit AMZN WEB-DL", "h265")]
+        [TestCase("MPEG-4 Visual, 20, Simple@L1, Lavc52.29.0", "Will.And.Grace.S08E14.WS.DVDrip.XviD.I.Love.L.Gay-Obfuscated", "XviD")]
+        [TestCase("MPEG-4 Visual, 20, Advanced Simple@L5, XviD0046", "", "XviD")]
+        [TestCase("mp4v, mp4v, , ", "American.Chopper.S06E07.Mountain.Creek.Bike.DSR.XviD-KRS", "XviD")]
         public void should_format_video_format(string videoFormatPack, string sceneName, string expectedFormat)
         {
             var split = videoFormatPack.Split(new string[] { ", " }, System.StringSplitOptions.None);
@@ -51,6 +56,42 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, sceneName).Should().Be(expectedFormat);
+        }
+
+        [TestCase("AVC, AVC, , x264", "Some.Video.S01E01.h264", "x264")] // Force mediainfo tag
+        [TestCase("HEVC, HEVC, , x265", "Some.Video.S01E01.h265", "x265")] // Force mediainfo tag
+        [TestCase("AVC, AVC, , ", "Some.Video.S01E01.x264", "x264")] // Not seen in practice, but honor tag if otherwise unknown
+        [TestCase("HEVC, HEVC, , ", "Some.Video.S01E01.x265", "x265")] // Not seen in practice, but honor tag if otherwise unknown
+        [TestCase("AVC, AVC, , ", "Some.Video.S01E01", "h264")] // Default value
+        [TestCase("HEVC, HEVC, , ", "Some.Video.S01E01", "h265")] // Default value
+        public void should_format_video_format_fallbacks(string videoFormatPack, string sceneName, string expectedFormat)
+        {
+            var split = videoFormatPack.Split(new string[] { ", " }, System.StringSplitOptions.None);
+            var mediaInfoModel = new MediaInfoModel
+            {
+                VideoFormat = split[0],
+                VideoCodecID = split[1],
+                VideoProfile = split[2],
+                VideoCodecLibrary = split[3]
+            };
+
+            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, sceneName).Should().Be(expectedFormat);
+        }
+
+        [TestCase("MPEG-4 Visual, 20, , Intel(R) MPEG-4 encoder based on Intel(R) IPP 6.1 build 137.20[6.1.137.763]", "", "")]
+        public void should_warn_on_unknown_video_format(string videoFormatPack, string sceneName, string expectedFormat)
+        {
+            var split = videoFormatPack.Split(new string[] { ", " }, System.StringSplitOptions.None);
+            var mediaInfoModel = new MediaInfoModel
+            {
+                VideoFormat = split[0],
+                VideoCodecID = split[1],
+                VideoProfile = split[2],
+                VideoCodecLibrary = split[3]
+            };
+
+            MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, sceneName).Should().Be(expectedFormat);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

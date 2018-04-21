@@ -41,15 +41,20 @@ namespace NzbDrone.Core.Test.Profiles
         [Test]
         public void should_not_be_able_to_delete_profile_if_assigned_to_series()
         {
+            var profile = Builder<Profile>.CreateNew()
+                                          .With(p => p.Id = 2)
+                                          .Build();
+
             var seriesList = Builder<Series>.CreateListOfSize(3)
                                             .Random(1)
-                                            .With(c => c.ProfileId = 2)
+                                            .With(c => c.ProfileId = profile.Id)
                                             .Build().ToList();
 
 
             Mocker.GetMock<ISeriesService>().Setup(c => c.GetAllSeries()).Returns(seriesList);
+            Mocker.GetMock<IProfileRepository>().Setup(c => c.Get(profile.Id)).Returns(profile);
 
-            Assert.Throws<ProfileInUseException>(() => Subject.Delete(2));
+            Assert.Throws<ProfileInUseException>(() => Subject.Delete(profile.Id));
 
             Mocker.GetMock<IProfileRepository>().Verify(c => c.Delete(It.IsAny<int>()), Times.Never());
 

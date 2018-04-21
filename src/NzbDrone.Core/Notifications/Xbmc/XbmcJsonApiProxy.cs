@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
@@ -122,12 +122,13 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private void CheckForError(IRestResponse response)
         {
-            _logger.Debug("Looking for error in response: {0}", response);
 
             if (string.IsNullOrWhiteSpace(response.Content))
             {
                 throw new XbmcJsonException("Invalid response from XBMC, the response is not valid JSON");
             }
+
+            _logger.Trace("Looking for error in response, {0}", response.Content);
 
             if (response.Content.StartsWith("{\"error\""))
             {

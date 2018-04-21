@@ -120,7 +120,9 @@ namespace NzbDrone.Core.RootFolders
             _rootFolderRepository.Insert(rootFolder);
 
             rootFolder.FreeSpace = _diskProvider.GetAvailableSpace(rootFolder.Path);
+            rootFolder.TotalSpace = _diskProvider.GetTotalSize(rootFolder.Path);
             rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
+
             return rootFolder;
         }
 

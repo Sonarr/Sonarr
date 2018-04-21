@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Tv
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
         PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
-        Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
+        List<Episode> FindEpisodesBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored);
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
@@ -134,21 +134,15 @@ namespace NzbDrone.Core.Tv
         {
             return Query.Where(s => s.SeriesId == seriesId)
                         .AndWhere(s => s.SceneSeasonNumber == seasonNumber)
-                        .AndWhere(s => s.SceneEpisodeNumber == episodeNumber);
+                        .AndWhere(s => s.SceneEpisodeNumber == episodeNumber)
+                        .ToList();
         }
 
-        public Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber)
+        public List<Episode> FindEpisodesBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber)
         {
-            var episodes = Query.Where(s => s.SeriesId == seriesId)
+            return Query.Where(s => s.SeriesId == seriesId)
                         .AndWhere(s => s.SceneAbsoluteEpisodeNumber == sceneAbsoluteEpisodeNumber)
                         .ToList();
-
-            if (episodes.Empty() || episodes.Count > 1)
-            {
-                return null;
-            }
-
-            return episodes.Single();
         }
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored)

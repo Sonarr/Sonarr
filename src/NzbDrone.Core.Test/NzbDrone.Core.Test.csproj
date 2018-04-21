@@ -90,7 +90,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.12\lib\net40\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.0-rc06\lib\net40-client\NLog.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.6.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.6.0\lib\net40\nunit.framework.dll</HintPath>
@@ -148,6 +148,7 @@
     <Compile Include="Datastore\Migration\079_dedupe_tagsFixture.cs" />
     <Compile Include="Datastore\Migration\075_force_lib_updateFixture.cs" />
     <Compile Include="Datastore\Migration\090_update_kickass_urlFixture.cs" />
+    <Compile Include="Datastore\Migration\121_update_animetosho_urlFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\ToSortDirectionFixture.cs" />
@@ -220,6 +221,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Download\TrackedDownloads\TrackedDownloadServiceFixture.cs" />
+    <Compile Include="Extras\Metadata\Consumers\Xbmc\FindMetadataFileFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
@@ -235,6 +237,7 @@
     <Compile Include="HealthCheck\Checks\ImportMechanismCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\IndexerSearchCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\IndexerRssCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\MonoDebugFixture.cs" />
     <Compile Include="HealthCheck\Checks\MonoVersionCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\IndexerStatusCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\RootFolderCheckFixture.cs" />
@@ -298,6 +301,9 @@
     <Compile Include="MediaFiles\DownloadedEpisodesCommandServiceFixture.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingServiceTests\MoveEpisodeFileFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateEpisodesFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateQualityFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\Augmenters\Quality\AugmentQualityFromMediaInfoFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMakerFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\DetectSampleFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\EpisodeTitleSpecificationFixture.cs" />
@@ -340,8 +346,8 @@
     <Compile Include="Messaging\Commands\CommandEqualityComparerFixture.cs" />
     <Compile Include="Messaging\Commands\CommandExecutorFixture.cs" />
     <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
-    <Compile Include="Metadata\Consumers\Roksbox\FindMetadataFileFixture.cs" />
-    <Compile Include="Metadata\Consumers\Wdtv\FindMetadataFileFixture.cs" />
+    <Compile Include="Extras\Metadata\Consumers\Roksbox\FindMetadataFileFixture.cs" />
+    <Compile Include="Extras\Metadata\Consumers\Wdtv\FindMetadataFileFixture.cs" />
     <Compile Include="NotificationTests\PlexClientServiceTest.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />

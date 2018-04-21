@@ -137,6 +137,9 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             QueueAndWaitForExecution(commandModel);
 
             VerifyEventPublished<CommandExecutedEvent>();
+
+            Thread.Sleep(10);
+
             ExceptionVerification.ExpectedErrors(1);
         }
 

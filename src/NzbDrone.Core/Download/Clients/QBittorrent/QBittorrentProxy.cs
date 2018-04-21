@@ -75,6 +75,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormParameter("urls", torrentUrl);
 
+            if (settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                request.AddFormParameter("category", settings.TvCategory);
+            }
+
             var result = ProcessRequest(request, settings);
 
             // Note: Older qbit versions returned nothing, so we can't do != "Ok." here.
@@ -89,6 +94,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var request = BuildRequest(settings).Resource("/command/upload")
                                                 .Post()
                                                 .AddFormUpload("torrents", fileName, fileContent);
+
+            if (settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                request.AddFormParameter("category", settings.TvCategory);
+            }
 
             var result = ProcessRequest(request, settings);
 
