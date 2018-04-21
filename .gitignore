@@ -136,3 +136,4 @@ _start
 _temp_*/**/*
 
 src/.idea/
+.DS_Store
