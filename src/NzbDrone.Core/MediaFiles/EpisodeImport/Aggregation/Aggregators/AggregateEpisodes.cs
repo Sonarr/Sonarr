@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.IO;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
@@ -15,9 +17,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
         public LocalEpisode Aggregate(LocalEpisode localEpisode, bool otherFiles)
         {
-            var bestEpisodeInfoForEpisodes = GetBestEpisodeInfo(localEpisode, otherFiles);
-
-            localEpisode.Episodes = _parsingService.GetEpisodes(bestEpisodeInfoForEpisodes, localEpisode.Series, localEpisode.SceneSource);
+            localEpisode.Episodes = GetEpisodes(localEpisode, otherFiles);
 
             return localEpisode;
         }
@@ -49,6 +49,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             }
 
             return parsedEpisodeInfo;
+        }
+
+        private List<Episode> GetEpisodes(LocalEpisode localEpisode, bool otherFiles)
+        {
+            var bestEpisodeInfoForEpisodes = GetBestEpisodeInfo(localEpisode, otherFiles);
+            var isMediaFile = MediaFileExtensions.Extensions.Contains(Path.GetExtension(localEpisode.Path));
+
+            if (ValidateParsedEpisodeInfo.ValidateForSeriesType(bestEpisodeInfoForEpisodes, localEpisode.Series, isMediaFile))
+            {
+                return _parsingService.GetEpisodes(bestEpisodeInfoForEpisodes, localEpisode.Series, localEpisode.SceneSource);
+            }
+
+            return new List<Episode>();
         }
     }
 }

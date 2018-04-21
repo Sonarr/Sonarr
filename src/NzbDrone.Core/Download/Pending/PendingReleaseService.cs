@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Marr.Data;
@@ -298,7 +298,14 @@ namespace NzbDrone.Core.Download.Pending
                 }
                 else
                 {
-                    episodes = _parsingService.GetEpisodes(release.ParsedEpisodeInfo, series, true);
+                    if (ValidateParsedEpisodeInfo.ValidateForSeriesType(release.ParsedEpisodeInfo, series))
+                    {
+                        episodes = _parsingService.GetEpisodes(release.ParsedEpisodeInfo, series, true);
+                    }
+                    else
+                    {
+                        episodes = new List<Episode>();
+                    }
                 }
 
                 release.RemoteEpisode = new RemoteEpisode
