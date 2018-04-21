@@ -11,6 +11,7 @@ using NzbDrone.Core.Validation;
 using NLog;
 using FluentValidation.Results;
 using System.Net;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
@@ -25,8 +26,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                       IConfigService configService,
                       IDiskProvider diskProvider,
                       IRemotePathMappingService remotePathMappingService,
+                      IIndexerFactory indexerFactory,
                       Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
         {
             _proxy = proxy;
         }
@@ -44,6 +46,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
+
+            _proxy.SetTorrentSeedingConfiguration(actualHash, GetSeedConfiguration(remoteEpisode.Release), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -64,6 +68,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 throw new DownloadClientException("Deluge failed to add torrent " + filename);
             }
+
+            _proxy.SetTorrentSeedingConfiguration(actualHash, GetSeedConfiguration(remoteEpisode.Release), Settings);
 
             if (!Settings.TvCategory.IsNullOrWhiteSpace())
             {

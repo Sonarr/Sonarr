@@ -13,6 +13,7 @@ using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Cache;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
 {
@@ -28,8 +29,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                         IConfigService configService,
                         IDiskProvider diskProvider,
                         IRemotePathMappingService remotePathMappingService,
+                        IIndexerFactory indexerFactory,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
         {
             _proxy = proxy;
 
@@ -40,6 +42,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
+            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -58,6 +61,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
+            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 

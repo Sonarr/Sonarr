@@ -10,6 +10,7 @@ using NLog;
 using NzbDrone.Core.Validation;
 using FluentValidation.Results;
 using System.Net;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 
@@ -25,8 +26,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                            IConfigService configService,
                            IDiskProvider diskProvider,
                            IRemotePathMappingService remotePathMappingService,
+                           IIndexerFactory indexerFactory,
                            Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
         {
             _proxy = proxy;
         }

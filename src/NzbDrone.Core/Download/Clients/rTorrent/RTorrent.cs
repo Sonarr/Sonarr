@@ -12,6 +12,7 @@ using NzbDrone.Core.Validation;
 using FluentValidation.Results;
 using NzbDrone.Core.Download.Clients.rTorrent;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
@@ -30,8 +31,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                         IDiskProvider diskProvider,
                         IRemotePathMappingService remotePathMappingService,
                         IRTorrentDirectoryValidator rTorrentDirectoryValidator,
+                        IIndexerFactory indexerFactory,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
         {
             _proxy = proxy;
             _rTorrentDirectoryValidator = rTorrentDirectoryValidator;
