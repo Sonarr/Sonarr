@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             {
                 _logger.Debug(e, "Failed to get config from Download Station");
 
-                throw e;
+                throw;
             }
         }
 
