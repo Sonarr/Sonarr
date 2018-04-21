@@ -8,6 +8,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -25,8 +26,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             IConfigService configService,
             IDiskProvider diskProvider,
             IRemotePathMappingService remotePathMappingService,
+            IIndexerFactory indexerFactory,
             Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
         {
             _proxy = proxy;
         }
@@ -119,7 +121,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                destDir = string.Format("{0}/.{1}", destDir, Settings.TvCategory);
+                destDir = $"{destDir}/.{Settings.TvCategory}";
             }
 
             return new DownloadClientInfo
@@ -132,6 +134,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
+            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -147,6 +150,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
+            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
