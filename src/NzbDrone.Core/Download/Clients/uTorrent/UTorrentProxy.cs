@@ -69,14 +69,14 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return configuration;
         }
 
-        public UTorrentResponse GetTorrents(string cacheID, UTorrentSettings settings)
+        public UTorrentResponse GetTorrents(string cacheId, UTorrentSettings settings)
         {
             var requestBuilder = BuildRequest(settings)
                 .AddQueryParam("list", 1);
 
-            if (cacheID.IsNotNullOrWhiteSpace())
+            if (cacheId.IsNotNullOrWhiteSpace())
             {
-                requestBuilder.AddQueryParam("cid", cacheID);
+                requestBuilder.AddQueryParam("cid", cacheId);
             }
 
             var result = ProcessRequest(requestBuilder, settings);
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 .Post()
                 .AddQueryParam("action", "add-file")
                 .AddQueryParam("path", string.Empty)
-                .AddFormUpload("torrent_file", fileName, fileContent, @"application/octet-stream");
+                .AddFormUpload("torrent_file", fileName, fileContent);
 
             ProcessRequest(requestBuilder, settings);
         }
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             var requestBuilder = BuildRequest(settings)
                 .AddQueryParam("action", "setprops")
                 .AddQueryParam("hash", hash);
-            
+
             requestBuilder.AddQueryParam("s", "seed_override")
                           .AddQueryParam("v", 1);
 

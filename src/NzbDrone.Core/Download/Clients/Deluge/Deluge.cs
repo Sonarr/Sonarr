@@ -152,8 +152,12 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met. This allows drone to delete the torrent as appropriate.
-                item.CanMoveFiles = item.CanBeRemoved = (torrent.IsAutoManaged && torrent.StopAtRatio && torrent.Ratio >= torrent.StopRatio && torrent.State == DelugeTorrentStatus.Paused);
+                // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met.
+                // This allows drone to delete the torrent as appropriate.
+                item.CanMoveFiles = item.CanBeRemoved =
+                    torrent.IsAutoManaged && torrent.StopAtRatio &&
+                    torrent.Ratio >= torrent.StopRatio &&
+                    torrent.State == DelugeTorrentStatus.Paused;
 
                 items.Add(item);
             }
