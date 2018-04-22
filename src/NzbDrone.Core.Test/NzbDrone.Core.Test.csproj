@@ -337,7 +337,7 @@
     <Compile Include="Qualities\RevisionComparableFixture.cs" />
     <Compile Include="QueueTests\QueueServiceFixture.cs" />
     <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />
-    <Compile Include="OrganizerTests\CleanFixture.cs" />
+    <Compile Include="OrganizerTests\CleanFilenameFixture.cs" />
     <Compile Include="MediaFiles\MediaFileServiceTests\FilterFixture.cs" />
     <Compile Include="MediaFiles\MediaFileTableCleanupServiceFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\UpdateMediaInfoServiceFixture.cs" />

@@ -274,7 +274,7 @@ namespace NzbDrone.Core.Organizer
                 result = result.Replace(badCharacters[i], replace ? goodCharacters[i] : string.Empty);
             }
 
-            return result.Trim();
+            return result.TrimStart(' ', '.').TrimEnd(' ');
         }
 
         public static string CleanFolderName(string name)
