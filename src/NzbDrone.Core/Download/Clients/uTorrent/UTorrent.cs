@@ -13,6 +13,7 @@ using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Cache;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
 {
@@ -28,8 +29,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                         IConfigService configService,
                         IDiskProvider diskProvider,
                         IRemotePathMappingService remotePathMappingService,
+                        IIndexerFactory indexerFactory,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
         {
             _proxy = proxy;
 
@@ -40,6 +42,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
+            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -58,6 +61,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
+            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -103,7 +107,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.RootDownloadPath));
 
-                if (outputPath == null || outputPath.FileName == torrent.Name)
+                if (outputPath.FileName == torrent.Name)
                 {
                     item.OutputPath = outputPath;
                 }
@@ -136,7 +140,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 }
 
                 // 'Started' without 'Queued' is when the torrent is 'forced seeding'
-                item.CanMoveFiles = item.CanBeRemoved = (!torrent.Status.HasFlag(UTorrentTorrentStatus.Queued) && !torrent.Status.HasFlag(UTorrentTorrentStatus.Started));
+                item.CanMoveFiles = item.CanBeRemoved =
+                    !torrent.Status.HasFlag(UTorrentTorrentStatus.Queued) &&
+                    !torrent.Status.HasFlag(UTorrentTorrentStatus.Started);
 
                 queueItems.Add(item);
             }
@@ -148,10 +154,10 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             List<UTorrentTorrent> torrents;
 
-            var cacheKey = string.Format("{0}:{1}:{2}", Settings.Host, Settings.Port, Settings.TvCategory);
+            var cacheKey = $"{Settings.Host}:{Settings.Port}:{Settings.TvCategory}";
             var cache = _torrentCache.Find(cacheKey);
 
-            var response = _proxy.GetTorrents(cache == null ? null : cache.CacheID, Settings);
+            var response = _proxy.GetTorrents(cache?.CacheID, Settings);
 
             if (cache != null && response.Torrents == null)
             {

@@ -144,7 +144,6 @@ namespace NzbDrone.Core.History
                 };
 
                 history.Data.Add("Indexer", message.Episode.Release.Indexer);
-                history.Data.Add("IndexerId", message.Episode.Release.IndexerId.ToString());
                 history.Data.Add("NzbInfoUrl", message.Episode.Release.InfoUrl);
                 history.Data.Add("ReleaseGroup", message.Episode.ParsedEpisodeInfo.ReleaseGroup);
                 history.Data.Add("Age", message.Episode.Release.Age.ToString());

@@ -8,6 +8,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -30,8 +31,9 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                                 IConfigService configService,
                                 IDiskProvider diskProvider,
                                 IRemotePathMappingService remotePathMappingService,
+                                IIndexerFactory indexerFactory,
                                 Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
         {
             _scanWatchFolder = scanWatchFolder;
 

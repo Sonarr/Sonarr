@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             _authSessionIDCache = cacheManager.GetCache<string>(GetType(), "authSessionID");
         }
-        
+
         public List<TransmissionTorrent> GetTorrents(TransmissionSettings settings)
         {
             var result = GetTorrentStatus(settings);
@@ -169,9 +169,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 "eta",
                 "errorString",
                 "uploadedEver",
-                "downloadedEver"
+                "downloadedEver",
+                "seedRatioLimit"
             };
-            
+
             var arguments = new Dictionary<string, object>();
             arguments.Add("fields", fields);
 
@@ -239,7 +240,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             requestBuilder.SetHeader("X-Transmission-Session-Id", sessionId);
         }
-        
+
         public TransmissionResponse ProcessRequest(string action, object arguments, TransmissionSettings settings)
         {
             try
@@ -261,7 +262,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 }
 
                 request.SetContent(data.ToJson());
-                request.ContentSummary = string.Format("{0}(...)", action);
+                request.ContentSummary = $"{action}(...)";
 
                 var response = _httpClient.Execute(request);
 
@@ -272,7 +273,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     request = requestBuilder.Post().Build();
 
                     request.SetContent(data.ToJson());
-                    request.ContentSummary = string.Format("{0}(...)", action);
+                    request.ContentSummary = $"{action}(...)";
 
                     response = _httpClient.Execute(request);
                 }

@@ -5,8 +5,6 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.History;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -19,39 +17,33 @@ namespace NzbDrone.Core.Download.TrackedDownloads
     {
         private readonly IDownloadClientStatusService _downloadClientStatusService;
         private readonly IDownloadClientFactory _downloadClientFactory;
-        private readonly IIndexerFactory _indexerFactory;
         private readonly IEventAggregator _eventAggregator;
         private readonly IManageCommandQueue _manageCommandQueue;
         private readonly IConfigService _configService;
         private readonly IFailedDownloadService _failedDownloadService;
         private readonly ICompletedDownloadService _completedDownloadService;
         private readonly ITrackedDownloadService _trackedDownloadService;
-        private readonly IHistoryService _historyService;
         private readonly Logger _logger;
         private readonly Debouncer _refreshDebounce;
 
         public DownloadMonitoringService(IDownloadClientStatusService downloadClientStatusService,
                                          IDownloadClientFactory downloadClientFactory,
-                                         IIndexerFactory indexerFactory,
                                          IEventAggregator eventAggregator,
                                          IManageCommandQueue manageCommandQueue,
                                          IConfigService configService,
                                          IFailedDownloadService failedDownloadService,
                                          ICompletedDownloadService completedDownloadService,
                                          ITrackedDownloadService trackedDownloadService,
-                                         IHistoryService historyService,
                                          Logger logger)
         {
             _downloadClientStatusService = downloadClientStatusService;
             _downloadClientFactory = downloadClientFactory;
-            _indexerFactory = indexerFactory;
             _eventAggregator = eventAggregator;
             _manageCommandQueue = manageCommandQueue;
             _configService = configService;
             _failedDownloadService = failedDownloadService;
             _completedDownloadService = completedDownloadService;
             _trackedDownloadService = trackedDownloadService;
-            _historyService = historyService;
             _logger = logger;
 
             _refreshDebounce = new Debouncer(QueueRefresh, TimeSpan.FromSeconds(5));
@@ -121,45 +113,10 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         private void RemoveCompletedDownloads(List<TrackedDownload> trackedDownloads)
         {
-            var removableDownloads = trackedDownloads.Where(c =>
-            {
-                if (c.Protocol != DownloadProtocol.Torrent)
-                {
-                    return c.DownloadItem.CanBeRemoved && c.State == TrackedDownloadStage.Imported;
-                }
-
-                return TorrentHasFinishedSeeding(c);
-            });
-
-            foreach (var trackedDownload in removableDownloads)
+            foreach (var trackedDownload in trackedDownloads.Where(c => c.DownloadItem.CanBeRemoved && c.State == TrackedDownloadStage.Imported))
             {
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
             }
-        }
-
-        private bool TorrentHasFinishedSeeding(TrackedDownload download)
-        {
-            var historyItem = _historyService.Find(download.DownloadItem.DownloadId, HistoryEventType.Grabbed).Last();
-            if (historyItem == null)
-            {
-                return download.DownloadItem.CanBeRemoved && download.State == TrackedDownloadStage.Imported;
-            }
-
-            var indexer = _indexerFactory.All().First(i => i.Id == int.Parse(historyItem.Data["indexerId"]));
-            if (indexer == null)
-            {
-                return download.DownloadItem.CanBeRemoved && download.State == TrackedDownloadStage.Imported;
-            }
-
-            var hasFinishedSeeding = false;
-
-            if (indexer.Settings is ITorrentIndexerSettings indexerSettings)
-            {
-                hasFinishedSeeding = download.DownloadItem.SeedRatio >= indexerSettings.SeedRatio;
-            }
-
-            return (download.DownloadItem.CanBeRemoved || hasFinishedSeeding) &&
-                   download.State == TrackedDownloadStage.Imported;
         }
 
         private List<TrackedDownload> ProcessClientItems(IDownloadClient downloadClient, DownloadClientItem downloadItem)
