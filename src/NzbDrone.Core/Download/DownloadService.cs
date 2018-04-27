@@ -5,6 +5,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.TPL;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
@@ -26,6 +27,7 @@ namespace NzbDrone.Core.Download
         private readonly IIndexerStatusService _indexerStatusService;
         private readonly IRateLimitService _rateLimitService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ISeedConfigProvider _seedConfigProvider;
         private readonly Logger _logger;
 
         public DownloadService(IProvideDownloadClient downloadClientProvider,
@@ -33,6 +35,7 @@ namespace NzbDrone.Core.Download
                                IIndexerStatusService indexerStatusService,
                                IRateLimitService rateLimitService,
                                IEventAggregator eventAggregator,
+                               ISeedConfigProvider seedConfigProvider,
                                Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
@@ -40,6 +43,7 @@ namespace NzbDrone.Core.Download
             _indexerStatusService = indexerStatusService;
             _rateLimitService = rateLimitService;
             _eventAggregator = eventAggregator;
+            _seedConfigProvider = seedConfigProvider;
             _logger = logger;
         }
 
@@ -55,6 +59,10 @@ namespace NzbDrone.Core.Download
             {
                 throw new DownloadClientUnavailableException($"{remoteEpisode.Release.DownloadProtocol} Download client isn't configured yet");
             }
+
+            // Method on RemoteEpisode that's passed the SeedConfigProvider??
+            var seedConfiguration = _seedConfigProvider.GetSeedConfiguration(remoteEpisode.Release);
+            remoteEpisode.SeedConfiguration = seedConfiguration;
 
             // Limit grabs to 2 per second.
             if (remoteEpisode.Release.DownloadUrl.IsNotNullOrWhiteSpace() && !remoteEpisode.Release.DownloadUrl.StartsWith("magnet:"))
@@ -77,8 +85,7 @@ namespace NzbDrone.Core.Download
             }
             catch (ReleaseDownloadException ex)
             {
-                var http429 = ex.InnerException as TooManyRequestsException;
-                if (http429 != null)
+                if (ex.InnerException is TooManyRequestsException http429)
                 {
                     _indexerStatusService.RecordFailure(remoteEpisode.Release.IndexerId, http429.RetryAfter);
                 }

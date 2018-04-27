@@ -22,20 +22,17 @@ namespace NzbDrone.Core.Download
     {
         protected readonly IHttpClient _httpClient;
         protected readonly ITorrentFileInfoReader _torrentFileInfoReader;
-        protected readonly IIndexerFactory _indexerFactory;
 
         protected TorrentClientBase(ITorrentFileInfoReader torrentFileInfoReader,
                                     IHttpClient httpClient,
                                     IConfigService configService,
                                     IDiskProvider diskProvider,
                                     IRemotePathMappingService remotePathMappingService,
-                                    IIndexerFactory indexerFactory,
                                     Logger logger)
             : base(configService, diskProvider, remotePathMappingService, logger)
         {
             _httpClient = httpClient;
             _torrentFileInfoReader = torrentFileInfoReader;
-            _indexerFactory = indexerFactory;
         }
 
         public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
@@ -231,19 +228,6 @@ namespace NzbDrone.Core.Download
             }
 
             return actualHash;
-        }
-
-        protected TorrentSeedConfiguration GetSeedConfiguration(ReleaseInfo release)
-        {
-            var indexer = _indexerFactory.Get(release.IndexerId);
-            var seedConfig = new TorrentSeedConfiguration();
-
-            if (indexer.Settings is ITorrentIndexerSettings torrentIndexerSettings)
-            {
-                seedConfig.Ratio = torrentIndexerSettings.SeedRatio;
-            }
-
-            return seedConfig;
         }
     }
 }

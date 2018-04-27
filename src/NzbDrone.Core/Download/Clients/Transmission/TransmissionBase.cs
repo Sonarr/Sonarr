@@ -26,9 +26,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             IConfigService configService,
             IDiskProvider diskProvider,
             IRemotePathMappingService remotePathMappingService,
-            IIndexerFactory indexerFactory,
             Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }
@@ -134,7 +133,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
-            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
+
+            if (remoteEpisode.SeedConfiguration != null)
+            {
+                _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
+            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -150,7 +153,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
-            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
+
+            if (remoteEpisode.SeedConfiguration != null)
+            {
+                _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
+            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -181,17 +188,13 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             {
                 return Settings.TvDirectory;
             }
-            else if (Settings.TvCategory.IsNotNullOrWhiteSpace())
-            {
-                var config = _proxy.GetConfig(Settings);
-                var destDir = (string)config.GetValueOrDefault("download-dir");
 
-                return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
-            }
-            else
-            {
-                return null;
-            }
+            if (!Settings.TvCategory.IsNotNullOrWhiteSpace()) return null;
+
+            var config = _proxy.GetConfig(Settings);
+            var destDir = (string)config.GetValueOrDefault("download-dir");
+
+            return $"{destDir.TrimEnd('/')}/{Settings.TvCategory}";
         }
 
         protected ValidationFailure TestConnection()
