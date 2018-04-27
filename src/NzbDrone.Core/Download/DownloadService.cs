@@ -60,7 +60,6 @@ namespace NzbDrone.Core.Download
                 throw new DownloadClientUnavailableException($"{remoteEpisode.Release.DownloadProtocol} Download client isn't configured yet");
             }
 
-            // Method on RemoteEpisode that's passed the SeedConfigProvider??
             var seedConfiguration = _seedConfigProvider.GetSeedConfiguration(remoteEpisode.Release);
             remoteEpisode.SeedConfiguration = seedConfiguration;
 

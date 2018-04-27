@@ -29,9 +29,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                         IConfigService configService,
                         IDiskProvider diskProvider,
                         IRemotePathMappingService remotePathMappingService,
-                        IIndexerFactory indexerFactory,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
 
@@ -42,7 +41,11 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
-            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
+
+            if (remoteEpisode.SeedConfiguration != null)
+            {
+                _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
+            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -61,7 +64,11 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
-            _proxy.SetTorrentSeedingConfiguration(hash, GetSeedConfiguration(remoteEpisode.Release), Settings);
+
+            if (remoteEpisode.SeedConfiguration != null)
+            {
+                _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
+            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 

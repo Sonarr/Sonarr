@@ -26,9 +26,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                       IConfigService configService,
                       IDiskProvider diskProvider,
                       IRemotePathMappingService remotePathMappingService,
-                      IIndexerFactory indexerFactory,
                       Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }
@@ -47,7 +46,10 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
 
-            _proxy.SetTorrentSeedingConfiguration(actualHash, GetSeedConfiguration(remoteEpisode.Release), Settings);
+            if (remoteEpisode.SeedConfiguration != null)
+            {
+                _proxy.SetTorrentSeedingConfiguration(actualHash, remoteEpisode.SeedConfiguration, Settings);
+            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -69,7 +71,10 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 throw new DownloadClientException("Deluge failed to add torrent " + filename);
             }
 
-            _proxy.SetTorrentSeedingConfiguration(actualHash, GetSeedConfiguration(remoteEpisode.Release), Settings);
+            if (remoteEpisode.SeedConfiguration != null)
+            {
+                _proxy.SetTorrentSeedingConfiguration(actualHash, remoteEpisode.SeedConfiguration, Settings);
+            }
 
             if (!Settings.TvCategory.IsNullOrWhiteSpace())
             {

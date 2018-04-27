@@ -19,9 +19,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                             IConfigService configService,
                             IDiskProvider diskProvider,
                             IRemotePathMappingService remotePathMappingService,
-                            IIndexerFactory indexerFactory,
                             Logger logger)
-            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
+            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
         }
 

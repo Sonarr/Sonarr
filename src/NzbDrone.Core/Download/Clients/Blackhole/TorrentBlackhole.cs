@@ -31,9 +31,8 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                                 IConfigService configService,
                                 IDiskProvider diskProvider,
                                 IRemotePathMappingService remotePathMappingService,
-                                IIndexerFactory indexerFactory,
                                 Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, indexerFactory, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _scanWatchFolder = scanWatchFolder;
 
@@ -51,7 +50,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
             title = FileNameBuilder.CleanFileName(title);
 
-            var filepath = Path.Combine(Settings.TorrentFolder, string.Format("{0}.magnet", title));
+            var filepath = Path.Combine(Settings.TorrentFolder, $"{title}.magnet");
 
             var fileContent = Encoding.UTF8.GetBytes(magnetLink);
             using (var stream = _diskProvider.OpenWriteStream(filepath))
@@ -70,7 +69,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
             title = FileNameBuilder.CleanFileName(title);
 
-            var filepath = Path.Combine(Settings.TorrentFolder, string.Format("{0}.torrent", title));
+            var filepath = Path.Combine(Settings.TorrentFolder, $"{title}.torrent");
 
             using (var stream = _diskProvider.OpenWriteStream(filepath))
             {
