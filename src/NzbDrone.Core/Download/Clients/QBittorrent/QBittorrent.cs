@@ -10,7 +10,6 @@ using NLog;
 using NzbDrone.Core.Validation;
 using FluentValidation.Results;
 using System.Net;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 

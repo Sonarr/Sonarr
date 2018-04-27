@@ -12,7 +12,6 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Configuration;
 using NLog;
-using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download

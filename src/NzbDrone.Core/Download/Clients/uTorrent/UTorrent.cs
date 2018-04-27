@@ -13,7 +13,6 @@ using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Cache;
-using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
 {

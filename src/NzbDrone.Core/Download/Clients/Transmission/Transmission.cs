@@ -5,7 +5,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NLog;
 using FluentValidation.Results;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.RemotePathMappings;
 
