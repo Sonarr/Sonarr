@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Numerics;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
 {
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public double Progress { get; set; } // Torrent progress (%/100)
 
-        public ulong Eta { get; set; } // Torrent ETA (seconds)
+        public BigInteger Eta { get; set; } // Torrent ETA (seconds) (QBit contains a bug exceeding ulong limits)
 
         public string State { get; set; } // Torrent state. See possible values here below
 
