@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Common.EnsureThat;
@@ -83,6 +84,12 @@ namespace NzbDrone.Api.ClientSchema
                         propertyInfo.SetValue(target, value ?? 0, null);
                     }
 
+                    else if (propertyInfo.PropertyType == typeof(double))
+                    {
+                        double.TryParse(field.Value.ToString(), out var value);
+                        propertyInfo.SetValue(target, value, null);
+                    }
+
                     else if (propertyInfo.PropertyType == typeof(int?))
                     {
                         var value = field.Value.ToString().ParseInt32();
@@ -93,6 +100,19 @@ namespace NzbDrone.Api.ClientSchema
                     {
                         var value = field.Value.ToString().ParseInt64();
                         propertyInfo.SetValue(target, value, null);
+                    }
+
+                    else if (propertyInfo.PropertyType == typeof(Nullable<double>))
+                    {
+                        if (field.Value.ToString().IsNullOrWhiteSpace())
+                        {
+                            propertyInfo.SetValue(target, null, null);
+                        }
+                        else
+                        {
+                            double.TryParse(field.Value.ToString(), out var value);
+                            propertyInfo.SetValue(target, value, null);
+                        }
                     }
 
                     else if (propertyInfo.PropertyType == typeof(IEnumerable<int>))

@@ -2,7 +2,6 @@
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.IPTorrents
@@ -18,19 +17,12 @@ namespace NzbDrone.Core.Indexers.IPTorrents
             RuleFor(c => c.BaseUrl).Matches(@"/rss\?.+;download(?:;|$)")
                 .WithMessage("Use Direct Download Url (;download)")
                 .When(v => v.BaseUrl.IsNotNullOrWhiteSpace() && Regex.IsMatch(v.BaseUrl, @"/rss\?.+$"));
-
-
-            RuleFor(c => c.UiSeedRatio)
-                .Must(c => c.IsNullOrWhiteSpace() || double.TryParse(c, out var _))
-                .WithMessage("Seed ratio must be a valid decimal number");
         }
     }
 
     public class IPTorrentsSettings : ITorrentIndexerSettings
     {
         private static readonly IPTorrentsSettingsValidator Validator = new IPTorrentsSettingsValidator();
-
-        public double SeedRatio { get; set; }
 
         public IPTorrentsSettings()
         {
@@ -44,11 +36,7 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(2, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
-        public string UiSeedRatio
-        {
-            get => SeedRatio.ToString();
-            set => SeedRatio = double.Parse(value);
-        }
+        public double? SeedRatio { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

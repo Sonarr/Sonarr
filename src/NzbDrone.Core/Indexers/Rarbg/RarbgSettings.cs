@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
@@ -10,18 +9,12 @@ namespace NzbDrone.Core.Indexers.Rarbg
         public RarbgSettingsValidator()
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
-
-            RuleFor(c => c.UiSeedRatio)
-                .Must(c => c.IsNullOrWhiteSpace() || double.TryParse(c, out var _))
-                .WithMessage("Seed ratio must be a valid decimal number");
         }
     }
 
     public class RarbgSettings : ITorrentIndexerSettings
     {
         private static readonly RarbgSettingsValidator Validator = new RarbgSettingsValidator();
-
-        public double SeedRatio { get; set; }
 
         public RarbgSettings()
         {
@@ -42,12 +35,8 @@ namespace NzbDrone.Core.Indexers.Rarbg
         [FieldDefinition(3, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
 
-        [FieldDefinition(5, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
-        public string UiSeedRatio
-        {
-            get => SeedRatio.ToString();
-            set => SeedRatio = double.Parse(value);
-        }
+        [FieldDefinition(4, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
+        public double? SeedRatio { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
@@ -10,18 +9,12 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         public TorrentRssIndexerSettingsValidator()
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
-
-            RuleFor(c => c.UiSeedRatio)
-                .Must(c => c.IsNullOrWhiteSpace() || double.TryParse(c, out var _))
-                .WithMessage("Seed ratio must be a valid decimal number");
         }
     }
 
     public class TorrentRssIndexerSettings : ITorrentIndexerSettings
     {
         private static readonly TorrentRssIndexerSettingsValidator validator = new TorrentRssIndexerSettingsValidator();
-
-        public double SeedRatio { get; set; }
 
         public TorrentRssIndexerSettings()
         {
@@ -43,11 +36,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(4, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
-        public string UiSeedRatio
-        {
-            get => SeedRatio.ToString();
-            set => SeedRatio = double.Parse(value);
-        }
+        public double? SeedRatio { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
