@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
             title = FileNameBuilder.CleanFileName(title);
 
-            var filepath = Path.Combine(Settings.TorrentFolder, string.Format("{0}.magnet", title));
+            var filepath = Path.Combine(Settings.TorrentFolder, string.Format("{0}.torrent", title));
 
             using (var stream = _diskProvider.OpenWriteStream(filepath))
             {
