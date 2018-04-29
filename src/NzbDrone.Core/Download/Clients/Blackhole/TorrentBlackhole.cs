@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
             title = FileNameBuilder.CleanFileName(title);
 
-            var filepath = Path.Combine(Settings.TorrentFolder, $"{title}.magnet");
+            var filepath = Path.Combine(Settings.TorrentFolder, string.Format("{0}.magnet", title));
 
             var fileContent = Encoding.UTF8.GetBytes(magnetLink);
             using (var stream = _diskProvider.OpenWriteStream(filepath))
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
             title = FileNameBuilder.CleanFileName(title);
 
-            var filepath = Path.Combine(Settings.TorrentFolder, $"{title}.torrent");
+            var filepath = Path.Combine(Settings.TorrentFolder, string.Format("{0}.magnet", title));
 
             using (var stream = _diskProvider.OpenWriteStream(filepath))
             {

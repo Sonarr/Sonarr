@@ -60,8 +60,8 @@ namespace NzbDrone.Core.Download
                 throw new DownloadClientUnavailableException($"{remoteEpisode.Release.DownloadProtocol} Download client isn't configured yet");
             }
 
-            var seedConfiguration = _seedConfigProvider.GetSeedConfiguration(remoteEpisode.Release);
-            remoteEpisode.SeedConfiguration = seedConfiguration;
+            // Get the seed configuration for this release.
+            remoteEpisode.SeedConfiguration = _seedConfigProvider.GetSeedConfiguration(remoteEpisode.Release);
 
             // Limit grabs to 2 per second.
             if (remoteEpisode.Release.DownloadUrl.IsNotNullOrWhiteSpace() && !remoteEpisode.Release.DownloadUrl.StartsWith("magnet:"))
@@ -84,7 +84,8 @@ namespace NzbDrone.Core.Download
             }
             catch (ReleaseDownloadException ex)
             {
-                if (ex.InnerException is TooManyRequestsException http429)
+                var http429 = ex.InnerException as TooManyRequestsException;
+                if (http429 != null)
                 {
                     _indexerStatusService.RecordFailure(remoteEpisode.Release.IndexerId, http429.RetryAfter);
                 }

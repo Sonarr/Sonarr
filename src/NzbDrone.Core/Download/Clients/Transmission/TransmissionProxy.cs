@@ -262,7 +262,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 }
 
                 request.SetContent(data.ToJson());
-                request.ContentSummary = $"{action}(...)";
+                request.ContentSummary = string.Format("{0}(...)", action);
 
                 var response = _httpClient.Execute(request);
 
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     request = requestBuilder.Post().Build();
 
                     request.SetContent(data.ToJson());
-                    request.ContentSummary = $"{action}(...)";
+                    request.ContentSummary = string.Format("{0}(...)", action);
 
                     response = _httpClient.Execute(request);
                 }

@@ -160,10 +160,10 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             List<UTorrentTorrent> torrents;
 
-            var cacheKey = $"{Settings.Host}:{Settings.Port}:{Settings.TvCategory}";
+            var cacheKey = string.Format("{0}:{1}:{2}", Settings.Host, Settings.Port, Settings.TvCategory);
             var cache = _torrentCache.Find(cacheKey);
 
-            var response = _proxy.GetTorrents(cache?.CacheID, Settings);
+            var response = _proxy.GetTorrents(cache == null ? null : cache.CacheID, Settings);
 
             if (cache != null && response.Torrents == null)
             {

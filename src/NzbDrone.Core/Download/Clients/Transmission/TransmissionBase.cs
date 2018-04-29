@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                destDir = $"{destDir}/.{Settings.TvCategory}";
+                destDir = string.Format("{0}/.{1}", destDir, Settings.TvCategory);
             }
 
             return new DownloadClientInfo
