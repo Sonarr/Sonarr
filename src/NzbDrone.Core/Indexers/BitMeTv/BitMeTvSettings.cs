@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         [FieldDefinition(4, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
 
-        [FieldDefinition(5, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default")]
+        [FieldDefinition(5, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default", Advanced = true)]
         public double? SeedRatio { get; set; }
 
         public NzbDroneValidationResult Validate()
