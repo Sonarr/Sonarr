@@ -21,19 +21,32 @@ namespace NzbDrone.Api.Test.ClientSchemaTests
         public void schema_should_have_proper_fields()
         {
             var model = new TestModel
-                {
-                    FirstName = "Bob",
-                    LastName = "Poop"
-                };
+            {
+                FirstName = "Bob",
+                LastName = "Poop"
+            };
 
             var schema = SchemaBuilder.ToSchema(model);
 
-            schema.Should().Contain(c => c.Order == 1 && c.Name == "LastName" && c.Label == "Last Name" && c.HelpText == "Your Last Name" && (string) c.Value == "Poop");
-            schema.Should().Contain(c => c.Order == 0 && c.Name == "FirstName" && c.Label == "First Name" && c.HelpText == "Your First Name" && (string) c.Value == "Bob");
+            schema.Should().Contain(c => c.Order == 1 && c.Name == "LastName" && c.Label == "Last Name" && c.HelpText == "Your Last Name" && (string)c.Value == "Poop");
+            schema.Should().Contain(c => c.Order == 0 && c.Name == "FirstName" && c.Label == "First Name" && c.HelpText == "Your First Name" && (string)c.Value == "Bob");
         }
 
-    }
 
+        [Test]
+        public void schema_should_have_nested_fields()
+        {
+            var model = new NestedTestModel();
+            model.Name.FirstName = "Bob";
+            model.Name.LastName = "Poop";
+
+            var schema = SchemaBuilder.ToSchema(model);
+
+            schema.Should().Contain(c => c.Order == 0 && c.Name == "FirstName" && c.Label == "First Name" && c.HelpText == "Your First Name" && (string)c.Value == "Bob");
+            schema.Should().Contain(c => c.Order == 1 && c.Name == "LastName" && c.Label == "Last Name" && c.HelpText == "Your Last Name" && (string)c.Value == "Poop");
+            schema.Should().Contain(c => c.Order == 2 && c.Name == "Quote" && c.Label == "Quote" && c.HelpText == "Your Favorite Quote");
+        }
+    }
 
     public class TestModel
     {
@@ -44,5 +57,14 @@ namespace NzbDrone.Api.Test.ClientSchemaTests
         public string LastName { get; set; }
 
         public string Other { get; set; }
+    }
+
+    public class NestedTestModel
+    {
+        [FieldDefinition(0)]
+        public TestModel Name { get; set; } = new TestModel();
+
+        [FieldDefinition(1, Label = "Quote", HelpText = "Your Favorite Quote")]
+        public string Quote { get; set; }
     }
 }
