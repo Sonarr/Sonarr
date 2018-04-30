@@ -104,6 +104,7 @@
     <Compile Include="Calendar\CalendarModule.cs" />
     <Compile Include="ClientSchema\Field.cs" />
     <Compile Include="ClientSchema\FieldDefinitionAttribute.cs" />
+    <Compile Include="ClientSchema\FieldMapping.cs" />
     <Compile Include="ClientSchema\SchemaBuilder.cs" />
     <Compile Include="ClientSchema\SchemaDeserializer.cs" />
     <Compile Include="ClientSchema\SelectOption.cs" />
