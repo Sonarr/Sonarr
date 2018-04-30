@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
@@ -11,45 +12,22 @@ namespace NzbDrone.Api.ClientSchema
 {
     public static class SchemaBuilder
     {
+        private static Dictionary<Type, FieldMapping[]> _mappings = new Dictionary<Type, FieldMapping[]>();
+
         public static List<Field> ToSchema(object model)
         {
             Ensure.That(model, () => model).IsNotNull();
 
-            var properties = model.GetType().GetSimpleProperties();
+            var mappings = GetFieldMappings(model.GetType());
 
-            var result = new List<Field>(properties.Count);
+            var result = new List<Field>(mappings.Length);
 
-            foreach (var propertyInfo in properties)
+            foreach (var mapping in mappings)
             {
-                var fieldAttribute = propertyInfo.GetAttribute<FieldDefinitionAttribute>(false);
+                var field = mapping.Field.Clone();
+                field.Value = mapping.GetterFunc(model);
 
-                if (fieldAttribute != null)
-                {
-
-                    var field = new Field
-                    {
-                        Name = propertyInfo.Name,
-                        Label = fieldAttribute.Label,
-                        HelpText = fieldAttribute.HelpText,
-                        HelpLink = fieldAttribute.HelpLink,
-                        Order = fieldAttribute.Order,
-                        Advanced = fieldAttribute.Advanced,
-                        Type = fieldAttribute.Type.ToString().ToLowerInvariant()
-                    };
-
-                    var value = propertyInfo.GetValue(model, null);
-                    if (value != null)
-                    {
-                        field.Value = value;
-                    }
-
-                    if (fieldAttribute.Type == FieldType.Select)
-                    {
-                        field.SelectOptions = GetSelectOptions(fieldAttribute.SelectOptions);
-                    }
-
-                    result.Add(field);
-                }
+                result.Add(field);
             }
 
             return result.OrderBy(r => r.Order).ToList();
@@ -59,81 +37,16 @@ namespace NzbDrone.Api.ClientSchema
         {
             Ensure.That(targetType, () => targetType).IsNotNull();
 
-            var properties = targetType.GetSimpleProperties();
+            var mappings = GetFieldMappings(targetType);
 
             var target = Activator.CreateInstance(targetType);
 
-            foreach (var propertyInfo in properties)
+            foreach (var mapping in mappings)
             {
-                var fieldAttribute = propertyInfo.GetAttribute<FieldDefinitionAttribute>(false);
+                var propertyType = mapping.PropertyType;
+                var field = fields.Find(f => f.Name == mapping.Field.Name);
 
-                if (fieldAttribute != null)
-                {
-                    var field = fields.Find(f => f.Name == propertyInfo.Name);
-
-                    if (propertyInfo.PropertyType == typeof(int))
-                    {
-                        var value = field.Value.ToString().ParseInt32();
-                        propertyInfo.SetValue(target, value ?? 0, null);
-                    }
-
-                    else if (propertyInfo.PropertyType == typeof(long))
-                    {
-                        var value = field.Value.ToString().ParseInt64();
-                        propertyInfo.SetValue(target, value ?? 0, null);
-                    }
-
-                    else if (propertyInfo.PropertyType == typeof(int?))
-                    {
-                        var value = field.Value.ToString().ParseInt32();
-                        propertyInfo.SetValue(target, value, null);
-                    }
-
-                    else if (propertyInfo.PropertyType == typeof(Nullable<Int64>))
-                    {
-                        var value = field.Value.ToString().ParseInt64();
-                        propertyInfo.SetValue(target, value, null);
-                    }
-
-                    else if (propertyInfo.PropertyType == typeof(IEnumerable<int>))
-                    {
-                        IEnumerable<int> value;
-
-                        if (field.Value.GetType() == typeof(JArray))
-                        {
-                            value = ((JArray)field.Value).Select(s => s.Value<int>());
-                        }
-
-                        else
-                        {
-                            value = field.Value.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => Convert.ToInt32(s));
-                        }
-
-                        propertyInfo.SetValue(target, value, null);
-                    }
-
-                    else if (propertyInfo.PropertyType == typeof(IEnumerable<string>))
-                    {
-                        IEnumerable<string> value;
-
-                        if (field.Value.GetType() == typeof(JArray))
-                        {
-                            value = ((JArray)field.Value).Select(s => s.Value<string>());
-                        }
-
-                        else
-                        {
-                            value = field.Value.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                        }
-
-                        propertyInfo.SetValue(target, value, null);
-                    }
-
-                    else
-                    {
-                        propertyInfo.SetValue(target, field.Value, null);
-                    }
-                }
+                mapping.SetterFunc(target, field.Value);
             }
 
             return target;
@@ -145,12 +58,157 @@ namespace NzbDrone.Api.ClientSchema
             return (T)ReadFromSchema(fields, typeof(T));
         }
 
+
+        // Ideally this function should begin a System.Linq.Expression expression tree since it's faster.
+        // But it's probably not needed till performance issues pop up.
+        public static FieldMapping[] GetFieldMappings(Type type)
+        {
+            lock (_mappings)
+            {
+                FieldMapping[] result;
+                if (!_mappings.TryGetValue(type, out result))
+                {
+                    result = GetFieldMapping(type, "", v => v);
+
+                    // Renumber al the field Orders since nested settings will have dupe Orders.
+                    for (int i = 0; i < result.Length; i++)
+                    {
+                        result[i].Field.Order = i;
+                    }
+
+                    _mappings[type] = result;
+                }
+                return result;
+            }
+        }
+
+        private static FieldMapping[] GetFieldMapping(Type type, string prefix, Func<object, object> targetSelector)
+        {
+            var result = new List<FieldMapping>();
+            foreach (var property in GetProperties(type))
+            {
+                var propertyInfo = property.Item1;
+                if (propertyInfo.PropertyType.IsSimpleType())
+                {
+                    var fieldAttribute = property.Item2;
+                    var field = new Field
+                    {
+                        Name = prefix + propertyInfo.Name,
+                        Label = fieldAttribute.Label,
+                        HelpText = fieldAttribute.HelpText,
+                        HelpLink = fieldAttribute.HelpLink,
+                        Order = fieldAttribute.Order,
+                        Advanced = fieldAttribute.Advanced,
+                        Type = fieldAttribute.Type.ToString().ToLowerInvariant()
+                    };
+
+                    if (fieldAttribute.Type == FieldType.Select)
+                    {
+                        field.SelectOptions = GetSelectOptions(fieldAttribute.SelectOptions);
+                    }
+
+                    var valueConverter = GetValueConverter(propertyInfo.PropertyType);
+
+                    result.Add(new FieldMapping
+                    {
+                        Field = field,
+                        PropertyType = propertyInfo.PropertyType,
+                        GetterFunc = t => propertyInfo.GetValue(targetSelector(t), null),
+                        SetterFunc = (t, v) => propertyInfo.SetValue(targetSelector(t), valueConverter(v), null)
+                    });
+                }
+                else
+                {
+                    result.AddRange(GetFieldMapping(propertyInfo.PropertyType, propertyInfo.Name + ".", t => propertyInfo.GetValue(targetSelector(t), null)));
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        private static Tuple<PropertyInfo, FieldDefinitionAttribute>[] GetProperties(Type type)
+        {
+            return type.GetProperties()
+                .Select(v => Tuple.Create(v, v.GetAttribute<FieldDefinitionAttribute>(false)))
+                .Where(v => v.Item2 != null)
+                .OrderBy(v => v.Item2.Order)
+                .ToArray();
+        }
+
         private static List<SelectOption> GetSelectOptions(Type selectOptions)
         {
             var options = from Enum e in Enum.GetValues(selectOptions)
                           select new SelectOption { Value = Convert.ToInt32(e), Name = e.ToString() };
 
             return options.OrderBy(o => o.Value).ToList();
+        }
+
+        private static Func<object, object> GetValueConverter(Type propertyType)
+        {
+            if (propertyType == typeof(int))
+            {
+                return fieldValue => fieldValue?.ToString().ParseInt32() ?? 0;
+            }
+
+            else if (propertyType == typeof(long))
+            {
+                return fieldValue => fieldValue?.ToString().ParseInt64() ?? 0;
+            }
+
+            else if (propertyType == typeof(double))
+            {
+                return fieldValue => fieldValue?.ToString().ParseDouble() ?? 0.0;
+            }
+
+            else if (propertyType == typeof(int?))
+            {
+                return fieldValue => fieldValue?.ToString().ParseInt32();
+            }
+
+            else if (propertyType == typeof(Int64?))
+            {
+                return fieldValue => fieldValue?.ToString().ParseInt64();
+            }
+
+            else if (propertyType == typeof(double?))
+            {
+                return fieldValue => fieldValue?.ToString().ParseDouble();
+            }
+
+            else if (propertyType == typeof(IEnumerable<int>))
+            {
+                return fieldValue =>
+                {
+                    if (fieldValue.GetType() == typeof(JArray))
+                    {
+                        return ((JArray)fieldValue).Select(s => s.Value<int>());
+                    }
+                    else
+                    {
+                        return fieldValue.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => Convert.ToInt32(s));
+                    }
+                };
+            }
+
+            else if (propertyType == typeof(IEnumerable<string>))
+            {
+                return fieldValue =>
+                {
+                    if (fieldValue.GetType() == typeof(JArray))
+                    {
+                        return ((JArray)fieldValue).Select(s => s.Value<string>());
+                    }
+                    else
+                    {
+                        return fieldValue.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    }
+                };
+            }
+
+            else
+            {
+                return fieldValue => fieldValue;
+            }
         }
     }
 }
