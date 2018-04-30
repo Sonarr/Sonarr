@@ -15,8 +15,11 @@ namespace NzbDrone.Core.Configuration
 
         public TorrentSeedConfiguration GetSeedConfiguration(ReleaseInfo release)
         {
-            var indexer = _indexerFactory.Get(release.IndexerId);
             var seedConfig = new TorrentSeedConfiguration();
+
+            if (release.DownloadProtocol != DownloadProtocol.Torrent) return seedConfig;
+
+            var indexer = _indexerFactory.Get(release.IndexerId);
 
             if (indexer.Settings is ITorrentIndexerSettings torrentIndexerSettings)
             {
