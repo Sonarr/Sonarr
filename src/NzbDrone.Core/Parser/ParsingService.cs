@@ -79,7 +79,11 @@ namespace NzbDrone.Core.Parser
             }
 
             remoteEpisode.Series = series;
-            remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, true, searchCriteria);
+
+            if (ValidateParsedEpisodeInfo.ValidateForSeriesType(parsedEpisodeInfo, series))
+            {
+                remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, true, searchCriteria);
+            }
 
             return remoteEpisode;
         }
@@ -103,12 +107,6 @@ namespace NzbDrone.Core.Parser
 
             if (parsedEpisodeInfo.IsDaily)
             {
-                if (series.SeriesType == SeriesTypes.Standard)
-                {
-                    _logger.Warn("Found daily-style episode for non-daily series: {0}.", series);
-                    return new List<Episode>();
-                }
-
                 var episodeInfo = GetDailyEpisode(series, parsedEpisodeInfo.AirDate, searchCriteria);
 
                 if (episodeInfo != null)

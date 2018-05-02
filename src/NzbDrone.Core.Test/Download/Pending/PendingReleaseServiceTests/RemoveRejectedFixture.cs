@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FizzWare.NBuilder;
 using Marr.Data;
@@ -98,6 +98,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                                                    .With(h => h.SeriesId = _series.Id)
                                                    .With(h => h.Title = title)
                                                    .With(h => h.Release = release)
+                                                   .With(h => h.ParsedEpisodeInfo = new ParsedEpisodeInfo())
                                                    .Build();
 
             Mocker.GetMock<IPendingReleaseRepository>()

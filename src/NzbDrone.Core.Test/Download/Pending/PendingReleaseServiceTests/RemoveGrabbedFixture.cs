@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using Marr.Data;
@@ -54,8 +54,10 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 
             _release = Builder<ReleaseInfo>.CreateNew().Build();
 
-            _parsedEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew().Build();
-            _parsedEpisodeInfo.Quality = new QualityModel(Quality.HDTV720p);
+            _parsedEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew()
+                                                           .With(h => h.Quality = new QualityModel(Quality.HDTV720p))
+                                                           .With(h => h.AirDate = null)
+                                                           .Build();
 
             _remoteEpisode = new RemoteEpisode();
             _remoteEpisode.Episodes = new List<Episode>{ _episode };
