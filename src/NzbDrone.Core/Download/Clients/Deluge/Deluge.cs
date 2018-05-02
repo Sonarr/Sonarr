@@ -11,7 +11,6 @@ using NzbDrone.Core.Validation;
 using NLog;
 using FluentValidation.Results;
 using System.Net;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
@@ -154,7 +153,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met.
                 // This allows drone to delete the torrent as appropriate.
                 item.CanMoveFiles = item.CanBeRemoved =
-                    torrent.IsAutoManaged && torrent.StopAtRatio &&
+                    torrent.IsAutoManaged &&
+                    torrent.StopAtRatio &&
                     torrent.Ratio >= torrent.StopRatio &&
                     torrent.State == DelugeTorrentStatus.Paused;
 
