@@ -133,11 +133,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
-
-            if (remoteEpisode.SeedConfiguration != null)
-            {
-                _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
-            }
+            _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -153,11 +149,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
-
-            if (remoteEpisode.SeedConfiguration != null)
-            {
-                _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
-            }
+            _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 

@@ -15,18 +15,19 @@ namespace NzbDrone.Core.Configuration
 
         public TorrentSeedConfiguration GetSeedConfiguration(ReleaseInfo release)
         {
-            var seedConfig = new TorrentSeedConfiguration();
-
-            if (release.DownloadProtocol != DownloadProtocol.Torrent) return seedConfig;
+            if (release.DownloadProtocol != DownloadProtocol.Torrent) return null;
 
             var indexer = _indexerFactory.Get(release.IndexerId);
 
             if (indexer.Settings is ITorrentIndexerSettings torrentIndexerSettings)
             {
-                seedConfig.Ratio = torrentIndexerSettings.SeedRatio;
+                return new TorrentSeedConfiguration
+                {
+                    Ratio = torrentIndexerSettings.SeedRatio
+                };
             }
 
-            return seedConfig;
+            return null;
         }
     }
 }

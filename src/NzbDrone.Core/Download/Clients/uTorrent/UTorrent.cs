@@ -40,11 +40,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
-
-            if (remoteEpisode.SeedConfiguration != null)
-            {
-                _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
-            }
+            _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -63,11 +59,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
-
-            if (remoteEpisode.SeedConfiguration != null)
-            {
-                _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
-            }
+            _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
