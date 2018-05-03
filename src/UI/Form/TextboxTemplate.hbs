@@ -4,5 +4,6 @@
     <div class="col-sm-5">
         <input type="text" name="fields.{{order}}.value" validation-name="{{name}}" spellcheck="false" class="form-control"/>
     </div>
+    {{#if unit}}<span class="unit-inline">{{unit}}</span>{{/if}}
     {{> FormHelpPartial}}
 </div>
