@@ -281,15 +281,15 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected double? GetSeedRatio(DownloadStationTask torrent)
         {
-            var couldConvertDownloaded = long.TryParse(torrent.Additional.Transfer["size_downloaded"], out var downloaded);
-            var couldConvertUploaded = long.TryParse(torrent.Additional.Transfer["size_uploaded"], out var uploaded);
+            var downloaded = torrent.Additional.Transfer["size_downloaded"].ParseInt64();
+            var uploaded = torrent.Additional.Transfer["size_uploaded"].ParseInt64();
 
-            if (!couldConvertDownloaded || !couldConvertUploaded)
+            if (downloaded.HasValue && uploaded.HasValue)
             {
-                return new Nullable<double>();
+                return downloaded <= 0 ? 0 : (double)uploaded.Value / downloaded.Value;
             }
 
-            return downloaded <= 0 ? 0 : (double) uploaded / downloaded;
+            return null;
         }
 
         protected ValidationFailure TestOutputPath()
