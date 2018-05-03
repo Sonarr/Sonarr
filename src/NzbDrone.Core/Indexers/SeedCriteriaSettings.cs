@@ -10,11 +10,35 @@ namespace NzbDrone.Core.Indexers
 {
     public class SeedCriteriaSettingsValidator : AbstractValidator<SeedCriteriaSettings>
     {
-        public SeedCriteriaSettingsValidator()
+        public SeedCriteriaSettingsValidator(double seedRatioMinimum = 0.0, int seedTimeMinimum = 0, int seasonPackSeedTimeMinimum = 0)
         {
-            RuleFor(c => c.SeedRatio).GreaterThan(0.0).When(c => c.SeedRatio.HasValue);
-            RuleFor(c => c.SeedTime).GreaterThan(0).When(c => c.SeedTime.HasValue);
-            RuleFor(c => c.SeasonPackSeedTime).GreaterThan(0).When(c => c.SeasonPackSeedTime.HasValue);
+            RuleFor(c => c.SeedRatio).GreaterThan(0.0).When(c => c.SeedRatio.HasValue).WithMessage("Must be greater than zero");
+            RuleFor(c => c.SeedTime).GreaterThan(0).When(c => c.SeedTime.HasValue).WithMessage("Must be greater than zero");
+            RuleFor(c => c.SeasonPackSeedTime).GreaterThan(0).When(c => c.SeasonPackSeedTime.HasValue).WithMessage("Must be greater than zero");
+
+            if (seedRatioMinimum != 0.0)
+            {
+                RuleFor(c => c.SeedRatio).GreaterThan(seedRatioMinimum)
+                    .When(c => c.SeedRatio > 0.0)
+                    .AsWarning()
+                    .WithMessage($"Under {seedRatioMinimum} leads to H&R");
+            }
+
+            if (seedTimeMinimum != 0)
+            {
+                RuleFor(c => c.SeedTime).GreaterThan(seedTimeMinimum)
+                    .When(c => c.SeedTime > 0)
+                    .AsWarning()
+                    .WithMessage($"Under {seedTimeMinimum} leads to H&R");
+            }
+
+            if (seasonPackSeedTimeMinimum != 0)
+            {
+                RuleFor(c => c.SeasonPackSeedTime).GreaterThan(seasonPackSeedTimeMinimum)
+                    .When(c => c.SeasonPackSeedTime > 0)
+                    .AsWarning()
+                    .WithMessage($"Under {seasonPackSeedTimeMinimum} leads to H&R");
+            }
         }
     }
 
