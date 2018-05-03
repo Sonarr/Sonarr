@@ -142,7 +142,6 @@
     <Compile Include="Configuration\Events\ConfigSavedEvent.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
-    <Compile Include="Configuration\ISeedConfigProvider.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
     <Compile Include="Configuration\SeedConfigProvider.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
@@ -709,6 +708,7 @@
     <Compile Include="Indexers\Rarbg\RarbgParser.cs" />
     <Compile Include="Indexers\Rarbg\RarbgTokenProvider.cs" />
     <Compile Include="Indexers\RssEnclosure.cs" />
+    <Compile Include="Indexers\SeedCriteriaSettings.cs" />
     <Compile Include="Indexers\XmlCleaner.cs" />
     <Compile Include="Indexers\RssIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\RssParser.cs" />

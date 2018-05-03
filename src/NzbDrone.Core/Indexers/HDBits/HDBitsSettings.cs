@@ -10,6 +10,8 @@ namespace NzbDrone.Core.Indexers.HDBits
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
             RuleFor(c => c.ApiKey).NotEmpty();
+
+            RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
         }
     }
 
@@ -35,8 +37,8 @@ namespace NzbDrone.Core.Indexers.HDBits
         [FieldDefinition(3, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
 
-        [FieldDefinition(4, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default", Advanced = true)]
-        public double? SeedRatio { get; set; }
+        [FieldDefinition(4)]
+        public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
 
         public NzbDroneValidationResult Validate()
         {

@@ -17,6 +17,8 @@ namespace NzbDrone.Core.Indexers.IPTorrents
             RuleFor(c => c.BaseUrl).Matches(@"/rss\?.+;download(?:;|$)")
                 .WithMessage("Use Direct Download Url (;download)")
                 .When(v => v.BaseUrl.IsNotNullOrWhiteSpace() && Regex.IsMatch(v.BaseUrl, @"/rss\?.+$"));
+
+            RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
         }
     }
 
@@ -35,8 +37,8 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         [FieldDefinition(1, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
 
-        [FieldDefinition(2, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default", Advanced = true)]
-        public double? SeedRatio { get; set; }
+        [FieldDefinition(2)]
+        public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
 
         public NzbDroneValidationResult Validate()
         {

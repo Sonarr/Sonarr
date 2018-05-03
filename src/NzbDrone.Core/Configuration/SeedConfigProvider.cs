@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Configuration
             {
                 return new TorrentSeedConfiguration
                 {
-                    Ratio = torrentIndexerSettings.SeedRatio
+                    Ratio = torrentIndexerSettings.SeedCriteria.SeedRatio
                 };
             }
 
