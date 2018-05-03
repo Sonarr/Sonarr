@@ -19,6 +19,8 @@ namespace NzbDrone.Core.Indexers.BitMeTv
                 .Matches(@"pass=[0-9a-f]{32}", RegexOptions.IgnoreCase)
                 .WithMessage("Wrong pattern")
                 .AsWarning();
+
+            RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
         }
     }
 
@@ -47,8 +49,8 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         [FieldDefinition(4, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
 
-        [FieldDefinition(5, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default", Advanced = true)]
-        public double? SeedRatio { get; set; }
+        [FieldDefinition(5)]
+        public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
 
         public NzbDroneValidationResult Validate()
         {

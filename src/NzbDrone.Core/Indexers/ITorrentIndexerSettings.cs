@@ -4,6 +4,6 @@
     {
         int MinimumSeeders { get; set; }
 
-        double? SeedRatio { get; set; }
+        SeedCriteriaSettings SeedCriteria { get; }
     }
 }
