@@ -95,6 +95,7 @@ namespace NzbDrone.Api.ClientSchema
                     {
                         Name = prefix + propertyInfo.Name,
                         Label = fieldAttribute.Label,
+                        Unit = fieldAttribute.Unit,
                         HelpText = fieldAttribute.HelpText,
                         HelpLink = fieldAttribute.HelpLink,
                         Order = fieldAttribute.Order,
