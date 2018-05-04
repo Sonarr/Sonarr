@@ -158,6 +158,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             if (seedConfiguration.Ratio != null)
             {
                 ratioArguments.Add("stop_ratio", seedConfiguration.Ratio.Value);
+                ratioArguments.Add("stop_at_ratio", 1);
             }
 
             ProcessRequest<object>(settings, "core.set_torrent_options", new[] { hash }, ratioArguments);
