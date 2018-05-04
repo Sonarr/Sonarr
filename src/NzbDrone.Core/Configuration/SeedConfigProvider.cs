@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Configuration
                 var seedTime = remoteEpisode.ParsedEpisodeInfo.FullSeason ? torrentIndexerSettings.SeedCriteria.SeasonPackSeedTime : torrentIndexerSettings.SeedCriteria.SeedTime;
                 if (seedTime.HasValue)
                 {
-                    seedConfig.SeedTime = TimeSpan.FromSeconds(seedTime.Value);
+                    seedConfig.SeedTime = TimeSpan.FromMinutes(seedTime.Value);
                 }
 
                 return seedConfig;
