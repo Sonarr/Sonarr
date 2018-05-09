@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
@@ -19,16 +20,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
         private readonly IEnumerable<IAggregateLocalEpisode> _augmenters;
         private readonly IDiskProvider _diskProvider;
         private readonly IVideoFileInfoReader _videoFileInfoReader;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public AugmentingService(IEnumerable<IAggregateLocalEpisode> augmenters,
                                  IDiskProvider diskProvider,
                                  IVideoFileInfoReader videoFileInfoReader,
+                                 IConfigService configService,
                                  Logger logger)
         {
             _augmenters = augmenters;
             _diskProvider = diskProvider;
             _videoFileInfoReader = videoFileInfoReader;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -45,7 +49,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
             }
 
             localEpisode.Size = _diskProvider.GetFileSize(localEpisode.Path);
-            localEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(localEpisode.Path);
+
+            if (!localEpisode.ExistingFile || _configService.EnableMediaInfo)
+            {
+                localEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(localEpisode.Path);
+            }
 
             foreach (var augmenter in _augmenters)
             {
