@@ -166,22 +166,26 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)?(?:(?:[-_\W](?<![()\[!]))+(?<season>(?<!\d+)[1-9])(?<episode>[1-9][0-9]|[0][1-9])(?![a-z]|\d+))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                //Episodes with airdate
-                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9])",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                //Supports 1103/1113 naming
-                new Regex(@"^(?<title>.+?)?(?:(?:[-_\W](?<![()\[!]))*(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
                 //4 digit episode number
                 //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
                 new Regex(@"^(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{4}(?!\d+|i|p)))+)(\W+|_|$)(?!\\)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //4 digit episode number
                 //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
                 new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{4}(?!\d+|i|p)))+)\W?(?!\\)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Episodes with airdate (2018.04.28)
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9])",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Episodes with airdate (04.28.2018)
+                new Regex(@"^(?<title>.+?)?\W*(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])\W+(?<airyear>\d{4})(?!\d+)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Supports 1103/1113 naming
+                new Regex(@"^(?<title>.+?)?(?:(?:[-_\W](?<![()\[!]))*(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with single digit episode number (S01E1, S01E5E6, etc)
@@ -267,9 +271,6 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex WebsitePrefixRegex = new Regex(@"^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-        private static readonly Regex AirDateRegex = new Regex(@"^(.*?)(?<!\d)((?<airyear>\d{4})[_.-](?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])|(?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])[_.-](?<airyear>\d{4}))(?!\d)",
-                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex SixDigitAirDateRegex = new Regex(@"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])",
                                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -359,12 +360,6 @@ namespace NzbDrone.Core.Parser
 
                     return m.Value;
                 });
-
-                var airDateMatch = AirDateRegex.Match(simpleTitle);
-                if (airDateMatch.Success)
-                {
-                    simpleTitle = airDateMatch.Groups[1].Value + airDateMatch.Groups["airyear"].Value + "." + airDateMatch.Groups["airmonth"].Value + "." + airDateMatch.Groups["airday"].Value;
-                }
 
                 var sixDigitAirDateMatch = SixDigitAirDateRegex.Match(simpleTitle);
                 if (sixDigitAirDateMatch.Success)

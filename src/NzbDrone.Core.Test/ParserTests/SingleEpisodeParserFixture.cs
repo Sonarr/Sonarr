@@ -131,6 +131,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Super.Potatoes.S01.Ep06.1080p.BluRay.DTS.x264-MiR", "Super Potatoes", 1, 6)]
         [TestCase("Room 104 - S01E07 The Missionaries [SDTV]", "Room 104", 1, 7)]
         [TestCase("11-02 The Retraction Reaction (HD).m4v", "", 11, 2)]
+        [TestCase("Plus belle la vie - S14E3533 FRENCH WEBRIP H.264 AAC (09.05.2018)", "Plus belle la vie", 14, 3533)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
