@@ -146,6 +146,7 @@ namespace NzbDrone.Core.Parser
             {
                 Logger.Debug(ex, "Failed parsing forced flag from subtitle file: {0}", fileName);
             }
+        }
 
         private static Language RegexLanguage(string title)
         {
