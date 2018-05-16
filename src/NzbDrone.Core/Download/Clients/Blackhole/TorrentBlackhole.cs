@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -81,9 +81,6 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
         }
 
         public override string Name => "Torrent Blackhole";
-
-        public override ProviderMessage Message => new ProviderMessage("Magnet links are not supported.", ProviderMessageType.Warning);
-
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
