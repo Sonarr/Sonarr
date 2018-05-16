@@ -18,7 +18,9 @@ namespace NzbDrone.Core.Parser
                                                                 RegexOptions.Compiled);
 
 
-        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})([-_. ]forced)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex SubtitleForcedRegex = new Regex(".+?[-_. ]forced$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static Language ParseLanguage(string title)
         {
@@ -128,6 +130,22 @@ namespace NzbDrone.Core.Parser
 
             return Language.Unknown;
         }
+
+        public static bool ParseForcedFlag(string fileName)
+        {
+            try
+            {
+                Logger.Debug("Parsing forced flag from subtitle file: {0}", fileName);
+
+                var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
+                var forcedFlagMatch = SubtitleForcedRegex.Match(simpleFilename);
+
+                return forcedFlagMatch.Success;
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex, "Failed parsing forced flag from subtitle file: {0}", fileName);
+            }
 
         private static Language RegexLanguage(string title)
         {
