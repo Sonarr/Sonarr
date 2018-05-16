@@ -87,7 +87,8 @@ namespace NzbDrone.Core.Extras.Subtitles
             if (SubtitleFileExtensions.Extensions.Contains(Path.GetExtension(path)))
             {
                 var language = LanguageParser.ParseSubtitleLanguage(path);
-                var suffix = GetSuffix(language, 1, false);
+                var forced = LanguageParser.ParseForcedFlag(path);
+                var suffix = GetSuffix(language, forced, 1, false);
                 var subtitleFile = ImportFile(series, episodeFile, path, readOnly, extension, suffix);
                 subtitleFile.Language = language;
 
@@ -99,7 +100,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             return null;
         }
 
-        private string GetSuffix(Language language, int copy, bool multipleCopies = false)
+        private string GetSuffix(Language language, bool forced, int copy, bool multipleCopies = false)
         {
             var suffixBuilder = new StringBuilder();
 
@@ -113,6 +114,12 @@ namespace NzbDrone.Core.Extras.Subtitles
             {
                 suffixBuilder.Append(".");
                 suffixBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
+            }
+
+            if (forced)
+            {
+                suffixBuilder.Append(".");
+                suffixBuilder.Append("forced");
             }
 
             return suffixBuilder.ToString();
