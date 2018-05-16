@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 _logger.Warn(ex, "Failed to set the torrent priority for {0}.", filename);
             }
 
-            SetInitialState(hash);
+            SetInitialState(hash.ToLower());
 
             return hash;
         }
