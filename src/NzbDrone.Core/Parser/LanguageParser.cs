@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})([-_. ]forced)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SubtitleForcedRegex = new Regex(".+?[-_. ]forced$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SubtitleForcedRegex = new Regex(".+?[-_. ]forced([-_. ][a-z]{2,3})?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static Language ParseLanguage(string title)
         {
