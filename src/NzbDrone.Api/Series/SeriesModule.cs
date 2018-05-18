@@ -74,7 +74,7 @@ namespace NzbDrone.Api.Series
                            .SetValidator(droneFactoryValidator)
                            .SetValidator(seriesAncestorValidator)
                            .SetValidator(systemFolderValidator)
-                           .When(s => !s.Path.IsNullOrWhiteSpace());
+                           .When(s => s.Path.IsNotNullOrWhiteSpace());
 
             SharedValidator.RuleFor(s => s.ProfileId).SetValidator(profileExistsValidator);
 

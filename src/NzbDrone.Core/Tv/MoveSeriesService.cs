@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Tv
             var source = message.SourcePath;
             var destination = message.DestinationPath;
 
-            if (!message.DestinationRootFolder.IsNullOrWhiteSpace())
+            if (message.DestinationRootFolder.IsNotNullOrWhiteSpace())
             {
                 _logger.Debug("Buiding destination path using root folder: {0} and the series title", message.DestinationRootFolder);
                 destination = Path.Combine(message.DestinationRootFolder, _filenameBuilder.GetSeriesFolder(series));

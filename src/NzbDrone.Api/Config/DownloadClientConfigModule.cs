@@ -18,7 +18,7 @@ namespace NzbDrone.Api.Config
                            .SetValidator(rootFolderValidator)
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(pathExistsValidator)
-                           .When(c => !string.IsNullOrWhiteSpace(c.DownloadedEpisodesFolder));
+                           .When(c => string.IsNotNullOrWhiteSpace(c.DownloadedEpisodesFolder));
         }
 
         protected override DownloadClientConfigResource ToResource(IConfigService model)

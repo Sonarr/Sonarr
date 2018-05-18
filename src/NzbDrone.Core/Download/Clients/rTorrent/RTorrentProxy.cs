@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             client.EnableCompression = true;
 
-            if (!settings.Username.IsNullOrWhiteSpace())
+            if (settings.Username.IsNotNullOrWhiteSpace())
             {
                 client.Credentials = new NetworkCredential(settings.Username, settings.Password);
             }

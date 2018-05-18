@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Notifications.Emby
         [JsonIgnore]
         public string Address => $"{Host}:{Port}";
 
-        public bool IsValid => !string.IsNullOrWhiteSpace(Host) && Port > 0;
+        public bool IsValid => string.IsNotNullOrWhiteSpace(Host) && Port > 0;
 
         public NzbDroneValidationResult Validate()
         {

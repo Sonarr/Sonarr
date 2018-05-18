@@ -445,7 +445,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             else
             {
-                if (!Settings.TvCategory.IsNullOrWhiteSpace())
+                if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
                     return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
                     {

@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 throw new DownloadClientException("Deluge failed to add magnet " + magnetLink);
             }
 
-            if (!Settings.TvCategory.IsNullOrWhiteSpace())
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 throw new DownloadClientException("Deluge failed to add torrent " + filename);
             }
 
-            if (!Settings.TvCategory.IsNullOrWhiteSpace())
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             IEnumerable<DelugeTorrent> torrents;
 
-            if (!Settings.TvCategory.IsNullOrWhiteSpace())
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
                 torrents = _proxy.GetTorrentsByLabel(Settings.TvCategory, Settings);
             }

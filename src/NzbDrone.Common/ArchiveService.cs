@@ -114,7 +114,7 @@ namespace NzbDrone.Common
 
         private void OnZipError(TestStatus status, string message)
         {
-            if (!string.IsNullOrWhiteSpace(message))
+            if (string.IsNotNullOrWhiteSpace(message))
             {
                 _logger.Error("File {0} failed zip validation. {1}", status.File.Name, message);
             }

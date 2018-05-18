@@ -169,7 +169,7 @@ namespace NzbDrone.Core.Tv
             foreach (var s in series)
             {
                 _logger.Trace("Updating: {0}", s.Title);
-                if (!s.RootFolderPath.IsNullOrWhiteSpace())
+                if (s.RootFolderPath.IsNotNullOrWhiteSpace())
                 {
                     var folderName = new DirectoryInfo(s.Path).Name;
                     s.Path = Path.Combine(s.RootFolderPath, folderName);

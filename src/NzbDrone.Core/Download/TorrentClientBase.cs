@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Download
                 torrentUrl = remoteEpisode.Release.DownloadUrl;
             }
 
-            if (torrentInfo != null && !torrentInfo.MagnetUrl.IsNullOrWhiteSpace())
+            if (torrentInfo != null && torrentInfo.MagnetUrl.IsNotNullOrWhiteSpace())
             {
                 magnetUrl = torrentInfo.MagnetUrl;
             }
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Download
                     }
                     catch (Exception ex)
                     {
-                        if (!magnetUrl.IsNullOrWhiteSpace())
+                        if (magnetUrl.IsNotNullOrWhiteSpace())
                         {
                             throw;
                         }

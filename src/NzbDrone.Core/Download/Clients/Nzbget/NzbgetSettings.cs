@@ -11,8 +11,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(1, 65535);
-            RuleFor(c => c.Username).NotEmpty().When(c => !string.IsNullOrWhiteSpace(c.Password));
-            RuleFor(c => c.Password).NotEmpty().When(c => !string.IsNullOrWhiteSpace(c.Username));
+            RuleFor(c => c.Username).NotEmpty().When(c => string.IsNotNullOrWhiteSpace(c.Password));
+            RuleFor(c => c.Password).NotEmpty().When(c => string.IsNotNullOrWhiteSpace(c.Username));
 
             RuleFor(c => c.TvCategory).NotEmpty().WithMessage("A category is recommended").AsWarning();
         }

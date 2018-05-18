@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             long size;
 
             var sizeString = TryGetTorznabAttribute(item, "size");
-            if (!sizeString.IsNullOrWhiteSpace() && long.TryParse(sizeString, out size))
+            if (sizeString.IsNotNullOrWhiteSpace() && long.TryParse(sizeString, out size))
             {
                 return size;
             }
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             var tvdbIdString = TryGetTorznabAttribute(item, "tvdbid");
             int tvdbId;
 
-            if (!tvdbIdString.IsNullOrWhiteSpace() && int.TryParse(tvdbIdString, out tvdbId))
+            if (tvdbIdString.IsNotNullOrWhiteSpace() && int.TryParse(tvdbIdString, out tvdbId))
             {
                 return tvdbId;
             }
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             var tvRageIdString = TryGetTorznabAttribute(item, "rageid");
             int tvRageId;
 
-            if (!tvRageIdString.IsNullOrWhiteSpace() && int.TryParse(tvRageIdString, out tvRageId))
+            if (tvRageIdString.IsNotNullOrWhiteSpace() && int.TryParse(tvRageIdString, out tvRageId))
             {
                 return tvRageId;
             }

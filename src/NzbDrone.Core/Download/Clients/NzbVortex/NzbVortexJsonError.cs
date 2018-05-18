@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
         public string Status { get; set; }
         public string Error { get; set; }
 
-        public bool Failed => !string.IsNullOrWhiteSpace(Status) &&
+        public bool Failed => string.IsNotNullOrWhiteSpace(Status) &&
                               Status.Equals("false", StringComparison.InvariantCultureIgnoreCase);
     }
 }

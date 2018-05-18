@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             var url = string.Format(@"http://{0}/jsonrpc", settings.Address);
             var client = RestClientFactory.BuildClient(url);
 
-            if (!settings.Username.IsNullOrWhiteSpace())
+            if (settings.Username.IsNotNullOrWhiteSpace())
             {
                 client.Authenticator = new HttpBasicAuthenticator(settings.Username, settings.Password);
             }

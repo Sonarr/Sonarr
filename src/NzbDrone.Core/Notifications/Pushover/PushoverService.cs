@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Notifications.Pushover
                 request.AddParameter("expire", settings.Expire);
             }
 
-            if (!settings.Sound.IsNullOrWhiteSpace())
+            if (settings.Sound.IsNotNullOrWhiteSpace())
             {
                 request.AddParameter("sound", settings.Sound);
             }

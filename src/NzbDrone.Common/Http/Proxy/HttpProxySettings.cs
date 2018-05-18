@@ -27,7 +27,7 @@ namespace NzbDrone.Common.Http.Proxy
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(BypassFilter))
+                if (string.IsNotNullOrWhiteSpace(BypassFilter))
                 {
                     var hostlist = BypassFilter.Split(',');
                     for(int i = 0; i < hostlist.Length; i++)

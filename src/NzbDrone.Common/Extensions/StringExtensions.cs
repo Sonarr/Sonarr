@@ -81,7 +81,7 @@ namespace NzbDrone.Common.Extensions
 
         public static bool IsNotNullOrWhiteSpace(this string text)
         {
-            return !string.IsNullOrWhiteSpace(text);
+            return string.IsNotNullOrWhiteSpace(text);
         }
 
         public static bool StartsWithIgnoreCase(this string text, string startsWith)

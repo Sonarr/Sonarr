@@ -59,7 +59,7 @@ namespace Microsoft.AspNet.SignalR.Owin
             if (environment.TryGetValue(OwinConstants.HostAppModeKey, out value))
             {
                 var stringVal = value as string;
-                return !String.IsNullOrWhiteSpace(stringVal) &&
+                return String.IsNotNullOrWhiteSpace(stringVal) &&
                        OwinConstants.AppModeDevelopment.Equals(stringVal, StringComparison.OrdinalIgnoreCase);
             }
 

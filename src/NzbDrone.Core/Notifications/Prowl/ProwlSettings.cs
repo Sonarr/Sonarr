@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Notifications.Prowl
         [FieldDefinition(1, Label = "Priority", Type = FieldType.Select, SelectOptions= typeof(ProwlPriority) )]
         public int Priority { get; set; }
 
-        public bool IsValid => !string.IsNullOrWhiteSpace(ApiKey) && Priority >= -2 && Priority <= 2;
+        public bool IsValid => string.IsNotNullOrWhiteSpace(ApiKey) && Priority >= -2 && Priority <= 2;
 
         public NzbDroneValidationResult Validate()
         {

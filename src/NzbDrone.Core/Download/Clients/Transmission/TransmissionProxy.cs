@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             arguments.Add("filename", torrentUrl);
             arguments.Add("paused", settings.AddPaused);
 
-            if (!downloadDirectory.IsNullOrWhiteSpace())
+            if (downloadDirectory.IsNotNullOrWhiteSpace())
             {
                 arguments.Add("download-dir", downloadDirectory);
             }
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             arguments.Add("metainfo", Convert.ToBase64String(torrentData));
             arguments.Add("paused", settings.AddPaused);
 
-            if (!downloadDirectory.IsNullOrWhiteSpace())
+            if (downloadDirectory.IsNotNullOrWhiteSpace())
             {
                 arguments.Add("download-dir", downloadDirectory);
             }
