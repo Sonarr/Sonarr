@@ -26,7 +26,7 @@ namespace NzbDrone.Common.Http
         {
             var osName = OsInfo.Os.ToString();
 
-            if (!string.IsNullOrWhiteSpace(osInfo.Name))
+            if (string.IsNotNullOrWhiteSpace(osInfo.Name))
             {
                 osName = osInfo.Name.ToLower();
             }

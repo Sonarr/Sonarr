@@ -36,7 +36,7 @@ namespace NzbDrone.Common.Composition
             var loadedInterfaces = _loadedTypes.Where(t => t.IsInterface).ToList();
             var implementedInterfaces = _loadedTypes.SelectMany(t => t.GetInterfaces());
 
-            var contracts = loadedInterfaces.Union(implementedInterfaces).Where(c => !c.IsGenericTypeDefinition && !string.IsNullOrWhiteSpace(c.FullName))
+            var contracts = loadedInterfaces.Union(implementedInterfaces).Where(c => !c.IsGenericTypeDefinition && string.IsNotNullOrWhiteSpace(c.FullName))
                 .Where(c => !c.FullName.StartsWith("System"))
                 .Except(new List<Type> { typeof(IMessage), typeof(IEvent), typeof(IContainer) }).Distinct().OrderBy(c => c.FullName);
 

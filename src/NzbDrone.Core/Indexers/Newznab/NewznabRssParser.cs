@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             long size;
 
             var sizeString = TryGetNewznabAttribute(item, "size");
-            if (!sizeString.IsNullOrWhiteSpace() && long.TryParse(sizeString, out size))
+            if (sizeString.IsNotNullOrWhiteSpace() && long.TryParse(sizeString, out size))
             {
                 return size;
             }
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         protected override DateTime GetPublishDate(XElement item)
         {
             var dateString = TryGetNewznabAttribute(item, "usenetdate");
-            if (!dateString.IsNullOrWhiteSpace())
+            if (dateString.IsNotNullOrWhiteSpace())
             {
                 return XElementExtensions.ParseDate(dateString);
             }
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             var tvdbIdString = TryGetNewznabAttribute(item, "tvdbid");
             int tvdbId;
 
-            if (!tvdbIdString.IsNullOrWhiteSpace() && int.TryParse(tvdbIdString, out tvdbId))
+            if (tvdbIdString.IsNotNullOrWhiteSpace() && int.TryParse(tvdbIdString, out tvdbId))
             {
                 return tvdbId;
             }
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             var tvRageIdString = TryGetNewznabAttribute(item, "rageid");
             int tvRageId;
 
-            if (!tvRageIdString.IsNullOrWhiteSpace() && int.TryParse(tvRageIdString, out tvRageId))
+            if (tvRageIdString.IsNotNullOrWhiteSpace() && int.TryParse(tvRageIdString, out tvRageId))
             {
                 return tvRageId;
             }

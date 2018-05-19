@@ -158,7 +158,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("TvRageId", message.Episode.Release.TvRageId.ToString());
                 history.Data.Add("Protocol", ((int)message.Episode.Release.DownloadProtocol).ToString());
 
-                if (!message.Episode.ParsedEpisodeInfo.ReleaseHash.IsNullOrWhiteSpace())
+                if (message.Episode.ParsedEpisodeInfo.ReleaseHash.IsNotNullOrWhiteSpace())
                 {
                     history.Data.Add("ReleaseHash", message.Episode.ParsedEpisodeInfo.ReleaseHash);
                 }

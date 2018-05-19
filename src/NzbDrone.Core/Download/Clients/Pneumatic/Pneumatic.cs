@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return GetDownloadClientId(strmFile);
         }
 
-        public bool IsConfigured => !string.IsNullOrWhiteSpace(Settings.NzbFolder);
+        public bool IsConfigured => string.IsNotNullOrWhiteSpace(Settings.NzbFolder);
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

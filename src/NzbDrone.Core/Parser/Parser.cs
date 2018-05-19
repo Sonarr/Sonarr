@@ -412,7 +412,7 @@ namespace NzbDrone.Core.Parser
                                 result.ReleaseGroup = ParseReleaseGroup(releaseTitle);
 
                                 var subGroup = GetSubGroup(match);
-                                if (!subGroup.IsNullOrWhiteSpace())
+                                if (subGroup.IsNotNullOrWhiteSpace())
                                 {
                                     result.ReleaseGroup = subGroup;
                                 }
@@ -420,7 +420,7 @@ namespace NzbDrone.Core.Parser
                                 Logger.Debug("Release Group parsed: {0}", result.ReleaseGroup);
 
                                 result.ReleaseHash = GetReleaseHash(match);
-                                if (!result.ReleaseHash.IsNullOrWhiteSpace())
+                                if (result.ReleaseHash.IsNotNullOrWhiteSpace())
                                 {
                                     Logger.Debug("Release Hash parsed: {0}", result.ReleaseHash);
                                 }
@@ -650,7 +650,7 @@ namespace NzbDrone.Core.Parser
                     {
                         //Check to see if this is an "Extras" or "SUBPACK" release, if it is, set
                         // IsSeasonExtra so they can be filtered out
-                        if (!matchCollection[0].Groups["extras"].Value.IsNullOrWhiteSpace())
+                        if (matchCollection[0].Groups["extras"].Value.IsNotNullOrWhiteSpace())
                         {
                             result.IsSeasonExtra = true;
                         }

@@ -43,7 +43,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
                         var key = parts[0];
                         var value = parts[1];
 
-                        if (!string.IsNullOrWhiteSpace(value))
+                        if (string.IsNotNullOrWhiteSpace(value))
                         {
                             switch (key)
                             {

@@ -76,14 +76,14 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
             episodeGroup.Should().OnlyContain(c => c.Count() == 1);
 
             episodes.Should().Contain(c => c.SeasonNumber > 0);
-            episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));
+            episodes.Should().Contain(c => string.IsNotNullOrWhiteSpace(c.Overview));
 
             foreach (var episode in episodes)
             {
                 ValidateEpisode(episode);
 
                 //if atleast one episdoe has title it means parse it working.
-                episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Title));
+                episodes.Should().Contain(c => string.IsNotNullOrWhiteSpace(c.Title));
             }
         }
 

@@ -257,7 +257,7 @@ namespace NzbDrone.Core.Notifications.Plex
                         Json.Deserialize<PlexError>(response.Content) : 
                         Json.Deserialize<PlexResponse<PlexError>>(response.Content).MediaContainer;
 
-            if (error != null && !error.Error.IsNullOrWhiteSpace())
+            if (error != null && error.Error.IsNotNullOrWhiteSpace())
             {
                 throw new PlexException(error.Error);
             }

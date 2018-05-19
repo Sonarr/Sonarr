@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
                 }
 
-                if (!torrent.ErrorString.IsNullOrWhiteSpace())
+                if (torrent.ErrorString.IsNotNullOrWhiteSpace())
                 {
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = torrent.ErrorString;

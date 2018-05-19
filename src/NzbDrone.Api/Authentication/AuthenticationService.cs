@@ -128,7 +128,7 @@ namespace NzbDrone.Api.Authentication
             var apiKeyHeader = context.Request.Headers["X-Api-Key"].FirstOrDefault();
             var apiKeyQueryString = context.Request.Query["ApiKey"];
 
-            if (!apiKeyHeader.IsNullOrWhiteSpace())
+            if (apiKeyHeader.IsNotNullOrWhiteSpace())
             {
                 return apiKeyHeader;
             }

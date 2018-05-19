@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
         [FieldDefinition(2, Label = "Image", Type = FieldType.Checkbox, HelpText = "Include Sonarr logo with notifications")]
         public bool Image { get; set; }
 
-        public bool IsValid => !string.IsNullOrWhiteSpace(AuthToken);
+        public bool IsValid => string.IsNotNullOrWhiteSpace(AuthToken);
 
         public NzbDroneValidationResult Validate()
         {

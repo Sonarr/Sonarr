@@ -74,7 +74,7 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                     }
 
-                    if (parsedEpisodeInfo != null && !parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace())
+                    if (parsedEpisodeInfo != null && parsedEpisodeInfo.SeriesTitle.IsNotNullOrWhiteSpace())
                     {
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, searchCriteria);
                         remoteEpisode.Release = report;

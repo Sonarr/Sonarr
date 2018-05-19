@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Parser.Model
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(AirDate);
+                return string.IsNotNullOrWhiteSpace(AirDate);
             }
 
             //This prevents manually downloading a release from blowing up in mono
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Parser.Model
                 // if we don't have any episode numbers we are likely a special episode and need to do a search by episode title
                 return (AirDate.IsNullOrWhiteSpace() &&
                        SeriesTitle.IsNullOrWhiteSpace() &&
-                       (EpisodeNumbers.Length == 0 || SeasonNumber == 0) || !SeriesTitle.IsNullOrWhiteSpace() && Special) ||
+                       (EpisodeNumbers.Length == 0 || SeasonNumber == 0) || SeriesTitle.IsNotNullOrWhiteSpace() && Special) ||
                        EpisodeNumbers.Length == 1 && EpisodeNumbers[0] == 0;
             }
 

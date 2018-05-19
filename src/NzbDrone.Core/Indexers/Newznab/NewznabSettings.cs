@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             RuleFor(c => c.ApiPath).ValidUrlBase("/api");
             RuleFor(c => c.ApiKey).NotEmpty().When(ShouldHaveApiKey);
             RuleFor(c => c.AdditionalParameters).Matches(AdditionalParametersRegex)
-                                                .When(c => !c.AdditionalParameters.IsNullOrWhiteSpace());
+                                                .When(c => c.AdditionalParameters.IsNotNullOrWhiteSpace());
         }
     }
 

@@ -455,7 +455,7 @@ namespace NzbDrone.Core.Organizer
 
         private void AddEpisodeTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes)
         {
-            if (!episodes.First().AirDate.IsNullOrWhiteSpace())
+            if (episodes.First().AirDate.IsNotNullOrWhiteSpace())
             {
                 tokenHandlers["{Air Date}"] = m => episodes.First().AirDate.Replace('-', ' ');
             }
@@ -498,7 +498,7 @@ namespace NzbDrone.Core.Organizer
             var audioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo);
 
             var mediaInfoAudioLanguages = GetLanguagesToken(episodeFile.MediaInfo.AudioLanguages);
-            if (!mediaInfoAudioLanguages.IsNullOrWhiteSpace())
+            if (mediaInfoAudioLanguages.IsNotNullOrWhiteSpace())
             {
                 mediaInfoAudioLanguages = $"[{mediaInfoAudioLanguages}]";
             }
@@ -509,7 +509,7 @@ namespace NzbDrone.Core.Organizer
             }
 
             var mediaInfoSubtitleLanguages = GetLanguagesToken(episodeFile.MediaInfo.Subtitles);
-            if (!mediaInfoSubtitleLanguages.IsNullOrWhiteSpace())
+            if (mediaInfoSubtitleLanguages.IsNotNullOrWhiteSpace())
             {
                 mediaInfoSubtitleLanguages = $"[{mediaInfoSubtitleLanguages}]";
             }
@@ -537,7 +537,7 @@ namespace NzbDrone.Core.Organizer
             List<string> tokens = new List<string>();
             foreach (var item in mediaInfoLanguages.Split('/'))
             {
-                if (!string.IsNullOrWhiteSpace(item))
+                if (string.IsNotNullOrWhiteSpace(item))
                     tokens.Add(item.Trim());
             }
 
@@ -594,14 +594,14 @@ namespace NzbDrone.Core.Organizer
                 replacementText = replacementText.ToUpper();
             }
 
-            if (!tokenMatch.Separator.IsNullOrWhiteSpace())
+            if (tokenMatch.Separator.IsNotNullOrWhiteSpace())
             {
                 replacementText = replacementText.Replace(" ", tokenMatch.Separator);
             }
 
             replacementText = CleanFileName(replacementText, namingConfig.ReplaceIllegalCharacters);
 
-            if (!replacementText.IsNullOrWhiteSpace())
+            if (replacementText.IsNotNullOrWhiteSpace())
             {
                 replacementText = tokenMatch.Prefix + replacementText + tokenMatch.Suffix;
             }

@@ -47,7 +47,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
                     var key = parts[0];
                     var value = parts[1].Trim('"');
 
-                    if (!string.IsNullOrWhiteSpace(value))
+                    if (string.IsNotNullOrWhiteSpace(value))
                     {
                         switch (key)
                         {
@@ -65,7 +65,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(version) && !string.IsNullOrWhiteSpace(major))
+            if (string.IsNullOrWhiteSpace(version) && string.IsNotNullOrWhiteSpace(major))
             {
                 version = $"{major}.{minor}";
             }

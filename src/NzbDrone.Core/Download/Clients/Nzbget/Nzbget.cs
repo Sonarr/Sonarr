@@ -282,7 +282,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var config = _proxy.GetConfig(Settings);
             var categories = GetCategories(config);
 
-            if (!Settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == Settings.TvCategory))
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace() && !categories.Any(v => v.Name == Settings.TvCategory))
             {
                 return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
                 {
