@@ -2,7 +2,6 @@
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.IPTorrents
@@ -35,6 +34,9 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
         [FieldDefinition(1, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
+
+        [FieldDefinition(2, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default", Advanced = true)]
+        public double? SeedRatio { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

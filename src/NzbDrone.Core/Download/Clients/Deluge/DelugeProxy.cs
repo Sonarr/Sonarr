@@ -151,13 +151,16 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, DelugeSettings settings)
         {
+            if (seedConfiguration == null) return;
+
+            var ratioArguments = new Dictionary<string, object>();
+
             if (seedConfiguration.Ratio != null)
             {
-                var ratioArguments = new Dictionary<string, object>();
                 ratioArguments.Add("stop_ratio", seedConfiguration.Ratio.Value);
-
-                ProcessRequest<object>(settings, "core.set_torrent_options", new string[] { hash }, ratioArguments);
             }
+
+            ProcessRequest<object>(settings, "core.set_torrent_options", new[] { hash }, ratioArguments);
         }
 
         public void AddLabel(string label, DelugeSettings settings)
@@ -176,7 +179,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             var requestBuilder = new JsonRpcRequestBuilder(url);
             requestBuilder.LogResponseContent = true;
-            
+
             requestBuilder.Resource("json");
             requestBuilder.PostProcess += r => r.RequestTimeout = TimeSpan.FromSeconds(15);
 
