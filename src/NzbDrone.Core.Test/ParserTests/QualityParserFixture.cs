@@ -177,6 +177,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Simpsons.S25E21.Pay.Pal.1080p.WEB-DL.DD5.1.H.264-NTb", false)]
         [TestCase("Incorporated.S01E08.Das.geloeschte.Ich.German.DD51.Dubbed.DL.1080p.AmazonHD.x264-TVS", false)]
         [TestCase("Death.Note.2017.German.DD51.DL.1080p.NetflixHD.x264-TVS", false)]
+        [TestCase("Played.S01E08.Pro.Gamer.1440p.BKPL.WEB-DL.H.264-LiGHT", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
