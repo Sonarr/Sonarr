@@ -172,7 +172,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 "errorString",
                 "uploadedEver",
                 "downloadedEver",
-                "seedRatioLimit"
+                "seedRatioLimit",
+                "fileCount"
             };
 
             var arguments = new Dictionary<string, object>();
