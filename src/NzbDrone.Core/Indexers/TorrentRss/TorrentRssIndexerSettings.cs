@@ -9,6 +9,8 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         public TorrentRssIndexerSettingsValidator()
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
+
+            RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
         }
     }
 
@@ -34,6 +36,9 @@ namespace NzbDrone.Core.Indexers.TorrentRss
 
         [FieldDefinition(3, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
+
+        [FieldDefinition(4)]
+        public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
 
         public NzbDroneValidationResult Validate()
         {

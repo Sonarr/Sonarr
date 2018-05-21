@@ -2,7 +2,6 @@
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.IPTorrents
@@ -18,6 +17,8 @@ namespace NzbDrone.Core.Indexers.IPTorrents
             RuleFor(c => c.BaseUrl).Matches(@"/rss\?.+;download(?:;|$)")
                 .WithMessage("Use Direct Download Url (;download)")
                 .When(v => v.BaseUrl.IsNotNullOrWhiteSpace() && Regex.IsMatch(v.BaseUrl, @"/rss\?.+$"));
+
+            RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
         }
     }
 
@@ -35,6 +36,9 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
         [FieldDefinition(1, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
+
+        [FieldDefinition(2)]
+        public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
 
         public NzbDroneValidationResult Validate()
         {

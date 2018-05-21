@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
@@ -21,9 +22,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
         {
             public virtual bool HasStackFrameInfo()
             {
-                var stackTrace = new StackTrace();
+                var stackTrace = new StackTrace(true);
 
-                return stackTrace.FrameCount > 0 && stackTrace.GetFrame(0).GetFileColumnNumber() > 0;
+                return stackTrace.FrameCount > 0 && stackTrace.GetFrame(0).GetFileName().IsNotNullOrWhiteSpace();
             }
         }
 

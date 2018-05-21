@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 using NzbDrone.Core.Datastore;
 
@@ -10,8 +10,8 @@ namespace NzbDrone.Core.Qualities
         public Revision Revision { get; set; }
 
         [JsonIgnore]
-        public QualitySource QualitySource { get; set; }
-        
+        public QualityDetectionSource QualityDetectionSource { get; set; }
+       
         public QualityModel()
             : this(Quality.Unknown, new Revision())
         {

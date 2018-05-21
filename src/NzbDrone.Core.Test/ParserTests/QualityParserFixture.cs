@@ -177,6 +177,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Simpsons.S25E21.Pay.Pal.1080p.WEB-DL.DD5.1.H.264-NTb", false)]
         [TestCase("Incorporated.S01E08.Das.geloeschte.Ich.German.DD51.Dubbed.DL.1080p.AmazonHD.x264-TVS", false)]
         [TestCase("Death.Note.2017.German.DD51.DL.1080p.NetflixHD.x264-TVS", false)]
+        [TestCase("Played.S01E08.Pro.Gamer.1440p.BKPL.WEB-DL.H.264-LiGHT", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -283,7 +284,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-REPACK-TLA")]
         public void should_parse_quality_from_name(string title)
         {
-            QualityParser.ParseQuality(title).QualitySource.Should().Be(QualitySource.Name);
+            QualityParser.ParseQuality(title).QualityDetectionSource.Should().Be(QualityDetectionSource.Name);
         }
 
         [TestCase("Revolution.S01E02.Chained.Heat.mkv")]
@@ -292,7 +293,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[CR] Sailor Moon - 004 [48CE2D0F].avi")]
         public void should_parse_quality_from_extension(string title)
         {
-            QualityParser.ParseQuality(title).QualitySource.Should().Be(QualitySource.Extension);
+            QualityParser.ParseQuality(title).QualityDetectionSource.Should().Be(QualityDetectionSource.Extension);
         }
 
         private void ParseAndVerifyQuality(string title, Quality quality, bool proper)

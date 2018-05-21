@@ -45,6 +45,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
 
+            _proxy.SetTorrentSeedingConfiguration(actualHash, remoteEpisode.SeedConfiguration, Settings);
+
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
             if (isRecentEpisode && Settings.RecentTvPriority == (int)DelugePriority.First ||
@@ -64,6 +66,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 throw new DownloadClientException("Deluge failed to add torrent " + filename);
             }
+
+            _proxy.SetTorrentSeedingConfiguration(actualHash, remoteEpisode.SeedConfiguration, Settings);
 
             if (!Settings.TvCategory.IsNullOrWhiteSpace())
             {
@@ -110,6 +114,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadPath));
                 item.OutputPath = outputPath + torrent.Name;
                 item.RemainingSize = torrent.Size - torrent.BytesDownloaded;
+                item.SeedRatio = torrent.Ratio;
 
                 try
                 {
@@ -145,8 +150,13 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met. This allows drone to delete the torrent as appropriate.
-                item.CanMoveFiles = item.CanBeRemoved = (torrent.IsAutoManaged && torrent.StopAtRatio && torrent.Ratio >= torrent.StopRatio && torrent.State == DelugeTorrentStatus.Paused);
+                // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met.
+                // This allows drone to delete the torrent as appropriate.
+                item.CanMoveFiles = item.CanBeRemoved =
+                    torrent.IsAutoManaged &&
+                    torrent.StopAtRatio &&
+                    torrent.Ratio >= torrent.StopRatio &&
+                    torrent.State == DelugeTorrentStatus.Paused;
 
                 items.Add(item);
             }

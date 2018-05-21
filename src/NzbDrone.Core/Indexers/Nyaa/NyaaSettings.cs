@@ -2,6 +2,7 @@
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 using System.Text.RegularExpressions;
+
 namespace NzbDrone.Core.Indexers.Nyaa
 {
     public class NyaaSettingsValidator : AbstractValidator<NyaaSettings>
@@ -10,6 +11,8 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
             RuleFor(c => c.AdditionalParameters).Matches("(&[a-z]+=[a-z0-9_]+)*", RegexOptions.IgnoreCase);
+
+            RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
         }
     }
 
@@ -32,6 +35,9 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         [FieldDefinition(2, Type = FieldType.Textbox, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
         public int MinimumSeeders { get; set; }
+
+        [FieldDefinition(3)]
+        public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
 
         public NzbDroneValidationResult Validate()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace NzbDrone.Common.Extensions
 {
@@ -6,7 +7,7 @@ namespace NzbDrone.Common.Extensions
     {
         public static int? ParseInt32(this string source)
         {
-            int result = 0;
+            int result;
 
             if (int.TryParse(source, out result))
             {
@@ -16,11 +17,23 @@ namespace NzbDrone.Common.Extensions
             return null;
         }
 
-        public static Nullable<long> ParseInt64(this string source)
+        public static long? ParseInt64(this string source)
         {
-            long result = 0;
+            long result;
 
             if (long.TryParse(source, out result))
+            {
+                return result;
+            }
+
+            return null;
+        }
+
+        public static double? ParseDouble(this string source)
+        {
+            double result;
+
+            if (double.TryParse(source.Replace(',', '.'), NumberStyles.Number, CultureInfo.InvariantCulture, out result))
             {
                 return result;
             }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -144,6 +144,18 @@ namespace NzbDrone.Core.Tv
             return seasons;
         }
 
+        private void RescanSeries(Series series)
+        {
+            try
+            {
+                _diskScanService.Scan(series);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Couldn't rescan series {0}", series);
+            }
+        }
+
         public void Execute(RefreshSeriesCommand message)
         {
             _eventAggregator.PublishEvent(new SeriesRefreshStartingEvent(message.Trigger == CommandTrigger.Manual));
@@ -151,7 +163,17 @@ namespace NzbDrone.Core.Tv
             if (message.SeriesId.HasValue)
             {
                 var series = _seriesService.GetSeries(message.SeriesId.Value);
-                RefreshSeriesInfo(series);
+
+                try
+                {
+                    RefreshSeriesInfo(series);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, "Couldn't refresh info for {0}", series);
+                    RescanSeries(series);
+                    throw;
+                }
             }
             else
             {
@@ -168,20 +190,14 @@ namespace NzbDrone.Core.Tv
                         catch (Exception e)
                         {
                             _logger.Error(e, "Couldn't refresh info for {0}", series);
+                            RescanSeries(series);
                         }
                     }
 
                     else
                     {
-                        try
-                        {
-                            _logger.Info("Skipping refresh of series: {0}", series.Title);
-                            _diskScanService.Scan(series);
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.Error(e, "Couldn't rescan series {0}", series);
-                        }
+                        _logger.Info("Skipping refresh of series: {0}", series.Title);
+                        RescanSeries(series);
                     }
                 }
             }

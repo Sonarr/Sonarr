@@ -245,7 +245,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 var file = message.Files[i];
                 var series = _seriesService.GetSeries(file.SeriesId);
                 var episodes = _episodeService.GetEpisodes(file.EpisodeIds);
-                var parsedEpisodeInfo = Parser.Parser.ParsePath(file.Path) ?? new ParsedEpisodeInfo();
+                var fileEpisodeInfo = Parser.Parser.ParsePath(file.Path) ?? new ParsedEpisodeInfo();
                 var mediaInfo = _videoFileInfoReader.GetMediaInfo(file.Path);
                 var existingFile = series.Path.IsParentPath(file.Path);
 
@@ -254,7 +254,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     ExistingFile = false,
                     Episodes = episodes,
                     MediaInfo = mediaInfo,
-                    ParsedEpisodeInfo = parsedEpisodeInfo,
+                    FileEpisodeInfo = fileEpisodeInfo,
                     Path = file.Path,
                     Quality = file.Quality,
                     Series = series,

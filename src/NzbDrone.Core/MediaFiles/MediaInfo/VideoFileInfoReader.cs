@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using NLog;
@@ -35,6 +35,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             MediaInfo mediaInfo = null;
+
+            // TODO: Cache media info by path, mtime and length so we don't need to read files multiple times
 
             try
             {

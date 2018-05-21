@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
@@ -28,7 +28,15 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         public void Register()
         {
-            _diskProvider.EnsureFolder(_appFolderInfo.AppDataFolder);
+            try
+            {
+                _diskProvider.EnsureFolder(_appFolderInfo.AppDataFolder);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new SonarrStartupException("Cannot create AppFolder, Access to the path {0} is denied", _appFolderInfo.AppDataFolder);
+            }
+            
 
             if (OsInfo.IsWindows)
             {

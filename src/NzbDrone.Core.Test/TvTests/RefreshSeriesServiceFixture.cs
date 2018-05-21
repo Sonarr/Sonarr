@@ -1,11 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -179,6 +182,36 @@ namespace NzbDrone.Core.Test.TvTests
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2), It.IsAny<bool>()));
 
+        }
+
+        [Test]
+        public void should_rescan_series_if_updating_fails()
+        {
+            Mocker.GetMock<IProvideSeriesInfo>()
+                  .Setup(s => s.GetSeriesInfo(_series.Id))
+                  .Throws(new IOException());
+
+            Assert.Throws<IOException>(() => Subject.Execute(new RefreshSeriesCommand(_series.Id)));
+
+            Mocker.GetMock<IDiskScanService>()
+                  .Verify(v => v.Scan(_series), Times.Once());
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_not_rescan_series_if_updating_fails_with_series_not_found()
+        {
+            Mocker.GetMock<IProvideSeriesInfo>()
+                  .Setup(s => s.GetSeriesInfo(_series.Id))
+                  .Throws(new SeriesNotFoundException(_series.Id));
+
+            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+
+            Mocker.GetMock<IDiskScanService>()
+                  .Verify(v => v.Scan(_series), Times.Never());
+
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }

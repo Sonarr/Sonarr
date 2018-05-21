@@ -4,6 +4,7 @@ using System.Linq;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Validation;
 using NzbDrone.Common;
+using NzbDrone.Common.TPL;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -17,6 +18,8 @@ namespace NzbDrone.Api.Commands
     {
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly IServiceFactory _serviceFactory;
+        private readonly Debouncer _debouncer;
+        private readonly Dictionary<int, CommandResource> _pendingUpdates;
 
         public CommandModule(IManageCommandQueue commandQueueManager,
                              IBroadcastSignalRMessage signalRBroadcaster,
@@ -31,6 +34,10 @@ namespace NzbDrone.Api.Commands
             GetResourceAll = GetStartedCommands;
 
             PostValidator.RuleFor(c => c.Name).NotBlank();
+
+            _debouncer = new Debouncer(SendUpdates, TimeSpan.FromSeconds(0.1));
+            _pendingUpdates = new Dictionary<int, CommandResource>();
+
         }
 
         private CommandResource GetCommand(int id)
@@ -59,7 +66,25 @@ namespace NzbDrone.Api.Commands
         {
             if (message.Command.Body.SendUpdatesToClient)
             {
-                BroadcastResourceChange(ModelAction.Updated, message.Command.ToResource());
+                lock (_pendingUpdates)
+                {
+                    _pendingUpdates[message.Command.Id] = message.Command.ToResource();
+                }
+                _debouncer.Execute();
+            }
+        }
+
+        private void SendUpdates()
+        {
+            lock (_pendingUpdates)
+            {
+                var pendingUpdates = _pendingUpdates.Values.ToArray();
+                _pendingUpdates.Clear();
+
+                foreach (var pendingUpdate in pendingUpdates)
+                {
+                    BroadcastResourceChange(ModelAction.Updated, pendingUpdate);
+                }
             }
         }
     }

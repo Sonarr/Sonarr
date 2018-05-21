@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
     public class TorrentRssIndexerRequestGenerator : IIndexerRequestGenerator
     {
         public TorrentRssIndexerSettings Settings { get; set; }
-        
+
         public virtual IndexerPageableRequestChain GetRecentRequests()
         {
             var pageableRequests = new IndexerPageableRequestChain();
@@ -29,6 +29,11 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         }
 
         public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
         {
             return new IndexerPageableRequestChain();
         }

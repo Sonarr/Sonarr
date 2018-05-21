@@ -52,6 +52,15 @@ namespace NzbDrone.Core.Indexers.Rarbg
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            pageableRequests.Add(GetPagedRequests("search", searchCriteria.Series.TvdbId, "\"{0}\"", searchCriteria.Year));
+
+            return pageableRequests;
+        }
+
         public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
             return new IndexerPageableRequestChain();

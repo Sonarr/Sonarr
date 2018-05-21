@@ -12,6 +12,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using System.Linq;
 using NzbDrone.Common.TPL;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.IndexerSearch
 {
@@ -73,7 +74,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             if (episode.SeasonNumber == 0)
             {
-                // search for special episodes in season 0 
+                // search for special episodes in season 0
                 return SearchSpecial(series, new List<Episode> { episode }, userInvokedSearch);
             }
 
@@ -95,9 +96,14 @@ namespace NzbDrone.Core.IndexerSearch
                 return SearchAnimeSeason(series, episodes, userInvokedSearch);
             }
 
+            if (series.SeriesType == SeriesTypes.Daily)
+            {
+                return SearchDailySeason(series, episodes, userInvokedSearch);
+            }
+
             if (seasonNumber == 0)
             {
-                // search for special episodes in season 0 
+                // search for special episodes in season 0
                 return SearchSpecial(series, episodes, userInvokedSearch);
             }
 
@@ -223,6 +229,30 @@ namespace NzbDrone.Core.IndexerSearch
             foreach (var episode in episodes.Where(e => e.Monitored))
             {
                 downloadDecisions.AddRange(SearchAnime(series, episode, userInvokedSearch));
+            }
+
+            return downloadDecisions;
+        }
+
+        private List<DownloadDecision> SearchDailySeason(Series series, List<Episode> episodes, bool userInvokedSearch)
+        {
+            var downloadDecisions = new List<DownloadDecision>();
+            foreach (var yearGroup in episodes.Where(v => v.Monitored && v.AirDate.IsNotNullOrWhiteSpace())
+                                              .GroupBy(v => DateTime.ParseExact(v.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture).Year))
+            {
+                var yearEpisodes = yearGroup.ToList();
+
+                if (yearEpisodes.Count > 1)
+                {
+                    var searchSpec = Get<DailySeasonSearchCriteria>(series, yearEpisodes, userInvokedSearch);
+                    searchSpec.Year = yearGroup.Key;
+
+                    downloadDecisions.AddRange(Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec));
+                }
+                else
+                {
+                    downloadDecisions.AddRange(SearchDaily(series, yearEpisodes.First(), userInvokedSearch));
+                }
             }
 
             return downloadDecisions;

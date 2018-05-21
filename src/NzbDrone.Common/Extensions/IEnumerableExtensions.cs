@@ -51,6 +51,34 @@ namespace NzbDrone.Common.Extensions
             }
         }
 
+        public static Dictionary<TKey, TItem> ToDictionaryIgnoreDuplicates<TItem, TKey>(this IEnumerable<TItem> src, Func<TItem, TKey> keySelector)
+        {
+            var result = new Dictionary<TKey, TItem>();
+            foreach (var item in src)
+            {
+                var key = keySelector(item);
+                if (!result.ContainsKey(key))
+                {
+                    result[key] = item;
+                }
+            }
+            return result;
+        }
+
+        public static Dictionary<TKey, TValue> ToDictionaryIgnoreDuplicates<TItem, TKey, TValue>(this IEnumerable<TItem> src, Func<TItem, TKey> keySelector, Func<TItem, TValue> valueSelector)
+        {
+            var result = new Dictionary<TKey, TValue>();
+            foreach (var item in src)
+            {
+                var key = keySelector(item);
+                if (!result.ContainsKey(key))
+                {
+                    result[key] = valueSelector(item);
+                }
+            }
+            return result;
+        }
+
         public static void AddIfNotNull<TSource>(this List<TSource> source, TSource item)
         {
             if (item == null)

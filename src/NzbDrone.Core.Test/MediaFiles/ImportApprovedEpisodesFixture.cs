@@ -58,10 +58,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                                                    Episodes = new List<Episode> { episode },
                                                    Path = Path.Combine(series.Path, "30 Rock - S01E01 - Pilot.avi"),
                                                    Quality = new QualityModel(Quality.Bluray720p),
-                                                   ParsedEpisodeInfo = new ParsedEpisodeInfo
-                                                                       {
-                                                                           ReleaseGroup = "DRONE"
-                                                                       }
+                                                   ReleaseGroup = "DRONE"
                                                }));
             }
 

@@ -1,16 +1,17 @@
-﻿using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.IndexerSearch;
-using NzbDrone.Core.Test.Framework;
-using FizzWare.NBuilder;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.IndexerSearchTests
 {
@@ -55,7 +56,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                   .Returns(new List<string>());
         }
 
-        private void WithEpisode(int seasonNumber, int episodeNumber, int? sceneSeasonNumber, int? sceneEpisodeNumber)
+        private void WithEpisode(int seasonNumber, int episodeNumber, int? sceneSeasonNumber, int? sceneEpisodeNumber, string airDate = null)
         {
             var episode = Builder<Episode>.CreateNew()
                 .With(v => v.SeriesId == _xemSeries.Id)
@@ -64,6 +65,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .With(v => v.EpisodeNumber, episodeNumber)
                 .With(v => v.SceneSeasonNumber, sceneSeasonNumber)
                 .With(v => v.SceneEpisodeNumber, sceneEpisodeNumber)
+                .With(v => v.AirDate = (airDate ?? $"{2000 + seasonNumber}-{episodeNumber:00}-05"))
                 .With(v => v.Monitored = true)
                 .Build();
 
@@ -108,8 +110,20 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .Callback<SeasonSearchCriteria>(s => result.Add(s))
                 .Returns(new List<Parser.Model.ReleaseInfo>());
 
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<DailyEpisodeSearchCriteria>()))
+                .Callback<DailyEpisodeSearchCriteria>(s => result.Add(s))
+                .Returns(new List<Parser.Model.ReleaseInfo>());
+
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<DailySeasonSearchCriteria>()))
+                .Callback<DailySeasonSearchCriteria>(s => result.Add(s))
+                .Returns(new List<Parser.Model.ReleaseInfo>());
+
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeEpisodeSearchCriteria>()))
                 .Callback<AnimeEpisodeSearchCriteria>(s => result.Add(s))
+                .Returns(new List<Parser.Model.ReleaseInfo>());
+
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<SpecialEpisodeSearchCriteria>()))
+                .Callback<SpecialEpisodeSearchCriteria>(s => result.Add(s))
                 .Returns(new List<Parser.Model.ReleaseInfo>());
 
             return result;
@@ -247,6 +261,68 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
             criteria.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void season_search_for_daily_should_search_multiple_years()
+        {
+            WithEpisode(1, 1, null, null, "2005-12-30");
+            WithEpisode(1, 2, null, null, "2005-12-31");
+            WithEpisode(1, 3, null, null, "2006-01-01");
+            WithEpisode(1, 4, null, null, "2006-01-02");
+            _xemSeries.SeriesType = SeriesTypes.Daily;
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true);
+
+            var criteria = allCriteria.OfType<DailySeasonSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(2);
+            criteria[0].Year.Should().Be(2005);
+            criteria[1].Year.Should().Be(2006);
+        }
+
+        [Test]
+        public void season_search_for_daily_should_search_single_episode_if_possible()
+        {
+            WithEpisode(1, 1, null, null, "2005-12-30");
+            WithEpisode(1, 2, null, null, "2005-12-31");
+            WithEpisode(1, 3, null, null, "2006-01-01");
+            _xemSeries.SeriesType = SeriesTypes.Daily;
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true);
+
+            var criteria1 = allCriteria.OfType<DailySeasonSearchCriteria>().ToList();
+            var criteria2 = allCriteria.OfType<DailyEpisodeSearchCriteria>().ToList();
+
+            criteria1.Count.Should().Be(1);
+            criteria1[0].Year.Should().Be(2005);
+
+            criteria2.Count.Should().Be(1);
+            criteria2[0].AirDate.Should().Be(new DateTime(2006, 1, 1));
+        }
+
+        [Test]
+        public void season_search_for_daily_should_not_search_for_unmonitored_episodes()
+        {
+            WithEpisode(1, 1, null, null, "2005-12-30");
+            WithEpisode(1, 2, null, null, "2005-12-31");
+            WithEpisode(1, 3, null, null, "2006-01-01");
+            _xemSeries.SeriesType = SeriesTypes.Daily;
+           _xemEpisodes[0].Monitored = false;
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true);
+
+            var criteria1 = allCriteria.OfType<DailySeasonSearchCriteria>().ToList();
+            var criteria2 = allCriteria.OfType<DailyEpisodeSearchCriteria>().ToList();
+
+            criteria1.Should().HaveCount(0);
+            criteria2.Should().HaveCount(2);
         }
 
         [Test]

@@ -73,6 +73,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "0"},
+                        { "size_uploaded", "0"},
                         { "speed_download", "0" }
                     }
                 }
@@ -96,6 +97,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "1000"},
+                        { "size_uploaded", "100"},
                         { "speed_download", "0" }
                     },
                 }
@@ -119,6 +121,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "1000"},
+                        { "size_uploaded", "100"},
                         { "speed_download", "0" }
                     }
                 }
@@ -142,6 +145,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "100"},
+                        { "size_uploaded", "10"},
                         { "speed_download", "50" }
                     }
                 }
@@ -165,6 +169,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "10"},
+                        { "size_uploaded", "1"},
                         { "speed_download", "0" }
                     }
                 }
@@ -188,6 +193,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "1000"},
+                        { "size_uploaded", "100"},
                         { "speed_download", "0" }
                     }
                 }
@@ -211,6 +217,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "1000"},
+                        { "size_uploaded", "100"},
                         { "speed_download", "0" }
                     }
                 }
@@ -234,6 +241,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "1000"},
+                        { "size_uploaded", "100"},
                         { "speed_download", "0" }
                     }
                 }
@@ -257,6 +265,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                     Transfer = new Dictionary<string, string>
                     {
                         { "size_downloaded", "1000"},
+                        { "size_uploaded", "100"},
                         { "speed_download", "0" }
                     }
                 }

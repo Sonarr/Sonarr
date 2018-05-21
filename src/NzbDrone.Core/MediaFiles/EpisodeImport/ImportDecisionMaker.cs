@@ -7,12 +7,9 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Parser;
+using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.MediaFiles.MediaInfo;
-
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
@@ -25,26 +22,23 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     public class ImportDecisionMaker : IMakeImportDecision
     {
         private readonly IEnumerable<IImportDecisionEngineSpecification> _specifications;
-        private readonly IParsingService _parsingService;
         private readonly IMediaFileService _mediaFileService;
+        private readonly IAugmentingService _augmentingService;
         private readonly IDiskProvider _diskProvider;
-        private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IDetectSample _detectSample;
         private readonly Logger _logger;
 
         public ImportDecisionMaker(IEnumerable<IImportDecisionEngineSpecification> specifications,
-                                   IParsingService parsingService,
                                    IMediaFileService mediaFileService,
+                                   IAugmentingService augmentingService,
                                    IDiskProvider diskProvider,
-                                   IVideoFileInfoReader videoFileInfoReader,
                                    IDetectSample detectSample,
                                    Logger logger)
         {
             _specifications = specifications;
-            _parsingService = parsingService;
             _mediaFileService = mediaFileService;
+            _augmentingService = augmentingService;
             _diskProvider = diskProvider;
-            _videoFileInfoReader = videoFileInfoReader;
             _detectSample = detectSample;
             _logger = logger;
         }
@@ -60,78 +54,82 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             _logger.Debug("Analyzing {0}/{1} files.", newFiles.Count, videoFiles.Count());
 
-            var shouldUseFolderName = ShouldUseFolderName(videoFiles, series, folderInfo);
+            ParsedEpisodeInfo downloadClientItemInfo = null;
+
+            if (downloadClientItem != null)
+            {
+                downloadClientItemInfo = Parser.Parser.ParseTitle(downloadClientItem.Title);
+            }
+
+            var nonSampleVideoFileCount = GetNonSampleVideoFileCount(newFiles, series, downloadClientItemInfo, folderInfo);
+
             var decisions = new List<ImportDecision>();
 
             foreach (var file in newFiles)
             {
-                decisions.AddIfNotNull(GetDecision(file, series, downloadClientItem, folderInfo, sceneSource, shouldUseFolderName));
+                var localEpisode = new LocalEpisode
+                                   {
+                                       Series = series,
+                                       DownloadClientEpisodeInfo = downloadClientItemInfo,
+                                       FolderEpisodeInfo = folderInfo,
+                                       Path = file,
+                                       SceneSource = sceneSource,
+                                       ExistingFile = series.Path.IsParentPath(file)
+                                   };
+
+                decisions.AddIfNotNull(GetDecision(localEpisode, downloadClientItem, nonSampleVideoFileCount > 1));
             }
 
             return decisions;
         }
 
-        private ImportDecision GetDecision(string file, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource, bool shouldUseFolderName)
+        private ImportDecision GetDecision(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
         {
             ImportDecision decision = null;
 
+            var fileEpisodeInfo = Parser.Parser.ParsePath(localEpisode.Path);
+
+            localEpisode.FileEpisodeInfo = fileEpisodeInfo;
+            localEpisode.Size = _diskProvider.GetFileSize(localEpisode.Path);
+
             try
             {
-                var localEpisode = _parsingService.GetLocalEpisode(file, series, shouldUseFolderName ? folderInfo : null, sceneSource);
+                _augmentingService.Augment(localEpisode, otherFiles);
 
-                if (localEpisode != null)
+                if (localEpisode.Episodes.Empty())
                 {
-                    localEpisode.Quality = GetQuality(folderInfo, localEpisode.Quality, series);
-                    localEpisode.Size = _diskProvider.GetFileSize(file);
-
-                    _logger.Debug("Size: {0}", localEpisode.Size);
-
-                    //TODO: make it so media info doesn't ruin the import process of a new series
-                    if (sceneSource)
+                    if (IsPartialSeason(localEpisode))
                     {
-                        localEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(file);
+                        decision = new ImportDecision(localEpisode, new Rejection("Partial season packs are not supported"));
                     }
-
-                    if (localEpisode.Episodes.Empty())
+                    else if (IsSeasonExtra(localEpisode))
                     {
-                        if (localEpisode.ParsedEpisodeInfo.IsPartialSeason)
-                        {
-                            decision = new ImportDecision(localEpisode, new Rejection("Partial season packs are not supported"));
-                        }
-                        else if (localEpisode.ParsedEpisodeInfo.IsSeasonExtra)
-                        {
-                            decision = new ImportDecision(localEpisode, new Rejection("Extras are not supported"));
-                        }
-                        else
-                        {
-                            decision = new ImportDecision(localEpisode, new Rejection("Invalid season or episode"));
-                        }
+                        decision = new ImportDecision(localEpisode, new Rejection("Extras are not supported"));
                     }
                     else
                     {
-                        decision = GetDecision(localEpisode, downloadClientItem);
+                        decision = new ImportDecision(localEpisode, new Rejection("Invalid season or episode"));
                     }
                 }
-
                 else
                 {
-                    localEpisode = new LocalEpisode();
-                    localEpisode.Path = file;
-
-                    decision = new ImportDecision(localEpisode, new Rejection("Unable to parse file"));
+                    decision = GetDecision(localEpisode, downloadClientItem);
                 }
             }
-            catch (Exception e)
+            catch (AugmentingFailedException)
             {
-                _logger.Error(e, "Couldn't import file. {0}", file);
+                decision = new ImportDecision(localEpisode, new Rejection("Unable to parse file"));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Couldn't import file. {0}", localEpisode.Path);
 
-                var localEpisode = new LocalEpisode { Path = file };
                 decision = new ImportDecision(localEpisode, new Rejection("Unexpected error processing file"));
             }
 
             if (decision == null)
             {
-                _logger.Error("Unable to make a decision on {0}", file);
+                _logger.Error("Unable to make a decision on {0}", localEpisode.Path);
             }
             else if (decision.Rejections.Any())
             {
@@ -175,65 +173,66 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             return null;
         }
 
-        private bool ShouldUseFolderName(List<string> videoFiles, Series series, ParsedEpisodeInfo folderInfo)
+        private int GetNonSampleVideoFileCount(List<string> videoFiles, Series series, ParsedEpisodeInfo downloadClientItemInfo, ParsedEpisodeInfo folderInfo)
         {
-            if (folderInfo == null)
-            {
-                return false;
-            }
-
-            if (folderInfo.FullSeason)
-            {
-                return false;
-            }
+            var isPossibleSpecialEpisode = downloadClientItemInfo?.IsPossibleSpecialEpisode ?? false;
+            // If we might already have a special, don't try to get it from the folder info.
+            isPossibleSpecialEpisode = isPossibleSpecialEpisode || (folderInfo?.IsPossibleSpecialEpisode ?? false);
 
             return videoFiles.Count(file =>
             {
-                var sample = _detectSample.IsSample(series, file, folderInfo.IsPossibleSpecialEpisode);
+                var sample = _detectSample.IsSample(series, file, isPossibleSpecialEpisode);
 
                 if (sample == DetectSampleResult.Sample)
                 {
                     return false;
                 }
 
-                if (SceneChecker.IsSceneTitle(Path.GetFileName(file)))
-                {
-                    return false;
-                }
-
                 return true;
-            }) == 1;
+            });
         }
 
-        private QualityModel GetQuality(ParsedEpisodeInfo folderInfo, QualityModel fileQuality, Series series)
+        private bool IsPartialSeason(LocalEpisode localEpisode)
         {
-            if (UseFolderQuality(folderInfo, fileQuality, series))
-            {
-                _logger.Debug("Using quality from folder: {0}", folderInfo.Quality);
-                return folderInfo.Quality;
-            }
+            var downloadClientEpisodeInfo = localEpisode.DownloadClientEpisodeInfo;
+            var folderEpisodeInfo = localEpisode.FolderEpisodeInfo;
+            var fileEpisodeInfo = localEpisode.FileEpisodeInfo;
 
-            return fileQuality;
-        }
-
-        private bool UseFolderQuality(ParsedEpisodeInfo folderInfo, QualityModel fileQuality, Series series)
-        {
-            if (folderInfo == null)
-            {
-                return false;
-            }
-
-            if (folderInfo.Quality.Quality == Quality.Unknown)
-            {
-                return false;
-            }
-
-            if (fileQuality.QualitySource == QualitySource.Extension)
+            if (downloadClientEpisodeInfo != null && downloadClientEpisodeInfo.IsPartialSeason)
             {
                 return true;
             }
 
-            if (new QualityModelComparer(series.Profile).Compare(folderInfo.Quality, fileQuality) > 0)
+            if (folderEpisodeInfo != null && folderEpisodeInfo.IsPartialSeason)
+            {
+                return true;
+            }
+
+            if (fileEpisodeInfo != null && fileEpisodeInfo.IsPartialSeason)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsSeasonExtra(LocalEpisode localEpisode)
+        {
+            var downloadClientEpisodeInfo = localEpisode.DownloadClientEpisodeInfo;
+            var folderEpisodeInfo = localEpisode.FolderEpisodeInfo;
+            var fileEpisodeInfo = localEpisode.FileEpisodeInfo;
+
+            if (downloadClientEpisodeInfo != null && downloadClientEpisodeInfo.IsSeasonExtra)
+            {
+                return true;
+            }
+
+            if (folderEpisodeInfo != null && folderEpisodeInfo.IsSeasonExtra)
+            {
+                return true;
+            }
+
+            if (fileEpisodeInfo != null && fileEpisodeInfo.IsSeasonExtra)
             {
                 return true;
             }

@@ -88,6 +88,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     TotalSize = torrent.Size,
                     RemainingSize = GetRemainingSize(torrent),
                     RemainingTime = GetRemainingTime(torrent),
+                    SeedRatio = GetSeedRatio(torrent),
                     Status = GetStatus(torrent),
                     Message = GetMessage(torrent),
                     CanMoveFiles = IsCompleted(torrent),
@@ -121,7 +122,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             {
                 _logger.Debug(e, "Failed to get config from Download Station");
 
-                throw e;
+                throw;
             }
         }
 
@@ -276,6 +277,19 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             var remainingSize = GetRemainingSize(torrent);
 
             return TimeSpan.FromSeconds(remainingSize / downloadSpeed);
+        }
+
+        protected double? GetSeedRatio(DownloadStationTask torrent)
+        {
+            var downloaded = torrent.Additional.Transfer["size_downloaded"].ParseInt64();
+            var uploaded = torrent.Additional.Transfer["size_uploaded"].ParseInt64();
+
+            if (downloaded.HasValue && uploaded.HasValue)
+            {
+                return downloaded <= 0 ? 0 : (double)uploaded.Value / downloaded.Value;
+            }
+
+            return null;
         }
 
         protected ValidationFailure TestOutputPath()
