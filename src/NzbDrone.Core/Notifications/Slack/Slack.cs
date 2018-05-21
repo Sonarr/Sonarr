@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Notifications.FailedMessage;
 using NzbDrone.Core.Notifications.Slack.Payloads;
 using NzbDrone.Core.Rest;
 using NzbDrone.Core.Tv;
