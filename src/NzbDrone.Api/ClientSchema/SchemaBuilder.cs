@@ -100,6 +100,7 @@ namespace NzbDrone.Api.ClientSchema
                         HelpLink = fieldAttribute.HelpLink,
                         Order = fieldAttribute.Order,
                         Advanced = fieldAttribute.Advanced,
+                        Persisted = fieldAttribute.Persisted,
                         Type = fieldAttribute.Type.ToString().ToLowerInvariant()
                     };
 

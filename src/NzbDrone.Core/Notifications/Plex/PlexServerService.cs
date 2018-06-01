@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Notifications.Plex
     public interface IPlexServerService
     {
         void UpdateLibrary(Series series, PlexServerSettings settings);
+        string Authenticate(PlexServerSettings settings);
         ValidationFailure Test(PlexServerSettings settings);
     }
 
@@ -114,8 +115,6 @@ namespace NzbDrone.Core.Notifications.Plex
             return version;
         }
 
-        
-
         private List<PlexPreference> GetPreferences(PlexServerSettings settings)
         {
             _logger.Debug("Getting preferences from Plex host: {0}", settings.Host);
@@ -162,8 +161,17 @@ namespace NzbDrone.Core.Notifications.Plex
             return _plexServerProxy.GetMetadataId(sectionId, series.TvdbId, language, settings);
         }
 
+        public string Authenticate(PlexServerSettings settings)
+        {
+            return _plexServerProxy.Authenticate(settings);
+        }
+
         public ValidationFailure Test(PlexServerSettings settings)
         {
+            // Unset Username and Password so authentication relies on the AuthToken
+            settings.Username = null;
+            settings.Password = null;
+
             try
             {
                 var sections = GetSections(settings);
@@ -176,7 +184,7 @@ namespace NzbDrone.Core.Notifications.Plex
             catch(PlexAuthenticationException ex)
             {
                 _logger.Error(ex, "Unable to connect to Plex Server");
-                return new ValidationFailure("Username", "Incorrect username or password");
+                return new ValidationFailure("AuthToken", "Auth Token is required");
             }
             catch (Exception ex)
             {

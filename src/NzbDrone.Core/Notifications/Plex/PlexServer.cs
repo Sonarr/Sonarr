@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
@@ -33,6 +34,23 @@ namespace NzbDrone.Core.Notifications.Plex
             {
                 _plexServerService.UpdateLibrary(series, Settings);
             }
+        }
+
+        public override object RequestAction(string action, IDictionary<string, string> query)
+        {
+            if (action == "authenticate")
+            {
+                Settings.Validate().Filter("Username", "Password").ThrowOnError();
+
+                var authToken = _plexServerService.Authenticate(Settings);
+
+                return new
+                       {
+                           authToken
+                       };
+            }
+
+            return new { };
         }
 
         public override ValidationResult Test()

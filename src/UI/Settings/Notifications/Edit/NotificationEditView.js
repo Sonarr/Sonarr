@@ -27,7 +27,8 @@ var view = Marionette.ItemView.extend({
     events : {
         'click .x-back'         : '_back',
         'change .x-on-download' : '_onDownloadChanged',
-        'click .AuthorizeNotification' : '_onAuthorizeNotification'
+        'click .AuthorizeNotification' : '_onAuthorizeNotification',
+        'click .Authenticate' : '_onAuthenticate'
     },
 
     _deleteView : DeleteView,
@@ -104,12 +105,27 @@ var view = Marionette.ItemView.extend({
                 self.model.setFieldValue('AccessToken', response.accessToken);
                 self.model.setFieldValue('AccessTokenSecret', response.accessTokenSecret);
             });
-            
+
         promise.always(function() {
                 self.ui.indicator.hide();
             });
     },
-    
+
+    _onAuthenticate : function() {
+        this.ui.indicator.show();
+
+        var self = this;
+
+        var promise = this.model.requestAction('authenticate')
+            .then(function(response) {
+                self.model.setFieldValue('AuthToken', response.authToken);
+            });
+
+        promise.always(function() {
+                self.ui.indicator.hide();
+            });
+    },
+
     _showOAuthWindow : function(oauthUrl) {
         var promise = $.Deferred();
     

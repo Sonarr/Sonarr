@@ -7,11 +7,19 @@ using Newtonsoft.Json.Converters;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
-    public class EmbeddedDocumentConverter : IConverter
+    public class EmbeddedDocumentConverter : EmbeddedDocumentConverterBase<CamelCasePropertyNamesContractResolver>
+    {
+        public EmbeddedDocumentConverter(params JsonConverter[] converters)
+            : base(converters)
+        {
+        }
+    }
+
+    public class EmbeddedDocumentConverterBase<TContractResolver> : IConverter where TContractResolver : IContractResolver, new()
     {
         private readonly JsonSerializerSettings SerializerSetting;
 
-        public EmbeddedDocumentConverter(params JsonConverter[] converters)
+        public EmbeddedDocumentConverterBase(params JsonConverter[] converters)
         {
             SerializerSetting = new JsonSerializerSettings
             {
@@ -19,7 +27,7 @@ namespace NzbDrone.Core.Datastore.Converters
                 NullValueHandling = NullValueHandling.Ignore,
                 Formatting = Formatting.Indented,
                 DefaultValueHandling = DefaultValueHandling.Include,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new TContractResolver()
             };
 
             SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
