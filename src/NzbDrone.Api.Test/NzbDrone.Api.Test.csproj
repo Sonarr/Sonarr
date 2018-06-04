@@ -60,11 +60,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
@@ -74,14 +71,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
-      <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
-      <Name>Marr.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
-      <Project>{FD286DF8-2D3A-4394-8AD5-443FADE55FB2}</Project>
-      <Name>NzbDrone.Api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>

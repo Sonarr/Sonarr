@@ -60,17 +60,10 @@
       <HintPath>..\packages\NUnit.3.6.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheTests\CachedDictionaryFixture.cs" />
@@ -130,18 +123,6 @@
     <ProjectReference Include="..\NzbDrone.Host\NzbDrone.Host.csproj">
       <Project>{95C11A9E-56ED-456A-8447-2C89C1139266}</Project>
       <Name>NzbDrone.Host</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Mono\NzbDrone.Mono.csproj">
-      <Project>{15ad7579-a314-4626-b556-663f51d97cd1}</Project>
-      <Name>NzbDrone.Mono</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Windows\NzbDrone.Windows.csproj">
-      <Project>{911284d3-f130-459e-836c-2430b6fbf21d}</Project>
-      <Name>NzbDrone.Windows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone\NzbDrone.csproj">
-      <Project>{D12F7F2F-8A3C-415F-88FA-6DD061A84869}</Project>
-      <Name>NzbDrone</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
       <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>

@@ -97,16 +97,11 @@
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Prowlin">
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
     </Reference>
@@ -453,10 +448,6 @@
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
       <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
       <Name>NzbDrone.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.SignalR\NzbDrone.SignalR.csproj">
-      <Project>{7C2CC69F-5CA0-4E5C-85CB-983F9F6C3B36}</Project>
-      <Name>NzbDrone.SignalR</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
       <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
