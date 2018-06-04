@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertProfile(IDbConnection conn, IDbTransaction tran)
         {
-            var updater = new ProfileUpdater116(conn, tran);
+            var updater = new ProfileUpdater117(conn, tran);
 
             updater.CreateGroupAt(8, 1000, "WEB 480p", new[] {12, 8}); // Group WEBRip480p with WEBDL480p
             updater.CreateGroupAt(2, 1001, "DVD", new[] {2, 13}); // Group Bluray480p with DVD
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Datastore.Migration
         }
     }
 
-    public class ProfileUpdater116
+    public class ProfileUpdater117
     {
         private readonly IDbConnection _connection;
         private readonly IDbTransaction _transaction;
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Datastore.Migration
         private List<Profile117> _profiles;
         private HashSet<Profile117> _changedProfiles = new HashSet<Profile117>();
 
-        public ProfileUpdater116(IDbConnection conn, IDbTransaction tran)
+        public ProfileUpdater117(IDbConnection conn, IDbTransaction tran)
         {
             _connection = conn;
             _transaction = tran;
