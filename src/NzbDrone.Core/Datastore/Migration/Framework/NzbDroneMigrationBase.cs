@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using FluentMigrator;
 using NLog;
 using NzbDrone.Common.Instrumentation;

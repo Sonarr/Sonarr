@@ -75,9 +75,6 @@
     <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.3.1.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Owin.Hosting, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Hosting.3.1.0\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
     </Reference>
@@ -103,11 +100,7 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="Interop.NetFwTypeLib">
       <HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
@@ -116,8 +109,6 @@
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
@@ -185,10 +176,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
-      <Project>{FD286DF8-2D3A-4394-8AD5-443FADE55FB2}</Project>
-      <Name>NzbDrone.Api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
@@ -200,10 +187,6 @@
     <ProjectReference Include="..\NzbDrone.SignalR\NzbDrone.SignalR.csproj">
       <Project>{7C2CC69F-5CA0-4E5C-85CB-983F9F6C3B36}</Project>
       <Name>NzbDrone.SignalR</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj">
-      <Project>{7140ff1f-79be-492f-9188-b21a050bf708}</Project>
-      <Name>Sonarr.Api.V3</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj">
       <Project>{5370bff7-1bd7-46bc-af06-7d9ea5cda1d6}</Project>
