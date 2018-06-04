@@ -1,5 +1,5 @@
 #! /bin/bash
-msBuild='/c/Program Files (x86)/MSBuild/14.0/Bin'
+msBuildVersion='15.0'
 outputFolder='./_output'
 outputFolderLinux='./_output_linux'
 outputFolderMacOS='./_output_macos'
@@ -12,6 +12,8 @@ updateFolder=$outputFolder/Sonarr.Update
 updateFolderMono=$outputFolderLinux/Sonarr.Update
 
 nuget='tools/nuget/nuget.exe';
+vswhere='tools/vswhere/vswhere.exe';
+
 CheckExitCode()
 {
     "$@"
@@ -62,8 +64,14 @@ CleanFolder()
 
 BuildWithMSBuild()
 {
+    installationPath=`$vswhere -latest -products \* -requires Microsoft.Component.MSBuild -property installationPath`
+    installationPath=${installationPath/C:\\/\/c\/}
+    installationPath=${installationPath//\\/\/}
+    msBuild="$installationPath/MSBuild/$msBuildVersion/Bin"
+    echo $msBuild
+
     export PATH=$msBuild:$PATH
-    CheckExitCode MSBuild.exe $slnFile //t:Clean //m
+    CheckExitCode MSBuild.exe $slnFile //p:Configuration=Release //p:Platform=x86 //t:Clean //m
     $nuget restore $slnFile
     CheckExitCode MSBuild.exe $slnFile //p:Configuration=Release //p:Platform=x86 //t:Build //m //p:AllowedReferenceRelatedFileExtensions=.pdb
 }
