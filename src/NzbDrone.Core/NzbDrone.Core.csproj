@@ -134,6 +134,7 @@
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
+    <Compile Include="Datastore\Migration\122_add_remux_qualities_in_profile.cs" />
     <Compile Include="Indexers\SeedConfigProvider.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
