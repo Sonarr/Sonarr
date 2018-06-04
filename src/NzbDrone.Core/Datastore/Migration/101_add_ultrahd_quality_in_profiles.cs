@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertProfile(IDbConnection conn, IDbTransaction tran)
         {
-            var updater = new ProfileUpdater70(conn, tran);
+            var updater = new ProfileUpdater71(conn, tran);
             updater.AppendQuality(16); // HDTV2160p
             updater.AppendQuality(18); // WEBDL2160p
             updater.AppendQuality(19); // Bluray2160p
