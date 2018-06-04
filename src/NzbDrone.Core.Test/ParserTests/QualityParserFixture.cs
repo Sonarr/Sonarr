@@ -286,12 +286,30 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);
         }
 
+        [TestCase("Yuri!!! on ICE - S01E12[JP BD Remux][ENG subs]", false)]
+        [TestCase("Agents.of.S.H.I.E.L.D.S01E08.The.Well.BluRay.1080p.AVC.DTS-HD.MA.5.1.REMUX-FraMeSToR", false)]
+        [TestCase("Miami.Vice.2x11.Nato.Per.La.Truffa.Bluray.Remux.AVC.1080p.AC3.ITA", false)]
+        [TestCase("Miami.Vice.2x11.Nato.Per.La.Truffa.Bluray.Remux.AVC.AC3.ITA", false)]
+        [TestCase("Arrow.S03E01.The.Calm.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR", false)]
+        public void should_parse_bluray1080p_remux_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.Bluray1080pRemux, proper);
+        }
+
         [TestCase("House.of.Cards.US.s05e13.4K.UHD.Bluray", false)]
         [TestCase("House.of.Cards.US.s05e13.UHD.4K.Bluray", false)]
         [TestCase("[DameDesuYo] Backlog Bundle - Part 1 (BD 4K 8bit FLAC)", false)]
         public void should_parse_bluray2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray2160p, proper);
+        }
+
+        [TestCase("Yuri!!! on ICE - S01E12[JP BD 2160p Remux][ENG subs]", false)]
+        [TestCase("Agents.of.S.H.I.E.L.D.S01E08.The.Well.BluRay.2160p.AVC.DTS-HD.MA.5.1.REMUX-FraMeSToR", false)]
+        [TestCase("Miami.Vice.2x11.Nato.Per.La.Truffa.Bluray.Remux.AVC.2160p.AC3.ITA", false)]
+        public void should_parse_bluray2160p_remux_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.Bluray2160pRemux, proper);
         }
 
         [TestCase("POI S02E11 1080i HDTV DD5.1 MPEG2-TrollHD", false)]
