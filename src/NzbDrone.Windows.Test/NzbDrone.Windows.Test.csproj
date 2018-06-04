@@ -66,11 +66,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
@@ -87,14 +84,6 @@
     <ProjectReference Include="..\NzbDrone.Common.Test\NzbDrone.Common.Test.csproj">
       <Project>{bec74619-ddbb-4fba-b517-d3e20afc9997}</Project>
       <Name>NzbDrone.Common.Test</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
-      <Project>{ff5ee3b6-913b-47ce-9ceb-11c51b4e1205}</Project>
-      <Name>NzbDrone.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Host\NzbDrone.Host.csproj">
-      <Project>{95c11a9e-56ed-456a-8447-2c89c1139266}</Project>
-      <Name>NzbDrone.Host</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
       <Project>{caddfce0-7509-4430-8364-2074e1eefca2}</Project>
