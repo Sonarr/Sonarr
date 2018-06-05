@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
@@ -8,6 +8,7 @@ using NzbDrone.Common.Reflection;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 using Newtonsoft.Json;
+using NzbDrone.Common.Serializer;
 using Sonarr.Http;
 using Sonarr.Http.ClientSchema;
 using Sonarr.Http.Mapping;
@@ -191,7 +192,7 @@ namespace NzbDrone.Api
             var query = ((IDictionary<string, object>)Request.Query.ToDictionary()).ToDictionary(k => k.Key, k => k.Value.ToString());
 
             var data = _providerFactory.RequestAction(providerDefinition, action, query);
-            Response resp = JsonConvert.SerializeObject(data);
+            Response resp = data.ToJson();
             resp.ContentType = "application/json";
             return resp;
         }

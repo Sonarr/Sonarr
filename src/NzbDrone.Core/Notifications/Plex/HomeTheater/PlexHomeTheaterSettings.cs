@@ -1,7 +1,7 @@
 ﻿using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Notifications.Xbmc;
 
-namespace NzbDrone.Core.Notifications.Plex
+namespace NzbDrone.Core.Notifications.Plex.HomeTheater
 {
     public class PlexHomeTheaterSettings : XbmcSettings
     {
