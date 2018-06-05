@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -6,10 +6,9 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Notifications.Plex.Models;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Notifications.Plex
+namespace NzbDrone.Core.Notifications.Plex.Server
 {
     public interface IPlexServerService
     {
@@ -109,12 +108,8 @@ namespace NzbDrone.Core.Notifications.Plex
             var rawVersion = _plexServerProxy.Version(settings);
             var version = new Version(Regex.Match(rawVersion, @"^(\d+[.-]){4}").Value.Trim('.', '-'));
 
-            
-
             return version;
         }
-
-        
 
         private List<PlexPreference> GetPreferences(PlexServerSettings settings)
         {
@@ -176,7 +171,7 @@ namespace NzbDrone.Core.Notifications.Plex
             catch(PlexAuthenticationException ex)
             {
                 _logger.Error(ex, "Unable to connect to Plex Server");
-                return new ValidationFailure("Username", "Incorrect username or password");
+                return new ValidationFailure("AuthToken", "Invalid authentication token");
             }
             catch (Exception ex)
             {

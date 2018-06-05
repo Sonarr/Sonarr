@@ -4,9 +4,8 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Notifications.Xbmc;
-using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Notifications.Plex
+namespace NzbDrone.Core.Notifications.Plex.HomeTheater
 {
     public class PlexHomeTheater : NotificationBase<PlexHomeTheaterSettings>
     {
