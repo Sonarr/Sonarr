@@ -758,6 +758,10 @@
     <Compile Include="Languages\LanguageComparer.cs" />
     <Compile Include="Languages\LanguagesBelowCutoff.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateLanguage.cs" />
+    <Compile Include="Notifications\Plex\PlexTv\PlexTvSignInUrlResponse.cs" />
+    <Compile Include="Notifications\Plex\PlexTv\PlexTvPinResponse.cs" />
+    <Compile Include="Notifications\Plex\PlexTv\PlexTvProxy.cs" />
+    <Compile Include="Notifications\Plex\PlexTv\PlexTvService.cs" />
     <Compile Include="Profiles\Languages\LanguageProfile.cs" />
     <Compile Include="Profiles\Languages\LanguageProfileInUseException.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
@@ -923,18 +927,18 @@
     <Compile Include="Notifications\Boxcar\BoxcarProxy.cs" />
     <Compile Include="Notifications\Boxcar\BoxcarSettings.cs" />
     <Compile Include="Notifications\GrabMessage.cs" />
-    <Compile Include="Notifications\Plex\Models\PlexIdentity.cs" />
-    <Compile Include="Notifications\Plex\Models\PlexResponse.cs" />
-    <Compile Include="Notifications\Plex\Models\PlexPreferences.cs" />
-    <Compile Include="Notifications\Plex\Models\PlexSectionItem.cs" />
-    <Compile Include="Notifications\Plex\Models\PlexSection.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexIdentity.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexResponse.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexPreferences.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexSectionItem.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexSection.cs" />
     <Compile Include="Notifications\Plex\PlexAuthenticationException.cs" />
     <Compile Include="Notifications\CustomScript\CustomScript.cs" />
     <Compile Include="Notifications\CustomScript\CustomScriptSettings.cs" />
     <Compile Include="Notifications\Plex\PlexVersionException.cs" />
-    <Compile Include="Notifications\Plex\PlexHomeTheater.cs" />
-    <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
-    <Compile Include="Notifications\Plex\PlexClientService.cs" />
+    <Compile Include="Notifications\Plex\HomeTheater\PlexHomeTheater.cs" />
+    <Compile Include="Notifications\Plex\HomeTheater\PlexHomeTheaterSettings.cs" />
+    <Compile Include="Notifications\Plex\HomeTheater\PlexClientService.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletException.cs" />
     <Compile Include="Notifications\Slack\Payloads\Attachment.cs" />
     <Compile Include="Notifications\Slack\Payloads\SlackPayload.cs" />
@@ -1025,17 +1029,16 @@
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidPriority.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidProxy.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidSettings.cs" />
-    <Compile Include="Notifications\Plex\PlexClient.cs">
+    <Compile Include="Notifications\Plex\HomeTheater\PlexClient.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
-    <Compile Include="Notifications\Plex\PlexError.cs" />
+    <Compile Include="Notifications\Plex\HomeTheater\PlexClientSettings.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexError.cs" />
     <Compile Include="Notifications\Plex\PlexException.cs" />
-    <Compile Include="Notifications\Plex\PlexServer.cs" />
-    <Compile Include="Notifications\Plex\PlexServerProxy.cs" />
-    <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
-    <Compile Include="Notifications\Plex\PlexServerService.cs" />
-    <Compile Include="Notifications\Plex\PlexUser.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexServer.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexServerProxy.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexServerSettings.cs" />
+    <Compile Include="Notifications\Plex\Server\PlexServerService.cs" />
     <Compile Include="Notifications\Prowl\InvalidApiKeyException.cs" />
     <Compile Include="Notifications\Prowl\Prowl.cs">
       <SubType>Code</SubType>

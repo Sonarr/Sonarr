@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -16,8 +16,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             var schema = DownloadClients.Schema().First(v => v.Implementation == "UsenetBlackhole");
 
             schema.Enable = true;
-            schema.Fields.First(v => v.Name == "WatchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
-            schema.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
+            schema.Fields.First(v => v.Name == "watchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
+            schema.Fields.First(v => v.Name == "nzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
 
             DownloadClients.InvalidPost(schema);
         }
@@ -31,7 +31,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             schema.Enable = true;
             schema.Name = "Test UsenetBlackhole";
-            schema.Fields.First(v => v.Name == "WatchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
+            schema.Fields.First(v => v.Name == "watchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
 
             DownloadClients.InvalidPost(schema);
         }
@@ -45,7 +45,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             schema.Enable = true;
             schema.Name = "Test UsenetBlackhole";
-            schema.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
+            schema.Fields.First(v => v.Name == "nzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
 
             DownloadClients.InvalidPost(schema);
         }
@@ -59,8 +59,8 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             schema.Enable = true;
             schema.Name = "Test UsenetBlackhole";
-            schema.Fields.First(v => v.Name == "WatchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
-            schema.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
+            schema.Fields.First(v => v.Name == "watchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
+            schema.Fields.First(v => v.Name == "nzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
 
             var result = DownloadClients.Post(schema);
 
@@ -99,7 +99,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             EnsureNoDownloadClient();
             var client = EnsureDownloadClient();
 
-            client.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb2");
+            client.Fields.First(v => v.Name == "nzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb2");
             var result = DownloadClients.Put(client);
 
             result.Should().NotBeNull();

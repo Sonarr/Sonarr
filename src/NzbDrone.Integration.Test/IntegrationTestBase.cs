@@ -329,8 +329,8 @@ namespace NzbDrone.Integration.Test
 
                 schema.Enable = enabled;
                 schema.Name = "Test UsenetBlackhole";
-                schema.Fields.First(v => v.Name == "WatchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
-                schema.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
+                schema.Fields.First(v => v.Name == "watchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
+                schema.Fields.First(v => v.Name == "nzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
 
                 client = DownloadClients.Post(schema);
             }
