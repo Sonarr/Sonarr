@@ -1,7 +1,7 @@
-﻿using Moq;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Notifications.Plex;
+using NzbDrone.Core.Notifications.Plex.HomeTheater;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.NotificationTests

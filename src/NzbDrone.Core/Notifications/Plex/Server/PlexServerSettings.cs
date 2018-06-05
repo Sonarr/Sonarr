@@ -1,9 +1,9 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
-namespace NzbDrone.Core.Notifications.Plex
+namespace NzbDrone.Core.Notifications.Plex.Server
 {
     public class PlexServerSettingsValidator : AbstractValidator<PlexServerSettings>
     {
@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             Port = 32400;
             UpdateLibrary = true;
+            SignIn = "startOAuth";
         }
 
         [FieldDefinition(0, Label = "Host")]
@@ -30,12 +31,11 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        //TODO: Change username and password to token and get a plex.tv OAuth token properly
-        [FieldDefinition(2, Label = "Username")]
-        public string Username { get; set; }
+        [FieldDefinition(2, Label = "Auth Token", Type = FieldType.Textbox, Advanced = true)]
+        public string AuthToken { get; set; }
 
-        [FieldDefinition(3, Label = "Password", Type = FieldType.Password)]
-        public string Password { get; set; }
+        [FieldDefinition(3, Label = "Authenticate with Plex.tv", Type = FieldType.OAuth)]
+        public string SignIn { get; set; }
 
         [FieldDefinition(4, Label = "Update Library", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }

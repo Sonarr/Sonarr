@@ -3,7 +3,7 @@ using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
-namespace NzbDrone.Core.Notifications.Plex
+namespace NzbDrone.Core.Notifications.Plex.HomeTheater
 {
     public class PlexClientSettingsValidator : AbstractValidator<PlexClientSettings>
     {
