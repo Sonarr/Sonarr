@@ -297,7 +297,15 @@ namespace NzbDrone.Core.Indexers
         {
             var response = FetchIndexerResponse(request);
 
-            return parser.ParseResponse(response).ToList();
+            try
+            {
+                return parser.ParseResponse(response).ToList();
+            }
+            catch (Exception)
+            {
+                _logger.Trace("Unexpected Response content ({0} bytes): {1}", response.HttpResponse.ResponseData.Length, response.HttpResponse.Content);
+                throw;
+            }
         }
 
         protected virtual IndexerResponse FetchIndexerResponse(IndexerRequest request)
