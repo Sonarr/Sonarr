@@ -80,6 +80,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 request.AddFormParameter("category", settings.TvCategory);
             }
 
+            if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            {
+                request.AddFormParameter("paused", true);
+            }
+
             var result = ProcessRequest(request, settings);
 
             // Note: Older qbit versions returned nothing, so we can't do != "Ok." here.
@@ -98,6 +103,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             if (settings.TvCategory.IsNotNullOrWhiteSpace())
             {
                 request.AddFormParameter("category", settings.TvCategory);
+            }
+
+            if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            {
+                request.AddFormParameter("paused", true);
             }
 
             var result = ProcessRequest(request, settings);
@@ -156,7 +166,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             catch (DownloadClientException ex)
             {
                 // qBittorrent rejects all Prio commands with 403: Forbidden if Options -> BitTorrent -> Torrent Queueing is not enabled
-#warning FIXME: so wouldn't the reauthenticate logic trigger on Forbidden?
+                #warning FIXME: so wouldn't the reauthenticate logic trigger on Forbidden?
                 if (ex.InnerException is HttpException && (ex.InnerException as HttpException).Response.StatusCode == HttpStatusCode.Forbidden)
                 {
                     return;
