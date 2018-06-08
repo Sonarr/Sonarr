@@ -32,7 +32,7 @@ namespace NzbDrone.Common.Extensions
         {
             if (response == null || response.Content == null) return ex;
 
-            var contentSample = response.Content.Substring(0, Math.Min(response.Content.Length, 512));
+            var contentSample = response.Content.Substring(0, Math.Min(response.Content.Length, maxSampleLength));
 
             if (response.Request != null)
             {
