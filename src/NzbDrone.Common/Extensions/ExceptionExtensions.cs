@@ -34,6 +34,18 @@ namespace NzbDrone.Common.Extensions
 
             var contentSample = response.Content.Substring(0, Math.Min(response.Content.Length, 512));
 
+            if (response.Request != null)
+            {
+                ex.AddData("RequestUri", response.Request.Url.ToString());
+
+                if (response.Request.ContentSummary != null)
+                {
+                    ex.AddData("RequestSummary", response.Request.ContentSummary);
+                }
+            }
+
+            ex.AddData("StatusCode", response.StatusCode.ToString());
+
             if (response.Headers != null)
             {
                 ex.AddData("ContentType", response.Headers.ContentType ?? string.Empty);

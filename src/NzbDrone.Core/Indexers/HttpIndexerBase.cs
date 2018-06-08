@@ -301,8 +301,9 @@ namespace NzbDrone.Core.Indexers
             {
                 return parser.ParseResponse(response).ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ex.WithData(response.HttpResponse, 128*1024);
                 _logger.Trace("Unexpected Response content ({0} bytes): {1}", response.HttpResponse.ResponseData.Length, response.HttpResponse.Content);
                 throw;
             }
