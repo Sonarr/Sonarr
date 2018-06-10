@@ -66,6 +66,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 1 };
             _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1 };
             _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01E01.720p.HDTV-Sonarr\S01E01.mkv".AsOsAgnostic();
+
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
@@ -75,22 +76,50 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 1 };
             _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1 };
             _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01E01E02.720p.HDTV-Sonarr\S01E01.mkv".AsOsAgnostic();
+
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_disregard_subfolder()
+        {
+            _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 5, 6 };
+            _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
+            _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01E01E02.720p.HDTV-Sonarr\S01E05E06.mkv".AsOsAgnostic();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_be_rejected_if_file_and_folder_do_not_have_same_episode()
         {
             _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01E01.720p.HDTV-Sonarr\S01E05.mkv".AsOsAgnostic();
+
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
-        public void should_be_rejected_if_file_and_folder_do_not_have_same_episodes()
+        public void should_be_rejected_if_file_and_folder_do_not_have_the_same_episodes()
         {
             _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 5, 6 };
             _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
             _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01E01E02.720p.HDTV-Sonarr\S01E05E06.mkv".AsOsAgnostic();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_rejected_if_file_and_folder_do_not_have_episodes_from_the_same_season()
+        {
+            _localEpisode.FileEpisodeInfo.SeasonNumber = 2;
+            _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 1 };
+
+            _localEpisode.FolderEpisodeInfo.FullSeason = true;
+            _localEpisode.FolderEpisodeInfo.SeasonNumber = 1;
+            _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
+
+            _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01.720p.HDTV-Sonarr\S02E01.mkv".AsOsAgnostic();
+
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
     }

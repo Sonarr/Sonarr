@@ -1,4 +1,3 @@
-using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
@@ -25,18 +24,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            var dirInfo = new FileInfo(localEpisode.Path).Directory;
-
-            if (dirInfo == null)
-            {
-                return Decision.Accept();
-            }
-
+            var fileInfo = localEpisode.FileEpisodeInfo;
             var folderInfo = localEpisode.FolderEpisodeInfo;
 
             if (folderInfo != null && folderInfo.IsPossibleSceneSeasonSpecial)
             {
-                folderInfo = _parsingService.ParseSpecialEpisodeTitle(folderInfo, dirInfo.Name, localEpisode.Series.TvdbId, 0);
+                folderInfo = _parsingService.ParseSpecialEpisodeTitle(folderInfo, folderInfo.ReleaseTitle, localEpisode.Series.TvdbId, 0);
             }
 
             if (folderInfo == null)
@@ -49,12 +42,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            if (folderInfo.FullSeason)
+            if (folderInfo.SeasonNumber != fileInfo.SeasonNumber)
             {
-                return Decision.Accept();
+                return Decision.Reject("Season number {0} was unexpected considering the folder name {1}", fileInfo.SeasonNumber, folderInfo.ReleaseTitle);
             }
 
-            var unexpected = localEpisode.FileEpisodeInfo.EpisodeNumbers.Where(f => !folderInfo.EpisodeNumbers.Contains(f)).ToList();
+            var unexpected = fileInfo.EpisodeNumbers.Where(f => !folderInfo.EpisodeNumbers.Contains(f)).ToList();
 
             if (unexpected.Any())
             {
@@ -62,10 +55,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (unexpected.Count == 1)
                 {
-                    return Decision.Reject("Episode Number {0} was unexpected considering the {1} folder name", unexpected.First(), dirInfo.Name);
+                    return Decision.Reject("Episode number {0} was unexpected considering the {1} folder name", unexpected.First(), folderInfo.ReleaseTitle);
                 }
 
-                return Decision.Reject("Episode Numbers {0} were unexpected considering the {1} folder name", string.Join(", ", unexpected), dirInfo.Name);
+                return Decision.Reject("Episode numbers {0} were unexpected considering the {1} folder name", string.Join(", ", unexpected), folderInfo.ReleaseTitle);
             }
 
             return Decision.Accept();
