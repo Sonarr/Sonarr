@@ -9,6 +9,7 @@ using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
+using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -33,6 +34,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         private readonly IEpisodeService _episodeService;
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
+        private readonly IAugmentingService _augmentingService;
         private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
         private readonly IEventAggregator _eventAggregator;
@@ -45,6 +47,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                    ISeriesService seriesService,
                                    IEpisodeService episodeService,
                                    IVideoFileInfoReader videoFileInfoReader,
+                                   IAugmentingService augmentingService,
                                    IImportApprovedEpisodes importApprovedEpisodes,
                                    ITrackedDownloadService trackedDownloadService,
                                    IDownloadedEpisodesImportService downloadedEpisodesImportService,
@@ -58,6 +61,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             _seriesService = seriesService;
             _episodeService = episodeService;
             _videoFileInfoReader = videoFileInfoReader;
+            _augmentingService = augmentingService;
             _importApprovedEpisodes = importApprovedEpisodes;
             _trackedDownloadService = trackedDownloadService;
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
@@ -262,6 +266,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 };
 
                 //TODO: Cleanup non-tracked downloads
+
+                localEpisode = _augmentingService.Augment(localEpisode, false);
 
                 var importDecision = new ImportDecision(localEpisode);
 
