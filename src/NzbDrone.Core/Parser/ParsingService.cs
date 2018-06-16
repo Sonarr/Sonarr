@@ -84,6 +84,10 @@ namespace NzbDrone.Core.Parser
             {
                 remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, true, searchCriteria);
             }
+            else
+            {
+                remoteEpisode.Episodes = new List<Episode>();
+            }
 
             return remoteEpisode;
         }
