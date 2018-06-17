@@ -59,6 +59,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Mad.Men.S05E01-02.720p.5.1Ch.BluRay", "Mad Men", 5, new[] { 1, 2 })]
         [TestCase("S01E01-E03 - Episode Title.HDTV-720p", "", 1, new [] { 1, 2, 3 })]
         [TestCase("1x01-x03 - Episode Title.HDTV-720p", "", 1, new [] { 1, 2, 3 })]
+        [TestCase("Are.You.Human.Too.E07-E08.180612.1080p-NEXT", "Are You Human Too", 1, new[] { 7, 8 })]
         //[TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
