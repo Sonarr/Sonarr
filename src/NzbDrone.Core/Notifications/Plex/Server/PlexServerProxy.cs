@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         public void UpdateSeries(int metadataId, PlexServerSettings settings)
         {
             var resource = $"library/metadata/{metadataId}/refresh";
-            var request = BuildRequest(resource, HttpMethod.GET, settings);
+            var request = BuildRequest(resource, HttpMethod.PUT, settings);
             var response = ProcessRequest(request);
 
             CheckForError(response);
