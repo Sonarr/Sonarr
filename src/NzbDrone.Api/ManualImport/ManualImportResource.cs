@@ -13,6 +13,7 @@ namespace NzbDrone.Api.ManualImport
     {
         public string Path { get; set; }
         public string RelativePath { get; set; }
+        public string FolderName { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }
         public SeriesResource Series { get; set; }
@@ -36,6 +37,7 @@ namespace NzbDrone.Api.ManualImport
 
                 Path = model.Path,
                 RelativePath = model.RelativePath,
+                FolderName = model.FolderName,
                 Name = model.Name,
                 Size = model.Size,
                 Series = model.Series.ToResource(),

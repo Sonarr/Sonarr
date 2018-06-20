@@ -9,6 +9,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
     {
         public string Path { get; set; }
         public string RelativePath { get; set; }
+        public string FolderName { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }
         public Series Series { get; set; }

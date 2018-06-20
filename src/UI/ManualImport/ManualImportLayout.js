@@ -211,6 +211,7 @@ module.exports = Marionette.Layout.extend({
             files : _.map(selected, function (file) {
                 return {
                     path       : file.get('path'),
+                    folderName : file.get('folderName'),
                     seriesId   : file.get('series').id,
                     episodeIds : _.map(file.get('episodes'), 'id'),
                     quality    : file.get('quality'),

@@ -6,6 +6,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
     public class ManualImportFile
     {
         public string Path { get; set; }
+        public string FolderName { get; set; }
         public int SeriesId { get; set; }
         public List<int> EpisodeIds { get; set; }
         public QualityModel Quality { get; set; }
