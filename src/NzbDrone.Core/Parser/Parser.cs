@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
-                new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+)))*)\W?(?!\\)",
+                new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[ex]|\W[ex]){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+)))*)\W?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with a title, 4 digit season number, Single episodes (S2016E05, etc) & Multi-episode (S2016E05E06, S2016E05-06, S2016E05 E06, etc)
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with a title, 4 digit season number, Single episodes (2016x05, etc) & Multi-episode (2016x05x06, 2016x05-06, 2016x05 x06, etc)
-                new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+(?<season>(?<!\d+)(?:\d{4})(?!\d+))(?:x|\Wx|_){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:\-|x|\Wx|_){1,2}(?<episode>\d{2,3}(?!\d+)))*)\W?(?!\\)",
+                new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+(?<season>(?<!\d+)(?:\d{4})(?!\d+))(?:x|\Wx){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:\-|x|\Wx|_){1,2}(?<episode>\d{2,3}(?!\d+)))*)\W?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Partial season pack
@@ -189,11 +189,11 @@ namespace NzbDrone.Core.Parser
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with airdate (2018.04.28)
-                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9])",
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with airdate (04.28.2018)
-                new Regex(@"^(?<title>.+?)?\W*(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])\W+(?<airyear>\d{4})(?!\d+)",
+                new Regex(@"^(?<title>.+?)?\W*(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])[-_. ]+(?<airyear>\d{4})(?!\d+)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 1103/1113 naming

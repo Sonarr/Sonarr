@@ -27,6 +27,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("At_Midnight_140722_720p_HDTV_x264-YesTV", "At Midnight", 2014, 07, 22)]
         //[TestCase("Corrie.07.01.15", "Corrie", 2015, 1, 7)]
         [TestCase("The Nightly Show with Larry Wilmore 2015 02 09 WEBRIP s01e13", "The Nightly Show with Larry Wilmore", 2015, 2, 9)]
+        [TestCase("Jimmy_Fallon_2018_06_22_Seth_Meyers_720p_HEVC_x265-MeGusta", "Jimmy Fallon", 2018, 6, 22)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_daily_episode(string postTitle, string title, int year, int month, int day)
         {
