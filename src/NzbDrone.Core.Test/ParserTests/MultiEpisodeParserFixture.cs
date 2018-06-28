@@ -60,6 +60,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("S01E01-E03 - Episode Title.HDTV-720p", "", 1, new [] { 1, 2, 3 })]
         [TestCase("1x01-x03 - Episode Title.HDTV-720p", "", 1, new [] { 1, 2, 3 })]
         [TestCase("Are.You.Human.Too.E07-E08.180612.1080p-NEXT", "Are You Human Too", 1, new[] { 7, 8 })]
+        [TestCase("Are You Human Too? E11-E12 1080p HDTV AAC H.264-NEXT", "Are You Human Too", 1, new[] { 11, 12 })]
         //[TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
