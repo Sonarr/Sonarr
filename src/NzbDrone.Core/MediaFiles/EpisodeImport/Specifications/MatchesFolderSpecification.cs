@@ -34,11 +34,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             if (folderInfo == null)
             {
+                _logger.Debug("No folder ParsedEpisodeInfo, skipping check");
+                return Decision.Accept();
+            }
+
+            if (fileInfo == null)
+            {
+                _logger.Debug("No file ParsedEpisodeInfo, skipping check");
                 return Decision.Accept();
             }
 
             if (!folderInfo.EpisodeNumbers.Any())
             {
+                _logger.Debug("No episode numbers in folder ParsedEpisodeInfo, skipping check");
                 return Decision.Accept();
             }
 

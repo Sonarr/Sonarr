@@ -30,6 +30,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
+        public void should_return_true_if_no_fileinfo_available()
+        {
+            _localEpisode.FileEpisodeInfo = null;
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_return_false_when_file_contains_the_full_season()
         {
             _localEpisode.FileEpisodeInfo.FullSeason = true;

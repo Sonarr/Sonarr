@@ -16,6 +16,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
+            if (localEpisode.FileEpisodeInfo == null)
+            {
+                return Decision.Accept();
+            }
+
             if (localEpisode.FileEpisodeInfo.FullSeason)
             {
                 _logger.Debug("Single episode file detected as containing all episodes in the season");

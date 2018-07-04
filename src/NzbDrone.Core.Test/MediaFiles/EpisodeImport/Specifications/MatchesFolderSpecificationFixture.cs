@@ -51,6 +51,15 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
+        public void should_be_accepted_if_file_name_is_not_parseable()
+        {
+            _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01E01\AFDAFD.mkv".AsOsAgnostic();
+            _localEpisode.FileEpisodeInfo = null;
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_should_be_accepted_for_full_season()
         {
             _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01\S01E01.mkv".AsOsAgnostic();
