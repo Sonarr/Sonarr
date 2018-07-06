@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
@@ -23,6 +24,32 @@ namespace NzbDrone.Libraries.Test.JsonTests
             var result = Json.Deserialize<TypeWithNumbers>(quality.ToJson());
 
             result.ShouldBeEquivalentTo(quality, o => o.IncludingAllRuntimeProperties());
+        }
+
+        [Test]
+        public void should_log_start_snippet_on_failure()
+        {
+            try
+            {
+                Json.Deserialize<object>("asdfl kasjd fsdfs derers");
+            }
+            catch (Exception ex)
+            {
+                ex.Message.Should().Contain("snippet '<--error-->asdfl kasjd fsdfs de'");
+            }
+        }
+
+        [Test]
+        public void should_log_line_snippet_on_failure()
+        {
+            try
+            {
+                Json.Deserialize<object>("{ \"a\": \r\n\"b\",\r\n \"b\": \"c\", asdfl kasjd fsdfs derers vsdfsdf");
+            }
+            catch (Exception ex)
+            {
+                ex.Message.Should().Contain("snippet ' \"b\": \"c\", asdfl <--error-->kasjd fsdfs derers v'");
+            }
         }
     }
 }
