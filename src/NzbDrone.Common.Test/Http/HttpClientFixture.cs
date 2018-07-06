@@ -29,22 +29,40 @@ namespace NzbDrone.Common.Test.Http
         private int _httpBinSleep;
         private int _httpBinRandom;
         private string _httpBinHost;
+        private string _httpBinHost2;
 
         [OneTimeSetUp]
         public void FixtureSetUp()
         {
-            var candidates = new[] { "eu.httpbin.org", "httpbin.org" };
+            var candidates = new[] { "eu.httpbin.org", "httpbin.org", "www.httpbin.org" };
             _httpBinHosts = candidates.Where(IsTestSiteAvailable).ToArray();
 
-            _httpBinSleep = _httpBinHosts.Count() < 2 ? 100 : 50;
+            TestLogger.Info($"{candidates.Length} TestSites available.");
+
+            _httpBinSleep = _httpBinHosts.Count() < 2 ? 100 : 10;
         }
 
         private bool IsTestSiteAvailable(string site)
         {
             try
             {
-                var result = new System.Net.WebClient().DownloadString($"http://{site}/get");
-                return result.StartsWith("{");
+                var req = WebRequest.Create($"http://{site}/get") as HttpWebRequest;
+                var res = req.GetResponse() as HttpWebResponse;
+                if (res.StatusCode != HttpStatusCode.OK) return false;
+
+                try
+                {
+                    req = WebRequest.Create($"http://{site}/status/429") as HttpWebRequest;
+                    res = req.GetResponse() as HttpWebResponse;
+                }
+                catch (WebException ex)
+                {
+                    res = ex.Response as HttpWebResponse;
+                }
+
+                if (res == null || res.StatusCode != (HttpStatusCode)429) return false;
+
+                return true;
             }
             catch
             {
@@ -57,7 +75,7 @@ namespace NzbDrone.Common.Test.Http
         {
             if (!_httpBinHosts.Any())
             {
-                Assert.Inconclusive("No TestSite available");
+                Assert.Inconclusive("No TestSites available");
             }
 
             Mocker.GetMock<IPlatformInfo>().Setup(c => c.Version).Returns(new Version("1.0.0"));
@@ -79,6 +97,7 @@ namespace NzbDrone.Common.Test.Http
 
             // Roundrobin over the two servers, to reduce the chance of hitting the ratelimiter.
             _httpBinHost = _httpBinHosts[_httpBinRandom++ % _httpBinHosts.Length];
+            _httpBinHost2 = _httpBinHosts[_httpBinRandom % _httpBinHosts.Length];
         }
 
         [TearDown]
@@ -280,12 +299,12 @@ namespace NzbDrone.Common.Test.Http
 
         public void GivenOldCookie()
         {
-            if (!_httpBinHosts.Contains("httpbin.org") || !_httpBinHosts.Contains("eu.httpbin.org"))
+            if (_httpBinHost == _httpBinHost2)
             {
                 Assert.Inconclusive("Need both httpbin.org and eu.httpbin.org to run this test.");
             }
 
-            var oldRequest = new HttpRequest("http://eu.httpbin.org/get");
+            var oldRequest = new HttpRequest($"http://{_httpBinHost2}/get");
             oldRequest.Cookies["my"] = "cookie";
 
             var oldClient = new HttpClient(new IHttpRequestInterceptor[0], Mocker.Resolve<ICacheManager>(), Mocker.Resolve<IRateLimitService>(), Mocker.Resolve<IHttpDispatcher>(), Mocker.GetMock<IUserAgentBuilder>().Object, Mocker.Resolve<Logger>());
@@ -302,7 +321,7 @@ namespace NzbDrone.Common.Test.Http
         {
             GivenOldCookie();
 
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest($"http://{_httpBinHost2}/get");
 
             var response = Subject.Get<HttpBinResource>(request);
 
@@ -318,7 +337,7 @@ namespace NzbDrone.Common.Test.Http
         {
             GivenOldCookie();
 
-            var request = new HttpRequest("http://httpbin.org/get");
+            var request = new HttpRequest($"http://{_httpBinHost}/get");
 
             var response = Subject.Get<HttpBinResource>(request);
 
