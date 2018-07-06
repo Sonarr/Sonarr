@@ -34,7 +34,8 @@ namespace NzbDrone.Common.Test.Http
         [OneTimeSetUp]
         public void FixtureSetUp()
         {
-            var candidates = new[] { "eu.httpbin.org", "httpbin.org", "www.httpbin.org" };
+            var candidates = new[] { "eu.httpbin.org", /*"httpbin.org",*/ "www.httpbin.org" };
+            // httpbin.org is broken right now, occassionally redirecting to https if it's unavailable.
             _httpBinHosts = candidates.Where(IsTestSiteAvailable).ToArray();
 
             TestLogger.Info($"{candidates.Length} TestSites available.");
