@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using FluentAssertions;
@@ -24,13 +25,41 @@ namespace NzbDrone.Common.Test.Http
     [TestFixture(typeof(CurlHttpDispatcher))]
     public class HttpClientFixture<TDispatcher> : TestBase<HttpClient> where TDispatcher : IHttpDispatcher
     {
-        private static string[] _httpBinHosts = new[] { "eu.httpbin.org", "httpbin.org" };
-        private static int _httpBinRandom;
+        private string[] _httpBinHosts;
+        private int _httpBinSleep;
+        private int _httpBinRandom;
         private string _httpBinHost;
+
+        [OneTimeSetUp]
+        public void FixtureSetUp()
+        {
+            var candidates = new[] { "eu.httpbin.org", "httpbin.org" };
+            _httpBinHosts = candidates.Where(IsTestSiteAvailable).ToArray();
+
+            _httpBinSleep = _httpBinHosts.Count() < 2 ? 100 : 50;
+        }
+
+        private bool IsTestSiteAvailable(string site)
+        {
+            try
+            {
+                var result = new System.Net.WebClient().DownloadString($"http://{site}/get");
+                return result.StartsWith("{");
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         [SetUp]
         public void SetUp()
         {
+            if (!_httpBinHosts.Any())
+            {
+                Assert.Inconclusive("No TestSite available");
+            }
+
             Mocker.GetMock<IPlatformInfo>().Setup(c => c.Version).Returns(new Version("1.0.0"));
             Mocker.GetMock<IOsInfo>().Setup(c => c.Name).Returns("TestOS");
             Mocker.GetMock<IOsInfo>().Setup(c => c.Version).Returns("9.0.0");
@@ -50,6 +79,12 @@ namespace NzbDrone.Common.Test.Http
 
             // Roundrobin over the two servers, to reduce the chance of hitting the ratelimiter.
             _httpBinHost = _httpBinHosts[_httpBinRandom++ % _httpBinHosts.Length];
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            Thread.Sleep(_httpBinSleep);
         }
 
         [Test]
@@ -245,6 +280,11 @@ namespace NzbDrone.Common.Test.Http
 
         public void GivenOldCookie()
         {
+            if (!_httpBinHosts.Contains("httpbin.org") || !_httpBinHosts.Contains("eu.httpbin.org"))
+            {
+                Assert.Inconclusive("Need both httpbin.org and eu.httpbin.org to run this test.");
+            }
+
             var oldRequest = new HttpRequest("http://eu.httpbin.org/get");
             oldRequest.Cookies["my"] = "cookie";
 
