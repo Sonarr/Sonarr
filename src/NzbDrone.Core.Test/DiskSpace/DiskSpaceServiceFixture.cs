@@ -137,6 +137,7 @@ namespace NzbDrone.Core.Test.DiskSpace
         [TestCase("/var/lib/kubelet")]
         [TestCase("/var/lib/docker")]
         [TestCase("/some/place/docker/aufs")]
+        [TestCase("/etc/network")]
         public void should_not_check_diskspace_for_irrelevant_mounts(string path)
         {
             var mount = new Mock<IMount>();
