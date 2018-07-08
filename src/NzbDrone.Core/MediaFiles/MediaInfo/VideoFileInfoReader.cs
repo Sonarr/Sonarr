@@ -99,7 +99,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     string scanType = mediaInfo.Get(StreamKind.Video, 0, "ScanType");
                     int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Width"), out width);
                     int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Height"), out height);
-                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
+                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate_Nominal"), out videoBitRate);
+                    if (videoBitRate <= 0)
+                    {
+                        int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
+                    }
                     decimal.TryParse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out videoFrameRate);
                     int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitDepth"), out videoBitDepth);
 
