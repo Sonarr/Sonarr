@@ -286,7 +286,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
                 {
-                    InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    InfoLink = _proxy.GetBaseUrl(Settings),
                     DetailedDescription = "The Category your entered doesn't exist in NzbGet. Go to NzbGet to create it."
                 };
             }
@@ -304,7 +304,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 return new NzbDroneValidationFailure(string.Empty, "NzbGet setting KeepHistory should be greater than 0")
                 {
-                    InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    InfoLink = _proxy.GetBaseUrl(Settings),
                     DetailedDescription = "NzbGet setting KeepHistory is set to 0. Which prevents Sonarr from seeing completed downloads."
                 };
             }
@@ -312,7 +312,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 return new NzbDroneValidationFailure(string.Empty, "NzbGet setting KeepHistory should be less than 25000")
                 {
-                    InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    InfoLink = _proxy.GetBaseUrl(Settings),
                     DetailedDescription = "NzbGet setting KeepHistory is set too high."
                 };
             }

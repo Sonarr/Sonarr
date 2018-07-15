@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public interface ISabnzbdProxy
     {
+        string GetBaseUrl(SabnzbdSettings settings, string relativePath = null);
         SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings);
         void RemoveFrom(string source, string id,bool deleteData, SabnzbdSettings settings);
         string GetVersion(SabnzbdSettings settings);
@@ -30,6 +31,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             _httpClient = httpClient;
             _logger = logger;
+        }
+
+        public string GetBaseUrl(SabnzbdSettings settings, string relativePath = null)
+        {
+            var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase);
+            baseUrl = HttpUri.CombinePath(baseUrl, relativePath);
+
+            return baseUrl;
         }
 
         public SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings)
@@ -140,10 +149,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private HttpRequestBuilder BuildRequest(string mode, SabnzbdSettings settings)
         {
-            var baseUrl = string.Format(@"{0}://{1}:{2}/api",
-                                   settings.UseSsl ? "https" : "http",
-                                   settings.Host,
-                                   settings.Port);
+            var baseUrl = GetBaseUrl(settings, "api");
 
             var requestBuilder = new HttpRequestBuilder(baseUrl)
                 .Accept(HttpAccept.Json)

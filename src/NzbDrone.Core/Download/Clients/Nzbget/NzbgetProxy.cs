@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public interface INzbgetProxy
     {
+        string GetBaseUrl(NzbgetSettings settings, string relativePath = null);
         string DownloadNzb(byte[] nzbData, string title, string category, int priority, bool addpaused, NzbgetSettings settings);
         NzbgetGlobalStatus GetGlobalStatus(NzbgetSettings settings);
         List<NzbgetQueueItem> GetQueue(NzbgetSettings settings);
@@ -36,9 +37,17 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _versionCache = cacheManager.GetCache<string>(GetType(), "versions");
         }
 
+        public string GetBaseUrl(NzbgetSettings settings, string relativePath = null)
+        {
+            var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase);
+            baseUrl = HttpUri.CombinePath(baseUrl, relativePath);
+
+            return baseUrl;
+        }
+
         private bool HasVersion(int minimumVersion, NzbgetSettings settings)
         {
-            var versionString = _versionCache.Find(settings.Host + ":" + settings.Port) ?? GetVersion(settings);
+            var versionString = _versionCache.Find(GetBaseUrl(settings)) ?? GetVersion(settings);
 
             var version = int.Parse(versionString.Split(new[] { '.', '-' })[0]);
 
@@ -139,7 +148,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var response = ProcessRequest<string>(settings, "version");
 
-            _versionCache.Set(settings.Host + ":" + settings.Port, response, TimeSpan.FromDays(1));
+            _versionCache.Set(GetBaseUrl(settings), response, TimeSpan.FromDays(1));
 
             return response;
         }
@@ -170,7 +179,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem = queue.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
                 historyItem = history.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
             }
-           
+
             if (queueItem != null)
             {
                 if (!EditQueue("GroupFinalDelete", 0, "", queueItem.NzbId, settings))
@@ -218,7 +227,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         private T ProcessRequest<T>(NzbgetSettings settings, string method, params object[] parameters)
         {
-            var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, "jsonrpc");
+            var baseUrl = GetBaseUrl(settings, "jsonrpc");
 
             var requestBuilder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
             requestBuilder.LogResponseContent = true;
