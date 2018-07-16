@@ -291,6 +291,24 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         }
 
         [Test]
+        public void GetItems_should_ignore_items_without_hash()
+        {
+            _downloading.Hash = null;
+
+            GivenTorrents(new List<DelugeTorrent>
+                {
+                    _downloading,
+                    _queued
+                });
+
+            var items = Subject.GetItems();
+
+            items.Should().HaveCount(1);
+
+            items.First().Status.Should().Be(DownloadItemStatus.Queued);
+        }
+
+        [Test]
         public void should_return_status_with_outputdirs()
         {
             var configItems = new Dictionary<string, object>();

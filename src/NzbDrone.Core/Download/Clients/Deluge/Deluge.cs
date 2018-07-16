@@ -105,6 +105,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             foreach (var torrent in torrents)
             {
                 if (torrent.Hash == null) continue;
+
                 var item = new DownloadClientItem();
                 item.DownloadId = torrent.Hash.ToUpper();
                 item.Title = torrent.Name;
