@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Indexers.YggTorrent
 
         public YggTorrentSettings()
         {
-            BaseUrl = "https://ww1.yggtorrent.is";
+            BaseUrl = "https://ww2.yggtorrent.is";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
             XPathItems = "//section[@id=\"#torrents\"]/*/table[@class=\"table\"]/tbody/tr";
             XPathItem = "td[3]/a|target;td[2]/a;td[5]/div;td[6];td[8];td[9]";

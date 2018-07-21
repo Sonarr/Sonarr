@@ -227,6 +227,9 @@
     </None>
     <Compile Include="Download\TrackedDownloads\TrackedDownloadServiceFixture.cs" />
     <Compile Include="Extras\Metadata\Consumers\Xbmc\FindMetadataFileFixture.cs" />
+    <Content Include="Files\Indexers\YggTorrent\YggTorrent.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="FluentTest.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
@@ -278,6 +281,7 @@
     <Compile Include="IndexerTests\IndexerStatusServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
     <Compile Include="IndexerTests\NewznabTests\NewznabCapabilitiesProviderFixture.cs" />
+    <Compile Include="IndexerTests\YggTorrentTests\YggTorrentFixture.cs" />
     <Compile Include="IndexerTests\RarbgTests\RarbgFixture.cs" />
     <Compile Include="IndexerTests\SeedConfigProviderFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssParserFactoryFixture.cs" />

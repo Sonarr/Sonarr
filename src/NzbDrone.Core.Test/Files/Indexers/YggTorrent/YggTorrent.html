@@ -1,0 +1,1989 @@
+<html><head>
+    <title>Recherche - Yggtorrent</title>
+    <!-- 
+			/**********************************************************************************************************************************************
+			*											__   __             _                                  _                                          *
+			* 											\ \ / /            | |                                | |                                         *
+			*  										     \ V / __ _   __ _ | |_  ___   _ __  _ __  ___  _ __  | |_                                        * 
+			*   										  \ / / _` | / _` || __|/ _ \ | '__|| '__|/ _ \| '_ \ | __|                                       *
+			*   										  | || (_| || (_| || |_| (_) || |   | |  |  __/| | | || |_                                        *
+			*   										  \_/ \__, | \__, | \__|\___/ |_|   |_|   \___||_| |_| \__|                                       *
+			*       										   __/ |  __/ |                                                                               *
+			*       										  |___/  |___/  Release 3.1                                                                   *
+			*																		                                                                      *
+			*   			Proudly powered by имярек, Somewhere in the World. Our mail if you find a bug/vulnerability : contact@ygg.is 			      *
+			*																																			  * 	
+			***********************************************************************************************************************************************/ 
+-->			
+<meta name = "viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- START INCLUDES -->
+<!-- Нам нужно подумать об организации и минимизации этого дерьма!! -->
+<link href = "https://ww2.yggtorrent.is/static/css/bootstrap.min.css" rel="stylesheet">
+<link href = "https://fonts.googleapis.com/css?family=Roboto+Condensed:700" rel="stylesheet" type="text/css">
+<script src = "https://ww2.yggtorrent.is/static/js/jquery.min.js" ></ script >
+< link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+<script src = "https://ww2.yggtorrent.is/static/js/bootstrap-notify.min.js" ></ script >
+< link href="https://fonts.googleapis.com/css?family=Pangolin" rel="stylesheet">	
+<script src = "https://ww2.yggtorrent.is/static/js/jnotifier.min.js" ></ script >
+< link href="https://ww2.yggtorrent.is/static/css/select2.css" rel="stylesheet" type="text/css">
+<link href = "https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+<link href = "https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet">
+<link href = "https://ww2.yggtorrent.is/static/css/select2.css" rel="stylesheet">
+<link href = "https://ww2.yggtorrent.is/static/css/fontawesome.css" rel="stylesheet">
+<link href = "https://ww2.yggtorrent.is/static/css/custom.css" rel="stylesheet">
+<link href = "https://ww2.yggtorrent.is/static/css/master.css?106" rel="stylesheet">
+<link href = "https://ww2.yggtorrent.is/static/css/jnotifier.css" rel="stylesheet" type="text/css">
+<!-- COUNTDOWN -->
+<script src = "https://ww2.yggtorrent.is/static/countdown/js/jquery.plugin.min.js" ></ script >
+< script src="https://ww2.yggtorrent.is/static/countdown/js/jquery.countdown.js"></script>
+<!-- END INCLUDES -->    <!-- bbcode editor -->
+    <script src = "https://cdn.wysibb.com/js/jquery.wysibb.min.js" ></ script >
+    < script src="https://cdn.wysibb.com/lang/fr.js"></script>
+    <link rel = "stylesheet" href="https://cdn.wysibb.com/css/default/wbbtheme.css">
+    <link href = "https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href = "https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet">
+
+
+
+    <!-- toast -->
+    <script src = "https://ww2.yggtorrent.is/static/js/jquery.toast.min.js" ></ script >
+    < link rel="stylesheet" href="https://ww2.yggtorrent.is/static/css/jquery.toast.min.css" "="">
+  </head>
+  <body>
+
+
+
+	<!-- Nfo Modal -->
+	<div class="modal fade" id="nfoModal" tabindex="-1" role="dialog" aria-labelledby="Nfo" aria-hidden="true">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="Nfo">Nfo</h5>
+					<button type = "button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body" id="nfo" style="background: #f1f1f1;">
+				</div>
+				<div class="modal-footer">
+					<button type = "button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+  <style type = "text/css" >
+
+
+   .select2 - container, .select2-container--default {
+      min-width: 400px !important;
+      width: auto !important;    
+    }
+      
+   .hide {
+      display: none !important;
+   }
+
+   #middle .list-torrent th:after {
+        content: "\f0dc";
+   }
+
+   #middle .list-torrent th.asc:after {
+        content: "\f0de";
+   }
+
+    #middle .list-torrent th.desc:after {
+        content: "\f0dd";
+   }
+             
+  </style>
+
+<style type = "text/css" >
+
+
+ # middle .small-padding tbody td {font-size: 13px !important; padding: 7px 10px !important;}
+# middle .search-criteria{width:100%; background: #fff;}
+# middle .search-criteria td{font-size:13px;padding: 10px 8px;background:#ffffff;border-right:1px solid #ebebeb;border-bottom:1px solid #ebebeb;}
+# middle .search-criteria tr:last-child td{border-bottom:0;}
+# middle .search-criteria td.adv_search_option,
+# middle .search-criteria td:first-child{font-size:10px;text-align:right;background:#f6f6f6;width:160px;text-transform:uppercase;}
+# middle .search-criteria td .green{color:#95bc0f;}
+# middle .search-criteria td .red{color:#ca1f1f;}
+# middle .search-criteria td a{color:#4e5c6f;}
+# middle .search-criteria td a:hover{text-decoration:underline;}
+# middle .search-criteria td a.butt{max-width:100%;color:#5ad9a4;top:-1px;font-size:11px;font-weight:700;text-transform:uppercase;border:3px solid #5ad9a4;border-radius:25px;padding:5px 10px;}
+# middle .search-criteria td a.butt:hover{color:#ffffff;background:#5ad9a4;text-decoration:none;}
+# middle .search-criteria td.of{overflow:hidden;}
+# middle .search-criteria td .pouce{color:#ffffff;padding:2px 5px 3px;border-radius:5px;font-size:11px;font-weight:700;text-decoration:none!important;}
+# middle .search-criteria td .pouce.green{background:#95bc0f;}
+# middle .search-criteria td .pouce.red{background:#ca1f1f;}
+# middle .search-criteria td.hadopi{background:#ffffff;text-transform:initial;text-align:center;font-size:12px;padding:20px 25px 25px;}
+# middle .search-criteria td.hadopi h3{text-transform:uppercase;font-size:14px;font-weight:700;padding-bottom:5px;}
+# middle .search-criteria td.hadopi p{margin:auto;max-width:100%;padding-bottom:15px;}
+# middle .search-criteria td.hadopi a.trust{max-width:100%;color:#4e5c6f;font-size:11px;font-weight:700;text-transform:uppercase;border:3px solid #4e5c6f;border-radius:25px;padding:5px 10px;}
+# middle .search-criteria td.hadopi a.trust:hover{background:#4e5c6f;color:#ffffff;text-decoration:none;}
+# middle .search-criteria td.alone{background:#ffffff;text-align:left;}
+# middle .search-criteria td.large{width:200px;}
+# middle .search-criteria td button{margin-bottom:0!important;width:160px!important;}
+# middle .search-criteria td button.solo{margin-bottom:0!important;margin-top:0!important;width:160px!important;}
+# middle .search-criteria td .input-table{width:100%; border: 1px solid #06060617; padding: 6px;}
+# middle .search-criteria td .input-table[type='file']{border: inherit !important;}
+
+# middle .search-criteria td input[type=radio]{margin-right:4px;}
+# middle .search-criteria td input { border-radius: 5px; }
+    .select2 - container--default .select2-selection--single.select2-selection__rendered {
+    line-height: 7px !important;
+}
+
+</style>
+    
+    
+<!--- Форма входа -->
+<div id = "connect" >
+
+    < h3 > Se connecter</h3>
+	<h5>Veuillez remplir tout les champs.</h5>
+	<form action = "https://ww2.yggtorrent.is/user/login" method="post" id="user-login">
+		<input type = "text" name="id" placeholder="Pseudo" required="">
+		<input type = "password" name="pass" placeholder="Mot de passe" required="" autocomplete="off">
+						<div id = "ban_msg_login" style="display: none;"><center style = "margin: 10px 10px; color: #ff3f3f; font-weight: bold;" > Votre compte a été banni! <br><span style = "font-weight: bold; font-size: 15px; color: #582a2a;" > Fin du ban : <span class="ban_duration"></span></span> <a id = "ban_reason" style="font-weight:bold; font-size: 13px;">Voir le motif</a></center></div>
+		<div id = "login_msg_pass" style="display: none;"><center style = "margin: 10px 10px; color: #ff3f3f; font-weight: bold;" > Échec de connexion.Vérifiez vos identifiants<br></center></div>
+		<div id = "login_msg_mail" style= "display: none;" >< center style= "margin: 10px 10px; color: #ff3f3f; font-weight: bold;" > Vous n'avez pas confirmer votre compte à l'aide du mail que nous vous avons envoyé<br></center></div> 
+		<center id = "resetpass" style= " margin: 10px 10px;  font-weight: bold;" >< a href= "https://ww2.yggtorrent.is/user/reset_password" > Mot de passe oublié?</a></center>
+		<input type = "hidden" name= "ci_csrf_token" value= "" >
+      
+
+              < button type= "submit" > Connexion < i class="ico_unlock"></i></button>
+	</form>
+</div>
+<div class="fadeconnect"></div>
+
+	<div class="panel" id="top_panel" style="right: -200px;">
+
+		<div class="ct">
+			<ul>
+				<li><a data-connect="" title="" id="register"><span class="ico_lock"></span> S'identifier</a></li>
+				<li><a href = "https://ww2.yggtorrent.is/user/register" title=""><span class="ico_user-plus"></span> <strong>S'inscrire</strong></a></li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+<script type = "text/javascript" >
+	$(function(){
+		$(document).on('click','#panel-btn', function(){
+    if ($('.panel-cache').is (':visible')){
+				$('.panel-cache').slideUp(400);
+    }else{
+				$('.panel-cache').slideDown(400);
+    }
+});
+	});
+</script>
+
+
+<header role = "header" >
+
+    < div class="ct">
+		<a class="ico_navicon nav" data-nav="no"></a>
+		<a class="ico_user user" data-user="no"></a>
+		<a href = "https://ww2.yggtorrent.is/" title="YggTorrent" class="logotype">
+			<img style = "margin-top: -4px" class="desktop" alt="YggTorrent - La communauté Bittorrent francophone !" src="https://ww2.yggtorrent.is//static/img/logo.svg">
+			<img class="mobile" alt="YggTorrent - La communauté Bittorrent francophone !" src="https://ww2.yggtorrent.is//static/img/logotype-mobile.png">
+		</a>
+		<form class="search" action="https://ww2.yggtorrent.is/engine/search" method="get">
+			<div class="input">
+				<input type = "text" name="name" placeholder="Rechercher des torrents">
+				<button type = "submit" name="do" value="search"><span class="ico_search"></span></button>
+			</div>
+		</form>
+		<style type = "text/css" >
+
+        .pulse {
+		  cursor: pointer;
+		  box-shadow: 0 0 0 rgba(94, 194, 218, 0.4);
+animation: pulse 1s infinite;
+		}
+		.pulse:hover {
+		  animation: none;
+		}
+
+		@-webkit-keyframes pulse
+{
+		  0% {
+        -webkit - box - shadow: 0 0 0 0 rgba(94, 194, 218, 0.4);
+    }
+		  70% {
+        -webkit - box - shadow: 0 0 0 10px rgba(94, 194, 218, 0);
+    }
+		  100% {
+        -webkit - box - shadow: 0 0 0 0 rgba(94, 194, 218, 0);
+    }
+}
+@keyframes pulse
+{
+		  0% {
+        -moz - box - shadow: 0 0 0 0 rgba(94, 194, 218, 0.4);
+        box - shadow: 0 0 0 0 rgba(94, 194, 218, 0.4);
+    }
+		  70% {
+        -moz - box - shadow: 0 0 0 10px rgba(94, 194, 218, 0);
+        box - shadow: 0 0 0 10px rgba(94, 194, 218, 0);
+    }
+		  100% {
+        -moz - box - shadow: 0 0 0 0 rgba(94, 194, 218, 0);
+        box - shadow: 0 0 0 0 rgba(94, 194, 218, 0);
+    }
+}
+		</style>
+		<a href = "https://ww2.yggtorrent.is/user/donate" class="donate pulse"><span class="ico_star"></span> Bonus Go &amp; Freeleech</a>
+	</div>
+</header>
+
+<div id = "top" style="left: -200px;">
+	<div class="ct">
+		<nav role = "navigation" >
+
+            < ul >
+
+
+                < li >
+
+                    < a class="title" href="https://ww2.yggtorrent.is/" title=""><span class="ico_home"></span> Accueil</a>
+				</li>
+				<li>  
+					<a class="title torrents" href="#"><span class="ico_download"></span> Torrents</a>
+					<ul>
+						<li><a href = "https://ww2.yggtorrent.is/engine/search?do=search" > Rechercher un torrent</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/top/day" > Torrents du jour</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/top/week" > Torrents de la semaine</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/top/month" > Torrents du mois</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/engine/mostseeded" > Torrents rapides</a></li>
+						<li><a onclick = "alert('Coming soon')" > Torrents non seedés</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/user/upload_torrent" > Uploader un torrent</a></li>
+					</ul>
+				</li>
+				<li class="color">  
+					<a class="title" href="#"> Catégories</a>
+					<ul>
+						<li><a href = "https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=all&amp;do=search" > Films & amp; Vidéos</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2139&amp;sub_category=all&amp;do=search" > Audio </ a ></ li >
+
+                        < li >< a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=all&amp;do=search">Application</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=all&amp;do=search" > Jeu vidéo</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2140&amp;sub_category=all&amp;do=search" > Ebook </ a ></ li >
+
+                        < li >< a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2141&amp;sub_category=all&amp;do=search">Emulation</a></li>
+						<li><a href = "https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2143&amp;sub_category=all&amp;do=search" > GPS </ a ></ li >
+
+                                            </ ul >
+
+                </ li >
+
+                < li class="color"> 
+					<a class="title" href="https://ww2.yggtorrent.is/engine/mostcompleted" title=""><span class="ico_trophy"></span> Top 100	</a>
+				</li>
+				<style type = "text/css" >
+				/*#top nav > ul > li a.title.trends::after { background: #f7ffb9; }
+				#top nav > ul > li a.title.torrents::after { background: #82f37b; }
+			</style>
+			<li class="color"> 
+				<a class="title trends" href="https://ww2.yggtorrent.is/engine/trends"><span class="ico_fire"></span> Tendances</a>
+			</li>
+			<li class="color"> 
+				<a class="title" href="https://wiki.yggtorrent.is/">Wiki</a>
+			</li>
+			<li class="color">  
+				<a class="title">Communauté</a>
+				<ul>
+					<li><a onclick="alert(&quot;Coming soon&quot;)">FAQ</a></li>
+					<li><a onclick="alert(&quot;Coming soon&quot;)">Nous contacter</a></li>
+				</ul>
+			</li>
+			<li class="color">  
+				<a class="title" href="#">Flux RSS</a>
+				<ul>
+					<li><a href="https://ww2.yggtorrent.is/rss?type=1&amp;parent_category=2145">Films &amp; Vidéos</a></li>
+					<li><a href="https://ww2.yggtorrent.is/rss?type=1&amp;parent_category=2139">Audio</a></li>
+					<li><a href="https://ww2.yggtorrent.is/rss?type=1&amp;parent_category=2144">Application</a></li>
+					<li><a href="https://ww2.yggtorrent.is/rss?type=1&amp;parent_category=2142">Jeu vidéo</a></li>
+					<li><a href="https://ww2.yggtorrent.is/rss?type=1&amp;parent_category=2140">Ebook</a></li>
+					<li><a href="https://ww2.yggtorrent.is/rss?type=1&amp;parent_category=2141">Emulation</a></li>
+					<li><a href="https://ww2.yggtorrent.is/rss?type=1&amp;parent_category=2143">GPS</a></li>
+									</ul>
+			</li>
+			<li class="color"> 
+				<a class="title" target="_blank" href="https://yggtorrent.is/forum/">Forum</a>
+			</li>
+		</ul>
+	</nav>
+</div>
+</div>
+
+<!-- Перечень категорий -->
+<div class="back-cat class=" active""=""></div>
+<div id="cat" class="">
+	<div class="open"><span class="ico_chevron-left"></span> <strong>Sections</strong></div>
+	<ul> 
+	<style>
+	#cat ul > li.foot > ul > li:first-child a {
+		color: #95d6c8;
+	}
+	
+	#cat ul > li.foot > ul > li:first-child:before {
+		background: #8adecc;
+	}
+	</style>
+	  
+		<li class="film">
+			<ul>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=all&amp;do=search">Films &amp; vidéos <span class="ico_film"></span></a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2178&amp;do=search">Animation</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2179&amp;do=search">Animation Série</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2180&amp;do=search" "="">Concert</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2181&amp;do=search" "="">Documentaire</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2182&amp;do=search" "="">Emission TV</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search" "="">Film</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2184&amp;do=search" "="">Série TV</a></li>           
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2185&amp;do=search" "="">Spectacle</a></li>      
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2186&amp;do=search" "="">Sport</a></li>  
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2187&amp;do=search" "="">Vidéo-clips</a></li>                              
+			</ul>
+		</li>   
+		<li class="livre">
+			<ul>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2140&amp;sub_category=all&amp;do=search">eBook <span class="ico_book"></span></a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2140&amp;sub_category=2151&amp;do=search">Audio</a></li>           
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2140&amp;sub_category=2152&amp;do=search">BDS</a></li>           
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2140&amp;sub_category=2153&amp;do=search">Comics</a></li>           
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2140&amp;sub_category=2154&amp;do=search">Livres</a></li>           
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2140&amp;sub_category=2155&amp;do=search">Manga</a></li>           
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2140&amp;sub_category=2156&amp;do=search">Presse</a></li>           
+			</ul>
+		</li>
+		<li class="audio">
+			<ul>   
+
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2139&amp;sub_category=all&amp;do=search">Audio <span class="ico_music"></span></a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2139&amp;sub_category=2147&amp;do=search">Karaoké</a></li>       
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2139&amp;sub_category=2148&amp;do=search">Musique</a></li>       
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2139&amp;sub_category=2150&amp;do=search">Podcast Radio</a></li>       
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2139&amp;sub_category=2149&amp;do=search">Samples</a></li>       
+			</ul>
+		</li>
+				<li class="app">
+			<ul>
+
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=all&amp;do=search">Applications <span class="ico_windows"></span></a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=2177&amp;do=search">Autre</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=2176&amp;do=search">Formation</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=2171&amp;do=search">Linux</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=2172&amp;do=search">MacOS</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=2174&amp;do=search">Smartphone</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=2175&amp;do=search">Tablette</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2144&amp;sub_category=2173&amp;do=search">Windows</a></li>
+			</ul>
+		</li>
+		<li class="jeu">
+			<ul>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=all&amp;do=search">Jeux vidéo <span class="ico_gamepad"></span></a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2167&amp;do=search">Autre</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2159&amp;do=search">Linux</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2160&amp;do=search">MacOS</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2162&amp;do=search">Microsoft</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2163&amp;do=search">Nintendo</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2165&amp;do=search">Smartphone</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2164&amp;do=search">Sony</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2166&amp;do=search">Tablette</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2142&amp;sub_category=2161&amp;do=search">Windows</a></li>        
+			</ul>
+		</li>
+		<li class="emu">
+			<ul>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2141&amp;sub_category=all&amp;do=search">Émulation <span class="ico_gamepad"></span></a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2141&amp;sub_category=2157&amp;do=search">Émulateur</a></li>       
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2141&amp;sub_category=2158&amp;do=search">ROM/ISO</a></li>       
+			</ul>
+		</li>
+		<li class="gps">
+			<ul>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2143&amp;sub_category=all&amp;do=search">GPS <span class="ico_map"></span></a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2143&amp;sub_category=2168&amp;do=search">Applications</a></li>
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2143&amp;sub_category=2169&amp;do=search">Cartes</a></li>        
+				<li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2143&amp;sub_category=2170&amp;do=search">Divers</a></li>        
+			</ul>
+		</li>
+	</ul>
+</div>
+
+	
+	<script type="text/javascript">
+		$(function(){
+			$('select').select2();
+		});
+	</script>
+      <!-- Tpl -->
+      <script id="option_field" type="x-tmpl-mustache">     
+       {{^display}}
+       <tr>     
+        <td>{{name}}</td>
+          <td>
+            <select name="option_{{name}}{{#multiple}}:multiple{{/multiple}}[]" style="height:200px" multiple>
+              <option></option>
+              {{#values}}
+                <option>{{.}}</option>
+              {{/values}}
+            </select>
+          </td>
+       {{/display}}
+
+       {{#display}}
+        <td class="adv_search_option">{{name}}</td>
+          <td>
+            <select name="option_{{name}}{{#multiple}}:multiple{{/multiple}}[]" style="height:200px" multiple>
+              <option></option>
+              {{#values}}
+                <option>{{.}}</option>
+              {{/values}}
+            </select>
+          </td>
+       </tr>
+       {{/display}}
+      </script>
+
+
+    <div class="container-fluid" id="middle">
+      <!-- Основной контейнер -->
+      <main class="ct" role="main">
+        <div class="row">
+         
+            <div class="col-lg-12">
+              
+              <div id="title">
+          <h1> Rechercher un torrent</h1>
+        </div>
+
+<style type="text/css">
+
+.input-table::-webkit-input-placeholder {
+    color: #00000094;
+    font-size: 12px;
+    opacity: 1; 
+}
+.input-table:-moz-placeholder {
+    color: #00000094;
+    font-size: 12px;
+    opacity: 1; 
+}
+.input-table::-moz-placeholder {
+    color: #00000094;
+    font-size: 12px;
+    opacity: 1; 
+}
+.input-table:-ms-input-placeholder {
+    color: #00000094;
+    font-size: 12px;
+    opacity: 1; 
+}
+
+.search-criteria tr td:first-child, .search-criteria td.adv_search_option {
+	font-weight: bold;
+	color: #2c343f !important;
+}
+</style>
+         
+          <section class="content">
+            <h2><span class="ico_search"></span> Critères de recherche</h2>
+            <!-- formulaire recherche avancée -->
+            <form method="get" action="https://ww2.yggtorrent.is/engine/search">
+                        <div class="table-responsive" style="width: 100%">
+              <table class="search-criteria">
+                <tbody>
+                <tr>
+                  <td>Nom </td>
+                  <td colspan="3"><input class="input-table" name="name" type="text" value="" placeholder="Rechercher dans les noms des torrents (Ex : Titanic, Avatar, Terminator)"> </td>
+                </tr>
+                <tr>
+                  <td>Description</td>
+                  <td colspan="3"><input class="input-table" name="description" type="text" value="" placeholder="Rechercher dans les descriptions des torrents (Ex : Brad pitt, VFF, AAC)"></td>
+                </tr>
+                <tr>
+                  <td>Fichier</td>
+                  <td colspan="3"><input class="input-table" name="file" type="text" value="" placeholder="Rechercher dans les fichiers des torrents (Ex : epub, mkv, avi)"></td>
+                </tr>
+                <tr>
+                  <td>Uploader</td>
+                  <td colspan="3"><input class="input-table" name="uploader" type="text" value="" placeholder="Rechercher les torrents d'un uploader (Ex : Fred2683, Apolowindow)"></td>
+                </tr>
+      
+                 <tr id="adv_search_cat">
+                  <td>Catégorie</td>
+                  <td>
+                  <!-- Catégorie -->
+                    <select id="categorie" name="category" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                        <option value="all" selected="">-- Toutes les catégories --</option>
+                        <option value="2145" data-categorie="FilmVidéo">Film/Vidéo</option>
+                        <option value="2139" data-categorie="Audio">Audio</option>
+                        <option value="2144" data-categorie="Application">Application</option>
+                        <option value="2142" data-categorie="Jeu-vidéo">Jeu vidéo</option>
+                        <option value="2140" data-categorie="eBook">eBook</option>
+                        <option value="2141" data-categorie="Emulation">Emulation</option>
+                        <option value="2143" data-categorie="GPS">GPS</option>
+                                            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 186px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-categorie-container"><span class="select2-selection__rendered" id="select2-categorie-container" title="Film/Vidéo">Film/Vidéo</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                  </td>
+                  <td id="subcat_item" class="adv_search_option" style="">Sous-catégorie</td>
+                  <td id="subcat_item" style="">
+                   <div id="sub_categorie_container">
+                   <!-- Sous catégories -->
+                      <select id="sub_categories_FilmVidéo" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                            <option value="all" selected="">-- Toutes les sous-catégories --</option>                      
+                            <option value="2178">Animation</option>
+                            <option value="2179">Animation Série</option>
+                            <option value="2180">Concert</option>
+                            <option value="2181">Documentaire</option>
+                            <option value="2182">Emission TV</option>
+                            <option value="2183">Film</option>
+                            <option value="2184">Série TV</option>
+                            <option value="2185">Spectacle</option>
+                            <option value="2186">Sport</option>
+                            <option value="2187">Vidéo-clips</option>
+                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: auto; display: inline-block;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sub_categories_FilmVidéo-container"><span class="select2-selection__rendered" id="select2-sub_categories_FilmVidéo-container" title="Film">Film</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        <select id="sub_categories_Audio" style="display: none;" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                            <option value="all" selected="">-- Toutes les sous-catégories --</option>                          
+                            <option value="2147">Karaoké</option>
+                            <option value="2148">Musique</option>
+                            <option value="2150">Podcast Radio</option>
+                            <option value="2149">Samples</option>
+                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: auto; display: none;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sub_categories_Audio-container"><span class="select2-selection__rendered" id="select2-sub_categories_Audio-container" title="-- Toutes les sous-catégories --">-- Toutes les sous-catégories --</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        <select id="sub_categories_Application" style="display: none;" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                            <option value="all" selected="">-- Toutes les sous-catégories --</option>                   
+                            <option value="2177">Autre</option>
+                            <option value="2176">Formation</option>
+                            <option value="2171">Linux</option>
+                            <option value="2172">MacOS</option>
+                            <option value="2174">Smartphone</option>
+                            <option value="2175">Tablette</option>
+                            <option value="2173">Windows</option>
+                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: auto; display: none;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sub_categories_Application-container"><span class="select2-selection__rendered" id="select2-sub_categories_Application-container" title="-- Toutes les sous-catégories --">-- Toutes les sous-catégories --</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                       <select id="sub_categories_Jeu-vidéo" style="display: none;" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                            <option value="all" selected="">-- Toutes les sous-catégories --</option>                    
+                            <option value="2167">Autre</option>
+                            <option value="2159">Linux</option>
+                            <option value="2160">MacOS</option>
+                            <option value="2162">Microsoft</option>
+                            <option value="2163">Nintendo</option>
+                            <option value="2165">Smartphone</option>
+                            <option value="2164">Sony</option>
+                            <option value="2166">Tablette</option>
+                            <option value="2161">Windows</option>
+                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: auto; display: none;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sub_categories_Jeu-vidéo-container"><span class="select2-selection__rendered" id="select2-sub_categories_Jeu-vidéo-container" title="-- Toutes les sous-catégories --">-- Toutes les sous-catégories --</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        <select id="sub_categories_eBook" style="display: none;" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                            <option value="all" selected="">-- Toutes les sous-catégories --</option>                        
+                            <option value="2151">Audio</option>
+                            <option value="2152">Bds</option>
+                            <option value="2153">Comics</option>
+                            <option value="2154">Livres</option>
+                            <option value="2155">Mangas</option>
+                            <option value="2156">Presse</option>
+                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: auto; display: none;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sub_categories_eBook-container"><span class="select2-selection__rendered" id="select2-sub_categories_eBook-container" title="-- Toutes les sous-catégories --">-- Toutes les sous-catégories --</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        <select id="sub_categories_Emulation" style="display: none;" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                            <option value="all" selected="">-- Toutes les sous-catégories --</option>                        
+                            <option value="2157">Emulateurs</option>
+                            <option value="2158">Roms</option>
+                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: auto; display: none;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sub_categories_Emulation-container"><span class="select2-selection__rendered" id="select2-sub_categories_Emulation-container" title="-- Toutes les sous-catégories --">-- Toutes les sous-catégories --</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        <select id="sub_categories_GPS" style="display: none;" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                            <option value="all" selected="">-- Toutes les sous-catégories --</option>                  
+                            <option value="2168">Applications</option>
+                            <option value="2169">Cartes</option>
+                            <option value="2170">Divers</option>
+                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: auto; display: none;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sub_categories_GPS-container"><span class="select2-selection__rendered" id="select2-sub_categories_GPS-container" title="-- Toutes les sous-catégories --">-- Toutes les sous-catégories --</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        <select id="sub_categories_XXX" style="display: none;" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                            <option value="all" selected="">-- Toutes les sous-catégories --</option>                     
+                            <option value="2189">Films</option>
+                            <option value="2190">Hentai</option>
+                            <option value="2191">Images</option>
+                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: auto; display: none;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sub_categories_XXX-container"><span class="select2-selection__rendered" id="select2-sub_categories_XXX-container" title="-- Toutes les sous-catégories --">-- Toutes les sous-catégories --</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                    </div>
+                    <input name="sub_category" type="hidden" value="2183">
+                </td>
+                </tr>     
+       <tr>     
+        <td>langue</td>
+          <td>
+            <select name="option_langue:multiple[]" style="height:200px" multiple="" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+              <option></option>
+                <option value="1">Anglais</option>
+                <option value="2">Français (VFF/Truefrench)</option>
+                <option value="3">Muet</option>
+                <option value="4">Multi (Français inclus)</option>
+                <option value="5">Multi (Québécois inclus)</option>
+                <option value="6">Québécois (VFQ/French)</option>
+                <option value="7">VFSTFR</option>
+                <option value="8">VOSTFR</option>
+            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 191px;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="-- Sélection --" style="width: 396px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+          </td>
+
+           
+
+        <td class="adv_search_option">qualite</td>
+          <td>
+            <select name="option_qualite[]" style="height:200px" multiple="" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+              <option></option>
+                <option value="1">BDrip/BRrip [Rip SD (non HD) depuis Bluray ou HDrip]</option>
+                <option value="2">Bluray 4K [Full ou Remux]</option>
+                <option value="3">Bluray [Full]</option>
+                <option value="4">Bluray [Remux]</option>
+                <option value="5">DVD-R 5 [DVD &lt; 4.37GB]</option>
+                <option value="6">DVD-R 9 [DVD &gt; 4.37GB]</option>
+                <option value="7">DVDrip [Rip depuis DVD-R]</option>
+                <option value="8">HDrip 1080 [Rip HD depuis Bluray]</option>
+                <option value="9">HDrip 4k [Rip HD 4k depuis source 4k]</option>
+                <option value="10">HDrip 720 [Rip HD depuis Bluray]</option>
+                <option value="11">TVrip [Rip SD (non HD) depuis Source Tv HD/SD]</option>
+                <option value="12">TVripHD 1080 [Rip HD depuis Source Tv HD]</option>
+                <option value="13">TvripHD 4k [Rip HD 4k depuis Source Tv 4k]</option>
+                <option value="14">TVripHD 720 [Rip HD depuis Source Tv HD]</option>
+                <option value="15">VCD/SVCD/VHSrip</option>
+                <option value="16">Web-Dl</option>
+                <option value="17">Web-Dl 1080</option>
+                <option value="18">Web-Dl 4K</option>
+                <option value="19">Web-Dl 720</option>
+                <option value="20">WEBrip</option>
+                <option value="21">WEBrip 1080</option>
+                <option value="22">WEBrip 4K</option>
+                <option value="23">WEBrip 720</option>
+            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 375px;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="-- Sélection --" style="width: 396px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+          </td>
+       </tr>
+           
+       <tr>     
+        <td>systeme</td>
+          <td>
+            <select name="option_systeme:multiple[]" style="height:200px" multiple="" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+              <option></option>
+                <option value="1">Nintendo Ds/3Ds</option>
+                <option value="2">PC/Platine/Lecteur Multimédia/etc</option>
+                <option value="3">Smartphone/Tablette/PSP/PSVita</option>
+            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 248px;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="-- Sélection --" style="width: 396px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+          </td>
+
+           
+
+        <td class="adv_search_option">type</td>
+          <td>
+            <select name="option_type[]" style="height:200px" multiple="" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+              <option></option>
+                <option value="1">2D (Standard)</option>
+                <option value="2">3D Converti (Non officiel/Amateur)</option>
+                <option value="3">3D Converti (Post-Production)</option>
+                <option value="4">3D Natif (Production)</option>
+            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 247px;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="-- Sélection --" style="width: 396px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+          </td>
+       </tr>
+           
+       <tr>     
+        <td>genre</td>
+          <td>
+            <select name="option_genre:multiple[]" style="height:200px" multiple="" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+              <option></option>
+                <option value="1">Action</option>
+                <option value="2">Animalier</option>
+                <option value="3">Animation</option>
+                <option value="4">Arts</option>
+                <option value="5">Arts Martiaux</option>
+                <option value="6">Aventure</option>
+                <option value="7">Ballet</option>
+                <option value="8">Biopic</option>
+                <option value="9">Chorégraphie</option>
+                <option value="10">Classique</option>
+                <option value="11">Comédie</option>
+                <option value="12">Comédie dramatique</option>
+                <option value="13">Court-métrage</option>
+                <option value="14">Culinaire</option>
+                <option value="15">Danse contemporaine</option>
+                <option value="16">Découverte</option>
+                <option value="17">Divers</option>
+                <option value="18">Documentaire</option>
+                <option value="19">Drame</option>
+                <option value="20">Enquête</option>
+                <option value="21">Epouvante &amp; Horreur</option>
+                <option value="22">Espionnage</option>
+                <option value="23">Famille</option>
+                <option value="24">Fantastique</option>
+                <option value="25">Fiction</option>
+                <option value="26">Film Noir</option>
+                <option value="27">Gore</option>
+                <option value="28">Guerre</option>
+                <option value="29">Historique</option>
+                <option value="30">Humour</option>
+                <option value="31">Intéractif</option>
+                <option value="32">Judiciaire</option>
+                <option value="33">Litterature</option>
+                <option value="34">Manga</option>
+                <option value="35">Musical</option>
+                <option value="36">Nanar</option>
+                <option value="37">Nature</option>
+                <option value="38">Opéra</option>
+                <option value="39">Opéra Rock</option>
+                <option value="40">Pédagogie</option>
+                <option value="41">Péplum</option>
+                <option value="42">Philosophie</option>
+                <option value="43">Policier</option>
+                <option value="44">Politique &amp; Géopolitique</option>
+                <option value="45">Religions &amp; Croyances</option>
+                <option value="46">Romance</option>
+                <option value="47">Santé &amp; Bien-être</option>
+                <option value="48">Science fiction</option>
+                <option value="49">Sciences &amp; Technologies</option>
+                <option value="50">Société</option>
+                <option value="51">Sports &amp; Loisirs</option>
+                <option value="52">Télé-Réalité</option>
+                <option value="53">Théatre</option>
+                <option value="54">Thriller</option>
+                <option value="55">Variétés TV</option>
+                <option value="56">Voyages &amp; Tourisme</option>
+                <option value="57">Western</option>
+            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 181px;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="-- Sélection --" style="width: 396px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+          </td>
+
+      </tr>
+                <!-- Options avancées de recherche -->
+                <tr>
+                  <td class="alone" colspan="4">
+                    <button class="solo" type="submit" name="do" value="search">Recherche</button>
+                  </td>
+                </tr>
+              </tbody></table>
+            </div>
+            </form>
+          </section>
+
+
+
+ <section class="content">
+           <center><ul class="pagination"><li class="active"><a href="">1</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=50" data-ci-pagination-page="2">2</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=100" data-ci-pagination-page="3">3</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=150" data-ci-pagination-page="4">4</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=200" data-ci-pagination-page="5">5</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=250" data-ci-pagination-page="6">6</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=300" data-ci-pagination-page="7">7</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=350" data-ci-pagination-page="8">8</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=400" data-ci-pagination-page="9">9</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=50" data-ci-pagination-page="2" rel="next">suivante →</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=9950" data-ci-pagination-page="200">dernière »</a></li></ul></center>
+        </section>
+
+       
+   <section class="content" id="#torrents">
+    <h2>Résultats de recherche <font style="float: right">41124 résultats trouvés </font></h2>
+          <!-- Start table -->
+          <div class="table-responsive results" style="width: 100%">
+<table class="table">
+<thead>
+<tr>
+<th style="width: 82px;" class="no">Type</th>
+<th><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;order=desc&amp;sort=name">Nom</a></th>
+<th class="no">NFO</th>
+<th><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;order=desc&amp;sort=name">Comm.</a></th>
+<th><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;order=desc&amp;sort=publish_date">Age</a></th>
+<th><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;order=desc&amp;sort=size">Taille</a></th>
+<th><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;order=desc&amp;sort=completed">Compl.</a></th>
+<th><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;order=desc&amp;sort=seed">Seed</a></th>
+<th><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;order=desc&amp;sort=leech">Leech</a></th>
+</tr>
+</thead>
+<tbody>
+          <!--- listing torrents -->
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283508-here+comes+the+boom+2012+truefrench+bdrip+xvid-atn">Here.Comes the.Boom.2012.TRUEFRENCH.BDRIP.XVID-ATN 
+
+
+</a></td>
+<td><a target="283508" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532185252</div><span class="ico_clock-o"></span> 41 minutes </td>
+<td>703.48Mo</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283501-sanitarium+2013+french+dvdrip+xvid-moi">Sanitarium.2013.FRENCH.DVDRip.XviD-MOi 
+
+
+</a></td>
+<td><a target="283501" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532184670</div><span class="ico_clock-o"></span> 51 minutes </td>
+<td>700.26Mo</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283481-scary+or+die+2012+french+dvdrip+xvid-carpediem">Scary.Or.Die.2012.FRENCH.DVDRiP.XviD-CARPEDIEM 
+
+
+</a></td>
+<td><a target="283481" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532183233</div><span class="ico_clock-o"></span> 1 heure </td>
+<td>701.36Mo</td>
+<td>75</td>
+<td>4</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283477-deadfall+trail+2012+truefrench+dvdrip+xvid-utt">Deadfall.Trail.2012.TRUEFRENCH.DVDRip.XviD-UTT 
+
+
+</a></td>
+<td><a target="283477" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532182681</div><span class="ico_clock-o"></span> 1 heure </td>
+<td>703.12Mo</td>
+<td>0</td>
+<td>2</td>
+<td>4</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283469-un+drole+de+caïd+1964+french+dvdrip+divx-notag">Un Drole De Caïd 1964 French DVDrip Divx-NoTag 
+
+
+</a></td>
+<td><a target="283469" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532181608</div><span class="ico_clock-o"></span> 1 heure </td>
+<td>691.10Mo</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283467-shutter+2008+unrated+french+brrip+xvid+ac3-lkt">Shutter.2008.UNRATED.FRENCH.BRRip.XviD.AC3-LKT 
+
+
+</a></td>
+<td><a target="283467" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532181450</div><span class="ico_clock-o"></span> 1 heure </td>
+<td>1.36Go</td>
+<td>0</td>
+<td>1</td>
+<td>3</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283461-the+haunting+in+connecticut+2+ghosts+of+georgia+2013+french+dvdrip+xvid-tmb">The.Haunting.In.Connecticut.2.Ghosts.Of.Georgia 2013.FRENCH.DVDRip.XviD-TMB 
+
+
+</a></td>
+<td><a target="283461" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532180216</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>699.02Mo</td>
+<td>75</td>
+<td>8</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283454-i+saw+the+devil+2011+multi+1080p+bdrip+x265+ac3-zza">I saw the devil 2011 Multi 1080p BDRip x265 AC3-zza  
+
+
+</a></td>
+<td><a target="283454" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532179225</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>3.92Go</td>
+<td>0</td>
+<td>1</td>
+<td>12</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283453-the+pact+2012+french+dvdrip-notag">The.Pact.2012.FRENCH.DVDRip-NoTag 
+
+
+</a></td>
+<td><a target="283453" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>2 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532178931</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>699.12Mo</td>
+<td>3</td>
+<td>4</td>
+<td>4</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283443-zoe+2018+french+webrip+xvid-fun">Zoe.2018.FRENCH.WEBRip.XviD-FuN 
+
+
+</a></td>
+<td><a target="283443" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>3 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532178415</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>700.58Mo</td>
+<td>0</td>
+<td>1</td>
+<td>32</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283440-comment+cest+loin+2015+truefrench+bluray+1080p+hdlightx264">Comment c'est loin 2015 TrueFRENCH Bluray 1080p HDLightx264 
+
+
+</a></td>
+<td><a target="283440" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532178010</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>1.77Go</td>
+<td>0</td>
+<td>1</td>
+<td>4</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283428-the+heat+2013+truefrench+unrated+720p+bluray+x264-diebex">The.Heat.2013.TRUEFRENCH.UNRATED.720p.BluRay.x264-DIEBEX 
+
+
+</a></td>
+<td><a target="283428" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532177271</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>4.37Go</td>
+<td>0</td>
+<td>1</td>
+<td>4</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283426-le+grand+restaurant+1966+french+dvd9+mpeg2">Le.Grand.Restaurant.1966.French.DVD9.Mpeg2 
+
+
+</a></td>
+<td><a target="283426" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532177166</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>5.31Go</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283425-land+of+the+lost+2009+multi+truefrench+1080p+hdlight+ac3+5+1+tzh-dread-team">Land.of.the.lost.2009.Multi.Truefrench.1080p.HDLight.AC3.5.1.TZH-Dread-Team 
+
+
+</a></td>
+<td><a target="283425" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532177149</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>2.73Go</td>
+<td>11</td>
+<td>12</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283423-pourquoi+tu+pleures+2011+french+dvdrip+xvid+ac3-autopsie">Pourquoi.Tu.Pleures.2011.FRENCH.DVDRiP.XviD.AC3-AUTOPSiE 
+
+
+</a></td>
+<td><a target="283423" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532177012</div><span class="ico_clock-o"></span> 2 heures </td>
+<td>1.49Go</td>
+<td>0</td>
+<td>1</td>
+<td>7</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283414-fanfan+1993+vff+dvdrip+aac+h264+notag">Fanfan.1993.VFF.DVDRip.AAC.H264.NoTag 
+
+
+</a></td>
+<td><a target="283414" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532175978</div><span class="ico_clock-o"></span> 3 heures </td>
+<td>1.26Go</td>
+<td>0</td>
+<td>1</td>
+<td>8</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283386-le+beauf+1986+french+dvdrip+xvid+ac3+hush">Le.Beauf.1986.FRENCH.DVDRiP.XViD.AC3.HuSh 
+
+
+</a></td>
+<td><a target="283386" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532171000</div><span class="ico_clock-o"></span> 4 heures </td>
+<td>1.37Go</td>
+<td>30</td>
+<td>23</td>
+<td>7</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283385-baby+driver+2017+truefrench+1080p+bluray+x265-lbs">Baby Driver.2017.TRUEFRENCH.1080p.BluRay.x265-LBS  
+
+
+</a></td>
+<td><a target="283385" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532170682</div><span class="ico_clock-o"></span> 4 heures </td>
+<td>1.83Go</td>
+<td>17</td>
+<td>19</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283381-the+remaining+2014+limited+french+bdrip+x264-rough">The.Remaining.2014.LiMiTED.FRENCH.BDRip.x264-ROUGH 
+
+
+</a></td>
+<td><a target="283381" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>3 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532169538</div><span class="ico_clock-o"></span> 5 heures </td>
+<td>616.69Mo</td>
+<td>94</td>
+<td>16</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283373-criminal+squad+2018+truefrench+720p+bluray+x264+aac+pixel">Criminal Squad 2018 Truefrench 720p BluRay x264 AAC PiXEL 
+
+
+</a></td>
+<td><a target="283373" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532168837</div><span class="ico_clock-o"></span> 5 heures </td>
+<td>1.85Go</td>
+<td>56</td>
+<td>46</td>
+<td>7</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283369-the+theatre+bizarre+2011+truefrench+dvdrip+xvid-utt">The.Theatre.Bizarre.2011.TRUEFRENCH.DVDRip.XviD-UTT 
+
+
+</a></td>
+<td><a target="283369" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532168673</div><span class="ico_clock-o"></span> 5 heures </td>
+<td>703.88Mo</td>
+<td>98</td>
+<td>13</td>
+<td>7</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283363-torpédo+2012+french+dvdrip+xvid-bloodymary">Torpédo.2012.FRENCH.DVDRip.XviD-BLOODYMARY 
+
+
+</a></td>
+<td><a target="283363" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>3 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532167887</div><span class="ico_clock-o"></span> 5 heures </td>
+<td>700.20Mo</td>
+<td>113</td>
+<td>17</td>
+<td>4</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283361-dark+crimes+2016+multi+1080p+bluray+remux+avc+dts-hd+ma+5+1-ozef">Dark.Crimes.2016.MULTi.1080p.BluRay.Remux.AVC.DTS-HD.MA.5.1-OZEF 
+
+
+</a></td>
+<td><a target="283361" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532167771</div><span class="ico_clock-o"></span> 5 heures </td>
+<td>17.51Go</td>
+<td>6</td>
+<td>7</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283360-sweeney+todd+le+diabolique+barbier+de+fleet+street+bonus+2008+multi+bluray+remux+1080p+vc-1+ac-3+-+dimos34">Sweeney Todd , le diabolique barbier de Fleet Street (+ Bonus) 2008 MULTI Bluray Remux 1080p VC-1 AC-3 - DIMOS34 
+
+
+</a></td>
+<td><a target="283360" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532167691</div><span class="ico_clock-o"></span> 5 heures </td>
+<td>37.35Go</td>
+<td>0</td>
+<td>1</td>
+<td>3</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283354-the+incite+mill+2010+stv+french+dvdrip+xvid-nakata">The.Incite.Mill.2010.STV.FRENCH.DVDRip.XviD-Nakata 
+
+
+</a></td>
+<td><a target="283354" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532166647</div><span class="ico_clock-o"></span> 5 heures </td>
+<td>699.75Mo</td>
+<td>5</td>
+<td>4</td>
+<td>1</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283352-la+femme+du+lac+1965+vostfr+dvd5+mpeg-2+ac3+horrorteam">La femme du lac 1965 VOSTFR DVD5 MPEG-2 AC3 HorrorTeam 
+
+
+</a></td>
+<td><a target="283352" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>3 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532166427</div><span class="ico_clock-o"></span> 5 heures </td>
+<td>4.36Go</td>
+<td>7</td>
+<td>7</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283351-sex+jack+k+wakamatsu+1970+dvdrip+xvid+vostfr+-+bolo">Sex Jack [K. Wakamatsu] 1970 DVDrip XviD VOSTFR - Bolo 
+
+
+</a></td>
+<td><a target="283351" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532165971</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>697.47Mo</td>
+<td>24</td>
+<td>20</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283346-demolition+man+1993+multi+vff+1080p+bluray+x265+dts-hdma+7+1+ac3+5+1-tsc">Demolition.Man.1993.MULTi.VFF.1080p.BluRay.x265.DTS-HDMA.7.1.AC3.5.1-TSC 
+
+
+</a></td>
+<td><a target="283346" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532165580</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>12.87Go</td>
+<td>19</td>
+<td>17</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283345-en+avant+la+musique+1962+french+dvdrip+divx-notag">En Avant La Musique 1962 French DVDrip Divx-NoTag 
+
+
+</a></td>
+<td><a target="283345" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532165234</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>699.68Mo</td>
+<td>6</td>
+<td>7</td>
+<td>3</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283343-absolument+fabuleux-2001-truefrench-dvdripx264-ac3-criss050607">Absolument fabuleux-2001-TrueFrench-DVDRIPx264-AC3-Criss050607 
+
+
+</a></td>
+<td><a target="283343" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532165175</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>1.74Go</td>
+<td>0</td>
+<td>1</td>
+<td>9</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283342-the+silent+house+la+casa+muda+2011+truefrench+brrip+x264+ac3-cnz">The.Silent.House.(La.Casa.Muda).2011.TRUEFRENCH.BRRiP.x264.AC3-CnZ 
+
+
+</a></td>
+<td><a target="283342" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532165097</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>1.37Go</td>
+<td>13</td>
+<td>9</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283340-police+story+3+-+supercop+1992+multi+1080p+bluray+x264-neirim">Police Story 3 - Supercop.1992.MULTi.1080p.Bluray.x264-Neirim 
+
+
+</a></td>
+<td><a target="283340" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532164271</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>6.78Go</td>
+<td>9</td>
+<td>7</td>
+<td>3</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283339-la+fête+à+henriette+1952+french+1080p+bdrip+x264+dts-fist">La.fête.à.Henriette.1952.FRENCH.1080p.BDrip.x264.DTS-fist 
+
+
+</a></td>
+<td><a target="283339" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>2 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532163976</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>8.82Go</td>
+<td>13</td>
+<td>12</td>
+<td>5</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283338-courte+tête+1956+french+dvdrip+xvid-notag">Courte Tête 1956 French DVDrip Xvid-NoTag 
+
+
+</a></td>
+<td><a target="283338" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532163931</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>698.41Mo</td>
+<td>11</td>
+<td>8</td>
+<td>0</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283336-the+pact+ii+2014+truefrench+hdlight+1080p+x264+ac3-svr">The.Pact.II.2014.TRUEFRENCH.HDlight.1080p.x264.AC3-SVR 
+
+
+</a></td>
+<td><a target="283336" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532163734</div><span class="ico_clock-o"></span> 6 heures </td>
+<td>1.68Go</td>
+<td>74</td>
+<td>9</td>
+<td>1</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283323-la+révolte+des+séminoles+-1955-western+vostfr+dvdrip+ac3+x264">La Révolte des Séminoles -1955-Western.VOSTFR.DVDRIP.AC3.X264 
+
+
+</a></td>
+<td><a target="283323" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>6 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532162220</div><span class="ico_clock-o"></span> 7 heures </td>
+<td>1.70Go</td>
+<td>27</td>
+<td>21</td>
+<td>5</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283321-la+révolte+des+séminoles+-1955-western+vostfr+dvd9">La Révolte des Séminoles -1955-Western.VOSTFR.DVD9 
+
+
+</a></td>
+<td><a target="283321" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>5 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532162107</div><span class="ico_clock-o"></span> 7 heures </td>
+<td>4.68Go</td>
+<td>14</td>
+<td>9</td>
+<td>0</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283319-le+sens+de+la+vie+1983+multi+dvdrip+xvid-ac3+afrique31">Le Sens de la vie.1983.MULTI.DVDRip.XVid-AC3.afrique31 
+
+
+</a></td>
+<td><a target="283319" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>3 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532161730</div><span class="ico_clock-o"></span> 7 heures </td>
+<td>2.08Go</td>
+<td>19</td>
+<td>15</td>
+<td>3</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283315-twixt+2012+truefrench+dvdrip+xvid-bloodymary">Twixt.2012.TRUEFRENCH.DVDRip.XviD-BLOODYMARY 
+
+
+</a></td>
+<td><a target="283315" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532160942</div><span class="ico_clock-o"></span> 7 heures </td>
+<td>696.07Mo</td>
+<td>146</td>
+<td>24</td>
+<td>1</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283309-paranoïa+unsane+2018+multi+vfi+1080p+bluray+x265+ac3+5+1-tsc">Paranoïa.(Unsane).2018.MULTi.VFI.1080p.BluRay.x265.AC3.5.1-TSC 
+
+
+</a></td>
+<td><a target="283309" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532159620</div><span class="ico_clock-o"></span> 7 heures </td>
+<td>9.32Go</td>
+<td>35</td>
+<td>32</td>
+<td>4</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283304-paranoïa+unsane+2018+multi+vfi+1080p+bluray+x265+dts-hdma+ac3+5+1-tsc">Paranoïa.(Unsane).2018.MULTi.VFI.1080p.BluRay.x265.DTS-HDMA.AC3.5.1-TSC 
+
+
+</a></td>
+<td><a target="283304" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532158941</div><span class="ico_clock-o"></span> 7 heures </td>
+<td>11.00Go</td>
+<td>18</td>
+<td>17</td>
+<td>4</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283302-herr+tartüff+1925+-+vostgb+bd+remux+1080p">Herr Tartüff, 1925 - VOSTGB BD Remux 1080p 
+
+
+</a></td>
+<td><a target="283302" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532158890</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>12.37Go</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283299-les+seducteurs+1980+multi+dvdrip+xvid-ac3+afrique31">Les Seducteurs.1980.MULTI.DVDRip.XVid-AC3.afrique31 
+
+
+</a></td>
+<td><a target="283299" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532158699</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>2.24Go</td>
+<td>29</td>
+<td>17</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283298-un+pont+entre+deux+rives+1999+vff+dvdrip+x264+ac3">Un pont entre deux rives 1999 VFF DVDrip x264 AC3  
+
+
+</a></td>
+<td><a target="283298" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>2 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532158609</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>1.17Go</td>
+<td>21</td>
+<td>16</td>
+<td>1</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283291-coeurs+perdus+en+atlantide+2002+vff+dvdrip+xvid+ac3">Coeurs perdus en Atlantide 2002 VFF DVDrip XVID AC3 
+
+
+</a></td>
+<td><a target="283291" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532158141</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>1.37Go</td>
+<td>14</td>
+<td>10</td>
+<td>1</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283289-la+guerre+des+rose+1989+multi+dvdrip+xvid-ac3+afrique31">La Guerre des Rose.1989.MULTI.DVDRip.XVid-AC3.afrique31 
+
+
+</a></td>
+<td><a target="283289" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532157994</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>2.00Go</td>
+<td>17</td>
+<td>13</td>
+<td>5</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283287-au+revoir+les+enfants+1987+vff+brrip+720p+x264+aac">Au revoir les enfants 1987 VFF BRRIP 720p x264 AAC 
+
+
+</a></td>
+<td><a target="283287" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>0 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532157699</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>1.46Go</td>
+<td>17</td>
+<td>14</td>
+<td>1</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283281-get+the+gringo+2012+multi+dvdrip+xvid-ac3+afrique31">Get the Gringo.2012.MULTI.DVDRip.XVid-AC3.afrique31 
+
+
+</a></td>
+<td><a target="283281" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>1 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532156667</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>1.72Go</td>
+<td>13</td>
+<td>10</td>
+<td>2</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283280-la+colline+de+ladieu+1955+multi+dvdrip+xvid-ac3+afrique31">La Colline de l'Adieu.1955.MULTI.DVDRip.XVid-AC3.afrique31 
+
+
+</a></td>
+<td><a target="283280" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>5 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532156243</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>2.16Go</td>
+<td>24</td>
+<td>19</td>
+<td>4</td>
+
+</tr>
+                      
+       <tr>
+<td><div class="hidden">2183</div><a href="https://ww2.yggtorrent.is/engine/url_builder?type=query&amp;source=sub_category&amp;id=2183"><span class="tag_subcat_2183"></span></a></td>
+<td style="text-align: left;"><a href="https://ww2.yggtorrent.is/torrent/filmvidéo/film/283278-ariane+jeune+fille+russe+1931+french+dvdrip+xvid-ac3+afrique31">Ariane, jeune fille russe.1931.FRENCH.DVDRip.XVid-AC3.afrique31 
+
+
+</a></td>
+<td><a target="283278" id="get_nfo"><img src="https://ww2.yggtorrent.is/static/img/nfo.gif"></a></td>
+<td>2 <span class="ico_comment"></span></td>
+<td><div class="hidden">1532155713</div><span class="ico_clock-o"></span> 8 heures </td>
+<td>1.43Go</td>
+<td>26</td>
+<td>21</td>
+<td>1</td>
+
+</tr>
+            
+            <!-- end table -->
+     </tbody>
+</table>
+</div></section></div>
+
+    
+            </div><!-- / column -->
+ <section class="content">
+           <center><ul class="pagination"><li class="active"><a href="">1</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=50" data-ci-pagination-page="2">2</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=100" data-ci-pagination-page="3">3</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=150" data-ci-pagination-page="4">4</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=200" data-ci-pagination-page="5">5</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=250" data-ci-pagination-page="6">6</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=300" data-ci-pagination-page="7">7</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=350" data-ci-pagination-page="8">8</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=400" data-ci-pagination-page="9">9</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=50" data-ci-pagination-page="2">suivante →</a></li><li><a href="https://ww2.yggtorrent.is/engine/search?name=&amp;description=&amp;file=&amp;uploader=&amp;category=2145&amp;sub_category=2183&amp;do=search&amp;page=9950" data-ci-pagination-page="200">dernière »</a></li></ul></center>
+        </section>
+        
+        </main></div><!-- / row -->
+      
+    
+  
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>    
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+   <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    
+<footer>
+	<div class="container">
+
+		<div class="copy text-center">
+			<strong>2017-2018 YggTorrent v3.1- Aucun droit réservé </strong><br>
+			Support YggTorrent - <a href="mailto:contact@ygg.is"> contact@ygg.is </a>
+			
+			<center>
+				<img style="width:110px; margin-top:15px" src="https://ww2.yggtorrent.is/static/img/footer.png">
+				<br>
+
+			</center>
+		</div>
+
+	</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script type="text/javascript">
+
+
+	$(function(){
+
+				/* init категорий view */
+		if(!Cookies.get('hide_side_menu')) {
+			hideSidebar();
+			$(window).on('resize', function(){
+    hideSidebar();
+}); 
+		}
+
+		function hideSidebar()
+{
+			$(window).width() < 1750 ? $('#cat, .back-cat').removeClass('active') : $('#cat, .back-cat').addClass('active');
+}
+				
+		$('.open').on('click', function(){
+    if ($('#cat').hasClass('active')){
+        Cookies.set('hide_side_menu', true, { expires: 7 });
+				$('#cat, .back-cat').removeClass('active');
+    }else{
+        Cookies.remove('hide_side_menu');
+				$('#cat, .back-cat').addClass('active');
+    }
+});
+
+
+		window.sendNotif = function(msg, type)
+{
+			$.notify(msg, {
+        type: type , allow_dismiss: true , placement: { from: "top", align: "center" },  animate:
+        {
+            enter: 'animated fadeInDown',exit: 'animated fadeOutUp'
+
+        }, delay: 3000});
+}
+
+
+		$('li').on('click', function () {
+    if ($(window).width() <= 800){
+				$('ul', this).toggle();
+    }
+});
+
+
+		
+		
+		window.closeNav = function()
+{
+			$('#top').stop().animate({
+        'left': -200,
+			},150);
+			$('[data-nav]').data('nav', 'no').removeClass('ico_close').addClass('ico_navicon');
+}
+window.navMobile = function(a)
+{
+    if (a == 'no')
+    {
+				$('#top').stop().animate({
+            'left': 0,
+				},300);
+				$('[data-nav]').data('nav', 'yes').removeClass('ico_navicon').addClass('ico_close');
+    }
+    else
+    {
+        closeNav();
+    }
+}
+window.closeUser = function()
+{
+			$('.panel').stop().animate({
+        'right': -200,
+			},150);
+			$('[data-user]').data('nav', 'no').removeClass('ico_close').addClass('ico_user');
+}
+window.userMobile = function(a)
+{
+    if (a == 'no')
+    {
+				$('.panel').stop().animate({
+            'right': 0,
+				},300);
+				$('[data-user]').data('nav', 'yes').removeClass('ico_user').addClass('ico_close');
+    }
+    else
+    {
+        closeUser();
+    }
+}
+		$('[data-nav]').on('click', function(){
+    var a = $(this).data('nav');
+    navMobile(a);
+    closeUser();
+    return false;
+});
+		$('[data-user]').on('click', function(){
+    var a = $(this).data('user');
+    userMobile(a);
+    closeNav();
+    return false;
+});
+		$(document).click(function(e){
+    if (!$(e.target).is ('[data-nav], [data-nav] *, #top, #top *')){
+        closeNav();
+    }
+    if (!$(e.target).is ('[data-user], [data-user] *, .panel, .panel *')){
+        closeUser();
+    }
+});
+
+
+		/****** CONNECT *****/
+
+		var h = $('html');
+		var panel = $('#connect');
+		var fV = $('.fadeconnect');
+
+		window.panelConnect = function()
+{
+    closeNav();
+    closeUser();
+
+    if (panel.css('opacity') == 0)
+    {
+        panel.stop().show();
+        panel.stop().animate({ top: 50, opacity: 1,},300);
+        fV.stop().fadeIn(300);
+        h.stop().css({ 'overflow':'hidden',});
+    }
+    else
+    {
+        fV.stop().fadeOut(300);
+        panel.stop().animate({ top: 20, opacity: 0,},300).promise().then(function(){
+            panel.stop().hide();
+            h.stop().css({ 'overflow':'auto',});
+        });
+    }
+}
+
+function hidePanelConnect()
+{
+    fV.stop().fadeOut(300);
+    panel.stop().animate({ top: 20, opacity: 0,},300).promise().then(function(){
+        panel.stop().hide();
+        h.stop().css({ 'overflow':'auto',});
+    });
+}
+
+		$('[data-connect], .fadeconnect').on('click', function(){
+    panelConnect();
+    return false;
+});
+
+		/****** NEWS *****/
+
+		$('[data-slidable] h2').on('click', function(){
+    console.log('ok');
+    var a = $(this).parent('[data-slidable]');
+			$('[data-slidable] .slidable').stop().slideUp();
+			$('[data-slidable]').attr('data-slidable', '');
+    a.children('.slidable').stop().slideDown();
+    a.attr('data-slidable', 'active');
+});
+
+
+      // Форма входа
+      $("#user-login").on("submit", function(e) {
+    e.preventDefault();
+      	$.ajax({
+        type: 'POST',
+      		url: 'https://ww2.yggtorrent.is/user/login',
+      		data: new FormData(this),
+      		contentType: false,             
+      		processData: false,
+      		success: function(data) {
+            hidePanelConnect();
+            if (data.hasOwnProperty('target_url'))
+            {
+                window.location.replace(data.target_url);
+            }
+            else
+            {
+      				      				$.getJSON('https://ww2.yggtorrent.is/user/ajax_usermenu', function(data) {   
+      					$('#top_panel').html(data.html);
+                    sendNotif('Heureux de vous revoir <strong>' + data.nickname + ' !</strong !', 'success');
+                });
+            }
+        } ,
+      		error: function(e, xhr, s) {
+            let error = e.responseJSON;
+            if (e.status == 403 && typeof error !== 'undefined')
+            {
+					$('#ban_msg_r').hide();
+                let ban_msg = $('#ban_msg_login');
+                ban_msg.find('.ban_duration').html(error.duration);
+                ban_msg.find('#ban_reason').attr('href', 'https://ww2.yggtorrent.is/user/ban_reason?h=' + error.reason_key);
+                ban_msg.show();
+            }
+            else if (e.status == 403)
+            {
+      				$('#login_msg_pass').hide();             	
+      				$('#login_msg_mail').show();
+            }
+            else if (e.status == 401)
+            {
+      				$('#login_msg_mail').hide();
+      				$('#login_msg_pass').show();
+      				$('#resetpass').show();
+            }
+            else
+            {
+                alert('Erreur ajax');
+            }
+
+
+        }
+    });
+});
+
+      
+
+      
+  });
+</script>
+
+<script type = "text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+
+
+
+        <script type = "text/javascript" >
+      $(function(){
+
+
+ 	   $(document).on('click','a#get_nfo', function(){
+      		$.get('https://ww2.yggtorrent.is/engine/get_nfo?torrent=' + $(this).attr('target'), function(nfo) {
+		    $('#nfo').html(nfo);
+		   $('#nfoModal').modal('show')
+
+            });
+});
+
+        var sub_category_display = false;
+var options_init = false;
+
+        $(document).on('change','#categorie', function()
+        {
+          $('input[name="sub_category"]').val('all');
+    if (this.value == 'all')
+    {
+           // $('input[name="sub_category"]').val('all');  
+            $('td#subcat_item').hide();
+        clearOptions();
+    }
+    else
+    {
+        if (!sub_category_display)
+        {
+             // console.log('ok')
+              $('td#subcat_item').show();
+            sub_category_display = true;
+        }
+            $('#sub_categorie_container .select2-container').hide();
+        var sub_category_id = $('option:selected', this).attr('data-categorie');
+        var selected_sub_category = $('#sub_categories_' + sub_category_id);
+        selected_sub_category.next(".select2-container").show();
+        selected_sub_category.show();
+        clearOptions();
+    }
+});
+
+        $(document).on('change','select[id^="sub_categories_"]', function()
+        {
+    if (this.value == 'all')
+    {
+           $('input[name="sub_category"]').val('all');
+        //$('td#subcat_item').hide();
+        clearOptions();
+    }
+    else
+    {
+            $('input[name="sub_category"]').val(this.value);
+        clearOptions();
+        setOptions(this.value);
+        console.log(this.value);
+    }
+});
+
+        function setOptions(sub_category)
+{
+          $.ajax
+          ({
+        type: 'GET',
+            dataType: 'json',
+            url: 'https://ww2.yggtorrent.is/engine/category_fields?id=' + sub_category,
+            timeout: 1500,
+            success: function(data)
+            {
+            if (Array.isArray(data))
+            {
+                var options_html = '';
+                data.forEach(function(op) {
+                    var template = $('#option_field').html();
+                    Mustache.parse(template);
+                    template = Mustache.render(template, op);
+                    options_html += template;
+                });
+            }
+            else
+            {
+                var template = $('#option_field').html();
+                Mustache.parse(template);
+                options_html = Mustache.render(template, data);
+            }
+              $('#adv_search_cat').after(options_html);
+            setIndex();
+              $('select:not(#adv_search_cat select)').select2({ placeholder: '-- Sélection --'});
+            if (options_init == false)
+            {
+                setInitOptions();
+            }
+        }
+    });
+}
+
+function clearOptions()
+{
+          $('[name^="option_"]').closest('tr').remove();
+}
+
+function setIndex()
+{
+          $('[name^="option_"]').each(function(){
+        var options = $(this).find('option');
+        options.each(function(index, el){
+            if (index > 0)
+            {
+                $(this).attr('value',$(this).index());
+            }
+        });
+    });
+}
+
+
+        $('#categorie').val(2145).trigger('change');
+var sub_category_id = $('#categorie option:selected').attr('data-categorie');
+        $('#sub_categories_' + sub_category_id).val(2183).trigger('change');
+
+/* Conservation des paramètres pour la recherche avancée */
+function setInitOptions()
+{
+    options_init = true;
+}
+
+      });
+    </script>
+
+  
+
+</body></html>
