@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Indexers.YggTorrent
             KB = 1,
             KiloBytes = 1,
             MB = 2,
-            MegaBytes = 3,
+            MegaBytes = 2,
             GB = 3,
             GigaBytes = 3,
             TB = 4,
