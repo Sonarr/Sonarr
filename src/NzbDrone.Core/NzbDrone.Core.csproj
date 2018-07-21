@@ -72,6 +72,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Growl.CoreLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.8.5.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.5\lib\Net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="ImageResizer, Version=3.4.3.103, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageResizer.3.4.3\lib\ImageResizer.dll</HintPath>
       <Private>True</Private>
@@ -744,6 +747,11 @@
     <Compile Include="IndexerSearch\SeasonSearchService.cs" />
     <Compile Include="IndexerSearch\SeriesSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeriesSearchService.cs" />
+    <Compile Include="Indexers\YggTorrent\FriendlyUnitConverter.cs" />
+    <Compile Include="Indexers\YggTorrent\YggTorrent.cs" />
+    <Compile Include="Indexers\YggTorrent\YggTorrentHtmlParser.cs" />
+    <Compile Include="Indexers\YggTorrent\YggTorrentRequestGenerator.cs" />
+    <Compile Include="Indexers\YggTorrent\YggTorrentSettings.cs" />
     <Compile Include="Instrumentation\Commands\ClearLogCommand.cs" />
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\DeleteUpdateLogFilesCommand.cs" />
