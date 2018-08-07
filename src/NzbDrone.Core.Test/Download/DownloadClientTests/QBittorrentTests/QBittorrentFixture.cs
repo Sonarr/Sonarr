@@ -495,5 +495,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             var item = Subject.GetItems().Single();
             item.Category.Should().Be(category);
         }
+
+        [Test]
+        public void should_handle_eta_biginteger()
+        {
+            // Let this stand as a lesson to never write temporary unit tests on your dev machine and claim it works.
+            // Commit the tests and let it run with the official build on the official build agents.
+            // (Also don't replace library versions in your build script)
+
+            var json = "{ \"eta\": 18446744073709335000 }";
+            var torrent = Newtonsoft.Json.JsonConvert.DeserializeObject<QBittorrentTorrent>(json);
+            torrent.Eta.ToString().Should().Be("18446744073709335000");
+
+        }
     }
 }

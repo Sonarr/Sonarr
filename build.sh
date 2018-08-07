@@ -52,15 +52,6 @@ CleanFolder()
     find $path -depth -empty -type d -exec rm -r "{}" \;
 }
 
-
-
-AddJsonNet()
-{
-    rm $outputFolder/Newtonsoft.Json.*
-    cp $sourceFolder/packages/Newtonsoft.Json.*/lib/net35/*.dll $outputFolder
-    cp $sourceFolder/packages/Newtonsoft.Json.*/lib/net35/*.dll $outputFolder/NzbDrone.Update
-}
-
 BuildWithMSBuild()
 {
     export PATH=$msBuild:$PATH
@@ -90,8 +81,6 @@ Build()
     fi
 
     CleanFolder $outputFolder false
-
-    AddJsonNet
 
     echo "Removing Mono.Posix.dll"
     rm $outputFolder/Mono.Posix.dll
