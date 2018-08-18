@@ -49,10 +49,13 @@ namespace NzbDrone.Core.Messaging.Commands
 
                 if (typeof(IEnumerable).IsAssignableFrom(xProperty.PropertyType))
                 {
-                    var xValueCollection = ((IEnumerable)xValue).Cast<object>().OrderBy(t => t);
-                    var yValueCollection = ((IEnumerable)yValue).Cast<object>().OrderBy(t => t);
+                    var xValueCollection = ((IEnumerable)xValue).Cast<object>();
+                    var yValueCollection = ((IEnumerable)yValue).Cast<object>();
 
-                    if (!xValueCollection.SequenceEqual(yValueCollection))
+                    var xNotY = xValueCollection.Except(yValueCollection);
+                    var yNotX = yValueCollection.Except(xValueCollection);
+
+                    if (xNotY.Any() || yNotX.Any())
                     {
                         return false;
                     }
