@@ -134,8 +134,12 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:[-_\W](?<![()\[]))+(?:\W?Season\W?)(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)+(?:Episode\W)(?:[-_. ]?(?<episode>(?<!\d+)\d{1,2}(?!\d+)))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Multi-episode with episodes in square brackets (Series Title [S01E11E12] or Series Title [S01E11-12])
+                new Regex(@"(?:.*(?:^))(?<title>.*?)[-._ ]+\[S(?<season>(?<!\d+)\d{2}(?!\d+))(?:[E-]{1,2}(?<episode>(?<!\d+)\d{2}(?!\d+)))+\]",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Multi-episode release with no space between series title and season (S01E11E12)
-                new Regex(@"(?:.*(?:^))(?<title>.*?)(?:\W?|_)S(?<season>(?<!\d+)\d{2}(?!\d+))(?:E(?<episode>(?<!\d+)\d{2}(?!\d+)))+",
+                new Regex(@"(?:.*(?:^))(?<title>.*?)S(?<season>(?<!\d+)\d{2}(?!\d+))(?:E(?<episode>(?<!\d+)\d{2}(?!\d+)))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Multi-episode with single episode numbers (S6.E1-E2, S6.E1E2, S6E1E2, etc)
