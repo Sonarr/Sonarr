@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Anime - Title with season number - Absolute Episode Number (Title S01 - EP14)
-                new Regex(@"^(?<title>.+?S\d{2})[. ]-[. ](?:EP)?(?<absoluteepisode>\d{2,3}(?!\d+|[-]))",
+                new Regex(@"^(?<title>.+?S\d{1,2})[-_. ]{3,}(?:EP)?(?<absoluteepisode>\d{2,3}(?!\d+|[-]))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Season only releases
