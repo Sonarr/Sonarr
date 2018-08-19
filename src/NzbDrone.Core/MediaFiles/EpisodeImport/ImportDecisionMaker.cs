@@ -61,7 +61,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 downloadClientItemInfo = Parser.Parser.ParseTitle(downloadClientItem.Title);
             }
 
-            var nonSampleVideoFileCount = GetNonSampleVideoFileCount(newFiles, series, downloadClientItemInfo, folderInfo);
+            // If not importing from a scene source (series folder for example), then assume all files are not samples
+            // to avoid using media info on every file needlessly (especially if Analyse Media Files is disabled).
+            var nonSampleVideoFileCount = sceneSource ? GetNonSampleVideoFileCount(newFiles, series, downloadClientItemInfo, folderInfo) : videoFiles.Count;
 
             var decisions = new List<ImportDecision>();
 
