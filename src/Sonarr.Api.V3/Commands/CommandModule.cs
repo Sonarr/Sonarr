@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common;
+using NzbDrone.Common.TPL;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -17,6 +18,8 @@ namespace Sonarr.Api.V3.Commands
     {
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly IServiceFactory _serviceFactory;
+        private readonly Debouncer _debouncer;
+        private readonly Dictionary<int, CommandResource> _pendingUpdates;
 
         public CommandModule(IManageCommandQueue commandQueueManager,
                              IBroadcastSignalRMessage signalRBroadcaster,
@@ -26,9 +29,13 @@ namespace Sonarr.Api.V3.Commands
             _commandQueueManager = commandQueueManager;
             _serviceFactory = serviceFactory;
 
+            _debouncer = new Debouncer(SendUpdates, TimeSpan.FromSeconds(0.1));
+            _pendingUpdates = new Dictionary<int, CommandResource>();
+
             GetResourceById = GetCommand;
             CreateResource = StartCommand;
             GetResourceAll = GetStartedCommands;
+            DeleteResource = CancelCommand;
 
             PostValidator.RuleFor(c => c.Name).NotBlank();
         }
@@ -56,14 +63,44 @@ namespace Sonarr.Api.V3.Commands
 
         private List<CommandResource> GetStartedCommands()
         {
-            return _commandQueueManager.GetStarted().ToResource();
+            return _commandQueueManager.All().ToResource();
+        }
+
+        private void CancelCommand(int id)
+        {
+            _commandQueueManager.Cancel(id);
         }
 
         public void Handle(CommandUpdatedEvent message)
         {
             if (message.Command.Body.SendUpdatesToClient)
             {
-                BroadcastResourceChange(ModelAction.Updated, message.Command.ToResource());
+                lock (_pendingUpdates)
+                {
+                    _pendingUpdates[message.Command.Id] = message.Command.ToResource();
+                }
+
+                _debouncer.Execute();
+            }
+        }
+
+        private void SendUpdates()
+        {
+            lock (_pendingUpdates)
+            {
+                var pendingUpdates = _pendingUpdates.Values.ToArray();
+                _pendingUpdates.Clear();
+
+                foreach (var pendingUpdate in pendingUpdates)
+                {
+                    BroadcastResourceChange(ModelAction.Updated, pendingUpdate);
+
+                    if (pendingUpdate.Name == typeof(MessagingCleanupCommand).Name.Replace("Command", "") &&
+                        pendingUpdate.Status == CommandStatus.Completed)
+                    {
+                        BroadcastResourceChange(ModelAction.Sync);
+                    }
+                }
             }
         }
     }

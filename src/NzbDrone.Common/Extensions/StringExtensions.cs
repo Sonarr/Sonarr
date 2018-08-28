@@ -9,6 +9,8 @@ namespace NzbDrone.Common.Extensions
 {
     public static class StringExtensions
     {
+        private static readonly Regex CamelCaseRegex = new Regex("(?<!^)[A-Z]", RegexOptions.Compiled);
+
         public static string NullSafe(this string target)
         {
             return ((object)target).NullSafe().ToString();
@@ -132,6 +134,11 @@ namespace NzbDrone.Common.Extensions
             var byteResult = (byte)((first << 6) | (second << 3) | (third));
 
             return Encoding.ASCII.GetString(new [] { byteResult });
+        }
+
+        public static string SplitCamelCase(this string input)
+        {
+            return CamelCaseRegex.Replace(input, match => " " + match.Value);
         }
     }
 }

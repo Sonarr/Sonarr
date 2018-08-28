@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
     [TestFixture]
     public class CommandExecutorFixture : TestBase<CommandExecutor>
     {
-        private BlockingCollection<CommandModel> _commandQueue;
+        private CommandQueue _commandQueue;
         private Mock<IExecute<CommandA>> _executorA;
         private Mock<IExecute<CommandB>> _executorB;
         private bool _commandExecuted = false;
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
 
         private void GivenCommandQueue()
         {
-            _commandQueue = new BlockingCollection<CommandModel>(new CommandQueue());
+            _commandQueue = new CommandQueue();
 
             Mocker.GetMock<IManageCommandQueue>()
                   .Setup(s => s.Queue(It.IsAny<CancellationToken>()))
