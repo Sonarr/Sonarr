@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -162,6 +162,18 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
                 tvShow.Add(new XElement("mpaa", series.Certification));
                 tvShow.Add(new XElement("id", series.TvdbId));
+
+                var uniqueId = new XElement("uniqueid", series.TvdbId);
+                uniqueId.SetAttributeValue("type", "tvdb");
+                uniqueId.SetAttributeValue("default", true);
+                tvShow.Add(uniqueId);
+
+                if (series.ImdbId.IsNotNullOrWhiteSpace())
+                {
+                    var imdbId = new XElement("uniqueid", series.ImdbId);
+                    imdbId.SetAttributeValue("type", "imdb");
+                    tvShow.Add(imdbId);
+                }
 
                 foreach (var genre in series.Genres)
                 {
