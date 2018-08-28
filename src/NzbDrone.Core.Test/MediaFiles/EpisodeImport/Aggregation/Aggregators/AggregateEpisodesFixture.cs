@@ -105,5 +105,24 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetEpisodes(folderEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
         }
+
+        [Test]
+        public void should_use_file_when_folder_is_absolute_and_file_is_not()
+        {
+            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
+            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.01");
+            var localEpisode = new LocalEpisode
+                               {
+                                   FileEpisodeInfo = fileEpisodeInfo,
+                                   FolderEpisodeInfo = folderEpisodeInfo,
+                                   Path = @"C:\Test\Unsorted TV\Series.Title.101\Series.Title.S01E01.mkv".AsOsAgnostic(),
+                                   Series = _series
+                               };
+
+            Subject.Aggregate(localEpisode, false);
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(v => v.GetEpisodes(fileEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
+        }
     }
 }
