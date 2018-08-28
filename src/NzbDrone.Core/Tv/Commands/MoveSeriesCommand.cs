@@ -9,5 +9,6 @@ namespace NzbDrone.Core.Tv.Commands
         public string DestinationPath { get; set; }
 
         public override bool SendUpdatesToClient => true;
+        public override bool RequiresDiskAccess => true;
     }
 }

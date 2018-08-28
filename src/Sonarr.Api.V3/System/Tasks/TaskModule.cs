@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Messaging.Events;
@@ -12,8 +13,6 @@ namespace Sonarr.Api.V3.System.Tasks
     public class TaskModule : SonarrRestModuleWithSignalR<TaskResource, ScheduledTask>, IHandle<CommandExecutedEvent>
     {
         private readonly ITaskManager _taskManager;
-
-        private static readonly Regex NameRegex = new Regex("(?<!^)[A-Z]", RegexOptions.Compiled);
 
         public TaskModule(ITaskManager taskManager, IBroadcastSignalRMessage broadcastSignalRMessage)
             : base(broadcastSignalRMessage, "system/task")
@@ -51,7 +50,7 @@ namespace Sonarr.Api.V3.System.Tasks
             return new TaskResource
                    {
                        Id = scheduledTask.Id,
-                       Name = NameRegex.Replace(taskName, match => " " + match.Value),
+                       Name = taskName.SplitCamelCase(),
                        TaskName = taskName,
                        Interval = scheduledTask.Interval,
                        LastExecution = scheduledTask.LastExecution,

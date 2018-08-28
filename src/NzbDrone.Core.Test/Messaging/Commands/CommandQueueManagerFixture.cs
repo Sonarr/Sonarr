@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -41,6 +42,10 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         public void should_not_remove_commands_for_five_minutes_after_they_end()
         {
             var command = Subject.Push<CheckForFinishedDownloadCommand>(new CheckForFinishedDownloadCommand());
+
+            // Start the command to mimic CommandQueue's behaviour
+            command.StartedAt = DateTime.Now;
+            command.Status = CommandStatus.Started;
 
             Subject.Start(command);
             Subject.Complete(command, "All done");
