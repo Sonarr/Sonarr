@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using Sonarr.Http.REST;
 
@@ -10,6 +11,7 @@ namespace Sonarr.Api.V3.Commands
     public class CommandResource : RestResource
     {
         public string Name { get; set; }
+        public string CommandName { get; set; }
         public string Message { get; set; }
         public Command Body { get; set; }
         public CommandPriority Priority { get; set; }
@@ -23,37 +25,6 @@ namespace Sonarr.Api.V3.Commands
 
         [JsonIgnore]
         public string CompletionMessage { get; set; }
-
-        //Legacy
-        public CommandStatus State
-        {
-            get
-            {
-                return Status;
-            }
-
-            set { }
-        }
-
-        public bool Manual
-        {
-            get
-            {
-                return Trigger == CommandTrigger.Manual;
-            }
-
-            set { }
-        }
-
-        public DateTime StartedOn
-        {
-            get
-            {
-                return Queued;
-            }
-
-            set { }
-        }
 
         public DateTime? StateChangeTime
         {
@@ -106,6 +77,7 @@ namespace Sonarr.Api.V3.Commands
                 Id = model.Id,
 
                 Name = model.Name,
+                CommandName = model.Name.SplitCamelCase(),
                 Message = model.Message,
                 Body = model.Body,
                 Priority = model.Priority,

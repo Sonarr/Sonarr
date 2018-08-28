@@ -8,6 +8,7 @@ namespace NzbDrone.Core.MediaFiles.Commands
         public List<int> SeriesIds { get; set; }
 
         public override bool SendUpdatesToClient => true;
+        public override bool RequiresDiskAccess => true;
 
         public RenameSeriesCommand()
         {
