@@ -1,27 +1,36 @@
-﻿using System;
+using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace NzbDrone.Core.Messaging.Commands
 {
-    public class CommandQueue : IProducerConsumerCollection<CommandModel>
+    public class CommandQueue : IEnumerable
     {
-        private object Mutex = new object();
-
-        private List<CommandModel> _items;
+        private readonly object _mutex = new object();
+        private readonly List<CommandModel> _items;
 
         public CommandQueue()
         {
             _items = new List<CommandModel>();
         }
 
+        public int Count => _items.Count;
+
+        public void Add(CommandModel item)
+        {
+            lock (_mutex)
+            {
+                _items.Add(item);
+            }
+        }
+
         public IEnumerator<CommandModel> GetEnumerator()
         {
             List<CommandModel> copy = null;
 
-            lock (Mutex)
+            lock (_mutex)
             {
                 copy = new List<CommandModel>(_items);
             }
@@ -34,77 +43,140 @@ namespace NzbDrone.Core.Messaging.Commands
             return GetEnumerator();
         }
 
-        public void CopyTo(Array array, int index)
+        public List<CommandModel> All()
         {
-            lock (Mutex)
+            List<CommandModel> rval = null;
+
+            lock (_mutex)
             {
-                ((ICollection)_items).CopyTo(array, index);
+                rval = _items;
+            }
+
+            return rval;
+        }
+
+        public CommandModel Find(int id)
+        {
+            return All().FirstOrDefault(q => q.Id == id);
+        }
+
+        public void RemoveMany(IEnumerable<CommandModel> commands)
+        {
+            lock (_mutex)
+            {
+                foreach (var command in commands)
+                {
+                    _items.Remove(command);
+                }
+            }
+        }
+        public bool RemoveIfQueued(int id)
+        {
+            var rval = false;
+
+            lock (_mutex)
+            {
+                var command = _items.FirstOrDefault(q => q.Id == id);
+
+                if (command?.Status == CommandStatus.Queued)
+                {
+                    _items.Remove(command);
+                    rval = true;
+                }
+            }
+
+            return rval;
+        }
+
+        public List<CommandModel> QueuedOrStarted()
+        {
+            return All().Where(q => q.Status == CommandStatus.Queued || q.Status == CommandStatus.Started)
+                        .ToList();
+        }
+
+        public IEnumerable<CommandModel> GetConsumingEnumerable()
+        {
+            return GetConsumingEnumerable(CancellationToken.None);
+        }
+
+        public IEnumerable<CommandModel> GetConsumingEnumerable(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (TryGet(out var command))
+                {
+                    yield return command;
+                }
+
+                Thread.Sleep(10);
             }
         }
 
-        public int Count => _items.Count;
-
-        public object SyncRoot => Mutex;
-
-        public bool IsSynchronized => true;
-
-        public void CopyTo(CommandModel[] array, int index)
+        public bool TryGet(out CommandModel item)
         {
-            lock (Mutex)
-            {
-                _items.CopyTo(array, index);
-            }
-        }
+            var rval = true;
+            item = default(CommandModel);
 
-        public bool TryAdd(CommandModel item)
-        {
-            Add(item);
-            return true;
-        }
-
-        public bool TryTake(out CommandModel item)
-        {
-            bool rval = true;
-            lock (Mutex)
+            lock (_mutex)
             {
                 if (_items.Count == 0)
                 {
-                    item = default(CommandModel);
                     rval = false;
                 }
 
                 else
                 {
-                    item = _items.Where(c => c.Status == CommandStatus.Queued)
-                                 .OrderByDescending(c => c.Priority)
-                                 .ThenBy(c => c.QueuedAt)
-                                 .First();
+                    var startedCommands = _items.Where(c => c.Status == CommandStatus.Started)
+                                                .ToList();
 
-                    _items.Remove(item);
+                    var localItem = _items.Where(c =>
+                                          {
+                                              // If an executing command requires disk access don't return a command that
+                                              // requires disk access. A lower priority or later queued task could be returned
+                                              // instead, but that will allow other tasks to execute whiule waiting for disk access.
+                                              if (startedCommands.Any(x => x.Body.RequiresDiskAccess))
+                                              {
+                                                  return c.Status == CommandStatus.Queued &&
+                                                         !c.Body.RequiresDiskAccess;
+                                              }
+
+                                              return c.Status == CommandStatus.Queued;
+                                          })
+                                          .OrderByDescending(c => c.Priority)
+                                          .ThenBy(c => c.QueuedAt)
+                                          .FirstOrDefault();
+
+                    // Nothing queued that meets the requirements
+                    if (localItem == null)
+                    {
+                        rval = false;
+                    }
+
+                    // If any executing command is exclusive don't want return another command until it completes.
+                    else if (startedCommands.Any(c => c.Body.IsExclusive))
+                    {
+                        rval = false;
+                    }
+
+                    // If the next command to execute is exclusive wait for executing commands to complete.
+                    // This will prevent other tasks from starting so the exclusive task executes in the order it should.
+                    else if (localItem.Body.IsExclusive && startedCommands.Any())
+                    {
+                        rval = false;
+                    }
+
+                    // A command ready to execute
+                    else
+                    {
+                        localItem.StartedAt = DateTime.UtcNow;
+                        localItem.Status = CommandStatus.Started;
+
+                        item = localItem;
+                    }
                 }
             }
 
             return rval;
-        }
-
-        public CommandModel[] ToArray()
-        {
-            CommandModel[] rval = null;
-
-            lock (Mutex)
-            {
-                rval = _items.ToArray();
-            }
-
-            return rval;
-        }
-
-        public void Add(CommandModel item)
-        {
-            lock (Mutex)
-            {
-                _items.Add(item);
-            }
         }
     }
 }
