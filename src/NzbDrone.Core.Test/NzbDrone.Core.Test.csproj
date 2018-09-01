@@ -336,6 +336,9 @@
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\MultiEpisodeFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleYearFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\TitleYearFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheYearFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheFixture.cs" />
     <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
     <Compile Include="ParserTests\ValidateParsedEpisodeInfoFixture.cs" />
