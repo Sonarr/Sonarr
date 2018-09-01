@@ -314,6 +314,7 @@
     <Compile Include="Datastore\Migration\115_add_downloadclient_status.cs" />
     <Compile Include="Datastore\Migration\121_update_animetosho_url.cs" />
     <Compile Include="Datastore\Migration\122_add_remux_qualities_in_profile.cs" />
+    <Compile Include="Datastore\Migration\124_remove_media_browser_metadata.cs" />
     <Compile Include="Datastore\Migration\117_add_webrip_and_br480_qualites_in_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
@@ -907,8 +908,6 @@
     <Compile Include="MetadataSource\SkyHook\SkyHookProxy.cs" />
     <Compile Include="MetadataSource\SearchSeriesComparer.cs" />
     <Compile Include="MetadataSource\SkyHook\SkyHookException.cs" />
-    <Compile Include="Extras\Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
-    <Compile Include="Extras\Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
     <Compile Include="Extras\Metadata\Consumers\Roksbox\RoksboxMetadata.cs" />
     <Compile Include="Extras\Metadata\Consumers\Roksbox\RoksboxMetadataSettings.cs" />
     <Compile Include="Extras\Metadata\Consumers\Wdtv\WdtvMetadata.cs" />
