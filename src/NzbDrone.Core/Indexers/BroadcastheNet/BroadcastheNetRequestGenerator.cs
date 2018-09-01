@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -54,19 +54,6 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters.Name = string.Format("S{0:00}%E{1:00}%", episode.SeasonNumber, episode.EpisodeNumber);
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
-                }
-
-                if (searchCriteria.UserInvokedSearch)
-                {
-                    foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
-                    {
-                        parameters = parameters.Clone();
-
-                        parameters.Category = "Season";
-                        parameters.Name = string.Format("Season {0}%", seasonNumber);
-
-                        pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
-                    }
                 }
             }
 

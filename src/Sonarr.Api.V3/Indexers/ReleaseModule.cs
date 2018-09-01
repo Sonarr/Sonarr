@@ -84,6 +84,11 @@ namespace Sonarr.Api.V3.Indexers
                 return GetEpisodeReleases(Request.Query.episodeId);
             }
 
+            if (Request.Query.seriesId.HasValue && Request.Query.seasonNumber.HasValue)
+            {
+                return GetSeasonReleases(Request.Query.seriesId, Request.Query.seasonNumber);
+            }
+
             return GetRss();
         }
 
@@ -98,7 +103,24 @@ namespace Sonarr.Api.V3.Indexers
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Episode search failed: " + ex.Message, ex);
+                _logger.Error(ex, "Episode search failed: " + ex.Message);
+            }
+
+            return new List<ReleaseResource>();
+        }
+
+        private List<ReleaseResource> GetSeasonReleases(int seriesId, int seasonNumber)
+        {
+            try
+            {
+                var decisions = _nzbSearchService.SeasonSearch(seriesId, seasonNumber, false, true, true);
+                var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
+
+                return MapDecisions(prioritizedDecisions);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Season search failed: " + ex.Message);
             }
 
             return new List<ReleaseResource>();
