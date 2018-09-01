@@ -309,6 +309,7 @@
     <Compile Include="Datastore\Migration\121_update_animetosho_url.cs" />
     <Compile Include="Datastore\Migration\122_add_remux_qualities_in_profile.cs" />
     <Compile Include="Datastore\Migration\124_remove_media_browser_metadata.cs" />
+    <Compile Include="Datastore\Migration\125_remove_notify_my_android_and_pushalot_notifications.cs" />
     <Compile Include="Datastore\Migration\117_add_webrip_and_br480_qualites_in_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
@@ -1032,10 +1033,6 @@
     <Compile Include="Notifications\NotificationFactory.cs" />
     <Compile Include="Notifications\NotificationRepository.cs" />
     <Compile Include="Notifications\NotificationService.cs" />
-    <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroid.cs" />
-    <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidPriority.cs" />
-    <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidProxy.cs" />
-    <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidSettings.cs" />
     <Compile Include="Notifications\Plex\HomeTheater\PlexClient.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1055,11 +1052,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
-    <Compile Include="Notifications\Pushalot\Pushalot.cs" />
-    <Compile Include="Notifications\Pushalot\PushalotPriority.cs" />
-    <Compile Include="Notifications\Pushalot\PushalotProxy.cs" />
-    <Compile Include="Notifications\Pushalot\PushalotResponse.cs" />
-    <Compile Include="Notifications\Pushalot\PushalotSettings.cs" />
     <Compile Include="Notifications\PushBullet\PushBullet.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />
