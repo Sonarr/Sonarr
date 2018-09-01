@@ -491,8 +491,10 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             {
                 VideoCodec = "AVC",
                 AudioFormat = "DTS",
+                AudioChannels = 6,
                 AudioLanguages = "English/Spanish",
-                Subtitles = "English/Spanish/Italian"
+                Subtitles = "English/Spanish/Italian",
+                SchemaRevision = 3
             };
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
@@ -508,8 +510,10 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             {
                 VideoCodec = "AVC",
                 AudioFormat = "DTS",
+                AudioChannels = 6,
                 AudioLanguages = "English",
-                Subtitles = "English/Spanish/Italian"
+                Subtitles = "English/Spanish/Italian",
+                SchemaRevision = 3
             };
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
