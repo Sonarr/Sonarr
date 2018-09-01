@@ -126,7 +126,7 @@ class NamingModal extends Component {
     ];
 
     const seriesTokens = [
-      { token: '{Series Title}', example: 'Series Title' },
+      { token: '{Series Title}', example: 'Series Title!' },
       { token: '{Series CleanTitle}', example: 'Series Title' },
       { token: '{Series CleanTitleYear}', example: 'Series Title 2010' },
       { token: '{Series TitleThe}', example: 'Series Title, The' },

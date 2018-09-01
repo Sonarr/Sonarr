@@ -12,7 +12,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {
     [TestFixture]
-    public class TitleTheFixture : CoreTest<FileNameBuilder>
+    public class CleanTitleYearFixture : CoreTest<FileNameBuilder>
     {
         private Series _series;
         private Episode _episode;
@@ -46,36 +46,17 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                 .Returns<Quality>(v => Quality.DefaultQualityDefinitions.First(c => c.Quality == v));
         }
 
-        [TestCase("The Mist", "Mist, The")]
-        [TestCase("A Place to Call Home", "Place to Call Home, A")]
-        [TestCase("An Adventure in Space and Time", "Adventure in Space and Time, An")]
-        [TestCase("The Flash (2010)", "Flash, The (2010)")]
-        [TestCase("A League Of Their Own (AU)", "League Of Their Own, A (AU)")]
-        [TestCase("The Fixer (ZH) (2015)", "Fixer, The (ZH) (2015)")]
-        [TestCase("The Sixth Sense 2 (Thai)", "Sixth Sense 2, The (Thai)")]
-        [TestCase("The Amazing Race (Latin America)", "Amazing Race, The (Latin America)")]
-        [TestCase("The Rat Pack (A&E)", "Rat Pack, The (A&E)")]
-        [TestCase("The Climax: I (Almost) Got Away With It (2016)", "Climax- I (Almost) Got Away With It, The (2016)")]
-        public void should_get_expected_title_back(string title, string expected)
+        [TestCase("The Mist", 2018, "The Mist 2018")]
+        [TestCase("The Rat Pack (A&E)", 1999, "The Rat Pack AandE 1999")]
+        [TestCase("The Climax: I (Almost) Got Away With It (2016)", 2016, "The Climax I Almost Got Away With It 2016")]
+        public void should_get_expected_title_back(string title, int year, string expected)
         {
             _series.Title = title;
-            _namingConfig.StandardEpisodeFormat = "{Series TitleThe}";
+            _series.Year = year;
+            _namingConfig.StandardEpisodeFormat = "{Series CleanTitleYear}";
 
             Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
                    .Should().Be(expected);
-        }
-
-        [TestCase("A")]
-        [TestCase("Anne")]
-        [TestCase("Theodore")]
-        [TestCase("3%")]
-        public void should_not_change_title(string title)
-        {
-            _series.Title = title;
-            _namingConfig.StandardEpisodeFormat = "{Series TitleThe}";
-
-            Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
-                   .Should().Be(title);
         }
     }
 }
