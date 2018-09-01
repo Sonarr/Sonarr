@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -41,19 +41,22 @@ namespace NzbDrone.Core.Organizer
             _standardSeries = new Series
             {
                 SeriesType = SeriesTypes.Standard,
-                Title = "The Series Title (2010)"
+                Title = "The Series Title!",
+                Year = 2010
             };
 
             _dailySeries = new Series
             {
                 SeriesType = SeriesTypes.Daily,
-                Title = "The Series Title (2010)"
+                Title = "The Series Title!",
+                Year = 2010
             };
 
             _animeSeries = new Series
             {
                 SeriesType = SeriesTypes.Anime,
-                Title = "The Series Title (2010)"
+                Title = "The Series Title!",
+                Year = 2010
             };
 
             _episode1 = new Episode
