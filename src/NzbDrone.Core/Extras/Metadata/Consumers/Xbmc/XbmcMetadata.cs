@@ -13,6 +13,7 @@ using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Core.Tags;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
@@ -21,16 +22,19 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
     {
         private readonly Logger _logger;
         private readonly IMapCoversToLocal _mediaCoverService;
+        private readonly ITagService _tagService;
         private readonly IDetectXbmcNfo _detectNfo;
         private readonly IDiskProvider _diskProvider;
 
         public XbmcMetadata(IDetectXbmcNfo detectNfo,
                             IDiskProvider diskProvider,
                             IMapCoversToLocal mediaCoverService,
+                            ITagService tagService,
                             Logger logger)
         {
             _logger = logger;
             _mediaCoverService = mediaCoverService;
+            _tagService = tagService;
             _diskProvider = diskProvider;
             _detectNfo = detectNfo;
         }
@@ -178,6 +182,16 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 foreach (var genre in series.Genres)
                 {
                     tvShow.Add(new XElement("genre", genre));
+                }
+
+                if (series.Tags.Any())
+                {
+                    var tags = _tagService.GetTags(series.Tags);
+
+                    foreach (var tag in tags)
+                    {
+                        tvShow.Add(new XElement("tag", tag.Label));
+                    }
                 }
 
                 if (series.FirstAired.HasValue)
