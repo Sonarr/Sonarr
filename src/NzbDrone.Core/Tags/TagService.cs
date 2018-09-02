@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Tags
     {
         Tag GetTag(int tagId);
         Tag GetTag(string tag);
+        List<Tag> GetTags(IEnumerable<int> ids);
         TagDetails Details(int tagId);
         List<TagDetails> Details();
         List<Tag> All();
@@ -59,6 +60,11 @@ namespace NzbDrone.Core.Tags
             {
                 return _repo.GetByLabel(tag);
             }
+        }
+
+        public List<Tag> GetTags(IEnumerable<int> ids)
+        {
+            return _repo.Get(ids).ToList();
         }
 
         public TagDetails Details(int tagId)
