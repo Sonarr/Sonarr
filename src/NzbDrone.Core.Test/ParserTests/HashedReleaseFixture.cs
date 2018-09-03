@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -80,6 +80,13 @@ namespace NzbDrone.Core.Test.ParserTests
                 "The Good Wife",
                 Quality.HDTV720p,
                 "NZBgeek"
+            },
+            new object[]
+            {
+                @"C:\Test\Fargo.S03E04.1080p.WEB-DL.DD5.1.H264-RARBG\170424_26.mkv".AsOsAgnostic(),
+                "Fargo",
+                Quality.WEBDL1080p,
+                "RARBG"
             }
         };
 

@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
-        private static readonly Regex[] RejectHashedReleasesRegex = new Regex[]
+        private static readonly Regex[] RejectHashedReleasesRegexes = new Regex[]
             {
                 // Generic match for md5 and mixed-case hashes.
                 new Regex(@"^[0-9a-zA-Z]{32}", RegexOptions.Compiled),
@@ -275,7 +275,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^abc$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
                 //b00bs - Started appearing January 2015
-                new Regex(@"^b00bs$", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                new Regex(@"^b00bs$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+
+                // 170424_26 - Started appearing August 2018
+                new Regex(@"^\d{6}_\d{2}$"), 
             };
 
         //Regex to detect whether the title was reversed.
@@ -751,7 +754,7 @@ namespace NzbDrone.Core.Parser
 
             var titleWithoutExtension = RemoveFileExtension(title);
 
-            if (RejectHashedReleasesRegex.Any(v => v.IsMatch(titleWithoutExtension)))
+            if (RejectHashedReleasesRegexes.Any(v => v.IsMatch(titleWithoutExtension)))
             {
                 Logger.Debug("Rejected Hashed Release Title: " + title);
                 return false;
