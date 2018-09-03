@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Notifications.Pushover
             var request = new RestRequest(Method.POST);
             request.AddParameter("token", settings.ApiKey);
             request.AddParameter("user", settings.UserKey);
+            request.AddParameter("device", string.Join(",", settings.Devices));
             request.AddParameter("title", title);
             request.AddParameter("message", message);
             request.AddParameter("priority", settings.Priority);

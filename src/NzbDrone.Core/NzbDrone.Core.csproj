@@ -1066,7 +1066,7 @@
     <Compile Include="Notifications\Pushover\InvalidResponseException.cs" />
     <Compile Include="Notifications\Pushover\Pushover.cs" />
     <Compile Include="Notifications\Pushover\PushoverPriority.cs" />
-    <Compile Include="Notifications\Pushover\PushoverService.cs" />
+    <Compile Include="Notifications\Pushover\PushoverProxy.cs" />
     <Compile Include="Notifications\Pushover\PushoverSettings.cs" />
     <Compile Include="Notifications\Xbmc\XbmcJsonException.cs" />
     <Compile Include="Notifications\Xbmc\HttpApiProvider.cs" />
