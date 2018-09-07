@@ -32,7 +32,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             _completedDownloadFolder = @"c:\blackhole\completed".AsOsAgnostic();
             _blackholeFolder = @"c:\blackhole\torrent".AsOsAgnostic();
             _filePath = (@"c:\blackhole\torrent\" + _title + ".torrent").AsOsAgnostic();
-            _magnetFilePath = Path.ChangeExtension(_filePath, ".magnet");
 
             Mocker.SetConstant<IScanWatchFolder>(Mocker.Resolve<ScanWatchFolder>());
 
@@ -77,6 +76,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetFileSize(It.IsAny<string>()))
                 .Returns(1000000);
+        }
+
+        protected void GivenMagnetFilePath(string extension = ".magnet")
+        {
+            _magnetFilePath = Path.ChangeExtension(_filePath, extension);
         }
 
         protected override RemoteEpisode CreateRemoteEpisode()
@@ -145,7 +149,27 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         [Test]
         public void Download_should_save_magnet_if_enabled()
         {
+            GivenMagnetFilePath();
             Subject.Definition.Settings.As<TorrentBlackholeSettings>().SaveMagnetFiles = true;
+
+            var remoteEpisode = CreateRemoteEpisode();
+            remoteEpisode.Release.DownloadUrl = null;
+
+            Subject.Download(remoteEpisode);
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_magnetFilePath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void Download_should_save_magnet_using_specified_extension()
+        {
+            var magnetFileExtension = ".url";
+            GivenMagnetFilePath(magnetFileExtension);
+            Subject.Definition.Settings.As<TorrentBlackholeSettings>().SaveMagnetFiles = true;
+            Subject.Definition.Settings.As<TorrentBlackholeSettings>().MagnetFileExtension = magnetFileExtension;
 
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.DownloadUrl = null;
@@ -161,6 +185,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         [Test]
         public void Download_should_not_save_magnet_if_disabled()
         {
+            GivenMagnetFilePath();
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.DownloadUrl = null;
 
