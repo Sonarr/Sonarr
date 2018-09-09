@@ -42,21 +42,30 @@ namespace NzbDrone.Core.Organizer
             {
                 SeriesType = SeriesTypes.Standard,
                 Title = "The Series Title!",
-                Year = 2010
+                Year = 2010,
+                ImdbId = "tt12345",
+                TvdbId = 12345,
+                TvMazeId = 54321
             };
 
             _dailySeries = new Series
             {
                 SeriesType = SeriesTypes.Daily,
                 Title = "The Series Title!",
-                Year = 2010
+                Year = 2010,
+                ImdbId = "tt12345",
+                TvdbId = 12345,
+                TvMazeId = 54321
             };
 
             _animeSeries = new Series
             {
                 SeriesType = SeriesTypes.Anime,
                 Title = "The Series Title!",
-                Year = 2010
+                Year = 2010,
+                ImdbId = "tt12345",
+                TvdbId = 12345,
+                TvMazeId = 54321
             };
 
             _episode1 = new Episode
