@@ -132,6 +132,7 @@ namespace NzbDrone.Core.Organizer
             pattern = AddAbsoluteNumberingTokens(pattern, tokenHandlers, series, episodes, namingConfig);
 
             AddSeriesTokens(tokenHandlers, series);
+            AddIdTokens(tokenHandlers, series);
             AddEpisodeTokens(tokenHandlers, episodes);
             AddEpisodeFileTokens(tokenHandlers, episodeFile);
             AddQualityTokens(tokenHandlers, series, episodeFile);
@@ -232,6 +233,7 @@ namespace NzbDrone.Core.Organizer
             var tokenHandlers = new Dictionary<string, Func<TokenMatch, string>>(FileNameBuilderTokenEqualityComparer.Instance);
 
             AddSeriesTokens(tokenHandlers, series);
+            AddIdTokens(tokenHandlers, series);
 
             return CleanFolderName(ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers, namingConfig));
         }
@@ -246,6 +248,7 @@ namespace NzbDrone.Core.Organizer
             var tokenHandlers = new Dictionary<string, Func<TokenMatch, string>>(FileNameBuilderTokenEqualityComparer.Instance);
 
             AddSeriesTokens(tokenHandlers, series);
+            AddIdTokens(tokenHandlers, series);
             AddSeasonTokens(tokenHandlers, seasonNumber);
 
             return CleanFolderName(ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers, namingConfig));
@@ -549,6 +552,13 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{MediaInfo Simple}"] = m => $"{videoCodec} {audioCodec}";
 
             tokenHandlers["{MediaInfo Full}"] = m => $"{videoCodec} {audioCodec}{mediaInfoAudioLanguages} {mediaInfoSubtitleLanguages}";
+        }
+
+        private void AddIdTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)
+        {
+            tokenHandlers["{ImdbId}"] = m => series.ImdbId;
+            tokenHandlers["{TvdbId}"] = m => series.TvdbId.ToString();
+            tokenHandlers["{TvMazeId}"] = m => series.TvMazeId.ToString();
         }
 
         private string GetLanguagesToken(string mediaInfoLanguages)
