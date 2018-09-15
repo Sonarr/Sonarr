@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -101,7 +102,7 @@ namespace NzbDrone.Common.Http.Dispatchers
 
             using (var responseStream = httpWebResponse.GetResponseStream())
             {
-                if (responseStream != null)
+                if (responseStream != null && responseStream != Stream.Null)
                 {
                     try
                     {
