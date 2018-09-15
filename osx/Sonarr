@@ -9,7 +9,11 @@ APPNAME="Sonarr"
  
 #set up environment
 if [[ -x '/opt/local/bin/mono' ]]; then
+    # Macports and mono-supplied installer path
     export PATH="/opt/local/bin:$PATH"
+elif [[ -x '/usr/local/bin/mono' ]]; then
+    # Homebrew-supplied path to mono
+    export PATH="/usr/local/bin:$PATH"
 fi
 
 export DYLD_FALLBACK_LIBRARY_PATH="$DIR"
