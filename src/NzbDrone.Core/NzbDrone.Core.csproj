@@ -1000,6 +1000,7 @@
     <Compile Include="Profiles\Qualities\QualityIndex.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\QualityDetectionSource.cs" />
+    <Compile Include="Qualities\QualityFinder.cs" />
     <Compile Include="Qualities\QualitySource.cs" />
     <Compile Include="Qualities\Revision.cs" />
     <Compile Include="Queue\EstimatedCompletionTimeComparer.cs" />
