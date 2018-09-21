@@ -109,11 +109,7 @@ namespace NzbDrone.Core.Qualities
                 Bluray2160pRemux
             };
 
-            AllLookup = new Quality[All.Select(v => v.Id).Max() + 1];
-            foreach (var quality in All)
-            {
-                AllLookup[quality.Id] = quality;
-            }
+            AllLookup = All.ToDictionary(q => q.Id, q => q);
 
             DefaultQualityDefinitions = new HashSet<QualityDefinition>
             {
@@ -143,7 +139,7 @@ namespace NzbDrone.Core.Qualities
 
         public static readonly List<Quality> All;
 
-        public static readonly Quality[] AllLookup;
+        public static readonly Dictionary<int, Quality> AllLookup;
 
         public static readonly HashSet<QualityDefinition> DefaultQualityDefinitions;
 
@@ -151,11 +147,11 @@ namespace NzbDrone.Core.Qualities
         {
             if (id == 0) return Unknown;
 
-            var quality = AllLookup[id];
-
-            if (quality == null)
+            if (!AllLookup.TryGetValue(id, out var quality))
+            {
                 throw new ArgumentException("ID does not match a known quality", nameof(id));
-                        
+            }
+
             return quality;
         }
 
@@ -167,11 +163,6 @@ namespace NzbDrone.Core.Qualities
         public static explicit operator int(Quality quality)
         {
             return quality.Id;
-        }
-
-        public static Quality FindBySourceAndResolution(QualitySource source, int resolution)
-        {
-            return All.SingleOrDefault(q => q.Source == source && q.Resolution == resolution);
         }
     }
 }

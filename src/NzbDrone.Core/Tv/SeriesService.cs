@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTitle(string title);
         Series FindByTitle(string title, int year);
         Series FindByTitleInexact(string title);
+        Series FindByPath(string path);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
         List<Series> AllForTag(int tagId);
@@ -132,6 +133,11 @@ namespace NzbDrone.Core.Tv
             }
 
             return match;
+        }
+
+        public Series FindByPath(string path)
+        {
+            return _seriesRepository.FindByPath(path);
         }
 
         public Series FindByTitle(string title, int year)
