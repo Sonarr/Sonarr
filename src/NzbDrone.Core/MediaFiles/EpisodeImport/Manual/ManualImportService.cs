@@ -114,6 +114,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 }
             }
 
+            // Try a lookup by the path if the series is still unknown, this will handle
+            // the case where the series folder doesn't match the series title.
+            if (series == null)
+            {
+                series = _seriesService.FindByPath(rootFolder);
+            }
+
             if (series == null)
             {
                 var files = _diskScanService.FilterFiles(baseFolder, _diskScanService.GetVideoFiles(baseFolder, false));
@@ -175,8 +182,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 return MapItem(new ImportDecision(localEpisode, new Rejection("Unknown Series")), rootFolder, downloadId, null);
             }
 
-            var importDecisions = _importDecisionMaker.GetImportDecisions(new List<string> {file},
-                series, downloadClientItem, null, SceneSource(series, baseFolder));
+            var importDecisions = _importDecisionMaker.GetImportDecisions(new List<string> {file}, series, downloadClientItem, null, SceneSource(series, baseFolder));
 
             if (importDecisions.Any())
             {
