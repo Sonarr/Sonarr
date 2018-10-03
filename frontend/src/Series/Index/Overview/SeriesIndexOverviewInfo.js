@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
 import { icons } from 'Helpers/Props';
@@ -182,6 +183,7 @@ function SeriesIndexOverviewInfo(props) {
     nextAiring,
     showRelativeDates,
     shortDateFormat,
+	longDateFormat,
     timeFormat
   } = props;
 
@@ -193,7 +195,7 @@ function SeriesIndexOverviewInfo(props) {
       {
         !!nextAiring &&
         <SeriesIndexOverviewInfoRow
-          title={nextAiring}
+          title={formatDateTime(nextAiring, shortDateFormat, timeFormat)}
           iconName={icons.SCHEDULED}
           label={getRelativeDate(
             nextAiring,
@@ -254,6 +256,7 @@ SeriesIndexOverviewInfo.propTypes = {
   sizeOnDisk: PropTypes.number,
   sortKey: PropTypes.string.isRequired,
   showRelativeDates: PropTypes.bool.isRequired,
+  longDateFormat: PropTypes.string.isRequired,
   shortDateFormat: PropTypes.string.isRequired,
   timeFormat: PropTypes.string.isRequired
 };
