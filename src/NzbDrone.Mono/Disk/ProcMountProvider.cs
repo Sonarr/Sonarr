@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -114,6 +114,12 @@ namespace NzbDrone.Mono.Disk
             if (mount.StartsWith("/var/lib/"))
             {
                 // Could be /var/lib/docker when docker uses zfs. Very unlikely that a useful mount is located in /var/lib.
+                return null;
+            }
+
+            if (mount.StartsWith("/snap/"))
+            {
+                // Mount point for snap packages
                 return null;
             }
 
