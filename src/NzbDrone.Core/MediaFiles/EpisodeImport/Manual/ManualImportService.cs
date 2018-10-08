@@ -34,7 +34,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         private readonly IEpisodeService _episodeService;
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
-        private readonly IAugmentingService _augmentingService;
+        private readonly IAggregationService _aggregationService;
         private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
         private readonly IEventAggregator _eventAggregator;
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                    ISeriesService seriesService,
                                    IEpisodeService episodeService,
                                    IVideoFileInfoReader videoFileInfoReader,
-                                   IAugmentingService augmentingService,
+                                   IAggregationService aggregationService,
                                    IImportApprovedEpisodes importApprovedEpisodes,
                                    ITrackedDownloadService trackedDownloadService,
                                    IDownloadedEpisodesImportService downloadedEpisodesImportService,
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             _seriesService = seriesService;
             _episodeService = episodeService;
             _videoFileInfoReader = videoFileInfoReader;
-            _augmentingService = augmentingService;
+            _aggregationService = aggregationService;
             _importApprovedEpisodes = importApprovedEpisodes;
             _trackedDownloadService = trackedDownloadService;
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
@@ -281,7 +281,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     localEpisode.FolderEpisodeInfo = Parser.Parser.ParseTitle(file.FolderName);
                 }
 
-                localEpisode = _augmentingService.Augment(localEpisode, false);
+                localEpisode = _aggregationService.Augment(localEpisode, false);
 
                 // Apply the user-chosen values.
                 localEpisode.Series = series;

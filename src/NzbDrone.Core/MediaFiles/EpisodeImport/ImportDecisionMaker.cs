@@ -23,21 +23,21 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     {
         private readonly IEnumerable<IImportDecisionEngineSpecification> _specifications;
         private readonly IMediaFileService _mediaFileService;
-        private readonly IAugmentingService _augmentingService;
+        private readonly IAggregationService _aggregationService;
         private readonly IDiskProvider _diskProvider;
         private readonly IDetectSample _detectSample;
         private readonly Logger _logger;
 
         public ImportDecisionMaker(IEnumerable<IImportDecisionEngineSpecification> specifications,
                                    IMediaFileService mediaFileService,
-                                   IAugmentingService augmentingService,
+                                   IAggregationService aggregationService,
                                    IDiskProvider diskProvider,
                                    IDetectSample detectSample,
                                    Logger logger)
         {
             _specifications = specifications;
             _mediaFileService = mediaFileService;
-            _augmentingService = augmentingService;
+            _aggregationService = aggregationService;
             _diskProvider = diskProvider;
             _detectSample = detectSample;
             _logger = logger;
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             try
             {
-                _augmentingService.Augment(localEpisode, otherFiles);
+                _aggregationService.Augment(localEpisode, otherFiles);
 
                 if (localEpisode.Episodes.Empty())
                 {

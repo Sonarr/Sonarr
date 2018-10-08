@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
         private void GivenAugmentationSuccess()
         {
-            Mocker.GetMock<IAugmentingService>()
+            Mocker.GetMock<IAggregationService>()
                   .Setup(s => s.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()))
                   .Callback<LocalEpisode, bool>((localEpisode, otherFiles) =>
                   {
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             GivenSpecifications(_pass1);
 
-            Mocker.GetMock<IAugmentingService>()
+            Mocker.GetMock<IAggregationService>()
                   .Setup(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()))
                   .Throws<TestException>();
 
@@ -173,7 +173,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             Subject.GetImportDecisions(_videoFiles, _series);
 
-            Mocker.GetMock<IAugmentingService>()
+            Mocker.GetMock<IAggregationService>()
                   .Verify(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()), Times.Exactly(_videoFiles.Count));
 
             ExceptionVerification.ExpectedErrors(3);
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             var decisions = Subject.GetImportDecisions(_videoFiles, _series);
 
-            Mocker.GetMock<IAugmentingService>()
+            Mocker.GetMock<IAggregationService>()
                   .Verify(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()), Times.Exactly(_videoFiles.Count));
 
             decisions.Should().HaveCount(3);
@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         [Test]
         public void should_return_a_decision_when_exception_is_caught()
         {
-            Mocker.GetMock<IAugmentingService>()
+            Mocker.GetMock<IAggregationService>()
                   .Setup(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()))
                   .Throws<TestException>();
 

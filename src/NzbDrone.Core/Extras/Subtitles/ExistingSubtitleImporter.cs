@@ -14,16 +14,16 @@ namespace NzbDrone.Core.Extras.Subtitles
     public class ExistingSubtitleImporter : ImportExistingExtraFilesBase<SubtitleFile>
     {
         private readonly IExtraFileService<SubtitleFile> _subtitleFileService;
-        private readonly IAugmentingService _augmentingService;
+        private readonly IAggregationService _aggregationService;
         private readonly Logger _logger;
 
         public ExistingSubtitleImporter(IExtraFileService<SubtitleFile> subtitleFileService,
-                                        IAugmentingService augmentingService,
+                                        IAggregationService aggregationService,
                                         Logger logger)
             : base (subtitleFileService)
         {
             _subtitleFileService = subtitleFileService;
-            _augmentingService = augmentingService;
+            _aggregationService = aggregationService;
             _logger = logger;
         }
 
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     try
                     {
-                        _augmentingService.Augment(localEpisode, false);
+                        _aggregationService.Augment(localEpisode, false);
                     }
                     catch (AugmentingFailedException ex)
                     {

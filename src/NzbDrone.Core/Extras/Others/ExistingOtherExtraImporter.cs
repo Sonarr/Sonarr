@@ -15,16 +15,16 @@ namespace NzbDrone.Core.Extras.Others
     public class ExistingOtherExtraImporter : ImportExistingExtraFilesBase<OtherExtraFile>
     {
         private readonly IExtraFileService<OtherExtraFile> _otherExtraFileService;
-        private readonly IAugmentingService _augmentingService;
+        private readonly IAggregationService _aggregationService;
         private readonly Logger _logger;
 
         public ExistingOtherExtraImporter(IExtraFileService<OtherExtraFile> otherExtraFileService,
-                                          IAugmentingService augmentingService,
+                                          IAggregationService aggregationService,
                                           Logger logger)
             : base(otherExtraFileService)
         {
             _otherExtraFileService = otherExtraFileService;
-            _augmentingService = augmentingService;
+            _aggregationService = aggregationService;
             _logger = logger;
         }
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Extras.Others
 
                 try
                 {
-                    _augmentingService.Augment(localEpisode, false);
+                    _aggregationService.Augment(localEpisode, false);
                 }
                 catch (AugmentingFailedException ex)
                 {

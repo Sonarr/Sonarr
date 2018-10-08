@@ -16,18 +16,18 @@ namespace NzbDrone.Core.Extras.Metadata
     public class ExistingMetadataImporter : ImportExistingExtraFilesBase<MetadataFile>
     {
         private readonly IExtraFileService<MetadataFile> _metadataFileService;
-        private readonly IAugmentingService _augmentingService;
+        private readonly IAggregationService _aggregationService;
         private readonly Logger _logger;
         private readonly List<IMetadata> _consumers;
 
         public ExistingMetadataImporter(IExtraFileService<MetadataFile> metadataFileService,
                                         IEnumerable<IMetadata> consumers,
-                                        IAugmentingService augmentingService,
+                                        IAggregationService aggregationService,
                                         Logger logger)
         : base(metadataFileService)
         {
             _metadataFileService = metadataFileService;
-            _augmentingService = augmentingService;
+            _aggregationService = aggregationService;
             _logger = logger;
             _consumers = consumers.ToList();
         }
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
                         try
                         {
-                            _augmentingService.Augment(localEpisode, false);
+                            _aggregationService.Augment(localEpisode, false);
                         }
                         catch (AugmentingFailedException ex)
                         {

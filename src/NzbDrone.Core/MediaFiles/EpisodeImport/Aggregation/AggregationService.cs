@@ -10,12 +10,12 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
 {
-    public interface IAugmentingService
+    public interface IAggregationService
     {
         LocalEpisode Augment(LocalEpisode localEpisode, bool otherFiles);
     }
 
-    public class AugmentingService : IAugmentingService
+    public class AggregationService : IAggregationService
     {
         private readonly IEnumerable<IAggregateLocalEpisode> _augmenters;
         private readonly IDiskProvider _diskProvider;
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public AugmentingService(IEnumerable<IAggregateLocalEpisode> augmenters,
+        public AggregationService(IEnumerable<IAggregateLocalEpisode> augmenters,
                                  IDiskProvider diskProvider,
                                  IVideoFileInfoReader videoFileInfoReader,
                                  IConfigService configService,
@@ -38,11 +38,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
 
         public LocalEpisode Augment(LocalEpisode localEpisode, bool otherFiles)
         {
+            var isMediaFile = MediaFileExtensions.Extensions.Contains(Path.GetExtension(localEpisode.Path));
+
             if (localEpisode.DownloadClientEpisodeInfo == null &&
                 localEpisode.FolderEpisodeInfo == null &&
                 localEpisode.FileEpisodeInfo == null)
             {
-                if (MediaFileExtensions.Extensions.Contains(Path.GetExtension(localEpisode.Path)))
+                if (isMediaFile)
                 {
                     throw new AugmentingFailedException("Unable to parse episode info from path: {0}", localEpisode.Path);
                 }
@@ -50,7 +52,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
 
             localEpisode.Size = _diskProvider.GetFileSize(localEpisode.Path);
 
-            if (!localEpisode.ExistingFile || _configService.EnableMediaInfo)
+            if (isMediaFile && (!localEpisode.ExistingFile || _configService.EnableMediaInfo))
             {
                 localEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(localEpisode.Path);
             }
