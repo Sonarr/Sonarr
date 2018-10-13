@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Tv
         {
             if (message.Series.SeriesType != message.OldSeries.SeriesType)
             {
-                _commandQueueManager.Push(new RefreshSeriesCommand(message.Series.Id));
+                _commandQueueManager.Push(new RefreshSeriesCommand(message.Series.Id, false));
             }
         }
     }

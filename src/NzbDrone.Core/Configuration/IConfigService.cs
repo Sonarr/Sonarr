@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Configuration
         bool EnableMediaInfo { get; set; }
         bool ImportExtraFiles { get; set; }
         string ExtraFileExtensions { get; set; }
+        RescanAfterRefreshType RescanAfterRefresh { get; set; }
 
         //Permissions (Media Management)
         bool SetPermissionsLinux { get; set; }

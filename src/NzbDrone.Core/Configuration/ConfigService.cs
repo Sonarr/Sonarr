@@ -215,6 +215,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("ExtraFileExtensions", value); }
         }
 
+        public RescanAfterRefreshType RescanAfterRefresh
+        {
+            get { return GetValueEnum("RescanAfterRefresh", RescanAfterRefreshType.Always); }
+
+            set { SetValue("RescanAfterRefresh", value); }
+        }
+
         public bool SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }
