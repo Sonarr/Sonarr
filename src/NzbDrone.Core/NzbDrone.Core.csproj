@@ -133,6 +133,7 @@
     <Compile Include="Configuration\Events\ConfigSavedEvent.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
+    <Compile Include="Configuration\RescanAfterRefreshType.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
     <Compile Include="DecisionEngine\Specifications\AlreadyImportedSpecification.cs" />
     <Compile Include="CustomFilters\CustomFilter.cs" />

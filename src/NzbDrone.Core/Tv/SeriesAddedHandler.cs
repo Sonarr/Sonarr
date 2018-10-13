@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Commands;
@@ -18,12 +18,12 @@ namespace NzbDrone.Core.Tv
 
         public void Handle(SeriesAddedEvent message)
         {
-            _commandQueueManager.Push(new RefreshSeriesCommand(message.Series.Id));
+            _commandQueueManager.Push(new RefreshSeriesCommand(message.Series.Id, true));
         }
 
         public void Handle(SeriesImportedEvent message)
         {
-            _commandQueueManager.PushMany(message.SeriesIds.Select(s => new RefreshSeriesCommand(s)).ToList());
+            _commandQueueManager.PushMany(message.SeriesIds.Select(s => new RefreshSeriesCommand(s, true)).ToList());
         }
     }
 }
