@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Indexers;
@@ -25,6 +25,7 @@ namespace NzbDrone.Core.DecisionEngine
             {
                 CompareQuality,
                 CompareLanguage,
+                ComparePreferredWordScore,
                 CompareProtocol,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
@@ -66,6 +67,11 @@ namespace NzbDrone.Core.DecisionEngine
         private int CompareLanguage(DownloadDecision x, DownloadDecision y)
         {
             return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Series.LanguageProfile.Value.Languages.FindIndex(l => l.Language == remoteEpisode.ParsedEpisodeInfo.Language));
+        }
+
+        private int ComparePreferredWordScore(DownloadDecision x, DownloadDecision y)
+        {
+            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.PreferredWordScore);
         }
 
         private int CompareProtocol(DownloadDecision x, DownloadDecision y)

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Restrictions;
+using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -35,11 +35,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void GivenRestictions(string required, string ignored)
         {
-            Mocker.GetMock<IRestrictionService>()
+            Mocker.GetMock<IReleaseProfileService>()
                   .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
-                  .Returns(new List<Restriction>
+                  .Returns(new List<ReleaseProfile>
                            {
-                               new Restriction
+                               new ReleaseProfile()
                                {
                                    Required = required,
                                    Ignored = ignored
@@ -50,9 +50,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_true_when_restrictions_are_empty()
         {
-            Mocker.GetMock<IRestrictionService>()
+            Mocker.GetMock<IReleaseProfileService>()
                   .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
-                  .Returns(new List<Restriction>());
+                  .Returns(new List<ReleaseProfile>());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -116,11 +116,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _remoteEpisode.Release.Title = "[ www.Speed.cd ] -Whose.Line.is.it.Anyway.US.S10E24.720p.HDTV.x264-BAJSKORV";
 
-            Mocker.GetMock<IRestrictionService>()
+            Mocker.GetMock<IReleaseProfileService>()
                   .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
-                  .Returns(new List<Restriction>
+                  .Returns(new List<ReleaseProfile>
                            {
-                               new Restriction { Required = "x264", Ignored = "www.Speed.cd" }
+                               new ReleaseProfile { Required = "x264", Ignored = "www.Speed.cd" }
                            });
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();

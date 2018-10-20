@@ -5,6 +5,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {
@@ -13,16 +14,19 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
         private readonly IHistoryService _historyService;
         private readonly UpgradableSpecification _upgradableSpecification;
         private readonly IConfigService _configService;
+        private readonly IPreferredWordService _preferredWordServiceCalculator;
         private readonly Logger _logger;
 
         public HistorySpecification(IHistoryService historyService,
                                            UpgradableSpecification upgradableSpecification,
                                            IConfigService configService,
+                                           IPreferredWordService preferredWordServiceCalculator,
                                            Logger logger)
         {
             _historyService = historyService;
             _upgradableSpecification = upgradableSpecification;
             _configService = configService;
+            _preferredWordServiceCalculator = preferredWordServiceCalculator;
             _logger = logger;
         }
 
@@ -48,8 +52,26 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
                 {
                     var recent = mostRecent.Date.After(DateTime.UtcNow.AddHours(-12));
-                    var cutoffUnmet = _upgradableSpecification.CutoffNotMet(subject.Series.Profile, subject.Series.LanguageProfile, mostRecent.Quality, mostRecent.Language, subject.ParsedEpisodeInfo.Quality);
-                    var upgradeable = _upgradableSpecification.IsUpgradable(subject.Series.Profile, subject.Series.LanguageProfile, mostRecent.Quality, mostRecent.Language, subject.ParsedEpisodeInfo.Quality, subject.ParsedEpisodeInfo.Language);
+                    var preferredWordScore = _preferredWordServiceCalculator.Calculate(mostRecent.Series, mostRecent.SourceTitle);
+
+                    var cutoffUnmet = _upgradableSpecification.CutoffNotMet(
+                        subject.Series.Profile,
+                        subject.Series.LanguageProfile,
+                        mostRecent.Quality,
+                        mostRecent.Language,
+                        preferredWordScore,
+                        subject.ParsedEpisodeInfo.Quality,
+                        subject.PreferredWordScore);
+
+                    var upgradeable = _upgradableSpecification.IsUpgradable(
+                        subject.Series.Profile,
+                        subject.Series.LanguageProfile,
+                        mostRecent.Quality,
+                        mostRecent.Language,
+                        preferredWordScore,
+                        subject.ParsedEpisodeInfo.Quality,
+                        subject.ParsedEpisodeInfo.Language,
+                        subject.PreferredWordScore);
 
                     if (!recent && cdhEnabled)
                     {

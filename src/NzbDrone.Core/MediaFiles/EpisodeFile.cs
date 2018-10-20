@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Core.Datastore;
@@ -41,6 +41,11 @@ namespace NzbDrone.Core.MediaFiles
             if (RelativePath.IsNotNullOrWhiteSpace())
             {
                 return System.IO.Path.GetFileName(RelativePath);
+            }
+
+            if (Path.IsNotNullOrWhiteSpace())
+            {
+                return System.IO.Path.GetFileName(Path);
             }
 
             return string.Empty;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Restrictions;
+using NzbDrone.Core.Profiles.Releases;
 using Sonarr.Http;
 using Sonarr.Http.Mapping;
 
@@ -9,12 +9,12 @@ namespace NzbDrone.Api.Restrictions
 {
     public class RestrictionModule : SonarrRestModule<RestrictionResource>
     {
-        private readonly IRestrictionService _restrictionService;
+        private readonly IReleaseProfileService _releaseProfileService;
 
 
-        public RestrictionModule(IRestrictionService restrictionService)
+        public RestrictionModule(IReleaseProfileService releaseProfileService)
         {
-            _restrictionService = restrictionService;
+            _releaseProfileService = releaseProfileService;
 
             GetResourceById = GetRestriction;
             GetResourceAll = GetAllRestrictions;
@@ -35,27 +35,27 @@ namespace NzbDrone.Api.Restrictions
 
         private RestrictionResource GetRestriction(int id)
         {
-            return _restrictionService.Get(id).ToResource();
+            return _releaseProfileService.Get(id).ToResource();
         }
 
         private List<RestrictionResource> GetAllRestrictions()
         {
-            return _restrictionService.All().ToResource();
+            return _releaseProfileService.All().ToResource();
         }
 
         private int CreateRestriction(RestrictionResource resource)
         {
-            return _restrictionService.Add(resource.ToModel()).Id;
+            return _releaseProfileService.Add(resource.ToModel()).Id;
         }
 
         private void UpdateRestriction(RestrictionResource resource)
         {
-            _restrictionService.Update(resource.ToModel());
+            _releaseProfileService.Update(resource.ToModel());
         }
 
         private void DeleteRestriction(int id)
         {
-            _restrictionService.Delete(id);
+            _releaseProfileService.Delete(id);
         }
     }
 }

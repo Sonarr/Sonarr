@@ -4,6 +4,7 @@ using System.Linq;
 using Nancy;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
 using Sonarr.Api.V3.Episodes;

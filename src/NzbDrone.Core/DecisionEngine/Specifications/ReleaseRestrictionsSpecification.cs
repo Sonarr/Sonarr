@@ -5,20 +5,20 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Restrictions;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class ReleaseRestrictionsSpecification : IDecisionEngineSpecification
     {
         private readonly Logger _logger;
-        private readonly IRestrictionService _restrictionService;
+        private readonly IReleaseProfileService _releaseProfileService;
         private readonly ITermMatcher _termMatcher;
 
-        public ReleaseRestrictionsSpecification(ITermMatcher termMatcher, IRestrictionService restrictionService, Logger logger)
+        public ReleaseRestrictionsSpecification(ITermMatcher termMatcher, IReleaseProfileService releaseProfileService, Logger logger)
         {
             _logger = logger;
-            _restrictionService = restrictionService;
+            _releaseProfileService = releaseProfileService;
             _termMatcher = termMatcher;
         }
 
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger.Debug("Checking if release meets restrictions: {0}", subject);
 
             var title = subject.Release.Title;
-            var restrictions = _restrictionService.AllForTags(subject.Series.Tags);
+            var restrictions = _releaseProfileService.AllForTags(subject.Series.Tags);
 
             var required = restrictions.Where(r => r.Required.IsNotNullOrWhiteSpace());
             var ignored = restrictions.Where(r => r.Ignored.IsNotNullOrWhiteSpace());

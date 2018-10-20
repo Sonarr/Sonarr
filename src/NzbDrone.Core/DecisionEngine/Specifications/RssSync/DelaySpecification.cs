@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -6,6 +6,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {
@@ -14,16 +15,19 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
         private readonly IPendingReleaseService _pendingReleaseService;
         private readonly IUpgradableSpecification _upgradableSpecification;
         private readonly IDelayProfileService _delayProfileService;
+        private readonly IPreferredWordService _preferredWordServiceCalculator;
         private readonly Logger _logger;
 
         public DelaySpecification(IPendingReleaseService pendingReleaseService,
-                                  IUpgradableSpecification UpgradableSpecification,
+                                  IUpgradableSpecification upgradableSpecification,
                                   IDelayProfileService delayProfileService,
+                                  IPreferredWordService preferredWordServiceCalculator,
                                   Logger logger)
         {
             _pendingReleaseService = pendingReleaseService;
-            _upgradableSpecification = UpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
             _delayProfileService = delayProfileService;
+            _preferredWordServiceCalculator = preferredWordServiceCalculator;
             _logger = logger;
         }
 
@@ -50,19 +54,22 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return Decision.Accept();
             }
 
-            var comparer = new QualityModelComparer(profile);
-            var comparerLanguage = new LanguageComparer(languageProfile);
+            var qualityComparer = new QualityModelComparer(profile);
+            var languageComparer = new LanguageComparer(languageProfile);
 
             if (isPreferredProtocol)
             {
                 foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
                 {
-                    var upgradable = _upgradableSpecification.IsUpgradable(profile, 
-                                                                           languageProfile, 
-                                                                           file.Quality, 
-                                                                           file.Language, 
-                                                                           subject.ParsedEpisodeInfo.Quality, 
-                                                                           subject.ParsedEpisodeInfo.Language);
+                    var upgradable = _upgradableSpecification.IsUpgradable(
+                        profile,
+                        languageProfile,
+                        file.Quality,
+                        file.Language,
+                        _preferredWordServiceCalculator.Calculate(subject.Series, file.GetSceneOrFileName()),
+                        subject.ParsedEpisodeInfo.Quality,
+                        subject.ParsedEpisodeInfo.Language,
+                        subject.PreferredWordScore);
 
                     if (upgradable)
                     {
@@ -74,8 +81,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             // If quality meets or exceeds the best allowed quality in the profile accept it immediately
             var bestQualityInProfile = profile.LastAllowedQuality();
-            var isBestInProfile = comparer.Compare(subject.ParsedEpisodeInfo.Quality.Quality, bestQualityInProfile) >= 0;
-            var isBestInProfileLanguage = comparerLanguage.Compare(subject.ParsedEpisodeInfo.Language, languageProfile.LastAllowedLanguage()) >= 0;
+            var isBestInProfile = qualityComparer.Compare(subject.ParsedEpisodeInfo.Quality.Quality, bestQualityInProfile) >= 0;
+            var isBestInProfileLanguage = languageComparer.Compare(subject.ParsedEpisodeInfo.Language, languageProfile.LastAllowedLanguage()) >= 0;
 
             if (isBestInProfile && isBestInProfileLanguage && isPreferredProtocol)
             {

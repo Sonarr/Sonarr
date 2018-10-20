@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
     
-    public class QualityUpgradeSpecificationFixture : CoreTest<UpgradableSpecification>
+    public class UpgradeSpecificationFixture : CoreTest<UpgradableSpecification>
     {
         public static object[] IsUpgradeTestCases =
         {
@@ -36,11 +36,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             new object[] { Quality.WEBDL720p, 1, Language.Spanish, Quality.HDTV720p, 2, Language.French, Quality.WEBDL720p, Language.Spanish, false }
         };
 
-        [SetUp]
-        public void Setup()
-        {
-
-        }
+        private static readonly int NoPreferredWordScore = 0;
 
         private void GivenAutoDownloadPropers(bool autoDownloadPropers)
         {
@@ -66,7 +62,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Cutoff = Language.English
             };
 
-            Subject.IsUpgradable(profile, langProfile, new QualityModel(current, new Revision(version: currentVersion)), Language.English, new QualityModel(newQuality, new Revision(version: newVersion)), Language.English)
+            Subject.IsUpgradable(
+                       profile,
+                       langProfile,
+                       new QualityModel(current, new Revision(version: currentVersion)),
+                       Language.English,
+                       NoPreferredWordScore,
+                       new QualityModel(newQuality, new Revision(version: newVersion)),
+                       Language.English,
+                       NoPreferredWordScore)
                     .Should().Be(expected);
         }
 
@@ -87,7 +91,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Cutoff = languageCutoff
             };
 
-            Subject.IsUpgradable(profile, langProfile, new QualityModel(current, new Revision(version: currentVersion)), currentLanguage, new QualityModel(newQuality, new Revision(version: newVersion)), newLanguage)
+            Subject.IsUpgradable(
+                       profile,
+                       langProfile,
+                       new QualityModel(current, new Revision(version: currentVersion)),
+                       currentLanguage,
+                       NoPreferredWordScore,
+                       new QualityModel(newQuality, new Revision(version: newVersion)),
+                       newLanguage,
+                       NoPreferredWordScore)
                     .Should().Be(expected);
         }
 
@@ -108,7 +120,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             };
 
 
-            Subject.IsUpgradable(profile, langProfile, new QualityModel(Quality.DVD, new Revision(version: 2)), Language.English, new QualityModel(Quality.DVD, new Revision(version: 1)), Language.English)
+            Subject.IsUpgradable(
+                       profile,
+                       langProfile,
+                       new QualityModel(Quality.DVD, new Revision(version: 2)),
+                       Language.English,
+                       NoPreferredWordScore,
+                       new QualityModel(Quality.DVD, new Revision(version: 1)),
+                       Language.English,
+                       NoPreferredWordScore)
                     .Should().BeFalse();
         }
     }

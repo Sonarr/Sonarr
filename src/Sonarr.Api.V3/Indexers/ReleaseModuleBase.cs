@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Core.DecisionEngine;
 using Sonarr.Http;
 
@@ -28,9 +28,15 @@ namespace Sonarr.Api.V3.Indexers
 
             if (decision.RemoteEpisode.Series != null)
             {
-                release.QualityWeight = decision.RemoteEpisode.Series
-                                                              .Profile.Value
-                                                              .Items.FindIndex(v => v.Quality == release.Quality.Quality) * 100;
+                release.QualityWeight = decision.RemoteEpisode
+                                                .Series
+                                                .Profile.Value
+                                                .Items.FindIndex(v => v.Quality == release.Quality.Quality) * 100;
+
+                release.LanguageWeight = decision.RemoteEpisode
+                                                 .Series
+                                                 .LanguageProfile.Value
+                                                 .Languages.FindIndex(v => v.Language == release.Language) * 100;
             }
 
             release.QualityWeight += release.Quality.Revision.Real * 10;
