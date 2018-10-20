@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Organizer
         private static EpisodeFile _dailyEpisodeFile;
         private static EpisodeFile _animeEpisodeFile;
         private static EpisodeFile _animeMultiEpisodeFile;
+        private static List<string> _preferredWords;
 
         public FileNameSampleService(IBuildFileNames buildFileNames)
         {
@@ -162,6 +163,11 @@ namespace NzbDrone.Core.Organizer
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfoAnime
             };
+
+            _preferredWords = new List<string>
+            {
+                "iNTERNAL"
+            };
         }
 
         public SampleResult GetStandardSample(NamingConfig nameSpec)
@@ -243,7 +249,7 @@ namespace NzbDrone.Core.Organizer
         {
             try
             {
-                return _buildFileNames.BuildFileName(episodes, series, episodeFile, nameSpec);
+                return _buildFileNames.BuildFileName(episodes, series, episodeFile, nameSpec, _preferredWords);
             }
             catch (NamingFormatException)
             {

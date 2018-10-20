@@ -3,7 +3,7 @@ using System.Linq;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.Restrictions;
+using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Tags
@@ -27,21 +27,21 @@ namespace NzbDrone.Core.Tags
         private readonly IEventAggregator _eventAggregator;
         private readonly IDelayProfileService _delayProfileService;
         private readonly INotificationFactory _notificationFactory;
-        private readonly IRestrictionService _restrictionService;
+        private readonly IReleaseProfileService _releaseProfileService;
         private readonly ISeriesService _seriesService;
 
         public TagService(ITagRepository repo,
                           IEventAggregator eventAggregator,
                           IDelayProfileService delayProfileService,
                           INotificationFactory notificationFactory,
-                          IRestrictionService restrictionService,
+                          IReleaseProfileService releaseProfileService,
                           ISeriesService seriesService)
         {
             _repo = repo;
             _eventAggregator = eventAggregator;
             _delayProfileService = delayProfileService;
             _notificationFactory = notificationFactory;
-            _restrictionService = restrictionService;
+            _releaseProfileService = releaseProfileService;
             _seriesService = seriesService;
         }
 
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Tags
             var tag = GetTag(tagId);
             var delayProfiles = _delayProfileService.AllForTag(tagId);
             var notifications = _notificationFactory.AllForTag(tagId);
-            var restrictions = _restrictionService.AllForTag(tagId);
+            var restrictions = _releaseProfileService.AllForTag(tagId);
             var series = _seriesService.AllForTag(tagId);
 
             return new TagDetails
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Tags
             var tags = All();
             var delayProfiles = _delayProfileService.All();
             var notifications = _notificationFactory.All();
-            var restrictions = _restrictionService.All();
+            var restrictions = _releaseProfileService.All();
             var series = _seriesService.GetAllSeries();
 
             var details = new List<TagDetails>();

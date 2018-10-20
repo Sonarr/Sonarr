@@ -3,7 +3,7 @@ using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.DecisionEngine
+namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class SameEpisodesSpecification
     {

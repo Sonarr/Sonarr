@@ -1,18 +1,21 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class UpgradeDiskSpecification : IDecisionEngineSpecification
     {
         private readonly UpgradableSpecification _upgradableSpecification;
+        private readonly IPreferredWordService _preferredWordServiceCalculator;
         private readonly Logger _logger;
 
-        public UpgradeDiskSpecification(UpgradableSpecification upgradableSpecification, Logger logger)
+        public UpgradeDiskSpecification(UpgradableSpecification upgradableSpecification, IPreferredWordService preferredWordServiceCalculator, Logger logger)
         {
             _upgradableSpecification = upgradableSpecification;
+            _preferredWordServiceCalculator = preferredWordServiceCalculator;
             _logger = logger;
         }
 
@@ -35,9 +38,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (!_upgradableSpecification.IsUpgradable(subject.Series.Profile, 
                                                            subject.Series.LanguageProfile, 
                                                            file.Quality, 
-                                                           file.Language, 
+                                                           file.Language,
+                                                           _preferredWordServiceCalculator.Calculate(subject.Series, file.GetSceneOrFileName()),
                                                            subject.ParsedEpisodeInfo.Quality, 
-                                                           subject.ParsedEpisodeInfo.Language))
+                                                           subject.ParsedEpisodeInfo.Language,
+                                                           subject.PreferredWordScore))
                 {
                     return Decision.Reject("Quality for existing file on disk is of equal or higher preference: {0} - {1}", file.Quality, file.Language);
                 }
