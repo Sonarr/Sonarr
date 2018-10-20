@@ -29,6 +29,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool SceneSource { get; set; }
         public int SeasonNumber { get; set; }
         public Language Language { get; set; }
+        public int LanguageWeight { get; set; }
         public string AirDate { get; set; }
         public string SeriesTitle { get; set; }
         public int[] EpisodeNumbers { get; set; }
@@ -45,6 +46,7 @@ namespace Sonarr.Api.V3.Indexers
         public string InfoUrl { get; set; }
         public bool DownloadAllowed { get; set; }
         public int ReleaseWeight { get; set; }
+        public int PreferredWordScore { get; set; }
 
         public string MagnetUrl { get; set; }
         public string InfoHash { get; set; }
@@ -104,7 +106,7 @@ namespace Sonarr.Api.V3.Indexers
                 InfoUrl = releaseInfo.InfoUrl,
                 DownloadAllowed = remoteEpisode.DownloadAllowed,
                 //ReleaseWeight
-
+                PreferredWordScore = remoteEpisode.PreferredWordScore,
 
                 MagnetUrl = torrentInfo.MagnetUrl,
                 InfoHash = torrentInfo.InfoHash,

@@ -2,6 +2,7 @@
 using Sonarr.Http.REST;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Episodes

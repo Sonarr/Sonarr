@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.MediaFiles;
 using Sonarr.Http.REST;
 using NzbDrone.Core.Qualities;

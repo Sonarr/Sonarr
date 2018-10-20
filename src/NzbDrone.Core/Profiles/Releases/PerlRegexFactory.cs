@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using System.Text.RegularExpressions;
-using NzbDrone.Common.Exceptions;
 
-namespace NzbDrone.Core.Restrictions
+namespace NzbDrone.Core.Profiles.Releases
 {
     public static class PerlRegexFactory
     {

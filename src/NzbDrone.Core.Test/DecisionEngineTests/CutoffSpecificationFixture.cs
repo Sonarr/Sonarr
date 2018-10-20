@@ -1,8 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     [TestFixture]
     public class CutoffSpecificationFixture : CoreTest<UpgradableSpecification>
     {
+        private static readonly int NoPreferredWordScore = 0;
+
         [Test]
         public void should_return_true_if_current_episode_is_less_than_cutoff()
         {
@@ -27,7 +29,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 },
-                new QualityModel(Quality.DVD, new Revision(version: 2)), Language.English).Should().BeTrue();
+                new QualityModel(Quality.DVD, new Revision(version: 2)),
+                Language.English,
+                NoPreferredWordScore).Should().BeTrue();
         }
 
         [Test]
@@ -44,7 +48,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 },
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2)), Language.English).Should().BeFalse();
+                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
+                Language.English,
+                NoPreferredWordScore).Should().BeFalse();
         }
 
         [Test]
@@ -61,7 +67,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 },
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)), Language.English).Should().BeFalse();
+                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
+                Language.English,
+                NoPreferredWordScore).Should().BeFalse();
         }
 
         [Test]
@@ -80,7 +88,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 },
                 new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
                 Language.English,
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2))).Should().BeTrue();
+                NoPreferredWordScore,
+                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
+                NoPreferredWordScore).Should().BeTrue();
         }
 
         [Test]
@@ -99,13 +109,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 },
                 new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
                 Language.English,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2))).Should().BeFalse();
+                NoPreferredWordScore,
+                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
+                NoPreferredWordScore).Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_if_quality_cutoff_is_met_and_quality_is_higher_but_language_is_not_met()
         {
-
             Profile _profile = new Profile
                 {
                     Cutoff = Quality.HDTV720p.Id,
@@ -122,13 +133,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 _langProfile,
                  new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
                  Language.English,
-                 new QualityModel(Quality.Bluray1080p, new Revision(version: 2))).Should().BeTrue();
+                 NoPreferredWordScore,
+                 new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
+                 NoPreferredWordScore).Should().BeTrue();
         }
 
         [Test]
         public void should_return_false_if_cutoff_is_met_and_quality_is_higher_and_language_is_met()
         {
-
             Profile _profile = new Profile
             {
                 Cutoff = Quality.HDTV720p.Id,
@@ -146,13 +158,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 _langProfile,
                 new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
                 Language.Spanish,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2))).Should().BeFalse();
+                NoPreferredWordScore,
+                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
+                NoPreferredWordScore).Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_if_cutoff_is_met_and_quality_is_higher_and_language_is_higher()
         {
-
             Profile _profile = new Profile
             {
                 Cutoff = Quality.HDTV720p.Id,
@@ -170,13 +183,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 _langProfile,
                 new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
                 Language.French,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2))).Should().BeFalse();
+                NoPreferredWordScore,
+                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
+                NoPreferredWordScore).Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_if_cutoff_is_not_met_and_new_quality_is_higher_and_language_is_higher()
         {
-
             Profile _profile = new Profile
             {
                 Cutoff = Quality.HDTV720p.Id,
@@ -194,13 +208,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 _langProfile,
                 new QualityModel(Quality.SDTV, new Revision(version: 2)),
                 Language.French,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2))).Should().BeTrue();
+                NoPreferredWordScore,
+                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
+                NoPreferredWordScore).Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_if_cutoff_is_not_met_and_language_is_higher()
         {
-
             Profile _profile = new Profile
             {
                 Cutoff = Quality.HDTV720p.Id,
@@ -217,7 +232,33 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 _profile,
                 _langProfile,
                 new QualityModel(Quality.SDTV, new Revision(version: 2)),
-                Language.French).Should().BeTrue();
+                Language.French,
+                NoPreferredWordScore).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_cutoffs_are_met_and_score_is_higher()
+        {
+            Profile _profile = new Profile
+                               {
+                                   Cutoff = Quality.HDTV720p.Id,
+                                   Items = Qualities.QualityFixture.GetDefaultQualities(),
+                               };
+
+            LanguageProfile _langProfile = new LanguageProfile
+                                           {
+                                               Cutoff = Language.Spanish,
+                                               Languages = LanguageFixture.GetDefaultLanguages()
+                                           };
+
+            Subject.CutoffNotMet(
+                _profile,
+                _langProfile,
+                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
+                Language.Spanish,
+                NoPreferredWordScore,
+                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
+                10).Should().BeTrue();
         }
     }
 }

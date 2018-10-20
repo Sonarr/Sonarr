@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nancy;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Http.Extensions;

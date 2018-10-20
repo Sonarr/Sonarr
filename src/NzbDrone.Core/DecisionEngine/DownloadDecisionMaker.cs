@@ -5,6 +5,8 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.Download.Aggregation;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -21,12 +23,17 @@ namespace NzbDrone.Core.DecisionEngine
     {
         private readonly IEnumerable<IDecisionEngineSpecification> _specifications;
         private readonly IParsingService _parsingService;
+        private readonly IRemoteEpisodeAggregationService _aggregationService;
         private readonly Logger _logger;
 
-        public DownloadDecisionMaker(IEnumerable<IDecisionEngineSpecification> specifications, IParsingService parsingService, Logger logger)
+        public DownloadDecisionMaker(IEnumerable<IDecisionEngineSpecification> specifications,
+                                     IParsingService parsingService,
+                                     IRemoteEpisodeAggregationService aggregationService,
+                                     Logger logger)
         {
             _specifications = specifications;
             _parsingService = parsingService;
+            _aggregationService = aggregationService;
             _logger = logger;
         }
 
@@ -89,6 +96,7 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                         else
                         {
+                            _aggregationService.Augment(remoteEpisode);
                             remoteEpisode.DownloadAllowed = remoteEpisode.Episodes.Any();
                             decision = GetDecisionForReport(remoteEpisode, searchCriteria);
                         }
