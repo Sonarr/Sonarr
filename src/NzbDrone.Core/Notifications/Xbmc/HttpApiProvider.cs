@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -53,6 +53,18 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public void Clean(XbmcSettings settings)
         {
+            if (!settings.AlwaysUpdate)
+            {
+                _logger.Debug("Determining if there are any active players on XBMC host: {0}", settings.Address);
+                var activePlayers = GetActivePlayers(settings);
+
+                if (activePlayers.Any(a => a.Type.Equals("video")))
+                {
+                    _logger.Debug("Video is currently playing, skipping library cleaning");
+                    return;
+                }
+            }
+
             const string cleanVideoLibrary = "CleanLibrary(video)";
             var command = BuildExecBuiltInCommand(cleanVideoLibrary);
 

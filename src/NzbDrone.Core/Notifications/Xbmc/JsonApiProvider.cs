@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             if (!settings.AlwaysUpdate)
             {
                 _logger.Debug("Determining if there are any active players on XBMC host: {0}", settings.Address);
-                var activePlayers = _proxy.GetActivePlayers(settings);
+                var activePlayers = GetActivePlayers(settings);
 
                 if (activePlayers.Any(a => a.Type.Equals("video")))
                 {
@@ -47,6 +47,18 @@ namespace NzbDrone.Core.Notifications.Xbmc
         
         public void Clean(XbmcSettings settings)
         {
+            if (!settings.AlwaysUpdate)
+            {
+                _logger.Debug("Determining if there are any active players on XBMC host: {0}", settings.Address);
+                var activePlayers = GetActivePlayers(settings);
+
+                if (activePlayers.Any(a => a.Type.Equals("video")))
+                {
+                    _logger.Debug("Video is currently playing, skipping library cleaning");
+                    return;
+                }
+            }
+
             _proxy.CleanLibrary(settings);
         }
 
