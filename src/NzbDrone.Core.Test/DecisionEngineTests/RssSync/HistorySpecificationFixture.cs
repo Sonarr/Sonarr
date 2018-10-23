@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -16,7 +16,7 @@ using NzbDrone.Core.DecisionEngine;
 
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.DecisionEngineTests
+namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 {
     [TestFixture]
     public class HistorySpecificationFixture : CoreTest<HistorySpecification>

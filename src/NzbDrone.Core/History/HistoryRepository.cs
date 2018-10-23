@@ -13,6 +13,7 @@ namespace NzbDrone.Core.History
     {
         List<QualityModel> GetBestQualityInHistory(int episodeId);
         History MostRecentForEpisode(int episodeId);
+        List<History> FindByEpisodeId(int episodeId);
         History MostRecentForDownloadId(string downloadId);
         List<History> FindByDownloadId(string downloadId);
         List<History> FindDownloadHistory(int idSeriesId, QualityModel quality);
@@ -41,6 +42,13 @@ namespace NzbDrone.Core.History
             return Query.Where(h => h.EpisodeId == episodeId)
                         .OrderByDescending(h => h.Date)
                         .FirstOrDefault();
+        }
+
+        public List<History> FindByEpisodeId(int episodeId)
+        {
+            return Query.Where(h => h.EpisodeId == episodeId)
+                        .OrderByDescending(h => h.Date)
+                        .ToList();
         }
 
         public History MostRecentForDownloadId(string downloadId)

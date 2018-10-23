@@ -166,7 +166,8 @@
     <Compile Include="DecisionEngineTests\ProtocolSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\DownloadDecisionMakerFixture.cs" />
-    <Compile Include="DecisionEngineTests\HistorySpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\AlreadyImportedSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\RssSync\HistorySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QueueSpecificationFixture.cs" />
@@ -316,7 +317,6 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecificationFixture.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\Specifications\GrabbedReleaseQualityFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\MatchesFolderSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecificationFixture.cs" />

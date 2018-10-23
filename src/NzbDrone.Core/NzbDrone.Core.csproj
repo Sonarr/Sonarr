@@ -143,6 +143,7 @@
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
+    <Compile Include="DecisionEngine\Specifications\AlreadyImportedSpecification.cs" />
     <Compile Include="Indexers\SeedConfigProvider.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
@@ -817,7 +818,6 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\EpisodeTitleSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameFileSpecification.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\Specifications\GrabbedReleaseQualitySpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\MatchesFolderSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecification.cs" />
