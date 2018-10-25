@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -253,12 +253,25 @@ namespace NzbDrone.Core.Indexers
         protected virtual RssEnclosure[] GetEnclosures(XElement item)
         {
             var enclosures = item.Elements("enclosure")
-                                 .Select(v  => new RssEnclosure
+                                 .Select(v =>
                                  {
-                                     Url = v.Attribute("url").Value,
-                                     Type = v.Attribute("type").Value,
-                                     Length = (long)v.Attribute("length")
+                                     try
+                                     {
+                                         return new RssEnclosure
+                                                {
+                                                    Url = v.Attribute("url").Value,
+                                                    Type = v.Attribute("type").Value,
+                                                    Length = (long)v.Attribute("length")
+                                                };
+                                     }
+                                     catch (Exception e)
+                                     {
+                                         _logger.Warn(e, "Failed to get enclosure for: {0}", item.Title());
+                                     }
+
+                                     return null;
                                  })
+                                 .Where(v => v != null)
                                  .ToArray();
 
             return enclosures;
