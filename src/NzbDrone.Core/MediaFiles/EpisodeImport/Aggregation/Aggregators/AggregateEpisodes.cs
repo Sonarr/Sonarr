@@ -49,7 +49,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 var title = Path.GetFileNameWithoutExtension(localEpisode.Path);
                 var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, title, localEpisode.Series);
 
-                return specialEpisodeInfo;
+                if (specialEpisodeInfo != null)
+                {
+                    parsedEpisodeInfo = specialEpisodeInfo;
+                }
             }
 
             return parsedEpisodeInfo;

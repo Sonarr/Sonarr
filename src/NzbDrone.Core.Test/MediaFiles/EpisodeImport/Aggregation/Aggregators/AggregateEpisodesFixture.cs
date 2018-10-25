@@ -3,6 +3,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -123,6 +124,29 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetEpisodes(fileEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
+        }
+
+        [Test]
+        public void should_use_special_info_when_not_null()
+        {
+            var fileEpisodeInfo = Parser.Parser.ParseTitle("S00E01");
+            var specialEpisodeInfo = fileEpisodeInfo.JsonClone();
+
+            var localEpisode = new LocalEpisode
+                               {
+                                   FileEpisodeInfo = fileEpisodeInfo,
+                                   Path = @"C:\Test\TV\Series\Specials\S00E01.mkv".AsOsAgnostic(),
+                                   Series = _series
+                               };
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.ParseSpecialEpisodeTitle(fileEpisodeInfo, It.IsAny<string>(), _series))
+                  .Returns(specialEpisodeInfo);
+
+            Subject.Aggregate(localEpisode, false);
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(v => v.GetEpisodes(specialEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
         }
     }
 }
