@@ -135,6 +135,13 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.HDTV1080p, proper);
         }
 
+        [TestCase("My Title - S01E01 - EpTitle [HEVC 4k DTSHD-MA-6ch]", false)]
+        [TestCase("My Title - S01E01 - EpTitle [HEVC-4k DTSHD-MA-6ch]", false)]
+        public void should_parse_hdtv2160p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.HDTV2160p, proper);
+        }
+
         [TestCase("Arrested.Development.S04E01.720p.WEBRip.AAC2.0.x264-NFRiP", false)]
         [TestCase("Vanguard S01E04 Mexicos Death Train 720p WEB DL", false)]
         [TestCase("Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264", false)]
