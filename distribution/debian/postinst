@@ -1,7 +1,9 @@
+#!/bin/sh
+set -e
+
 USER="sonarr"
 
 # Add User
-
 if ! getent passwd "$USER" >/dev/null; then
   adduser --quiet --system --shell /bin/bash --home /var/opt/sonarr --group "$USER"
 
@@ -10,24 +12,14 @@ if ! getent passwd "$USER" >/dev/null; then
     usermod -a -G "$USER" "$USER"
   fi
 fi
-  
-# Create home directory
 
+# Create home directory
 if [ ! -d /var/opt/sonarr ]; then
   mkdir -p /var/opt/sonarr
-  chown $USER:$USER /var/opt/sonarr
+  chown -R $USER: /var/opt/sonarr
 fi
 
 # Set permissions on /opt/sonarr
+chown -R $USER: /opt/sonarr
 
-chown -R $USER:$USER /opt/sonarr
-
-# Start Sonarr automatically
-
-if [ -f /proc/1/comm ]; then
-  if [ "`cat /proc/1/comm`" = "systemd" ]; then
-    # Enable and start systemd service
-    systemctl enable sonarr.service
-    systemctl start sonarr.service
-  fi
-fi
+#DEBHELPER#

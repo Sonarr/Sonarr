@@ -10,4 +10,8 @@
 #export DH_VERBOSE=1
 
 %:
-	dh $@ 
+	dh $@ --with=systemd
+
+# No init script, only systemd
+override_dh_installinit:
+	true
