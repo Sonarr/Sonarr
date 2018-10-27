@@ -7,7 +7,7 @@ User=sonarr
 Group=sonarr
 
 Type=simple
-ExecStart=/usr/bin/mono --debug /opt/sonarr/Sonarr.exe -nobrowser
+ExecStart=/usr/bin/mono --debug /opt/sonarr/bin/Sonarr.exe -nobrowser
 TimeoutStopSec=20
 KillMode=process
 Restart=on-failure
