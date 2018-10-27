@@ -9,9 +9,20 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+EXCLUDE_MODULEREFS = crypt32 httpapi ntdll api-ms-win-core-sysinfo-l1-1-0 api-ms-win-core-sysinfo-l1-2-0 \
+					 libcurl3 msbuild
+
 %:
-	dh $@ --with=systemd
+	dh $@ --with=systemd --with=cli
 
 # No init script, only systemd
 override_dh_installinit:
 	true
+
+# Sonarr like debug symbols for logging
+override_dh_clistrip:
+
+override_dh_makeclilibs:
+
+override_dh_clideps:
+	dh_clideps -d -r $(patsubst %,--exclude-moduleref=%,$(EXCLUDE_MODULEREFS))
