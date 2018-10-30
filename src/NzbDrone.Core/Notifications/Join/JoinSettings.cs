@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Notifications.Join
 
         public JoinSettings()
         {
-            Priority = 0;
+            Priority = (int)JoinPriority.Normal;
         }
 
         private static readonly JoinSettingsValidator Validator = new JoinSettingsValidator();
