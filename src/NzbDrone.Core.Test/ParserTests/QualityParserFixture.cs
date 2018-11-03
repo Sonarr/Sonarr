@@ -137,6 +137,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("My Title - S01E01 - EpTitle [HEVC 4k DTSHD-MA-6ch]", false)]
         [TestCase("My Title - S01E01 - EpTitle [HEVC-4k DTSHD-MA-6ch]", false)]
+        [TestCase("My Title - S01E01 - EpTitle [4k HEVC DTSHD-MA-6ch]", false)]
         public void should_parse_hdtv2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV2160p, proper);
@@ -239,6 +240,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("House.of.Cards.US.s05e13.4K.UHD.Bluray", false)]
         [TestCase("House.of.Cards.US.s05e13.UHD.4K.Bluray", false)]
+        [TestCase("[DameDesuYo] Backlog Bundle - Part 1 (BD 4K 8bit FLAC)", false)]
         public void should_parse_bluray2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray2160p, proper);
