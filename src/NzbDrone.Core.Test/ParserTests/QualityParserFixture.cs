@@ -137,6 +137,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Miaou] Akanesasu Shoujo 02 VOSTFR FHD 10 bits", false)]
         [TestCase("[mhastream.com]_Episode_05_FHD.mp4", false)]
         [TestCase("[Kousei]_One_Piece_ - _609_[FHD][648A87C7].mp4", false)]
+        [TestCase("Presunto culpable 1x02 Culpabilidad [HDTV 1080i AVC MP2 2.0 Sub][GrupoHDS]", false)]
+        [TestCase("Cuéntame cómo pasó - 19x15 [344] Cuarenta años de baile [HDTV 1080i AVC MP2 2.0 Sub][GrupoHDS]", false)]
         public void should_parse_hdtv1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV1080p, proper);
