@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Tv;
 
@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Test.TvTests
         [TestCase("A to Z", 281588, "a to z")]
         [TestCase("A.D. The Bible Continues", 289260, "ad bible continues")]
         [TestCase("A.P. Bio", 328534, "ap bio")]
+        [TestCase("The A-Team", 77904, "ateam")]
         public void should_use_precomputed_title(string title, int tvdbId, string expected)
         {
             SeriesTitleNormalizer.Normalize(title, tvdbId).Should().Be(expected);
