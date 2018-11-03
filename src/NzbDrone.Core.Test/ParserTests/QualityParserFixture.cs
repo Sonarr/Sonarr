@@ -118,6 +118,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hells.Kitchen.US.S12E17.HR.WS.PDTV.X264-DIMENSION", false)]
         [TestCase("Survivorman.The.Lost.Pilots.Summer.HR.WS.PDTV.x264-DHD", false)]
         [TestCase("Victoria S01E07 - Motor zmen (CZ)[TvRip][HEVC][720p]", false)]
+        [TestCase("flashpoint.S05E06.720p.HDTV.x264-FHD", false)]
         public void should_parse_hdtv720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV720p, proper);
@@ -130,6 +131,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Dexter - S01E01 - Title [HDTV-1080p]", false)]
         [TestCase("[HorribleSubs] Yowamushi Pedal - 32 [1080p]", false)]
         [TestCase("Victoria S01E07 - Motor zmen (CZ)[TvRip][HEVC][1080p]", false)]
+        [TestCase("Sword Art Online Alicization 04 vostfr FHD", false)]
+        [TestCase("Goblin Slayer 04 vostfr FHD.mkv", false)]
+        [TestCase("[Onii-ChanSub] SSSS.Gridman - 02 vostfr (FHD 1080p 10bits).mkv", false)]
+        [TestCase("[Miaou] Akanesasu Shoujo 02 VOSTFR FHD 10 bits", false)]
+        [TestCase("[mhastream.com]_Episode_05_FHD.mp4", false)]
+        [TestCase("[Kousei]_One_Piece_ - _609_[FHD][648A87C7].mp4", false)]
         public void should_parse_hdtv1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV1080p, proper);
@@ -186,6 +193,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Incorporated.S01E08.Das.geloeschte.Ich.German.DD51.Dubbed.DL.1080p.AmazonHD.x264-TVS", false)]
         [TestCase("Death.Note.2017.German.DD51.DL.1080p.NetflixHD.x264-TVS", false)]
         [TestCase("Played.S01E08.Pro.Gamer.1440p.BKPL.WEB-DL.H.264-LiGHT", false)]
+        [TestCase("Good.Luck.Charlie.S04E11.Teddy's.Choice.FHD.1080p.Web-DL", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -218,6 +226,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Elysium]Lucky.Star.01(BD.720p.AAC.DA)[0BB96AD8].mkv", false)]
         [TestCase("Battlestar.Galactica.S01E01.33.720p.HDDVD.x264-SiNNERS.mkv", false)]
         [TestCase("The.Expanse.S01E07.RERIP.720p.BluRay.x264-DEMAND", true)]
+        [TestCase("Sans.Laisser.De.Traces.FRENCH.720p.BluRay.x264-FHD", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
@@ -233,6 +242,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("WEEDS.S03E01-06.DUAL.1080p.Blu-ray.AC3.-HELLYWOOD.avi", false)]
         [TestCase("[Coalgirls]_Durarara!!_01_(1920x1080_Blu-ray_FLAC)_[8370CB8F].mkv", false)]
         [TestCase("Planet.Earth.S01E11.Ocean.Deep.1080p.HD-DVD.DD.VC1-TRB", false)]
+        [TestCase("Spirited Away(2001) Bluray FHD Hi10P.mkv", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);
