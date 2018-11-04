@@ -170,6 +170,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?S\d{1,2})[-_. ]{3,}(?:EP)?(?<absoluteepisode>\d{2,3}(?!\d+|[-]))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Anime - French titles with single episode numbers, with or without leading sub group ([RlsGroup] Title - Episode 1)
+                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)[-_. ]+?(?:Episode[-_. ]+?)(?<absoluteepisode>\d{1}(?!\d+))",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+            
                 //Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),

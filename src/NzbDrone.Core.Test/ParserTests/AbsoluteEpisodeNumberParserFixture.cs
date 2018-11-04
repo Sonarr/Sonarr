@@ -91,6 +91,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Love Rerun 2018 06 720p x265 AOZ.mp4", "Love Rerun 2018", 6, 0, 0)]
         [TestCase("Boku No Hero Academia S03 - EP14 VOSTFR [1080p] [HardSub] Yass'Kun", "Boku No Hero Academia S03", 14, 0, 0)]
         [TestCase("Boku No Hero Academia S3 -  15 VOSTFR [720p]", "Boku No Hero Academia S3", 15, 0, 0)]
+        [TestCase("Tokyo Ghoul: RE S2 - Episode 4 VOSTFR (1080p)", "Tokyo Ghoul RE S2", 4, 0, 0)]
+        [TestCase("To Aru Majutsu no Index III - Episode 5 VOSTFR (1080p)", "To Aru Majutsu no Index III", 5, 0, 0)]
+        [TestCase("[Prout] Steins;Gate 0 - Episode 5 VOSTFR (BDRip 1920x1080 x264 FLAC)", "Steins;Gate 0", 5, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
