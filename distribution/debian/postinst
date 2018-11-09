@@ -1,25 +1,37 @@
 #!/bin/sh
 set -e
 
-USER="sonarr"
+# Source debconf library.
+. /usr/share/debconf/confmodule
 
-# Add User
+SYSTEMD_UNIT=/lib/systemd/system/sonarr.service
+db_get sonarr/owning_user
+USER="$RET"
+db_get sonarr/owning_group
+GROUP="$RET"
+db_get sonarr/config_directory
+CONFDIR="$RET"
+
+# Add User and Group
+if ! getent group "$GROUP" >/dev/null; then
+  groupadd "$GROUP"
+fi
 if ! getent passwd "$USER" >/dev/null; then
-  adduser --quiet --system --shell /bin/bash --home /var/opt/sonarr --group "$USER"
-
-  if ! getent group "$USER" >/dev/null; then
-    groupadd "$USER"
-    usermod -a -G "$USER" "$USER"
-  fi
+  adduser --system --no-create-home --ingroup "$GROUP" "$USER"
 fi
 
-# Create home directory
-if [ ! -d /var/opt/sonarr ]; then
-  mkdir -p /var/opt/sonarr
-  chown -R $USER: /var/opt/sonarr
+# Create data directory
+if [ ! -d "$CONFDIR" ]; then
+  mkdir -p "$CONFDIR"
+  chown -R $USER:$GROUP "$CONFDIR"
 fi
 
 # Set permissions on /opt/sonarr
-chown -R $USER: /opt/sonarr
+chown -R $USER:$GROUP /opt/sonarr
+
+# Update sonarr.service file
+sed -i "s:User=sonarr:User=$USER:g; s:Group=sonarr:Group=$GROUP:g; s:-data=/var/opt/sonarr:-data=$CONFDIR:g" $SYSTEMD_UNIT
 
 #DEBHELPER#
+
+exit 0

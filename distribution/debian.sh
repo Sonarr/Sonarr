@@ -2,6 +2,7 @@ fromdos ./debian/*
 echo Version: "$dependent_build_number" Branch: "$dependent_build_branch"
 
 rm -r ./sonarr_bin/Sonarr.Update
+chmod -R 664 ./sonarr_bin/*
 
 echo Updating changelog
 sed -i "s/{version}/$dependent_build_number/g" debian/changelog

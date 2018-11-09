@@ -9,14 +9,14 @@ Build-Depends:  debhelper (>= 9),
                 dh-systemd (>= 1.5),
                 mono-devel (>= 4.6),
                 libmono-cil-dev (>= 4.6),
-                cli-common-dev (>= 0.9)
+                cli-common-dev (>= 0.5.7)
 
 Package: sonarr
 Architecture: all
 Provides: nzbdrone
 Conflicts: nzbdrone
 Replaces: nzbdrone
-Depends: libsqlite3-0 (>= 3.7), libmediainfo0v5 (>= 0.7.52), ${shlibs:Depends}, ${cli:Depends}, ${misc:Depends}
+Depends: adduser, libsqlite3-0 (>= 3.7), libmediainfo0v5 (>= 0.7.52), mono-runtime (>= 5.4), ${shlibs:Depends}, ${cli:Depends}, ${misc:Depends}
 Recommends: sqlite3 (>= 3.7), mediainfo (>= 0.7.52), ${shlibs:Recommends}, ${cli:Recommends}, ${misc:Recommends}
 Suggests: ${shlibs:Suggests}, ${cli:Suggests}, ${misc:Suggests}
 Description: Internet PVR

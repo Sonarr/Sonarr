@@ -5,9 +5,10 @@ After=network.target
 [Service]
 User=sonarr
 Group=sonarr
+UMask=002
 
 Type=simple
-ExecStart=/usr/bin/mono --debug /opt/sonarr/bin/Sonarr.exe -nobrowser
+ExecStart=/usr/bin/mono --debug /opt/sonarr/bin/Sonarr.exe -nobrowser -data=/var/opt/sonarr
 TimeoutStopSec=20
 KillMode=process
 Restart=on-failure

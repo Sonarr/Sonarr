@@ -1,0 +1,19 @@
+Template: sonarr/owning_user
+Type: string
+Default: sonarr
+Description: Sonarr user:
+    Specify the user that Sonarr must run as. The user will be created if it does not already exist.
+
+Template: sonarr/owning_group
+Type: string
+Default: sonarr
+Description: Sonarr group:
+    Specify the group that Sonarr must run as. The group will be created if it does not already exist.
+    If the user doesn't already exist then this group will be specified as the user's primary group.
+    Any media files created by Sonarr will be writeable by this group.
+
+Template: sonarr/config_directory
+Type: string
+Default: /var/lib/sonarr
+Description: Config directory:
+    Specify the directory where Sonarr stores the internal database and metadata. Media content will be stored elsewhere.
