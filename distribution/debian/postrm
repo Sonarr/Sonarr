@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "abort-install" ]; then
+    # preinst was aborted, possibly due to NzbDrone still running.
+    # Nothing to do here
+	:
+fi
+
+# Purge the entire sonarr configuration directory.
+# TODO: Maybe move a minimal backup to tmp?
+if [ "$1" = "purge" ]; then
+	if [ -d "/var/opt/sonarr" ]; then
+		rm -rf /var/opt/sonarr
+	fi
+fi
+
+#DEBHELPER#

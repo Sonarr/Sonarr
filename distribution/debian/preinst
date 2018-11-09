@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+
+# Deal with existing nzbdrone installs
+#
+# Any existing nzbdrone package would already be in de deconfigured stage, so the binaries are gone.
+# However the process might still be running since those are not part of the nzbdrone package.
+# If the user manually installed nzbdrone then the process might still be running too.
+
+if [ $1 = "install" ]; then
+    psNzbDrone=`ps aux | grep mono.*NzbDrone\\\\.exe || true`
+    if [ ! -z "$psNzbDrone" ]; then
+        # TODO: Perform operations to detect auto-migration capabilities.
+        
+        # Return failure, which causes postrm abort-install to be called.
+        echo "ps: $psNzbDrone"
+        echo "Error: An existing Sonarr v2 (NzbDrone) process is running. Remove the NzbDrone auto-startup prior to installing sonarr."
+        exit 1
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0
