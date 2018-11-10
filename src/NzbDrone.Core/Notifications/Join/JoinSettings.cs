@@ -16,6 +16,12 @@ namespace NzbDrone.Core.Notifications.Join
 
     public class JoinSettings : IProviderConfig
     {
+
+        public JoinSettings()
+        {
+            Priority = (int)JoinPriority.Normal;
+        }
+
         private static readonly JoinSettingsValidator Validator = new JoinSettingsValidator();
 
         [FieldDefinition(0, Label = "API Key", HelpText = "The API Key from your Join account settings (click Join API button).", HelpLink = "https://joinjoaomgcd.appspot.com/")]
@@ -26,6 +32,9 @@ namespace NzbDrone.Core.Notifications.Join
 
         [FieldDefinition(2, Label = "Device Names", HelpText = "Comma separated list of full or partial device names you'd like to send notifications to. If unset, all devices will receive notifications.", HelpLink = "https://joaoapps.com/join/api/")]
         public string DeviceNames { get; set; }
+
+        [FieldDefinition(3, Label = "Notification Priority", Type = FieldType.Select, SelectOptions = typeof(JoinPriority))]
+        public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

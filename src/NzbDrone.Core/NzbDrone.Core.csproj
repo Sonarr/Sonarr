@@ -911,6 +911,7 @@
     <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
     <Compile Include="Notifications\Join\JoinAuthException.cs" />
     <Compile Include="Notifications\Join\JoinInvalidDeviceException.cs" />
+    <Compile Include="Notifications\Join\JoinPriority.cs" />
     <Compile Include="Notifications\Join\JoinResponseModel.cs" />
     <Compile Include="Notifications\Join\Join.cs" />
     <Compile Include="Notifications\Join\JoinException.cs" />
