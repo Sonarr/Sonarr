@@ -1,1 +1,1 @@
-sonarr_bin/* /opt/sonarr/bin
+sonarr_bin/* /usr/lib/sonarr/bin

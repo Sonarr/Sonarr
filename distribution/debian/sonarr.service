@@ -8,7 +8,7 @@ Group=sonarr
 UMask=002
 
 Type=simple
-ExecStart=/usr/bin/mono --debug /opt/sonarr/bin/Sonarr.exe -nobrowser -data=/var/opt/sonarr
+ExecStart=/usr/bin/mono --debug /usr/lib/sonarr/bin/Sonarr.exe -nobrowser -data=/var/lib/sonarr
 TimeoutStopSec=20
 KillMode=process
 Restart=on-failure

@@ -20,17 +20,28 @@ if ! getent passwd "$USER" >/dev/null; then
   adduser --system --no-create-home --ingroup "$GROUP" "$USER"
 fi
 
+# Migrate old data dir (Sonarr v3 alpha)
+if [ -d "/var/opt/sonarr" ] && [ "$CONFDIR" != "/var/opt/sonarr" ]; then
+  if [ ! -f "/var/opt/sonarr/sonarr.db" ] && [ -f "/var/opt/sonarr/.config/Sonarr/sonarr.db" ]; then
+    mv "/var/opt/sonarr/.config/Sonarr" "$CONFDIR"
+    rm -rf "/var/opt/sonarr"
+  else
+    mv "/var/opt/sonarr" "$CONFDIR"
+  fi
+  chown -R $USER:$GROUP "$CONFDIR"
+fi
+
 # Create data directory
 if [ ! -d "$CONFDIR" ]; then
   mkdir -p "$CONFDIR"
   chown -R $USER:$GROUP "$CONFDIR"
 fi
 
-# Set permissions on /opt/sonarr
-chown -R $USER:$GROUP /opt/sonarr
+# Set permissions on /usr/lib/sonarr
+chown -R $USER:$GROUP /usr/lib/sonarr
 
 # Update sonarr.service file
-sed -i "s:User=sonarr:User=$USER:g; s:Group=sonarr:Group=$GROUP:g; s:-data=/var/opt/sonarr:-data=$CONFDIR:g" $SYSTEMD_UNIT
+sed -i "s:User=sonarr:User=$USER:g; s:Group=sonarr:Group=$GROUP:g; s:-data=/var/lib/sonarr:-data=$CONFDIR:g" $SYSTEMD_UNIT
 
 #DEBHELPER#
 
