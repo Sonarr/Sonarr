@@ -267,6 +267,7 @@ namespace NzbDrone.Common.Http
         public HttpResponse<T> Get<T>(HttpRequest request) where T : new()
         {
             var response = Get(request);
+            CheckResponseContentType(response);
             return new HttpResponse<T>(response);
         }
 
@@ -285,7 +286,16 @@ namespace NzbDrone.Common.Http
         public HttpResponse<T> Post<T>(HttpRequest request) where T : new()
         {
             var response = Post(request);
+            CheckResponseContentType(response);
             return new HttpResponse<T>(response);
+        }
+
+        private void CheckResponseContentType(HttpResponse response)
+        {
+            if (response.Headers.ContentType != null && response.Headers.ContentType.Contains("text/html"))
+            {
+                throw new UnexpectedHtmlContentException(response);
+            }
         }
     }
 }
