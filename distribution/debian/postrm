@@ -9,9 +9,12 @@ fi
 
 # Purge the entire sonarr configuration directory.
 # TODO: Maybe move a minimal backup to tmp?
-if [ "$1" = "purge" ]; then
-	if [ -d "/var/opt/sonarr" ]; then
-		rm -rf /var/opt/sonarr
+if [ "$1" = "purge" ] && [ -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_get sonarr/config_directory
+	CONFDIR="$RET"
+	if [ -d "$CONFDIR" ]; then
+		rm -rf "$CONFDIR"
 	fi
 fi
 
