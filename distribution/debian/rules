@@ -9,8 +9,7 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-EXCLUDE_MODULEREFS = crypt32 httpapi ntdll api-ms-win-core-sysinfo-l1-1-0 api-ms-win-core-sysinfo-l1-2-0 \
-					 libcurl3 msbuild
+EXCLUDE_MODULEREFS = crypt32 httpapi
 
 %:
 	dh $@ --with=systemd --with=cli

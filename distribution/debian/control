@@ -16,7 +16,6 @@ Architecture: all
 Provides: nzbdrone
 Conflicts: nzbdrone
 Replaces: nzbdrone
-Depends: adduser, libsqlite3-0 (>= 3.7), libmediainfo0v5 (>= 0.7.52), mono-runtime (>= 5.4), ${shlibs:Depends}, ${cli:Depends}, ${misc:Depends}
-Recommends: sqlite3 (>= 3.7), mediainfo (>= 0.7.52), ${shlibs:Recommends}, ${cli:Recommends}, ${misc:Recommends}
-Suggests: ${shlibs:Suggests}, ${cli:Suggests}, ${misc:Suggests}
+Depends: adduser, libsqlite3-0 (>= 3.7), libmediainfo0v5 (>= 0.7.52), mono-runtime (>= 5.4), ${cli:Depends}, ${misc:Depends}
+Recommends: sqlite3 (>= 3.7), mediainfo (>= 0.7.52), ${cli:Recommends}
 Description: Internet PVR

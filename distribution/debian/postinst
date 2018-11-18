@@ -1,10 +1,8 @@
 #!/bin/sh
 set -e
 
-# Source debconf library.
-. /usr/share/debconf/confmodule
 
-SYSTEMD_UNIT=/lib/systemd/system/sonarr.service
+. /usr/share/debconf/confmodule
 db_get sonarr/owning_user
 USER="$RET"
 db_get sonarr/owning_group
@@ -20,15 +18,18 @@ if ! getent passwd "$USER" >/dev/null; then
   adduser --system --no-create-home --ingroup "$GROUP" "$USER"
 fi
 
-# Migrate old data dir (Sonarr v3 alpha)
-if [ -d "/var/opt/sonarr" ] && [ "$CONFDIR" != "/var/opt/sonarr" ]; then
-  if [ ! -f "/var/opt/sonarr/sonarr.db" ] && [ -f "/var/opt/sonarr/.config/Sonarr/sonarr.db" ]; then
-    mv "/var/opt/sonarr/.config/Sonarr" "$CONFDIR"
-    rm -rf "/var/opt/sonarr"
-  else
-    mv "/var/opt/sonarr" "$CONFDIR"
+if [ $1 = "configure" ]; then
+  # Migrate old Sonarr v3 alpha data dir
+  if [ -d "/var/opt/sonarr" ] && [ "$CONFDIR" != "/var/opt/sonarr" ] && [ ! -d "$CONFDIR" ]; then
+    if [ ! -f "/var/opt/sonarr/sonarr.db" ] && [ -f "/var/opt/sonarr/.config/Sonarr/sonarr.db" ]; then
+      mv "/var/opt/sonarr/.config/Sonarr" "$CONFDIR"
+      rm -rf "/var/opt/sonarr"
+    else
+      mv "/var/opt/sonarr" "$CONFDIR"
+    fi
+    chown -R $USER:$GROUP "$CONFDIR"
+    chmod -R 775 "$CONFDIR"
   fi
-  chown -R $USER:$GROUP "$CONFDIR"
 fi
 
 # Create data directory
@@ -41,7 +42,7 @@ fi
 chown -R $USER:$GROUP /usr/lib/sonarr
 
 # Update sonarr.service file
-sed -i "s:User=sonarr:User=$USER:g; s:Group=sonarr:Group=$GROUP:g; s:-data=/var/lib/sonarr:-data=$CONFDIR:g" $SYSTEMD_UNIT
+sed -i "s:User=sonarr:User=$USER:g; s:Group=sonarr:Group=$GROUP:g; s:-data=/var/lib/sonarr:-data=$CONFDIR:g" /lib/systemd/system/sonarr.service
 
 #DEBHELPER#
 
