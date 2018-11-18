@@ -6,22 +6,44 @@ UPDATER={updater}
 
 # Deal with existing nzbdrone installs
 #
-# Any existing nzbdrone package would already be in de deconfigured stage, so the binaries are gone.
-# However the process might still be running since those are not part of the nzbdrone package.
+# Existing nzbdrone packages do not have startup scripts and the process might still be running.
 # If the user manually installed nzbdrone then the process might still be running too.
-
 if [ $1 = "install" ]; then
-    psNzbDrone=`ps aux | grep mono.*NzbDrone\\\\.exe || true`
-    if [ ! -z "$psNzbDrone" ]; then
-        # TODO: Perform operations to detect auto-migration capabilities.
-        
-        # Return failure, which causes postrm abort-install to be called.
-        echo "ps: $psNzbDrone"
-        echo "Error: An existing Sonarr v2 (NzbDrone) process is running. Remove the NzbDrone auto-startup prior to installing sonarr."
-        exit 1
+  psNzbDrone=`ps ax -o'user,pid,ppid,unit,args' | grep mono.*NzbDrone\\\\.exe || true`
+  if [ ! -z "$psNzbDrone" ]; then
+    # Get the user and optional systemd unit
+    psNzbDroneUser=`echo "$psNzbDrone" | tr -s ' ' | cut -d ' ' -f 1`
+    psNzbDroneUnit=`echo "$psNzbDrone" | tr -s ' ' | cut -d ' ' -f 4`
+    # Get the appdata from the cmdline or get it from the user dir
+    droneAppData=`echo "$psNzbDrone" | tr ' ' '\n' | grep -- "-data=" | cut -d= -f 2`
+    if [ "$droneAppData" = "" ]; then
+      droneUserHome=`getent passwd $psNzbDroneUser | cut -d ':' -f 6`
+      droneAppData="$droneUserHome/.config/NzbDrone"
     fi
-fi
 
+    if [ "$psNzbDroneUnit" != "-" ] && [ -d /run/systemd/system ]; then
+      # The user used a systemd auto-startup for NzbDrone, we can deal with that.
+      echo "NzbDrone systemd startup detected at $psNzbDroneUnit, stopping and disabling..."
+      deb-systemd-invoke stop $psNzbDroneUnit >/dev/null
+      deb-systemd-invoke mask $psNzbDroneUnit >/dev/null
+    else
+      # We don't support auto migration for other startup methods, so bail.
+      # This leaves the sonarr package in an incomplete state.
+      echo "ps: $psNzbDrone"
+      echo "Error: An existing Sonarr v2 (NzbDrone) process is running. Remove the NzbDrone auto-startup prior to installing sonarr."
+      exit 1
+    fi
+
+    # We don't have the debconf configuration yet so we can't migrate the data.
+    # Instead we symlink so postinst knows where it's at.
+    if [ -f "/usr/lib/sonarr/nzbdrone-appdata" ]; then
+      rm "/usr/lib/sonarr/nzbdrone-appdata"
+    else
+      mkdir -p "/usr/lib/sonarr"
+    fi
+    ln -s $droneAppData /usr/lib/sonarr/nzbdrone-appdata
+  fi
+fi
 
 #BEGIN BUILTIN UPDATER
 # Check for supported upgrade paths

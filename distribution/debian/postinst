@@ -32,6 +32,21 @@ if [ $1 = "configure" ]; then
     chown -R $USER:$GROUP "$CONFDIR"
     chmod -R 775 "$CONFDIR"
   fi
+
+  # Migrate old NzbDrone data dir
+  if [ -d "/usr/lib/sonarr/nzbdrone-appdata" ] && [ ! -d "$CONFDIR" ]; then
+    NZBDRONE_DATA=`readlink /usr/lib/sonarr/nzbdrone-appdata`
+    if [ -f "$NZBDRONE_DATA/config.xml" ] && [ -f "$NZBDRONE_DATA/nzbdrone.db" ]; then
+      echo "Found NzbDrone database in $NZBDRONE_DATA, copying to $CONFDIR."
+      mkdir -p "$CONFDIR"
+      cp $NZBDRONE_DATA/config.xml $NZBDRONE_DATA/nzbdrone.db* "$CONFDIR/"
+      chown -R $USER:$GROUP "$CONFDIR"
+      chmod -R 775 "$CONFDIR"
+    else
+      echo "Missing NzbDrone database in $NZBDRONE_DATA, skipping migration."
+    fi
+    rm /usr/lib/sonarr/nzbdrone-appdata
+  fi
 fi
 
 # Create data directory
