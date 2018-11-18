@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+BUILD_VERSION={version}
+UPDATER={updater}
+
 # Deal with existing nzbdrone installs
 #
 # Any existing nzbdrone package would already be in de deconfigured stage, so the binaries are gone.
@@ -18,6 +21,33 @@ if [ $1 = "install" ]; then
         exit 1
     fi
 fi
+
+
+#BEGIN BUILTIN UPDATER
+# Check for supported upgrade paths
+if [ $1 = "upgrade" ] && [ "$UPDATER" = "BuiltIn" ] && [ -f /usr/lib/sonarr/bin/release_info ]; then
+  # If we allow the Built-In updater to upgrade from 3.0.1.123 to 3.0.2.500 and now apt is catching up to 3.0.2.425
+  # then we need to deal with that 500->425 'downgrade'.
+  # We do that by preserving the binaries and using those instead for postinst.
+
+  currentVersion=`cat /usr/lib/sonarr/bin/release_info | grep 'ReleaseVersion=' | cut -d= -f 2`
+  currentRelease=`echo "$currentVersion" | cut -d. -f1,2,3`
+  currentBuild=`echo "$currentVersion" | cut -d. -f4`
+  targetVersion=$BUILD_VERSION
+  targetRelease=`echo "$targetVersion" | cut -d. -f1,2,3`
+  targetBuild=`echo "$targetVersion" | cut -d. -f4`
+
+  if [ -d /usr/lib/sonarr/bin_patch ]; then
+    rm -rf /usr/lib/sonarr/bin_patch
+  fi
+
+  # Check if the existing version is already an upgrade for the included build
+  if [ "$currentRelease" = "$targetRelease" ] && [ "$currentBuild" -gt "$targetBuild" ]; then
+    echo "Preserving $currentVersion from BuiltIn updater instead of downgrading to $targetVersion"
+    cp -r /usr/lib/sonarr/bin /usr/lib/sonarr/bin_patch
+  fi
+fi
+#END BUILTIN UPDATER
 
 #DEBHELPER#
 

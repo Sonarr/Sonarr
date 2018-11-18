@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+BUILD_VERSION={version}
+UPDATER={updater}
+
 if [ $1 = "abort-install" ]; then
   # preinst was aborted, possibly due to NzbDrone still running.
   # Nothing to do here
@@ -11,6 +14,13 @@ fi
 if [ $1 = "remove" ] && [ -d /usr/lib/sonarr/bin ]; then
   rm -rf /usr/lib/sonarr/bin
 fi
+
+#BEGIN BUILTIN UPDATER
+# Remove any existing patch if still present
+if [ $1 = "remove" ] && [ -d /usr/lib/sonarr/bin_patch ]; then
+  rm -rf /usr/lib/sonarr/bin_patch
+fi
+#END BUILTIN UPDATER
 
 # Purge the entire sonarr configuration directory.
 # TODO: Maybe move a minimal backup to tmp?

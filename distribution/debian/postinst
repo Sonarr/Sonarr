@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+BUILD_VERSION={version}
+UPDATER={updater}
 
 . /usr/share/debconf/confmodule
 db_get sonarr/owning_user
@@ -38,11 +40,40 @@ if [ ! -d "$CONFDIR" ]; then
   chown -R $USER:$GROUP "$CONFDIR"
 fi
 
+#BEGIN BUILTIN UPDATER
+# Apply patch if present
+if [ "$UPDATER" = "BuiltIn" ] && [ -f /usr/lib/sonarr/bin_patch/release_info ]; then
+  # It shouldn't be possible to get a wrong bin_patch, but let's check anyway and throw it away if it's wrong
+  currentVersion=`cat /usr/lib/sonarr/bin_patch/release_info | grep 'ReleaseVersion=' | cut -d= -f 2`
+  currentRelease=`echo "$currentVersion" | cut -d. -f1,2,3`
+  currentBuild=`echo "$currentVersion" | cut -d. -f4`
+  targetVersion=$BUILD_VERSION
+  targetRelease=`echo "$targetVersion" | cut -d. -f1,2,3`
+  targetBuild=`echo "$targetVersion" | cut -d. -f4`
+
+  if [ "$currentRelease" = "$targetRelease" ] && [ "$currentBuild" -gt "$targetBuild" ]; then
+    echo "Applying $currentVersion from BuiltIn updater instead of downgrading to $targetVersion"
+    rm -rf /usr/lib/sonarr/bin
+    mv /usr/lib/sonarr/bin_patch /usr/lib/sonarr/bin
+  else
+    rm -rf /usr/lib/sonarr/bin_patch
+  fi
+fi
+#END BUILTIN UPDATER
+
 # Set permissions on /usr/lib/sonarr
 chown -R $USER:$GROUP /usr/lib/sonarr
 
 # Update sonarr.service file
 sed -i "s:User=sonarr:User=$USER:g; s:Group=sonarr:Group=$GROUP:g; s:-data=/var/lib/sonarr:-data=$CONFDIR:g" /lib/systemd/system/sonarr.service
+
+#BEGIN BUILTIN UPDATER
+if [ $1 = "upgrade" ] && [ "$UPDATER" = "BuiltIn" ]; then
+  # If we upgraded, signal Sonarr to do an update check on startup instead of scheduled.
+  touch $CONFDIR/update_required
+  chown $USER:$GROUP $CONFDIR/update_required
+fi
+#END BUILTIN UPDATER
 
 #DEBHELPER#
 
