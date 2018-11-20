@@ -14,6 +14,8 @@ updateFolderMono=$outputFolderLinux/Sonarr.Update
 nuget='tools/nuget/nuget.exe';
 vswhere='tools/vswhere/vswhere.exe';
 
+. ./version.sh
+
 CheckExitCode()
 {
     "$@"
@@ -35,6 +37,17 @@ ProgressEnd()
 {
     echo "##teamcity[progressFinish '$1']"
     echo "##teamcity[blockClosed name='$1']"
+}
+
+UpdateVersionNumber()
+{
+    if [ "$BUILD_NUMBER" != "" ]; then
+        verMajorMinorRevision=`echo "$buildVersion" | cut -d. -f1,2,3`
+        verBuild=`echo "$BUILD_NUMBER" | cut -d. -f4`
+        BUILD_NUMBER=$verMajorMinorRevision.$verBuild
+        echo "##teamcity[buildNumber '$BUILD_NUMBER']"
+        sed -i "s/^[[]assembly: Assembly\(File\|Informational\)\?Version[(]\"[0-9.*]\+\"[)]/[assembly: Assembly\1Version(\"$BUILD_NUMBER\")/g" ./src/**/Properties/AssemblyInfo.cs ./src/Common/CommonVersionInfo.cs
+    fi
 }
 
 CleanFolder()
@@ -321,6 +334,7 @@ case "$(uname -s)" in
         ;;
 esac
 
+UpdateVersionNumber
 Build
 RunGulp
 PackageMono
