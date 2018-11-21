@@ -22,6 +22,10 @@ namespace NzbDrone.Core.Parser
 //                new Regex(@"^(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.)+)+(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
 //                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Daily episodes without title (2018-10-12, 20181012) (Strict pattern to avoid false matches)
+                new Regex(@"^(?<airyear>19[6-9]\d|20\d\d)(?<sep>[-]?)(?<airmonth>0\d|1[0-2])\k<sep>(?<airday>[0-2]\d|3[01])(?!\d)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Multi-Part episodes without a title (S01E05.S01E06)
                 new Regex(@"^(?:\W*S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -173,7 +177,7 @@ namespace NzbDrone.Core.Parser
                 // Anime - French titles with single episode numbers, with or without leading sub group ([RlsGroup] Title - Episode 1)
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)[-_. ]+?(?:Episode[-_. ]+?)(?<absoluteepisode>\d{1}(?!\d+))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
-            
+
                 //Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -282,7 +286,7 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^b00bs$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
                 // 170424_26 - Started appearing August 2018
-                new Regex(@"^\d{6}_\d{2}$"), 
+                new Regex(@"^\d{6}_\d{2}$"),
             };
 
         //Regex to detect whether the title was reversed.
