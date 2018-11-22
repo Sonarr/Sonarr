@@ -42,11 +42,20 @@ ProgressEnd()
 UpdateVersionNumber()
 {
     if [ "$BUILD_NUMBER" != "" ]; then
+        echo "Updating Version Info"
         verMajorMinorRevision=`echo "$buildVersion" | cut -d. -f1,2,3`
-        verBuild=`echo "$BUILD_NUMBER" | cut -d. -f4`
+        verBuild=`echo "${BUILD_NUMBER}" | cut -d. -f4`
         BUILD_NUMBER=$verMajorMinorRevision.$verBuild
         echo "##teamcity[buildNumber '$BUILD_NUMBER']"
-        sed -i "s/^[[]assembly: Assembly\(File\|Informational\)\?Version[(]\"[0-9.*]\+\"[)]/[assembly: Assembly\1Version(\"$BUILD_NUMBER\")/g" ./src/**/Properties/AssemblyInfo.cs ./src/Common/CommonVersionInfo.cs
+        sed -i "s/^[[]assembly: Assembly\(File\|Informational\)\?Version[(]\"[0-9.*]\+\"[)]/[assembly: Assembly\1Version(\"$BUILD_NUMBER\")/g" ./src/NzbDrone*/Properties/AssemblyInfo.cs ./src/Sonarr*/Properties/AssemblyInfo.cs ./src/ServiceHelpers/Properties/AssemblyInfo.cs ./src/Common/CommonVersionInfo.cs
+    fi
+}
+
+CreateReleaseInfo()
+{
+    if [ "$BUILD_NUMBER" != "" ]; then
+        echo "Create Release Info"
+        echo -e "# Do Not Edit\nReleaseVersion=$BUILD_NUMBER\nBranch=${BRANCH:-dev}" > $outputFolder/release_info
     fi
 }
 
@@ -336,6 +345,7 @@ esac
 
 UpdateVersionNumber
 Build
+CreateReleaseInfo
 RunGulp
 PackageMono
 PackageMacOS

@@ -18,7 +18,6 @@ echo Updating changelog for $BuildVersion
 sed -i "s:{version}:$BuildVersion:g; s:{branch}:$BuildBranch:g;" debian/changelog
 sed -i "s:{version}:$BuildVersion:g; s:{updater}:$PackageUpdater:g" debian/preinst debian/postinst debian/postrm
 sed -i '/#BEGIN BUILTIN UPDATER/,/#END BUILTIN UPDATER/d' debian/preinst debian/postinst debian/postrm
-echo "# Do Not Edit\nReleaseVersion=$BuildVersion\nBranch=$BuildBranch" > release_info
 echo "# Do Not Edit\nPackageVersion=$BuildVersion\nReleaseVersion=$BuildVersion\nUpdateMethod=$PackageUpdater\nBranch=$BuildBranch" > package_info
 
 echo Running debuild for $BuildVersion
