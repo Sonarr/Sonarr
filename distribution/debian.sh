@@ -10,8 +10,6 @@ PackageUpdater="apt"
 echo Version: "$BuildVersion" Branch: "$BuildBranch"
 
 rm -r ./sonarr_bin/Sonarr.Update
-rm ./sonarr_bin/System.Runtime.InteropServices.RuntimeInformation.dll
-rm ./sonarr_bin/UI/*.map ./sonarr_bin/UI/Content/*.map
 chmod -R ugo-x,ugo+rwX,go-w ./sonarr_bin/*
 
 echo Updating changelog for $BuildVersion
