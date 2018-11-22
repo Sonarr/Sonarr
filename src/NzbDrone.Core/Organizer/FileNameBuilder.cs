@@ -235,7 +235,8 @@ namespace NzbDrone.Core.Organizer
             AddSeriesTokens(tokenHandlers, series);
             AddIdTokens(tokenHandlers, series);
 
-            return CleanFolderName(ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers, namingConfig));
+            var folderName = ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers, namingConfig);
+            return CleanFolderName(folderName);
         }
 
         public string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null)
@@ -251,7 +252,8 @@ namespace NzbDrone.Core.Organizer
             AddIdTokens(tokenHandlers, series);
             AddSeasonTokens(tokenHandlers, seasonNumber);
 
-            return CleanFolderName(ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers, namingConfig));
+            var folderName = ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers, namingConfig);
+            return CleanFolderName(folderName);
         }
 
         public static string CleanTitle(string title)
@@ -341,6 +343,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Series TitleThe}"] = m => TitleThe(series.Title);
             tokenHandlers["{Series TitleYear}"] = m => TitleYear(series.Title, series.Year);
             tokenHandlers["{Series TitleTheYear}"] = m => TitleYear(TitleThe(series.Title), series.Year);
+            tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleThe(series.Title).Substring(0, 1).FirstCharToUpper();
         }
 
         private string AddSeasonEpisodeNumberingTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes, NamingConfig namingConfig)
