@@ -47,7 +47,7 @@ UpdateVersionNumber()
         verBuild=`echo "${BUILD_NUMBER}" | cut -d. -f4`
         BUILD_NUMBER=$verMajorMinorRevision.$verBuild
         echo "##teamcity[buildNumber '$BUILD_NUMBER']"
-        sed -i "s/^[[]assembly: Assembly\(File\|Informational\)\?Version[(]\"[0-9.*]\+\"[)]/[assembly: Assembly\1Version(\"$BUILD_NUMBER\")/g" ./src/NzbDrone*/Properties/AssemblyInfo.cs ./src/Sonarr*/Properties/AssemblyInfo.cs ./src/ServiceHelpers/Properties/AssemblyInfo.cs ./src/Common/CommonVersionInfo.cs
+        sed -i "s/^[[]assembly: Assembly\(File\|Informational\)\?Version[(]\"[0-9.*]\+\"[)]/[assembly: Assembly\1Version(\"$BUILD_NUMBER\")/g" ./src/NzbDrone*/Properties/AssemblyInfo.cs ./src/Sonarr*/Properties/AssemblyInfo.cs ./src/ServiceHelpers/*/Properties/AssemblyInfo.cs ./src/Common/CommonVersionInfo.cs
     fi
 }
 
