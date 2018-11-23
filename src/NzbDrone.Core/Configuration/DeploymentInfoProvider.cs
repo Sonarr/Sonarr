@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Configuration
         Version ReleaseVersion { get; }
         string ReleaseBranch { get; }
 
-        bool BuiltInUpdaterAllowed { get; }
+        bool IsExternalUpdateMechanism { get; }
         UpdateMechanism DefaultUpdateMechanism { get; }
         string DefaultBranch { get; }
     }
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Configuration
         public string ReleaseBranch { get; set; }
 
 
-        public bool BuiltInUpdaterAllowed => PackageUpdateMechanism == UpdateMechanism.BuiltIn;
+        public bool IsExternalUpdateMechanism => PackageUpdateMechanism >= UpdateMechanism.External;
         public UpdateMechanism DefaultUpdateMechanism { get; private set; }
         public string DefaultBranch { get; private set; }
     }

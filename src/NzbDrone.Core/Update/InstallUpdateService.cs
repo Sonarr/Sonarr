@@ -220,12 +220,12 @@ namespace NzbDrone.Core.Update
 
 
             // Safety net, ConfigureUpdateMechanism should take care of invalid settings
-            if (_configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn && !_deploymentInfoProvider.BuiltInUpdaterAllowed)
+            if (_configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn && _deploymentInfoProvider.IsExternalUpdateMechanism)
             {
                 _logger.ProgressDebug("Built-In updater disabled, please use {0} to install", _deploymentInfoProvider.PackageUpdateMechanism);
                 return;
             }
-            else if (_configFileProvider.UpdateMechanism != UpdateMechanism.Script && !_deploymentInfoProvider.BuiltInUpdaterAllowed)
+            else if (_configFileProvider.UpdateMechanism != UpdateMechanism.Script && _deploymentInfoProvider.IsExternalUpdateMechanism)
             {
                 _logger.ProgressDebug("Update available, please use {0} to install", _deploymentInfoProvider.PackageUpdateMechanism);
                 return;

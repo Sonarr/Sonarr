@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Update
 
             var externalMechanisms = Enum.GetValues(typeof(UpdateMechanism))
                                          .Cast<UpdateMechanism>()
-                                         .Where(v => (int)v >= (int)UpdateMechanism.External)
+                                         .Where(v => v >= UpdateMechanism.External)
                                          .ToArray();
 
             foreach (var externalMechanism in externalMechanisms)
