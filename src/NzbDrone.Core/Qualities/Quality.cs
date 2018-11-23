@@ -113,27 +113,27 @@ namespace NzbDrone.Core.Qualities
 
             DefaultQualityDefinitions = new HashSet<QualityDefinition>
             {
-                new QualityDefinition(Quality.Unknown)     { Weight = 1,  MinSize = 0, MaxSize = 100 },
-                new QualityDefinition(Quality.SDTV)        { Weight = 2,  MinSize = 0, MaxSize = 100 },
-                new QualityDefinition(Quality.WEBRip480p)  { Weight = 3,  MinSize = 0, MaxSize = 100,  GroupName = "WEB 480p" },
-                new QualityDefinition(Quality.WEBDL480p)   { Weight = 3,  MinSize = 0, MaxSize = 100,  GroupName = "WEB 480p" },
-                new QualityDefinition(Quality.DVD)         { Weight = 4,  MinSize = 0, MaxSize = 100,  GroupName = "DVD" },
-                new QualityDefinition(Quality.Bluray480p)  { Weight = 5,  MinSize = 0, MaxSize = 100,  GroupName = "DVD" },
-                new QualityDefinition(Quality.HDTV720p)    { Weight = 6,  MinSize = 0, MaxSize = 100 },
-                new QualityDefinition(Quality.HDTV1080p)   { Weight = 7,  MinSize = 0, MaxSize = 100 },
-                new QualityDefinition(Quality.RAWHD)       { Weight = 8,  MinSize = 0, MaxSize = null },
-                new QualityDefinition(Quality.WEBRip720p)  { Weight = 9,  MinSize = 0, MaxSize = 100,  GroupName = "WEB 720p" },
-                new QualityDefinition(Quality.WEBDL720p)   { Weight = 9,  MinSize = 0, MaxSize = 100,  GroupName = "WEB 720p" },
-                new QualityDefinition(Quality.Bluray720p)  { Weight = 10, MinSize = 0, MaxSize = 100 },
-                new QualityDefinition(Quality.WEBRip1080p) { Weight = 11, MinSize = 0, MaxSize = 100,  GroupName = "WEB 1080p" },
-                new QualityDefinition(Quality.WEBDL1080p)  { Weight = 11, MinSize = 0, MaxSize = 100,  GroupName = "WEB 1080p" },
-                new QualityDefinition(Quality.Bluray1080p) { Weight = 12, MinSize = 0, MaxSize = 100 },
-                new QualityDefinition(Quality.Bluray1080pRemux) { Weight = 13, MinSize = 0, MaxSize = null },
-                new QualityDefinition(Quality.HDTV2160p)   { Weight = 14, MinSize = 0, MaxSize = null },
-                new QualityDefinition(Quality.WEBRip2160p) { Weight = 15, MinSize = 0, MaxSize = null, GroupName = "WEB 2160p" },
-                new QualityDefinition(Quality.WEBDL2160p)  { Weight = 15, MinSize = 0, MaxSize = null, GroupName = "WEB 2160p" },
-                new QualityDefinition(Quality.Bluray2160p) { Weight = 16, MinSize = 0, MaxSize = null },
-                new QualityDefinition(Quality.Bluray2160pRemux) { Weight = 17, MinSize = 0, MaxSize = null }
+                new QualityDefinition(Quality.Unknown)     { Weight = 1,  MinSize = 1, MaxSize = 199.9 },
+                new QualityDefinition(Quality.SDTV)        { Weight = 2,  MinSize = 2, MaxSize = 100 },
+                new QualityDefinition(Quality.WEBRip480p)  { Weight = 3,  MinSize = 2, MaxSize = 100,  GroupName = "WEB 480p" },
+                new QualityDefinition(Quality.WEBDL480p)   { Weight = 3,  MinSize = 2, MaxSize = 100,  GroupName = "WEB 480p" },
+                new QualityDefinition(Quality.DVD)         { Weight = 4,  MinSize = 2, MaxSize = 100,  GroupName = "DVD" },
+                new QualityDefinition(Quality.Bluray480p)  { Weight = 5,  MinSize = 2, MaxSize = 100,  GroupName = "DVD" },
+                new QualityDefinition(Quality.HDTV720p)    { Weight = 6,  MinSize = 3, MaxSize = 125 },
+                new QualityDefinition(Quality.HDTV1080p)   { Weight = 7,  MinSize = 4, MaxSize = 125 },
+                new QualityDefinition(Quality.RAWHD)       { Weight = 8,  MinSize = 4, MaxSize = null },
+                new QualityDefinition(Quality.WEBRip720p)  { Weight = 9,  MinSize = 3, MaxSize = 130,  GroupName = "WEB 720p" },
+                new QualityDefinition(Quality.WEBDL720p)   { Weight = 9,  MinSize = 3, MaxSize = 130,  GroupName = "WEB 720p" },
+                new QualityDefinition(Quality.Bluray720p)  { Weight = 10, MinSize = 4, MaxSize = 130 },
+                new QualityDefinition(Quality.WEBRip1080p) { Weight = 11, MinSize = 4, MaxSize = 130,  GroupName = "WEB 1080p" },
+                new QualityDefinition(Quality.WEBDL1080p)  { Weight = 11, MinSize = 4, MaxSize = 130,  GroupName = "WEB 1080p" },
+                new QualityDefinition(Quality.Bluray1080p) { Weight = 12, MinSize = 4, MaxSize = 155 },
+                new QualityDefinition(Quality.Bluray1080pRemux) { Weight = 13, MinSize = 35, MaxSize = null },
+                new QualityDefinition(Quality.HDTV2160p)   { Weight = 14, MinSize = 35, MaxSize = 199.9 },
+                new QualityDefinition(Quality.WEBRip2160p) { Weight = 15, MinSize = 35, MaxSize = null, GroupName = "WEB 2160p" },
+                new QualityDefinition(Quality.WEBDL2160p)  { Weight = 15, MinSize = 35, MaxSize = null, GroupName = "WEB 2160p" },
+                new QualityDefinition(Quality.Bluray2160p) { Weight = 16, MinSize = 35, MaxSize = null },
+                new QualityDefinition(Quality.Bluray2160pRemux) { Weight = 17, MinSize = 35, MaxSize = null }
             };
         }
 
