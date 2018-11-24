@@ -9,7 +9,9 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-EXCLUDE_MODULEREFS = crypt32 httpapi
+# Note: System.Native is a dependency of System.Runtime.InteropServices.RuntimeInformation used by SharpRaven,
+#       but SharpRaven doesn't use any functions that need System.Native
+EXCLUDE_MODULEREFS = crypt32 httpapi System.Native
 
 %:
 	dh $@ --with=systemd --with=cli
