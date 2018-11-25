@@ -99,6 +99,7 @@ class GeneralSettings extends Component {
       isMono,
       isWindows,
       mode,
+      packageUpdateMechanism,
       onInputChange,
       onConfirmResetApiKey,
       ...otherProps
@@ -161,6 +162,7 @@ class GeneralSettings extends Component {
                   advancedSettings={advancedSettings}
                   settings={settings}
                   isMono={isMono}
+                  packageUpdateMechanism={packageUpdateMechanism}
                   onInputChange={onInputChange}
                 />
 
@@ -202,6 +204,7 @@ GeneralSettings.propTypes = {
   isMono: PropTypes.bool.isRequired,
   isWindows: PropTypes.bool.isRequired,
   mode: PropTypes.string.isRequired,
+  packageUpdateMechanism: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired,
   onConfirmResetApiKey: PropTypes.func.isRequired,
   onConfirmRestart: PropTypes.func.isRequired

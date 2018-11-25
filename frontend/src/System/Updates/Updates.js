@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { icons, kinds } from 'Helpers/Props';
 import formatDate from 'Utilities/Date/formatDate';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -21,15 +21,18 @@ class Updates extends Component {
     const {
       isFetching,
       isPopulated,
-      error,
+      updatesError,
+      generalSettingsError,
       items,
       isInstallingUpdate,
+      updateMechanism,
       shortDateFormat,
       onInstallLatestPress
     } = this.props;
 
-    const hasUpdates = isPopulated && !error && items.length > 0;
-    const noUpdates = isPopulated && !error && !items.length;
+    const hasError = !!(updatesError || generalSettingsError);
+    const hasUpdates = isPopulated && !hasError && items.length > 0;
+    const noUpdates = isPopulated && !hasError && !items.length;
     const hasUpdateToInstall = hasUpdates && _.some(items, { installable: true, latest: true });
     const noUpdateToInstall = hasUpdates && !hasUpdateToInstall;
 
@@ -37,7 +40,7 @@ class Updates extends Component {
       <PageContent title="Updates">
         <PageContentBodyConnector>
           {
-            !isPopulated && !error &&
+            !isPopulated && !hasError &&
               <LoadingIndicator />
           }
 
@@ -48,15 +51,30 @@ class Updates extends Component {
 
           {
             hasUpdateToInstall &&
-              <div className={styles.updateAvailable}>
-                <SpinnerButton
-                  className={styles.updateAvailable}
-                  kind={kinds.PRIMARY}
-                  isSpinning={isInstallingUpdate}
-                  onPress={onInstallLatestPress}
-                >
-                  Install Latest
-                </SpinnerButton>
+              <div className={styles.messageContainer}>
+                {
+                  updateMechanism === 'builtIn' || updateMechanism === 'script' ?
+                    <SpinnerButton
+                      className={styles.updateAvailable}
+                      kind={kinds.PRIMARY}
+                      isSpinning={isInstallingUpdate}
+                      onPress={onInstallLatestPress}
+                    >
+                      Install Latest
+                    </SpinnerButton> :
+
+                    <Fragment>
+                      <Icon
+                        name={icons.WARNING}
+                        kind={kinds.WARNING}
+                        size={30}
+                      />
+
+                      <div className={styles.message}>
+                        Unable to update Sonarr. Sonarr is configured to use an external update mechanism
+                      </div>
+                    </Fragment>
+                }
 
                 {
                   isFetching &&
@@ -70,13 +88,14 @@ class Updates extends Component {
 
           {
             noUpdateToInstall &&
-              <div className={styles.upToDate}>
+              <div className={styles.messageContainer}>
                 <Icon
                   className={styles.upToDateIcon}
                   name={icons.CHECK_CIRCLE}
                   size={30}
                 />
-                <div className={styles.upToDateMessage}>
+
+                <div className={styles.message}>
                   The latest version of Sonarr is already installed
                 </div>
 
@@ -144,9 +163,16 @@ class Updates extends Component {
           }
 
           {
-            !!error &&
+            !!updatesError &&
               <div>
                 Failed to fetch updates
+              </div>
+          }
+
+          {
+            !!generalSettingsError &&
+              <div>
+                Failed to update settings
               </div>
           }
         </PageContentBodyConnector>
@@ -159,9 +185,11 @@ class Updates extends Component {
 Updates.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
-  error: PropTypes.object,
+  updatesError: PropTypes.object,
+  generalSettingsError: PropTypes.object,
   items: PropTypes.array.isRequired,
   isInstallingUpdate: PropTypes.bool.isRequired,
+  updateMechanism: PropTypes.string.isRequired,
   shortDateFormat: PropTypes.string.isRequired,
   onInstallLatestPress: PropTypes.func.isRequired
 };

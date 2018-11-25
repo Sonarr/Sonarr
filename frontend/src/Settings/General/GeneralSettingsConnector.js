@@ -27,6 +27,7 @@ function createMapStateToProps() {
         isMono: systemStatus.isMono,
         isWindows: systemStatus.isWindows,
         mode: systemStatus.mode,
+        packageUpdateMechanism: systemStatus.packageUpdateMechanism,
         ...sectionSettings
       };
     }

@@ -1,8 +1,4 @@
-.updateAvailable {
-  display: flex;
-}
-
-.upToDate {
+.messageContainer {
   display: flex;
   margin-bottom: 20px;
 }
@@ -12,7 +8,7 @@
   font-size: 30px;
 }
 
-.upToDateMessage {
+.message {
   padding-left: 5px;
   font-size: 18px;
   line-height: 30px;
