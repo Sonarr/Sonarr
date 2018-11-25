@@ -20,6 +20,7 @@ namespace Sonarr.Api.V3.System
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IMainDatabase _database;
         private readonly ILifecycleService _lifecycleService;
+        private readonly IDeploymentInfoProvider _deploymentInfoProvider;
 
         public SystemModule(IAppFolderInfo appFolderInfo,
                             IRuntimeInfo runtimeInfo,
@@ -28,7 +29,8 @@ namespace Sonarr.Api.V3.System
                             IRouteCacheProvider routeCacheProvider,
                             IConfigFileProvider configFileProvider,
                             IMainDatabase database,
-                            ILifecycleService lifecycleService)
+                            ILifecycleService lifecycleService,
+                            IDeploymentInfoProvider deploymentInfoProvider)
             : base("system")
         {
             _appFolderInfo = appFolderInfo;
@@ -39,6 +41,7 @@ namespace Sonarr.Api.V3.System
             _configFileProvider = configFileProvider;
             _database = database;
             _lifecycleService = lifecycleService;
+            _deploymentInfoProvider = deploymentInfoProvider;
             Get["/status"] = x => GetStatus();
             Get["/routes"] = x => GetRoutes();
             Post["/shutdown"] = x => Shutdown();
@@ -71,8 +74,9 @@ namespace Sonarr.Api.V3.System
                        UrlBase = _configFileProvider.UrlBase,
                        RuntimeVersion = _platformInfo.Version,
                        RuntimeName = PlatformInfo.Platform,
-                       StartTime = _runtimeInfo.StartTime
-                   }.AsResponse();
+                       StartTime = _runtimeInfo.StartTime,
+                       PackageUpdateMechanism = _deploymentInfoProvider.PackageUpdateMechanism
+            }.AsResponse();
         }
 
         private Response GetRoutes()
