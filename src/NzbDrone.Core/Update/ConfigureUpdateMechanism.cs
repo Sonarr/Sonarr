@@ -1,4 +1,5 @@
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
@@ -48,6 +49,17 @@ namespace NzbDrone.Core.Update
                     break;
                 }
             }
+
+            if (_deploymentInfoProvider.IsExternalUpdateMechanism)
+            {
+                var currentBranch = _configFileProvider.Branch;
+                var packageBranch = _deploymentInfoProvider.PackageBranch;
+                if (packageBranch.IsNotNullOrWhiteSpace() & packageBranch != currentBranch)
+                {
+                    _logger.Info("External updater uses branch {0} instead of the currently selected {1}, changing to {0}.", packageBranch, currentBranch);
+                    ChangeBranch(packageBranch);
+                }
+            }
         }
         
         private void ChangeUpdateMechanism(UpdateMechanism updateMechanism)
@@ -55,6 +67,15 @@ namespace NzbDrone.Core.Update
             var config = new Dictionary<string, object>
             {
                 [nameof(_configFileProvider.UpdateMechanism)] = updateMechanism
+            };
+            _configFileProvider.SaveConfigDictionary(config);
+        }
+
+        private void ChangeBranch(string branch)
+        {
+            var config = new Dictionary<string, object>
+            {
+                [nameof(_configFileProvider.Branch)] = branch
             };
             _configFileProvider.SaveConfigDictionary(config);
         }
