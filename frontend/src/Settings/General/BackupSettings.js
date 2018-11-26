@@ -49,7 +49,8 @@ function BackupSettings(props) {
         <FormInputGroup
           type={inputTypes.NUMBER}
           name="backupInterval"
-          helpText="Interval in days"
+          unit="days"
+          helpText="Interval between automatic backups"
           onChange={onInputChange}
           {...backupInterval}
         />
@@ -64,7 +65,8 @@ function BackupSettings(props) {
         <FormInputGroup
           type={inputTypes.NUMBER}
           name="backupRetention"
-          helpText="Retention in days. Automatic backups older the retention will be cleaned up automatically"
+          unit="days"
+          helpText="Automatic backups older the retention will be cleaned up automatically"
           onChange={onInputChange}
           {...backupRetention}
         />
