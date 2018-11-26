@@ -27,17 +27,20 @@ function UpdateSettings(props) {
     return null;
   }
 
-  const updateOptions = [
-    { key: 'builtIn', value: 'Built-In' },
-    { key: 'script', value: 'Script' }
-  ];
+  const usingExternalUpdateMechanism = packageUpdateMechanism !== 'builtIn';
 
-  if (packageUpdateMechanism !== 'builtIn') {
+  const updateOptions = [];
+
+  if (usingExternalUpdateMechanism) {
     updateOptions.push({
       key: packageUpdateMechanism,
       value: titleCase(packageUpdateMechanism)
     });
+  } else {
+    updateOptions.push({ key: 'builtIn', value: 'Built-In' });
   }
+
+  updateOptions.push({ key: 'script', value: 'Script' });
 
   return (
     <FieldSet legend="Updates">
@@ -50,9 +53,10 @@ function UpdateSettings(props) {
         <FormInputGroup
           type={inputTypes.TEXT}
           name="branch"
-          helpText="Branch to use to update Sonarr"
+          helpText={usingExternalUpdateMechanism ? 'Branch used by external update mechanism' : 'Branch to use to update Sonarr'}
           helpLink="https://github.com/Sonarr/Sonarr/wiki/Release-Branches"
           onChange={onInputChange}
+          readOnly={usingExternalUpdateMechanism}
           {...branch}
         />
       </FormGroup>
