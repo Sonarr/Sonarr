@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Data.SQLite;
+using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -14,10 +17,20 @@ namespace NzbDrone.Core.Datastore
 
     public class ConnectionStringFactory : IConnectionStringFactory
     {
-        public ConnectionStringFactory(IAppFolderInfo appFolderInfo)
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(ConnectionStringFactory));
+
+        public ConnectionStringFactory(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider)
         {
-            MainDbConnectionString = GetConnectionString(appFolderInfo.GetNzbDroneDatabase());
-            LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase());
+            var mount = diskProvider.GetMount(appFolderInfo.AppDataFolder);
+            var isNetworkDrive = mount.DriveType == System.IO.DriveType.Network;
+            if (isNetworkDrive)
+            {
+                Logger.Warn("AppData folder {0} is located on the network drive {1} using a {2} filesystem. Is highly discouraged to use a SQLite database on network drives and may lead to database corruption.",
+                    appFolderInfo.AppDataFolder, mount.RootDirectory, mount.DriveFormat);
+            }
+
+            MainDbConnectionString = GetConnectionString(appFolderInfo.GetNzbDroneDatabase(), isNetworkDrive);
+            LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase(), isNetworkDrive);
         }
 
         public string MainDbConnectionString { get; private set; }
@@ -30,14 +43,14 @@ namespace NzbDrone.Core.Datastore
             return connectionBuilder.DataSource;
         }
 
-        private static string GetConnectionString(string dbPath)
+        private static string GetConnectionString(string dbPath, bool isNetworkDrive)
         {
             var connectionBuilder = new SQLiteConnectionStringBuilder();
 
             connectionBuilder.DataSource = dbPath;
             connectionBuilder.CacheSize = (int)-10.Megabytes();
             connectionBuilder.DateTimeKind = DateTimeKind.Utc;
-            connectionBuilder.JournalMode = OsInfo.IsOsx ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
+            connectionBuilder.JournalMode = OsInfo.IsOsx || isNetworkDrive ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
             connectionBuilder.Pooling = true;
             connectionBuilder.Version = 3;
             
