@@ -216,7 +216,7 @@ namespace NzbDrone.Core.Download.Pending
             {
                 var series = g.First().Series;
 
-                return g.OrderByDescending(e => e.Quality, new QualityModelComparer(series.Profile))
+                return g.OrderByDescending(e => e.Quality, new QualityModelComparer(series.QualityProfile))
                         .ThenBy(q => PrioritizeDownloadProtocol(q.Series, q.Protocol))
                         .First();
             });
@@ -375,7 +375,7 @@ namespace NzbDrone.Core.Download.Pending
                 return;
             }
 
-            var profile = remoteEpisode.Series.Profile.Value;
+            var profile = remoteEpisode.Series.QualityProfile.Value;
 
             foreach (var existingReport in existingReports)
             {

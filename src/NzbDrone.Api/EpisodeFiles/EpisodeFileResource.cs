@@ -65,7 +65,7 @@ namespace NzbDrone.Api.EpisodeFiles
                 SceneName = model.SceneName,
                 Quality = model.Quality,
                 Language = model.Language,
-                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.Profile.Value, model.Quality),
+                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.QualityProfile.Value, model.Quality),
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
             };
         }

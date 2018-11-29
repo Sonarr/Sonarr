@@ -16,7 +16,7 @@ namespace NzbDrone.Api.Series
 
         //Todo: Sorters should be done completely on the client
         //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
-        //Todo: We should get the entire Profile instead of ID and Name separately
+        //Todo: We should get the entire QualityProfile instead of ID and Name separately
 
         //View Only
         public string Title { get; set; }
@@ -124,7 +124,7 @@ namespace NzbDrone.Api.Series
                 Year = model.Year,
                 
                 Path = model.Path,
-                ProfileId = model.ProfileId,
+                ProfileId = model.QualityProfileId,
                 LanguageProfileId = model.LanguageProfileId,
                 
                 SeasonFolder = model.SeasonFolder,
@@ -179,7 +179,7 @@ namespace NzbDrone.Api.Series
                 Year = resource.Year,
 
                 Path = resource.Path,
-                ProfileId = resource.ProfileId,
+                QualityProfileId = resource.ProfileId,
                 LanguageProfileId = resource.LanguageProfileId,
 
                 SeasonFolder = resource.SeasonFolder,

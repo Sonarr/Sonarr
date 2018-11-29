@@ -43,7 +43,7 @@ namespace NzbDrone.Api.History
 
             if (model.Series != null)
             {
-                resource.QualityCutoffNotMet = _upgradableSpecification.QualityCutoffNotMet(model.Series.Profile.Value, model.Quality);
+                resource.QualityCutoffNotMet = _upgradableSpecification.QualityCutoffNotMet(model.Series.QualityProfile.Value, model.Quality);
             }
 
             return resource;

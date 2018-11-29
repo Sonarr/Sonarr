@@ -14,48 +14,48 @@ namespace NzbDrone.Core.Test.Qualities
 
         private void GivenDefaultProfile()
         {
-            Subject = new QualityModelComparer(new Profile { Items = QualityFixture.GetDefaultQualities() });
+            Subject = new QualityModelComparer(new QualityProfile { Items = QualityFixture.GetDefaultQualities() });
         }
 
         private void GivenCustomProfile()
         {
-            Subject = new QualityModelComparer(new Profile { Items = QualityFixture.GetDefaultQualities(Quality.Bluray720p, Quality.DVD) });
+            Subject = new QualityModelComparer(new QualityProfile { Items = QualityFixture.GetDefaultQualities(Quality.Bluray720p, Quality.DVD) });
         }
 
         private void GivenGroupedProfile()
         {
-            var profile = new Profile
+            var profile = new QualityProfile
                           {
-                              Items = new List<ProfileQualityItem>
+                              Items = new List<QualityProfileQualityItem>
                                       {
-                                          new ProfileQualityItem
+                                          new QualityProfileQualityItem
                                           {
                                               Allowed = false,
                                               Quality = Quality.SDTV
                                           },
-                                          new ProfileQualityItem
+                                          new QualityProfileQualityItem
                                           {
                                               Allowed = false,
                                               Quality = Quality.DVD
                                           },
-                                          new ProfileQualityItem
+                                          new QualityProfileQualityItem
                                           {
                                               Allowed = true,
-                                              Items = new List<ProfileQualityItem>
+                                              Items = new List<QualityProfileQualityItem>
                                                       {
-                                                          new ProfileQualityItem
+                                                          new QualityProfileQualityItem
                                                           {
                                                               Allowed = true,
                                                               Quality = Quality.HDTV720p
                                                           },
-                                                          new ProfileQualityItem
+                                                          new QualityProfileQualityItem
                                                           {
                                                               Allowed = true,
                                                               Quality = Quality.WEBDL720p
                                                           }
                                                       }
                                           },
-                                          new ProfileQualityItem
+                                          new QualityProfileQualityItem
                                           {
                                               Allowed = true,
                                               Quality = Quality.Bluray720p

@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.Release.DownloadProtocol = downloadProtocol;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
-                                                  .With(e => e.Profile = new Profile
+                                                  .With(e => e.QualityProfile = new QualityProfile
                                                   {
                                                       Items = Qualities.QualityFixture.GetDefaultQualities()
                                                   })

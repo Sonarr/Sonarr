@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
     [TestFixture]
     public class DelaySpecificationFixture : CoreTest<DelaySpecification>
     {
-        private Profile _profile;
+        private QualityProfile _profile;
         private LanguageProfile _langProfile;
         private DelayProfile _delayProfile;
         private RemoteEpisode _remoteEpisode;
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         [SetUp]
         public void Setup()
         {
-            _profile = Builder<Profile>.CreateNew()
+            _profile = Builder<QualityProfile>.CreateNew()
                                        .Build();
 
             _langProfile = Builder<LanguageProfile>.CreateNew()
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                                                  .Build();
 
             var series = Builder<Series>.CreateNew()
-                                        .With(s => s.Profile = _profile)
+                                        .With(s => s.QualityProfile = _profile)
                                         .With(s => s.LanguageProfile = _langProfile)
                                         .Build();
 
@@ -53,10 +53,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                                                    .With(r => r.Series = series)
                                                    .Build();
 
-            _profile.Items = new List<ProfileQualityItem>();
-            _profile.Items.Add(new ProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p });
-            _profile.Items.Add(new ProfileQualityItem { Allowed = true, Quality = Quality.WEBDL720p });
-            _profile.Items.Add(new ProfileQualityItem { Allowed = true, Quality = Quality.Bluray720p });
+            _profile.Items = new List<QualityProfileQualityItem>();
+            _profile.Items.Add(new QualityProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p });
+            _profile.Items.Add(new QualityProfileQualityItem { Allowed = true, Quality = Quality.WEBDL720p });
+            _profile.Items.Add(new QualityProfileQualityItem { Allowed = true, Quality = Quality.Bluray720p });
 
             _profile.Cutoff = Quality.WEBDL720p.Id;
 
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         private void GivenUpgradeForExistingFile()
         {
             Mocker.GetMock<IUpgradableSpecification>()
-                  .Setup(s => s.IsUpgradable(It.IsAny<Profile>(), It.IsAny<LanguageProfile>(), It.IsAny<QualityModel>(), It.IsAny<Language>(), It.IsAny<int>(), It.IsAny<QualityModel>(), It.IsAny<Language>(), It.IsAny<int>()))
+                  .Setup(s => s.IsUpgradable(It.IsAny<QualityProfile>(), It.IsAny<LanguageProfile>(), It.IsAny<QualityModel>(), It.IsAny<Language>(), It.IsAny<int>(), It.IsAny<QualityModel>(), It.IsAny<Language>(), It.IsAny<int>()))
                   .Returns(true);
         }
 

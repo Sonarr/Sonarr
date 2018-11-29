@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Common.Extensions;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Tv
         public string Overview { get; set; }
         public string AirTime { get; set; }
         public bool Monitored { get; set; }
-        public int ProfileId { get; set; }
+        public int QualityProfileId { get; set; }
         public int LanguageProfileId { get; set; }
         public bool SeasonFolder { get; set; }
         public DateTime? LastInfoSync { get; set; }
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Tv
         public string RootFolderPath { get; set; }
         public DateTime Added { get; set; }
         public DateTime? FirstAired { get; set; }
-        public LazyLoaded<Profile> Profile { get; set; }
+        public LazyLoaded<QualityProfile> QualityProfile { get; set; }
         public LazyLoaded<LanguageProfile> LanguageProfile { get; set; }
 
         public List<Season> Seasons { get; set; }
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Tv
 
             Seasons = otherSeries.Seasons;
             Path = otherSeries.Path;
-            ProfileId = otherSeries.ProfileId;
+            QualityProfileId = otherSeries.QualityProfileId;
             LanguageProfileId = otherSeries.LanguageProfileId;
 
             SeasonFolder = otherSeries.SeasonFolder;

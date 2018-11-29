@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             _series = Builder<Series>.CreateNew()
                                      .With(e => e.Path = @"C:\Test\Series".AsOsAgnostic())
-                                     .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                      .With(e => e.LanguageProfile = new LanguageProfile { Languages = Languages.LanguageFixture.GetDefaultLanguages() })
                                      .Build();
 

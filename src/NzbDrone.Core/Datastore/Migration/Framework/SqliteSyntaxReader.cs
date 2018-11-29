@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -148,7 +148,8 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             {
                 var start = Index;
                 var end = start + 1;
-                while (end < Buffer.Length && (char.IsLetter(Buffer[end]) || Buffer[end] == '_')) end++;
+                while (end < Buffer.Length && (char.IsLetter(Buffer[end]) || char.IsNumber(Buffer[end]) || Buffer[end] == '_' || Buffer[end] == '(')) end++;
+
                 if (end >= Buffer.Length || Buffer[end] == ',' || Buffer[end] == ')' || char.IsWhiteSpace(Buffer[end]))
                 {
                     Index = end;

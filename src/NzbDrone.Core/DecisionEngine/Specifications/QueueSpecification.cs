@@ -31,7 +31,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var queue = _queueService.GetQueue();
-            var matchingSeries = queue.Where(q => q.Series.Id == subject.Series.Id);
+            var matchingSeries = queue.Where(q => q.RemoteEpisode.Series.Id == subject.Series.Id);
             var matchingEpisode = matchingSeries.Where(q => q.RemoteEpisode.Episodes.Select(e => e.Id).Intersect(subject.Episodes.Select(e => e.Id)).Any());
 
             foreach (var queueItem in matchingEpisode)
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 _logger.Debug("Checking if existing release in queue meets cutoff. Queued quality is: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
                 var queuedItemPreferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, queueItem.Title);
 
-                if (!_upgradableSpecification.CutoffNotMet(subject.Series.Profile, 
+                if (!_upgradableSpecification.CutoffNotMet(subject.Series.QualityProfile, 
                                                            subject.Series.LanguageProfile, 
                                                            remoteEpisode.ParsedEpisodeInfo.Quality, 
                                                            remoteEpisode.ParsedEpisodeInfo.Language,
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 _logger.Debug("Checking if release is higher quality than queued release. Queued quality is: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
 
-                if (!_upgradableSpecification.IsUpgradable(subject.Series.Profile,
+                if (!_upgradableSpecification.IsUpgradable(subject.Series.QualityProfile,
                                                            subject.Series.LanguageProfile, 
                                                            remoteEpisode.ParsedEpisodeInfo.Quality, 
                                                            remoteEpisode.ParsedEpisodeInfo.Language,

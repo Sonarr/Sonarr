@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
         [Test]
         public void should_lazyload_quality_profile()
         {
-            var profile = new Profile
+            var profile = new QualityProfile
                 {
                     Items = Qualities.QualityFixture.GetDefaultQualities(Quality.Bluray1080p, Quality.DVD, Quality.HDTV720p),
 
@@ -34,17 +34,17 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
                 };
 
 
-            Mocker.Resolve<ProfileRepository>().Insert(profile);
+            Mocker.Resolve<QualityProfileRepository>().Insert(profile);
             Mocker.Resolve<LanguageProfileRepository>().Insert(langProfile);
 
             var series = Builder<Series>.CreateNew().BuildNew();
-            series.ProfileId = profile.Id;
+            series.QualityProfileId = profile.Id;
             series.LanguageProfileId = langProfile.Id;
 
             Subject.Insert(series);
 
 
-            StoredModel.Profile.Should().NotBeNull();
+            StoredModel.QualityProfile.Should().NotBeNull();
             StoredModel.LanguageProfile.Should().NotBeNull();
 
 

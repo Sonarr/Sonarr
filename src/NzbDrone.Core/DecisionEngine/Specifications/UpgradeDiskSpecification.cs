@@ -34,8 +34,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
-
-                if (!_upgradableSpecification.IsUpgradable(subject.Series.Profile, 
+                if (!_upgradableSpecification.IsUpgradable(subject.Series.QualityProfile, 
                                                            subject.Series.LanguageProfile, 
                                                            file.Quality, 
                                                            file.Language,
@@ -44,7 +43,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                                                            subject.ParsedEpisodeInfo.Language,
                                                            subject.PreferredWordScore))
                 {
-                    return Decision.Reject("Quality for existing file on disk is of equal or higher preference: {0} - {1}", file.Quality, file.Language);
+                    return Decision.Reject("Existing file on disk is of equal or higher preference: {0} - {1}", file.Quality, file.Language);
                 }
             }
 

@@ -6,9 +6,9 @@ namespace NzbDrone.Core.Qualities
 {
     public class QualityModelComparer : IComparer<Quality>, IComparer<QualityModel>
     {
-        private readonly Profile _profile;
+        private readonly QualityProfile _profile;
 
-        public QualityModelComparer(Profile profile)
+        public QualityModelComparer(QualityProfile profile)
         {
             Ensure.That(profile, () => profile).IsNotNull();
             Ensure.That(profile.Items, () => profile.Items).HasItems();
