@@ -10,7 +10,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.Profiles
 {
     [TestFixture]
-    public class ProfileServiceFixture : CoreTest<ProfileService>
+    public class ProfileServiceFixture : CoreTest<QualityProfileService>
     {
         [Test]
         public void init_should_add_default_profiles()
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.Profiles
             Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IProfileRepository>()
-                .Verify(v => v.Insert(It.IsAny<Profile>()), Times.Exactly(6));
+                .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Exactly(6));
         }
 
         [Test]
@@ -28,32 +28,32 @@ namespace NzbDrone.Core.Test.Profiles
         {
             Mocker.GetMock<IProfileRepository>()
                   .Setup(s => s.All())
-                  .Returns(Builder<Profile>.CreateListOfSize(2).Build().ToList());
+                  .Returns(Builder<QualityProfile>.CreateListOfSize(2).Build().ToList());
 
             Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IProfileRepository>()
-                .Verify(v => v.Insert(It.IsAny<Profile>()), Times.Never());
+                .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Never());
         }
 
 
         [Test]
         public void should_not_be_able_to_delete_profile_if_assigned_to_series()
         {
-            var profile = Builder<Profile>.CreateNew()
+            var profile = Builder<QualityProfile>.CreateNew()
                                           .With(p => p.Id = 2)
                                           .Build();
 
             var seriesList = Builder<Series>.CreateListOfSize(3)
                                             .Random(1)
-                                            .With(c => c.ProfileId = profile.Id)
+                                            .With(c => c.QualityProfileId = profile.Id)
                                             .Build().ToList();
 
 
             Mocker.GetMock<ISeriesService>().Setup(c => c.GetAllSeries()).Returns(seriesList);
             Mocker.GetMock<IProfileRepository>().Setup(c => c.Get(profile.Id)).Returns(profile);
 
-            Assert.Throws<ProfileInUseException>(() => Subject.Delete(profile.Id));
+            Assert.Throws<QualityProfileInUseException>(() => Subject.Delete(profile.Id));
 
             Mocker.GetMock<IProfileRepository>().Verify(c => c.Delete(It.IsAny<int>()), Times.Never());
 
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.Profiles
         {
             var seriesList = Builder<Series>.CreateListOfSize(3)
                                             .All()
-                                            .With(c => c.ProfileId = 2)
+                                            .With(c => c.QualityProfileId = 2)
                                             .Build().ToList();
 
 

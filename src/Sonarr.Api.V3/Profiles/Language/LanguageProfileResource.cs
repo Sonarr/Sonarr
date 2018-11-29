@@ -8,6 +8,7 @@ namespace Sonarr.Api.V3.Profiles.Language
     public class LanguageProfileResource : RestResource
     {
         public string Name { get; set; }
+        public bool UpgradeAllowed { get; set; }
         public NzbDrone.Core.Languages.Language Cutoff { get; set; }
         public List<LanguageProfileItemResource> Languages { get; set; }
     }
@@ -28,6 +29,7 @@ namespace Sonarr.Api.V3.Profiles.Language
             {
                 Id = model.Id,
                 Name = model.Name,
+                UpgradeAllowed = model.UpgradeAllowed,
                 Cutoff = model.Cutoff,
                 Languages = model.Languages.ConvertAll(ToResource)
             };
@@ -52,6 +54,7 @@ namespace Sonarr.Api.V3.Profiles.Language
             {
                 Id = resource.Id,
                 Name = resource.Name,
+                UpgradeAllowed = resource.UpgradeAllowed,
                 Cutoff = (NzbDrone.Core.Languages.Language)resource.Cutoff.Id,
                 Languages = resource.Languages.ConvertAll(ToModel)
             };

@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         private DownloadDecision _temporarilyRejected;
         private Series _series;
         private Episode _episode;
-        private Profile _profile;
+        private QualityProfile _profile;
         private ReleaseInfo _release;
         private ParsedEpisodeInfo _parsedEpisodeInfo;
         private RemoteEpisode _remoteEpisode;
@@ -38,19 +38,19 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             _episode = Builder<Episode>.CreateNew()
                                        .Build();
 
-            _profile = new Profile
+            _profile = new QualityProfile
                        {
                            Name = "Test",
                            Cutoff = Quality.HDTV720p.Id,
-                           Items = new List<ProfileQualityItem>
+                           Items = new List<QualityProfileQualityItem>
                                    {
-                                       new ProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p },
-                                       new ProfileQualityItem { Allowed = true, Quality = Quality.WEBDL720p },
-                                       new ProfileQualityItem { Allowed = true, Quality = Quality.Bluray720p }
+                                       new QualityProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p },
+                                       new QualityProfileQualityItem { Allowed = true, Quality = Quality.WEBDL720p },
+                                       new QualityProfileQualityItem { Allowed = true, Quality = Quality.Bluray720p }
                                    },
                        };
 
-            _series.Profile = new LazyLoaded<Profile>(_profile);
+            _series.QualityProfile = new LazyLoaded<QualityProfile>(_profile);
 
             _release = Builder<ReleaseInfo>.CreateNew().Build();
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 using Sonarr.Http.REST;
@@ -12,7 +11,7 @@ namespace Sonarr.Api.V3.Series
     {
         //Todo: Sorters should be done completely on the client
         //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
-        //Todo: We should get the entire Profile instead of ID and Name separately
+        //Todo: We should get the entire QualityProfile instead of ID and Name separately
 
         //View Only
         public string Title { get; set; }
@@ -97,7 +96,7 @@ namespace Sonarr.Api.V3.Series
                        Year = model.Year,
 
                        Path = model.Path,
-                       QualityProfileId = model.ProfileId,
+                       QualityProfileId = model.QualityProfileId,
                        LanguageProfileId = model.LanguageProfileId,
 
                        SeasonFolder = model.SeasonFolder,
@@ -155,7 +154,7 @@ namespace Sonarr.Api.V3.Series
                        Year = resource.Year,
 
                        Path = resource.Path,
-                       ProfileId = resource.QualityProfileId,
+                       QualityProfileId = resource.QualityProfileId,
                        LanguageProfileId = resource.LanguageProfileId,
 
                        SeasonFolder = resource.SeasonFolder,

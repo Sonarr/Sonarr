@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -42,9 +42,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var languages = Languages.LanguageFixture.GetDefaultLanguages(Language.English, Language.Spanish);
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p.Id, Items = Qualities.QualityFixture.GetDefaultQualities()})
-                         .With(l => l.LanguageProfile = new LanguageProfile { Cutoff = Language.Spanish, Languages = languages })
-                         .Build();
+                .With(c => c.QualityProfile = new QualityProfile
+                {
+                    UpgradeAllowed = true,
+                    Cutoff = Quality.Bluray1080p.Id,
+                    Items = Qualities.QualityFixture.GetDefaultQualities()
+                })
+                .With(l => l.LanguageProfile = new LanguageProfile
+                {
+                    UpgradeAllowed = true,
+                    Cutoff = Language.Spanish,
+                    Languages = languages
+                })
+                .Build();
 
             _parseResultMulti = new RemoteEpisode
             {

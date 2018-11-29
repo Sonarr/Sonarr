@@ -51,13 +51,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenAutoDownloadPropers(true);
 
 
-            var profile = new Profile
+            var profile = new QualityProfile
             {
+                UpgradeAllowed = true,
                 Items = Qualities.QualityFixture.GetDefaultQualities()
             };
 
             var langProfile = new LanguageProfile
             {
+                UpgradeAllowed = true,
                 Languages = LanguageFixture.GetDefaultLanguages(),
                 Cutoff = Language.English
             };
@@ -79,14 +81,16 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(true);
 
-            var profile = new Profile
+            var profile = new QualityProfile
             {
+                UpgradeAllowed = true,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 Cutoff = cutoff.Id,
             };
 
             var langProfile = new LanguageProfile
             {
+                UpgradeAllowed = true,
                 Languages = LanguageFixture.GetDefaultLanguages(),
                 Cutoff = languageCutoff
             };
@@ -108,7 +112,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(false);
 
-            var profile = new Profile 
+            var profile = new QualityProfile 
             { 
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
             };

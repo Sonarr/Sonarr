@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Profiles.Languages
     {
         public string Name { get; set; }
         public List<LanguageProfileItem> Languages { get; set; }
+        public bool UpgradeAllowed { get; set;  }
         public Language Cutoff { get; set;  }
 
         public Language LastAllowedLanguage()

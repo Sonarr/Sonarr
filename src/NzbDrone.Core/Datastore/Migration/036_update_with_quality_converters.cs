@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         var allowed = Json.Deserialize<List<Quality>>(allowedJson);
 
-                        var items = Quality.DefaultQualityDefinitions.OrderBy(v => v.Weight).Select(v => new ProfileQualityItem { Quality = v.Quality, Allowed = allowed.Contains(v.Quality) }).ToList();
+                        var items = Quality.DefaultQualityDefinitions.OrderBy(v => v.Weight).Select(v => new QualityProfileQualityItem { Quality = v.Quality, Allowed = allowed.Contains(v.Quality) }).ToList();
 
                         var allowedNewJson = qualityProfileItemConverter.ToDB(items);
 

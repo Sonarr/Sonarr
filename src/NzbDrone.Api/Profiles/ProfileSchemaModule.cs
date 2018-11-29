@@ -23,10 +23,10 @@ namespace NzbDrone.Api.Profiles
         {
             var items = _qualityDefinitionService.All()
                 .OrderBy(v => v.Weight)
-                .Select(v => new ProfileQualityItem { Quality = v.Quality, Allowed = false })
+                .Select(v => new QualityProfileQualityItem { Quality = v.Quality, Allowed = false })
                 .ToList();
 
-            var profile = new Profile();
+            var profile = new QualityProfile();
             profile.Cutoff = Quality.Unknown.Id;
             profile.Items = items;
 

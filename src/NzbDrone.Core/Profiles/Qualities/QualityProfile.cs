@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Profiles.Qualities
 {
-    public class Profile : ModelBase
+    public class QualityProfile : ModelBase
     {
         public string Name { get; set; }
+        public bool UpgradeAllowed { get; set; }
         public int Cutoff { get; set; }
-        public List<ProfileQualityItem> Items { get; set; }
+        public List<QualityProfileQualityItem> Items { get; set; }
 
         public Quality LastAllowedQuality()
         {

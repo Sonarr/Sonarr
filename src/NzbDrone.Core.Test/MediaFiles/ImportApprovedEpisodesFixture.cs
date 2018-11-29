@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             _approvedDecisions = new List<ImportDecision>();
 
             var series = Builder<Series>.CreateNew()
-                                        .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                        .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                         .With(l => l.LanguageProfile = new LanguageProfile 
                                         { 
                                             Cutoff = Language.Spanish,

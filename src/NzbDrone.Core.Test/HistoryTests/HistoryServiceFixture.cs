@@ -21,20 +21,20 @@ namespace NzbDrone.Core.Test.HistoryTests
 {
     public class HistoryServiceFixture : CoreTest<HistoryService>
     {
-        private Profile _profile;
-        private Profile _profileCustom;
+        private QualityProfile _profile;
+        private QualityProfile _profileCustom;
         private LanguageProfile _languageProfile;
 
         [SetUp]
         public void Setup()
         {
-            _profile = new Profile
+            _profile = new QualityProfile
                 {
                     Cutoff = Quality.WEBDL720p.Id,
                     Items = QualityFixture.GetDefaultQualities(),
                 };
 
-            _profileCustom = new Profile
+            _profileCustom = new QualityProfile
                 {
                     Cutoff = Quality.WEBDL720p.Id, 
                     Items = QualityFixture.GetDefaultQualities(Quality.DVD),

@@ -42,7 +42,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return Decision.Accept();
             }
 
-            var profile = subject.Series.Profile.Value;
+            var profile = subject.Series.QualityProfile.Value;
             var languageProfile = subject.Series.LanguageProfile.Value;
             var delayProfile = _delayProfileService.BestForTags(subject.Series.Tags);
             var delay = delayProfile.GetProtocolDelay(subject.Release.DownloadProtocol);
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (delay == 0)
             {
-                _logger.Debug("Profile does not require a waiting period before download for {0}.", subject.Release.DownloadProtocol);
+                _logger.Debug("QualityProfile does not require a waiting period before download for {0}.", subject.Release.DownloadProtocol);
                 return Decision.Accept();
             }
 
