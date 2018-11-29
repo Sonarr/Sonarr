@@ -3,10 +3,12 @@
 . /usr/share/debconf/confmodule
 
 db_beginblock
-db_input medium sonarr/owning_user || true
+db_input high sonarr/owning_user || true
 db_input high sonarr/owning_group || true
-db_input low sonarr/config_directory || true
 db_endblock
+db_go
+
+db_input low sonarr/config_directory || true
 db_go
 
 exit 0

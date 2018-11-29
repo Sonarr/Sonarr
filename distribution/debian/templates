@@ -2,14 +2,15 @@ Template: sonarr/owning_user
 Type: string
 Default: sonarr
 Description: Sonarr user:
-  Specify the user that Sonarr must run as. The user will be created if it does not already exist.
+  Specify the user that is used to run Sonarr. The user will be created if it does not already exist.
+  The default 'sonarr' should work fine for most users. You can specify the user group next.
 
 Template: sonarr/owning_group
 Type: string
 Default: sonarr
 Description: Sonarr group:
-  Specify the group that Sonarr must run as. The group will be created if it does not already exist.
-  If the user doesn't already exist then this group will be specified as the user's primary group.
+  Specify the group that is used to run Sonarr. The group will be created if it does not already exist.
+  If the user doesn't already exist then this group will be used as the user's primary group.
   Any media files created by Sonarr will be writeable by this group.
   It's advisable to keep the group the same between download client, Sonarr and media centers.
 
