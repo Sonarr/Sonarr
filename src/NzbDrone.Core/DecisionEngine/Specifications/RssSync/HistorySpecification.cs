@@ -58,7 +58,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                     var preferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, mostRecent.SourceTitle);
 
                     var cutoffUnmet = _upgradableSpecification.CutoffNotMet(
-                        subject.Series.Profile,
+                        subject.Series.QualityProfile,
                         subject.Series.LanguageProfile,
                         mostRecent.Quality,
                         mostRecent.Language,
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                         subject.PreferredWordScore);
 
                     var upgradeable = _upgradableSpecification.IsUpgradable(
-                        subject.Series.Profile,
+                        subject.Series.QualityProfile,
                         subject.Series.LanguageProfile,
                         mostRecent.Quality,
                         mostRecent.Language,

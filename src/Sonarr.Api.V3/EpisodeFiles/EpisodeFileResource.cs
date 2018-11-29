@@ -69,7 +69,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Language = model.Language,
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
-                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.Profile.Value, model.Quality),
+                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.QualityProfile.Value, model.Quality),
                 LanguageCutoffNotMet = upgradableSpecification.LanguageCutoffNotMet(series.LanguageProfile.Value, model.Language)
             };
         }

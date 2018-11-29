@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             var outputPath = @"C:\Test\Unsorted\TV\30.Rock.S01E01".AsOsAgnostic();
 
             var series = Builder<Series>.CreateNew()
-                                        .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                        .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                         .With(l => l.LanguageProfile = new LanguageProfile 
                                         { 
                                             Cutoff = Language.Spanish,
@@ -86,6 +86,13 @@ namespace NzbDrone.Core.Test.MediaFiles
             _approvedDecisions.ForEach(a => a.LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), Path.GetFileName(a.LocalEpisode.Path)));
         }
 
+        private void GivenExistingFileOnDisk()
+        {
+            Mocker.GetMock<IMediaFileService>()
+                  .Setup(s => s.GetFilesWithRelativePath(It.IsAny<int>(), It.IsAny<string>()))
+                  .Returns(new List<EpisodeFile>());
+        }
+
         [Test]
         public void should_not_import_any_if_there_are_no_approved_decisions()
         {
@@ -97,12 +104,16 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_import_each_approved()
         {
+            GivenExistingFileOnDisk();
+
             Subject.Import(_approvedDecisions, false).Should().HaveCount(5);
         }
 
         [Test]
         public void should_only_import_approved()
         {
+            GivenExistingFileOnDisk();
+
             var all = new List<ImportDecision>();
             all.AddRange(_rejectedDecisions);
             all.AddRange(_approvedDecisions);
@@ -116,6 +127,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_only_import_each_episode_once()
         {
+            GivenExistingFileOnDisk();
+
             var all = new List<ImportDecision>();
             all.AddRange(_approvedDecisions);
             all.Add(new ImportDecision(_approvedDecisions.First().LocalEpisode));
@@ -147,6 +160,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_not_move_existing_files()
         {
+            GivenExistingFileOnDisk();
+
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, false);
 
             Mocker.GetMock<IUpgradeMediaFiles>()
@@ -217,6 +232,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_import_larger_files_first()
         {
+            GivenExistingFileOnDisk();
+
             var fileDecision = _approvedDecisions.First();
             fileDecision.LocalEpisode.Size = 1.Gigabytes();
 

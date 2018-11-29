@@ -137,6 +137,7 @@
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
     <Compile Include="Datastore\Migration\130_episode_last_searched_time.cs" />
     <Compile Include="Datastore\Migration\129_add_relative_original_path_to_episode_file.cs" />
+    <Compile Include="Datastore\Migration\128_rename_quality_profiles_add_upgrade_allowed.cs" />
     <Compile Include="DecisionEngine\Specifications\AlreadyImportedSpecification.cs" />
     <Compile Include="CustomFilters\CustomFilter.cs" />
     <Compile Include="CustomFilters\CustomFilterRepository.cs" />
@@ -1000,11 +1001,11 @@
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
     <Compile Include="Profiles\Languages\LanguageProfileItem.cs" />
     <Compile Include="Profiles\Languages\LanguageProfileRepository.cs" />
-    <Compile Include="Profiles\Qualities\Profile.cs" />
-    <Compile Include="Profiles\Qualities\ProfileInUseException.cs" />
-    <Compile Include="Profiles\Qualities\ProfileQualityItem.cs" />
-    <Compile Include="Profiles\Qualities\ProfileRepository.cs" />
-    <Compile Include="Profiles\Qualities\ProfileService.cs" />
+    <Compile Include="Profiles\Qualities\QualityProfile.cs" />
+    <Compile Include="Profiles\Qualities\QualityProfileInUseException.cs" />
+    <Compile Include="Profiles\Qualities\QualityProfileQualityItem.cs" />
+    <Compile Include="Profiles\Qualities\QualityProfileRepository.cs" />
+    <Compile Include="Profiles\Qualities\QualityProfileService.cs" />
     <Compile Include="Profiles\Qualities\QualityIndex.cs" />
     <Compile Include="Profiles\Releases\PreferredWordService.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />

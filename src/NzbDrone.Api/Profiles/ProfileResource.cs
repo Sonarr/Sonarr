@@ -10,6 +10,7 @@ namespace NzbDrone.Api.Profiles
     public class ProfileResource : RestResource
     {
         public string Name { get; set; }
+        public bool UpgradeAllowed { get; set; }
         public Quality Cutoff { get; set; }
         public List<ProfileQualityItemResource> Items { get; set; }
     }
@@ -22,7 +23,7 @@ namespace NzbDrone.Api.Profiles
 
     public static class ProfileResourceMapper
     {
-        public static ProfileResource ToResource(this Profile model)
+        public static ProfileResource ToResource(this QualityProfile model)
         {
             if (model == null) return null;
 
@@ -44,6 +45,7 @@ namespace NzbDrone.Api.Profiles
                 Id = model.Id,
 
                 Name = model.Name,
+                UpgradeAllowed = model.UpgradeAllowed,
                 Cutoff = cutoff,
 
                 // Flatten groups so things don't explode
@@ -64,7 +66,7 @@ namespace NzbDrone.Api.Profiles
             };
         }
 
-        public static ProfileQualityItemResource ToResource(this ProfileQualityItem model)
+        public static ProfileQualityItemResource ToResource(this QualityProfileQualityItem model)
         {
             if (model == null) return null;
 
@@ -75,32 +77,33 @@ namespace NzbDrone.Api.Profiles
             };
         }
             
-        public static Profile ToModel(this ProfileResource resource)
+        public static QualityProfile ToModel(this ProfileResource resource)
         {
             if (resource == null) return null;
 
-            return new Profile
+            return new QualityProfile
             {
                 Id = resource.Id,
 
                 Name = resource.Name,
+                UpgradeAllowed = resource.UpgradeAllowed,
                 Cutoff = resource.Cutoff.Id,
                 Items = resource.Items.ConvertAll(ToModel)
             };
         }
 
-        public static ProfileQualityItem ToModel(this ProfileQualityItemResource resource)
+        public static QualityProfileQualityItem ToModel(this ProfileQualityItemResource resource)
         {
             if (resource == null) return null;
 
-            return new ProfileQualityItem
+            return new QualityProfileQualityItem
             {
                 Quality = (Quality)resource.Quality.Id,
                 Allowed = resource.Allowed
             };
         }
 
-        public static List<ProfileResource> ToResource(this IEnumerable<Profile> models)
+        public static List<ProfileResource> ToResource(this IEnumerable<QualityProfile> models)
         {
             return models.Select(ToResource).ToList();
         }

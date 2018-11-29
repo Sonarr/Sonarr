@@ -28,15 +28,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [SetUp]
         public void Setup()
         {
-            var profile = new Profile 
+            var profile = new QualityProfile 
             {  
                 Id = 1,
                 Cutoff = Quality.WEBDL480p.Id,
-                Items = new List<ProfileQualityItem> 
+                Items = new List<QualityProfileQualityItem> 
                 { 
-                    new ProfileQualityItem { Allowed = true, Quality = Quality.SDTV },
-                    new ProfileQualityItem { Allowed = true, Quality = Quality.WEBDL480p },
-                    new ProfileQualityItem { Allowed = true, Quality = Quality.RAWHD }
+                    new QualityProfileQualityItem { Allowed = true, Quality = Quality.SDTV },
+                    new QualityProfileQualityItem { Allowed = true, Quality = Quality.WEBDL480p },
+                    new QualityProfileQualityItem { Allowed = true, Quality = Quality.RAWHD }
                 }
             };
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                               .With(s => s.Runtime = 30)
                                               .With(s => s.Monitored = true)
                                               .With(s => s.TitleSlug = "Title3")
-                                              .With(s => s.ProfileId = profile.Id)
+                                              .With(s => s.QualityProfileId = profile.Id)
                                               .With(s => s.LanguageProfileId = langProfile.Id)
                                               .BuildNew();
 
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                                 .With(s => s.Runtime = 30)
                                                 .With(s => s.Monitored = false)
                                                 .With(s => s.TitleSlug = "Title2")
-                                                .With(s => s.ProfileId = profile.Id)
+                                                .With(s => s.QualityProfileId = profile.Id)
                                                 .With(s => s.LanguageProfileId = langProfile.Id)
                                                 .BuildNew();
 

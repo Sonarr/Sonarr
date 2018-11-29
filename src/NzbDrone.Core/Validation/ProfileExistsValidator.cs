@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Validation
         private readonly IProfileService _profileService;
 
         public ProfileExistsValidator(IProfileService profileService)
-            : base("Profile does not exist")
+            : base("QualityProfile does not exist")
         {
             _profileService = profileService;
         }

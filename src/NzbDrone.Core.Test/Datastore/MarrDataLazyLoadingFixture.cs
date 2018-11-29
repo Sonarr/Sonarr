@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.Datastore
         [SetUp]
         public void Setup()
         {
-            var profile = new Profile
+            var profile = new QualityProfile
                 {
                     Name = "Test",
                     Cutoff = Quality.WEBDL720p.Id,
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.Datastore
 
             var series = Builder<Series>.CreateListOfSize(1)
                 .All()
-                .With(v => v.ProfileId = profile.Id)
+                .With(v => v.QualityProfileId = profile.Id)
                 .With(v => v.LanguageProfileId = languageProfile.Id)
                 .BuildListOfNew();
 
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.Datastore
             foreach (var episode in episodes)
             {
                 Assert.IsNotNull(episode.Series);
-                Assert.IsFalse(episode.Series.Profile.IsLoaded);
+                Assert.IsFalse(episode.Series.QualityProfile.IsLoaded);
                 Assert.IsFalse(episode.Series.LanguageProfile.IsLoaded);
             }
         }
@@ -106,13 +106,13 @@ namespace NzbDrone.Core.Test.Datastore
 
             var episodes = DataMapper.Query<Episode>()
                 .Join<Episode, Series>(Marr.Data.QGen.JoinType.Inner, v => v.Series, (l, r) => l.SeriesId == r.Id)
-                .Join<Series, Profile>(Marr.Data.QGen.JoinType.Inner, v => v.Profile, (l, r) => l.ProfileId == r.Id)
+                .Join<Series, QualityProfile>(Marr.Data.QGen.JoinType.Inner, v => v.QualityProfile, (l, r) => l.QualityProfileId == r.Id)
                 .ToList();
 
             foreach (var episode in episodes)
             {
                 Assert.IsNotNull(episode.Series);
-                Assert.IsTrue(episode.Series.Profile.IsLoaded);
+                Assert.IsTrue(episode.Series.QualityProfile.IsLoaded);
                 Assert.IsFalse(episode.Series.LanguageProfile.IsLoaded);
             }
         }
@@ -125,13 +125,13 @@ namespace NzbDrone.Core.Test.Datastore
 
             var episodes = DataMapper.Query<Episode>()
                                      .Join<Episode, Series>(Marr.Data.QGen.JoinType.Inner, v => v.Series, (l, r) => l.SeriesId == r.Id)
-                                     .Join<Series, LanguageProfile>(Marr.Data.QGen.JoinType.Inner, v => v.LanguageProfile, (l, r) => l.ProfileId == r.Id)
+                                     .Join<Series, LanguageProfile>(Marr.Data.QGen.JoinType.Inner, v => v.LanguageProfile, (l, r) => l.QualityProfileId == r.Id)
                                      .ToList();
 
             foreach (var episode in episodes)
             {
                 Assert.IsNotNull(episode.Series);
-                Assert.IsFalse(episode.Series.Profile.IsLoaded);
+                Assert.IsFalse(episode.Series.QualityProfile.IsLoaded);
                 Assert.IsTrue(episode.Series.LanguageProfile.IsLoaded);
             }
         }

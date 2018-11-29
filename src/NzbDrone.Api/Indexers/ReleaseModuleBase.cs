@@ -29,7 +29,7 @@ namespace NzbDrone.Api.Indexers
             if (decision.RemoteEpisode.Series != null)
             {
                 release.QualityWeight = decision.RemoteEpisode.Series
-                                                              .Profile.Value
+                                                              .QualityProfile.Value
                                                               .Items.FindIndex(v => v.Quality == release.Quality.Quality) * 100;
             }
 

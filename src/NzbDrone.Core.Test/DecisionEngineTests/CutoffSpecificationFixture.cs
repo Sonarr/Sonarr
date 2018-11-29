@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_true_if_current_episode_is_less_than_cutoff()
         {
             Subject.CutoffNotMet(
-                new Profile 
+                new QualityProfile 
                 { 
                     Cutoff = Quality.Bluray1080p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_false_if_current_episode_is_equal_to_cutoff()
         {
             Subject.CutoffNotMet(
-                new Profile
+                new QualityProfile
                 {
                     Cutoff = Quality.HDTV720p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_false_if_current_episode_is_greater_than_cutoff()
         {
             Subject.CutoffNotMet(
-                new Profile 
+                new QualityProfile 
                 { 
                     Cutoff = Quality.HDTV720p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_true_when_new_episode_is_proper_but_existing_is_not()
         {
             Subject.CutoffNotMet(
-                new Profile 
+                new QualityProfile 
                 { 
                     Cutoff = Quality.HDTV720p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_false_if_cutoff_is_met_and_quality_is_higher()
         {
             Subject.CutoffNotMet(
-                new Profile 
+                new QualityProfile 
                 {
                     Cutoff = Quality.HDTV720p.Id, 
                     Items = Qualities.QualityFixture.GetDefaultQualities()
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_quality_cutoff_is_met_and_quality_is_higher_but_language_is_not_met()
         {
-            Profile _profile = new Profile
+            QualityProfile _profile = new QualityProfile
                 {
                     Cutoff = Quality.HDTV720p.Id,
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_if_cutoff_is_met_and_quality_is_higher_and_language_is_met()
         {
-            Profile _profile = new Profile
+            QualityProfile _profile = new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_if_cutoff_is_met_and_quality_is_higher_and_language_is_higher()
         {
-            Profile _profile = new Profile
+            QualityProfile _profile = new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_cutoff_is_not_met_and_new_quality_is_higher_and_language_is_higher()
         {
-            Profile _profile = new Profile
+            QualityProfile _profile = new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
@@ -216,7 +216,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_cutoff_is_not_met_and_language_is_higher()
         {
-            Profile _profile = new Profile
+            QualityProfile _profile = new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
@@ -239,7 +239,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_cutoffs_are_met_and_score_is_higher()
         {
-            Profile _profile = new Profile
+            QualityProfile _profile = new QualityProfile
                                {
                                    Cutoff = Quality.HDTV720p.Id,
                                    Items = Qualities.QualityFixture.GetDefaultQualities(),

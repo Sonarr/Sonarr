@@ -19,7 +19,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
-            var qualityComparer = new QualityModelComparer(localEpisode.Series.Profile);
+            var qualityComparer = new QualityModelComparer(localEpisode.Series.QualityProfile);
             var languageComparer = new LanguageComparer(localEpisode.Series.LanguageProfile);
             
             if (localEpisode.Episodes.Any(e => e.EpisodeFileId != 0 && qualityComparer.Compare(e.EpisodeFile.Value.Quality, localEpisode.Quality) > 0))
