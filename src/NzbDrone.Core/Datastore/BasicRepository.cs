@@ -40,7 +40,21 @@ namespace NzbDrone.Core.Datastore
         private readonly IDatabase _database;
         private readonly IEventAggregator _eventAggregator;
 
-        protected IDataMapper DataMapper => _database.GetDataMapper();
+        protected IDataMapper DataMapper
+        {
+            get
+            {
+//                using (var dm = _database.GetDataMapper())
+//                {
+//                    return dm;
+//                }
+
+                var dm = _database.GetDataMapper();
+                dm.Dispose();
+
+                return dm;
+            }
+        }
 
         public BasicRepository(IDatabase database, IEventAggregator eventAggregator)
         {
