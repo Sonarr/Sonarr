@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Organizer
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
         string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null);
         bool RequiresEpisodeTitle(Series series, List<Episode> episodes);
+        bool RequiresAbsoluteEpisodeNumber(Series series, List<Episode> episodes);
     }
 
     public class FileNameBuilder : IBuildFileNames
@@ -35,6 +36,7 @@ namespace NzbDrone.Core.Organizer
         private readonly ICached<EpisodeFormat[]> _episodeFormatCache;
         private readonly ICached<AbsoluteEpisodeFormat[]> _absoluteEpisodeFormatCache;
         private readonly ICached<bool> _requiresEpisodeTitleCache;
+        private readonly ICached<bool> _requiresAbsoluteEpisodeNumberCache;
         private readonly Logger _logger;
 
         private static readonly Regex TitleRegex = new Regex(@"\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9]+))?(?<suffix>[- ._)\]]*)\}",
@@ -87,6 +89,7 @@ namespace NzbDrone.Core.Organizer
             _episodeFormatCache = cacheManager.GetCache<EpisodeFormat[]>(GetType(), "episodeFormat");
             _absoluteEpisodeFormatCache = cacheManager.GetCache<AbsoluteEpisodeFormat[]>(GetType(), "absoluteEpisodeFormat");
             _requiresEpisodeTitleCache = cacheManager.GetCache<bool>(GetType(), "requiresEpisodeTitle");
+            _requiresAbsoluteEpisodeNumberCache = cacheManager.GetCache<bool>(GetType(), "requiresAbsoluteEpisodeNumber");
             _logger = logger;
         }
 
@@ -337,6 +340,24 @@ namespace NzbDrone.Core.Organizer
                 }
 
                 return false;
+            });
+        }
+
+        public bool RequiresAbsoluteEpisodeNumber(Series series, List<Episode> episodes)
+        {
+            if (series.SeriesType != SeriesTypes.Anime)
+            {
+                return false;
+            }
+
+            var namingConfig = _namingConfigService.GetConfig();
+            var pattern = namingConfig.AnimeEpisodeFormat;
+
+            return _requiresAbsoluteEpisodeNumberCache.Get(pattern, () =>
+            {
+                var matches = AbsoluteEpisodeRegex.Matches(pattern);
+
+                return matches.Count > 0;
             });
         }
 

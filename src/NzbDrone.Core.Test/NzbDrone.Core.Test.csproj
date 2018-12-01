@@ -312,6 +312,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\Augmenters\Quality\AugmentQualityFromMediaInfoFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMakerFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\DetectSampleFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\AbsoluteEpisodeNumberSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\EpisodeTitleSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecificationFixture.cs" />
@@ -332,6 +333,7 @@
     <Compile Include="MetadataSource\SkyHook\SkyHookProxyFixture.cs" />
     <Compile Include="NotificationTests\NotificationBaseFixture.cs" />
     <Compile Include="NotificationTests\SynologyIndexerFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\RequiresAbsoluteEpisodeNumberFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\RequiresEpisodeTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
