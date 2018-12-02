@@ -317,7 +317,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex CleanQualityBracketsRegex = new Regex(@"\[[a-z0-9 ._-]+\]$",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)(?<!WEB-DL|480p|720p|1080p|2160p)(?:\b|[-._ ])",
+        private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)(?<!WEB-DL|480p|720p|1080p|2160p)(?:\b|[-._ ])|[-._ ]\[(?<releasegroup>[a-z0-9]+)\]$",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex AnimeReleaseGroupRegex = new Regex(@"^(?:\[(?<subgroup>(?!\s).+?(?<!\s))\](?:_|-|\s|\.)?)",

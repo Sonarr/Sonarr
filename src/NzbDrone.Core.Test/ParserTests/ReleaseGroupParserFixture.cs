@@ -22,13 +22,14 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Colbert Report - 2014-06-02 - Thomas Piketty.mkv", null)]
         [TestCase("Real Time with Bill Maher S12E17 May 23, 2014.mp4", null)]
         [TestCase("Reizen Waes - S01E08 - Transistri\u00EB, Zuid-Osseti\u00EB en Abchazi\u00EB SDTV.avi", null)]
-        [TestCase("Simpsons 10x11 - Wild Barts Cant Be Broken [rl].avi", null)]
+        [TestCase("Simpsons 10x11 - Wild Barts Cant Be Broken [rl].avi", "rl")]
         [TestCase("[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "DIMENSION")]
         [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "2HD")]
         [TestCase("7s-atlantis-s02e01-720p.mkv", null)]
         [TestCase("The.Middle.S09E13.720p.HEVC.x265-MeGusta-Pre", "MeGusta")]
         [TestCase("Ghosted.S01E08.Haunted.Hayride.720p.AMZN.WEBRip.DDP5.1.x264-NTb-postbot", "NTb")]
         [TestCase("Ghosted.S01E08.Haunted.Hayride.720p.AMZN.WEBRip.DDP5.1.x264-NTb-xpost", "NTb")]
+        [TestCase("Series Title - S01E01 - Episode Title [RlsGroup]", "RlsGroup")]
         //[TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
         {
