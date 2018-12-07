@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Common.Extensions;
@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Tv
         public bool UnverifiedSceneNumbering { get; set; }
         public Ratings Ratings { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }
+        public DateTime? LastSearchTime { get; set; }
 
         public string SeriesTitle { get; private set; }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -313,6 +313,16 @@ namespace NzbDrone.Core.IndexerSearch
             Task.WaitAll(taskList.ToArray());
 
             _logger.Debug("Total of {0} reports were found for {1} from {2} indexers", reports.Count, criteriaBase, indexers.Count);
+
+            // Update the last search time for all episodes if at least 1 indexer was searched.
+            if (indexers.Any())
+            {
+                var lastSearchTime = DateTime.UtcNow;
+                _logger.Debug("Setting last search time to: {0}", lastSearchTime);
+
+                criteriaBase.Episodes.ForEach(e => e.LastSearchTime = lastSearchTime);
+                _episodeService.UpdateEpisodes(criteriaBase.Episodes);
+            }
 
             return _makeDownloadDecision.GetSearchDecision(reports, criteriaBase).ToList();
         }

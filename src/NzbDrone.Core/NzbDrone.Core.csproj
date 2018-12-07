@@ -143,6 +143,7 @@
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
+    <Compile Include="Datastore\Migration\130_episode_last_searched_time.cs" />
     <Compile Include="Datastore\Migration\129_add_relative_original_path_to_episode_file.cs" />
     <Compile Include="DecisionEngine\Specifications\AlreadyImportedSpecification.cs" />
     <Compile Include="Indexers\SeedConfigProvider.cs" />
