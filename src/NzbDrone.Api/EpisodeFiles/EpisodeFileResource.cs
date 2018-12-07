@@ -16,6 +16,7 @@ namespace NzbDrone.Api.EpisodeFiles
         public string SceneName { get; set; }
         public QualityModel Quality { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
+        public string OriginalFilePath { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
     }
@@ -38,8 +39,8 @@ namespace NzbDrone.Api.EpisodeFiles
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
                 Quality = model.Quality,
-                MediaInfo = model.MediaInfo.ToResource(model.SceneName)
-                //QualityCutoffNotMet
+                MediaInfo = model.MediaInfo.ToResource(model.SceneName),
+                OriginalFilePath = model.OriginalFilePath
             };
         }
 
@@ -61,6 +62,7 @@ namespace NzbDrone.Api.EpisodeFiles
                 Quality = model.Quality,
                 QualityCutoffNotMet = qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, model.Quality),
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
+                OriginalFilePath = model.OriginalFilePath
             };
         }
     }

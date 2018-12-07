@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Core.Datastore;
@@ -17,6 +17,7 @@ namespace NzbDrone.Core.MediaFiles
         public string Path { get; set; }
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
+        public string OriginalFilePath { get; set; }
         public string SceneName { get; set; }
         public string ReleaseGroup { get; set; }
         public QualityModel Quality { get; set; }

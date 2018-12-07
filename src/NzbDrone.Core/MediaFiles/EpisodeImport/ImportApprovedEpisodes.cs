@@ -102,6 +102,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
+                        episodeFile.OriginalFilePath = GetOriginalFilePath(downloadClientItem, localEpisode);
                         episodeFile.SceneName = GetSceneName(downloadClientItem, localEpisode);
 
                         var moveResult = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, copyOnly);
@@ -146,6 +147,37 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                                             .Select(d => new ImportResult(d, d.Rejections.Select(r => r.Reason).ToArray())));
 
             return importResults;
+        }
+
+        private string GetOriginalFilePath(DownloadClientItem downloadClientItem, LocalEpisode localEpisode)
+        {
+            if (downloadClientItem != null)
+            {
+                return downloadClientItem.OutputPath.Directory.ToString().GetRelativePath(localEpisode.Path);
+            }
+
+            var path = localEpisode.Path;
+            var folderEpisodeInfo = localEpisode.FolderEpisodeInfo;
+
+            if (folderEpisodeInfo != null)
+            {
+                var folderPath = path.GetAncestorPath(folderEpisodeInfo.ReleaseTitle);
+
+                if (folderPath != null)
+                {
+                    return folderPath.GetParentPath().GetRelativePath(path);
+                }
+            }
+
+            var parentPath = path.GetParentPath();
+            var grandparentPath = parentPath.GetParentPath();
+
+            if (grandparentPath != null)
+            {
+                return grandparentPath.GetRelativePath(path);
+            }
+
+            return Path.Combine(Path.GetFileName(parentPath), Path.GetFileName(path));
         }
 
         private string GetSceneName(DownloadClientItem downloadClientItem, LocalEpisode localEpisode)

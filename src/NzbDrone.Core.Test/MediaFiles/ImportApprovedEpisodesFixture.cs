@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles;
@@ -33,6 +34,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             _rejectedDecisions = new List<ImportDecision>();
             _approvedDecisions = new List<ImportDecision>();
+
+            var outputPath = @"C:\Test\Unsorted\TV\30.Rock.S01E01".AsOsAgnostic();
 
             var series = Builder<Series>.CreateNew()
                                         .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
@@ -66,7 +69,14 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Setup(s => s.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>(), It.IsAny<bool>()))
                   .Returns(new EpisodeFileMoveResult());
 
-            _downloadClientItem = Builder<DownloadClientItem>.CreateNew().Build();
+            _downloadClientItem = Builder<DownloadClientItem>.CreateNew()
+                                                             .With(d => d.OutputPath = new OsPath(outputPath))
+                                                             .Build();
+        }
+
+        private void GivenNewDownload()
+        {
+            _approvedDecisions.ForEach(a => a.LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), Path.GetFileName(a.LocalEpisode.Path)));
         }
 
         [Test]
@@ -140,6 +150,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_use_nzb_title_as_scene_name()
         {
+            GivenNewDownload();
             _downloadClientItem.Title = "malcolm.in.the.middle.s02e05.dvdrip.xvid-ingot";
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
@@ -152,6 +163,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         [TestCase(".nzb")]
         public void should_remove_extension_from_nzb_title_for_scene_name(string extension)
         {
+            GivenNewDownload();
             var title = "malcolm.in.the.middle.s02e05.dvdrip.xvid-ingot";
 
             _downloadClientItem.Title = title + extension;
@@ -164,7 +176,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_not_use_nzb_title_as_scene_name_if_full_season()
         {
-            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\season1\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv".AsOsAgnostic();
+            GivenNewDownload();
+            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv");
             _downloadClientItem.Title = "malcolm.in.the.middle.s02.dvdrip.xvid-ingot";
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
@@ -175,7 +188,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_use_file_name_as_scenename_only_if_it_looks_like_scenename()
         {
-            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv".AsOsAgnostic();
+            GivenNewDownload();
+            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv");
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
 
@@ -185,7 +199,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_not_use_file_name_as_scenename_if_it_doesnt_looks_like_scenename()
         {
-            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\aaaaa.mkv".AsOsAgnostic();
+            GivenNewDownload();
+            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "aaaaa.mkv");
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
 
@@ -223,7 +238,11 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_copy_when_cannot_move_files_downloads()
         {
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, new DownloadClientItem { Title = "30.Rock.S01E01", CanMoveFiles = false});
+            GivenNewDownload();
+            _downloadClientItem.Title = "30.Rock.S01E01";
+            _downloadClientItem.CanMoveFiles = false;
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
 
             Mocker.GetMock<IUpgradeMediaFiles>()
                   .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode, true), Times.Once());
@@ -232,10 +251,71 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_use_override_importmode()
         {
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, new DownloadClientItem { Title = "30.Rock.S01E01", CanMoveFiles = false }, ImportMode.Move);
+            GivenNewDownload();
+            _downloadClientItem.Title = "30.Rock.S01E01";
+            _downloadClientItem.CanMoveFiles = false;
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem, ImportMode.Move);
 
             Mocker.GetMock<IUpgradeMediaFiles>()
                   .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode, false), Times.Once());
+        }
+
+        [Test]
+        public void should_use_file_name_only_for_download_client_item_without_a_job_folder()
+        {
+            var fileName = "Series.Title.S01E01.720p.HDTV.x264-Sonarr.mkv";
+            var path = Path.Combine(@"C:\Test\Unsorted\TV\".AsOsAgnostic(), fileName);
+
+            _downloadClientItem.OutputPath = new OsPath(path);
+            _approvedDecisions.First().LocalEpisode.Path = path;
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == fileName)));
+        }
+
+        [Test]
+        public void should_use_folder_and_file_name_only_for_download_client_item_with_a_job_folder()
+        {
+            var name = "Series.Title.S01E01.720p.HDTV.x264-Sonarr";
+            var outputPath = Path.Combine(@"C:\Test\Unsorted\TV\".AsOsAgnostic(), name);
+
+            _downloadClientItem.OutputPath = new OsPath(outputPath);
+            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(outputPath, name + ".mkv");
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}\\{name}.mkv".AsOsAgnostic())));
+        }
+
+        [Test]
+        public void should_include_intermediate_folders_for_download_client_item_with_a_job_folder()
+        {
+            var name = "Series.Title.S01E01.720p.HDTV.x264-Sonarr";
+            var outputPath = Path.Combine(@"C:\Test\Unsorted\TV\".AsOsAgnostic(), name);
+
+            _downloadClientItem.OutputPath = new OsPath(outputPath);
+            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(outputPath, "subfolder", name + ".mkv");
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}\\subfolder\\{name}.mkv".AsOsAgnostic())));
+        }
+
+        [Test]
+        public void should_use_folder_info_release_title_to_find_relative_path()
+        {
+            var name = "Series.Title.S01E01.720p.HDTV.x264-Sonarr";
+            var outputPath = Path.Combine(@"C:\Test\Unsorted\TV\".AsOsAgnostic(), name);
+            var localEpisode = _approvedDecisions.First().LocalEpisode;
+
+            localEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo { ReleaseTitle = name };
+            localEpisode.Path = Path.Combine(outputPath, "subfolder", name + ".mkv");
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, null);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}\\subfolder\\{name}.mkv".AsOsAgnostic())));
         }
     }
 }

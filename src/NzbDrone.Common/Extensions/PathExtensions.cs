@@ -191,6 +191,24 @@ namespace NzbDrone.Common.Extensions
             return directories;
         }
 
+        public static string GetAncestorPath(this string path, string ancestorName)
+        {
+            var parent = Path.GetDirectoryName(path);
+
+            while (parent != null)
+            {
+                var currentPath = parent;
+                parent = Path.GetDirectoryName(parent);
+
+                if (Path.GetFileName(currentPath) == ancestorName)
+                {
+                    return currentPath;
+                }
+            }
+
+            return null;
+        }
+
         public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)
         {
             return appFolderInfo.AppDataFolder;
