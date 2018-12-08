@@ -28,7 +28,7 @@ namespace Sonarr.Http.Frontend.Mappers
 
         public override bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/content/images/icons/browserconfig");
+            return resourceUrl.StartsWith("/content/images/favicon/browserconfig");
         }
     }
 }
