@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
@@ -22,6 +22,64 @@ namespace NzbDrone.Core.Test.IndexerTests.IPTorrentsTests
                                         Name = "IPTorrents",
                                         Settings = new IPTorrentsSettings() {  BaseUrl = "http://fake.com/" }
                                     };
+        }
+
+        private void GivenOldFeedFormat()
+        {
+            Subject.Definition = new IndexerDefinition()
+            {
+                Name = "IPTorrents",
+                Settings = new IPTorrentsSettings() {  BaseUrl = "https://iptorrents.com/torrents/rss?u=snip;tp=snip;3;80;93;37;download" }
+            };
+        }
+
+        private void GivenNewFeedFormat()
+        {
+            Subject.Definition = new IndexerDefinition()
+            {
+                Name = "IPTorrents",
+                Settings = new IPTorrentsSettings() {  BaseUrl = "https://iptorrents.com/t.rss?u=USERID;tp=APIKEY;3;80;93;37;download" }
+            };
+        }
+
+        private void GivenFeedNoDownloadFormat()
+        {
+            Subject.Definition = new IndexerDefinition()
+            {
+                Name = "IPTorrents",
+                Settings = new IPTorrentsSettings() {  BaseUrl = "https://iptorrents.com/t.rss?u=USERID;tp=APIKEY;3;80;93;37" }
+            };
+        }
+
+        [Test]
+        public void should_validate_old_feed_format()
+        {
+            GivenOldFeedFormat();
+            var validationResult = Subject.Definition.Settings.Validate();
+            validationResult.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_validate_new_feed_format()
+        {
+            GivenNewFeedFormat();
+            var validationResult = Subject.Definition.Settings.Validate();
+            validationResult.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_validate_bad_format()
+        {
+            var validationResult = Subject.Definition.Settings.Validate();
+            validationResult.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_validate_no_download_format()
+        {
+            GivenFeedNoDownloadFormat();
+            var validationResult = Subject.Definition.Settings.Validate();
+            validationResult.IsValid.Should().BeFalse();
         }
 
         [Test]

@@ -12,11 +12,11 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
 
-            RuleFor(c => c.BaseUrl).Matches(@"/rss\?.+$");
+            RuleFor(c => c.BaseUrl).Matches(@"(?:/|t\.)rss\?.+$");
 
-            RuleFor(c => c.BaseUrl).Matches(@"/rss\?.+;download(?:;|$)")
+            RuleFor(c => c.BaseUrl).Matches(@"(?:/|t\.)rss\?.+;download(?:;|$)")
                 .WithMessage("Use Direct Download Url (;download)")
-                .When(v => v.BaseUrl.IsNotNullOrWhiteSpace() && Regex.IsMatch(v.BaseUrl, @"/rss\?.+$"));
+                .When(v => v.BaseUrl.IsNotNullOrWhiteSpace() && Regex.IsMatch(v.BaseUrl, @"(?:/|t\.)rss\?.+$"));
 
             RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
         }
