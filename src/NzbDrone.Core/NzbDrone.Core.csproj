@@ -911,6 +911,12 @@
     <Compile Include="Extras\Metadata\MetadataType.cs" />
     <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
     <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
+    <Compile Include="Notifications\Discord\Discord.cs" />
+    <Compile Include="Notifications\Discord\DiscordExeption.cs" />
+    <Compile Include="Notifications\Discord\DiscordProxy.cs" />
+    <Compile Include="Notifications\Discord\DiscordSettings.cs" />
+    <Compile Include="Notifications\Discord\Payloads\Attachment.cs" />
+    <Compile Include="Notifications\Discord\Payloads\DiscordPayload.cs" />
     <Compile Include="Notifications\Join\JoinAuthException.cs" />
     <Compile Include="Notifications\Join\JoinInvalidDeviceException.cs" />
     <Compile Include="Notifications\Join\JoinPriority.cs" />

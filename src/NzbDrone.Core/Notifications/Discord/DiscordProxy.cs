@@ -1,32 +1,32 @@
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Notifications.Slack.Payloads;
+using NzbDrone.Core.Notifications.Discord.Payloads;
 using NzbDrone.Core.Rest;
 
-namespace NzbDrone.Core.Notifications.Slack
+namespace NzbDrone.Core.Notifications.Discord
 {
-    public interface ISlackProxy
+    public interface IDiscordProxy
     {
-        void SendPayload(SlackPayload payload, SlackSettings settings);
+        void SendPayload(DiscordPayload payload, DiscordSettings settings);
     }
 
-    public class SlackProxy : ISlackProxy
+    public class DiscordProxy : IDiscordProxy
     {
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public SlackProxy(IHttpClient httpClient, Logger logger)
+        public DiscordProxy(IHttpClient httpClient, Logger logger)
         {
             _httpClient = httpClient;
             _logger = logger;
         }
 
-        public void SendPayload(SlackPayload payload, SlackSettings settings)
+        public void SendPayload(DiscordPayload payload, DiscordSettings settings)
         {
             try
             {
-                var request = new HttpRequestBuilder(settings.WebHookUrl)
+                var request = new HttpRequestBuilder(settings.WebHookUrl + "/slack")
                     .Accept(HttpAccept.Json)
                     .Build();
 
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Notifications.Slack
             catch (RestException ex)
             {
                 _logger.Error(ex, "Unable to post payload {0}", payload);
-                throw new SlackExeption("Unable to post payload", ex);
+                throw new DiscordExeption("Unable to post payload", ex);
             }
         }
     }
