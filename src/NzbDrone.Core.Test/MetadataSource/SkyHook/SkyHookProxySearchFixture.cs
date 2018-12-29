@@ -44,12 +44,12 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase("tvdbid: 0")]
         [TestCase("tvdbid: -12")]
         [TestCase("tvdbid:289578")]
-        [TestCase("adjalkwdjkalwdjklawjdlKAJD;EF")]
+        [TestCase("adjalkwdjkalwdjklawjdlKAJD")]
         public void no_search_result(string term)
         {
             var result = Subject.SearchForNewSeries(term);
             result.Should().BeEmpty();
-            
+
             ExceptionVerification.IgnoreWarns();
         }
     }
