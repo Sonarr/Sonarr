@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Common;
@@ -91,9 +91,11 @@ namespace Marr.Data.Mapping
             Type entType = ent.GetType();
             if (_repos.Relationships.ContainsKey(entType))
             {
+                var provider = _db.ProviderFactory;
+                var connectionString = _db.ConnectionString;
                 Func<IDataMapper> dbCreate = () =>
                 {
-                    var db = new DataMapper(_db.ProviderFactory, _db.ConnectionString);
+                    var db = new DataMapper(provider, connectionString);
                     db.SqlMode = SqlModes.Text;
                     return db;
                 };
