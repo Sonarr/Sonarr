@@ -71,10 +71,11 @@ namespace NzbDrone.Common.Extensions
 
             var index = parentPath.LastIndexOfAny(new[] { '\\', '/' });
 
-            if (index != -1)
+            if (index > 0)
             {
                 return parentPath.Substring(0, index);
             }
+
             return null;
         }
 
