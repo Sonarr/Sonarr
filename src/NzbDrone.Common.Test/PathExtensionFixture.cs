@@ -140,6 +140,8 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\Test\mydir", @"C:\Test")]
         [TestCase(@"C:\Test\", @"C:")]
         [TestCase(@"C:\", null)]
+        [TestCase(@"/", null)]
+        [TestCase(@"/test", null)]
         public void path_should_return_parent(string path, string parentPath)
         {
             path.GetParentPath().Should().Be(parentPath);
