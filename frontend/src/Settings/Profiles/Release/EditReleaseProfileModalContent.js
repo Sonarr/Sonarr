@@ -41,9 +41,7 @@ function EditReleaseProfileModalContent(props) {
       </ModalHeader>
 
       <ModalBody>
-        <Form
-          {...otherProps}
-        >
+        <Form {...otherProps}>
           <FormGroup>
             <FormLabel>Must Contain</FormLabel>
 

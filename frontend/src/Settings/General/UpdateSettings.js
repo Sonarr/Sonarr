@@ -7,6 +7,11 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 
+const branchValues = [
+  'master',
+  'develop'
+];
+
 function UpdateSettings(props) {
   const {
     advancedSettings,
@@ -51,13 +56,14 @@ function UpdateSettings(props) {
         <FormLabel>Branch</FormLabel>
 
         <FormInputGroup
-          type={inputTypes.TEXT}
+          type={inputTypes.AUTO_COMPLETE}
           name="branch"
           helpText={usingExternalUpdateMechanism ? 'Branch used by external update mechanism' : 'Branch to use to update Sonarr'}
           helpLink="https://github.com/Sonarr/Sonarr/wiki/Release-Branches"
+          {...branch}
+          values={branchValues}
           onChange={onInputChange}
           readOnly={usingExternalUpdateMechanism}
-          {...branch}
         />
       </FormGroup>
 

@@ -56,9 +56,7 @@ function EditRemotePathMappingModalContent(props) {
 
         {
           !isFetching && !error &&
-            <Form
-              {...otherProps}
-            >
+            <Form {...otherProps}>
               <FormGroup>
                 <FormLabel>Host</FormLabel>
 

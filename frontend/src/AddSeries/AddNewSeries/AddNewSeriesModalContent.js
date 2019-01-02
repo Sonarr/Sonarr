@@ -70,7 +70,8 @@ class AddNewSeriesModalContent extends Component {
       showLanguageProfile,
       isSmallScreen,
       onModalClose,
-      onInputChange
+      onInputChange,
+      ...otherProps
     } = this.props;
 
     return (
@@ -87,22 +88,27 @@ class AddNewSeriesModalContent extends Component {
         <ModalBody>
           <div className={styles.container}>
             {
-              !isSmallScreen &&
+              isSmallScreen ?
                 <div className={styles.poster}>
                   <SeriesPoster
                     className={styles.poster}
                     images={images}
                     size={250}
                   />
-                </div>
+                </div> :
+                null
             }
 
             <div className={styles.info}>
-              <div className={styles.overview}>
-                {overview}
-              </div>
+              {
+                overview ?
+                  <div className={styles.overview}>
+                    {overview}
+                  </div> :
+                  null
+              }
 
-              <Form>
+              <Form {...otherProps}>
                 <FormGroup>
                   <FormLabel>Root Folder</FormLabel>
 

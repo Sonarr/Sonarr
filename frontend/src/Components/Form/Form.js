@@ -2,37 +2,42 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { kinds } from 'Helpers/Props';
 import Alert from 'Components/Alert';
+import styles from './Form.css';
 
 function Form({ children, validationErrors, validationWarnings, ...otherProps }) {
   return (
     <div>
-      <div>
-        {
-          validationErrors.map((error, index) => {
-            return (
-              <Alert
-                key={index}
-                kind={kinds.DANGER}
-              >
-                {error.errorMessage}
-              </Alert>
-            );
-          })
-        }
+      {
+        validationErrors.length || validationWarnings.length ?
+          <div className={styles.validationFailures}>
+            {
+              validationErrors.map((error, index) => {
+                return (
+                  <Alert
+                    key={index}
+                    kind={kinds.DANGER}
+                  >
+                    {error.errorMessage}
+                  </Alert>
+                );
+              })
+            }
 
-        {
-          validationWarnings.map((warning, index) => {
-            return (
-              <Alert
-                key={index}
-                kind={kinds.WARNING}
-              >
-                {warning.errorMessage}
-              </Alert>
-            );
-          })
-        }
-      </div>
+            {
+              validationWarnings.map((warning, index) => {
+                return (
+                  <Alert
+                    key={index}
+                    kind={kinds.WARNING}
+                  >
+                    {warning.errorMessage}
+                  </Alert>
+                );
+              })
+            }
+          </div> :
+          null
+      }
 
       {children}
     </div>

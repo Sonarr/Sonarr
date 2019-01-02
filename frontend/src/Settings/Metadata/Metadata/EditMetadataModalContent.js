@@ -38,9 +38,7 @@ function EditMetadataModalContent(props) {
       </ModalHeader>
 
       <ModalBody>
-        <Form
-          {...otherProps}
-        >
+        <Form {...otherProps}>
           <FormGroup>
             <FormLabel>Enable</FormLabel>
 

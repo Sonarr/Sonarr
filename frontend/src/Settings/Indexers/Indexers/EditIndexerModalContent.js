@@ -64,9 +64,7 @@ function EditIndexerModalContent(props) {
 
         {
           !isFetching && !error &&
-            <Form
-              {...otherProps}
-            >
+            <Form {...otherProps}>
               <FormGroup>
                 <FormLabel>Name</FormLabel>
 

@@ -67,9 +67,7 @@ class EditDownloadClientModalContent extends Component {
 
           {
             !isFetching && !error &&
-              <Form
-                {...otherProps}
-              >
+              <Form {...otherProps}>
                 {
                   !!message &&
                     <Alert

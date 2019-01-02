@@ -61,9 +61,7 @@ function EditDelayProfileModalContent(props) {
 
         {
           !isFetching && !error &&
-            <Form
-              {...otherProps}
-            >
+            <Form {...otherProps}>
               <FormGroup>
                 <FormLabel>Protocol</FormLabel>
 

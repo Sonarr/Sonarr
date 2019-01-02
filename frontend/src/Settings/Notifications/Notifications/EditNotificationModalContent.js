@@ -70,9 +70,7 @@ function EditNotificationModalContent(props) {
 
         {
           !isFetching && !error &&
-            <Form
-              {...otherProps}
-            >
+            <Form {...otherProps}>
               {
                 !!message &&
                   <Alert
