@@ -21,7 +21,7 @@ function Settings() {
         </Link>
 
         <div className={styles.summary}>
-          Naming and file management settings
+          Naming, file management settings and root folders
         </div>
 
         <Link

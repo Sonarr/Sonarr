@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { push } from 'react-router-redux';
 import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
-import { fetchRootFolders, addRootFolder, deleteRootFolder } from 'Store/Actions/rootFolderActions';
+import { fetchRootFolders, addRootFolder } from 'Store/Actions/rootFolderActions';
 import ImportSeriesSelectFolder from './ImportSeriesSelectFolder';
 
 function createMapStateToProps() {
@@ -24,7 +24,6 @@ function createMapStateToProps() {
 const mapDispatchToProps = {
   fetchRootFolders,
   addRootFolder,
-  deleteRootFolder,
   push
 };
 
@@ -60,10 +59,6 @@ class ImportSeriesSelectFolderConnector extends Component {
     this.props.addRootFolder({ path });
   }
 
-  onDeleteRootFolderPress = (id) => {
-    this.props.deleteRootFolder({ id });
-  }
-
   //
   // Render
 
@@ -72,7 +67,6 @@ class ImportSeriesSelectFolderConnector extends Component {
       <ImportSeriesSelectFolder
         {...this.props}
         onNewRootFolderSelect={this.onNewRootFolderSelect}
-        onDeleteRootFolderPress={this.onDeleteRootFolderPress}
       />
     );
   }
@@ -84,7 +78,6 @@ ImportSeriesSelectFolderConnector.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchRootFolders: PropTypes.func.isRequired,
   addRootFolder: PropTypes.func.isRequired,
-  deleteRootFolder: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired
 };
 

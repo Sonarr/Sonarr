@@ -6,9 +6,9 @@ import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
-import styles from './ImportSeriesRootFolderRow.css';
+import styles from './RootFolderRow.css';
 
-function ImportSeriesRootFolderRow(props) {
+function RootFolderRow(props) {
   const {
     id,
     path,
@@ -49,7 +49,7 @@ function ImportSeriesRootFolderRow(props) {
   );
 }
 
-ImportSeriesRootFolderRow.propTypes = {
+RootFolderRow.propTypes = {
   id: PropTypes.number.isRequired,
   path: PropTypes.string.isRequired,
   freeSpace: PropTypes.number.isRequired,
@@ -57,9 +57,9 @@ ImportSeriesRootFolderRow.propTypes = {
   onDeletePress: PropTypes.func.isRequired
 };
 
-ImportSeriesRootFolderRow.defaultProps = {
+RootFolderRow.defaultProps = {
   freeSpace: 0,
   unmappedFolders: []
 };
 
-export default ImportSeriesRootFolderRow;
+export default RootFolderRow;
