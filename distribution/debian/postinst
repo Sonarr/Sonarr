@@ -27,7 +27,7 @@ if [ $1 = "configure" ]; then
     varoptAppData="$varoptRoot/.config/Sonarr"
     sonarrUserHome=`getent passwd $USER | cut -d ':' -f 6`
     sonarrAppData="$sonarrUserHome/.config/Sonarr"
-    if [ ! -f "$varoptRoot/sonarr.db" ]; then
+    if [ -f "$varoptRoot/sonarr.db" ]; then
       # Handle /var/opt/sonarr/sonarr.db
       mv "$varoptRoot" "$CONFDIR"
     elif [ -f "$varoptAppData/sonarr.db" ]; then
