@@ -5,6 +5,7 @@ import { filterTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import { setAppValue } from 'Store/Actions/appActions';
 import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
+import createClearReducer from './Creators/Reducers/createClearReducer';
 import createFetchHandler from './Creators/createFetchHandler';
 import createRemoveItemHandler from './Creators/createRemoveItemHandler';
 import createHandleActions from './Creators/createHandleActions';
@@ -199,7 +200,8 @@ export const GOTO_LAST_LOGS_PAGE = 'system/logs/gotoLogsLastPage';
 export const GOTO_LOGS_PAGE = 'system/logs/gotoLogsPage';
 export const SET_LOGS_SORT = 'system/logs/setLogsSort';
 export const SET_LOGS_FILTER = 'system/logs/setLogsFilter';
-export const SET_LOGS_TABLE_OPTION = 'system/logs/ssetLogsTableOption';
+export const SET_LOGS_TABLE_OPTION = 'system/logs/setLogsTableOption';
+export const CLEAR_LOGS_TABLE = 'system/logs/clearLogsTable';
 
 export const FETCH_LOG_FILES = 'system/logFiles/fetchLogFiles';
 export const FETCH_UPDATE_LOG_FILES = 'system/updateLogFiles/fetchUpdateLogFiles';
@@ -233,6 +235,7 @@ export const gotoLogsPage = createThunk(GOTO_LOGS_PAGE);
 export const setLogsSort = createThunk(SET_LOGS_SORT);
 export const setLogsFilter = createThunk(SET_LOGS_FILTER);
 export const setLogsTableOption = createAction(SET_LOGS_TABLE_OPTION);
+export const clearLogsTable = createAction(CLEAR_LOGS_TABLE);
 
 export const fetchLogFiles = createThunk(FETCH_LOG_FILES);
 export const fetchUpdateLogFiles = createThunk(FETCH_UPDATE_LOG_FILES);
@@ -370,6 +373,15 @@ export const reducers = createHandleActions({
     };
   },
 
-  [SET_LOGS_TABLE_OPTION]: createSetTableOptionReducer('logs')
+  [SET_LOGS_TABLE_OPTION]: createSetTableOptionReducer('logs'),
+
+  [CLEAR_LOGS_TABLE]: createClearReducer(section, {
+    isFetching: false,
+    isPopulated: false,
+    error: null,
+    items: [],
+    totalPages: 0,
+    totalRecords: 0
+  })
 
 }, defaultState, section);

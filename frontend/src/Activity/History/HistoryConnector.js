@@ -137,6 +137,7 @@ class HistoryConnector extends Component {
 }
 
 HistoryConnector.propTypes = {
+  useCurrentPage: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchHistory: PropTypes.func.isRequired,
   gotoHistoryFirstPage: PropTypes.func.isRequired,

@@ -126,6 +126,7 @@ class BlacklistConnector extends Component {
 }
 
 BlacklistConnector.propTypes = {
+  useCurrentPage: PropTypes.bool.isRequired,
   isClearingBlacklistExecuting: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchBlacklist: PropTypes.func.isRequired,

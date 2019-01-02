@@ -132,7 +132,7 @@ export const reducers = createHandleActions({
 
   [SET_BLACKLIST_TABLE_OPTION]: createSetTableOptionReducer(section),
 
-  [CLEAR_BLACKLIST]: createClearReducer('history', {
+  [CLEAR_BLACKLIST]: createClearReducer(section, {
     isFetching: false,
     isPopulated: false,
     error: null,

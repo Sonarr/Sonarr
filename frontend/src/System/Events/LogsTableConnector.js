@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import withCurrentPage from 'Components/withCurrentPage';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { executeCommand } from 'Store/Actions/commandActions';
 import * as systemActions from 'Store/Actions/systemActions';
@@ -32,7 +33,17 @@ class LogsTableConnector extends Component {
   // Lifecycle
 
   componentDidMount() {
-    this.props.fetchLogs();
+    const {
+      useCurrentPage,
+      fetchLogs,
+      gotoLogsFirstPage
+    } = this.props;
+
+    if (useCurrentPage) {
+      fetchLogs();
+    } else {
+      gotoLogsFirstPage();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -111,6 +122,7 @@ class LogsTableConnector extends Component {
 }
 
 LogsTableConnector.propTypes = {
+  useCurrentPage: PropTypes.bool.isRequired,
   clearLogExecuting: PropTypes.bool.isRequired,
   fetchLogs: PropTypes.func.isRequired,
   gotoLogsFirstPage: PropTypes.func.isRequired,
@@ -124,4 +136,6 @@ LogsTableConnector.propTypes = {
   executeCommand: PropTypes.func.isRequired
 };
 
-export default connect(createMapStateToProps, mapDispatchToProps)(LogsTableConnector);
+export default withCurrentPage(
+  connect(createMapStateToProps, mapDispatchToProps)(LogsTableConnector)
+);
