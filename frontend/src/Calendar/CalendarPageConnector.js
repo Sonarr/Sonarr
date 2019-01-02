@@ -25,7 +25,7 @@ function createMissingEpisodeIdsSelector() {
           moment(airDateUtc).isAfter(start) &&
           moment(airDateUtc).isBefore(end) &&
           isBefore(episode.airDateUtc) &&
-          !queueDetails.some((details) => details.episode.id === episode.id)
+          !queueDetails.some((details) => !!details.episode && details.episode.id === episode.id)
         ) {
           acc.push(episode.id);
         }
