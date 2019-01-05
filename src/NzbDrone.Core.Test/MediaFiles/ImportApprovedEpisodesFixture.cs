@@ -322,7 +322,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         public void should_get_relative_path_when_there_is_no_grandparent()
         {
             var name = "Series.Title.S01E01.720p.HDTV.x264-Sonarr";
-            var outputPath = Path.Combine(@"C:\".AsOsAgnostic());
+            var outputPath = @"C:\".AsOsAgnostic();
             var localEpisode = _approvedDecisions.First().LocalEpisode;
 
             localEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo { ReleaseTitle = name };
@@ -331,6 +331,23 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, null);
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}.mkv".AsOsAgnostic())));
+        }
+
+        [Test]
+        public void should_get_relative_path_when_there_is_no_grandparent_for_UNC_path()
+        {
+            WindowsOnly();
+
+            var name = "Series.Title.S01E01.720p.HDTV.x264-Sonarr";
+            var outputPath = @"\\server\share";
+            var localEpisode = _approvedDecisions.First().LocalEpisode;
+
+            localEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo { ReleaseTitle = name };
+            localEpisode.Path = Path.Combine(outputPath, name + ".mkv");
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, null);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}.mkv")));
         }
     }
 }
