@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import { icons } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
 import VirtualTableHeader from 'Components/Table/VirtualTableHeader';
@@ -37,7 +38,7 @@ class SeriesIndexHeader extends Component {
 
   render() {
     const {
-      showSearchAction,
+      showBanners,
       columns,
       onTableOptionChange,
       ...otherProps
@@ -78,7 +79,10 @@ class SeriesIndexHeader extends Component {
             return (
               <VirtualTableHeaderCell
                 key={name}
-                className={styles[name]}
+                className={classNames(
+                  styles[name],
+                  name === 'sortTitle' && showBanners && styles.banner
+                )}
                 name={name}
                 isSortable={isSortable}
                 {...otherProps}
@@ -102,6 +106,7 @@ class SeriesIndexHeader extends Component {
 }
 
 SeriesIndexHeader.propTypes = {
+  showBanners: PropTypes.bool.isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   onTableOptionChange: PropTypes.func.isRequired
 };

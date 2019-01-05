@@ -10,6 +10,10 @@
   flex: 4 0 110px;
 }
 
+.banner {
+  flex: 0 0 379px;
+}
+
 .network {
   composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
 

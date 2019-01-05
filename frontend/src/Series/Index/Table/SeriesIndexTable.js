@@ -95,6 +95,7 @@ class SeriesIndexTable extends Component {
         rowRenderer={this.rowRenderer}
         header={
           <SeriesIndexHeaderConnector
+            showBanners={showBanners}
             columns={columns}
             sortKey={sortKey}
             sortDirection={sortDirection}
