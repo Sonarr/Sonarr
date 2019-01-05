@@ -24,6 +24,8 @@ namespace NzbDrone.Common.Extensions
         private static readonly string UPDATE_CLIENT_FOLDER_NAME = "Sonarr.Update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_LOG_FOLDER_NAME = "UpdateLogs" + Path.DirectorySeparatorChar;
 
+        private static readonly Regex PARENT_PATH_END_SLASH_REGEX = new Regex(@"(?<!:)\\$", RegexOptions.Compiled);
+
         public static string CleanFilePath(this string path)
         {
             Ensure.That(path, () => path).IsNotNullOrWhiteSpace();
@@ -67,16 +69,11 @@ namespace NzbDrone.Common.Extensions
 
         public static string GetParentPath(this string childPath)
         {
-            var parentPath = childPath.TrimEnd('\\', '/');
+            var cleanPath = OsInfo.IsWindows
+                ? PARENT_PATH_END_SLASH_REGEX.Replace(childPath, "")
+                : childPath.TrimEnd(Path.DirectorySeparatorChar);
 
-            var index = parentPath.LastIndexOfAny(new[] { '\\', '/' });
-
-            if (index > 0)
-            {
-                return parentPath.Substring(0, index);
-            }
-
-            return null;
+            return Directory.GetParent(cleanPath)?.FullName;
         }
 
         public static bool IsParentPath(this string parentPath, string childPath)
