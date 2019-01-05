@@ -32,25 +32,37 @@ function createMapStateToProps() {
     (state) => state.series,
     (state) => state.customFilters,
     (state) => state.tags,
-    (state) => state.settings,
+    (state) => state.settings.ui,
+    (state) => state.settings.qualityProfiles,
+    (state) => state.settings.languageProfiles,
     (state) => state.app,
     createDimensionsSelector(),
-    (series, customFilters, tags, settings, app, dimensions) => {
+    (
+      series,
+      customFilters,
+      tags,
+      uiSettings,
+      qualityProfiles,
+      languageProfiles,
+      app,
+      dimensions
+    ) => {
       const isPopulated = (
         series.isPopulated &&
         customFilters.isPopulated &&
         tags.isPopulated &&
-        settings.qualityProfiles.isPopulated &&
-        settings.ui.isPopulated
+        qualityProfiles.isPopulated &&
+        languageProfiles.isPopulated &&
+        uiSettings.isPopulated
       );
 
       const hasError = !!(
         series.error ||
         customFilters.error ||
         tags.error ||
-        settings.qualityProfiles.error ||
-        settings.languageProfiles.error ||
-        settings.ui.error
+        qualityProfiles.error ||
+        languageProfiles.error ||
+        uiSettings.error
       );
 
       return {
@@ -59,10 +71,12 @@ function createMapStateToProps() {
         seriesError: series.error,
         customFiltersError: tags.error,
         tagsError: tags.error,
-        qualityProfilesError: settings.qualityProfiles.error,
-        uiSettingsError: settings.ui.error,
+        qualityProfilesError: qualityProfiles.error,
+        languageProfilesError: languageProfiles.error,
+        uiSettingsError: uiSettings.error,
         isSmallScreen: dimensions.isSmallScreen,
         isSidebarVisible: app.isSidebarVisible,
+        enableColorImpairedMode: uiSettings.item.enableColorImpairedMode,
         version: app.version,
         isUpdated: app.isUpdated,
         isDisconnected: app.isDisconnected

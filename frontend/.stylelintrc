@@ -24,7 +24,7 @@
         "ignoreAtRules": [
           "/^add\\-mixin$/",
           "/^define\\-mixin$/"
-        ]
+        ] 
       }
     ],
     "at-rule-no-vendor-prefix": true,

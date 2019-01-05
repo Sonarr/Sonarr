@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import locationShape from 'Helpers/Props/Shapes/locationShape';
 import SignalRConnector from 'Components/SignalRConnector';
-import AppUpdatedModalConnector from 'App/AppUpdatedModalConnector';
+import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModalConnector from 'App/ConnectionLostModalConnector';
+import AppUpdatedModalConnector from 'App/AppUpdatedModalConnector';
 import PageHeader from './Header/PageHeader';
 import PageSidebar from './Sidebar/PageSidebar';
 import styles from './Page.css';
@@ -73,39 +74,42 @@ class Page extends Component {
       children,
       isSmallScreen,
       isSidebarVisible,
+      enableColorImpairedMode,
       onSidebarToggle,
       onSidebarVisibleChange
     } = this.props;
 
     return (
-      <div className={className}>
-        <SignalRConnector />
+      <ColorImpairedContext.Provider value={enableColorImpairedMode}>
+        <div className={className}>
+          <SignalRConnector />
 
-        <PageHeader
-          onSidebarToggle={onSidebarToggle}
-        />
-
-        <div className={styles.main}>
-          <PageSidebar
-            location={location}
-            isSmallScreen={isSmallScreen}
-            isSidebarVisible={isSidebarVisible}
-            onSidebarVisibleChange={onSidebarVisibleChange}
+          <PageHeader
+            onSidebarToggle={onSidebarToggle}
           />
 
-          {children}
+          <div className={styles.main}>
+            <PageSidebar
+              location={location}
+              isSmallScreen={isSmallScreen}
+              isSidebarVisible={isSidebarVisible}
+              onSidebarVisibleChange={onSidebarVisibleChange}
+            />
+
+            {children}
+          </div>
+
+          <AppUpdatedModalConnector
+            isOpen={this.state.isUpdatedModalOpen}
+            onModalClose={this.onUpdatedModalClose}
+          />
+
+          <ConnectionLostModalConnector
+            isOpen={this.state.isConnectionLostModalOpen}
+            onModalClose={this.onConnectionLostModalClose}
+          />
         </div>
-
-        <AppUpdatedModalConnector
-          isOpen={this.state.isUpdatedModalOpen}
-          onModalClose={this.onUpdatedModalClose}
-        />
-
-        <ConnectionLostModalConnector
-          isOpen={this.state.isConnectionLostModalOpen}
-          onModalClose={this.onConnectionLostModalClose}
-        />
-      </div>
+      </ColorImpairedContext.Provider>
     );
   }
 }
@@ -118,6 +122,7 @@ Page.propTypes = {
   isSidebarVisible: PropTypes.bool.isRequired,
   isUpdated: PropTypes.bool.isRequired,
   isDisconnected: PropTypes.bool.isRequired,
+  enableColorImpairedMode: PropTypes.bool.isRequired,
   onResize: PropTypes.func.isRequired,
   onSidebarToggle: PropTypes.func.isRequired,
   onSidebarVisibleChange: PropTypes.func.isRequired

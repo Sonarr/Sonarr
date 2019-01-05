@@ -209,7 +209,6 @@
     "lines-around-comment": ["error", { "beforeBlockComment": true, "afterBlockComment": false }],
     "max-depth": ["error", {"maximum": 5}],
     "max-nested-callbacks": ["error", 4],
-    "max-params": ["error", 6],
     "max-statements": "off",
     "max-statements-per-line": ["error", { "max": 1 }],
     "new-cap": ["error", {"capIsNewExceptions": ["$.Deferred", "DragDropContext", "DragLayer", "DragSource", "DropTarget"]}],

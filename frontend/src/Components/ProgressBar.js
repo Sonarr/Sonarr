@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { kinds, sizes } from 'Helpers/Props';
+import { ColorImpairedConsumer } from 'App/ColorImpairedContext';
 import styles from './ProgressBar.css';
 
 function ProgressBar(props) {
@@ -23,55 +24,65 @@ function ProgressBar(props) {
   const actualWidth = width ? `${width}px` : '100%';
 
   return (
-    <div
-      className={classNames(
-        containerClassName,
-        styles[size]
-      )}
-      title={title}
-      style={{ width: actualWidth }}
-    >
-      {
-        showText && !!width &&
+    <ColorImpairedConsumer>
+      {(enableColorImpairedMode) => {
+        return (
           <div
-            className={styles.backTextContainer}
+            className={classNames(
+              containerClassName,
+              styles[size]
+            )}
+            title={title}
             style={{ width: actualWidth }}
           >
-            <div className={styles.backText}>
-              <div>
-                {progressText}
-              </div>
-            </div>
-          </div>
-      }
+            {
+              showText && width ?
+                <div
+                  className={styles.backTextContainer}
+                  style={{ width: actualWidth }}
+                >
+                  <div className={styles.backText}>
+                    <div>
+                      {progressText}
+                    </div>
+                  </div>
+                </div> :
+                null
+            }
 
-      <div
-        className={classNames(
-          className,
-          styles[kind]
-        )}
-        aria-valuenow={progress}
-        aria-valuemin="0"
-        aria-valuemax="100"
-        style={{ width: progressPercent }}
-      />
-      {
-        showText &&
-        <div
-          className={styles.frontTextContainer}
-          style={{ width: progressPercent }}
-        >
-          <div
-            className={styles.frontText}
-            style={{ width: actualWidth }}
-          >
-            <div>
-              {progressText}
-            </div>
+            <div
+              className={classNames(
+                className,
+                styles[kind],
+                enableColorImpairedMode && 'colorImpaired'
+              )}
+              aria-valuenow={progress}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              style={{ width: progressPercent }}
+            />
+
+            {
+              showText ?
+                <div
+                  className={styles.frontTextContainer}
+                  style={{ width: progressPercent }}
+                >
+                  <div
+                    className={styles.frontText}
+                    style={{ width: actualWidth }}
+                  >
+                    <div>
+                      {progressText}
+                    </div>
+                  </div>
+                </div> :
+                null
+            }
           </div>
-        </div>
-      }
-    </div>
+        );
+      }}
+    </ColorImpairedConsumer>
   );
 }
 

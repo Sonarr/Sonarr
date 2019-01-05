@@ -65,6 +65,21 @@ function Legend(props) {
 
       <div>
         <LegendItem
+          status="onAir"
+          name="On Air"
+          tooltip="Episode is currently airing"
+          colorImpairedMode={colorImpairedMode}
+        />
+
+        <LegendItem
+          status="missing"
+          tooltip="Episode has aired and is missing from disk"
+          colorImpairedMode={colorImpairedMode}
+        />
+      </div>
+
+      <div>
+        <LegendItem
           status="downloading"
           tooltip="Episode is currently downloading"
           colorImpairedMode={colorImpairedMode}

@@ -43,10 +43,18 @@
 
 .primary {
   background-color: $primaryColor;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(90deg, $primaryColor, $primaryColor 10px, $colorImpairedAlternateGradient 10px, $colorImpairedAlternateGradient 20px);
+  }
 }
 
 .danger {
   background-color: $dangerColor;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(90deg, $dangerColor, $dangerColor 10px, $colorImpairedAlternateGradient 10px, $colorImpairedAlternateGradient 20px);
+  }
 }
 
 .success {
@@ -59,6 +67,10 @@
 
 .warning {
   background-color: $warningColor;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(90deg, $warningColor, $warningColor 10px, $colorImpairedAlternateGradient 10px, $colorImpairedAlternateGradient 20px);
+  }
 }
 
 .info {
