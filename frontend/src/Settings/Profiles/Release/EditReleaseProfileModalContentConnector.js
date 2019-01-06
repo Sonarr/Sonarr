@@ -10,7 +10,7 @@ import EditReleaseProfileModalContent from './EditReleaseProfileModalContent';
 const newReleaseProfile = {
   required: '',
   ignored: '',
-  preferred: '',
+  preferred: [],
   includePreferredWhenRenaming: false,
   tags: []
 };

@@ -160,6 +160,7 @@ class PageToolbarSection extends Component {
                   !!overflowItems.length &&
                     <Menu>
                       <ToolbarMenuButton
+                        className={styles.overflowMenuButton}
                         iconName={icons.OVERFLOW}
                         text="More"
                       />
@@ -179,14 +180,13 @@ class PageToolbarSection extends Component {
                             return (
                               <MenuItem
                                 key={label}
-                                isDisabled={isDisabled}
+                                isDisabled={isDisabled || isSpinning}
                                 {...otherProps}
                               >
                                 <SpinnerIcon
                                   className={styles.overflowMenuItemIcon}
                                   name={iconName}
                                   spinningName={spinningName}
-                                  isDisabled={isDisabled}
                                   isSpinning={isSpinning}
                                 />
                                 {label}

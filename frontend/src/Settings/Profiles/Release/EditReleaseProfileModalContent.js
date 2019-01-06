@@ -94,7 +94,7 @@ function EditReleaseProfileModalContent(props) {
             <FormInputGroup
               type={inputTypes.CHECK}
               name="includePreferredWhenRenaming"
-              helpText="If Preferred Words is included in the naming format include the preferred words above"
+              helpText="Include in {Preferred Words} renaming format"
               {...includePreferredWhenRenaming}
               onChange={onInputChange}
             />

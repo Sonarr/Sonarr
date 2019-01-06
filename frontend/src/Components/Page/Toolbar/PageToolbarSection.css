@@ -22,6 +22,19 @@
   justify-content: flex-end;
 }
 
+.overflowMenuButton {
+  composes: menuButton from 'Components/Menu/ToolbarMenuButton.css';
+}
+
 .overflowMenuItemIcon {
   margin-right: 8px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .overflowMenuButton {
+    &::after {
+      margin-left: 0;
+      content: '\25BE';
+    }
+  }
 }
