@@ -15,9 +15,14 @@ namespace Sonarr.Http.Extensions.Pipelines
 
         public int Order => 0;
 
+        private readonly Action<Action<Stream>, Stream> _writeGZipStream;
+
         public GzipCompressionPipeline(Logger logger)
         {
             _logger = logger;
+
+            // On Mono GZipStream/DeflateStream leaks memory if an exception is thrown, use an intermediate buffer in that case.
+            _writeGZipStream = NzbDrone.Common.EnvironmentInfo.PlatformInfo.IsMono ? WriteGZipStreamMono : (Action<Action<Stream>, Stream>)WriteGZipStream;
         }
 
         public void Register(IPipelines pipelines)
@@ -43,14 +48,7 @@ namespace Sonarr.Http.Extensions.Pipelines
                     var contents = response.Contents;
 
                     response.Headers["Content-Encoding"] = "gzip";
-                    response.Contents = responseStream =>
-                    {
-                        using (var gzip = new GZipStream(responseStream, CompressionMode.Compress, true))
-                        using (var buffered = new BufferedStream(gzip, 8192))
-                        {
-                            contents.Invoke(buffered);
-                        }
-                    };
+                    response.Contents = responseStream => _writeGZipStream(contents, responseStream);
                 }
             }
 
@@ -58,6 +56,25 @@ namespace Sonarr.Http.Extensions.Pipelines
             {
                 _logger.Error(ex, "Unable to gzip response");
                 throw;
+            }
+        }
+
+        private static void WriteGZipStreamMono(Action<Stream> innerContent, Stream targetStream)
+        {
+            using (var membuffer = new MemoryStream())
+            {
+                WriteGZipStream(innerContent, membuffer);
+                membuffer.Position = 0;
+                membuffer.CopyTo(targetStream);
+            }
+        }
+
+        private static void WriteGZipStream(Action<Stream> innerContent, Stream targetStream)
+        {
+            using (var gzip = new GZipStream(targetStream, CompressionMode.Compress, true))
+            using (var buffered = new BufferedStream(gzip, 8192))
+            {
+                innerContent.Invoke(buffered);
             }
         }
 
