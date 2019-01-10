@@ -1,11 +1,14 @@
 using System;
 using System.Linq;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Queue;
 using NzbDrone.SignalR;
 using Sonarr.Http;
@@ -18,18 +21,23 @@ namespace Sonarr.Api.V3.Queue
     {
         private readonly IQueueService _queueService;
         private readonly IPendingReleaseService _pendingReleaseService;
-        private readonly IConfigService _configService;
+
+        private readonly LanguageComparer LANGUAGE_COMPARER;
+        private readonly QualityModelComparer QUALITY_COMPARER;
 
         public QueueModule(IBroadcastSignalRMessage broadcastSignalRMessage,
                            IQueueService queueService,
                            IPendingReleaseService pendingReleaseService,
-                           IConfigService configService)
+                           ILanguageProfileService languageProfileService,
+                           QualityProfileService qualityProfileService)
             : base(broadcastSignalRMessage)
         {
             _queueService = queueService;
             _pendingReleaseService = pendingReleaseService;
-            _configService = configService;
             GetResourcePaged = GetQueue;
+
+            LANGUAGE_COMPARER = new LanguageComparer(languageProfileService.GetDefaultProfile(string.Empty));
+            QUALITY_COMPARER = new QualityModelComparer(qualityProfileService.GetDefaultProfile(string.Empty));
         }
 
         private PagingResource<QueueResource> GetQueue(PagingResource<QueueResource> pagingResource)
@@ -55,38 +63,60 @@ namespace Sonarr.Api.V3.Queue
 
             if (pagingSpec.SortKey == "episode")
             {
-                ordered = ascending ? fullQueue.OrderBy(q => q.Episode.SeasonNumber).ThenBy(q => q.Episode.EpisodeNumber) :
-                                      fullQueue.OrderByDescending(q => q.Episode.SeasonNumber).ThenByDescending(q => q.Episode.EpisodeNumber);
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.Episode?.SeasonNumber).ThenBy(q => q.Episode?.EpisodeNumber)
+                    : fullQueue.OrderByDescending(q => q.Episode?.SeasonNumber)
+                               .ThenByDescending(q => q.Episode?.EpisodeNumber);
             }
 
             else if (pagingSpec.SortKey == "timeleft")
             {
-                ordered = ascending ? fullQueue.OrderBy(q => q.Timeleft, new TimeleftComparer()) :
-                                      fullQueue.OrderByDescending(q => q.Timeleft, new TimeleftComparer());
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.Timeleft, new TimeleftComparer())
+                    : fullQueue.OrderByDescending(q => q.Timeleft, new TimeleftComparer());
             }
 
             else if (pagingSpec.SortKey == "estimatedCompletionTime")
             {
-                ordered = ascending ? fullQueue.OrderBy(q => q.EstimatedCompletionTime, new EstimatedCompletionTimeComparer()) :
-                                      fullQueue.OrderByDescending(q => q.EstimatedCompletionTime, new EstimatedCompletionTimeComparer());
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.EstimatedCompletionTime, new EstimatedCompletionTimeComparer())
+                    : fullQueue.OrderByDescending(q => q.EstimatedCompletionTime,
+                        new EstimatedCompletionTimeComparer());
             }
 
             else if (pagingSpec.SortKey == "protocol")
             {
-                ordered = ascending ? fullQueue.OrderBy(q => q.Protocol) :
-                    fullQueue.OrderByDescending(q => q.Protocol);
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.Protocol)
+                    : fullQueue.OrderByDescending(q => q.Protocol);
             }
 
             else if (pagingSpec.SortKey == "indexer")
             {
-                ordered = ascending ? fullQueue.OrderBy(q => q.Indexer, StringComparer.InvariantCultureIgnoreCase) :
-                    fullQueue.OrderByDescending(q => q.Indexer, StringComparer.InvariantCultureIgnoreCase);
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.Indexer, StringComparer.InvariantCultureIgnoreCase)
+                    : fullQueue.OrderByDescending(q => q.Indexer, StringComparer.InvariantCultureIgnoreCase);
             }
 
             else if (pagingSpec.SortKey == "downloadClient")
             {
-                ordered = ascending ? fullQueue.OrderBy(q => q.DownloadClient, StringComparer.InvariantCultureIgnoreCase) :
-                    fullQueue.OrderByDescending(q => q.DownloadClient, StringComparer.InvariantCultureIgnoreCase);
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.DownloadClient, StringComparer.InvariantCultureIgnoreCase)
+                    : fullQueue.OrderByDescending(q => q.DownloadClient, StringComparer.InvariantCultureIgnoreCase);
+            }
+
+            else if (pagingSpec.SortKey == "language")
+            {
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.Language, LANGUAGE_COMPARER)
+                    : fullQueue.OrderByDescending(q => q.Language, LANGUAGE_COMPARER);
+            }
+
+            else if (pagingSpec.SortKey == "quality")
+            {
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.Quality, QUALITY_COMPARER)
+                    : fullQueue.OrderByDescending(q => q.Quality, QUALITY_COMPARER);
             }
 
             else
@@ -113,13 +143,15 @@ namespace Sonarr.Api.V3.Queue
             switch (pagingSpec.SortKey)
             {
                 case "series.sortTitle":
-                    return q => q.Series.SortTitle;
+                    return q => q.Series?.SortTitle;
                 case "episode":
                     return q => q.Episode;
                 case "episode.airDateUtc":
                     return q => q.Episode.AirDateUtc;
                 case "episode.title":
                     return q => q.Episode.Title;
+                case "language":
+                    return q => q.Language;
                 case "quality":
                     return q => q.Quality;
                 case "progress":

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Core.Download.TrackedDownloads;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Queue
@@ -42,7 +44,7 @@ namespace NzbDrone.Core.Queue
 
         private IEnumerable<Queue> MapQueue(TrackedDownload trackedDownload)
         {
-            if (trackedDownload.RemoteEpisode.Episodes != null && trackedDownload.RemoteEpisode.Episodes.Any())
+            if (trackedDownload.RemoteEpisode?.Episodes != null && trackedDownload.RemoteEpisode.Episodes.Any())
             {
                 foreach (var episode in trackedDownload.RemoteEpisode.Episodes)
                 {
@@ -59,9 +61,10 @@ namespace NzbDrone.Core.Queue
         {
             var queue = new Queue
             {
-                Series = trackedDownload.RemoteEpisode.Series,
+                Series = trackedDownload.RemoteEpisode?.Series,
                 Episode = episode,
-                Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                Language = trackedDownload.RemoteEpisode?.ParsedEpisodeInfo.Language ?? Language.Unknown,
+                Quality = trackedDownload.RemoteEpisode?.ParsedEpisodeInfo.Quality ?? new QualityModel(Quality.Unknown),
                 Title = Parser.Parser.RemoveFileExtension(trackedDownload.DownloadItem.Title),
                 Size = trackedDownload.DownloadItem.TotalSize,
                 Sizeleft = trackedDownload.DownloadItem.RemainingSize,

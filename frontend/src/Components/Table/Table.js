@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import { icons, scrollDirections } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
 import Scroller from 'Components/Scroller/Scroller';
-import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TableHeader from './TableHeader';
 import TableHeaderCell from './TableHeaderCell';
 import TableSelectAllHeaderCell from './TableSelectAllHeaderCell';
@@ -25,119 +25,88 @@ function getTableHeaderCellProps(props) {
   }, {});
 }
 
-class Table extends Component {
+function Table(props) {
+  const {
+    className,
+    selectAll,
+    columns,
+    optionsComponent,
+    pageSize,
+    canModifyColumns,
+    children,
+    onSortPress,
+    onTableOptionChange,
+    ...otherProps
+  } = props;
 
-  //
-  // Lifecycle
+  return (
+    <Scroller
+      className={styles.tableContainer}
+      scrollDirection={scrollDirections.HORIZONTAL}
+    >
+      <table className={className}>
+        <TableHeader>
+          {
+            selectAll &&
+              <TableSelectAllHeaderCell {...otherProps} />
+          }
 
-  constructor(props, context) {
-    super(props, context);
+          {
+            columns.map((column) => {
+              const {
+                name,
+                isVisible
+              } = column;
 
-    this.state = {
-      isTableOptionsModalOpen: false
-    };
-  }
+              if (!isVisible) {
+                return null;
+              }
 
-  //
-  // Listeners
-
-  onTableOptionsPress = () => {
-    this.setState({ isTableOptionsModalOpen: true });
-  }
-
-  onTableOptionsModalClose = () => {
-    this.setState({ isTableOptionsModalOpen: false });
-  }
-
-  //
-  // Render
-
-  render() {
-    const {
-      className,
-      selectAll,
-      columns,
-      optionsComponent,
-      pageSize,
-      canModifyColumns,
-      children,
-      onSortPress,
-      onTableOptionChange,
-      ...otherProps
-    } = this.props;
-
-    return (
-      <Scroller
-        className={styles.tableContainer}
-        scrollDirection={scrollDirections.HORIZONTAL}
-      >
-        <table className={className}>
-          <TableHeader>
-            {
-              selectAll &&
-                <TableSelectAllHeaderCell {...otherProps} />
-            }
-
-            {
-              columns.map((column) => {
-                const {
-                  name,
-                  isVisible
-                } = column;
-
-                if (!isVisible) {
-                  return null;
-                }
-
-                if ((name === 'actions' || name === 'details') && onTableOptionChange) {
-                  return (
-                    <TableHeaderCell
-                      key={name}
-                      className={styles[name]}
-                      name={name}
-                      isSortable={false}
-                      {...otherProps}
+              if (
+                (name === 'actions' || name === 'details') &&
+                onTableOptionChange
+              ) {
+                return (
+                  <TableHeaderCell
+                    key={name}
+                    className={styles[name]}
+                    name={name}
+                    isSortable={false}
+                    {...otherProps}
+                  >
+                    <TableOptionsModalWrapper
+                      columns={columns}
+                      optionsComponent={optionsComponent}
+                      pageSize={pageSize}
+                      canModifyColumns={canModifyColumns}
+                      onTableOptionChange={onTableOptionChange}
                     >
                       <IconButton
                         name={icons.ADVANCED_SETTINGS}
-                        onPress={this.onTableOptionsPress}
                       />
-                    </TableHeaderCell>
-                  );
-                }
-
-                return (
-                  <TableHeaderCell
-                    key={column.name}
-                    onSortPress={onSortPress}
-                    {...getTableHeaderCellProps(otherProps)}
-                    {...column}
-                  >
-                    {column.label}
+                    </TableOptionsModalWrapper>
                   </TableHeaderCell>
                 );
-              })
-            }
+              }
 
-            {
-              !!onTableOptionChange &&
-                <TableOptionsModal
-                  isOpen={this.state.isTableOptionsModalOpen}
-                  columns={columns}
-                  optionsComponent={optionsComponent}
-                  pageSize={pageSize}
-                  canModifyColumns={canModifyColumns}
-                  onTableOptionChange={onTableOptionChange}
-                  onModalClose={this.onTableOptionsModalClose}
-                />
-            }
+              return (
+                <TableHeaderCell
+                  key={column.name}
+                  onSortPress={onSortPress}
+                  {...getTableHeaderCellProps(otherProps)}
+                  {...column}
+                >
+                  {column.label}
+                </TableHeaderCell>
+              );
+            })
+          }
 
-          </TableHeader>
-          {children}
-        </table>
-      </Scroller>
-    );
-  }
+        </TableHeader>
+        {children}
+      </table>
+    </Scroller>
+  );
 }
 
 Table.propTypes = {

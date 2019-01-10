@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
@@ -16,6 +17,7 @@ namespace Sonarr.Api.V3.Queue
         public int? EpisodeId { get; set; }
         public SeriesResource Series { get; set; }
         public EpisodeResource Episode { get; set; }
+        public Language Language { get; set; }
         public QualityModel Quality { get; set; }
         public decimal Size { get; set; }
         public string Title { get; set; }
@@ -45,6 +47,7 @@ namespace Sonarr.Api.V3.Queue
                 EpisodeId = model.Episode?.Id,
                 Series = includeSeries && model.Series != null ? model.Series.ToResource() : null,
                 Episode = includeEpisode && model.Episode != null ? model.Episode.ToResource() : null,
+                Language = model.Language,
                 Quality = model.Quality,
                 Size = model.Size,
                 Title = model.Title,

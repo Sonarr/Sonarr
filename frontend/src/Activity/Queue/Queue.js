@@ -5,7 +5,7 @@ import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
-import { icons } from 'Helpers/Props';
+import { align, icons } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
@@ -16,6 +16,7 @@ import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import RemoveQueueItemsModal from './RemoveQueueItemsModal';
 import QueueOptionsConnector from './QueueOptionsConnector';
 import QueueRowConnector from './QueueRowConnector';
@@ -43,13 +44,15 @@ class Queue extends Component {
     // before episodes start fetching or when episodes start fetching.
 
     if (
-      (
-        this.props.isFetching &&
-        nextProps.isPopulated &&
-        hasDifferentItems(this.props.items, nextProps.items)
-      ) ||
-      (!this.props.isEpisodesFetching && nextProps.isEpisodesFetching)
+      this.props.isFetching &&
+      nextProps.isPopulated &&
+      hasDifferentItems(this.props.items, nextProps.items) &&
+      nextProps.items.some((e) => e.episodeId)
     ) {
+      return false;
+    }
+
+    if (!this.props.isEpisodesFetching && nextProps.isEpisodesFetching) {
       return false;
     }
 
@@ -139,7 +142,7 @@ class Queue extends Component {
     } = this.state;
 
     const isRefreshing = isFetching || isEpisodesFetching || isCheckForFinishedDownloadExecuting;
-    const isAllPopulated = isPopulated && (isEpisodesPopulated || !items.length);
+    const isAllPopulated = isPopulated && (isEpisodesPopulated || !items.length || items.every((e) => !e.episodeId));
     const hasError = error || episodesError;
     const selectedCount = this.getSelectedIds().length;
     const disableSelectedActions = selectedCount === 0;
@@ -172,6 +175,21 @@ class Queue extends Component {
               isSpinning={isRemoving}
               onPress={this.onRemoveSelectedPress}
             />
+          </PageToolbarSection>
+
+          <PageToolbarSection
+            alignContent={align.RIGHT}
+          >
+            <TableOptionsModalWrapper
+              columns={columns}
+              {...otherProps}
+              optionsComponent={QueueOptionsConnector}
+            >
+              <PageToolbarButton
+                label="Options"
+                iconName={icons.TABLE}
+              />
+            </TableOptionsModalWrapper>
           </PageToolbarSection>
         </PageToolbar>
 

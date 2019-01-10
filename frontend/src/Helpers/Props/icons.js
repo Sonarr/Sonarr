@@ -86,6 +86,7 @@ import {
   faStop as fasStop,
   faSync as fasSync,
   faTags as fasTags,
+  faTable as fasTable,
   faTh as fasTh,
   faThList as fasThList,
   faTrashAlt as fasTrashAlt,
@@ -188,6 +189,7 @@ export const SORT_DESCENDING = fasSortDown;
 export const SPINNER = fasSpinner;
 export const SUBTRACT = fasMinus;
 export const SYSTEM = fasLaptop;
+export const TABLE = fasTable;
 export const TAGS = fasTags;
 export const TBA = fasQuestionCircle;
 export const TEST = fasVial;

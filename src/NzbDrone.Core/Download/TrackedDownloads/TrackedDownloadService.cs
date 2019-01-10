@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -124,11 +124,10 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     }
                 }
 
+                // Track it so it can be displayed in the queue even though we can't determine which serires it is for
                 if (trackedDownload.RemoteEpisode == null)
                 {
-                    _logger.Trace("No Episode found for download '{0}', not tracking.", trackedDownload.DownloadItem.Title);
-
-                    return null;
+                    _logger.Trace("No Episode found for download '{0}'", trackedDownload.DownloadItem.Title);
                 }
             }
             catch (Exception e)

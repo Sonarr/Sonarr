@@ -1,108 +1,78 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { icons } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
 import VirtualTableHeader from 'Components/Table/VirtualTableHeader';
 import VirtualTableHeaderCell from 'Components/Table/VirtualTableHeaderCell';
-import TableOptionsModal from 'Components/Table/TableOptions/TableOptionsModal';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import SeriesIndexTableOptionsConnector from './SeriesIndexTableOptionsConnector';
 import styles from './SeriesIndexHeader.css';
 
-class SeriesIndexHeader extends Component {
+function SeriesIndexHeader(props) {
+  const {
+    showBanners,
+    columns,
+    onTableOptionChange,
+    ...otherProps
+  } = props;
 
-  //
-  // Lifecycle
+  return (
+    <VirtualTableHeader>
+      {
+        columns.map((column) => {
+          const {
+            name,
+            label,
+            isSortable,
+            isVisible
+          } = column;
 
-  constructor(props, context) {
-    super(props, context);
+          if (!isVisible) {
+            return null;
+          }
 
-    this.state = {
-      isTableOptionsModalOpen: false
-    };
-  }
-
-  //
-  // Listeners
-
-  onTableOptionsPress = () => {
-    this.setState({ isTableOptionsModalOpen: true });
-  }
-
-  onTableOptionsModalClose = () => {
-    this.setState({ isTableOptionsModalOpen: false });
-  }
-
-  //
-  // Render
-
-  render() {
-    const {
-      showBanners,
-      columns,
-      onTableOptionChange,
-      ...otherProps
-    } = this.props;
-
-    return (
-      <VirtualTableHeader>
-        {
-          columns.map((column) => {
-            const {
-              name,
-              label,
-              isSortable,
-              isVisible
-            } = column;
-
-            if (!isVisible) {
-              return null;
-            }
-
-            if (name === 'actions') {
-              return (
-                <VirtualTableHeaderCell
-                  key={name}
-                  className={styles[name]}
-                  name={name}
-                  isSortable={false}
-                  {...otherProps}
-                >
-                  <IconButton
-                    name={icons.ADVANCED_SETTINGS}
-                    onPress={this.onTableOptionsPress}
-                  />
-                </VirtualTableHeaderCell>
-              );
-            }
-
+          if (name === 'actions') {
             return (
               <VirtualTableHeaderCell
                 key={name}
-                className={classNames(
-                  styles[name],
-                  name === 'sortTitle' && showBanners && styles.banner
-                )}
+                className={styles[name]}
                 name={name}
-                isSortable={isSortable}
+                isSortable={false}
                 {...otherProps}
               >
-                {label}
+
+                <TableOptionsModalWrapper
+                  columns={columns}
+                  optionsComponent={SeriesIndexTableOptionsConnector}
+                  onTableOptionChange={onTableOptionChange}
+                >
+                  <IconButton
+                    name={icons.ADVANCED_SETTINGS}
+                  />
+                </TableOptionsModalWrapper>
               </VirtualTableHeaderCell>
             );
-          })
-        }
+          }
 
-        <TableOptionsModal
-          isOpen={this.state.isTableOptionsModalOpen}
-          columns={columns}
-          optionsComponent={SeriesIndexTableOptionsConnector}
-          onTableOptionChange={onTableOptionChange}
-          onModalClose={this.onTableOptionsModalClose}
-        />
-      </VirtualTableHeader>
-    );
-  }
+          return (
+            <VirtualTableHeaderCell
+              key={name}
+              className={classNames(
+                styles[name],
+                name === 'sortTitle' && showBanners && styles.banner
+              )}
+              name={name}
+              isSortable={isSortable}
+              {...otherProps}
+            >
+              {label}
+            </VirtualTableHeaderCell>
+          );
+        })
+      }
+    </VirtualTableHeader>
+  );
 }
 
 SeriesIndexHeader.propTypes = {

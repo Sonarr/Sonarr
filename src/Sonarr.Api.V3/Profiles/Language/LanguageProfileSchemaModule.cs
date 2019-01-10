@@ -1,4 +1,3 @@
-﻿using System.Linq;
 using NzbDrone.Core.Profiles.Languages;
 using Sonarr.Http;
 
@@ -6,31 +5,18 @@ namespace Sonarr.Api.V3.Profiles.Language
 {
     public class LanguageProfileSchemaModule : SonarrRestModule<LanguageProfileResource>
     {
+        private readonly LanguageProfileService _languageProfileService;
 
-        public LanguageProfileSchemaModule()
+        public LanguageProfileSchemaModule(LanguageProfileService languageProfileService)
             : base("/languageprofile/schema")
         {
+            _languageProfileService = languageProfileService;
             GetResourceSingle = GetAll;
         }
 
         private LanguageProfileResource GetAll()
         {
-            var orderedLanguages = NzbDrone.Core.Languages.Language.All
-                                           .Where(l => l != NzbDrone.Core.Languages.Language.Unknown)
-                                           .OrderByDescending(l => l.Name)
-                                           .ToList();
-
-            orderedLanguages.Insert(0, NzbDrone.Core.Languages.Language.Unknown);
-
-            var languages = orderedLanguages.Select(v => new LanguageProfileItem {Language = v, Allowed = false})
-                                            .ToList();
-
-            var profile = new LanguageProfile
-                          {
-                              Cutoff = NzbDrone.Core.Languages.Language.Unknown,
-                              Languages = languages
-                          };
-
+            var profile = _languageProfileService.GetDefaultProfile(string.Empty);
             return profile.ToResource();
         }
     }
