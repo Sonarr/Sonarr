@@ -151,12 +151,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         private string GetOriginalFilePath(DownloadClientItem downloadClientItem, LocalEpisode localEpisode)
         {
+            var path = localEpisode.Path;
+
             if (downloadClientItem != null)
             {
-                return downloadClientItem.OutputPath.Directory.ToString().GetRelativePath(localEpisode.Path);
+                var outputDirectory = downloadClientItem.OutputPath.Directory.ToString();
+
+                if (outputDirectory.IsParentPath(path))
+                {
+                    return outputDirectory.GetRelativePath(path);
+                }
             }
 
-            var path = localEpisode.Path;
             var folderEpisodeInfo = localEpisode.FolderEpisodeInfo;
 
             if (folderEpisodeInfo != null)
