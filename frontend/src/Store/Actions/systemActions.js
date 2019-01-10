@@ -80,25 +80,30 @@ export const defaultState = {
     columns: [
       {
         name: 'level',
-        isSortable: true,
-        isVisible: true
+        columnLabel: 'Level',
+        isSortable: false,
+        isVisible: true,
+        isModifiable: false
       },
       {
         name: 'logger',
         label: 'Component',
-        isSortable: true,
-        isVisible: true
+        isSortable: false,
+        isVisible: true,
+        isModifiable: false
       },
       {
         name: 'message',
         label: 'Message',
-        isVisible: true
+        isVisible: true,
+        isModifiable: false
       },
       {
         name: 'time',
         label: 'Time',
         isSortable: true,
-        isVisible: true
+        isVisible: true,
+        isModifiable: false
       },
       {
         name: 'actions',

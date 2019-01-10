@@ -7,20 +7,22 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
 import PageJumpBar from 'Components/Page/PageJumpBar';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import NoSeries from 'Series/NoSeries';
 import SeriesIndexTableConnector from './Table/SeriesIndexTableConnector';
+import SeriesIndexTableOptionsConnector from './Table/SeriesIndexTableOptionsConnector';
 import SeriesIndexPosterOptionsModal from './Posters/Options/SeriesIndexPosterOptionsModal';
 import SeriesIndexPostersConnector from './Posters/SeriesIndexPostersConnector';
 import SeriesIndexOverviewOptionsModal from './Overview/Options/SeriesIndexOverviewOptionsModal';
 import SeriesIndexOverviewsConnector from './Overview/SeriesIndexOverviewsConnector';
-import SeriesIndexFooter from './SeriesIndexFooter';
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
 import SeriesIndexSortMenu from './Menus/SeriesIndexSortMenu';
 import SeriesIndexViewMenu from './Menus/SeriesIndexViewMenu';
+import SeriesIndexFooter from './SeriesIndexFooter';
 import styles from './SeriesIndex.css';
 
 function getViewComponent(view) {
@@ -172,6 +174,7 @@ class SeriesIndex extends Component {
       error,
       totalItems,
       items,
+      columns,
       selectedFilterKey,
       filters,
       customFilters,
@@ -229,25 +232,41 @@ class SeriesIndex extends Component {
             alignContent={align.RIGHT}
             collapseButtons={false}
           >
+            {
+              view === 'table' ?
+                <TableOptionsModalWrapper
+                  {...otherProps}
+                  columns={columns}
+                  optionsComponent={SeriesIndexTableOptionsConnector}
+                >
+                  <PageToolbarButton
+                    label="Options"
+                    iconName={icons.TABLE}
+                  />
+                </TableOptionsModalWrapper> :
+                null
+            }
 
             {
-              view === 'posters' &&
+              view === 'posters' ?
                 <PageToolbarButton
                   label="Options"
                   iconName={icons.POSTER}
                   isDisabled={hasNoSeries}
                   onPress={this.onPosterOptionsPress}
-                />
+                /> :
+                null
             }
 
             {
-              view === 'overview' &&
+              view === 'overview' ?
                 <PageToolbarButton
                   label="Options"
                   iconName={icons.OVERVIEW}
                   isDisabled={hasNoSeries}
                   onPress={this.onOverviewOptionsPress}
-                />
+                /> :
+                null
             }
 
             {
@@ -348,6 +367,7 @@ SeriesIndex.propTypes = {
   error: PropTypes.object,
   totalItems: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectedFilterKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   filters: PropTypes.arrayOf(PropTypes.object).isRequired,
   customFilters: PropTypes.arrayOf(PropTypes.object).isRequired,

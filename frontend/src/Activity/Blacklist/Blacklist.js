@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
+import { align, icons } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
@@ -40,6 +41,18 @@ class Blacklist extends Component {
               isSpinning={isClearingBlacklistExecuting}
               onPress={onClearBlacklistPress}
             />
+          </PageToolbarSection>
+
+          <PageToolbarSection alignContent={align.RIGHT}>
+            <TableOptionsModalWrapper
+              {...otherProps}
+              columns={columns}
+            >
+              <PageToolbarButton
+                label="Options"
+                iconName={icons.TABLE}
+              />
+            </TableOptionsModalWrapper>
           </PageToolbarSection>
         </PageToolbar>
 

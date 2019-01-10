@@ -52,7 +52,7 @@ export const defaultState = {
     isPopulated: false,
     error: null,
     sortKey: 'episodeNumber',
-    sortDirection: sortDirections.DESCENDING,
+    sortDirection: sortDirections.ASCENDING,
     items: []
   }
 };

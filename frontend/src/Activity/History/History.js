@@ -5,6 +5,7 @@ import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
@@ -75,6 +76,16 @@ class History extends Component {
           </PageToolbarSection>
 
           <PageToolbarSection alignContent={align.RIGHT}>
+            <TableOptionsModalWrapper
+              {...otherProps}
+              columns={columns}
+            >
+              <PageToolbarButton
+                label="Options"
+                iconName={icons.TABLE}
+              />
+            </TableOptionsModalWrapper>
+
             <FilterMenu
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}

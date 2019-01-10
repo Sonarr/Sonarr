@@ -8,7 +8,7 @@ import createCommandExecutingSelector from 'Store/Selectors/createCommandExecuti
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { fetchSeries } from 'Store/Actions/seriesActions';
 import scrollPositions from 'Store/scrollPositions';
-import { setSeriesSort, setSeriesFilter, setSeriesView } from 'Store/Actions/seriesIndexActions';
+import { setSeriesSort, setSeriesFilter, setSeriesView, setSeriesTableOption } from 'Store/Actions/seriesIndexActions';
 import { executeCommand } from 'Store/Actions/commandActions';
 import * as commandNames from 'Commands/commandNames';
 import withScrollPosition from 'Components/withScrollPosition';
@@ -59,13 +59,41 @@ function createMapStateToProps() {
   );
 }
 
-const mapDispatchToProps = {
-  fetchSeries,
-  setSeriesSort,
-  setSeriesFilter,
-  setSeriesView,
-  executeCommand
-};
+function createMapDispatchToProps(dispatch, props) {
+  return {
+    dispatchFetchSeries() {
+      dispatch(fetchSeries);
+    },
+
+    onTableOptionChange(payload) {
+      dispatch(setSeriesTableOption(payload));
+    },
+
+    onSortSelect(sortKey) {
+      dispatch(setSeriesSort({ sortKey }));
+    },
+
+    onFilterSelect(selectedFilterKey) {
+      dispatch(setSeriesFilter({ selectedFilterKey }));
+    },
+
+    dispatchSetSeriesView(view) {
+      dispatch(setSeriesView({ view }));
+    },
+
+    onRefreshSeriesPress() {
+      dispatch(executeCommand({
+        name: commandNames.REFRESH_SERIES
+      }));
+    },
+
+    onRssSyncPress() {
+      dispatch(executeCommand({
+        name: commandNames.RSS_SYNC
+      }));
+    }
+  };
+}
 
 class SeriesIndexConnector extends Component {
 
@@ -87,24 +115,16 @@ class SeriesIndexConnector extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchSeries();
+    this.props.dispatchFetchSeries();
   }
 
   //
   // Listeners
 
-  onSortSelect = (sortKey) => {
-    this.props.setSeriesSort({ sortKey });
-  }
-
-  onFilterSelect = (selectedFilterKey) => {
-    this.props.setSeriesFilter({ selectedFilterKey });
-  }
-
   onViewSelect = (view) => {
     // Reset the scroll position before changing the view
     this.setState({ scrollTop: 0 }, () => {
-      this.props.setSeriesView({ view });
+      this.props.dispatchSetSeriesView({ view });
     });
   }
 
@@ -116,18 +136,6 @@ class SeriesIndexConnector extends Component {
     });
   }
 
-  onRefreshSeriesPress = () => {
-    this.props.executeCommand({
-      name: commandNames.REFRESH_SERIES
-    });
-  }
-
-  onRssSyncPress = () => {
-    this.props.executeCommand({
-      name: commandNames.RSS_SYNC
-    });
-  }
-
   //
   // Render
 
@@ -136,12 +144,8 @@ class SeriesIndexConnector extends Component {
       <SeriesIndex
         {...this.props}
         scrollTop={this.state.scrollTop}
-        onSortSelect={this.onSortSelect}
-        onFilterSelect={this.onFilterSelect}
         onViewSelect={this.onViewSelect}
         onScroll={this.onScroll}
-        onRefreshSeriesPress={this.onRefreshSeriesPress}
-        onRssSyncPress={this.onRssSyncPress}
       />
     );
   }
@@ -151,14 +155,10 @@ SeriesIndexConnector.propTypes = {
   isSmallScreen: PropTypes.bool.isRequired,
   view: PropTypes.string.isRequired,
   scrollTop: PropTypes.number.isRequired,
-  fetchSeries: PropTypes.func.isRequired,
-  setSeriesSort: PropTypes.func.isRequired,
-  setSeriesFilter: PropTypes.func.isRequired,
-  setSeriesView: PropTypes.func.isRequired,
-  executeCommand: PropTypes.func.isRequired
+  dispatchFetchSeries: PropTypes.func.isRequired
 };
 
 export default withScrollPosition(
-  connect(createMapStateToProps, mapDispatchToProps)(SeriesIndexConnector),
+  connect(createMapStateToProps, createMapDispatchToProps)(SeriesIndexConnector),
   'seriesIndex'
 );

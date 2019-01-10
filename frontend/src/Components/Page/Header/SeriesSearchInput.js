@@ -117,6 +117,7 @@ class SeriesSearchInput extends Component {
     if (!suggestions.length || highlightedSectionIndex) {
       this.props.onGoToAddNewSeries(value);
       this._autosuggest.input.blur();
+      this.reset();
 
       return;
     }
@@ -129,6 +130,9 @@ class SeriesSearchInput extends Component {
     } else {
       this.goToSeries(suggestions[highlightedSuggestionIndex]);
     }
+
+    this._autosuggest.input.blur();
+    this.reset();
   }
 
   onBlur = () => {

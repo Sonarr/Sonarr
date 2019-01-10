@@ -105,6 +105,14 @@ class BlacklistConnector extends Component {
     this.props.executeCommand({ name: commandNames.CLEAR_BLACKLIST });
   }
 
+  onTableOptionChange = (payload) => {
+    this.props.setBlacklistTableOption(payload);
+
+    if (payload.pageSize) {
+      this.props.gotoBlacklistFirstPage();
+    }
+  }
+
   //
   // Render
 
