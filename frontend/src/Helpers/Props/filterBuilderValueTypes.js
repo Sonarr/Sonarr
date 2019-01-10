@@ -8,4 +8,5 @@ export const PROTOCOL = 'protocol';
 export const QUALITY = 'quality';
 export const QUALITY_PROFILE = 'qualityProfile';
 export const SERIES_STATUS = 'seriesStatus';
+export const SERIES_TYPES = 'seriesType';
 export const TAG = 'tag';

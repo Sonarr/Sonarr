@@ -17,6 +17,12 @@
   flex: 4 0 110px;
 }
 
+.seriesType {
+  composes: cell;
+
+  flex: 0 0 100px;
+}
+
 .banner {
   flex: 0 0 379px;
 }

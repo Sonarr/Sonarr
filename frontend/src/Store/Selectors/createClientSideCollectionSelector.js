@@ -52,7 +52,14 @@ function filter(items, state) {
         const predicate = filterTypePredicates[type];
 
         if (Array.isArray(value)) {
-          accepted = value.some((v) => predicate(item[key], v));
+          if (
+            type === filterTypes.NOT_CONTAINS ||
+            type === filterTypes.NOT_EQUAL
+          ) {
+            accepted = value.every((v) => predicate(item[key], v));
+          } else {
+            accepted = value.some((v) => predicate(item[key], v));
+          }
         } else {
           accepted = predicate(item[key], value);
         }

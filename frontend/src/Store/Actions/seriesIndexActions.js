@@ -67,6 +67,12 @@ export const defaultState = {
       isModifiable: false
     },
     {
+      name: 'seriesType',
+      label: 'Type',
+      isSortable: true,
+      isVisible: false
+    },
+    {
       name: 'network',
       label: 'Network',
       isSortable: true,
@@ -254,6 +260,12 @@ export const defaultState = {
       label: 'Status',
       type: filterBuilderTypes.EXACT,
       valueType: filterBuilderValueTypes.SERIES_STATUS
+    },
+    {
+      name: 'seriesType',
+      label: 'Type',
+      type: filterBuilderTypes.EXACT,
+      valueType: filterBuilderValueTypes.SERIES_TYPES
     },
     {
       name: 'network',

@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
 import formatBytes from 'Utilities/Number/formatBytes';
+import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
+import titleCase from 'Utilities/String/titleCase';
 import { icons } from 'Helpers/Props';
 import HeartRating from 'Components/HeartRating';
 import IconButton from 'Components/Link/IconButton';
@@ -83,6 +84,7 @@ class SeriesIndexRow extends Component {
       status,
       title,
       titleSlug,
+      seriesType,
       network,
       qualityProfile,
       languageProfile,
@@ -183,6 +185,17 @@ class SeriesIndexRow extends Component {
                         title={title}
                       />
                   }
+                </VirtualTableRowCell>
+              );
+            }
+
+            if (name === 'seriesType') {
+              return (
+                <VirtualTableRowCell
+                  key={name}
+                  className={styles[name]}
+                >
+                  {titleCase(seriesType)}
                 </VirtualTableRowCell>
               );
             }
@@ -477,6 +490,7 @@ SeriesIndexRow.propTypes = {
   status: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   titleSlug: PropTypes.string.isRequired,
+  seriesType: PropTypes.string.isRequired,
   network: PropTypes.string,
   qualityProfile: PropTypes.object.isRequired,
   languageProfile: PropTypes.object.isRequired,

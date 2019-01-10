@@ -14,6 +14,12 @@
   flex: 0 0 379px;
 }
 
+.seriesType {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 100px;
+}
+
 .network {
   composes: headerCell from 'Components/Table/VirtualTableHeaderCell.css';
 
