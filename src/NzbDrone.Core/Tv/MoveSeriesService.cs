@@ -54,6 +54,9 @@ namespace NzbDrone.Core.Tv
             try
             {
                 _diskTransferService.TransferFolder(sourcePath, destinationPath, TransferMode.Move);
+                _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, series.Path);
+
+                _eventAggregator.PublishEvent(new SeriesMovedEvent(series, sourcePath, destinationPath));
             }
             catch (IOException ex)
             {
@@ -61,10 +64,6 @@ namespace NzbDrone.Core.Tv
 
                 RevertPath(series.Id, sourcePath);
             }
-
-            _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, series.Path);
-
-            _eventAggregator.PublishEvent(new SeriesMovedEvent(series, sourcePath, destinationPath));
         }
 
         private void RevertPath(int seriesId, string path)
