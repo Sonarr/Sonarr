@@ -183,7 +183,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 return grandparentPath.GetRelativePath(path);
             }
 
-            return Path.Combine(Path.GetFileName(parentPath), Path.GetFileName(path));
+            return Path.GetFileName(path);
         }
 
         private string GetSceneName(DownloadClientItem downloadClientItem, LocalEpisode localEpisode)

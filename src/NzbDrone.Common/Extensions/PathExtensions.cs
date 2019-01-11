@@ -73,6 +73,11 @@ namespace NzbDrone.Common.Extensions
                 ? PARENT_PATH_END_SLASH_REGEX.Replace(childPath, "")
                 : childPath.TrimEnd(Path.DirectorySeparatorChar);
 
+            if (cleanPath.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             return Directory.GetParent(cleanPath)?.FullName;
         }
 
