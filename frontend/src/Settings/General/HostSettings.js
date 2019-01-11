@@ -87,56 +87,59 @@ function HostSettings(props) {
       </FormGroup>
 
       {
-        enableSsl.value &&
-        <FormGroup
-          advancedSettings={advancedSettings}
-          isAdvanced={true}
-        >
-          <FormLabel>SSL Port</FormLabel>
+        enableSsl.value ?
+          <FormGroup
+            advancedSettings={advancedSettings}
+            isAdvanced={true}
+          >
+            <FormLabel>SSL Port</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.NUMBER}
-            name="sslPort"
-            min={1}
-            max={65535}
-            helpTextWarning="Requires restart to take effect"
-            onChange={onInputChange}
-            {...sslPort}
-          />
-        </FormGroup>
+            <FormInputGroup
+              type={inputTypes.NUMBER}
+              name="sslPort"
+              min={1}
+              max={65535}
+              helpTextWarning="Requires restart to take effect"
+              onChange={onInputChange}
+              {...sslPort}
+            />
+          </FormGroup> :
+          null
       }
 
       {
-        isWindows && enableSsl.value &&
-        <FormGroup
-          advancedSettings={advancedSettings}
-          isAdvanced={true}
-        >
-          <FormLabel>SSL Cert Hash</FormLabel>
+        isWindows && enableSsl.value ?
+          <FormGroup
+            advancedSettings={advancedSettings}
+            isAdvanced={true}
+          >
+            <FormLabel>SSL Cert Hash</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.TEXT}
-            name="sslCertHash"
-            helpTextWarning="Requires restart to take effect"
-            onChange={onInputChange}
-            {...sslCertHash}
-          />
-        </FormGroup>
+            <FormInputGroup
+              type={inputTypes.TEXT}
+              name="sslCertHash"
+              helpTextWarning="Requires restart to take effect"
+              onChange={onInputChange}
+              {...sslCertHash}
+            />
+          </FormGroup> :
+          null
       }
 
       {
-        mode !== 'service' &&
-        <FormGroup size={sizes.MEDIUM}>
-          <FormLabel>Open browser on start</FormLabel>
+        isWindows && mode !== 'service' ?
+          <FormGroup size={sizes.MEDIUM}>
+            <FormLabel>Open browser on start</FormLabel>
 
-          <FormInputGroup
-            type={inputTypes.CHECK}
-            name="launchBrowser"
-            helpText=" Open a web browser and navigate to Sonarr homepage on app start."
-            onChange={onInputChange}
-            {...launchBrowser}
-          />
-        </FormGroup>
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="launchBrowser"
+              helpText=" Open a web browser and navigate to Sonarr homepage on app start."
+              onChange={onInputChange}
+              {...launchBrowser}
+            />
+          </FormGroup> :
+          null
       }
 
     </FieldSet>

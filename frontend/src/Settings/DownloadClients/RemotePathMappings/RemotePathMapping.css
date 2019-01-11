@@ -8,11 +8,15 @@
 }
 
 .host {
-  flex: 0 0 300px;
+  @add-mixin truncate;
+
+  flex: 0 1 300px;
 }
 
 .path {
-  flex: 0 0 400px;
+  @add-mixin truncate;
+
+  flex: 0 1 400px;
 }
 
 .actions {
