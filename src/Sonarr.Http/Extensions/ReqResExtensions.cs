@@ -42,7 +42,7 @@ namespace Sonarr.Http.Extensions
 
         public static IDictionary<string, string> DisableCache(this IDictionary<string, string> headers)
         {
-            headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0";
             headers["Pragma"] = "no-cache";
             headers["Expires"] = "0";
 
