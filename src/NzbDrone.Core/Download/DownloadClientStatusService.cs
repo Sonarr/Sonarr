@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider.Status;
 
@@ -12,8 +13,8 @@ namespace NzbDrone.Core.Download
 
     public class DownloadClientStatusService : ProviderStatusServiceBase<IDownloadClient, DownloadClientStatus>, IDownloadClientStatusService
     {
-        public DownloadClientStatusService(IDownloadClientStatusRepository providerStatusRepository, IEventAggregator eventAggregator, Logger logger)
-            : base(providerStatusRepository, eventAggregator, logger)
+        public DownloadClientStatusService(IDownloadClientStatusRepository providerStatusRepository, IEventAggregator eventAggregator, IRuntimeInfo runtimeInfo, Logger logger)
+            : base(providerStatusRepository, eventAggregator, runtimeInfo, logger)
         {
             MinimumTimeSinceInitialFailure = TimeSpan.FromMinutes(5);
             MaximumEscalationLevel = 5;
