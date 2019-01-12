@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.ParserTests
                 @"C:\Test\XxQVHK4GJMP3n2dLpmhW\XxQVHK4GJMP3n2dLpmhW\MKV\010E70S.yhcranA.fo.snoS.mkv".AsOsAgnostic(),
                 "Sons of Anarchy",
                 Quality.HDTV720p,
-                ""
+                null
             }
         };
 
