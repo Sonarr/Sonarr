@@ -227,6 +227,14 @@ namespace NzbDrone.Common.Disk
             MoveFileInternal(source, destination);
         }
 
+        public void MoveFolder(string source, string destination)
+        {
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
+
+            Directory.Move(source, destination);
+        }
+
         protected virtual void MoveFileInternal(string source, string destination)
         {
             File.Move(source, destination);
