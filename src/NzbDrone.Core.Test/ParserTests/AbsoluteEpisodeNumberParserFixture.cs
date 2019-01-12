@@ -148,5 +148,17 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeasonNumber.Should().Be(seasonNumber);
         }
 
+        [TestCase("[HorribleSubs] Goblin Slayer - 10.5 [1080p].mkv", "Goblin Slayer", 10.5)]
+        public void should_handle_anime_recap_numbering(string postTitle, string title, double specialEpisodeNumber)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.SeriesTitle.Should().Be(title);
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.SpecialAbsoluteEpisodeNumbers.Should().NotBeEmpty();
+            result.SpecialAbsoluteEpisodeNumbers.Should().BeEquivalentTo(new[] { (decimal)specialEpisodeNumber });
+            result.FullSeason.Should().BeFalse();
+        }
+
     }
 }
