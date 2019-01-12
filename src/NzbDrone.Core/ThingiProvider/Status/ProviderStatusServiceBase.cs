@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider.Events;
 
@@ -24,15 +25,18 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
         protected readonly IProviderStatusRepository<TModel> _providerStatusRepository;
         protected readonly IEventAggregator _eventAggregator;
+        protected readonly IRuntimeInfo _runtimeInfo;
         protected readonly Logger _logger;
 
         protected int MaximumEscalationLevel { get; set; } = EscalationBackOff.Periods.Length - 1;
         protected TimeSpan MinimumTimeSinceInitialFailure { get; set; } = TimeSpan.Zero;
+        protected TimeSpan MinimumTimeSinceStartup { get; set; } = TimeSpan.FromMinutes(15);
 
-        public ProviderStatusServiceBase(IProviderStatusRepository<TModel> providerStatusRepository, IEventAggregator eventAggregator, Logger logger)
+        public ProviderStatusServiceBase(IProviderStatusRepository<TModel> providerStatusRepository, IEventAggregator eventAggregator, IRuntimeInfo runtimeInfo, Logger logger)
         {
             _providerStatusRepository = providerStatusRepository;
             _eventAggregator = eventAggregator;
+            _runtimeInfo = runtimeInfo;
             _logger = logger;
         }
 
@@ -89,9 +93,10 @@ namespace NzbDrone.Core.ThingiProvider.Status
                     escalate = false;
                 }
 
+                var inStartupGracePeriod = (_runtimeInfo.StartTime + MinimumTimeSinceStartup) > now;
                 var inGracePeriod = (status.InitialFailure.Value + MinimumTimeSinceInitialFailure) > now;
 
-                if (escalate && !inGracePeriod)
+                if (escalate && !inGracePeriod && !inStartupGracePeriod)
                 {
                     status.EscalationLevel = Math.Min(MaximumEscalationLevel, status.EscalationLevel + 1);
                 }
@@ -107,6 +112,15 @@ namespace NzbDrone.Core.ThingiProvider.Status
                 if (!inGracePeriod || minimumBackOff != TimeSpan.Zero)
                 {
                     status.DisabledTill = now + CalculateBackOffPeriod(status);
+                }
+
+                if (inStartupGracePeriod && minimumBackOff == TimeSpan.Zero && status.DisabledTill.HasValue)
+                {
+                    var maximumDisabledTill = now + TimeSpan.FromSeconds(EscalationBackOff.Periods[1]);
+                    if (maximumDisabledTill < status.DisabledTill)
+                    {
+                        status.DisabledTill = maximumDisabledTill;
+                    }
                 }
 
                 _providerStatusRepository.Upsert(status);

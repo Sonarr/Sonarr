@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Linq;
 using FluentAssertions;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.ThingiProvider;
@@ -25,8 +26,8 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
 
     public class MockProviderStatusService : ProviderStatusServiceBase<IMockProvider, MockProviderStatus>
     {
-        public MockProviderStatusService(IMockProviderStatusRepository providerStatusRepository, IEventAggregator eventAggregator, Logger logger)
-            : base(providerStatusRepository, eventAggregator, logger)
+        public MockProviderStatusService(IMockProviderStatusRepository providerStatusRepository, IEventAggregator eventAggregator, IRuntimeInfo runtimeInfo, Logger logger)
+            : base(providerStatusRepository, eventAggregator, runtimeInfo, logger)
         {
 
         }
@@ -40,9 +41,20 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
         public void SetUp()
         {
             _epoch = DateTime.UtcNow;
+
+            Mocker.GetMock<IRuntimeInfo>()
+                .SetupGet(v => v.StartTime)
+                .Returns(_epoch - TimeSpan.FromHours(1));
         }
 
-        private void WithStatus(MockProviderStatus status)
+        private void GivenRecentStartup()
+        {
+            Mocker.GetMock<IRuntimeInfo>()
+                .SetupGet(v => v.StartTime)
+                .Returns(_epoch - TimeSpan.FromMinutes(12));
+        }
+
+        private MockProviderStatus WithStatus(MockProviderStatus status)
         {
             Mocker.GetMock<IMockProviderStatusRepository>()
                 .Setup(v => v.FindByProviderId(1))
@@ -51,6 +63,8 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
             Mocker.GetMock<IMockProviderStatusRepository>()
                 .Setup(v => v.All())
                 .Returns(new[] { status });
+
+            return status;
         }
 
         private void VerifyUpdate()
@@ -121,6 +135,33 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
             status.Should().NotBeNull();
             status.DisabledTill.Should().HaveValue();
             status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(15), 500);
+        }
+
+        [Test]
+        public void should_not_escalate_further_till_after_5_minutes_since_startup()
+        {
+            GivenRecentStartup();
+
+            var origStatus = WithStatus(new MockProviderStatus
+            {
+                InitialFailure = _epoch - TimeSpan.FromMinutes(6),
+                MostRecentFailure = _epoch - TimeSpan.FromSeconds(120),
+                EscalationLevel = 3
+            });
+
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+            Subject.RecordFailure(1);
+
+            var status = Subject.GetBlockedProviders().FirstOrDefault();
+            status.Should().NotBeNull();
+
+            origStatus.EscalationLevel.Should().Be(3);
+            status.DisabledTill.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), 500);
         }
     }
 }

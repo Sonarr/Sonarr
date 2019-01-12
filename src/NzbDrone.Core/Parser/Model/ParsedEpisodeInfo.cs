@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Parser.Model
         public int SeasonNumber { get; set; }
         public int[] EpisodeNumbers { get; set; }
         public int[] AbsoluteEpisodeNumbers { get; set; }
+        public decimal[] SpecialAbsoluteEpisodeNumbers { get; set; }
         public string AirDate { get; set; }
         public Language Language { get; set; }
         public bool FullSeason { get; set; }
@@ -28,6 +29,7 @@ namespace NzbDrone.Core.Parser.Model
         {
             EpisodeNumbers = new int[0];
             AbsoluteEpisodeNumbers = new int[0];
+            SpecialAbsoluteEpisodeNumbers = new decimal[0];
         }
 
         public bool IsDaily
