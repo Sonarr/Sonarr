@@ -81,6 +81,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
+      <Project>{fd286df8-2d3a-4394-8ad5-443fade55fb2}</Project>
+      <Name>NzbDrone.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
@@ -96,6 +100,18 @@
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
       <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
       <Name>NzbDrone.Test.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Windows\NzbDrone.Windows.csproj">
+      <Project>{911284d3-f130-459e-836c-2430b6fbf21d}</Project>
+      <Name>NzbDrone.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj">
+      <Project>{7140ff1f-79be-492f-9188-b21a050bf708}</Project>
+      <Name>Sonarr.Api.V3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj">
+      <Project>{5370bff7-1bd7-46bc-af06-7d9ea5cda1d6}</Project>
+      <Name>Sonarr.Http</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
