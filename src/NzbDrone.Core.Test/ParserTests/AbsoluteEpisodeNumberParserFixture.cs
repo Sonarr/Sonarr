@@ -136,5 +136,17 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
         }
+
+        [TestCase("[Vivid] Living Sky Saga S01 [Web][MKV][h264 10-bit][1080p][AAC 2.0]", "Living Sky Saga", 1)]
+        public void should_parse_anime_season_packs(string postTitle, string title, int seasonNumber)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.SeriesTitle.Should().Be(title);
+            result.FullSeason.Should().BeTrue();
+            result.SeasonNumber.Should().Be(seasonNumber);
+        }
+
     }
 }
