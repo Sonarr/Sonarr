@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Notifications.Emby
 
             if (Settings.UpdateLibrary)
             {
-                _mediaBrowserService.Update(Settings, message.Series);
+                _mediaBrowserService.Update(Settings, message.Series, "Created");
             }
         }
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Notifications.Emby
         {
             if (Settings.UpdateLibrary)
             {
-                _mediaBrowserService.Update(Settings, series);
+                _mediaBrowserService.Update(Settings, series, "Modified");
             }
         }
 
