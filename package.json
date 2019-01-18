@@ -65,6 +65,7 @@
     "moment": "2.22.2",
     "mousetrap": "1.6.2",
     "normalize.css": "8.0.0",
+    "postcss-color-function": "4.0.1",
     "postcss-loader": "3.0.0",
     "postcss-mixins": "6.2.0",
     "postcss-nested": "4.1.0",

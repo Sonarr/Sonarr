@@ -43,17 +43,13 @@
 
 .primary {
   background-color: $primaryColor;
-
-  &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $primaryColor, $primaryColor 10px, $colorImpairedAlternateGradient 10px, $colorImpairedAlternateGradient 20px);
-  }
 }
 
 .danger {
   background-color: $dangerColor;
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $dangerColor, $dangerColor 10px, $colorImpairedAlternateGradient 10px, $colorImpairedAlternateGradient 20px);
+    background: repeating-linear-gradient(90deg, color($dangerColor shade(5%)), color($dangerColor shade(5%)) 5px, color($dangerColor shade(15%)) 5px, color($dangerColor shade(15%)) 10px);
   }
 }
 
@@ -69,7 +65,7 @@
   background-color: $warningColor;
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $warningColor, $warningColor 10px, $colorImpairedAlternateGradient 10px, $colorImpairedAlternateGradient 20px);
+    background: repeating-linear-gradient(45deg, $warningColor, $warningColor 5px, color($warningColor tint(15%)) 5px, color($warningColor tint(15%)) 10px);
   }
 }
 

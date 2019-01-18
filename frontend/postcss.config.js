@@ -14,6 +14,7 @@ module.exports = (ctx, configPath, options) => {
             return Object.assign(acc, reload(vars));
           }, {})
       },
+      'postcss-color-function': {},
       'postcss-nested': {},
       autoprefixer: {
         browsers: [
