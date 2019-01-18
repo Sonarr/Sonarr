@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
@@ -61,6 +62,16 @@ namespace Sonarr.Api.V3.Indexers
         public bool IsAbsoluteNumbering { get; set; }
         public bool IsPossibleSpecialEpisode { get; set; }
         public bool Special { get; set; }
+
+        // Sent when queuing an unknown release
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+//        [JsonIgnore]
+        public int? SeriesId { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+//        [JsonIgnore]
+        public int? EpisodeId { get; set; }
     }
 
     public static class ReleaseResourceMapper

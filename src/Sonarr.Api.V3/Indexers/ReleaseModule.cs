@@ -5,12 +5,15 @@ using Nancy;
 using Nancy.ModelBinding;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 using Sonarr.Http.Extensions;
 using HttpStatusCode = System.Net.HttpStatusCode;
@@ -24,6 +27,9 @@ namespace Sonarr.Api.V3.Indexers
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IPrioritizeDownloadDecision _prioritizeDownloadDecision;
         private readonly IDownloadService _downloadService;
+        private readonly ISeriesService _seriesService;
+        private readonly IEpisodeService _episodeService;
+        private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
         private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
@@ -33,6 +39,9 @@ namespace Sonarr.Api.V3.Indexers
                              IMakeDownloadDecision downloadDecisionMaker,
                              IPrioritizeDownloadDecision prioritizeDownloadDecision,
                              IDownloadService downloadService,
+                             ISeriesService seriesService,
+                             IEpisodeService episodeService,
+                             IParsingService parsingService,
                              ICacheManager cacheManager,
                              Logger logger)
         {
@@ -41,6 +50,9 @@ namespace Sonarr.Api.V3.Indexers
             _downloadDecisionMaker = downloadDecisionMaker;
             _prioritizeDownloadDecision = prioritizeDownloadDecision;
             _downloadService = downloadService;
+            _seriesService = seriesService;
+            _episodeService = episodeService;
+            _parsingService = parsingService;
             _logger = logger;
 
             GetResourceAll = GetReleases;
@@ -66,6 +78,34 @@ namespace Sonarr.Api.V3.Indexers
 
             try
             {
+                if (remoteEpisode.Series == null)
+                {
+                    if (release.EpisodeId.HasValue)
+                    {
+                        var episode = _episodeService.GetEpisode(release.EpisodeId.Value);
+
+                        remoteEpisode.Series = _seriesService.GetSeries(episode.SeriesId);
+                        remoteEpisode.Episodes = new List<Episode> { episode };
+                    }
+                    else if (release.SeriesId.HasValue)
+                    {
+                        var series = _seriesService.GetSeries(release.SeriesId.Value);
+                        var episodes = _parsingService.GetEpisodes(remoteEpisode.ParsedEpisodeInfo, series, true);
+
+                        if (episodes.Empty())
+                        {
+                            throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release");
+                        }
+
+                        remoteEpisode.Series = series;
+                        remoteEpisode.Episodes = episodes;
+                    }
+                    else
+                    {
+                            throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to find matching series and episodes");
+                    }
+                }
+
                 _downloadService.DownloadReport(remoteEpisode);
             }
             catch (ReleaseDownloadException ex)

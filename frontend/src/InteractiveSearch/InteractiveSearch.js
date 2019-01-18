@@ -90,6 +90,7 @@ const columns = [
 
 function InteractiveSearch(props) {
   const {
+    searchPayload,
     isFetching,
     isPopulated,
     error,
@@ -164,6 +165,7 @@ function InteractiveSearch(props) {
                     <InteractiveSearchRow
                       key={item.guid}
                       {...item}
+                      searchPayload={searchPayload}
                       longDateFormat={longDateFormat}
                       timeFormat={timeFormat}
                       onGrabPress={onGrabPress}
@@ -186,6 +188,7 @@ function InteractiveSearch(props) {
 }
 
 InteractiveSearch.propTypes = {
+  searchPayload: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
