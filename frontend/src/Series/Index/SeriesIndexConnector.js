@@ -124,7 +124,7 @@ class SeriesIndexConnector extends Component {
   onViewSelect = (view) => {
     // Reset the scroll position before changing the view
     this.setState({ scrollTop: 0 }, () => {
-      this.props.dispatchSetSeriesView({ view });
+      this.props.dispatchSetSeriesView(view);
     });
   }
 
