@@ -537,7 +537,12 @@ namespace NzbDrone.Core.Organizer
 
         private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)
         {
-            if (episodeFile.MediaInfo == null) return;
+            if (episodeFile.MediaInfo == null)
+            {
+                _logger.Trace("Media info is unavailable for {0}", episodeFile);
+
+                return;
+            }
 
             var sceneName = episodeFile.GetSceneOrFileName();
 
