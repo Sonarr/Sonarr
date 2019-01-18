@@ -16,6 +16,11 @@ namespace NzbDrone.Core.Parser.Model
         public TorrentSeedConfiguration SeedConfiguration { get; set; }
         public int PreferredWordScore { get; set; }
 
+        public RemoteEpisode()
+        {
+            Episodes = new List<Episode>();
+        }
+
         public bool IsRecentEpisode()
         {
             return Episodes.Any(e => e.AirDateUtc >= DateTime.UtcNow.Date.AddDays(-14));
