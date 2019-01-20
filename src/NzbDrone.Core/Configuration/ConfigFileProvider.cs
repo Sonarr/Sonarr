@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Configuration
         AuthenticationType AuthenticationMethod { get; }
         bool AnalyticsEnabled { get; }
         string LogLevel { get; }
+        string ConsoleLogLevel { get; }
         string Branch { get; }
         string ApiKey { get; }
         string SslCertHash { get; }
@@ -179,6 +180,7 @@ namespace NzbDrone.Core.Configuration
         public string Branch => GetValue("Branch", "master").ToLowerInvariant();
 
         public string LogLevel => GetValue("LogLevel", "Info");
+        public string ConsoleLogLevel => GetValue("ConsoleLogLevel", null, persist: false);
 
         public string SslCertHash => GetValue("SslCertHash", "");
 

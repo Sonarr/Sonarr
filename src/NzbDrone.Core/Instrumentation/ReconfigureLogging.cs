@@ -20,11 +20,19 @@ namespace NzbDrone.Core.Instrumentation
         public void Reconfigure()
         {
             var minimumLogLevel = LogLevel.FromString(_configFileProvider.LogLevel);
+            LogLevel minimumConsoleLogLevel;
+
+            if (_configFileProvider.ConsoleLogLevel != null)
+                minimumConsoleLogLevel = LogLevel.FromString(_configFileProvider.ConsoleLogLevel);
+            else if (minimumLogLevel > LogLevel.Info)
+                minimumConsoleLogLevel = minimumLogLevel;
+            else
+                minimumConsoleLogLevel = LogLevel.Info;
 
             var rules = LogManager.Configuration.LoggingRules;
 
             //Console
-            SetMinimumLogLevel(rules, "consoleLogger", minimumLogLevel);
+            SetMinimumLogLevel(rules, "consoleLogger", minimumConsoleLogLevel);
 
             //Log Files
             SetMinimumLogLevel(rules, "appFileInfo", minimumLogLevel <= LogLevel.Info ? LogLevel.Info : LogLevel.Off);
