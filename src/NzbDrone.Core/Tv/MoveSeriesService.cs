@@ -1,7 +1,6 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -26,7 +25,6 @@ namespace NzbDrone.Core.Tv
                                  IBuildFileNames filenameBuilder,
                                  IDiskProvider diskProvider,
                                  IDiskTransferService diskTransferService,
-                                 IRootFolderService rootFolderService,
                                  IEventAggregator eventAggregator,
                                  Logger logger)
         {
@@ -34,7 +32,6 @@ namespace NzbDrone.Core.Tv
             _filenameBuilder = filenameBuilder;
             _diskProvider = diskProvider;
             _diskTransferService = diskTransferService;
-            _rootFolderService = rootFolderService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -58,17 +55,7 @@ namespace NzbDrone.Core.Tv
 
             try
             {
-                var sourceRootFolder = _rootFolderService.GetBestRootFolderPath(sourcePath);
-                var destinationRootFolder = _rootFolderService.GetBestRootFolderPath(destinationPath);
-
-                if (sourceRootFolder.PathEquals(destinationRootFolder) && !_diskProvider.FolderExists(destinationPath))
-                {
-                    _diskProvider.MoveFolder(sourcePath, destinationPath);
-                }
-                else
-                {
-                    _diskTransferService.TransferFolder(sourcePath, destinationPath, TransferMode.Move);
-                }
+                _diskTransferService.TransferFolder(sourcePath, destinationPath, TransferMode.Move);
 
                 _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, series.Path);
 
