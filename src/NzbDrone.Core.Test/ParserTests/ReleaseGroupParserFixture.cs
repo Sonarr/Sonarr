@@ -71,6 +71,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Anime-Koi] Barakamon - S01E06 - Guys From Tokyo", "Anime-Koi")]
         [TestCase("[Anime-Koi] Barakamon - S01E07 - A High-Grade Fish", "Anime-Koi")]
         [TestCase("[Anime-Koi] Kami-sama Hajimemashita 2 - 01 [h264-720p][28D54E2C]", "Anime-Koi")]
+        [TestCase("[爱恋字幕社][盾之勇者成名录][Tate no Yuusha no Nariagari][02][720P][GB][MP4]", "爱恋字幕社")]
+        [TestCase("【极影字幕社】 ★01月新番多罗罗Dororo第02话BIG5 720P MP4（字幕社招内详）", "极影字幕社")]
         //[TestCase("Tokyo.Ghoul.02x01.013.HDTV-720p-Anime-Koi", "Anime-Koi")]
         //[TestCase("", "")]
         public void should_parse_anime_release_groups(string title, string expected)
