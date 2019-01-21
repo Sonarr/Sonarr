@@ -27,6 +27,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             var fileInfo = localEpisode.FileEpisodeInfo;
             var folderInfo = localEpisode.FolderEpisodeInfo;
 
+            if (fileInfo != null && fileInfo.IsPossibleSceneSeasonSpecial)
+            {
+                fileInfo = _parsingService.ParseSpecialEpisodeTitle(fileInfo, fileInfo.ReleaseTitle, localEpisode.Series.TvdbId, 0);
+            }
+
             if (folderInfo != null && folderInfo.IsPossibleSceneSeasonSpecial)
             {
                 folderInfo = _parsingService.ParseSpecialEpisodeTitle(folderInfo, folderInfo.ReleaseTitle, localEpisode.Series.TvdbId, 0);
