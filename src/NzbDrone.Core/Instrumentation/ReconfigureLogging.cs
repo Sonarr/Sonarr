@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NLog.Config;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Messaging.Events;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Instrumentation
             var minimumLogLevel = LogLevel.FromString(_configFileProvider.LogLevel);
             LogLevel minimumConsoleLogLevel;
 
-            if (_configFileProvider.ConsoleLogLevel != null)
+            if (_configFileProvider.ConsoleLogLevel.IsNotNullOrWhiteSpace())
                 minimumConsoleLogLevel = LogLevel.FromString(_configFileProvider.ConsoleLogLevel);
             else if (minimumLogLevel > LogLevel.Info)
                 minimumConsoleLogLevel = minimumLogLevel;
