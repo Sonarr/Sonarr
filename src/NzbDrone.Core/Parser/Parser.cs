@@ -175,6 +175,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?S\d{1,2})[-_. ]{3,}(?:EP)?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|[-]))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Anime - Chinese titles with duplicated title and episode number in square brackts ([RlsGroup] [Chinese title][title][number])
+                new Regex(@"^(?:\[(?<subgroup>.+?)\])?.*?(?<title>[a-z][\x20-\x5A\x5E-\x7F]+?)\][-_. ]?\[(?<absoluteepisode>(?<!\d+)\d{2,3}(\.\d{1,2})?(?!\d+))\]",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Anime - French titles with single episode numbers, with or without leading sub group ([RlsGroup] Title - Episode 1)
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)[-_. ]+?(?:Episode[-_. ]+?)(?<absoluteepisode>\d{1}(\.\d{1,2})?(?!\d+))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -239,7 +243,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - Title Absolute Episode Number
-                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:[-_. ]+(?<absoluteepisode>(?<!\d+)\d{2,3}(\.\d{1,2})?(?!\d+)))+(?:_|-|\s|\.)*?(?<hash>\[.{8}\])?(?:$|\.)?",
+                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?.*?(?<title>[^/_][\x20-\x5A\x5E-\x7F]+?)(?:[-_. ]+(?<absoluteepisode>(?<!\d+)\d{2,3}(\.\d{1,2})?(?!\d+)))+(?:_|-|\s|\.)*?(?<hash>\[.{8}\])?(?:$|\.)?",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - Title {Absolute Episode Number}
@@ -305,6 +309,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex WebsitePrefixRegex = new Regex(@"^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex EpisodePostfixRegex = new Regex(@"(?<=\d)END",
+                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private static readonly Regex SixDigitAirDateRegex = new Regex(@"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])",
                                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -314,8 +321,8 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex CleanTorrentSuffixRegex = new Regex(@"\[(?:ettv|rartv|rarbg|cttv)\]$",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex CleanQualityBracketsRegex = new Regex(@"\[[a-z0-9 ._-]+\]$",
-                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex CleanQualityRegex = new Regex(@"(?:\[[a-z0-9 ._-]+\]| [a-z0-9_-]+)$",
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)(?<!WEB-DL|480p|720p|1080p|2160p)(?:\b|[-._ ])",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -379,12 +386,16 @@ namespace NzbDrone.Core.Parser
 
                 var simpleTitle = SimpleTitleRegex.Replace(releaseTitle, string.Empty);
 
+                simpleTitle = simpleTitle.Replace("【", "[").Replace("】", "]");
+
                 // TODO: Quick fix stripping [url] - prefixes.
                 simpleTitle = WebsitePrefixRegex.Replace(simpleTitle, string.Empty);
 
+                simpleTitle = EpisodePostfixRegex.Replace(simpleTitle, string.Empty);
+
                 simpleTitle = CleanTorrentSuffixRegex.Replace(simpleTitle, string.Empty);
 
-                simpleTitle = CleanQualityBracketsRegex.Replace(simpleTitle, m =>
+                simpleTitle = CleanQualityRegex.Replace(simpleTitle, m =>
                 {
                     if (QualityParser.ParseQualityName(m.Value).Quality != Qualities.Quality.Unknown)
                     {

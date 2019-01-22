@@ -94,6 +94,14 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Tokyo Ghoul: RE S2 - Episode 4 VOSTFR (1080p)", "Tokyo Ghoul RE S2", 4, 0, 0)]
         [TestCase("To Aru Majutsu no Index III - Episode 5 VOSTFR (1080p)", "To Aru Majutsu no Index III", 5, 0, 0)]
         [TestCase("[Prout] Steins;Gate 0 - Episode 5 VOSTFR (BDRip 1920x1080 x264 FLAC)", "Steins;Gate 0", 5, 0, 0)]
+        [TestCase("【喵萌奶茶屋】★10月新番★[哥布林杀手/Goblin Slayer][12END][720p][繁体][招募翻译校对]", "Goblin Slayer", 12, 0, 0)]
+        [TestCase("[爱恋字幕社][盾之勇者成名录][Tate no Yuusha no Nariagari][02][720P][GB][MP4]", "Tate no Yuusha no Nariagari", 2, 0, 0)]
+        [TestCase("【幻樱字幕组】【10月新番】【欢迎光临，千岁酱Okoshiyasu, Chitose-chan】【13】【GB_MP4】【1280X720】", "Okoshiyasu, Chitose-chan", 13, 0, 0)]
+        [TestCase("★1月新番★【百慕达三角~多彩田园曲~/ Bermuda Triangle - Colorful Pastrale】【02】【BIG5】【1080P】【V2】", "Bermuda Triangle - Colorful Pastrale", 2, 0, 0)]
+        [TestCase("【极影字幕社】 ★一月新番【Fate /EXTRA Last Encore】【10】【BIG5】【720P】（字幕社招内详）", "Fate /EXTRA Last Encore", 10, 0, 0)]
+        [TestCase("【悠哈璃羽字幕社&诸神字幕组& JOJO奇妙冒险吧】[ JOJO的奇妙冒险黄金之风_ JoJo 's Bizarre Adventure - Golden Wind][15][繁日双语][ x264 1080p] ", "JoJo 's Bizarre Adventure - Golden Wind", 15, 0, 0)]
+        [TestCase("【风之圣殿字幕组】★04月新番[闪亮 美妙☆频道 / Kiratto_Pri-chan][041][简体][720P][MP4]", "Kiratto Pri-chan", 41, 0, 0)]
+        [TestCase("	[悠哈璃羽字幕社&LoliHouse]不吉波普不笑/ Boogiepop wa Warawanai - 04v2 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕] ", "Boogiepop wa Warawanai", 4, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
