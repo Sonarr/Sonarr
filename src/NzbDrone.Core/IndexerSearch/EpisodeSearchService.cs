@@ -163,7 +163,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             var episodes = _episodeCutoffService.EpisodesWhereCutoffUnmet(pagingSpec).Records.ToList();
 
-            var queue = _queueService.GetQueue().Select(q => q.Episode.Id);
+            var queue = _queueService.GetQueue().Where(q => q.Episode != null).Select(q => q.Episode.Id);
             var missing = episodes.Where(e => !queue.Contains(e.Id)).ToList();
 
             SearchForMissingEpisodes(missing, message.Trigger == CommandTrigger.Manual);
