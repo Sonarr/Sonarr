@@ -89,14 +89,14 @@ class AddNewSeriesModalContent extends Component {
           <div className={styles.container}>
             {
               isSmallScreen ?
+                null :
                 <div className={styles.poster}>
                   <SeriesPoster
                     className={styles.poster}
                     images={images}
                     size={250}
                   />
-                </div> :
-                null
+                </div>
             }
 
             <div className={styles.info}>
