@@ -328,6 +328,10 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)(?<!WEB-DL|480p|720p|1080p|2160p)(?:\b|[-._ ])|[-._ ]\[(?<releasegroup>[a-z0-9]+)\]$",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+
+        private static readonly Regex InvalidReleaseGroupRegex = new Regex(@"^[se]\d+$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+
         private static readonly Regex AnimeReleaseGroupRegex = new Regex(@"^(?:\[(?<subgroup>(?!\s).+?(?<!\s))\](?:_|-|\s|\.)?)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -567,6 +571,11 @@ namespace NzbDrone.Core.Parser
                 int groupIsNumeric;
 
                 if (int.TryParse(group, out groupIsNumeric))
+                {
+                    return null;
+                }
+
+                if (InvalidReleaseGroupRegex.IsMatch(group))
                 {
                     return null;
                 }

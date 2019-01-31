@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Ghosted.S01E08.Haunted.Hayride.720p.AMZN.WEBRip.DDP5.1.x264-NTb-postbot", "NTb")]
         [TestCase("Ghosted.S01E08.Haunted.Hayride.720p.AMZN.WEBRip.DDP5.1.x264-NTb-xpost", "NTb")]
         [TestCase("Series Title - S01E01 - Episode Title [RlsGroup]", "RlsGroup")]
+        [TestCase("Black Monday S01 E01-E02 1080p AMZN WEBRip DDP5.1 x264 monkee", null)]
         //[TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
         {
