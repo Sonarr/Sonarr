@@ -16,12 +16,15 @@ function getProviderState(payload, getState, section) {
 
   if (item.fields) {
     pendingChanges.fields = _.reduce(item.fields, (result, field) => {
-      const value = pendingFields.hasOwnProperty(field.name) ?
-        pendingFields[field.name] :
+      const name = field.name;
+
+      const value = pendingFields.hasOwnProperty(name) ?
+        pendingFields[name] :
         field.value;
 
+      // Only send the name and value to the server
       result.push({
-        ...field,
+        name,
         value
       });
 
@@ -29,7 +32,11 @@ function getProviderState(payload, getState, section) {
     }, []);
   }
 
-  return Object.assign({}, item, pendingChanges);
+  const result = Object.assign({}, item, pendingChanges);
+
+  delete result.presets;
+
+  return result;
 }
 
 export default getProviderState;
