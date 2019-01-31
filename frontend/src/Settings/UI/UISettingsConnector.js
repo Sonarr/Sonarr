@@ -39,7 +39,7 @@ class UISettingsConnector extends Component {
   }
 
   componentWillUnmount() {
-    this.props.clearPendingChanges({ section: SECTION });
+    this.props.clearPendingChanges({ section: `settings.${SECTION}` });
   }
 
   //
