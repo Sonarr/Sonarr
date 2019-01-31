@@ -345,6 +345,7 @@
     <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheYearFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheFixture.cs" />
     <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
+    <Compile Include="ParserTests\UnicodeReleaseParserFixture.cs" />
     <Compile Include="ParserTests\ValidateParsedEpisodeInfoFixture.cs" />
     <Compile Include="Profiles\Delay\DelayProfileServiceFixture.cs" />
     <Compile Include="Profiles\Qualities\QualityIndexCompareToFixture.cs" />
