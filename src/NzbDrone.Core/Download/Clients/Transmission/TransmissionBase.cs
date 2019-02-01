@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
                 item.CanMoveFiles = item.CanBeRemoved =
                     torrent.Status == TransmissionTorrentStatus.Stopped &&
-                    item.SeedRatio >= torrent.SeedRatioLimit;
+                    (item.SeedRatio >= torrent.SeedRatioLimit || torrent.isFinished);
 
                 items.Add(item);
             }
