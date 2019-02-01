@@ -20,7 +20,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ### Requirements
 
-* Visual Studio 2015 (https://www.visualstudio.com/vs/)
+* [Visual Studio 2015](https://visualstudio.microsoft.com/vs/)
 * [Git](https://git-scm.com/downloads)
 * [NodeJS](https://nodejs.org/en/download/)
 
@@ -41,12 +41,12 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ### License
 
-* [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
+* [GNU GPL v3](https://www.gnu.org/licenses/gpl.html)
 * Copyright 2010-2017
 
 ### Sponsors
 
-* [JetBrains](http://www.jetbrains.com/) for providing us with free licenses to their great tools
-    * [ReSharper](http://www.jetbrains.com/resharper/)
-    * [WebStorm](http://www.jetbrains.com/webstorm/)
-    * [TeamCity](http://www.jetbrains.com/teamcity/)
+* [JetBrains](https://www.jetbrains.com/) for providing us with free licenses to their great tools
+    * [ReSharper](https://www.jetbrains.com/resharper/)
+    * [WebStorm](https://www.jetbrains.com/webstorm/)
+    * [TeamCity](https://www.jetbrains.com/teamcity/)
