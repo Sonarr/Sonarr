@@ -30,6 +30,9 @@ namespace NzbDrone.Core.Organizer
 
     public class FileNameBuilder : IBuildFileNames
     {
+        private static readonly string[] ValidHdrTransferFunctions = {"PQ", "HLG"};
+        private static readonly string ValidHdrColourPrimaries = "BT.2020";
+
         private readonly INamingConfigService _namingConfigService;
         private readonly IQualityDefinitionService _qualityDefinitionService;
         private readonly IPreferredWordService _preferredWordService;
@@ -572,6 +575,20 @@ namespace NzbDrone.Core.Organizer
                                 audioChannels.ToString("F1", CultureInfo.InvariantCulture) :
                                 string.Empty;
 
+            var mediaInfoHdr = string.Empty;
+
+            if (episodeFile.MediaInfo.VideoBitDepth >= 10 &&
+                !string.IsNullOrEmpty(episodeFile.MediaInfo.VideoColourPrimaries) &&
+                !string.IsNullOrEmpty(episodeFile.MediaInfo.VideoTransferCharacteristics))
+            {
+                if (episodeFile.MediaInfo.VideoColourPrimaries.EqualsIgnoreCase(ValidHdrColourPrimaries) &&
+                    ValidHdrTransferFunctions.Any(episodeFile.MediaInfo.VideoTransferCharacteristics.Contains))
+                {
+                    mediaInfoHdr = "HDR";
+                }
+            }
+            
+
             tokenHandlers["{MediaInfo Video}"] = m => videoCodec;
             tokenHandlers["{MediaInfo VideoCodec}"] = m => videoCodec;
             tokenHandlers["{MediaInfo VideoBitDepth}"] = m => videoBitDepth;
@@ -580,6 +597,8 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{MediaInfo AudioCodec}"] = m => audioCodec;
             tokenHandlers["{MediaInfo AudioChannels}"] = m => audioChannelsFormatted;
             tokenHandlers["{MediaInfo AudioLanguages}"] = m => mediaInfoAudioLanguages;
+
+            tokenHandlers["{MediaInfo HDR}"] = m => mediaInfoHdr;
 
             tokenHandlers["{MediaInfo SubtitleLanguages}"] = m => mediaInfoSubtitleLanguages;
 

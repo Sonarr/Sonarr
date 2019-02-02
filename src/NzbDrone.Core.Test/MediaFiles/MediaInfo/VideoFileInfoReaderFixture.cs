@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using FluentAssertions;
 using Moq;
@@ -59,7 +60,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.VideoBitrate.Should().Be(193329);
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
-
+            info.VideoColourPrimaries.Should().Be("BT.601 NTSC");
+            info.VideoTransferCharacteristics.Should().Be("BT.709");
         }
 
         [Test]
@@ -95,6 +97,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.VideoBitrate.Should().Be(193329);
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
+            info.VideoColourPrimaries.Should().Be("BT.601 NTSC");
+            info.VideoTransferCharacteristics.Should().Be("BT.709");
         }
 
         [Test]

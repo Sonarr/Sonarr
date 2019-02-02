@@ -18,7 +18,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly Logger _logger;
 
         public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 3;
-        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 4;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 5;
 
         public VideoFileInfoReader(IDiskProvider diskProvider, Logger logger)
         {
@@ -128,6 +128,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     string videoProfile = mediaInfo.Get(StreamKind.Video, 0, "Format_Profile").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
                     string audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
 
+                    var videoColourPrimaries = mediaInfo.Get(StreamKind.Video, 0, "colour_primaries");
+                    var videoTransferCharacteristics = mediaInfo.Get(StreamKind.Video, 0, "transfer_characteristics");
+
                     int.TryParse(audioChannelsStr, out audioChannels);
                     var mediaInfoModel = new MediaInfoModel
                     {
@@ -138,6 +141,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         VideoCodecLibrary = mediaInfo.Get(StreamKind.Video, 0, "Encoded_Library"),
                         VideoBitrate = videoBitRate,
                         VideoBitDepth = videoBitDepth,
+                        VideoColourPrimaries = videoColourPrimaries,
+                        VideoTransferCharacteristics = videoTransferCharacteristics,
                         Height = height,
                         Width = width,
                         AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
