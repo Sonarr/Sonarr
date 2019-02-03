@@ -91,6 +91,11 @@ namespace NzbDrone.Common.Extensions
             return text.StartsWith(startsWith, StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public static bool EndsWithIgnoreCase(this string text, string startsWith)
+        {
+            return text.EndsWith(startsWith, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool EqualsIgnoreCase(this string text, string equals)
         {
             return text.Equals(equals, StringComparison.InvariantCultureIgnoreCase);
@@ -139,6 +144,11 @@ namespace NzbDrone.Common.Extensions
         public static string SplitCamelCase(this string input)
         {
             return CamelCaseRegex.Replace(input, match => " " + match.Value);
+        }
+
+        public static bool ContainsIgnoreCase(this IEnumerable<string> source, string value)
+        {
+            return source.Contains(value, StringComparer.InvariantCultureIgnoreCase);
         }
     }
 }

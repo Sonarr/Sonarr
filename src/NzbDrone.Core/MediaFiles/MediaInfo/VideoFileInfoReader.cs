@@ -18,7 +18,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly Logger _logger;
 
         public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 3;
-        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 4;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 5;
 
         public VideoFileInfoReader(IDiskProvider diskProvider, Logger logger)
         {
@@ -94,18 +94,20 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     int audioChannels;
                     int videoBitDepth;
                     decimal videoFrameRate;
+                    int videoMultiViewCount;
 
                     string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
                     string scanType = mediaInfo.Get(StreamKind.Video, 0, "ScanType");
                     int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Width"), out width);
                     int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Height"), out height);
-                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate_Nominal"), out videoBitRate);
+                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
                     if (videoBitRate <= 0)
                     {
-                        int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
+                        int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate_Nominal"), out videoBitRate);
                     }
                     decimal.TryParse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out videoFrameRate);
                     int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitDepth"), out videoBitDepth);
+                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "MultiView_Count"), out videoMultiViewCount);
 
                     //Runtime
                     int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
@@ -138,12 +140,16 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         VideoCodecLibrary = mediaInfo.Get(StreamKind.Video, 0, "Encoded_Library"),
                         VideoBitrate = videoBitRate,
                         VideoBitDepth = videoBitDepth,
+                        VideoMultiViewCount = videoMultiViewCount,
+                        VideoColourPrimaries = mediaInfo.Get(StreamKind.Video, 0, "colour_primaries"),
+                        VideoTransferCharacteristics = mediaInfo.Get(StreamKind.Video, 0, "transfer_characteristics"),
                         Height = height,
                         Width = width,
                         AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
                         AudioCodecID = mediaInfo.Get(StreamKind.Audio, 0, "CodecID"),
                         AudioProfile = audioProfile,
                         AudioCodecLibrary = mediaInfo.Get(StreamKind.Audio, 0, "Encoded_Library"),
+                        AudioAdditionalFeatures = mediaInfo.Get(StreamKind.Audio, 0, "Format_AdditionalFeatures"),
                         AudioBitrate = audioBitRate,
                         RunTime = GetBestRuntime(audioRuntime, videoRuntime, generalRuntime),
                         AudioStreamCount = streamCount,

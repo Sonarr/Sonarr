@@ -43,6 +43,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             var audioCodecID = mediaInfo.AudioCodecID ?? string.Empty;
             var audioProfile = mediaInfo.AudioProfile ?? string.Empty;
             var audioCodecLibrary = mediaInfo.AudioCodecLibrary ?? string.Empty;
+            var splitAdditionalFeatures = (mediaInfo.AudioAdditionalFeatures ?? string.Empty).Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
             if (audioFormat.IsNullOrWhiteSpace())
             {
@@ -71,6 +72,25 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (audioFormat.EqualsIgnoreCase("DTS"))
             {
+                if (splitAdditionalFeatures.ContainsIgnoreCase("XLL"))
+                {
+                    if (splitAdditionalFeatures.ContainsIgnoreCase("X"))
+                    {
+                        return "DTS-X";
+                    }
+                    return "DTS-HD MA";
+                }
+
+                if (splitAdditionalFeatures.ContainsIgnoreCase("ES"))
+                {
+                    return "DTS-ES";
+                }
+
+                if (splitAdditionalFeatures.ContainsIgnoreCase("XBR"))
+                {
+                    return "DTS-HD HRA";
+                }
+
                 return "DTS";
             }
 
@@ -109,6 +129,16 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (audioFormat.EqualsIgnoreCase("TrueHD"))
             {
+                return "TrueHD";
+            }
+
+            if (audioFormat.EqualsIgnoreCase("MLP FBA"))
+            {
+                if (splitAdditionalFeatures.ContainsIgnoreCase("16-ch"))
+                {
+                    return "TrueHD Atmos";
+                }
+
                 return "TrueHD";
             }
 
@@ -373,13 +403,16 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                                                 .Sum(s => decimal.Parse(s.Trim(), CultureInfo.InvariantCulture));
                 }
 
-
-                return Regex.Replace(audioChannelPositions, @"^\d+\sobjects", "", RegexOptions.Compiled | RegexOptions.IgnoreCase)
-                                            .Replace("Object Based / ", "")
-                                            .Split(new string[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
-                                            .FirstOrDefault()
-                                           ?.Split('/')
-                                            .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
+                if (audioChannelPositions.Contains("/"))
+                {
+                    return Regex.Replace(audioChannelPositions, @"^\d+\sobjects", "",
+                            RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                        .Replace("Object Based / ", "")
+                        .Split(new string[] {" / "}, StringSplitOptions.RemoveEmptyEntries)
+                        .FirstOrDefault()
+                        ?.Split('/')
+                        .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
+                }
             }
             catch (Exception e)
             {
@@ -401,7 +434,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             try
             {
-                return mediaInfo.AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
+                return audioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
             }
             catch (Exception e)
             {
