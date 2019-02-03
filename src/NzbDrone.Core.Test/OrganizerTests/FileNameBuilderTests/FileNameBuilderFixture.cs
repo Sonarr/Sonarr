@@ -520,15 +520,12 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be("South.Park.S15E06.City.Sushi.X264.DTS.[EN+ES+IT]");
         }
 
-        [TestCase(8, "BT.601 NTSC", "BT.709", "South.Park.S15E06.City.Sushi")]
+        [TestCase(8, "BT.601 NTSC", "BT.709", "South.Park.S15E06.City.Sushi.SDR")]
         [TestCase(10, "BT.2020", "PQ", "South.Park.S15E06.City.Sushi.HDR")]
-        [TestCase(8, "BT.2020", "PQ", "South.Park.S15E06.City.Sushi")]
-        [TestCase(10, "BT.601 NTSC", "PQ", "South.Park.S15E06.City.Sushi")]
-        [TestCase(10, "BT.2020", "BT.709", "South.Park.S15E06.City.Sushi")]
         [TestCase(10, "BT.2020", "HLG", "South.Park.S15E06.City.Sushi.HDR")]
         public void should_include_hdr_for_mediainfo_hdr_with_valid_properties(int bitDepth, string colourPrimaries, string transferCharacteristics, string expectedName)
         {
-            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.HDR}";
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
 
             _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel
             {
