@@ -22,5 +22,12 @@ namespace NzbDrone.Core.Parser
         {
             return _regex.Replace(input, _replacement);
         }
+
+        public bool TryReplace(ref string input)
+        {
+            var result = _regex.IsMatch(input);
+            input = _regex.Replace(input, _replacement);
+            return result;
+        }
     }
 }

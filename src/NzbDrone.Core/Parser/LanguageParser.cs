@@ -12,6 +12,11 @@ namespace NzbDrone.Core.Parser
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(LanguageParser));
 
+        private static readonly RegexReplace[] CleanSeriesTitleRegex = new[]
+            {
+                new RegexReplace(@".*?\.(S\d{2}E\d{2,4}\..*)", "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+            };
+
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -23,6 +28,12 @@ namespace NzbDrone.Core.Parser
 
         public static Language ParseLanguage(string title)
         {
+            foreach (var regex in CleanSeriesTitleRegex)
+            {
+                if (regex.TryReplace(ref title))
+                    break;
+            }
+
             var lowerTitle = title.ToLower();
 
             if (lowerTitle.Contains("english"))

@@ -213,5 +213,13 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Language.Id.Should().Be(Language.Czech.Id);
         }
 
+
+        [TestCase("Russian.Puppets.S01E07.Cold.Action.HDTV.XviD-Droned")]
+        public void should_not_parse_series_or_episode_title(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Language.Name.Should().Be(Language.English.Name);
+        }
+
     }
 }
