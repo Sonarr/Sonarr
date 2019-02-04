@@ -15,6 +15,8 @@ class About extends Component {
   render() {
     const {
       version,
+      packageVersion,
+      packageAuthor,
       isMonoRuntime,
       runtimeVersion,
       appData,
@@ -32,6 +34,14 @@ class About extends Component {
             title="Version"
             data={version}
           />
+
+          {
+            packageVersion &&
+              <DescriptionListItem
+                title="Package Version"
+                data={(packageAuthor ? `${packageVersion} by ${packageAuthor}` : packageVersion)}
+              />
+          }
 
           {
             isMonoRuntime &&
@@ -75,6 +85,8 @@ class About extends Component {
 
 About.propTypes = {
   version: PropTypes.string.isRequired,
+  packageVersion: PropTypes.string,
+  packageAuthor: PropTypes.string,
   isMonoRuntime: PropTypes.bool.isRequired,
   runtimeVersion: PropTypes.string.isRequired,
   appData: PropTypes.string.isRequired,

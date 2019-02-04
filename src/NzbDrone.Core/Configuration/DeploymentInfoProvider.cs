@@ -14,11 +14,12 @@ namespace NzbDrone.Core.Configuration
 {
     public interface IDeploymentInfoProvider
     {
-        Version PackageVersion { get; }
+        string PackageVersion { get; }
+        string PackageAuthor { get; }
         string PackageBranch { get; }
         UpdateMechanism PackageUpdateMechanism { get; }
 
-        Version ReleaseVersion { get; }
+        string ReleaseVersion { get; }
         string ReleaseBranch { get; }
 
         bool IsExternalUpdateMechanism { get; }
@@ -41,11 +42,12 @@ namespace NzbDrone.Core.Configuration
             {
                 var data = diskProvider.ReadAllText(packageInfoPath);
 
-                PackageVersion = ReadVersion(data, "PackageVersion");
+                PackageVersion = ReadValue(data, "PackageVersion");
+                PackageAuthor = ReadValue(data, "PackageAuthor");
                 PackageUpdateMechanism = ReadEnumValue(data, "UpdateMethod", UpdateMechanism.BuiltIn);
-                PackageBranch = ReadValue(data, "Branch", null);
+                PackageBranch = ReadValue(data, "Branch");
 
-                ReleaseVersion = ReadVersion(data, "ReleaseVersion");
+                ReleaseVersion = ReadValue(data, "ReleaseVersion");
 
                 if (PackageBranch.IsNotNullOrWhiteSpace())
                 {
@@ -57,8 +59,8 @@ namespace NzbDrone.Core.Configuration
             {
                 var data = diskProvider.ReadAllText(releaseInfoPath);
 
-                ReleaseVersion = ReadVersion(data, "ReleaseVersion", ReleaseVersion);
-                ReleaseBranch = ReadValue(data, "Branch", null);
+                ReleaseVersion = ReadValue(data, "ReleaseVersion", ReleaseVersion);
+                ReleaseBranch = ReadValue(data, "Branch");
 
                 if (ReleaseBranch.IsNotNullOrWhiteSpace())
                 {
@@ -69,7 +71,7 @@ namespace NzbDrone.Core.Configuration
             DefaultUpdateMechanism = PackageUpdateMechanism;
         }
 
-        private static string ReadValue(string fileData, string key, string defaultValue)
+        private static string ReadValue(string fileData, string key, string defaultValue = null)
         {
             var match = Regex.Match(fileData, "^" + key + "=(.*)$", RegexOptions.Multiline);
             if (match.Success)
@@ -83,7 +85,7 @@ namespace NzbDrone.Core.Configuration
         private static T ReadEnumValue<T>(string fileData, string key, T defaultValue)
             where T : struct
         {
-            var value = ReadValue(fileData, key, null);
+            var value = ReadValue(fileData, key);
             if (value != null && Enum.TryParse<T>(value, true, out var result))
             {
                 return result;
@@ -92,22 +94,12 @@ namespace NzbDrone.Core.Configuration
             return defaultValue;
         }
 
-        private static Version ReadVersion(string fileData, string key, Version defaultValue = null)
-        {
-            var value = ReadValue(fileData, key, null);
-            if (value != null && Version.TryParse(value, out var result))
-            {
-                return result;
-            }
-
-            return defaultValue;
-        }
-
-        public Version PackageVersion { get; private set; }
+        public string PackageVersion { get; private set; }
+        public string PackageAuthor { get; private set; }
         public string PackageBranch { get; private set; }
         public UpdateMechanism PackageUpdateMechanism { get; private set; }
 
-        public Version ReleaseVersion { get; set; }
+        public string ReleaseVersion { get; private set; }
         public string ReleaseBranch { get; set; }
 
 

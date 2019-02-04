@@ -75,6 +75,8 @@ namespace Sonarr.Api.V3.System
                        RuntimeVersion = _platformInfo.Version,
                        RuntimeName = PlatformInfo.Platform,
                        StartTime = _runtimeInfo.StartTime,
+                       PackageVersion = _deploymentInfoProvider.PackageVersion,
+                       PackageAuthor = _deploymentInfoProvider.PackageAuthor,
                        PackageUpdateMechanism = _deploymentInfoProvider.PackageUpdateMechanism
             }.AsResponse();
         }
