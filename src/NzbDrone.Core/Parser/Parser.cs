@@ -17,6 +17,13 @@ namespace NzbDrone.Core.Parser
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(Parser));
 
+        private static readonly RegexReplace[] PreSubstitutionRegex = new[]
+            {
+                // Korean series without season number, replace with S01Exxx and remove airdate.
+                new RegexReplace(@"\.E(\d{2,4})\.\d{6}\.(.*-NEXT)$", ".S01E$1.$2", RegexOptions.Compiled),
+
+            };
+
         private static readonly Regex[] ReportTitleRegex = new[]
             {
                 //Anime - Absolute Episode Number + Title + Season+Episode
@@ -382,6 +389,11 @@ namespace NzbDrone.Core.Parser
                 var releaseTitle = RemoveFileExtension(title);
 
                 var simpleTitle = SimpleTitleRegex.Replace(releaseTitle, string.Empty);
+
+                foreach (var replace in PreSubstitutionRegex)
+                {
+                    simpleTitle = replace.Replace(simpleTitle);
+                }
 
                 // TODO: Quick fix stripping [url] - prefixes.
                 simpleTitle = WebsitePrefixRegex.Replace(simpleTitle, string.Empty);

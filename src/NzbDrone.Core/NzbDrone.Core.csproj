@@ -785,6 +785,7 @@
     <Compile Include="Notifications\Plex\PlexTv\PlexTvService.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletDevice.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletDevicesResponse.cs" />
+    <Compile Include="Parser\RegexReplace.cs" />
     <Compile Include="Profiles\Languages\LanguageProfile.cs" />
     <Compile Include="Profiles\Languages\LanguageProfileInUseException.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
