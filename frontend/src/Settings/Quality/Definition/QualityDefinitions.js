@@ -44,7 +44,7 @@ class QualityDefinitions extends Component {
                   <QualityDefinitionConnector
                     key={item.id}
                     {...item}
-                    advancedSettings={advancedSettings }
+                    advancedSettings={advancedSettings}
                   />
                 );
               })
