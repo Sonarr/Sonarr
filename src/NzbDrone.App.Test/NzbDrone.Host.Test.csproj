@@ -126,12 +126,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent Condition="('$(OS)' == 'Windows_NT')">
-      xcopy /s /y "$(SolutionDir)\..\_output\NzbDrone.Mono.*"   "$(TargetDir)"
-      xcopy /s /y "$(SolutionDir)\..\_output\NzbDrone.Windows.*"   "$(TargetDir)"
+      xcopy /s /y "$(SolutionDir)\..\_output\Sonarr.Mono.*"   "$(TargetDir)"
+      xcopy /s /y "$(SolutionDir)\..\_output\Sonarr.Windows.*"   "$(TargetDir)"
     </PostBuildEvent>
     <PostBuildEvent Condition="('$(OS)' != 'Windows_NT')">
-      cp -rv $(SolutionDir)\..\_output\NzbDrone.Mono.* $(TargetDir) || true
-      cp -rv $(SolutionDir)\..\_output\NzbDrone.Windows.* $(TargetDir) || true
+      cp -rv $(SolutionDir)\..\_output\Sonarr.Mono.* $(TargetDir) || true
+      cp -rv $(SolutionDir)\..\_output\Sonarr.Windows.* $(TargetDir) || true
     </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
