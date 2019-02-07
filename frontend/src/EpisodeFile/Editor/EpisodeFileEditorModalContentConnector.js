@@ -10,20 +10,45 @@ import { deleteEpisodeFiles, updateEpisodeFiles } from 'Store/Actions/episodeFil
 import { fetchLanguageProfileSchema, fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
 import EpisodeFileEditorModalContent from './EpisodeFileEditorModalContent';
 
+function createSchemaSelector() {
+  return createSelector(
+    (state) => state.settings.languageProfiles,
+    (state) => state.settings.qualityProfiles,
+    (languageProfiles, qualityProfiles) => {
+      const languages = _.map(languageProfiles.schema.languages, 'language');
+      const qualities = getQualities(qualityProfiles.schema.items);
+
+      let error = null;
+
+      if (languageProfiles.schemaError) {
+        error = 'Unable to load languages';
+      } else if (qualityProfiles.schemaError) {
+        error = 'Unable to load qualities';
+      }
+
+      return {
+        isFetching: languageProfiles.isSchemaFetching || qualityProfiles.isSchemaFetching,
+        isPopulated: languageProfiles.isSchemaPopulated && qualityProfiles.isSchemaPopulated,
+        error,
+        languages,
+        qualities
+      };
+    }
+  );
+}
+
 function createMapStateToProps() {
   return createSelector(
     (state, { seasonNumber }) => seasonNumber,
     (state) => state.episodes,
     (state) => state.episodeFiles,
-    (state) => state.settings.languageProfiles.schema,
-    (state) => state.settings.qualityProfiles.schema,
+    createSchemaSelector(),
     createSeriesSelector(),
     (
       seasonNumber,
       episodes,
       episodeFiles,
-      languageProfilesSchema,
-      qualityProfileSchema,
+      schema,
       series
     ) => {
       const filtered = _.filter(episodes.items, (episode) => {
@@ -51,16 +76,12 @@ function createMapStateToProps() {
         };
       });
 
-      const languages = _.map(languageProfilesSchema.languages, 'language');
-      const qualities = getQualities(qualityProfileSchema.items);
-
       return {
+        ...schema,
         items,
         seriesType: series.seriesType,
         isDeleting: episodeFiles.isDeleting,
-        isSaving: episodeFiles.isSaving,
-        languages,
-        qualities
+        isSaving: episodeFiles.isSaving
       };
     }
   );
@@ -97,9 +118,6 @@ class EpisodeFileEditorModalContentConnector extends Component {
   }
 
   //
-  // Render
-
-  //
   // Listeners
 
   onLanguageChange = (episodeFileIds, languageId) => {
@@ -119,6 +137,9 @@ class EpisodeFileEditorModalContentConnector extends Component {
 
     this.props.dispatchUpdateEpisodeFiles({ episodeFileIds, quality });
   }
+
+  //
+  // Render
 
   render() {
     const {

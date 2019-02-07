@@ -159,6 +159,7 @@ class SeriesImage extends Component {
             style={style}
             src={url}
             onError={this.onError}
+            onLoad={this.onLoad}
           />
         </LazyLoad>
       );

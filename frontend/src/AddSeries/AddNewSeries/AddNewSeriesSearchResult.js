@@ -78,12 +78,14 @@ class AddNewSeriesSearchResult extends Component {
           {...linkProps}
         >
           {
-            !isSmallScreen &&
-            <SeriesPoster
-              className={styles.poster}
-              images={images}
-              size={250}
-            />
+            isSmallScreen ?
+              null :
+              <SeriesPoster
+                className={styles.poster}
+                images={images}
+                size={250}
+                overflow={true}
+              />
           }
 
           <div>
@@ -91,18 +93,22 @@ class AddNewSeriesSearchResult extends Component {
               {title}
 
               {
-                !title.contains(year) && !!year &&
-                <span className={styles.year}>({year})</span>
+                !title.contains(year) && year ?
+                  <span className={styles.year}>
+                    ({year})
+                  </span> :
+                  null
               }
 
               {
-                isExistingSeries &&
-                <Icon
-                  className={styles.alreadyExistsIcon}
-                  name={icons.CHECK_CIRCLE}
-                  size={36}
-                  title="Already in your library"
-                />
+                isExistingSeries ?
+                  <Icon
+                    className={styles.alreadyExistsIcon}
+                    name={icons.CHECK_CIRCLE}
+                    size={36}
+                    title="Already in your library"
+                  /> :
+                  null
               }
             </div>
 
@@ -115,27 +121,30 @@ class AddNewSeriesSearchResult extends Component {
               </Label>
 
               {
-                !!network &&
-                <Label size={sizes.LARGE}>
-                  {network}
-                </Label>
+                network ?
+                  <Label size={sizes.LARGE}>
+                    {network}
+                  </Label> :
+                  null
               }
 
               {
-                !!seasonCount &&
-                <Label size={sizes.LARGE}>
-                  {seasons}
-                </Label>
+                seasonCount ?
+                  <Label size={sizes.LARGE}>
+                    {seasons}
+                  </Label> :
+                  null
               }
 
               {
-                status === 'ended' &&
-                <Label
-                  kind={kinds.DANGER}
-                  size={sizes.LARGE}
-                >
+                status === 'ended' ?
+                  <Label
+                    kind={kinds.DANGER}
+                    size={sizes.LARGE}
+                  >
                   Ended
-                </Label>
+                  </Label> :
+                  null
               }
             </div>
 

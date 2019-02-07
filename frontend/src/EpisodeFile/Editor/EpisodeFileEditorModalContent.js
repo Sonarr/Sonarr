@@ -5,10 +5,11 @@ import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import { kinds } from 'Helpers/Props';
-import ConfirmModal from 'Components/Modal/ConfirmModal';
+import SelectInput from 'Components/Form/SelectInput';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
-import SelectInput from 'Components/Form/SelectInput';
+import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import ConfirmModal from 'Components/Modal/ConfirmModal';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -140,6 +141,9 @@ class EpisodeFileEditorModalContent extends Component {
     const {
       seasonNumber,
       isDeleting,
+      isFetching,
+      isPopulated,
+      error,
       items,
       languages,
       qualities,
@@ -182,14 +186,27 @@ class EpisodeFileEditorModalContent extends Component {
 
         <ModalBody>
           {
-            !items.length &&
-              <div>
-                No episode files to manage.
-              </div>
+            isFetching && !isPopulated ?
+              <LoadingIndicator /> :
+              null
           }
 
           {
-            !!items.length &&
+            !isFetching && error ?
+              <div>{error}</div> :
+              null
+          }
+
+          {
+            isPopulated && !items.length ?
+              <div>
+                No episode files to manage.
+              </div>:
+              null
+          }
+
+          {
+            isPopulated && items.length ?
               <Table
                 columns={columns}
                 selectAll={true}
@@ -212,7 +229,8 @@ class EpisodeFileEditorModalContent extends Component {
                     })
                   }
                 </TableBody>
-              </Table>
+              </Table> :
+              null
           }
         </ModalBody>
 
@@ -272,6 +290,9 @@ class EpisodeFileEditorModalContent extends Component {
 EpisodeFileEditorModalContent.propTypes = {
   seasonNumber: PropTypes.number,
   isDeleting: PropTypes.bool.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  isPopulated: PropTypes.bool.isRequired,
+  error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   qualities: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -265,13 +265,13 @@ class Missing extends Component {
                   onConfirm={this.onSearchAllMissingConfirmed}
                   onCancel={this.onConfirmSearchAllMissingModalClose}
                 />
-
-                <InteractiveImportModal
-                  isOpen={isInteractiveImportModalOpen}
-                  onModalClose={this.onInteractiveImportModalClose}
-                />
               </div>
           }
+
+          <InteractiveImportModal
+            isOpen={isInteractiveImportModalOpen}
+            onModalClose={this.onInteractiveImportModalClose}
+          />
         </PageContentBodyConnector>
       </PageContent>
     );

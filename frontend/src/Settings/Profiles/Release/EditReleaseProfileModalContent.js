@@ -13,6 +13,9 @@ import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import styles from './EditReleaseProfileModalContent.css';
 
+// Tab, enter, and comma
+const tagInputDelimiters = [9, 13, 188];
+
 function EditReleaseProfileModalContent(props) {
   const {
     isSaving,
@@ -51,6 +54,7 @@ function EditReleaseProfileModalContent(props) {
               helpText="The release must contain at least one of these terms (case insensitive)"
               kind={kinds.SUCCESS}
               placeholder="Add new restriction"
+              delimiters={tagInputDelimiters}
               {...required}
               onChange={onInputChange}
             />
@@ -65,6 +69,7 @@ function EditReleaseProfileModalContent(props) {
               helpText="The release will be rejected if it contains one or more of terms (case insensitive)"
               kind={kinds.DANGER}
               placeholder="Add new restriction"
+              delimiters={tagInputDelimiters}
               {...ignored}
               onChange={onInputChange}
             />

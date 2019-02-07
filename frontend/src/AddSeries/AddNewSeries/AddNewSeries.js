@@ -100,6 +100,7 @@ class AddNewSeries extends Component {
               name="seriesLookup"
               value={term}
               placeholder="eg. Breaking Bad, tvdb:####"
+              autoFocus={true}
               onChange={this.onSearchInputChange}
             />
 
