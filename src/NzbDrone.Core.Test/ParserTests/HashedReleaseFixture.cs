@@ -94,6 +94,20 @@ namespace NzbDrone.Core.Test.ParserTests
                 "Sons of Anarchy",
                 Quality.HDTV720p,
                 null
+            },
+            new object[]
+            {
+                @"50E50S.denorD.mkv".AsOsAgnostic(),
+                "Droned",
+                Quality.HDTV720p,
+                null
+            },
+            new object[]
+            {
+                @"C:\Test\XxQVHK4GJMP3n2dLpmhW\XxQVHK4GJMP3n2dLpmhW\50E50S.denorD.mkv".AsOsAgnostic(),
+                "Droned",
+                Quality.HDTV720p,
+                null
             }
         };
 
