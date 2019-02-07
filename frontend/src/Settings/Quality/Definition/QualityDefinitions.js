@@ -13,6 +13,7 @@ class QualityDefinitions extends Component {
   render() {
     const {
       items,
+      advancedSettings,
       ...otherProps
     } = this.props;
 
@@ -26,7 +27,14 @@ class QualityDefinitions extends Component {
             <div className={styles.quality}>Quality</div>
             <div className={styles.title}>Title</div>
             <div className={styles.sizeLimit}>Size Limit</div>
-            <div className={styles.megabytesPerMinute}>Megabytes Per Minute</div>
+
+            {
+              advancedSettings ?
+                <div className={styles.megabytesPerMinute}>
+                  Megabytes Per Minute
+                </div> :
+                null
+            }
           </div>
 
           <div className={styles.definitions}>
@@ -36,6 +44,7 @@ class QualityDefinitions extends Component {
                   <QualityDefinitionConnector
                     key={item.id}
                     {...item}
+                    advancedSettings={advancedSettings }
                   />
                 );
               })
@@ -57,7 +66,8 @@ QualityDefinitions.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   defaultProfile: PropTypes.object,
-  items: PropTypes.arrayOf(PropTypes.object).isRequired
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  advancedSettings: PropTypes.bool.isRequired
 };
 
 export default QualityDefinitions;

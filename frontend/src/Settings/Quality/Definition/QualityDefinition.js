@@ -2,28 +2,38 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactSlider from 'react-slider';
 import formatBytes from 'Utilities/Number/formatBytes';
+import roundNumber from 'Utilities/Number/roundNumber';
 import { kinds } from 'Helpers/Props';
 import Label from 'Components/Label';
 import NumberInput from 'Components/Form/NumberInput';
 import TextInput from 'Components/Form/TextInput';
 import styles from './QualityDefinition.css';
 
+const MIN = 0;
+const MAX = 400;
+
 const slider = {
-  min: 0,
-  max: 200,
+  min: MIN,
+  max: roundNumber(Math.pow(MAX, 1 / 1.1)),
   step: 0.1
 };
 
-function getValue(value) {
-  if (value < slider.min) {
-    return slider.min;
+function getValue(inputValue) {
+  if (inputValue < MIN) {
+    return MIN;
   }
 
-  if (value > slider.max) {
-    return slider.max;
+  if (inputValue > MAX) {
+    return MAX;
   }
 
-  return value;
+  return roundNumber(inputValue);
+}
+
+function getSliderValue(value, defaultValue) {
+  const sliderValue = value ? Math.pow(value, 1 / 1.1) : defaultValue;
+
+  return roundNumber(sliderValue);
 }
 
 class QualityDefinition extends Component {
@@ -35,6 +45,11 @@ class QualityDefinition extends Component {
     super(props, context);
 
     this._forceUpdateTimeout = null;
+
+    this.state = {
+      sliderMinSize: getSliderValue(props.minSize, slider.min),
+      sliderMaxSize: getSliderValue(props.maxSize, slider.max)
+    };
   }
 
   componentDidMount() {
@@ -54,14 +69,36 @@ class QualityDefinition extends Component {
   //
   // Listeners
 
-  onSizeChange = ([minSize, maxSize]) => {
-    maxSize = maxSize === slider.max ? null : maxSize;
+  onSliderChange = ([sliderMinSize, sliderMaxSize]) => {
+    this.setState({
+      sliderMinSize,
+      sliderMaxSize
+    });
 
-    this.props.onSizeChange({ minSize, maxSize });
+    this.props.onSizeChange({
+      minSize: roundNumber(Math.pow(sliderMinSize, 1.1)),
+      maxSize: sliderMaxSize === slider.max ? null : roundNumber(Math.pow(sliderMaxSize, 1.1))
+    });
+  }
+
+  onAfterSliderChange = () => {
+    const {
+      minSize,
+      maxSize
+    } = this.props;
+
+    this.setState({
+      sliderMiSize: getSliderValue(minSize, slider.min),
+      sliderMaxSize: getSliderValue(maxSize, slider.max)
+    });
   }
 
   onMinSizeChange = ({ value }) => {
     const minSize = getValue(value);
+
+    this.setState({
+      sliderMinSize: getSliderValue(minSize, slider.min)
+    });
 
     this.props.onSizeChange({
       minSize,
@@ -70,7 +107,11 @@ class QualityDefinition extends Component {
   }
 
   onMaxSizeChange = ({ value }) => {
-    const maxSize = value === slider.max ? null : getValue(value);
+    const maxSize = value === MAX ? null : getValue(value);
+
+    this.setState({
+      sliderMaxSize: getSliderValue(maxSize, slider.max)
+    });
 
     this.props.onSizeChange({
       minSize: this.props.minSize,
@@ -91,6 +132,11 @@ class QualityDefinition extends Component {
       advancedSettings,
       onTitleChange
     } = this.props;
+
+    const {
+      sliderMinSize,
+      sliderMaxSize
+    } = this.state;
 
     const minBytes = minSize * 1024 * 1024;
     const minThirty = formatBytes(minBytes * 30, 2);
@@ -120,13 +166,14 @@ class QualityDefinition extends Component {
             max={slider.max}
             step={slider.step}
             minDistance={10}
-            value={[minSize || slider.min, maxSize || slider.max]}
+            value={[sliderMinSize, sliderMaxSize]}
             withBars={true}
             snapDragDisabled={true}
             className={styles.slider}
             barClassName={styles.bar}
             handleClassName={styles.handle}
-            onChange={this.onSizeChange}
+            onChange={this.onSliderChange}
+            onAfterChange={this.onAfterSliderChange}
           />
 
           <div className={styles.sizes}>
@@ -151,9 +198,10 @@ class QualityDefinition extends Component {
                 <NumberInput
                   className={styles.sizeInput}
                   name={`${id}.min`}
-                  value={minSize || slider.min}
-                  min={slider.min}
-                  max={maxSize ? maxSize - 10 : slider.max - 10}
+                  value={minSize || MIN}
+                  min={MIN}
+                  max={maxSize ? maxSize - 10 : MAX - 10}
+                  step={0.1}
                   isFloat={true}
                   onChange={this.onMinSizeChange}
                 />
@@ -165,9 +213,10 @@ class QualityDefinition extends Component {
                 <NumberInput
                   className={styles.sizeInput}
                   name={`${id}.min`}
-                  value={maxSize || slider.max}
+                  value={maxSize || MAX}
                   min={minSize + 10}
-                  max={slider.max}
+                  max={MAX}
+                  step={0.1}
                   isFloat={true}
                   onChange={this.onMaxSizeChange}
                 />

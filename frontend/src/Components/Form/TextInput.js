@@ -127,6 +127,7 @@ class TextInput extends Component {
       hasError,
       hasWarning,
       hasButton,
+      step,
       onBlur
     } = this.props;
 
@@ -146,6 +147,7 @@ class TextInput extends Component {
         )}
         name={name}
         value={value}
+        step={step}
         onChange={this.onChange}
         onFocus={this.onFocus}
         onBlur={onBlur}
@@ -168,6 +170,7 @@ TextInput.propTypes = {
   hasError: PropTypes.bool,
   hasWarning: PropTypes.bool,
   hasButton: PropTypes.bool,
+  step: PropTypes.number,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,

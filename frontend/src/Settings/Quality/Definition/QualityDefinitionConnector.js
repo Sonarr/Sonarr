@@ -5,12 +5,6 @@ import { setQualityDefinitionValue } from 'Store/Actions/settingsActions';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import QualityDefinition from './QualityDefinition';
 
-function mapStateToProps(state) {
-  return {
-    advancedSettings: state.settings.advancedSettings
-  };
-}
-
 const mapDispatchToProps = {
   setQualityDefinitionValue,
   clearPendingChanges
@@ -40,7 +34,7 @@ class QualityDefinitionConnector extends Component {
       this.props.setQualityDefinitionValue({ id, name: 'minSize', value: minSize });
     }
 
-    if (minSize !== currentMaxSize) {
+    if (maxSize !== currentMaxSize) {
       this.props.setQualityDefinitionValue({ id, name: 'maxSize', value: maxSize });
     }
   }
@@ -67,4 +61,4 @@ QualityDefinitionConnector.propTypes = {
   clearPendingChanges: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(QualityDefinitionConnector);
+export default connect(null, mapDispatchToProps)(QualityDefinitionConnector);
