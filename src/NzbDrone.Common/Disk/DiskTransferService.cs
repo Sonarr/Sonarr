@@ -56,7 +56,7 @@ namespace NzbDrone.Common.Disk
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
 
-            if (mode == TransferMode.Move)
+            if (mode == TransferMode.Move && !_diskProvider.FolderExists(targetPath))
             {
                 if (verificationMode == DiskTransferVerificationMode.TryTransactional || verificationMode == DiskTransferVerificationMode.VerifyOnly)
                 {

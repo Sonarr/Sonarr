@@ -814,6 +814,24 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        public void TransferFolder_should_not_use_movefolder_if_on_same_mount_but_target_already_exists()
+        {
+            WithEmulatedDiskProvider();
+
+            var src = @"C:\Base1\TestDir1".AsOsAgnostic();
+            var dst = @"C:\Base1\TestDir2".AsOsAgnostic();
+
+            WithMockMount(@"C:\Base1".AsOsAgnostic());
+            WithExistingFile(@"C:\Base1\TestDir1\test.file.txt".AsOsAgnostic());
+            WithExistingFolder(dst);
+
+            Subject.TransferFolder(src, dst, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.MoveFolder(src, dst), Times.Never());
+        }
+
+        [Test]
         public void TransferFolder_should_not_use_movefolder_if_on_same_mount_but_transactional()
         {
             WithEmulatedDiskProvider();
