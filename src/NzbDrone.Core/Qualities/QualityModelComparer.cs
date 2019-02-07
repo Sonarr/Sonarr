@@ -31,8 +31,8 @@ namespace NzbDrone.Core.Qualities
 
         public int Compare(Quality left, Quality right, bool respectGroupOrder)
         {
-            var leftIndex = _profile.GetIndex(left);
-            var rightIndex = _profile.GetIndex(right);
+            var leftIndex = _profile.GetIndex(left, respectGroupOrder);
+            var rightIndex = _profile.GetIndex(right, respectGroupOrder);
 
             return leftIndex.CompareTo(rightIndex, respectGroupOrder);
         }
