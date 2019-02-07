@@ -50,6 +50,7 @@ function createCleanSeriesSelector() {
           alternateTitles: alternateTitles.map((alternateTitle) => {
             return {
               title: alternateTitle.title,
+              sortTitle: alternateTitle.sortTitle,
               cleanTitle: jdu.replace(alternateTitle.title).toLowerCase()
             };
           }),
@@ -58,10 +59,10 @@ function createCleanSeriesSelector() {
           })
         };
       }).sort((a, b) => {
-        if (a.cleanTitle < b.cleanTitle) {
+        if (a.sortTitle < b.sortTitle) {
           return -1;
         }
-        if (a.cleanTitle > b.cleanTitle) {
+        if (a.sortTitle > b.sortTitle) {
           return 1;
         }
 
