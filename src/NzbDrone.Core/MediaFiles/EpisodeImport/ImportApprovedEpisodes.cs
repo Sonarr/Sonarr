@@ -164,7 +164,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             var path = localEpisode.Path;
 
-            if (downloadClientItem != null)
+            if (downloadClientItem != null && !downloadClientItem.OutputPath.IsEmpty)
             {
                 var outputDirectory = downloadClientItem.OutputPath.Directory.ToString();
 
