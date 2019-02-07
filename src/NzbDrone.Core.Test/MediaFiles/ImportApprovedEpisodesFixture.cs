@@ -384,5 +384,22 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}\\subfolder\\{name}.mkv".AsOsAgnostic())));
         }
+
+        [Test]
+        public void should_use_folder_info_release_title_to_find_relative_path_when_download_client_item_has_an_empty_output_path()
+        {
+            var name = "Series.Title.S01E01.720p.HDTV.x264-Sonarr";
+            var outputPath = Path.Combine(@"C:\Test\Unsorted\TV\".AsOsAgnostic(), name);
+            var localEpisode = _approvedDecisions.First().LocalEpisode;
+
+            _downloadClientItem.OutputPath = new OsPath();
+            localEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo { ReleaseTitle = name };
+            localEpisode.Path = Path.Combine(outputPath, "subfolder", name + ".mkv");
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}\\subfolder\\{name}.mkv".AsOsAgnostic())));
+        }
+
     }
 }
