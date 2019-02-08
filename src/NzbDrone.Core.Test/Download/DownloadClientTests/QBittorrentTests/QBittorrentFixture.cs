@@ -37,8 +37,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
 
             Mocker.GetMock<IQBittorrentProxy>()
-                .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
-                .Returns(new QBittorrentPreferences());
+                  .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
+                  .Returns(new QBittorrentPreferences());
+
+            Mocker.GetMock<IQBittorrentProxySelector>()
+                  .Setup(s => s.GetProxy(It.IsAny<QBittorrentSettings>(), It.IsAny<bool>()))
+                  .Returns(Mocker.GetMock<IQBittorrentProxy>().Object);
         }
 
         protected void GivenRedirectToMagnet()
@@ -507,6 +511,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             var torrent = Newtonsoft.Json.JsonConvert.DeserializeObject<QBittorrentTorrent>(json);
             torrent.Eta.ToString().Should().Be("18446744073709335000");
 
+        }
+
+        [Test]
+        public void Test_should_force_api_version_check()
+        {
+            // Set TestConnection up to fail quick
+            Mocker.GetMock<IQBittorrentProxy>()
+                  .Setup(v => v.GetApiVersion(It.IsAny<QBittorrentSettings>()))
+                  .Returns(new Version(1, 0));
+
+            Subject.Test();
+
+            Mocker.GetMock<IQBittorrentProxySelector>()
+                  .Verify(v => v.GetProxy(It.IsAny<QBittorrentSettings>(), true), Times.Once());
         }
     }
 }
