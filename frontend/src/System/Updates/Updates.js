@@ -19,6 +19,7 @@ class Updates extends Component {
 
   render() {
     const {
+      currentVersion,
       isFetching,
       isPopulated,
       updatesError,
@@ -133,12 +134,24 @@ class Updates extends Component {
                           <div className={styles.date}>{formatDate(update.releaseDate, shortDateFormat)}</div>
 
                           {
-                            update.branch !== 'master' &&
+                            update.branch === 'master' ?
+                              null:
                               <Label
-                                className={styles.branch}
+                                className={styles.label}
                               >
                                 {update.branch}
                               </Label>
+                          }
+
+                          {
+                            update.version === currentVersion ?
+                              <Label
+                                className={styles.label}
+                                kind={kinds.SUCCESS}
+                              >
+                                Currently Installed
+                              </Label> :
+                              null
                           }
                         </div>
 
@@ -189,6 +202,7 @@ class Updates extends Component {
 }
 
 Updates.propTypes = {
+  currentVersion: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
   updatesError: PropTypes.object,

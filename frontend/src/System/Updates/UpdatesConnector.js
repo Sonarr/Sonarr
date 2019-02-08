@@ -12,11 +12,18 @@ import Updates from './Updates';
 
 function createMapStateToProps() {
   return createSelector(
+    (state) => state.app.version,
     (state) => state.system.updates,
     (state) => state.settings.general,
     createUISettingsSelector(),
     createCommandExecutingSelector(commandNames.APPLICATION_UPDATE),
-    (updates, generalSettings, uiSettings, isInstallingUpdate) => {
+    (
+      currentVersion,
+      updates,
+      generalSettings,
+      uiSettings,
+      isInstallingUpdate
+    ) => {
       const {
         error: updatesError,
         items
@@ -26,6 +33,7 @@ function createMapStateToProps() {
       const isPopulated = updates.isPopulated && generalSettings.isPopulated;
 
       return {
+        currentVersion,
         isFetching,
         isPopulated,
         updatesError,
