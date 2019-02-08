@@ -58,6 +58,7 @@ export const defaultState = {
       {
         name: 'status',
         columnLabel: 'Status',
+        isSortable: true,
         isVisible: true,
         isModifiable: false
       },

@@ -142,6 +142,8 @@ namespace Sonarr.Api.V3.Queue
         {
             switch (pagingSpec.SortKey)
             {
+                case "status":
+                    return q => q.Status;
                 case "series.sortTitle":
                     return q => q.Series?.SortTitle;
                 case "episode":
