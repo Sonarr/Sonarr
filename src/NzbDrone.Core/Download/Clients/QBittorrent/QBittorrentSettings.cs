@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             Host = "localhost";
             Port = 8080;
             TvCategory = "tv-sonarr";
+            UseApiV2 = true;
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
@@ -52,6 +53,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         [FieldDefinition(8, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use a secure connection. See Options -> Web UI -> 'Use HTTPS instead of HTTP' in qBittorrent.")]
         public bool UseSsl { get; set; }
 
+        [FieldDefinition(9, Label = "Use API V2", Type = FieldType.Checkbox, HelpText = "Uncheck to use older qBittorrent API (When using qBittorent < v4.0.0).")]
+        public bool UseApiV2 { get; set; }
+        
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
