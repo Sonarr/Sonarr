@@ -73,13 +73,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             if (settings.UseApiV2)
             {
                 request = BuildRequest(settings).Resource("/api/v2/torrents/info")
-                                                .AddQueryParam("category", settings.MovieCategory);
+                                                .AddQueryParam("category", settings.TvCategory);
             }
             else
             {
                 request = BuildRequest(settings).Resource("/query/torrents")
-                                                .AddQueryParam("label", settings.MovieCategory)
-                                                .AddQueryParam("category", settings.MovieCategory);
+                                                .AddQueryParam("label", settings.TvCategory)
+                                                .AddQueryParam("category", settings.TvCategory);
             }
 
             var response = ProcessRequest<List<QBittorrentTorrent>>(request, settings);
