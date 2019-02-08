@@ -42,6 +42,7 @@
 .info {
   border-color: $infoColor;
   background-color: $infoColor;
+  color: $themeLightColor;
 
   &.outline {
     color: $infoColor;
@@ -71,6 +72,7 @@
 .success {
   border-color: $successColor;
   background-color: $successColor;
+  color: #eee;
 
   &.outline {
     color: $successColor;
