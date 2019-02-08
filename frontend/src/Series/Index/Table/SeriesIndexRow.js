@@ -19,6 +19,7 @@ import SeriesTitleLink from 'Series/SeriesTitleLink';
 import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import SeriesBanner from 'Series/SeriesBanner';
+import hasGrowableColumns from './hasGrowableColumns';
 import SeriesStatusCell from './SeriesStatusCell';
 import styles from './SeriesIndexRow.css';
 
@@ -154,7 +155,8 @@ class SeriesIndexRow extends Component {
                   key={name}
                   className={classNames(
                     styles[name],
-                    showBanners && styles.banner
+                    showBanners && styles.banner,
+                    showBanners && !hasGrowableColumns(columns) && styles.bannerGrow
                   )}
                 >
                   {
@@ -307,8 +309,10 @@ class SeriesIndexRow extends Component {
                 );
               }
 
-              const seasonStatistics = latestSeason.statistics;
-              const progress = seasonStatistics.episodeCount ? seasonStatistics.episodeFileCount / seasonStatistics.episodeCount * 100 : 100;
+              const seasonStatistics = latestSeason.statistics || {};
+              const progress = seasonStatistics.episodeCount ?
+                seasonStatistics.episodeFileCount / seasonStatistics.episodeCount * 100 :
+                100;
 
               return (
                 <VirtualTableRowCell

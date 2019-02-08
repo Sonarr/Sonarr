@@ -6,6 +6,7 @@ import IconButton from 'Components/Link/IconButton';
 import VirtualTableHeader from 'Components/Table/VirtualTableHeader';
 import VirtualTableHeaderCell from 'Components/Table/VirtualTableHeaderCell';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import hasGrowableColumns from './hasGrowableColumns';
 import SeriesIndexTableOptionsConnector from './SeriesIndexTableOptionsConnector';
 import styles from './SeriesIndexHeader.css';
 
@@ -60,7 +61,8 @@ function SeriesIndexHeader(props) {
               key={name}
               className={classNames(
                 styles[name],
-                name === 'sortTitle' && showBanners && styles.banner
+                name === 'sortTitle' && showBanners && styles.banner,
+                name === 'sortTitle' && showBanners && !hasGrowableColumns(columns) && styles.bannerGrow
               )}
               name={name}
               isSortable={isSortable}

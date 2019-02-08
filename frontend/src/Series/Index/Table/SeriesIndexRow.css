@@ -27,6 +27,10 @@
   flex: 0 0 379px;
 }
 
+.bannerGrow {
+  flex-grow: 1;
+}
+
 .link {
   composes: link from 'Components/Link/Link.css';
 
