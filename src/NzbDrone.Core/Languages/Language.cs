@@ -64,8 +64,8 @@ namespace NzbDrone.Core.Languages
         public static Language Danish       { get { return new Language(6, "Danish"); } }
         public static Language Dutch        { get { return new Language(7, "Dutch"); } }
         public static Language Japanese     { get { return new Language(8, "Japanese"); } }
-        public static Language Cantonese    { get { return new Language(9, "Cantonese"); } }
-        public static Language Mandarin     { get { return new Language(10, "Mandarin"); } }
+        public static Language Icelandic    { get { return new Language(9, "Icelandic"); } }
+        public static Language Chinese     { get { return new Language(10, "Chinese"); } }
         public static Language Russian      { get { return new Language(11, "Russian"); } }
         public static Language Polish       { get { return new Language(12, "Polish"); } }
         public static Language Vietnamese   { get { return new Language(13, "Vietnamese"); } }
@@ -98,8 +98,8 @@ namespace NzbDrone.Core.Languages
                     Danish,
                     Dutch,
                     Japanese,
-                    Cantonese,
-                    Mandarin,
+                    Icelandic,
+                    Chinese,
                     Russian,
                     Polish,
                     Vietnamese,

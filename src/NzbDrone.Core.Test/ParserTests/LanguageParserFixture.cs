@@ -88,18 +88,30 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Language.Id.Should().Be(Language.Japanese.Id);
         }
 
-        [TestCase("Castle.2009.S01E14.Cantonese.HDTV.XviD-LOL")]
-        public void should_parse_language_cantonese(string postTitle)
+        [TestCase("Castle.2009.S01E14.Icelandic.HDTV.XviD-LOL")]
+        [TestCase("S.B.S01E03.1080p.WEB-DL.DD5.1.H.264-SbR Icelandic")]
+        public void should_parse_language_icelandic(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-            result.Language.Id.Should().Be(Language.Cantonese.Id);
+            result.Language.Id.Should().Be(Language.Icelandic.Id);
         }
 
+        [TestCase("Castle.2009.S01E14.Chinese.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.Cantonese.HDTV.XviD-LOL")]
         [TestCase("Castle.2009.S01E14.Mandarin.HDTV.XviD-LOL")]
-        public void should_parse_language_mandarin(string postTitle)
+        [TestCase("[abc] My Series - 01 [CHS]")]
+        [TestCase("[abc] My Series - 01 [CHT]")]
+        [TestCase("[abc] My Series - 01 [BIG5]")]
+        [TestCase("[abc] My Series - 01 [GB]")]
+        [TestCase("[abc] My Series - 01 [繁中]")]
+        [TestCase("[abc] My Series - 01 [繁体]")]
+        [TestCase("[abc] My Series - 01 [简繁外挂]")]
+        [TestCase("[abc] My Series - 01 [简繁内封字幕]")]
+        [TestCase("[ZERO字幕组]My Series/My Series[01][HDTV]")]
+        public void should_parse_language_chinese(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-            result.Language.Id.Should().Be(Language.Mandarin.Id);
+            result.Language.Id.Should().Be(Language.Chinese.Id);
         }
 
         [TestCase("Castle.2009.S01E14.Korean.HDTV.XviD-LOL")]
