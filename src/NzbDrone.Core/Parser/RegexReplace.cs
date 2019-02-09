@@ -10,23 +10,36 @@ namespace NzbDrone.Core.Parser
     public class RegexReplace
     {
         private readonly Regex _regex;
-        private readonly string _replacement;
+        private readonly string _replacementFormat;
+        private readonly MatchEvaluator _replacementFunc;
 
         public RegexReplace(string pattern, string replacement, RegexOptions regexOptions)
         {
             _regex = new Regex(pattern, regexOptions);
-            _replacement = replacement;
+            _replacementFormat = replacement;
+        }
+
+        public RegexReplace(string pattern, MatchEvaluator replacement, RegexOptions regexOptions)
+        {
+            _regex = new Regex(pattern, regexOptions);
+            _replacementFunc = replacement;
         }
 
         public string Replace(string input)
         {
-            return _regex.Replace(input, _replacement);
+            if (_replacementFunc != null)
+                return _regex.Replace(input, _replacementFunc);
+            else
+                return _regex.Replace(input, _replacementFormat);
         }
 
         public bool TryReplace(ref string input)
         {
             var result = _regex.IsMatch(input);
-            input = _regex.Replace(input, _replacement);
+            if (_replacementFunc != null)
+                input = _regex.Replace(input, _replacementFunc);
+            else
+                input = _regex.Replace(input, _replacementFormat);
             return result;
         }
     }
