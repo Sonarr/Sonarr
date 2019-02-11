@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
     {
         private readonly IQBittorrentProxy _proxy;
 
-        public QBittorrent(IQBittorrentProxy proxy,
+        public QBittorrent(IQBittorrentProxySelector proxySelector,
                            ITorrentFileInfoReader torrentFileInfoReader,
                            IHttpClient httpClient,
                            IConfigService configService,
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                            Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
-            _proxy = proxy;
+            _proxy = proxySelector.GetProxy(Settings);
         }
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             try
             {
                 var version = _proxy.GetVersion(Settings);
-                if (version < 5)
+                if (version < Version.Parse("1.5"))
                 {
                     // API version 5 introduced the "save_path" property in /query/torrents
                     return new NzbDroneValidationFailure("Host", "Unsupported client version")
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                         DetailedDescription = "Please upgrade to qBittorrent version 3.2.4 or higher."
                     };
                 }
-                else if (version < 6)
+                else if (version < Version.Parse("1.6"))
                 {
                     // API version 6 introduced support for labels
                     if (Settings.TvCategory.IsNotNullOrWhiteSpace())
