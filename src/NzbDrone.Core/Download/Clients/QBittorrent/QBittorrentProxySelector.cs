@@ -39,30 +39,39 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         private readonly ICacheManager _cacheManager;
         private readonly Logger _logger;
 
-        public  QBittorrentProxySelector(IHttpClient httpClient, ICacheManager cacheManager, Logger logger)
+        private readonly IQBittorrentProxy _proxyV1;
+        private readonly IQBittorrentProxy _proxyV2;
+
+        public  QBittorrentProxySelector(QBittorrentProxyV1 proxyV1,
+                                         QBittorrentProxyV2 proxyV2,
+                                         IHttpClient httpClient, 
+                                         ICacheManager cacheManager,
+                                         Logger logger)
         {
             _httpClient = httpClient;
             _cacheManager = cacheManager;
             _logger = logger;
+
+            _proxyV1 = proxyV1;
+            _proxyV2 = proxyV2;
         }
 
         public IQBittorrentProxy GetProxy(QBittorrentSettings settings)
         {
             //Try to get API version using V2 API call... If it fails, we will fall back to V1 API
-            var qBitV2 = new QBittorrentProxyV2(_httpClient, _cacheManager, _logger);
-            var version = qBitV2.GetVersion(settings);
+            var version = _proxyV2.GetVersion(settings);
 
             if (version.ToString() == "")
             {
                 // Return V1 Proxy
                 _logger.Debug("Using V1 Proxy");
-                return new QBittorrentProxyV1(_httpClient, _cacheManager, _logger);
+                return _proxyV1;
             }
             else
             {
                 // Return V2 Proxy
                 _logger.Debug("Using V2 Proxy");
-                return qBitV2;
+                return _proxyV2;
             }
 
         }
