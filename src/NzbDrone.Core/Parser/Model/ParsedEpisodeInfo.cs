@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Parser.Model
         public string ReleaseGroup { get; set; }
         public string ReleaseHash { get; set; }
         public int SeasonPart { get; set; }
+        public string ReleaseTokens { get; set; }
 
         public ParsedEpisodeInfo()
         {
@@ -103,6 +104,13 @@ namespace NzbDrone.Core.Parser.Model
             else if (AbsoluteEpisodeNumbers != null && AbsoluteEpisodeNumbers.Any())
             {
                 episodeString = string.Format("{0}", string.Join("-", AbsoluteEpisodeNumbers.Select(c => c.ToString("000"))));
+            }
+            else if (Special)
+            {
+                if (SeasonNumber != 0)
+                    episodeString = string.Format("[Unknown Season {0:00} Special]", SeasonNumber);
+                else
+                    episodeString = "[Unknown Special]";
             }
 
             return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);

@@ -450,7 +450,7 @@ namespace NzbDrone.Core.Parser
 
                             if (result != null)
                             {
-                                if (result.FullSeason && title.ContainsIgnoreCase("Special"))
+                                if (result.FullSeason && result.ReleaseTokens.ContainsIgnoreCase("Special"))
                                 {
                                     result.FullSeason = false;
                                     result.Special = true;
@@ -643,6 +643,8 @@ namespace NzbDrone.Core.Parser
             int airYear;
             int.TryParse(matchCollection[0].Groups["airyear"].Value, out airYear);
 
+            int lastSeasonEpisodeStringIndex = matchCollection[0].Groups["title"].EndIndex();
+
             ParsedEpisodeInfo result;
 
             if (airYear < 1900)
@@ -653,7 +655,11 @@ namespace NzbDrone.Core.Parser
                 {
                     int parsedSeason;
                     if (int.TryParse(seasonCapture.Value, out parsedSeason))
+                    {
                         seasons.Add(parsedSeason);
+
+                        lastSeasonEpisodeStringIndex = Math.Max(lastSeasonEpisodeStringIndex, seasonCapture.EndIndex());
+                    }
                 }
 
                 //If no season was found it should be treated as a mini series and season 1
@@ -688,6 +694,8 @@ namespace NzbDrone.Core.Parser
 
                         var count = last - first + 1;
                         result.EpisodeNumbers = Enumerable.Range(first, count).ToArray();
+
+                        lastSeasonEpisodeStringIndex = Math.Max(lastSeasonEpisodeStringIndex, episodeCaptures.Last().EndIndex());
                     }
 
                     if (absoluteEpisodeCaptures.Any())
@@ -707,6 +715,8 @@ namespace NzbDrone.Core.Parser
 
                             result.SpecialAbsoluteEpisodeNumbers = new decimal[] { first };
                             result.Special = true;
+
+                            lastSeasonEpisodeStringIndex = Math.Max(lastSeasonEpisodeStringIndex, absoluteEpisodeCaptures.First().EndIndex());
                         }
                         else
                         {
@@ -717,6 +727,8 @@ namespace NzbDrone.Core.Parser
                             {
                                 result.Special = true;
                             }
+
+                            lastSeasonEpisodeStringIndex = Math.Max(lastSeasonEpisodeStringIndex, absoluteEpisodeCaptures.Last().EndIndex());
                         }
                     }
 
@@ -782,12 +794,21 @@ namespace NzbDrone.Core.Parser
                     throw new InvalidDateException("Invalid date found: {0}", airDate);
                 }
 
+                lastSeasonEpisodeStringIndex = Math.Max(lastSeasonEpisodeStringIndex, matchCollection[0].Groups["airyear"].EndIndex());
+                lastSeasonEpisodeStringIndex = Math.Max(lastSeasonEpisodeStringIndex, matchCollection[0].Groups["airmonth"].EndIndex());
+                lastSeasonEpisodeStringIndex = Math.Max(lastSeasonEpisodeStringIndex, matchCollection[0].Groups["airday"].EndIndex());
+
                 result = new ParsedEpisodeInfo
                 {
                     ReleaseTitle = releaseTitle,
                     AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
                 };
             }
+
+            if (lastSeasonEpisodeStringIndex != releaseTitle.Length)
+                result.ReleaseTokens = releaseTitle.Substring(lastSeasonEpisodeStringIndex);
+            else
+                result.ReleaseTokens = releaseTitle;
 
             result.SeriesTitle = seriesName;
             result.SeriesTitleInfo = GetSeriesTitleInfo(result.SeriesTitle);
