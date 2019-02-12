@@ -64,13 +64,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             if (version.ToString() == "")
             {
                 // Return V1 Proxy
-                _logger.Debug("Using V1 Proxy");
+                _logger.Debug("qBittorrent application is using API version {0}.", version.ToString());
                 return _proxyV1;
             }
             else
             {
                 // Return V2 Proxy
-                _logger.Debug("Using V2 Proxy");
+                _logger.Debug("qBittorrent application is using API version {0}.", version.ToString());
                 return _proxyV2;
             }
 

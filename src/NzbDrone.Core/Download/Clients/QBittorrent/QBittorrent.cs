@@ -17,7 +17,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 {
     public class QBittorrent : TorrentClientBase<QBittorrentSettings>
     {
-        private readonly IQBittorrentProxy _proxy;
+        private readonly IQBittorrentProxySelector _proxySelector;
+        private IQBittorrentProxy _currentProxy;
 
         public QBittorrent(IQBittorrentProxySelector proxySelector,
                            ITorrentFileInfoReader torrentFileInfoReader,
@@ -28,16 +29,16 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                            Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
-            _proxy = proxySelector.GetProxy(Settings);
+            _proxySelector = proxySelector;
         }
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            _proxy.AddTorrentFromUrl(magnetLink, Settings);
+            GetProxy().AddTorrentFromUrl(magnetLink, Settings);
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                _proxy.SetTorrentLabel(hash.ToLower(), Settings.TvCategory, Settings);
+                GetProxy().SetTorrentLabel(hash.ToLower(), Settings.TvCategory, Settings);
             }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             if (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First ||
                 !isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First)
             {
-                _proxy.MoveTorrentToTopInQueue(hash.ToLower(), Settings);
+                GetProxy().MoveTorrentToTopInQueue(hash.ToLower(), Settings);
             }
 
             SetInitialState(hash.ToLower());
@@ -55,13 +56,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, Byte[] fileContent)
         {
-            _proxy.AddTorrentFromFile(filename, fileContent, Settings);
+            GetProxy().AddTorrentFromFile(filename, fileContent, Settings);
 
             try
             {
                 if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
-                    _proxy.SetTorrentLabel(hash.ToLower(), Settings.TvCategory, Settings);
+                    GetProxy().SetTorrentLabel(hash.ToLower(), Settings.TvCategory, Settings);
                 }
             }
             catch (Exception ex)
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 if (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First ||
                     !isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First)
                 {
-                    _proxy.MoveTorrentToTopInQueue(hash.ToLower(), Settings);
+                    GetProxy().MoveTorrentToTopInQueue(hash.ToLower(), Settings);
                 }
             }
             catch (Exception ex)
@@ -93,8 +94,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            var config = _proxy.GetConfig(Settings);
-            var torrents = _proxy.GetTorrents(Settings);
+            var config = GetProxy().GetConfig(Settings);
+            var torrents = GetProxy().GetTorrents(Settings);
 
             var queueItems = new List<DownloadClientItem>();
 
@@ -166,12 +167,12 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public override void RemoveItem(string hash, bool deleteData)
         {
-            _proxy.RemoveTorrent(hash.ToLower(), deleteData, Settings);
+            GetProxy().RemoveTorrent(hash.ToLower(), deleteData, Settings);
         }
 
         public override DownloadClientInfo GetStatus()
         {
-            var config = _proxy.GetConfig(Settings);
+            var config = GetProxy().GetConfig(Settings);
 
             var destDir = new OsPath(config.SavePath);
 
@@ -194,7 +195,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             try
             {
-                var version = _proxy.GetVersion(Settings);
+                var version = GetProxy().GetVersion(Settings);
                 if (version < Version.Parse("1.5"))
                 {
                     // API version 5 introduced the "save_path" property in /query/torrents
@@ -225,7 +226,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 }
 
                 // Complain if qBittorrent is configured to remove torrents on max ratio
-                var config = _proxy.GetConfig(Settings);
+                var config = GetProxy().GetConfig(Settings);
                 if (config.MaxRatioEnabled && config.RemoveOnMaxRatio)
                 {
                     return new NzbDroneValidationFailure(String.Empty, "qBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
@@ -275,7 +276,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             try
             {
-                var config = _proxy.GetConfig(Settings);
+                var config = GetProxy().GetConfig(Settings);
 
                 if (!config.QueueingEnabled)
                 {
@@ -302,7 +303,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             try
             {
-                _proxy.GetTorrents(Settings);
+                GetProxy().GetTorrents(Settings);
             }
             catch (Exception ex)
             {
@@ -320,13 +321,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 switch ((QBittorrentState)Settings.InitialState)
                 {
                     case QBittorrentState.ForceStart:
-                        _proxy.SetForceStart(hash, true, Settings);
+                        GetProxy().SetForceStart(hash, true, Settings);
                         break;
                     case QBittorrentState.Start:
-                        _proxy.ResumeTorrent(hash, Settings);
+                        GetProxy().ResumeTorrent(hash, Settings);
                         break;
                     case QBittorrentState.Pause:
-                        _proxy.PauseTorrent(hash, Settings);
+                        GetProxy().PauseTorrent(hash, Settings);
                         break;
                 }
             }
@@ -334,6 +335,15 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 _logger.Warn(ex, "Failed to set inital state for {0}.", hash);
             }
+        }
+
+        private IQBittorrentProxy GetProxy()
+        {
+            if (_currentProxy == null)
+            {
+                _currentProxy = _proxySelector.GetProxy(Settings);               
+            }
+            return _currentProxy;
         }
 
         protected TimeSpan? GetRemainingTime(QBittorrentTorrent torrent)
