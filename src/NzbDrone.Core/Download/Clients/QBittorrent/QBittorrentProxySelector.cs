@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
     public class QBittorrentProxySelector : IQBittorrentProxySelector
     {
         private readonly IHttpClient _httpClient;
-        private readonly ICacheManager _cacheManager;
+        private readonly ICached<IQBittorrentProxy> _proxyCache;
         private readonly Logger _logger;
 
         private readonly IQBittorrentProxy _proxyV1;
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                          Logger logger)
         {
             _httpClient = httpClient;
-            _cacheManager = cacheManager;
+            _proxyCache = cacheManager.GetCache<IQBittorrentProxy>(GetType());
             _logger = logger;
 
             _proxyV1 = proxyV1;
@@ -58,22 +58,24 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public IQBittorrentProxy GetProxy(QBittorrentSettings settings)
         {
-            //Try to get API version using V2 API call... If it fails, we will fall back to V1 API
-            var version = _proxyV2.GetVersion(settings);
+            return _proxyCache.Get(settings.ToString(), () =>
+             {
+                 //Try to get API version using V2 API call... If it fails, we will fall back to V1 API
+                 var version = _proxyV2.GetVersion(settings);
+                 if (version.ToString() == "")
+                 {
+                     // Return V1 Proxy
+                     _logger.Debug("qBittorrent application is using API version {0}.", version.ToString());
+                     return _proxyV1;
+                 }
+                 else
+                 {
+                     // Return V2 Proxy
+                     _logger.Debug("qBittorrent application is using API version {0}.", version.ToString());
+                     return _proxyV2;
+                 }
 
-            if (version.ToString() == "")
-            {
-                // Return V1 Proxy
-                _logger.Debug("qBittorrent application is using API version {0}.", version.ToString());
-                return _proxyV1;
-            }
-            else
-            {
-                // Return V2 Proxy
-                _logger.Debug("qBittorrent application is using API version {0}.", version.ToString());
-                return _proxyV2;
-            }
-
+             }, TimeSpan.FromMinutes(10.0));      
         }
     }
 }
