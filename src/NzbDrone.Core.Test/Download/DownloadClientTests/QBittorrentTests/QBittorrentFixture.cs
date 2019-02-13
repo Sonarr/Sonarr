@@ -37,8 +37,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
 
             Mocker.GetMock<IQBittorrentProxy>()
-                .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
-                .Returns(new QBittorrentPreferences());
+                  .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
+                  .Returns(new QBittorrentPreferences());
+
+            Mocker.GetMock<IQBittorrentProxySelector>()
+                  .Setup(s => s.GetProxy(It.IsAny<QBittorrentSettings>()))
+                  .Returns(Mocker.GetMock<IQBittorrentProxy>().Object);
         }
 
         protected void GivenRedirectToMagnet()
