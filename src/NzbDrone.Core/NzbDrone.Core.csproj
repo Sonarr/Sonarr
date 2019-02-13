@@ -778,7 +778,6 @@
     <Compile Include="Languages\LanguagesBelowCutoff.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateLanguage.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\AbsoluteEpisodeNumberSpecification.cs" />
-    <Compile Include="MediaFiles\MediaInfo\MediaInfoUpdater.cs" />
     <Compile Include="Notifications\Plex\PlexTv\PlexTvPinUrlResponse.cs" />
     <Compile Include="Notifications\Plex\PlexTv\PlexTvSignInUrlResponse.cs" />
     <Compile Include="Notifications\Plex\PlexTv\PlexTvPinResponse.cs" />

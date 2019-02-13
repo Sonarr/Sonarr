@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using System.IO;
+using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
@@ -10,19 +12,22 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public class UpdateMediaInfoService : IHandle<SeriesScannedEvent>
     {
+        private readonly IDiskProvider _diskProvider;
         private readonly IMediaFileService _mediaFileService;
+        private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IConfigService _configService;
-        private readonly IUpdateMediaInfo _mediaInfoUpdater;
         private readonly Logger _logger;
 
-        public UpdateMediaInfoService(IMediaFileService mediaFileService,
-            IConfigService configService,
-            IUpdateMediaInfo mediaInfoUpdater,
-            Logger logger)
+        public UpdateMediaInfoService(IDiskProvider diskProvider,
+                                IMediaFileService mediaFileService,
+                                IVideoFileInfoReader videoFileInfoReader,
+                                IConfigService configService,
+                                Logger logger)
         {
+            _diskProvider = diskProvider;
             _mediaFileService = mediaFileService;
+            _videoFileInfoReader = videoFileInfoReader;
             _configService = configService;
-            _mediaInfoUpdater = mediaInfoUpdater;
             _logger = logger;
         }
 
@@ -30,7 +35,21 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         {
             foreach (var mediaFile in mediaFiles)
             {
-                _mediaInfoUpdater.Update(mediaFile, series);
+                var path = Path.Combine(series.Path, mediaFile.RelativePath);
+
+                if (!_diskProvider.FileExists(path))
+                {
+                    _logger.Debug("Can't update MediaInfo because '{0}' does not exist", path);
+                    continue;
+                }
+
+                mediaFile.MediaInfo = _videoFileInfoReader.GetMediaInfo(path);
+
+                if (mediaFile.MediaInfo != null)
+                {
+                    _mediaFileService.Update(mediaFile);
+                    _logger.Debug("Updated MediaInfo for '{0}'", path);
+                }
             }
         }
 
