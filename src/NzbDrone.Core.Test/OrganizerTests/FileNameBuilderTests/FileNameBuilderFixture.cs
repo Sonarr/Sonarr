@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -737,6 +738,41 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(releaseGroup);
+        }
+
+        [TestCase(8, "BT.601 NTSC", "BT.709", "South.Park.S15E06.City.Sushi")]
+        [TestCase(10, "BT.2020", "PQ", "South.Park.S15E06.City.Sushi.HDR")]
+        [TestCase(10, "BT.2020", "HLG", "South.Park.S15E06.City.Sushi.HDR")]
+        [TestCase(0, null, null, "South.Park.S15E06.City.Sushi")]
+        public void should_include_hdr_for_mediainfo_videodynamicrange_with_valid_properties(int bitDepth, string colourPrimaries,
+            string transferCharacteristics, string expectedName)
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(videoBitDepth: bitDepth, videoColourPrimaries: colourPrimaries, videoTransferCharacteristics: transferCharacteristics);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
+                .Should().Be(expectedName);
+        }
+
+        private void GivenMediaInfoModel(string videoCodec = "AVC", string audioCodec = "DTS", int audioChannels = 6, int videoBitDepth = 8,
+            string videoColourPrimaries = "", string videoTransferCharacteristics = "", string audioLanguages = "English",
+            string subtitles = "English/Spanish/Italian")
+        {
+            _episodeFile.MediaInfo = new MediaInfoModel
+            {
+                VideoCodec = videoCodec,
+                AudioFormat = audioCodec,
+                AudioChannels = audioChannels,
+                AudioLanguages = audioLanguages,
+                Subtitles = subtitles,
+                VideoBitDepth = videoBitDepth,
+                VideoColourPrimaries = videoColourPrimaries,
+                VideoTransferCharacteristics = videoTransferCharacteristics,
+                SchemaRevision = 5
+            };
+
         }
     }
 }

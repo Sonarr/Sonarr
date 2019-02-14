@@ -586,6 +586,9 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{MediaInfo Simple}"] = m => $"{videoCodec} {audioCodec}";
 
             tokenHandlers["{MediaInfo Full}"] = m => $"{videoCodec} {audioCodec}{mediaInfoAudioLanguages} {mediaInfoSubtitleLanguages}";
+
+            tokenHandlers["{MediaInfo VideoDynamicRange}"] =
+                m => MediaInfoFormatter.FormatVideoDynamicRange(episodeFile.MediaInfo);
         }
 
         private void AddIdTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)
