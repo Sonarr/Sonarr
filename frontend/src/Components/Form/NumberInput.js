@@ -9,7 +9,7 @@ function parseValue(props, value) {
     max
   } = props;
 
-  if (value == null) {
+  if (value == null || value === '') {
     return min;
   }
 
@@ -33,14 +33,18 @@ class NumberInput extends Component {
     super(props, context);
 
     this.state = {
-      value: props.value.toString(),
+      value: props.value == null ? '' : props.value.toString(),
       isFocused: false
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.value !== prevProps.value && !this.state.isFocused) {
-      this.setState({ value: this.props.value.toString() });
+    const { value } = this.props;
+
+    if (value !== prevProps.value && !this.state.isFocused) {
+      this.setState({
+        value: value == null ? '' : value.toString()
+      });
     }
   }
 
@@ -69,19 +73,20 @@ class NumberInput extends Component {
 
     const { value } = this.state;
     const parsedValue = parseValue(this.props, value);
+    const stringValue = parsedValue == null ? '' : parsedValue.toString();
 
-    if (parsedValue.toString() === value) {
+    if (stringValue === value) {
       this.setState({ isFocused: false });
     } else {
       this.setState({
-        value: parsedValue.toString(),
+        value: stringValue,
         isFocused: false
       });
     }
 
     onChange({
       name,
-      value: parseValue(this.props, this.state.value)
+      value: parsedValue
     });
   }
 
