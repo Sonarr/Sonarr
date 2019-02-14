@@ -188,10 +188,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         private HttpRequestBuilder BuildRequest(QBittorrentSettings settings)
         {
-            var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port);
-            requestBuilder.LogResponseContent = true;
-            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
-
+            var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port)
+            {
+                LogResponseContent = true,
+                NetworkCredential = new NetworkCredential(settings.Username, settings.Password)
+            };
             return requestBuilder;
         }
 

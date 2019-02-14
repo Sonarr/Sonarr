@@ -101,21 +101,22 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             foreach (var torrent in torrents)
             {
-                var item = new DownloadClientItem();
-                item.DownloadId = torrent.Hash.ToUpper();
-                item.Category = torrent.Category.IsNotNullOrWhiteSpace() ? torrent.Category : torrent.Label;
-                item.Title = torrent.Name;
-                item.TotalSize = torrent.Size;
-                item.DownloadClient = Definition.Name;
-                item.RemainingSize = (long)(torrent.Size * (1.0 - torrent.Progress));
-                item.RemainingTime = GetRemainingTime(torrent);
-                item.SeedRatio = torrent.Ratio;
-
-                item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
-
+                var item = new DownloadClientItem()
+                {
+                    DownloadId = torrent.Hash.ToUpper(),
+                    Category = torrent.Category.IsNotNullOrWhiteSpace() ? torrent.Category : torrent.Label,
+                    Title = torrent.Name,
+                    TotalSize = torrent.Size,
+                    DownloadClient = Definition.Name,
+                    RemainingSize = (long)(torrent.Size * (1.0 - torrent.Progress)),
+                    RemainingTime = GetRemainingTime(torrent),
+                    SeedRatio = torrent.Ratio,
+                    OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath)),
+                };
                 // Avoid removing torrents that haven't reached the global max ratio.
                 // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
                 item.CanMoveFiles = item.CanBeRemoved = (!config.MaxRatioEnabled || config.MaxRatio <= torrent.Ratio) && torrent.State == "pausedUP";
+                
 
                 if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
                 {
