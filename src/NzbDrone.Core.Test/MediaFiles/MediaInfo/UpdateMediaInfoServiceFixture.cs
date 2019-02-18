@@ -1,5 +1,6 @@
-﻿using System.IO;
+using System.IO;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
@@ -179,6 +180,112 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 
             Mocker.GetMock<IMediaFileService>()
                   .Verify(v => v.Update(It.IsAny<EpisodeFile>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public void should_not_update_files_if_media_info_disabled()
+        {
+            var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
+                .All()
+                .With(v => v.RelativePath = "media.mkv")
+                .TheFirst(1)
+                .With(v => v.RelativePath = "media2.mkv")
+                .BuildList();
+
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(v => v.GetFilesBySeries(1))
+                .Returns(episodeFiles);
+
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(s => s.EnableMediaInfo)
+                .Returns(false);
+            
+            GivenFileExists();
+            GivenSuccessfulScan();
+
+            Subject.Handle(new SeriesScannedEvent(_series));
+
+            Mocker.GetMock<IVideoFileInfoReader>()
+                .Verify(v => v.GetMediaInfo(It.IsAny<string>()), Times.Never());
+
+            Mocker.GetMock<IMediaFileService>()
+                .Verify(v => v.Update(It.IsAny<EpisodeFile>()), Times.Never());
+        }
+
+        [Test]
+        public void should_not_update_if_media_info_disabled()
+        {
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(v => v.RelativePath = "media.mkv")
+                .Build();
+
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(s => s.EnableMediaInfo)
+                .Returns(false);
+            
+            GivenFileExists();
+            GivenSuccessfulScan();
+
+            Subject.Update(episodeFile, _series);
+
+            Mocker.GetMock<IVideoFileInfoReader>()
+                .Verify(v => v.GetMediaInfo(It.IsAny<string>()), Times.Never());
+
+            Mocker.GetMock<IMediaFileService>()
+                .Verify(v => v.Update(It.IsAny<EpisodeFile>()), Times.Never());
+        }
+
+        [Test]
+        public void should_update_media_info()
+        {
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(v => v.RelativePath = "media.mkv")
+                .With(e => e.MediaInfo = new MediaInfoModel{SchemaRevision = 3})
+                .Build();
+
+            GivenFileExists();
+            GivenSuccessfulScan();
+
+            Subject.Update(episodeFile, _series);
+
+            Mocker.GetMock<IVideoFileInfoReader>()
+                .Verify(v => v.GetMediaInfo(Path.Combine(_series.Path, "media.mkv")), Times.Once());
+
+            Mocker.GetMock<IMediaFileService>()
+                .Verify(v => v.Update(episodeFile), Times.Once());
+        }
+        
+        [Test]
+        public void should_not_update_media_info_if_new_info_is_null()
+        {
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(v => v.RelativePath = "media.mkv")
+                .With(e => e.MediaInfo = new MediaInfoModel{SchemaRevision = 3})
+                .Build();
+
+            GivenFileExists();
+            GivenFailedScan(Path.Combine(_series.Path, "media.mkv"));
+
+            Subject.Update(episodeFile, _series);
+
+            episodeFile.MediaInfo.Should().NotBeNull();
+        }
+        
+        [Test]
+        public void should_not_save_episode_file_if_new_info_is_null()
+        {
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(v => v.RelativePath = "media.mkv")
+                .With(e => e.MediaInfo = new MediaInfoModel{SchemaRevision = 3})
+                .Build();
+
+            GivenFileExists();
+            GivenFailedScan(Path.Combine(_series.Path, "media.mkv"));
+
+            Subject.Update(episodeFile, _series);
+
+            Mocker.GetMock<IMediaFileService>()
+                .Verify(v => v.Update(episodeFile), Times.Never());
         }
     }
 }
