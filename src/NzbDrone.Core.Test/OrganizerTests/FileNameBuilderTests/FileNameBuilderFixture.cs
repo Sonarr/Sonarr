@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
@@ -756,9 +757,88 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                 .Should().Be(expectedName);
         }
 
+        [Test]
+        public void should_update_media_info_if_token_configured_and_revision_is_old()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(schemaRevision: 3);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Once());
+        }
+
+        [Test]
+        public void should_not_update_media_info_if_token_not_configured_and_revision_is_old()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}";
+
+            GivenMediaInfoModel(schemaRevision: 3);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Never());
+        }
+
+        [Test]
+        public void should_not_update_media_info_if_token_configured_and_revision_is_current()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(schemaRevision: 5);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Never());
+        }
+        
+        [Test]
+        public void should_not_update_media_info_if_token_configured_and_revision_is_newer()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(schemaRevision: 8);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Never());
+        }
+
+        [Test]
+        public void should_use_updated_media_info_if_token_configured_and_revision_is_old()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(schemaRevision: 3);
+
+            Mocker.GetMock<IUpdateMediaInfo>()
+                .Setup(u => u.Update(_episodeFile, _series))
+                .Callback((EpisodeFile e, Series s) => e.MediaInfo = new MediaInfoModel
+                {
+                    VideoCodec = "AVC",
+                    AudioFormat = "DTS",
+                    AudioChannels = 6,
+                    VideoBitDepth = 10,
+                    VideoColourPrimaries = "BT.2020",
+                    VideoTransferCharacteristics = "PQ",
+                    SchemaRevision = 5
+                });
+
+            var result = Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            result.Should().EndWith("HDR");
+
+        }
+
         private void GivenMediaInfoModel(string videoCodec = "AVC", string audioCodec = "DTS", int audioChannels = 6, int videoBitDepth = 8,
             string videoColourPrimaries = "", string videoTransferCharacteristics = "", string audioLanguages = "English",
-            string subtitles = "English/Spanish/Italian")
+            string subtitles = "English/Spanish/Italian", int schemaRevision = 5)
         {
             _episodeFile.MediaInfo = new MediaInfoModel
             {
@@ -770,7 +850,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                 VideoBitDepth = videoBitDepth,
                 VideoColourPrimaries = videoColourPrimaries,
                 VideoTransferCharacteristics = videoTransferCharacteristics,
-                SchemaRevision = 5
+                SchemaRevision = schemaRevision
             };
 
         }

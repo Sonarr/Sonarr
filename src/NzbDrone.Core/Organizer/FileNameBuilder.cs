@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Organizer
         private readonly INamingConfigService _namingConfigService;
         private readonly IQualityDefinitionService _qualityDefinitionService;
         private readonly IPreferredWordService _preferredWordService;
+        private readonly IUpdateMediaInfo _mediaInfoUpdater;
         private readonly ICached<EpisodeFormat[]> _episodeFormatCache;
         private readonly ICached<AbsoluteEpisodeFormat[]> _absoluteEpisodeFormatCache;
         private readonly ICached<bool> _requiresEpisodeTitleCache;
@@ -81,11 +82,13 @@ namespace NzbDrone.Core.Organizer
                                IQualityDefinitionService qualityDefinitionService,
                                ICacheManager cacheManager,
                                IPreferredWordService preferredWordService,
+                               IUpdateMediaInfo mediaInfoUpdater,
                                Logger logger)
         {
             _namingConfigService = namingConfigService;
             _qualityDefinitionService = qualityDefinitionService;
             _preferredWordService = preferredWordService;
+            _mediaInfoUpdater = mediaInfoUpdater;
             _episodeFormatCache = cacheManager.GetCache<EpisodeFormat[]>(GetType(), "episodeFormat");
             _absoluteEpisodeFormatCache = cacheManager.GetCache<AbsoluteEpisodeFormat[]>(GetType(), "absoluteEpisodeFormat");
             _requiresEpisodeTitleCache = cacheManager.GetCache<bool>(GetType(), "requiresEpisodeTitle");
@@ -122,6 +125,7 @@ namespace NzbDrone.Core.Organizer
 
             var pattern = namingConfig.StandardEpisodeFormat;
             var tokenHandlers = new Dictionary<string, Func<TokenMatch, string>>(FileNameBuilderTokenEqualityComparer.Instance);
+            var minimumMediaInfoSchemaRevisions = new Dictionary<string,int>();
 
             episodes = episodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber).ToList();
 
@@ -143,8 +147,10 @@ namespace NzbDrone.Core.Organizer
             AddEpisodeTokens(tokenHandlers, episodes);
             AddEpisodeFileTokens(tokenHandlers, episodeFile);
             AddQualityTokens(tokenHandlers, series, episodeFile);
-            AddMediaInfoTokens(tokenHandlers, episodeFile);
+            AddMediaInfoTokens(tokenHandlers, minimumMediaInfoSchemaRevisions, episodeFile);
             AddPreferredWords(tokenHandlers, series, episodeFile, preferredWords);
+
+            UpdateMediaInfoIfNeeded(pattern, minimumMediaInfoSchemaRevisions, episodeFile, series);
 
             var fileName = ReplaceTokens(pattern, tokenHandlers, namingConfig).Trim();
             fileName = FileNameCleanupRegex.Replace(fileName, match => match.Captures[0].Value[0].ToString());
@@ -535,7 +541,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Quality Real}"] = m => qualityReal;
         }
 
-        private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)
+        private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Dictionary<string,int> minimumMediaInfoSchemaRevisions, EpisodeFile episodeFile)
         {
             if (episodeFile.MediaInfo == null)
             {
@@ -589,6 +595,7 @@ namespace NzbDrone.Core.Organizer
 
             tokenHandlers["{MediaInfo VideoDynamicRange}"] =
                 m => MediaInfoFormatter.FormatVideoDynamicRange(episodeFile.MediaInfo);
+            minimumMediaInfoSchemaRevisions["{MediaInfo VideoDynamicRange}"] = 5;
         }
 
         private void AddIdTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)
@@ -617,7 +624,7 @@ namespace NzbDrone.Core.Organizer
                     tokens.Add(item.Trim());
             }
 
-            var cultures = System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.NeutralCultures);
+            var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
             for (int i = 0; i < tokens.Count; i++)
             {
                 try
@@ -633,6 +640,22 @@ namespace NzbDrone.Core.Organizer
             }
 
             return string.Join("+", tokens.Distinct());
+        }
+
+        private void UpdateMediaInfoIfNeeded(string pattern, Dictionary<string, int> minimumMediaInfoSchemaRevisions, EpisodeFile episodeFile, Series series)
+        {
+            var matches = TitleRegex.Matches(pattern);
+
+            var shouldUpdateMediaInfo = matches.Cast<Match>()
+                .Select(m => minimumMediaInfoSchemaRevisions.GetValueOrDefault(m.Value, -1))
+                .Where(r => r > -1)
+                .Any(r => episodeFile.MediaInfo.SchemaRevision < r);
+
+
+            if (shouldUpdateMediaInfo)
+            {
+                _mediaInfoUpdater.Update(episodeFile, series);
+            }
         }
 
         private string ReplaceTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, NamingConfig namingConfig)
