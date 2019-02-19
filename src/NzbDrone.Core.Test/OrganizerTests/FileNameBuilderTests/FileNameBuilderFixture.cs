@@ -809,11 +809,11 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Never());
         }
 
-        [Test]
-        public void should_use_updated_media_info_if_token_configured_and_revision_is_old()
+        [TestCase("{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}")]
+        [TestCase("{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo.VideoDynamicRange}")]
+        public void should_use_updated_media_info_if_token_configured_and_revision_is_old(string standardEpisodeFormat)
         {
-            _namingConfig.StandardEpisodeFormat =
-                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+            _namingConfig.StandardEpisodeFormat = standardEpisodeFormat;
 
             GivenMediaInfoModel(schemaRevision: 3);
 
@@ -824,6 +824,8 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                     VideoCodec = "AVC",
                     AudioFormat = "DTS",
                     AudioChannels = 6,
+                    AudioLanguages = "English",
+                    Subtitles = "English/Spanish/Italian",
                     VideoBitDepth = 10,
                     VideoColourPrimaries = "BT.2020",
                     VideoTransferCharacteristics = "PQ",
@@ -835,7 +837,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             result.Should().EndWith("HDR");
 
         }
-
+        
         private void GivenMediaInfoModel(string videoCodec = "AVC", string audioCodec = "DTS", int audioChannels = 6, int videoBitDepth = 8,
             string videoColourPrimaries = "", string videoTransferCharacteristics = "", string audioLanguages = "English",
             string subtitles = "English/Spanish/Italian", int schemaRevision = 5)
