@@ -13,8 +13,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         {
             _profileService = profileService;
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
-            // TODO: Need to validate the cutoff is allowed and the ID/quality ID exists
-            // TODO: Need to validate the Items to ensure groups have names and at no item has no name, no items and no quality
             SharedValidator.RuleFor(c => c.Cutoff).ValidCutoff();
             SharedValidator.RuleFor(c => c.Items).ValidItems();
 

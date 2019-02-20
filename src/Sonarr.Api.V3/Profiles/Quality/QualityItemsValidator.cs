@@ -13,7 +13,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
             ruleBuilder.SetValidator(new AllowedValidator<T>());
             ruleBuilder.SetValidator(new QualityNameValidator<T>());
-            ruleBuilder.SetValidator(new EmptyItemGroupNameValidator<T>());
+            ruleBuilder.SetValidator(new GroupItemValidator<T>());
             ruleBuilder.SetValidator(new ItemGroupIdValidator<T>());
             ruleBuilder.SetValidator(new UniqueIdValidator<T>());
             ruleBuilder.SetValidator(new UniqueQualityIdValidator<T>());
@@ -47,10 +47,10 @@ namespace Sonarr.Api.V3.Profiles.Quality
         }
     }
 
-    public class EmptyItemGroupNameValidator<T> : PropertyValidator
+    public class GroupItemValidator<T> : PropertyValidator
     {
-        public EmptyItemGroupNameValidator()
-            : base("Groups must not be empty")
+        public GroupItemValidator()
+            : base("Groups must contain multiple qualities")
         {
 
         }
@@ -59,7 +59,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
         {
             var items = context.PropertyValue as IList<QualityProfileQualityItemResource>;
 
-            if (items.Any(i => i.Name.IsNotNullOrWhiteSpace() && i.Items.Empty()))
+            if (items.Any(i => i.Name.IsNotNullOrWhiteSpace() && i.Items.Count <= 1))
             {
                 return false;
             }
