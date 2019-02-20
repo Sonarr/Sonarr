@@ -159,6 +159,7 @@
     <Compile Include="Datastore\SqliteSchemaDumperTests\SqliteSchemaDumperFixture.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\AnimeVersionUpgradeSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\UpgradeAllowedSpecificationFixture .cs" />
     <Compile Include="DecisionEngineTests\FullSeasonSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\MaximumSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\ProtocolSpecificationFixture.cs" />

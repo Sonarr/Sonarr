@@ -24,7 +24,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            var profile = subject.Series.QualityProfile.Value;
+            var qualityProfile = subject.Series.QualityProfile.Value;
+            var languageProfile = subject.Series.LanguageProfile.Value;
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
@@ -36,8 +37,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
-                if (!_upgradableSpecification.CutoffNotMet(profile, 
-                                                           subject.Series.LanguageProfile, 
+                if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
+                    languageProfile, 
                                                            file.Quality, 
                                                            file.Language,
                                                            _preferredWordServiceCalculator.Calculate(subject.Series, file.GetSceneOrFileName()),
@@ -46,10 +47,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     _logger.Debug("Cutoff already met, rejecting.");
 
-                    var qualityCutoffIndex = profile.GetIndex(profile.Cutoff);
-                    var qualityCutoff = profile.Items[qualityCutoffIndex.Index];
+                    var qualityCutoffIndex = qualityProfile.GetIndex(qualityProfile.Cutoff);
+                    var qualityCutoff = qualityProfile.Items[qualityCutoffIndex.Index];
 
-                    return Decision.Reject("Existing file meets cutoff: {0} - {1}", qualityCutoff, subject.Series.LanguageProfile.Value.Cutoff);
+                    return Decision.Reject("Existing file meets cutoff: {0} - {1}", qualityCutoff, languageProfile.Cutoff);
                 }
             }
 
