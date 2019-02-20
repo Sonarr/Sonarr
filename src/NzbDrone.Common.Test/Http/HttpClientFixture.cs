@@ -130,7 +130,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_execute_typed_get()
         {
-            var request = new HttpRequest($"http://{_httpBinHost}/get");
+            var request = new HttpRequest($"https://{_httpBinHost}/get");
 
             var response = Subject.Get<HttpBinResource>(request);
 
