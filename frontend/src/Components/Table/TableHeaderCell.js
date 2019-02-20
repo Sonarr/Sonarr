@@ -30,6 +30,7 @@ class TableHeaderCell extends Component {
     const {
       className,
       name,
+      columnLabel,
       isSortable,
       isVisible,
       isModifiable,
@@ -49,10 +50,11 @@ class TableHeaderCell extends Component {
     return (
       isSortable ?
         <Link
+          {...otherProps}
           component="th"
           className={className}
+          title={columnLabel}
           onPress={this.onPress}
-          {...otherProps}
         >
           {children}
 
@@ -75,7 +77,7 @@ class TableHeaderCell extends Component {
 TableHeaderCell.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  columnLabel: PropTypes.string,
   isSortable: PropTypes.bool,
   isVisible: PropTypes.bool,
   isModifiable: PropTypes.bool,
