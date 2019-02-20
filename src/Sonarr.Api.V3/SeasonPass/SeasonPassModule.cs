@@ -46,6 +46,11 @@ namespace Sonarr.Api.V3.SeasonPass
                     }
                 }
 
+                if (request.MonitoringOptions != null && request.MonitoringOptions.Monitor == MonitorTypes.None)
+                {
+                    series.Monitored = false;
+                }
+
                 _episodeMonitoredService.SetEpisodeMonitoredStatus(series, request.MonitoringOptions);
             }
 
