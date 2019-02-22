@@ -3,8 +3,10 @@ using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -737,6 +739,122 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(releaseGroup);
+        }
+
+        [TestCase(8, "BT.601 NTSC", "BT.709", "South.Park.S15E06.City.Sushi")]
+        [TestCase(10, "BT.2020", "PQ", "South.Park.S15E06.City.Sushi.HDR")]
+        [TestCase(10, "BT.2020", "HLG", "South.Park.S15E06.City.Sushi.HDR")]
+        [TestCase(0, null, null, "South.Park.S15E06.City.Sushi")]
+        public void should_include_hdr_for_mediainfo_videodynamicrange_with_valid_properties(int bitDepth, string colourPrimaries,
+            string transferCharacteristics, string expectedName)
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(videoBitDepth: bitDepth, videoColourPrimaries: colourPrimaries, videoTransferCharacteristics: transferCharacteristics);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
+                .Should().Be(expectedName);
+        }
+
+        [Test]
+        public void should_update_media_info_if_token_configured_and_revision_is_old()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(schemaRevision: 3);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Once());
+        }
+
+        [Test]
+        public void should_not_update_media_info_if_token_not_configured_and_revision_is_old()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}";
+
+            GivenMediaInfoModel(schemaRevision: 3);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Never());
+        }
+
+        [Test]
+        public void should_not_update_media_info_if_token_configured_and_revision_is_current()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(schemaRevision: 5);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Never());
+        }
+        
+        [Test]
+        public void should_not_update_media_info_if_token_configured_and_revision_is_newer()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(schemaRevision: 8);
+
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Never());
+        }
+
+        [TestCase("{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}")]
+        [TestCase("{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo.VideoDynamicRange}")]
+        public void should_use_updated_media_info_if_token_configured_and_revision_is_old(string standardEpisodeFormat)
+        {
+            _namingConfig.StandardEpisodeFormat = standardEpisodeFormat;
+
+            GivenMediaInfoModel(schemaRevision: 3);
+
+            Mocker.GetMock<IUpdateMediaInfo>()
+                .Setup(u => u.Update(_episodeFile, _series))
+                .Callback((EpisodeFile e, Series s) => e.MediaInfo = new MediaInfoModel
+                {
+                    VideoCodec = "AVC",
+                    AudioFormat = "DTS",
+                    AudioChannels = 6,
+                    AudioLanguages = "English",
+                    Subtitles = "English/Spanish/Italian",
+                    VideoBitDepth = 10,
+                    VideoColourPrimaries = "BT.2020",
+                    VideoTransferCharacteristics = "PQ",
+                    SchemaRevision = 5
+                });
+
+            var result = Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile);
+
+            result.Should().EndWith("HDR");
+
+        }
+        
+        private void GivenMediaInfoModel(string videoCodec = "AVC", string audioCodec = "DTS", int audioChannels = 6, int videoBitDepth = 8,
+            string videoColourPrimaries = "", string videoTransferCharacteristics = "", string audioLanguages = "English",
+            string subtitles = "English/Spanish/Italian", int schemaRevision = 5)
+        {
+            _episodeFile.MediaInfo = new MediaInfoModel
+            {
+                VideoCodec = videoCodec,
+                AudioFormat = audioCodec,
+                AudioChannels = audioChannels,
+                AudioLanguages = audioLanguages,
+                Subtitles = subtitles,
+                VideoBitDepth = videoBitDepth,
+                VideoColourPrimaries = videoColourPrimaries,
+                VideoTransferCharacteristics = videoTransferCharacteristics,
+                SchemaRevision = schemaRevision
+            };
+
         }
     }
 }

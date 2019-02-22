@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
@@ -472,6 +471,28 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             // Last token is the default.
             return tokens.Last();
+        }
+
+        private static readonly string[] ValidHdrTransferFunctions = {"PQ", "HLG"};
+        private const string ValidHdrColourPrimaries = "BT.2020";
+
+        public static string FormatVideoDynamicRange(MediaInfoModel mediaInfo)
+        {
+            // assume SDR by default
+            var videoDynamicRange = "";
+
+            if (mediaInfo.VideoBitDepth >= 10 &&
+                !string.IsNullOrEmpty(mediaInfo.VideoColourPrimaries) &&
+                !string.IsNullOrEmpty(mediaInfo.VideoTransferCharacteristics))
+            {
+                if (mediaInfo.VideoColourPrimaries.EqualsIgnoreCase(ValidHdrColourPrimaries) &&
+                    ValidHdrTransferFunctions.Any(mediaInfo.VideoTransferCharacteristics.Contains))
+                {
+                    videoDynamicRange = "HDR";
+                }
+            }
+
+            return videoDynamicRange;
         }
     }
 }
