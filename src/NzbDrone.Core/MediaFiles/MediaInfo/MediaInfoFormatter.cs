@@ -452,8 +452,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return audioChannels;
             }
 
-            Logger.Warn("Unable to format audio channels using 'AudioChannels', with a value of: '{0}'", audioChannels);
-
             return null;
         }
 
