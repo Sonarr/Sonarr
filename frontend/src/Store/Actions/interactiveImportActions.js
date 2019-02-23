@@ -68,6 +68,7 @@ export const persistState = [
 export const FETCH_INTERACTIVE_IMPORT_ITEMS = 'interactiveImport/fetchInteractiveImportItems';
 export const SET_INTERACTIVE_IMPORT_SORT = 'interactiveImport/setInteractiveImportSort';
 export const UPDATE_INTERACTIVE_IMPORT_ITEM = 'interactiveImport/updateInteractiveImportItem';
+export const UPDATE_INTERACTIVE_IMPORT_ITEMS = 'interactiveImport/updateInteractiveImportItems';
 export const CLEAR_INTERACTIVE_IMPORT = 'interactiveImport/clearInteractiveImport';
 export const ADD_RECENT_FOLDER = 'interactiveImport/addRecentFolder';
 export const REMOVE_RECENT_FOLDER = 'interactiveImport/removeRecentFolder';
@@ -83,6 +84,7 @@ export const CLEAR_INTERACTIVE_IMPORT_EPISODES = 'interactiveImport/clearInterac
 export const fetchInteractiveImportItems = createThunk(FETCH_INTERACTIVE_IMPORT_ITEMS);
 export const setInteractiveImportSort = createAction(SET_INTERACTIVE_IMPORT_SORT);
 export const updateInteractiveImportItem = createAction(UPDATE_INTERACTIVE_IMPORT_ITEM);
+export const updateInteractiveImportItems = createAction(UPDATE_INTERACTIVE_IMPORT_ITEMS);
 export const clearInteractiveImport = createAction(CLEAR_INTERACTIVE_IMPORT);
 export const addRecentFolder = createAction(ADD_RECENT_FOLDER);
 export const removeRecentFolder = createAction(REMOVE_RECENT_FOLDER);
@@ -148,6 +150,23 @@ export const reducers = createHandleActions({
 
     newState.items = [...items];
     newState.items.splice(index, 1, item);
+
+    return newState;
+  },
+
+  [UPDATE_INTERACTIVE_IMPORT_ITEMS]: (state, { payload }) => {
+    const ids = payload.ids;
+    const newState = Object.assign({}, state);
+    const items = [...newState.items];
+
+    ids.forEach((id) => {
+      const index = items.findIndex((item) => item.id === id);
+      const item = Object.assign({}, items[index], payload);
+
+      items.splice(index, 1, item);
+    });
+
+    newState.items = items;
 
     return newState;
   },

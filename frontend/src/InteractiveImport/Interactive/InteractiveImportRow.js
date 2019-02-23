@@ -328,7 +328,7 @@ class InteractiveImportRow extends Component {
 
         <SelectQualityModal
           isOpen={isSelectQualityModalOpen}
-          id={id}
+          ids={[id]}
           qualityId={quality ? quality.quality.id : 0}
           proper={quality ? quality.revision.version > 1 : false}
           real={quality ? quality.revision.real > 0 : false}
@@ -337,7 +337,7 @@ class InteractiveImportRow extends Component {
 
         <SelectLanguageModal
           isOpen={isSelectLanguageModalOpen}
-          id={id}
+          ids={[id]}
           languageId={language ? language.id : 0}
           onModalClose={this.onSelectLanguageModalClose}
         />

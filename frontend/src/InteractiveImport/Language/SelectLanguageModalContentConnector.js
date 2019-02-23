@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { fetchLanguageProfileSchema } from 'Store/Actions/settingsActions';
-import { updateInteractiveImportItem } from 'Store/Actions/interactiveImportActions';
+import { updateInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
 import SelectLanguageModalContent from './SelectLanguageModalContent';
 
 function createMapStateToProps() {
@@ -29,8 +29,8 @@ function createMapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  fetchLanguageProfileSchema,
-  updateInteractiveImportItem
+  dispatchFetchLanguageProfileSchema: fetchLanguageProfileSchema,
+  dispatchUpdateInteractiveImportItems: updateInteractiveImportItems
 };
 
 class SelectLanguageModalContentConnector extends Component {
@@ -40,7 +40,7 @@ class SelectLanguageModalContentConnector extends Component {
 
   componentDidMount = () => {
     if (!this.props.isPopulated) {
-      this.props.fetchLanguageProfileSchema();
+      this.props.dispatchFetchLanguageProfileSchema();
     }
   }
 
@@ -52,8 +52,8 @@ class SelectLanguageModalContentConnector extends Component {
     const language = _.find(this.props.items,
       (item) => item.language.id === languageId).language;
 
-    this.props.updateInteractiveImportItem({
-      id: this.props.id,
+    this.props.dispatchUpdateInteractiveImportItems({
+      ids: this.props.ids,
       language
     });
 
@@ -74,13 +74,13 @@ class SelectLanguageModalContentConnector extends Component {
 }
 
 SelectLanguageModalContentConnector.propTypes = {
-  id: PropTypes.number.isRequired,
+  ids: PropTypes.arrayOf(PropTypes.number).isRequired,
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  fetchLanguageProfileSchema: PropTypes.func.isRequired,
-  updateInteractiveImportItem: PropTypes.func.isRequired,
+  dispatchFetchLanguageProfileSchema: PropTypes.func.isRequired,
+  dispatchUpdateInteractiveImportItems: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import getQualities from 'Utilities/Quality/getQualities';
 import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
-import { updateInteractiveImportItem } from 'Store/Actions/interactiveImportActions';
+import { updateInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
 import SelectQualityModalContent from './SelectQualityModalContent';
 
 function createMapStateToProps() {
@@ -30,8 +30,8 @@ function createMapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  fetchQualityProfileSchema,
-  updateInteractiveImportItem
+  dispatchFetchQualityProfileSchema: fetchQualityProfileSchema,
+  dispatchUpdateInteractiveImportItems: updateInteractiveImportItems
 };
 
 class SelectQualityModalContentConnector extends Component {
@@ -41,7 +41,7 @@ class SelectQualityModalContentConnector extends Component {
 
   componentDidMount = () => {
     if (!this.props.isPopulated) {
-      this.props.fetchQualityProfileSchema();
+      this.props.dispatchFetchQualityProfileSchema();
     }
   }
 
@@ -57,8 +57,8 @@ class SelectQualityModalContentConnector extends Component {
       real: real ? 1 : 0
     };
 
-    this.props.updateInteractiveImportItem({
-      id: this.props.id,
+    this.props.dispatchUpdateInteractiveImportItems({
+      ids: this.props.ids,
       quality: {
         quality,
         revision
@@ -82,13 +82,13 @@ class SelectQualityModalContentConnector extends Component {
 }
 
 SelectQualityModalContentConnector.propTypes = {
-  id: PropTypes.number.isRequired,
+  ids: PropTypes.arrayOf(PropTypes.number).isRequired,
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  fetchQualityProfileSchema: PropTypes.func.isRequired,
-  updateInteractiveImportItem: PropTypes.func.isRequired,
+  dispatchFetchQualityProfileSchema: PropTypes.func.isRequired,
+  dispatchUpdateInteractiveImportItems: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 

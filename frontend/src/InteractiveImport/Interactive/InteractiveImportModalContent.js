@@ -20,6 +20,8 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
+import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
 import SelectSeasonModal from 'InteractiveImport/Season/SelectSeasonModal';
 import InteractiveImportRow from './InteractiveImportRow';
@@ -80,6 +82,17 @@ const filterExistingFilesOptions = {
   NEW: 'new'
 };
 
+const importModeOptions = [
+  { key: 'move', value: 'Move Files' },
+  { key: 'copy', value: 'Copy Files' }
+];
+
+const SELECT = 'select';
+const SERIES = 'series';
+const SEASON = 'season';
+const LANGUAGE = 'language';
+const QUALITY = 'quality';
+
 class InteractiveImportModalContent extends Component {
 
   //
@@ -94,8 +107,7 @@ class InteractiveImportModalContent extends Component {
       lastToggled: null,
       selectedState: {},
       invalidRowsSelected: [],
-      isSelectSeriesModalOpen: false,
-      isSelectSeasonModalOpen: false
+      selectModalOpen: null
     };
   }
 
@@ -155,20 +167,12 @@ class InteractiveImportModalContent extends Component {
     this.props.onImportModeChange(value);
   }
 
-  onSelectSeriesPress = () => {
-    this.setState({ isSelectSeriesModalOpen: true });
+  onSelectModalSelect = ({ value }) => {
+    this.setState({ selectModalOpen: value });
   }
 
-  onSelectSeasonPress = () => {
-    this.setState({ isSelectSeasonModalOpen: true });
-  }
-
-  onSelectSeriesModalClose = () => {
-    this.setState({ isSelectSeriesModalOpen: false });
-  }
-
-  onSelectSeasonModalClose = () => {
-    this.setState({ isSelectSeasonModalOpen: false });
+  onSelectModalClose = () => {
+    this.setState({ selectModalOpen: null });
   }
 
   //
@@ -200,18 +204,26 @@ class InteractiveImportModalContent extends Component {
       allUnselected,
       selectedState,
       invalidRowsSelected,
-      isSelectSeriesModalOpen,
-      isSelectSeasonModalOpen
+      selectModalOpen
     } = this.state;
 
     const selectedIds = this.getSelectedIds();
     const selectedItem = selectedIds.length ? _.find(items, { id: selectedIds[0] }) : null;
     const errorMessage = getErrorMessage(error, 'Unable to load manual import items');
 
-    const importModeOptions = [
-      { key: 'move', value: 'Move Files' },
-      { key: 'copy', value: 'Copy Files' }
+    const bulkSelectOptions = [
+      { key: SELECT, value: 'Select...', disabled: true },
+      { key: SEASON, value: 'Select Season' },
+      { key: LANGUAGE, value: 'Select Language' },
+      { key: QUALITY, value: 'Select Qualty' }
     ];
+
+    if (allowSeriesChange) {
+      bulkSelectOptions.splice(1, 0, {
+        key: SERIES,
+        value: 'Select Series'
+      });
+    }
 
     return (
       <ModalContent onModalClose={onModalClose}>
@@ -308,28 +320,25 @@ class InteractiveImportModalContent extends Component {
         <ModalFooter className={styles.footer}>
           <div className={styles.leftButtons}>
             {
-              !downloadId && showImportMode &&
+              !downloadId && showImportMode ?
                 <SelectInput
                   className={styles.importMode}
                   name="importMode"
                   value={importMode}
                   values={importModeOptions}
                   onChange={this.onImportModeChange}
-                />
-            }
-          </div>
-
-          <div className={styles.centerButtons}>
-            {
-              allowSeriesChange &&
-                <Button onPress={this.onSelectSeriesPress}>
-                  Select Series
-                </Button>
+                /> :
+                null
             }
 
-            <Button onPress={this.onSelectSeasonPress}>
-              Select Season
-            </Button>
+            <SelectInput
+              className={styles.bulkSelect}
+              name="select"
+              value={SELECT}
+              values={bulkSelectOptions}
+              isDisabled={!selectedIds.length}
+              onChange={this.onSelectModalSelect}
+            />
           </div>
 
           <div className={styles.rightButtons}>
@@ -353,16 +362,32 @@ class InteractiveImportModalContent extends Component {
         </ModalFooter>
 
         <SelectSeriesModal
-          isOpen={isSelectSeriesModalOpen}
+          isOpen={selectModalOpen === SERIES}
           ids={selectedIds}
-          onModalClose={this.onSelectSeriesModalClose}
+          onModalClose={this.onSelectModalClose}
         />
 
         <SelectSeasonModal
-          isOpen={isSelectSeasonModalOpen}
+          isOpen={selectModalOpen === SEASON}
           ids={selectedIds}
           seriesId={selectedItem && selectedItem.series && selectedItem.series.id}
-          onModalClose={this.onSelectSeasonModalClose}
+          onModalClose={this.onSelectModalClose}
+        />
+
+        <SelectLanguageModal
+          isOpen={selectModalOpen === LANGUAGE}
+          ids={selectedIds}
+          languageId={0}
+          onModalClose={this.onSelectModalClose}
+        />
+
+        <SelectQualityModal
+          isOpen={selectModalOpen === QUALITY}
+          ids={selectedIds}
+          qualityId={0}
+          proper={false}
+          real={false}
+          onModalClose={this.onSelectModalClose}
         />
       </ModalContent>
     );
