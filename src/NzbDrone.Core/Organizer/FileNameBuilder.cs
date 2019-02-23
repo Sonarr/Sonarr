@@ -610,7 +610,7 @@ namespace NzbDrone.Core.Organizer
         {
             tokenHandlers["{ImdbId}"] = m => series.ImdbId ?? string.Empty;
             tokenHandlers["{TvdbId}"] = m => series.TvdbId.ToString();
-            tokenHandlers["{TvMazeId}"] = m => series.TvMazeId.ToString();
+            tokenHandlers["{TvMazeId}"] = m => series.TvMazeId > 0 ? series.TvMazeId.ToString() : string.Empty;
         }
 
         private void AddPreferredWords(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, EpisodeFile episodeFile, List<string> preferredWords = null)
