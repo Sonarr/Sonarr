@@ -57,6 +57,18 @@ namespace NzbDrone.Core.Indexers.Newznab
                        capabilities.SupportedTvSearchParameters.Contains("ep");
             }
         }
+        private bool SupportsImdbSearch
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.SupportedTvSearchParameters != null &&
+                       capabilities.SupportedTvSearchParameters.Contains("imdbid") &&
+                       capabilities.SupportedTvSearchParameters.Contains("season") &&
+                       capabilities.SupportedTvSearchParameters.Contains("ep");
+            }
+        }
 
         private bool SupportsTvRageSearch
         {
@@ -198,6 +210,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         private void AddTvIdPageableRequests(IndexerPageableRequestChain chain, int maxPages, IEnumerable<int> categories, SearchCriteriaBase searchCriteria, string parameters)
         {
             var includeTvdbSearch = SupportsTvdbSearch && searchCriteria.Series.TvdbId > 0;
+            var includeImdbSearch = SupportsImdbSearch && searchCriteria.Series.ImdbId.IsNotNullOrWhiteSpace();
             var includeTvRageSearch = SupportsTvRageSearch && searchCriteria.Series.TvRageId > 0;
             var includeTvMazeSearch = SupportsTvMazeSearch && searchCriteria.Series.TvMazeId > 0;
 
@@ -208,6 +221,10 @@ namespace NzbDrone.Core.Indexers.Newznab
                 if (includeTvdbSearch)
                 {
                     ids += "&tvdbid=" + searchCriteria.Series.TvdbId;
+                }
+                if (includeImdbSearch)
+                {
+                    ids += "&imdbid=" + searchCriteria.Series.ImdbId;
                 }
 
                 if (includeTvRageSearch)
@@ -228,6 +245,11 @@ namespace NzbDrone.Core.Indexers.Newznab
                 {
                     chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
                         string.Format("&tvdbid={0}{1}", searchCriteria.Series.TvdbId, parameters)));
+                }
+                else if (includeImdbSearch)
+                {
+                    chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
+                        string.Format("&imdbid={0}{1}", searchCriteria.Series.ImdbId, parameters)));
                 }
                 else if (includeTvRageSearch)
                 {
