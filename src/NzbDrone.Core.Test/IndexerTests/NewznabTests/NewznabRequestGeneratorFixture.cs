@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30 },
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId ="t40" },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 1,
                 EpisodeNumber = 2
@@ -187,6 +187,19 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var page = results.GetAllTiers().First().First();
 
             page.Url.Query.Should().Contain("tvmazeid=30");
+        }
+
+        [Test]
+        public void should_search_by_imdbid_if_supported()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "imdbid", "season", "ep" };
+
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+            results.GetTier(0).Should().HaveCount(1);
+
+            var page = results.GetAllTiers().First().First();
+
+            page.Url.Query.Should().Contain("imdbid=t40");
         }
 
         [Test]
