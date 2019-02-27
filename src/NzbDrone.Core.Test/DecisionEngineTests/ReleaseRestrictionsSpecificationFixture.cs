@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                          }
                            };
 
-            Mocker.SetConstant<ITermMatcher>(Mocker.Resolve<TermMatcher>());
+            Mocker.SetConstant<ITermMatcherService>(Mocker.Resolve<TermMatcherService>());
         }
 
         private void GivenRestictions(string required, string ignored)

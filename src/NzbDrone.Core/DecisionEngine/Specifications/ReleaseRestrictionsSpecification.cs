@@ -13,13 +13,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     {
         private readonly Logger _logger;
         private readonly IReleaseProfileService _releaseProfileService;
-        private readonly ITermMatcher _termMatcher;
+        private readonly ITermMatcherService _termMatcherService;
 
-        public ReleaseRestrictionsSpecification(ITermMatcher termMatcher, IReleaseProfileService releaseProfileService, Logger logger)
+        public ReleaseRestrictionsSpecification(ITermMatcherService termMatcherService, IReleaseProfileService releaseProfileService, Logger logger)
         {
             _logger = logger;
             _releaseProfileService = releaseProfileService;
-            _termMatcher = termMatcher;
+            _termMatcherService = termMatcherService;
         }
 
         public SpecificationPriority Priority => SpecificationPriority.Default;
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         private List<string> ContainsAny(List<string> terms, string title)
         {
-            return terms.Where(t => _termMatcher.IsMatch(t, title)).ToList();
+            return terms.Where(t => _termMatcherService.IsMatch(t, title)).ToList();
         }
     }
 }

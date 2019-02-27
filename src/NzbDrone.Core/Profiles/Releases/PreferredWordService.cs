@@ -2,25 +2,26 @@ using NLog;
 using NzbDrone.Core.Tv;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Profiles.Releases
 {
     public interface IPreferredWordService
     {
         int Calculate(Series series, string title);
-        List<string> GetMatchingPreferredWords(Series series, string title, bool isRenaming);
+        List<string> GetMatchingPreferredWords(Series series, string title);
     }
 
     public class PreferredWordService : IPreferredWordService
     {
         private readonly IReleaseProfileService _releaseProfileService;
-        private readonly ITermMatcher _termMatcher;
+        private readonly ITermMatcherService _termMatcherService;
         private readonly Logger _logger;
 
-        public PreferredWordService(IReleaseProfileService releaseProfileService, ITermMatcher termMatcher, Logger logger)
+        public PreferredWordService(IReleaseProfileService releaseProfileService, ITermMatcherService termMatcherService, Logger logger)
         {
             _releaseProfileService = releaseProfileService;
-            _termMatcher = termMatcher;
+            _termMatcherService = termMatcherService;
             _logger = logger;
         }
 
@@ -28,7 +29,22 @@ namespace NzbDrone.Core.Profiles.Releases
         {
             _logger.Trace("Calculating preferred word score for '{0}'", title);
 
-            var matchingPairs = GetMatchingPairs(series, title, false);
+            var releaseProfiles = _releaseProfileService.AllForTags(series.Tags);
+            var matchingPairs = new List<KeyValuePair<string, int>>();
+
+            foreach (var releaseProfile in releaseProfiles)
+            {
+                foreach (var preferredPair in releaseProfile.Preferred)
+                {
+                    var term = preferredPair.Key;
+
+                    if (_termMatcherService.IsMatch(term, title))
+                    {
+                        matchingPairs.Add(preferredPair);
+                    }
+                }
+            }
+
             var score = matchingPairs.Sum(p => p.Value);
 
             _logger.Trace("Calculated preferred word score for '{0}': {1}", title, score);
@@ -36,25 +52,16 @@ namespace NzbDrone.Core.Profiles.Releases
             return score;
         }
 
-        public List<string> GetMatchingPreferredWords(Series series, string title, bool isRenaming)
-        {
-            var matchingPairs = GetMatchingPairs(series, title, isRenaming);
-
-            return matchingPairs.OrderByDescending(p => p.Value)
-                                .Select(p => p.Key)
-                                .ToList();
-        }
-
-        private List<KeyValuePair<string, int>> GetMatchingPairs(Series series, string title, bool isRenaming)
+        public List<string> GetMatchingPreferredWords(Series series, string title)
         {
             var releaseProfiles = _releaseProfileService.AllForTags(series.Tags);
-            var result = new List<KeyValuePair<string, int>>();
+            var matchingPairs = new List<KeyValuePair<string, int>>();
 
             _logger.Trace("Calculating preferred word score for '{0}'", title);
 
             foreach (var releaseProfile in releaseProfiles)
             {
-                if (isRenaming && !releaseProfile.IncludePreferredWhenRenaming)
+                if (!releaseProfile.IncludePreferredWhenRenaming)
                 {
                     continue;
                 }
@@ -62,15 +69,18 @@ namespace NzbDrone.Core.Profiles.Releases
                 foreach (var preferredPair in releaseProfile.Preferred)
                 {
                     var term = preferredPair.Key;
+                    var matchingTerm = _termMatcherService.MatchingTerm(term, title);
 
-                    if (_termMatcher.IsMatch(term, title))
+                    if (matchingTerm.IsNotNullOrWhiteSpace())
                     {
-                        result.Add(preferredPair);
+                        matchingPairs.Add(new KeyValuePair<string, int>(matchingTerm, preferredPair.Value));
                     }
                 }
             }
 
-            return result;
+            return matchingPairs.OrderByDescending(p => p.Value)
+                                .Select(p => p.Key)
+                                .ToList();
         }
     }
 }

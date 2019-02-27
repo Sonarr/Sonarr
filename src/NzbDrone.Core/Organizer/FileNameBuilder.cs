@@ -617,7 +617,7 @@ namespace NzbDrone.Core.Organizer
         {
             if (preferredWords == null)
             {
-                preferredWords = _preferredWordService.GetMatchingPreferredWords(series, episodeFile.GetSceneOrFileName(), true);
+                preferredWords = _preferredWordService.GetMatchingPreferredWords(series, episodeFile.GetSceneOrFileName());
             }
 
             tokenHandlers["{Preferred Words}"] = m => string.Join(" ", preferredWords);

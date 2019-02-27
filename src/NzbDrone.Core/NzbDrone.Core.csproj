@@ -1012,6 +1012,9 @@
     <Compile Include="Profiles\Qualities\QualityProfileService.cs" />
     <Compile Include="Profiles\Qualities\QualityIndex.cs" />
     <Compile Include="Profiles\Releases\PreferredWordService.cs" />
+    <Compile Include="Profiles\Releases\TermMatchers\CaseInsensitiveTermMatcher.cs" />
+    <Compile Include="Profiles\Releases\TermMatchers\ITermMatcher.cs" />
+    <Compile Include="Profiles\Releases\TermMatchers\RegexTermMatcher.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\QualityDetectionSource.cs" />
     <Compile Include="Qualities\QualityFinder.cs" />
@@ -1145,7 +1148,7 @@
     <Compile Include="Profiles\Releases\ReleaseProfile.cs" />
     <Compile Include="Profiles\Releases\ReleaseProfileRepository.cs" />
     <Compile Include="Profiles\Releases\ReleaseProfileService.cs" />
-    <Compile Include="Profiles\Releases\TermMatcher.cs" />
+    <Compile Include="Profiles\Releases\TermMatcherService.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="Rest\RestClientFactory.cs" />
     <Compile Include="Rest\RestException.cs" />

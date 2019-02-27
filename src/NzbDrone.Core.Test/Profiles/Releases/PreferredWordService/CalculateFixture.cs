@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
             
         private void GivenMatchingTerms(params string[] terms)
         {
-            Mocker.GetMock<ITermMatcher>()
+            Mocker.GetMock<ITermMatcherService>()
                   .Setup(s => s.IsMatch(It.IsAny<string>(), _title))
                   .Returns<string, string>((term, title) => terms.Contains(term));
         }
