@@ -26,6 +26,13 @@ class PageJumpBar extends Component {
     this.computeVisibleItems();
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextProps.items !== this.props.items ||
+      nextState.height !== this.state.height
+    );
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.items !== this.props.items ||

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import formatBytes from 'Utilities/Number/formatBytes';
 import { ColorImpairedConsumer } from 'App/ColorImpairedContext';
@@ -7,141 +7,148 @@ import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import styles from './SeriesIndexFooter.css';
 
-function SeriesIndexFooter({ series }) {
-  const count = series.length;
-  let episodes = 0;
-  let episodeFiles = 0;
-  let ended = 0;
-  let continuing = 0;
-  let monitored = 0;
-  let totalFileSize = 0;
+class SeriesIndexFooter extends PureComponent {
 
-  series.forEach((s) => {
-    const { statistics = {} } = s;
+  //
+  // Render
 
-    const {
-      episodeCount = 0,
-      episodeFileCount = 0,
-      sizeOnDisk = 0
-    } = statistics;
+  render() {
+    const { series } = this.props;
+    const count = series.length;
+    let episodes = 0;
+    let episodeFiles = 0;
+    let ended = 0;
+    let continuing = 0;
+    let monitored = 0;
+    let totalFileSize = 0;
 
-    episodes += episodeCount;
-    episodeFiles += episodeFileCount;
+    series.forEach((s) => {
+      const { statistics = {} } = s;
 
-    if (s.status === 'ended') {
-      ended++;
-    } else {
-      continuing++;
-    }
+      const {
+        episodeCount = 0,
+        episodeFileCount = 0,
+        sizeOnDisk = 0
+      } = statistics;
 
-    if (s.monitored) {
-      monitored++;
-    }
+      episodes += episodeCount;
+      episodeFiles += episodeFileCount;
 
-    totalFileSize += sizeOnDisk;
-  });
+      if (s.status === 'ended') {
+        ended++;
+      } else {
+        continuing++;
+      }
 
-  return (
-    <ColorImpairedConsumer>
-      {(enableColorImpairedMode) => {
-        return (
-          <div className={styles.footer}>
-            <div>
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.continuing,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>Continuing (All episodes downloaded)</div>
+      if (s.monitored) {
+        monitored++;
+      }
+
+      totalFileSize += sizeOnDisk;
+    });
+
+    return (
+      <ColorImpairedConsumer>
+        {(enableColorImpairedMode) => {
+          return (
+            <div className={styles.footer}>
+              <div>
+                <div className={styles.legendItem}>
+                  <div
+                    className={classNames(
+                      styles.continuing,
+                      enableColorImpairedMode && 'colorImpaired'
+                    )}
+                  />
+                  <div>Continuing (All episodes downloaded)</div>
+                </div>
+
+                <div className={styles.legendItem}>
+                  <div
+                    className={classNames(
+                      styles.ended,
+                      enableColorImpairedMode && 'colorImpaired'
+                    )}
+                  />
+                  <div>Ended (All episodes downloaded)</div>
+                </div>
+
+                <div className={styles.legendItem}>
+                  <div
+                    className={classNames(
+                      styles.missingMonitored,
+                      enableColorImpairedMode && 'colorImpaired'
+                    )}
+                  />
+                  <div>Missing Episodes (Series monitored)</div>
+                </div>
+
+                <div className={styles.legendItem}>
+                  <div
+                    className={classNames(
+                      styles.missingUnmonitored,
+                      enableColorImpairedMode && 'colorImpaired'
+                    )}
+                  />
+                  <div>Missing Episodes (Series not monitored)</div>
+                </div>
               </div>
 
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.ended,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>Ended (All episodes downloaded)</div>
-              </div>
+              <div className={styles.statistics}>
+                <DescriptionList>
+                  <DescriptionListItem
+                    title="Series"
+                    data={count}
+                  />
 
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.missingMonitored,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>Missing Episodes (Series monitored)</div>
-              </div>
+                  <DescriptionListItem
+                    title="Ended"
+                    data={ended}
+                  />
 
-              <div className={styles.legendItem}>
-                <div
-                  className={classNames(
-                    styles.missingUnmonitored,
-                    enableColorImpairedMode && 'colorImpaired'
-                  )}
-                />
-                <div>Missing Episodes (Series not monitored)</div>
+                  <DescriptionListItem
+                    title="Continuing"
+                    data={continuing}
+                  />
+                </DescriptionList>
+
+                <DescriptionList>
+                  <DescriptionListItem
+                    title="Monitored"
+                    data={monitored}
+                  />
+
+                  <DescriptionListItem
+                    title="Unmonitored"
+                    data={count - monitored}
+                  />
+                </DescriptionList>
+
+                <DescriptionList>
+                  <DescriptionListItem
+                    title="Episodes"
+                    data={episodes}
+                  />
+
+                  <DescriptionListItem
+                    title="Files"
+                    data={episodeFiles}
+                  />
+                </DescriptionList>
+
+                <DescriptionList>
+                  <DescriptionListItem
+                    title="Total File Size"
+                    data={formatBytes(totalFileSize)}
+                  />
+                </DescriptionList>
               </div>
             </div>
-
-            <div className={styles.statistics}>
-              <DescriptionList>
-                <DescriptionListItem
-                  title="Series"
-                  data={count}
-                />
-
-                <DescriptionListItem
-                  title="Ended"
-                  data={ended}
-                />
-
-                <DescriptionListItem
-                  title="Continuing"
-                  data={continuing}
-                />
-              </DescriptionList>
-
-              <DescriptionList>
-                <DescriptionListItem
-                  title="Monitored"
-                  data={monitored}
-                />
-
-                <DescriptionListItem
-                  title="Unmonitored"
-                  data={count - monitored}
-                />
-              </DescriptionList>
-
-              <DescriptionList>
-                <DescriptionListItem
-                  title="Episodes"
-                  data={episodes}
-                />
-
-                <DescriptionListItem
-                  title="Files"
-                  data={episodeFiles}
-                />
-              </DescriptionList>
-
-              <DescriptionList>
-                <DescriptionListItem
-                  title="Total File Size"
-                  data={formatBytes(totalFileSize)}
-                />
-              </DescriptionList>
-            </div>
-          </div>
-        );
-      }}
-    </ColorImpairedConsumer>
-  );
+          );
+        }}
+      </ColorImpairedConsumer>
+    );
+  }
 }
 
 SeriesIndexFooter.propTypes = {
