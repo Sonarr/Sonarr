@@ -37,7 +37,7 @@ function getInternalLink(source) {
     case 'RootFolderCheck':
       return (
         <IconButton
-          name={icons.SERIES}
+          name={icons.PLAY}
           title="Series Editor"
           to="/serieseditor"
         />
