@@ -29,7 +29,8 @@ class PageJumpBar extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return (
       nextProps.items !== this.props.items ||
-      nextState.height !== this.state.height
+      nextState.height !== this.state.height ||
+      nextState.visibleItems !== this.state.visibleItems
     );
   }
 
