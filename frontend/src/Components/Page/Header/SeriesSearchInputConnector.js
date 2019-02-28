@@ -1,35 +1,14 @@
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { createSelector } from 'reselect';
-import jdu from 'jdu';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import SeriesSearchInput from './SeriesSearchInput';
 
-function createCleanTagsSelector() {
-  return createSelector(
-    createTagsSelector(),
-    (tags) => {
-      return tags.map((tag) => {
-        const {
-          id,
-          label
-        } = tag;
-
-        return {
-          id,
-          label,
-          cleanLabel: jdu.replace(label).toLowerCase()
-        };
-      });
-    }
-  );
-}
-
 function createCleanSeriesSelector() {
   return createSelector(
     createAllSeriesSelector(),
-    createCleanTagsSelector(),
+    createTagsSelector(),
     (allSeries, allTags) => {
       return allSeries.map((series) => {
         const {
@@ -46,27 +25,11 @@ function createCleanSeriesSelector() {
           titleSlug,
           sortTitle,
           images,
-          cleanTitle: jdu.replace(title).toLowerCase(),
-          alternateTitles: alternateTitles.map((alternateTitle) => {
-            return {
-              title: alternateTitle.title,
-              sortTitle: alternateTitle.sortTitle,
-              cleanTitle: jdu.replace(alternateTitle.title).toLowerCase()
-            };
-          }),
+          alternateTitles,
           tags: tags.map((id) => {
             return allTags.find((tag) => tag.id === id);
           })
         };
-      }).sort((a, b) => {
-        if (a.sortTitle < b.sortTitle) {
-          return -1;
-        }
-        if (a.sortTitle > b.sortTitle) {
-          return 1;
-        }
-
-        return 0;
       });
     }
   );

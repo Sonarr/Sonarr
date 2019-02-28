@@ -5,38 +5,22 @@ import Label from 'Components/Label';
 import SeriesPoster from 'Series/SeriesPoster';
 import styles from './SeriesSearchResult.css';
 
-function findMatchingAlternateTitle(alternateTitles, cleanQuery) {
-  return alternateTitles.find((alternateTitle) => {
-    return alternateTitle.cleanTitle.contains(cleanQuery);
-  });
-}
-
-function getMatchingTag(tags, cleanQuery) {
-  return tags.find((tag) => {
-    return tag.cleanLabel.contains(cleanQuery);
-  });
-}
-
 function SeriesSearchResult(props) {
   const {
-    cleanQuery,
+    match,
     title,
-    cleanTitle,
     images,
     alternateTitles,
     tags
   } = props;
 
-  const titleContains = cleanTitle.contains(cleanQuery);
   let alternateTitle = null;
   let tag = null;
 
-  if (!titleContains) {
-    alternateTitle = findMatchingAlternateTitle(alternateTitles, cleanQuery);
-  }
-
-  if (!titleContains && !alternateTitle) {
-    tag = getMatchingTag(tags, cleanQuery);
+  if (match.key === 'alternateTitles.cleanTitle') {
+    alternateTitle = alternateTitles[match.arrayIndex];
+  } else if (match.key === 'tags.label') {
+    tag = tags[match.arrayIndex];
   }
 
   return (
@@ -55,14 +39,15 @@ function SeriesSearchResult(props) {
         </div>
 
         {
-          !!alternateTitle &&
+          alternateTitle ?
             <div className={styles.alternateTitle}>
               {alternateTitle.title}
-            </div>
+            </div> :
+            null
         }
 
         {
-          !!tag &&
+          tag ?
             <div className={styles.tagContainer}>
               <Label
                 key={tag.id}
@@ -70,7 +55,8 @@ function SeriesSearchResult(props) {
               >
                 {tag.label}
               </Label>
-            </div>
+            </div> :
+            null
         }
       </div>
     </div>
@@ -78,12 +64,11 @@ function SeriesSearchResult(props) {
 }
 
 SeriesSearchResult.propTypes = {
-  cleanQuery: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  cleanTitle: PropTypes.string.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired,
-  tags: PropTypes.arrayOf(PropTypes.object).isRequired
+  tags: PropTypes.arrayOf(PropTypes.object).isRequired,
+  match: PropTypes.object.isRequired
 };
 
 export default SeriesSearchResult;

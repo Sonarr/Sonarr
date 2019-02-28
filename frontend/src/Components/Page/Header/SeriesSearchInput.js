@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
-import jdu from 'jdu';
+import Fuse from 'fuse.js';
 import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import keyboardShortcuts, { shortcuts } from 'Components/keyboardShortcuts';
@@ -9,6 +9,21 @@ import SeriesSearchResult from './SeriesSearchResult';
 import styles from './SeriesSearchInput.css';
 
 const ADD_NEW_TYPE = 'addNew';
+
+const fuseOptions = {
+  shouldSort: true,
+  includeMatches: true,
+  threshold: 0.3,
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  minMatchCharLength: 1,
+  keys: [
+    'title',
+    'alternateTitles.title',
+    'tags.label'
+  ]
+};
 
 class SeriesSearchInput extends Component {
 
@@ -69,9 +84,8 @@ class SeriesSearchInput extends Component {
 
     return (
       <SeriesSearchResult
-        query={query}
-        cleanQuery={jdu.replace(query).toLowerCase()}
-        {...item}
+        {...item.item}
+        match={item.matches[0]}
       />
     );
   }
@@ -140,25 +154,16 @@ class SeriesSearchInput extends Component {
   }
 
   onSuggestionsFetchRequested = ({ value }) => {
-    const lowerCaseValue = jdu.replace(value).toLowerCase();
-
-    const suggestions = this.props.series.filter((series) => {
-      // Check the title first and if there isn't a match fallback to
-      // the alternate titles and finally the tags.
-
-      if (value.length === 1) {
-        return (
-          series.cleanTitle.startsWith(lowerCaseValue) ||
-          series.alternateTitles.some((alternateTitle) => alternateTitle.cleanTitle.startsWith(lowerCaseValue)) ||
-          series.tags.some((tag) => tag.cleanLabel.startsWith(lowerCaseValue))
-        );
+    const fuse = new Fuse(this.props.series, fuseOptions);
+    const suggestions = fuse.search(value).sort((a, b) => {
+      if (a.item.sortTitle < b.item.sortTitle) {
+        return -1;
+      }
+      if (a.item.sortTitle > b.item.sortTitle) {
+        return 1;
       }
 
-      return (
-        series.cleanTitle.contains(lowerCaseValue) ||
-        series.alternateTitles.some((alternateTitle) => alternateTitle.cleanTitle.contains(lowerCaseValue)) ||
-        series.tags.some((tag) => tag.cleanLabel.contains(lowerCaseValue))
-      );
+      return 0;
     });
 
     this.setState({ suggestions });
