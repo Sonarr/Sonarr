@@ -1,42 +1,48 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { PureComponent } from 'react';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import TableRowCell from './TableRowCell';
 import styles from './RelativeDateCell.css';
 
-function RelativeDateCell(props) {
-  const {
-    className,
-    date,
-    includeSeconds,
-    showRelativeDates,
-    shortDateFormat,
-    longDateFormat,
-    timeFormat,
-    component: Component,
-    dispatch,
-    ...otherProps
-  } = props;
+class RelativeDateCell extends PureComponent {
 
-  if (!date) {
+  //
+  // Render
+
+  render() {
+    const {
+      className,
+      date,
+      includeSeconds,
+      showRelativeDates,
+      shortDateFormat,
+      longDateFormat,
+      timeFormat,
+      component: Component,
+      dispatch,
+      ...otherProps
+    } = this.props;
+
+    if (!date) {
+      return (
+        <Component
+          className={className}
+          {...otherProps}
+        />
+      );
+    }
+
     return (
       <Component
         className={className}
+        title={formatDateTime(date, longDateFormat, timeFormat, { includeSeconds, includeRelativeDay: !showRelativeDates })}
         {...otherProps}
-      />
+      >
+        {getRelativeDate(date, shortDateFormat, showRelativeDates, { timeFormat, includeSeconds, timeForToday: true })}
+      </Component>
     );
   }
-
-  return (
-    <Component
-      className={className}
-      title={formatDateTime(date, longDateFormat, timeFormat, { includeSeconds, includeRelativeDay: !showRelativeDates })}
-      {...otherProps}
-    >
-      {getRelativeDate(date, shortDateFormat, showRelativeDates, { timeFormat, includeSeconds, timeForToday: true })}
-    </Component>
-  );
 }
 
 RelativeDateCell.propTypes = {
