@@ -90,9 +90,9 @@ class SeriesSearchInput extends Component {
     );
   }
 
-  goToSeries(series) {
+  goToSeries(item) {
     this.setState({ value: '' });
-    this.props.onGoToSeries(series.titleSlug);
+    this.props.onGoToSeries(item.item.titleSlug);
   }
 
   reset() {
