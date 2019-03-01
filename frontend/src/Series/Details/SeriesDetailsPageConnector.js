@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import NotFound from 'Components/NotFound';
 import SeriesDetailsConnector from './SeriesDetailsConnector';

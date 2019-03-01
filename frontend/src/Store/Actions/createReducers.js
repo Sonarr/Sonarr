@@ -1,13 +1,10 @@
 import { combineReducers } from 'redux';
 import { enableBatching } from 'redux-batched-actions';
-import { routerReducer } from 'react-router-redux';
 import actions from 'Store/Actions';
+import { connectRouter } from 'connected-react-router';
 
 const defaultState = {};
-
-const reducers = {
-  routing: routerReducer
-};
+const reducers = {};
 
 actions.forEach((action) => {
   const section = action.section;
@@ -17,4 +14,10 @@ actions.forEach((action) => {
 });
 
 export { defaultState };
-export default enableBatching(combineReducers(reducers));
+
+export default function(history) {
+  return enableBatching(combineReducers({
+    ...reducers,
+    router: connectRouter(history)
+  }));
+}

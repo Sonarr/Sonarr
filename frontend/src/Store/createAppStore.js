@@ -1,10 +1,10 @@
 import { createStore } from 'redux';
-import reducers, { defaultState } from 'Store/Actions/reducers';
+import createReducers, { defaultState } from 'Store/Actions/createReducers';
 import middlewares from 'Store/Middleware/middlewares';
 
 function createAppStore(history) {
   const appStore = createStore(
-    reducers,
+    createReducers(history),
     defaultState,
     middlewares(history)
   );

@@ -10,7 +10,7 @@ import AddNewSeries from './AddNewSeries';
 function createMapStateToProps() {
   return createSelector(
     (state) => state.addSeries,
-    (state) => state.routing.location,
+    (state) => state.router.location,
     (addSeries, location) => {
       const { params } = parseUrl(location.search);
 

@@ -89,4 +89,4 @@ QualityDefinitionsConnector.propTypes = {
   onChildStateChange: PropTypes.func.isRequired
 };
 
-export default connect(createMapStateToProps, mapDispatchToProps, null, { withRef: true })(QualityDefinitionsConnector);
+export default connect(createMapStateToProps, mapDispatchToProps, null)(QualityDefinitionsConnector);

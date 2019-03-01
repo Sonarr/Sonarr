@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import { fetchRootFolders, addRootFolder } from 'Store/Actions/rootFolderActions';
 import ImportSeriesSelectFolder from './ImportSeriesSelectFolder';
