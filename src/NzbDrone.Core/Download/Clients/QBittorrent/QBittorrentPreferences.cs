@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
 {
@@ -19,5 +19,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         [JsonProperty(PropertyName = "queueing_enabled")]
         public bool QueueingEnabled { get; set; } = true;
+
+        [JsonProperty(PropertyName = "dht")]
+        public bool DhtEnabled { get; set; } // DHT enabled (needed for more peers and magnet downloads)
     }
 }

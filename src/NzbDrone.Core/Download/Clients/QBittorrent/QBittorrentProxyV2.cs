@@ -272,6 +272,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             if (settings.Username.IsNullOrWhiteSpace() || settings.Password.IsNullOrWhiteSpace())
             {
+                if (reauthenticate)
+                {
+                    throw new DownloadClientAuthenticationException("Failed to authenticate with qBittorrent.");
+                }
                 return;
             }
 

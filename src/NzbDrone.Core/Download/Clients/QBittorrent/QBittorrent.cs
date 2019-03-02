@@ -35,6 +35,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
+            if (!Proxy.GetConfig(Settings).DhtEnabled)
+            {
+                throw new NotSupportedException("Magnet Links not supported if DHT is disabled");
+            }
+
             Proxy.AddTorrentFromUrl(magnetLink, Settings);
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
@@ -153,6 +158,18 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     case "stalledDL": // torrent is being downloaded, but no connection were made
                         item.Status = DownloadItemStatus.Warning;
                         item.Message = "The download is stalled with no connections";
+                        break;
+
+                    case "metaDL": // torrent magnet is being downloaded
+                        if (config.DhtEnabled)
+                        {
+                            item.Status = DownloadItemStatus.Queued;
+                        }
+                        else
+                        {
+                            item.Status = DownloadItemStatus.Warning;
+                            item.Message = "qBittorrent cannot resolve magnet link with DHT disabled";
+                        }
                         break;
 
                     case "downloading": // torrent is being downloaded and data is being transfered
@@ -342,6 +359,12 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         protected TimeSpan? GetRemainingTime(QBittorrentTorrent torrent)
         {
             if (torrent.Eta < 0 || torrent.Eta > 365 * 24 * 3600)
+            {
+                return null;
+            }
+
+            // qBittorrent sends eta=8640000 if unknown such as queued
+            if (torrent.Eta == 8640000)
             {
                 return null;
             }
