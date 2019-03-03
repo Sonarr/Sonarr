@@ -20,13 +20,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         {
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = new QBittorrentSettings
-                                          {
-                                              Host = "127.0.0.1",
-                                              Port = 2222,
-                                              Username = "admin",
-                                              Password = "pass",
-                                              TvCategory = "tv"
-                                          };
+            {
+                Host = "127.0.0.1",
+                Port = 2222,
+                Username = "admin",
+                Password = "pass",
+                TvCategory = "tv"
+            };
 
             Mocker.GetMock<ITorrentFileInfoReader>()
                   .Setup(s => s.GetHashFromTorrentFile(It.IsAny<Byte[]>()))
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             Mocker.GetMock<IQBittorrentProxy>()
                   .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
-                  .Returns(new QBittorrentPreferences());
+                  .Returns(new QBittorrentPreferences() { DhtEnabled = true });
 
             Mocker.GetMock<IQBittorrentProxySelector>()
                   .Setup(s => s.GetProxy(It.IsAny<QBittorrentSettings>(), It.IsAny<bool>()))
@@ -104,10 +104,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             Mocker.GetMock<IQBittorrentProxy>()
                 .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
                 .Returns(new QBittorrentPreferences
-                         {
-                             RemoveOnMaxRatio = removeOnMaxRatio,
-                             MaxRatio = maxRatio
-                         });
+                {
+                    RemoveOnMaxRatio = removeOnMaxRatio,
+                    MaxRatio = maxRatio
+                });
         }
 
         protected virtual void GivenTorrents(List<QBittorrentTorrent> torrents)
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var item = Subject.GetItems().Single();
             VerifyPaused(item);
-            item.RemainingTime.Should().NotBe(TimeSpan.Zero);
+            item.RemainingTime.Should().NotHaveValue();
         }
 
         [TestCase("pausedUP")]
@@ -189,6 +189,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
         [TestCase("queuedDL")]
         [TestCase("checkingDL")]
+        [TestCase("metaDL")]
         public void queued_item_should_have_required_properties(string state)
         {
             var torrent = new QBittorrentTorrent
@@ -206,7 +207,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var item = Subject.GetItems().Single();
             VerifyQueued(item);
-            item.RemainingTime.Should().NotBe(TimeSpan.Zero);
+            item.RemainingTime.Should().NotHaveValue();
         }
 
         [Test]
@@ -248,7 +249,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var item = Subject.GetItems().Single();
             VerifyWarning(item);
-            item.RemainingTime.Should().NotBe(TimeSpan.Zero);
+            item.RemainingTime.Should().NotHaveValue();
         }
 
         [Test]
@@ -274,6 +275,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             var id = Subject.Download(remoteEpisode);
 
             id.Should().Be(expectedHash);
+        }
+
+        public void Download_should_refuse_magnet_if_dht_is_disabled()
+        {
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                  .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
+                  .Returns(new QBittorrentPreferences() { DhtEnabled = false });
+
+            var remoteEpisode = CreateRemoteEpisode();
+            remoteEpisode.Release.DownloadUrl = "magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp";
+
+            Assert.Throws<NotSupportedException>(() => Subject.Download(remoteEpisode));
         }
 
         [Test]
@@ -448,6 +462,56 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeTrue();
             item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_overridden_max_ratio_reached_and_paused()
+        {
+            GivenMaxRatio(2.0f);
+
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "pausedUP",
+                Label = "",
+                SavePath = "",
+                Ratio = 1.0f,
+                RatioLimit = 0.8f
+            };
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_be_removable_if_overridden_max_ratio_not_reached_and_paused()
+        {
+            GivenMaxRatio(0.2f);
+
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "pausedUP",
+                Label = "",
+                SavePath = "",
+                Ratio = 0.5f,
+                RatioLimit = 0.8f
+            };
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
         }
 
         [Test]

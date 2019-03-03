@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -130,11 +130,12 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_execute_typed_get()
         {
-            var request = new HttpRequest($"http://{_httpBinHost}/get");
+            var request = new HttpRequest($"http://{_httpBinHost}/get?test=1");
 
             var response = Subject.Get<HttpBinResource>(request);
 
-            response.Resource.Url.Should().Be(request.Url.FullUri);
+            response.Resource.Url.EndsWith("/get?test=1");
+            response.Resource.Args.Should().Contain("test", "1");
         }
 
         [Test]
@@ -706,6 +707,7 @@ namespace NzbDrone.Common.Test.Http
 
     public class HttpBinResource
     {
+        public Dictionary<string, object> Args { get; set; }
         public Dictionary<string, object> Headers { get; set; }
         public string Origin { get; set; }
         public string Url { get; set; }

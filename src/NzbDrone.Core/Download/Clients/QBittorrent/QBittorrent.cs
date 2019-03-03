@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             SetInitialState(hash.ToLower());
 
-            if (remoteEpisode.SeedConfiguration.Ratio.HasValue || remoteEpisode.SeedConfiguration.SeedTime.HasValue)
+            if (remoteEpisode.SeedConfiguration != null && (remoteEpisode.SeedConfiguration.Ratio.HasValue || remoteEpisode.SeedConfiguration.SeedTime.HasValue))
             {
                 Proxy.SetTorrentSeedingConfiguration(hash.ToLower(), remoteEpisode.SeedConfiguration, Settings);
             }
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             SetInitialState(hash.ToLower());
 
-            if (remoteEpisode.SeedConfiguration.Ratio.HasValue || remoteEpisode.SeedConfiguration.SeedTime.HasValue)
+            if (remoteEpisode.SeedConfiguration != null && (remoteEpisode.SeedConfiguration.Ratio.HasValue || remoteEpisode.SeedConfiguration.SeedTime.HasValue))
             {
                 Proxy.SetTorrentSeedingConfiguration(hash.ToLower(), remoteEpisode.SeedConfiguration, Settings);
             }
