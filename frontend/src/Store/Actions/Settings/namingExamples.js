@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { createThunk } from 'Store/thunks';
 import { set, update } from 'Store/Actions/baseActions';
 
@@ -42,10 +42,10 @@ export default {
 
       const naming = getState().settings.naming;
 
-      const promise = $.ajax({
+      const promise = createAjaxRequest({
         url: '/config/naming/examples',
         data: Object.assign({}, naming.item, naming.pendingChanges)
-      });
+      }).request;
 
       promise.done((data) => {
         dispatch(batchActions([

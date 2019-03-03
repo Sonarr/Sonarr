@@ -1,15 +1,15 @@
 .select {
-  composes: input from 'Components/Form/Input.css';
+  composes: input from '~Components/Form/Input.css';
 
   padding: 0 11px;
 }
 
 .hasError {
-  composes: hasError from 'Components/Form/Input.css';
+  composes: hasError from '~Components/Form/Input.css';
 }
 
 .hasWarning {
-  composes: hasWarning from 'Components/Form/Input.css';
+  composes: hasWarning from '~Components/Form/Input.css';
 }
 
 .isDisabled {

@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
 import { sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
@@ -252,10 +252,10 @@ export const actionHandlers = handleThunks({
 
     dispatch(updateItem({ section: paged, id, isGrabbing: true }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: `/queue/grab/${id}`,
       method: 'POST'
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([
@@ -297,12 +297,12 @@ export const actionHandlers = handleThunks({
       })
     ]));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/queue/grab/bulk',
       method: 'POST',
       dataType: 'json',
       data: JSON.stringify(payload)
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([
@@ -349,10 +349,10 @@ export const actionHandlers = handleThunks({
 
     dispatch(updateItem({ section: paged, id, isRemoving: true }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: `/queue/${id}?blacklist=${blacklist}`,
       method: 'DELETE'
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(fetchQueue());
@@ -381,12 +381,12 @@ export const actionHandlers = handleThunks({
       set({ section: paged, isRemoving: true })
     ]));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: `/queue/bulk?blacklist=${blacklist}`,
       method: 'DELETE',
       dataType: 'json',
       data: JSON.stringify({ ids })
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([

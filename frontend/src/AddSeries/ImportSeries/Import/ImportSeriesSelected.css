@@ -1,3 +1,3 @@
 .input {
-  composes: input from 'Components/Form/CheckInput.css';
+  composes: input from '~Components/Form/CheckInput.css';
 }

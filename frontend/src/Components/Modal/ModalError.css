@@ -1,5 +1,5 @@
 .message {
-  composes: message from 'Components/Error/ErrorBoundaryError.css';
+  composes: message from '~Components/Error/ErrorBoundaryError.css';
 
   margin: 0;
   margin-bottom: 30px;
@@ -8,7 +8,7 @@
 }
 
 .details {
-  composes: details from 'Components/Error/ErrorBoundaryError.css';
+  composes: details from '~Components/Error/ErrorBoundaryError.css';
 
   margin: 0;
   margin-top: 20px;

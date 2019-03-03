@@ -9,7 +9,7 @@
 }
 
 .footer {
-  composes: modalFooter from 'Components/Modal/ModalFooter.css';
+  composes: modalFooter from '~Components/Modal/ModalFooter.css';
 
   justify-content: space-between;
   padding: 15px;
@@ -28,7 +28,7 @@
 
 .importMode,
 .bulkSelect {
-  composes: select from 'Components/Form/SelectInput.css';
+  composes: select from '~Components/Form/SelectInput.css';
 
   margin-right: 10px;
   width: auto;

@@ -1,5 +1,5 @@
 .menuButton {
-  composes: menuButton from './MenuButton.css';
+  composes: menuButton from '~./MenuButton.css';
 
   &:hover {
     color: #666;

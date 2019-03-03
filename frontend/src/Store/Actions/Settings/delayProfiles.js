@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { createThunk } from 'Store/thunks';
 import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
 import createFetchHandler from 'Store/Actions/Creators/createFetchHandler';
@@ -82,10 +82,10 @@ export default {
       const after = moveIndex > 0 ? _.find(delayProfiles, { order: moveIndex }) : null;
       const afterQueryParam = after ? `after=${after.id}` : '';
 
-      const promise = $.ajax({
+      const promise = createAjaxRequest({
         method: 'PUT',
         url: `/delayprofile/reorder/${id}?${afterQueryParam}`
-      });
+      }).request;
 
       promise.done((data) => {
         dispatch(update({ section, data }));

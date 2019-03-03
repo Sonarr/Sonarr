@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createFetchHandler from './Creators/createFetchHandler';
 import createRemoveItemHandler from './Creators/createRemoveItemHandler';
@@ -50,11 +50,11 @@ export const actionHandlers = handleThunks({
   [FETCH_TAGS]: createFetchHandler(section, '/tag'),
 
   [ADD_TAG]: function(getState, payload, dispatch) {
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/tag',
       method: 'POST',
       data: JSON.stringify(payload.tag)
-    });
+    }).request;
 
     promise.done((data) => {
       const tags = getState().tags.items.slice();

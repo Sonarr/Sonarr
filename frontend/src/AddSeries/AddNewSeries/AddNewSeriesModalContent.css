@@ -36,28 +36,28 @@
 }
 
 .searchForMissingEpisodesContainer {
-  composes: container from 'Components/Form/CheckInput.css';
+  composes: container from '~Components/Form/CheckInput.css';
 
   flex: 0 1 0;
 }
 
 .searchForMissingEpisodesInput {
-  composes: input from 'Components/Form/CheckInput.css';
+  composes: input from '~Components/Form/CheckInput.css';
 
   margin-top: 0;
 }
 
 .modalFooter {
-  composes: modalFooter from 'Components/Modal/ModalFooter.css';
+  composes: modalFooter from '~Components/Modal/ModalFooter.css';
 }
 
 .addButton {
   @add-mixin truncate;
-  composes: button from 'Components/Link/SpinnerButton.css';
+  composes: button from '~Components/Link/SpinnerButton.css';
 }
 
 .hideLanguageProfile {
-  composes: group from 'Components/Form/FormGroup.css';
+  composes: group from '~Components/Form/FormGroup.css';
 
   display: none;
 }

@@ -14,7 +14,7 @@
 }
 
 .button {
-  composes: button from 'Components/Link/Button.css';
+  composes: button from '~Components/Link/Button.css';
 
   width: 300px;
 }

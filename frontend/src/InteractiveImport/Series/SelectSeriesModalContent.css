@@ -1,5 +1,5 @@
 .modalBody {
-  composes: modalBody from 'Components/Modal/ModalBody.css';
+  composes: modalBody from '~Components/Modal/ModalBody.css';
 
   display: flex;
   flex: 1 1 auto;
@@ -7,7 +7,7 @@
 }
 
 .filterInput {
-  composes: input from 'Components/Form/TextInput.css';
+  composes: input from '~Components/Form/TextInput.css';
 
   flex: 0 0 auto;
   margin-bottom: 20px;

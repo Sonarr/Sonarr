@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { kinds } from 'Helpers/Props';
-import { tagShape } from './TagInput';
+import tagShape from 'Helpers/Props/Shapes/tagShape';
 import styles from './TagInputInput.css';
 
 class TagInputInput extends Component {

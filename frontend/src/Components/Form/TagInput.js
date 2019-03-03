@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import { kinds } from 'Helpers/Props';
+import tagShape from 'Helpers/Props/Shapes/tagShape';
 import TagInputInput from './TagInputInput';
 import TagInputTag from './TagInputTag';
 import styles from './TagInput.css';
@@ -265,11 +266,6 @@ class TagInput extends Component {
     );
   }
 }
-
-export const tagShape = {
-  id: PropTypes.oneOfType([PropTypes.bool, PropTypes.number, PropTypes.string]).isRequired,
-  name: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired
-};
 
 TagInput.propTypes = {
   className: PropTypes.string.isRequired,

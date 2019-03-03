@@ -1,5 +1,5 @@
 .level {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 20px;
 }
@@ -29,7 +29,7 @@
 }
 
 .actions {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 45px;
 }

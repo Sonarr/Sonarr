@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import getSectionState from 'Utilities/State/getSectionState';
 import updateSectionState from 'Utilities/State/updateSectionState';
 import { createThunk } from 'Store/thunks';
@@ -75,11 +75,11 @@ export default {
         isSaving: true
       }));
 
-      const promise = $.ajax({
+      const promise = createAjaxRequest({
         method: 'PUT',
         url: '/qualityDefinition/update',
         data: JSON.stringify(upatedDefinitions)
-      });
+      }).request;
 
       promise.done((data) => {
         dispatch(batchActions([

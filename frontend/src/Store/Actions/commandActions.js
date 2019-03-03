@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { isSameCommand } from 'Utilities/Command';
 import { messageTypes } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
@@ -138,11 +138,11 @@ export function executeCommandHelper( payload, dispatch) {
     lastCommand = null;
   }, 5000);
 
-  const promise = $.ajax({
+  const promise = createAjaxRequest({
     url: '/command',
     method: 'POST',
     data: JSON.stringify(payload)
-  });
+  }).request;
 
   return promise.then((data) => {
     dispatch(addCommand(data));

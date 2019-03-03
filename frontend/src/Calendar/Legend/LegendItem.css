@@ -13,29 +13,29 @@
  */
 
 .downloaded {
-  composes: downloaded from 'Calendar/Events/CalendarEvent.css';
+  composes: downloaded from '~Calendar/Events/CalendarEvent.css';
 }
 
 .downloading {
-  composes: downloading from 'Calendar/Events/CalendarEvent.css';
+  composes: downloading from '~Calendar/Events/CalendarEvent.css';
 }
 
 .unmonitored {
-  composes: unmonitored from 'Calendar/Events/CalendarEvent.css';
+  composes: unmonitored from '~Calendar/Events/CalendarEvent.css';
 }
 
 .onAir {
-  composes: onAir from 'Calendar/Events/CalendarEvent.css';
+  composes: onAir from '~Calendar/Events/CalendarEvent.css';
 }
 
 .missing {
-  composes: missing from 'Calendar/Events/CalendarEvent.css';
+  composes: missing from '~Calendar/Events/CalendarEvent.css';
 }
 
 .premiere {
-  composes: premiere from 'Calendar/Events/CalendarEvent.css';
+  composes: premiere from '~Calendar/Events/CalendarEvent.css';
 }
 
 .unaired {
-  composes: unaired from 'Calendar/Events/CalendarEvent.css';
+  composes: unaired from '~Calendar/Events/CalendarEvent.css';
 }

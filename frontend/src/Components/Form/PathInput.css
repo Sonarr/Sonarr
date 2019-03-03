@@ -1,17 +1,17 @@
 .path {
-  composes: input from 'Components/Form/Input.css';
+  composes: input from '~Components/Form/Input.css';
 }
 
 .hasError {
-  composes: hasError from 'Components/Form/Input.css';
+  composes: hasError from '~Components/Form/Input.css';
 }
 
 .hasWarning {
-  composes: hasWarning from 'Components/Form/Input.css';
+  composes: hasWarning from '~Components/Form/Input.css';
 }
 
 .hasFileBrowser {
-  composes: hasButton from 'Components/Form/Input.css';
+  composes: hasButton from '~Components/Form/Input.css';
 }
 
 .pathInputWrapper {
@@ -62,7 +62,7 @@
 }
 
 .fileBrowserButton {
-  composes: button from './FormInputButton.css';
+  composes: button from '~./FormInputButton.css';
 
   height: 35px;
 }

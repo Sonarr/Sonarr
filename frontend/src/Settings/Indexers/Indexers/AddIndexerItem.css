@@ -1,5 +1,5 @@
 .indexer {
-  composes: card from 'Components/Card.css';
+  composes: card from '~Components/Card.css';
 
   position: relative;
   width: 300px;
@@ -28,14 +28,14 @@
 }
 
 .presetsMenu {
-  composes: menu from 'Components/Menu/Menu.css';
+  composes: menu from '~Components/Menu/Menu.css';
 
   display: inline-block;
   margin: 0 5px;
 }
 
 .presetsMenuButton {
-  composes: button from 'Components/Link/Button.css';
+  composes: button from '~Components/Link/Button.css';
 
   &::after {
     margin-left: 5px;

@@ -21,7 +21,7 @@
 }
 
 .loading {
-  composes: loading from 'Components/Loading/LoadingIndicator.css';
+  composes: loading from '~Components/Loading/LoadingIndicator.css';
 
   margin: 0;
   margin-left: 5px;
@@ -54,7 +54,7 @@
 }
 
 .pageSelect {
-  composes: select from 'Components/Form/SelectInput.css';
+  composes: select from '~Components/Form/SelectInput.css';
 
   padding: 0 2px;
   height: 25px;

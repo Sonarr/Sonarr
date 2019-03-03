@@ -18,7 +18,7 @@
 }
 
 @media only screen and (max-width: $breakpointSmall) {
-  composes: modalFooter from 'Components/Modal/ModalFooter.css';
+  composes: modalFooter from '~Components/Modal/ModalFooter.css';
 
   flex-wrap: wrap;
 }

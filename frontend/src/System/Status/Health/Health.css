@@ -4,7 +4,7 @@
 }
 
 .loading {
-  composes: loading from 'Components/Loading/LoadingIndicator.css';
+  composes: loading from '~Components/Loading/LoadingIndicator.css';
 
   margin-top: 2px;
   margin-left: 10px;

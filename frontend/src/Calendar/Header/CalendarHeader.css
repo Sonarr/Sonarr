@@ -8,7 +8,7 @@
 }
 
 .todayButton {
-  composes: button from 'Components/Link/Button.css';
+  composes: button from '~Components/Link/Button.css';
 
   margin-left: 5px;
 }
@@ -30,13 +30,13 @@
 }
 
 .viewMenu {
-  composes: menu from 'Components/Menu/Menu.css';
+  composes: menu from '~Components/Menu/Menu.css';
 
   line-height: 31px;
 }
 
 .loading {
-  composes: loading from 'Components/Loading/LoadingIndicator.css';
+  composes: loading from '~Components/Loading/LoadingIndicator.css';
 
   margin-top: 5px;
   margin-right: 10px;

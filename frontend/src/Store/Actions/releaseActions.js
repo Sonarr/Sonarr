@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { filterBuilderTypes, filterBuilderValueTypes, filterTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
@@ -210,12 +210,12 @@ export const actionHandlers = handleThunks({
 
     dispatch(updateRelease({ guid, isGrabbing: true }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/release',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(payload)
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(updateRelease({

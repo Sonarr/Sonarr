@@ -17,7 +17,7 @@
 }
 
 .searchInput {
-  composes: input from 'Components/Form/TextInput.css';
+  composes: input from '~Components/Form/TextInput.css';
 
   height: 46px;
   border-radius: 0;

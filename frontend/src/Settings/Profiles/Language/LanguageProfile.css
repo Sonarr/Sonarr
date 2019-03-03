@@ -1,5 +1,5 @@
 .languageProfile {
-  composes: card from 'Components/Card.css';
+  composes: card from '~Components/Card.css';
 
   width: 300px;
 }
@@ -18,7 +18,7 @@
 }
 
 .cloneButton {
-  composes: button from 'Components/Link/IconButton.css';
+  composes: button from '~Components/Link/IconButton.css';
 
   height: 36px;
 }

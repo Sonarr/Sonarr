@@ -3,8 +3,8 @@
 }
 
 .enhancedSelect {
-  composes: input from 'Components/Form/Input.css';
-  composes: link from 'Components/Link/Link.css';
+  composes: input from '~Components/Form/Input.css';
+  composes: link from '~Components/Link/Link.css';
 
   position: relative;
   display: flex;
@@ -21,11 +21,11 @@
 }
 
 .hasError {
-  composes: hasError from 'Components/Form/Input.css';
+  composes: hasError from '~Components/Form/Input.css';
 }
 
 .hasWarning {
-  composes: hasWarning from 'Components/Form/Input.css';
+  composes: hasWarning from '~Components/Form/Input.css';
 }
 
 .isDisabled {
@@ -62,7 +62,7 @@
 }
 
 .optionsModalBody {
-  composes: modalBody from 'Components/Modal/ModalBody.css';
+  composes: modalBody from '~Components/Modal/ModalBody.css';
 
   display: flex;
   justify-content: center;
@@ -71,7 +71,7 @@
 }
 
 .optionsModalScroller {
-  composes: scroller from 'Components/Scroller/Scroller.css';
+  composes: scroller from '~Components/Scroller/Scroller.css';
 
   border: 1px solid $inputBorderColor;
   border-radius: 4px;

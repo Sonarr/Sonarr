@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { filterBuilderTypes, filterBuilderValueTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
@@ -121,7 +121,7 @@ export const actionHandlers = handleThunks({
       isSaving: true
     }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/seasonPass',
       method: 'POST',
       data: JSON.stringify({
@@ -129,7 +129,7 @@ export const actionHandlers = handleThunks({
         monitoringOptions: { monitor }
       }),
       dataType: 'json'
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(fetchSeries());

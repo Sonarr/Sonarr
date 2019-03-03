@@ -265,7 +265,8 @@ SeriesIndexOverview.propTypes = {
   isSmallScreen: PropTypes.bool.isRequired,
   isRefreshingSeries: PropTypes.bool.isRequired,
   isSearchingSeries: PropTypes.bool.isRequired,
-  onRefreshSeriesPress: PropTypes.func.isRequired
+  onRefreshSeriesPress: PropTypes.func.isRequired,
+  onSearchPress: PropTypes.func.isRequired
 };
 
 SeriesIndexOverview.defaultProps = {

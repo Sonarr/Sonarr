@@ -1,5 +1,5 @@
 .qualityProfile {
-  composes: card from 'Components/Card.css';
+  composes: card from '~Components/Card.css';
 
   width: 300px;
 }
@@ -18,7 +18,7 @@
 }
 
 .cloneButton {
-  composes: button from 'Components/Link/IconButton.css';
+  composes: button from '~Components/Link/IconButton.css';
 
   height: 36px;
 }
@@ -31,7 +31,7 @@
 }
 
 .tooltipLabel {
-  composes: label from 'Components/Label.css';
+  composes: label from '~Components/Label.css';
 
   margin: 0;
   border: none;

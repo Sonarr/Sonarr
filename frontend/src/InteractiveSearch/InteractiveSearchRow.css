@@ -1,12 +1,12 @@
 .title {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   word-break: break-all;
 }
 
 .quality,
 .language {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   text-align: center;
 }
@@ -16,7 +16,7 @@
 }
 
 .preferredWordScore {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 55px;
   font-weight: bold;
@@ -25,14 +25,14 @@
 
 .rejected,
 .download {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 50px;
 }
 
 .age,
 .size {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   white-space: nowrap;
 }

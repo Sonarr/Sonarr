@@ -1,5 +1,5 @@
 .indexer {
-  composes: card from 'Components/Card.css';
+  composes: card from '~Components/Card.css';
 
   width: 290px;
 }

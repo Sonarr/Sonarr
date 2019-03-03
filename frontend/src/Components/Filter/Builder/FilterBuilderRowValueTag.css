@@ -7,7 +7,7 @@
 }
 
 .label {
-  composes: label from 'Components/Label.css';
+  composes: label from '~Components/Label.css';
 
   border-style: none;
   font-size: 13px;

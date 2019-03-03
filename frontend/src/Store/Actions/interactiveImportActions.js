@@ -1,7 +1,7 @@
-import $ from 'jquery';
 import moment from 'moment';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import updateSectionState from 'Utilities/State/updateSectionState';
 import { createThunk, handleThunks } from 'Store/thunks';
 import { sortDirections } from 'Helpers/Props';
@@ -105,10 +105,10 @@ export const actionHandlers = handleThunks({
 
     dispatch(set({ section, isFetching: true }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/manualimport',
       data: payload
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([

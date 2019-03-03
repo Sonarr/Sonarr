@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import getQualities from 'Utilities/Quality/getQualities';
+import tagShape from 'Helpers/Props/Shapes/tagShape';
 import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
-import { tagShape } from 'Components/Form/TagInput';
 import FilterBuilderRowValue from './FilterBuilderRowValue';
 
 function createMapStateToProps() {

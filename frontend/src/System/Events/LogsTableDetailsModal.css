@@ -1,5 +1,5 @@
 .detailsText {
-  composes: scroller from 'Components/Scroller/Scroller.css';
+  composes: scroller from '~Components/Scroller/Scroller.css';
 
   display: block;
   margin: 0 0 10.5px;

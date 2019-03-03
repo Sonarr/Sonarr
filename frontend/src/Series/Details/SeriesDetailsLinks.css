@@ -7,7 +7,7 @@
 }
 
 .linkLabel {
-  composes: label from 'Components/Label.css';
+  composes: label from '~Components/Label.css';
 
   cursor: pointer;
 }

@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createHandleActions from './Creators/createHandleActions';
 import { set } from './baseActions';
@@ -49,13 +49,13 @@ export const actionHandlers = handleThunks({
       allowFoldersWithoutTrailingSlashes = false
     } = payload;
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/filesystem',
       data: {
         path,
         allowFoldersWithoutTrailingSlashes
       }
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(updatePaths({ path, ...data }));

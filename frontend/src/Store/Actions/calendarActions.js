@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import moment from 'moment';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { filterTypes } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import * as calendarViews from 'Calendar/calendarViews';
@@ -239,14 +239,14 @@ export const actionHandlers = handleThunks({
 
     dispatch(set(attrs));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/calendar',
       data: {
         unmonitored,
         start,
         end
       }
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([

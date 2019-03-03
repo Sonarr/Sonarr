@@ -28,6 +28,12 @@
     "react"
   ],
 
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+
   "rules": {
     "filenames/match-exported": ["error"],
 

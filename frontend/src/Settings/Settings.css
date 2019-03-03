@@ -1,5 +1,5 @@
 .link {
-  composes: link from 'Components/Link/Link.css';
+  composes: link from '~Components/Link/Link.css';
 
   border-bottom: 1px solid #e5e5e5;
   color: #3a3f51;

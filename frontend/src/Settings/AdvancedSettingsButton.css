@@ -1,15 +1,15 @@
 .button {
-  composes: toolbarButton from 'Components/Page/Toolbar/PageToolbarButton.css';
+  composes: toolbarButton from '~Components/Page/Toolbar/PageToolbarButton.css';
 
   position: relative;
 }
 
 .labelContainer {
-  composes: labelContainer from 'Components/Page/Toolbar/PageToolbarButton.css';
+  composes: labelContainer from '~Components/Page/Toolbar/PageToolbarButton.css';
 }
 
 .label {
-  composes: label from 'Components/Page/Toolbar/PageToolbarButton.css';
+  composes: label from '~Components/Page/Toolbar/PageToolbarButton.css';
 }
 
 .indicatorContainer {

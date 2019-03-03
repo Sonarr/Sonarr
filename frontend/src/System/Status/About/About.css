@@ -1,5 +1,5 @@
 .descriptionList {
-  composes: descriptionList from 'Components/DescriptionList/DescriptionList.css';
+  composes: descriptionList from '~Components/DescriptionList/DescriptionList.css';
 
   margin-bottom: 10px;
 }

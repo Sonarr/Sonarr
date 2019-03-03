@@ -1,5 +1,5 @@
 .tableContainer {
-  composes: tableContainer from 'Components/Table/VirtualTable.css';
+  composes: tableContainer from '~Components/Table/VirtualTable.css';
 
   flex: 1 0 auto;
 }

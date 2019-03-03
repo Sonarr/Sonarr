@@ -1,5 +1,5 @@
 .menuButton {
-  composes: menuButton from './MenuButton.css';
+  composes: menuButton from '~./MenuButton.css';
 
   width: $toolbarButtonWidth;
   height: $toolbarHeight;
@@ -7,5 +7,5 @@
 }
 
 .label {
-  composes: label from 'Components/Page/Toolbar/PageToolbarButton.css';
+  composes: label from '~Components/Page/Toolbar/PageToolbarButton.css';
 }

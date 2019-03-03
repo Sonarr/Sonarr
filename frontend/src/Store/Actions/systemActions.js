@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
 import { filterTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
@@ -302,7 +302,7 @@ export const actionHandlers = handleThunks({
       }));
     }
 
-    const promise = $.ajax(ajaxOptions);
+    const promise = createAjaxRequest(ajaxOptions).request;
 
     promise.done((data) => {
       dispatch(set({
@@ -344,10 +344,10 @@ export const actionHandlers = handleThunks({
   ),
 
   [RESTART]: function(getState, payload, dispatch) {
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/system/restart',
       method: 'POST'
-    });
+    }).request;
 
     promise.done(() => {
       dispatch(setAppValue({ isRestarting: true }));
@@ -355,7 +355,7 @@ export const actionHandlers = handleThunks({
   },
 
   [SHUTDOWN]: function() {
-    $.ajax({
+    createAjaxRequest({
       url: '/system/shutdown',
       method: 'POST'
     });

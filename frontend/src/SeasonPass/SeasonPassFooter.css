@@ -8,7 +8,7 @@
 }
 
 .updateSelectedButton {
-  composes: button from 'Components/Link/SpinnerButton.css';
+  composes: button from '~Components/Link/SpinnerButton.css';
 
   height: 35px;
 }

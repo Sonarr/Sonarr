@@ -1,13 +1,13 @@
-import $ from 'jquery';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { set } from '../baseActions';
 
 function createFetchSchemaHandler(section, url) {
   return function(getState, payload, dispatch) {
     dispatch(set({ section, isSchemaFetching: true }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(set({

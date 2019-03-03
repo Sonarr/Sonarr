@@ -1,23 +1,23 @@
 .title {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   white-space: nowrap;
 }
 
 .monitored {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 42px;
 }
 
 .episodeNumber {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 50px;
 }
 
 .size {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 100px;
 }
@@ -26,7 +26,7 @@
 .audio,
 .video,
 .status {
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 100px;
 }

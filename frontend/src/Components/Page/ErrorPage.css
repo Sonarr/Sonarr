@@ -1,5 +1,5 @@
 .page {
-  composes: page from './Page.css';
+  composes: page from '~./Page.css';
 
   margin-top: 20px;
   text-align: center;

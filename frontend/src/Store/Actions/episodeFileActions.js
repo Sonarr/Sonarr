@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { createThunk, handleThunks } from 'Store/thunks';
 import episodeEntities from 'Episode/episodeEntities';
 import createFetchHandler from './Creators/createFetchHandler';
@@ -90,12 +90,12 @@ export const actionHandlers = handleThunks({
 
     dispatch(set({ section, isDeleting: true }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/episodeFile/bulk',
       method: 'DELETE',
       dataType: 'json',
       data: JSON.stringify({ episodeFileIds })
-    });
+    }).request;
 
     promise.done(() => {
       const episodes = getState().episodes.items;
@@ -157,12 +157,12 @@ export const actionHandlers = handleThunks({
       data.quality = quality;
     }
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/episodeFile/editor',
       method: 'PUT',
       dataType: 'json',
       data: JSON.stringify(data)
-    });
+    }).request;
 
     promise.done(() => {
       dispatch(batchActions([

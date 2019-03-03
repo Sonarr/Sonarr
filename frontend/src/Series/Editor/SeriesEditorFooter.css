@@ -21,14 +21,14 @@
 
 .organizeSelectedButton,
 .tagsButton {
-  composes: button from 'Components/Link/SpinnerButton.css';
+  composes: button from '~Components/Link/SpinnerButton.css';
 
   margin-right: 10px;
   height: 35px;
 }
 
 .deleteSelectedButton {
-  composes: button from 'Components/Link/SpinnerButton.css';
+  composes: button from '~Components/Link/SpinnerButton.css';
 
   margin-left: 50px;
   height: 35px;

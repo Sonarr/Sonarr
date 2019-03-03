@@ -1,5 +1,5 @@
 .button {
-  composes: link from 'Components/Link/Link.css';
+  composes: link from '~Components/Link/Link.css';
 
   display: inline-block;
   margin: 0 2px;

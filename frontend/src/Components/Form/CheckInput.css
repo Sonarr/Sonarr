@@ -94,7 +94,7 @@
 }
 
 .helpText {
-  composes: helpText from 'Components/Form/FormInputHelpText.css';
+  composes: helpText from '~Components/Form/FormInputHelpText.css';
 
   margin-top: 8px;
   margin-left: 5px;

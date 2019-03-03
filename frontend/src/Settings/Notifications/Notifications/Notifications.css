@@ -4,7 +4,7 @@
 }
 
 .addNotification {
-  composes: notification from './Notification.css';
+  composes: notification from '~./Notification.css';
 
   background-color: $cardAlternateBackgroundColor;
   color: $gray;

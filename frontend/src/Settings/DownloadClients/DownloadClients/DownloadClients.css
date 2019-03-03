@@ -4,7 +4,7 @@
 }
 
 .addDownloadClient {
-  composes: downloadClient from './DownloadClient.css';
+  composes: downloadClient from '~./DownloadClient.css';
 
   background-color: $cardAlternateBackgroundColor;
   color: $gray;

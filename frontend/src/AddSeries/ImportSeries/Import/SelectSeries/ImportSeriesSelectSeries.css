@@ -3,7 +3,7 @@
 }
 
 .button {
-  composes: link from 'Components/Link/Link.css';
+  composes: link from '~Components/Link/Link.css';
 
   position: relative;
   display: flex;
@@ -65,7 +65,7 @@
 }
 
 .searchInput {
-  composes: input from 'Components/Form/TextInput.css';
+  composes: input from '~Components/Form/TextInput.css';
 
   border-radius: 0;
 }

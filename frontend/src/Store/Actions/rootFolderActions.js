@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createFetchHandler from './Creators/createFetchHandler';
 import createHandleActions from './Creators/createHandleActions';
@@ -58,12 +58,12 @@ export const actionHandlers = handleThunks({
       isSaving: true
     }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/rootFolder',
       method: 'POST',
       data: JSON.stringify({ path }),
       dataType: 'json'
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([

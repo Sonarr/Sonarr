@@ -1,5 +1,5 @@
 .selectedValue {
-  composes: selectedValue from './EnhancedSelectInputSelectedValue.css';
+  composes: selectedValue from '~./EnhancedSelectInputSelectedValue.css';
 
   display: flex;
   align-items: center;

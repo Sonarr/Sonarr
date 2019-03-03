@@ -1,5 +1,5 @@
 .tag {
-  composes: card from 'Components/Card.css';
+  composes: card from '~Components/Card.css';
 
   width: 150px;
 }

@@ -1,6 +1,6 @@
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { createThunk, handleThunks } from 'Store/thunks';
 import { sortDirections } from 'Helpers/Props';
 import createHandleActions from './Creators/createHandleActions';
@@ -51,10 +51,10 @@ export const actionHandlers = handleThunks({
       episodeId: payload.episodeId
     };
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/history',
       data: queryParams
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([
@@ -85,13 +85,13 @@ export const actionHandlers = handleThunks({
       episodeId
     } = payload;
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/history/failed',
       method: 'POST',
       data: {
         id: historyId
       }
-    });
+    }).request;
 
     promise.done(() => {
       dispatch(fetchEpisodeHistory({ episodeId }));

@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import convertToBytes from 'Utilities/Number/convertToBytes';
 import formatBytes from 'Utilities/Number/formatBytes';
 import { kinds, filterBuilderTypes, filterBuilderValueTypes } from 'Helpers/Props';
-import TagInput, { tagShape } from 'Components/Form/TagInput';
+import tagShape from 'Helpers/Props/Shapes/tagShape';
+import TagInput from 'Components/Form/TagInput';
 import FilterBuilderRowValueTag from './FilterBuilderRowValueTag';
 
 export const NAME = 'value';

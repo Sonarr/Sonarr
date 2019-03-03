@@ -1,5 +1,5 @@
 .progress {
-  composes: container from 'Components/ProgressBar.css';
+  composes: container from '~Components/ProgressBar.css';
 
   border-radius: 0;
   background-color: #5b5b5b;
@@ -8,7 +8,7 @@
 }
 
 .progressBar {
-  composes: progressBar from 'Components/ProgressBar.css';
+  composes: progressBar from '~Components/ProgressBar.css';
 
   transition: width 200ms ease;
 }

@@ -22,7 +22,7 @@ $hoverScale: 1.05;
 }
 
 .link {
-  composes: link from 'Components/Link/Link.css';
+  composes: link from '~Components/Link/Link.css';
 
   display: block;
   color: $defaultColor;

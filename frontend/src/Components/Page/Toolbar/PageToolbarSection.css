@@ -23,7 +23,7 @@
 }
 
 .overflowMenuButton {
-  composes: menuButton from 'Components/Menu/ToolbarMenuButton.css';
+  composes: menuButton from '~Components/Menu/ToolbarMenuButton.css';
 }
 
 .overflowMenuItemIcon {

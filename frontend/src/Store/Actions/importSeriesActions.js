@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
@@ -229,12 +228,12 @@ export const actionHandlers = handleThunks({
       return acc;
     }, []);
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/series/import',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(allNewSeries)
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([

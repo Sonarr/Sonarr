@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import monitorOptions from 'Utilities/Series/monitorOptions';
@@ -120,12 +119,12 @@ export const actionHandlers = handleThunks({
     const items = getState().addSeries.items;
     const newSeries = getNewSeries(_.cloneDeep(_.find(items, { tvdbId })), payload);
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/series',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(newSeries)
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([

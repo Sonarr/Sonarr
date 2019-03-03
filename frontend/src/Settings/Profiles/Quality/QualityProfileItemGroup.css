@@ -16,18 +16,18 @@
 }
 
 .checkInputContainer {
-  composes: checkInputContainer from './QualityProfileItem.css';
+  composes: checkInputContainer from '~./QualityProfileItem.css';
 
   display: flex;
   align-items: center;
 }
 
 .checkInput {
-  composes: checkInput from './QualityProfileItem.css';
+  composes: checkInput from '~./QualityProfileItem.css';
 }
 
 .nameInput {
-  composes: input from 'Components/Form/TextInput.css';
+  composes: input from '~Components/Form/TextInput.css';
 
   margin-top: 4px;
   margin-right: 10px;
@@ -71,7 +71,7 @@
 }
 
 .deleteGroupButton {
-  composes: buton from 'Components/Link/IconButton.css';
+  composes: buton from '~Components/Link/IconButton.css';
 
   display: flex;
   justify-content: center;

@@ -19,7 +19,7 @@
 }
 
 .checkInput {
-  composes: input from 'Components/Form/CheckInput.css';
+  composes: input from '~Components/Form/CheckInput.css';
 
   margin-top: 5px;
 }
@@ -45,7 +45,7 @@
 }
 
 .createGroupButton {
-  composes: buton from 'Components/Link/IconButton.css';
+  composes: buton from '~Components/Link/IconButton.css';
 
   display: flex;
   justify-content: center;

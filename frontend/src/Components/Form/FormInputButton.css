@@ -1,5 +1,5 @@
 .button {
-  composes: button from 'Components/Link/Button.css';
+  composes: button from '~Components/Link/Button.css';
 
   border-left: none;
   border-top-left-radius: 0;

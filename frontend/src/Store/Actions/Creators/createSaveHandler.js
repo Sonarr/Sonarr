@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import getSectionState from 'Utilities/State/getSectionState';
 import { set, update } from '../baseActions';
 
@@ -10,12 +10,12 @@ function createSaveHandler(section, url) {
     const state = getSectionState(getState(), section, true);
     const saveData = Object.assign({}, state.item, state.pendingChanges, payload);
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url,
       method: 'PUT',
       dataType: 'json',
       data: JSON.stringify(saveData)
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions([

@@ -1,6 +1,6 @@
 .cell {
   @add-mixin truncate;
-  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   flex-grow: 0;
   flex-shrink: 1;

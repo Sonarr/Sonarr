@@ -94,7 +94,9 @@ class SignalRConnector extends Component {
   componentDidMount() {
     console.log('Starting signalR');
 
-    this.signalRconnection = $.connection('/signalr', { apiKey: window.Sonarr.apiKey });
+    const url = `${window.Sonarr.urlBase}/signalr`;
+
+    this.signalRconnection = $.connection(url, { apiKey: window.Sonarr.apiKey });
 
     this.signalRconnection.stateChanged(this.onStateChanged);
     this.signalRconnection.received(this.onReceived);

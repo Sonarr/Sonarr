@@ -4,14 +4,14 @@ const livereload = require('gulp-livereload');
 const path = require('path');
 const webpack = require('webpack');
 const errorHandler = require('./helpers/errorHandler');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const uiFolder = 'UI';
-const root = path.join(__dirname, '..', 'src');
+const srcFolder = path.join(__dirname, '..', 'src');
+const frontendFolder = path.join(__dirname, '..');
 const isProduction = process.argv.indexOf('--production') > -1;
 
-console.log('ROOT:', root);
+console.log('Source Folder:', srcFolder);
 console.log('isProduction:', isProduction);
 
 const cssVarsFiles = [
@@ -21,40 +21,19 @@ const cssVarsFiles = [
   '../src/Styles/Variables/animations'
 ].map(require.resolve);
 
-const extractCSSPlugin = new ExtractTextPlugin({
-  filename: path.join('_output', uiFolder, 'Content', 'styles.css'),
-  allChunks: true,
-  disable: false,
-  ignoreOrder: true
-});
-
 const plugins = [
-  extractCSSPlugin,
-
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor'
-  }),
-
   new webpack.DefinePlugin({
     __DEV__: !isProduction,
     'process.env.NODE_ENV': isProduction ? JSON.stringify('production') : JSON.stringify('development')
+  }),
+
+  new MiniCssExtractPlugin({
+    filename: path.join('_output', uiFolder, 'Content', 'styles.css')
   })
 ];
 
-if (isProduction) {
-  plugins.push(new UglifyJSPlugin({
-    sourceMap: true,
-    uglifyOptions: {
-      mangle: false,
-      output: {
-        comments: false,
-        beautify: true
-      }
-    }
-  }));
-}
-
 const config = {
+  mode: isProduction ? 'production' : 'development',
   devtool: '#source-map',
 
   stats: {
@@ -73,8 +52,8 @@ const config = {
 
   resolve: {
     modules: [
-      root,
-      path.join(root, 'Shims'),
+      srcFolder,
+      path.join(srcFolder, 'Shims'),
       'node_modules'
     ],
     alias: {
@@ -85,6 +64,10 @@ const config = {
   output: {
     filename: path.join('_output', uiFolder, '[name].js'),
     sourceMapFilename: '[file].map'
+  },
+
+  optimization: {
+    chunkIds: 'named'
   },
 
   plugins,
@@ -101,53 +84,44 @@ const config = {
       {
         test: /\.js?$/,
         exclude: /(node_modules|JsLibraries)/,
-        loader: 'babel-loader',
-        query: {
-          plugins: ['transform-class-properties'],
-          presets: ['es2015', 'decorators-legacy', 'react', 'stage-2'],
-          env: {
-            development: {
-              plugins: ['transform-react-jsx-source']
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              configFile: `${frontendFolder}/babel.config.js`,
+              envName: isProduction ? 'production' : 'development'
             }
           }
-        }
+        ]
       },
 
       // CSS Modules
       {
         test: /\.css$/,
         exclude: /(node_modules|globals.css)/,
-        use: extractCSSPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-variables-loader',
-              options: {
-                cssVarsFiles
-              }
-            },
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                importLoaders: 1,
-                localIdentName: '[name]-[local]-[hash:base64:5]',
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                config: {
-                  ctx: {
-                    cssVarsFiles
-                  },
-                  path: 'frontend/postcss.config.js'
-                }
+        use: [
+          { loader: MiniCssExtractPlugin.loader },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              localIdentName: '[name]/[local]/[hash:base64:5]',
+              modules: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              config: {
+                ctx: {
+                  cssVarsFiles
+                },
+                path: 'frontend/postcss.config.js'
               }
             }
-          ]
-        })
+          }
+        ]
       },
 
       // Global styles

@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { icons } from 'Helpers/Props';
+import tagShape from 'Helpers/Props/Shapes/tagShape';
 import Icon from 'Components/Icon';
 import FormInputButton from './FormInputButton';
-import TagInput, { tagShape } from './TagInput';
+import TagInput from './TagInput';
 import styles from './DeviceInput.css';
 
 class DeviceInput extends Component {

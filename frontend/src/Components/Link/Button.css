@@ -1,5 +1,5 @@
 .button {
-  composes: link from './Link.css';
+  composes: link from '~./Link.css';
 
   overflow: hidden;
   border: 1px solid;

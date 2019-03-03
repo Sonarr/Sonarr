@@ -1,5 +1,5 @@
 .button {
-  composes: button from 'Components/Form/FormInputButton.css';
+  composes: button from '~Components/Form/FormInputButton.css';
 
   position: relative;
 }

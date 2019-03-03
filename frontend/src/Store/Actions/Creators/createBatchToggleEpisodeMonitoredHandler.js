@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import updateEpisodes from 'Utilities/Episode/updateEpisodes';
 import getSectionState from 'Utilities/State/getSectionState';
 
@@ -15,12 +15,12 @@ function createBatchToggleEpisodeMonitoredHandler(section, fetchHandler) {
       isSaving: true
     }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/episode/monitor',
       method: 'PUT',
       data: JSON.stringify({ episodeIds, monitored }),
       dataType: 'json'
-    });
+    }).request;
 
     promise.done(() => {
       dispatch(updateEpisodes(section, state.items, episodeIds, {

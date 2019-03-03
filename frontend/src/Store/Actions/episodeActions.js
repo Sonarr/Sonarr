@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
@@ -136,12 +136,12 @@ export const actionHandlers = handleThunks({
       isSaving: true
     }));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: `/episode/${id}`,
       method: 'PUT',
       data: JSON.stringify({ monitored }),
       dataType: 'json'
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(updateItem({
@@ -180,12 +180,12 @@ export const actionHandlers = handleThunks({
       })
     ));
 
-    const promise = $.ajax({
+    const promise = createAjaxRequest({
       url: '/episode/monitor',
       method: 'PUT',
       data: JSON.stringify({ episodeIds, monitored }),
       dataType: 'json'
-    });
+    }).request;
 
     promise.done((data) => {
       dispatch(batchActions(

@@ -1,11 +1,11 @@
 .calendarPageBody {
-  composes: contentBody from 'Components/Page/PageContentBody.css';
+  composes: contentBody from '~Components/Page/PageContentBody.css';
 
   display: flex;
 }
 
 .calendarInnerPageBody {
-  composes: innerContentBody from 'Components/Page/PageContentBody.css';
+  composes: innerContentBody from '~Components/Page/PageContentBody.css';
 
   display: flex;
   flex-direction: column;

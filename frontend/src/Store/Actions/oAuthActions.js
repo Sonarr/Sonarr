@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import requestAction from 'Utilities/requestAction';
 import getSectionState from 'Utilities/State/getSectionState';
 import updateSectionState from 'Utilities/State/updateSectionState';
@@ -88,7 +89,7 @@ function showOAuthWindow(url, payload) {
 }
 
 function executeIntermediateRequest(payload, ajaxOptions) {
-  return $.ajax(ajaxOptions).then((data) => {
+  return createAjaxRequest(ajaxOptions).then((data) => {
     return requestAction({
       action: 'continueOAuth',
       queryParams: {
@@ -97,7 +98,7 @@ function executeIntermediateRequest(payload, ajaxOptions) {
       },
       ...payload
     });
-  });
+  }).request;
 }
 
 //
