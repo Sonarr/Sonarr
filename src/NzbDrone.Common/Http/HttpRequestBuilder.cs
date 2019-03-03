@@ -355,7 +355,7 @@ namespace NzbDrone.Common.Http
             FormData.Add(new HttpFormData
             {
                 Name = key,
-                ContentData = Encoding.UTF8.GetBytes(value.ToString())
+                ContentData = Encoding.UTF8.GetBytes(Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture))
             });
 
             return this;

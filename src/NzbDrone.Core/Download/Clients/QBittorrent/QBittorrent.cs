@@ -57,6 +57,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             SetInitialState(hash.ToLower());
 
+            if (remoteEpisode.SeedConfiguration.Ratio.HasValue || remoteEpisode.SeedConfiguration.SeedTime.HasValue)
+            {
+                Proxy.SetTorrentSeedingConfiguration(hash.ToLower(), remoteEpisode.SeedConfiguration, Settings);
+            }
+
             return hash;
         }
 
@@ -93,6 +98,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             SetInitialState(hash.ToLower());
 
+            if (remoteEpisode.SeedConfiguration.Ratio.HasValue || remoteEpisode.SeedConfiguration.SeedTime.HasValue)
+            {
+                Proxy.SetTorrentSeedingConfiguration(hash.ToLower(), remoteEpisode.SeedConfiguration, Settings);
+            }
+
             return hash;
         }
 
@@ -119,9 +129,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     SeedRatio = torrent.Ratio,
                     OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath)),
                 };
+
                 // Avoid removing torrents that haven't reached the global max ratio.
                 // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
-                item.CanMoveFiles = item.CanBeRemoved = (!config.MaxRatioEnabled || config.MaxRatio <= torrent.Ratio) && torrent.State == "pausedUP";
+                item.CanMoveFiles = item.CanBeRemoved = (torrent.State == "pausedUP" && HasReachedSeedLimit(torrent, config));
                 
 
                 if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
@@ -246,7 +257,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 // Complain if qBittorrent is configured to remove torrents on max ratio
                 var config = Proxy.GetConfig(Settings);
-                if (config.MaxRatioEnabled && config.RemoveOnMaxRatio)
+                if ((config.MaxRatioEnabled || config.MaxSeedingTimeEnabled) && config.RemoveOnMaxRatio)
                 {
                     return new NzbDroneValidationFailure(String.Empty, "qBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
                     {
@@ -370,6 +381,29 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
 
             return TimeSpan.FromSeconds((int)torrent.Eta);
+        }
+
+        protected bool HasReachedSeedLimit(QBittorrentTorrent torrent, QBittorrentPreferences config)
+        {
+            if (torrent.RatioLimit >= 0)
+            {
+                if (torrent.Ratio < torrent.RatioLimit) return false;
+            }
+            else if (torrent.RatioLimit == -2 && config.MaxRatioEnabled)
+            {
+                if (torrent.Ratio < config.MaxRatio) return false;
+            }
+
+            if (torrent.SeedingTimeLimit >= 0)
+            {
+                if (torrent.SeedingTime < torrent.SeedingTimeLimit) return false;
+            }
+            else if (torrent.RatioLimit == -2 && config.MaxSeedingTimeEnabled)
+            {
+                if (torrent.SeedingTime < config.MaxSeedingTime) return false;
+            }
+            
+            return true;
         }
     }
 }

@@ -165,6 +165,33 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             ProcessRequest(request, settings);
         }
 
+        public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
+        {
+            var ratioLimit = seedConfiguration.Ratio.HasValue ? seedConfiguration.Ratio : -2;
+            var seedingTimeLimit = seedConfiguration.SeedTime.HasValue ? (long)seedConfiguration.SeedTime.Value.TotalMinutes : -2;
+
+            var request = BuildRequest(settings).Resource("/api/v2/torrents/setShareLimits")
+                                                .Post()
+                                                .AddFormParameter("hashes", hash)
+                                                .AddFormParameter("ratioLimit", ratioLimit)
+                                                .AddFormParameter("seedingTimeLimit", seedingTimeLimit);
+
+            try
+            {
+                ProcessRequest(request, settings);
+            }
+            catch (DownloadClientException ex)
+            {
+                // setShareLimits was added in api v2.0.1 so catch it case of the unlikely event that someone has api v2.0
+                if (ex.InnerException is HttpException && (ex.InnerException as HttpException).Response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return;
+                }
+
+                throw;
+            }
+        }
+
         public void MoveTorrentToTopInQueue(string hash, QBittorrentSettings settings)
         {
             var request = BuildRequest(settings).Resource("/api/v2/torrents/topPrio")

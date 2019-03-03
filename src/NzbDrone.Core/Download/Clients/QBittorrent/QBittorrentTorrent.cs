@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
@@ -25,5 +25,15 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         public string SavePath { get; set; } // Torrent save path
 
         public float Ratio { get; set; } // Torrent share ratio
+
+        [JsonProperty(PropertyName = "ratio_limit")] // Per torrent seeding ratio limit (-2 = use global, -1 = unlimited)
+        public float RatioLimit { get; set; } = -2;
+
+        [JsonProperty(PropertyName = "seeding_time")]
+        public long SeedingTime { get; set; } // Torrent seeding time
+
+        [JsonProperty(PropertyName = "seeding_time_limit")] // Per torrent seeding time limit (-2 = use global, -1 = unlimited)
+        public long SeedingTimeLimit { get; set; } = -2;
+
     }
 }

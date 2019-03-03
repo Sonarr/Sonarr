@@ -177,7 +177,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     ProcessRequest(setLabelRequest, settings);
                 }
             }
+        }
 
+        public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
+        {
+            // Not supported on api v1
         }
 
         public void MoveTorrentToTopInQueue(string hash, QBittorrentSettings settings)
