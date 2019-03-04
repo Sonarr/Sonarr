@@ -1,9 +1,10 @@
-var path = require('path');
-var gulp = require('gulp');
-var print = require('gulp-print').default;
-var cache = require('gulp-cached');
-var livereload = require('gulp-livereload');
-var paths = require('./helpers/paths.js');
+const path = require('path');
+const gulp = require('gulp');
+const print = require('gulp-print').default;
+const cache = require('gulp-cached');
+const flatten = require('gulp-flatten');
+const livereload = require('gulp-livereload');
+const paths = require('./helpers/paths.js');
 
 gulp.task('copyJs', () => {
   return gulp.src(
@@ -12,6 +13,7 @@ gulp.task('copyJs', () => {
     ])
     .pipe(cache('copyJs'))
     .pipe(print())
+    .pipe(flatten())
     .pipe(gulp.dest(paths.dest.root))
     .pipe(livereload());
 });
@@ -30,7 +32,8 @@ gulp.task('copyFonts', () => {
   )
     .pipe(cache('copyFonts'))
     .pipe(print())
-    .pipe(gulp.dest(paths.dest.fonts))
+    .pipe(flatten({ subPath: 2 }))
+    .pipe(gulp.dest(paths.dest.root))
     .pipe(livereload());
 });
 
@@ -40,6 +43,7 @@ gulp.task('copyImages', () => {
   )
     .pipe(cache('copyImages'))
     .pipe(print())
-    .pipe(gulp.dest(paths.dest.images))
+    .pipe(flatten({ subPath: 2 }))
+    .pipe(gulp.dest(paths.dest.root))
     .pipe(livereload());
 });

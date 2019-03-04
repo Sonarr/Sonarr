@@ -1,15 +1,18 @@
 const gulp = require('gulp');
-const runSequence = require('run-sequence');
 
 require('./clean');
 require('./copy');
+require('./webpack');
 
-gulp.task('build', () => {
-  return runSequence('clean', [
-    'webpack',
-    'copyHtml',
-    'copyFonts',
-    'copyImages',
-    'copyJs'
-  ]);
-});
+gulp.task('build',
+  gulp.series('clean',
+    gulp.parallel(
+      'webpack',
+      'copyHtml',
+      'copyFonts',
+      'copyImages',
+      'copyJs'
+    )
+  )
+);
+
