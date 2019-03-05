@@ -1,6 +1,6 @@
-const gulpUtil = require('gulp-util');
+const colors = require('ansi-colors');
 
 module.exports = function errorHandler(error) {
-  gulpUtil.log(gulpUtil.colors.red(`Error (${error.plugin}): ${error.message}`));
+  console.log(colors.red(`Error (${error.plugin}): ${error.message}`));
   this.emit('end');
 };
