@@ -15,12 +15,6 @@ module.exports = {
     '@babel/plugin-syntax-dynamic-import'
   ],
   env: {
-    test: {
-      presets: [
-        ['@babel/preset-env', { loose, modules: 'commonjs' }],
-        ['@babel/preset-react']
-      ]
-    },
     development: {
       presets: [
         ['@babel/preset-react', { development: true }]
