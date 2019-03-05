@@ -2,6 +2,6 @@
 
 @import '~normalize.css/normalize.css';
 @import 'scaffolding.css';
-@import '../Content/Fonts/fonts.css';
+@import '/Content/Fonts/fonts.css';
 
 /* stylelint-enable */

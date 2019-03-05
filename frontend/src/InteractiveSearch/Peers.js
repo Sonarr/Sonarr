@@ -21,7 +21,7 @@ function getKind(seeders) {
 
 function getPeersTooltipPart(peers, peersUnit) {
   if (peers == null) {
-    return `unknown ${peersUnit}s`;
+    return `Unknown ${peersUnit}s`;
   }
 
   if (peers === 1) {
