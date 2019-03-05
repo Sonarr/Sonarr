@@ -351,6 +351,7 @@
     <Compile Include="ParserTests\ValidateParsedEpisodeInfoFixture.cs" />
     <Compile Include="Profiles\Delay\DelayProfileServiceFixture.cs" />
     <Compile Include="Profiles\Qualities\QualityIndexCompareToFixture.cs" />
+    <Compile Include="Profiles\Releases\PreferredWordService\GetMatchingPreferredWordsFixture.cs" />
     <Compile Include="Profiles\Releases\PreferredWordService\CalculateFixture.cs" />
     <Compile Include="Qualities\QualityFinderFixture.cs" />
     <Compile Include="Qualities\RevisionComparableFixture.cs" />
