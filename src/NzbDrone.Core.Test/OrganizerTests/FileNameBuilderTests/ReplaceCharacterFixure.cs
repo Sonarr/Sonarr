@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -12,7 +12,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {
     [TestFixture]
-    public class TitleTheFixture : CoreTest<FileNameBuilder>
+    public class ReplaceCharacterFixture : CoreTest<FileNameBuilder>
     {
         private Series _series;
         private Episode _episode;
@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _series = Builder<Series>
                     .CreateNew()
+                    .With(s => s.Title = "South Park")
                     .Build();
 
             _episode = Builder<Episode>.CreateNew()
@@ -46,36 +47,27 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                 .Returns<Quality>(v => Quality.DefaultQualityDefinitions.First(c => c.Quality == v));
         }
 
-        [TestCase("The Mist", "Mist, The")]
-        [TestCase("A Place to Call Home", "Place to Call Home, A")]
-        [TestCase("An Adventure in Space and Time", "Adventure in Space and Time, An")]
-        [TestCase("The Flash (2010)", "Flash, The (2010)")]
-        [TestCase("A League Of Their Own (AU)", "League Of Their Own, A (AU)")]
-        [TestCase("The Fixer (ZH) (2015)", "Fixer, The (ZH) (2015)")]
-        [TestCase("The Sixth Sense 2 (Thai)", "Sixth Sense 2, The (Thai)")]
-        [TestCase("The Amazing Race (Latin America)", "Amazing Race, The (Latin America)")]
-        [TestCase("The Rat Pack (A&E)", "Rat Pack, The (A&E)")]
-        [TestCase("The Climax: I (Almost) Got Away With It (2016)", "Climax - I (Almost) Got Away With It, The (2016)")]
-        public void should_get_expected_title_back(string title, string expected)
+//        { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
+//        { "+", "+", "", "", "!", "-", " -", "", "" };
+
+
+    [TestCase("CSI: Crime Scene Investigation", "CSI - Crime Scene Investigation")]
+    [TestCase("Back Slash\\", "Back Slash+")]
+    [TestCase("Forward Slash\\", "Forward Slash+")]
+    [TestCase("Greater Than>", "Greater Than")]
+    [TestCase("Less Than<", "Less Than")]
+    [TestCase("Question Mark?", "Question Mark!")]
+    [TestCase("Aster*sk", "Aster-sk")]
+    [TestCase("Colon: Two Periods", "Colon - Two Periods")]
+    [TestCase("Pipe|", "Pipe")]
+    [TestCase("Quotes\"", "Quotes")]
+        public void should_replace_illegal_characters(string title, string expected)
         {
             _series.Title = title;
-            _namingConfig.StandardEpisodeFormat = "{Series TitleThe}";
+            _namingConfig.StandardEpisodeFormat = "{Series Title}";
 
             Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
                    .Should().Be(expected);
-        }
-
-        [TestCase("A")]
-        [TestCase("Anne")]
-        [TestCase("Theodore")]
-        [TestCase("3%")]
-        public void should_not_change_title(string title)
-        {
-            _series.Title = title;
-            _namingConfig.StandardEpisodeFormat = "{Series TitleThe}";
-
-            Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
-                   .Should().Be(title);
         }
     }
 }

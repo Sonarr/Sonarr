@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
         [TestCase("The Mist", 2018, "Mist, The (2018)")]
         [TestCase("The Rat Pack (A&E)", 1999, "Rat Pack, The (A&E) (1999)")]
-        [TestCase("The Climax: I (Almost) Got Away With It (2016)", 2016, "Climax- I (Almost) Got Away With It, The (2016)")]
+        [TestCase("The Climax: I (Almost) Got Away With It (2016)", 2016, "Climax - I (Almost) Got Away With It, The (2016)")]
         [TestCase("A", 2017, "A (2017)")]
         public void should_get_expected_title_back(string title, int year, string expected)
         {

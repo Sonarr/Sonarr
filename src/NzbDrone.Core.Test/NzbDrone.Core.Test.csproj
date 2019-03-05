@@ -335,6 +335,7 @@
     <Compile Include="MetadataSource\SkyHook\SkyHookProxyFixture.cs" />
     <Compile Include="NotificationTests\NotificationBaseFixture.cs" />
     <Compile Include="NotificationTests\SynologyIndexerFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\ReplaceCharacterFixure.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\RequiresAbsoluteEpisodeNumberFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\RequiresEpisodeTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
