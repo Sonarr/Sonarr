@@ -1,4 +1,5 @@
 const reload = require('require-nocache')(module);
+const browsers = require('./browsers');
 
 module.exports = (ctx, configPath, options) => {
   const config = {
@@ -17,15 +18,7 @@ module.exports = (ctx, configPath, options) => {
       'postcss-color-function': {},
       'postcss-nested': {},
       autoprefixer: {
-        browsers: [
-          'Chrome >= 30',
-          'Firefox >= 30',
-          'Safari >= 6',
-          'Edge >= 12',
-          'Explorer >= 11',
-          'iOS >= 7',
-          'Android >= 4.4'
-        ]
+        browsers
       }
     }
   };
