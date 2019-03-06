@@ -473,7 +473,7 @@
     <Compile Include="Download\Clients\rTorrent\RTorrentDirectoryValidator.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrent.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrentPriority.cs" />
-    <Compile Include="Download\Clients\QBittorrent\QBittorrentProxy.cs" />
+    <Compile Include="Download\Clients\QBittorrent\QBittorrentProxyV1.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrentSettings.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrentTorrent.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
@@ -1264,6 +1264,8 @@
     <Compile Include="Validation\ProfileExistsValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
     <Compile Include="Validation\UrlValidator.cs" />
+    <Compile Include="Download\Clients\QBittorrent\QBittorrentProxyV2.cs" />
+    <Compile Include="Download\Clients\QBittorrent\QBittorrentProxySelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
