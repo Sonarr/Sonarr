@@ -38,6 +38,9 @@ class Menu extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this._menuRef = {};
+    this._menuContentRef = {};
+
     this.state = {
       isMenuOpen: false,
       maxHeight: 0
@@ -60,7 +63,7 @@ class Menu extends Component {
       return;
     }
 
-    const menu = ReactDOM.findDOMNode(this.refs.menu);
+    const menu = ReactDOM.findDOMNode(this._menuRef.current);
 
     if (!menu) {
       return;
@@ -73,9 +76,13 @@ class Menu extends Component {
   }
 
   setMaxHeight() {
-    this.setState({
-      maxHeight: this.getMaxHeight()
-    });
+    const maxHeight = this.getMaxHeight();
+
+    if (maxHeight !== this.state.maxHeight) {
+      this.setState({
+        maxHeight
+      });
+    }
   }
 
   _addListener() {
@@ -99,10 +106,10 @@ class Menu extends Component {
   // Listeners
 
   onWindowClick = (event) => {
-    const menu = ReactDOM.findDOMNode(this.refs.menu);
-    const menuContent = ReactDOM.findDOMNode(this.refs.menuContent);
+    const menu = ReactDOM.findDOMNode(this._menuRef.current);
+    const menuContent = ReactDOM.findDOMNode(this._menuContentRef.current);
 
-    if (!menu) {
+    if (!menu || !menuContent) {
       return;
     }
 
@@ -116,7 +123,17 @@ class Menu extends Component {
     this.setMaxHeight();
   }
 
-  onWindowScroll = () => {
+  onWindowScroll = (event) => {
+    if (!this._menuContentRef.current) {
+      return;
+    }
+
+    const menuContent = ReactDOM.findDOMNode(this._menuContentRef.current);
+
+    if (menuContent && menuContent.contains(event.target)) {
+      return;
+    }
+
     this.setMaxHeight();
   }
 
@@ -158,35 +175,46 @@ class Menu extends Component {
       }
     );
 
-    const content = React.cloneElement(
-      childrenArray[1],
-      {
-        ref: 'menuContent',
-        alignMenu,
-        maxHeight,
-        isOpen: isMenuOpen
-      }
-    );
-
     return (
       <TetherComponent
         classes={{
           element: styles.tether
         }}
         {...tetherOptions[alignMenu]}
-      >
-        <div
-          ref="menu"
-          className={className}
-        >
-          {button}
-        </div>
+        renderTarget={
+          (ref) => {
+            this._menuRef = ref;
 
-        {
-          isMenuOpen &&
-            content
+            return (
+              <div
+                ref={ref}
+                className={className}
+              >
+                {button}
+              </div>
+            );
+          }
         }
-      </TetherComponent>
+        renderElement={
+          (ref) => {
+            this._menuContentRef = ref;
+
+            if (!isMenuOpen) {
+              return null;
+            }
+
+            return React.cloneElement(
+              childrenArray[1],
+              {
+                ref,
+                alignMenu,
+                maxHeight,
+                isOpen: isMenuOpen
+              }
+            );
+          }
+        }
+      />
     );
   }
 }

@@ -87,6 +87,9 @@ class EnhancedSelectInput extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this._buttonRef = {};
+    this._optionsRef = {};
+
     this.state = {
       isOpen: false,
       selectedIndex: getSelectedIndex(props),
@@ -106,14 +109,6 @@ class EnhancedSelectInput extends Component {
   //
   // Control
 
-  _setButtonRef = (ref) => {
-    this._buttonRef = ref;
-  }
-
-  _setOptionsRef = (ref) => {
-    this._optionsRef = ref;
-  }
-
   _addListener() {
     window.addEventListener('click', this.onWindowClick);
   }
@@ -126,8 +121,8 @@ class EnhancedSelectInput extends Component {
   // Listeners
 
   onWindowClick = (event) => {
-    const button = ReactDOM.findDOMNode(this._buttonRef);
-    const options = ReactDOM.findDOMNode(this._optionsRef);
+    const button = ReactDOM.findDOMNode(this._buttonRef.current);
+    const options = ReactDOM.findDOMNode(this._optionsRef.current);
 
     if (!button || this.state.isMobile) {
       return;
@@ -276,75 +271,91 @@ class EnhancedSelectInput extends Component {
             element: styles.tether
           }}
           {...tetherOptions}
-        >
-          <Measure
-            whitelist={['width']}
-            onMeasure={this.onMeasure}
-          >
-            <Link
-              ref={this._setButtonRef}
-              className={classNames(
-                className,
-                hasError && styles.hasError,
-                hasWarning && styles.hasWarning,
-                isDisabled && disabledClassName
-              )}
-              isDisabled={isDisabled}
-              onBlur={this.onBlur}
-              onKeyDown={this.onKeyDown}
-              onPress={this.onPress}
-            >
-              <SelectedValueComponent
-                {...selectedValueOptions}
-                {...selectedOption}
-                isDisabled={isDisabled}
-              >
-                {selectedOption ? selectedOption.value : null}
-              </SelectedValueComponent>
+          renderTarget={
+            (ref) => {
+              this._buttonRef = ref;
 
-              <div
-                className={isDisabled ?
-                  styles.dropdownArrowContainerDisabled :
-                  styles.dropdownArrowContainer
-                }
-              >
-                <Icon
-                  name={icons.CARET_DOWN}
-                />
-              </div>
-            </Link>
-          </Measure>
+              return (
+                <Measure
+                  whitelist={['width']}
+                  onMeasure={this.onMeasure}
+                >
+                  <div ref={ref}>
+                    <Link
+                      className={classNames(
+                        className,
+                        hasError && styles.hasError,
+                        hasWarning && styles.hasWarning,
+                        isDisabled && disabledClassName
+                      )}
+                      isDisabled={isDisabled}
+                      onBlur={this.onBlur}
+                      onKeyDown={this.onKeyDown}
+                      onPress={this.onPress}
+                    >
+                      <SelectedValueComponent
+                        {...selectedValueOptions}
+                        {...selectedOption}
+                        isDisabled={isDisabled}
+                      >
+                        {selectedOption ? selectedOption.value : null}
+                      </SelectedValueComponent>
 
-          {
-            isOpen && !isMobile &&
-              <div
-                ref={this._setOptionsRef}
-                className={styles.optionsContainer}
-                style={{
-                  minWidth: width
-                }}
-              >
-                <div className={styles.options}>
-                  {
-                    values.map((v, index) => {
-                      return (
-                        <OptionComponent
-                          key={v.key}
-                          id={v.key}
-                          isSelected={index === selectedIndex}
-                          {...v}
-                          isMobile={false}
-                          onSelect={this.onSelect}
-                        >
-                          {v.value}
-                        </OptionComponent>
-                      );
-                    })
-                  }
-                </div>
-              </div>
+                      <div
+                        className={isDisabled ?
+                          styles.dropdownArrowContainerDisabled :
+                          styles.dropdownArrowContainer
+                        }
+                      >
+                        <Icon
+                          name={icons.CARET_DOWN}
+                        />
+                      </div>
+                    </Link>
+                  </div>
+                </Measure>
+              );
+            }
           }
-        </TetherComponent>
+          renderElement={
+            (ref) => {
+              this._optionsRef = ref;
+
+              if (!isOpen || isMobile) {
+                return;
+              }
+
+              return (
+                <div
+                  ref={ref}
+                  className={styles.optionsContainer}
+                  style={{
+                    minWidth: width
+                  }}
+                >
+                  <div className={styles.options}>
+                    {
+                      values.map((v, index) => {
+                        return (
+                          <OptionComponent
+                            key={v.key}
+                            id={v.key}
+                            isSelected={index === selectedIndex}
+                            {...v}
+                            isMobile={false}
+                            onSelect={this.onSelect}
+                          >
+                            {v.value}
+                          </OptionComponent>
+                        );
+                      })
+                    }
+                  </div>
+                </div>
+              );
+            }
+          }
+        />
 
         {
           isMobile &&

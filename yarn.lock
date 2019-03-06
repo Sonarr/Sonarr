@@ -6940,13 +6940,13 @@ react-tabs@3.0.0:
     classnames "^2.2.0"
     prop-types "^15.5.0"
 
-react-tether@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-tether/-/react-tether-1.0.1.tgz#6e5173764d4f9b8bef6d1b20ff51972909674942"
-  integrity sha512-OsgGk2hmsIpnpMl1Uq9aYKopG4V7bDuz2msNYPaRosF0CBbpa1YVF9P1qJ8MRsf1Zj/oK/I2uH++S+ffqxL98A==
+react-tether@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-tether/-/react-tether-2.0.0.tgz#84928b9636f1fe0a6874d1e450e7822e87f8cb07"
+  integrity sha512-iJnqTQV42Pf7w4xrg3g1gxSxbBCXleDt8AzlSoAqRINqB+mhcJUeegpB8SFMJ/nKT7lSfMkx3GvUfYY+9sPBGw==
   dependencies:
-    prop-types "^15.5.8"
-    tether "^1.4.3"
+    prop-types "^15.6.2"
+    tether "^1.4.5"
 
 react-text-truncate@0.14.0:
   version "0.14.0"
@@ -8243,7 +8243,7 @@ terser@^3.16.1:
     source-map "~0.6.1"
     source-map-support "~0.5.9"
 
-tether@^1.4.3:
+tether@^1.4.5:
   version "1.4.5"
   resolved "https://registry.yarnpkg.com/tether/-/tether-1.4.5.tgz#8efd7b35572767ba502259ba9b1cc167fcf6f2c1"
   integrity sha512-fysT1Gug2wbRi7a6waeu39yVDwiNtvwj5m9eRD+qZDSHKNghLo6KqP/U3yM2ap6TNUL2skjXGJaJJTJqoC31vw==

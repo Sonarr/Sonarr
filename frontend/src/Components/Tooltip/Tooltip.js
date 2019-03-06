@@ -105,44 +105,55 @@ class Tooltip extends Component {
           element: styles.tether
         }}
         {...tetherOptions[position]}
-      >
-        <span
-          className={className}
-          onClick={this.onClick}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        >
-          {anchor}
-        </span>
-
-        {
-          this.state.isOpen &&
-            <div
-              className={styles.tooltipContainer}
+        renderTarget={
+          (ref) => (
+            <span
+              ref={ref}
+              className={className}
+              onClick={this.onClick}
               onMouseEnter={this.onMouseEnter}
               onMouseLeave={this.onMouseLeave}
             >
+              {anchor}
+            </span>
+          )
+        }
+        renderElement={
+          (ref) => {
+            if (!this.state.isOpen) {
+              return;
+            }
+
+            return (
               <div
-                className={classNames(
-                  styles.tooltip,
-                  styles[kind]
-                )}
+                ref={ref}
+                className={styles.tooltipContainer}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
               >
                 <div
                   className={classNames(
-                    styles.arrow,
-                    styles[kind],
-                    styles[position]
+                    styles.tooltip,
+                    styles[kind]
                   )}
-                />
+                >
+                  <div
+                    className={classNames(
+                      styles.arrow,
+                      styles[kind],
+                      styles[position]
+                    )}
+                  />
 
-                <div className={styles.body}>
-                  {tooltip}
+                  <div className={styles.body}>
+                    {tooltip}
+                  </div>
                 </div>
               </div>
-            </div>
+            );
+          }
         }
-      </TetherComponent>
+      />
     );
   }
 }
