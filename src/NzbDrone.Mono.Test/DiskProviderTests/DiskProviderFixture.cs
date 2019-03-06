@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Mono.Unix;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Test.DiskTests;
@@ -93,6 +94,10 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
 
         private void GivenSpecialMount(string rootDir)
         {
+            Mocker.GetMock<ISymbolicLinkResolver>()
+                .Setup(v => v.GetCompleteRealPath(It.IsAny<string>()))
+                .Returns<string>(s => s);
+
             Mocker.GetMock<IProcMountProvider>()
                 .Setup(v => v.GetMounts())
                 .Returns(new List<IMount> {
@@ -112,7 +117,7 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
         }
 
         [TestCase("/snap/blaat")]
-        [TestCase("/var/lib/docker/zfs-storage-moun")]
+        [TestCase("/var/lib/docker/zfs-storage-mount")]
         public void should_return_special_mount_when_queried(string rootDir)
         {
             GivenSpecialMount(rootDir);
