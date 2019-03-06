@@ -2,10 +2,12 @@
 {
     public sealed class CaseInsensitiveTermMatcher : ITermMatcher
     {
+        private readonly string _originalTerm;
         private readonly string _term;
 
         public CaseInsensitiveTermMatcher(string term)
         {
+            _originalTerm = term;
             _term = term.ToLowerInvariant();
         }
 
@@ -18,7 +20,7 @@
         {
             if (value.ToLowerInvariant().Contains(_term))
             {
-                return _term;
+                return _originalTerm;
             }
 
             return null;
