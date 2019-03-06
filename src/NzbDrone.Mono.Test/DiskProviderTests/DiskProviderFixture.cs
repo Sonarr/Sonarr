@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using Mono.Unix;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Test.DiskTests;
 using NzbDrone.Mono.Disk;
 
@@ -86,6 +89,38 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
 
             File.ReadAllText(source).Should().Be("Some content");
             File.ReadAllText(destination).Should().Be("Some content");
+        }
+
+        private void GivenSpecialMount(string rootDir)
+        {
+            Mocker.GetMock<IProcMountProvider>()
+                .Setup(v => v.GetMounts())
+                .Returns(new List<IMount> {
+                    new ProcMount(DriveType.Fixed, rootDir, rootDir, "myfs", new MountOptions(new Dictionary<string, string>()))
+                });
+        }
+
+        [TestCase("/snap/blaat")]
+        [TestCase("/var/lib/docker/zfs-storage-mount")]
+        public void should_ignore_special_mounts(string rootDir)
+        {
+            GivenSpecialMount(rootDir);
+
+            var mounts = Subject.GetMounts();
+
+            mounts.Select(d => d.RootDirectory).Should().NotContain(rootDir);
+        }
+
+        [TestCase("/snap/blaat")]
+        [TestCase("/var/lib/docker/zfs-storage-moun")]
+        public void should_return_special_mount_when_queried(string rootDir)
+        {
+            GivenSpecialMount(rootDir);
+
+            var mount = Subject.GetMount(Path.Combine(rootDir, "dir/somefile.mkv"));
+
+            mount.Should().NotBeNull();
+            mount.RootDirectory.Should().Be(rootDir);
         }
     }
 }

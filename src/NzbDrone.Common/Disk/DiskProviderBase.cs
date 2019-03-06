@@ -418,7 +418,12 @@ namespace NzbDrone.Common.Disk
             return new FileStream(path, FileMode.Create);
         }
 
-        public virtual List<IMount> GetMounts()
+        public List<IMount> GetMounts()
+        {
+            return GetAllMounts().Where(d => !IsSpecialMount(d)).ToList();
+        }
+
+        protected virtual List<IMount> GetAllMounts()
         {
             return GetDriveInfoMounts().Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable)
                                        .Select(d => new DriveInfoMount(d))
@@ -426,11 +431,16 @@ namespace NzbDrone.Common.Disk
                                        .ToList();
         }
 
+        protected virtual bool IsSpecialMount(IMount mount)
+        {
+            return false;
+        }
+
         public virtual IMount GetMount(string path)
         {
             try
             {
-                var mounts = GetMounts();
+                var mounts = GetAllMounts();
 
                 return mounts.Where(drive => drive.RootDirectory.PathEquals(path) ||
                                              drive.RootDirectory.IsParentPath(path))

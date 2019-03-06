@@ -111,18 +111,6 @@ namespace NzbDrone.Mono.Disk
                 return null;
             }
 
-            if (mount.StartsWith("/var/lib/"))
-            {
-                // Could be /var/lib/docker when docker uses zfs. Very unlikely that a useful mount is located in /var/lib.
-                return null;
-            }
-
-            if (mount.StartsWith("/snap/"))
-            {
-                // Mount point for snap packages
-                return null;
-            }
-
             var driveType = FindDriveType.Find(type);
 
             if (name.StartsWith("/dev/") || GetFileSystems().GetValueOrDefault(type, false))

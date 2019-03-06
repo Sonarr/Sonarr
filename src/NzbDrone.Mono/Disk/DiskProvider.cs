@@ -75,7 +75,7 @@ namespace NzbDrone.Mono.Disk
             SetOwner(path, user, group);
         }
 
-        public override List<IMount> GetMounts()
+        protected override List<IMount> GetAllMounts()
         {
             return _procMountProvider.GetMounts()
                                      .Concat(GetDriveInfoMounts()
@@ -85,6 +85,25 @@ namespace NzbDrone.Mono.Disk
                                                              d.DriveType == DriveType.Removable))
                                      .DistinctBy(v => v.RootDirectory)
                                      .ToList();
+        }
+
+        protected override bool IsSpecialMount(IMount mount)
+        {
+            var root = mount.RootDirectory;
+
+            if (root.StartsWith("/var/lib/"))
+            {
+                // Could be /var/lib/docker when docker uses zfs. Very unlikely that a useful mount is located in /var/lib.
+                return true;
+            }
+
+            if (root.StartsWith("/snap/"))
+            {
+                // Mount point for snap packages
+                return true;
+            }
+
+            return false;
         }
 
         public override long? GetTotalSize(string path)
