@@ -7,8 +7,8 @@ const errorHandler = require('./helpers/errorHandler');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const uiFolder = 'UI';
-const srcFolder = path.join(__dirname, '..', 'src');
 const frontendFolder = path.join(__dirname, '..');
+const srcFolder = path.join(frontendFolder, 'src');
 const isProduction = process.argv.indexOf('--production') > -1;
 
 console.log('Source Folder:', srcFolder);
@@ -89,7 +89,24 @@ const config = {
             loader: 'babel-loader',
             options: {
               configFile: `${frontendFolder}/babel.config.js`,
-              envName: isProduction ? 'production' : 'development'
+              envName: isProduction ? 'production' : 'development',
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    modules: false,
+                    loose: true,
+                    debug: false,
+                    useBuiltIns: 'entry',
+                    targets: [
+                      '>0.25%',
+                      'not ie 11',
+                      'not op_mini all',
+                      'not chrome < 60'
+                    ]
+                  }
+                ]
+              ]
             }
           }
         ]
