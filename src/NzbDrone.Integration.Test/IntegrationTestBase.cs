@@ -127,6 +127,9 @@ namespace NzbDrone.Integration.Test
         public void IntegrationSetUp()
         {
             TempDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "_test_" + DateTime.UtcNow.Ticks);
+
+            // Wait for things to get quiet, otherwise the previous test might influence the current one.
+            Commands.WaitAll();
         }
 
         [TearDown]
