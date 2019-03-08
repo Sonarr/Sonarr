@@ -35,6 +35,11 @@ namespace NzbDrone.Integration.Test
                 Protocol = Core.Indexers.DownloadProtocol.Usenet,
                 Fields = SchemaBuilder.ToSchema(new NewznabSettings())
             });
+
+            // Change Console Log Level to Debug so we get more details.
+            var config = HostConfig.Get(1);
+            config.ConsoleLogLevel = "Debug";
+            HostConfig.Put(config);
         }
 
         protected override void StopTestTarget()

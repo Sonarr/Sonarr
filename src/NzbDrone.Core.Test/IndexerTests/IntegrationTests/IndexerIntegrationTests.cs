@@ -38,40 +38,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
             };
         }
 
-        [Test]
-        public void nyaa_fetch_recent()
-        {
-            var indexer = Mocker.Resolve<Nyaa>();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "MyIndexer",
-                Settings = new NyaaSettings()
-            };
-
-            var result = indexer.FetchRecent();
-
-            ValidateTorrentResult(result, hasSize: true);
-        }
-
-        [Test]
-        public void nyaa_search_single()
-        {
-            var indexer = Mocker.Resolve<Nyaa>();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "MyIndexer",
-                Settings = new NyaaSettings()
-            };
-
-            var result = indexer.Fetch(_animeSearchCriteria);
-
-            ValidateTorrentResult(result, hasSize: true);
-        }
-
-
-
         private void ValidateTorrentResult(IList<ReleaseInfo> reports, bool hasSize = false, bool hasInfoUrl = false, bool hasMagnet = false)
         {
             reports.Should().OnlyContain(c => c.GetType() == typeof(TorrentInfo));
