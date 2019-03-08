@@ -43,7 +43,7 @@
 
 .downloaded {
   border-left-color: $successColor !important;
-  
+
   &:global(.colorImpaired) {
     border-left-color: color($successColor, saturation(+15%)) !important;
   }
