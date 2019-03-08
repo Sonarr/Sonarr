@@ -5,6 +5,10 @@
   border-bottom: 1px solid $borderColor;
   border-left: 4px solid $borderColor;
   font-size: 12px;
+
+  &:global(.colorImpaired) {
+    border-left-width: 5px;
+  }
 }
 
 .info,
@@ -39,6 +43,10 @@
 
 .downloaded {
   border-left-color: $successColor !important;
+  
+  &:global(.colorImpaired) {
+    border-left-color: color($successColor, saturation(+15%)) !important;
+  }
 }
 
 .downloading {
@@ -49,7 +57,7 @@
   border-left-color: $gray !important;
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(45deg, transparent, transparent 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
+    background: repeating-linear-gradient(45deg, $colorImpairedGradientDark, $colorImpairedGradientDark 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
   }
 }
 
@@ -57,7 +65,7 @@
   border-left-color: $warningColor !important;
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, transparent, transparent 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
+    background: repeating-linear-gradient(90deg, $colorImpairedGradientDark, $colorImpairedGradientDark 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
   }
 }
 
@@ -65,7 +73,8 @@
   border-left-color: $dangerColor !important;
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, transparent, transparent 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
+    border-left-color: color($dangerColor saturation(+15%)) !important;
+    background: repeating-linear-gradient(90deg, $colorImpairedGradientDark, $colorImpairedGradientDark 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
   }
 }
 
@@ -73,6 +82,6 @@
   border-left-color: $primaryColor !important;
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, transparent, transparent 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
+    background: repeating-linear-gradient(90deg, $colorImpairedGradientDark, $colorImpairedGradientDark 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
   }
 }
