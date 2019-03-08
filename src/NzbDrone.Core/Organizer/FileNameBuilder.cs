@@ -658,6 +658,11 @@ namespace NzbDrone.Core.Organizer
 
         private void UpdateMediaInfoIfNeeded(string pattern, EpisodeFile episodeFile, Series series)
         {
+            if (series.Path.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+           
             var schemaRevision = episodeFile.MediaInfo != null ? episodeFile.MediaInfo.SchemaRevision : 0;
             var matches = TitleRegex.Matches(pattern);
 

@@ -771,6 +771,20 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         [Test]
+        public void should_not_update_media_info_if_no_series_path_available()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
+
+            GivenMediaInfoModel(schemaRevision: 3);
+            _series.Path = null;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile);
+
+            Mocker.GetMock<IUpdateMediaInfo>().Verify(v => v.Update(_episodeFile, _series), Times.Never());
+        }
+
+        [Test]
         public void should_not_update_media_info_if_token_not_configured_and_revision_is_old()
         {
             _namingConfig.StandardEpisodeFormat =
