@@ -58,6 +58,8 @@ namespace NzbDrone.Common.EnvironmentInfo
             {
                 throw new SonarrStartupException("AppFolder {0} is not writable", _appFolderInfo.AppDataFolder);
             }
+
+            InitializeMonoApplicationData();
         }
 
         private void SetPermissions()
@@ -122,6 +124,28 @@ namespace NzbDrone.Common.EnvironmentInfo
             {
                 _logger.Debug(ex, ex.Message);
                 throw new SonarrStartupException("Unable to migrate AppData folder from {0} to {1}. Migrate manually", _appFolderInfo.LegacyAppDataFolder, _appFolderInfo.AppDataFolder);
+            }
+        }
+
+
+        private void InitializeMonoApplicationData()
+        {
+            if (OsInfo.IsWindows) return;
+
+            var configHome = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (configHome.EndsWith("/.config") &&! _diskProvider.FolderExists(configHome.GetParentPath()) ||
+                !_diskProvider.FolderExists(configHome))
+            {
+                // Tell mono to use appData/.config as ApplicationData folder.
+                Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", Path.Combine(_appFolderInfo.AppDataFolder, ".config"));
+            }
+
+            var dataHome = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            if (dataHome.EndsWith("/.local/share") && !_diskProvider.FolderExists(configHome.GetParentPath().GetParentPath()) ||
+                !_diskProvider.FolderExists(dataHome))
+            {
+                // Tell mono to use appData/.config/share as LocalApplicationData folder.
+                Environment.SetEnvironmentVariable("XDG_DATA_HOME", Path.Combine(_appFolderInfo.AppDataFolder, ".config/share"));
             }
         }
 

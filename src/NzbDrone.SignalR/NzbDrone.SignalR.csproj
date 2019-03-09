@@ -81,7 +81,6 @@
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="NonPersistentManagedProtection.cs" />
     <Compile Include="NoOpPerformanceCounter.cs" />
     <Compile Include="NzbDronePersistentConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,7 +88,6 @@
     <Compile Include="SignalRDependencyResolver.cs" />
     <Compile Include="SignalRJsonSerializer.cs" />
     <Compile Include="SignalRMessage.cs" />
-    <Compile Include="SignalRProtectedData.cs" />
     <Compile Include="SonarrPerformanceCounterManager.cs" />
   </ItemGroup>
   <ItemGroup>
