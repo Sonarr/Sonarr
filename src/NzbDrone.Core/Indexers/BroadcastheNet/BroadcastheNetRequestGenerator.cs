@@ -175,7 +175,28 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
-            return new IndexerPageableRequestChain();
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            var parameters = new BroadcastheNetTorrentQuery();
+            if (AddSeriesSearchParameters(parameters, searchCriteria))
+            {
+                var episodeQueryTitle = searchCriteria.Episodes.Where(e => !string.IsNullOrWhiteSpace(e.Title))
+                                               .Select(e => SearchCriteriaBase.GetQueryTitle(e.Title))
+                                               .ToArray();
+
+                foreach (var queryTitle in episodeQueryTitle)
+                {
+                    parameters = parameters.Clone();
+
+                    parameters.Category = "Episode";
+                    parameters.Name = "%" + queryTitle + "%";
+                
+
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+                }
+            }
+
+            return pageableRequests;
         }
 
         private bool AddSeriesSearchParameters(BroadcastheNetTorrentQuery parameters, SearchCriteriaBase searchCriteria)
