@@ -132,20 +132,29 @@ namespace NzbDrone.Common.EnvironmentInfo
         {
             if (OsInfo.IsWindows) return;
 
-            var configHome = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            if (configHome.EndsWith("/.config") &&! _diskProvider.FolderExists(configHome.GetParentPath()) ||
-                !_diskProvider.FolderExists(configHome))
+            try
             {
-                // Tell mono to use appData/.config as ApplicationData folder.
-                Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", Path.Combine(_appFolderInfo.AppDataFolder, ".config"));
-            }
+                var configHome = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                if (configHome == "/.config" ||
+                    configHome.EndsWith("/.config") && !_diskProvider.FolderExists(configHome.GetParentPath()) ||
+                    !_diskProvider.FolderExists(configHome))
+                {
+                    // Tell mono to use appData/.config as ApplicationData folder.
+                    Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", Path.Combine(_appFolderInfo.AppDataFolder, ".config"));
+                }
 
-            var dataHome = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            if (dataHome.EndsWith("/.local/share") && !_diskProvider.FolderExists(configHome.GetParentPath().GetParentPath()) ||
-                !_diskProvider.FolderExists(dataHome))
+                var dataHome = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                if (dataHome == "/.local/share" ||
+                    dataHome.EndsWith("/.local/share") && !_diskProvider.FolderExists(dataHome.GetParentPath().GetParentPath()) ||
+                    !_diskProvider.FolderExists(dataHome))
+                {
+                    // Tell mono to use appData/.config/share as LocalApplicationData folder.
+                    Environment.SetEnvironmentVariable("XDG_DATA_HOME", Path.Combine(_appFolderInfo.AppDataFolder, ".config/share"));
+                }
+            }
+            catch (Exception ex)
             {
-                // Tell mono to use appData/.config/share as LocalApplicationData folder.
-                Environment.SetEnvironmentVariable("XDG_DATA_HOME", Path.Combine(_appFolderInfo.AppDataFolder, ".config/share"));
+                _logger.Warn(ex, "Failed to initialize the mono config directory.");
             }
         }
 
