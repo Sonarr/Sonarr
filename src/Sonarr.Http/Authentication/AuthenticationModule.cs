@@ -25,9 +25,7 @@ namespace Sonarr.Http.Authentication
         private Response Login(LoginResource resource)
         {
             Ensure.That(resource.Username, () => resource.Username).IsNotNullOrWhiteSpace();
-
-            // TODO: A null or empty password should not be allowed, uncomment in v3
-            //Ensure.That(resource.Password, () => resource.Password).IsNotNullOrWhiteSpace();
+            Ensure.That(resource.Password, () => resource.Password).IsNotNullOrWhiteSpace();
 
             var user = _userService.FindUser(resource.Username, resource.Password);
 
