@@ -336,7 +336,7 @@ namespace NzbDrone.Core.Indexers
 
                 if (releases.Empty())
                 {
-                    return new ValidationFailure(string.Empty, "No results were returned from your indexer, please check your settings.");
+                    return new ValidationFailure(string.Empty, "Query successful, but no results were returned from your indexer. This may be an issue with the indexer or your indexer category settings.");
                 }
             }
             catch (ApiKeyException)
