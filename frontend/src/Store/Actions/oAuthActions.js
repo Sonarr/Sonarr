@@ -89,7 +89,7 @@ function showOAuthWindow(url, payload) {
 }
 
 function executeIntermediateRequest(payload, ajaxOptions) {
-  return createAjaxRequest(ajaxOptions).then((data) => {
+  return createAjaxRequest(ajaxOptions).request.then((data) => {
     return requestAction({
       action: 'continueOAuth',
       queryParams: {
@@ -98,7 +98,7 @@ function executeIntermediateRequest(payload, ajaxOptions) {
       },
       ...payload
     });
-  }).request;
+  });
 }
 
 //
