@@ -779,6 +779,13 @@
     <Compile Include="Languages\LanguagesBelowCutoff.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateLanguage.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\AbsoluteEpisodeNumberSpecification.cs" />
+    <Compile Include="Notifications\Discord\Discord.cs" />
+    <Compile Include="Notifications\Discord\DiscordColors.cs" />
+    <Compile Include="Notifications\Discord\DiscordException.cs" />
+    <Compile Include="Notifications\Discord\DiscordProxy.cs" />
+    <Compile Include="Notifications\Discord\DiscordSettings.cs" />
+    <Compile Include="Notifications\Discord\Payloads\Embed.cs" />
+    <Compile Include="Notifications\Discord\Payloads\DiscordPayload.cs" />
     <Compile Include="Notifications\Plex\PlexTv\PlexTvPinUrlResponse.cs" />
     <Compile Include="Notifications\Plex\PlexTv\PlexTvSignInUrlResponse.cs" />
     <Compile Include="Notifications\Plex\PlexTv\PlexTvPinResponse.cs" />

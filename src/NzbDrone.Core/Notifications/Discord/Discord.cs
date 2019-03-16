@@ -2,64 +2,63 @@ using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Notifications.Slack.Payloads;
+using NzbDrone.Core.Notifications.Discord.Payloads;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 
-
-namespace NzbDrone.Core.Notifications.Slack
+namespace NzbDrone.Core.Notifications.Discord
 {
-    public class Slack : NotificationBase<SlackSettings>
+    public class Discord : NotificationBase<DiscordSettings>
     {
-        private readonly ISlackProxy _proxy;
+        private readonly IDiscordProxy _proxy;
 
-        public Slack(ISlackProxy proxy)
+        public Discord(IDiscordProxy proxy)
         {
             _proxy = proxy;
         }
 
-        public override string Name => "Slack";
-        public override string Link => "https://my.slack.com/services/new/incoming-webhook/";
+        public override string Name => "Discord";
+        public override string Link => "https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks";
 
         public override void OnGrab(GrabMessage message)
         {
-            var attachments = new List<Attachment>
+            var embeds = new List<Embed>
                               {
-                                  new Attachment
+                                  new Embed
                                   {
-                                      Fallback = message.Message,
+                                      Description = message.Message,
                                       Title = message.Series.Title,
                                       Text = message.Message,
-                                      Color = "warning"
+                                      Color = (int)DiscordColors.Warning
                                   }
                               };
-            var payload = CreatePayload($"Grabbed: {message.Message}", attachments);
+            var payload = CreatePayload($"Grabbed: {message.Message}", embeds);
 
             _proxy.SendPayload(payload, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            var attachments = new List<Attachment>
+            var embeds = new List<Embed>
                               {
-                                  new Attachment
+                                  new Embed
                                   {
-                                      Fallback = message.Message,
+                                      Description = message.Message,
                                       Title = message.Series.Title,
                                       Text = message.Message,
-                                      Color = "good"
+                                      Color = (int)DiscordColors.Success
                                   }
                               };
-            var payload = CreatePayload($"Imported: {message.Message}", attachments);
+            var payload = CreatePayload($"Imported: {message.Message}", embeds);
 
             _proxy.SendPayload(payload, Settings);
         }
 
         public override void OnRename(Series series)
         {
-            var attachments = new List<Attachment>
+            var attachments = new List<Embed>
                               {
-                                  new Attachment
+                                  new Embed
                                   {
                                       Title = series.Title,
                                   }
@@ -89,7 +88,7 @@ namespace NzbDrone.Core.Notifications.Slack
                 _proxy.SendPayload(payload, Settings);
 
             }
-            catch (SlackExeption ex)
+            catch (DiscordException ex)
             {
                 return new NzbDroneValidationFailure("Unable to post", ex.Message);
             }
@@ -97,34 +96,25 @@ namespace NzbDrone.Core.Notifications.Slack
             return null;
         }
 
-        private SlackPayload CreatePayload(string message, List<Attachment> attachments = null)
+        private DiscordPayload CreatePayload(string message, List<Embed> embeds = null)
         {
-            var icon = Settings.Icon;
-            var channel = Settings.Channel;
+            var avatar = Settings.Avatar;
 
-            var payload = new SlackPayload
+            var payload = new DiscordPayload
             {
                 Username = Settings.Username,
-                Text = message,
-                Attachments = attachments
+                Content = message,
+                Embeds = embeds
             };
 
-            if (icon.IsNotNullOrWhiteSpace())
+            if (avatar.IsNotNullOrWhiteSpace())
             {
-                // Set the correct icon based on the value
-                if (icon.StartsWith(":") && icon.EndsWith(":"))
-                {
-                    payload.IconEmoji = icon;
-                }
-                else
-                {
-                    payload.IconUrl = icon;
-                }
+                payload.AvatarUrl = avatar;
             }
 
-            if (channel.IsNotNullOrWhiteSpace())
+            if (Settings.Username.IsNotNullOrWhiteSpace())
             {
-                payload.Channel = channel;
+                payload.Username = Settings.Username;
             }
 
             return payload;
