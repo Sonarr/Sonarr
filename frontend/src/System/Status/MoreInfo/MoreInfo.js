@@ -34,6 +34,11 @@ class MoreInfo extends Component {
             <Link to="https://sonarr.tv/">@sonarrtv</Link>
           </DescriptionListItemDescription>
 
+          <DescriptionListItemTitle>Discord</DescriptionListItemTitle>
+          <DescriptionListItemDescription>
+            <Link to="https://discord.gg/M6BvZn5">discord.gg/M6BvZn5</Link>
+          </DescriptionListItemDescription>
+
           <DescriptionListItemTitle>IRC</DescriptionListItemTitle>
           <DescriptionListItemDescription>
             <Link to="irc://irc.freenode.net/#sonarr">#sonarr on Freenode</Link>
