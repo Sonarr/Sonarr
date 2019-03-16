@@ -31,11 +31,23 @@ namespace NzbDrone.Core.Notifications.Emby
             ProcessRequest(request, settings);
         }
 
-        public void Update(MediaBrowserSettings settings, int tvdbId)
+        public void Update(MediaBrowserSettings settings, string seriesPath, string updateType)
         {
-            var path = string.Format("/Library/Series/Updated?tvdbid={0}", tvdbId);            
+            var path = "/Library/Media/Updated";
             var request = BuildRequest(path, settings);
-            request.Headers.Add("Content-Length", "0");
+            request.Headers.ContentType = "application/json";
+
+            request.SetContent(new
+            {
+                Updates = new[]
+                {
+                    new
+                    {
+                        Path = seriesPath,
+                        UpdateType = updateType
+                    }
+                }
+            }.ToJson());
 
             ProcessRequest(request, settings);
         }

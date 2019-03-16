@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Emby
     public interface IMediaBrowserService
     {
         void Notify(MediaBrowserSettings settings, string title, string message);
-        void Update(MediaBrowserSettings settings, Series series);
+        void Update(MediaBrowserSettings settings, Series series, string updateType);
         ValidationFailure Test(MediaBrowserSettings settings);
     }
 
@@ -30,9 +30,9 @@ namespace NzbDrone.Core.Notifications.Emby
             _proxy.Notify(settings, title, message);
         }
 
-        public void Update(MediaBrowserSettings settings, Series series)
+        public void Update(MediaBrowserSettings settings, Series series, string updateType)
         {
-            _proxy.Update(settings, series.TvdbId);
+            _proxy.Update(settings, series.Path, updateType);
         }
 
         public ValidationFailure Test(MediaBrowserSettings settings)
