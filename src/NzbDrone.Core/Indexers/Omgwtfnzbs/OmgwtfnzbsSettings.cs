@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         public OmgwtfnzbsSettings()
         {
             Delay = 30;
+            Priority = IndexerDefaults.PRIORITY;
         }
 
         // Unused since Omg has a hardcoded url.
@@ -35,6 +36,9 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
         [FieldDefinition(2, Label = "Delay", HelpText = "Time in minutes to delay new nzbs before they appear on the RSS feed", Advanced = true)]
         public int Delay { get; set; }
+
+        [FieldDefinition(3, Label = "Priority", HelpText = "Used when searching for releases, a higher priority indexer will be used if releases found have the same quality", Advanced = true)]
+        public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

@@ -17,16 +17,21 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Test.Languages;
+using NzbDrone.Core.Indexers.Torznab;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
     public class PrioritizeDownloadDecisionFixture : CoreTest<DownloadDecisionPriorizationService>
     {
+        private static IndexerDefinition _TestIndexer1 = new IndexerDefinition { Id = 1, Settings = new TorznabSettings { Priority = 10 } };
+        private static IndexerDefinition _TestIndexer2 = new IndexerDefinition { Id = 2, Settings = new TorznabSettings { Priority = 1 } };
+
         [SetUp]
         public void Setup()
         {
             GivenPreferredDownloadProtocol(DownloadProtocol.Usenet);
+            GivenTestIndexers();
         }
 
         private Episode GivenEpisode(int id)
@@ -37,7 +42,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                             .Build();
         }
 
-        private RemoteEpisode GivenRemoteEpisode(List<Episode> episodes, QualityModel quality, Language language, int age = 0, long size = 0, DownloadProtocol downloadProtocol = DownloadProtocol.Usenet)
+        private RemoteEpisode GivenRemoteEpisode(List<Episode> episodes, QualityModel quality, Language language, 
+            int age = 0, long size = 0, DownloadProtocol downloadProtocol = DownloadProtocol.Usenet, 
+            IndexerDefinition indexerDefinition = null)
         {
             var remoteEpisode = new RemoteEpisode();
             remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
@@ -51,6 +58,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.Release.PublishDate = DateTime.Now.AddDays(-age);
             remoteEpisode.Release.Size = size;
             remoteEpisode.Release.DownloadProtocol = downloadProtocol;
+            remoteEpisode.Release.IndexerId = indexerDefinition == null? 0 : indexerDefinition.Id;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
                                                   .With(e => e.QualityProfile = new QualityProfile
@@ -75,6 +83,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                   {
                       PreferredProtocol = downloadProtocol
                   });
+        }
+
+        private void GivenTestIndexers()
+        {
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(x => x.All())
+                .Returns(new List<IndexerDefinition> { _TestIndexer1, _TestIndexer2 });
         }
 
         [Test]
@@ -211,6 +226,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.Release.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+        }
+
+        [Test]
+        public void should_adhere_to_indexer_priority()
+        {
+            GivenPreferredDownloadProtocol(DownloadProtocol.Torrent);
+
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, downloadProtocol: DownloadProtocol.Torrent, indexerDefinition: _TestIndexer1);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, downloadProtocol: DownloadProtocol.Torrent, indexerDefinition: _TestIndexer2);
+            var remoteEpisode3 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, downloadProtocol: DownloadProtocol.Torrent, indexerDefinition: _TestIndexer1);
+
+            var decisions = new List<DownloadDecision>
+            {
+                new DownloadDecision(remoteEpisode1),
+                new DownloadDecision(remoteEpisode2),
+                new DownloadDecision(remoteEpisode3)
+            };
+            
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports[0].RemoteEpisode.Release.IndexerId.Should().Be(_TestIndexer1.Id);
+            qualifiedReports[1].RemoteEpisode.Release.IndexerId.Should().Be(_TestIndexer1.Id);
         }
 
         [Test]

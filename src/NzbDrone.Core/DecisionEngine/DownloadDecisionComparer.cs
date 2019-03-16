@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
@@ -11,12 +12,19 @@ namespace NzbDrone.Core.DecisionEngine
     public class DownloadDecisionComparer : IComparer<DownloadDecision>
     {
         private readonly IDelayProfileService _delayProfileService;
+        private readonly Logger _logger;
+        private readonly Dictionary<int, IndexerDefinition> _indexersById;
+
         public delegate int CompareDelegate(DownloadDecision x, DownloadDecision y);
         public delegate int CompareDelegate<TSubject, TValue>(DownloadDecision x, DownloadDecision y);
 
-        public DownloadDecisionComparer(IDelayProfileService delayProfileService)
+        public DownloadDecisionComparer(IDelayProfileService delayProfileService, Logger logger, IEnumerable<IndexerDefinition> allIndexers)
         {
             _delayProfileService = delayProfileService;
+            _logger = logger;
+
+            //Cache the indexers to prevent DB calls for each compare call
+            _indexersById = allIndexers.ToDictionary(i => i.Id, i => i);
         }
 
         public int Compare(DownloadDecision x, DownloadDecision y)
@@ -27,6 +35,7 @@ namespace NzbDrone.Core.DecisionEngine
                 CompareLanguage,
                 ComparePreferredWordScore,
                 CompareProtocol,
+                CompareIndexerPriority,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
                 ComparePeersIfTorrent,
@@ -72,6 +81,31 @@ namespace NzbDrone.Core.DecisionEngine
         private int ComparePreferredWordScore(DownloadDecision x, DownloadDecision y)
         {
             return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.PreferredWordScore);
+        }
+
+        private int CompareIndexerPriority(DownloadDecision x, DownloadDecision y)
+        {
+            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, GetIndexerPriority);
+        }
+
+        private int GetIndexerPriority(RemoteEpisode remoteEpisode)
+        {
+            if (remoteEpisode == null  || remoteEpisode.Release == null || remoteEpisode.Release.IndexerId == 0)
+            {
+                return int.MinValue;
+            }
+
+            try
+            {
+                var indexer = _indexersById[remoteEpisode.Release.IndexerId];
+                var settings = indexer.Settings as IIndexerSettings;
+                return settings == null ? int.MinValue : settings.Priority;
+            }
+            catch (KeyNotFoundException)
+            {
+                _logger.Debug("Indexer with id {0} does not exist, assiging lowest priority for release", remoteEpisode.Release.IndexerId);
+                return int.MinValue;
+            }
         }
 
         private int CompareProtocol(DownloadDecision x, DownloadDecision y)

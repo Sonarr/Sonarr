@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             BaseUrl = "http://api.broadcasthe.net/";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
+            Priority = IndexerDefaults.PRIORITY;
         }
 
         [FieldDefinition(0, Label = "API URL", Advanced = true, HelpText = "Do not change this unless you know what you're doing. Since your API key will be sent to that host.")]
@@ -36,6 +37,9 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         [FieldDefinition(3)]
         public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
+
+        [FieldDefinition(4, Label = "Priority", HelpText = "Used when searching for releases, a higher priority indexer will be used if releases found have the same quality", Advanced = true)]
+        public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
