@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             var settingsJsonOjb = JObject.Parse(settings);
 
             settingsJsonOjb.Properties().Any(p => p.Name == "priority").Should().BeTrue();
-            settingsJsonOjb.Property("priority").Value.Value<int>().ShouldBeEquivalentTo(1000);
+            settingsJsonOjb.Property("priority").Value.Value<int>().ShouldBeEquivalentTo(100);
         }
     }
 }

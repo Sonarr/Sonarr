@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         [FieldDefinition(2, Label = "Delay", HelpText = "Time in minutes to delay new nzbs before they appear on the RSS feed", Advanced = true)]
         public int Delay { get; set; }
 
-        [FieldDefinition(3, Label = "Priority", HelpText = "Used when searching for releases, a higher priority indexer will be used if releases found have the same quality", Advanced = true)]
+        [FieldDefinition(3, Label = "Priority", HelpText = "Used when processing releases, a higher priority indexer will be used if releases found are otherwise equal. Note: only applied on indexers with the same protocol", Advanced = true)]
         public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()

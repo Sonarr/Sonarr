@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Indexers.HDBits
         [FieldDefinition(4)]
         public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
 
-        [FieldDefinition(5, Label = "Priority", HelpText = "Used when searching for releases, a higher priority indexer will be used if releases found have the same quality", Advanced = true)]
+        [FieldDefinition(5, Label = "Priority", HelpText = "Used when processing releases, a higher priority indexer will be used if releases found are otherwise equal. Note: only applied on indexers with the same protocol", Advanced = true)]
         public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()

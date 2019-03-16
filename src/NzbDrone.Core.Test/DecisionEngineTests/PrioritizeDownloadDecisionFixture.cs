@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.Release.PublishDate = DateTime.Now.AddDays(-age);
             remoteEpisode.Release.Size = size;
             remoteEpisode.Release.DownloadProtocol = downloadProtocol;
-            remoteEpisode.Release.IndexerId = indexerDefinition == null? 0 : indexerDefinition.Id;
+            remoteEpisode.Release.IndexerId = indexerDefinition == null ? 0 : indexerDefinition.Id;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
                                                   .With(e => e.QualityProfile = new QualityProfile

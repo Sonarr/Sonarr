@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore.Migration
         private static void AddPriorityProperty(IndexerSettingsRow indexerSettingsRow)
         {
             var jsonSettingsObj = JObject.Parse(indexerSettingsRow.Settings);
-            jsonSettingsObj.Add("priority", JToken.FromObject(1000)); //1000 = default indexer prio
+            jsonSettingsObj.Add("priority", JToken.FromObject(100)); //100 = default indexer prio
             indexerSettingsRow.Settings = jsonSettingsObj.ToString();
         }
 

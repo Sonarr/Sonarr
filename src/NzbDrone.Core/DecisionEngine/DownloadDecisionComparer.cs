@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
@@ -12,18 +13,17 @@ namespace NzbDrone.Core.DecisionEngine
     public class DownloadDecisionComparer : IComparer<DownloadDecision>
     {
         private readonly IDelayProfileService _delayProfileService;
-        private readonly Logger _logger;
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DownloadDecisionPriorizationService));
         private readonly Dictionary<int, IndexerDefinition> _indexersById;
 
         public delegate int CompareDelegate(DownloadDecision x, DownloadDecision y);
         public delegate int CompareDelegate<TSubject, TValue>(DownloadDecision x, DownloadDecision y);
 
-        public DownloadDecisionComparer(IDelayProfileService delayProfileService, Logger logger, IEnumerable<IndexerDefinition> allIndexers)
+        public DownloadDecisionComparer(IDelayProfileService delayProfileService, IEnumerable<IndexerDefinition> allIndexers)
         {
             _delayProfileService = delayProfileService;
-            _logger = logger;
 
-            //Cache the indexers to prevent DB calls for each compare call
+            // Cache the indexers to prevent DB calls for each compare call
             _indexersById = allIndexers.ToDictionary(i => i.Id, i => i);
         }
 
@@ -90,21 +90,16 @@ namespace NzbDrone.Core.DecisionEngine
 
         private int GetIndexerPriority(RemoteEpisode remoteEpisode)
         {
-            if (remoteEpisode == null  || remoteEpisode.Release == null || remoteEpisode.Release.IndexerId == 0)
+            IndexerDefinition indexer;
+            if(_indexersById.TryGetValue(remoteEpisode.Release.IndexerId, out indexer))
             {
-                return int.MinValue;
-            }
-
-            try
-            {
-                var indexer = _indexersById[remoteEpisode.Release.IndexerId];
                 var settings = indexer.Settings as IIndexerSettings;
                 return settings == null ? int.MinValue : settings.Priority;
             }
-            catch (KeyNotFoundException)
+            else
             {
-                _logger.Debug("Indexer with id {0} does not exist, assiging lowest priority for release", remoteEpisode.Release.IndexerId);
-                return int.MinValue;
+                Logger.Debug("Indexer with id {0} does not exist, assiging lowest priority for release", remoteEpisode.Release.IndexerId);
+                return 0;
             }
         }
 
