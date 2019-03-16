@@ -84,7 +84,7 @@ class Notification extends Component {
         {
           supportsOnDownload && onDownload &&
             <Label kind={kinds.SUCCESS}>
-              On Download
+              On Import
             </Label>
         }
 
