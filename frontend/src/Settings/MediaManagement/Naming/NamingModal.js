@@ -92,7 +92,7 @@ const mediaInfoTokens = [
   { token: '{MediaInfo Simple}', example: 'x264 DTS' },
   { token: '{MediaInfo Full}', example: 'x264 DTS [EN+DE]' },
   { token: '{MediaInfo VideoCodec}', example: 'x264' },
-  { token: '{MediaInfo AudioFormat}', example: 'DTS' },
+  { token: '{MediaInfo AudioCodec}', example: 'DTS' },
   { token: '{MediaInfo AudioChannels}', example: '5.1' },
   { token: '{MediaInfo VideoDynamicRange}', example: 'HDR' }
 ];
