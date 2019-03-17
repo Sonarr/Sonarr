@@ -37,7 +37,7 @@ namespace NzbDrone.Api.Calendar
             var start = DateTime.Today.AddDays(-pastDays);
             var end = DateTime.Today.AddDays(futureDays);
             var unmonitored = false;
-            var premiersOnly = false;
+            var premieresOnly = false;
             var asAllDay = false;
             var tags = new List<int>();
 
@@ -47,6 +47,7 @@ namespace NzbDrone.Api.Calendar
             var queryPastDays = Request.Query.PastDays;
             var queryFutureDays = Request.Query.FutureDays;
             var queryUnmonitored = Request.Query.Unmonitored;
+            var queryPremieresOnly = Request.Query.PremieresOnly;
             var queryPremiersOnly = Request.Query.PremiersOnly;
             var queryAsAllDay = Request.Query.AsAllDay;
             var queryTags = Request.Query.Tags;
@@ -71,10 +72,16 @@ namespace NzbDrone.Api.Calendar
                 unmonitored = bool.Parse(queryUnmonitored.Value);
             }
 
-            if (queryPremiersOnly.HasValue)
+            if (queryPremieresOnly.HasValue)
             {
-                premiersOnly = bool.Parse(queryPremiersOnly.Value);
+                premieresOnly = bool.Parse(queryPremieresOnly.Value);
             }
+            else if (queryPremiersOnly.HasValue)
+            {
+                // There was a typo, recognize mistyped 'premiersOnly' boolean too for background compat.
+                premieresOnly = bool.Parse(queryPremiersOnly.Value);
+            }
+
 
             if (queryAsAllDay.HasValue)
             {
@@ -99,7 +106,7 @@ namespace NzbDrone.Api.Calendar
 
             foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
             {
-                if (premiersOnly && (episode.SeasonNumber == 0 || episode.EpisodeNumber != 1))
+                if (premieresOnly && (episode.SeasonNumber == 0 || episode.EpisodeNumber != 1))
                 {
                     continue;
                 }

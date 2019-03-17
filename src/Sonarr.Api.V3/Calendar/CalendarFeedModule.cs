@@ -37,7 +37,8 @@ namespace Sonarr.Api.V3.Calendar
             var start = DateTime.Today.AddDays(-pastDays);
             var end = DateTime.Today.AddDays(futureDays);
             var unmonitored = Request.GetBooleanQueryParameter("unmonitored");
-            var premiersOnly = Request.GetBooleanQueryParameter("premiersOnly");
+            // There was a typo, recognize both the correct 'premieresOnly' and mistyped 'premiersOnly' boolean for background compat.
+            var premieresOnly = Request.GetBooleanQueryParameter("premieresOnly") || Request.GetBooleanQueryParameter("premiersOnly");
             var asAllDay = Request.GetBooleanQueryParameter("asAllDay");
             var tags = new List<int>();
 
@@ -75,7 +76,7 @@ namespace Sonarr.Api.V3.Calendar
 
             foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
             {
-                if (premiersOnly && (episode.SeasonNumber == 0 || episode.EpisodeNumber != 1))
+                if (premieresOnly && (episode.SeasonNumber == 0 || episode.EpisodeNumber != 1))
                 {
                     continue;
                 }
