@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Blue.Bloods.S08E05.The.Forgotten.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb-Rakuv", "NTb")]
         [TestCase("Lie.To.Me.S01E13.720p.BluRay.x264-SiNNERS-Rakuvfinhel", "SiNNERS")]
         [TestCase("Who.is.America.S01E01.INTERNAL.720p.HDTV.x264-aAF-RakuvUS-Obfuscated", "aAF")]
+        [TestCase("Deadly.Class.S01E10.Sink.With.California.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTG-WhiteRev", "NTG")]
         [TestCase("Series Title - S01E01 - Episode Title [RlsGroup]", "RlsGroup")]
         [TestCase("Black Monday S01 E01-E02 1080p AMZN WEBRip DDP5.1 x264 monkee", null)]
         //[TestCase("", "")]
