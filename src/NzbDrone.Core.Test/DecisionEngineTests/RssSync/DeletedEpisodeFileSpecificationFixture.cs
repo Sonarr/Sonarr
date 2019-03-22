@@ -18,6 +18,7 @@ using NzbDrone.Common.Disk;
 using Moq;
 using NzbDrone.Test.Common;
 using System.IO;
+using NzbDrone.Core.Profiles.Qualities;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 {
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             };
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p })
+                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p.Id })
                          .With(c => c.Path = @"C:\Series\My.Series".AsOsAgnostic())
                          .Build();
 

@@ -1,0 +1,36 @@
+#!/bin/sh
+set -e
+
+BUILD_VERSION={version}
+UPDATER={updater}
+
+if [ $1 = "abort-install" ]; then
+  # preinst was aborted, possibly due to NzbDrone still running.
+  # Nothing to do here
+  :
+fi
+
+# The bin directory is expected to be empty, unless the BuiltIn updater added files.
+if [ $1 = "remove" ] && [ -d /usr/lib/sonarr/bin ]; then
+  rm -rf /usr/lib/sonarr/bin
+fi
+
+#BEGIN BUILTIN UPDATER
+# Remove any existing patch if still present
+if [ $1 = "remove" ] && [ -d /usr/lib/sonarr/bin_patch ]; then
+  rm -rf /usr/lib/sonarr/bin_patch
+fi
+#END BUILTIN UPDATER
+
+# Purge the entire sonarr configuration directory.
+# TODO: Maybe move a minimal backup to tmp?
+if [ $1 = "purge" ] && [ -e /usr/share/debconf/confmodule ]; then
+  . /usr/share/debconf/confmodule
+  db_get sonarr/config_directory
+  CONFDIR="$RET"
+  if [ -d "$CONFDIR" ]; then
+    rm -rf "$CONFDIR"
+  fi
+fi
+
+#DEBHELPER#

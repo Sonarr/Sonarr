@@ -1,0 +1,15 @@
+.message {
+  composes: message from '~Components/Error/ErrorBoundaryError.css';
+
+  margin: 0;
+  margin-bottom: 30px;
+  font-weight: normal;
+  font-size: 26px;
+}
+
+.details {
+  composes: details from '~Components/Error/ErrorBoundaryError.css';
+
+  margin: 0;
+  margin-top: 20px;
+}

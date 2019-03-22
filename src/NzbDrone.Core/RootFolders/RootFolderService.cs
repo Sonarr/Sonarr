@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.RootFolders
@@ -18,6 +17,7 @@ namespace NzbDrone.Core.RootFolders
         RootFolder Add(RootFolder rootDir);
         void Remove(int id);
         RootFolder Get(int id);
+        string GetBestRootFolderPath(string path);
     }
 
     public class RootFolderService : IRootFolderService
@@ -25,7 +25,6 @@ namespace NzbDrone.Core.RootFolders
         private readonly IRootFolderRepository _rootFolderRepository;
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
-        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         private static readonly HashSet<string> SpecialFolders = new HashSet<string>
@@ -45,13 +44,11 @@ namespace NzbDrone.Core.RootFolders
         public RootFolderService(IRootFolderRepository rootFolderRepository,
                                  IDiskProvider diskProvider,
                                  ISeriesRepository seriesRepository,
-                                 IConfigService configService,
                                  Logger logger)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
             _seriesRepository = seriesRepository;
-            _configService = configService;
             _logger = logger;
         }
 
@@ -105,11 +102,6 @@ namespace NzbDrone.Core.RootFolders
             if (all.Exists(r => r.Path.PathEquals(rootFolder.Path)))
             {
                 throw new InvalidOperationException("Recent directory already exists.");
-            }
-
-            if (_configService.DownloadedEpisodesFolder.IsNotNullOrWhiteSpace() && _configService.DownloadedEpisodesFolder.PathEquals(rootFolder.Path))
-            {
-                throw new InvalidOperationException("Drone Factory folder cannot be used.");
             }
 
             if (!_diskProvider.FolderWritable(rootFolder.Path))
@@ -172,6 +164,20 @@ namespace NzbDrone.Core.RootFolders
             rootFolder.TotalSpace = _diskProvider.GetTotalSize(rootFolder.Path);
             rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
             return rootFolder;
+        }
+
+        public string GetBestRootFolderPath(string path)
+        {
+            var possibleRootFolder = All().Where(r => r.Path.IsParentPath(path))
+                                          .OrderByDescending(r => r.Path.Length)
+                                          .FirstOrDefault();
+
+            if (possibleRootFolder == null)
+            {
+                return Path.GetDirectoryName(path);
+            }
+
+            return possibleRootFolder.Path;
         }
     }
 }

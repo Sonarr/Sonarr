@@ -9,6 +9,7 @@ namespace NzbDrone.Core.MediaFiles.Commands
         public List<int> Files { get; set; }
 
         public override bool SendUpdatesToClient => true;
+        public override bool RequiresDiskAccess => true;
 
         public RenameFilesCommand()
         {

@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Twitter
         public TwitterSettings()
         {
             DirectMessage = true;
-            AuthorizeNotification = "step1";
+            AuthorizeNotification = "startOAuth";
         }
 
         [FieldDefinition(0, Label = "Consumer Key", HelpText = "Consumer key from a Twitter application", HelpLink = "https://github.com/Sonarr/Sonarr/wiki/Twitter-Notifications")]
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Notifications.Twitter
         [FieldDefinition(5, Label = "Direct Message", Type = FieldType.Checkbox, HelpText = "Send a direct message instead of a public message")]
         public bool DirectMessage { get; set; }
 
-        [FieldDefinition(6, Label = "Connect to twitter", Type = FieldType.Action)]
+        [FieldDefinition(6, Label = "Connect to Twitter", Type = FieldType.OAuth)]
         public string AuthorizeNotification { get; set; }
 
         public NzbDroneValidationResult Validate()

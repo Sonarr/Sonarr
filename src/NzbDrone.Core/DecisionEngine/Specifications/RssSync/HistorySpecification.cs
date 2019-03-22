@@ -5,24 +5,28 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {
     public class HistorySpecification : IDecisionEngineSpecification
     {
         private readonly IHistoryService _historyService;
-        private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly UpgradableSpecification _upgradableSpecification;
         private readonly IConfigService _configService;
+        private readonly IPreferredWordService _preferredWordServiceCalculator;
         private readonly Logger _logger;
 
         public HistorySpecification(IHistoryService historyService,
-                                           QualityUpgradableSpecification qualityUpgradableSpecification,
+                                           UpgradableSpecification upgradableSpecification,
                                            IConfigService configService,
+                                           IPreferredWordService preferredWordServiceCalculator,
                                            Logger logger)
         {
             _historyService = historyService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
             _configService = configService;
+            _preferredWordServiceCalculator = preferredWordServiceCalculator;
             _logger = logger;
         }
 
@@ -48,8 +52,29 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
                 {
                     var recent = mostRecent.Date.After(DateTime.UtcNow.AddHours(-12));
-                    var cutoffUnmet = _qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality);
-                    var upgradeable = _qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality);
+
+                    // The series will be the same as the one in history since it's the same episode.
+                    // Instead of fetching the series from the DB reuse the known series.
+                    var preferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, mostRecent.SourceTitle);
+
+                    var cutoffUnmet = _upgradableSpecification.CutoffNotMet(
+                        subject.Series.QualityProfile,
+                        subject.Series.LanguageProfile,
+                        mostRecent.Quality,
+                        mostRecent.Language,
+                        preferredWordScore,
+                        subject.ParsedEpisodeInfo.Quality,
+                        subject.PreferredWordScore);
+
+                    var upgradeable = _upgradableSpecification.IsUpgradable(
+                        subject.Series.QualityProfile,
+                        subject.Series.LanguageProfile,
+                        mostRecent.Quality,
+                        mostRecent.Language,
+                        preferredWordScore,
+                        subject.ParsedEpisodeInfo.Quality,
+                        subject.ParsedEpisodeInfo.Language,
+                        subject.PreferredWordScore);
 
                     if (!recent && cdhEnabled)
                     {

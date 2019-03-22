@@ -1,1 +1,1 @@
-require('./gulp/gulpFile.js');
+require('./frontend/gulp/gulpFile.js');

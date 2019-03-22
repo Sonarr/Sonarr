@@ -1,10 +1,10 @@
-﻿using FizzWare.NBuilder;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tags;
-using NzbDrone.Core.Restrictions;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             var tags = Builder<Tag>.CreateListOfSize(2).BuildList();
             Db.InsertMany(tags);
 
-            var restrictions = Builder<Restriction>.CreateListOfSize(2)
+            var restrictions = Builder<ReleaseProfile>.CreateListOfSize(2)
                 .All()
                 .With(v => v.Tags.Add(tags[0].Id))
                 .BuildList();

@@ -20,33 +20,39 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ### Requirements
 
-* [Visual Studio 2015](https://visualstudio.microsoft.com/vs/)
+* [Visual Studio 2017] (https://www.visualstudio.com/vs/)
 * [Git](https://git-scm.com/downloads)
 * [NodeJS](https://nodejs.org/en/download/)
+* [Yarn](https://yarnpkg.com/)
 
 ### Setup
 
-* Make sure all the required software mentioned above are installed.
-* Clone the repository into your development machine. [*info*](https://help.github.com/articles/working-with-repositories)
+* Make sure all the required software mentioned above are installed
+* Clone the repository into your development machine. [*info*](https://help.github.com/en/articles/working-with-forks)
 * Grab the submodules `git submodule init && git submodule update`
-* Install the required Node Packages `npm install`
-* Start gulp to monitor your dev environment for any changes that need post processing using `npm start` command.
+* Install the required Node Packages `yarn`
 
-*Please note gulp must be running at all times while you are working with Sonarr client source files.*
+### Backend Development
 
-### Development
+* Run `yarn build` to build the UI
+* Open `Sonarr.sln` in Visual Studio
+* Make sure `Sonarr.Console` is set as the startup project
+* Build `Sonarr.Windows` and `Sonarr.Mono` projects
+* Build Solution
 
-* Open `NzbDrone.sln` in Visual Studio
-* Make sure `NzbDrone.Console` is set as the startup project
+### UI Development
+
+* Run `yarn watch` to build UI and rebuild automatically when changes are detected
+* Run Sonarr.Console.exe (or debug in Visual Studio)
 
 ### License
 
-* [GNU GPL v3](https://www.gnu.org/licenses/gpl.html)
-* Copyright 2010-2017
+
+* [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
+* Copyright 2010-2019
 
 ### Sponsors
 
-* [JetBrains](https://www.jetbrains.com/) for providing us with free licenses to their great tools
-    * [ReSharper](https://www.jetbrains.com/resharper/)
-    * [WebStorm](https://www.jetbrains.com/webstorm/)
-    * [TeamCity](https://www.jetbrains.com/teamcity/)
+* [JetBrains](http://www.jetbrains.com/) for providing us with free licenses to their great tools
+    * [ReSharper](http://www.jetbrains.com/resharper/)
+    * [TeamCity](http://www.jetbrains.com/teamcity/)

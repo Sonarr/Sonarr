@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
@@ -48,7 +48,8 @@ namespace NzbDrone.Core.Indexers
                 {
                     Name = GetType().Name,
                     EnableRss = config.Validate().IsValid && SupportsRss,
-                    EnableSearch = config.Validate().IsValid && SupportsSearch,
+                    EnableAutomaticSearch = config.Validate().IsValid && SupportsSearch,
+                    EnableInteractiveSearch = config.Validate().IsValid && SupportsSearch,
                     Implementation = GetType().Name,
                     Settings = config
                 };

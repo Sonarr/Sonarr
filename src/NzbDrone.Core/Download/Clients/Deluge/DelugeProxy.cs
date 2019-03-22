@@ -48,9 +48,25 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         public string GetVersion(DelugeSettings settings)
         {
-            var response = ProcessRequest<string>(settings, "daemon.info");
+            try
+            {
+                var response = ProcessRequest<string>(settings, "daemon.info");
 
-            return response;
+                return response;
+            }
+            catch (DownloadClientException ex)
+            {
+                if (ex.Message.Contains("Unknown method"))
+                {
+                    // Deluge v2 beta replaced 'daemon.info' with 'daemon.get_version'.
+                    // It may return or become official, for now we just retry with the get_version api.
+                    var response = ProcessRequest<string>(settings, "daemon.get_version");
+
+                    return response;
+                }
+
+                throw;
+            }
         }
 
         public Dictionary<string, object> GetConfig(DelugeSettings settings)

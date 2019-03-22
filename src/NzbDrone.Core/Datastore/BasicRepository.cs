@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -254,10 +254,21 @@ namespace NzbDrone.Core.Datastore
 
         protected virtual SortBuilder<TModel> GetPagedQuery(QueryBuilder<TModel> query, PagingSpec<TModel> pagingSpec)
         {
-            return query.Where(pagingSpec.FilterExpression)
-                        .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
-                        .Skip(pagingSpec.PagingOffset())
-                        .Take(pagingSpec.PageSize);
+            var filterExpressions = pagingSpec.FilterExpressions;
+            var sortQuery = query.Where(filterExpressions.FirstOrDefault());
+
+            if (filterExpressions.Count > 1)
+            {
+                // Start at the second item for the AndWhere clauses
+                for (var i = 1; i < filterExpressions.Count; i++)
+                {
+                    sortQuery.AndWhere(filterExpressions[i]);
+                }
+            }
+
+            return sortQuery.OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
+                            .Skip(pagingSpec.PagingOffset())
+                            .Take(pagingSpec.PageSize);
         }
 
         protected void ModelCreated(TModel model)

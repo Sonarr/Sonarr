@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Queue;
 using NzbDrone.SignalR;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Queue
 {
-    public class QueueModule : NzbDroneRestModuleWithSignalR<QueueResource, Core.Queue.Queue>,
+    public class QueueModule : SonarrRestModuleWithSignalR<QueueResource, Core.Queue.Queue>,
                                IHandle<QueueUpdatedEvent>, IHandle<PendingReleasesUpdatedEvent>
     {
         private readonly IQueueService _queueService;
@@ -29,7 +30,7 @@ namespace NzbDrone.Api.Queue
 
         private IEnumerable<Core.Queue.Queue> GetQueueItems()
         {
-            var queue = _queueService.GetQueue();
+            var queue = _queueService.GetQueue().Where(q => q.Series != null);
             var pending = _pendingReleaseService.GetPendingQueue();
 
             return queue.Concat(pending);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 
@@ -12,9 +13,9 @@ namespace NzbDrone.Api.Calendar
     {
         public CalendarModule(IEpisodeService episodeService,
                               ISeriesService seriesService,
-                              IQualityUpgradableSpecification qualityUpgradableSpecification,
+                              IUpgradableSpecification upgradableSpecification,
                               IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster, "calendar")
+            : base(episodeService, seriesService, upgradableSpecification, signalRBroadcaster, "calendar")
         {
             GetResourceAll = GetCalendar;
         }

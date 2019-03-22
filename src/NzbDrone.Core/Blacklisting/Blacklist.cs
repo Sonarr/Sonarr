@@ -4,6 +4,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Blacklisting
 {
@@ -21,5 +22,6 @@ namespace NzbDrone.Core.Blacklisting
         public string Indexer { get; set; }
         public string Message { get; set; }
         public string TorrentInfoHash { get; set; }
+        public Language Language { get; set; }
     }
 }

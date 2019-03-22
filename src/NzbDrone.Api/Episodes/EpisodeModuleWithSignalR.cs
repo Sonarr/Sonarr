@@ -1,48 +1,50 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Api.EpisodeFiles;
 using NzbDrone.Api.Series;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Episodes
 {
-    public abstract class EpisodeModuleWithSignalR : NzbDroneRestModuleWithSignalR<EpisodeResource, Episode>,
+    public abstract class EpisodeModuleWithSignalR : SonarrRestModuleWithSignalR<EpisodeResource, Episode>,
         IHandle<EpisodeGrabbedEvent>,
         IHandle<EpisodeImportedEvent>
     {
         protected readonly IEpisodeService _episodeService;
         protected readonly ISeriesService _seriesService;
-        protected readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
+        protected readonly IUpgradableSpecification _upgradableSpecification;
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
                                            ISeriesService seriesService,
-                                           IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IUpgradableSpecification upgradableSpecification,
                                            IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
                                            ISeriesService seriesService,
-                                           IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IUpgradableSpecification upgradableSpecification,
                                            IBroadcastSignalRMessage signalRBroadcaster,
                                            string resource)
             : base(signalRBroadcaster, resource)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
@@ -68,7 +70,7 @@ namespace NzbDrone.Api.Episodes
                 }
                 if (includeEpisodeFile && episode.EpisodeFileId != 0)
                 {
-                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _qualityUpgradableSpecification);
+                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _upgradableSpecification);
                 }
             }
 
@@ -96,7 +98,7 @@ namespace NzbDrone.Api.Episodes
                     }
                     if (includeEpisodeFile && episodes[i].EpisodeFileId != 0)
                     {
-                        resource.EpisodeFile = episodes[i].EpisodeFile.Value.ToResource(series, _qualityUpgradableSpecification);
+                        resource.EpisodeFile = episodes[i].EpisodeFile.Value.ToResource(series, _upgradableSpecification);
                     }
                 }
             }

@@ -1,0 +1,6 @@
+.cell {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 35px;
+  text-align: center;
+}

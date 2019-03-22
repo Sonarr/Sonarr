@@ -1,5 +1,5 @@
 ﻿using FluentValidation.Validators;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 
 namespace NzbDrone.Core.Validation
 {
@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Validation
         private readonly IProfileService _profileService;
 
         public ProfileExistsValidator(IProfileService profileService)
-            : base("Profile does not exist")
+            : base("QualityProfile does not exist")
         {
             _profileService = profileService;
         }

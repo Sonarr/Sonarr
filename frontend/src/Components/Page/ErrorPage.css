@@ -1,0 +1,12 @@
+.page {
+  composes: page from '~./Page.css';
+
+  margin-top: 20px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.version {
+  margin-top: 20px;
+  font-size: 16px;
+}

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Parser
 {
@@ -15,8 +16,8 @@ namespace NzbDrone.Core.Parser
                                                                new IsoLanguage("da", "dan", Language.Danish),
                                                                new IsoLanguage("nl", "nld", Language.Dutch),
                                                                new IsoLanguage("ja", "jpn", Language.Japanese),
-//                                                             new IsoLanguage("", "", Language.Cantonese),
-//                                                             new IsoLanguage("", "", Language.Mandarin),
+                                                               new IsoLanguage("is", "isl", Language.Icelandic),
+                                                               new IsoLanguage("zh", "zho", Language.Chinese),
                                                                new IsoLanguage("ru", "rus", Language.Russian),
                                                                new IsoLanguage("pl", "pol", Language.Polish),
                                                                new IsoLanguage("vi", "vie", Language.Vietnamese),

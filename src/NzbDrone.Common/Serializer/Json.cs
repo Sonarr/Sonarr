@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -10,11 +10,17 @@ namespace NzbDrone.Common.Serializer
     public static class Json
     {
         private static readonly JsonSerializer Serializer;
-        private static readonly JsonSerializerSettings SerializerSetting;
+        private static readonly JsonSerializerSettings SerializerSettings;
 
         static Json()
         {
-            SerializerSetting = new JsonSerializerSettings
+            SerializerSettings = GetSerializerSettings();
+            Serializer = JsonSerializer.Create(SerializerSettings);
+        }
+
+        public static JsonSerializerSettings GetSerializerSettings()
+        {
+            var serializerSettings = new JsonSerializerSettings
             {
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 NullValueHandling = NullValueHandling.Ignore,
@@ -23,21 +29,18 @@ namespace NzbDrone.Common.Serializer
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
+            serializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            serializerSettings.Converters.Add(new VersionConverter());
+            serializerSettings.Converters.Add(new HttpUriConverter());
 
-            SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
-            //SerializerSetting.Converters.Add(new IntConverter());
-            SerializerSetting.Converters.Add(new VersionConverter());
-            SerializerSetting.Converters.Add(new HttpUriConverter());
-
-            Serializer = JsonSerializer.Create(SerializerSetting);
-
+            return serializerSettings;
         }
 
         public static T Deserialize<T>(string json) where T : new()
         {
             try
             {
-                return JsonConvert.DeserializeObject<T>(json, SerializerSetting);
+                return JsonConvert.DeserializeObject<T>(json, SerializerSettings);
             }
             catch (JsonReaderException ex)
             {
@@ -49,7 +52,7 @@ namespace NzbDrone.Common.Serializer
         {
             try
             {
-                return JsonConvert.DeserializeObject(json, type, SerializerSetting);
+                return JsonConvert.DeserializeObject(json, type, SerializerSettings);
             }
             catch (JsonReaderException ex)
             {
@@ -113,7 +116,7 @@ namespace NzbDrone.Common.Serializer
 
         public static string ToJson(this object obj)
         {
-            return JsonConvert.SerializeObject(obj, SerializerSetting);
+            return JsonConvert.SerializeObject(obj, SerializerSettings);
         }
 
         public static void Serialize<TModel>(TModel model, TextWriter outputStream)

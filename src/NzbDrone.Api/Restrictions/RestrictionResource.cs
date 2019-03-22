@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Api.REST;
-using NzbDrone.Core.Restrictions;
+using NzbDrone.Core.Profiles.Releases;
+using Sonarr.Http.REST;
 
 namespace NzbDrone.Api.Restrictions
 {
     public class RestrictionResource : RestResource
     {
         public string Required { get; set; }
-        public string Preferred { get; set; }
         public string Ignored { get; set; }
         public HashSet<int> Tags { get; set; }
 
@@ -20,7 +19,7 @@ namespace NzbDrone.Api.Restrictions
 
     public static class RestrictionResourceMapper
     {
-        public static RestrictionResource ToResource(this Restriction model)
+        public static RestrictionResource ToResource(this ReleaseProfile model)
         {
             if (model == null) return null;
 
@@ -29,28 +28,26 @@ namespace NzbDrone.Api.Restrictions
                 Id = model.Id,
 
                 Required = model.Required,
-                Preferred = model.Preferred,
                 Ignored = model.Ignored,
                 Tags = new HashSet<int>(model.Tags)
             };
         }
 
-        public static Restriction ToModel(this RestrictionResource resource)
+        public static ReleaseProfile ToModel(this RestrictionResource resource)
         {
             if (resource == null) return null;
 
-            return new Restriction
+            return new ReleaseProfile
             {
                 Id = resource.Id,
 
                 Required = resource.Required,
-                Preferred = resource.Preferred,
                 Ignored = resource.Ignored,
                 Tags = new HashSet<int>(resource.Tags)
             };
         }
 
-        public static List<RestrictionResource> ToResource(this IEnumerable<Restriction> models)
+        public static List<RestrictionResource> ToResource(this IEnumerable<ReleaseProfile> models)
         {
             return models.Select(ToResource).ToList();
         }

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Core.DecisionEngine;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Indexers
 {
-    public abstract class ReleaseModuleBase : NzbDroneRestModule<ReleaseResource>
+    public abstract class ReleaseModuleBase : SonarrRestModule<ReleaseResource>
     {
         protected virtual List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
         {
@@ -28,7 +29,7 @@ namespace NzbDrone.Api.Indexers
             if (decision.RemoteEpisode.Series != null)
             {
                 release.QualityWeight = decision.RemoteEpisode.Series
-                                                              .Profile.Value
+                                                              .QualityProfile.Value
                                                               .Items.FindIndex(v => v.Quality == release.Quality.Quality) * 100;
             }
 

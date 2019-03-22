@@ -1,0 +1,23 @@
+.captchaInputWrapper {
+  display: flex;
+}
+
+.input {
+  composes: input from '~Components/Form/Input.css';
+}
+
+.hasError {
+  composes: hasError from '~Components/Form/Input.css';
+}
+
+.hasWarning {
+  composes: hasWarning from '~Components/Form/Input.css';
+}
+
+.hasButton {
+  composes: hasButton from '~Components/Form/Input.css';
+}
+
+.recaptchaWrapper {
+  margin-top: 10px;
+}

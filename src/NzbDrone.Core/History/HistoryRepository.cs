@@ -11,11 +11,12 @@ namespace NzbDrone.Core.History
 {
     public interface IHistoryRepository : IBasicRepository<History>
     {
-        List<QualityModel> GetBestQualityInHistory(int episodeId);
         History MostRecentForEpisode(int episodeId);
         List<History> FindByEpisodeId(int episodeId);
         History MostRecentForDownloadId(string downloadId);
         List<History> FindByDownloadId(string downloadId);
+        List<History> GetBySeries(int seriesId, HistoryEventType? eventType);
+        List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType);
         List<History> FindDownloadHistory(int idSeriesId, QualityModel quality);
         void DeleteForSeries(int seriesId);
         List<History> Since(DateTime date, HistoryEventType? eventType);
@@ -27,14 +28,6 @@ namespace NzbDrone.Core.History
         public HistoryRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-        }
-
-
-        public List<QualityModel> GetBestQualityInHistory(int episodeId)
-        {
-            var history = Query.Where(c => c.EpisodeId == episodeId);
-
-            return history.Select(h => h.Quality).ToList();
         }
 
         public History MostRecentForEpisode(int episodeId)
@@ -61,6 +54,36 @@ namespace NzbDrone.Core.History
         public List<History> FindByDownloadId(string downloadId)
         {
             return Query.Where(h => h.DownloadId == downloadId);
+        }
+
+        public List<History> GetBySeries(int seriesId, HistoryEventType? eventType)
+        {
+            var query = Query.Where(h => h.SeriesId == seriesId);
+
+            if (eventType.HasValue)
+            {
+                query.AndWhere(h => h.EventType == eventType);
+            }
+
+            query.OrderByDescending(h => h.Date);
+
+            return query;
+        }
+
+        public List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType)
+        {
+            var query = Query.Join<History, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
+                             .Where(h => h.SeriesId == seriesId)
+                             .AndWhere(h => h.Episode.SeasonNumber == seasonNumber);
+
+            if (eventType.HasValue)
+            {
+                query.AndWhere(h => h.EventType == eventType);
+            }
+
+            query.OrderByDescending(h => h.Date);
+
+            return query;
         }
 
         public List<History> FindDownloadHistory(int idSeriesId, QualityModel quality)

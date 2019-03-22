@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Parser
 {
@@ -11,7 +12,12 @@ namespace NzbDrone.Core.Parser
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(LanguageParser));
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)",
+        private static readonly RegexReplace[] CleanSeriesTitleRegex = new[]
+            {
+                new RegexReplace(@".*?\.(S\d{2}E\d{2,4}\..*)", "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+            };
+
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<chinese>\[(?:CH[ST]|BIG5|GB)\]|简|繁|字幕组)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex CaseSensitiveLanguageRegex = new Regex(@"(?<lithuanian>\bLT\b)|(?<czech>\bCZ\b)",
@@ -22,6 +28,12 @@ namespace NzbDrone.Core.Parser
 
         public static Language ParseLanguage(string title)
         {
+            foreach (var regex in CleanSeriesTitleRegex)
+            {
+                if (regex.TryReplace(ref title))
+                    break;
+            }
+
             var lowerTitle = title.ToLower();
 
             if (lowerTitle.Contains("english"))
@@ -42,11 +54,11 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("japanese"))
                 return Language.Japanese;
 
-            if (lowerTitle.Contains("cantonese"))
-                return Language.Cantonese;
+            if (lowerTitle.Contains("icelandic"))
+                return Language.Icelandic;
 
-            if (lowerTitle.Contains("mandarin"))
-                return Language.Mandarin;
+            if (lowerTitle.Contains("mandarin") || lowerTitle.Contains("cantonese") || lowerTitle.Contains("chinese"))
+                return Language.Chinese;
 
             if (lowerTitle.Contains("korean"))
                 return Language.Korean;
@@ -169,6 +181,9 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["hebrew"].Success)
                 return Language.Hebrew;
+
+            if (match.Groups["chinese"].Success)
+                return Language.Chinese;
 
             return Language.Unknown;
         }

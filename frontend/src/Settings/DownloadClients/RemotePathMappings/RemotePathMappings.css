@@ -1,0 +1,27 @@
+.remotePathMappingsHeader {
+  display: flex;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.host {
+  @add-mixin truncate;
+
+  flex: 0 1 300px;
+}
+
+.path {
+  @add-mixin truncate;
+
+  flex: 0 1 400px;
+}
+
+.addRemotePathMapping {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
+
+.addButton {
+  text-align: center;
+}

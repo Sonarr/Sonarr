@@ -1,4 +1,4 @@
-﻿using NzbDrone.Api.REST;
+using Sonarr.Http.REST;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
@@ -18,6 +18,7 @@ namespace NzbDrone.Api.Config
         public string Username { get; set; }
         public string Password { get; set; }
         public string LogLevel { get; set; }
+        public string ConsoleLogLevel { get; set; }
         public string Branch { get; set; }
         public string ApiKey { get; set; }
         public string SslCertHash { get; set; }
@@ -33,6 +34,9 @@ namespace NzbDrone.Api.Config
         public string ProxyPassword { get; set; }
         public string ProxyBypassFilter { get; set; }
         public bool ProxyBypassLocalAddresses { get; set; }
+        public string BackupFolder { get; set; }
+        public int BackupInterval { get; set; }
+        public int BackupRetention { get; set; }
     }
 
     public static class HostConfigResourceMapper
@@ -52,6 +56,7 @@ namespace NzbDrone.Api.Config
                 //Username
                 //Password
                 LogLevel = model.LogLevel,
+                ConsoleLogLevel = model.ConsoleLogLevel,
                 Branch = model.Branch,
                 ApiKey = model.ApiKey,
                 SslCertHash = model.SslCertHash,
@@ -66,7 +71,10 @@ namespace NzbDrone.Api.Config
                 ProxyUsername = configService.ProxyUsername,
                 ProxyPassword = configService.ProxyPassword,
                 ProxyBypassFilter = configService.ProxyBypassFilter,
-                ProxyBypassLocalAddresses = configService.ProxyBypassLocalAddresses
+                ProxyBypassLocalAddresses = configService.ProxyBypassLocalAddresses,
+                BackupFolder = configService.BackupFolder,
+                BackupInterval = configService.BackupInterval,
+                BackupRetention = configService.BackupRetention
             };
         }
     }

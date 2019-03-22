@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Parser;
+using NzbDrone.Core.Languages;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Profiles.Languages
 {
-    public class LanguageModule : NzbDroneRestModule<LanguageResource>
+    public class LanguageModule : SonarrRestModule<LanguageResource>
     {
         public LanguageModule()
         {

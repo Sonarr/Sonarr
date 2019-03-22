@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+}
+
+.numberInput {
+  composes: input from '~Components/Form/TextInput.css';
+
+  margin-right: 3px;
+}
+
+.selectInput {
+  composes: select from '~Components/Form/SelectInput.css';
+
+  margin-left: 3px;
+}

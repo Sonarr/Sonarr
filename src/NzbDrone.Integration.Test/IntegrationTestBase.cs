@@ -127,6 +127,9 @@ namespace NzbDrone.Integration.Test
         public void IntegrationSetUp()
         {
             TempDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "_test_" + DateTime.UtcNow.Ticks);
+
+            // Wait for things to get quiet, otherwise the previous test might influence the current one.
+            Commands.WaitAll();
         }
 
         [TearDown]
@@ -213,6 +216,7 @@ namespace NzbDrone.Integration.Test
                 var lookup = Series.Lookup("tvdb:" + tvdbId);
                 var series = lookup.First();
                 series.ProfileId = 1;
+                series.LanguageProfileId = 1;
                 series.Path = Path.Combine(SeriesRootFolder, series.Title);
                 series.Monitored = true;
                 series.Seasons.ForEach(v => v.Monitored = true);
@@ -328,8 +332,8 @@ namespace NzbDrone.Integration.Test
 
                 schema.Enable = enabled;
                 schema.Name = "Test UsenetBlackhole";
-                schema.Fields.First(v => v.Name == "WatchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
-                schema.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
+                schema.Fields.First(v => v.Name == "watchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
+                schema.Fields.First(v => v.Name == "nzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
 
                 client = DownloadClients.Post(schema);
             }

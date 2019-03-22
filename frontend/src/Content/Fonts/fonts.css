@@ -1,0 +1,38 @@
+@font-face {
+  font-weight: 300;
+  font-style: normal;
+  font-family: 'Roboto';
+  src: url('Roboto-Light.woff2?v=1.3.0') format('woff2'), url('Roboto-Light.woff?v=1.3.0') format('woff'), url('Roboto-Light.ttf?v=1.3.0') format('truetype');
+}
+
+@font-face {
+  font-weight: 400;
+  font-style: normal;
+  font-family: 'Roboto';
+  src: url('Roboto-Regular.woff2?v=1.3.0') format('woff2'), url('Roboto-Regular.woff?v=1.3.0') format('woff'), url('Roboto-Regular.ttf?v=1.3.0') format('truetype');
+}
+
+@font-face {
+  font-weight: normal;
+  font-style: normal;
+  font-family: 'Roboto';
+  src: url('Roboto-Regular.woff2?v=1.3.0') format('woff2'), url('Roboto-Regular.woff?v=1.3.0') format('woff'), url('Roboto-Regular.ttf?v=1.3.0') format('truetype');
+}
+
+@font-face {
+  font-weight: 400;
+  font-style: normal;
+  font-family: 'Ubuntu Mono';
+  src: url('UbuntuMono-Regular.eot?#iefix&v=1.3.0') format('embedded-opentype'), url('UbuntuMono-Regular.woff?v=1.3.0') format('woff'), url('UbuntuMono-Regular.ttf?v=1.3.0') format('truetype');
+}
+
+/*
+ * text-security-disc
+ */
+
+@font-face {
+  font-weight: normal;
+  font-style: normal;
+  font-family: 'text-security-disc';
+  src: url('text-security-disc.woff?v=1.3.0') format('woff'), url('text-security-disc.ttf?v=1.3.0') format('truetype');
+}

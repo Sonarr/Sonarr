@@ -36,7 +36,7 @@ namespace NzbDrone.Common.Test
         {
             if (Subject.ServiceExist(TEMP_SERVICE_NAME))
             {
-                Subject.UnInstall(TEMP_SERVICE_NAME);
+                Subject.Uninstall(TEMP_SERVICE_NAME);
             }
 
             if (Subject.IsServiceRunning(ALWAYS_INSTALLED_SERVICE))
@@ -65,7 +65,7 @@ namespace NzbDrone.Common.Test
             Subject.ServiceExist(TEMP_SERVICE_NAME).Should().BeFalse("Service already installed");
             Subject.Install(TEMP_SERVICE_NAME);
             Subject.ServiceExist(TEMP_SERVICE_NAME).Should().BeTrue();
-            Subject.UnInstall(TEMP_SERVICE_NAME);
+            Subject.Uninstall(TEMP_SERVICE_NAME);
             Subject.ServiceExist(TEMP_SERVICE_NAME).Should().BeFalse();
 
             ExceptionVerification.ExpectedWarns(1);
@@ -76,8 +76,8 @@ namespace NzbDrone.Common.Test
         [ManualTest]
         public void UnInstallService()
         {
-            Subject.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
-            Subject.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME).Should().BeFalse();
+            Subject.Uninstall(ServiceProvider.SERVICE_NAME);
+            Subject.ServiceExist(ServiceProvider.SERVICE_NAME).Should().BeFalse();
         }
 
         [Test]

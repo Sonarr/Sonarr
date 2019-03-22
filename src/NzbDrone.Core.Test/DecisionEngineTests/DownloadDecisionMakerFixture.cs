@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -11,6 +11,8 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using FizzWare.NBuilder;
+using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.DecisionEngine.Specifications;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -313,6 +315,23 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.GetRssDecision(_reports).Should().HaveCount(1);
 
             ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_return_unknown_series_rejection_if_series_title_is_an_alias_for_another_series()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.FindTvdbId(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns(12345);
+
+            _remoteEpisode.Series = null;
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Should().HaveCount(1);
+            result.First().Rejections.First().Reason.Should().Contain("12345");
         }
     }
 }

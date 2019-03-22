@@ -1,0 +1,2 @@
+recommends libcurl3
+ignores msbuild

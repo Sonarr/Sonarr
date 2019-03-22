@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Tv
 {
@@ -6,5 +6,18 @@ namespace NzbDrone.Core.Tv
     {
         public bool IgnoreEpisodesWithFiles { get; set; }
         public bool IgnoreEpisodesWithoutFiles { get; set; }
+        public MonitorTypes Monitor { get; set; }
+    }
+
+    public enum MonitorTypes
+    {
+        Unknown,
+        All,
+        Future,
+        Missing,
+        Existing,
+        FirstSeason,
+        LatestSeason,
+        None
     }
 }

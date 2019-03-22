@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -17,6 +16,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     {
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series);
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource);
+        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource, bool filterExistingFiles);
     }
 
     public class ImportDecisionMaker : IMakeImportDecision
@@ -50,7 +50,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource)
         {
-            var newFiles = _mediaFileService.FilterExistingFiles(videoFiles.ToList(), series);
+            return GetImportDecisions(videoFiles, series, downloadClientItem, folderInfo, sceneSource, true);
+        }
+
+        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource, bool filterExistingFiles)
+        {
+            var newFiles = filterExistingFiles ? _mediaFileService.FilterExistingFiles(videoFiles.ToList(), series) : videoFiles.ToList();
 
             _logger.Debug("Analyzing {0}/{1} files.", newFiles.Count, videoFiles.Count());
 
@@ -70,14 +75,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             foreach (var file in newFiles)
             {
                 var localEpisode = new LocalEpisode
-                                   {
-                                       Series = series,
-                                       DownloadClientEpisodeInfo = downloadClientItemInfo,
-                                       FolderEpisodeInfo = folderInfo,
-                                       Path = file,
-                                       SceneSource = sceneSource,
-                                       ExistingFile = series.Path.IsParentPath(file)
-                                   };
+                {
+                    Series = series,
+                    DownloadClientEpisodeInfo = downloadClientItemInfo,
+                    FolderEpisodeInfo = folderInfo,
+                    Path = file,
+                    SceneSource = sceneSource,
+                    ExistingFile = series.Path.IsParentPath(file)
+                };
 
                 decisions.AddIfNotNull(GetDecision(localEpisode, downloadClientItem, nonSampleVideoFileCount > 1));
             }

@@ -1,0 +1,18 @@
+.select {
+  composes: input from '~Components/Form/Input.css';
+
+  padding: 0 11px;
+}
+
+.hasError {
+  composes: hasError from '~Components/Form/Input.css';
+}
+
+.hasWarning {
+  composes: hasWarning from '~Components/Form/Input.css';
+}
+
+.isDisabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

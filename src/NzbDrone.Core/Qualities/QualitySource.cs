@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Qualities
         Web,
         WebRip,
         DVD,
-        Bluray
+        Bluray,
+        BlurayRaw
     }
 }

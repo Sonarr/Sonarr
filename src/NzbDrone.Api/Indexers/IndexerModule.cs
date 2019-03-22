@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -14,7 +14,7 @@ namespace NzbDrone.Api.Indexers
             base.MapToResource(resource, definition);
             
             resource.EnableRss = definition.EnableRss;
-            resource.EnableSearch = definition.EnableSearch;
+            resource.EnableSearch = definition.EnableAutomaticSearch || definition.EnableInteractiveSearch;
             resource.SupportsRss = definition.SupportsRss;
             resource.SupportsSearch = definition.SupportsSearch;
             resource.Protocol = definition.Protocol;
@@ -25,7 +25,8 @@ namespace NzbDrone.Api.Indexers
             base.MapToModel(definition, resource);
 
             definition.EnableRss = resource.EnableRss;
-            definition.EnableSearch = resource.EnableSearch;
+            definition.EnableAutomaticSearch = resource.EnableSearch;
+            definition.EnableInteractiveSearch = resource.EnableSearch;
         }
 
         protected override void Validate(IndexerDefinition definition, bool includeWarnings)

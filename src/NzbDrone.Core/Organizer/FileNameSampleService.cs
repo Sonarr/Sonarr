@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Organizer
         private static EpisodeFile _dailyEpisodeFile;
         private static EpisodeFile _animeEpisodeFile;
         private static EpisodeFile _animeMultiEpisodeFile;
+        private static List<string> _preferredWords;
 
         public FileNameSampleService(IBuildFileNames buildFileNames)
         {
@@ -41,19 +42,31 @@ namespace NzbDrone.Core.Organizer
             _standardSeries = new Series
             {
                 SeriesType = SeriesTypes.Standard,
-                Title = "The Series Title (2010)"
+                Title = "The Series Title!",
+                Year = 2010,
+                ImdbId = "tt12345",
+                TvdbId = 12345,
+                TvMazeId = 54321
             };
 
             _dailySeries = new Series
             {
                 SeriesType = SeriesTypes.Daily,
-                Title = "The Series Title (2010)"
+                Title = "The Series Title!",
+                Year = 2010,
+                ImdbId = "tt12345",
+                TvdbId = 12345,
+                TvMazeId = 54321
             };
 
             _animeSeries = new Series
             {
                 SeriesType = SeriesTypes.Anime,
-                Title = "The Series Title (2010)"
+                Title = "The Series Title!",
+                Year = 2010,
+                ImdbId = "tt12345",
+                TvdbId = 12345,
+                TvMazeId = 54321
             };
 
             _episode1 = new Episode
@@ -150,6 +163,11 @@ namespace NzbDrone.Core.Organizer
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfoAnime
             };
+
+            _preferredWords = new List<string>
+            {
+                "iNTERNAL"
+            };
         }
 
         public SampleResult GetStandardSample(NamingConfig nameSpec)
@@ -231,7 +249,7 @@ namespace NzbDrone.Core.Organizer
         {
             try
             {
-                return _buildFileNames.BuildFileName(episodes, series, episodeFile, nameSpec);
+                return _buildFileNames.BuildFileName(episodes, series, episodeFile, nameSpec, _preferredWords);
             }
             catch (NamingFormatException)
             {

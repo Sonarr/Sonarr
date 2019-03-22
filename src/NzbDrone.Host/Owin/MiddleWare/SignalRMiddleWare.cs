@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNet.SignalR;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.SignalR;
 using Owin;
 
@@ -12,14 +13,17 @@ namespace NzbDrone.Host.Owin.MiddleWare
 
         public SignalRMiddleWare(IContainer container)
         {
-            SignalrDependencyResolver.Register(container);
+            SignalRDependencyResolver.Register(container);
+            SignalRJsonSerializer.Register();
 
+            // Half the default time (110s) to get under nginx's default 60 proxy_read_timeout
+            GlobalHost.Configuration.ConnectionTimeout = TimeSpan.FromSeconds(55);
             GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromMinutes(3);
         }
 
         public void Attach(IAppBuilder appBuilder)
         {
-            appBuilder.MapConnection("signalr", typeof(NzbDronePersistentConnection), new ConnectionConfiguration { EnableCrossDomain = true });
+            appBuilder.MapSignalR("/signalr", typeof(NzbDronePersistentConnection), new ConnectionConfiguration());
         }
     }
 }

@@ -6,6 +6,7 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -24,6 +25,7 @@ namespace NzbDrone.Core.MediaFiles
         public MediaInfoModel MediaInfo { get; set; }
         public LazyLoaded<List<Episode>> Episodes { get; set; }
         public LazyLoaded<Series> Series { get; set; }
+        public Language Language { get; set; }
 
         public override string ToString()
         {
@@ -40,6 +42,11 @@ namespace NzbDrone.Core.MediaFiles
             if (RelativePath.IsNotNullOrWhiteSpace())
             {
                 return System.IO.Path.GetFileName(RelativePath);
+            }
+
+            if (Path.IsNotNullOrWhiteSpace())
+            {
+                return System.IO.Path.GetFileName(Path);
             }
 
             return string.Empty;

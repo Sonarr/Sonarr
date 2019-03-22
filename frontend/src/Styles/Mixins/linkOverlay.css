@@ -1,0 +1,11 @@
+@define-mixin linkOverlay {
+  @add-mixin cover;
+
+  pointer-events: none;
+  user-select: none;
+
+  a,
+  button {
+    pointer-events: all;
+  }
+}

@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using FluentValidation.Results;
@@ -6,6 +7,7 @@ using NLog;
 using RestSharp;
 using NzbDrone.Core.Rest;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Serializer;
 using RestSharp.Authenticators;
 
 namespace NzbDrone.Core.Notifications.PushBullet
@@ -13,13 +15,15 @@ namespace NzbDrone.Core.Notifications.PushBullet
     public interface IPushBulletProxy
     {
         void SendNotification(string title, string message, PushBulletSettings settings);
+        List<PushBulletDevice> GetDevices(PushBulletSettings settings);
         ValidationFailure Test(PushBulletSettings settings);
     }
 
     public class PushBulletProxy : IPushBulletProxy
     {
         private readonly Logger _logger;
-        private const string URL = "https://api.pushbullet.com/v2/pushes";
+        private const string PUSH_URL = "https://api.pushbullet.com/v2/pushes";
+        private const string DEVICE_URL = "https://api.pushbullet.com/v2/devices";
 
         public PushBulletProxy(Logger logger)
         {
@@ -88,6 +92,30 @@ namespace NzbDrone.Core.Notifications.PushBullet
             }
         }
 
+        public List<PushBulletDevice> GetDevices(PushBulletSettings settings)
+        {
+            try
+            {
+                var client = RestClientFactory.BuildClient(DEVICE_URL);
+                var request = new RestRequest(Method.GET);
+
+                client.Authenticator = new HttpBasicAuthenticator(settings.ApiKey, string.Empty);
+                var response = client.ExecuteAndValidate(request);
+
+                return Json.Deserialize<PushBulletDevicesResponse>(response.Content).Devices;
+            }
+            catch (RestException ex)
+            {
+                if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _logger.Error(ex, "Access token is invalid");
+                    throw;
+                }
+            }
+
+            return new List<PushBulletDevice>();
+        }
+
         public ValidationFailure Test(PushBulletSettings settings)
         {
             try
@@ -147,7 +175,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
         {
             try
             {
-                var client = RestClientFactory.BuildClient(URL);
+                var client = RestClientFactory.BuildClient(PUSH_URL);
 
                 request.AddParameter("type", "note");
                 request.AddParameter("title", title);
@@ -165,7 +193,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    _logger.Error(ex, "API Key is invalid");
+                    _logger.Error(ex, "Access token is invalid");
                     throw;
                 }
 

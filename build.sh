@@ -1,17 +1,21 @@
 #! /bin/bash
-msBuild='/c/Program Files (x86)/MSBuild/14.0/Bin'
+msBuildVersion='15.0'
 outputFolder='./_output'
-outputFolderMono='./_output_mono'
-outputFolderOsx='./_output_osx'
-outputFolderOsxApp='./_output_osx_app'
+outputFolderLinux='./_output_linux'
+outputFolderMacOS='./_output_macos'
+outputFolderMacOSApp='./_output_macos_app'
 testPackageFolder='./_tests/'
 testSearchPattern='*.Test/bin/x86/Release'
 sourceFolder='./src'
-slnFile=$sourceFolder/NzbDrone.sln
-updateFolder=$outputFolder/NzbDrone.Update
-updateFolderMono=$outputFolderMono/NzbDrone.Update
+slnFile=$sourceFolder/Sonarr.sln
+updateFolder=$outputFolder/Sonarr.Update
+updateFolderMono=$outputFolderLinux/Sonarr.Update
 
 nuget='tools/nuget/nuget.exe';
+vswhere='tools/vswhere/vswhere.exe';
+
+. ./version.sh
+
 CheckExitCode()
 {
     "$@"
@@ -23,11 +27,42 @@ CheckExitCode()
     return $status
 }
 
+ProgressStart()
+{
+    echo "##teamcity[blockOpened name='$1']"
+    echo "##teamcity[progressStart '$1']"
+}
+
+ProgressEnd()
+{
+    echo "##teamcity[progressFinish '$1']"
+    echo "##teamcity[blockClosed name='$1']"
+}
+
+UpdateVersionNumber()
+{
+    if [ "$BUILD_NUMBER" != "" ]; then
+        echo "Updating Version Info"
+        verMajorMinorRevision=`echo "$buildVersion" | cut -d. -f1,2,3`
+        verBuild=`echo "${BUILD_NUMBER}" | cut -d. -f4`
+        BUILD_NUMBER=$verMajorMinorRevision.$verBuild
+        echo "##teamcity[buildNumber '$BUILD_NUMBER']"
+        sed -i "s/^[[]assembly: Assembly\(File\|Informational\)\?Version[(]\"[0-9.*]\+\"[)]/[assembly: Assembly\1Version(\"$BUILD_NUMBER\")/g" ./src/NzbDrone*/Properties/AssemblyInfo.cs ./src/Sonarr*/Properties/AssemblyInfo.cs ./src/ServiceHelpers/*/Properties/AssemblyInfo.cs ./src/Common/CommonVersionInfo.cs
+    fi
+}
+
+CreateReleaseInfo()
+{
+    if [ "$BUILD_NUMBER" != "" ]; then
+        echo "Create Release Info"
+        echo -e "# Do Not Edit\nReleaseVersion=$BUILD_NUMBER\nBranch=${BRANCH:-dev}" > $outputFolder/release_info
+    fi
+}
+
 CleanFolder()
 {
     local path=$1
     local keepConfigFiles=$2
-
 
     find $path -name "*.transform" -exec rm "{}" \;
 
@@ -38,9 +73,6 @@ CleanFolder()
     echo "Removing FluentValidation.Resources files"
     find $path -name "FluentValidation.resources.dll" -exec rm "{}" \;
     find $path -name "App.config" -exec rm "{}" \;
-
-    echo "Removing .less files"
-    find $path -name "*.less" -exec rm "{}" \;
 
     echo "Removing vshost files"
     find $path -name "*.vshost.exe" -exec rm "{}" \;
@@ -54,8 +86,14 @@ CleanFolder()
 
 BuildWithMSBuild()
 {
+    installationPath=`$vswhere -latest -products \* -requires Microsoft.Component.MSBuild -property installationPath`
+    installationPath=${installationPath/C:\\/\/c\/}
+    installationPath=${installationPath//\\/\/}
+    msBuild="$installationPath/MSBuild/$msBuildVersion/Bin"
+    echo $msBuild
+
     export PATH=$msBuild:$PATH
-    CheckExitCode MSBuild.exe $slnFile //t:Clean //m
+    CheckExitCode MSBuild.exe $slnFile //p:Configuration=Release //p:Platform=x86 //t:Clean //m
     $nuget restore $slnFile
     CheckExitCode MSBuild.exe $slnFile //p:Configuration=Release //p:Platform=x86 //t:Build //m //p:AllowedReferenceRelatedFileExtensions=.pdb
 }
@@ -68,9 +106,20 @@ BuildWithXbuild()
     CheckExitCode xbuild /p:Configuration=Release /p:Platform=x86 /t:Build /p:AllowedReferenceRelatedFileExtensions=.pdb $slnFile
 }
 
+LintUI()
+{
+    ProgressStart 'ESLint'
+    CheckExitCode yarn eslint
+    ProgressEnd 'ESLint'
+
+    ProgressStart 'Stylelint'
+    CheckExitCode yarn stylelint
+    ProgressEnd 'Stylelint'
+}
+
 Build()
 {
-    echo "##teamcity[progressStart 'Build']"
+    ProgressStart 'Build'
 
     rm -rf $outputFolder
 
@@ -85,18 +134,20 @@ Build()
     echo "Removing Mono.Posix.dll"
     rm $outputFolder/Mono.Posix.dll
 
-    echo "##teamcity[progressFinish 'Build']"
+    ProgressEnd 'Build'
 }
 
 RunGulp()
 {
-    echo "##teamcity[progressStart 'npm install']"
-    npm-cache install npm || CheckExitCode npm install
-    echo "##teamcity[progressFinish 'npm install']"
+    ProgressStart 'yarn install'
+    yarn install
+    ProgressEnd 'yarn install'
 
-    echo "##teamcity[progressStart 'Running gulp']"
-    CheckExitCode npm run build
-    echo "##teamcity[progressFinish 'Running gulp']"
+    LintUI
+
+    ProgressStart 'Running gulp'
+    CheckExitCode yarn run build --production
+    ProgressEnd 'Running gulp'
 }
 
 CreateMdbs()
@@ -118,79 +169,107 @@ CreateMdbs()
 
 PackageMono()
 {
-    echo "##teamcity[progressStart 'Creating Mono Package']"
-    rm -rf $outputFolderMono
-    cp -r $outputFolder $outputFolderMono
+    ProgressStart 'Creating Mono Package'
+
+    rm -rf $outputFolderLinux
+
+    echo "Copying Binaries"
+    cp -r $outputFolder $outputFolderLinux
 
     echo "Creating MDBs"
-    CreateMdbs $outputFolderMono
+    CreateMdbs $outputFolderLinux
 
     echo "Removing PDBs"
-    find $outputFolderMono -name "*.pdb" -exec rm "{}" \;
+    find $outputFolderLinux -name "*.pdb" -exec rm "{}" \;
 
     echo "Removing Service helpers"
-    rm -f $outputFolderMono/ServiceUninstall.*
-    rm -f $outputFolderMono/ServiceInstall.*
+    rm -f $outputFolderLinux/ServiceUninstall.*
+    rm -f $outputFolderLinux/ServiceInstall.*
 
     echo "Removing native windows binaries Sqlite, MediaInfo"
-    rm -f $outputFolderMono/sqlite3.*
-    rm -f $outputFolderMono/MediaInfo.*
+    rm -f $outputFolderLinux/sqlite3.*
+    rm -f $outputFolderLinux/MediaInfo.*
 
-    echo "Adding NzbDrone.Core.dll.config (for dllmap)"
-    cp $sourceFolder/NzbDrone.Core/NzbDrone.Core.dll.config $outputFolderMono
+    echo "Adding Sonarr.Core.dll.config (for dllmap)"
+    cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $outputFolderLinux
 
     echo "Adding CurlSharp.dll.config (for dllmap)"
-    cp $sourceFolder/NzbDrone.Common/CurlSharp.dll.config $outputFolderMono
+    cp $sourceFolder/NzbDrone.Common/CurlSharp.dll.config $outputFolderLinux
 
-    echo "Renaming NzbDrone.Console.exe to NzbDrone.exe"
-    rm $outputFolderMono/NzbDrone.exe*
-    for file in $outputFolderMono/NzbDrone.Console.exe*; do
+    echo "Adding unix System.Runtime.InteropServices.RuntimeInformation.dll (for SharpRaven)"
+    cp $sourceFolder/packages/System.Runtime.InteropServices.RuntimeInformation.4.3.0/runtimes/unix/lib/netstandard1.1/System.Runtime.InteropServices.RuntimeInformation.dll $outputFolderLinux
+    cp $sourceFolder/packages/System.Runtime.InteropServices.RuntimeInformation.4.3.0/runtimes/unix/lib/netstandard1.1/System.Runtime.InteropServices.RuntimeInformation.dll $outputFolderLinux/Sonarr.Update
+
+    echo "Renaming Sonarr.Console.exe to Sonarr.exe"
+    rm $outputFolderLinux/Sonarr.exe*
+    for file in $outputFolderLinux/Sonarr.Console.exe*; do
         mv "$file" "${file//.Console/}"
     done
 
-    echo "Removing NzbDrone.Windows"
-    rm $outputFolderMono/NzbDrone.Windows.*
+    echo "Removing Sonarr.Windows"
+    rm $outputFolderLinux/Sonarr.Windows.*
 
-    echo "Adding NzbDrone.Mono to UpdatePackage"
-    cp $outputFolderMono/NzbDrone.Mono.* $updateFolderMono
+    echo "Adding Sonarr.Mono to UpdatePackage"
+    cp $outputFolderLinux/Sonarr.Mono.* $updateFolderMono
 
-    echo "##teamcity[progressFinish 'Creating Mono Package']"
+    ProgressEnd 'Creating Mono Package'
 }
 
-PackageOsx()
+PackageMacOS()
 {
-    echo "##teamcity[progressStart 'Creating OS X Package']"
-    rm -rf $outputFolderOsx
-    cp -r $outputFolderMono $outputFolderOsx
+    ProgressStart 'Creating MacOS Package'
 
-    echo "Adding sqlite dylibs"
-    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderOsx
-
-    echo "Adding MediaInfo dylib"
-    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderOsx
+    rm -rf $outputFolderMacOS
+    mkdir $outputFolderMacOS
 
     echo "Adding Startup script"
-    cp  ./osx/Sonarr $outputFolderOsx
+    cp ./macOS/Sonarr $outputFolderMacOS
+    dos2unix $outputFolderMacOS/Sonarr
 
-    echo "##teamcity[progressFinish 'Creating OS X Package']"
+    echo "Copying Binaries"
+    cp -r $outputFolderLinux/* $outputFolderMacOS
+
+    echo "Adding sqlite dylibs"
+    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOS
+
+    echo "Adding MediaInfo dylib"
+    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderMacOS
+
+    ProgressEnd 'Creating MacOS Package'
 }
 
-PackageOsxApp()
+PackageMacOSApp()
 {
-    echo "##teamcity[progressStart 'Creating OS X App Package']"
-    rm -rf $outputFolderOsxApp
-    mkdir $outputFolderOsxApp
+    ProgressStart 'Creating macOS App Package'
 
-    cp -r ./osx/Sonarr.app $outputFolderOsxApp
-    cp -r $outputFolderOsx $outputFolderOsxApp/Sonarr.app/Contents/MacOS
+    rm -rf $outputFolderMacOSApp
+    mkdir $outputFolderMacOSApp
+    cp -r ./macOS/Sonarr.app $outputFolderMacOSApp
+    mkdir -p $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
 
-    echo "##teamcity[progressFinish 'Creating OS X App Package']"
+    echo "Adding Startup script"
+    cp ./macOS/Sonarr $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+    dos2unix $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr
+
+    echo "Copying Binaries"
+    cp -r $outputFolderLinux/* $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+
+    echo "Adding sqlite dylibs"
+    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+
+    echo "Adding MediaInfo dylib"
+    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+
+    echo "Removing Update Folder"
+    rm -r $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr.Update
+
+    ProgressEnd 'Creating macOS App Package'
 }
 
 PackageTests()
 {
-    echo "Packaging Tests"
-    echo "##teamcity[progressStart 'Creating Test Package']"
+    ProgressStart 'Creating Test Package'
+
     rm -rf $testPackageFolder
     mkdir $testPackageFolder
 
@@ -203,7 +282,7 @@ PackageTests()
     fi
 
     cp $outputFolder/*.dll $testPackageFolder
-    cp ./*.sh $testPackageFolder
+    cp ./test.sh $testPackageFolder
 
     echo "Creating MDBs for tests"
     CreateMdbs $testPackageFolder
@@ -212,8 +291,8 @@ PackageTests()
 
     CleanFolder $testPackageFolder true
 
-    echo "Adding NzbDrone.Core.dll.config (for dllmap)"
-    cp $sourceFolder/NzbDrone.Core/NzbDrone.Core.dll.config $testPackageFolder
+    echo "Adding Sonarr.Core.dll.config (for dllmap)"
+    cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $testPackageFolder
 
     echo "Adding CurlSharp.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Common/CurlSharp.dll.config $testPackageFolder
@@ -221,16 +300,39 @@ PackageTests()
     echo "Copying CurlSharp libraries"
     cp $sourceFolder/ExternalModules/CurlSharp/libs/i386/* $testPackageFolder
 
-    echo "##teamcity[progressFinish 'Creating Test Package']"
+    ProgressEnd 'Creating Test Package'
 }
 
 CleanupWindowsPackage()
 {
-    echo "Removing NzbDrone.Mono"
-    rm -f $outputFolder/NzbDrone.Mono.*
+    ProgressStart 'Cleaning Windows Package'
 
-    echo "Adding NzbDrone.Windows to UpdatePackage"
-    cp $outputFolder/NzbDrone.Windows.* $updateFolder
+    echo "Removing Sonarr.Mono"
+    rm -f $outputFolder/Sonarr.Mono.*
+
+    echo "Adding Sonarr.Windows to UpdatePackage"
+    cp $outputFolder/Sonarr.Windows.* $updateFolder
+
+    ProgressEnd 'Cleaning Windows Package'
+}
+
+PublishArtifacts()
+{
+    ProgressStart 'Publishing Artifacts'
+
+    # Tests
+    echo "##teamcity[publishArtifacts '_tests/** => tests.zip']"
+
+    # Releases
+    echo "##teamcity[publishArtifacts '$outputFolder/** => Sonarr.$BRANCH.$BUILD_NUMBER.windows.zip!Sonarr']"
+    echo "##teamcity[publishArtifacts '$outputFolderLinux/** => Sonarr.$BRANCH.$BUILD_NUMBER.linux.tar.gz!Sonarr']"
+    echo "##teamcity[publishArtifacts '$outputFolderMacOS/** => Sonarr.$BRANCH.$BUILD_NUMBER.macos.tar.gz!Sonarr']"
+    echo "##teamcity[publishArtifacts '$outputFolderMacOSApp/** => Sonarr.$BRANCH.$BUILD_NUMBER.macos.zip']"
+    
+    # Debian Package
+    echo "##teamcity[publishArtifacts 'distribution/** => distribution.zip']"
+    
+    ProgressEnd 'Publishing Artifacts'
 }
 
 # Use mono or .net depending on OS
@@ -245,10 +347,13 @@ case "$(uname -s)" in
         ;;
 esac
 
+UpdateVersionNumber
 Build
+CreateReleaseInfo
 RunGulp
 PackageMono
-PackageOsx
-PackageOsxApp
+PackageMacOS
+PackageMacOSApp
 PackageTests
 CleanupWindowsPackage
+PublishArtifacts

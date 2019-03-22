@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaCover;
@@ -14,12 +13,15 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Validation;
 using NzbDrone.SignalR;
+using Sonarr.Http;
+using Sonarr.Http.Extensions;
 
 namespace NzbDrone.Api.Series
 {
-    public class SeriesModule : NzbDroneRestModuleWithSignalR<SeriesResource, Core.Tv.Series>, 
+    public class SeriesModule : SonarrRestModuleWithSignalR<SeriesResource, Core.Tv.Series>, 
                                 IHandle<EpisodeImportedEvent>, 
                                 IHandle<EpisodeFileDeletedEvent>,
                                 IHandle<SeriesUpdatedEvent>,       
@@ -34,6 +36,7 @@ namespace NzbDrone.Api.Series
         private readonly ISeriesStatisticsService _seriesStatisticsService;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IMapCoversToLocal _coverMapper;
+        private readonly ILanguageProfileService _languageProfileService;
 
         public SeriesModule(IBroadcastSignalRMessage signalRBroadcaster,
                             ISeriesService seriesService,
@@ -41,13 +44,14 @@ namespace NzbDrone.Api.Series
                             ISeriesStatisticsService seriesStatisticsService,
                             ISceneMappingService sceneMappingService,
                             IMapCoversToLocal coverMapper,
+                            ILanguageProfileService languageProfileService,
                             RootFolderValidator rootFolderValidator,
                             SeriesPathValidator seriesPathValidator,
                             SeriesExistsValidator seriesExistsValidator,
-                            DroneFactoryValidator droneFactoryValidator,
                             SeriesAncestorValidator seriesAncestorValidator,
                             SystemFolderValidator systemFolderValidator,
-                            ProfileExistsValidator profileExistsValidator
+                            ProfileExistsValidator profileExistsValidator,
+                            LanguageProfileExistsValidator languageProfileExistsValidator
             )
             : base(signalRBroadcaster)
         {
@@ -57,6 +61,7 @@ namespace NzbDrone.Api.Series
             _sceneMappingService = sceneMappingService;
 
             _coverMapper = coverMapper;
+            _languageProfileService = languageProfileService;
 
             GetResourceAll = AllSeries;
             GetResourceById = GetSeries;
@@ -64,14 +69,14 @@ namespace NzbDrone.Api.Series
             UpdateResource = UpdateSeries;
             DeleteResource = DeleteSeries;
 
-            Validation.RuleBuilderExtensions.ValidId(SharedValidator.RuleFor(s => s.ProfileId));
+            SharedValidator.RuleFor(s => s.ProfileId).ValidId();
+            SharedValidator.RuleFor(s => s.LanguageProfileId);
 
             SharedValidator.RuleFor(s => s.Path)
                            .Cascade(CascadeMode.StopOnFirstFailure)
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
                            .SetValidator(seriesPathValidator)
-                           .SetValidator(droneFactoryValidator)
                            .SetValidator(seriesAncestorValidator)
                            .SetValidator(systemFolderValidator)
                            .When(s => !s.Path.IsNullOrWhiteSpace());
@@ -81,8 +86,12 @@ namespace NzbDrone.Api.Series
             PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => s.RootFolderPath.IsNullOrWhiteSpace());
             PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => s.Path.IsNullOrWhiteSpace());
             PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);
+            PostValidator.RuleFor(s => s.LanguageProfileId).SetValidator(languageProfileExistsValidator).When(s => s.LanguageProfileId != 0);
 
             PutValidator.RuleFor(s => s.Path).IsValidPath();
+
+            // Ensure any editing has a valid LanguageProfile
+            PutValidator.RuleFor(s => s.LanguageProfileId).SetValidator(languageProfileExistsValidator);
         }
 
         private SeriesResource GetSeries(int id)
@@ -109,6 +118,12 @@ namespace NzbDrone.Api.Series
         private int AddSeries(SeriesResource seriesResource)
         {
             var model = seriesResource.ToModel();
+
+            // Set a default LanguageProfileId to maintain backwards compatibility with apps using the v2 API
+            if (model.LanguageProfileId == 0 || !_languageProfileService.Exists(model.LanguageProfileId))
+            {
+                model.LanguageProfileId = _languageProfileService.All().First().Id;
+            }
 
             return _addSeriesService.AddSeries(model).Id;
         }
@@ -207,7 +222,12 @@ namespace NzbDrone.Api.Series
 
             if (mappings == null) return;
 
-            resource.AlternateTitles = mappings.Select(v => new AlternateTitleResource { Title = v.Title, SeasonNumber = v.SeasonNumber, SceneSeasonNumber = v.SceneSeasonNumber }).ToList();
+            resource.AlternateTitles = mappings.Select(v => new AlternateTitleResource
+                                                            {
+                                                                Title = v.Title,
+                                                                SeasonNumber = v.SeasonNumber,
+                                                                SceneSeasonNumber = v.SceneSeasonNumber
+                                                            }).ToList();
         }
 
         public void Handle(EpisodeImportedEvent message)

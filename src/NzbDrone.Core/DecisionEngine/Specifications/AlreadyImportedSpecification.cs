@@ -37,7 +37,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Accept();
             }
 
-            _logger.Debug("Performing alerady imported check on report");
+            _logger.Debug("Performing already imported check on report");
             foreach (var episode in subject.Episodes)
             {
                 if (!episode.HasFile)

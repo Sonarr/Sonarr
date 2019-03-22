@@ -1,0 +1,33 @@
+.button {
+  composes: button from '~Components/Form/FormInputButton.css';
+
+  position: relative;
+}
+
+.stateIconContainer {
+  position: absolute;
+  top: 50%;
+  left: -100%;
+  display: inline-flex;
+  visibility: hidden;
+  transition: left $defaultSpeed;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.clipboardIconContainer {
+  position: relative;
+  left: 0;
+  transition: left $defaultSpeed, opacity $defaultSpeed;
+}
+
+.showStateIcon {
+  .stateIconContainer {
+    left: 50%;
+    visibility: visible;
+  }
+
+  .clipboardIconContainer {
+    left: 100%;
+    opacity: 0;
+  }
+}

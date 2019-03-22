@@ -1,0 +1,5 @@
+.description {
+  composes: description from '~Components/DescriptionList/DescriptionListItemDescription.css';
+
+  overflow-wrap: break-word;
+}

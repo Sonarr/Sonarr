@@ -1,0 +1,11 @@
+.menuButton {
+  composes: menuButton from '~./MenuButton.css';
+
+  &:hover {
+    color: #666;
+  }
+}
+
+.label {
+  margin-left: 5px;
+}

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
@@ -12,7 +13,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Extras;
-using NzbDrone.Common.Exceptions;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
@@ -49,7 +50,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
-                   .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.Profile))
+                   .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.QualityProfile))
+                   .ThenByDescending(c => c.LocalEpisode.Language, new LanguageComparer(s.First().LocalEpisode.Series.LanguageProfile))
                    .ThenByDescending(c => c.LocalEpisode.Size))
                .SelectMany(c => c)
                .ToList();
@@ -84,6 +86,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.SeasonNumber = localEpisode.SeasonNumber;
                     episodeFile.Episodes = localEpisode.Episodes;
                     episodeFile.ReleaseGroup = localEpisode.ReleaseGroup;
+                    episodeFile.Language = localEpisode.Language;
 
                     bool copyOnly;
                     switch (importMode)
@@ -111,6 +114,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     else
                     {
                         episodeFile.RelativePath = localEpisode.Series.Path.GetRelativePath(episodeFile.Path);
+
+                        // Delete existing files from the DB mapped to this path
+                        var previousFiles = _mediaFileService.GetFilesWithRelativePath(localEpisode.Series.Id, episodeFile.RelativePath);
+
+                        foreach (var previousFile in previousFiles)
+                        {
+                            _mediaFileService.Delete(previousFile, DeleteMediaFileReason.ManualOverride);
+                        }
                     }
 
                     _mediaFileService.Add(episodeFile);
@@ -151,12 +162,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         private string GetOriginalFilePath(DownloadClientItem downloadClientItem, LocalEpisode localEpisode)
         {
-            if (downloadClientItem != null)
+            var path = localEpisode.Path;
+
+            if (downloadClientItem != null && !downloadClientItem.OutputPath.IsEmpty)
             {
-                return downloadClientItem.OutputPath.Directory.ToString().GetRelativePath(localEpisode.Path);
+                var outputDirectory = downloadClientItem.OutputPath.Directory.ToString();
+
+                if (outputDirectory.IsParentPath(path))
+                {
+                    return outputDirectory.GetRelativePath(path);
+                }
             }
 
-            var path = localEpisode.Path;
             var folderEpisodeInfo = localEpisode.FolderEpisodeInfo;
 
             if (folderEpisodeInfo != null)
@@ -177,7 +194,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 return grandparentPath.GetRelativePath(path);
             }
 
-            return Path.Combine(Path.GetFileName(parentPath), Path.GetFileName(path));
+            return Path.GetFileName(path);
         }
 
         private string GetSceneName(DownloadClientItem downloadClientItem, LocalEpisode localEpisode)

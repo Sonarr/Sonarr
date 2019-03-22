@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
-using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Slack.Payloads;
-using NzbDrone.Core.Rest;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
-using RestSharp;
 
 
 namespace NzbDrone.Core.Notifications.Slack
@@ -17,12 +12,10 @@ namespace NzbDrone.Core.Notifications.Slack
     public class Slack : NotificationBase<SlackSettings>
     {
         private readonly ISlackProxy _proxy;
-        private readonly Logger _logger;
 
-        public Slack(ISlackProxy proxy, Logger logger)
+        public Slack(ISlackProxy proxy)
         {
             _proxy = proxy;
-            _logger = logger;
         }
 
         public override string Name => "Slack";

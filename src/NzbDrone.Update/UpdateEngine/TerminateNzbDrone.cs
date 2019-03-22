@@ -31,13 +31,13 @@ namespace NzbDrone.Update.UpdateEngine
             {
                 _logger.Info("Stopping all running services");
 
-                if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
-                    && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
+                if (_serviceProvider.ServiceExist(ServiceProvider.SERVICE_NAME)
+                    && _serviceProvider.IsServiceRunning(ServiceProvider.SERVICE_NAME))
                 {
                     try
                     {
                         _logger.Info("NzbDrone Service is installed and running");
-                        _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                        _serviceProvider.Stop(ServiceProvider.SERVICE_NAME);
                     }
                     catch (Exception e)
                     {
@@ -47,15 +47,15 @@ namespace NzbDrone.Update.UpdateEngine
 
                 _logger.Info("Killing all running processes");
 
-                _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
-                _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.SONARR_CONSOLE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.SONARR_PROCESS_NAME);
             }
             else
             {
                 _logger.Info("Killing all running processes");
 
-                _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
-                _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.SONARR_CONSOLE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.SONARR_PROCESS_NAME);
 
                 _processProvider.Kill(processId);
             }

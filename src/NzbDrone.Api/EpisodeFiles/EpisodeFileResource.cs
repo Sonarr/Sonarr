@@ -1,7 +1,11 @@
 using System;
 using System.IO;
-using NzbDrone.Api.REST;
+using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.MediaFiles;
+using Sonarr.Http.REST;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
@@ -15,6 +19,7 @@ namespace NzbDrone.Api.EpisodeFiles
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
         public QualityModel Quality { get; set; }
+        public Language Language { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
         public string OriginalFilePath { get; set; }
 
@@ -23,7 +28,7 @@ namespace NzbDrone.Api.EpisodeFiles
 
     public static class EpisodeFileResourceMapper
     {
-        private static EpisodeFileResource ToResource(this Core.MediaFiles.EpisodeFile model)
+        private static EpisodeFileResource ToResource(this EpisodeFile model)
         {
             if (model == null) return null;
 
@@ -44,7 +49,7 @@ namespace NzbDrone.Api.EpisodeFiles
             };
         }
 
-        public static EpisodeFileResource ToResource(this Core.MediaFiles.EpisodeFile model, Core.Tv.Series series, Core.DecisionEngine.IQualityUpgradableSpecification qualityUpgradableSpecification)
+        public static EpisodeFileResource ToResource(this EpisodeFile model, Core.Tv.Series series, IUpgradableSpecification upgradableSpecification)
         {
             if (model == null) return null;
 
@@ -60,7 +65,8 @@ namespace NzbDrone.Api.EpisodeFiles
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
                 Quality = model.Quality,
-                QualityCutoffNotMet = qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, model.Quality),
+                Language = model.Language,
+                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.QualityProfile.Value, model.Quality),
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
                 OriginalFilePath = model.OriginalFilePath
             };

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Marr.Data.QGen;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
@@ -10,20 +11,23 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.History
 {
     public interface IHistoryService
     {
-        QualityModel GetBestQualityInHistory(Profile profile, int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
         History MostRecentForEpisode(int episodeId);
         List<History> FindByEpisodeId(int episodeId);
         History MostRecentForDownloadId(string downloadId);
         History Get(int historyId);
+        List<History> GetBySeries(int seriesId, HistoryEventType? eventType);
+        List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType);
         List<History> Find(string downloadId, HistoryEventType eventType);
         List<History> FindByDownloadId(string downloadId);
         List<History> Since(DateTime date, HistoryEventType? eventType);
@@ -71,6 +75,16 @@ namespace NzbDrone.Core.History
             return _historyRepository.Get(historyId);
         }
 
+        public List<History> GetBySeries(int seriesId, HistoryEventType? eventType)
+        {
+            return _historyRepository.GetBySeries(seriesId, eventType);
+        }
+
+        public List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType)
+        {
+            return _historyRepository.GetBySeason(seriesId, seasonNumber, eventType);
+        }
+
         public List<History> Find(string downloadId, HistoryEventType eventType)
         {
             return _historyRepository.FindByDownloadId(downloadId).Where(c => c.EventType == eventType).ToList();
@@ -79,14 +93,6 @@ namespace NzbDrone.Core.History
         public List<History> FindByDownloadId(string downloadId)
         {
             return _historyRepository.FindByDownloadId(downloadId);
-        }
-
-        public QualityModel GetBestQualityInHistory(Profile profile, int episodeId)
-        {
-            var comparer = new QualityModelComparer(profile);
-            return _historyRepository.GetBestQualityInHistory(episodeId)
-                .OrderByDescending(q => q, comparer)
-                .FirstOrDefault();
         }
 
         private string FindDownloadId(EpisodeImportedEvent trackedDownload)
@@ -146,7 +152,8 @@ namespace NzbDrone.Core.History
                     SourceTitle = message.Episode.Release.Title,
                     SeriesId = episode.SeriesId,
                     EpisodeId = episode.Id,
-                    DownloadId = message.DownloadId
+                    DownloadId = message.DownloadId,
+                    Language = message.Episode.ParsedEpisodeInfo.Language
                 };
 
                 history.Data.Add("Indexer", message.Episode.Release.Indexer);
@@ -204,7 +211,8 @@ namespace NzbDrone.Core.History
                         SourceTitle = message.ImportedEpisode.SceneName ?? Path.GetFileNameWithoutExtension(message.EpisodeInfo.Path),
                         SeriesId = message.ImportedEpisode.SeriesId,
                         EpisodeId = episode.Id,
-                        DownloadId = downloadId
+                        DownloadId = downloadId,
+                        Language = message.EpisodeInfo.Language
                     };
 
                 //Won't have a value since we publish this event before saving to DB.
@@ -229,7 +237,8 @@ namespace NzbDrone.Core.History
                     SourceTitle = message.SourceTitle,
                     SeriesId = message.SeriesId,
                     EpisodeId = episodeId,
-                    DownloadId = message.DownloadId
+                    DownloadId = message.DownloadId,
+                    Language = message.Language
                 };
 
                 history.Data.Add("DownloadClient", message.DownloadClient);
@@ -244,6 +253,11 @@ namespace NzbDrone.Core.History
             if (message.Reason == DeleteMediaFileReason.NoLinkedEpisodes)
             {
                 _logger.Debug("Removing episode file from DB as part of cleanup routine, not creating history event.");
+                return;
+            }
+            else if (message.Reason == DeleteMediaFileReason.ManualOverride)
+            {
+                _logger.Debug("Removing episode file from DB as part of manual override of existing file, not creating history event.");
                 return;
             }
 

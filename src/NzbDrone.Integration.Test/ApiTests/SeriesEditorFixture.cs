@@ -15,6 +15,7 @@ namespace NzbDrone.Integration.Test.ApiTests
                 var newSeries = Series.Lookup(title).First();
 
                 newSeries.ProfileId = 1;
+                newSeries.LanguageProfileId = 1;
                 newSeries.Path = string.Format(@"C:\Test\{0}", title).AsOsAgnostic();
 
                 Series.Post(newSeries);

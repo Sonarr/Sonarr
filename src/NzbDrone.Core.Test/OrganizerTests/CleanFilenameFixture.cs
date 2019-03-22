@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
     [TestFixture]
     public class CleanFilenameFixture : CoreTest
     {
-        [TestCase("Law & Order: Criminal Intent - S10E07 - Icarus [HDTV-720p]", "Law & Order- Criminal Intent - S10E07 - Icarus [HDTV-720p]")]
+        [TestCase("Law & Order: Criminal Intent - S10E07 - Icarus [HDTV-720p]", "Law & Order - Criminal Intent - S10E07 - Icarus [HDTV-720p]")]
         public void should_replaace_invalid_characters(string name, string expectedName)
         {
             FileNameBuilder.CleanFileName(name).Should().Be(expectedName);

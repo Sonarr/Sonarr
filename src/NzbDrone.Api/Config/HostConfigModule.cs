@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using NzbDrone.Common.EnvironmentInfo;
@@ -8,10 +9,11 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Config
 {
-    public class HostConfigModule : NzbDroneRestModule<HostConfigResource>
+    public class HostConfigModule : SonarrRestModule<HostConfigResource>
     {
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IConfigService _configService;
@@ -45,6 +47,10 @@ namespace NzbDrone.Api.Config
 
             SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");
             SharedValidator.RuleFor(c => c.UpdateScriptPath).IsValidPath().When(c => c.UpdateMechanism == UpdateMechanism.Script);
+
+            SharedValidator.RuleFor(c => c.BackupFolder).IsValidPath().When(c => Path.IsPathRooted(c.BackupFolder));
+            SharedValidator.RuleFor(c => c.BackupInterval).InclusiveBetween(1, 7);
+            SharedValidator.RuleFor(c => c.BackupRetention).InclusiveBetween(1, 90);
         }
 
         private HostConfigResource GetHostConfig()

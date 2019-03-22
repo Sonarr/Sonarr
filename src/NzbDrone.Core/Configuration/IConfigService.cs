@@ -11,9 +11,7 @@ namespace NzbDrone.Core.Configuration
         bool IsDefined(string key);
 
         //Download Client
-        string DownloadedEpisodesFolder { get; set; }
         string DownloadClientWorkingFolders { get; set; }
-        int DownloadedEpisodesScanInterval { get; set; }
         int DownloadClientHistoryLimit { get; set; }
 
         //Completed/Failed Download Handling (Download client)
@@ -35,6 +33,7 @@ namespace NzbDrone.Core.Configuration
         bool EnableMediaInfo { get; set; }
         bool ImportExtraFiles { get; set; }
         string ExtraFileExtensions { get; set; }
+        RescanAfterRefreshType RescanAfterRefresh { get; set; }
 
         //Permissions (Media Management)
         bool SetPermissionsLinux { get; set; }
@@ -61,7 +60,7 @@ namespace NzbDrone.Core.Configuration
 
         //Internal
         bool CleanupMetadataImages { get; set; }
-
+        string PlexClientIdentifier { get; }
 
         //Forms Auth
         string RijndaelPassphrase { get; }
@@ -78,5 +77,10 @@ namespace NzbDrone.Core.Configuration
         string ProxyPassword { get; }
         string ProxyBypassFilter { get; }
         bool ProxyBypassLocalAddresses { get; }
+
+        // Backups
+        string BackupFolder { get; }
+        int BackupInterval { get; }
+        int BackupRetention { get; }
     }
 }

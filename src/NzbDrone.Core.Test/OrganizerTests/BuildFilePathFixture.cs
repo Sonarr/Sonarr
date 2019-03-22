@@ -48,11 +48,11 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             var filename = @"S01E05 - Episode Title";
             var seasonNumber = 1;
-            var expectedPath = @"C:\Test\NCIS- Los Angeles\NCIS- Los Angeles Season 1\S01E05 - Episode Title.mkv";
+            var expectedPath = @"C:\Test\NCIS - Los Angeles\NCIS - Los Angeles Season 1\S01E05 - Episode Title.mkv";
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Title = "NCIS: Los Angeles")
-                .With(s => s.Path = @"C:\Test\NCIS- Los Angeles".AsOsAgnostic())
+                .With(s => s.Path = @"C:\Test\NCIS - Los Angeles".AsOsAgnostic())
                 .With(s => s.SeasonFolder = true)
                 .Build();
 

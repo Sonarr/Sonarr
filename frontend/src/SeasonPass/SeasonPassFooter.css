@@ -1,0 +1,14 @@
+.inputContainer {
+  margin-right: 20px;
+}
+
+.label {
+  margin-bottom: 3px;
+  font-weight: bold;
+}
+
+.updateSelectedButton {
+  composes: button from '~Components/Link/SpinnerButton.css';
+
+  height: 35px;
+}

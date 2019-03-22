@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
@@ -43,6 +42,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             var audioCodecID = mediaInfo.AudioCodecID ?? string.Empty;
             var audioProfile = mediaInfo.AudioProfile ?? string.Empty;
             var audioCodecLibrary = mediaInfo.AudioCodecLibrary ?? string.Empty;
+            var splitAdditionalFeatures = (mediaInfo.AudioAdditionalFeatures ?? string.Empty).Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
             if (audioFormat.IsNullOrWhiteSpace())
             {
@@ -71,6 +71,25 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (audioFormat.EqualsIgnoreCase("DTS"))
             {
+                if (splitAdditionalFeatures.ContainsIgnoreCase("XLL"))
+                {
+                    if (splitAdditionalFeatures.ContainsIgnoreCase("X"))
+                    {
+                        return "DTS-X";
+                    }
+                    return "DTS-HD MA";
+                }
+
+                if (splitAdditionalFeatures.ContainsIgnoreCase("ES"))
+                {
+                    return "DTS-ES";
+                }
+
+                if (splitAdditionalFeatures.ContainsIgnoreCase("XBR"))
+                {
+                    return "DTS-HD HRA";
+                }
+
                 return "DTS";
             }
 
@@ -109,6 +128,16 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (audioFormat.EqualsIgnoreCase("TrueHD"))
             {
+                return "TrueHD";
+            }
+
+            if (audioFormat.EqualsIgnoreCase("MLP FBA"))
+            {
+                if (splitAdditionalFeatures.ContainsIgnoreCase("16-ch"))
+                {
+                    return "TrueHD Atmos";
+                }
+
                 return "TrueHD";
             }
 
@@ -367,25 +396,26 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             try
             {
-                Logger.Debug("Formatting audio channels using 'AudioChannelPositions', with a value of: '{0}'", audioChannelPositions);
-
                 if (audioChannelPositions.Contains("+"))
                 {
                     return audioChannelPositions.Split('+')
                                                 .Sum(s => decimal.Parse(s.Trim(), CultureInfo.InvariantCulture));
                 }
 
-
-                return Regex.Replace(audioChannelPositions, @"^\d+\sobjects", "", RegexOptions.Compiled | RegexOptions.IgnoreCase)
-                                            .Replace("Object Based / ", "")
-                                            .Split(new string[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
-                                            .FirstOrDefault()
-                                           ?.Split('/')
-                                            .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
+                if (audioChannelPositions.Contains("/"))
+                {
+                    return Regex.Replace(audioChannelPositions, @"^\d+\sobjects", "",
+                            RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                        .Replace("Object Based / ", "")
+                        .Split(new string[] {" / "}, StringSplitOptions.RemoveEmptyEntries)
+                        .FirstOrDefault()
+                        ?.Split('/')
+                        .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
+                }
             }
             catch (Exception e)
             {
-                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositions'");
+                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositions', with a value of: '{0}'", audioChannelPositions);
             }
 
             return null;
@@ -403,13 +433,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             try
             {
-                Logger.Debug("Formatiting audio channels using 'AudioChannelPositionsText', with a value of: '{0}'", audioChannelPositionsText);
-
-                return mediaInfo.AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
+                return audioChannelPositionsText.ContainsIgnoreCase("LFE") ? audioChannels - 1 + 0.1m : audioChannels;
             }
             catch (Exception e)
             {
-                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositionsText'");
+                Logger.Warn(e, "Unable to format audio channels using 'AudioChannelPositionsText', with a value of: '{0}'", audioChannelPositionsText);
             }
 
             return null;
@@ -421,8 +449,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (mediaInfo.SchemaRevision >= 3)
             {
-                Logger.Debug("Formatiting audio channels using 'AudioChannels', with a value of: '{0}'", audioChannels);
-
                 return audioChannels;
             }
 
@@ -443,6 +469,28 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             // Last token is the default.
             return tokens.Last();
+        }
+
+        private static readonly string[] ValidHdrTransferFunctions = {"PQ", "HLG"};
+        private const string ValidHdrColourPrimaries = "BT.2020";
+
+        public static string FormatVideoDynamicRange(MediaInfoModel mediaInfo)
+        {
+            // assume SDR by default
+            var videoDynamicRange = "";
+
+            if (mediaInfo.VideoBitDepth >= 10 &&
+                !string.IsNullOrEmpty(mediaInfo.VideoColourPrimaries) &&
+                !string.IsNullOrEmpty(mediaInfo.VideoTransferCharacteristics))
+            {
+                if (mediaInfo.VideoColourPrimaries.EqualsIgnoreCase(ValidHdrColourPrimaries) &&
+                    ValidHdrTransferFunctions.Any(mediaInfo.VideoTransferCharacteristics.Contains))
+                {
+                    videoDynamicRange = "HDR";
+                }
+            }
+
+            return videoDynamicRange;
         }
     }
 }

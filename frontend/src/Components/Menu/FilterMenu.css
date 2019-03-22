@@ -1,0 +1,9 @@
+.filterMenu {
+  composes: menu from '~./Menu.css';
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .filterMenu {
+    margin-right: 10px;
+  }
+}

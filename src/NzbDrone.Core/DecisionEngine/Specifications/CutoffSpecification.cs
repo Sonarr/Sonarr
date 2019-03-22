@@ -1,18 +1,21 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class CutoffSpecification : IDecisionEngineSpecification
     {
-        private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly UpgradableSpecification _upgradableSpecification;
+        private readonly IPreferredWordService _preferredWordServiceCalculator;
         private readonly Logger _logger;
 
-        public CutoffSpecification(QualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
+        public CutoffSpecification(UpgradableSpecification upgradableSpecification, IPreferredWordService preferredWordServiceCalculator, Logger logger)
         {
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
+            _preferredWordServiceCalculator = preferredWordServiceCalculator;
             _logger = logger;
         }
 
@@ -21,6 +24,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            var qualityProfile = subject.Series.QualityProfile.Value;
+            var languageProfile = subject.Series.LanguageProfile.Value;
+
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
                 if (file == null)
@@ -29,12 +35,22 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     continue;
                 }
 
-                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
+                _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
-                if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, file.Quality, subject.ParsedEpisodeInfo.Quality))
+                if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
+                    languageProfile, 
+                                                           file.Quality, 
+                                                           file.Language,
+                                                           _preferredWordServiceCalculator.Calculate(subject.Series, file.GetSceneOrFileName()),
+                                                           subject.ParsedEpisodeInfo.Quality,
+                                                           subject.PreferredWordScore))
                 {
                     _logger.Debug("Cutoff already met, rejecting.");
-                    return Decision.Reject("Existing file meets cutoff: {0}", subject.Series.Profile.Value.Cutoff);
+
+                    var qualityCutoffIndex = qualityProfile.GetIndex(qualityProfile.Cutoff);
+                    var qualityCutoff = qualityProfile.Items[qualityCutoffIndex.Index];
+
+                    return Decision.Reject("Existing file meets cutoff: {0} - {1}", qualityCutoff, languageProfile.Cutoff);
                 }
             }
 

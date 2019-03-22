@@ -1,0 +1,12 @@
+.type {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 20px;
+  text-align: center;
+}
+
+.actions {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 70px;
+}

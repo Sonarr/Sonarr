@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("NzbDrone.Core.Test")]
+[assembly: AssemblyTitle("Sonarr.Core.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("NzbDrone.Core.Test")]
+[assembly: AssemblyProduct("Sonarr.Core.Test")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -27,4 +27,4 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("10.0.0.*")]
 
-[assembly: InternalsVisibleTo("NzbDrone.Core")]
+[assembly: InternalsVisibleTo("Sonarr.Core")]

@@ -5,21 +5,21 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Restrictions;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class ReleaseRestrictionsSpecification : IDecisionEngineSpecification
     {
         private readonly Logger _logger;
-        private readonly IRestrictionService _restrictionService;
-        private readonly ITermMatcher _termMatcher;
+        private readonly IReleaseProfileService _releaseProfileService;
+        private readonly ITermMatcherService _termMatcherService;
 
-        public ReleaseRestrictionsSpecification(ITermMatcher termMatcher, IRestrictionService restrictionService, Logger logger)
+        public ReleaseRestrictionsSpecification(ITermMatcherService termMatcherService, IReleaseProfileService releaseProfileService, Logger logger)
         {
             _logger = logger;
-            _restrictionService = restrictionService;
-            _termMatcher = termMatcher;
+            _releaseProfileService = releaseProfileService;
+            _termMatcherService = termMatcherService;
         }
 
         public SpecificationPriority Priority => SpecificationPriority.Default;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger.Debug("Checking if release meets restrictions: {0}", subject);
 
             var title = subject.Release.Title;
-            var restrictions = _restrictionService.AllForTags(subject.Series.Tags);
+            var restrictions = _releaseProfileService.AllForTags(subject.Series.Tags);
 
             var required = restrictions.Where(r => r.Required.IsNotNullOrWhiteSpace());
             var ignored = restrictions.Where(r => r.Ignored.IsNotNullOrWhiteSpace());
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         private List<string> ContainsAny(List<string> terms, string title)
         {
-            return terms.Where(t => _termMatcher.IsMatch(t, title)).ToList();
+            return terms.Where(t => _termMatcherService.IsMatch(t, title)).ToList();
         }
     }
 }

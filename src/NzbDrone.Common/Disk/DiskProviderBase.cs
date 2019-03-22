@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -227,6 +227,14 @@ namespace NzbDrone.Common.Disk
             MoveFileInternal(source, destination);
         }
 
+        public void MoveFolder(string source, string destination)
+        {
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
+
+            Directory.Move(source, destination);
+        }
+
         protected virtual void MoveFileInternal(string source, string destination)
         {
             File.Move(source, destination);
@@ -410,7 +418,12 @@ namespace NzbDrone.Common.Disk
             return new FileStream(path, FileMode.Create);
         }
 
-        public virtual List<IMount> GetMounts()
+        public List<IMount> GetMounts()
+        {
+            return GetAllMounts().Where(d => !IsSpecialMount(d)).ToList();
+        }
+
+        protected virtual List<IMount> GetAllMounts()
         {
             return GetDriveInfoMounts().Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable)
                                        .Select(d => new DriveInfoMount(d))
@@ -418,11 +431,16 @@ namespace NzbDrone.Common.Disk
                                        .ToList();
         }
 
+        protected virtual bool IsSpecialMount(IMount mount)
+        {
+            return false;
+        }
+
         public virtual IMount GetMount(string path)
         {
             try
             {
-                var mounts = GetMounts();
+                var mounts = GetAllMounts();
 
                 return mounts.Where(drive => drive.RootDirectory.PathEquals(path) ||
                                              drive.RootDirectory.IsParentPath(path))
@@ -472,6 +490,14 @@ namespace NzbDrone.Common.Disk
                 {
                     DeleteFolder(subfolder, false);
                 }
+            }
+        }
+
+        public void SaveStream(Stream stream, string path)
+        {
+            using (var fileStream = OpenWriteStream(path))
+            {
+                stream.CopyTo(fileStream);
             }
         }
     }

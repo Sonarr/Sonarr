@@ -1,0 +1,8 @@
+.actions {
+  display: flex;
+  margin-right: auto;
+}
+
+.selectInput {
+  margin-left: 10px;
+}

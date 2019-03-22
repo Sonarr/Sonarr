@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Api.REST;
+using Sonarr.Http.REST;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Episodes
@@ -10,9 +11,9 @@ namespace NzbDrone.Api.Episodes
     {
         public EpisodeModule(ISeriesService seriesService,
                              IEpisodeService episodeService,
-                             IQualityUpgradableSpecification qualityUpgradableSpecification,
+                             IUpgradableSpecification upgradableSpecification,
                              IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster)
+            : base(episodeService, seriesService, upgradableSpecification, signalRBroadcaster)
         {
             GetResourceAll = GetEpisodes;
             UpdateResource = SetMonitored;

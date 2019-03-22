@@ -1,6 +1,6 @@
 ﻿using Nancy;
 using Nancy.Routing;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;

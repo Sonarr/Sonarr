@@ -1,0 +1,87 @@
+.event {
+  overflow-x: hidden;
+  margin: 4px 2px;
+  padding: 5px;
+  border-bottom: 1px solid $borderColor;
+  border-left: 4px solid $borderColor;
+  font-size: 12px;
+
+  &:global(.colorImpaired) {
+    border-left-width: 5px;
+  }
+}
+
+.info,
+.episodeInfo {
+  display: flex;
+}
+
+.seriesTitle,
+.episodeTitle {
+  @add-mixin truncate;
+
+  flex: 1 0 1px;
+  margin-right: 10px;
+}
+
+.seriesTitle {
+  color: #3a3f51;
+  font-size: $defaultFontSize;
+}
+
+.absoluteEpisodeNumber {
+  margin-left: 3px;
+}
+
+.statusIcon {
+  margin-left: 3px;
+}
+
+/*
+ * Status
+ */
+
+.downloaded {
+  border-left-color: $successColor !important;
+
+  &:global(.colorImpaired) {
+    border-left-color: color($successColor, saturation(+15%)) !important;
+  }
+}
+
+.downloading {
+  border-left-color: $purple !important;
+}
+
+.unmonitored {
+  border-left-color: $gray !important;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(45deg, $colorImpairedGradientDark, $colorImpairedGradientDark 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
+  }
+}
+
+.onAir {
+  border-left-color: $warningColor !important;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(90deg, $colorImpairedGradientDark, $colorImpairedGradientDark 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
+  }
+}
+
+.missing {
+  border-left-color: $dangerColor !important;
+
+  &:global(.colorImpaired) {
+    border-left-color: color($dangerColor saturation(+15%)) !important;
+    background: repeating-linear-gradient(90deg, $colorImpairedGradientDark, $colorImpairedGradientDark 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
+  }
+}
+
+.unaired {
+  border-left-color: $primaryColor !important;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(90deg, $colorImpairedGradientDark, $colorImpairedGradientDark 5px, $colorImpairedGradient 5px, $colorImpairedGradient 10px);
+  }
+}

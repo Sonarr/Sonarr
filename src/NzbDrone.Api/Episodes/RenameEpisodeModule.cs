@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Api.REST;
+using Sonarr.Http.REST;
 using NzbDrone.Core.MediaFiles;
+using Sonarr.Http;
 
 namespace NzbDrone.Api.Episodes
 {
-    public class RenameEpisodeModule : NzbDroneRestModule<RenameEpisodeResource>
+    public class RenameEpisodeModule : SonarrRestModule<RenameEpisodeResource>
     {
         private readonly IRenameEpisodeFileService _renameEpisodeFileService;
 

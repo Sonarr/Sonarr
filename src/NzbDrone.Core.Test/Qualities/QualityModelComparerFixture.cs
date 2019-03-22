@@ -1,6 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 
@@ -13,12 +14,56 @@ namespace NzbDrone.Core.Test.Qualities
 
         private void GivenDefaultProfile()
         {
-            Subject = new QualityModelComparer(new Profile { Items = QualityFixture.GetDefaultQualities() });
+            Subject = new QualityModelComparer(new QualityProfile { Items = QualityFixture.GetDefaultQualities() });
         }
 
         private void GivenCustomProfile()
         {
-            Subject = new QualityModelComparer(new Profile { Items = QualityFixture.GetDefaultQualities(Quality.Bluray720p, Quality.DVD) });
+            Subject = new QualityModelComparer(new QualityProfile { Items = QualityFixture.GetDefaultQualities(Quality.Bluray720p, Quality.DVD) });
+        }
+
+        private void GivenGroupedProfile()
+        {
+            var profile = new QualityProfile
+                          {
+                              Items = new List<QualityProfileQualityItem>
+                                      {
+                                          new QualityProfileQualityItem
+                                          {
+                                              Allowed = false,
+                                              Quality = Quality.SDTV
+                                          },
+                                          new QualityProfileQualityItem
+                                          {
+                                              Allowed = false,
+                                              Quality = Quality.DVD
+                                          },
+                                          new QualityProfileQualityItem
+                                          {
+                                              Allowed = true,
+                                              Items = new List<QualityProfileQualityItem>
+                                                      {
+                                                          new QualityProfileQualityItem
+                                                          {
+                                                              Allowed = true,
+                                                              Quality = Quality.HDTV720p
+                                                          },
+                                                          new QualityProfileQualityItem
+                                                          {
+                                                              Allowed = true,
+                                                              Quality = Quality.WEBDL720p
+                                                          }
+                                                      }
+                                          },
+                                          new QualityProfileQualityItem
+                                          {
+                                              Allowed = true,
+                                              Quality = Quality.Bluray720p
+                                          }
+                                      }
+                          };
+
+            Subject = new QualityModelComparer(profile);
         }
 
         [Test]
@@ -71,6 +116,32 @@ namespace NzbDrone.Core.Test.Qualities
             var compare = Subject.Compare(first, second);
 
             compare.Should().BeGreaterThan(0);
+        }
+
+        [Test]
+        public void should_ignore_group_order_by_default()
+        {
+            GivenGroupedProfile();
+
+            var first = new QualityModel(Quality.HDTV720p);
+            var second = new QualityModel(Quality.WEBDL720p);
+
+            var compare = Subject.Compare(first, second);
+
+            compare.Should().Be(0);
+        }
+
+        [Test]
+        public void should_respect_group_order()
+        {
+            GivenGroupedProfile();
+
+            var first = new QualityModel(Quality.HDTV720p);
+            var second = new QualityModel(Quality.WEBDL720p);
+
+            var compare = Subject.Compare(first, second, true);
+
+            compare.Should().BeLessThan(0);
         }
     }
 }

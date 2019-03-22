@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Nancy.Bootstrapper;
-using NzbDrone.Api;
+using Sonarr.Http;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http.Dispatchers;
@@ -14,10 +14,12 @@ namespace NzbDrone.Host
         {
             var assemblies = new List<string>
                              {
-                                 "NzbDrone.Host",
-                                 "NzbDrone.Core",
-                                 "NzbDrone.Api",
-                                 "NzbDrone.SignalR"
+                                 "Sonarr.Host",
+                                 "Sonarr.Core",
+                                 "Sonarr.Api",
+                                 "Sonarr.SignalR",
+                                 "Sonarr.Api.V3",
+                                 "Sonarr.Http"
                              };
 
             return new MainAppContainerBuilder(args, assemblies).Container;
@@ -28,7 +30,7 @@ namespace NzbDrone.Host
         {
             AutoRegisterImplementations<NzbDronePersistentConnection>();
 
-            Container.Register<INancyBootstrapper, NancyBootstrapper>();
+            Container.Register<INancyBootstrapper, SonarrBootstrapper>();
             Container.Register<IHttpDispatcher, FallbackHttpDispatcher>();
         }
     }

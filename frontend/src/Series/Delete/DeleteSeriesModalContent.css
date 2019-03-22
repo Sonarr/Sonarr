@@ -1,0 +1,12 @@
+.pathContainer {
+  margin-bottom: 20px;
+}
+
+.pathIcon {
+  margin-right: 8px;
+}
+
+.deleteFilesMessage {
+  margin-top: 20px;
+  color: $dangerColor;
+}

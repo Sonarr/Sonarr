@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -9,11 +9,12 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NzbDrone.Core.Test</RootNamespace>
-    <AssemblyName>NzbDrone.Core.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>Sonarr.Core.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +26,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -35,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -42,40 +45,36 @@
   <ItemGroup>
     <Reference Include="AutoMoq, Version=1.8.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMoq.1.8.1.0\lib\net40\AutoMoq.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="FizzWare.NBuilder, Version=4.0.0.115, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
       <HintPath>..\packages\NBuilder.4.0.0\lib\net40\FizzWare.NBuilder.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.19.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.19.0\lib\net40\FluentAssertions.dll</HintPath>
+      <HintPath>..\packages\FluentAssertions.4.19.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions.Core, Version=4.19.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.19.0\lib\net40\FluentAssertions.Core.dll</HintPath>
+      <HintPath>..\packages\FluentAssertions.4.19.0\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="FluentMigrator.Runner, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentMigrator.Runner.1.6.2\lib\40\FluentMigrator.Runner.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\portable-net40+sl50+wp80+win8+wpa81\FluentValidation.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
@@ -86,26 +85,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.3\lib\net40-client\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.6.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.6.0\lib\net40\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.3.6.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Prowlin, Version=0.9.4456.26422, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Prowlin">
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
     </Reference>
@@ -135,13 +131,15 @@
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
+    <Compile Include="Datastore\Migration\101_add_ultrahd_quality_in_profilesFixture.cs" />
+    <Compile Include="Datastore\Migration\117_add_webrip_qualites_in_profileFixture.cs" />
     <Compile Include="Datastore\Migration\108_fix_metadata_file_extensionsFixture.cs" />
     <Compile Include="Datastore\Migration\109_import_extra_files_configFixture.cs" />
     <Compile Include="Datastore\Migration\110_fix_extra_files_configFixture.cs" />
     <Compile Include="Datastore\Migration\106_update_btn_urlFixture.cs" />
     <Compile Include="Datastore\Migration\103_fix_metadata_file_extensionsFixture.cs" />
     <Compile Include="Datastore\Migration\099_extra_and_subtitle_filesFixture.cs" />
-    <Compile Include="Datastore\Migration\101_add_ultrahd_quality_in_profilesFixture.cs" />
+    <Compile Include="Datastore\Migration\122_add_remux_qualities_in_profile.cs" />
     <Compile Include="Datastore\Migration\071_unknown_quality_in_profileFixture.cs" />
     <Compile Include="Datastore\Migration\072_history_downloadIdFixture.cs" />
     <Compile Include="Datastore\Migration\070_delay_profileFixture.cs" />
@@ -161,6 +159,7 @@
     <Compile Include="Datastore\SqliteSchemaDumperTests\SqliteSchemaDumperFixture.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\AnimeVersionUpgradeSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\UpgradeAllowedSpecificationFixture .cs" />
     <Compile Include="DecisionEngineTests\FullSeasonSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\MaximumSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\ProtocolSpecificationFixture.cs" />
@@ -174,7 +173,7 @@
     <Compile Include="DecisionEngineTests\ReleaseRestrictionsSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\PrioritizeDownloadDecisionFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityAllowedByProfileSpecificationFixture.cs" />
-    <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\UpgradeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\MinimumAgeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RetentionSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RssSync\DelaySpecificationFixture.cs" />
@@ -238,7 +237,6 @@
     <Compile Include="HealthCheck\Checks\DeleteBadMediaCovers.cs" />
     <Compile Include="HealthCheck\Checks\AppDataLocationFixture.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientCheckFixture.cs" />
-    <Compile Include="HealthCheck\Checks\DroneFactoryCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\HealthCheckFixtureExtensions.cs" />
     <Compile Include="HealthCheck\Checks\ImportMechanismCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\IndexerSearchCheckFixture.cs" />
@@ -301,6 +299,7 @@
     <Compile Include="Instrumentation\DatabaseTargetFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
+    <Compile Include="Languages\LanguageFixture.cs" />
     <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\ImageResizerFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
@@ -309,10 +308,12 @@
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingServiceTests\MoveEpisodeFileFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateEpisodesFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateLanguageFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateQualityFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\Augmenters\Quality\AugmentQualityFromMediaInfoFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMakerFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\DetectSampleFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\AbsoluteEpisodeNumberSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\EpisodeTitleSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecificationFixture.cs" />
@@ -327,19 +328,33 @@
     <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatAudioCodecFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatVideoCodecFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatAudioChannelsFixture.cs" />
+    <Compile Include="MediaFiles\MediaInfo\MediaInfoFormatterTests\FormatVideoDynamicRangeFixture.cs" />
     <Compile Include="Messaging\Commands\CommandQueueManagerFixture.cs" />
     <Compile Include="MetadataSource\SkyHook\SkyHookProxySearchFixture.cs" />
     <Compile Include="MetadataSource\SearchSeriesComparerFixture.cs" />
     <Compile Include="MetadataSource\SkyHook\SkyHookProxyFixture.cs" />
     <Compile Include="NotificationTests\NotificationBaseFixture.cs" />
     <Compile Include="NotificationTests\SynologyIndexerFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\ReplaceCharacterFixure.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\RequiresAbsoluteEpisodeNumberFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\RequiresEpisodeTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\MultiEpisodeFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleYearFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\IdFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\SeriesTitleFirstCharcterFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\TitleYearFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheYearFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\TitleTheFixture.cs" />
     <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
+    <Compile Include="ParserTests\UnicodeReleaseParserFixture.cs" />
     <Compile Include="ParserTests\ValidateParsedEpisodeInfoFixture.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileServiceFixture.cs" />
+    <Compile Include="Profiles\Qualities\QualityIndexCompareToFixture.cs" />
+    <Compile Include="Profiles\Releases\PreferredWordService\GetMatchingPreferredWordsFixture.cs" />
+    <Compile Include="Profiles\Releases\PreferredWordService\CalculateFixture.cs" />
+    <Compile Include="Qualities\QualityFinderFixture.cs" />
     <Compile Include="Qualities\RevisionComparableFixture.cs" />
     <Compile Include="QueueTests\QueueServiceFixture.cs" />
     <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />
@@ -391,6 +406,8 @@
     <Compile Include="ParserTests\SceneCheckerFixture.cs" />
     <Compile Include="Profiles\ProfileRepositoryFixture.cs" />
     <Compile Include="Profiles\ProfileServiceFixture.cs" />
+    <Compile Include="Languages\LanguageProfileRepositoryFixture.cs" />
+    <Compile Include="Languages\LanguageProfileServiceFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\XemProxyFixture.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />
@@ -407,6 +424,7 @@
     <Compile Include="ThingiProviderTests\ProviderStatusServiceFixture.cs" />
     <Compile Include="ThingiProviderTests\ProviderBaseFixture.cs" />
     <Compile Include="ThingiProviderTests\NullConfigFixture.cs" />
+    <Compile Include="TvTests\EpisodeMonitoredServiceTests\LegacySetEpisodeMontitoredFixture.cs" />
     <Compile Include="TvTests\EpisodeServiceTests\FindEpisodeByTitleFixture.cs" />
     <Compile Include="TvTests\EpisodeServiceTests\HandleEpisodeFileDeletedFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\ByAirDateFixture.cs" />
@@ -420,6 +438,7 @@
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\RefreshSeriesServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeMonitoredServiceTests\SetEpisodeMontitoredFixture.cs" />
+    <Compile Include="TvTests\SeriesFolderPathBuilderFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\SeriesRepositoryFixture.cs" />
     <Compile Include="TvTests\AddSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateMultipleSeriesFixture.cs" />
@@ -431,6 +450,7 @@
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="ValidationTests\SystemFolderValidatorFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
@@ -444,10 +464,6 @@
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
       <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
       <Name>NzbDrone.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.SignalR\NzbDrone.SignalR.csproj">
-      <Project>{7C2CC69F-5CA0-4E5C-85CB-983F9F6C3B36}</Project>
-      <Name>NzbDrone.SignalR</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
       <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>

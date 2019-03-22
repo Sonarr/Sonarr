@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Api.REST;
+using Sonarr.Http.REST;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 
@@ -16,7 +16,7 @@ namespace NzbDrone.Api.Series
 
         //Todo: Sorters should be done completely on the client
         //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
-        //Todo: We should get the entire Profile instead of ID and Name separately
+        //Todo: We should get the entire QualityProfile instead of ID and Name separately
 
         //View Only
         public string Title { get; set; }
@@ -52,6 +52,7 @@ namespace NzbDrone.Api.Series
         //View & Edit
         public string Path { get; set; }
         public int ProfileId { get; set; }
+        public int LanguageProfileId { get; set; }
 
         //Editing Only
         public bool SeasonFolder { get; set; }
@@ -75,8 +76,6 @@ namespace NzbDrone.Api.Series
         public DateTime Added { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
         public Ratings Ratings { get; set; }
-
-        //TODO: Add series statistics as a property of the series (instead of individual properties)
 
         //Used to support legacy consumers
         public int QualityProfileId
@@ -125,7 +124,8 @@ namespace NzbDrone.Api.Series
                 Year = model.Year,
                 
                 Path = model.Path,
-                ProfileId = model.ProfileId,
+                ProfileId = model.QualityProfileId,
+                LanguageProfileId = model.LanguageProfileId,
                 
                 SeasonFolder = model.SeasonFolder,
                 Monitored = model.Monitored,
@@ -179,7 +179,8 @@ namespace NzbDrone.Api.Series
                 Year = resource.Year,
 
                 Path = resource.Path,
-                ProfileId = resource.ProfileId,
+                QualityProfileId = resource.ProfileId,
+                LanguageProfileId = resource.LanguageProfileId,
 
                 SeasonFolder = resource.SeasonFolder,
                 Monitored = resource.Monitored,

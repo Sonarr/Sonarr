@@ -46,5 +46,11 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             Parser.Parser.ParseTitle(title).IsPossibleSpecialEpisode.Should().BeTrue();
         }
+
+        [TestCase("Big.Special.Show.S05.HDTV.x264-2HD")]
+        public void IsPossibleSpecialEpisode_should_be_false_for_Special_in_title(string title)
+        {
+            Parser.Parser.ParseTitle(title).IsPossibleSpecialEpisode.Should().BeFalse();
+        }
     }
 }

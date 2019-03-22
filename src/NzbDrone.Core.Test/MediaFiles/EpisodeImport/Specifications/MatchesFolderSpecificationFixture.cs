@@ -1,7 +1,9 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -130,6 +132,36 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01.720p.HDTV-Sonarr\S02E01.mkv".AsOsAgnostic();
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_accepted_if_both_file_and_folder_info_map_to_same_special()
+        {
+            var title = "Some.Special.S12E00.WEB-DL.1080p-GoodNightTV";
+            var actualInfo = Parser.Parser.ParseTitle("Some.Special.S0E100.WEB-DL.1080p-GoodNightTV.mkv");
+
+            var folderInfo = Parser.Parser.ParseTitle(title);
+            var fileInfo = Parser.Parser.ParseTitle(title + ".mkv");
+            var localEpisode = new LocalEpisode
+            {
+                FileEpisodeInfo = fileInfo,
+                FolderEpisodeInfo = folderInfo,
+                Series = new Tv.Series
+                {
+                    Id = 1,
+                    Title = "Some Special"
+                }
+            };
+
+            Mocker.GetMock<IParsingService>()
+                .Setup(v => v.ParseSpecialEpisodeTitle(fileInfo, It.IsAny<string>(), 0, 0, null))
+                .Returns(actualInfo);
+
+            Mocker.GetMock<IParsingService>()
+                .Setup(v => v.ParseSpecialEpisodeTitle(folderInfo, It.IsAny<string>(), 0, 0, null))
+                .Returns(actualInfo);
+
+            Subject.IsSatisfiedBy(localEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

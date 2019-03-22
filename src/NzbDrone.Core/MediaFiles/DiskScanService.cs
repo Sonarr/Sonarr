@@ -14,6 +14,7 @@ using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -29,7 +30,6 @@ namespace NzbDrone.Core.MediaFiles
 
     public class DiskScanService :
         IDiskScanService,
-        IHandle<SeriesUpdatedEvent>,
         IExecute<RescanSeriesCommand>
     {
         private readonly IDiskProvider _diskProvider;
@@ -38,6 +38,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IConfigService _configService;
         private readonly ISeriesService _seriesService;
         private readonly IMediaFileTableCleanupService _mediaFileTableCleanupService;
+        private readonly IRootFolderService _rootFolderService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -47,6 +48,7 @@ namespace NzbDrone.Core.MediaFiles
                                IConfigService configService,
                                ISeriesService seriesService,
                                IMediaFileTableCleanupService mediaFileTableCleanupService,
+                               IRootFolderService rootFolderService,
                                IEventAggregator eventAggregator,
                                Logger logger)
         {
@@ -56,6 +58,7 @@ namespace NzbDrone.Core.MediaFiles
             _configService = configService;
             _seriesService = seriesService;
             _mediaFileTableCleanupService = mediaFileTableCleanupService;
+            _rootFolderService = rootFolderService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -65,7 +68,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public void Scan(Series series)
         {
-            var rootFolder = _diskProvider.GetParentFolder(series.Path);
+            var rootFolder = _rootFolderService.GetBestRootFolderPath(series.Path);
 
             if (!_diskProvider.FolderExists(rootFolder))
             {
@@ -81,7 +84,7 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            _logger.ProgressInfo("Scanning disk for {0}", series.Title);
+            _logger.ProgressInfo("Scanning {0}", series.Title);
 
             if (!_diskProvider.FolderExists(series.Path))
             {
@@ -143,6 +146,7 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Trace("{0} files were found in {1}", filesOnDisk.Count, path);
             _logger.Debug("{0} video files were found in {1}", mediaFileList.Count, path);
+
             return mediaFileList.ToArray();
         }
 
@@ -158,6 +162,7 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Trace("{0} files were found in {1}", filesOnDisk.Count, path);
             _logger.Debug("{0} non-video files were found in {1}", mediaFileList.Count, path);
+
             return mediaFileList.ToArray();
         }
 
@@ -202,11 +207,6 @@ namespace NzbDrone.Core.MediaFiles
                     _diskProvider.RemoveEmptySubfolders(path);
                 }
             }
-        }
-
-        public void Handle(SeriesUpdatedEvent message)
-        {
-            Scan(message.Series);
         }
 
         public void Execute(RescanSeriesCommand message)

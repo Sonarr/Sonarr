@@ -3,7 +3,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 using System.Data;
 using System.Linq;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using System.Collections.Generic;
 using NzbDrone.Core.Datastore.Converters;
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         var allowed = Json.Deserialize<List<Quality>>(allowedJson);
 
-                        var items = Quality.DefaultQualityDefinitions.OrderBy(v => v.Weight).Select(v => new ProfileQualityItem { Quality = v.Quality, Allowed = allowed.Contains(v.Quality) }).ToList();
+                        var items = Quality.DefaultQualityDefinitions.OrderBy(v => v.Weight).Select(v => new QualityProfileQualityItem { Quality = v.Quality, Allowed = allowed.Contains(v.Quality) }).ToList();
 
                         var allowedNewJson = qualityProfileItemConverter.ToDB(items);
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using Nancy;
@@ -10,7 +10,7 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using Nancy.ModelBinding;
-using NzbDrone.Api.Extensions;
+using Sonarr.Http.Extensions;
 using NzbDrone.Common.Cache;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Api.Indexers
         {
             try
             {
-                var decisions = _nzbSearchService.EpisodeSearch(episodeId, true);
+                var decisions = _nzbSearchService.EpisodeSearch(episodeId, true, true);
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);

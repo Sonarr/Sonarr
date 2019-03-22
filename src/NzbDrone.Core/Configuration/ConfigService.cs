@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
@@ -72,13 +71,6 @@ namespace NzbDrone.Core.Configuration
         public bool IsDefined(string key)
         {
             return _repository.Get(key.ToLower()) != null;
-        }
-
-        public string DownloadedEpisodesFolder
-        {
-            get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
-
-            set { SetValue(ConfigKey.DownloadedEpisodesFolder.ToString(), value); }
         }
 
         public bool AutoUnmonitorPreviouslyDownloadedEpisodes
@@ -181,13 +173,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadClientWorkingFolders", value); }
         }
 
-        public int DownloadedEpisodesScanInterval
-        {
-            get { return GetValueInt("DownloadedEpisodesScanInterval", 1); }
-
-            set { SetValue("DownloadedEpisodesScanInterval", value); }
-        }
-
         public int DownloadClientHistoryLimit
         {
             get { return GetValueInt("DownloadClientHistoryLimit", 30); }
@@ -228,6 +213,13 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("ExtraFileExtensions", "srt"); }
 
             set { SetValue("ExtraFileExtensions", value); }
+        }
+
+        public RescanAfterRefreshType RescanAfterRefresh
+        {
+            get { return GetValueEnum("RescanAfterRefresh", RescanAfterRefreshType.Always); }
+
+            set { SetValue("RescanAfterRefresh", value); }
         }
 
         public bool SetPermissionsLinux
@@ -321,6 +313,8 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("CleanupMetadataImages", value); }
         }
 
+        public string PlexClientIdentifier => GetValue("PlexClientIdentifier", Guid.NewGuid().ToString(), true);
+
         public string RijndaelPassphrase => GetValue("RijndaelPassphrase", Guid.NewGuid().ToString(), true);
 
         public string HmacPassphrase => GetValue("HmacPassphrase", Guid.NewGuid().ToString(), true);
@@ -344,6 +338,12 @@ namespace NzbDrone.Core.Configuration
         public string ProxyBypassFilter => GetValue("ProxyBypassFilter", string.Empty);
 
         public bool ProxyBypassLocalAddresses => GetValueBoolean("ProxyBypassLocalAddresses", true);
+
+        public string BackupFolder => GetValue("BackupFolder", "Backups");
+
+        public int BackupInterval => GetValueInt("BackupInterval", 7);
+
+        public int BackupRetention => GetValueInt("BackupRetention", 28);
 
         private string GetValue(string key)
         {

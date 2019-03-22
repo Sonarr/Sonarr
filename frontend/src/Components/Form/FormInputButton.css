@@ -1,0 +1,12 @@
+.button {
+  composes: button from '~Components/Link/Button.css';
+
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.middleButton {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}

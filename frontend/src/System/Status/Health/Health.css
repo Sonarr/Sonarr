@@ -1,0 +1,20 @@
+.legend {
+  display: flex;
+  justify-content: space-between;
+}
+
+.loading {
+  composes: loading from '~Components/Loading/LoadingIndicator.css';
+
+  margin-top: 2px;
+  margin-left: 10px;
+  text-align: left;
+}
+
+.status {
+  width: 20px;
+}
+
+.healthOk {
+  margin-bottom: 25px;
+}

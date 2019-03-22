@@ -3,10 +3,11 @@ using System.Net;
 using FluentAssertions;
 using NLog;
 using NzbDrone.Api;
-using NzbDrone.Api.REST;
+using Sonarr.Http.REST;
 using NzbDrone.Common.Serializer;
 using RestSharp;
 using System.Linq;
+using Sonarr.Http;
 
 namespace NzbDrone.Integration.Test.Client
 {
@@ -62,7 +63,7 @@ namespace NzbDrone.Integration.Test.Client
 
         private static void AssertDisableCache(IList<Parameter> headers)
         {
-            headers.Single(c => c.Name == "Cache-Control").Value.Should().Be("no-cache, no-store, must-revalidate");
+            headers.Single(c => c.Name == "Cache-Control").Value.Should().Be("no-cache, no-store, must-revalidate, max-age=0");
             headers.Single(c => c.Name == "Pragma").Value.Should().Be("no-cache");
             headers.Single(c => c.Name == "Expires").Value.Should().Be("0");
         }

@@ -195,6 +195,7 @@ namespace NzbDrone.Core.Download.Pending
                                     Id = GetQueueId(pendingRelease, episode),
                                     Series = pendingRelease.RemoteEpisode.Series,
                                     Episode = episode,
+                                    Language = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Language,
                                     Quality = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Quality,
                                     Title = pendingRelease.Title,
                                     Size = pendingRelease.RemoteEpisode.Release.Size,
@@ -203,7 +204,8 @@ namespace NzbDrone.Core.Download.Pending
                                     Timeleft = timeleft,
                                     EstimatedCompletionTime = ect,
                                     Status = pendingRelease.Reason.ToString(),
-                                    Protocol = pendingRelease.RemoteEpisode.Release.DownloadProtocol
+                                    Protocol = pendingRelease.RemoteEpisode.Release.DownloadProtocol,
+                                    Indexer = pendingRelease.RemoteEpisode.Release.Indexer
                                 };
 
                     queued.Add(queue);
@@ -215,7 +217,7 @@ namespace NzbDrone.Core.Download.Pending
             {
                 var series = g.First().Series;
 
-                return g.OrderByDescending(e => e.Quality, new QualityModelComparer(series.Profile))
+                return g.OrderByDescending(e => e.Quality, new QualityModelComparer(series.QualityProfile))
                         .ThenBy(q => PrioritizeDownloadProtocol(q.Series, q.Protocol))
                         .First();
             });
@@ -374,7 +376,7 @@ namespace NzbDrone.Core.Download.Pending
                 return;
             }
 
-            var profile = remoteEpisode.Series.Profile.Value;
+            var profile = remoteEpisode.Series.QualityProfile.Value;
 
             foreach (var existingReport in existingReports)
             {
