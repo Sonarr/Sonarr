@@ -252,6 +252,14 @@ class QueueRow extends Component {
               );
             }
 
+            if (name === 'title') {
+              return (
+                <TableRowCell key={name}>
+                  {title}
+                </TableRowCell>
+              );
+            }
+
             if (name === 'estimatedCompletionTime') {
               return (
                 <TimeleftCell

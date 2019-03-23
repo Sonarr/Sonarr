@@ -146,6 +146,8 @@ namespace Sonarr.Api.V3.Queue
                     return q => q.Status;
                 case "series.sortTitle":
                     return q => q.Series?.SortTitle;
+                case "title":
+                    return q => q.Title;
                 case "episode":
                     return q => q.Episode;
                 case "episode.airDateUtc":
