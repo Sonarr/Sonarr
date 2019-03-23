@@ -20,6 +20,8 @@ function getType(type) {
       return inputTypes.NUMBER;
     case 'path':
       return inputTypes.PATH;
+    case 'filepath':
+      return inputTypes.PATH;
     case 'select':
       return inputTypes.SELECT;
     case 'tag':
@@ -84,7 +86,7 @@ function ProviderFieldFormGroup(props) {
         errors={errors}
         warnings={warnings}
         pending={pending}
-        hasFileBrowser={false}
+        includeFiles={type === 'filepath' ? true : undefined}
         onChange={onChange}
         {...otherProps}
       />

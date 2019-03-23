@@ -46,14 +46,16 @@ export const actionHandlers = handleThunks({
 
     const {
       path,
-      allowFoldersWithoutTrailingSlashes = false
+      allowFoldersWithoutTrailingSlashes = false,
+      includeFiles = false
     } = payload;
 
     const promise = createAjaxRequest({
       url: '/filesystem',
       data: {
         path,
-        allowFoldersWithoutTrailingSlashes
+        allowFoldersWithoutTrailingSlashes,
+        includeFiles
       }
     }).request;
 

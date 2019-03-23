@@ -38,7 +38,10 @@ class PathInputConnector extends Component {
   // Listeners
 
   onFetchPaths = (path) => {
-    this.props.fetchPaths({ path });
+    this.props.fetchPaths({ 
+      path, 
+      includeFiles: this.props.includeFiles
+    });
   }
 
   onClearPaths = () => {
@@ -60,6 +63,7 @@ class PathInputConnector extends Component {
 }
 
 PathInputConnector.propTypes = {
+  includeFiles: PropTypes.bool.isRequired,
   fetchPaths: PropTypes.func.isRequired,
   clearPaths: PropTypes.func.isRequired
 };
