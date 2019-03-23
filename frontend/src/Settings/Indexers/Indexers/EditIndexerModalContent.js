@@ -40,6 +40,7 @@ function EditIndexerModalContent(props) {
     enableRss,
     enableAutomaticSearch,
     enableInteractiveSearch,
+    priority,
     supportsRss,
     supportsSearch,
     fields
@@ -113,6 +114,18 @@ function EditIndexerModalContent(props) {
                   helpTextWarning={supportsSearch.value ? undefined : 'Search is not supported with this indexer'}
                   isDisabled={!supportsSearch.value}
                   {...enableInteractiveSearch}
+                  onChange={onInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup isAdvanced={true} advancedSettings={advancedSettings}>
+                <FormLabel>Priority</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.NUMBER}
+                  name="priority"
+                  helpText="Used when processing releases, a higher priority indexer will be used if releases found are otherwise equal. Applies to indexers with the same protocol"
+                  {...priority}
                   onChange={onInputChange}
                 />
               </FormGroup>

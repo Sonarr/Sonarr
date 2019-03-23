@@ -23,7 +23,6 @@ namespace NzbDrone.Core.Indexers.HDBits
         {
             BaseUrl = "https://hdbits.org";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
-            Priority = IndexerDefaults.PRIORITY;
         }
 
         [FieldDefinition(0, Label = "Username")]
@@ -40,9 +39,6 @@ namespace NzbDrone.Core.Indexers.HDBits
 
         [FieldDefinition(4)]
         public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
-
-        [FieldDefinition(5, Label = "Priority", HelpText = "Used when processing releases, a higher priority indexer will be used if releases found are otherwise equal. Applies to indexers with the same protocol", Advanced = true)]
-        public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

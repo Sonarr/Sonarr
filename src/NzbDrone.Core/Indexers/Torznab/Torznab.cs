@@ -58,6 +58,7 @@ namespace NzbDrone.Core.Indexers.Torznab
                        EnableRss = false,
                        EnableAutomaticSearch = false,
                        EnableInteractiveSearch = false,
+                       Priority = 0,
                        Name = name,
                        Implementation = GetType().Name,
                        Settings = settings,

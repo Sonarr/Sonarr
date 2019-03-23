@@ -22,8 +22,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
         {
             BaseUrl = "https://torrentapi.org";
             RankedOnly = false;
-            MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
-            Priority = IndexerDefaults.PRIORITY; 
+            MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS; 
         }
 
         [FieldDefinition(0, Label = "API URL", HelpText = "URL to Rarbg api, not the website.")]
@@ -40,9 +39,6 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
         [FieldDefinition(4)]
         public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
-
-        [FieldDefinition(5, Label = "Priority", HelpText = "Used when processing releases, a higher priority indexer will be used if releases found are otherwise equal. Applies to indexers with the same protocol", Advanced = true)]
-        public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

@@ -93,8 +93,7 @@ namespace NzbDrone.Core.DecisionEngine
             IndexerDefinition indexer;
             if(_indexersById.TryGetValue(remoteEpisode.Release.IndexerId, out indexer))
             {
-                var settings = indexer.Settings as IIndexerSettings;
-                return settings == null ? int.MinValue : settings.Priority;
+                return indexer.Priority;
             }
             else
             {

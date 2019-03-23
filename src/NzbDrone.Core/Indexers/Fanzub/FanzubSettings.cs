@@ -20,14 +20,10 @@ namespace NzbDrone.Core.Indexers.Fanzub
         public FanzubSettings()
         {
             BaseUrl = "http://fanzub.com/rss/";
-            Priority = IndexerDefaults.PRIORITY;
         }
 
         [FieldDefinition(0, Label = "Rss URL", HelpText = "Enter to URL to an Fanzub compatible RSS feed")]
-        public string BaseUrl { get; set; }
-
-        [FieldDefinition(1, Label = "Priority", HelpText = "Used when processing releases, a higher priority indexer will be used if releases found are otherwise equal. Applies to indexers with the same protocol", Advanced = true)]
-        public int Priority { get; set; }
+        public string BaseUrl { get; set; }        public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

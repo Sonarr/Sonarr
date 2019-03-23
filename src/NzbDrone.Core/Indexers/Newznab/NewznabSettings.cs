@@ -64,7 +64,6 @@ namespace NzbDrone.Core.Indexers.Newznab
             ApiPath = "/api";
             Categories = new[] { 5030, 5040 };
             AnimeCategories = Enumerable.Empty<int>();
-            Priority = IndexerDefaults.PRIORITY;
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -83,10 +82,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         public IEnumerable<int> AnimeCategories { get; set; }
 
         [FieldDefinition(5, Label = "Additional Parameters", HelpText = "Additional Newznab parameters", Advanced = true)]
-        public string AdditionalParameters { get; set; }
-
-        [FieldDefinition(6, Label = "Priority", HelpText = "Used when processing releases, a higher priority indexer will be used if releases found are otherwise equal. Applies to indexers with the same protocol", Advanced = true)]
-        public int Priority { get; set; }
+        public string AdditionalParameters { get; set; }        public int Priority { get; set; }
 
         // Field 6 is used by TorznabSettings MinimumSeeders
         // If you need to add another field here, update TorznabSettings as well and this comment

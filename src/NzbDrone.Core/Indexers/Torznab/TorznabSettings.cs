@@ -57,7 +57,6 @@ namespace NzbDrone.Core.Indexers.Torznab
         public TorznabSettings()
         {
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
-            Priority = IndexerDefaults.PRIORITY;
         }
 
         [FieldDefinition(6, Type = FieldType.Number, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]

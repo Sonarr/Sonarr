@@ -15,6 +15,7 @@ namespace NzbDrone.Api.Indexers
             
             resource.EnableRss = definition.EnableRss;
             resource.EnableSearch = definition.EnableAutomaticSearch || definition.EnableInteractiveSearch;
+            resource.Priority = definition.Priority;
             resource.SupportsRss = definition.SupportsRss;
             resource.SupportsSearch = definition.SupportsSearch;
             resource.Protocol = definition.Protocol;
@@ -27,6 +28,7 @@ namespace NzbDrone.Api.Indexers
             definition.EnableRss = resource.EnableRss;
             definition.EnableAutomaticSearch = resource.EnableSearch;
             definition.EnableInteractiveSearch = resource.EnableSearch;
+            definition.Priority = resource.Priority;
         }
 
         protected override void Validate(IndexerDefinition definition, bool includeWarnings)

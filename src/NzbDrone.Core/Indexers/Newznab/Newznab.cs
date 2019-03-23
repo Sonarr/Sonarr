@@ -69,6 +69,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                        EnableRss = false,
                        EnableAutomaticSearch = false,
                        EnableInteractiveSearch = false,
+                       Priority = 0,
                        Name = name,
                        Implementation = GetType().Name,
                        Settings = settings,

@@ -132,6 +132,7 @@ Indexer.propTypes = {
   enableRss: PropTypes.bool.isRequired,
   enableAutomaticSearch: PropTypes.bool.isRequired,
   enableInteractiveSearch: PropTypes.bool.isRequired,
+  priority: PropTypes.number.isRequired,
   supportsRss: PropTypes.bool.isRequired,
   supportsSearch: PropTypes.bool.isRequired,
   onConfirmDeleteIndexer: PropTypes.func.isRequired

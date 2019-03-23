@@ -32,7 +32,6 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         {
             BaseUrl = "https://www.bitmetv.org";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
-            Priority = IndexerDefaults.PRIORITY;
         }
 
         [FieldDefinition(0, Label = "Website URL")]
@@ -52,9 +51,6 @@ namespace NzbDrone.Core.Indexers.BitMeTv
 
         [FieldDefinition(5)]
         public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
-
-        [FieldDefinition(6, Label = "Priority", HelpText = "Used when processing releases, a higher priority indexer will be used if releases found are otherwise equal. Applies to indexers with the same protocol", Advanced = true)]
-        public int Priority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

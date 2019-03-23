@@ -136,6 +136,7 @@
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
     <Compile Include="Configuration\RescanAfterRefreshType.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
+    <Compile Include="Datastore\Migration\131_indexer_priority_column.cs" />
     <Compile Include="Datastore\Migration\130_episode_last_searched_time.cs" />
     <Compile Include="Datastore\Migration\129_add_relative_original_path_to_episode_file.cs" />
     <Compile Include="Datastore\Migration\128_rename_quality_profiles_add_upgrade_allowed.cs" />

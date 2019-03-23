@@ -10,6 +10,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool SupportsRss { get; set; }
         public bool SupportsSearch { get; set; }
         public DownloadProtocol Protocol { get; set; }
+        public int Priority { get; set; }
     }
 
     public class IndexerResourceMapper : ProviderResourceMapper<IndexerResource, IndexerDefinition>
@@ -23,6 +24,7 @@ namespace Sonarr.Api.V3.Indexers
             resource.EnableRss = definition.EnableRss;
             resource.EnableAutomaticSearch = definition.EnableAutomaticSearch;
             resource.EnableInteractiveSearch = definition.EnableInteractiveSearch;
+            resource.Priority = definition.Priority;
             resource.SupportsRss = definition.SupportsRss;
             resource.SupportsSearch = definition.SupportsSearch;
             resource.Protocol = definition.Protocol;
@@ -39,6 +41,7 @@ namespace Sonarr.Api.V3.Indexers
             definition.EnableRss = resource.EnableRss;
             definition.EnableAutomaticSearch = resource.EnableAutomaticSearch;
             definition.EnableInteractiveSearch = resource.EnableInteractiveSearch;
+            definition.Priority = resource.Priority;
 
             return definition;
         }
