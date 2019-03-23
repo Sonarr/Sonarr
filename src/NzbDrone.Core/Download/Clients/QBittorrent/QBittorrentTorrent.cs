@@ -30,10 +30,17 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         public float RatioLimit { get; set; } = -2;
 
         [JsonProperty(PropertyName = "seeding_time")]
-        public long SeedingTime { get; set; } // Torrent seeding time
+        public long? SeedingTime { get; set; } // Torrent seeding time (not provided by the list api)
 
         [JsonProperty(PropertyName = "seeding_time_limit")] // Per torrent seeding time limit (-2 = use global, -1 = unlimited)
         public long SeedingTimeLimit { get; set; } = -2;
+    }
 
+    public class QBittorrentTorrentProperties
+    {
+        public string Hash { get; set; } // Torrent hash
+
+        [JsonProperty(PropertyName = "seeding_time")]
+        public long SeedingTime { get; set; } // Torrent seeding time
     }
 }

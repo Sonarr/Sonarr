@@ -99,15 +99,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             Subject.Definition.Settings.As<QBittorrentSettings>().RecentTvPriority = (int)QBittorrentPriority.First;
         }
 
-        protected void GivenMaxRatio(float maxRatio, bool removeOnMaxRatio = true)
+        protected void GivenGlobalSeedLimits(float maxRatio, int maxSeedingTime = -1, bool removeOnMaxRatio = false)
         {
             Mocker.GetMock<IQBittorrentProxy>()
-                .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
-                .Returns(new QBittorrentPreferences
-                {
-                    RemoveOnMaxRatio = removeOnMaxRatio,
-                    MaxRatio = maxRatio
-                });
+                  .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
+                  .Returns(new QBittorrentPreferences
+                  {
+                      RemoveOnMaxRatio = removeOnMaxRatio,
+                      MaxRatio = maxRatio,
+                      MaxRatioEnabled = maxRatio >= 0,
+                      MaxSeedingTime = maxSeedingTime,
+                      MaxSeedingTimeEnabled = maxSeedingTime >= 0
+                  });
         }
 
         protected virtual void GivenTorrents(List<QBittorrentTorrent> torrents)
@@ -371,7 +374,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         [Test]
         public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_not_reached()
         {
-            GivenMaxRatio(1.0f);
+            GivenGlobalSeedLimits(1.0f);
 
             var torrent = new QBittorrentTorrent
             {
@@ -392,11 +395,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             item.CanMoveFiles.Should().BeFalse();
         }
 
-        [Test]
-        public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_reached_and_not_paused()
+        protected virtual QBittorrentTorrent GivenCompletedTorrent(
+            string state = "pausedUP",
+            float ratio = 0.1f, float ratioLimit = -2,
+            int seedingTime = 1, int seedingTimeLimit = -2)
         {
-            GivenMaxRatio(1.0f);
-
             var torrent = new QBittorrentTorrent
             {
                 Hash = "HASH",
@@ -404,12 +407,32 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                 Size = 1000,
                 Progress = 1.0,
                 Eta = 8640000,
-                State = "uploading",
+                State = state,
                 Label = "",
                 SavePath = "",
-                Ratio = 1.0f
+                Ratio = ratio,
+                RatioLimit = ratioLimit,
+                SeedingTimeLimit = seedingTimeLimit
             };
-            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            GivenTorrents(new List<QBittorrentTorrent>() { torrent });
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                .Setup(s => s.GetTorrentProperties("HASH", It.IsAny<QBittorrentSettings>()))
+                .Returns(new QBittorrentTorrentProperties
+                {
+                    Hash = "HASH",
+                    SeedingTime = seedingTime
+                });
+
+            return torrent;
+        }
+
+        [Test]
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_reached_and_not_paused()
+        {
+            GivenGlobalSeedLimits(1.0f);
+            GivenCompletedTorrent("uploading", ratio: 1.0f);
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeFalse();
@@ -419,21 +442,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         [Test]
         public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_is_not_set()
         {
-            GivenMaxRatio(1.0f, false);
-
-            var torrent = new QBittorrentTorrent
-            {
-                Hash = "HASH",
-                Name = _title,
-                Size = 1000,
-                Progress = 1.0,
-                Eta = 8640000,
-                State = "uploading",
-                Label = "",
-                SavePath = "",
-                Ratio = 1.0f
-            };
-            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenGlobalSeedLimits(-1);
+            GivenCompletedTorrent("pausedUP", ratio: 1.0f);
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeFalse();
@@ -443,21 +453,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         [Test]
         public void should_be_removable_and_should_allow_move_files_if_max_ratio_reached_and_paused()
         {
-            GivenMaxRatio(1.0f);
-
-            var torrent = new QBittorrentTorrent
-            {
-                Hash = "HASH",
-                Name = _title,
-                Size = 1000,
-                Progress = 1.0,
-                Eta = 8640000,
-                State = "pausedUP",
-                Label = "",
-                SavePath = "",
-                Ratio = 1.0f
-            };
-            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenGlobalSeedLimits(1.0f);
+            GivenCompletedTorrent("pausedUP", ratio: 1.0f);
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeTrue();
@@ -467,22 +464,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         [Test]
         public void should_be_removable_and_should_allow_move_files_if_overridden_max_ratio_reached_and_paused()
         {
-            GivenMaxRatio(2.0f);
-
-            var torrent = new QBittorrentTorrent
-            {
-                Hash = "HASH",
-                Name = _title,
-                Size = 1000,
-                Progress = 1.0,
-                Eta = 8640000,
-                State = "pausedUP",
-                Label = "",
-                SavePath = "",
-                Ratio = 1.0f,
-                RatioLimit = 0.8f
-            };
-            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenGlobalSeedLimits(2.0f);
+            GivenCompletedTorrent("pausedUP", ratio: 1.0f, ratioLimit: 0.8f);
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeTrue();
@@ -492,22 +475,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         [Test]
         public void should_not_be_removable_if_overridden_max_ratio_not_reached_and_paused()
         {
-            GivenMaxRatio(0.2f);
+            GivenGlobalSeedLimits(0.2f);
+            GivenCompletedTorrent("pausedUP", ratio: 0.5f, ratioLimit: 0.8f);
 
-            var torrent = new QBittorrentTorrent
-            {
-                Hash = "HASH",
-                Name = _title,
-                Size = 1000,
-                Progress = 1.0,
-                Eta = 8640000,
-                State = "pausedUP",
-                Label = "",
-                SavePath = "",
-                Ratio = 0.5f,
-                RatioLimit = 0.8f
-            };
-            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+
+        [Test]
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_seedingtime_reached_and_not_paused()
+        {
+            GivenGlobalSeedLimits(-1, 20);
+            GivenCompletedTorrent("uploading", ratio: 2.0f, seedingTime: 30);
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeFalse();
@@ -515,10 +496,54 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
+        public void should_be_removable_and_should_allow_move_files_if_max_seedingtime_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(-1, 20);
+            GivenCompletedTorrent("pausedUP", ratio: 2.0f, seedingTime: 20);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_overridden_max_seedingtime_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(-1, 40);
+            GivenCompletedTorrent("pausedUP", ratio: 2.0f, seedingTime: 20, seedingTimeLimit: 10);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_be_removable_if_overridden_max_seedingtime_not_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(-1, 20);
+            GivenCompletedTorrent("pausedUP", ratio: 2.0f, seedingTime: 30, seedingTimeLimit: 40);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_max_seedingtime_reached_but_ratio_not_and_paused()
+        {
+            GivenGlobalSeedLimits(2.0f, 20);
+            GivenCompletedTorrent("pausedUP", ratio: 1.0f, seedingTime: 30);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
         public void should_get_category_from_the_category_if_set()
         {
             const string category = "tv-sonarr";
-            GivenMaxRatio(1.0f);
+            GivenGlobalSeedLimits(1.0f);
 
             var torrent = new QBittorrentTorrent
             {
@@ -543,7 +568,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         public void should_get_category_from_the_label_if_the_category_is_not_available()
         {
             const string category = "tv-sonarr";
-            GivenMaxRatio(1.0f);
+            GivenGlobalSeedLimits(1.0f);
 
             var torrent = new QBittorrentTorrent
             {
