@@ -1,15 +1,15 @@
-const root = './frontend/src/';
+const root = './frontend/src';
 
 const paths = {
   src: {
     root,
-    html: `${root}*.html`,
-    scripts: `${root}**/*.js`,
-    content: `${root}Content/`,
-    fonts: `${root}Content/Fonts/`,
-    images: `${root}Content/Images/`,
+    html: `${root}/*.html`,
+    scripts: `${root}/**/*.js`,
+    content: `${root}/Content/`,
+    fonts: `${root}/Content/Fonts/`,
+    images: `${root}/Content/Images/`,
     exclude: {
-      libs: `!${root}JsLibraries/**`
+      libs: `!${root}/JsLibraries/**`
     }
   },
   dest: {

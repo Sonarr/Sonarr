@@ -3916,14 +3916,6 @@ gulp-declare@0.3.0:
     vinyl-map "^1.0.1"
     xtend "^4.0.0"
 
-gulp-flatten@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/gulp-flatten/-/gulp-flatten-0.4.0.tgz#d9ac819416c30fd5dfb3dea9da79c83a1bcd61d1"
-  integrity sha512-eg4spVTAiv1xXmugyaCxWne1oPtNG0UHEtABx5W8ScLiqAYceyYm6GYA36x0Qh8KOIXmAZV97L2aYGnKREG3Sg==
-  dependencies:
-    plugin-error "^0.1.2"
-    through2 "^2.0.0"
-
 gulp-livereload@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/gulp-livereload/-/gulp-livereload-4.0.1.tgz#cb438e62f24363e26b44ddf36fd37c274b8b15ee"
