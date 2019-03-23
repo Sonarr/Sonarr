@@ -280,7 +280,7 @@ class SeriesDetails extends Component {
             />
 
             <PageToolbarButton
-              label="Manual Import"
+              label="Manual File Import"
               iconName={icons.INTERACTIVE}
               onPress={this.onInteractiveImportPress}
             />
