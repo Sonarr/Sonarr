@@ -16,8 +16,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
                                                                 (?<bluray>BluRay|Blu-Ray|HD-?DVD|BD)|
-                                                                (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DDP?5[. ]1)|\d+0p[. ]WEB[. ]|WEB-DLMux)|
-                                                                (?<webrip>WebRip)|
+                                                                (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DDP?5[. ]1)|\d+0p[. ]WEB[. ]|WEB-DLMux|\b\s\/\sWEB\s\/\s\b)|
+                                                                (?<webrip>WebRip|Web-Rip)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRip)|
                                                                 (?<brrip>BRRip)|
@@ -92,6 +92,7 @@ namespace NzbDrone.Core.Parser
                 return result;
             }
 
+            var test = SourceRegex.Matches(normalizedName);
             var sourceMatch = SourceRegex.Matches(normalizedName).OfType<Match>().LastOrDefault();
             var resolution = ParseResolution(normalizedName);
             var codecRegex = CodecRegex.Match(normalizedName);

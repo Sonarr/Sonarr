@@ -183,6 +183,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hush 2016 German DD51 DL 720p NetflixHD x264-TVS", false)]
         [TestCase("Community.6x10.Basic.RV.Repair.and.Palmistry.ITA.ENG.720p.WEB-DLMux.H.264-GiuseppeTnT", false)]
         [TestCase("Community.6x11.Modern.Espionage.ITA.ENG.720p.WEB.DLMux.H.264-GiuseppeTnT", false)]
+        [TestCase("The Walking Dead 2010 S09E13 [MKV / H.264 / AC3/AAC / WEB / Dual Áudio / Inglês / 720p]", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
@@ -224,6 +225,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Arrested.Development.S04E01.iNTERNAL.1080p.WEBRip.x264-QRUS", false)]
         [TestCase("Blue.Bloods.S07E20.1080p.AMZN.WEBRip.DDP5.1.x264-ViSUM ac3.(NLsub)", false)]
         [TestCase("Better.Call.Saul.S03E09.1080p.NF.WEBRip.DD5.1.x264-ViSUM", false)]
+        [TestCase("The Walking Dead S09E13 1.54 GB WEB-RIP 1080p Dual-Audio 2019 MKV", false)]
         public void should_parse_webrip1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip1080p, proper);
