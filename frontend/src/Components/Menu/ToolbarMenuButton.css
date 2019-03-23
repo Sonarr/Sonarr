@@ -1,9 +1,14 @@
 .menuButton {
   composes: menuButton from '~./MenuButton.css';
 
+  padding-top: 4px;
   width: $toolbarButtonWidth;
   height: $toolbarHeight;
   text-align: center;
+}
+
+.labelContainer {
+  composes: labelContainer from '~Components/Page/Toolbar/PageToolbarButton.css';
 }
 
 .label {

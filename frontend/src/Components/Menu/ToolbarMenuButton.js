@@ -22,8 +22,10 @@ function ToolbarMenuButton(props) {
           size={21}
         />
 
-        <div className={styles.label}>
-          {text}
+        <div className={styles.labelContainer}>
+          <div className={styles.label}>
+            {text}
+          </div>
         </div>
       </div>
     </MenuButton>

@@ -1,6 +1,7 @@
 .toolbarButton {
   composes: link from '~Components/Link/Link.css';
 
+  padding-top: 4px;
   width: $toolbarButtonWidth;
   text-align: center;
 
@@ -21,7 +22,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 16px;
+  height: 24px;
 }
 
 .label {
