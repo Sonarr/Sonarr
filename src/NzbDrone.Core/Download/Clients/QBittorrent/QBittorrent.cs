@@ -35,9 +35,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            if (!Proxy.GetConfig(Settings).DhtEnabled)
+            if (!Proxy.GetConfig(Settings).DhtEnabled && !magnetLink.Contains("&tr="))
             {
-                throw new NotSupportedException("Magnet Links not supported if DHT is disabled");
+                throw new NotSupportedException("Magnet Links without trackers not supported if DHT is disabled");
             }
 
             Proxy.AddTorrentFromUrl(magnetLink, Settings);

@@ -9,6 +9,7 @@ using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.QBittorrent;
 using NzbDrone.Test.Common;
+using NzbDrone.Core.Exceptions;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 {
@@ -280,17 +281,33 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             id.Should().Be(expectedHash);
         }
 
-        public void Download_should_refuse_magnet_if_dht_is_disabled()
+        [Test]
+        public void Download_should_refuse_magnet_if_no_trackers_provided_and_dht_is_disabled()
         {
-
             Mocker.GetMock<IQBittorrentProxy>()
                   .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
                   .Returns(new QBittorrentPreferences() { DhtEnabled = false });
 
             var remoteEpisode = CreateRemoteEpisode();
-            remoteEpisode.Release.DownloadUrl = "magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp";
+            remoteEpisode.Release.DownloadUrl = "magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR";
 
-            Assert.Throws<NotSupportedException>(() => Subject.Download(remoteEpisode));
+            Assert.Throws<ReleaseDownloadException>(() => Subject.Download(remoteEpisode));
+        }
+
+        [Test]
+        public void Download_should_accept_magnet_if_trackers_provided_and_dht_is_disabled()
+        {
+            Mocker.GetMock<IQBittorrentProxy>()
+                  .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
+                  .Returns(new QBittorrentPreferences() { DhtEnabled = false });
+
+            var remoteEpisode = CreateRemoteEpisode();
+            remoteEpisode.Release.DownloadUrl = "magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp://abc";
+
+            Assert.DoesNotThrow(() => Subject.Download(remoteEpisode));
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                  .Verify(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<QBittorrentSettings>()), Times.Once());
         }
 
         [Test]
