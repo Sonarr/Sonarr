@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace NzbDrone.Core.Validation
 {
@@ -18,6 +20,22 @@ namespace NzbDrone.Core.Validation
             {
                 throw new ValidationException(result.Errors);
             }
+        }
+
+        public static bool HasErrors(this List<ValidationFailure> list)
+        {
+            foreach (var item in list)
+            {
+                var extended = item as NzbDroneValidationFailure;
+                if (extended != null && extended.IsWarning)
+                {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

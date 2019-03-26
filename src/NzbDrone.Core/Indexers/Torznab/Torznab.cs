@@ -9,6 +9,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.Torznab
 {
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         protected override void Test(List<ValidationFailure> failures)
         {
             base.Test(failures);
-            if (failures.Any()) return;
+            if (failures.HasErrors()) return;
             failures.AddIfNotNull(TestCapabilities());
         }
 

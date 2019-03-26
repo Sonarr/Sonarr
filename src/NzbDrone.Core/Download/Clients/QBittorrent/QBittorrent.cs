@@ -35,9 +35,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            if (!Proxy.GetConfig(Settings).DhtEnabled)
+            if (!Proxy.GetConfig(Settings).DhtEnabled && !magnetLink.Contains("&tr="))
             {
-                throw new NotSupportedException("Magnet Links not supported if DHT is disabled");
+                throw new NotSupportedException("Magnet Links without trackers not supported if DHT is disabled");
             }
 
             Proxy.AddTorrentFromUrl(magnetLink, Settings);
@@ -133,7 +133,6 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 // Avoid removing torrents that haven't reached the global max ratio.
                 // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
                 item.CanMoveFiles = item.CanBeRemoved = (torrent.State == "pausedUP" && HasReachedSeedLimit(torrent, config));
-                
 
                 if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
                 {
@@ -216,7 +215,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            if (failures.Any()) return;
+            if (failures.HasErrors()) return;
             failures.AddIfNotNull(TestPrioritySupport());
             failures.AddIfNotNull(TestGetTorrents());
         }
@@ -387,23 +386,40 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             if (torrent.RatioLimit >= 0)
             {
-                if (torrent.Ratio < torrent.RatioLimit) return false;
+                if (torrent.Ratio >= torrent.RatioLimit) return true;
             }
             else if (torrent.RatioLimit == -2 && config.MaxRatioEnabled)
             {
-                if (torrent.Ratio < config.MaxRatio) return false;
+                if (torrent.Ratio >= config.MaxRatio) return true;
             }
 
             if (torrent.SeedingTimeLimit >= 0)
             {
-                if (torrent.SeedingTime < torrent.SeedingTimeLimit) return false;
+                if (!torrent.SeedingTime.HasValue)
+                {
+                    FetchTorrentDetails(torrent);
+                }
+
+                if (torrent.SeedingTime >= torrent.SeedingTimeLimit) return true;
             }
-            else if (torrent.RatioLimit == -2 && config.MaxSeedingTimeEnabled)
+            else if (torrent.SeedingTimeLimit == -2 && config.MaxSeedingTimeEnabled)
             {
-                if (torrent.SeedingTime < config.MaxSeedingTime) return false;
+                if (!torrent.SeedingTime.HasValue)
+                {
+                    FetchTorrentDetails(torrent);
+                }
+
+                if (torrent.SeedingTime >= config.MaxSeedingTime) return true;
             }
-            
-            return true;
+
+            return false;
+        }
+
+        protected void FetchTorrentDetails(QBittorrentTorrent torrent)
+        {
+            var torrentProperties = Proxy.GetTorrentProperties(torrent.Hash, Settings);
+
+            torrent.SeedingTime = torrentProperties.SeedingTime;
         }
     }
 }

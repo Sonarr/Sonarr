@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            if (failures.Any()) return;
+            if (failures.HasErrors()) return;
             failures.AddIfNotNull(TestOutputPath());
             failures.AddIfNotNull(TestGetNZB());
         }

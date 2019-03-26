@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            if (failures.Any()) return;
+            if (failures.HasErrors()) return;
             failures.AddIfNotNull(TestCategory());
             failures.AddIfNotNull(TestGetTorrents());
         }

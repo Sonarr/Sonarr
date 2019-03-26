@@ -86,9 +86,21 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public List<QBittorrentTorrent> GetTorrents(QBittorrentSettings settings)
         {
-            var request = BuildRequest(settings).Resource("/api/v2/torrents/info")
-                                                .AddQueryParam("category", settings.TvCategory);
+            var request = BuildRequest(settings).Resource("/api/v2/torrents/info");
+            if (settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                request.AddQueryParam("category", settings.TvCategory);
+            }
             var response = ProcessRequest<List<QBittorrentTorrent>>(request, settings);
+
+            return response;
+        }
+
+        public QBittorrentTorrentProperties GetTorrentProperties(string hash, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/api/v2/torrents/properties")
+                                                .AddQueryParam("hash", hash);
+            var response = ProcessRequest<QBittorrentTorrentProperties>(request, settings);
 
             return response;
         }
