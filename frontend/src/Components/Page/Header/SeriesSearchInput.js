@@ -155,16 +155,7 @@ class SeriesSearchInput extends Component {
 
   onSuggestionsFetchRequested = ({ value }) => {
     const fuse = new Fuse(this.props.series, fuseOptions);
-    const suggestions = fuse.search(value).sort((a, b) => {
-      if (a.item.sortTitle < b.item.sortTitle) {
-        return -1;
-      }
-      if (a.item.sortTitle > b.item.sortTitle) {
-        return 1;
-      }
-
-      return 0;
-    });
+    const suggestions = fuse.search(value);
 
     this.setState({ suggestions });
   }
