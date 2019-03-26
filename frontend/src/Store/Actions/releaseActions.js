@@ -27,6 +27,9 @@ export const defaultState = {
   sortKey: 'releaseWeight',
   sortDirection: sortDirections.ASCENDING,
   sortPredicates: {
+    age: function(item, direction) {
+      return item.ageMinutes;
+    },
     peers: function(item, direction) {
       const seeders = item.seeders || 0;
       const leechers = item.leechers || 0;
