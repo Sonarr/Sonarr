@@ -17,8 +17,7 @@ function createMapStateToProps() {
         unknownErrors,
         unknownWarnings,
         count,
-        totalCount,
-        unknownCount
+        totalCount
       } = status.item;
 
       return {

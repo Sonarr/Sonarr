@@ -38,8 +38,8 @@ class PathInputConnector extends Component {
   // Listeners
 
   onFetchPaths = (path) => {
-    this.props.fetchPaths({ 
-      path, 
+    this.props.fetchPaths({
+      path,
       includeFiles: this.props.includeFiles
     });
   }
