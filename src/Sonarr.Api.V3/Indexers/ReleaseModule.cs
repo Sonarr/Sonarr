@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Nancy;
 using Nancy.ModelBinding;
@@ -16,6 +17,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 using Sonarr.Http.Extensions;
+using Sonarr.Http.REST;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace Sonarr.Api.V3.Indexers
@@ -31,6 +33,7 @@ namespace Sonarr.Api.V3.Indexers
         private readonly IEpisodeService _episodeService;
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
+        private ResourceValidator<ReleaseResource> _releaseValidator;
 
         private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
 
@@ -55,18 +58,26 @@ namespace Sonarr.Api.V3.Indexers
             _parsingService = parsingService;
             _logger = logger;
 
+            _releaseValidator = new ResourceValidator<ReleaseResource>();
+            _releaseValidator.RuleFor(s => s.DownloadAllowed).Equal(true);
+            _releaseValidator.RuleFor(s => s.IndexerId).ValidId();
+            _releaseValidator.RuleFor(s => s.Guid).NotEmpty();
+
             GetResourceAll = GetReleases;
             Post["/"] = x => DownloadRelease(this.Bind<ReleaseResource>());
-
-            PostValidator.RuleFor(s => s.DownloadAllowed).Equal(true);
-            PostValidator.RuleFor(s => s.IndexerId).ValidId();
-            PostValidator.RuleFor(s => s.Guid).NotEmpty();
 
             _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
         }
 
         private Response DownloadRelease(ReleaseResource release)
         {
+            var validationFailures = _releaseValidator.Validate(release).Errors;
+
+            if (validationFailures.Any())
+            {
+                throw new ValidationException(validationFailures);
+            }
+
             var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
             if (remoteEpisode == null)

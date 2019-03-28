@@ -4,12 +4,12 @@ using Sonarr.Http;
 
 namespace Sonarr.Api.V3.DiskSpace
 {
-    public class DiskSpaceModule :SonarrRestModule<DiskSpaceResource>
+    public class DiskSpaceModule : SonarrRestModule<DiskSpaceResource>
     {
         private readonly IDiskSpaceService _diskSpaceService;
 
         public DiskSpaceModule(IDiskSpaceService diskSpaceService)
-            :base("diskspace")
+            : base("diskspace")
         {
             _diskSpaceService = diskSpaceService;
             GetResourceAll = GetFreeSpace;

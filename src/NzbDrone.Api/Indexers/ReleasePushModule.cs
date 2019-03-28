@@ -4,7 +4,6 @@ using FluentValidation;
 using Nancy;
 using Nancy.ModelBinding;
 using NLog;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
@@ -12,7 +11,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using Sonarr.Http.Extensions;
-using Sonarr.Http.Mapping;
+using Sonarr.Http.REST;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -21,6 +20,7 @@ namespace NzbDrone.Api.Indexers
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IProcessDownloadDecisions _downloadDecisionProcessor;
         private readonly IIndexerFactory _indexerFactory;
+        private ResourceValidator<ReleaseResource> _releaseValidator;
         private readonly Logger _logger;
 
         public ReleasePushModule(IMakeDownloadDecision downloadDecisionMaker,
@@ -35,14 +35,22 @@ namespace NzbDrone.Api.Indexers
 
             Post["/push"] = x => ProcessRelease(this.Bind<ReleaseResource>());
 
-            PostValidator.RuleFor(s => s.Title).NotEmpty();
-            PostValidator.RuleFor(s => s.DownloadUrl).NotEmpty();
-            PostValidator.RuleFor(s => s.Protocol).NotEmpty();
-            PostValidator.RuleFor(s => s.PublishDate).NotEmpty();
+            _releaseValidator = new ResourceValidator<ReleaseResource>();
+            _releaseValidator.RuleFor(s => s.Title).NotEmpty();
+            _releaseValidator.RuleFor(s => s.DownloadUrl).NotEmpty();
+            _releaseValidator.RuleFor(s => s.DownloadProtocol).NotEmpty();
+            _releaseValidator.RuleFor(s => s.PublishDate).NotEmpty();
         }
 
         private Response ProcessRelease(ReleaseResource release)
         {
+            var validationFailures = _releaseValidator.Validate(release).Errors;
+
+            if (validationFailures.Any())
+            {
+                throw new ValidationException(validationFailures);
+            }
+
             _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl);
 
             var info = release.ToModel();
@@ -69,7 +77,7 @@ namespace NzbDrone.Api.Indexers
                 }
                 else
                 {
-                    _logger.Debug("Push Release {0} not associated with unknown indexer {1}.", release.Title, release.Indexer);
+                    _logger.Debug("Push Release {0} not associated with known indexer {1}.", release.Title, release.Indexer);
                 }
             }
             else if (release.IndexerId != 0 && release.Indexer.IsNullOrWhiteSpace())
@@ -82,7 +90,7 @@ namespace NzbDrone.Api.Indexers
                 }
                 catch (ModelNotFoundException)
                 {
-                    _logger.Debug("Push Release {0} not associated with unknown indexer {0}.", release.Title, release.IndexerId);
+                    _logger.Debug("Push Release {0} not associated with known indexer {0}.", release.Title, release.IndexerId);
                     release.IndexerId = 0;
                 }
             }
