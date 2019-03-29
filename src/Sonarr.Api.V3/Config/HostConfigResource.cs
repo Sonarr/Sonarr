@@ -1,6 +1,7 @@
 using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Security;
 using NzbDrone.Core.Update;
 using Sonarr.Http.REST;
 
@@ -34,6 +35,7 @@ namespace Sonarr.Api.V3.Config
         public string ProxyPassword { get; set; }
         public string ProxyBypassFilter { get; set; }
         public bool ProxyBypassLocalAddresses { get; set; }
+        public CertificateValidationType CertificateValidation { get; set; }
         public string BackupFolder { get; set; }
         public int BackupInterval { get; set; }
         public int BackupRetention { get; set; }
@@ -72,6 +74,7 @@ namespace Sonarr.Api.V3.Config
                 ProxyPassword = configService.ProxyPassword,
                 ProxyBypassFilter = configService.ProxyBypassFilter,
                 ProxyBypassLocalAddresses = configService.ProxyBypassLocalAddresses,
+                CertificateValidation = configService.CertificateValidation,
                 BackupFolder = configService.BackupFolder,
                 BackupInterval = configService.BackupInterval,
                 BackupRetention = configService.BackupRetention

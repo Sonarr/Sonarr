@@ -7,7 +7,6 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
-using NzbDrone.Common.Security;
 using NzbDrone.Update.UpdateEngine;
 
 namespace NzbDrone.Update
@@ -30,9 +29,6 @@ namespace NzbDrone.Update
         {
             try
             {
-                SecurityProtocolPolicy.Register();
-                X509CertificateValidationPolicy.Register();
-
                 var startupContext = new StartupContext(args);
                 NzbDroneLogger.Register(startupContext, true, true);
 

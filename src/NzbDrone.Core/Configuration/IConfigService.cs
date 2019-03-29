@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Common.Http.Proxy;
+using NzbDrone.Core.Security;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -82,5 +83,7 @@ namespace NzbDrone.Core.Configuration
         string BackupFolder { get; }
         int BackupInterval { get; }
         int BackupRetention { get; }
+
+        CertificateValidationType CertificateValidation { get; }
     }
 }
