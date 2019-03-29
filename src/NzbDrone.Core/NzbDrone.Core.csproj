@@ -1166,7 +1166,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RootFolders\UnmappedFolder.cs" />
-    <Compile Include="Security.cs" />
+    <Compile Include="Hashing.cs" />
+    <Compile Include="Security\CertificateValidationType.cs" />
+    <Compile Include="Security\X509CertificateValidationPolicy.cs" />
     <Compile Include="SeriesStats\SeasonStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />

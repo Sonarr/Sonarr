@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NzbDrone.Core
 {
-    public static class Security
+    public static class Hashing
     {
         public static string SHA256Hash(this string input)
         {

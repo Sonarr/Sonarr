@@ -7,9 +7,9 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
-using NzbDrone.Common.Security;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Security;
 
 namespace NzbDrone.Host
 {
@@ -22,9 +22,6 @@ namespace NzbDrone.Host
         {
             try
             {
-                SecurityProtocolPolicy.Register();
-                X509CertificateValidationPolicy.Register();
-
                 Logger.Info("Starting Sonarr - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);
 
                 if (!PlatformValidation.IsValidate(userAlert))
@@ -39,6 +36,7 @@ namespace NzbDrone.Host
                 var appMode = GetApplicationMode(startupContext);
 
                 Start(appMode, startupContext);
+                _container.Resolve<IX509CertificateValidationPolicy>().Register();
 
                 if (startCallback != null)
                 {

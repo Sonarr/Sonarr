@@ -10,6 +10,18 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormInputButton from 'Components/Form/FormInputButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 
+const authenticationMethodOptions = [
+  { key: 'none', value: 'None' },
+  { key: 'basic', value: 'Basic (Browser Popup)' },
+  { key: 'forms', value: 'Forms (Login Page)' }
+];
+
+const certificateValidationOptions = [
+  { key: 'enabled', value: 'Enabled' },
+  { key: 'disabledForLocalAddresses', value: 'Disabled for Local Addresses' },
+  { key: 'disabled', value: 'Disabled' }
+];
+
 class SecuritySettings extends Component {
 
   //
@@ -57,14 +69,9 @@ class SecuritySettings extends Component {
       authenticationMethod,
       username,
       password,
-      apiKey
+      apiKey,
+      certificateValidation
     } = settings;
-
-    const authenticationMethodOptions = [
-      { key: 'none', value: 'None' },
-      { key: 'basic', value: 'Basic (Browser Popup)' },
-      { key: 'forms', value: 'Forms (Login Page)' }
-    ];
 
     const authenticationEnabled = authenticationMethod && authenticationMethod.value !== 'none';
 
@@ -143,6 +150,19 @@ class SecuritySettings extends Component {
             onChange={onInputChange}
             onFocus={this.onApikeyFocus}
             {...apiKey}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <FormLabel>Certificate Validation</FormLabel>
+
+          <FormInputGroup
+            type={inputTypes.SELECT}
+            name="certificateValidation"
+            values={certificateValidationOptions}
+            helpText="Change how strict HTTPS certification validation is"
+            onChange={onInputChange}
+            {...certificateValidation}
           />
         </FormGroup>
 
