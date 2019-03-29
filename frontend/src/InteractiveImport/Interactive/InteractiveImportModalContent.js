@@ -215,7 +215,7 @@ class InteractiveImportModalContent extends Component {
       { key: SELECT, value: 'Select...', disabled: true },
       { key: SEASON, value: 'Select Season' },
       { key: LANGUAGE, value: 'Select Language' },
-      { key: QUALITY, value: 'Select Qualty' }
+      { key: QUALITY, value: 'Select Quality' }
     ];
 
     if (allowSeriesChange) {
