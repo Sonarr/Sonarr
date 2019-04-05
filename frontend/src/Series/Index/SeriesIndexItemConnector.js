@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { isCommandExecuting } from 'Utilities/Command';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
-import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
+import createExecutingCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import createQualityProfileSelector from 'Store/Selectors/createQualityProfileSelector';
 import createLanguageProfileSelector from 'Store/Selectors/createLanguageProfileSelector';
 import { executeCommand } from 'Store/Actions/commandActions';
@@ -35,27 +34,25 @@ function createMapStateToProps() {
     createQualityProfileSelector(),
     createLanguageProfileSelector(),
     selectShowSearchAction(),
-    createCommandsSelector(),
+    createExecutingCommandsSelector(),
     (
       series,
       qualityProfile,
       languageProfile,
       showSearchAction,
-      commands
+      executingCommands
     ) => {
-      const isRefreshingSeries = commands.some((command) => {
+      const isRefreshingSeries = executingCommands.some((command) => {
         return (
           command.name === commandNames.REFRESH_SERIES &&
-          command.body.seriesId === series.id &&
-          isCommandExecuting(command)
+          command.body.seriesId === series.id
         );
       });
 
-      const isSearchingSeries = commands.some((command) => {
+      const isSearchingSeries = executingCommands.some((command) => {
         return (
           command.name === commandNames.SERIES_SEARCH &&
-          command.body.seriesId === series.id &&
-          isCommandExecuting(command)
+          command.body.seriesId === series.id
         );
       });
 
