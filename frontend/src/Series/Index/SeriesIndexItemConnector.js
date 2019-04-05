@@ -42,6 +42,16 @@ function createMapStateToProps() {
       showSearchAction,
       executingCommands
     ) => {
+
+      // If a series is deleted this selector may fire before the parent
+      // selecors, which will result in an undefined series, if that happens
+      // we want to return early here and again in the render function to avoid
+      // trying to show a series that has no information available.
+
+      if (!series) {
+        return {};
+      }
+
       const isRefreshingSeries = executingCommands.some((command) => {
         return (
           command.name === commandNames.REFRESH_SERIES &&
@@ -99,13 +109,19 @@ class SeriesIndexItemConnector extends Component {
 
   render() {
     const {
+      id,
       component: ItemComponent,
       ...otherProps
     } = this.props;
 
+    if (!id) {
+      return null;
+    }
+
     return (
       <ItemComponent
         {...otherProps}
+        id={id}
         onRefreshSeriesPress={this.onRefreshSeriesPress}
         onSearchPress={this.onSearchPress}
       />
@@ -114,7 +130,7 @@ class SeriesIndexItemConnector extends Component {
 }
 
 SeriesIndexItemConnector.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.number,
   component: PropTypes.func.isRequired,
   executeCommand: PropTypes.func.isRequired
 };
