@@ -68,4 +68,8 @@ PathInputConnector.propTypes = {
   clearPaths: PropTypes.func.isRequired
 };
 
+PathInputConnector.defaultProps = {
+  includeFiles: false
+};
+
 export default connect(createMapStateToProps, mapDispatchToProps)(PathInputConnector);
