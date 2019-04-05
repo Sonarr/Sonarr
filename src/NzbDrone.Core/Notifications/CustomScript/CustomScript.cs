@@ -6,7 +6,10 @@ using System.Linq;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
@@ -16,13 +19,17 @@ namespace NzbDrone.Core.Notifications.CustomScript
     public class CustomScript : NotificationBase<CustomScriptSettings>
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IProcessProvider _processProvider;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public CustomScript(IDiskProvider diskProvider, IProcessProvider processProvider, Logger logger)
+        public CustomScript(IDiskProvider diskProvider, IAppFolderInfo appFolderInfo, IProcessProvider processProvider, IConfigService configService, Logger logger)
         {
             _diskProvider = diskProvider;
+            _appFolderInfo = appFolderInfo;
             _processProvider = processProvider;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -127,6 +134,12 @@ namespace NzbDrone.Core.Notifications.CustomScript
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
+            var scriptsPath = GetScriptsFolder();
+
+            if (!scriptsPath.IsParentPath(Settings.Path))
+            {
+                failures.Add(new NzbDroneValidationFailure("Path", $"Must be in '{scriptsPath}'"));
+            }
 
             if (!_diskProvider.FileExists(Settings.Path))
             {
@@ -154,8 +167,54 @@ namespace NzbDrone.Core.Notifications.CustomScript
             return new ValidationResult(failures);
         }
 
+
+        public override object RequestAction(string action, IDictionary<string, string> query)
+        {
+            if (action == "getFiles")
+            {
+                var scriptsPath = GetScriptsFolder();
+
+                if (!_diskProvider.FolderExists(scriptsPath))
+                {
+                    return new { };
+                }
+
+                var files = _diskProvider.GetFiles(scriptsPath, SearchOption.TopDirectoryOnly);
+
+                return new
+                       {
+                           options = files.Select(f => new
+                                                       {
+                                                           key = f,
+                                                           value = Path.GetFileName(f)
+                                                       })
+                       };
+            }
+
+            return new { };
+        }
+
+        private string GetScriptsFolder()
+        {
+            var scriptFolder = _configService.ScriptFolder;
+
+            if (Path.IsPathRooted(scriptFolder))
+            {
+                return scriptFolder;
+            }
+
+            return Path.Combine(_appFolderInfo.GetAppDataPath(), scriptFolder);
+        }
+
         private ProcessOutput ExecuteScript(StringDictionary environmentVariables)
         {
+            var scriptsPath = GetScriptsFolder();
+
+            if (!scriptsPath.IsParentPath(Settings.Path))
+            {
+                _logger.Error("External script must be run from the specified scripts folder: {0}", scriptsPath);
+            }
+
             _logger.Debug("Executing external script: {0}", Settings.Path);
 
             var processOutput = _processProvider.StartAndCapture(Settings.Path, Settings.Arguments, environmentVariables);

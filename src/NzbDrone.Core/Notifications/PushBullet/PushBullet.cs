@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
                 return new
                        {
-                           devices = devices.Where(d => d.Nickname.IsNotNullOrWhiteSpace())
+                           options = devices.Where(d => d.Nickname.IsNotNullOrWhiteSpace())
                                             .OrderBy(d => d.Nickname, StringComparer.InvariantCultureIgnoreCase)
                                             .Select(d => new
                                                          {

@@ -14,6 +14,8 @@ function getType(type) {
       return inputTypes.CHECK;
     case 'device':
       return inputTypes.DEVICE;
+    case 'fileselect':
+      return inputTypes.FILE_SELECT;
     case 'password':
       return inputTypes.PASSWORD;
     case 'number':

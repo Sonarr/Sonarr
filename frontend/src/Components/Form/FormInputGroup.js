@@ -6,6 +6,7 @@ import AutoCompleteInput from './AutoCompleteInput';
 import CaptchaInputConnector from './CaptchaInputConnector';
 import CheckInput from './CheckInput';
 import DeviceInputConnector from './DeviceInputConnector';
+import FileSelectInputConnector from './FileSelectInputConnector';
 import KeyValueListInput from './KeyValueListInput';
 import MonitorEpisodesSelectInput from './MonitorEpisodesSelectInput';
 import NumberInput from './NumberInput';
@@ -36,6 +37,9 @@ function getComponent(type) {
 
     case inputTypes.DEVICE:
       return DeviceInputConnector;
+
+    case inputTypes.FILE_SELECT:
+      return FileSelectInputConnector;
 
     case inputTypes.KEY_VALUE_LIST:
       return KeyValueListInput;

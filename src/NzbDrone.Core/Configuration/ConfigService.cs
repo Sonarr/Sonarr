@@ -358,6 +358,8 @@ namespace NzbDrone.Core.Configuration
         public CertificateValidationType CertificateValidation =>
             GetValueEnum("CertificateValidation", CertificateValidationType.Enabled);
 
+        public string ScriptFolder => GetValue("ScriptFolder", "Scripts");
+
         private string GetValue(string key)
         {
             return GetValue(key, string.Empty);

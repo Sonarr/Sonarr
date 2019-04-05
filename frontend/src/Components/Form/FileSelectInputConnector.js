@@ -3,35 +3,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { fetchOptions, clearOptions } from 'Store/Actions/providerOptionActions';
-import DeviceInput from './DeviceInput';
+import FileSelectInput from './FileSelectInput';
 
 function createMapStateToProps() {
   return createSelector(
-    (state, { value }) => value,
     (state) => state.providerOptions,
-    (value, devices) => {
-
-      return {
-        ...devices,
-        selectedDevices: value.map((valueDevice) => {
-          // Disable equality ESLint rule so we don't need to worry about
-          // a type mismatch between the value items and the device ID.
-          // eslint-disable-next-line eqeqeq
-          const device = devices.items.find((d) => d.id == valueDevice);
-
-          if (device) {
-            return {
-              id: device.id,
-              name: `${device.name} (${device.id})`
-            };
-          }
-
-          return {
-            id: valueDevice,
-            name: `Unknown (${valueDevice})`
-          };
-        })
-      };
+    (files) => {
+      return files;
     }
   );
 }
@@ -41,7 +19,7 @@ const mapDispatchToProps = {
   dispatchClearOptions: clearOptions
 };
 
-class DeviceInputConnector extends Component {
+class FileSelectInputConnector extends Component {
 
   //
   // Lifecycle
@@ -65,7 +43,7 @@ class DeviceInputConnector extends Component {
     } = this.props;
 
     dispatchFetchOptions({
-      action: 'getDevices',
+      action: 'getFiles',
       provider,
       providerData
     });
@@ -83,7 +61,7 @@ class DeviceInputConnector extends Component {
 
   render() {
     return (
-      <DeviceInput
+      <FileSelectInput
         {...this.props}
         onRefreshPress={this.onRefreshPress}
       />
@@ -91,7 +69,7 @@ class DeviceInputConnector extends Component {
   }
 }
 
-DeviceInputConnector.propTypes = {
+FileSelectInputConnector.propTypes = {
   provider: PropTypes.string.isRequired,
   providerData: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
@@ -100,4 +78,4 @@ DeviceInputConnector.propTypes = {
   dispatchClearOptions: PropTypes.func.isRequired
 };
 
-export default connect(createMapStateToProps, mapDispatchToProps)(DeviceInputConnector);
+export default connect(createMapStateToProps, mapDispatchToProps)(FileSelectInputConnector);

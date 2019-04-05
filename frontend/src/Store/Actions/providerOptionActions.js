@@ -8,7 +8,7 @@ import { set } from './baseActions';
 //
 // Variables
 
-export const section = 'devices';
+export const section = 'providerOptions';
 
 //
 // State
@@ -23,32 +23,27 @@ export const defaultState = {
 //
 // Actions Types
 
-export const FETCH_DEVICES = 'devices/fetchDevices';
-export const CLEAR_DEVICES = 'devices/clearDevices';
+export const FETCH_OPTIONS = 'devices/fetchOptions';
+export const CLEAR_OPTIONS = 'devices/clearOptions';
 
 //
 // Action Creators
 
-export const fetchDevices = createThunk(FETCH_DEVICES);
-export const clearDevices = createAction(CLEAR_DEVICES);
+export const fetchOptions = createThunk(FETCH_OPTIONS);
+export const clearOptions = createAction(CLEAR_OPTIONS);
 
 //
 // Action Handlers
 
 export const actionHandlers = handleThunks({
 
-  [FETCH_DEVICES]: function(getState, payload, dispatch) {
-    const actionPayload = {
-      action: 'getDevices',
-      ...payload
-    };
-
+  [FETCH_OPTIONS]: function(getState, payload, dispatch) {
     dispatch(set({
       section,
       isFetching: true
     }));
 
-    const promise = requestAction(actionPayload);
+    const promise = requestAction(payload);
 
     promise.done((data) => {
       dispatch(set({
@@ -56,7 +51,7 @@ export const actionHandlers = handleThunks({
         isFetching: false,
         isPopulated: true,
         error: null,
-        items: data.devices || []
+        items: data.options || []
       }));
     });
 
@@ -76,7 +71,7 @@ export const actionHandlers = handleThunks({
 
 export const reducers = createHandleActions({
 
-  [CLEAR_DEVICES]: function(state) {
+  [CLEAR_OPTIONS]: function(state) {
     return updateSectionState(state, section, defaultState);
   }
 
