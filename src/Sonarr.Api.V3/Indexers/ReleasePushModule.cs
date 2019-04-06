@@ -3,7 +3,6 @@ using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using Nancy;
-using Nancy.ModelBinding;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
@@ -12,7 +11,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using Sonarr.Http.Extensions;
-using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Indexers
 {
@@ -21,7 +19,6 @@ namespace Sonarr.Api.V3.Indexers
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IProcessDownloadDecisions _downloadDecisionProcessor;
         private readonly IIndexerFactory _indexerFactory;
-        private ResourceValidator<ReleaseResource> _releaseValidator;
         private readonly Logger _logger;
 
         public ReleasePushModule(IMakeDownloadDecision downloadDecisionMaker,
@@ -34,24 +31,16 @@ namespace Sonarr.Api.V3.Indexers
             _indexerFactory = indexerFactory;
             _logger = logger;
 
-            _releaseValidator = new ResourceValidator<ReleaseResource>();
-            _releaseValidator.RuleFor(s => s.Title).NotEmpty();
-            _releaseValidator.RuleFor(s => s.DownloadUrl).NotEmpty();
-            _releaseValidator.RuleFor(s => s.DownloadProtocol).NotEmpty();
-            _releaseValidator.RuleFor(s => s.PublishDate).NotEmpty();
+            PostValidator.RuleFor(s => s.Title).NotEmpty();
+            PostValidator.RuleFor(s => s.DownloadUrl).NotEmpty();
+            PostValidator.RuleFor(s => s.DownloadProtocol).NotEmpty();
+            PostValidator.RuleFor(s => s.PublishDate).NotEmpty();
 
-            Post["/push"] = x => ProcessRelease(this.Bind<ReleaseResource>());
+            Post["/push"] = x => ProcessRelease(ReadResourceFromRequest());
         }
 
         private Response ProcessRelease(ReleaseResource release)
         {
-            var validationFailures = _releaseValidator.Validate(release).Errors;
-
-            if (validationFailures.Any())
-            {
-                throw new ValidationException(validationFailures);
-            }
-
             _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl);
 
             var info = release.ToModel();
