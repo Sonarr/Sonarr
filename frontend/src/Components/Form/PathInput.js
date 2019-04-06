@@ -111,6 +111,7 @@ class PathInput extends Component {
       value,
       placeholder,
       paths,
+      includeFiles,
       hasError,
       hasWarning,
       hasFileBrowser,
@@ -171,6 +172,7 @@ class PathInput extends Component {
                 isOpen={this.state.isFileBrowserModalOpen}
                 name={name}
                 value={value}
+                includeFiles={includeFiles}
                 onChange={onChange}
                 onModalClose={this.onFileBrowserModalClose}
               />
@@ -188,6 +190,7 @@ PathInput.propTypes = {
   value: PropTypes.string,
   placeholder: PropTypes.string,
   paths: PropTypes.array.isRequired,
+  includeFiles: PropTypes.bool.isRequired,
   hasError: PropTypes.bool,
   hasWarning: PropTypes.bool,
   hasFileBrowser: PropTypes.bool,

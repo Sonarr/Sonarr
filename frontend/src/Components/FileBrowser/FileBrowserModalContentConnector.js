@@ -42,8 +42,8 @@ function createMapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  fetchPaths,
-  clearPaths
+  dispatchFetchPaths: fetchPaths,
+  dispatchClearPaths: clearPaths
 };
 
 class FileBrowserModalContentConnector extends Component {
@@ -51,9 +51,16 @@ class FileBrowserModalContentConnector extends Component {
   // Lifecycle
 
   componentDidMount() {
-    this.props.fetchPaths({
-      path: this.props.value,
-      allowFoldersWithoutTrailingSlashes: true
+    const {
+      value,
+      includeFiles,
+      dispatchFetchPaths
+    } = this.props;
+
+    dispatchFetchPaths({
+      path: value,
+      allowFoldersWithoutTrailingSlashes: true,
+      includeFiles
     });
   }
 
@@ -61,18 +68,24 @@ class FileBrowserModalContentConnector extends Component {
   // Listeners
 
   onFetchPaths = (path) => {
-    this.props.fetchPaths({
+    const {
+      includeFiles,
+      dispatchFetchPaths
+    } = this.props;
+
+    dispatchFetchPaths({
       path,
-      allowFoldersWithoutTrailingSlashes: true
+      allowFoldersWithoutTrailingSlashes: true,
+      includeFiles
     });
   }
 
   onClearPaths = () => {
-    // this.props.clearPaths();
+    // this.props.dispatchClearPaths();
   }
 
   onModalClose = () => {
-    this.props.clearPaths();
+    this.props.dispatchClearPaths();
     this.props.onModalClose();
   }
 
@@ -93,9 +106,14 @@ class FileBrowserModalContentConnector extends Component {
 
 FileBrowserModalContentConnector.propTypes = {
   value: PropTypes.string,
-  fetchPaths: PropTypes.func.isRequired,
-  clearPaths: PropTypes.func.isRequired,
+  includeFiles: PropTypes.bool.isRequired,
+  dispatchFetchPaths: PropTypes.func.isRequired,
+  dispatchClearPaths: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
+};
+
+FileBrowserModalContentConnector.defaultProps = {
+  includeFiles: false
 };
 
 export default connect(createMapStateToProps, mapDispatchToProps)(FileBrowserModalContentConnector);
