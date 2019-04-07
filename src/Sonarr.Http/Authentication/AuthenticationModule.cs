@@ -3,7 +3,6 @@ using Nancy;
 using Nancy.Authentication.Forms;
 using Nancy.Extensions;
 using Nancy.ModelBinding;
-using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 
@@ -24,9 +23,6 @@ namespace Sonarr.Http.Authentication
 
         private Response Login(LoginResource resource)
         {
-            Ensure.That(resource.Username, () => resource.Username).IsNotNullOrWhiteSpace();
-            Ensure.That(resource.Password, () => resource.Password).IsNotNullOrWhiteSpace();
-
             var user = _userService.FindUser(resource.Username, resource.Password);
 
             if (user == null)

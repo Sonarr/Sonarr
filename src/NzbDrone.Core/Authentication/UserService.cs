@@ -73,6 +73,11 @@ namespace NzbDrone.Core.Authentication
 
         public User FindUser(string username, string password)
         {
+            if (username.IsNullOrWhiteSpace() || password.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             var user = _repo.FindUser(username.ToLowerInvariant());
 
             if (user == null)
