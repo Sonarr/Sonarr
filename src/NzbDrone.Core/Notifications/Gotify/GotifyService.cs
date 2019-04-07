@@ -31,13 +31,6 @@ namespace NzbDrone.Core.Notifications.Gotify
             request.AddParameter("message", message);
             request.AddParameter("priority", settings.Priority);
 
-            if ((GotifyPriority)settings.Priority == GotifyPriority.Emergency)
-            {
-                request.AddParameter("retry", settings.Retry);
-                request.AddParameter("expire", settings.Expire);
-            }
-
-
             client.ExecuteAndValidate(request);
         }
 
