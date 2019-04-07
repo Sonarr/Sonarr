@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { createSelector } from 'reselect';
 
 function createQualityProfileSelector() {
@@ -6,7 +5,9 @@ function createQualityProfileSelector() {
     (state, { qualityProfileId }) => qualityProfileId,
     (state) => state.settings.qualityProfiles.items,
     (qualityProfileId, qualityProfiles) => {
-      return _.find(qualityProfiles, { id: qualityProfileId });
+      return qualityProfiles.find((profile) => {
+        return profile.id === qualityProfileId;
+      });
     }
   );
 }

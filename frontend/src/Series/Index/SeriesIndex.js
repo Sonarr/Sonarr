@@ -22,7 +22,7 @@ import SeriesIndexOverviewsConnector from './Overview/SeriesIndexOverviewsConnec
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
 import SeriesIndexSortMenu from './Menus/SeriesIndexSortMenu';
 import SeriesIndexViewMenu from './Menus/SeriesIndexViewMenu';
-import SeriesIndexFooter from './SeriesIndexFooter';
+import SeriesIndexFooterConnector from './SeriesIndexFooterConnector';
 import styles from './SeriesIndex.css';
 
 function getViewComponent(view) {
@@ -330,9 +330,7 @@ class SeriesIndex extends Component {
                     {...otherProps}
                   />
 
-                  <SeriesIndexFooter
-                    series={items}
-                  />
+                  <SeriesIndexFooterConnector />
                 </div>
             }
 

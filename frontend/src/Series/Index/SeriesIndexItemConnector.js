@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import createExecutingCommandsSelector from 'Store/Selectors/createCommandsSelector';
-import createQualityProfileSelector from 'Store/Selectors/createQualityProfileSelector';
-import createLanguageProfileSelector from 'Store/Selectors/createLanguageProfileSelector';
+import createSeriesQualityProfileSelector from 'Store/Selectors/createSeriesQualityProfileSelector';
+import createSeriesLanguageProfileSelector from 'Store/Selectors/createSeriesLanguageProfileSelector';
 import { executeCommand } from 'Store/Actions/commandActions';
 import * as commandNames from 'Commands/commandNames';
 
@@ -31,8 +31,8 @@ function selectShowSearchAction() {
 function createMapStateToProps() {
   return createSelector(
     createSeriesSelector(),
-    createQualityProfileSelector(),
-    createLanguageProfileSelector(),
+    createSeriesQualityProfileSelector(),
+    createSeriesLanguageProfileSelector(),
     selectShowSearchAction(),
     createExecutingCommandsSelector(),
     (
@@ -82,7 +82,7 @@ function createMapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  executeCommand
+  dispatchExecuteCommand: executeCommand
 };
 
 class SeriesIndexItemConnector extends Component {
@@ -91,14 +91,14 @@ class SeriesIndexItemConnector extends Component {
   // Listeners
 
   onRefreshSeriesPress = () => {
-    this.props.executeCommand({
+    this.props.dispatchExecuteCommand({
       name: commandNames.REFRESH_SERIES,
       seriesId: this.props.id
     });
   }
 
   onSearchPress = () => {
-    this.props.executeCommand({
+    this.props.dispatchExecuteCommand({
       name: commandNames.SERIES_SEARCH,
       seriesId: this.props.id
     });
@@ -132,7 +132,7 @@ class SeriesIndexItemConnector extends Component {
 SeriesIndexItemConnector.propTypes = {
   id: PropTypes.number,
   component: PropTypes.func.isRequired,
-  executeCommand: PropTypes.func.isRequired
+  dispatchExecuteCommand: PropTypes.func.isRequired
 };
 
 export default connect(createMapStateToProps, mapDispatchToProps)(SeriesIndexItemConnector);
