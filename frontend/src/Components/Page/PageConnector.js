@@ -27,59 +27,110 @@ function testLocalStorage() {
   }
 }
 
+const selectAppProps = createSelector(
+  (state) => state.app.isSidebarVisible,
+  (state) => state.app.version,
+  (state) => state.app.isUpdated,
+  (state) => state.app.isDisconnected,
+  (isSidebarVisible, version, isUpdated, isDisconnected) => {
+    return {
+      isSidebarVisible,
+      version,
+      isUpdated,
+      isDisconnected
+    };
+  }
+);
+
+const selectIsPopulated = createSelector(
+  (state) => state.series.isPopulated,
+  (state) => state.customFilters.isPopulated,
+  (state) => state.tags.isPopulated,
+  (state) => state.settings.ui.isPopulated,
+  (state) => state.settings.qualityProfiles.isPopulated,
+  (state) => state.settings.languageProfiles.isPopulated,
+  (state) => state.system.status.isPopulated,
+  (
+    seriesIsPopulated,
+    customFiltersIsPopulated,
+    tagsIsPopulated,
+    uiSettingsIsPopulated,
+    qualityProfilesIsPopulated,
+    languageProfilesIsPopulated,
+    systemStatusIsPopulated
+  ) => {
+    return (
+      seriesIsPopulated &&
+      customFiltersIsPopulated &&
+      tagsIsPopulated &&
+      uiSettingsIsPopulated &&
+      qualityProfilesIsPopulated &&
+      languageProfilesIsPopulated &&
+      systemStatusIsPopulated
+    );
+  }
+);
+
+const selectErrors = createSelector(
+  (state) => state.series.error,
+  (state) => state.customFilters.error,
+  (state) => state.tags.error,
+  (state) => state.settings.ui.error,
+  (state) => state.settings.qualityProfiles.error,
+  (state) => state.settings.languageProfiles.error,
+  (state) => state.system.status.error,
+  (
+    seriesError,
+    customFiltersError,
+    tagsError,
+    uiSettingsError,
+    qualityProfilesError,
+    languageProfilesError,
+    systemStatusError
+  ) => {
+    const hasError = !!(
+      seriesError ||
+      customFiltersError ||
+      tagsError ||
+      uiSettingsError ||
+      qualityProfilesError ||
+      languageProfilesError ||
+      systemStatusError
+    );
+
+    return {
+      hasError,
+      seriesError,
+      customFiltersError,
+      tagsError,
+      uiSettingsError,
+      qualityProfilesError,
+      languageProfilesError,
+      systemStatusError
+    };
+  }
+);
+
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.series,
-    (state) => state.customFilters,
-    (state) => state.tags,
-    (state) => state.settings.ui,
-    (state) => state.settings.qualityProfiles,
-    (state) => state.settings.languageProfiles,
-    (state) => state.app,
+    (state) => state.settings.ui.item.enableColorImpairedMode,
+    selectIsPopulated,
+    selectErrors,
+    selectAppProps,
     createDimensionsSelector(),
     (
-      series,
-      customFilters,
-      tags,
-      uiSettings,
-      qualityProfiles,
-      languageProfiles,
+      enableColorImpairedMode,
+      isPopulated,
+      errors,
       app,
       dimensions
     ) => {
-      const isPopulated = (
-        series.isPopulated &&
-        customFilters.isPopulated &&
-        tags.isPopulated &&
-        qualityProfiles.isPopulated &&
-        languageProfiles.isPopulated &&
-        uiSettings.isPopulated
-      );
-
-      const hasError = !!(
-        series.error ||
-        customFilters.error ||
-        tags.error ||
-        qualityProfiles.error ||
-        languageProfiles.error ||
-        uiSettings.error
-      );
-
       return {
+        ...app,
+        ...errors,
         isPopulated,
-        hasError,
-        seriesError: series.error,
-        customFiltersError: tags.error,
-        tagsError: tags.error,
-        qualityProfilesError: qualityProfiles.error,
-        languageProfilesError: languageProfiles.error,
-        uiSettingsError: uiSettings.error,
         isSmallScreen: dimensions.isSmallScreen,
-        isSidebarVisible: app.isSidebarVisible,
-        enableColorImpairedMode: uiSettings.item.enableColorImpairedMode,
-        version: app.version,
-        isUpdated: app.isUpdated,
-        isDisconnected: app.isDisconnected
+        enableColorImpairedMode
       };
     }
   );

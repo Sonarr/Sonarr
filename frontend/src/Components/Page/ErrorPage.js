@@ -12,7 +12,8 @@ function ErrorPage(props) {
     tagsError,
     qualityProfilesError,
     languageProfilesError,
-    uiSettingsError
+    uiSettingsError,
+    systemStatusError
   } = props;
 
   let errorMessage = 'Failed to load Sonarr';
@@ -31,6 +32,8 @@ function ErrorPage(props) {
     errorMessage = getErrorMessage(languageProfilesError, 'Failed to load language profiles from API');
   } else if (uiSettingsError) {
     errorMessage = getErrorMessage(uiSettingsError, 'Failed to load UI settings from API');
+  } else if (systemStatusError) {
+    errorMessage = getErrorMessage(uiSettingsError, 'Failed to load system status from API');
   }
 
   return (
@@ -54,7 +57,8 @@ ErrorPage.propTypes = {
   tagsError: PropTypes.object,
   qualityProfilesError: PropTypes.object,
   languageProfilesError: PropTypes.object,
-  uiSettingsError: PropTypes.object
+  uiSettingsError: PropTypes.object,
+  systemStatusError: PropTypes.object
 };
 
 export default ErrorPage;
