@@ -30,7 +30,7 @@ namespace Sonarr.Http.Exceptions
 
             if (content != null)
             {
-                result = result + " :" + content;
+                result = $"{result}: {content}";
             }
 
             return result;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Nancy;
+using Newtonsoft.Json;
 using NzbDrone.Core.Datastore;
 using Sonarr.Http.Extensions;
 
@@ -194,8 +195,16 @@ namespace Sonarr.Http.REST
 
         protected TResource ReadResourceFromRequest(bool skipValidate = false)
         {
-            //TODO: handle when request is null
-            var resource = Request.Body.FromJson<TResource>();
+            TResource resource;
+
+            try
+            {
+                resource = Request.Body.FromJson<TResource>();
+            }
+            catch (JsonReaderException e)
+            {
+                throw new BadRequestException($"Invalid request body. {e.Message}");
+            }
 
             if (resource == null)
             {
