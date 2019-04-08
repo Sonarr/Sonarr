@@ -23,9 +23,8 @@ namespace NzbDrone.Core.Notifications.Gotify
 
         public void SendNotification(string title, string message, GotifySettings settings)
         {
-            var URL = settings.GotifyServer + "/message?token=" + settings.AppToken;
-
-            var client = RestClientFactory.BuildClient(URL);
+            var url = $"{settings.GotifyServer}/message?token={settings.AppToken}";
+            var client = RestClientFactory.BuildClient(url);
             var request = new RestRequest(Method.POST);
             request.AddParameter("title", title);
             request.AddParameter("message", message);
@@ -46,7 +45,7 @@ namespace NzbDrone.Core.Notifications.Gotify
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("ApiKey", "Unable to send test message");
+                return new ValidationFailure("", "Unable to send test message");
             }
 
             return null;
