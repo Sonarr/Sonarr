@@ -30,10 +30,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger.Debug("Checking if release meets restrictions: {0}", subject);
 
             var title = subject.Release.Title;
-            var origin = subject.Relase.Origin ?? "";
-            var source = subject.Relase.Source ?? "";
-            var container = subject.Relase.Container ?? "";
-            var codec = subject.Relase.Codec ?? "";
+            var origin = subject.Release.Origin ?? "";
+            var source = subject.Release.Source ?? "";
+            var container = subject.Release.Container ?? "";
+            var codec = subject.Release.Codec ?? "";
 
             title += origin + source + container + codec;           var title = subject.Release.Title;
 
