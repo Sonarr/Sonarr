@@ -30,6 +30,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger.Debug("Checking if release meets restrictions: {0}", subject);
 
             var title = subject.Release.Title;
+            var origin = subject.Relase.Origin ?? "";
+            var source = subject.Relase.Source ?? "";
+            var container = subject.Relase.Container ?? "";
+            var codec = subject.Relase.Codec ?? "";
+
+            title += origin + source + container + codec;           var title = subject.Release.Title;
+
             var restrictions = _restrictionService.AllForTags(subject.Series.Tags);
 
             var required = restrictions.Where(r => r.Required.IsNotNullOrWhiteSpace());
