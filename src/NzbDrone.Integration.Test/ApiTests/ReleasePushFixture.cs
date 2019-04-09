@@ -5,7 +5,6 @@ using System.Net;
 using System.Collections.Generic;
 using System;
 using System.Globalization;
-using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {
@@ -18,7 +17,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             var body = new Dictionary<string, object>();
             body.Add("guid", "sdfsdfsdf");
             body.Add("title", "The.Series.S01E01");
-            body.Add("downloadProtocol", DownloadProtocol.Torrent.ToString());
+            body.Add("downloadProtocol", 2);
+            body.Add("downloadUrl", "https://sonarr.tv/test.torrent");
             body.Add("publishDate", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture));
 
             var request = ReleasePush.BuildRequest();

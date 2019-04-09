@@ -33,7 +33,7 @@ namespace Sonarr.Api.V3.Indexers
 
             PostValidator.RuleFor(s => s.Title).NotEmpty();
             PostValidator.RuleFor(s => s.DownloadUrl).NotEmpty();
-            PostValidator.RuleFor(s => s.DownloadProtocol).NotEmpty();
+            PostValidator.RuleFor(s => s.Protocol).NotEmpty();
             PostValidator.RuleFor(s => s.PublishDate).NotEmpty();
 
             Post["/push"] = x => ProcessRelease(ReadResourceFromRequest());
