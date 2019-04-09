@@ -17,7 +17,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             var body = new Dictionary<string, object>();
             body.Add("guid", "sdfsdfsdf");
             body.Add("title", "The.Series.S01E01");
-            body.Add("downloadProtocol", 2);
+            body.Add("protocol", "Torrent");
             body.Add("downloadUrl", "https://sonarr.tv/test.torrent");
             body.Add("publishDate", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture));
 
