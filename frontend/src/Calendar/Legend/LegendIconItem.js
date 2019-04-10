@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Icon from 'Components/Icon';
-import styles from './legendIconItem.css';
+import styles from './LegendIconItem.css';
 
 function LegendIconItem(props) {
   const {
