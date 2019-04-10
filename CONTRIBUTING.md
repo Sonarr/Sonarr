@@ -7,21 +7,7 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 
 ## Development ##
 
-### Tools required ###
-- Visual Studio 2015
-- HTML/Javascript editor of choice (Sublime Text/Webstorm/Atom/etc)
-- npm (node package manager)
-- git
-
-### Getting started ###
-
-1.  Fork Sonarr
-2.  Clone (develop branch) *you may need pull in submodules separately if you client doesn't clone them automatically (CurlSharp)*
-3.  Run `npm install`
-4.  Run `npm start` - Used to compile the UI components and copy them.
-    Leave this window open.
-    If you have gulp globally installed you can use `gulp watch` instead
-5.  Compile in Visual Studio
+See the readme for information on setting up your development environment.
 
 ### Contributing Code ###
 - If you're adding a new, already requested feature, please comment on [Github Issues](https://github.com/Sonarr/Sonarr/issues "Github Issues") so work is not duplicated (If you want to add something not already on there, please talk to us first)
