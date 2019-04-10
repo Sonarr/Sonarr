@@ -58,7 +58,8 @@ namespace NzbDrone.Core.Security
                 return true;
             }
 
-            if (certificateValidation == CertificateValidationType.DisabledForLocalAddresses && host.AddressList.All(i => i.IsLocalAddress()))
+            if (certificateValidation == CertificateValidationType.DisabledForLocalAddresses &&
+                host.AddressList.All(i => i.IsIPv6LinkLocal || i.IsLocalAddress()))
             {
                 return true;
             }
