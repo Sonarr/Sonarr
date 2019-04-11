@@ -9,7 +9,6 @@ using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Security;
 
 namespace NzbDrone.Host
 {
@@ -36,7 +35,6 @@ namespace NzbDrone.Host
                 var appMode = GetApplicationMode(startupContext);
 
                 Start(appMode, startupContext);
-                _container.Resolve<IX509CertificateValidationPolicy>().Register();
 
                 if (startCallback != null)
                 {
