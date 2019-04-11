@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Security
                 return true;
             }
 
-            var ipAddresses = GetIPAddresses(request.Host);
+            var ipAddresses = GetIPAddresses(request.RequestUri.Host);
             var certificateValidation = _configService.CertificateValidation;
 
             if (certificateValidation == CertificateValidationType.Disabled)
