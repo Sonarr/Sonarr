@@ -209,7 +209,7 @@ Updates.propTypes = {
   generalSettingsError: PropTypes.object,
   items: PropTypes.array.isRequired,
   isInstallingUpdate: PropTypes.bool.isRequired,
-  updateMechanism: PropTypes.string.isRequired,
+  updateMechanism: PropTypes.string,
   shortDateFormat: PropTypes.string.isRequired,
   onInstallLatestPress: PropTypes.func.isRequired
 };
