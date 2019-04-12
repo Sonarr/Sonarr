@@ -129,6 +129,38 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
+        public void should_be_accepted_if_grabbed_download_id_and_release_torrent_hash_is_unknown()
+        {
+            var downloadId = Guid.NewGuid().ToString().ToUpper();
+
+            GivenHistoryItem(downloadId, TITLE, _hdtv720p, HistoryEventType.Grabbed);
+            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, HistoryEventType.DownloadFolderImported);
+
+            _remoteEpisode.Release = Builder<TorrentInfo>.CreateNew()
+                                                         .With(t => t.DownloadProtocol = DownloadProtocol.Torrent)
+                                                         .With(t => t.InfoHash = null)
+                                                         .Build();
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_accepted_if_grabbed_download_does_not_have_an_id()
+        {
+            var downloadId = Guid.NewGuid().ToString().ToUpper();
+
+            GivenHistoryItem(null, TITLE, _hdtv720p, HistoryEventType.Grabbed);
+            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, HistoryEventType.DownloadFolderImported);
+
+            _remoteEpisode.Release = Builder<TorrentInfo>.CreateNew()
+                                                         .With(t => t.DownloadProtocol = DownloadProtocol.Torrent)
+                                                         .With(t => t.InfoHash = downloadId)
+                                                         .Build();
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_be_rejected_if_grabbed_download_id_matches_release_torrent_hash()
         {
             var downloadId = Guid.NewGuid().ToString().ToUpper();

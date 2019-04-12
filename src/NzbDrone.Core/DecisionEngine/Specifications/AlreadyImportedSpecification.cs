@@ -77,7 +77,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     var torrentInfo = release as TorrentInfo;
 
-                    if (torrentInfo != null && torrentInfo.InfoHash.ToUpper() == lastGrabbed.DownloadId)
+                    if (torrentInfo?.InfoHash != null && torrentInfo.InfoHash.ToUpper() == lastGrabbed.DownloadId)
                     {
                         _logger.Debug("Has same torrent hash as a grabbed and imported release");
                         return Decision.Reject("Has same torrent hash as a grabbed and imported release");
