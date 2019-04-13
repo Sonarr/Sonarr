@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
-import createExecutingCommandsSelector from 'Store/Selectors/createCommandsSelector';
+import createExecutingCommandsSelector from 'Store/Selectors/createExecutingCommandsSelector';
 import createSeriesQualityProfileSelector from 'Store/Selectors/createSeriesQualityProfileSelector';
 import createSeriesLanguageProfileSelector from 'Store/Selectors/createSeriesLanguageProfileSelector';
 import { executeCommand } from 'Store/Actions/commandActions';
