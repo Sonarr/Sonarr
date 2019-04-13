@@ -1,6 +1,6 @@
 .option {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   flex-wrap: wrap;
   margin: 3px;
   border: 1px solid $borderColor;
@@ -17,7 +17,7 @@
 }
 
 .small {
-  width: 460px;
+  width: 480px;
 }
 
 .large {
@@ -34,7 +34,6 @@
 .example {
   display: flex;
   align-items: center;
-  align-self: stretch;
   flex: 0 0 50%;
   padding: 6px 16px;
   background-color: #ddd;
