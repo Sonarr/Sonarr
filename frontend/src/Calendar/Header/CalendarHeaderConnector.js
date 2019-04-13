@@ -23,6 +23,7 @@ function createMapStateToProps() {
       ]);
 
       result.isSmallScreen = dimensions.isSmallScreen;
+      result.collapseViewButtons = dimensions.isLargeScreen;
       result.longDateFormat = uiSettings.longDateFormat;
 
       return result;
