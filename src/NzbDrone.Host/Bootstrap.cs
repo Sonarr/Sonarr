@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Threading;
 using NLog;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
@@ -27,6 +28,8 @@ namespace NzbDrone.Host
                 {
                     throw new TerminateApplicationException("Missing system requirements");
                 }
+
+                LongPathSupport.Enable();
 
                 _container = MainAppContainerBuilder.BuildContainer(startupContext);
                 _container.Resolve<IAppFolderFactory>().Register();
