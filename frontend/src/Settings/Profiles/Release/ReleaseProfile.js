@@ -9,6 +9,10 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import EditReleaseProfileModalConnector from './EditReleaseProfileModalConnector';
 import styles from './ReleaseProfile.css';
 
+function sortPreferred(preferred) {
+  return preferred.slice().sort((a, b) => b.value - a.value);
+}
+
 class ReleaseProfile extends Component {
 
   //
@@ -18,9 +22,18 @@ class ReleaseProfile extends Component {
     super(props, context);
 
     this.state = {
+      sortedPreferred: sortPreferred(props.preferred),
       isEditReleaseProfileModalOpen: false,
       isDeleteReleaseProfileModalOpen: false
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { preferred } = this.props;
+
+    if (prevProps.preferred !== preferred) {
+      this.setState({ sortedPreferred: sortPreferred(preferred) });
+    }
   }
 
   //
@@ -57,10 +70,15 @@ class ReleaseProfile extends Component {
       id,
       required,
       ignored,
-      preferred,
       tags,
       tagList
     } = this.props;
+
+    const {
+      sortedPreferred,
+      isEditReleaseProfileModalOpen,
+      isDeleteReleaseProfileModalOpen
+    } = this.state;
 
     return (
       <Card
@@ -108,7 +126,7 @@ class ReleaseProfile extends Component {
 
         <div>
           {
-            preferred.map((item) => {
+            sortedPreferred.map((item) => {
               const isPreferred = item.value >= 0;
 
               return (
@@ -130,13 +148,13 @@ class ReleaseProfile extends Component {
 
         <EditReleaseProfileModalConnector
           id={id}
-          isOpen={this.state.isEditReleaseProfileModalOpen}
+          isOpen={isEditReleaseProfileModalOpen}
           onModalClose={this.onEditReleaseProfileModalClose}
           onDeleteReleaseProfilePress={this.onDeleteReleaseProfilePress}
         />
 
         <ConfirmModal
-          isOpen={this.state.isDeleteReleaseProfileModalOpen}
+          isOpen={isDeleteReleaseProfileModalOpen}
           kind={kinds.DANGER}
           title="Delete ReleaseProfile"
           message={'Are you sure you want to delete this releaseProfile?'}
