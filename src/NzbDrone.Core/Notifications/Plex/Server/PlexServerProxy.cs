@@ -191,11 +191,11 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                     throw new PlexAuthenticationException("Unauthorized - AuthToken is invalid");
                 }
 
-                throw new PlexException("Unable to connect to Plex Media Server");
+                throw new PlexException("Unable to connect to Plex Media Server. Status Code: {0}", ex.Response.StatusCode);
             }
             catch (WebException ex)
             {
-                throw new PlexException("Unable to connect to Plex Media Server");
+                throw new PlexException("Unable to connect to Plex Media Server", ex);
             }
 
             return response.Content;
