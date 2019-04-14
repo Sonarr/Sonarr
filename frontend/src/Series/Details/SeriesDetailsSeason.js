@@ -405,7 +405,7 @@ class SeriesDetailsSeason extends Component {
                 <IconButton
                   className={styles.actionButton}
                   name={icons.EPISODE_FILE}
-                  title="Manage episode files in this series"
+                  title="Manage episode files in this season"
                   size={24}
                   isDisabled={!episodeFileCount}
                   onPress={this.onManageEpisodesPress}
