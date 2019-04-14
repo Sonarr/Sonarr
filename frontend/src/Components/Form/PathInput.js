@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Autosuggest from 'react-autosuggest';
-import classNames from 'classnames';
 import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import FileBrowserModal from 'Components/FileBrowser/FileBrowserModal';
+import AutoSuggestInput from './AutoSuggestInput';
 import FormInputButton from './FormInputButton';
 import styles from './PathInput.css';
 
@@ -15,6 +14,8 @@ class PathInput extends Component {
 
   constructor(props, context) {
     super(props, context);
+
+    this._node = document.getElementById('portal-root');
 
     this.state = {
       isFileBrowserModalOpen: false
@@ -106,56 +107,30 @@ class PathInput extends Component {
   render() {
     const {
       className,
-      inputClassName,
       name,
       value,
-      placeholder,
       paths,
       includeFiles,
-      hasError,
-      hasWarning,
       hasFileBrowser,
-      onChange
+      onChange,
+      ...otherProps
     } = this.props;
-
-    const inputProps = {
-      className: classNames(
-        inputClassName,
-        hasError && styles.hasError,
-        hasWarning && styles.hasWarning,
-        hasFileBrowser && styles.hasFileBrowser
-      ),
-      name,
-      value,
-      placeholder,
-      autoComplete: 'off',
-      spellCheck: false,
-      onChange: this.onInputChange,
-      onKeyDown: this.onInputKeyDown,
-      onBlur: this.onInputBlur
-    };
-
-    const theme = {
-      container: styles.pathInputContainer,
-      containerOpen: styles.pathInputContainerOpen,
-      suggestionsContainer: styles.pathContainer,
-      suggestionsList: styles.pathList,
-      suggestion: styles.pathListItem,
-      suggestionHighlighted: styles.pathHighlighted
-    };
-
     return (
       <div className={className}>
-        <Autosuggest
-          id={name}
-          inputProps={inputProps}
-          theme={theme}
+        <AutoSuggestInput
+          {...otherProps}
+          className={hasFileBrowser ? styles.hasFileBrowser : undefined}
+          name={name}
+          value={value}
           suggestions={paths}
           getSuggestionValue={this.getSuggestionValue}
           renderSuggestion={this.renderSuggestion}
+          onInputKeyDown={this.onInputKeyDown}
+          onInputBlur={this.onInputBlur}
           onSuggestionSelected={this.onSuggestionSelected}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          onChange={onChange}
         />
 
         {
@@ -185,14 +160,10 @@ class PathInput extends Component {
 
 PathInput.propTypes = {
   className: PropTypes.string.isRequired,
-  inputClassName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
-  placeholder: PropTypes.string,
   paths: PropTypes.array.isRequired,
   includeFiles: PropTypes.bool.isRequired,
-  hasError: PropTypes.bool,
-  hasWarning: PropTypes.bool,
   hasFileBrowser: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onFetchPaths: PropTypes.func.isRequired,
@@ -200,8 +171,7 @@ PathInput.propTypes = {
 };
 
 PathInput.defaultProps = {
-  className: styles.pathInputWrapper,
-  inputClassName: styles.path,
+  className: styles.inputWrapper,
   value: '',
   hasFileBrowser: true
 };

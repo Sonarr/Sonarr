@@ -1,171 +1,37 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import TetherComponent from 'react-tether';
-import classNames from 'classnames';
-import isMobileUtil from 'Utilities/isMobile';
-import { tooltipPositions } from 'Helpers/Props';
+import React from 'react';
+import Tooltip from './Tooltip';
 import styles from './Popover.css';
 
-const baseTetherOptions = {
-  skipMoveElement: true,
-  constraints: [
-    {
-      to: 'window',
-      attachment: 'together',
-      pin: true
-    }
-  ]
-};
+function Popover(props) {
+  const {
+    title,
+    body,
+    ...otherProps
+  } = props;
 
-const tetherOptions = {
-  [tooltipPositions.TOP]: {
-    ...baseTetherOptions,
-    attachment: 'bottom center',
-    targetAttachment: 'top center'
-  },
+  return (
+    <Tooltip
+      {...otherProps}
+      bodyClassName={styles.tooltipBody}
+      tooltip={
+        <div>
+          <div className={styles.title}>
+            {title}
+          </div>
 
-  [tooltipPositions.RIGHT]: {
-    ...baseTetherOptions,
-    attachment: 'middle left',
-    targetAttachment: 'middle right'
-  },
-
-  [tooltipPositions.BOTTOM]: {
-    ...baseTetherOptions,
-    attachment: 'top center',
-    targetAttachment: 'bottom center'
-  },
-
-  [tooltipPositions.LEFT]: {
-    ...baseTetherOptions,
-    attachment: 'middle right',
-    targetAttachment: 'middle left'
-  }
-};
-
-class Popover extends Component {
-
-  //
-  // Lifecycle
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      isOpen: false
-    };
-
-    this._closeTimeout = null;
-  }
-
-  componentWillUnmount() {
-    if (this._closeTimeout) {
-      this._closeTimeout = clearTimeout(this._closeTimeout);
-    }
-  }
-
-  //
-  // Listeners
-
-  onClick = () => {
-    if (isMobileUtil()) {
-      this.setState({ isOpen: !this.state.isOpen });
-    }
-  }
-
-  onMouseEnter = () => {
-    if (this._closeTimeout) {
-      this._closeTimeout = clearTimeout(this._closeTimeout);
-    }
-
-    this.setState({ isOpen: true });
-  }
-
-  onMouseLeave = () => {
-    this._closeTimeout = setTimeout(() => {
-      this.setState({ isOpen: false });
-    }, 100);
-  }
-
-  //
-  // Render
-
-  render() {
-    const {
-      className,
-      anchor,
-      title,
-      body,
-      position
-    } = this.props;
-
-    return (
-      <TetherComponent
-        classes={{
-          element: styles.tether
-        }}
-        {...tetherOptions[position]}
-        renderTarget={
-          (ref) => (
-            <span
-              ref={ref}
-              className={className}
-              onClick={this.onClick}
-              onMouseEnter={this.onMouseEnter}
-              onMouseLeave={this.onMouseLeave}
-            >
-              {anchor}
-            </span>
-          )
-        }
-        renderElement={
-          (ref) => {
-            if (!this.state.isOpen) {
-              return null;
-            }
-
-            return (
-              <div
-                ref={ref}
-                className={styles.popoverContainer}
-                onMouseEnter={this.onMouseEnter}
-                onMouseLeave={this.onMouseLeave}
-              >
-                <div className={styles.popover}>
-                  <div
-                    className={classNames(
-                      styles.arrow,
-                      styles[position]
-                    )}
-                  />
-
-                  <div className={styles.title}>
-                    {title}
-                  </div>
-
-                  <div className={styles.body}>
-                    {body}
-                  </div>
-                </div>
-              </div>
-            );
-          }
-        }
-      />
-    );
-  }
+          <div className={styles.body}>
+            {body}
+          </div>
+        </div>
+      }
+    />
+  );
 }
 
 Popover.propTypes = {
-  className: PropTypes.string,
-  anchor: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
-  body: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-  position: PropTypes.oneOf(tooltipPositions.all)
-};
-
-Popover.defaultProps = {
-  position: tooltipPositions.TOP
+  body: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired
 };
 
 export default Popover;

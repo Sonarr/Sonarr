@@ -1,11 +1,6 @@
-.tether {
-  z-index: 2000;
-}
-
 .button {
   composes: link from '~Components/Link/Link.css';
 
-  position: relative;
   display: flex;
   align-items: center;
   padding: 6px 16px;
@@ -36,9 +31,10 @@
 }
 
 .contentContainer {
+  z-index: $popperZIndex;
   margin-top: 4px;
-  padding: 0 8px;
-  width: 400px;
+  /* 400px container witdh with 8px padding on each side */
+  width: 384px;
 }
 
 .content {

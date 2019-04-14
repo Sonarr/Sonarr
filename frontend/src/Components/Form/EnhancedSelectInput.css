@@ -1,7 +1,3 @@
-.tether {
-  z-index: 2000;
-}
-
 .enhancedSelect {
   composes: input from '~Components/Form/Input.css';
   composes: link from '~Components/Link/Link.css';
@@ -44,6 +40,7 @@
 }
 
 .optionsContainer {
+  z-index: $popperZIndex;
   width: auto;
 }
 

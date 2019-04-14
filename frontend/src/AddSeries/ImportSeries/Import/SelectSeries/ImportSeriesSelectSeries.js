@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import TetherComponent from 'react-tether';
+import { Manager, Popper, Reference } from 'react-popper';
+import getUniqueElememtId from 'Utilities/getUniqueElementId';
 import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
+import Portal from 'Components/Portal';
 import FormInputButton from 'Components/Form/FormInputButton';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -11,19 +12,6 @@ import TextInput from 'Components/Form/TextInput';
 import ImportSeriesSearchResultConnector from './ImportSeriesSearchResultConnector';
 import ImportSeriesTitle from './ImportSeriesTitle';
 import styles from './ImportSeriesSelectSeries.css';
-
-const tetherOptions = {
-  skipMoveElement: true,
-  constraints: [
-    {
-      to: 'window',
-      attachment: 'together',
-      pin: true
-    }
-  ],
-  attachment: 'top center',
-  targetAttachment: 'bottom center'
-};
 
 class ImportSeriesSelectSeries extends Component {
 
@@ -34,13 +22,20 @@ class ImportSeriesSelectSeries extends Component {
     super(props, context);
 
     this._seriesLookupTimeout = null;
-    this._buttonRef = {};
-    this._contentRef = {};
+    this._scheduleUpdate = null;
+    this._buttonId = getUniqueElememtId();
+    this._contentId = getUniqueElememtId();
 
     this.state = {
       term: props.id,
       isOpen: false
     };
+  }
+
+  componentDidUpdate() {
+    if (this._scheduleUpdate) {
+      this._scheduleUpdate();
+    }
   }
 
   //
@@ -58,8 +53,8 @@ class ImportSeriesSelectSeries extends Component {
   // Listeners
 
   onWindowClick = (event) => {
-    const button = ReactDOM.findDOMNode(this._buttonRef.current);
-    const content = ReactDOM.findDOMNode(this._contentRef.current);
+    const button = document.getElementById(this._buttonId);
+    const content = document.getElementById(this._contentId);
 
     if (!button || !content) {
       return;
@@ -127,150 +122,158 @@ class ImportSeriesSelectSeries extends Component {
       error.responseJSON.message;
 
     return (
-      <TetherComponent
-        classes={{
-          element: styles.tether
-        }}
-        {...tetherOptions}
-        renderTarget={
-          (ref) => {
-            this._buttonRef = ref;
+      <Manager>
+        <Reference>
+          {({ ref }) => (
+            <div
+              ref={ref}
+              id={this._buttonId}
+            >
+              <Link
+                ref={ref}
+                className={styles.button}
+                component="div"
+                onPress={this.onPress}
+              >
+                {
+                  isLookingUpSeries && isQueued && !isPopulated ?
+                    <LoadingIndicator
+                      className={styles.loading}
+                      size={20}
+                    /> :
+                    null
+                }
 
-            return (
-              <div ref={ref}>
-                <Link
-                  className={styles.button}
-                  component="div"
-                  onPress={this.onPress}
-                >
-                  {
-                    isLookingUpSeries && isQueued && !isPopulated ?
-                      <LoadingIndicator
-                        className={styles.loading}
-                        size={20}
-                      /> :
-                      null
-                  }
+                {
+                  isPopulated && selectedSeries && isExistingSeries ?
+                    <Icon
+                      className={styles.warningIcon}
+                      name={icons.WARNING}
+                      kind={kinds.WARNING}
+                    /> :
+                    null
+                }
 
-                  {
-                    isPopulated && selectedSeries && isExistingSeries ?
+                {
+                  isPopulated && selectedSeries ?
+                    <ImportSeriesTitle
+                      title={selectedSeries.title}
+                      year={selectedSeries.year}
+                      network={selectedSeries.network}
+                      isExistingSeries={isExistingSeries}
+                    /> :
+                    null
+                }
+
+                {
+                  isPopulated && !selectedSeries ?
+                    <div className={styles.noMatches}>
                       <Icon
                         className={styles.warningIcon}
                         name={icons.WARNING}
                         kind={kinds.WARNING}
-                      /> :
-                      null
-                  }
-
-                  {
-                    isPopulated && selectedSeries ?
-                      <ImportSeriesTitle
-                        title={selectedSeries.title}
-                        year={selectedSeries.year}
-                        network={selectedSeries.network}
-                        isExistingSeries={isExistingSeries}
-                      /> :
-                      null
-                  }
-
-                  {
-                    isPopulated && !selectedSeries ?
-                      <div className={styles.noMatches}>
-                        <Icon
-                          className={styles.warningIcon}
-                          name={icons.WARNING}
-                          kind={kinds.WARNING}
-                        />
+                      />
 
                 No match found!
-                      </div> :
-                      null
-                  }
+                    </div> :
+                    null
+                }
 
-                  {
-                    !isFetching && !!error ?
-                      <div>
-                        <Icon
-                          className={styles.warningIcon}
-                          title={errorMessage}
-                          name={icons.WARNING}
-                          kind={kinds.WARNING}
-                        />
+                {
+                  !isFetching && !!error ?
+                    <div>
+                      <Icon
+                        className={styles.warningIcon}
+                        title={errorMessage}
+                        name={icons.WARNING}
+                        kind={kinds.WARNING}
+                      />
 
                 Search failed, please try again later.
+                    </div> :
+                    null
+                }
+
+                <div className={styles.dropdownArrowContainer}>
+                  <Icon
+                    name={icons.CARET_DOWN}
+                  />
+                </div>
+              </Link>
+            </div>
+          )}
+        </Reference>
+
+        <Portal>
+          <Popper
+            placement="bottom"
+            modifiers={{
+              preventOverflow: {
+                boundariesElement: 'viewport'
+              }
+            }}
+          >
+            {({ ref, style, scheduleUpdate }) => {
+              this._scheduleUpdate = scheduleUpdate;
+
+              return (
+                <div
+                  ref={ref}
+                  id={this._contentId}
+                  className={styles.contentContainer}
+                  style={style}
+                >
+                  {
+                    this.state.isOpen ?
+                      <div className={styles.content}>
+                        <div className={styles.searchContainer}>
+                          <div className={styles.searchIconContainer}>
+                            <Icon name={icons.SEARCH} />
+                          </div>
+
+                          <TextInput
+                            className={styles.searchInput}
+                            name={`${name}_textInput`}
+                            value={this.state.term}
+                            onChange={this.onSearchInputChange}
+                          />
+
+                          <FormInputButton
+                            kind={kinds.DEFAULT}
+                            spinnerIcon={icons.REFRESH}
+                            canSpin={true}
+                            isSpinning={isFetching}
+                            onPress={this.onRefreshPress}
+                          >
+                            <Icon name={icons.REFRESH} />
+                          </FormInputButton>
+                        </div>
+
+                        <div className={styles.results}>
+                          {
+                            items.map((item) => {
+                              return (
+                                <ImportSeriesSearchResultConnector
+                                  key={item.tvdbId}
+                                  tvdbId={item.tvdbId}
+                                  title={item.title}
+                                  year={item.year}
+                                  network={item.network}
+                                  onPress={this.onSeriesSelect}
+                                />
+                              );
+                            })
+                          }
+                        </div>
                       </div> :
                       null
                   }
-
-                  <div className={styles.dropdownArrowContainer}>
-                    <Icon
-                      name={icons.CARET_DOWN}
-                    />
-                  </div>
-                </Link>
-              </div>
-            );
-          }
-        }
-        renderElement={
-          (ref) => {
-            this._contentRef = ref;
-
-            if (!this.state.isOpen) {
-              return;
-            }
-
-            return (
-              <div
-                ref={ref}
-                className={styles.contentContainer}
-              >
-                <div className={styles.content}>
-                  <div className={styles.searchContainer}>
-                    <div className={styles.searchIconContainer}>
-                      <Icon name={icons.SEARCH} />
-                    </div>
-
-                    <TextInput
-                      className={styles.searchInput}
-                      name={`${name}_textInput`}
-                      value={this.state.term}
-                      onChange={this.onSearchInputChange}
-                    />
-
-                    <FormInputButton
-                      kind={kinds.DEFAULT}
-                      spinnerIcon={icons.REFRESH}
-                      canSpin={true}
-                      isSpinning={isFetching}
-                      onPress={this.onRefreshPress}
-                    >
-                      <Icon name={icons.REFRESH} />
-                    </FormInputButton>
-                  </div>
-
-                  <div className={styles.results}>
-                    {
-                      items.map((item) => {
-                        return (
-                          <ImportSeriesSearchResultConnector
-                            key={item.tvdbId}
-                            tvdbId={item.tvdbId}
-                            title={item.title}
-                            year={item.year}
-                            network={item.network}
-                            onPress={this.onSeriesSelect}
-                          />
-                        );
-                      })
-                    }
-                  </div>
                 </div>
-              </div>
-            );
-          }
-        }
-      />
+              );
+            }}
+          </Popper>
+        </Portal>
+      </Manager>
     );
   }
 }

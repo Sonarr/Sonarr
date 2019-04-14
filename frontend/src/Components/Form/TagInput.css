@@ -1,5 +1,5 @@
-.inputContainer {
-  composes: input from '~Components/Form/Input.css';
+.input {
+  composes: input from '~./AutoSuggestInput.css';
 
   position: relative;
   padding: 0;
@@ -13,20 +13,7 @@
   }
 }
 
-.hasError {
-  composes: hasError from '~Components/Form/Input.css';
-}
-
-.hasWarning {
-  composes: hasWarning from '~Components/Form/Input.css';
-}
-
-.tags {
-  flex: 0 0 auto;
-  max-width: 100%;
-}
-
-.input {
+.internalInput {
   flex: 1 1 0%;
   margin-left: 3px;
   min-width: 20%;
@@ -34,45 +21,4 @@
   width: 0%;
   height: 21px;
   border: none;
-}
-
-.suggestionsContainer {
-  @add-mixin scrollbar;
-  @add-mixin scrollbarTrack;
-  @add-mixin scrollbarThumb;
-}
-
-.containerOpen {
-  .suggestionsContainer {
-    position: absolute;
-    right: -1px;
-    left: -1px;
-    z-index: 1;
-    overflow-y: auto;
-    margin-top: 1px;
-    max-height: 110px;
-    border: 1px solid $inputBorderColor;
-    border-radius: 4px;
-    background-color: $white;
-    box-shadow: inset 0 1px 1px $inputBoxShadowColor;
-  }
-}
-
-.suggestionsList {
-  margin: 5px 0;
-  padding-left: 0;
-  list-style-type: none;
-}
-
-.suggestion {
-  padding: 0 16px;
-  cursor: default;
-
-  &:hover {
-    background-color: $menuItemHoverBackgroundColor;
-  }
-}
-
-.suggestionHighlighted {
-  background-color: $menuItemHoverBackgroundColor;
 }

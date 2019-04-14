@@ -1,4 +1,5 @@
 .menuContent {
+  z-index: $popperZIndex;
   display: flex;
   flex-direction: column;
   background-color: $toolbarMenuItemBackgroundColor;

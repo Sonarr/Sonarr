@@ -47,6 +47,7 @@ class DeviceInput extends Component {
   render() {
     const {
       className,
+      name,
       items,
       selectedDevices,
       hasError,
@@ -58,7 +59,8 @@ class DeviceInput extends Component {
     return (
       <div className={className}>
         <TagInput
-          className={styles.inputContainer}
+          inputContainerClassName={styles.input}
+          name={name}
           tags={selectedDevices}
           tagList={items}
           allowNew={true}

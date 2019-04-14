@@ -28,7 +28,7 @@ class Modal extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this._node = document.getElementById('modal-root');
+    this._node = document.getElementById('portal-root');
     this._backgroundRef = null;
     this._modalId = getUniqueElememtId();
   }

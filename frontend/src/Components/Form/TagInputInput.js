@@ -23,6 +23,7 @@ class TagInputInput extends Component {
 
   render() {
     const {
+      forwardedRef,
       className,
       tags,
       inputProps,
@@ -33,6 +34,7 @@ class TagInputInput extends Component {
 
     return (
       <div
+        ref={forwardedRef}
         className={className}
         component="div"
         onMouseDown={this.onMouseDown}
@@ -59,6 +61,7 @@ class TagInputInput extends Component {
 }
 
 TagInputInput.propTypes = {
+  forwardedRef: PropTypes.func,
   className: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.shape(tagShape)).isRequired,
   inputProps: PropTypes.object.isRequired,

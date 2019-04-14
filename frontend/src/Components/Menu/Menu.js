@@ -1,32 +1,31 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import TetherComponent from 'react-tether';
+import { Manager, Popper, Reference } from 'react-popper';
+import getUniqueElememtId from 'Utilities/getUniqueElementId';
 import { align } from 'Helpers/Props';
+import Portal from 'Components/Portal';
 import styles from './Menu.css';
 
-const baseTetherOptions = {
-  skipMoveElement: true,
-  constraints: [
-    {
-      to: 'window',
-      attachment: 'together',
-      pin: true
+const sharedPopperOptions = {
+  modifiers: {
+    preventOverflow: {
+      padding: 0
+    },
+    flip: {
+      padding: 0
     }
-  ]
+  }
 };
 
-const tetherOptions = {
+const popperOptions = {
   [align.RIGHT]: {
-    ...baseTetherOptions,
-    attachment: 'top right',
-    targetAttachment: 'bottom right'
+    ...sharedPopperOptions,
+    placement: 'bottom-end'
   },
 
   [align.LEFT]: {
-    ...baseTetherOptions,
-    attachment: 'top left',
-    targetAttachment: 'bottom left'
+    ...sharedPopperOptions,
+    placement: 'bottom-start'
   }
 };
 
@@ -38,8 +37,8 @@ class Menu extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this._menuRef = {};
-    this._menuContentRef = {};
+    this._scheduleUpdate = null;
+    this._menuButtonId = getUniqueElememtId();
 
     this.state = {
       isMenuOpen: false,
@@ -49,6 +48,12 @@ class Menu extends Component {
 
   componentDidMount() {
     this.setMaxHeight();
+  }
+
+  componentDidUpdate() {
+    if (this._scheduleUpdate) {
+      this._scheduleUpdate();
+    }
   }
 
   componentWillUnmount() {
@@ -63,13 +68,13 @@ class Menu extends Component {
       return;
     }
 
-    const menu = ReactDOM.findDOMNode(this._menuRef.current);
+    const menuButton = document.getElementById(this._menuButtonId);
 
-    if (!menu) {
+    if (!menuButton) {
       return;
     }
 
-    const { bottom } = menu.getBoundingClientRect();
+    const { bottom } = menuButton.getBoundingClientRect();
     const maxHeight = window.innerHeight - bottom;
 
     return maxHeight;
@@ -106,14 +111,13 @@ class Menu extends Component {
   // Listeners
 
   onWindowClick = (event) => {
-    const menu = ReactDOM.findDOMNode(this._menuRef.current);
-    const menuContent = ReactDOM.findDOMNode(this._menuContentRef.current);
+    const menuButton = document.getElementById(this._menuButtonId);
 
-    if (!menu || !menuContent) {
+    if (!menuButton) {
       return;
     }
 
-    if ((!menu.contains(event.target) || menuContent.contains(event.target)) && this.state.isMenuOpen) {
+    if (!menuButton.contains(event.target) && this.state.isMenuOpen) {
       this.setState({ isMenuOpen: false });
       this._removeListener();
     }
@@ -124,17 +128,9 @@ class Menu extends Component {
   }
 
   onWindowScroll = (event) => {
-    if (!this._menuContentRef.current) {
-      return;
+    if (this.state.isMenuOpen) {
+      this.setMaxHeight();
     }
-
-    const menuContent = ReactDOM.findDOMNode(this._menuContentRef.current);
-
-    if (menuContent && menuContent.contains(event.target)) {
-      return;
-    }
-
-    this.setMaxHeight();
   }
 
   onMenuButtonPress = () => {
@@ -176,45 +172,39 @@ class Menu extends Component {
     );
 
     return (
-      <TetherComponent
-        classes={{
-          element: styles.tether
-        }}
-        {...tetherOptions[alignMenu]}
-        renderTarget={
-          (ref) => {
-            this._menuRef = ref;
+      <Manager>
+        <Reference>
+          {({ ref }) => (
+            <div
+              ref={ref}
+              id={this._menuButtonId}
+              className={className}
+            >
+              {button}
+            </div>
+          )}
+        </Reference>
 
-            return (
-              <div
-                ref={ref}
-                className={className}
-              >
-                {button}
-              </div>
-            );
-          }
-        }
-        renderElement={
-          (ref) => {
-            this._menuContentRef = ref;
+        <Portal>
+          <Popper {...popperOptions[alignMenu]}>
+            {({ ref, style, scheduleUpdate }) => {
+              this._scheduleUpdate = scheduleUpdate;
 
-            if (!isMenuOpen) {
-              return null;
-            }
-
-            return React.cloneElement(
-              childrenArray[1],
-              {
-                ref,
-                alignMenu,
-                maxHeight,
-                isOpen: isMenuOpen
-              }
-            );
-          }
-        }
-      />
+              return React.cloneElement(
+                childrenArray[1],
+                {
+                  forwardedRef: ref,
+                  style: {
+                    ...style,
+                    maxHeight
+                  },
+                  isOpen: isMenuOpen
+                }
+              );
+            }}
+          </Popper>
+        </Portal>
+      </Manager>
     );
   }
 }

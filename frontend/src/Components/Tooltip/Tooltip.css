@@ -1,8 +1,5 @@
-.tether {
-  z-index: 2000;
-}
-
 .tooltipContainer {
+  z-index: $popperZIndex;
   margin: 10px 15px;
 }
 

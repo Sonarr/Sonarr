@@ -10,30 +10,37 @@ class MenuContent extends Component {
 
   render() {
     const {
+      forwardedRef,
       className,
       children,
-      maxHeight
+      style,
+      isOpen
     } = this.props;
 
     return (
       <div
+        ref={forwardedRef}
         className={className}
-        style={{
-          maxHeight: maxHeight ? `${maxHeight}px` : undefined
-        }}
+        style={style}
       >
-        <Scroller className={styles.scroller}>
-          {children}
-        </Scroller>
+        {
+          isOpen ?
+            <Scroller className={styles.scroller}>
+              {children}
+            </Scroller> :
+            null
+        }
       </div>
     );
   }
 }
 
 MenuContent.propTypes = {
+  forwardedRef: PropTypes.func,
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
-  maxHeight: PropTypes.number
+  style: PropTypes.object,
+  isOpen: PropTypes.bool
 };
 
 MenuContent.defaultProps = {

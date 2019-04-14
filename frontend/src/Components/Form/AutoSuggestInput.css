@@ -10,25 +10,20 @@
   composes: hasWarning from '~Components/Form/Input.css';
 }
 
-.inputWrapper {
-  display: flex;
-}
-
 .inputContainer {
-  position: relative;
   flex-grow: 1;
 }
 
-.container {
+.suggestionsContainer {
   @add-mixin scrollbar;
   @add-mixin scrollbarTrack;
   @add-mixin scrollbarThumb;
 }
 
-.inputContainerOpen {
-  .container {
-    position: absolute;
-    z-index: 1;
+.suggestionsContainerOpen {
+  z-index: $popperZIndex;
+
+  .suggestionsContainer {
     overflow-y: auto;
     max-height: 200px;
     width: 100%;
@@ -39,20 +34,16 @@
   }
 }
 
-.list {
+.suggestionsList {
   margin: 5px 0;
   padding-left: 0;
   list-style-type: none;
 }
 
-.listItem {
+.suggestion {
   padding: 0 16px;
 }
 
-.match {
-  font-weight: bold;
-}
-
-.highlighted {
+.suggestionHighlighted {
   background-color: $menuItemHoverBackgroundColor;
 }

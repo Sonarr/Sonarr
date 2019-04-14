@@ -19,7 +19,8 @@ const cssVarsFiles = [
   '../src/Styles/Variables/colors',
   '../src/Styles/Variables/dimensions',
   '../src/Styles/Variables/fonts',
-  '../src/Styles/Variables/animations'
+  '../src/Styles/Variables/animations',
+  '../src/Styles/Variables/zIndexes'
 ].map(require.resolve);
 
 const plugins = [
