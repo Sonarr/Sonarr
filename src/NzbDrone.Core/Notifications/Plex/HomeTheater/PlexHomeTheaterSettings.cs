@@ -13,22 +13,22 @@ namespace NzbDrone.Core.Notifications.Plex.HomeTheater
 
         //These need to be kept in the same order as XBMC Settings, but we don't want them displayed
 
-        [FieldDefinition(2, Label = "Username", Type = FieldType.Hidden)]
+        [FieldDefinition(2, Label = "Username", Hidden = HiddenType.Hidden)]
         public new string Username { get; set; }
 
-        [FieldDefinition(3, Label = "Password", Type = FieldType.Hidden)]
+        [FieldDefinition(3, Label = "Password", Hidden = HiddenType.Hidden)]
         public new string Password { get; set; }
 
-        [FieldDefinition(5, Label = "GUI Notification", Type = FieldType.Hidden)]
+        [FieldDefinition(5, Label = "GUI Notification", Type = FieldType.Checkbox, Hidden = HiddenType.Hidden)]
         public new bool Notify { get; set; }
 
-        [FieldDefinition(6, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Hidden)]
+        [FieldDefinition(6, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Checkbox, Hidden = HiddenType.Hidden)]
         public new bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(7, Label = "Clean Library", HelpText = "Clean Library after update?", Type = FieldType.Hidden)]
+        [FieldDefinition(7, Label = "Clean Library", HelpText = "Clean Library after update?", Type = FieldType.Checkbox, Hidden = HiddenType.Hidden)]
         public new bool CleanLibrary { get; set; }
 
-        [FieldDefinition(8, Label = "Always Update", HelpText = "Update Library even when a video is playing?", Type = FieldType.Hidden)]
+        [FieldDefinition(8, Label = "Always Update", HelpText = "Update Library even when a video is playing?", Type = FieldType.Checkbox, Hidden = HiddenType.Hidden)]
         public new bool AlwaysUpdate { get; set; }
     }
 }

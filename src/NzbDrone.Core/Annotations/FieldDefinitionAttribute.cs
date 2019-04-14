@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Annotations
         public bool Advanced { get; set; }
         public Type SelectOptions { get; set; }
         public string Section { get; set; }
+        public HiddenType Hidden { get; set; }
     }
 
     public enum FieldType
@@ -30,13 +31,18 @@ namespace NzbDrone.Core.Annotations
         Select,
         Path,
         FilePath,
-        Hidden,
         Tag,
         Action,
         Url,
         Captcha,
         OAuth,
-        Device,
-        FileSelect
+        Device
+    }
+
+    public enum HiddenType
+    {
+        Visible,
+        Hidden,
+        HiddenIfNotSet
     }
 }

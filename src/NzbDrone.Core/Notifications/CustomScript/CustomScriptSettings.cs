@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
         public CustomScriptSettingsValidator()
         {
             RuleFor(c => c.Path).IsValidPath();
+            RuleFor(c => c.Arguments).Empty().WithMessage("Arguments are no longer supported for custom scripts");
         }
     }
 
@@ -18,10 +19,10 @@ namespace NzbDrone.Core.Notifications.CustomScript
     {
         private static readonly CustomScriptSettingsValidator Validator = new CustomScriptSettingsValidator();
 
-        [FieldDefinition(0, Label = "Path", Type = FieldType.FileSelect, HelpText = "Options are limited to the scripts folder in General settings")]
+        [FieldDefinition(0, Label = "Path", Type = FieldType.FilePath)]
         public string Path { get; set; }
 
-        [FieldDefinition(1, Label = "Arguments", HelpText = "Arguments to pass to the script")]
+        [FieldDefinition(1, Label = "Arguments", HelpText = "Arguments to pass to the script", Hidden = HiddenType.HiddenIfNotSet)]
         public string Arguments { get; set; }
 
         public NzbDroneValidationResult Validate()

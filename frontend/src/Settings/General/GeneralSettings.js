@@ -13,7 +13,6 @@ import BackupSettings from './BackupSettings';
 import HostSettings from './HostSettings';
 import LoggingSettings from './LoggingSettings';
 import ProxySettings from './ProxySettings';
-import ScriptSettings from './ScriptSettings';
 import SecuritySettings from './SecuritySettings';
 import UpdateSettings from './UpdateSettings';
 
@@ -169,12 +168,6 @@ class GeneralSettings extends Component {
                 />
 
                 <BackupSettings
-                  advancedSettings={advancedSettings}
-                  settings={settings}
-                  onInputChange={onInputChange}
-                />
-
-                <ScriptSettings
                   advancedSettings={advancedSettings}
                   settings={settings}
                   onInputChange={onInputChange}
