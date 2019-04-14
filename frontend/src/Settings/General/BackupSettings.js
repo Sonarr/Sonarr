@@ -32,7 +32,7 @@ function BackupSettings(props) {
         <FormLabel>Folder</FormLabel>
 
         <FormInputGroup
-          type={inputTypes.TEXT}
+          type={inputTypes.PATH}
           name="backupFolder"
           helpText="Relative paths will be under Sonarr's AppData directory"
           onChange={onInputChange}
