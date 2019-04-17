@@ -110,7 +110,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 if (series == null)
                 {
-                    series = trackedDownload.RemoteEpisode.Series;
+                    series = trackedDownload.RemoteEpisode?.Series;
                 }
             }
 
