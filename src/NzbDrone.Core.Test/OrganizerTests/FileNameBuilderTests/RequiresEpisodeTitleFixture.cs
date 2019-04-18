@@ -47,6 +47,13 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         [Test]
+        public void should_return_false_if_renaming_episodes_is_off()
+        {
+            _namingConfig.RenameEpisodes = false;
+            Subject.RequiresEpisodeTitle(_series, new List<Episode> { _episode }).Should().BeFalse();
+        }
+
+        [Test]
         public void should_return_true_when_episode_title_is_part_of_the_pattern()
         {
             Subject.RequiresEpisodeTitle(_series, new List<Episode> { _episode }).Should().BeTrue();

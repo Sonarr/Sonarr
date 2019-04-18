@@ -332,6 +332,11 @@ namespace NzbDrone.Core.Organizer
             var namingConfig = _namingConfigService.GetConfig();
             var pattern = namingConfig.StandardEpisodeFormat;
 
+            if (!namingConfig.RenameEpisodes)
+            {
+                return false;
+            }
+
             if (series.SeriesType == SeriesTypes.Daily)
             {
                 pattern = namingConfig.DailyEpisodeFormat;
