@@ -286,6 +286,12 @@ namespace NzbDrone.Core.Organizer
 
         public static string TitleYear(string title, int year)
         {
+            // Don't use 0 for the year.
+            if (year == 0)
+            {
+                return title;
+            }
+
             // Regex match incase the year in the title doesn't match the year, for whatever reason.
             if (YearRegex.IsMatch(title))
             {

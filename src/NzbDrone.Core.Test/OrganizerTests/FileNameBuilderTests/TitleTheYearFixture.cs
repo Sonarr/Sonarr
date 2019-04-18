@@ -59,5 +59,16 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
                    .Should().Be(expected);
         }
+
+        [Test]
+        public void should_not_include_0_for_year()
+        {
+            _series.Title = "The Alienist";
+            _series.Year = 0;
+            _namingConfig.StandardEpisodeFormat = "{Series TitleTheYear}";
+
+            Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
+                   .Should().Be("Alienist, The");
+        }
     }
 }
