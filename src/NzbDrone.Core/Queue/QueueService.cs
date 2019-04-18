@@ -77,7 +77,8 @@ namespace NzbDrone.Core.Queue
                 DownloadId = trackedDownload.DownloadItem.DownloadId,
                 Protocol = trackedDownload.Protocol,
                 DownloadClient = trackedDownload.DownloadItem.DownloadClient,
-                Indexer = trackedDownload.Indexer
+                Indexer = trackedDownload.Indexer,
+                OutputPath = trackedDownload.DownloadItem.OutputPath.ToString()
             };
 
             if (episode != null)

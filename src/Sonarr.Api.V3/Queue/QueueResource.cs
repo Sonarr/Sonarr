@@ -32,6 +32,7 @@ namespace Sonarr.Api.V3.Queue
         public DownloadProtocol Protocol { get; set; }
         public string DownloadClient { get; set; }
         public string Indexer { get; set; }
+        public string OutputPath { get; set; }
     }
 
     public static class QueueResourceMapper
@@ -61,7 +62,8 @@ namespace Sonarr.Api.V3.Queue
                 DownloadId = model.DownloadId,
                 Protocol = model.Protocol,
                 DownloadClient = model.DownloadClient,
-                Indexer = model.Indexer
+                Indexer = model.Indexer,
+                OutputPath = model.OutputPath
             };
         }
 
