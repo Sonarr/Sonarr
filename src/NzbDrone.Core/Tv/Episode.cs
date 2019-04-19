@@ -29,6 +29,8 @@ namespace NzbDrone.Core.Tv
         public int? SceneAbsoluteEpisodeNumber { get; set; }
         public int? SceneSeasonNumber { get; set; }
         public int? SceneEpisodeNumber { get; set; }
+        public int? DisplaySeasonNumber { get; set; }
+        public int? DisplayEpisodeNumber { get; set; }
         public bool UnverifiedSceneNumbering { get; set; }
         public Ratings Ratings { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }

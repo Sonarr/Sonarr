@@ -1236,6 +1236,7 @@
     <Compile Include="Validation\UrlValidator.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrentProxyV2.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrentProxySelector.cs" />
+    <Compile Include="Datastore\Migration\131_add_displayseasonnumber_and_displayepisodenumber_to_episodes.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
