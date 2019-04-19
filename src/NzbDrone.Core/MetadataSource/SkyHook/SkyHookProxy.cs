@@ -211,6 +211,8 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             episode.EpisodeNumber = oracleEpisode.EpisodeNumber;
             episode.AbsoluteEpisodeNumber = oracleEpisode.AbsoluteEpisodeNumber;
             episode.Title = oracleEpisode.Title;
+            episode.DisplaySeasonNumber = oracleEpisode.DisplaySeasonNumber;
+            episode.DisplayEpisodeNumber = oracleEpisode.DisplayEpisodeNumber;
 
             episode.AirDate = oracleEpisode.AirDate;
             episode.AirDateUtc = oracleEpisode.AirDateUtc;
