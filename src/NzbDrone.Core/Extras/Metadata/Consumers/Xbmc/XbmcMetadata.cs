@@ -241,9 +241,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     details.Add(new XElement("aired", episode.AirDate));
                     details.Add(new XElement("plot", episode.Overview));
 
-                    //If trakt ever gets airs before information for specials we should add set it
-                    details.Add(new XElement("displayseason"));
-                    details.Add(new XElement("displayepisode"));
+                    details.Add(new XElement("displayseason", episode.DisplaySeasonNumber ?? -1));
+                    details.Add(new XElement("displayepisode", episode.DisplayEpisodeNumber ?? (episode.DisplaySeasonNumber != null ? 4096 : -1)));
 
                     if (image == null)
                     {
