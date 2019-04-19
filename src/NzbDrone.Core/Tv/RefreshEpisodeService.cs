@@ -66,6 +66,9 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
                     episodeToUpdate.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber;
+                    episodeToUpdate.AiredAfterSeasonNumber = episode.AiredAfterSeasonNumber;
+                    episodeToUpdate.AiredBeforeSeasonNumber = episode.AiredBeforeSeasonNumber;
+                    episodeToUpdate.AiredBeforeEpisodeNumber = episode.AiredBeforeEpisodeNumber;
                     episodeToUpdate.Title = episode.Title ?? "TBA";
                     episodeToUpdate.Overview = episode.Overview;
                     episodeToUpdate.AirDate = episode.AirDate;

@@ -255,10 +255,16 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     details.Add(new XElement("aired", episode.AirDate));
                     details.Add(new XElement("plot", episode.Overview));
 
-                    //If trakt ever gets airs before information for specials we should add set it
-                    details.Add(new XElement("displayseason"));
-                    details.Add(new XElement("displayepisode"));
-
+                    if (episode.SeasonNumber == 0 && episode.AiredAfterSeasonNumber.HasValue)
+                    {
+                        details.Add(new XElement("displayafterseason", episode.AiredAfterSeasonNumber));
+                    }
+                    else if (episode.SeasonNumber == 0 && episode.AiredBeforeSeasonNumber.HasValue)
+                    {
+                        details.Add(new XElement("displayseason", episode.AiredBeforeSeasonNumber));
+                        details.Add(new XElement("displayepisode", episode.AiredBeforeEpisodeNumber ?? -1));
+                    }
+                    
                     var uniqueId = new XElement("uniqueid", episode.Id);
                     uniqueId.SetAttributeValue("type", "sonarr");
                     uniqueId.SetAttributeValue("default", true);
