@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.Width.Should().Be(480);
             info.VideoColourPrimaries.Should().Be("BT.601 NTSC");
             info.VideoTransferCharacteristics.Should().Be("BT.709");
-            info.AudioAdditionalFeatures.Should().Be("");
+            info.AudioAdditionalFeatures.Should().BeOneOf("", "LC");
 
         }
 
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.Width.Should().Be(480);
             info.VideoColourPrimaries.Should().Be("BT.601 NTSC");
             info.VideoTransferCharacteristics.Should().Be("BT.709");
-            info.AudioAdditionalFeatures.Should().Be("");
+            info.AudioAdditionalFeatures.Should().BeOneOf("", "LC");
         }
 
         [Test]
