@@ -119,12 +119,6 @@ namespace NzbDrone.Core.Tv
 
         private void AdjustMultiEpisodeAirTime(Series series, IEnumerable<Episode> allEpisodes)
         {
-            if (series.Network == "Netflix")
-            {
-                _logger.Debug("Not adjusting episode air times for Netflix series {0}", series.Title);
-                return;
-            }
-
             var groups = allEpisodes.Where(c => c.AirDateUtc.HasValue)
                                     .GroupBy(e => new { e.SeasonNumber, e.AirDate })
                                     .Where(g => g.Count() > 1)
@@ -132,6 +126,12 @@ namespace NzbDrone.Core.Tv
 
             foreach (var group in groups)
             {
+                if (group.Key.SeasonNumber != 0 && group.Count() > 3)
+                {
+                    _logger.Debug("Not adjusting multi-episode air times for series {0} season {1} since more than 3 episodes 'aired' on the same day", series.Title, group.Key.SeasonNumber);
+                    continue;
+                }
+
                 var episodeCount = 0;
 
                 foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))

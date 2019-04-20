@@ -328,13 +328,14 @@ namespace NzbDrone.Core.Test.TvTests
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
                 .Returns(new List<Episode>());
 
+            var now = DateTime.UtcNow;
             var series = GetSeries();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
                                            .All()
                                            .With(e => e.SeasonNumber = 1)
-                                           .With(e => e.AirDate = DateTime.Now.ToShortDateString())
-                                           .With(e => e.AirDateUtc = DateTime.UtcNow)
+                                           .With(e => e.AirDate = now.ToShortDateString())
+                                           .With(e => e.AirDateUtc = now)
                                            .Build()
                                            .ToList();
 
@@ -345,19 +346,19 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_not_update_air_date_when_multiple_episodes_air_on_the_same_day_for_netflix()
+        public void should_not_update_air_date_when_more_than_three_episodes_air_on_the_same_day()
         {
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
                 .Returns(new List<Episode>());
 
+            var now = DateTime.UtcNow;
             var series = GetSeries();
-            series.Network = "Netflix";
 
-            var episodes = Builder<Episode>.CreateListOfSize(2)
+            var episodes = Builder<Episode>.CreateListOfSize(4)
                                            .All()
                                            .With(e => e.SeasonNumber = 1)
-                                           .With(e => e.AirDate = DateTime.Now.ToShortDateString())
-                                           .With(e => e.AirDateUtc = DateTime.UtcNow)
+                                           .With(e => e.AirDate = now.ToShortDateString())
+                                           .With(e => e.AirDateUtc = now)
                                            .Build()
                                            .ToList();
 
