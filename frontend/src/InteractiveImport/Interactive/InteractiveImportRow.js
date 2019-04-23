@@ -211,6 +211,7 @@ class InteractiveImportRow extends Component {
 
         <TableRowCellButton
           isDisabled={!allowSeriesChange}
+          title={allowSeriesChange ? 'Click to change series' : undefined}
           onPress={this.onSelectSeriesPress}
         >
           {
@@ -220,6 +221,7 @@ class InteractiveImportRow extends Component {
 
         <TableRowCellButton
           isDisabled={!series}
+          title={series ? 'Click to change season' : undefined}
           onPress={this.onSelectSeasonPress}
         >
           {
@@ -229,6 +231,7 @@ class InteractiveImportRow extends Component {
 
         <TableRowCellButton
           isDisabled={!series || isNaN(seasonNumber)}
+          title={series && !isNaN(seasonNumber) ? 'Click to change episode' : undefined}
           onPress={this.onSelectEpisodePress}
         >
           {
@@ -238,6 +241,7 @@ class InteractiveImportRow extends Component {
 
         <TableRowCellButton
           className={styles.quality}
+          title="Click to change quality"
           onPress={this.onSelectQualityPress}
         >
           {
@@ -256,6 +260,7 @@ class InteractiveImportRow extends Component {
 
         <TableRowCellButton
           className={styles.language}
+          title="Click to change language"
           onPress={this.onSelectLanguagePress}
         >
           {

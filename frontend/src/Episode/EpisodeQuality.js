@@ -5,6 +5,10 @@ import { kinds } from 'Helpers/Props';
 import Label from 'Components/Label';
 
 function getTooltip(title, quality, size) {
+  if (!title) {
+    return;
+  }
+
   const revision = quality.revision;
 
   if (revision.real && revision.real > 0) {
