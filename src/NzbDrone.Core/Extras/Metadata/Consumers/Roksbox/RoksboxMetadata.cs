@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             if (image == null)
             {
                 _logger.Trace("Failed to find suitable Series image for series {0}.", series.Title);
-                return null;
+                return new List<ImageFileResult>();
             }
 
             var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType);
