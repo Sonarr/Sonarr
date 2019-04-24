@@ -3,10 +3,12 @@ import React, { Component } from 'react';
 import ReactSlider from 'react-slider';
 import formatBytes from 'Utilities/Number/formatBytes';
 import roundNumber from 'Utilities/Number/roundNumber';
-import { kinds } from 'Helpers/Props';
+import { kinds, tooltipPositions } from 'Helpers/Props';
 import Label from 'Components/Label';
 import NumberInput from 'Components/Form/NumberInput';
 import TextInput from 'Components/Form/TextInput';
+import Popover from 'Components/Tooltip/Popover';
+import QualityDefinitionLimits from './QualityDefinitionLimits';
 import styles from './QualityDefinition.css';
 
 const MIN = 0;
@@ -139,12 +141,10 @@ class QualityDefinition extends Component {
     } = this.state;
 
     const minBytes = minSize * 1024 * 1024;
-    const minThirty = formatBytes(minBytes * 30, 2);
-    const minSixty = formatBytes(minBytes * 60, 2);
+    const minSixty = `${formatBytes(minBytes * 60, 2)}/h`;
 
     const maxBytes = maxSize && maxSize * 1024 * 1024;
-    const maxThirty = maxBytes ? formatBytes(maxBytes * 30, 2) : 'Unlimited';
-    const maxSixty = maxBytes ? formatBytes(maxBytes * 60, 2) : 'Unlimited';
+    const maxSixty = maxBytes ? `${formatBytes(maxBytes * 60, 2)}/h` : 'Unlimited';
 
     return (
       <div className={styles.qualityDefinition}>
@@ -178,13 +178,35 @@ class QualityDefinition extends Component {
 
           <div className={styles.sizes}>
             <div>
-              <Label kind={kinds.WARNING}>{minThirty}</Label>
-              <Label kind={kinds.INFO}>{minSixty}</Label>
+              <Popover
+                anchor={
+                  <Label kind={kinds.INFO}>{minSixty}</Label>
+                }
+                title="Minimum Limits"
+                body={
+                  <QualityDefinitionLimits
+                    bytes={minBytes}
+                    message="No minimum for any runtime"
+                  />
+                }
+                position={tooltipPositions.BOTTOM}
+              />
             </div>
 
             <div>
-              <Label kind={kinds.WARNING}>{maxThirty}</Label>
-              <Label kind={kinds.INFO}>{maxSixty}</Label>
+              <Popover
+                anchor={
+                  <Label kind={kinds.WARNING}>{maxSixty}</Label>
+                }
+                title="Maximim Limits"
+                body={
+                  <QualityDefinitionLimits
+                    bytes={maxBytes}
+                    message="No limit for any runtime"
+                  />
+                }
+                position={tooltipPositions.BOTTOM}
+              />
             </div>
           </div>
         </div>
