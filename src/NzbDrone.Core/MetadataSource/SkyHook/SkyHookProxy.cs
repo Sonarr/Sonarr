@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using NLog;
@@ -148,7 +149,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
             if (show.FirstAired != null)
             {
-                series.FirstAired = DateTime.Parse(show.FirstAired).ToUniversalTime();
+                series.FirstAired = DateTime.ParseExact(show.FirstAired, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo).ToUniversalTime();
                 series.Year = series.FirstAired.Value.Year;
             }
 
