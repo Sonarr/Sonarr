@@ -13,8 +13,8 @@ function QualityDefinitionLimits(props) {
   }
 
   const thirty = formatBytes(bytes * 30, 2);
-  const fourtyFive = formatBytes(bytes * 30, 2);
-  const sixty = formatBytes(bytes * 30, 2);
+  const fourtyFive = formatBytes(bytes * 45, 2);
+  const sixty = formatBytes(bytes * 60, 2);
 
   return (
     <div>
