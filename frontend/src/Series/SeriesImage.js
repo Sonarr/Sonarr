@@ -24,7 +24,7 @@ class SeriesImage extends Component {
   constructor(props, context) {
     super(props, context);
 
-    const pixelRatio = Math.floor(window.devicePixelRatio);
+    const pixelRatio = Math.max(Math.round(window.devicePixelRatio), 1);
 
     const {
       images,
