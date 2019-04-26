@@ -18,8 +18,6 @@ import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue
 import EnhancedSelectInputOption from './EnhancedSelectInputOption';
 import styles from './EnhancedSelectInput.css';
 
-const POPPER_PADDING = 10;
-
 function isArrowKey(keyCode) {
   return keyCode === keyCodes.UP_ARROW || keyCode === keyCodes.DOWN_ARROW;
 }
