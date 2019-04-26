@@ -18,6 +18,8 @@ import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue
 import EnhancedSelectInputOption from './EnhancedSelectInputOption';
 import styles from './EnhancedSelectInput.css';
 
+const POPPER_PADDING = 10;
+
 function isArrowKey(keyCode) {
   return keyCode === keyCodes.UP_ARROW || keyCode === keyCodes.DOWN_ARROW;
 }
@@ -306,7 +308,31 @@ class EnhancedSelectInput extends Component {
             )}
           </Reference>
           <Portal>
-            <Popper placement="bottom-start">
+            <Popper
+              placement="bottom-start"
+              modifiers={{
+                computeMaxHeight: {
+                  order: 851,
+                  enabled: true,
+                  fn: (data) => {
+                    const {
+                      top,
+                      bottom
+                    } = data.offsets.reference;
+
+                    const windowHeight = window.innerHeight;
+
+                    if ((/^botton/).test(data.placement)) {
+                      data.styles.maxHeight = windowHeight - bottom - POPPER_PADDING;
+                    } else {
+                      data.styles.maxHeight = top - POPPER_PADDING;
+                    }
+
+                    return data;
+                  }
+                }
+              }}
+            >
               {({ ref, style, scheduleUpdate }) => {
                 this._scheduleUpdate = scheduleUpdate;
 
@@ -322,7 +348,12 @@ class EnhancedSelectInput extends Component {
                   >
                     {
                       isOpen && !isMobile ?
-                        <div className={styles.options}>
+                        <Scroller
+                          className={styles.options}
+                          style={{
+                            maxHeight: style.maxHeight
+                          }}
+                        >
                           {
                             values.map((v, index) => {
                               return (
@@ -339,7 +370,7 @@ class EnhancedSelectInput extends Component {
                               );
                             })
                           }
-                        </div> :
+                        </Scroller> :
                         null
                     }
                   </div>
