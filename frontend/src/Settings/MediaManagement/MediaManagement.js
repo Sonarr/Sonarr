@@ -240,7 +240,7 @@ class MediaManagement extends Component {
                     <FormInputGroup
                       type={inputTypes.SELECT}
                       name="rescanAfterRefresh"
-                      helpText="Rescan the series foler after refreshing the series"
+                      helpText="Rescan the series folder after refreshing the series"
                       helpTextWarning="Sonarr will not automatically detect changes to files when not set to 'Always'"
                       values={rescanAfterRefreshOptions}
                       onChange={onInputChange}

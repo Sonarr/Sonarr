@@ -198,7 +198,7 @@ class QualityDefinition extends Component {
                 anchor={
                   <Label kind={kinds.WARNING}>{maxSixty}</Label>
                 }
-                title="Maximim Limits"
+                title="Maximum Limits"
                 body={
                   <QualityDefinitionLimits
                     bytes={maxBytes}
