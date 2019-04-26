@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Autosuggest from 'react-autosuggest';
 import { Manager, Popper, Reference } from 'react-popper';
 import classNames from 'classnames';
+import Portal from 'Components/Portal';
 import styles from './AutoSuggestInput.css';
 
 class AutoSuggestInput extends Component {
@@ -15,7 +15,6 @@ class AutoSuggestInput extends Component {
     super(props, context);
 
     this._scheduleUpdate = null;
-    this._node = document.getElementById('portal-root');
   }
 
   componentDidUpdate(prevProps) {
@@ -53,83 +52,68 @@ class AutoSuggestInput extends Component {
   }
 
   renderSuggestionsContainer = ({ containerProps, children }) => {
-    return ReactDOM.createPortal(
-      <Popper
-        placement='bottom-start'
-        modifiers={{
-          computeStyle: {
-            fn: this.onComputeStyle
-          },
-          flip: {
-            padding: this.props.minHeight
-          }
-        }}
-      >
-        {({ ref: popperRef, style, scheduleUpdate }) => {
-          this._scheduleUpdate = scheduleUpdate;
+    return (
+      <Portal>
+        <Popper
+          placement='bottom-start'
+          modifiers={{
+            computeMaxHeight: {
+              order: 851,
+              enabled: true,
+              fn: this.onComputeMaxHeight
+            },
+            flip: {
+              padding: this.props.minHeight
+            }
+          }}
+        >
+          {({ ref: popperRef, style, scheduleUpdate }) => {
+            this._scheduleUpdate = scheduleUpdate;
 
-          return (
-            <div
-              ref={popperRef}
-              style={style}
-              className={children ? styles.suggestionsContainerOpen : undefined}
-            >
+            return (
               <div
-                {...containerProps}
-                style={{
-                  maxHeight: style.maxHeight
-                }}
+                ref={popperRef}
+                style={style}
+                className={children ? styles.suggestionsContainerOpen : undefined}
               >
-                {children}
+                <div
+                  {...containerProps}
+                  style={{
+                    maxHeight: style.maxHeight
+                  }}
+                >
+                  {children}
+                </div>
               </div>
-            </div>
-          );
-        }}
-      </Popper>,
-      this._node
+            );
+          }}
+        </Popper>
+      </Portal>
     );
   }
 
   //
   // Listeners
 
-  onComputeStyle = (data) => {
-    const {
-      enforceMaxHeight,
-      maxHeight
-    } = this.props;
-
+  onComputeMaxHeight = (data) => {
     const {
       top,
       bottom,
-      left,
       width
     } = data.offsets.reference;
 
-    const popperHeight = data.offsets.popper.height;
     const windowHeight = window.innerHeight;
 
-    data.styles.top = 0;
-    data.styles.left = 0;
-    data.styles.width = width;
-    data.styles.willChange = 'transform';
-
-    if (data.placement === 'bottom-start') {
-      data.styles.transform = `translate3d(${left}px, ${bottom}px, 0)`;
-
-      if (enforceMaxHeight) {
-        data.styles.maxHeight = Math.min(maxHeight, windowHeight - bottom);
-      }
-    } else if (data.placement === 'top-start') {
-      data.styles.transform = `translate3d(${left}px, ${top-popperHeight}px, 0)`;
-
-      if (enforceMaxHeight) {
-        data.styles.maxHeight = Math.min(maxHeight, top);
-      }
+    if ((/^botton/).test(data.placement)) {
+      data.styles.maxHeight = windowHeight - bottom;
+    } else {
+      data.styles.maxHeight = top;
     }
 
+    data.styles.width = width;
+
     return data;
-  };
+  }
 
   onInputChange = (event, { newValue }) => {
     this.props.onChange({

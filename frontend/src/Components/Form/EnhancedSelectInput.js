@@ -115,6 +115,23 @@ class EnhancedSelectInput extends Component {
   //
   // Listeners
 
+  onComputeMaxHeight = (data) => {
+    const {
+      top,
+      bottom
+    } = data.offsets.reference;
+
+    const windowHeight = window.innerHeight;
+
+    if ((/^botton/).test(data.placement)) {
+      data.styles.maxHeight = windowHeight - bottom;
+    } else {
+      data.styles.maxHeight = top;
+    }
+
+    return data;
+  }
+
   onWindowClick = (event) => {
     const button = document.getElementById(this._buttonId);
     const options = document.getElementById(this._optionsId);
@@ -314,22 +331,7 @@ class EnhancedSelectInput extends Component {
                 computeMaxHeight: {
                   order: 851,
                   enabled: true,
-                  fn: (data) => {
-                    const {
-                      top,
-                      bottom
-                    } = data.offsets.reference;
-
-                    const windowHeight = window.innerHeight;
-
-                    if ((/^botton/).test(data.placement)) {
-                      data.styles.maxHeight = windowHeight - bottom - POPPER_PADDING;
-                    } else {
-                      data.styles.maxHeight = top - POPPER_PADDING;
-                    }
-
-                    return data;
-                  }
+                  fn: this.onComputeMaxHeight
                 }
               }}
             >
