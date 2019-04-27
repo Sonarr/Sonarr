@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         public string DeleteStatus { get; set; }
         public string MarkStatus { get; set; }
         public string DestDir { get; set; }
+        public string FinalDir { get; set; }
         public List<NzbgetParameter> Parameters { get; set; }
     }
 }

@@ -117,13 +117,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             foreach (var item in history)
             {
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
-
                 var historyItem = new DownloadClientItem();
+                var itemDir = item.FinalDir ?? item.DestDir;
+
                 historyItem.DownloadClient = Definition.Name;
                 historyItem.DownloadId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
                 historyItem.Title = item.Name;
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
-                historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(item.DestDir));
+                historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(itemDir));
                 historyItem.Category = item.Category;
                 historyItem.Message = $"PAR Status: {item.ParStatus} - Unpack Status: {item.UnpackStatus} - Move Status: {item.MoveStatus} - Script Status: {item.ScriptStatus} - Delete Status: {item.DeleteStatus} - Mark Status: {item.MarkStatus}";
                 historyItem.Status = DownloadItemStatus.Completed;
