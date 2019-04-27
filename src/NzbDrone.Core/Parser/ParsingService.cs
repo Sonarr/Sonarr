@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NLog.Fluent;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -243,13 +245,21 @@ namespace NzbDrone.Core.Parser
 
                 if (tvdbId > 0 && tvdbId == searchCriteria.Series.TvdbId)
                 {
-                    //TODO: If series is found by TvdbId, we should report it as a scene naming exception, since it will fail to import
+                    _logger.Debug()
+                           .Message("Found matching series by TVDB ID (0}, an alias may be need for: {1}", tvdbId, parsedEpisodeInfo.SeriesTitle)
+                           .WriteSentryWarn("TvdbIdMatch", tvdbId.ToString(), parsedEpisodeInfo.SeriesTitle)
+                           .Write();
+
                     return searchCriteria.Series;
                 }
 
                 if (tvRageId > 0 && tvRageId == searchCriteria.Series.TvRageId)
                 {
-                    //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
+                    _logger.Debug()
+                           .Message("Found matching series by TVRage ID (0}, an alias may be need for: {1}", tvdbId, parsedEpisodeInfo.SeriesTitle)
+                           .WriteSentryWarn("TvRageIdMatch", tvdbId.ToString(), parsedEpisodeInfo.SeriesTitle)
+                           .Write();
+
                     return searchCriteria.Series;
                 }
             }
@@ -263,14 +273,28 @@ namespace NzbDrone.Core.Parser
 
             if (series == null && tvdbId > 0)
             {
-                //TODO: If series is found by TvdbId, we should report it as a scene naming exception, since it will fail to import
                 series = _seriesService.FindByTvdbId(tvdbId);
+
+                if (series != null)
+                {
+                    _logger.Debug()
+                           .Message("Found matching series by TVDB ID (0}, an alias may be need for: {1}", tvdbId, parsedEpisodeInfo.SeriesTitle)
+                           .WriteSentryWarn("TvdbIdMatch", tvdbId.ToString(), parsedEpisodeInfo.SeriesTitle)
+                           .Write();
+                }
             }
 
             if (series == null && tvRageId > 0)
             {
-                //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
                 series = _seriesService.FindByTvRageId(tvRageId);
+
+                if (series != null)
+                {
+                    _logger.Debug()
+                           .Message("Found matching series by TVRage ID (0}, an alias may be need for: {1}", tvdbId, parsedEpisodeInfo.SeriesTitle)
+                           .WriteSentryWarn("TvRageIdMatch", tvdbId.ToString(), parsedEpisodeInfo.SeriesTitle)
+                           .Write();
+                }
             }
 
             if (series == null)

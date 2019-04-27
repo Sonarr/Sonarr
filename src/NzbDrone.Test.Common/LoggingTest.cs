@@ -26,6 +26,8 @@ namespace NzbDrone.Test.Common
                 var logOutput = TestLogOutput.Console;
                 Enum.TryParse<TestLogOutput>(Environment.GetEnvironmentVariable("SONARR_TESTS_LOG_OUTPUT"), out logOutput);
 
+                RegisterSentryLogger();
+
                 switch (logOutput)
                 {
                     case TestLogOutput.Console:
@@ -66,6 +68,13 @@ namespace NzbDrone.Test.Common
 
             LogManager.Configuration.AddTarget(fileTarget.GetType().Name, fileTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
+        }
+
+        private static void RegisterSentryLogger()
+        {
+            // Register a null target for sentry logs, so they aren't caught by other loggers.
+            var loggingRuleSentry = new LoggingRule("Sentry", LogLevel.Debug, new NullTarget()) { Final = true };
+            LogManager.Configuration.LoggingRules.Insert(0, loggingRuleSentry);
         }
 
         private static void RegisterExceptionVerification()
