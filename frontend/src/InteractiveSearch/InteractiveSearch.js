@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
+import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import { align, icons, sortDirections } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Icon from 'Components/Icon';
@@ -109,6 +110,8 @@ function InteractiveSearch(props) {
     onGrabPress
   } = props;
 
+  const errorMessage = getErrorMessage(error);
+
   return (
     <div>
       <div className={styles.filterMenuContainer}>
@@ -125,33 +128,42 @@ function InteractiveSearch(props) {
       </div>
 
       {
-        isFetching &&
-          <LoadingIndicator />
+        isFetching ? <LoadingIndicator /> : null
       }
 
       {
-        !isFetching && !!error &&
+        !isFetching && error ?
           <div>
-            Unable to load results for this episode search. Try again later
-          </div>
+            {
+              errorMessage ?
+                <Fragment>
+                  Search failed because its {errorMessage.charAt(0).toLowerCase() + errorMessage.slice(1)}.
+                  Try refreshing the series info and verify the necessary information is present before searching again
+                </Fragment> :
+                'Unable to load results for this episode search. Try again later'
+            }
+          </div> :
+          null
       }
 
       {
-        !isFetching && isPopulated && !totalReleasesCount &&
+        !isFetching && isPopulated && !totalReleasesCount ?
           <div>
             No results found
-          </div>
+          </div> :
+          null
       }
 
       {
-        !!totalReleasesCount && isPopulated && !items.length &&
+        !!totalReleasesCount && isPopulated && !items.length ?
           <div>
             All results are hidden by the applied filter
-          </div>
+          </div> :
+          null
       }
 
       {
-        isPopulated && !!items.length &&
+        isPopulated && !!items.length ?
           <Table
             columns={columns}
             sortKey={sortKey}
@@ -174,14 +186,16 @@ function InteractiveSearch(props) {
                 })
               }
             </TableBody>
-          </Table>
+          </Table> :
+          null
       }
 
       {
-        totalReleasesCount !== items.length && !!items.length &&
+        totalReleasesCount !== items.length && !!items.length ?
           <div className={styles.filteredMessage}>
                 Some results are hidden by the applied filter
-          </div>
+          </div> :
+          null
       }
     </div>
   );

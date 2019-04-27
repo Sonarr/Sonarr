@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentValidation;
 using Nancy;
-using Nancy.ModelBinding;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
@@ -110,7 +108,7 @@ namespace Sonarr.Api.V3.Indexers
             }
             catch (ReleaseDownloadException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 throw new NzbDroneClientException(HttpStatusCode.Conflict, "Getting release from indexer failed");
             }
 
@@ -141,6 +139,10 @@ namespace Sonarr.Api.V3.Indexers
 
                 return MapDecisions(prioritizedDecisions);
             }
+            catch (SearchFailedException ex)
+            {
+                throw new NzbDroneClientException(HttpStatusCode.BadRequest, ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Episode search failed: " + ex.Message);
@@ -157,6 +159,10 @@ namespace Sonarr.Api.V3.Indexers
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);
+            }
+            catch (SearchFailedException ex)
+            {
+                throw new NzbDroneClientException(HttpStatusCode.BadRequest, ex.Message);
             }
             catch (Exception ex)
             {
