@@ -134,5 +134,13 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             "Tokyo Ghoul A".CleanSeriesTitle().Should().Be("tokyoghoula");
         }
+
+        [TestCase("3%", "3percent")]
+        [TestCase("Teen Top & 100% Outing Brothers", "teentop100percentoutingbrothers")]
+        [TestCase("Big Jay Oakerson's What's Your F@%king Deal?!", "bigjayoakersonswhatsyourfkingdeal")]
+        public void should_replace_percent_sign_with_percent_following_numbers(string input, string expected)
+        {
+            input.CleanSeriesTitle().Should().Be(expected);
+        }
     }
 }
