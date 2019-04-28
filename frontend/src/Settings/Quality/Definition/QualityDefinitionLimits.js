@@ -12,9 +12,9 @@ function QualityDefinitionLimits(props) {
     return <div>{message}</div>;
   }
 
-  const thirty = formatBytes(bytes * 30, 2);
-  const fourtyFive = formatBytes(bytes * 45, 2);
-  const sixty = formatBytes(bytes * 60, 2);
+  const thirty = formatBytes(bytes * 30);
+  const fourtyFive = formatBytes(bytes * 45);
+  const sixty = formatBytes(bytes * 60);
 
   return (
     <div>
@@ -26,7 +26,7 @@ function QualityDefinitionLimits(props) {
 }
 
 QualityDefinitionLimits.propTypes = {
-  bytes: PropTypes.number.isRequired,
+  bytes: PropTypes.number,
   message: PropTypes.string.isRequired
 };
 

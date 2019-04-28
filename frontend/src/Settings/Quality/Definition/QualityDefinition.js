@@ -141,10 +141,10 @@ class QualityDefinition extends Component {
     } = this.state;
 
     const minBytes = minSize * 1024 * 1024;
-    const minSixty = `${formatBytes(minBytes * 60, 2)}/h`;
+    const minSixty = `${formatBytes(minBytes * 60)}/h`;
 
     const maxBytes = maxSize && maxSize * 1024 * 1024;
-    const maxSixty = maxBytes ? `${formatBytes(maxBytes * 60, 2)}/h` : 'Unlimited';
+    const maxSixty = maxBytes ? `${formatBytes(maxBytes * 60)}/h` : 'Unlimited';
 
     return (
       <div className={styles.qualityDefinition}>
