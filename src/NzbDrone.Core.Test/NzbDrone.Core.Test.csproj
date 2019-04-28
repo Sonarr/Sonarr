@@ -245,6 +245,7 @@
     <Compile Include="HealthCheck\Checks\MonoDebugFixture.cs" />
     <Compile Include="HealthCheck\Checks\MonoVersionCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\IndexerStatusCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\SystemTimeCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\RootFolderCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheckFixture.cs" />
     <Compile Include="HealthCheck\HealthCheckFixture.cs" />

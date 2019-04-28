@@ -152,6 +152,7 @@
     <Compile Include="Download\Aggregation\RemoteEpisodeAggregationService.cs" />
     <Compile Include="Download\Aggregation\Aggregators\AggregatePreferredWordScore.cs" />
     <Compile Include="Download\Aggregation\Aggregators\IAggregateRemoteEpisode.cs" />
+    <Compile Include="HealthCheck\Checks\SystemTimeCheck.cs" />
     <Compile Include="Housekeeping\Housekeepers\EnsureValidLanguageProfileId.cs" />
     <Compile Include="Indexers\SeedConfigProvider.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
