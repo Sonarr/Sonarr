@@ -31,17 +31,17 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Auth Token", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
+        public bool UseSsl { get; set; }
+
+        [FieldDefinition(3, Label = "Auth Token", Type = FieldType.Textbox, Advanced = true)]
         public string AuthToken { get; set; }
 
-        [FieldDefinition(3, Label = "Authenticate with Plex.tv", Type = FieldType.OAuth)]
+        [FieldDefinition(4, Label = "Authenticate with Plex.tv", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
-        [FieldDefinition(4, Label = "Update Library", Type = FieldType.Checkbox)]
+        [FieldDefinition(5, Label = "Update Library", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
-
-        [FieldDefinition(5, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
-        public bool UseSsl { get; set; }
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host);
 

@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(series);
         }
 
-        public override string Name => "Kodi (XBMC)";
+        public override string Name => "Kodi";
 
         public override ValidationResult Test()
         {
