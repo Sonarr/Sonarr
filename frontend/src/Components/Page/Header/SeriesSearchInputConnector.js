@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { createSelector } from 'reselect';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
+import createDeepEqualSelector from 'Store/Selectors/createDeepEqualSelector';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import SeriesSearchInput from './SeriesSearchInput';
 
@@ -37,7 +38,7 @@ function createCleanSeriesSelector() {
 }
 
 function createMapStateToProps() {
-  return createSelector(
+  return createDeepEqualSelector(
     createCleanSeriesSelector(),
     (series) => {
       return {
