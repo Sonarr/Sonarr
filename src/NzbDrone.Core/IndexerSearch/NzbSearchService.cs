@@ -229,7 +229,8 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var downloadDecisions = new List<DownloadDecision>();
 
-            foreach (var episode in episodes.Where(e => e.Monitored))
+            // Only search for aired episodes when performing a season anime search
+            foreach (var episode in episodes.Where(e => e.Monitored && e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow)))
             {
                 downloadDecisions.AddRange(SearchAnime(series, episode, userInvokedSearch, interactiveSearch));
             }

@@ -247,6 +247,24 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
+        public void season_search_for_anime_should_not_search_for_unaired_episodes()
+        {
+            WithEpisodes();
+            _xemSeries.SeriesType = SeriesTypes.Anime;
+            _xemEpisodes.ForEach(e => e.AirDateUtc = DateTime.UtcNow.AddDays(5));
+            _xemEpisodes.ForEach(e => e.EpisodeFileId = 0);
+
+            var seasonNumber = 1;
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, false, true, false);
+
+            var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(0);
+        }
+
+        [Test]
         public void season_search_for_anime_should_not_search_for_episodes_with_files()
         {
             WithEpisodes();
