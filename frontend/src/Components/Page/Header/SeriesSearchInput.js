@@ -154,8 +154,33 @@ class SeriesSearchInput extends Component {
   }
 
   onSuggestionsFetchRequested = ({ value }) => {
-    const fuse = new Fuse(this.props.series, fuseOptions);
-    const suggestions = fuse.search(value);
+    const { series } = this.props;
+    let suggestions = [];
+
+    if (value.length === 1) {
+      suggestions = series.reduce((acc, s) => {
+        if (s.firstCharacter === value.toLowerCase()) {
+          acc.push({
+            item: s,
+            indices: [
+              [0, 0]
+            ],
+            matches: [
+              {
+                value: s.title,
+                key: 'title'
+              }
+            ],
+            arrayIndex: 0
+          });
+        }
+
+        return acc;
+      }, []);
+    } else {
+      const fuse = new Fuse(series, fuseOptions);
+      suggestions = fuse.search(value);
+    }
 
     this.setState({ suggestions });
   }

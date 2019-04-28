@@ -26,6 +26,7 @@ function createCleanSeriesSelector() {
           sortTitle,
           images,
           alternateTitles,
+          firstCharacter: title.charAt(0).toLowerCase(),
           tags: tags.map((id) => {
             return allTags.find((tag) => tag.id === id);
           })
