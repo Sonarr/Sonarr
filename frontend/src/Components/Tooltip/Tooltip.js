@@ -94,6 +94,7 @@ class Tooltip extends Component {
         <Portal>
           <Popper
             placement={position}
+            eventsEnabled={false}
             modifiers={{
               preventOverflow: {
               // Fixes positioning for tooltips in the queue
