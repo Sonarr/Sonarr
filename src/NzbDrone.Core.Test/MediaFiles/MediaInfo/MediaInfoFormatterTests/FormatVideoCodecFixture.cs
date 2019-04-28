@@ -91,7 +91,6 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, sceneName).Should().Be(expectedFormat);
-            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -103,7 +102,6 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatVideoCodec(mediaInfoModel, null).Should().Be(mediaInfoModel.VideoFormat);
-            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }
