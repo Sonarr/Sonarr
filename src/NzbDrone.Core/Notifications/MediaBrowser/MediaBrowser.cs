@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Notifications.Emby
         }
 
         public override string Link => "https://emby.media/";
-        public override string Name => "Emby (Media Browser)";
+        public override string Name => "Emby";
 
 
         public override void OnGrab(GrabMessage grabMessage)

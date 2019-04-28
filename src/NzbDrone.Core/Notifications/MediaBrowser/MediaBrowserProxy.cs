@@ -66,7 +66,8 @@ namespace NzbDrone.Core.Notifications.Emby
 
         private HttpRequest BuildRequest(string path, MediaBrowserSettings settings)
         {
-            var url = string.Format(@"http://{0}/mediabrowser", settings.Address);
+            var scheme = settings.UseSsl ? "https" : "http";
+            var url = $@"{scheme}://{settings.Address}/mediabrowser";
             
             return new HttpRequestBuilder(url).Resource(path).Build();
         }

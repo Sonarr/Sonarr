@@ -30,13 +30,16 @@ namespace NzbDrone.Core.Notifications.Emby
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "API Key")]
+        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Emby over HTTPS instead of HTTP")]
+        public bool UseSsl { get; set; }
+
+        [FieldDefinition(3, Label = "API Key")]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(3, Label = "Send Notifications", HelpText = "Have MediaBrowser send notfications to configured providers", Type = FieldType.Checkbox)]
+        [FieldDefinition(4, Label = "Send Notifications", HelpText = "Have MediaBrowser send notfications to configured providers", Type = FieldType.Checkbox)]
         public bool Notify { get; set; }
 
-        [FieldDefinition(4, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Checkbox)]
+        [FieldDefinition(5, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
         [JsonIgnore]
