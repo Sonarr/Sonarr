@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 
@@ -54,18 +55,27 @@ namespace NzbDrone.Host.AccessControl
 
         public void ConfigureUrls()
         {
+            var enableSsl = _configFileProvider.EnableSsl;
+            var port = _configFileProvider.Port;
+            var sslPort = _configFileProvider.SslPort;
+
+            if (enableSsl && sslPort == port)
+            {
+                throw new SonarrStartupException("Cannot use the same port for HTTP and HTTPS. Port {0}", port);
+            }
+
             if (RegisteredUrls.Empty())
             {
                 GetRegisteredUrls();
             }
 
-            var localHostHttpUrls = BuildUrlAcls("http", "localhost", _configFileProvider.Port);
-            var interfaceHttpUrls = BuildUrlAcls("http", _configFileProvider.BindAddress, _configFileProvider.Port);
+            var localHostHttpUrls = BuildUrlAcls("http", "localhost", port);
+            var interfaceHttpUrls = BuildUrlAcls("http", _configFileProvider.BindAddress, port);
 
-            var localHostHttpsUrls = BuildUrlAcls("https", "localhost", _configFileProvider.SslPort);
-            var interfaceHttpsUrls = BuildUrlAcls("https", _configFileProvider.BindAddress, _configFileProvider.SslPort);
+            var localHostHttpsUrls = BuildUrlAcls("https", "localhost", sslPort);
+            var interfaceHttpsUrls = BuildUrlAcls("https", _configFileProvider.BindAddress, sslPort);
 
-            if (!_configFileProvider.EnableSsl)
+            if (!enableSsl)
             {
                 localHostHttpsUrls.Clear();
                 interfaceHttpsUrls.Clear();
