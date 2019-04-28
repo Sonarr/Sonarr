@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Parser.Model
         public Language Language { get; set; }
         public bool FullSeason { get; set; }
         public bool IsPartialSeason { get; set; }
+        public bool IsMultiSeason { get; set; }
         public bool IsSeasonExtra { get; set; }
         public bool Special { get; set; }
         public string ReleaseGroup { get; set; }

@@ -128,6 +128,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+(?<season>(?<!\d+)(?:\d{4})(?!\d+))(?:x|\Wx){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:\-|x|\Wx|_){1,2}(?<episode>\d{2,3}(?!\d+)))*)\W?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Multi-season pack
+                new Regex(@"^(?<title>.+?)[-_. ]+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))-(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Partial season pack
                 new Regex(@"^(?<title>.+?)(?:\W+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<seasonpart>\d{1,2}(?!\d+)))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -684,9 +688,6 @@ namespace NzbDrone.Core.Parser
                 //If no season was found it should be treated as a mini series and season 1
                 if (seasons.Count == 0) seasons.Add(1);
 
-                //If more than 1 season was parsed go to the next REGEX (A multi-season release is unlikely)
-                if (seasons.Distinct().Count() > 1) return null;
-
                 result = new ParsedEpisodeInfo
                 {
                     ReleaseTitle = releaseTitle,
@@ -694,6 +695,13 @@ namespace NzbDrone.Core.Parser
                     EpisodeNumbers = new int[0],
                     AbsoluteEpisodeNumbers = new int[0]
                 };
+
+
+                //If more than 1 season was parsed set IsMultiSeason to true so it can be rejected later
+                if (seasons.Distinct().Count() > 1)
+                {
+                    result.IsMultiSeason = true;
+                }
 
                 foreach (Match matchGroup in matchCollection)
                 {

@@ -76,5 +76,18 @@ namespace NzbDrone.Core.Test.ParserTests
             result.IsPartialSeason.Should().BeTrue();
             result.SeasonPart.Should().Be(seasonPart);
         }
+
+        [TestCase("The Wire S01-05 WS BDRip X264-REWARD-No Rars", "The Wire", 1)]
+        public void should_parse_multi_season_release(string postTitle, string title, int firstSeason)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.SeasonNumber.Should().Be(firstSeason);
+            result.SeriesTitle.Should().Be(title);
+            result.EpisodeNumbers.Should().BeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeTrue();
+            result.IsPartialSeason.Should().BeFalse();
+            result.IsMultiSeason.Should().BeTrue();
+        }
     }
 }
