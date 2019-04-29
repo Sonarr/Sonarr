@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
                 var historyItem = new DownloadClientItem();
-                var itemDir = item.FinalDir ?? item.DestDir;
+                var itemDir = item.FinalDir.IsNullOrWhiteSpace() ? item.DestDir : item.FinalDir;
 
                 historyItem.DownloadClient = Definition.Name;
                 historyItem.DownloadId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
