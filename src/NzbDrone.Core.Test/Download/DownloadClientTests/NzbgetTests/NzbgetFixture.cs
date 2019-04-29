@@ -407,8 +407,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
+        public void should_use_dest_dir_if_final_dir_is_null()
+        {
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Subject.GetItems().First().OutputPath.Should().Be(_completed.DestDir);
+        }
+
+        [Test]
         public void should_use_dest_dir_if_final_dir_is_not_set()
         {
+            _completed.FinalDir = string.Empty;
+
             GivenQueue(null);
             GivenHistory(_completed);
 
