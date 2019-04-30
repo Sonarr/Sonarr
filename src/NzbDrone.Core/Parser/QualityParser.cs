@@ -32,8 +32,11 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex RawHDRegex = new Regex(@"\b(?<rawhd>RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD|MPEG[-_. ]?2)\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex ProperRegex = new Regex(@"\b(?<proper>proper|repack|rerip)\b",
+        private static readonly Regex ProperRegex = new Regex(@"\b(?<proper>proper|rerip)\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex RepackRegex = new Regex(@"\b(?<repack>repack)\b",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex VersionRegex = new Regex(@"\dv(?<version>\d)\b|\[v(?<version>\d)\]",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -425,6 +428,12 @@ namespace NzbDrone.Core.Parser
                 result.Revision.Version = 2;
             }
 
+            if (RepackRegex.IsMatch(normalizedName))
+            {
+                result.Revision.Version = 2;
+                result.Revision.IsRepack = true;
+            }
+
             var versionRegexResult = VersionRegex.Match(normalizedName);
 
             if (versionRegexResult.Success)
@@ -433,7 +442,7 @@ namespace NzbDrone.Core.Parser
             }
 
             // TODO: re-enable this when we have a reliable way to determine real
-            // TODO: Only treat it as a real if it comes AFTER the season/epsiode number
+            // TODO: Only treat it as a real if it comes AFTER the season/episode number
             var realRegexResult = RealRegex.Matches(name);
 
             if (realRegexResult.Count > 0)

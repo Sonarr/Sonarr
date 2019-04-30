@@ -145,6 +145,7 @@
     <Compile Include="CustomFilters\CustomFilterService.cs" />
     <Compile Include="Datastore\Migration\127_rename_release_profiles.cs" />
     <Compile Include="Datastore\Migration\126_add_custom_filters.cs" />
+    <Compile Include="DecisionEngine\Specifications\RepackSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\MultiSeasonSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeAllowedSpecification.cs" />
     <Compile Include="Exceptions\DownloadClientRejectedReleaseException.cs" />
