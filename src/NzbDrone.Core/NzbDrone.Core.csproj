@@ -147,6 +147,7 @@
     <Compile Include="Datastore\Migration\126_add_custom_filters.cs" />
     <Compile Include="DecisionEngine\Specifications\MultiSeasonSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeAllowedSpecification.cs" />
+    <Compile Include="Exceptions\DownloadClientRejectedReleaseException.cs" />
     <Compile Include="Exceptions\SearchFailedException.cs" />
     <Compile Include="Extras\Metadata\MetadataSectionType.cs" />
     <Compile Include="Download\Aggregation\RemoteEpisodeAggregationService.cs" />

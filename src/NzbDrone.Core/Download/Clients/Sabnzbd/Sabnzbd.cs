@@ -8,6 +8,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.RemotePathMappings;
@@ -40,12 +41,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
 
-            if (response != null && response.Ids.Any())
+            if (response == null || response.Ids.Empty())
             {
-                return response.Ids.First();
+                throw new DownloadClientRejectedReleaseException(remoteEpisode.Release, "SABnzbd rejected the NZB for an unknown reason");
             }
 
-            return null;
+            return response.Ids.First();
         }
 
         private IEnumerable<DownloadClientItem> GetQueue()
