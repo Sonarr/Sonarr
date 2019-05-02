@@ -207,6 +207,22 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
             VerifyNotMonitored(e => e.HasFile);
         }
 
+        [Test]
+        public void should_not_monitor_latest_season_if_all_episodes_aired_more_than_90_days_ago()
+        {
+            _episodes.ForEach(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-100));
+
+            var monitoringOptions = new MonitoringOptions
+                                    {
+                                        Monitor = MonitorTypes.LatestSeason
+                                    };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => !e.Monitored))));
+        }
+
         private void VerifyMonitored(Func<Episode, bool> predicate)
         {
             Mocker.GetMock<IEpisodeService>()
