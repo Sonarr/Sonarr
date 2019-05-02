@@ -13,6 +13,12 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import RootFoldersConnector from 'RootFolder/RootFoldersConnector';
 import NamingConnector from './Naming/NamingConnector';
 
+const episodeTitleRequiredOptions = [
+  { key: 'always', value: 'Always' },
+  { key: 'bulkSeasonReleases', value: 'Only for Bulk Season Releases' },
+  { key: 'never', value: 'Never' }
+];
+
 const rescanAfterRefreshOptions = [
   { key: 'always', value: 'Always' },
   { key: 'afterManual', value: 'After Manual Refresh' },
@@ -116,6 +122,23 @@ class MediaManagement extends Component {
                     <FieldSet
                       legend="Importing"
                     >
+                      <FormGroup
+                        advancedSettings={advancedSettings}
+                        isAdvanced={true}
+                        size={sizes.SMALL}
+                      >
+                        <FormLabel>Episode Title Required</FormLabel>
+
+                        <FormInputGroup
+                          type={inputTypes.SELECT}
+                          name="episodeTitleRequired"
+                          helpText="Prevent importing for up to 24 hours if the episode title is in the naming format and the episode title is TBA"
+                          values={episodeTitleRequiredOptions}
+                          onChange={onInputChange}
+                          {...settings.episodeTitleRequired}
+                        />
+                      </FormGroup>
+
                       {
                         isMono &&
                           <FormGroup

@@ -1,5 +1,6 @@
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Config
@@ -20,6 +21,7 @@ namespace Sonarr.Api.V3.Config
         public string ChownUser { get; set; }
         public string ChownGroup { get; set; }
 
+        public EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
         public bool SkipFreeSpaceCheckWhenImporting { get; set; }
         public bool CopyUsingHardlinks { get; set; }
         public bool ImportExtraFiles { get; set; }
@@ -47,6 +49,7 @@ namespace Sonarr.Api.V3.Config
                 ChownUser = model.ChownUser,
                 ChownGroup = model.ChownGroup,
 
+                EpisodeTitleRequired = model.EpisodeTitleRequired,
                 SkipFreeSpaceCheckWhenImporting = model.SkipFreeSpaceCheckWhenImporting,
                 CopyUsingHardlinks = model.CopyUsingHardlinks,
                 ImportExtraFiles = model.ImportExtraFiles,

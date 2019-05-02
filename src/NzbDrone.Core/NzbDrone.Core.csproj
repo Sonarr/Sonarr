@@ -783,6 +783,7 @@
     <Compile Include="Languages\LanguageComparer.cs" />
     <Compile Include="Languages\LanguagesBelowCutoff.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Aggregation\Aggregators\AggregateLanguage.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\EpisodeTitleRequiredType.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\AbsoluteEpisodeNumberSpecification.cs" />
     <Compile Include="Notifications\Discord\Discord.cs" />
     <Compile Include="Notifications\Discord\DiscordColors.cs" />

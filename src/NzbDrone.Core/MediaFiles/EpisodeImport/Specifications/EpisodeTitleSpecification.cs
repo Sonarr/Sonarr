@@ -1,32 +1,69 @@
 using System;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
     public class EpisodeTitleSpecification : IImportDecisionEngineSpecification
     {
+        private readonly IConfigService _configService;
         private readonly IBuildFileNames _buildFileNames;
+        private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
 
-        public EpisodeTitleSpecification(IBuildFileNames buildFileNames, Logger logger)
+        public EpisodeTitleSpecification(IConfigService configService,
+                                         IBuildFileNames buildFileNames,
+                                         IEpisodeService episodeService,
+                                         Logger logger)
         {
+            _configService = configService;
             _buildFileNames = buildFileNames;
+            _episodeService = episodeService;
             _logger = logger;
         }
+
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
+            var episodeTitleRequired = _configService.EpisodeTitleRequired;
+
+            if (episodeTitleRequired == EpisodeTitleRequiredType.Never)
+            {
+                _logger.Debug("Episode titles are never required, skipping check");
+                return Decision.Accept();
+            }
+
             if (!_buildFileNames.RequiresEpisodeTitle(localEpisode.Series, localEpisode.Episodes))
             {
                 _logger.Debug("File name format does not require episode title, skipping check");
                 return Decision.Accept();
             }
 
-            foreach (var episode in localEpisode.Episodes)
+            var episodes = localEpisode.Episodes;
+            var firstEpisode = episodes.First();
+            var episodesInSeason = _episodeService.GetEpisodesBySeason(firstEpisode.SeriesId, firstEpisode.EpisodeNumber);
+            var allEpisodesOnTheSameDay = firstEpisode.AirDateUtc.HasValue && episodes.All(e =>
+                                              e.AirDateUtc.HasValue &&
+                                              e.AirDateUtc.Value == firstEpisode.AirDateUtc.Value);
+
+            if (episodeTitleRequired == EpisodeTitleRequiredType.BulkSeasonReleases &&
+                allEpisodesOnTheSameDay &&
+                episodesInSeason.Count(e => e.AirDateUtc.HasValue &&
+                                            e.AirDateUtc.Value == firstEpisode.AirDateUtc.Value
+                                       ) < 4
+            )
+            {
+                _logger.Debug("Episode title only required for bulk season releases");
+                return Decision.Accept();
+            }
+
+            foreach (var episode in episodes)
             {
                 var airDateUtc = episode.AirDateUtc;
                 var title = episode.Title;
