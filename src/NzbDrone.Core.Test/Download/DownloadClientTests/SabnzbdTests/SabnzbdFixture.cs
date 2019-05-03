@@ -349,7 +349,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             Mocker.GetMock<ISabnzbdProxy>()
                     .Setup(s => s.DownloadNzb(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()))
-                    .Returns(new SabnzbdAddResponse());
+                    .Returns(new SabnzbdAddResponse { Ids = new List<string> { "sonarrtest" } });
 
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
