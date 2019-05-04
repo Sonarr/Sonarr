@@ -16,6 +16,19 @@ import ProxySettings from './ProxySettings';
 import SecuritySettings from './SecuritySettings';
 import UpdateSettings from './UpdateSettings';
 
+const requiresRestartKeys = [
+  'bindAddress',
+  'port',
+  'urlBase',
+  'enableSsl',
+  'sslPort',
+  'sslCertHash',
+  'authenticationMethod',
+  'username',
+  'password',
+  'apiKey'
+];
+
 class GeneralSettings extends Component {
 
   //
@@ -42,20 +55,7 @@ class GeneralSettings extends Component {
 
     const prevSettings = prevProps.settings;
 
-    const keys = [
-      'bindAddress',
-      'port',
-      'urlBase',
-      'enableSsl',
-      'sslPort',
-      'sslCertHash',
-      'authenticationMethod',
-      'username',
-      'password',
-      'apiKey'
-    ];
-
-    const pendingRestart = _.some(keys, (key) => {
+    const pendingRestart = _.some(requiresRestartKeys, (key) => {
       const setting = settings[key];
       const prevSetting = prevSettings[key];
 
@@ -98,6 +98,7 @@ class GeneralSettings extends Component {
       isResettingApiKey,
       isMono,
       isWindows,
+      isWindowsService,
       mode,
       packageUpdateMechanism,
       onInputChange,
@@ -179,7 +180,9 @@ class GeneralSettings extends Component {
           isOpen={this.state.isRestartRequiredModalOpen}
           kind={kinds.DANGER}
           title="Restart Sonarr"
-          message="Sonarr requires a restart to apply changes, do you want to restart now?"
+          message={
+            `Sonarr requires a restart to apply changes, do you want to restart now? ${isWindowsService ? 'Depending which user is running the Sonarr service you may need to restart Sonarr as admin once before the service will start automatically.' : ''}`
+          }
           cancelLabel="I'll restart later"
           confirmLabel="Restart Now"
           onConfirm={this.onConfirmRestart}
@@ -203,6 +206,7 @@ GeneralSettings.propTypes = {
   hasSettings: PropTypes.bool.isRequired,
   isMono: PropTypes.bool.isRequired,
   isWindows: PropTypes.bool.isRequired,
+  isWindowsService: PropTypes.bool.isRequired,
   mode: PropTypes.string.isRequired,
   packageUpdateMechanism: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired,
