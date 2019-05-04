@@ -288,10 +288,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 if (file.DownloadId.IsNotNullOrWhiteSpace())
                 {
                     trackedDownload = _trackedDownloadService.Find(file.DownloadId);
-                    if (trackedDownload != null)
-                    {
-                        localEpisode.DownloadClientEpisodeInfo = trackedDownload.RemoteEpisode.ParsedEpisodeInfo;
-                    }
+                    localEpisode.DownloadClientEpisodeInfo = trackedDownload?.RemoteEpisode?.ParsedEpisodeInfo;
                 }
 
                 if (file.FolderName.IsNotNullOrWhiteSpace())
