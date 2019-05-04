@@ -10,7 +10,6 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
-using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
@@ -22,6 +21,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
     public interface IManualImportService
     {
         List<ManualImportItem> GetMediaFiles(string path, string downloadId, bool filterExistingFiles);
+        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId);
     }
 
     public class ManualImportService : IExecute<ManualImportCommand>, IManualImportService
@@ -32,7 +32,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
-        private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly IAggregationService _aggregationService;
         private readonly ITrackedDownloadService _trackedDownloadService;
@@ -46,7 +45,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                    IMakeImportDecision importDecisionMaker,
                                    ISeriesService seriesService,
                                    IEpisodeService episodeService,
-                                   IVideoFileInfoReader videoFileInfoReader,
                                    IAggregationService aggregationService,
                                    IImportApprovedEpisodes importApprovedEpisodes,
                                    ITrackedDownloadService trackedDownloadService,
@@ -60,7 +58,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             _importDecisionMaker = importDecisionMaker;
             _seriesService = seriesService;
             _episodeService = episodeService;
-            _videoFileInfoReader = videoFileInfoReader;
             _aggregationService = aggregationService;
             _importApprovedEpisodes = importApprovedEpisodes;
             _trackedDownloadService = trackedDownloadService;
@@ -95,6 +92,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             }
 
             return ProcessFolder(path, path, downloadId, filterExistingFiles);
+        }
+
+        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId)
+        {
+            var rootFolder = Path.GetDirectoryName(path);
+            var series = _seriesService.GetSeries(seriesId);
+
+            return ProcessFile(rootFolder, rootFolder, path, downloadId, series);
         }
 
         private List<ManualImportItem> ProcessFolder(string rootFolder, string baseFolder, string downloadId, bool filterExistingFiles)
@@ -139,11 +144,15 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return decisions.Select(decision => MapItem(decision, rootFolder, downloadId, directoryInfo.Name)).ToList();
         }
 
-        private ManualImportItem ProcessFile(string rootFolder, string baseFolder, string file, string downloadId)
+        private ManualImportItem ProcessFile(string rootFolder, string baseFolder, string file, string downloadId, Series series = null)
         {
             DownloadClientItem downloadClientItem = null;
             var relativeFile = baseFolder.GetRelativePath(file);
-            var series = _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
+
+            if (series == null)
+            {
+                _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
+            }
 
             if (series == null)
             {

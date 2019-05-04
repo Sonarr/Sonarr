@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Nancy;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Qualities;
+using Sonarr.Api.V3.Episodes;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 
@@ -17,6 +19,7 @@ namespace Sonarr.Api.V3.ManualImport
             _manualImportService = manualImportService;
 
             GetResourceAll = GetMediaFiles;
+            Post["/"] = x => ReprocessItems();
         }
 
         private List<ManualImportResource> GetMediaFiles()
@@ -26,6 +29,21 @@ namespace Sonarr.Api.V3.ManualImport
             var filterExistingFiles = Request.GetBooleanQueryParameter("filterExistingFiles", true);
 
             return _manualImportService.GetMediaFiles(folder, downloadId, filterExistingFiles).ToResource().Select(AddQualityWeight).ToList();
+        }
+
+        private Response ReprocessItems()
+        {
+            var items = Request.Body.FromJson<List<ManualImportReprocessResource>>();
+
+            foreach (var item in items)
+            {
+                var processedItem = _manualImportService.ReprocessItem(item.Path, item.DownloadId, item.SeriesId);
+
+                item.SeasonNumber = processedItem.SeasonNumber;
+                item.Episodes = processedItem.Episodes.ToResource();
+            }
+
+            return items.AsResponse();
         }
 
         private ManualImportResource AddQualityWeight(ManualImportResource item)

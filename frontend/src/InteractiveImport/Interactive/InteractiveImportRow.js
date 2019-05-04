@@ -4,6 +4,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Icon from 'Components/Icon';
+import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRowCellButton from 'Components/Table/Cells/TableRowCellButton';
@@ -172,6 +173,7 @@ class InteractiveImportRow extends Component {
       language,
       size,
       rejections,
+      isReprocessing,
       isSelected,
       onSelectedChange
     } = this.props;
@@ -189,7 +191,7 @@ class InteractiveImportRow extends Component {
       .join(', ');
 
     const showSeriesPlaceholder = isSelected && !series;
-    const showSeasonNumberPlaceholder = isSelected && !!series && isNaN(seasonNumber);
+    const showSeasonNumberPlaceholder = isSelected && !!series && isNaN(seasonNumber) && !isReprocessing;
     const showEpisodeNumbersPlaceholder = isSelected && Number.isInteger(seasonNumber) && !episodes.length;
     const showQualityPlaceholder = isSelected && !quality;
     const showLanguagePlaceholder = isSelected && !language;
@@ -227,6 +229,15 @@ class InteractiveImportRow extends Component {
           {
             showSeasonNumberPlaceholder ? <InteractiveImportRowCellPlaceholder /> : seasonNumber
           }
+
+          {
+            isReprocessing && seasonNumber == null ?
+              <LoadingIndicator className={styles.reprocessing}
+                size={20}
+
+              /> : null
+          }
+
         </TableRowCellButton>
 
         <TableRowCellButton
@@ -363,6 +374,7 @@ InteractiveImportRow.propTypes = {
   language: PropTypes.object,
   size: PropTypes.number.isRequired,
   rejections: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isReprocessing: PropTypes.bool,
   isSelected: PropTypes.bool,
   onSelectedChange: PropTypes.func.isRequired,
   onValidRowChange: PropTypes.func.isRequired

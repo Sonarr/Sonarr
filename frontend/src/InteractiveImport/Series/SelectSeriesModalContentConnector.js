@@ -1,9 +1,8 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { updateInteractiveImportItem } from 'Store/Actions/interactiveImportActions';
+import { reprocessInteractiveImportItems, updateInteractiveImportItem } from 'Store/Actions/interactiveImportActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import SelectSeriesModalContent from './SelectSeriesModalContent';
 
@@ -29,7 +28,8 @@ function createMapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  updateInteractiveImportItem
+  dispatchReprocessInteractiveImportItems: reprocessInteractiveImportItems,
+  dispatchUpdateInteractiveImportItem: updateInteractiveImportItem
 };
 
 class SelectSeriesModalContentConnector extends Component {
@@ -38,10 +38,18 @@ class SelectSeriesModalContentConnector extends Component {
   // Listeners
 
   onSeriesSelect = (seriesId) => {
-    const series = _.find(this.props.items, { id: seriesId });
+    const {
+      ids,
+      items,
+      dispatchUpdateInteractiveImportItem,
+      dispatchReprocessInteractiveImportItems,
+      onModalClose
+    } = this.props;
 
-    this.props.ids.forEach((id) => {
-      this.props.updateInteractiveImportItem({
+    const series = items.find((s) => s.id === seriesId);
+
+    ids.forEach((id) => {
+      dispatchUpdateInteractiveImportItem({
         id,
         series,
         seasonNumber: undefined,
@@ -49,7 +57,9 @@ class SelectSeriesModalContentConnector extends Component {
       });
     });
 
-    this.props.onModalClose(true);
+    dispatchReprocessInteractiveImportItems({ ids });
+
+    onModalClose(true);
   }
 
   //
@@ -68,7 +78,8 @@ class SelectSeriesModalContentConnector extends Component {
 SelectSeriesModalContentConnector.propTypes = {
   ids: PropTypes.arrayOf(PropTypes.number).isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  updateInteractiveImportItem: PropTypes.func.isRequired,
+  dispatchReprocessInteractiveImportItems: PropTypes.func.isRequired,
+  dispatchUpdateInteractiveImportItem: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 
