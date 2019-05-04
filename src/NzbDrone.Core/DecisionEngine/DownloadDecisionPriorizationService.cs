@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.DecisionEngine
 {
@@ -12,10 +12,12 @@ namespace NzbDrone.Core.DecisionEngine
 
     public class DownloadDecisionPriorizationService : IPrioritizeDownloadDecision
     {
+        private readonly IConfigService _configService;
         private readonly IDelayProfileService _delayProfileService;
 
-        public DownloadDecisionPriorizationService(IDelayProfileService delayProfileService)
+        public DownloadDecisionPriorizationService(IConfigService configService, IDelayProfileService delayProfileService)
         {
+            _configService = configService;
             _delayProfileService = delayProfileService;
         }
 
@@ -24,7 +26,7 @@ namespace NzbDrone.Core.DecisionEngine
             return decisions.Where(c => c.RemoteEpisode.Series != null)
                             .GroupBy(c => c.RemoteEpisode.Series.Id, (seriesId, downloadDecisions) =>
                                 {
-                                    return downloadDecisions.OrderByDescending(decision => decision, new DownloadDecisionComparer(_delayProfileService));
+                                    return downloadDecisions.OrderByDescending(decision => decision, new DownloadDecisionComparer(_configService, _delayProfileService));
                                 })
                             .SelectMany(c => c)
                             .Union(decisions.Where(c => c.RemoteEpisode.Series == null))

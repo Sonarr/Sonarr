@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Security;
 
 namespace NzbDrone.Core.Configuration
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.Configuration
         //Media Management
         bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
         string RecycleBin { get; set; }
-        bool AutoDownloadPropers { get; set; }
+        ProperDownloadTypes DownloadPropersAndRepacks { get; set; }
         bool CreateEmptySeriesFolders { get; set; }
         bool DeleteEmptyFolders { get; set; }
         FileDateType FileDate { get; set; }

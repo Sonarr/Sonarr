@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {
@@ -30,20 +31,28 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return Decision.Accept();
             }
 
+            var downloadPropersAndRepacks = _configService.DownloadPropersAndRepacks;
+
+            if (downloadPropersAndRepacks == ProperDownloadTypes.DoNotPrefer)
+            {
+                _logger.Debug("Propers are not preferred, skipping check");
+                return Decision.Accept();
+            }
+
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
                 if (_upgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
+                    if (downloadPropersAndRepacks == ProperDownloadTypes.DoNotUpgrade)
+                    {
+                        _logger.Debug("Auto downloading of propers is disabled");
+                        return Decision.Reject("Proper downloading is disabled");
+                    }
+
                     if (file.DateAdded < DateTime.Today.AddDays(-7))
                     {
                         _logger.Debug("Proper for old file, rejecting: {0}", subject);
                         return Decision.Reject("Proper for old file");
-                    }
-
-                    if (!_configService.AutoDownloadPropers)
-                    {
-                        _logger.Debug("Auto downloading of propers is disabled");
-                        return Decision.Reject("Proper downloading is disabled");
                     }
                 }
             }
