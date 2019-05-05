@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Who.is.America.S01E01.INTERNAL.720p.HDTV.x264-aAF-RakuvUS-Obfuscated", "aAF")]
         [TestCase("Deadly.Class.S01E10.Sink.With.California.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTG-WhiteRev", "NTG")]
         [TestCase("The.Walking.Dead.S09E12.Guardians.REPACK.1080p.AMZN.WEB-DL.DD.5.1.H.264-CasStudio-BUYMORE", "CasStudio")]
+        [TestCase("2.Broke.Girls.S02E24.1080p.AMZN.WEBRip.DD5.1.x264-CasStudio-AsRequested", "CasStudio")]
         [TestCase("Series Title - S01E01 - Episode Title [RlsGroup]", "RlsGroup")]
         [TestCase("Black Monday S01 E01-E02 1080p AMZN WEBRip DDP5.1 x264 monkee", null)]
         [TestCase("Series.Title.S01E05.The-Aniversary.WEBDL-1080p.mkv", null)]
