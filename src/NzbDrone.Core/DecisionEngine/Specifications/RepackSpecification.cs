@@ -31,7 +31,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 var releaseGroup = subject.ParsedEpisodeInfo.ReleaseGroup;
                 var fileReleaseGroup = file.ReleaseGroup;
 
-                if (fileReleaseGroup.IsNotNullOrWhiteSpace() && !fileReleaseGroup.Equals(releaseGroup, StringComparison.InvariantCultureIgnoreCase))
+                if (fileReleaseGroup.IsNullOrWhiteSpace())
+                {
+                    return Decision.Reject("Unable to determine release group for the existing file");
+                }
+
+                if (releaseGroup.IsNullOrWhiteSpace())
+                {
+                    return Decision.Reject("Unable to determine release group for this release");
+                }
+
+                if (!fileReleaseGroup.Equals(releaseGroup, StringComparison.InvariantCultureIgnoreCase))
                 {
                     _logger.Debug("Release is a repack for a different release group. Release Group: {0}. File release group: {0}", releaseGroup, fileReleaseGroup);
                     return Decision.Reject("Release is a repack for a different release group. Release Group: {0}. File release group: {0}", releaseGroup, fileReleaseGroup);

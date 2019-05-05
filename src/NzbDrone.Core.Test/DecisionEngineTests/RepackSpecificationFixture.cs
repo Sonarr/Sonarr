@@ -84,12 +84,54 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_return_false_if_is_a_repack_for_existing_file()
+        public void should_return_false_if_is_a_repack_for_a_different_file()
         {
             _parsedEpisodeInfo.Quality.Revision.IsRepack = true;
             _episodes.First().EpisodeFileId = 1;
             _episodes.First().EpisodeFile = Builder<EpisodeFile>.CreateNew()
                                                                 .With(e => e.ReleaseGroup = "NotSonarr")
+                                                                .Build();
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(e => e.ParsedEpisodeInfo = _parsedEpisodeInfo)
+                                                      .With(e => e.Episodes = _episodes)
+                                                      .Build();
+
+            Subject.IsSatisfiedBy(remoteEpisode, null)
+                   .Accepted
+                   .Should()
+                   .BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_release_group_for_existing_file_is_unknown()
+        {
+            _parsedEpisodeInfo.Quality.Revision.IsRepack = true;
+            _episodes.First().EpisodeFileId = 1;
+            _episodes.First().EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                                                                .With(e => e.ReleaseGroup = "")
+                                                                .Build();
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(e => e.ParsedEpisodeInfo = _parsedEpisodeInfo)
+                                                      .With(e => e.Episodes = _episodes)
+                                                      .Build();
+
+            Subject.IsSatisfiedBy(remoteEpisode, null)
+                   .Accepted
+                   .Should()
+                   .BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_release_group_for_release_is_unknown()
+        {
+            _parsedEpisodeInfo.Quality.Revision.IsRepack = true;
+            _parsedEpisodeInfo.ReleaseGroup = null;
+
+            _episodes.First().EpisodeFileId = 1;
+            _episodes.First().EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                                                                .With(e => e.ReleaseGroup = "Sonarr")
                                                                 .Build();
 
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
