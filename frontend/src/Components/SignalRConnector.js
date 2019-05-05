@@ -262,7 +262,7 @@ class SignalRConnector extends Component {
   }
 
   handleSystemTask = () => {
-    // No-op for now, we may want this later
+    this.props.dispatchFetchCommands();
   }
 
   handleRootfolder = () => {

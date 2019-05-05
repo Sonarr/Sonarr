@@ -348,7 +348,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 if (groupedTrackedDownload.Select(c => c.ImportResult).Count(c => c.Result == ImportResultType.Imported) >= Math.Max(1, trackedDownload.RemoteEpisode.Episodes.Count))
                 {
-                    trackedDownload.State = TrackedDownloadStage.Imported;
+                    trackedDownload.State = TrackedDownloadState.Imported;
                     _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
                 }
             }

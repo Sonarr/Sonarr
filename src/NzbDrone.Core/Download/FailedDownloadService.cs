@@ -11,7 +11,8 @@ namespace NzbDrone.Core.Download
     {
         void MarkAsFailed(int historyId);
         void MarkAsFailed(string downloadId);
-        void Process(TrackedDownload trackedDownload);
+        void Check(TrackedDownload trackedDownload);
+        void ProcessFailed(TrackedDownload trackedDownload);
     }
 
     public class FailedDownloadService : IFailedDownloadService
@@ -52,33 +53,60 @@ namespace NzbDrone.Core.Download
             }
         }
 
-        public void Process(TrackedDownload trackedDownload)
+        public void Check(TrackedDownload trackedDownload)
         {
-            string failure = null;
-
-            if (trackedDownload.DownloadItem.IsEncrypted)
+            // Only process tracked downloads that are still downloading
+            if (trackedDownload.State != TrackedDownloadState.Downloading)
             {
-                failure = "Encrypted download detected";
-            }
-            else if (trackedDownload.DownloadItem.Status == DownloadItemStatus.Failed)
-            {
-                failure = trackedDownload.DownloadItem.Message ?? "Failed download detected";
+                return;
             }
 
-            if (failure != null)
+            if (trackedDownload.DownloadItem.IsEncrypted ||
+                trackedDownload.DownloadItem.Status == DownloadItemStatus.Failed)
             {
-                var grabbedItems = _historyService.Find(trackedDownload.DownloadItem.DownloadId, HistoryEventType.Grabbed)
-                    .ToList();
+                var grabbedItems = _historyService
+                                   .Find(trackedDownload.DownloadItem.DownloadId, HistoryEventType.Grabbed)
+                                   .ToList();
 
                 if (grabbedItems.Empty())
                 {
                     trackedDownload.Warn("Download wasn't grabbed by sonarr, skipping");
                     return;
                 }
-            
-                trackedDownload.State = TrackedDownloadStage.DownloadFailed;
-                PublishDownloadFailedEvent(grabbedItems, failure, trackedDownload);
+
+                trackedDownload.State = TrackedDownloadState.FailedPending;
             }
+        }
+
+        public void ProcessFailed(TrackedDownload trackedDownload)
+        {
+            if (trackedDownload.State != TrackedDownloadState.FailedPending)
+            {
+                return;
+            }
+
+            var grabbedItems = _historyService
+                               .Find(trackedDownload.DownloadItem.DownloadId, HistoryEventType.Grabbed)
+                               .ToList();
+
+            if (grabbedItems.Empty())
+            {
+                return;
+            }
+
+            var failure = "Failed download detected";
+
+            if (trackedDownload.DownloadItem.IsEncrypted)
+            {
+                failure = "Encrypted download detected";
+            }
+            else if (trackedDownload.DownloadItem.Status == DownloadItemStatus.Failed && trackedDownload.DownloadItem.Message.IsNotNullOrWhiteSpace())
+            {
+                failure = trackedDownload.DownloadItem.Message;
+            }
+
+            trackedDownload.State = TrackedDownloadState.Failed;
+            PublishDownloadFailedEvent(grabbedItems, failure, trackedDownload);
         }
 
         private void PublishDownloadFailedEvent(List<History.History> historyItems, string message, TrackedDownload trackedDownload = null)

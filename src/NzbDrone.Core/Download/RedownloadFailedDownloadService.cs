@@ -2,13 +2,14 @@
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
 {
-    public class RedownloadFailedDownloadService : IHandleAsync<DownloadFailedEvent>
+    public class RedownloadFailedDownloadService : IHandle<DownloadFailedEvent>
     {
         private readonly IConfigService _configService;
         private readonly IEpisodeService _episodeService;
@@ -26,7 +27,8 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public void HandleAsync(DownloadFailedEvent message)
+        [EventHandleOrder(EventHandleOrder.Last)]
+        public void Handle(DownloadFailedEvent message)
         {
             if (!_configService.AutoRedownloadFailed)
             {

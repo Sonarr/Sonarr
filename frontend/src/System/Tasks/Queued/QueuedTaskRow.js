@@ -168,7 +168,7 @@ class QueuedTaskRow extends Component {
       isCancelConfirmModalOpen
     } = this.state;
 
-    let triggerIcon = icons.UNKNOWN;
+    let triggerIcon = icons.QUICK;
 
     if (trigger === 'manual') {
       triggerIcon = icons.INTERACTIVE;

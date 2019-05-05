@@ -46,7 +46,7 @@ namespace NzbDrone.Api.Queue
                 Timeleft = model.Timeleft,
                 EstimatedCompletionTime = model.EstimatedCompletionTime,
                 Status = model.Status,
-                TrackedDownloadStatus = model.TrackedDownloadStatus,
+                TrackedDownloadStatus = model.TrackedDownloadStatus.ToString(),
                 StatusMessages = model.StatusMessages,
                 DownloadId = model.DownloadId,
                 Protocol = model.Protocol
