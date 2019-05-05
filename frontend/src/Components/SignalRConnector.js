@@ -84,7 +84,7 @@ class SignalRConnector extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.signalRconnectionOptions = { transport: ['webSockets', 'longPolling'] };
+    this.signalRconnectionOptions = { transport: ['webSockets', 'serverSentEvents', 'longPolling'] };
     this.signalRconnection = null;
     this.retryInterval = 1;
     this.retryTimeoutId = null;

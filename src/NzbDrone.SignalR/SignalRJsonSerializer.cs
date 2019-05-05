@@ -13,6 +13,7 @@ namespace NzbDrone.SignalR
         {
             _serializerSettings = Json.GetSerializerSettings();
             _serializerSettings.ContractResolver = new SignalRContractResolver();
+            _serializerSettings.Formatting = Formatting.None; // ServerSentEvents doesn't like newlines
 
             _serializer = JsonSerializer.Create(_serializerSettings);
 
