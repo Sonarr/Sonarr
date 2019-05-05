@@ -68,6 +68,7 @@ class QueueRow extends Component {
       title,
       status,
       trackedDownloadStatus,
+      trackedDownloadState,
       statusMessages,
       errorMessage,
       series,
@@ -100,8 +101,8 @@ class QueueRow extends Component {
     } = this.state;
 
     const progress = 100 - (sizeleft / size * 100);
-    const showInteractiveImport = status === 'Completed' && trackedDownloadStatus === 'Warning';
-    const isPending = status === 'Delay' || status === 'DownloadClientUnavailable';
+    const showInteractiveImport = status === 'completed' && trackedDownloadStatus === 'warning';
+    const isPending = status === 'delay' || status === 'downloadClientUnavailable';
 
     return (
       <TableRow>
@@ -129,6 +130,7 @@ class QueueRow extends Component {
                   sourceTitle={title}
                   status={status}
                   trackedDownloadStatus={trackedDownloadStatus}
+                  trackedDownloadState={trackedDownloadState}
                   statusMessages={statusMessages}
                   errorMessage={errorMessage}
                 />
@@ -365,6 +367,7 @@ QueueRow.propTypes = {
   title: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   trackedDownloadStatus: PropTypes.string,
+  trackedDownloadState: PropTypes.string,
   statusMessages: PropTypes.arrayOf(PropTypes.object),
   errorMessage: PropTypes.string,
   series: PropTypes.object,

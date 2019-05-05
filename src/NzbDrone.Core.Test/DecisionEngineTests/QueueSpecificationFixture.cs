@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Qualities;
@@ -79,11 +80,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(new List<Queue.Queue>());
         }
 
-        private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes)
+        private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes, TrackedDownloadState trackedDownloadState = TrackedDownloadState.Downloading)
         {
             var queue = remoteEpisodes.Select(remoteEpisode => new Queue.Queue
             {
-                RemoteEpisode = remoteEpisode
+                RemoteEpisode = remoteEpisode,
+                TrackedDownloadState = trackedDownloadState
             });
 
             Mocker.GetMock<IQueueService>()
@@ -431,6 +433,28 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_if_everything_is_the_same_for_failed_pending()
+        {
+            _series.QualityProfile.Value.Cutoff = Quality.Bluray1080p.Id;
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                .With(r => r.Series = _series)
+                .With(r => r.Episodes = new List<Episode> { _episode })
+                .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    Quality = new QualityModel(Quality.DVD),
+                    Language = Language.Spanish
+                })
+                .With(r => r.Release = _releaseInfo)
+                .Build();
+
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode }, TrackedDownloadState.FailedPending);
+            
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

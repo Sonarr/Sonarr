@@ -19,16 +19,12 @@ namespace NzbDrone.Core.Messaging.Events
 
         private class EventSubscribers<TEvent> where TEvent : class, IEvent
         {
-            private IServiceFactory _serviceFactory;
-
             public IHandle<TEvent>[] _syncHandlers;
             public IHandleAsync<TEvent>[] _asyncHandlers;
             public IHandleAsync<IEvent>[] _globalHandlers;
 
             public EventSubscribers(IServiceFactory serviceFactory)
             {
-                _serviceFactory = serviceFactory;
-
                 _syncHandlers = serviceFactory.BuildAll<IHandle<TEvent>>()
                                               .OrderBy(GetEventHandleOrder)
                                               .ToArray();
@@ -139,8 +135,7 @@ namespace NzbDrone.Core.Messaging.Events
 
         internal static int GetEventHandleOrder<TEvent>(IHandle<TEvent> eventHandler) where TEvent : class, IEvent
         {
-            // TODO: Convert "Handle" to nameof(eventHandler.Handle) after .net 4.5
-            var method = eventHandler.GetType().GetMethod("Handle", new Type[] {typeof(TEvent)});
+            var method = eventHandler.GetType().GetMethod(nameof(eventHandler.Handle), new Type[] {typeof(TEvent)});
 
             if (method == null)
             {

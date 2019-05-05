@@ -1,5 +1,6 @@
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Releases;
@@ -41,6 +42,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 var remoteEpisode = queueItem.RemoteEpisode;
                 var qualityProfile = subject.Series.QualityProfile.Value;
                 var languageProfile = subject.Series.LanguageProfile.Value;
+
+                // To avoid a race make sure it's not FailedPending (failed awaiting removal/search).
+                // Failed items (already searching for a replacement) won't be part of the queue since
+                // it's a copy, of the tracked download, not a reference.
+
+                if (queueItem.TrackedDownloadState == TrackedDownloadState.FailedPending)
+                {
+                    continue;
+                }
 
                 _logger.Debug("Checking if existing release in queue meets cutoff. Queued: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
                 var queuedItemPreferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, queueItem.Title);
