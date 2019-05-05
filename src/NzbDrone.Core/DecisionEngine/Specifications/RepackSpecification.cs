@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 var releaseGroup = subject.ParsedEpisodeInfo.ReleaseGroup;
                 var fileReleaseGroup = file.ReleaseGroup;
 
-                if (!fileReleaseGroup.Equals(releaseGroup, StringComparison.InvariantCultureIgnoreCase))
+                if (fileReleaseGroup.IsNotNullOrWhiteSpace() && !fileReleaseGroup.Equals(releaseGroup, StringComparison.InvariantCultureIgnoreCase))
                 {
                     _logger.Debug("Release is a repack for a different release group. Release Group: {0}. File release group: {0}", releaseGroup, fileReleaseGroup);
                     return Decision.Reject("Release is a repack for a different release group. Release Group: {0}. File release group: {0}", releaseGroup, fileReleaseGroup);
