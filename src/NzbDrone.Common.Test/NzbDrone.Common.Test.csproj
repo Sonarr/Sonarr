@@ -85,6 +85,8 @@
     <Compile Include="ExtensionTests\IEnumerableExtensionTests\IntersectByFixture.cs" />
     <Compile Include="ExtensionTests\Int64ExtensionFixture.cs" />
     <Compile Include="ExtensionTests\IPAddressExtensionsFixture.cs" />
+    <Compile Include="ExtensionTests\StringExtensionTests\FirstCharcacterToLowerFixture.cs" />
+    <Compile Include="ExtensionTests\StringExtensionTests\FirstCharcacterToUpperFixture.cs" />
     <Compile Include="ExtensionTests\UrlExtensionsFixture.cs" />
     <Compile Include="HashUtilFixture.cs" />
     <Compile Include="Http\HttpClientFixture.cs" />

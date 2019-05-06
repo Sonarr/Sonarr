@@ -22,9 +22,14 @@ namespace NzbDrone.Common.Extensions
             return "[NULL]";
         }
 
+        public static string FirstCharToLower(this string input)
+        {
+            return input.First().ToString().ToLower() + input.Substring(1);
+        }
+
         public static string FirstCharToUpper(this string input)
         {
-            return input.First().ToString().ToUpper() + string.Join("", input.Skip(1));
+            return input.First().ToString().ToUpper() + input.Substring(1);
         }
 
         public static string Inject(this string format, params object[] formattingArgs)
