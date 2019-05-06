@@ -12,9 +12,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         private readonly UpgradableSpecification _upgradableSpecification;
         private readonly Logger _logger;
 
-        public AnimeVersionUpgradeSpecification(UpgradableSpecification UpgradableSpecification, Logger logger)
+        public AnimeVersionUpgradeSpecification(UpgradableSpecification upgradableSpecification, Logger logger)
         {
-            _upgradableSpecification = UpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
             _logger = logger;
         }
 
