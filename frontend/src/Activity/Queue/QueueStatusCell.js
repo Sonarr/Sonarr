@@ -116,6 +116,7 @@ function QueueStatusCell(props) {
         title={title}
         body={hasWarning || hasError ? getDetailedPopoverBody(statusMessages) : sourceTitle}
         position={tooltipPositions.RIGHT}
+        canFlip={false}
       />
     </TableRowCell>
   );

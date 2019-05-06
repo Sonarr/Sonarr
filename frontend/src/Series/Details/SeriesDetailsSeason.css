@@ -74,13 +74,19 @@
 }
 
 .collapseButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 15px;
   width: 100%;
   border-top: 1px solid $borderColor;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   background-color: #fafafa;
-  text-align: center;
+}
+
+.collapseButtonIcon {
+  margin-bottom: -4px;
 }
 
 .expandButtonIcon {
