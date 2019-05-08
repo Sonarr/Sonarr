@@ -66,6 +66,7 @@ namespace Sonarr.Api.V3.History
 
             var eventTypeFilter = pagingResource.Filters.FirstOrDefault(f => f.Key == "eventType");
             var episodeIdFilter = pagingResource.Filters.FirstOrDefault(f => f.Key == "episodeId");
+            var downloadIdFilter = pagingResource.Filters.FirstOrDefault(f => f.Key == "downloadId");
 
             if (eventTypeFilter != null)
             {
@@ -77,6 +78,12 @@ namespace Sonarr.Api.V3.History
             {
                 var episodeId = Convert.ToInt32(episodeIdFilter.Value);
                 pagingSpec.FilterExpressions.Add(h => h.EpisodeId == episodeId);
+            }
+            
+            if (downloadIdFilter != null)
+            {
+                var downloadId = downloadIdFilter.Value;
+                pagingSpec.FilterExpressions.Add(h => h.DownloadId == downloadId);
             }
 
             return ApplyToPage(_historyService.Paged, pagingSpec, h => MapToResource(h, includeSeries, includeEpisode));
