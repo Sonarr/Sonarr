@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -29,6 +30,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly IDetectSample _detectSample;
+        private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -38,6 +40,7 @@ namespace NzbDrone.Core.MediaFiles
                                                IMakeImportDecision importDecisionMaker,
                                                IImportApprovedEpisodes importApprovedEpisodes,
                                                IDetectSample detectSample,
+                                               IRuntimeInfo runtimeInfo,
                                                Logger logger)
         {
             _diskProvider = diskProvider;
@@ -47,6 +50,7 @@ namespace NzbDrone.Core.MediaFiles
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
             _detectSample = detectSample;
+            _runtimeInfo = runtimeInfo;
             _logger = logger;
         }
 
@@ -95,7 +99,7 @@ namespace NzbDrone.Core.MediaFiles
                 return ProcessFile(fileInfo, importMode, series, downloadClientItem);
             }
 
-            _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}", path);
+            LogInaccessiblePathError(path);
             return new List<ImportResult>();
         }
 
@@ -256,6 +260,32 @@ namespace NzbDrone.Core.MediaFiles
             var localEpisode = videoFile == null ? null : new LocalEpisode { Path = videoFile };
 
             return new ImportResult(new ImportDecision(localEpisode, new Rejection("Unknown Series")), message);
+        }
+
+        private void LogInaccessiblePathError(string path)
+        {
+            if (_runtimeInfo.IsWindowsService)
+            {
+                var mounts = _diskProvider.GetMounts();
+                var mount = mounts.FirstOrDefault(m => m.RootDirectory == Path.GetPathRoot(path));
+
+                if (mount.DriveType == DriveType.Network)
+                {
+                    _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}. It's recommended to avoid mapped network drives when running as a Windows service. See the FAQ for more info", path);
+                    return;
+                }
+            }
+
+            if (OsInfo.IsWindows)
+            {
+                if (path.StartsWith(@"\\"))
+                {
+                    _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}. Ensure the user running Sonarr has access to the network share", path);
+                    return;
+                }
+            }
+
+            _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}. Ensure the path exists and the user running Sonarr has the correct permissions to access this file/folder", path);
         }
     }
 }
