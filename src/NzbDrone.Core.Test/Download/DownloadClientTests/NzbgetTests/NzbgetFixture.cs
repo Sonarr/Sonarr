@@ -285,7 +285,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             GivenQueue(null);
             GivenHistory(_completed);
 
-            var result = Subject.GetItems().Single();
+            var result = Subject.GetItems().SingleOrDefault();
 
             result.Should().BeNull();
         }
