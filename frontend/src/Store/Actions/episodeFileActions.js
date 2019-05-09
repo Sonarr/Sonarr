@@ -31,6 +31,7 @@ export const defaultState = {
 //
 // Actions Types
 
+export const FETCH_EPISODE_FILE = 'episodeFiles/fetchEpisodeFile';
 export const FETCH_EPISODE_FILES = 'episodeFiles/fetchEpisodeFiles';
 export const DELETE_EPISODE_FILE = 'episodeFiles/deleteEpisodeFile';
 export const DELETE_EPISODE_FILES = 'episodeFiles/deleteEpisodeFiles';
@@ -40,6 +41,7 @@ export const CLEAR_EPISODE_FILES = 'episodeFiles/clearEpisodeFiles';
 //
 // Action Creators
 
+export const fetchEpisodeFile = createThunk(FETCH_EPISODE_FILE);
 export const fetchEpisodeFiles = createThunk(FETCH_EPISODE_FILES);
 export const deleteEpisodeFile = createThunk(DELETE_EPISODE_FILE);
 export const deleteEpisodeFiles = createThunk(DELETE_EPISODE_FILES);
@@ -55,6 +57,7 @@ const deleteEpisodeFileHelper = createRemoveItemHandler(section, '/episodeFile')
 // Action Handlers
 
 export const actionHandlers = handleThunks({
+  [FETCH_EPISODE_FILE]: createFetchHandler(section, '/episodeFile'),
   [FETCH_EPISODE_FILES]: createFetchHandler(section, '/episodeFile'),
 
   [DELETE_EPISODE_FILE]: function(getState, payload, dispatch) {

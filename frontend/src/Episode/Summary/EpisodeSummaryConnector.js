@@ -1,6 +1,8 @@
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { deleteEpisodeFile } from 'Store/Actions/episodeFileActions';
+import { fetchEpisodeFile, deleteEpisodeFile } from 'Store/Actions/episodeFileActions';
 import createEpisodeSelector from 'Store/Selectors/createEpisodeSelector';
 import createEpisodeFileSelector from 'Store/Selectors/createEpisodeFileSelector';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
@@ -52,8 +54,50 @@ function createMapDispatchToProps(dispatch, props) {
         id: props.episodeFileId,
         episodeEntity: props.episodeEntity
       }));
+    },
+
+    dispatchFetchEpisodeFile() {
+      dispatch(fetchEpisodeFile({
+        id: props.episodeFileId
+      }));
     }
   };
 }
 
-export default connect(createMapStateToProps, createMapDispatchToProps)(EpisodeSummary);
+class EpisodeSummaryConnector extends Component {
+
+  //
+  // Lifecycle
+
+  componentDidMount() {
+    const {
+      episodeFileId,
+      path,
+      dispatchFetchEpisodeFile
+    } = this.props;
+
+    if (episodeFileId && !path) {
+      dispatchFetchEpisodeFile({ id: episodeFileId });
+    }
+  }
+
+  //
+  // Render
+
+  render() {
+    const {
+      dispatchFetchEpisodeFile,
+      ...otherProps
+    } = this.props;
+
+    return <EpisodeSummary {...otherProps} />;
+  }
+}
+
+EpisodeSummaryConnector.propTypes = {
+  episodeFileId: PropTypes.number,
+  path: PropTypes.string,
+  dispatchFetchEpisodeFile: PropTypes.func.isRequired
+};
+
+export default connect(createMapStateToProps, createMapDispatchToProps)(EpisodeSummaryConnector);

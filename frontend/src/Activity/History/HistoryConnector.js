@@ -8,6 +8,7 @@ import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import withCurrentPage from 'Components/withCurrentPage';
 import * as historyActions from 'Store/Actions/historyActions';
 import { fetchEpisodes, clearEpisodes } from 'Store/Actions/episodeActions';
+import { clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
 import History from './History';
 
 function createMapStateToProps() {
@@ -28,7 +29,8 @@ function createMapStateToProps() {
 const mapDispatchToProps = {
   ...historyActions,
   fetchEpisodes,
-  clearEpisodes
+  clearEpisodes,
+  clearEpisodeFiles
 };
 
 class HistoryConnector extends Component {
@@ -68,6 +70,7 @@ class HistoryConnector extends Component {
     unregisterPagePopulator(this.repopulate);
     this.props.clearHistory();
     this.props.clearEpisodes();
+    this.props.clearEpisodeFiles();
   }
 
   //
@@ -150,7 +153,8 @@ HistoryConnector.propTypes = {
   setHistoryTableOption: PropTypes.func.isRequired,
   clearHistory: PropTypes.func.isRequired,
   fetchEpisodes: PropTypes.func.isRequired,
-  clearEpisodes: PropTypes.func.isRequired
+  clearEpisodes: PropTypes.func.isRequired,
+  clearEpisodeFiles: PropTypes.func.isRequired
 };
 
 export default withCurrentPage(
