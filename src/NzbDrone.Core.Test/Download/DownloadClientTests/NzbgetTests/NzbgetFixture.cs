@@ -9,7 +9,7 @@ using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Exceptions;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {
@@ -278,7 +278,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
-        public void should_report_deletestatus_copy_as_failed()
+        public void should_skip_deletestatus_copy()
         {
             _completed.DeleteStatus = "COPY";
 
@@ -287,7 +287,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 
             var result = Subject.GetItems().Single();
 
-            result.Status.Should().Be(DownloadItemStatus.Failed);
+            result.Should().BeNull();
         }
 
         [Test]
@@ -351,7 +351,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Assert.Throws<DownloadClientException>(() => Subject.Download(remoteEpisode));
+            Assert.Throws<DownloadClientRejectedReleaseException>(() => Subject.Download(remoteEpisode));
         }
 
         [Test]
