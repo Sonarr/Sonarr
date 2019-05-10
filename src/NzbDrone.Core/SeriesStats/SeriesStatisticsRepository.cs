@@ -27,7 +27,7 @@ namespace NzbDrone.Core.SeriesStats
             mapper.AddParameter("currentDate", DateTime.UtcNow);
 
             var sb = new StringBuilder();
-            sb.AppendLine(GetSelectClause());
+            sb.AppendLine(GetSelectClause(false));
             sb.AppendLine(GetEpisodeFilesJoin());
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
@@ -43,16 +43,15 @@ namespace NzbDrone.Core.SeriesStats
             mapper.AddParameter("seriesId", seriesId);
 
             var sb = new StringBuilder();
-            sb.AppendLine(GetSelectClause());
+            sb.AppendLine(GetSelectClause(true));
             sb.AppendLine(GetEpisodeFilesJoin());
-            sb.AppendLine("WHERE Episodes.SeriesId = @seriesId");
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
 
             return mapper.Query<SeasonStatistics>(queryText);
         }
 
-        private string GetSelectClause()
+        private string GetSelectClause(bool series)
         {
             return @"SELECT Episodes.*, SUM(EpisodeFiles.Size) as SizeOnDisk FROM
                      (SELECT
@@ -64,7 +63,8 @@ namespace NzbDrone.Core.SeriesStats
                      SUM(CASE WHEN EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
                      MIN(CASE WHEN AirDateUtc < @currentDate OR EpisodeFileId > 0 OR Monitored = 0 THEN NULL ELSE AirDateUtc END) AS NextAiringString,
                      MAX(CASE WHEN AirDateUtc >= @currentDate OR EpisodeFileId = 0 AND Monitored = 0 THEN NULL ELSE AirDateUtc END) AS PreviousAiringString
-                     FROM Episodes
+                     FROM Episodes" +
+                     (series ? " WHERE Episodes.SeriesId = @seriesId" :  "") + @"
                      GROUP BY Episodes.SeriesId, Episodes.SeasonNumber) as Episodes";
         }
 
