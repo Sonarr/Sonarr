@@ -6,6 +6,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.Transmission;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Organizer;
 
 namespace NzbDrone.Core.Download.Clients.Vuze
 {
@@ -19,8 +20,9 @@ namespace NzbDrone.Core.Download.Clients.Vuze
                     IConfigService configService,
                     IDiskProvider diskProvider,
                     IRemotePathMappingService remotePathMappingService,
+                    IBuildFileNames filenameBuilder,
                     Logger logger)
-            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, filenameBuilder, logger)
         {
         }
 

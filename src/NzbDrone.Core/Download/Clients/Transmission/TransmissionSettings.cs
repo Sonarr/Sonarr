@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             Host = "localhost";
             Port = 9091;
             UrlBase = "/transmission/";
+            PassDownloadDir = true;
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
@@ -67,6 +68,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         [FieldDefinition(10, Label = "Use SSL", Type = FieldType.Checkbox)]
         public bool UseSsl { get; set; }
+
+        [FieldDefinition(11, Label = "Pass download dir", Type = FieldType.Checkbox, Advanced =true, HelpText = "Pass 'seriesname/season' directory to transmission as download location. Requires valid host mappings. Uses Season Folder Format from Media Management settings.")]
+        public bool PassDownloadDir { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

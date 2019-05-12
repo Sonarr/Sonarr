@@ -11,6 +11,7 @@ using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
+using NzbDrone.Core.Organizer;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
 {
@@ -18,16 +19,20 @@ namespace NzbDrone.Core.Download.Clients.Transmission
     {
         protected readonly ITransmissionProxy _proxy;
 
+        protected readonly IBuildFileNames _filenameBuilder;
+
         public TransmissionBase(ITransmissionProxy proxy,
             ITorrentFileInfoReader torrentFileInfoReader,
             IHttpClient httpClient,
             IConfigService configService,
             IDiskProvider diskProvider,
             IRemotePathMappingService remotePathMappingService,
+            IBuildFileNames filenameBuilder,
             Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
+            _filenameBuilder = filenameBuilder;
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
@@ -132,7 +137,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
+            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(remoteEpisode), Settings);
             _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
@@ -148,7 +153,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
+            _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(remoteEpisode), Settings);
             _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
@@ -174,8 +179,40 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return outputPath + torrent.Name;
         }
 
-        protected string GetDownloadDirectory()
+        protected string GetDownloadDirectory(RemoteEpisode remoteEpisode)
         {
+            if (Settings.PassDownloadDir) {
+                var seriesPath = remoteEpisode.Series.Path;
+
+                // try to get common season number
+                var seasonNumber = -1;
+                foreach (var ep in remoteEpisode.Episodes) {
+                    if (seasonNumber == -1) {
+                        seasonNumber = ep.SeasonNumber;
+                    } else if (seasonNumber != ep.SeasonNumber) {
+                        seasonNumber = -1;
+                        break;
+                    }
+                }
+
+                var seasonPath = "";
+                if (seasonNumber != -1) {
+                    seasonPath = _filenameBuilder.BuildSeasonPath(remoteEpisode.Series, seasonNumber);
+                } else {
+                    _logger.Warn("Could not find common season number for episodes to download, using series path");
+                    seasonPath = remoteEpisode.Series.Path;
+                }
+
+                var localPath = new OsPath(seasonPath);
+                var remotePath = _remotePathMappingService.RemapLocalToRemote(Settings.Host, localPath);
+
+                if (remotePath == localPath) {
+                    _logger.Warn("Local and remote path are the same, perhaps you have no mapping for " + localPath.FullPath +"?");
+                } else {
+                    _logger.Trace("Mapped to remote season path: " + remotePath.FullPath);
+                }
+                return remotePath.FullPath;
+            }
             if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
             {
                 return Settings.TvDirectory;
