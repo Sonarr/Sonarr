@@ -99,9 +99,19 @@ namespace Sonarr.Api.V3.Series
 
         private List<SeriesResource> AllSeries()
         {
+            var tvdbId = Request.GetIntegerQueryParameter("tvdbId");
             var includeSeasonImages = Request.GetBooleanQueryParameter("includeSeasonImages");
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
-            var seriesResources = _seriesService.GetAllSeries().Select(s => s.ToResource(includeSeasonImages)).ToList();
+            var seriesResources = new List<SeriesResource>();
+
+            if (tvdbId > 0)
+            {
+                seriesResources.AddIfNotNull(_seriesService.FindByTvdbId(tvdbId).ToResource(includeSeasonImages));
+            }
+            else
+            {
+                seriesResources.AddRange(_seriesService.GetAllSeries().Select(s => s.ToResource(includeSeasonImages)));
+            }
 
             MapCoversToLocal(seriesResources.ToArray());
             LinkSeriesStatistics(seriesResources, seriesStats);
