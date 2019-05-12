@@ -169,15 +169,21 @@ namespace NzbDrone.Core.Tv
         {
             var storedSeries = GetSeries(series.Id);
 
-            foreach (var season in series.Seasons)
+            if (updateEpisodesToMatchSeason)
             {
-                var storedSeason = storedSeries.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);
-
-                if (storedSeason != null && season.Monitored != storedSeason.Monitored && updateEpisodesToMatchSeason)
+                foreach (var season in series.Seasons)
                 {
-                    _episodeService.SetEpisodeMonitoredBySeason(series.Id, season.SeasonNumber, season.Monitored);
+                    var storedSeason = storedSeries.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);
+
+                    if (storedSeason != null && season.Monitored != storedSeason.Monitored)
+                    {
+                        _episodeService.SetEpisodeMonitoredBySeason(series.Id, season.SeasonNumber, season.Monitored);
+                    }
                 }
             }
+
+            // Never update AddOptions when updating a series, keep it the same as the existing stored series.
+            series.AddOptions = storedSeries.AddOptions;
 
             var updatedSeries = _seriesRepository.Update(series);
             _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries));
