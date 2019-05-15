@@ -37,7 +37,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     return Decision.Reject("Not an upgrade for existing episode file(s)");
                 }
 
-                if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
+                if (qualityCompare == 0 && downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                     localEpisode.Quality.Revision.CompareTo(episodeFile.Quality.Revision) < 0)
                 {
                     _logger.Debug("This file isn't a quality upgrade for all episodes. Skipping {0}", localEpisode.Path);
