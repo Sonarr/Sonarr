@@ -33,7 +33,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             Host = "localhost";
             Port = 9091;
             UrlBase = "/transmission/";
-            PassDownloadDir = true;
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
