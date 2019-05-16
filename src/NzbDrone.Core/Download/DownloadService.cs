@@ -45,7 +45,6 @@ namespace NzbDrone.Core.Download
             _eventAggregator = eventAggregator;
             _seedConfigProvider = seedConfigProvider;
             _logger = logger;
-            // TODO: add
         }
 
         public void DownloadReport(RemoteEpisode remoteEpisode)
