@@ -688,7 +688,7 @@ SeriesDetails.propTypes = {
 
 SeriesDetails.defaultProps = {
   statistics: {},
-  tag: [],
+  tags: [],
   isSaving: false
 };
 
