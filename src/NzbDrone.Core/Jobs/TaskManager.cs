@@ -65,7 +65,6 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 6*60, TypeName = typeof(ApplicationUpdateCommand).FullName},
                     new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName},
                     new ScheduledTask{ Interval = 6*60, TypeName = typeof(CheckHealthCommand).FullName},
-                    new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 24*60, TypeName = typeof(HousekeepingCommand).FullName},
 
                     new ScheduledTask
@@ -79,6 +78,18 @@ namespace NzbDrone.Core.Jobs
                         Interval = GetRssSyncInterval(),
                         TypeName = typeof(RssSyncCommand).FullName
                     }
+
+                    new ScheduledTask
+                    {
+                        Interval = Math.Max(_configService.CheckForFinishedDownloadInterval, 1),
+                        TypeName = typeof(CheckForFinishedDownloadCommand).FullName
+                    },
+
+                    new ScheduledTask
+                    {
+                        Interval = Math.Max(_configService.RefreshSeriesInterval, 24*60),
+                        TypeName = typeof(RefreshSeriesCommand).FullName
+                    },
                 };
 
             var currentTasks = _scheduledTaskRepository.All().ToList();
@@ -149,7 +160,13 @@ namespace NzbDrone.Core.Jobs
             var rss = _scheduledTaskRepository.GetDefinition(typeof(RssSyncCommand));
             rss.Interval = _configService.RssSyncInterval;
 
-            _scheduledTaskRepository.Update(rss);
+            var checkForFinishedDownloads = _scheduledTaskRepository.GetDefinition(typeof(CheckForFinishedDownloadCommand));
+            checkForFinishedDownloads.Interval = _configService.CheckForFinishedDownloadInterval;
+
+            var refreshSeries = _scheduledTaskRepository.GetDefinition(typeof(RefreshSeriesCommand));
+            refreshSeries.Interval = _configService.RefreshSeriesInterval * 24 * 60;
+
+            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask> { rss, checkForFinishedDownloads, refreshSeries });
         }
     }
 }

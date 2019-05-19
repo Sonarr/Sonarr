@@ -13,6 +13,7 @@ namespace NzbDrone.Api.Config
         public bool CreateEmptySeriesFolders { get; set; }
         public bool DeleteEmptyFolders { get; set; }
         public FileDateType FileDate { get; set; }
+        public int RefreshSeriesInterval { get; set; }
 
         public bool SetPermissionsLinux { get; set; }
         public string FileChmod { get; set; }
@@ -39,6 +40,7 @@ namespace NzbDrone.Api.Config
                 CreateEmptySeriesFolders = model.CreateEmptySeriesFolders,
                 DeleteEmptyFolders = model.DeleteEmptyFolders,
                 FileDate = model.FileDate,
+                RefreshSeriesInterval = model.RefreshSeriesInterval,
 
                 SetPermissionsLinux = model.SetPermissionsLinux,
                 FileChmod = model.FileChmod,

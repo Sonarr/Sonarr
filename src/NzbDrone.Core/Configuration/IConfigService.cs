@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Configuration
         //Download Client
         string DownloadClientWorkingFolders { get; set; }
         int DownloadClientHistoryLimit { get; set; }
+        int CheckForFinishedDownloadInterval { get; set; }
 
         //Completed/Failed Download Handling (Download client)
         bool EnableCompletedDownloadHandling { get; set; }
@@ -38,6 +39,7 @@ namespace NzbDrone.Core.Configuration
         string ExtraFileExtensions { get; set; }
         RescanAfterRefreshType RescanAfterRefresh { get; set; }
         EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
+        int RefreshSeriesInterval { get; set; }
 
 
         //Permissions (Media Management)

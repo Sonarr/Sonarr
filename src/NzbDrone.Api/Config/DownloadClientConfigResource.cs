@@ -9,6 +9,7 @@ namespace NzbDrone.Api.Config
 
         public bool EnableCompletedDownloadHandling { get; set; }
         public bool RemoveCompletedDownloads { get; set; }
+        public int CheckForFinishedDownloadInterval { get; set; }
 
         public bool AutoRedownloadFailed { get; set; }
         public bool RemoveFailedDownloads { get; set; }
@@ -24,6 +25,7 @@ namespace NzbDrone.Api.Config
 
                 EnableCompletedDownloadHandling = model.EnableCompletedDownloadHandling,
                 RemoveCompletedDownloads = model.RemoveCompletedDownloads,
+                CheckForFinishedDownloadInterval = model.CheckForFinishedDownloadInterval,
 
                 AutoRedownloadFailed = model.AutoRedownloadFailed,
                 RemoveFailedDownloads = model.RemoveFailedDownloads
