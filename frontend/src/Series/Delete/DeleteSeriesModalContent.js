@@ -62,7 +62,7 @@ class DeleteSeriesModalContent extends Component {
 
     if (episodeFileCount === 0) {
       deleteFilesLabel = 'Delete Series Folder';
-      deleteFilesHelpText = 'Delete the series folder and it\'s contents';
+      deleteFilesHelpText = 'Delete the series folder and its contents';
     }
 
     return (
@@ -99,7 +99,7 @@ class DeleteSeriesModalContent extends Component {
           {
             deleteFiles &&
               <div className={styles.deleteFilesMessage}>
-                <div>The series folder <strong>{path}</strong> and all it's content will be deleted.</div>
+                <div>The series folder <strong>{path}</strong> and all of its content will be deleted.</div>
 
                 {
                   !!episodeFileCount &&
