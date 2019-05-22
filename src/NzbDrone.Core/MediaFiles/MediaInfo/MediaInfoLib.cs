@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using NzbDrone.Common.Instrumentation;
 using NLog;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -98,18 +100,24 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
             else
             {
+                var responses = new List<string>();
+
                 // Linux normally UCS-4. As fallback we try UCS-2 and plain Ansi.
                 MustUseAnsi = false;
                 Encoding = Encoding.UTF32;
 
-                if (Option("Info_Version", "").StartsWith("MediaInfoLib"))
+                var version = Option("Info_Version", "");
+                responses.Add(version);
+                if (version.StartsWith("MediaInfoLib"))
                 {
                     return;
                 }
 
                 Encoding = Encoding.Unicode;
 
-                if (Option("Info_Version", "").StartsWith("MediaInfoLib"))
+                version = Option("Info_Version", "");
+                responses.Add(version);
+                if (version.StartsWith("MediaInfoLib"))
                 {
                     return;
                 }
@@ -117,12 +125,14 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 MustUseAnsi = true;
                 Encoding = Encoding.Default;
 
-                if (Option("Info_Version", "").StartsWith("MediaInfoLib"))
+                version = Option("Info_Version", "");
+                responses.Add(version);
+                if (version.StartsWith("MediaInfoLib"))
                 {
                     return;
                 }
 
-                throw new NotSupportedException("Unsupported MediaInfoLib encoding");
+                throw new NotSupportedException("Unsupported MediaInfoLib encoding, version check responses (may be gibberish, show it to the Sonarr devs): " + responses.Join(", ") );
             }
         }
 
