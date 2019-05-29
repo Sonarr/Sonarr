@@ -40,7 +40,7 @@
     "jshint-stylish": "2.0.1",
     "run-sequence": "1.1.1",
     "streamqueue": "1.1.0",
-    "tar.gz": "0.1.1",
+    "tar.gz": "1.0.0",
     "webpack": "1.12.0",
     "webpack-stream": "2.1.0"
   }
