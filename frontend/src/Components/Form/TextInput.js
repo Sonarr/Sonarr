@@ -128,6 +128,8 @@ class TextInput extends Component {
       hasWarning,
       hasButton,
       step,
+      min,
+      max,
       onBlur
     } = this.props;
 
@@ -148,6 +150,8 @@ class TextInput extends Component {
         name={name}
         value={value}
         step={step}
+        min={min}
+        max={max}
         onChange={this.onChange}
         onFocus={this.onFocus}
         onBlur={onBlur}
@@ -171,6 +175,8 @@ TextInput.propTypes = {
   hasWarning: PropTypes.bool,
   hasButton: PropTypes.bool,
   step: PropTypes.number,
+  min: PropTypes.number,
+  max: PropTypes.number,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,

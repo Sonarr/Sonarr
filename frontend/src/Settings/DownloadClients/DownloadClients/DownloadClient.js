@@ -54,7 +54,8 @@ class DownloadClient extends Component {
     const {
       id,
       name,
-      enable
+      enable,
+      priority
     } = this.props;
 
     return (
@@ -78,6 +79,16 @@ class DownloadClient extends Component {
                 outline={true}
               >
                 Disabled
+              </Label>
+          }
+
+          {
+            priority > 1 &&
+              <Label
+                kind={kinds.DISABLED}
+                outline={true}
+              >
+                Priority: {priority}
               </Label>
           }
         </div>
@@ -107,6 +118,7 @@ DownloadClient.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   enable: PropTypes.bool.isRequired,
+  priority: PropTypes.number.isRequired,
   onConfirmDeleteDownloadClient: PropTypes.func.isRequired
 };
 

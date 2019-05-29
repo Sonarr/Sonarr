@@ -7,6 +7,7 @@ namespace Sonarr.Api.V3.DownloadClient
     {
         public bool Enable { get; set; }
         public DownloadProtocol Protocol { get; set; }
+        public int Priority { get; set; }
     }
 
     public class DownloadClientResourceMapper : ProviderResourceMapper<DownloadClientResource, DownloadClientDefinition>
@@ -19,6 +20,7 @@ namespace Sonarr.Api.V3.DownloadClient
 
             resource.Enable = definition.Enable;
             resource.Protocol = definition.Protocol;
+            resource.Priority = definition.Priority;
 
             return resource;
         }
@@ -31,6 +33,7 @@ namespace Sonarr.Api.V3.DownloadClient
 
             definition.Enable = resource.Enable;
             definition.Protocol = resource.Protocol;
+            definition.Priority = resource.Priority;
 
             return definition;
         }

@@ -35,13 +35,14 @@ namespace NzbDrone.Core.Test.Download
                   .Returns(_blockedProviders);
         }
 
-        private Mock<IDownloadClient> WithUsenetClient()
+        private Mock<IDownloadClient> WithUsenetClient(int priority = 0)
         {
             var mock = new Mock<IDownloadClient>(MockBehavior.Default);
             mock.SetupGet(s => s.Definition)
                 .Returns(Builder<DownloadClientDefinition>
                     .CreateNew()
                     .With(v => v.Id = _nextId++)
+                    .With(v => v.Priority = priority)
                     .Build());
 
             _downloadClients.Add(mock.Object);
@@ -51,13 +52,14 @@ namespace NzbDrone.Core.Test.Download
             return mock;
         }
 
-        private Mock<IDownloadClient> WithTorrentClient()
+        private Mock<IDownloadClient> WithTorrentClient(int priority = 0)
         {
             var mock = new Mock<IDownloadClient>(MockBehavior.Default);
             mock.SetupGet(s => s.Definition)
                 .Returns(Builder<DownloadClientDefinition>
                     .CreateNew()
                     .With(v => v.Id = _nextId++)
+                    .With(v => v.Priority = priority)
                     .Build());
 
             _downloadClients.Add(mock.Object);
@@ -180,6 +182,48 @@ namespace NzbDrone.Core.Test.Download
             client2.Definition.Id.Should().Be(3);
             client3.Definition.Id.Should().Be(4);
             client4.Definition.Id.Should().Be(2);
+        }
+
+        [Test]
+        public void should_skip_secondary_prio_torrent_client()
+        {
+            WithUsenetClient();
+            WithTorrentClient(2);
+            WithTorrentClient();
+            WithTorrentClient();
+
+            var client1 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+            var client2 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+            var client3 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+            var client4 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+            var client5 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+
+            client1.Definition.Id.Should().Be(3);
+            client2.Definition.Id.Should().Be(4);
+            client3.Definition.Id.Should().Be(3);
+            client4.Definition.Id.Should().Be(4);
+        }
+
+        [Test]
+        public void should_not_skip_secondary_prio_torrent_client_if_primary_blocked()
+        {
+            WithUsenetClient();
+            WithTorrentClient(2);
+            WithTorrentClient(2);
+            WithTorrentClient();
+
+            GivenBlockedClient(4);
+
+            var client1 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+            var client2 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+            var client3 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+            var client4 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+            var client5 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
+
+            client1.Definition.Id.Should().Be(2);
+            client2.Definition.Id.Should().Be(3);
+            client3.Definition.Id.Should().Be(2);
+            client4.Definition.Id.Should().Be(3);
         }
     }
 }

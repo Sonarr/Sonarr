@@ -15,6 +15,7 @@ namespace NzbDrone.Api.DownloadClient
 
             resource.Enable = definition.Enable;
             resource.Protocol = definition.Protocol;
+            resource.Priority = definition.Priority;
         }
 
         protected override void MapToModel(DownloadClientDefinition definition, DownloadClientResource resource)
@@ -23,6 +24,7 @@ namespace NzbDrone.Api.DownloadClient
 
             definition.Enable = resource.Enable;
             definition.Protocol = resource.Protocol;
+            definition.Priority = resource.Priority;
         }
 
         protected override void Validate(DownloadClientDefinition definition, bool includeWarnings)

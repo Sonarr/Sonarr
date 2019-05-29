@@ -50,6 +50,11 @@ namespace NzbDrone.Core.Download
                 }
             }
 
+            // Use the first priority clients first
+            availableProviders = availableProviders.GroupBy(v => (v.Definition as DownloadClientDefinition).Priority)
+                                                   .OrderBy(v => v.Key)
+                                                   .First().OrderBy(v => v.Definition.Id).ToList();
+
             var lastId = _lastUsedDownloadClient.Find(downloadProtocol.ToString());
 
             var provider = availableProviders.FirstOrDefault(v => v.Definition.Id > lastId) ?? availableProviders.First();

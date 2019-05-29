@@ -139,7 +139,8 @@
     <Compile Include="Datastore\Migration\106_update_btn_urlFixture.cs" />
     <Compile Include="Datastore\Migration\103_fix_metadata_file_extensionsFixture.cs" />
     <Compile Include="Datastore\Migration\099_extra_and_subtitle_filesFixture.cs" />
-    <Compile Include="Datastore\Migration\122_add_remux_qualities_in_profile.cs" />
+    <Compile Include="Datastore\Migration\132_add_download_client_priorityFixture.cs" />
+    <Compile Include="Datastore\Migration\122_add_remux_qualities_in_profileFixture.cs" />
     <Compile Include="Datastore\Migration\071_unknown_quality_in_profileFixture.cs" />
     <Compile Include="Datastore\Migration\072_history_downloadIdFixture.cs" />
     <Compile Include="Datastore\Migration\070_delay_profileFixture.cs" />
