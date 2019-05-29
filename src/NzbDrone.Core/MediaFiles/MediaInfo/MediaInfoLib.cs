@@ -282,7 +282,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public string Option(string option, string value)
         {
-            var pOption = MakeStringParameter(option);
+            var pOption = MakeStringParameter(option.ToLowerInvariant());
             var pValue = MakeStringParameter(value);
             try
             {
