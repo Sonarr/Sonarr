@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
         [Test]
         public void completed_download_should_have_required_properties()
         {
-            PrepareClientToReturnCompletedItem();
+            PrepareClientToReturnCompletedItem(true, ratioLimit: 0.5);
             var item = Subject.GetItems().Single();
             VerifyCompleted(item);
 
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
             item.Status.Should().Be(expectedItemStatus);
         }
 
-        [TestCase(TransmissionTorrentStatus.Stopped, DownloadItemStatus.Completed, true)]
+        [TestCase(TransmissionTorrentStatus.Stopped, DownloadItemStatus.Completed, false)]
         [TestCase(TransmissionTorrentStatus.CheckWait, DownloadItemStatus.Downloading, false)]
         [TestCase(TransmissionTorrentStatus.Check, DownloadItemStatus.Downloading, false)]
         [TestCase(TransmissionTorrentStatus.Queued, DownloadItemStatus.Queued, false)]

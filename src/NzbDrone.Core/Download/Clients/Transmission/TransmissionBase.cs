@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
+            var configFunc = new Lazy<TransmissionConfig>(() => _proxy.GetConfig(Settings));
             var torrents = _proxy.GetTorrents(Settings);
 
             var items = new List<DownloadClientItem>();
@@ -98,14 +99,53 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.CanMoveFiles = item.CanBeRemoved =
-                    torrent.Status == TransmissionTorrentStatus.Stopped &&
-                    item.SeedRatio >= torrent.SeedRatioLimit;
+                item.CanBeRemoved = HasReachedSeedLimit(torrent, item.SeedRatio, configFunc);
+                item.CanMoveFiles = item.CanBeRemoved && torrent.Status == TransmissionTorrentStatus.Stopped;
 
                 items.Add(item);
             }
 
             return items;
+        }
+
+        protected bool HasReachedSeedLimit(TransmissionTorrent torrent, double? ratio, Lazy<TransmissionConfig> config)
+        {
+            var isStopped = torrent.Status == TransmissionTorrentStatus.Stopped;
+            var isSeeding = torrent.Status == TransmissionTorrentStatus.Seeding;
+            
+            if (torrent.SeedRatioMode == 1)
+            {
+                if (isStopped && ratio.HasValue && ratio >= torrent.SeedRatioLimit)
+                {
+                    return true;
+                }
+            }
+            else if (torrent.SeedRatioMode == 0)
+            {
+                if (isStopped && config.Value.SeedRatioLimited && ratio >= config.Value.SeedRatioLimit)
+                {
+                    return true;
+                }
+            }
+
+            // Transmission doesn't support SeedTimeLimit, use/abuse seed idle limit, but only if it was set per-torrent.
+            if (torrent.SeedIdleMode == 1)
+            {
+                if ((isStopped || isSeeding) && torrent.SecondsSeeding > torrent.SeedIdleLimit * 60)
+                {
+                    return true;
+                }
+            }
+            else if (torrent.SeedIdleMode == 0)
+            {
+                // The global idle limit is a real idle limit, if it's configured then 'Stopped' is enough.
+                if (isStopped && config.Value.IdleSeedingLimitEnabled)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public override void RemoveItem(string downloadId, bool deleteData)
@@ -116,7 +156,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         public override DownloadClientInfo GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
-            var destDir = config.GetValueOrDefault("download-dir") as string;
+            var destDir = config.DownloadDir;
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
@@ -184,7 +224,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             if (!Settings.TvCategory.IsNotNullOrWhiteSpace()) return null;
 
             var config = _proxy.GetConfig(Settings);
-            var destDir = (string)config.GetValueOrDefault("download-dir");
+            var destDir = config.DownloadDir;
 
             return $"{destDir.TrimEnd('/')}/{Settings.TvCategory}";
         }

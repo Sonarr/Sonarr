@@ -42,8 +42,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             var item = Subject.GetItems().Single();
             VerifyCompleted(item);
 
-            item.CanBeRemoved.Should().BeTrue();
-            item.CanMoveFiles.Should().BeTrue();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
         }
 
         [Test]
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             item.Status.Should().Be(expectedItemStatus);
         }
 
-        [TestCase(TransmissionTorrentStatus.Stopped, DownloadItemStatus.Completed, true)]
+        [TestCase(TransmissionTorrentStatus.Stopped, DownloadItemStatus.Completed, false)]
         [TestCase(TransmissionTorrentStatus.CheckWait, DownloadItemStatus.Downloading, false)]
         [TestCase(TransmissionTorrentStatus.Check, DownloadItemStatus.Downloading, false)]
         [TestCase(TransmissionTorrentStatus.Queued, DownloadItemStatus.Completed, false)]
@@ -282,6 +282,140 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             PrepareClientToReturnCompletedItem();
             var item = Subject.GetItems().Single();
             item.RemainingTime.Should().NotHaveValue();
+        }
+
+
+        [Test]
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_reached_and_not_stopped()
+        {
+            GivenGlobalSeedLimits(1.0);
+            PrepareClientToReturnCompletedItem(false, ratio: 1.0);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_is_not_set()
+        {
+            GivenGlobalSeedLimits();
+            PrepareClientToReturnCompletedItem(true, ratio: 1.0);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_max_ratio_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(1.0);
+            PrepareClientToReturnCompletedItem(true, ratio: 1.0);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_overridden_max_ratio_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(2.0);
+            PrepareClientToReturnCompletedItem(true, ratio: 1.0, ratioLimit: 0.8);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_be_removable_if_overridden_max_ratio_not_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(0.2);
+            PrepareClientToReturnCompletedItem(true, ratio: 0.5, ratioLimit: 0.8);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+
+        [Test]
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_idletime_reached_and_not_paused()
+        {
+            GivenGlobalSeedLimits(null, 20);
+            PrepareClientToReturnCompletedItem(false, ratio: 2.0, seedingTime: 30);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_max_idletime_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(null, 20);
+            PrepareClientToReturnCompletedItem(true, ratio: 2.0, seedingTime: 20);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_overridden_max_idletime_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(null, 40);
+            PrepareClientToReturnCompletedItem(true, ratio: 2.0, seedingTime: 20, idleLimit: 10);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_not_allow_move_files_if_overridden_max_idletime_reached_and_not_paused()
+        {
+            GivenGlobalSeedLimits(null, 40);
+            PrepareClientToReturnCompletedItem(false, ratio: 2.0, seedingTime: 20, idleLimit: 10);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_be_removable_if_overridden_max_idletime_not_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(null, 20);
+            PrepareClientToReturnCompletedItem(true,  ratio: 2.0, seedingTime: 30, idleLimit: 40);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_be_removable_if_max_idletime_reached_but_ratio_not_and_not_paused()
+        {
+            GivenGlobalSeedLimits(2.0, 20);
+            PrepareClientToReturnCompletedItem(false, ratio: 1.0, seedingTime: 30);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_max_idletime_configured_and_paused()
+        {
+            GivenGlobalSeedLimits(2.0, 20);
+            PrepareClientToReturnCompletedItem(true, ratio: 1.0, seedingTime: 30);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
         }
     }
 }

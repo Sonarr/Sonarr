@@ -151,6 +151,7 @@
     <Compile Include="DecisionEngine\Specifications\RepackSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\MultiSeasonSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeAllowedSpecification.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionConfig.cs" />
     <Compile Include="Exceptions\DownloadClientRejectedReleaseException.cs" />
     <Compile Include="Exceptions\SearchFailedException.cs" />
     <Compile Include="Download\Clients\QBittorrent\QBittorrentLabel.cs" />

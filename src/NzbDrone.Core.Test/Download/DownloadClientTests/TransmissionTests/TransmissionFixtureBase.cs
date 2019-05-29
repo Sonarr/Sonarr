@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Transmission;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
@@ -72,11 +73,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             {
                 HashString = "HASH",
                 IsFinished = true,
-                Status = TransmissionTorrentStatus.Stopped,
+                Status = TransmissionTorrentStatus.Seeding,
                 Name = _title,
                 TotalSize = 1000,
                 LeftUntilDone = 0,
-                DownloadDir = "somepath"
+                DownloadDir = "somepath",
+                DownloadedEver = 1000,
+                UploadedEver = 900
             };
 
             _magnet = new TransmissionTorrent
@@ -106,7 +109,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
             Mocker.GetMock<ITransmissionProxy>()
                   .Setup(v => v.GetConfig(It.IsAny<TransmissionSettings>()))
-                  .Returns(_transmissionConfigItems);
+                  .Returns(() => Json.Deserialize<TransmissionConfig>(_transmissionConfigItems.ToJson()));
 
         }
 
@@ -178,8 +181,40 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             });
         }
 
-        protected void PrepareClientToReturnCompletedItem()
+        protected void PrepareClientToReturnCompletedItem(bool stopped = false, double ratio = 0.9, int seedingTime = 60, double? ratioLimit = null, int? idleLimit = null)
         {
+            if (stopped)
+                _completed.Status = TransmissionTorrentStatus.Stopped;
+            _completed.UploadedEver = (int)(_completed.DownloadedEver * ratio);
+            _completed.SecondsSeeding = seedingTime * 60;
+
+            if (ratioLimit.HasValue)
+            {
+                if (double.IsPositiveInfinity(ratioLimit.Value))
+                {
+                    _completed.SeedRatioMode = 2;
+                }
+                else
+                {
+                    _completed.SeedRatioMode = 1;
+                    _completed.SeedRatioLimit = ratioLimit.Value;
+                }
+            }
+
+            if (idleLimit.HasValue)
+            {
+                if (double.IsPositiveInfinity(idleLimit.Value))
+                {
+                    _completed.SeedIdleMode = 2;
+                }
+                else
+                {
+                    _completed.SeedIdleMode = 1;
+                    _completed.SeedIdleLimit = idleLimit.Value;
+                }
+            }
+
+
             GivenTorrents(new List<TransmissionTorrent>
             {
                 _completed
@@ -192,6 +227,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             {
                 _magnet
             });
+        }
+
+        protected void GivenGlobalSeedLimits(double? ratioLimit = null, int? idleLimit = null)
+        {
+            _transmissionConfigItems["seedRatioLimited"] = ratioLimit.HasValue;
+            if (ratioLimit.HasValue)
+            {
+                _transmissionConfigItems["seedRatioLimit"] = ratioLimit.Value;
+            }
+
+            _transmissionConfigItems["idle-seeding-limit-enabled"] = idleLimit.HasValue;
+            if (idleLimit.HasValue)
+            {
+                _transmissionConfigItems["idle-seeding-limit"] = idleLimit.Value;
+            }
         }
     }
 }

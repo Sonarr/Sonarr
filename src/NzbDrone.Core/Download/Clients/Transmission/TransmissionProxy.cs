@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         void AddTorrentFromUrl(string torrentUrl, string downloadDirectory, TransmissionSettings settings);
         void AddTorrentFromData(byte[] torrentData, string downloadDirectory, TransmissionSettings settings);
         void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, TransmissionSettings settings);
-        Dictionary<string, object> GetConfig(TransmissionSettings settings);
+        TransmissionConfig GetConfig(TransmissionSettings settings);
         string GetProtocolVersion(TransmissionSettings settings);
         string GetClientVersion(TransmissionSettings settings);
         void RemoveTorrent(string hash, bool removeData, TransmissionSettings settings);
@@ -101,26 +101,22 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var config = GetConfig(settings);
 
-            var version = config["rpc-version"];
-
-            return version.ToString();
+            return config.RpcVersion;
         }
 
         public string GetClientVersion(TransmissionSettings settings)
         {
             var config = GetConfig(settings);
 
-            var version = config["version"];
-
-            return version.ToString();
+            return config.Version;
         }
 
-        public Dictionary<string, object> GetConfig(TransmissionSettings settings)
+        public TransmissionConfig GetConfig(TransmissionSettings settings)
         {
             // Gets the transmission version.
             var result = GetSessionVariables(settings);
 
-            return result.Arguments;
+            return Json.Deserialize<TransmissionConfig>(result.Arguments.ToJson());
         }
 
         public void RemoveTorrent(string hashString, bool removeData, TransmissionSettings settings)
@@ -164,15 +160,20 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 "hashString", // Unique torrent ID. Use this instead of the client id?
                 "name",
                 "downloadDir",
-                "status",
                 "totalSize",
                 "leftUntilDone",
                 "isFinished",
                 "eta",
+                "status",
+                "secondsDownloading",
+                "secondsSeeding",
                 "errorString",
                 "uploadedEver",
                 "downloadedEver",
                 "seedRatioLimit",
+                "seedRatioMode",
+                "seedIdleLimit",
+                "seedIdleMode",
                 "fileCount"
             };
 
