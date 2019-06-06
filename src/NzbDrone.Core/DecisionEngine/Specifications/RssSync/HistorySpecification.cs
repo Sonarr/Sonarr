@@ -60,7 +60,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                     // The series will be the same as the one in history since it's the same episode.
                     // Instead of fetching the series from the DB reuse the known series.
-                    var preferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, mostRecent.SourceTitle);
+                    var preferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, mostRecent.SourceTitle, subject.Release?.IndexerId ?? 0);
 
                     var cutoffUnmet = _upgradableSpecification.CutoffNotMet(
                         subject.Series.QualityProfile,

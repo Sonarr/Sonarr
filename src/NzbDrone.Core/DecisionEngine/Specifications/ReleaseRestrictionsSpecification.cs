@@ -30,10 +30,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger.Debug("Checking if release meets restrictions: {0}", subject);
 
             var title = subject.Release.Title;
-            var restrictions = _releaseProfileService.AllForTags(subject.Series.Tags);
+            var releaseProfiles = _releaseProfileService.EnabledForTags(subject.Series.Tags, subject.Release.IndexerId);
 
-            var required = restrictions.Where(r => r.Required.IsNotNullOrWhiteSpace());
-            var ignored = restrictions.Where(r => r.Ignored.IsNotNullOrWhiteSpace());
+            var required = releaseProfiles.Where(r => r.Required.IsNotNullOrWhiteSpace());
+            var ignored = releaseProfiles.Where(r => r.Ignored.IsNotNullOrWhiteSpace());
 
             foreach (var r in required)
             {

@@ -8,11 +8,13 @@ import { setReleaseProfileValue, saveReleaseProfile } from 'Store/Actions/settin
 import EditReleaseProfileModalContent from './EditReleaseProfileModalContent';
 
 const newReleaseProfile = {
+  enabled: true,
   required: '',
   ignored: '',
   preferred: [],
   includePreferredWhenRenaming: false,
-  tags: []
+  tags: [],
+  indexerId: 0
 };
 
 function createMapStateToProps() {

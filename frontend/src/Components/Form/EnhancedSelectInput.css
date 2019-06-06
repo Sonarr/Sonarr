@@ -1,19 +1,8 @@
 .enhancedSelect {
   composes: input from '~Components/Form/Input.css';
-  composes: link from '~Components/Link/Link.css';
 
-  position: relative;
   display: flex;
   align-items: center;
-  padding: 6px 16px;
-  width: 100%;
-  height: 35px;
-  border: 1px solid $inputBorderColor;
-  border-radius: 4px;
-  background-color: $white;
-  box-shadow: inset 0 1px 1px $inputBoxShadowColor;
-  color: $black;
-  cursor: default;
 }
 
 .hasError {

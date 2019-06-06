@@ -98,7 +98,9 @@ class KeyValueListInput extends Component {
       className,
       value,
       keyPlaceholder,
-      valuePlaceholder
+      valuePlaceholder,
+      hasError,
+      hasWarning
     } = this.props;
 
     const { isFocused } = this.state;
@@ -106,7 +108,9 @@ class KeyValueListInput extends Component {
     return (
       <div className={classNames(
         className,
-        isFocused && styles.isFocused
+        isFocused && styles.isFocused,
+        hasError && styles.hasError,
+        hasWarning && styles.hasWarning
       )}
       >
         {

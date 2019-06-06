@@ -40,12 +40,11 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
                   .Setup(s => s.MatchingTerm(It.IsAny<string>(), _title))
                   .Returns<string, string>((term, title) => title.Contains(term) ? term : null);
         }
-
-            
+  
         private void GivenReleaseProfile()
         {
             Mocker.GetMock<IReleaseProfileService>()
-                  .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
+                  .Setup(s => s.EnabledForTags(It.IsAny<HashSet<int>>(), It.IsAny<int>()))
                   .Returns(_releaseProfiles);
         }
 
@@ -53,7 +52,7 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
         public void should_return_empty_list_when_there_are_no_release_profiles()
         {
             Mocker.GetMock<IReleaseProfileService>()
-                  .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
+                  .Setup(s => s.EnabledForTags(It.IsAny<HashSet<int>>(), It.IsAny<int>()))
                   .Returns(new List<ReleaseProfile>());
 
             Subject.GetMatchingPreferredWords(_series, _title).Should().BeEmpty();

@@ -12,6 +12,14 @@
   }
 }
 
+.hasError {
+  composes: hasError from '~Components/Form/Input.css';
+}
+
+.hasWarning {
+  composes: hasWarning from '~Components/Form/Input.css';
+}
+
 .internalInput {
   flex: 1 1 0%;
   margin-left: 3px;

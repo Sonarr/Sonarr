@@ -53,7 +53,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 }
 
                 _logger.Debug("Checking if existing release in queue meets cutoff. Queued: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
-                var queuedItemPreferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, queueItem.Title);
+                var queuedItemPreferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, queueItem.Title, subject.Release?.IndexerId ?? 0);
 
                 if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
                     languageProfile, 

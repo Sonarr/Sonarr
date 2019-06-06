@@ -9,6 +9,7 @@ namespace NzbDrone.Core.ThingiProvider
     {
         List<TProviderDefinition> All();
         List<TProvider> GetAvailableProviders();
+        bool Exists(int id);
         TProviderDefinition Get(int id);
         TProviderDefinition Create(TProviderDefinition definition);
         void Update(TProviderDefinition definition);

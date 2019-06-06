@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private void GivenRestictions(string required, string ignored)
         {
             Mocker.GetMock<IReleaseProfileService>()
-                  .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
+                  .Setup(s => s.EnabledForTags(It.IsAny<HashSet<int>>(), It.IsAny<int>()))
                   .Returns(new List<ReleaseProfile>
                            {
                                new ReleaseProfile()
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_be_true_when_restrictions_are_empty()
         {
             Mocker.GetMock<IReleaseProfileService>()
-                  .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
+                  .Setup(s => s.EnabledForTags(It.IsAny<HashSet<int>>(), It.IsAny<int>()))
                   .Returns(new List<ReleaseProfile>());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Release.Title = "[ www.Speed.cd ] -Whose.Line.is.it.Anyway.US.S10E24.720p.HDTV.x264-BAJSKORV";
 
             Mocker.GetMock<IReleaseProfileService>()
-                  .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
+                  .Setup(s => s.EnabledForTags(It.IsAny<HashSet<int>>(), It.IsAny<int>()))
                   .Returns(new List<ReleaseProfile>
                            {
                                new ReleaseProfile { Required = "x264", Ignored = "www.Speed.cd" }

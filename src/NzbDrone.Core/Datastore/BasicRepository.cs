@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Datastore
     {
         IEnumerable<TModel> All();
         int Count();
+        TModel Find(int id);
         TModel Get(int id);
         IEnumerable<TModel> Get(IEnumerable<int> ids);
         TModel SingleOrDefault();
@@ -65,9 +66,16 @@ namespace NzbDrone.Core.Datastore
             return DataMapper.Query<TModel>().GetRowCount();
         }
 
-        public TModel Get(int id)
+        public TModel Find(int id)
         {
             var model = Query.Where(c => c.Id == id).SingleOrDefault();
+
+            return model;
+        }
+
+        public TModel Get(int id)
+        {
+            var model = Find(id);
 
             if (model == null)
             {
