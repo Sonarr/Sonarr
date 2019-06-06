@@ -16,6 +16,22 @@ import styles from './EditReleaseProfileModalContent.css';
 // Tab, enter, and comma
 const tagInputDelimiters = [9, 13, 188];
 
+const indexerOptions = [
+  { key: 'all', value: 'All' },
+  { key: 'fanzub', value: 'Fanzub' },
+  { key: 'newznab', value: 'Newznab' },
+  { key: 'omgwtfnzbs', value: 'omgwtfnzbs' },
+  { key: 'bitmetv', value: 'BitMeTV' },
+  { key: 'broadcasthenet', value: 'BroadcastheNet' },
+  { key: 'hdbits', value: 'HDBits' },
+  { key: 'iptorrents', value: 'IP Torrents' },
+  { key: 'nyaa', value: 'Nyaa' },
+  { key: 'rarbg', value: 'Rarbg' },
+  { key: 'torrentrssfeed', value: 'Torrent RSS Feed' },
+  { key: 'torrentleech', value: 'TorrentLeech' },
+  { key: 'torznab', value: 'Torznab' }
+];
+
 function EditReleaseProfileModalContent(props) {
   const {
     isSaving,
@@ -33,6 +49,8 @@ function EditReleaseProfileModalContent(props) {
     required,
     ignored,
     preferred,
+    indexer,
+    enableIndexer,
     includePreferredWhenRenaming,
     tags
   } = item;
@@ -101,6 +119,32 @@ function EditReleaseProfileModalContent(props) {
               name="includePreferredWhenRenaming"
               helpText="Include in {Preferred Words} renaming format"
               {...includePreferredWhenRenaming}
+              onChange={onInputChange}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>Indexer</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.SELECT}
+              name="indexer"
+              helpText="Specify what indexer profile applies to"
+              values={indexerOptions}
+              {...indexer}
+              onChange={onInputChange}
+            />
+
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>Enable Indexer</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="enableIndexer"
+              helpText="Enable to apply profile to chosen indexer"
+              {...enableIndexer}
               onChange={onInputChange}
             />
           </FormGroup>
