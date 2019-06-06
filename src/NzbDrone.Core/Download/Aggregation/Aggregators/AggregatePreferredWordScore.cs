@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
 
         public RemoteEpisode Aggregate(RemoteEpisode remoteEpisode)
         {
-            remoteEpisode.PreferredWordScore = _preferredWordServiceCalculator.Calculate(remoteEpisode.Series, remoteEpisode.Release.Title);
+            remoteEpisode.PreferredWordScore = _preferredWordServiceCalculator.Calculate(remoteEpisode.Series, remoteEpisode.Release.Title, remoteEpisode.Release.IndexerId);
 
             return remoteEpisode;
         }

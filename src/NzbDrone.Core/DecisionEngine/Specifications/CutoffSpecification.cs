@@ -41,7 +41,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                                                            languageProfile, 
                                                            file.Quality, 
                                                            file.Language,
-                                                           _preferredWordServiceCalculator.Calculate(subject.Series, file.GetSceneOrFileName()),
+                                                           _preferredWordServiceCalculator.Calculate(subject.Series, file.GetSceneOrFileName(), subject.Release.IndexerId),
                                                            subject.ParsedEpisodeInfo.Quality,
                                                            subject.PreferredWordScore))
                 {

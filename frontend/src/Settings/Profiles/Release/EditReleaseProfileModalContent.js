@@ -30,9 +30,11 @@ function EditReleaseProfileModalContent(props) {
 
   const {
     id,
+    enabled,
     required,
     ignored,
     preferred,
+    indexerId,
     includePreferredWhenRenaming,
     tags
   } = item;
@@ -45,6 +47,18 @@ function EditReleaseProfileModalContent(props) {
 
       <ModalBody>
         <Form {...otherProps}>
+          <FormGroup>
+            <FormLabel>Enable Profile</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="enabled"
+              helpText="Check to enable release profile"
+              {...enabled}
+              onChange={onInputChange}
+            />
+          </FormGroup>
+
           <FormGroup>
             <FormLabel>Must Contain</FormLabel>
 
@@ -101,6 +115,18 @@ function EditReleaseProfileModalContent(props) {
               name="includePreferredWhenRenaming"
               helpText="Include in {Preferred Words} renaming format"
               {...includePreferredWhenRenaming}
+              onChange={onInputChange}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>Indexer</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.INDEXER_SELECT}
+              name="indexerId"
+              helpText="Specify what indexer the profile applies to"
+              {...indexerId}
               onChange={onInputChange}
             />
           </FormGroup>

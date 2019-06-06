@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
                   .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
                   .Returns(new List<ReleaseProfile>());
 
-            Subject.Calculate(_series, _title).Should().Be(0);
+            Subject.Calculate(_series, _title, 0).Should().Be(0);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
         {
             GivenMatchingTerms();
 
-            Subject.Calculate(_series, _title).Should().Be(0);
+            Subject.Calculate(_series, _title, 0).Should().Be(0);
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
         {
             GivenMatchingTerms("x264");
 
-            Subject.Calculate(_series, _title).Should().Be(5);
+            Subject.Calculate(_series, _title, 0).Should().Be(5);
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
         {
             GivenMatchingTerms("x265");
 
-            Subject.Calculate(_series, _title).Should().Be(-10);
+            Subject.Calculate(_series, _title, 0).Should().Be(-10);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
 
             GivenMatchingTerms("x264");
 
-            Subject.Calculate(_series, _title).Should().Be(10);
+            Subject.Calculate(_series, _title, 0).Should().Be(10);
         }
     }
 }

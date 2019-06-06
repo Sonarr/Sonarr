@@ -1,6 +1,8 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -14,6 +16,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         private readonly Logger _logger;
         private readonly IReleaseProfileService _releaseProfileService;
         private readonly ITermMatcherService _termMatcherService;
+
+        private static readonly Regex keyValueRegex = new Regex(@"^([^:]+):([^:]+)$");
 
         public ReleaseRestrictionsSpecification(ITermMatcherService termMatcherService, IReleaseProfileService releaseProfileService, Logger logger)
         {
@@ -30,16 +34,26 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger.Debug("Checking if release meets restrictions: {0}", subject);
 
             var title = subject.Release.Title;
-            var restrictions = _releaseProfileService.AllForTags(subject.Series.Tags);
+            var releaseProfiles = _releaseProfileService.EnabledForTags(subject.Series.Tags, subject.Release.IndexerId);
 
-            var required = restrictions.Where(r => r.Required.IsNotNullOrWhiteSpace());
-            var ignored = restrictions.Where(r => r.Ignored.IsNotNullOrWhiteSpace());
+            var required = releaseProfiles.Where(r => r.Required.IsNotNullOrWhiteSpace());
+            var ignored = releaseProfiles.Where(r => r.Ignored.IsNotNullOrWhiteSpace());
 
             foreach (var r in required)
             {
-                var requiredTerms = r.Required.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var requiredTerms = r.Required.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                var foundTerms = ContainsAny(requiredTerms, title);
+                // separate key-value terms and normal terms
+                var reqKeyValues = requiredTerms.Where(kv => keyValueRegex.IsMatch(kv)).ToList();
+                var reqTitleTerms = requiredTerms.Where(t => !keyValueRegex.IsMatch(t)).ToList();
+
+                // check title terms
+                var foundTerms = ContainsAny(reqTitleTerms, title);
+
+                // check key-value terms
+                foundTerms.AddRange(ContainsAnyKeyValues(reqKeyValues, subject));
+
+
                 if (foundTerms.Empty())
                 {
                     var terms = string.Join(", ", requiredTerms);
@@ -48,11 +62,21 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 }
             }
 
+
             foreach (var r in ignored)
             {
                 var ignoredTerms = r.Ignored.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                var foundTerms = ContainsAny(ignoredTerms, title);
+                // separate key-value terms and normal terms
+                var ignKeyValues = ignoredTerms.Where(kv => keyValueRegex.IsMatch(kv)).ToList();
+                var ignTitleTerms = ignoredTerms.Where(t => !keyValueRegex.IsMatch(t)).ToList();
+
+                // check title terms
+                var foundTerms = ContainsAny(ignTitleTerms, title);
+
+                // check key-value terms
+                foundTerms.AddRange(ContainsAnyKeyValues(ignKeyValues, subject));
+
                 if (foundTerms.Any())
                 {
                     var terms = string.Join(", ", foundTerms);
@@ -60,7 +84,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     return Decision.Reject("Contains these ignored terms: {0}", terms);
                 }
             }
-
             _logger.Debug("[{0}] No restrictions apply, allowing", subject);
             return Decision.Accept();
         }
@@ -68,6 +91,35 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         private List<string> ContainsAny(List<string> terms, string title)
         {
             return terms.Where(t => _termMatcherService.IsMatch(t, title)).ToList();
+        }
+
+        private List<string> ContainsAnyKeyValues(List<string> terms, RemoteEpisode subject)
+        {
+            var foundTerms = new List<string>(); 
+
+            foreach (var kv in terms)
+            {
+                var match = keyValueRegex.Match(kv);
+                var key = match.Groups[1].Value;
+                var value = match.Groups[2].Value;
+
+                try
+                {
+                    IReleaseFilter releaseFilter = Assembly.GetExecutingAssembly().
+                        CreateInstance("NzbDrone.Core.Profiles.Releases." + key + "ReleaseFilter", true) as IReleaseFilter;
+
+                    if (releaseFilter.Matches(value, subject))
+                    {
+                        foundTerms.Add(kv);
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    _logger.Debug("Unsupported key {0}", key);
+                }
+            }
+
+            return foundTerms;
         }
     }
 }
