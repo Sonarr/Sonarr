@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
         void RemoveTorrent(string hash, bool removeData, UTorrentSettings settings);
         void SetTorrentLabel(string hash, string label, UTorrentSettings settings);
+        void RemoveTorrentLabel(string hash, string label, UTorrentSettings settings);
         void MoveTorrentToTopInQueue(string hash, UTorrentSettings settings);
         void SetState(string hash, UTorrentState state, UTorrentSettings settings);
     }
@@ -147,6 +148,20 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
             requestBuilder.AddQueryParam("s", "label")
                           .AddQueryParam("v", label);
+
+            ProcessRequest(requestBuilder, settings);
+        }
+
+        public void RemoveTorrentLabel(string hash, string label, UTorrentSettings settings)
+        {
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", "setprops")
+                .AddQueryParam("hash", hash);
+
+            requestBuilder.AddQueryParam("s", "label")
+                          .AddQueryParam("v", label)
+                          .AddQueryParam("s", "label")
+                          .AddQueryParam("v", "");
 
             ProcessRequest(requestBuilder, settings);
         }

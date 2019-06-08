@@ -52,16 +52,19 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional.")]
         public string TvCategory { get; set; }
 
-        [FieldDefinition(7, Label = "Directory", Type = FieldType.Textbox, Advanced = true, HelpText = "Optional location to put downloads in, leave blank to use the default rTorrent location")]
+        [FieldDefinition(7, Label = "Post-Import Category", Type = FieldType.Textbox, Advanced = true, HelpText = "Category for Sonarr to set after it has imported the download. Leave blank to disable this feature.")]
+        public string TvImportedCategory { get; set; }
+
+        [FieldDefinition(8, Label = "Directory", Type = FieldType.Textbox, Advanced = true, HelpText = "Optional location to put downloads in, leave blank to use the default rTorrent location")]
         public string TvDirectory { get; set; }
 
-        [FieldDefinition(8, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(RTorrentPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
+        [FieldDefinition(9, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(RTorrentPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
         public int RecentTvPriority { get; set; }
 
-        [FieldDefinition(9, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(RTorrentPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
+        [FieldDefinition(10, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(RTorrentPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public int OlderTvPriority { get; set; }
 
-        [FieldDefinition(10, Label = "Add Stopped", Type = FieldType.Checkbox, HelpText = "Enabling will prevent magnets from downloading before downloading")]
+        [FieldDefinition(11, Label = "Add Stopped", Type = FieldType.Checkbox, HelpText = "Enabling will prevent magnets from downloading before downloading")]
         public bool AddStopped { get; set; }
 
         public NzbDroneValidationResult Validate()

@@ -33,6 +33,24 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         private IQBittorrentProxy Proxy => _proxySelector.GetProxy(Settings);
 
+        public override void MarkItemAsImported(DownloadClientItem downloadClientItem)
+        {
+            // set post-import category
+            if (Settings.TvImportedCategory.IsNotNullOrWhiteSpace() &&
+                Settings.TvImportedCategory != Settings.TvCategory)
+            {
+                try
+                {
+                    Proxy.SetTorrentLabel(downloadClientItem.DownloadId.ToLower(), Settings.TvImportedCategory, Settings);
+                }
+                catch (DownloadClientException)
+                {
+                    _logger.Warn("Failed to set post-import torrent label \"{0}\" for {1} in qBittorrent. Does the label exist?",
+                        Settings.TvImportedCategory, downloadClientItem.Title);
+                }
+            }
+        }
+
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             if (!Proxy.GetConfig(Settings).DhtEnabled && !magnetLink.Contains("&tr="))
@@ -41,11 +59,6 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
 
             Proxy.AddTorrentFromUrl(magnetLink, Settings);
-
-            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
-            {
-                Proxy.SetTorrentLabel(hash.ToLower(), Settings.TvCategory, Settings);
-            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -68,18 +81,6 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, Byte[] fileContent)
         {
             Proxy.AddTorrentFromFile(filename, fileContent, Settings);
-
-            try
-            {
-                if (Settings.TvCategory.IsNotNullOrWhiteSpace())
-                {
-                    Proxy.SetTorrentLabel(hash.ToLower(), Settings.TvCategory, Settings);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Warn(ex, "Failed to set the torrent label for {0}.", filename);
-            }
 
             try
             {
@@ -216,6 +217,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             failures.AddIfNotNull(TestConnection());
             if (failures.HasErrors()) return;
+            failures.AddIfNotNull(TestCategory());
             failures.AddIfNotNull(TestPrioritySupport());
             failures.AddIfNotNull(TestGetTorrents());
         }
@@ -288,6 +290,53 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 _logger.Error(ex, "Unable to test qBittorrent");
                 return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+            }
+
+            return null;
+        }
+
+        private ValidationFailure TestCategory()
+        {
+            if (Settings.TvCategory.IsNullOrWhiteSpace() && Settings.TvImportedCategory.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            // api v1 doesn't need to check/add categories as it's done on set
+            var version = _proxySelector.GetProxy(Settings, true).GetApiVersion(Settings);
+            if (version < Version.Parse("2.0"))
+            {
+                return null;
+            }
+
+            Dictionary<string, QBittorrentLabel> labels = Proxy.GetLabels(Settings);
+
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace() && !labels.ContainsKey(Settings.TvCategory))
+            {
+                Proxy.AddLabel(Settings.TvCategory, Settings);
+                labels = Proxy.GetLabels(Settings);
+
+                if (!labels.ContainsKey(Settings.TvCategory))
+                {
+                    return new NzbDroneValidationFailure("TvCategory", "Configuration of label failed")
+                    {
+                        DetailedDescription = "Sonarr was unable to add the label to qBittorrent."
+                    };
+                }
+            }
+
+            if (Settings.TvImportedCategory.IsNotNullOrWhiteSpace() && !labels.ContainsKey(Settings.TvImportedCategory))
+            {
+                Proxy.AddLabel(Settings.TvImportedCategory, Settings);
+                labels = Proxy.GetLabels(Settings);
+
+                if (!labels.ContainsKey(Settings.TvImportedCategory))
+                {
+                    return new NzbDroneValidationFailure("TvImportedCategory", "Configuration of label failed")
+                    {
+                        DetailedDescription = "Sonarr was unable to add the label to qBittorrent."
+                    };
+                }
             }
 
             return null;

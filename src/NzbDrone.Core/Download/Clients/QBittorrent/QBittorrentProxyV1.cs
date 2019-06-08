@@ -190,6 +190,19 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
         }
 
+        public void AddLabel(string label, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/command/addCategory")
+                                                .Post()
+                                                .AddFormParameter("category", label);
+            ProcessRequest(request, settings);
+        }
+
+        public Dictionary<string, QBittorrentLabel> GetLabels(QBittorrentSettings settings)
+        {
+            throw new NotSupportedException("qBittorrent api v1 does not support getting all torrent categories");
+        }
+
         public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
         {
             // Not supported on api v1

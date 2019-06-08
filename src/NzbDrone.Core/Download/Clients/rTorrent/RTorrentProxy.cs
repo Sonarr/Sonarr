@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         void AddTorrentFromUrl(string torrentUrl, string label, RTorrentPriority priority, string directory, RTorrentSettings settings);
         void AddTorrentFromFile(string fileName, byte[] fileContent, string label, RTorrentPriority priority, string directory, RTorrentSettings settings);
         void RemoveTorrent(string hash, RTorrentSettings settings);
+        void SetTorrentLabel(string hash, string label, RTorrentSettings settings);
         bool HasHashTorrent(string hash, RTorrentSettings settings);
     }
 
@@ -43,6 +44,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         [XmlRpcMethod("d.name")]
         string GetName(string hash);
+
+        [XmlRpcMethod("d.custom1.set")]
+        string SetLabel(string hash, string label);
 
         [XmlRpcMethod("system.client_version")]
         string GetVersion();
@@ -90,20 +94,20 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             foreach (object[] torrent in ret)
             {
-                var labelDecoded = System.Web.HttpUtility.UrlDecode((string) torrent[3]);
+                var labelDecoded = System.Web.HttpUtility.UrlDecode((string)torrent[3]);
 
                 var item = new RTorrentTorrent();
-                item.Name = (string) torrent[0];
-                item.Hash = (string) torrent[1];
-                item.Path = (string) torrent[2];
+                item.Name = (string)torrent[0];
+                item.Hash = (string)torrent[1];
+                item.Path = (string)torrent[2];
                 item.Category = labelDecoded;
-                item.TotalSize = (long) torrent[4];
-                item.RemainingSize = (long) torrent[5];
-                item.DownRate = (long) torrent[6];
-                item.Ratio = (long) torrent[7];
-                item.IsOpen = Convert.ToBoolean((long) torrent[8]);
-                item.IsActive = Convert.ToBoolean((long) torrent[9]);
-                item.IsFinished = Convert.ToBoolean((long) torrent[10]);
+                item.TotalSize = (long)torrent[4];
+                item.RemainingSize = (long)torrent[5];
+                item.DownRate = (long)torrent[6];
+                item.Ratio = (long)torrent[7];
+                item.IsOpen = Convert.ToBoolean((long)torrent[8]);
+                item.IsActive = Convert.ToBoolean((long)torrent[9]);
+                item.IsFinished = Convert.ToBoolean((long)torrent[10]);
 
                 items.Add(item);
             }
@@ -154,6 +158,19 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             if (response != 0)
             {
                 throw new DownloadClientException("Could not add torrent: {0}.", fileName);
+            }
+        }
+
+        public void SetTorrentLabel(string hash, string label, RTorrentSettings settings)
+        {
+            _logger.Debug("Executing remote method: d.custom1.set");
+
+            var client = BuildClient(settings);
+            var response = ExecuteRequest(() => client.SetLabel(hash, label));
+
+            if (response != label)
+            {
+                throw new DownloadClientException("Could not set label to {1} for torrent: {0}.", hash, label);
             }
         }
 

@@ -31,6 +31,24 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             _proxy = proxy;
         }
 
+        public override void MarkItemAsImported(DownloadClientItem downloadClientItem)
+        {
+            // set post-import category
+            if (Settings.TvImportedCategory.IsNotNullOrWhiteSpace() &&
+                Settings.TvImportedCategory != Settings.TvCategory)
+            {
+                try
+                {
+                    _proxy.SetTorrentLabel(downloadClientItem.DownloadId.ToLower(), Settings.TvImportedCategory, Settings);
+                }
+                catch (DownloadClientUnavailableException)
+                {
+                    _logger.Warn("Failed to set torrent post-import label \"{0}\" for {1} in Deluge. Does the label exist?",
+                        Settings.TvImportedCategory, downloadClientItem.Title);
+                }
+            }
+        }
+
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             var actualHash = _proxy.AddTorrentFromMagnet(magnetLink, Settings);
@@ -40,12 +58,12 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 throw new DownloadClientException("Deluge failed to add magnet " + magnetLink);
             }
 
-            if (!Settings.TvCategory.IsNullOrWhiteSpace())
-            {
-                _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
-            }
-
             _proxy.SetTorrentSeedingConfiguration(actualHash, remoteEpisode.SeedConfiguration, Settings);
+
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                _proxy.SetTorrentLabel(actualHash, Settings.TvCategory, Settings);
+            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -69,9 +87,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             _proxy.SetTorrentSeedingConfiguration(actualHash, remoteEpisode.SeedConfiguration, Settings);
 
-            if (!Settings.TvCategory.IsNullOrWhiteSpace())
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
+                _proxy.SetTorrentLabel(actualHash, Settings.TvCategory, Settings);
             }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
@@ -91,7 +109,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             IEnumerable<DelugeTorrent> torrents;
 
-            if (!Settings.TvCategory.IsNullOrWhiteSpace())
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
                 torrents = _proxy.GetTorrentsByLabel(Settings.TvCategory, Settings);
             }
@@ -250,7 +268,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         private ValidationFailure TestCategory()
         {
-            if (Settings.TvCategory.IsNullOrWhiteSpace())
+            if (Settings.TvCategory.IsNullOrWhiteSpace() && Settings.TvImportedCategory.IsNullOrWhiteSpace())
             {
                 return null;
             }
@@ -267,7 +285,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             var labels = _proxy.GetAvailableLabels(Settings);
 
-            if (!labels.Contains(Settings.TvCategory))
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace() && !labels.Contains(Settings.TvCategory))
             {
                 _proxy.AddLabel(Settings.TvCategory, Settings);
                 labels = _proxy.GetAvailableLabels(Settings);
@@ -276,7 +294,21 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 {
                     return new NzbDroneValidationFailure("TvCategory", "Configuration of label failed")
                     {
-                        DetailedDescription = "Sonarr as unable to add the label to Deluge."
+                        DetailedDescription = "Sonarr was unable to add the label to Deluge."
+                    };
+                }
+            }
+
+            if (Settings.TvImportedCategory.IsNotNullOrWhiteSpace() && !labels.Contains(Settings.TvImportedCategory))
+            {
+                _proxy.AddLabel(Settings.TvImportedCategory, Settings);
+                labels = _proxy.GetAvailableLabels(Settings);
+
+                if (!labels.Contains(Settings.TvImportedCategory))
+                {
+                    return new NzbDroneValidationFailure("TvImportedCategory", "Configuration of label failed")
+                    {
+                        DetailedDescription = "Sonarr was unable to add the label to Deluge."
                     };
                 }
             }
