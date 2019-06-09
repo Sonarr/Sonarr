@@ -35,15 +35,17 @@ namespace NzbDrone.Core.Download
 
         public void Handle(DownloadCompletedEvent message)
         {
-            if (!_configService.RemoveCompletedDownloads ||
-                message.TrackedDownload.DownloadItem.Removed ||
-                !message.TrackedDownload.DownloadItem.CanBeRemoved ||
-                message.TrackedDownload.DownloadItem.Status == DownloadItemStatus.Downloading)
+            if (_configService.RemoveCompletedDownloads &&
+                !message.TrackedDownload.DownloadItem.Removed &&
+                message.TrackedDownload.DownloadItem.CanBeRemoved &&
+                message.TrackedDownload.DownloadItem.Status != DownloadItemStatus.Downloading)
             {
-                return;
+                RemoveFromDownloadClient(message.TrackedDownload);
             }
-
-            RemoveFromDownloadClient(message.TrackedDownload);
+            else
+            {
+                MarkItemAsImported(message.TrackedDownload);
+            }           
         }
 
         public void Handle(DownloadFailedEvent message)
@@ -74,7 +76,25 @@ namespace NzbDrone.Core.Download
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Couldn't remove item from client {0}", trackedDownload.DownloadItem.Title);
+                _logger.Error(e, "Couldn't remove item {0} from client {1}", trackedDownload.DownloadItem.Title, downloadClient.Name);
+            }
+        }
+
+        private void MarkItemAsImported(TrackedDownload trackedDownload)
+        {
+            var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
+            try
+            {
+                _logger.Debug("[{0}] Marking download as imported from {1}", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClient);
+                downloadClient.MarkItemAsImported(trackedDownload.DownloadItem);
+            }
+            catch (NotSupportedException e)
+            {
+                _logger.Debug(e.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Couldn't mark item {0} as imported from client {1}", trackedDownload.DownloadItem.Title, downloadClient.Name);
             }
         }
     }

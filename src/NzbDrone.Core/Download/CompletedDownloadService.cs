@@ -127,7 +127,6 @@ namespace NzbDrone.Core.Download
 
                 trackedDownload.Warn(statusMessages);
             }
-
         }
     }
 }

@@ -152,6 +152,7 @@
     <Compile Include="DecisionEngine\Specifications\UpgradeAllowedSpecification.cs" />
     <Compile Include="Exceptions\DownloadClientRejectedReleaseException.cs" />
     <Compile Include="Exceptions\SearchFailedException.cs" />
+    <Compile Include="Download\Clients\QBittorrent\QBittorrentLabel.cs" />
     <Compile Include="Extras\Metadata\MetadataSectionType.cs" />
     <Compile Include="Download\Aggregation\RemoteEpisodeAggregationService.cs" />
     <Compile Include="Download\Aggregation\Aggregators\AggregatePreferredWordScore.cs" />

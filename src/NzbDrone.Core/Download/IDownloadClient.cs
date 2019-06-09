@@ -13,5 +13,6 @@ namespace NzbDrone.Core.Download
         IEnumerable<DownloadClientItem> GetItems();
         void RemoveItem(string downloadId, bool deleteData);
         DownloadClientInfo GetStatus();
+        void MarkItemAsImported(DownloadClientItem downloadClientItem);
     }
 }

@@ -36,11 +36,31 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             _torrentCache = cacheManager.GetCache<UTorrentTorrentCache>(GetType(), "differentialTorrents");
         }
 
+        public override void MarkItemAsImported(DownloadClientItem downloadClientItem)
+        {
+            // set post-import category
+            if (Settings.TvImportedCategory.IsNotNullOrWhiteSpace() &&
+                Settings.TvImportedCategory != Settings.TvCategory)
+            {
+                _proxy.SetTorrentLabel(downloadClientItem.DownloadId.ToLower(), Settings.TvImportedCategory, Settings);
+
+                // old label must be explicitly removed
+                if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+                {
+                    _proxy.RemoveTorrentLabel(downloadClientItem.DownloadId.ToLower(), Settings.TvCategory, Settings);
+                }
+            }
+        }
+
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
-            _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
             _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
+
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
+            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -58,8 +78,12 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
-            _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
             _proxy.SetTorrentSeedingConfiguration(hash, remoteEpisode.SeedConfiguration, Settings);
+
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
+            }
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
