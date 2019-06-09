@@ -13,6 +13,7 @@ namespace NzbDrone.Api.Config
         public string AnimeEpisodeFormat { get; set; }
         public string SeriesFolderFormat { get; set; }
         public string SeasonFolderFormat { get; set; }
+        public string SpecialsFolderFormat { get; set; }
         public bool IncludeSeriesTitle { get; set; }
         public bool IncludeEpisodeTitle { get; set; }
         public bool IncludeQuality { get; set; }
@@ -36,7 +37,8 @@ namespace NzbDrone.Api.Config
                 DailyEpisodeFormat = model.DailyEpisodeFormat,
                 AnimeEpisodeFormat = model.AnimeEpisodeFormat,
                 SeriesFolderFormat = model.SeriesFolderFormat,
-                SeasonFolderFormat = model.SeasonFolderFormat
+                SeasonFolderFormat = model.SeasonFolderFormat,
+                SpecialsFolderFormat = model.SpecialsFolderFormat
                 //IncludeSeriesTitle
                 //IncludeEpisodeTitle
                 //IncludeQuality
@@ -69,7 +71,8 @@ namespace NzbDrone.Api.Config
                 DailyEpisodeFormat = resource.DailyEpisodeFormat,
                 AnimeEpisodeFormat = resource.AnimeEpisodeFormat,
                 SeriesFolderFormat = resource.SeriesFolderFormat,
-                SeasonFolderFormat = resource.SeasonFolderFormat
+                SeasonFolderFormat = resource.SeasonFolderFormat,
+                SpecialsFolderFormat = resource.SpecialsFolderFormat
             };
         }
     }

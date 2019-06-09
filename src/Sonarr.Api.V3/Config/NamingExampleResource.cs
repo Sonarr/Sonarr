@@ -11,6 +11,7 @@ namespace Sonarr.Api.V3.Config
         public string AnimeMultiEpisodeExample { get; set; }
         public string SeriesFolderExample { get; set; }
         public string SeasonFolderExample { get; set; }
+        public string SpecialsFolderExample { get; set; }
     }
 
     public static class NamingConfigResourceMapper
@@ -28,7 +29,8 @@ namespace Sonarr.Api.V3.Config
                 DailyEpisodeFormat = model.DailyEpisodeFormat,
                 AnimeEpisodeFormat = model.AnimeEpisodeFormat,
                 SeriesFolderFormat = model.SeriesFolderFormat,
-                SeasonFolderFormat = model.SeasonFolderFormat
+                SeasonFolderFormat = model.SeasonFolderFormat,
+                SpecialsFolderFormat = model.SpecialsFolderFormat
                 //IncludeSeriesTitle
                 //IncludeEpisodeTitle
                 //IncludeQuality
@@ -61,7 +63,8 @@ namespace Sonarr.Api.V3.Config
                 DailyEpisodeFormat = resource.DailyEpisodeFormat,
                 AnimeEpisodeFormat = resource.AnimeEpisodeFormat,
                 SeriesFolderFormat = resource.SeriesFolderFormat,
-                SeasonFolderFormat = resource.SeasonFolderFormat
+                SeasonFolderFormat = resource.SeasonFolderFormat,
+                SpecialsFolderFormat = resource.SpecialsFolderFormat
             };
         }
     }

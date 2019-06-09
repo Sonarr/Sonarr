@@ -41,6 +41,11 @@ namespace NzbDrone.Core.Organizer
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
             return ruleBuilder.SetValidator(new RegularExpressionValidator(SeasonFolderRegex)).WithMessage("Must contain season number");
         }
+
+        public static IRuleBuilderOptions<T, string> ValidSpecialsFolderFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new NotEmptyValidator(null));
+        }
     }
 
     public class ValidStandardEpisodeFormatValidator : PropertyValidator

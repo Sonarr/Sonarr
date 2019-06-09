@@ -9,5 +9,6 @@
         public string AnimeMultiEpisodeExample { get; set; }
         public string SeriesFolderExample { get; set; }
         public string SeasonFolderExample { get; set; }
+        public string SpecialsFolderExample { get; set; }
     }
 }

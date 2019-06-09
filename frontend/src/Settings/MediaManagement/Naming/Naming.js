@@ -85,6 +85,16 @@ class Naming extends Component {
     });
   }
 
+  onSpecialsFolderNamingModalOpenClick = () => {
+    this.setState({
+      isNamingModalOpen: true,
+      namingModalOptions: {
+        name: 'specialsFolderFormat',
+        season: true
+      }
+    });
+  }
+
   onNamingModalClose = () => {
     this.setState({ isNamingModalOpen: false });
   }
@@ -130,6 +140,8 @@ class Naming extends Component {
     const seriesFolderFormatErrors = [];
     const seasonFolderFormatHelpTexts = [];
     const seasonFolderFormatErrors = [];
+    const specialsFolderFormatHelpTexts = [];
+    const specialsFolderFormatErrors = [];
 
     if (examplesPopulated) {
       if (examples.singleEpisodeExample) {
@@ -172,6 +184,12 @@ class Naming extends Component {
         seasonFolderFormatHelpTexts.push(`Example: ${examples.seasonFolderExample}`);
       } else {
         seasonFolderFormatErrors.push({ message: 'Invalid Format' });
+      }
+
+      if (examples.specialsFolderExample) {
+        specialsFolderFormatHelpTexts.push(`Example: ${examples.specialsFolderExample}`);
+      } else {
+        specialsFolderFormatErrors.push({ message: 'Invalid Format' });
       }
     }
 
@@ -294,6 +312,24 @@ class Naming extends Component {
                   {...settings.seasonFolderFormat}
                   helpTexts={seasonFolderFormatHelpTexts}
                   errors={[...seasonFolderFormatErrors, ...settings.seasonFolderFormat.errors]}
+                />
+              </FormGroup>
+
+              <FormGroup
+                advancedSettings={advancedSettings}
+                isAdvanced={true}
+              >
+                <FormLabel>Specials Folder Format</FormLabel>
+
+                <FormInputGroup
+                  inputClassName={styles.namingInput}
+                  type={inputTypes.TEXT}
+                  name="specialsFolderFormat"
+                  buttons={<FormInputButton onPress={this.onSpecialsFolderNamingModalOpenClick}>?</FormInputButton>}
+                  onChange={onInputChange}
+                  {...settings.specialsFolderFormat}
+                  helpTexts={specialsFolderFormatHelpTexts}
+                  errors={[...specialsFolderFormatErrors, ...settings.specialsFolderFormat.errors]}
                 />
               </FormGroup>
 

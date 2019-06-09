@@ -41,6 +41,7 @@ namespace Sonarr.Api.V3.Config
             SharedValidator.RuleFor(c => c.AnimeEpisodeFormat).ValidAnimeEpisodeFormat();
             SharedValidator.RuleFor(c => c.SeriesFolderFormat).ValidSeriesFolderFormat();
             SharedValidator.RuleFor(c => c.SeasonFolderFormat).ValidSeasonFolderFormat();
+            SharedValidator.RuleFor(c => c.SpecialsFolderFormat).ValidSpecialsFolderFormat();
         }
 
         private void UpdateNamingConfig(NamingConfigResource resource)
@@ -113,6 +114,10 @@ namespace Sonarr.Api.V3.Config
             sampleResource.SeasonFolderExample = nameSpec.SeasonFolderFormat.IsNullOrWhiteSpace()
                 ? null
                 : _filenameSampleService.GetSeasonFolderSample(nameSpec);
+
+            sampleResource.SpecialsFolderExample = nameSpec.SpecialsFolderFormat.IsNullOrWhiteSpace()
+                ? null
+                : _filenameSampleService.GetSpecialsFolderSample(nameSpec);
 
             return sampleResource.AsResponse();
         }
