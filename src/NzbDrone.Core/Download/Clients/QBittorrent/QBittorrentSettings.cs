@@ -12,8 +12,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(1, 65535);
 
-            RuleFor(c => c.TvCategory).Matches("^[^/\\\\](((?!//)[^\\\\])*[^/\\\\])?$").WithMessage("Can not contain '\\', '//', or start/end with '/'");
-            RuleFor(c => c.TvImportedCategory).Matches("^[^/\\\\](((?!//)[^\\\\])*[^/\\\\])?$").WithMessage("Can not contain '\\', '//', or start/end with '/'");
+            RuleFor(c => c.TvCategory).Matches(@"^([^\\\/](\/?[^\\\/])*)?$").WithMessage("Can not contain '\', '//', or start/end with '/'");
+            RuleFor(c => c.TvImportedCategory).Matches(@"^([^\\\/](\/?[^\\\/])*)?$").WithMessage("Can not contain '\', '//', or start/end with '/'");
         }
     }
 
