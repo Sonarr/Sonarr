@@ -100,8 +100,26 @@ namespace Sonarr.Api.V3.Indexers
                     }
                     else
                     {
-                            throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to find matching series and episodes");
+                        throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to find matching series and episodes");
                     }
+                }
+                else if (remoteEpisode.Episodes.Empty())
+                {
+                    var episodes = _parsingService.GetEpisodes(remoteEpisode.ParsedEpisodeInfo, remoteEpisode.Series, true);
+
+                    if (episodes.Empty() && release.EpisodeId.HasValue)
+                    {
+                        var episode = _episodeService.GetEpisode(release.EpisodeId.Value);
+
+                        episodes = new List<Episode>{episode};
+                    }
+
+                    remoteEpisode.Episodes = episodes;
+                }
+
+                if (remoteEpisode.Episodes.Empty())
+                {
+                    throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release");
                 }
 
                 _downloadService.DownloadReport(remoteEpisode);
