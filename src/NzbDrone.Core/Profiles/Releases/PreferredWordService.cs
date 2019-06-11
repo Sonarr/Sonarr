@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Profiles.Releases
 {
     public interface IPreferredWordService
     {
-        int Calculate(Series series, string title);
+        int Calculate(Series series, string title, int indexerId);
         List<string> GetMatchingPreferredWords(Series series, string title);
     }
 
@@ -25,11 +25,11 @@ namespace NzbDrone.Core.Profiles.Releases
             _logger = logger;
         }
 
-        public int Calculate(Series series, string title)
+        public int Calculate(Series series, string title, int indexerId)
         {
             _logger.Trace("Calculating preferred word score for '{0}'", title);
 
-            var releaseProfiles = _releaseProfileService.AllForTags(series.Tags);
+            var releaseProfiles = _releaseProfileService.EnabledForTags(series.Tags, indexerId);
             var matchingPairs = new List<KeyValuePair<string, int>>();
 
             foreach (var releaseProfile in releaseProfiles)
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Profiles.Releases
 
         public List<string> GetMatchingPreferredWords(Series series, string title)
         {
-            var releaseProfiles = _releaseProfileService.AllForTags(series.Tags);
+            var releaseProfiles = _releaseProfileService.EnabledForTags(series.Tags, 0);
             var matchingPairs = new List<KeyValuePair<string, int>>();
 
             _logger.Trace("Calculating preferred word score for '{0}'", title);
