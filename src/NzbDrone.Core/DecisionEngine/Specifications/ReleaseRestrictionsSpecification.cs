@@ -31,81 +31,72 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger.Debug("Checking if release meets restrictions: {0}", subject);
 
             var title = subject.Release.Title;
-            List<ReleaseProfile> restrictions = _releaseProfileService.AllForTags(subject.Series.Tags);
+            var releaseProfiles = _releaseProfileService.EnabledForTags(subject.Series.Tags, subject.Release.IndexerId);
 
-            foreach (ReleaseProfile restriction in restrictions)
+            var required = releaseProfiles.Where(r => r.Required.IsNotNullOrWhiteSpace());
+            var ignored = releaseProfiles.Where(r => r.Ignored.IsNotNullOrWhiteSpace());
+
+            var keyValueRegex = new Regex(@"\b\w+:\w+\b");
+
+            foreach (var r in required)
             {
-                // TODO: attach Enabled and IndexerId fields to restriction
-                /*if (!restriction.Enabled || restriction.IndexerId != subject.Release.IndexerId)
+                var requiredTerms = r.Required.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                // separate key-value terms and normal terms
+                var reqKeyValues = requiredTerms.Where(kv => keyValueRegex.IsMatch(kv)).ToList();
+                var reqTitleTerms = requiredTerms.Where(t => !keyValueRegex.IsMatch(t)).ToList();
+
+                // check title terms
+                var foundTerms = ContainsAny(reqTitleTerms, title);
+
+                // check key-value terms
+                foreach (var kv in reqKeyValues)
                 {
-                    continue;
-                }*/
+                    var key = kv.Split(':')[0];
+                    var value = kv.Split(':')[1];
 
-                var required = restrictions.Where(r => r.Required.IsNotNullOrWhiteSpace());
-                var ignored = restrictions.Where(r => r.Ignored.IsNotNullOrWhiteSpace());
-
-                var keyValueRegex = new Regex(@"\b\w+:\w+\b");
-
-                foreach (var r in required)
-                {
-                    var requiredTerms = r.Required.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                    // separate key-value terms and normal terms
-                    var reqKeyValues = requiredTerms.Where(kv => keyValueRegex.IsMatch(kv)).ToList();
-                    var reqTitleTerms = requiredTerms.Where(t => !keyValueRegex.IsMatch(t)).ToList();
-
-                    // check title terms
-                    var foundTerms = ContainsAny(reqTitleTerms, title);
-
-                    // check key-value terms
-                    foreach (var kv in reqKeyValues)
+                    switch (key)
                     {
-                        var key = kv.Split(':')[0];
-                        var value = kv.Split(':')[1];
-
-                        switch (key)
-                        {
-                            case "origin":
-                                var origin = subject.Release.Origin;
-                                if (origin.IsNotNullOrWhiteSpace())
+                        case "origin":
+                            var origin = subject.Release.Origin;
+                            if (origin.IsNotNullOrWhiteSpace())
+                            {
+                                if (string.Equals(origin, value, StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    if (string.Equals(origin, value, StringComparison.InvariantCultureIgnoreCase))
-                                    {
-                                        foundTerms.Add(kv);
-                                    }
+                                    foundTerms.Add(kv);
                                 }
-                                else
-                                {
-                                    _logger.Debug("{0} not found in release", key);
-                                }
-                                break;
-                            default:
-                                _logger.Debug("{0} is not a supported key", key);
-                                break;
-                        }
+                            }
+                            else
+                            {
+                                _logger.Debug("{0} not found in release", key);
+                            }
+                            break;
+                        default:
+                            _logger.Debug("{0} is not a supported key", key);
+                            break;
+                    }
     
-                    }
-
-                    if (foundTerms.Empty())
-                    {
-                        var terms = string.Join(", ", requiredTerms);
-                        _logger.Debug("[{0}] does not contain one of the required terms: {1}", title, terms);
-                        return Decision.Reject("Does not contain one of the required terms: {0}", terms);
-                    }
                 }
 
-
-                foreach (var r in ignored)
+                if (foundTerms.Empty())
                 {
-                    var ignoredTerms = r.Ignored.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    var terms = string.Join(", ", requiredTerms);
+                    _logger.Debug("[{0}] does not contain one of the required terms: {1}", title, terms);
+                    return Decision.Reject("Does not contain one of the required terms: {0}", terms);
+                }
+            }
 
-                    var foundTerms = ContainsAny(ignoredTerms, title);
-                    if (foundTerms.Any())
-                    {
-                        var terms = string.Join(", ", foundTerms);
-                        _logger.Debug("[{0}] contains these ignored terms: {1}", title, terms);
-                        return Decision.Reject("Contains these ignored terms: {0}", terms);
-                    }
+
+            foreach (var r in ignored)
+            {
+                var ignoredTerms = r.Ignored.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                var foundTerms = ContainsAny(ignoredTerms, title);
+                if (foundTerms.Any())
+                {
+                    var terms = string.Join(", ", foundTerms);
+                    _logger.Debug("[{0}] contains these ignored terms: {1}", title, terms);
+                    return Decision.Reject("Contains these ignored terms: {0}", terms);
                 }
             }
             _logger.Debug("[{0}] No restrictions apply, allowing", subject);
