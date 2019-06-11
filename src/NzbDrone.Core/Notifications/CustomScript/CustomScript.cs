@@ -142,22 +142,25 @@ namespace NzbDrone.Core.Notifications.CustomScript
                 }
             }
 
-            try
+            if (failures.Empty())
             {
-                var environmentVariables = new StringDictionary();
-                environmentVariables.Add("Sonarr_EventType", "Test");
-
-                var processOutput = ExecuteScript(environmentVariables);
-
-                if (processOutput.ExitCode != 0)
+                try
                 {
-                    failures.Add(new NzbDroneValidationFailure(string.Empty, $"Script exited with code: {processOutput.ExitCode}"));
+                    var environmentVariables = new StringDictionary();
+                    environmentVariables.Add("Sonarr_EventType", "Test");
+
+                    var processOutput = ExecuteScript(environmentVariables);
+
+                    if (processOutput.ExitCode != 0)
+                    {
+                        failures.Add(new NzbDroneValidationFailure(string.Empty, $"Script exited with code: {processOutput.ExitCode}"));
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-                failures.Add(new NzbDroneValidationFailure(string.Empty, ex.Message));
+                catch (Exception ex)
+                {
+                    _logger.Error(ex);
+                    failures.Add(new NzbDroneValidationFailure(string.Empty, ex.Message));
+                }
             }
 
             return new ValidationResult(failures);
