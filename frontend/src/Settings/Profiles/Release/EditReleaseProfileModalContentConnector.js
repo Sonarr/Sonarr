@@ -8,10 +8,12 @@ import { setReleaseProfileValue, saveReleaseProfile } from 'Store/Actions/settin
 import EditReleaseProfileModalContent from './EditReleaseProfileModalContent';
 
 const newReleaseProfile = {
+  enabled: false,
   required: '',
   ignored: '',
   preferred: [],
   includePreferredWhenRenaming: false,
+  indexer: 0,
   tags: []
 };
 

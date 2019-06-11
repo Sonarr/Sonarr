@@ -30,7 +30,7 @@ function EditReleaseProfileModalContent(props) {
 
   const {
     id,
-    enableProfile,
+    enabled,
     required,
     ignored,
     preferred,
@@ -52,9 +52,9 @@ function EditReleaseProfileModalContent(props) {
 
             <FormInputGroup
               type={inputTypes.CHECK}
-              name="enableProfile"
+              name="enabled"
               helpText="Check to enable release profile"
-              {...enableProfile}
+              {...enabled}
               onChange={onInputChange}
             />
           </FormGroup>
