@@ -24,12 +24,22 @@ namespace NzbDrone.Common.Extensions
 
         public static string FirstCharToLower(this string input)
         {
-            return input.First().ToString().ToLower() + input.Substring(1);
+            if (string.IsNullOrEmpty(input))
+            {
+                return string.Empty;
+            }
+
+            return char.ToLowerInvariant(input.First()) + input.Substring(1);
         }
 
         public static string FirstCharToUpper(this string input)
         {
-            return input.First().ToString().ToUpper() + input.Substring(1);
+            if (string.IsNullOrEmpty(input))
+            {
+                return string.Empty;
+            }
+
+            return char.ToUpperInvariant(input.First()) + input.Substring(1);
         }
 
         public static string Inject(this string format, params object[] formattingArgs)

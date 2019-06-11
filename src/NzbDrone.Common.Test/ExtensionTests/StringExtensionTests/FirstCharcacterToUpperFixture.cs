@@ -10,6 +10,8 @@ namespace NzbDrone.Common.Test.ExtensionTests.StringExtensionTests
         [TestCase("hello", "Hello")]
         [TestCase("camelCase", "CamelCase")]
         [TestCase("a full sentence", "A full sentence")]
+        [TestCase("", "")]
+        [TestCase(null, "")]
         public void should_capitalize_first_character(string input, string expected)
         {
             input.FirstCharToUpper().Should().Be(expected);
