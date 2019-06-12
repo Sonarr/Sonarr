@@ -34,6 +34,19 @@
   height: 35px;
 }
 
+@media only screen and (max-width: $breakpointExtraLarge) {
+  .deleteSelectedButton {
+    margin-left: 0;
+  }
+}
+
+@media only screen and (max-width: $breakpointLarge) {
+  .buttonContainer {
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+}
+
 @media only screen and (max-width: $breakpointSmall) {
   .inputContainer {
     margin-right: 0;
