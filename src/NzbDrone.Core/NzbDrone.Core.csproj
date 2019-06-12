@@ -1170,6 +1170,8 @@
     <Compile Include="Queue\Queue.cs" />
     <Compile Include="Queue\QueueService.cs" />
     <Compile Include="Queue\QueueUpdatedEvent.cs" />
+    <Compile Include="Profiles\Releases\ReleaseFilters\IReleaseFilter.cs" />
+    <Compile Include="Profiles\Releases\ReleaseFilters\OriginReleaseFilter.cs" />
     <Compile Include="Profiles\Releases\PerlRegexFactory.cs" />
     <Compile Include="Profiles\Releases\ReleaseProfile.cs" />
     <Compile Include="Profiles\Releases\ReleaseProfileRepository.cs" />
