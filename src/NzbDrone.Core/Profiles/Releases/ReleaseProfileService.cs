@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Profiles.Releases
         {
             return (List<ReleaseProfile>)AllForTags(tagIds)
                 .Where(r => r.Enabled)
-                .Where(r => r.IndexerId == indexerId || r.IndexerId == 0);
+                .Where(r => r.IndexerId == indexerId || r.IndexerId == 0).ToList();
         }
 
         public ReleaseProfile Get(int id)
