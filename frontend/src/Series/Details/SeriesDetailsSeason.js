@@ -274,7 +274,6 @@ class SeriesDetailsSeason extends Component {
                   />
                 </div>
               }
-              kind={kinds.INVERSE}
               position={tooltipPositions.BOTTOM}
             />
           </div>

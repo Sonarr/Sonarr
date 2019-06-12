@@ -5,7 +5,7 @@ function createSeriesQualityProfileSelector() {
   return createSelector(
     (state) => state.settings.qualityProfiles.items,
     createSeriesSelector(),
-    (qualityProfiles, series) => {
+    (qualityProfiles, series = {}) => {
       return qualityProfiles.find((profile) => {
         return profile.id === series.qualityProfileId;
       });

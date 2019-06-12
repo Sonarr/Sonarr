@@ -294,7 +294,7 @@ class InteractiveImportRow extends Component {
 
         <TableRowCell>
           {
-            !!rejections.length &&
+            rejections && rejections.length ?
               <Popover
                 anchor={
                   <Icon
@@ -317,7 +317,8 @@ class InteractiveImportRow extends Component {
                   </ul>
                 }
                 position={tooltipPositions.LEFT}
-              />
+              /> :
+              null
           }
         </TableRowCell>
 
