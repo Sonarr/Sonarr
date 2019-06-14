@@ -123,7 +123,7 @@ function EditReleaseProfileModalContent(props) {
             <FormLabel>Indexer</FormLabel>
 
             <FormInputGroup
-              type={inputTypes.NUMBER}
+              type={inputTypes.INDEXER_SELECT}
               name="indexerId"
               helpText="Specify what indexer the profile applies to"
               {...indexerId}
