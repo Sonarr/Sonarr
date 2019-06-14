@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Profiles.Releases
