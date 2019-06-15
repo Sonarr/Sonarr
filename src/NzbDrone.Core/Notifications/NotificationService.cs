@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
@@ -15,7 +16,8 @@ namespace NzbDrone.Core.Notifications
     public class NotificationService
         : IHandle<EpisodeGrabbedEvent>,
           IHandle<EpisodeImportedEvent>,
-          IHandle<SeriesRenamedEvent>
+          IHandle<SeriesRenamedEvent>,
+          IHandle<HealthCheckFailedEvent>
     {
         private readonly INotificationFactory _notificationFactory;
         private readonly Logger _logger;
@@ -168,6 +170,22 @@ namespace NzbDrone.Core.Notifications
                 catch (Exception ex)
                 {
                     _logger.Warn(ex, "Unable to send OnRename notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(HealthCheckFailedEvent message)
+        {
+            foreach (var notification in _notificationFactory.OnHealthCheckFailedEnabled())
+            {
+                try
+                {
+                    notification.OnHealthCheckFailed(message.HealthCheck);
+                }
+
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to send OnHealthCheckFailed notification to: " + notification.Definition.Name);
                 }
             }
         }

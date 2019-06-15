@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Notifications
     {
         protected const string EPISODE_GRABBED_TITLE = "Episode Grabbed";
         protected const string EPISODE_DOWNLOADED_TITLE = "Episode Downloaded";
+        protected const string HEALTH_CHECK_FAILED_TITLE = "Health Check Failed";
 
         protected const string EPISODE_GRABBED_TITLE_BRANDED = "Sonarr - " + EPISODE_GRABBED_TITLE;
         protected const string EPISODE_DOWNLOADED_TITLE_BRANDED = "Sonarr - " + EPISODE_DOWNLOADED_TITLE;
@@ -42,10 +43,16 @@ namespace NzbDrone.Core.Notifications
 
         }
 
+        public virtual void OnHealthCheckFailed(HealthCheck.HealthCheck healthCheck)
+        {
+
+        }
+
         public bool SupportsOnGrab => HasConcreteImplementation("OnGrab");
         public bool SupportsOnRename => HasConcreteImplementation("OnRename");
         public bool SupportsOnDownload => HasConcreteImplementation("OnDownload");
         public bool SupportsOnUpgrade => SupportsOnDownload;
+        public bool SupportsOnHealthCheckFailed => HasConcreteImplementation("OnHealthCheckFailed");
 
         protected TSettings Settings => (TSettings)Definition.Settings;
 

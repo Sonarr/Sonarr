@@ -63,7 +63,8 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.SupportsOnGrab)
                   .Ignore(i => i.SupportsOnDownload)
                   .Ignore(i => i.SupportsOnUpgrade)
-                  .Ignore(i => i.SupportsOnRename);
+                  .Ignore(i => i.SupportsOnRename)
+                  .Ignore(i => i.SupportsOnHealthCheckFailed);
 
             Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata");
 

@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.ThingiProvider;
+﻿using NzbDrone.Core.HealthCheck;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications
@@ -10,9 +11,11 @@ namespace NzbDrone.Core.Notifications
         void OnGrab(GrabMessage grabMessage);
         void OnDownload(DownloadMessage message);
         void OnRename(Series series);
+        void OnHealthCheckFailed(HealthCheck.HealthCheck healthCheck);
         bool SupportsOnGrab { get; }
         bool SupportsOnDownload { get; }
         bool SupportsOnUpgrade { get; }
         bool SupportsOnRename { get; }
+        bool SupportsOnHealthCheckFailed { get; }
     }
 }
