@@ -28,9 +28,15 @@ function createCleanSeriesSelector() {
           images,
           alternateTitles,
           firstCharacter: title.charAt(0).toLowerCase(),
-          tags: tags.map((id) => {
-            return allTags.find((tag) => tag.id === id);
-          })
+          tags: tags.reduce((acc, id) => {
+            const matchingTag = allTags.find((tag) => tag.id === id);
+
+            if (matchingTag) {
+              acc.push(matchingTag);
+            }
+
+            return acc;
+          }, [])
         };
       });
     }
