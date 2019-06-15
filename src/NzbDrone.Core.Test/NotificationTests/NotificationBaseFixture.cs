@@ -2,6 +2,7 @@
 using FluentAssertions;
 using FluentValidation.Results;
 using NUnit.Framework;
+using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
@@ -65,6 +66,11 @@ namespace NzbDrone.Core.Test.NotificationTests
                 TestLogger.Info("OnRename was called");
             }
 
+            public override void OnHealthCheckFailed(Core.HealthCheck.HealthCheck healthCheck)
+            {
+                TestLogger.Info("OnHealthCheckFailed was called");
+            }
+
         }
 
         class TestNotificationWithNoEvents : NotificationBase<TestSetting>
@@ -91,6 +97,7 @@ namespace NzbDrone.Core.Test.NotificationTests
 
             notification.SupportsOnGrab.Should().BeFalse();
             notification.SupportsOnRename.Should().BeFalse();
+            notification.SupportsOnHealthCheckFailed.Should().BeFalse();
         }
 
         [Test]
@@ -102,6 +109,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             notification.SupportsOnDownload.Should().BeTrue();
             notification.SupportsOnUpgrade.Should().BeTrue();
             notification.SupportsOnRename.Should().BeTrue();
+            notification.SupportsOnHealthCheckFailed.Should().BeTrue();
         }
 
 
@@ -114,6 +122,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             notification.SupportsOnDownload.Should().BeFalse();
             notification.SupportsOnUpgrade.Should().BeFalse();
             notification.SupportsOnRename.Should().BeFalse();
+            notification.SupportsOnHealthCheckFailed.Should().BeFalse();
         }
     }
 
