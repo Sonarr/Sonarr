@@ -3,6 +3,7 @@ using System.Data.SQLite;
 using FluentValidation;
 using Nancy;
 using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Exceptions;
 using Sonarr.Http.Exceptions;
 using Sonarr.Http.Extensions;
@@ -23,26 +24,20 @@ namespace Sonarr.Http.ErrorManagement
         {
             _logger.Trace("Handling Exception");
 
-            var apiException = exception as ApiException;
-
-            if (apiException != null)
+            if (exception is ApiException apiException)
             {
                 _logger.Warn(apiException, "API Error");
                 return apiException.ToErrorResponse();
             }
-
-            var validationException = exception as ValidationException;
-
-            if (validationException != null)
+            
+            if (exception is ValidationException validationException)
             {
                 _logger.Warn("Invalid request {0}", validationException.Message);
 
                 return validationException.Errors.AsResponse(HttpStatusCode.BadRequest);
             }
 
-            var clientException = exception as NzbDroneClientException;
-
-            if (clientException != null)
+            if (exception is NzbDroneClientException clientException)
             {
                 return new ErrorModel
                 {
@@ -51,9 +46,25 @@ namespace Sonarr.Http.ErrorManagement
                 }.AsResponse((HttpStatusCode)clientException.StatusCode);
             }
 
-            var sqLiteException = exception as SQLiteException;
+            if (exception is ModelNotFoundException notFoundException)
+            {
+                return new ErrorModel
+                {
+                    Message = exception.Message,
+                    Description = exception.ToString()
+                }.AsResponse(HttpStatusCode.NotFound);
+            }
 
-            if (sqLiteException != null)
+            if (exception is ModelConflictException conflictException)
+            {
+                return new ErrorModel
+                {
+                    Message = exception.Message,
+                    Description = exception.ToString()
+                }.AsResponse(HttpStatusCode.Conflict);
+            }
+
+            if (exception is SQLiteException sqLiteException)
             {
                 if (context.Request.Method == "PUT" || context.Request.Method == "POST")
                 {
