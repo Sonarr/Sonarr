@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.HealthCheck;
 
 namespace NzbDrone.Core.Notifications.Telegram
 {
@@ -24,6 +25,11 @@ namespace NzbDrone.Core.Notifications.Telegram
         public override void OnDownload(DownloadMessage message)
         {
             _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
+        }
+
+        public override void OnHealthCheckFailed(HealthCheck.HealthCheck healthCheck)
+        {
+            _proxy.SendNotification(HEALTH_CHECK_FAILED_TITLE, healthCheck.Message, Settings);
         }
 
         public override ValidationResult Test()
