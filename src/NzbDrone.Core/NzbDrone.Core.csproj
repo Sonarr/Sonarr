@@ -146,6 +146,7 @@
     <Compile Include="Datastore\Migration\130_episode_last_searched_time.cs" />
     <Compile Include="Datastore\Migration\129_add_relative_original_path_to_episode_file.cs" />
     <Compile Include="DecisionEngine\Specifications\AlreadyImportedSpecification.cs" />
+    <Compile Include="HealthCheck\HealthCheckFailedEvent.cs" />
     <Compile Include="Indexers\SeedConfigProvider.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />

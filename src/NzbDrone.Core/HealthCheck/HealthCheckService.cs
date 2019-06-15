@@ -81,6 +81,7 @@ namespace NzbDrone.Core.HealthCheck
                 else
                 {
                     _healthCheckResults.Set(result.Source.Name, result);
+                    _eventAggregator.PublishEvent(new HealthCheckFailedEvent(result));
                 }
             }
 
