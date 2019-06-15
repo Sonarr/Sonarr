@@ -302,5 +302,18 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
+
+        [Test]
+        public void should_return_true_if_episode_file_is_null()
+        {
+            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(2)
+                                                     .All()
+                                                     .With(e => e.EpisodeFileId = 1)
+                                                     .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(null))
+                                                     .Build()
+                                                     .ToList();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
     }
 }

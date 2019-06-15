@@ -29,6 +29,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             foreach (var episode in localEpisode.Episodes.Where(e => e.EpisodeFileId > 0))
             {
                 var episodeFile = episode.EpisodeFile.Value;
+
+                if (episodeFile == null)
+                {
+                    _logger.Trace("Unable to get episode file details from the DB. EpisodeId: {0} EpisodeFileId: {1}", episode.Id, episode.EpisodeFileId);
+                    continue;
+                }
+
                 var qualityCompare = qualityComparer.Compare(localEpisode.Quality.Quality, episodeFile.Quality.Quality);
 
                 if (qualityCompare < 0)

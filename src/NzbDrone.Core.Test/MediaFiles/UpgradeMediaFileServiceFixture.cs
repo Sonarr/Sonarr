@@ -194,5 +194,20 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_localEpisode.Episodes.Single().EpisodeFile.Value, DeleteMediaFileReason.Upgrade), Times.Never());
         }
+
+        [Test]
+        public void should_import_if_existing_file_doesnt_exist_in_db()
+        {
+            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
+                                                     .All()
+                                                     .With(e => e.EpisodeFileId = 1)
+                                                     .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(null))
+                                                     .Build()
+                                                     .ToList();
+
+            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_localEpisode.Episodes.Single().EpisodeFile.Value, It.IsAny<DeleteMediaFileReason>()), Times.Never());
+        }
     }
 }
