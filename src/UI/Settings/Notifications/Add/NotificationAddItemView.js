@@ -26,11 +26,12 @@ module.exports = Marionette.ItemView.extend({
         this.model.set(presetData);
 
         this.model.set({
-            id         : undefined,
-            onGrab     : this.model.get('supportsOnGrab'),
-            onDownload : this.model.get('supportsOnDownload'),
-            onUpgrade  : this.model.get('supportsOnUpgrade'),
-            onRename   : this.model.get('supportsOnRename')
+            id                  : undefined,
+            onGrab              : this.model.get('supportsOnGrab'),
+            onDownload          : this.model.get('supportsOnDownload'),
+            onUpgrade           : this.model.get('supportsOnUpgrade'),
+            onRename            : this.model.get('supportsOnRename'),
+            onHealthCheckFailed : this.model.get('supportsOnHealthCheckFailed')
         });
 
         var editView = new EditView({
@@ -47,11 +48,12 @@ module.exports = Marionette.ItemView.extend({
         }
 
         this.model.set({
-            id         : undefined,
-            onGrab     : this.model.get('supportsOnGrab'),
-            onDownload : this.model.get('supportsOnDownload'),
-            onUpgrade  : this.model.get('supportsOnUpgrade'),
-            onRename   : this.model.get('supportsOnRename')
+            id                  : undefined,
+            onGrab              : this.model.get('supportsOnGrab'),
+            onDownload          : this.model.get('supportsOnDownload'),
+            onUpgrade           : this.model.get('supportsOnUpgrade'),
+            onRename            : this.model.get('supportsOnRename'),
+            onHealthCheckFailed : this.model.get('supportsOnHealthCheckFailed')
         });
 
         var editView = new EditView({

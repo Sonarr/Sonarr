@@ -106,6 +106,28 @@
             </div>
 
             <div class="form-group">
+                <label class="col-sm-3 control-label">On Health Check Failed</label>
+
+                <div class="col-sm-5">
+                    <div class="input-group">
+                        <label class="checkbox toggle well">
+                            <input type="checkbox" name="onHealthCheckFailed" class="x-on-health-check-failed" {{#unless supportsOnHealthCheckFailed}}disabled="disabled"{{/unless}}/>
+                            <p>
+                                <span>Yes</span>
+                                <span>No</span>
+                            </p>
+
+                            <div class="btn btn-primary slide-button"/>
+                        </label>
+
+                        <span class="help-inline-checkbox">
+                            <i class="icon-sonarr-form-info" title="Be notified when a health check has failed"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="col-sm-3 control-label">Filter Series Tags</label>
 
                 <div class="col-sm-5">

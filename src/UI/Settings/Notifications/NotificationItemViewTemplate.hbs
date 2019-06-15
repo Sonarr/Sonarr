@@ -43,5 +43,15 @@
         {{else}}
             <span class="label label-default label-disabled">On Rename</span>
         {{/if}}
+
+        {{#if supportsOnHealthCheckFailed}}
+            {{#if onHealthCheckFailed}}
+                <span class="label label-success">On Health Check Failed</span>
+            {{else}}
+                <span class="label label-default">On Health Check Failed</span>
+            {{/if}}
+        {{else}}
+            <span class="label label-default label-disabled">On Health Check Failed</span>
+        {{/if}}
     </div>
 </div>
