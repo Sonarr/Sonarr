@@ -129,7 +129,7 @@ namespace NzbDrone.Core.RemotePathMappings
 
             foreach (var mapping in All())
             {
-                if (host == mapping.Host && new OsPath(mapping.RemotePath).Contains(remotePath))
+                if (host.Equals(mapping.Host, StringComparison.InvariantCultureIgnoreCase) && new OsPath(mapping.RemotePath).Contains(remotePath))
                 {
                     var localPath = new OsPath(mapping.LocalPath) + (remotePath - new OsPath(mapping.RemotePath));
 
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.RemotePathMappings
 
             foreach (var mapping in All())
             {
-                if (host == mapping.Host && new OsPath(mapping.LocalPath).Contains(localPath))
+                if (host.Equals(mapping.Host, StringComparison.InvariantCultureIgnoreCase) && new OsPath(mapping.LocalPath).Contains(localPath))
                 {
                     var remotePath = new OsPath(mapping.RemotePath) + (localPath - new OsPath(mapping.LocalPath));
 

@@ -87,6 +87,7 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
         }
 
         [TestCase("my-server.localdomain", "/mnt/storage/downloads/tv", @"D:\mountedstorage\downloads\tv")]
+        [TestCase("My-Server.localdomain", "/mnt/storage/downloads/tv", @"D:\mountedstorage\downloads\tv")]
         [TestCase("my-2server.localdomain", "/mnt/storage/downloads/tv", "/mnt/storage/downloads/tv")]
         [TestCase("my-server.localdomain", "/mnt/storageabc/downloads/tv", "/mnt/storageabc/downloads/tv")]
         public void should_remap_remote_to_local(string host, string remotePath, string expectedLocalPath)
@@ -101,6 +102,7 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
         }
 
         [TestCase("my-server.localdomain", "/mnt/storage/downloads/tv", @"D:\mountedstorage\downloads\tv")]
+        [TestCase("My-Server.localdomain", "/mnt/storage/downloads/tv", @"D:\mountedstorage\downloads\tv")]
         [TestCase("my-server.localdomain", "/mnt/storage/", @"D:\mountedstorage")]
         [TestCase("my-2server.localdomain", "/mnt/storage/downloads/tv", "/mnt/storage/downloads/tv")]
         [TestCase("my-server.localdomain", "/mnt/storageabc/downloads/tv", "/mnt/storageabc/downloads/tv")]
