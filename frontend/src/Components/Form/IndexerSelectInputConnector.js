@@ -4,43 +4,48 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import sortByName from 'Utilities/Array/sortByName';
-import SelectInput from './SelectInput';
+import { fetchIndexers } from 'Store/Actions/settingsActions';
+import EnhancedSelectInput from './EnhancedSelectInput';
 
 function createMapStateToProps() {
   return createSelector(
     (state) => state.settings.indexers,
-    (state, { includeNoChange }) => includeNoChange,
-    (state, { includeMixed }) => includeMixed,
-    (indexers, includeNoChange, includeMixed) => {
-      const values = _.map(indexers.items.sort(sortByName), (indexer) => {
+    (state, { includeAny }) => includeAny,
+    (indexers, includeAny) => {
+      const {
+        isFetching,
+        isPopulated,
+        error,
+        items
+      } = indexers;
+
+      const values = _.map(items.sort(sortByName), (indexer) => {
         return {
           key: indexer.id,
           value: indexer.name
         };
       });
 
-      if (includeNoChange) {
+      if (includeAny) {
         values.unshift({
-          key: 'noChange',
-          value: 'No Change',
-          disabled: true
-        });
-      }
-
-      if (includeMixed) {
-        values.unshift({
-          key: 'mixed',
-          value: '(Mixed)',
-          disabled: true
+          key: 0,
+          value: '(Any)'
         });
       }
 
       return {
+        isFetching,
+        isPopulated,
+        error,
         values
       };
     }
   );
 }
+
+const mapDispatchToProps = {
+  dispatchFetchIndexers: fetchIndexers
+};
 
 class IndexerSelectInputConnector extends Component {
 
@@ -48,6 +53,10 @@ class IndexerSelectInputConnector extends Component {
   // Lifecycle
 
   componentDidMount() {
+    if (!this.props.isPopulated) {
+      this.props.dispatchFetchIndexers();
+    }
+
     const {
       name,
       value,
@@ -55,11 +64,7 @@ class IndexerSelectInputConnector extends Component {
     } = this.props;
 
     if (!value || !_.some(values, (option) => parseInt(option.key) === value)) {
-      const firstValue = _.find(values, (option) => !isNaN(parseInt(option.key)));
-
-      if (firstValue) {
-        this.onChange({ name, value: firstValue.key });
-      }
+      this.onChange({ name, value: 0 });
     }
   }
 
@@ -75,7 +80,7 @@ class IndexerSelectInputConnector extends Component {
 
   render() {
     return (
-      <SelectInput
+      <EnhancedSelectInput
         {...this.props}
         onChange={this.onChange}
       />
@@ -84,15 +89,18 @@ class IndexerSelectInputConnector extends Component {
 }
 
 IndexerSelectInputConnector.propTypes = {
+  isFetching: PropTypes.bool.isRequired,
+  isPopulated: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
-  includeNoChange: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired
+  includeAny: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  dispatchFetchIndexers: PropTypes.func.isRequired
 };
 
 IndexerSelectInputConnector.defaultProps = {
-  includeNoChange: false
+  includeAny: false
 };
 
-export default connect(createMapStateToProps)(IndexerSelectInputConnector);
+export default connect(createMapStateToProps, mapDispatchToProps)(IndexerSelectInputConnector);
