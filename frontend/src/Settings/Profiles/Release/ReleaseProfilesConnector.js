@@ -2,24 +2,28 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchReleaseProfiles, deleteReleaseProfile } from 'Store/Actions/settingsActions';
+import { fetchReleaseProfiles, deleteReleaseProfile, fetchIndexers } from 'Store/Actions/settingsActions';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import ReleaseProfiles from './ReleaseProfiles';
 
 function createMapStateToProps() {
   return createSelector(
     (state) => state.settings.releaseProfiles,
+    (state) => state.settings.indexers,
     createTagsSelector(),
-    (releaseProfiles, tagList) => {
+    (releaseProfiles, indexers, tagList) => {
       return {
         ...releaseProfiles,
-        tagList
+        tagList,
+        isIndexersPopulated: indexers.isPopulated,
+        indexerList: indexers.items
       };
     }
   );
 }
 
 const mapDispatchToProps = {
+  fetchIndexers,
   fetchReleaseProfiles,
   deleteReleaseProfile
 };
@@ -31,6 +35,9 @@ class ReleaseProfilesConnector extends Component {
 
   componentDidMount() {
     this.props.fetchReleaseProfiles();
+    if (!this.props.isIndexersPopulated) {
+      this.props.fetchIndexers();
+    }
   }
 
   //
@@ -54,8 +61,10 @@ class ReleaseProfilesConnector extends Component {
 }
 
 ReleaseProfilesConnector.propTypes = {
+  isIndexersPopulated: PropTypes.bool.isRequired,
   fetchReleaseProfiles: PropTypes.func.isRequired,
-  deleteReleaseProfile: PropTypes.func.isRequired
+  deleteReleaseProfile: PropTypes.func.isRequired,
+  fetchIndexers: PropTypes.func.isRequired
 };
 
 export default connect(createMapStateToProps, mapDispatchToProps)(ReleaseProfilesConnector);

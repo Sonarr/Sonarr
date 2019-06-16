@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import split from 'Utilities/String/split';
@@ -68,10 +69,13 @@ class ReleaseProfile extends Component {
   render() {
     const {
       id,
+      enabled,
       required,
       ignored,
       tags,
-      tagList
+      indexerId,
+      tagList,
+      indexerList
     } = this.props;
 
     const {
@@ -79,6 +83,8 @@ class ReleaseProfile extends Component {
       isEditReleaseProfileModalOpen,
       isDeleteReleaseProfileModalOpen
     } = this.state;
+
+    const indexer = indexerId !== 0 && _.find(indexerList, { id: indexerId });
 
     return (
       <Card
@@ -107,6 +113,23 @@ class ReleaseProfile extends Component {
 
         <div>
           {
+            sortedPreferred.map((item) => {
+              const isPreferred = item.value >= 0;
+
+              return (
+                <Label
+                  key={item.key}
+                  kind={isPreferred ? kinds.DEFAULT : kinds.WARNING}
+                >
+                  {item.key} {isPreferred && '+'}{item.value}
+                </Label>
+              );
+            })
+          }
+        </div>
+
+        <div>
+          {
             split(ignored).map((item) => {
               if (!item) {
                 return null;
@@ -124,27 +147,32 @@ class ReleaseProfile extends Component {
           }
         </div>
 
-        <div>
-          {
-            sortedPreferred.map((item) => {
-              const isPreferred = item.value >= 0;
-
-              return (
-                <Label
-                  key={item.key}
-                  kind={isPreferred ? kinds.DEFAULT : kinds.WARNING}
-                >
-                  {item.key} {isPreferred && '+'}{item.value}
-                </Label>
-              );
-            })
-          }
-        </div>
-
         <TagList
           tags={tags}
           tagList={tagList}
         />
+
+        <div>
+          {
+            !enabled &&
+            <Label
+              kind={kinds.DISABLED}
+              outline={true}
+            >
+              Disabled
+            </Label>
+          }
+
+          {
+            indexer &&
+            <Label
+              kind={kinds.INFO}
+              outline={true}
+            >
+              {indexer.name}
+            </Label>
+          }
+        </div>
 
         <EditReleaseProfileModalConnector
           id={id}
@@ -169,18 +197,23 @@ class ReleaseProfile extends Component {
 
 ReleaseProfile.propTypes = {
   id: PropTypes.number.isRequired,
+  enabled: PropTypes.bool.isRequired,
   required: PropTypes.string.isRequired,
   ignored: PropTypes.string.isRequired,
   preferred: PropTypes.arrayOf(PropTypes.object).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
+  indexerId: PropTypes.number.isRequired,
   tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  indexerList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onConfirmDeleteReleaseProfile: PropTypes.func.isRequired
 };
 
 ReleaseProfile.defaultProps = {
+  enabled: true,
   required: '',
   ignored: '',
-  preferred: []
+  preferred: [],
+  indexerId: 0
 };
 
 export default ReleaseProfile;

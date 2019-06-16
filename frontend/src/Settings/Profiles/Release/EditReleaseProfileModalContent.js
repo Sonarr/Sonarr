@@ -34,9 +34,9 @@ function EditReleaseProfileModalContent(props) {
     required,
     ignored,
     preferred,
-    indexerId,
     includePreferredWhenRenaming,
-    tags
+    tags,
+    indexerId
   } = item;
 
   return (
@@ -127,6 +127,7 @@ function EditReleaseProfileModalContent(props) {
               name="indexerId"
               helpText="Specify what indexer the profile applies to"
               {...indexerId}
+              includeAny={true}
               onChange={onInputChange}
             />
           </FormGroup>
