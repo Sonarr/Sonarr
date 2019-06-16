@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import getUniqueElememtId from 'Utilities/getUniqueElementId';
 import isMobileUtil from 'Utilities/isMobile';
 import * as keyCodes from 'Utilities/Constants/keyCodes';
-import { icons, scrollDirections } from 'Helpers/Props';
+import { icons, sizes, scrollDirections } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Portal from 'Components/Portal';
 import Link from 'Components/Link/Link';
@@ -14,8 +14,8 @@ import Measure from 'Components/Measure';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
 import Scroller from 'Components/Scroller/Scroller';
-import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue';
-import EnhancedSelectInputOption from './EnhancedSelectInputOption';
+import HintedSelectInputSelectedValue from './HintedSelectInputSelectedValue';
+import HintedSelectInputOption from './HintedSelectInputOption';
 import styles from './EnhancedSelectInput.css';
 
 function isArrowKey(keyCode) {
@@ -150,9 +150,11 @@ class EnhancedSelectInput extends Component {
   }
 
   onBlur = () => {
-    this.setState({
-      selectedIndex: getSelectedIndex(this.props)
-    });
+    // Calling setState without this check prevents the click event from being properly handled on Chrome (it is on firefox)
+    const origIndex = getSelectedIndex(this.props);
+    if (origIndex !== this.state.selectedIndex) {
+      this.setState({ selectedIndex: origIndex });
+    }
   }
 
   onKeyDown = (event) => {
@@ -385,6 +387,7 @@ class EnhancedSelectInput extends Component {
           isMobile &&
             <Modal
               className={styles.optionsModal}
+              size={sizes.EXTRA_SMALL}
               isOpen={isOpen}
               onModalClose={this.onOptionsModalClose}
             >
@@ -439,8 +442,8 @@ EnhancedSelectInput.defaultProps = {
   disabledClassName: styles.isDisabled,
   isDisabled: false,
   selectedValueOptions: {},
-  selectedValueComponent: EnhancedSelectInputSelectedValue,
-  optionComponent: EnhancedSelectInputOption
+  selectedValueComponent: HintedSelectInputSelectedValue,
+  optionComponent: HintedSelectInputOption
 };
 
 export default EnhancedSelectInput;

@@ -1,0 +1,23 @@
+.optionText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 0 0;
+  min-width: 0;
+
+  &.isMobile {
+    display: block;
+
+    .hintText {
+      margin-left: 0;
+    }
+  }
+}
+
+.hintText {
+  @add-mixin truncate;
+
+  margin-left: 15px;
+  color: $darkGray;
+  font-size: $smallFontSize;
+}
