@@ -40,6 +40,7 @@ class ReleaseProfiles extends Component {
     const {
       items,
       tagList,
+      indexerList,
       onConfirmDeleteReleaseProfile,
       ...otherProps
     } = this.props;
@@ -69,6 +70,7 @@ class ReleaseProfiles extends Component {
                   <ReleaseProfile
                     key={item.id}
                     tagList={tagList}
+                    indexerList={indexerList}
                     {...item}
                     onConfirmDeleteReleaseProfile={onConfirmDeleteReleaseProfile}
                   />
@@ -92,6 +94,7 @@ ReleaseProfiles.propTypes = {
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  indexerList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onConfirmDeleteReleaseProfile: PropTypes.func.isRequired
 };
 
