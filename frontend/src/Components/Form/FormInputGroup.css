@@ -1,5 +1,6 @@
 .inputGroupContainer {
   flex: 1 1 auto;
+  min-width: 0;
 }
 
 .inputGroup {
@@ -11,6 +12,7 @@
 .inputContainer {
   position: relative;
   flex: 1 1 auto;
+  min-width: 0;
 }
 
 .inputUnit {

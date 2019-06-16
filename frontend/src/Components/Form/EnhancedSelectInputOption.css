@@ -7,12 +7,16 @@
   cursor: default;
 
   &:hover {
-    background-color: #f9f9f9;
+    background-color: #f8f8f8;
   }
 }
 
 .isSelected {
   background-color: #e2e2e2;
+
+  &:hover {
+    background-color: #e2e2e2;
+  }
 
   &.isMobile {
     background-color: inherit;

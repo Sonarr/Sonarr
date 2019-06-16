@@ -61,7 +61,7 @@ function EditRemotePathMappingModalContent(props) {
                 <FormLabel>Host</FormLabel>
 
                 <FormInputGroup
-                  type={inputTypes.AUTO_COMPLETE}
+                  type={inputTypes.SELECT}
                   name="host"
                   helpText="The same host you specified for the remote Download Client"
                   {...host}

@@ -122,12 +122,12 @@ class Naming extends Component {
     const renameEpisodes = hasSettings && settings.renameEpisodes.value;
 
     const multiEpisodeStyleOptions = [
-      { key: 0, value: 'Extend' },
-      { key: 1, value: 'Duplicate' },
-      { key: 2, value: 'Repeat' },
-      { key: 3, value: 'Scene' },
-      { key: 4, value: 'Range' },
-      { key: 5, value: 'Prefixed Range' }
+      { key: 0, value: 'Extend', hint: 'S01E01-02-03' },
+      { key: 1, value: 'Duplicate', hint: 'S01E01.S01E02' },
+      { key: 2, value: 'Repeat', hint: 'S01E01E02E03' },
+      { key: 3, value: 'Scene', hint: 'S01E01-E02-E03' },
+      { key: 4, value: 'Range', hint: 'S01E01-03' },
+      { key: 5, value: 'Prefixed Range', hint: 'S01E01-E03' }
     ];
 
     const standardEpisodeFormatHelpTexts = [];
