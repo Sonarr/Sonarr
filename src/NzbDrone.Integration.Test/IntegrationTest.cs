@@ -1,4 +1,4 @@
-﻿using NLog;
+using NLog;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Test.Common;
 using Sonarr.Http.ClientSchema;
@@ -39,6 +39,7 @@ namespace NzbDrone.Integration.Test
             // Change Console Log Level to Debug so we get more details.
             var config = HostConfig.Get(1);
             config.ConsoleLogLevel = "Debug";
+            config.DatabaseJournalMode = "Auto";
             HostConfig.Put(config);
         }
 
