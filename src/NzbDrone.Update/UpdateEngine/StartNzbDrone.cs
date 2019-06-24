@@ -80,6 +80,11 @@ namespace NzbDrone.Update.UpdateEngine
                 _startupContext.Flags.Add(StartupContext.NO_BROWSER);
             }
 
+            if (!_startupContext.Flags.Contains(StartupContext.DISABLE_WAL))
+            {
+                _startupContext.Flags.Add(StartupContext.DISABLE_WAL);
+            }
+
             _processProvider.SpawnNewProcess(path, _startupContext.PreservedArguments);
         }
     }
