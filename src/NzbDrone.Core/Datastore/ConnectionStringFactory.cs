@@ -24,8 +24,6 @@ namespace NzbDrone.Core.Datastore
 
             MainDbConnectionString = GetConnectionString(appFolderInfo.GetDatabase(), DisableWal, AppDataDriveType);
             LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase(), DisableWal, AppDataDriveType);
-
-            _diskProvider = diskProvider;
         }
 
 
@@ -50,14 +48,9 @@ namespace NzbDrone.Core.Datastore
             connectionBuilder.CacheSize = (int)-10000;
             connectionBuilder.DateTimeKind = DateTimeKind.Utc;
 
-            if (OsInfo.IsOsx || disableWal || appDataDriveType == DriveType.Network)
-            {
-                connectionBuilder.JournalMode = SQLiteJournalModeEnum.Truncate;
-            }
-            else
-            {
-                connectionBuilder.JournalMode = SQLiteJournalModeEnum.Wal;
-            }
+            connectionBuilder.JournalMode = appDataDriveType == DriveType.Network ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
+            connectionBuilder.JournalMode = disableWal ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
+            connectionBuilder.JournalMode = OsInfo.IsOsx ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
 
             connectionBuilder.Pooling = true;
             connectionBuilder.Version = 3;
