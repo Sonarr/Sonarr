@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Datastore
 
             if (_configFileProvider.DatabaseJournalMode != "Auto")
             {
-                _logger.Debug("Network filesystem store for application data detected, disabling WAL mode for SQLite");
+                _logger.Debug("DatabaseJournalMode detected in config.xml, disabling WAL mode for SQLite");
                 return SQLiteJournalModeEnum.Truncate;
             }
 
