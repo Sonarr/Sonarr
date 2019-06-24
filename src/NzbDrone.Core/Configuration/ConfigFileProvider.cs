@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Configuration
         bool AnalyticsEnabled { get; }
         string LogLevel { get; }
         string ConsoleLogLevel { get; }
+        string DatabaseJournalMode { get; }
         string Branch { get; }
         string ApiKey { get; }
         string SslCertHash { get; }
@@ -181,6 +182,8 @@ namespace NzbDrone.Core.Configuration
 
         public string LogLevel => GetValue("LogLevel", "Info");
         public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
+
+        public string DatabaseJournalMode => GetValue("DatabaseJournalMode", "Auto", persist: false);
 
         public string SslCertHash => GetValue("SslCertHash", "");
 
