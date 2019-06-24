@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
@@ -52,6 +52,11 @@ namespace NzbDrone.Host
             if (!args.Contains("/nobrowser"))
             {
                 args += " /nobrowser";
+            }
+
+            if (!args.Contains("/disablewal"))
+            {
+                args += " /disablewal";
             }
 
             return args;
