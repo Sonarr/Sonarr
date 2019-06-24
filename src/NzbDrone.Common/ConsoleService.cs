@@ -30,6 +30,7 @@ namespace NzbDrone.Common
             }
 
             Console.WriteLine("                 /{0} Don't open Sonarr in a browser", StartupContext.NO_BROWSER);
+            Console.WriteLine("                 /{0} Disable WAL", StartupContext.DISABLE_WAL);
             Console.WriteLine("                 /{0} Start Sonarr terminating any other instances", StartupContext.TERMINATE);
             Console.WriteLine("                 /{0}=path Path to use as the AppData location (stores database, config, logs, etc)", StartupContext.APPDATA);
             Console.WriteLine("                 <No Arguments>  Run application in console mode.");
