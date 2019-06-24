@@ -18,6 +18,7 @@ namespace NzbDrone.Common.EnvironmentInfo
     {
         public const string APPDATA = "data";
         public const string NO_BROWSER = "nobrowser";
+        public const string DISABLE_WAL = "disablewal";
         internal const string INSTALL_SERVICE = "i";
         internal const string UNINSTALL_SERVICE = "u";
         public const string HELP = "?";
@@ -69,6 +70,11 @@ namespace NzbDrone.Common.EnvironmentInfo
                 if (Flags.Contains(NO_BROWSER))
                 {
                     args += " /" + NO_BROWSER;
+                }
+
+                if (Flags.Contains(DISABLE_WAL))
+                {
+                    args += " /" + DISABLE_WAL;
                 }
 
                 return args.Trim();
