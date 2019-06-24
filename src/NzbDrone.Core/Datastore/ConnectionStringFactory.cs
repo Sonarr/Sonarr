@@ -17,8 +17,6 @@ namespace NzbDrone.Core.Datastore
 
     public class ConnectionStringFactory : IConnectionStringFactory
     {
-        private readonly IDiskProvider _diskProvider;
-
         public ConnectionStringFactory(IAppFolderInfo appFolderInfo, IStartupContext startupContext, IDiskProvider diskProvider)
         {
             DisableWal = startupContext.Flags.Contains(StartupContext.DISABLE_WAL);
