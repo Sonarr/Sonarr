@@ -1,5 +1,7 @@
 using System;
 using System.Data.SQLite;
+using System.IO;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 
@@ -15,14 +17,23 @@ namespace NzbDrone.Core.Datastore
 
     public class ConnectionStringFactory : IConnectionStringFactory
     {
-        public ConnectionStringFactory(IAppFolderInfo appFolderInfo, IStartupContext startupContext)
+        private readonly IDiskProvider _diskProvider;
+
+        public ConnectionStringFactory(IAppFolderInfo appFolderInfo, IStartupContext startupContext, IDiskProvider diskProvider)
         {
             DisableWal = startupContext.Flags.Contains(StartupContext.DISABLE_WAL);
-            MainDbConnectionString = GetConnectionString(appFolderInfo.GetDatabase(), DisableWal);
-            LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase(), DisableWal);
+            AppDataDriveType = diskProvider.GetMount(appFolderInfo.AppDataFolder).DriveType;
+
+            MainDbConnectionString = GetConnectionString(appFolderInfo.GetDatabase(), DisableWal, AppDataDriveType);
+            LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase(), DisableWal, AppDataDriveType);
+
+            _diskProvider = diskProvider;
         }
 
+
         public bool DisableWal { get; private set; }
+
+        public DriveType AppDataDriveType { get; private set; }
         public string MainDbConnectionString { get; private set; }
         public string LogDbConnectionString { get; private set; }
 
@@ -33,7 +44,7 @@ namespace NzbDrone.Core.Datastore
             return connectionBuilder.DataSource;
         }
 
-        private static string GetConnectionString(string dbPath, bool disableWal)
+        private static string GetConnectionString(string dbPath, bool disableWal, DriveType appDataDriveType)
         {
             var connectionBuilder = new SQLiteConnectionStringBuilder();
 
@@ -41,7 +52,7 @@ namespace NzbDrone.Core.Datastore
             connectionBuilder.CacheSize = (int)-10000;
             connectionBuilder.DateTimeKind = DateTimeKind.Utc;
 
-            if (OsInfo.IsOsx || disableWal)
+            if (OsInfo.IsOsx || disableWal || appDataDriveType == DriveType.Network)
             {
                 connectionBuilder.JournalMode = SQLiteJournalModeEnum.Truncate;
             }
