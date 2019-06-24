@@ -55,7 +55,16 @@ namespace NzbDrone.Common.Test.EnvironmentTests
             args.PreservedArguments.Should().Be(preserved);
         }
 
-     
+        [TestCase("/disablewal", "/disablewal")]
+        [TestCase("/Disablewal", "/disablewal")]
+        [TestCase("-Disablewal", "/disablewal")]
+        public void should_preserver_disable_wal(string arg, string preserved)
+        {
+            var args = new StartupContext(new[] { arg });
+            args.PreservedArguments.Should().Be(preserved);
+        }
+
+
         [Test]
         public void should_preserver_both()
         {
