@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data.SQLite;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -7,6 +7,7 @@ namespace NzbDrone.Core.Datastore
 {
     public interface IConnectionStringFactory
     {
+        bool DisableWal { get; }
         string MainDbConnectionString { get; }
         string LogDbConnectionString { get; }
         string GetDatabasePath(string connectionString);
@@ -14,12 +15,14 @@ namespace NzbDrone.Core.Datastore
 
     public class ConnectionStringFactory : IConnectionStringFactory
     {
-        public ConnectionStringFactory(IAppFolderInfo appFolderInfo)
+        public ConnectionStringFactory(IAppFolderInfo appFolderInfo, IStartupContext startupContext)
         {
-            MainDbConnectionString = GetConnectionString(appFolderInfo.GetDatabase());
-            LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase());
+            DisableWal = startupContext.Flags.Contains(StartupContext.DISABLE_WAL);
+            MainDbConnectionString = GetConnectionString(appFolderInfo.GetDatabase(), DisableWal);
+            LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase(), DisableWal);
         }
 
+        public bool DisableWal { get; private set; }
         public string MainDbConnectionString { get; private set; }
         public string LogDbConnectionString { get; private set; }
 
@@ -30,14 +33,23 @@ namespace NzbDrone.Core.Datastore
             return connectionBuilder.DataSource;
         }
 
-        private static string GetConnectionString(string dbPath)
+        private static string GetConnectionString(string dbPath, bool disableWal)
         {
             var connectionBuilder = new SQLiteConnectionStringBuilder();
 
             connectionBuilder.DataSource = dbPath;
             connectionBuilder.CacheSize = (int)-10000;
             connectionBuilder.DateTimeKind = DateTimeKind.Utc;
-            connectionBuilder.JournalMode = OsInfo.IsOsx ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
+
+            if (OsInfo.IsOsx || disableWal)
+            {
+                connectionBuilder.JournalMode = SQLiteJournalModeEnum.Truncate;
+            }
+            else
+            {
+                connectionBuilder.JournalMode = SQLiteJournalModeEnum.Wal;
+            }
+
             connectionBuilder.Pooling = true;
             connectionBuilder.Version = 3;
             
