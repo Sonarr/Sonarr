@@ -48,9 +48,22 @@ namespace NzbDrone.Core.Datastore
             connectionBuilder.CacheSize = (int)-10000;
             connectionBuilder.DateTimeKind = DateTimeKind.Utc;
 
-            connectionBuilder.JournalMode = appDataDriveType == DriveType.Network ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
-            connectionBuilder.JournalMode = disableWal ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
-            connectionBuilder.JournalMode = OsInfo.IsOsx ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
+            connectionBuilder.JournalMode = SQLiteJournalModeEnum.Wal;
+
+            if (appDataDriveType == DriveType.Network)
+            {
+                connectionBuilder.JournalMode = SQLiteJournalModeEnum.Truncate;
+            }
+
+            if (disableWal)
+            {
+                connectionBuilder.JournalMode = SQLiteJournalModeEnum.Truncate;
+            }
+
+            if(OsInfo.IsOsx)
+            {
+                connectionBuilder.JournalMode = SQLiteJournalModeEnum.Truncate;
+            }
 
             connectionBuilder.Pooling = true;
             connectionBuilder.Version = 3;
