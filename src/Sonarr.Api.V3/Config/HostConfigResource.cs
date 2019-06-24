@@ -20,6 +20,7 @@ namespace Sonarr.Api.V3.Config
         public string Password { get; set; }
         public string LogLevel { get; set; }
         public string ConsoleLogLevel { get; set; }
+        public string DatabaseJournalMode { get; set; }
         public string Branch { get; set; }
         public string ApiKey { get; set; }
         public string SslCertHash { get; set; }
@@ -59,6 +60,7 @@ namespace Sonarr.Api.V3.Config
                 //Password
                 LogLevel = model.LogLevel,
                 ConsoleLogLevel = model.ConsoleLogLevel,
+                DatabaseJournalMode = model.DatabaseJournalMode,
                 Branch = model.Branch,
                 ApiKey = model.ApiKey,
                 SslCertHash = model.SslCertHash,
