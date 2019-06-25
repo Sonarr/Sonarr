@@ -3,6 +3,7 @@ using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
 using NzbDrone.Common.Http.Proxy;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Api.Config
 {
@@ -19,6 +20,7 @@ namespace NzbDrone.Api.Config
         public string Password { get; set; }
         public string LogLevel { get; set; }
         public string ConsoleLogLevel { get; set; }
+        public DatabaseJournalType DatabaseJournalMode { get; set; }
         public string Branch { get; set; }
         public string ApiKey { get; set; }
         public string SslCertHash { get; set; }
