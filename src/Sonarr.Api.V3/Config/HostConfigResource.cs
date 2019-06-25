@@ -1,6 +1,7 @@
 using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Security;
 using NzbDrone.Core.Update;
 using Sonarr.Http.REST;
@@ -20,6 +21,7 @@ namespace Sonarr.Api.V3.Config
         public string Password { get; set; }
         public string LogLevel { get; set; }
         public string ConsoleLogLevel { get; set; }
+        public DatabaseJournalType DatabaseJournalMode { get; set; }
         public string Branch { get; set; }
         public string ApiKey { get; set; }
         public string SslCertHash { get; set; }

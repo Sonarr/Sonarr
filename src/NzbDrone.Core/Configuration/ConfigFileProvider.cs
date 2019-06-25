@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,6 +13,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration.Events;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -34,6 +36,7 @@ namespace NzbDrone.Core.Configuration
         bool AnalyticsEnabled { get; }
         string LogLevel { get; }
         string ConsoleLogLevel { get; }
+        DatabaseJournalType DatabaseJournalMode { get; }
         string Branch { get; }
         string ApiKey { get; }
         string SslCertHash { get; }
@@ -181,6 +184,8 @@ namespace NzbDrone.Core.Configuration
 
         public string LogLevel => GetValue("LogLevel", "info");
         public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
+
+        public DatabaseJournalType DatabaseJournalMode => GetValueEnum("DatabaseJournalMode", DatabaseJournalType.Wal, persist: false);
 
         public string SslCertHash => GetValue("SslCertHash", "");
 
