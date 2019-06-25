@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Configuration
         public string LogLevel => GetValue("LogLevel", "info");
         public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
 
-        public DatabaseJournalType DatabaseJournalMode => GetValueEnum("DatabaseJournalMode", DatabaseJournalType.Wal, persist: false);
+        public DatabaseJournalType DatabaseJournalMode => GetValueEnum("DatabaseJournalMode", DatabaseJournalType.Auto, persist: false);
 
         public string SslCertHash => GetValue("SslCertHash", "");
 

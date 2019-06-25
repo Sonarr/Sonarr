@@ -20,7 +20,6 @@ namespace NzbDrone.Api.Config
         public string Password { get; set; }
         public string LogLevel { get; set; }
         public string ConsoleLogLevel { get; set; }
-        public DatabaseJournalType DatabaseJournalMode { get; set; }
         public string Branch { get; set; }
         public string ApiKey { get; set; }
         public string SslCertHash { get; set; }
