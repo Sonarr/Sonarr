@@ -136,6 +136,7 @@
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
     <Compile Include="Configuration\RescanAfterRefreshType.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
+    <Compile Include="Datastore\DatabaseJournalType.cs" />
     <Compile Include="Datastore\Migration\134_add_specials_folder_format.cs" />
     <Compile Include="Datastore\Migration\132_add_download_client_priority.cs" />
     <Compile Include="Datastore\Migration\131_download_propers_config.cs" />

@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Datastore
 
             connectionBuilder.JournalMode = GetJournalMode(dbPath);
 
-            if (connectionBuilder.JournalMode == SQLiteJournalModeEnum.Truncate)
+            if (OsInfo.IsOsx)
             {
                 connectionBuilder.Add("Full FSync", true);
             }
@@ -65,24 +65,34 @@ namespace NzbDrone.Core.Datastore
 
         private SQLiteJournalModeEnum GetJournalMode(string path)
         {
-            var driveType = _diskProvider.GetMount(path).DriveType;
-
-            if (driveType == DriveType.Network || driveType == DriveType.Unknown)
+            if (_configFileProvider.DatabaseJournalMode != DatabaseJournalType.Auto)
             {
-                _logger.Debug("Network filesystem store for application data detected, disabling WAL mode for SQLite");
-                return SQLiteJournalModeEnum.Truncate;
-            }
-
-            if (_configFileProvider.DatabaseJournalMode != (DatabaseJournalType)SQLiteJournalModeEnum.Wal)
-            {
-                _logger.Debug("DatabaseJournalMode tag detected in config.xml, disabling WAL mode for SQLite");
-                return SQLiteJournalModeEnum.Truncate;
+                _logger.Debug("Database journal mode overridden by config.xml, using {0} journal mode", _configFileProvider.DatabaseJournalMode);
+                return (SQLiteJournalModeEnum)_configFileProvider.DatabaseJournalMode;
             }
 
             if (OsInfo.IsOsx)
             {
-                _logger.Debug("macOS operating system detected, disabling WAL mode for SQLite");
+                _logger.Debug("macOS operating system, using Truncate database journal mode");
                 return SQLiteJournalModeEnum.Truncate;
+            }
+
+            var mount = _diskProvider.GetMount(path);
+
+            if (mount == null)
+            {
+                _logger.Debug("Database {0} located on unknown filesystem, using Truncate journal mode", path);
+                return SQLiteJournalModeEnum.Truncate;
+            }
+
+            if (mount.DriveType == DriveType.Network || mount.DriveType == DriveType.Unknown)
+            {
+                _logger.Debug("Database {0} located on filesystem {1} with type {2}, using Truncate journal mode", path, mount.DriveFormat, mount.DriveType);
+                return SQLiteJournalModeEnum.Truncate;
+            }
+            else
+            {
+                _logger.Debug("Database {0} located on filesystem {1} with type {2}, using WAL journal mode", path, mount.DriveFormat, mount.DriveType);
             }
 
             return SQLiteJournalModeEnum.Wal;

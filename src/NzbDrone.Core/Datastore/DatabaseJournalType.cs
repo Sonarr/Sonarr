@@ -4,7 +4,9 @@ namespace NzbDrone.Core.Datastore
 {
     public enum DatabaseJournalType
     {
+        Auto = SQLiteJournalModeEnum.Default,
         Wal = SQLiteJournalModeEnum.Wal,
-        Truncate = SQLiteJournalModeEnum.Truncate
+        Truncate = SQLiteJournalModeEnum.Truncate,
+        Delete = SQLiteJournalModeEnum.Delete
     }
 }
