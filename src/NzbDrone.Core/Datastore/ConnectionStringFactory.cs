@@ -14,7 +14,6 @@ namespace NzbDrone.Core.Datastore
         string MainDbConnectionString { get; }
         string LogDbConnectionString { get; }
         string GetDatabasePath(string connectionString);
-        SQLiteJournalModeEnum GetJournalMode(string path);
     }
 
     public class ConnectionStringFactory : IConnectionStringFactory
@@ -53,7 +52,7 @@ namespace NzbDrone.Core.Datastore
 
             connectionBuilder.JournalMode = GetJournalMode(dbPath);
 
-            if(connectionBuilder.JournalMode == SQLiteJournalModeEnum.Truncate)
+            if (connectionBuilder.JournalMode == SQLiteJournalModeEnum.Truncate)
             {
                 connectionBuilder.Add("Full FSync", true);
             }
@@ -64,7 +63,7 @@ namespace NzbDrone.Core.Datastore
             return connectionBuilder.ConnectionString;
         }
 
-        public SQLiteJournalModeEnum GetJournalMode(string path)
+        private SQLiteJournalModeEnum GetJournalMode(string path)
         {
             var driveType = _diskProvider.GetMount(path).DriveType;
 
@@ -74,15 +73,15 @@ namespace NzbDrone.Core.Datastore
                 return SQLiteJournalModeEnum.Truncate;
             }
 
-            if (_configFileProvider.DatabaseJournalMode != "Auto")
+            if (_configFileProvider.DatabaseJournalMode != (DatabaseJournalType)SQLiteJournalModeEnum.Wal)
             {
-                _logger.Debug("Network filesystem store for application data detected, disabling WAL mode for SQLite");
+                _logger.Debug("DatabaseJournalMode tag detected in config.xml, disabling WAL mode for SQLite");
                 return SQLiteJournalModeEnum.Truncate;
             }
 
             if (OsInfo.IsOsx)
             {
-                _logger.Debug("Mac OSX operating system detected, disabling WAL mode for SQLite");
+                _logger.Debug("macOS operating system detected, disabling WAL mode for SQLite");
                 return SQLiteJournalModeEnum.Truncate;
             }
 
