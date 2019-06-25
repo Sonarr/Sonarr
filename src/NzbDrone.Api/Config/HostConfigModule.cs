@@ -1,91 +1,83 @@
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using FluentValidation;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
+using Sonarr.Http.REST;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
-using NzbDrone.Core.Validation;
-using NzbDrone.Core.Validation.Paths;
-using Sonarr.Http;
+using NzbDrone.Common.Http.Proxy;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Api.Config
 {
-    public class HostConfigModule : SonarrRestModule<HostConfigResource>
+    public class HostConfigResource : RestResource
     {
-        private readonly IConfigFileProvider _configFileProvider;
-        private readonly IConfigService _configService;
-        private readonly IUserService _userService;
+        public string BindAddress { get; set; }
+        public int Port { get; set; }
+        public int SslPort { get; set; }
+        public bool EnableSsl { get; set; }
+        public bool LaunchBrowser { get; set; }
+        public AuthenticationType AuthenticationMethod { get; set; }
+        public bool AnalyticsEnabled { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string LogLevel { get; set; }
+        public string ConsoleLogLevel { get; set; }
+        public DatabaseJournalType DatabaseJournalMode { get; set; }
+        public string Branch { get; set; }
+        public string ApiKey { get; set; }
+        public string SslCertHash { get; set; }
+        public string UrlBase { get; set; }
+        public bool UpdateAutomatically { get; set; }
+        public UpdateMechanism UpdateMechanism { get; set; }
+        public string UpdateScriptPath { get; set; }
+        public bool ProxyEnabled { get; set; }
+        public ProxyType ProxyType { get; set; }
+        public string ProxyHostname { get; set; }
+        public int ProxyPort { get; set; }
+        public string ProxyUsername { get; set; }
+        public string ProxyPassword { get; set; }
+        public string ProxyBypassFilter { get; set; }
+        public bool ProxyBypassLocalAddresses { get; set; }
+        public string BackupFolder { get; set; }
+        public int BackupInterval { get; set; }
+        public int BackupRetention { get; set; }
+    }
 
-        public HostConfigModule(IConfigFileProvider configFileProvider, IConfigService configService, IUserService userService)
-            : base("/config/host")
+    public static class HostConfigResourceMapper
+    {
+        public static HostConfigResource ToResource(this IConfigFileProvider model, IConfigService configService)
         {
-            _configFileProvider = configFileProvider;
-            _configService = configService;
-            _userService = userService;
-
-            GetResourceSingle = GetHostConfig;
-            GetResourceById = GetHostConfig;
-            UpdateResource = SaveHostConfig;
-
-            SharedValidator.RuleFor(c => c.BindAddress)
-                           .ValidIp4Address()
-                           .NotListenAllIp4Address()
-                           .When(c => c.BindAddress != "*");
-
-            SharedValidator.RuleFor(c => c.Port).ValidPort();
-
-            SharedValidator.RuleFor(c => c.UrlBase).ValidUrlBase();
-
-            SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationMethod != AuthenticationType.None);
-            SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationMethod != AuthenticationType.None);
-
-            SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
-            SharedValidator.RuleFor(c => c.SslCertHash).NotEmpty().When(c => c.EnableSsl && OsInfo.IsWindows);
-
-            SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");
-            SharedValidator.RuleFor(c => c.UpdateScriptPath).IsValidPath().When(c => c.UpdateMechanism == UpdateMechanism.Script);
-
-            SharedValidator.RuleFor(c => c.BackupFolder).IsValidPath().When(c => Path.IsPathRooted(c.BackupFolder));
-            SharedValidator.RuleFor(c => c.BackupInterval).InclusiveBetween(1, 7);
-            SharedValidator.RuleFor(c => c.BackupRetention).InclusiveBetween(1, 90);
-        }
-
-        private HostConfigResource GetHostConfig()
-        {
-            var resource = _configFileProvider.ToResource(_configService);
-            resource.Id = 1;
-
-            var user = _userService.FindUser();
-            if (user != null)
+            // TODO: Clean this mess up. don't mix data from multiple classes, use sub-resources instead?
+            return new HostConfigResource
             {
-                resource.Username = user.Username;
-                resource.Password = user.Password;
-            }
-
-            return resource;
-        }
-
-        private HostConfigResource GetHostConfig(int id)
-        {
-            return GetHostConfig();
-        }
-
-        private void SaveHostConfig(HostConfigResource resource)
-        {
-            var dictionary = resource.GetType()
-                                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                     .ToDictionary(prop => prop.Name, prop => prop.GetValue(resource, null));
-
-            _configFileProvider.SaveConfigDictionary(dictionary);
-            _configService.SaveConfigDictionary(dictionary);
-
-            if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
-            {
-                _userService.Upsert(resource.Username, resource.Password);
-            }
+                BindAddress = model.BindAddress,
+                Port = model.Port,
+                SslPort = model.SslPort,
+                EnableSsl = model.EnableSsl,
+                LaunchBrowser = model.LaunchBrowser,
+                AuthenticationMethod = model.AuthenticationMethod,
+                AnalyticsEnabled = model.AnalyticsEnabled,
+                //Username
+                //Password
+                LogLevel = model.LogLevel,
+                ConsoleLogLevel = model.ConsoleLogLevel,
+                Branch = model.Branch,
+                ApiKey = model.ApiKey,
+                SslCertHash = model.SslCertHash,
+                UrlBase = model.UrlBase,
+                UpdateAutomatically = model.UpdateAutomatically,
+                UpdateMechanism = model.UpdateMechanism,
+                UpdateScriptPath = model.UpdateScriptPath,
+                ProxyEnabled = configService.ProxyEnabled,
+                ProxyType = configService.ProxyType,
+                ProxyHostname = configService.ProxyHostname,
+                ProxyPort = configService.ProxyPort,
+                ProxyUsername = configService.ProxyUsername,
+                ProxyPassword = configService.ProxyPassword,
+                ProxyBypassFilter = configService.ProxyBypassFilter,
+                ProxyBypassLocalAddresses = configService.ProxyBypassLocalAddresses,
+                BackupFolder = configService.BackupFolder,
+                BackupInterval = configService.BackupInterval,
+                BackupRetention = configService.BackupRetention
+            };
         }
     }
 }
