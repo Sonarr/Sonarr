@@ -107,6 +107,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("Clarissa.Explains.It.All.S02E10.480p.HULU.WEBRip.x264-Puffin", false)]
         [TestCase("Duck.Dynasty.S10E14.Techs.And.Balances.480p.AE.WEBRip.AAC2.0.x264-SEA", false)]
+        [TestCase("Series.Title.1x04.ITA.WEBMux.x264-NovaRip", false)]
         public void should_parse_webrip480p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip480p, proper);
@@ -193,6 +194,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Arrested.Development.S04E01.720p.WEBRip.AAC2.0.x264-NFRiP", false)]
         [TestCase("American.Gods.S01E07.A.Prayer.For.Mad.Sweeney.720p.AMZN.WEBRip.DD5.1.x264-NTb", false)]
         [TestCase("LEGO.Star.Wars.The.Freemaker.Adventures.S07E01.A.New.Home.720p.DSNY.WEBRip.AAC2.0.x264-TVSmash", false)]
+        [TestCase("Series.Title.1x04.ITA.720p.WEBMux.x264-NovaRip", false)]
         public void should_parse_webrip720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip720p, proper);
@@ -227,6 +229,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Blue.Bloods.S07E20.1080p.AMZN.WEBRip.DDP5.1.x264-ViSUM ac3.(NLsub)", false)]
         [TestCase("Better.Call.Saul.S03E09.1080p.NF.WEBRip.DD5.1.x264-ViSUM", false)]
         [TestCase("The Walking Dead S09E13 1.54 GB WEB-RIP 1080p Dual-Audio 2019 MKV", false)]
+        [TestCase("Series.Title.1x04.ITA.1080p.WEBMux.x264-NovaRip", false)]
         public void should_parse_webrip1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip1080p, proper);
