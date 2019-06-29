@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchDevices, clearDevices } from 'Store/Actions/deviceActions';
+import { fetchOptions, clearOptions } from 'Store/Actions/providerOptionActions';
 import DeviceInput from './DeviceInput';
 
 function createMapStateToProps() {
   return createSelector(
     (state, { value }) => value,
-    (state) => state.devices,
+    (state) => state.providerOptions,
     (value, devices) => {
 
       return {
@@ -37,8 +37,8 @@ function createMapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  dispatchFetchDevices: fetchDevices,
-  dispatchClearDevices: clearDevices
+  dispatchFetchOptions: fetchOptions,
+  dispatchClearOptions: clearOptions
 };
 
 class DeviceInputConnector extends Component {
@@ -51,7 +51,7 @@ class DeviceInputConnector extends Component {
   }
 
   componentWillUnmount = () => {
-    // this.props.dispatchClearDevices();
+    this.props.dispatchClearOptions();
   }
 
   //
@@ -61,10 +61,14 @@ class DeviceInputConnector extends Component {
     const {
       provider,
       providerData,
-      dispatchFetchDevices
+      dispatchFetchOptions
     } = this.props;
 
-    dispatchFetchDevices({ provider, providerData });
+    dispatchFetchOptions({
+      action: 'getDevices',
+      provider,
+      providerData
+    });
   }
 
   //
@@ -92,8 +96,8 @@ DeviceInputConnector.propTypes = {
   providerData: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  dispatchFetchDevices: PropTypes.func.isRequired,
-  dispatchClearDevices: PropTypes.func.isRequired
+  dispatchFetchOptions: PropTypes.func.isRequired,
+  dispatchClearOptions: PropTypes.func.isRequired
 };
 
 export default connect(createMapStateToProps, mapDispatchToProps)(DeviceInputConnector);

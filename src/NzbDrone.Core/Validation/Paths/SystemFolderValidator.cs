@@ -1,6 +1,5 @@
-using System;
 using FluentValidation.Validators;
-using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Validation.Paths
@@ -16,33 +15,13 @@ namespace NzbDrone.Core.Validation.Paths
         {
             var folder = context.PropertyValue.ToString();
 
-            if (OsInfo.IsWindows)
+            foreach (var systemFolder in SystemFolders.GetSystemFolders())
             {
-                var windowsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-                context.MessageFormatter.AppendArgument("systemFolder", windowsFolder);
-
-                if (windowsFolder.PathEquals(folder))
-                {
-                    context.MessageFormatter.AppendArgument("relationship", "set to");
-
-                    return false;
-                }
-
-                if (windowsFolder.IsParentPath(folder))
-                {
-                    context.MessageFormatter.AppendArgument("relationship", "child of");
-
-                    return false;
-                }
-            }
-            else if (OsInfo.IsOsx)
-            {
-                var systemFolder = "/System";
                 context.MessageFormatter.AppendArgument("systemFolder", systemFolder);
 
                 if (systemFolder.PathEquals(folder))
                 {
-                    context.MessageFormatter.AppendArgument("relationship", "child of");
+                    context.MessageFormatter.AppendArgument("relationship", "set to");
 
                     return false;
                 }
@@ -52,36 +31,6 @@ namespace NzbDrone.Core.Validation.Paths
                     context.MessageFormatter.AppendArgument("relationship", "child of");
 
                     return false;
-                }
-            }
-            else
-            {
-                var folders = new[]
-                              {
-                                  "/bin",
-                                  "/boot",
-                                  "/lib",
-                                  "/sbin",
-                                  "/proc"
-                              };
-
-                foreach (var f in folders)
-                {
-                    context.MessageFormatter.AppendArgument("systemFolder", f);
-
-                    if (f.PathEquals(folder))
-                    {
-                        context.MessageFormatter.AppendArgument("relationship", "child of");
-
-                        return false;
-                    }
-
-                    if (f.IsParentPath(folder))
-                    {
-                        context.MessageFormatter.AppendArgument("relationship", "child of");
-
-                        return false;
-                    }
                 }
             }
 

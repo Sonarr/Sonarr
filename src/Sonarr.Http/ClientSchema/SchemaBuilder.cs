@@ -100,13 +100,18 @@ namespace Sonarr.Http.ClientSchema
                         HelpLink = fieldAttribute.HelpLink,
                         Order = fieldAttribute.Order,
                         Advanced = fieldAttribute.Advanced,
-                        Type = fieldAttribute.Type.ToString().ToLowerInvariant(),
-                        Section = fieldAttribute.Section,
+                        Type = fieldAttribute.Type.ToString().FirstCharToLower(),
+                        Section = fieldAttribute.Section
                     };
 
                     if (fieldAttribute.Type == FieldType.Select)
                     {
                         field.SelectOptions = GetSelectOptions(fieldAttribute.SelectOptions);
+                    }
+
+                    if (fieldAttribute.Hidden != HiddenType.Visible)
+                    {
+                        field.Hidden = fieldAttribute.Hidden.ToString().FirstCharToLower();
                     }
 
                     var valueConverter = GetValueConverter(propertyInfo.PropertyType);
