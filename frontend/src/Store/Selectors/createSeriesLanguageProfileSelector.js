@@ -5,7 +5,7 @@ function createSeriesLanguageProfileSelector() {
   return createSelector(
     (state) => state.settings.languageProfiles.items,
     createSeriesSelector(),
-    (languageProfiles, series) => {
+    (languageProfiles, series = {}) => {
       return languageProfiles.find((profile) => {
         return profile.id === series.languageProfileId;
       });

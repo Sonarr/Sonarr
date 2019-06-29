@@ -204,7 +204,10 @@ class MediaManagement extends Component {
                             <FormInputGroup
                               type={inputTypes.TEXT}
                               name="extraFileExtensions"
-                              helpText="Comma separated list of extra files to import, ie sub,nfo (.nfo will be imported as .nfo-orig)"
+                              helpTexts={[
+                                'Comma separated list of extra files to import (.nfo will be imported as .nfo-orig)',
+                                'Examples: ".sub, .nfo" or "sub,nfo"'
+                              ]}
                               onChange={onInputChange}
                               {...settings.extraFileExtensions}
                             />
