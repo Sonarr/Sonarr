@@ -193,10 +193,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         [Test]
         public void should_be_false_when_release_is_proper_for_existing_episode_of_different_quality()
         {
-            _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.HDTV720p, new Revision(version: 2));
+            _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL720p, new Revision(version: 2));
             _remoteEpisode.Release.PublishDate = DateTime.UtcNow;
 
-            GivenExistingFile(new QualityModel(Quality.SDTV), Language.English);
+            GivenExistingFile(new QualityModel(Quality.HDTV720p), Language.English);
 
             _delayProfile.UsenetDelay = 720;
 
