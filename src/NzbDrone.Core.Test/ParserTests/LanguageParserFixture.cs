@@ -225,6 +225,13 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Language.Id.Should().Be(Language.Czech.Id);
         }
 
+        [TestCase("Castle.2009.S01E14.Ukrainian.HDTV.XviD-LOL")]
+        [TestCase("True.Detective.S01E01.1080p.WEB-DL.Ukr.Eng.TVKlondike")]
+        public void should_parse_language_ukrainian(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Language.Id.Should().Be(Language.Ukrainian.Id);
+        }
 
         [TestCase("Russian.Puppets.S01E07.Cold.Action.HDTV.XviD-Droned")]
         public void should_not_parse_series_or_episode_title(string postTitle)
