@@ -164,5 +164,31 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                        NoPreferredWordScore)
                    .Should().BeFalse();
         }
+
+        [Test]
+        public void should_return_false_if_release_and_existing_file_are_the_same()
+        {
+            var profile = new QualityProfile
+                          {
+                              Items = Qualities.QualityFixture.GetDefaultQualities(),
+                          };
+
+            var langProfile = new LanguageProfile
+                              {
+                                  Languages = LanguageFixture.GetDefaultLanguages(),
+                                  Cutoff = Language.English
+                              };
+
+            Subject.IsUpgradable(
+                       profile,
+                       langProfile,
+                       new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
+                       Language.English,
+                       NoPreferredWordScore,
+                       new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
+                       Language.English,
+                       NoPreferredWordScore)
+                   .Should().BeFalse();
+        }
     }
 }

@@ -30,6 +30,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         private bool IsPreferredWordUpgradable(int currentScore, int newScore)
         {
+            _logger.Debug("Comparing preferred word score. Current: {0} New: {1}", currentScore, newScore);
+
             return newScore > currentScore;
         }
 
@@ -40,6 +42,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (qualityCompare > 0)
             {
+                _logger.Debug("New item has a better quality");
                 return true;
             }
 
@@ -54,6 +57,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (_configService.DownloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                 newQuality?.Revision.CompareTo(currentQuality.Revision) > 0)
             {
+                _logger.Debug("New item has a better quality revision");
                 return true;
             }
 
@@ -61,6 +65,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (languageCompare > 0)
             {
+                _logger.Debug("New item has a more preferred language");
                 return true;
             }
 
@@ -69,13 +74,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 _logger.Debug("Existing item has better language, skipping");
                 return false;
             }
-
+            
             if (!IsPreferredWordUpgradable(currentScore, newScore))
             {
                 _logger.Debug("Existing item has a better preferred word score, skipping");
                 return false;
             }
 
+            _logger.Debug("New item has a better preferred word score");
             return true;
         }
 
