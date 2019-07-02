@@ -365,6 +365,16 @@ namespace NzbDrone.Common.Processes
                 return ("cmd.exe", $"/c {path} {args}");
             }
 
+            if (OsInfo.IsWindows && path.EndsWith(".ps1", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return ("powershell.exe", $"-ExecutionPolicy Bypass -NoProfile -File {path} {args}");
+            }
+
+            if (OsInfo.IsWindows && path.EndsWith(".py", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return ("python.exe", $"{path} {args}");
+            }
+
             return (path, args);
         }
     }
