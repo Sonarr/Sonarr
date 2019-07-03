@@ -187,6 +187,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Walking Dead 2010 S09E13 [MKV / H.264 / AC3/AAC / WEB / Dual Áudio / Inglês / 720p]", false)]
         [TestCase("into.the.badlands.s03e16.h264.720p-web-handbrake.mkv", false)]
         [TestCase("BrainDead.S01E01.The.Insanity.Principle.720p.WEB-DL.DD5.1.H.264-BD", false)]
+        [TestCase("Jerks.S03E05.Griebnitzsee.German.720p.MaxdomeHD.AVC-TVS", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
@@ -236,7 +237,6 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.WEBRip1080p, proper);
         }
 
-        
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.x264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.h264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.PROPER.h264-spamTV", true)]
