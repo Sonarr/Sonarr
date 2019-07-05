@@ -270,7 +270,17 @@ export const defaultState = {
     {
       name: 'network',
       label: 'Network',
-      type: filterBuilderTypes.STRING
+      type: filterBuilderTypes.STRING,
+      optionsSelector: function(items) {
+        const tagList = items.map((series) => {
+          return {
+            id: series.network,
+            name: series.network
+          };
+        });
+
+        return tagList.sort(sortByName);
+      }
     },
     {
       name: 'qualityProfileId',

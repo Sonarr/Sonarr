@@ -6,5 +6,6 @@
   display: flex;
   flex-wrap: wrap;
   padding: 6px 16px;
+  height: 33px;
   cursor: default;
 }

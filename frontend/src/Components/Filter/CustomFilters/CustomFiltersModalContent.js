@@ -29,10 +29,10 @@ function CustomFiltersModalContent(props) {
 
       <ModalBody>
         {
-          customFilters.map((customFilter, index) => {
+          customFilters.map((customFilter) => {
             return (
               <CustomFilter
-                key={index}
+                key={customFilter.id}
                 id={customFilter.id}
                 label={customFilter.label}
                 filters={customFilter.filters}

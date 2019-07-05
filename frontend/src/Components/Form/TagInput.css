@@ -14,10 +14,11 @@
 
 .internalInput {
   flex: 1 1 0%;
+  margin-top: -6px;
   margin-left: 3px;
   min-width: 20%;
   max-width: 100%;
   width: 0%;
-  height: 21px;
+  height: 31px;
   border: none;
 }
