@@ -4,6 +4,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { scrollDirections } from 'Helpers/Props';
 import styles from './OverlayScroller.css';
 
+const SCROLLBAR_SIZE = 10;
+
 class OverlayScroller extends Component {
 
   //
@@ -21,7 +23,11 @@ class OverlayScroller extends Component {
       scrollTop
     } = this.props;
 
-    if (!this._isScrolling && scrollTop != null && scrollTop !== prevProps.scrollTop) {
+    if (
+      !this._isScrolling &&
+      scrollTop != null &&
+      scrollTop !== prevProps.scrollTop
+    ) {
       this._scroller.scrollTop(scrollTop);
     }
   }
@@ -37,6 +43,42 @@ class OverlayScroller extends Component {
     return (
       <div
         className={this.props.trackClassName}
+        {...props}
+      />
+    );
+  }
+
+  _renderTrackHorizontal = ({ style, props }) => {
+    const finalStyle = {
+      ...style,
+      right: 2,
+      bottom: 2,
+      left: 2,
+      borderRadius: 3,
+      height: SCROLLBAR_SIZE
+    };
+
+    return (
+      <div
+        style={finalStyle}
+        {...props}
+      />
+    );
+  }
+
+  _renderTrackVertical = ({ style, props }) => {
+    const finalStyle = {
+      ...style,
+      right: 2,
+      bottom: 2,
+      top: 2,
+      borderRadius: 3,
+      width: SCROLLBAR_SIZE
+    };
+
+    return (
+      <div
+        style={finalStyle}
         {...props}
       />
     );
@@ -91,6 +133,8 @@ class OverlayScroller extends Component {
         ref={this._setScrollRef}
         autoHide={autoHide}
         hideTracksWhenNotNeeded={autoScroll}
+        renderTrackHorizontal={this._renderTrackHorizontal}
+        renderTrackVertical={this._renderTrackVertical}
         renderThumbHorizontal={this._renderThumb}
         renderThumbVertical={this._renderThumb}
         renderView={this._renderView}

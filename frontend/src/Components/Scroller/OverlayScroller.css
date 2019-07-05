@@ -3,7 +3,7 @@
 }
 
 .thumb {
-  min-height: 50px;
+  min-height: 100px;
   border: 1px solid transparent;
   border-radius: 5px;
   background-color: $scrollbarBackgroundColor;
