@@ -2,8 +2,8 @@
   flex: 1 0 14.28%;
   overflow: hidden;
   min-height: 70px;
-  border-bottom: 1px solid $borderColor;
-  border-left: 1px solid $borderColor;
+  border-bottom: 1px solid $calendarBorderColor;
+  border-left: 1px solid $calendarBorderColor;
 }
 
 .isSingleDay {
@@ -12,7 +12,7 @@
 
 .dayOfMonth {
   padding-right: 5px;
-  border-bottom: 1px solid $borderColor;
+  border-bottom: 1px solid $calendarBorderColor;
   text-align: right;
 }
 

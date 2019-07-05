@@ -1,6 +1,6 @@
 .days {
   display: flex;
-  border-right: 1px solid $borderColor;
+  border-right: 1px solid $calendarBorderColor;
 }
 
 .day,
