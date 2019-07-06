@@ -69,8 +69,12 @@ class RemoveQueueItemModal extends Component {
           </ModalHeader>
 
           <ModalBody>
-            <div className={styles.message}>
+            <div>
               Are you sure you want to remove '{sourceTitle}' from the queue?
+            </div>
+
+            <div className={styles.messageRemove}>
+              Removing will remove the download and the file(s) from the download client.
             </div>
 
             <FormGroup>

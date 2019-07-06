@@ -24,7 +24,7 @@ class AddNewSeriesSearchResult extends Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.isExistingSeries && this.props.isExistingSeries) {
-      this.onAddSerisModalClose();
+      this.onAddSeriesModalClose();
     }
   }
 
@@ -35,7 +35,7 @@ class AddNewSeriesSearchResult extends Component {
     this.setState({ isNewAddSeriesModalOpen: true });
   }
 
-  onAddSerisModalClose = () => {
+  onAddSeriesModalClose = () => {
     this.setState({ isNewAddSeriesModalOpen: false });
   }
 
@@ -161,7 +161,7 @@ class AddNewSeriesSearchResult extends Component {
           year={year}
           overview={overview}
           images={images}
-          onModalClose={this.onAddSerisModalClose}
+          onModalClose={this.onAddSeriesModalClose}
         />
       </div>
     );
