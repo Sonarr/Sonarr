@@ -186,6 +186,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Community.6x11.Modern.Espionage.ITA.ENG.720p.WEB.DLMux.H.264-GiuseppeTnT", false)]
         [TestCase("The Walking Dead 2010 S09E13 [MKV / H.264 / AC3/AAC / WEB / Dual Áudio / Inglês / 720p]", false)]
         [TestCase("into.the.badlands.s03e16.h264.720p-web-handbrake.mkv", false)]
+        [TestCase("BrainDead.S01E01.The.Insanity.Principle.720p.WEB-DL.DD5.1.H.264-BD", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
