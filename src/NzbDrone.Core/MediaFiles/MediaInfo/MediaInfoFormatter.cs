@@ -480,8 +480,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             var videoDynamicRange = "";
 
             if (mediaInfo.VideoBitDepth >= 10 &&
-                !string.IsNullOrEmpty(mediaInfo.VideoColourPrimaries) &&
-                !string.IsNullOrEmpty(mediaInfo.VideoTransferCharacteristics))
+                mediaInfo.VideoColourPrimaries.IsNotNullOrWhiteSpace() &&
+                mediaInfo.VideoTransferCharacteristics.IsNotNullOrWhiteSpace())
             {
                 if (mediaInfo.VideoColourPrimaries.EqualsIgnoreCase(ValidHdrColourPrimaries) &&
                     ValidHdrTransferFunctions.Any(mediaInfo.VideoTransferCharacteristics.Contains))

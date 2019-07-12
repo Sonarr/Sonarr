@@ -101,7 +101,9 @@ namespace NzbDrone.Core.Organizer
             var mediaInfo = new MediaInfoModel()
             {
                 VideoCodec = "AVC",
-                VideoBitDepth = 8,
+                VideoBitDepth = 10,
+                VideoColourPrimaries = "BT.2020",
+                VideoTransferCharacteristics = "HLG",
                 AudioFormat = "DTS",
                 AudioChannels = 6,
                 AudioChannelPositions = "3/2/0.1",
@@ -112,7 +114,9 @@ namespace NzbDrone.Core.Organizer
             var mediaInfoAnime = new MediaInfoModel()
             {
                 VideoCodec = "AVC",
-                VideoBitDepth = 8,
+                VideoBitDepth = 10,
+                VideoColourPrimaries = "BT.2020",
+                VideoTransferCharacteristics = "HLG",
                 AudioFormat = "DTS",
                 AudioChannels = 6,
                 AudioChannelPositions = "3/2/0.1",
