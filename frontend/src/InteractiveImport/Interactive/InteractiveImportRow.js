@@ -340,6 +340,7 @@ class InteractiveImportRow extends Component {
           id={id}
           seriesId={series && series.id}
           seasonNumber={seasonNumber}
+          relativePath={relativePath}
           onModalClose={this.onSelectEpisodeModalClose}
         />
 

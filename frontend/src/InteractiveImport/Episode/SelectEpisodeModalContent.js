@@ -14,6 +14,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import SelectEpisodeRow from './SelectEpisodeRow';
+import styles from './SelectEpisodeModalContent.css';
 
 const columns = [
   {
@@ -83,6 +84,7 @@ class SelectEpisodeModalContent extends Component {
       isPopulated,
       error,
       items,
+      relativePath,
       sortKey,
       sortDirection,
       onSortPress,
@@ -100,7 +102,10 @@ class SelectEpisodeModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Manual Import - Select Episode(s)
+          <div className={styles.header}>
+            Manual Import - Select Episode(s)
+          </div>
+
         </ModalHeader>
 
         <ModalBody>
@@ -152,17 +157,21 @@ class SelectEpisodeModalContent extends Component {
           }
         </ModalBody>
 
-        <ModalFooter>
-          <Button onPress={onModalClose}>
-            Cancel
-          </Button>
+        <ModalFooter className={styles.footer}>
+          <div className={styles.path}>{relativePath}</div>
 
-          <Button
-            kind={kinds.SUCCESS}
-            onPress={this.onEpisodesSelect}
-          >
+          <div className={styles.buttons}>
+            <Button onPress={onModalClose}>
+            Cancel
+            </Button>
+
+            <Button
+              kind={kinds.SUCCESS}
+              onPress={this.onEpisodesSelect}
+            >
             Select Episodes
-          </Button>
+            </Button>
+          </div>
         </ModalFooter>
       </ModalContent>
     );
@@ -174,6 +183,7 @@ SelectEpisodeModalContent.propTypes = {
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  relativePath: PropTypes.string.isRequired,
   sortKey: PropTypes.string,
   sortDirection: PropTypes.string,
   onSortPress: PropTypes.func.isRequired,
