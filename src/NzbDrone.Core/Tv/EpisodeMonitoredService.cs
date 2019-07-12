@@ -79,7 +79,9 @@ namespace NzbDrone.Core.Tv
                 case MonitorTypes.LatestSeason:
 
                     if (episodes.Where(e => e.SeasonNumber == lastSeason)
-                                .All(e => e.AirDateUtc.HasValue && !e.AirDateUtc.Value.InLastDays(90)))
+                                .All(e => e.AirDateUtc.HasValue &&
+                                          e.AirDateUtc.Value.Before(DateTime.UtcNow) &&
+                                          !e.AirDateUtc.Value.InLastDays(90)))
                     {
                         _logger.Debug("[{0}] Unmonitoring all episodes because latest season aired more than 90 days ago", series.Title);
                         ToggleEpisodesMonitoredState(episodes, e => false);

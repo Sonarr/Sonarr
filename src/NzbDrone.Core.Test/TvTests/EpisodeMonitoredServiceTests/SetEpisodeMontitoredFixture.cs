@@ -223,6 +223,41 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                   .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => !e.Monitored))));
         }
 
+        [Test]
+        public void should_monitor_latest_season_if_some_episodes_have_aired()
+        {
+            _series.Seasons = Builder<Season>.CreateListOfSize(2)
+                                             .All()
+                                             .With(n => n.Monitored = true)
+                                             .Build()
+                                             .ToList();
+
+            _episodes = Builder<Episode>.CreateListOfSize(5)
+                                        .All()
+                                        .With(e => e.SeasonNumber = 1)
+                                        .With(e => e.EpisodeFileId = 0)
+                                        .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-100))
+                                        .TheLast(2)
+                                        .With(e => e.SeasonNumber = 2)
+                                        .TheLast(1)
+                                        .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(100))
+                                        .Build()
+                                        .ToList();
+
+            var monitoringOptions = new MonitoringOptions
+                                    {
+                                        Monitor = MonitorTypes.LatestSeason
+                                    };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            VerifySeasonMonitored(n => n.SeasonNumber == 2);
+            VerifyMonitored(n => n.SeasonNumber == 2);
+
+            VerifySeasonNotMonitored(n => n.SeasonNumber == 1);
+            VerifyNotMonitored(n => n.SeasonNumber == 1);
+        }
+
         private void VerifyMonitored(Func<Episode, bool> predicate)
         {
             Mocker.GetMock<IEpisodeService>()
