@@ -19,7 +19,11 @@ sed -i '/#BEGIN BUILTIN UPDATER/,/#END BUILTIN UPDATER/d' debian/preinst debian/
 echo "# Do Not Edit\nPackageVersion=$BuildVersion\nReleaseVersion=$BuildVersion\nUpdateMethod=$PackageUpdater\nBranch=$BuildBranch" > package_info
 
 echo Running debuild for $BuildVersion
-debuild -b
+if [ -z "${TEST_OUTPUT}" ]; then
+    debuild -b
+else
+    debuild -us -uc -b
+fi
 
 # Restore debian directory to the original files
 rm -rf ./debian
@@ -32,16 +36,28 @@ sed -i '/#BEGIN BUILTIN UPDATER/d; /#END BUILTIN UPDATER/d' debian/preinst debia
 echo "# Do Not Edit\nPackageVersion=$BootstrapVersion\nReleaseVersion=$BuildVersion\nUpdateMethod=$BootstrapUpdater\nBranch=$BuildBranch" > package_info
 
 echo Running debuild for $BootstrapVersion
-debuild -b
+if [ -z "${TEST_OUTPUT}" ]; then
+    debuild -b
+else
+    debuild -us -uc -b
+fi
 
 echo Moving stuff around
 mv ../sonarr_*.deb ./
 mv ../sonarr_*.changes ./
 rm ../sonarr_*.build
 
-echo Signing Package
-dpkg-sig -k 884589CE --sign builder "sonarr_${BuildVersion}_all.deb"
-dpkg-sig -k 884589CE --sign builder "sonarr_${BootstrapVersion}_all.deb"
+if [ -z "${TEST_OUTPUT}" ]; then
+    echo Signing Package
+    dpkg-sig -k 884589CE --sign builder "sonarr_${BuildVersion}_all.deb"
+    dpkg-sig -k 884589CE --sign builder "sonarr_${BootstrapVersion}_all.deb"
 
-echo running alien
-alien -r -v ./*.deb
+    echo running alien
+    alien -r -v ./*.deb
+else
+    echo "Exporting packages to ${TEST_OUTPUT}"
+    dpkg -e "sonarr_${BuildVersion}_all.deb" ${TEST_OUTPUT}/sonarr-build
+    dpkg -e "sonarr_${BootstrapVersion}_all.deb" ${TEST_OUTPUT}/sonarr-release
+
+    cp *.deb ${TEST_OUTPUT}/
+fi
