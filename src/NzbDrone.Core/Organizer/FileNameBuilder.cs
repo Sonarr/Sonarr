@@ -583,6 +583,7 @@ namespace NzbDrone.Core.Organizer
                 mediaInfoAudioLanguages = $"[{mediaInfoAudioLanguages}]";
             }
 
+            var mediaInfoAudioLanguagesAll = mediaInfoAudioLanguages;
             if (mediaInfoAudioLanguages == "[EN]")
             {
                 mediaInfoAudioLanguages = string.Empty;
@@ -607,8 +608,10 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{MediaInfo AudioCodec}"] = m => audioCodec;
             tokenHandlers["{MediaInfo AudioChannels}"] = m => audioChannelsFormatted;
             tokenHandlers["{MediaInfo AudioLanguages}"] = m => mediaInfoAudioLanguages;
+            tokenHandlers["{MediaInfo AudioLanguagesAll}"] = m => mediaInfoAudioLanguagesAll;
 
             tokenHandlers["{MediaInfo SubtitleLanguages}"] = m => mediaInfoSubtitleLanguages;
+            tokenHandlers["{MediaInfo SubtitleLanguagesAll}"] = m => mediaInfoSubtitleLanguages;
 
             tokenHandlers["{MediaInfo Simple}"] = m => $"{videoCodec} {audioCodec}";
 

@@ -741,6 +741,38 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be(releaseGroup);
         }
 
+        [TestCase("English", "")]
+        [TestCase("English/German", "[EN+DE]")]
+        public void should_format_audio_languages(string audioLanguages, string expected)
+        {
+            _episodeFile.ReleaseGroup = null;
+
+            GivenMediaInfoModel(audioLanguages: audioLanguages);
+
+
+            _namingConfig.StandardEpisodeFormat = "{MediaInfo AudioLanguages}";
+
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(expected);
+        }
+
+        [TestCase("English", "[EN]")]
+        [TestCase("English/German", "[EN+DE]")]
+        public void should_format_audio_languages_all(string audioLanguages, string expected)
+        {
+            _episodeFile.ReleaseGroup = null;
+
+            GivenMediaInfoModel(audioLanguages: audioLanguages);
+
+
+            _namingConfig.StandardEpisodeFormat = "{MediaInfo AudioLanguagesAll}";
+
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(expected);
+        }
+
         [TestCase(8, "BT.601 NTSC", "BT.709", "South.Park.S15E06.City.Sushi")]
         [TestCase(10, "BT.2020", "PQ", "South.Park.S15E06.City.Sushi.HDR")]
         [TestCase(10, "BT.2020", "HLG", "South.Park.S15E06.City.Sushi.HDR")]
