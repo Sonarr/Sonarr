@@ -1,2 +1,3 @@
 recommends libcurl3
 ignores msbuild
+ignores libmediainfo0v5
