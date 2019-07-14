@@ -22,10 +22,25 @@ if [ $1 = "install" ]; then
     fi
 
     if [ "$psNzbDroneUnit" != "-" ] && [ -d /run/systemd/system ]; then
-      # The user used a systemd auto-startup for NzbDrone, we can deal with that.
-      echo "NzbDrone systemd startup detected at $psNzbDroneUnit, stopping and disabling..."
-      deb-systemd-invoke stop $psNzbDroneUnit >/dev/null
-      deb-systemd-invoke mask $psNzbDroneUnit >/dev/null
+      if [ "$psNzbDroneUnit" = "sonarr.service" ]; then
+        # Conflicts with our new sonarr.service so we have to remove it
+        echo "NzbDrone systemd startup detected at $psNzbDroneUnit, stopping and removing..."
+        deb-systemd-invoke stop $psNzbDroneUnit >/dev/null
+        if [ -f "/etc/systemd/system/$psNzbDroneUnit" ]; then
+          rm /etc/systemd/system/$psNzbDroneUnit
+        fi
+        if [ -f "/usr/lib/systemd/system/$psNzbDroneUnit" ]; then
+          rm /usr/lib/systemd/system/$psNzbDroneUnit
+        fi
+        deb-systemd-helper purge $psNzbDroneUnit >/dev/null
+		    deb-systemd-helper unmask $psNzbDroneUnit >/dev/null
+        systemctl --system daemon-reload >/dev/null || true
+      else
+        # Just disable it, so the user can revisit the settings later
+        echo "NzbDrone systemd startup detected at $psNzbDroneUnit, stopping and disabling..."
+        deb-systemd-invoke stop $psNzbDroneUnit >/dev/null
+        deb-systemd-invoke mask $psNzbDroneUnit >/dev/null
+      fi
     else
       # We don't support auto migration for other startup methods, so bail.
       # This leaves the sonarr package in an incomplete state.
