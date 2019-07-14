@@ -12,12 +12,20 @@ using FluentValidation.Results;
 using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Common.Cache;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
 {
     public class QBittorrent : TorrentClientBase<QBittorrentSettings>
     {
         private readonly IQBittorrentProxySelector _proxySelector;
+        private readonly ICached<SeedingTimeCacheEntry> _seedingTimeCache;
+
+        private class SeedingTimeCacheEntry
+        {
+            public DateTime LastFetched { get; set; }
+            public long SeedingTime { get; set; }
+        }
 
         public QBittorrent(IQBittorrentProxySelector proxySelector,
                            ITorrentFileInfoReader torrentFileInfoReader,
@@ -25,10 +33,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                            IConfigService configService,
                            IDiskProvider diskProvider,
                            IRemotePathMappingService remotePathMappingService,
+                           ICacheManager cacheManager,
                            Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxySelector = proxySelector;
+
+            _seedingTimeCache = cacheManager.GetCache<SeedingTimeCacheEntry>(GetType(), "seedingTime");
         }
 
         private IQBittorrentProxy Proxy => _proxySelector.GetProxy(Settings);
@@ -442,23 +453,71 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 if (torrent.Ratio >= config.MaxRatio) return true;
             }
 
+            if (HasReachedSeedingTimeLimit(torrent, config)) return true;
+
+
+            return false;
+        }
+
+        protected bool HasReachedSeedingTimeLimit(QBittorrentTorrent torrent, QBittorrentPreferences config)
+        {
+            long seedingTimeLimit;
+
             if (torrent.SeedingTimeLimit >= 0)
             {
-                if (!torrent.SeedingTime.HasValue)
-                {
-                    FetchTorrentDetails(torrent);
-                }
-
-                if (torrent.SeedingTime >= torrent.SeedingTimeLimit) return true;
+                seedingTimeLimit = torrent.SeedingTimeLimit;
             }
             else if (torrent.SeedingTimeLimit == -2 && config.MaxSeedingTimeEnabled)
             {
-                if (!torrent.SeedingTime.HasValue)
-                {
-                    FetchTorrentDetails(torrent);
-                }
+                seedingTimeLimit = config.MaxSeedingTime;
+            }
+            else
+            {
+                return false;
+            }
 
-                if (torrent.SeedingTime >= config.MaxSeedingTime) return true;
+            if (torrent.SeedingTime.HasValue)
+            {
+                // SeedingTime can't be available here, but use it if the api starts to provide it.
+                return torrent.SeedingTime.Value >= seedingTimeLimit;
+            }
+
+            var cacheKey = Settings.Host + Settings.Port + torrent.Hash;
+            var cacheSeedingTime = _seedingTimeCache.Find(cacheKey);
+
+            if (cacheSeedingTime != null)
+            {
+                var togo = seedingTimeLimit - cacheSeedingTime.SeedingTime;
+                var elapsed = (DateTime.UtcNow - cacheSeedingTime.LastFetched).TotalSeconds;
+
+                if (togo <= 0)
+                {
+                    // Already reached the limit, keep the cache alive
+                    _seedingTimeCache.Set(cacheKey, cacheSeedingTime, TimeSpan.FromMinutes(5));
+                    return true;
+                }
+                else if (togo > elapsed)
+                {
+                    // SeedingTime cannot have reached the required value since the last check, preserve the cache
+                    _seedingTimeCache.Set(cacheKey, cacheSeedingTime, TimeSpan.FromMinutes(5));
+                    return false;
+                }
+            }
+
+            FetchTorrentDetails(torrent);
+
+            cacheSeedingTime = new SeedingTimeCacheEntry
+            {
+                LastFetched = DateTime.UtcNow,
+                SeedingTime = torrent.SeedingTime.Value
+            };
+
+            _seedingTimeCache.Set(cacheKey, cacheSeedingTime, TimeSpan.FromMinutes(5));
+
+            if (cacheSeedingTime.SeedingTime >= seedingTimeLimit)
+            {
+                // Reached the limit, keep the cache alive
+                return true;
             }
 
             return false;

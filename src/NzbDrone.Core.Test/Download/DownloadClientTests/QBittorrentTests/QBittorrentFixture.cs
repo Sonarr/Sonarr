@@ -557,6 +557,22 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
+        public void should_not_fetch_details_twice()
+        {
+            GivenGlobalSeedLimits(-1, 30);
+            GivenCompletedTorrent("pausedUP", ratio: 2.0f, seedingTime: 20);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+            
+            var item2 = Subject.GetItems().Single();
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                  .Verify(p => p.GetTorrentProperties(It.IsAny<string>(), It.IsAny<QBittorrentSettings>()), Times.Once());
+        }
+
+        [Test]
         public void should_get_category_from_the_category_if_set()
         {
             const string category = "tv-sonarr";
