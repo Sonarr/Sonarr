@@ -43,6 +43,7 @@
     "classnames": "2.2.6",
     "clipboard": "2.0.4",
     "connected-react-router": "6.3.1",
+    "core-js": "3",
     "create-react-class": "15.6.3",
     "css-loader": "3.0.0",
     "del": "4.0.0",

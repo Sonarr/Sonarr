@@ -100,6 +100,7 @@ const config = {
                     loose: true,
                     debug: false,
                     useBuiltIns: 'entry',
+                    corejs: 3,
                     targets: browsers
                   }
                 ]
@@ -119,8 +120,9 @@ const config = {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              localIdentName: '[name]/[local]/[hash:base64:5]',
-              modules: true
+              modules: {
+                localIdentName: '[name]/[local]/[hash:base64:5]'
+              }
             }
           },
           {
