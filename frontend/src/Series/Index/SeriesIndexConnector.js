@@ -61,10 +61,6 @@ function createMapStateToProps() {
 
 function createMapDispatchToProps(dispatch, props) {
   return {
-    dispatchFetchSeries() {
-      dispatch(fetchSeries);
-    },
-
     onTableOptionChange(payload) {
       dispatch(setSeriesTableOption(payload));
     },
@@ -112,10 +108,6 @@ class SeriesIndexConnector extends Component {
     this.state = {
       scrollTop: getScrollTop(view, scrollTop, isSmallScreen)
     };
-  }
-
-  componentDidMount() {
-    this.props.dispatchFetchSeries();
   }
 
   //
