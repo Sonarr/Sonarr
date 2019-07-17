@@ -176,7 +176,7 @@ class AutoSuggestInput extends Component {
       className: classNames(
         className,
         hasError && styles.hasError,
-        hasWarning && styles.hasWarning,
+        hasWarning && styles.hasWarning
       ),
       name,
       value,

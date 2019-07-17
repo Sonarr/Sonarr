@@ -96,7 +96,7 @@ class DelayProfile extends Component {
       <div
         className={classNames(
           styles.delayProfile,
-          isDragging && styles.isDragging,
+          isDragging && styles.isDragging
         )}
       >
         <div className={styles.column}>{preferred}</div>

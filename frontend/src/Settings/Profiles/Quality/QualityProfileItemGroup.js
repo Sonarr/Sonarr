@@ -67,7 +67,7 @@ class QualityProfileItemGroup extends Component {
         className={classNames(
           styles.qualityProfileItemGroup,
           editGroups && styles.editGroups,
-          isDragging && styles.isDragging,
+          isDragging && styles.isDragging
         )}
       >
         <div className={styles.qualityProfileItemGroupInfo}>

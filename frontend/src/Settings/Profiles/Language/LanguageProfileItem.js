@@ -35,7 +35,7 @@ class LanguageProfileItem extends Component {
       <div
         className={classNames(
           styles.languageProfileItem,
-          isDragging && styles.isDragging,
+          isDragging && styles.isDragging
         )}
       >
         <label

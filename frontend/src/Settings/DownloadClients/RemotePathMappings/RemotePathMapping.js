@@ -62,7 +62,7 @@ class RemotePathMapping extends Component {
     return (
       <div
         className={classNames(
-          styles.remotePathMapping,
+          styles.remotePathMapping
         )}
       >
         <div className={styles.host}>{host}</div>

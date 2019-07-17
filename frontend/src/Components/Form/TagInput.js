@@ -226,7 +226,7 @@ class TagInput extends Component {
         className={styles.internalInput}
         inputContainerClassName={classNames(
           inputContainerClassName,
-          isFocused && styles.isFocused,
+          isFocused && styles.isFocused
         )}
         value={value}
         suggestions={suggestions}
