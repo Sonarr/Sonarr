@@ -218,7 +218,11 @@ class EditQualityProfileModalContent extends Component {
               id &&
                 <div
                   className={styles.deleteButtonContainer}
-                  title={isInUse && 'Can\'t delete a quality profile that is attached to a series'}
+                  title={
+                    isInUse ?
+                      'Can\'t delete a quality profile that is attached to a series' :
+                      undefined
+                  }
                 >
                   <Button
                     kind={kinds.DANGER}
