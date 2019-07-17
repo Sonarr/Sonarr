@@ -5,7 +5,6 @@ const path = require('path');
 const webpack = require('webpack');
 const errorHandler = require('./helpers/errorHandler');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const browsers = require('../browsers');
 
 const uiFolder = 'UI';
 const frontendFolder = path.join(__dirname, '..');
@@ -100,8 +99,7 @@ const config = {
                     loose: true,
                     debug: false,
                     useBuiltIns: 'entry',
-                    corejs: 3,
-                    targets: browsers
+                    corejs: 3
                   }
                 ]
               ]

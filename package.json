@@ -35,7 +35,7 @@
     "@fortawesome/react-fontawesome": "0.1.4",
     "@sentry/browser": "4.6.4",
     "ansi-colors": "4.1.1",
-    "autoprefixer": "9.4.10",
+    "autoprefixer": "9.6.1",
     "babel-eslint": "10.0.2",
     "babel-loader": "8.0.6",
     "babel-plugin-inline-classnames": "2.0.1",
@@ -72,12 +72,12 @@
     "jquery": "3.3.1",
     "loader-utils": "^1.1.0",
     "lodash": "4.17.11",
-    "mini-css-extract-plugin": "0.5.0",
+    "mini-css-extract-plugin": "0.8.0",
     "mobile-detect": "1.4.3",
     "moment": "2.24.0",
     "mousetrap": "1.6.3",
     "normalize.css": "8.0.1",
-    "postcss-color-function": "4.0.1",
+    "postcss-color-function": "4.1.0",
     "postcss-loader": "3.0.0",
     "postcss-mixins": "6.2.1",
     "postcss-nested": "4.1.2",
@@ -121,5 +121,11 @@
     "webpack": "4.35.3",
     "webpack-stream": "^5.2.1"
   },
-  "main": "index.js"
+  "main": "index.js",
+  "browserslist": [
+    ">0.25%",
+    "not ie 11",
+    "not op_mini all",
+    "not chrome < 60"
+  ]
 }
