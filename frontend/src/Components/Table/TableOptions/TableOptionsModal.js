@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { DragDropContext } from 'react-dnd';
+import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { inputTypes } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
@@ -127,116 +127,118 @@ class TableOptionsModal extends Component {
     const isDraggingDown = isDragging && dropIndex > dragIndex;
 
     return (
-      <Modal
-        isOpen={isOpen}
-        onModalClose={onModalClose}
-      >
-        {
-          isOpen ?
-            <ModalContent onModalClose={onModalClose}>
-              <ModalHeader>
+      <DndProvider backend={HTML5Backend}>
+        <Modal
+          isOpen={isOpen}
+          onModalClose={onModalClose}
+        >
+          {
+            isOpen ?
+              <ModalContent onModalClose={onModalClose}>
+                <ModalHeader>
             Table Options
-              </ModalHeader>
+                </ModalHeader>
 
-              <ModalBody>
-                <Form>
-                  {
-                    hasPageSize ?
-                      <FormGroup>
-                        <FormLabel>Page Size</FormLabel>
+                <ModalBody>
+                  <Form>
+                    {
+                      hasPageSize ?
+                        <FormGroup>
+                          <FormLabel>Page Size</FormLabel>
 
-                        <FormInputGroup
-                          type={inputTypes.NUMBER}
-                          name="pageSize"
-                          value={pageSize || 0}
-                          helpText="Number of items to show on each page"
-                          errors={pageSizeError ? [{ message: pageSizeError }] : undefined}
-                          onChange={this.onPageSizeChange}
-                        />
-                      </FormGroup> :
-                      null
-                  }
-
-                  {
-                    OptionsComponent ?
-                      <OptionsComponent
-                        onTableOptionChange={onTableOptionChange}
-                      /> : null
-                  }
-
-                  {
-                    canModifyColumns ?
-                      <FormGroup>
-                        <FormLabel>Columns</FormLabel>
-
-                        <div>
-                          <FormInputHelpText
-                            text="Choose which columns are visible and which order they appear in"
+                          <FormInputGroup
+                            type={inputTypes.NUMBER}
+                            name="pageSize"
+                            value={pageSize || 0}
+                            helpText="Number of items to show on each page"
+                            errors={pageSizeError ? [{ message: pageSizeError }] : undefined}
+                            onChange={this.onPageSizeChange}
                           />
+                        </FormGroup> :
+                        null
+                    }
 
-                          <div className={styles.columns}>
-                            {
-                              columns.map((column, index) => {
-                                const {
-                                  name,
-                                  label,
-                                  columnLabel,
-                                  isVisible,
-                                  isModifiable
-                                } = column;
+                    {
+                      OptionsComponent ?
+                        <OptionsComponent
+                          onTableOptionChange={onTableOptionChange}
+                        /> : null
+                    }
 
-                                if (isModifiable !== false) {
+                    {
+                      canModifyColumns ?
+                        <FormGroup>
+                          <FormLabel>Columns</FormLabel>
+
+                          <div>
+                            <FormInputHelpText
+                              text="Choose which columns are visible and which order they appear in"
+                            />
+
+                            <div className={styles.columns}>
+                              {
+                                columns.map((column, index) => {
+                                  const {
+                                    name,
+                                    label,
+                                    columnLabel,
+                                    isVisible,
+                                    isModifiable
+                                  } = column;
+
+                                  if (isModifiable !== false) {
+                                    return (
+                                      <TableOptionsColumnDragSource
+                                        key={name}
+                                        name={name}
+                                        label={label || columnLabel}
+                                        isVisible={isVisible}
+                                        isModifiable={true}
+                                        index={index}
+                                        isDragging={isDragging}
+                                        isDraggingUp={isDraggingUp}
+                                        isDraggingDown={isDraggingDown}
+                                        onVisibleChange={this.onVisibleChange}
+                                        onColumnDragMove={this.onColumnDragMove}
+                                        onColumnDragEnd={this.onColumnDragEnd}
+                                      />
+                                    );
+                                  }
+
                                   return (
-                                    <TableOptionsColumnDragSource
+                                    <TableOptionsColumn
                                       key={name}
                                       name={name}
                                       label={label || columnLabel}
                                       isVisible={isVisible}
-                                      isModifiable={true}
                                       index={index}
-                                      isDragging={isDragging}
-                                      isDraggingUp={isDraggingUp}
-                                      isDraggingDown={isDraggingDown}
+                                      isModifiable={false}
                                       onVisibleChange={this.onVisibleChange}
-                                      onColumnDragMove={this.onColumnDragMove}
-                                      onColumnDragEnd={this.onColumnDragEnd}
                                     />
                                   );
-                                }
+                                })
+                              }
 
-                                return (
-                                  <TableOptionsColumn
-                                    key={name}
-                                    name={name}
-                                    label={label || columnLabel}
-                                    isVisible={isVisible}
-                                    index={index}
-                                    isModifiable={false}
-                                    onVisibleChange={this.onVisibleChange}
-                                  />
-                                );
-                              })
-                            }
-
-                            <TableOptionsColumnDragPreview />
+                              <TableOptionsColumnDragPreview />
+                            </div>
                           </div>
-                        </div>
-                      </FormGroup> :
-                      null
-                  }
-                </Form>
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  onPress={onModalClose}
-                >
+                        </FormGroup> :
+                        null
+                    }
+                  </Form>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    onPress={onModalClose}
+                  >
               Close
-                </Button>
-              </ModalFooter>
-            </ModalContent> :
-            null
-        }
-      </Modal>
+                  </Button>
+                </ModalFooter>
+              </ModalContent> :
+              null
+          }
+        </Modal>
+      </DndProvider>
     );
   }
 }
@@ -255,4 +257,4 @@ TableOptionsModal.defaultProps = {
   canModifyColumns: true
 };
 
-export default DragDropContext(HTML5Backend)(TableOptionsModal);
+export default TableOptionsModal;
