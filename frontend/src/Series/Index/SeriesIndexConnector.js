@@ -6,7 +6,6 @@ import createSeriesClientSideCollectionItemsSelector from 'Store/Selectors/creat
 import dimensions from 'Styles/Variables/dimensions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
-import { fetchSeries } from 'Store/Actions/seriesActions';
 import scrollPositions from 'Store/scrollPositions';
 import { setSeriesSort, setSeriesFilter, setSeriesView, setSeriesTableOption } from 'Store/Actions/seriesIndexActions';
 import { executeCommand } from 'Store/Actions/commandActions';
