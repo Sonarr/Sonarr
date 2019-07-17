@@ -248,7 +248,7 @@ TableOptionsModal.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   pageSize: PropTypes.number,
   canModifyColumns: PropTypes.bool.isRequired,
-  optionsComponent: PropTypes.func,
+  optionsComponent: PropTypes.elementType,
   onTableOptionChange: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

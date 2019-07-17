@@ -113,7 +113,7 @@ Table.propTypes = {
   className: PropTypes.string,
   selectAll: PropTypes.bool.isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  optionsComponent: PropTypes.func,
+  optionsComponent: PropTypes.elementType,
   pageSize: PropTypes.number,
   canModifyColumns: PropTypes.bool,
   children: PropTypes.node,

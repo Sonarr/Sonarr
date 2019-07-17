@@ -95,8 +95,8 @@ FilterMenu.propTypes = {
   selectedFilterKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   filters: PropTypes.arrayOf(PropTypes.object).isRequired,
   customFilters: PropTypes.arrayOf(PropTypes.object).isRequired,
-  buttonComponent: PropTypes.func.isRequired,
-  filterModalConnectorComponent: PropTypes.func,
+  buttonComponent: PropTypes.elementType.isRequired,
+  filterModalConnectorComponent: PropTypes.elementType,
   filterModalConnectorComponentProps: PropTypes.object,
   onFilterSelect: PropTypes.func.isRequired
 };

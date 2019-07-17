@@ -67,7 +67,7 @@ TagInputInput.propTypes = {
   inputProps: PropTypes.object.isRequired,
   kind: PropTypes.oneOf(kinds.all).isRequired,
   isFocused: PropTypes.bool.isRequired,
-  tagComponent: PropTypes.func.isRequired,
+  tagComponent: PropTypes.elementType.isRequired,
   onTagDelete: PropTypes.func.isRequired,
   onInputContainerPress: PropTypes.func.isRequired
 };

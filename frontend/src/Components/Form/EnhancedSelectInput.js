@@ -433,7 +433,7 @@ EnhancedSelectInput.propTypes = {
   hasWarning: PropTypes.bool,
   selectedValueOptions: PropTypes.object.isRequired,
   selectedValueComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
-  optionComponent: PropTypes.func,
+  optionComponent: PropTypes.elementType,
   onChange: PropTypes.func.isRequired
 };
 

@@ -234,7 +234,7 @@ AutoSuggestInput.propTypes = {
   minHeight: PropTypes.number.isRequired,
   maxHeight: PropTypes.number.isRequired,
   getSuggestionValue: PropTypes.func.isRequired,
-  renderInputComponent: PropTypes.func,
+  renderInputComponent: PropTypes.elementType,
   renderSuggestion: PropTypes.func.isRequired,
   onInputChange: PropTypes.func,
   onInputKeyDown: PropTypes.func,

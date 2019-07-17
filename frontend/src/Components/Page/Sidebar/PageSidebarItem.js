@@ -94,7 +94,7 @@ PageSidebarItem.propTypes = {
   isActiveParent: PropTypes.bool,
   isParentItem: PropTypes.bool.isRequired,
   isChildItem: PropTypes.bool.isRequired,
-  statusComponent: PropTypes.func,
+  statusComponent: PropTypes.elementType,
   children: PropTypes.node,
   onPress: PropTypes.func
 };

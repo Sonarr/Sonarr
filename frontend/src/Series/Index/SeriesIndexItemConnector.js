@@ -131,7 +131,7 @@ class SeriesIndexItemConnector extends Component {
 
 SeriesIndexItemConnector.propTypes = {
   id: PropTypes.number,
-  component: PropTypes.func.isRequired,
+  component: PropTypes.elementType.isRequired,
   dispatchExecuteCommand: PropTypes.func.isRequired
 };
 

@@ -39,7 +39,7 @@ SeriesStatusCell.propTypes = {
   className: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
-  component: PropTypes.func
+  component: PropTypes.elementType
 };
 
 SeriesStatusCell.defaultProps = {

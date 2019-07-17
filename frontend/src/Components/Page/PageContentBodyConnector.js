@@ -14,4 +14,4 @@ function createMapStateToProps() {
   );
 }
 
-export default connect(createMapStateToProps)(PageContentBody);
+export default connect(createMapStateToProps, null, null, { forwardRef: true })(PageContentBody);
