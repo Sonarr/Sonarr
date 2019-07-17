@@ -146,7 +146,6 @@ SeriesIndexConnector.propTypes = {
   isSmallScreen: PropTypes.bool.isRequired,
   view: PropTypes.string.isRequired,
   scrollTop: PropTypes.number.isRequired,
-  dispatchFetchSeries: PropTypes.func.isRequired,
   dispatchSetSeriesView: PropTypes.func.isRequired
 };
 
