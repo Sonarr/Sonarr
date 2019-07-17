@@ -1,12 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import createAppStore from 'Store/createAppStore';
 import App from './App/App';
 import 'Styles/globals.css';
 import './index.css';
 
-const history = createHistory();
+const history = createBrowserHistory();
 const store = createAppStore(history);
 
 render(
