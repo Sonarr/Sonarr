@@ -28,7 +28,7 @@ function getType(type) {
       return inputTypes.TEXT_TAG;
     case 'textbox':
       return inputTypes.TEXT;
-    case 'oauth':
+    case 'oAuth':
       return inputTypes.OAUTH;
     default:
       return inputTypes.TEXT;
