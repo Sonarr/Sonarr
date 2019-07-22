@@ -53,6 +53,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 {
                     var recent = mostRecent.Date.After(DateTime.UtcNow.AddHours(-12));
 
+                    if (!recent && cdhEnabled)
+                    {
+                        continue;
+                    }
+
                     // The series will be the same as the one in history since it's the same episode.
                     // Instead of fetching the series from the DB reuse the known series.
                     var preferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, mostRecent.SourceTitle);
@@ -75,11 +80,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                         subject.ParsedEpisodeInfo.Quality,
                         subject.ParsedEpisodeInfo.Language,
                         subject.PreferredWordScore);
-
-                    if (!recent && cdhEnabled)
-                    {
-                        continue;
-                    }
 
                     if (!cutoffUnmet)
                     {

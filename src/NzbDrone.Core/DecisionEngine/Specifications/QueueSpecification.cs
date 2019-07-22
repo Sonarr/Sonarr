@@ -15,12 +15,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         private readonly Logger _logger;
 
         public QueueSpecification(IQueueService queueService,
-                                  UpgradableSpecification UpgradableSpecification,
+                                  UpgradableSpecification upgradableSpecification,
                                   IPreferredWordService preferredWordServiceCalculator,
                                   Logger logger)
         {
             _queueService = queueService;
-            _upgradableSpecification = UpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
             _preferredWordServiceCalculator = preferredWordServiceCalculator;
             _logger = logger;
         }
@@ -31,8 +31,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var queue = _queueService.GetQueue();
-            var matchingEpisode = queue.Where(q => q.RemoteEpisode != null &&
-                                                   q.RemoteEpisode.Series != null &&
+            var matchingEpisode = queue.Where(q => q.RemoteEpisode?.Series != null &&
                                                    q.RemoteEpisode.Series.Id == subject.Series.Id &&
                                                    q.RemoteEpisode.Episodes.Select(e => e.Id).Intersect(subject.Episodes.Select(e => e.Id)).Any())
                                        .ToList();
