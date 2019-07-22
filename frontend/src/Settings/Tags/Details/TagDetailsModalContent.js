@@ -147,6 +147,7 @@ function TagDetailsModalContent(props) {
           <Button
             className={styles.deleteButton}
             kind={kinds.DANGER}
+            title={isTagUsed ? 'Cannot be deleted while in use' : undefined}
             isDisabled={isTagUsed}
             onPress={onDeleteTagPress}
           >
