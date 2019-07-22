@@ -4,8 +4,9 @@
   bottom: -1px;
   left: -1px;
   display: flex;
+  align-items: start;
   flex-wrap: wrap;
-  padding: 6px 16px;
-  height: 33px;
+  padding: 1px 16px;
+  min-height: 33px;
   cursor: default;
 }

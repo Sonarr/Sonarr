@@ -4,6 +4,7 @@ import { kinds } from 'Helpers/Props';
 import tagShape from 'Helpers/Props/Shapes/tagShape';
 import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
+import styles from './TagInputTag.css';
 
 class TagInputTag extends Component {
 
@@ -31,9 +32,9 @@ class TagInputTag extends Component {
       tag,
       kind
     } = this.props;
-
     return (
       <Link
+        className={styles.tag}
         tabIndex={-1}
         onPress={this.onDelete}
       >
