@@ -23,7 +23,7 @@
 }
 
 .overflowMenuButton {
-  composes: menuButton from '~Components/Menu/ToolbarMenuButton.css';
+  composes: menuButton from "~Components/Menu/ToolbarMenuButton.css";
 }
 
 .overflowMenuItemIcon {
@@ -34,7 +34,7 @@
   .overflowMenuButton {
     &::after {
       margin-left: 0;
-      content: '\25BE';
+      content: "\25BE";
     }
   }
 }

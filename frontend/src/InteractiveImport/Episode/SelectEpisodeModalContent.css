@@ -1,5 +1,5 @@
 .footer {
-  composes: modalFooter from '~Components/Modal/ModalFooter.css';
+  composes: modalFooter from "~Components/Modal/ModalFooter.css";
 
   display: flex;
   justify-content: space-between;

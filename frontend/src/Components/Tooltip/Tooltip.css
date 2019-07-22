@@ -30,7 +30,7 @@
 
 .arrow::after {
   border-width: 10px;
-  content: '';
+  content: "";
 }
 
 .top {
@@ -43,7 +43,7 @@
     bottom: 1px;
     margin-left: -10px;
     border-bottom-width: 0;
-    content: ' ';
+    content: " ";
 
     &.default {
       border-top-color: $popoverArrowBorderColor;
@@ -73,7 +73,7 @@
     bottom: -10px;
     left: 1px;
     border-left-width: 0;
-    content: ' ';
+    content: " ";
 
     &.default {
       border-right-color: $popoverArrowBorderColor;
@@ -103,7 +103,7 @@
     top: 1px;
     margin-left: -10px;
     border-top-width: 0;
-    content: ' ';
+    content: " ";
 
     &.default {
       border-bottom-color: $popoverArrowBorderColor;
@@ -133,7 +133,7 @@
     right: 1px;
     bottom: -10px;
     border-right-width: 0;
-    content: ' ';
+    content: " ";
 
     &.default {
       border-left-color: $popoverArrowBorderColor;

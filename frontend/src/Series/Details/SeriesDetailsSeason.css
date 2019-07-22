@@ -27,7 +27,7 @@
 }
 
 .expandButton {
-  composes: link from '~Components/Link/Link.css';
+  composes: link from "~Components/Link/Link.css";
 
   flex-grow: 1;
   margin: 0 20px;
@@ -46,13 +46,13 @@
 }
 
 .actionsMenu {
-  composes: menu from '~Components/Menu/Menu.css';
+  composes: menu from "~Components/Menu/Menu.css";
 
   flex: 0 0 45px;
 }
 
 .actionsMenuContent {
-  composes: menuContent from '~Components/Menu/MenuContent.css';
+  composes: menuContent from "~Components/Menu/MenuContent.css";
 
   white-space: nowrap;
   font-size: $defaultFontSize;
@@ -63,7 +63,7 @@
 }
 
 .actionButton {
-  composes: button from '~Components/Link/IconButton.css';
+  composes: button from "~Components/Link/IconButton.css";
 
   width: 30px;
 }
