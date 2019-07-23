@@ -135,6 +135,20 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
+        public void should_be_rejected_if_file_and_folder_do_not_have_episodes_from_the_same_partial_season()
+        {
+            _localEpisode.FileEpisodeInfo.SeasonNumber = 2;
+            _localEpisode.FileEpisodeInfo.EpisodeNumbers = new[] { 1 };
+
+            _localEpisode.FolderEpisodeInfo.SeasonNumber = 1;
+            _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
+
+            _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01.720p.HDTV-Sonarr\S02E01.mkv".AsOsAgnostic();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
         public void should_be_accepted_if_file_and_folder_have_episodes_from_the_same_season()
         {
             _localEpisode.FileEpisodeInfo.SeasonNumber = 1;
