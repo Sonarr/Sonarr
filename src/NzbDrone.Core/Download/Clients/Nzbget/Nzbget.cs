@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.CanMoveFiles = true;
                 historyItem.CanBeRemoved = true;
 
-                if (item.DeleteStatus == "MANUAL" || item.DeleteStatus == "COPY")
+                if (item.DeleteStatus == "MANUAL")
                 {
                     continue;
                 }
