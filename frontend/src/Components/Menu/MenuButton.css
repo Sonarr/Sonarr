@@ -6,7 +6,7 @@
 
   &::after {
     margin-left: 5px;
-    content: "\25BE";
+    content: '\25BE';
   }
 
   &:hover {

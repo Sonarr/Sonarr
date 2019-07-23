@@ -1,24 +1,24 @@
 .relativePath {
-  composes: cell from "~Components/Table/Cells/TableRowCell.css";
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   word-break: break-all;
 }
 
 .quality,
 .language {
-  composes: cell from "~Components/Table/Cells/TableRowCell.css";
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   text-align: center;
 }
 
 .label {
-  composes: label from "~Components/Label.css";
+  composes: label from '~Components/Label.css';
 
   cursor: pointer;
 }
 
 .reprocessing {
-  composes: loading from "~Components/Loading/LoadingIndicator.css";
+  composes: loading from '~Components/Loading/LoadingIndicator.css';
 
   margin-top: 0;
   text-align: start;

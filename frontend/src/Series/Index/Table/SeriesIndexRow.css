@@ -1,5 +1,5 @@
 .cell {
-  composes: cell from "~Components/Table/Cells/VirtualTableRowCell.css";
+  composes: cell from '~Components/Table/Cells/VirtualTableRowCell.css';
 
   display: flex;
   align-items: center;
@@ -32,7 +32,7 @@
 }
 
 .link {
-  composes: link from "~Components/Link/Link.css";
+  composes: link from '~Components/Link/Link.css';
 
   position: relative;
   display: block;
@@ -118,7 +118,7 @@
 }
 
 .ratings {
-  composes: headerCell from "~Components/Table/VirtualTableHeaderCell.css";
+  composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
 
   flex: 0 0 80px;
 }
@@ -143,7 +143,7 @@
 }
 
 .checkInput {
-  composes: input from "~Components/Form/CheckInput.css";
+  composes: input from '~Components/Form/CheckInput.css';
 
   margin-top: 0;
 }

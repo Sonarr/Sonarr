@@ -1,5 +1,5 @@
 .toolbarButton {
-  composes: link from "~Components/Link/Link.css";
+  composes: link from '~Components/Link/Link.css';
 
   padding-top: 4px;
   width: $toolbarButtonWidth;

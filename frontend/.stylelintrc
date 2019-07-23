@@ -382,7 +382,7 @@
     "selector-type-no-unknown": true,
     "shorthand-property-no-redundant-values": true,
     "string-no-newline": true,
-    "string-quotes": "double",
+    "string-quotes": "single",
     "time-min-milliseconds": 100,
     "unit-case": "lower",
     "unit-no-unknown": true,
