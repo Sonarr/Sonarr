@@ -278,16 +278,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
-        public void should_skip_deletestatus_copy()
+        public void should_report_deletestatus_copy_as_failed()
         {
             _completed.DeleteStatus = "COPY";
 
             GivenQueue(null);
             GivenHistory(_completed);
 
-            var result = Subject.GetItems().SingleOrDefault();
+            var result = Subject.GetItems().Single();
 
-            result.Should().BeNull();
+            result.Status.Should().Be(DownloadItemStatus.Failed);
         }
 
         [Test]
