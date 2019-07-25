@@ -36,6 +36,7 @@ CompressionThreads=2
 Compression=lzma2/normal
 AppContact={#ForumsURL}
 VersionInfoVersion={#BuildNumber}
+SetupLogging=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -74,5 +75,5 @@ function PrepareToInstall(var NeedsRestart: Boolean): String;
 var
   ResultCode: Integer;
 begin
-  Exec(ExpandConstant('{commonappdata}\NzbDrone\bin\NzbDrone.Console.exe'), '/u', '', 0, ewWaitUntilTerminated, ResultCode)
+  Exec(ExpandConstant('{commonappdata}\NzbDrone\bin\NzbDrone.Console.exe'), '/u', '', 0, waituntilterminated, ResultCode)
 end;
