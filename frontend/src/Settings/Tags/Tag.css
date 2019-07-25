@@ -1,11 +1,12 @@
 .tag {
   composes: card from '~Components/Card.css';
 
-  width: 150px;
+  flex: 150px 0 1;
 }
 
 .label {
   margin-bottom: 20px;
+  white-space: nowrap;
   font-weight: 300;
   font-size: 24px;
 }
