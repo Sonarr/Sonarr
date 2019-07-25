@@ -200,7 +200,7 @@ class CalendarEvent extends Component {
               </div>
           }
 
-          <div>
+          <div className={styles.airTime}>
             {formatTime(airDateUtc, timeFormat)} - {formatTime(endTime.toISOString(), timeFormat, { includeMinuteZero: true })}
           </div>
         </Link>

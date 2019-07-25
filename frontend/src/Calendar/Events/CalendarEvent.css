@@ -16,10 +16,13 @@
   display: flex;
 }
 
+.episodeInfo {
+  color: $calendarTextDim;
+}
+
 .seriesTitle,
 .episodeTitle {
   @add-mixin truncate;
-
   flex: 1 0 1px;
   margin-right: 10px;
 }
@@ -35,6 +38,10 @@
 
 .statusIcon {
   margin-left: 3px;
+}
+
+.airTime {
+  color: $calendarTextDim;
 }
 
 /*

@@ -22,10 +22,12 @@
 
 .airTime {
   flex: 1 0 1px;
+  color: $calendarTextDim;
 }
 
 .episodeInfo {
   margin-left: 10px;
+  color: $calendarTextDim;
 }
 
 .absoluteEpisodeNumber {
