@@ -14,7 +14,6 @@
 
 .seriesTitle {
   @add-mixin truncate;
-
   flex: 1 0 1px;
   margin-right: 10px;
   color: #3a3f51;
@@ -23,10 +22,12 @@
 
 .airTime {
   flex: 1 0 1px;
+  color: $calendarTextDim;
 }
 
 .episodeInfo {
   margin-left: 10px;
+  color: $calendarTextDim;
 }
 
 .absoluteEpisodeNumber {
@@ -79,4 +80,8 @@
 
 .premiere {
   composes: premiere from '~Calendar/Events/CalendarEvent.css';
+}
+
+.unaired {
+  composes: unaired from '~Calendar/Events/CalendarEvent.css';
 }

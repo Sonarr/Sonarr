@@ -51,7 +51,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     return Decision.Reject("Not an upgrade for existing episode file(s)");
                 }
 
-                    if (languageComparer.Compare(localEpisode.Language, episodeFile.Language) < 0 && qualityCompare == 0)
+                if (languageComparer.Compare(localEpisode.Language, episodeFile.Language) < 0 && qualityCompare == 0)
                 {
                     _logger.Debug("This file isn't a language upgrade for all episodes. Skipping {0}", localEpisode.Path);
                     return Decision.Reject("Not an upgrade for existing episode file(s)");

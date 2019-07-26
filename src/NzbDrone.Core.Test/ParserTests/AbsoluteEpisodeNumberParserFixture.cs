@@ -94,6 +94,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Tokyo Ghoul: RE S2 - Episode 4 VOSTFR (1080p)", "Tokyo Ghoul RE S2", 4, 0, 0)]
         [TestCase("To Aru Majutsu no Index III - Episode 5 VOSTFR (1080p)", "To Aru Majutsu no Index III", 5, 0, 0)]
         [TestCase("[Prout] Steins;Gate 0 - Episode 5 VOSTFR (BDRip 1920x1080 x264 FLAC)", "Steins;Gate 0", 5, 0, 0)]
+        [TestCase("[BakedFish] Nakanohito Genome [Jikkyouchuu] - 01 [720p][AAC].mp4", "Nakanohito Genome [Jikkyouchuu]", 1, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {

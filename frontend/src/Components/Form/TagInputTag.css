@@ -1,0 +1,5 @@
+.tag {
+  composes: link from '~Components/Link/Link.css';
+
+  height: 31px;
+}

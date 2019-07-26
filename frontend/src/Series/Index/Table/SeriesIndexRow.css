@@ -139,6 +139,7 @@
   composes: cell;
 
   flex: 0 1 90px;
+  min-width: 60px;
 }
 
 .checkInput {
