@@ -9,11 +9,11 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(SetMetadataFileExtension);
+            Execute.WithConnection(SetConfigValue);
             Execute.Sql("DELETE FROM Config WHERE Key = 'autodownloadpropers'");
         }
 
-        private void SetMetadataFileExtension(IDbConnection conn, IDbTransaction tran)
+        private void SetConfigValue(IDbConnection conn, IDbTransaction tran)
         {
             using (var cmd = conn.CreateCommand())
             {
