@@ -48,7 +48,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 _logger.Debug("No file ParsedEpisodeInfo, skipping check");
                 return Decision.Accept();
             }
-            
+
+            if (fileInfo.IsAbsoluteNumbering)
+            {
+                _logger.Debug("File uses absolute episode numbering, skipping check");
+                return Decision.Accept();
+            }
+
             if (folderInfo.SeasonNumber != fileInfo.SeasonNumber)
             {
                 return Decision.Reject("Season number {0} was unexpected considering the folder name {1}", fileInfo.SeasonNumber, folderInfo.ReleaseTitle);
