@@ -48,16 +48,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 _logger.Debug("No file ParsedEpisodeInfo, skipping check");
                 return Decision.Accept();
             }
+            
+            if (folderInfo.SeasonNumber != fileInfo.SeasonNumber)
+            {
+                return Decision.Reject("Season number {0} was unexpected considering the folder name {1}", fileInfo.SeasonNumber, folderInfo.ReleaseTitle);
+            }
 
             if (!folderInfo.EpisodeNumbers.Any())
             {
                 _logger.Debug("No episode numbers in folder ParsedEpisodeInfo, skipping check");
                 return Decision.Accept();
-            }
-
-            if (folderInfo.SeasonNumber != fileInfo.SeasonNumber)
-            {
-                return Decision.Reject("Season number {0} was unexpected considering the folder name {1}", fileInfo.SeasonNumber, folderInfo.ReleaseTitle);
             }
 
             var unexpected = fileInfo.EpisodeNumbers.Where(f => !folderInfo.EpisodeNumbers.Contains(f)).ToList();
