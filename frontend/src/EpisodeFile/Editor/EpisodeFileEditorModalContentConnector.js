@@ -72,6 +72,8 @@ function createMapStateToProps() {
           relativePath: episodeFile.relativePath,
           language: episodeFile.language,
           quality: episodeFile.quality,
+          languageCutoffNotMet: episodeFile.languageCutoffNotMet,
+          qualityCutoffNotMet: episodeFile.qualityCutoffNotMet,
           ...episode
         };
       });

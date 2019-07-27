@@ -148,29 +148,34 @@ export const actionHandlers = handleThunks({
 
     dispatch(set({ section, isSaving: true }));
 
-    const data = {
+    const requestData = {
       episodeFileIds
     };
 
     if (language) {
-      data.language = language;
+      requestData.language = language;
     }
 
     if (quality) {
-      data.quality = quality;
+      requestData.quality = quality;
     }
 
     const promise = createAjaxRequest({
       url: '/episodeFile/editor',
       method: 'PUT',
       dataType: 'json',
-      data: JSON.stringify(data)
+      data: JSON.stringify(requestData)
     }).request;
 
-    promise.done(() => {
+    promise.done((data) => {
       dispatch(batchActions([
         ...episodeFileIds.map((id) => {
           const props = {};
+
+          const episodeFile = data.find((file) => file.id === id);
+
+          props.qualityCutoffNotMet = episodeFile.qualityCutoffNotMet;
+          props.languageCutoffNotMet = episodeFile.languageCutoffNotMet;
 
           if (language) {
             props.language = language;
