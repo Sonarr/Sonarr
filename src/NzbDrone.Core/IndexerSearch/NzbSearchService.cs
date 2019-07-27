@@ -193,9 +193,11 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> SearchAnime(Series series, Episode episode, bool userInvokedSearch, bool interactiveSearch)
+        private List<DownloadDecision> SearchAnime(Series series, Episode episode, bool userInvokedSearch, bool interactiveSearch, bool isSeasonSearch = false)
         {
             var searchSpec = Get<AnimeEpisodeSearchCriteria>(series, new List<Episode> { episode }, userInvokedSearch, interactiveSearch);
+
+            searchSpec.IsSeasonSearch = isSeasonSearch;
 
             if (episode.SceneAbsoluteEpisodeNumber.HasValue)
             {
@@ -232,7 +234,7 @@ namespace NzbDrone.Core.IndexerSearch
             // Only search for aired episodes when performing a season anime search
             foreach (var episode in episodes.Where(e => e.Monitored && e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow)))
             {
-                downloadDecisions.AddRange(SearchAnime(series, episode, userInvokedSearch, interactiveSearch));
+                downloadDecisions.AddRange(SearchAnime(series, episode, userInvokedSearch, interactiveSearch, true));
             }
 
             return downloadDecisions;

@@ -56,9 +56,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             return Decision.Accept();
         }
 
-        private Decision IsSatisfiedBy(RemoteEpisode remoteEpisode, AnimeEpisodeSearchCriteria singleEpisodeSpec)
+        private Decision IsSatisfiedBy(RemoteEpisode remoteEpisode, AnimeEpisodeSearchCriteria animeEpisodeSpec)
         {
-            if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
+            if (remoteEpisode.ParsedEpisodeInfo.FullSeason && !animeEpisodeSpec.IsSeasonSearch)
             {
                 _logger.Debug("Full season result during single episode search, skipping.");
                 return Decision.Reject("Full season pack");

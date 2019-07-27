@@ -162,6 +162,8 @@
     <Compile Include="DecisionEngineTests\AnimeVersionUpgradeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RepackSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\MultiSeasonSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\Search\SingleEpisodeSearchMatchSpecificationTests\AnimeSearchFixture.cs" />
+    <Compile Include="DecisionEngineTests\Search\SingleEpisodeSearchMatchSpecificationTests\StandardEpisodeSearch.cs" />
     <Compile Include="DecisionEngineTests\UpgradeAllowedSpecificationFixture .cs" />
     <Compile Include="DecisionEngineTests\FullSeasonSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\MaximumSizeSpecificationFixture.cs" />

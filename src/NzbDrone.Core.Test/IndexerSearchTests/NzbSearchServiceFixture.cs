@@ -282,6 +282,24 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
+        public void season_search_for_anime_should_set_isSeasonSearch_flag()
+        {
+            WithEpisodes();
+            _xemSeries.SeriesType = SeriesTypes.Anime;
+            _xemEpisodes.ForEach(e => e.EpisodeFileId = 0);
+
+            var seasonNumber = 1;
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true, true, false);
+
+            var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(_xemEpisodes.Count(e => e.SeasonNumber == seasonNumber));
+            criteria.ForEach(c => c.IsSeasonSearch.Should().BeTrue());
+        }
+
+        [Test]
         public void season_search_for_daily_should_search_multiple_years()
         {
             WithEpisode(1, 1, null, null, "2005-12-30");

@@ -3,6 +3,7 @@
     public class AnimeEpisodeSearchCriteria : SearchCriteriaBase
     {
         public int AbsoluteEpisodeNumber { get; set; }
+        public bool IsSeasonSearch { get; set; }
 
         public override string ToString()
         {
