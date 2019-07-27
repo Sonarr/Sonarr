@@ -34,6 +34,17 @@ class FilterModal extends Component {
     });
   }
 
+  onCancelPress = () => {
+    if (this.state.filterBuilder) {
+      this.setState({
+        filterBuilder: false,
+        id: null
+      });
+    } else {
+      this.onModalClose();
+    }
+  }
+
   onModalClose = () => {
     this.setState({
       filterBuilder: false,
@@ -67,6 +78,7 @@ class FilterModal extends Component {
             <FilterBuilderModalContentConnector
               {...otherProps}
               id={id}
+              onCancelPress={this.onCancelPress}
               onModalClose={this.onModalClose}
             /> :
             <CustomFiltersModalContentConnector

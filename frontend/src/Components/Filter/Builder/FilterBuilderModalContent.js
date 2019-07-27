@@ -132,6 +132,7 @@ class FilterBuilderModalContent extends Component {
       filterBuilderProps,
       isSaving,
       saveError,
+      onCancelPress,
       onModalClose
     } = this.props;
 
@@ -190,7 +191,7 @@ class FilterBuilderModalContent extends Component {
         </ModalBody>
 
         <ModalFooter>
-          <Button onPress={onModalClose}>
+          <Button onPress={onCancelPress}>
             Cancel
           </Button>
 
@@ -220,6 +221,7 @@ FilterBuilderModalContent.propTypes = {
   dispatchDeleteCustomFilter: PropTypes.func.isRequired,
   onSaveCustomFilterPress: PropTypes.func.isRequired,
   dispatchSetFilter: PropTypes.func.isRequired,
+  onCancelPress: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 
