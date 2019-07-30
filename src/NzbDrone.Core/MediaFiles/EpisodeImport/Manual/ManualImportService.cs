@@ -162,11 +162,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             if (downloadId.IsNotNullOrWhiteSpace())
             {
                 var trackedDownload = _trackedDownloadService.Find(downloadId);
-                downloadClientItem = trackedDownload.DownloadItem;
+                downloadClientItem = trackedDownload?.DownloadItem;
 
                 if (series == null)
                 {
-                    series = trackedDownload.RemoteEpisode.Series;
+                    series = trackedDownload?.RemoteEpisode?.Series;
                 }
             }
 
