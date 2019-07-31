@@ -30,8 +30,7 @@ namespace Sonarr.Api.V3.Indexers
             {
                 release.QualityWeight = decision.RemoteEpisode
                                                 .Series
-                                                .QualityProfile.Value
-                                                .Items.FindIndex(v => v.Quality == release.Quality.Quality) * 100;
+                                                .QualityProfile.Value.GetIndex(release.Quality.Quality).Index * 100;
 
                 release.LanguageWeight = decision.RemoteEpisode
                                                  .Series

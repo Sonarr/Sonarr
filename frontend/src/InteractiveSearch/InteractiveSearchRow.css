@@ -1,7 +1,19 @@
+.protocol {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 80px;
+}
+
 .title {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   word-break: break-all;
+}
+
+.indexer {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 85px;
 }
 
 .quality,
@@ -35,4 +47,10 @@
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   white-space: nowrap;
+}
+
+.peers {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 75px;
 }
