@@ -80,6 +80,7 @@ class SelectEpisodeModalContent extends Component {
 
   render() {
     const {
+      ids,
       isFetching,
       isPopulated,
       error,
@@ -98,6 +99,13 @@ class SelectEpisodeModalContent extends Component {
     } = this.state;
 
     const errorMessage = getErrorMessage(error, 'Unable to load episodes');
+
+    const selectedFilesCount = ids.length;
+    const selectedCount = this.getSelectedIds().length;
+    const selectionIsValid = (
+      selectedCount > 0 &&
+      selectedCount % selectedFilesCount === 0
+    );
 
     return (
       <ModalContent onModalClose={onModalClose}>
@@ -158,18 +166,25 @@ class SelectEpisodeModalContent extends Component {
         </ModalBody>
 
         <ModalFooter className={styles.footer}>
-          <div className={styles.path}>{relativePath}</div>
+          <div className={styles.path}>
+            {
+              relativePath ?
+                relativePath :
+                `${selectedFilesCount} selected files`
+            }
+          </div>
 
           <div className={styles.buttons}>
             <Button onPress={onModalClose}>
-            Cancel
+              Cancel
             </Button>
 
             <Button
               kind={kinds.SUCCESS}
+              isDisabled={!selectionIsValid}
               onPress={this.onEpisodesSelect}
             >
-            Select Episodes
+              Select Episodes
             </Button>
           </div>
         </ModalFooter>
@@ -179,11 +194,12 @@ class SelectEpisodeModalContent extends Component {
 }
 
 SelectEpisodeModalContent.propTypes = {
+  ids: PropTypes.arrayOf(PropTypes.number).isRequired,
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  relativePath: PropTypes.string.isRequired,
+  relativePath: PropTypes.string,
   sortKey: PropTypes.string,
   sortDirection: PropTypes.string,
   onSortPress: PropTypes.func.isRequired,

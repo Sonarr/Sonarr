@@ -20,6 +20,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
@@ -90,6 +91,7 @@ const importModeOptions = [
 const SELECT = 'select';
 const SERIES = 'series';
 const SEASON = 'season';
+const EPISODE = 'episode';
 const LANGUAGE = 'language';
 const QUALITY = 'quality';
 
@@ -208,12 +210,25 @@ class InteractiveImportModalContent extends Component {
     } = this.state;
 
     const selectedIds = this.getSelectedIds();
-    const selectedItem = selectedIds.length ? _.find(items, { id: selectedIds[0] }) : null;
+
+    const orderedSelectedIds = items.reduce((acc, file) => {
+      if (selectedIds.includes(file.id)) {
+        acc.push(file.id);
+      }
+
+      return acc;
+    }, []);
+
+    const selectedItem = selectedIds.length ?
+      items.find((file) => file.id === selectedIds[0]) :
+      null;
+
     const errorMessage = getErrorMessage(error, 'Unable to load manual import items');
 
     const bulkSelectOptions = [
       { key: SELECT, value: 'Select...', disabled: true },
       { key: SEASON, value: 'Select Season' },
+      { key: EPISODE, value: 'Select Episode(s)' },
       { key: LANGUAGE, value: 'Select Language' },
       { key: QUALITY, value: 'Select Quality' }
     ];
@@ -371,6 +386,14 @@ class InteractiveImportModalContent extends Component {
           isOpen={selectModalOpen === SEASON}
           ids={selectedIds}
           seriesId={selectedItem && selectedItem.series && selectedItem.series.id}
+          onModalClose={this.onSelectModalClose}
+        />
+
+        <SelectEpisodeModal
+          isOpen={selectModalOpen === EPISODE}
+          ids={orderedSelectedIds}
+          seriesId={selectedItem && selectedItem.series && selectedItem.series.id}
+          seasonNumber={selectedItem && selectedItem.seasonNumber}
           onModalClose={this.onSelectModalClose}
         />
 

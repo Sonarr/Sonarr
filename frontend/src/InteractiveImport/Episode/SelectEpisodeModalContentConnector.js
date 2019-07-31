@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -56,7 +55,13 @@ class SelectEpisodeModalContentConnector extends Component {
   }
 
   onEpisodesSelect = (episodeIds) => {
-    const episodes = _.reduce(this.props.items, (acc, item) => {
+    const {
+      ids,
+      items,
+      onModalClose
+    } = this.props;
+
+    const selectedEpisodes = items.reduce((acc, item) => {
       if (episodeIds.indexOf(item.id) > -1) {
         acc.push(item);
       }
@@ -64,12 +69,22 @@ class SelectEpisodeModalContentConnector extends Component {
       return acc;
     }, []);
 
-    this.props.updateInteractiveImportItem({
-      id: this.props.id,
-      episodes: _.sortBy(episodes, 'episodeNumber')
+    const episodesPerFile = selectedEpisodes.length / ids.length;
+    const sortedEpisodes = selectedEpisodes.sort((a, b) => {
+      return a.seasonNumber - b.seasonNumber;
     });
 
-    this.props.onModalClose(true);
+    ids.forEach((id, index) => {
+      const startingIndex = index * episodesPerFile;
+      const episodes = sortedEpisodes.slice(startingIndex, startingIndex + episodesPerFile);
+
+      this.props.updateInteractiveImportItem({
+        id,
+        episodes
+      });
+    });
+
+    onModalClose(true);
   }
 
   //
@@ -87,7 +102,7 @@ class SelectEpisodeModalContentConnector extends Component {
 }
 
 SelectEpisodeModalContentConnector.propTypes = {
-  id: PropTypes.number.isRequired,
+  ids: PropTypes.arrayOf(PropTypes.number).isRequired,
   seriesId: PropTypes.number.isRequired,
   seasonNumber: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
