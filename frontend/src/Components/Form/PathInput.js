@@ -18,8 +18,17 @@ class PathInput extends Component {
     this._node = document.getElementById('portal-root');
 
     this.state = {
+      value: props.value,
       isFileBrowserModalOpen: false
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { value } = this.props;
+
+    if (prevProps.value !== value) {
+      this.setState({ value });
+    }
   }
 
   //
@@ -51,11 +60,8 @@ class PathInput extends Component {
   //
   // Listeners
 
-  onInputChange = (event, { newValue }) => {
-    this.props.onChange({
-      name: this.props.name,
-      value: newValue
-    });
+  onInputChange = ({ value }) => {
+    this.setState({ value });
   }
 
   onInputKeyDown = (event) => {
@@ -77,6 +83,11 @@ class PathInput extends Component {
   }
 
   onInputBlur = () => {
+    this.props.onChange({
+      name: this.props.name,
+      value: this.state.value
+    });
+
     this.props.onClearPaths();
   }
 
@@ -108,13 +119,18 @@ class PathInput extends Component {
     const {
       className,
       name,
-      value,
       paths,
       includeFiles,
       hasFileBrowser,
       onChange,
       ...otherProps
     } = this.props;
+
+    const {
+      value,
+      isFileBrowserModalOpen
+    } = this.state;
+
     return (
       <div className={className}>
         <AutoSuggestInput
@@ -130,7 +146,7 @@ class PathInput extends Component {
           onSuggestionSelected={this.onSuggestionSelected}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          onChange={onChange}
+          onChange={this.onInputChange}
         />
 
         {
@@ -144,7 +160,7 @@ class PathInput extends Component {
               </FormInputButton>
 
               <FileBrowserModal
-                isOpen={this.state.isFileBrowserModalOpen}
+                isOpen={isFileBrowserModalOpen}
                 name={name}
                 value={value}
                 includeFiles={includeFiles}

@@ -203,7 +203,7 @@ export const toggleSeasonMonitored = createThunk(TOGGLE_SEASON_MONITORED);
 
 export const setSeriesValue = createAction(SET_SERIES_VALUE, (payload) => {
   return {
-    section: 'series',
+    section,
     ...payload
   };
 });
