@@ -11,6 +11,7 @@ using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {
@@ -438,7 +439,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _namingConfig.AnimeEpisodeFormat = "{Series.Title}.{season}x{episode:00}.{absolute:000}\\{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("South.Park.15x06.100\\South.Park.S15E06.100.City.Sushi");
+                   .Should().Be("South.Park.15x06.100\\South.Park.S15E06.100.City.Sushi".AsOsAgnostic());
         }
 
         [Test]
@@ -448,7 +449,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _namingConfig.AnimeEpisodeFormat = "{Series Title} Season {season:0000} Episode {episode:0000}\\{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("South Park Season 0015 Episode 0006\\South.Park.S15E06.100.City.Sushi");
+                   .Should().Be("South Park Season 0015 Episode 0006\\South.Park.S15E06.100.City.Sushi".AsOsAgnostic());
         }
 
         [Test]
