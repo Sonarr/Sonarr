@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Manager, Popper, Reference } from 'react-popper';
 import classNames from 'classnames';
 import getUniqueElememtId from 'Utilities/getUniqueElementId';
-import isMobileUtil from 'Utilities/isMobile';
+import { isMobile as isMobileUtil } from 'Utilities/mobile';
 import * as keyCodes from 'Utilities/Constants/keyCodes';
 import { icons, sizes, scrollDirections } from 'Helpers/Props';
 import Icon from 'Components/Icon';

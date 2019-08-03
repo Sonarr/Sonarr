@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import elementClass from 'element-class';
 import getUniqueElememtId from 'Utilities/getUniqueElementId';
+import { isIOS } from 'Utilities/mobile';
+import { setScrollLock } from 'Utilities/scrollLock';
 import * as keyCodes from 'Utilities/Constants/keyCodes';
 import { sizes } from 'Helpers/Props';
 import ErrorBoundary from 'Components/Error/ErrorBoundary';
@@ -69,7 +71,14 @@ class Modal extends Component {
     window.addEventListener('keydown', this.onKeyDown);
 
     if (openModals.length === 1) {
-      elementClass(document.body).add(styles.modalOpen);
+      if (isIOS()) {
+        setScrollLock(true);
+        const offset = document.body.scrollTop;
+        document.body.style.top = `${offset * -1}px`;
+        elementClass(document.body).add(styles.modalOpenIOS);
+      } else {
+        elementClass(document.body).add(styles.modalOpen);
+      }
     }
   }
 
@@ -78,7 +87,15 @@ class Modal extends Component {
     window.removeEventListener('keydown', this.onKeyDown);
 
     if (openModals.length === 0) {
-      elementClass(document.body).remove(styles.modalOpen);
+      setScrollLock(false);
+
+      if (isIOS()) {
+        const offset = parseInt(document.body.style.top);
+        elementClass(document.body).remove(styles.modalOpenIOS);
+        document.body.scrollTop = (offset * -1);
+      } else {
+        elementClass(document.body).remove(styles.modalOpen);
+      }
     }
   }
 

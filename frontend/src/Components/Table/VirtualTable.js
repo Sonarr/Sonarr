@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { WindowScroller } from 'react-virtualized';
+import { isLocked } from 'Utilities/scrollLock';
 import { scrollDirections } from 'Helpers/Props';
 import Measure from 'Components/Measure';
 import Scroller from 'Components/Scroller/Scroller';
@@ -83,6 +84,16 @@ class VirtualTable extends Component {
     }
   }
 
+  onScroll = (props) => {
+    if (isLocked()) {
+      return;
+    }
+
+    const { onScroll } = this.props;
+
+    onScroll(props);
+  }
+
   //
   // Render
 
@@ -107,7 +118,7 @@ class VirtualTable extends Component {
       <Measure onMeasure={this.onMeasure}>
         <WindowScroller
           scrollElement={isSmallScreen ? undefined : this._contentBodyNode}
-          onScroll={onScroll}
+          onScroll={this.onScroll}
         >
           {({ height, isScrolling }) => {
             return (
