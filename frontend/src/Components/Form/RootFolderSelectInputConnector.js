@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -13,7 +12,7 @@ function createMapStateToProps() {
     (state) => state.rootFolders,
     (state, { includeNoChange }) => includeNoChange,
     (rootFolders, includeNoChange) => {
-      const values = _.map(rootFolders.items, (rootFolder) => {
+      const values = rootFolders.items.map((rootFolder) => {
         return {
           key: rootFolder.path,
           value: rootFolder.path,
@@ -85,7 +84,7 @@ class RootFolderSelectInputConnector extends Component {
       onChange
     } = this.props;
 
-    if (!value || !_.some(values, (v) => v.key === value) || value === ADD_NEW_KEY) {
+    if (!value || !values.some((v) => v.key === value) || value === ADD_NEW_KEY) {
       const defaultValue = values[0];
 
       if (defaultValue.key === ADD_NEW_KEY) {

@@ -160,6 +160,7 @@
     <Compile Include="Notifications\NotificationModule.cs" />
     <Compile Include="Notifications\NotificationResource.cs" />
     <Compile Include="SeasonPass\SeasonPassSeriesResource.cs" />
+    <Compile Include="Series\SeriesFolderAsRootFolderValidator.cs" />
     <Compile Include="Series\SeriesStatisticsResource.cs" />
     <Compile Include="Series\SeriesEditorDeleteResource.cs" />
     <Compile Include="Series\SeriesEditorResource.cs" />

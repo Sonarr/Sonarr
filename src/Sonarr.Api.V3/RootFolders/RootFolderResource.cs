@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.RootFolders;
 using Sonarr.Http.REST;
 
@@ -23,7 +24,7 @@ namespace Sonarr.Api.V3.RootFolders
             {
                 Id = model.Id,
 
-                Path = model.Path,
+                Path = model.Path.GetCleanPath(),
                 FreeSpace = model.FreeSpace,
                 UnmappedFolders = model.UnmappedFolders
             };
@@ -37,7 +38,7 @@ namespace Sonarr.Api.V3.RootFolders
             {
                 Id = resource.Id,
 
-                Path = resource.Path,
+                Path = resource.Path
                 //FreeSpace
                 //UnmappedFolders
             };

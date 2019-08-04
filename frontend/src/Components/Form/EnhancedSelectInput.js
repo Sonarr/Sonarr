@@ -262,6 +262,7 @@ class EnhancedSelectInput extends Component {
       isDisabled,
       hasError,
       hasWarning,
+      valueOptions,
       selectedValueOptions,
       selectedValueComponent: SelectedValueComponent,
       optionComponent: OptionComponent
@@ -363,6 +364,7 @@ class EnhancedSelectInput extends Component {
                                   key={v.key}
                                   id={v.key}
                                   isSelected={index === selectedIndex}
+                                  {...valueOptions}
                                   {...v}
                                   isMobile={false}
                                   onSelect={this.onSelect}
@@ -404,6 +406,7 @@ class EnhancedSelectInput extends Component {
                           key={v.key}
                           id={v.key}
                           isSelected={index === selectedIndex}
+                          {...valueOptions}
                           {...v}
                           isMobile={true}
                           onSelect={this.onSelect}
@@ -431,6 +434,7 @@ EnhancedSelectInput.propTypes = {
   isDisabled: PropTypes.bool,
   hasError: PropTypes.bool,
   hasWarning: PropTypes.bool,
+  valueOptions: PropTypes.object.isRequired,
   selectedValueOptions: PropTypes.object.isRequired,
   selectedValueComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
   optionComponent: PropTypes.elementType,
@@ -441,6 +445,7 @@ EnhancedSelectInput.defaultProps = {
   className: styles.enhancedSelect,
   disabledClassName: styles.isDisabled,
   isDisabled: false,
+  valueOptions: {},
   selectedValueOptions: {},
   selectedValueComponent: HintedSelectInputSelectedValue,
   optionComponent: HintedSelectInputOption

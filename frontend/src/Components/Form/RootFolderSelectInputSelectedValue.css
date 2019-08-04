@@ -7,10 +7,20 @@
   overflow: hidden;
 }
 
+.pathContainer {
+  @add-mixin truncate;
+  display: flex;
+  flex: 1 0 0;
+}
+
 .path {
   @add-mixin truncate;
+  flex: 0 1 auto;
+}
 
-  flex: 1 0 0;
+.seriesFolder {
+  flex: 0 1 auto;
+  color: $disabledColor;
 }
 
 .freeSpace {

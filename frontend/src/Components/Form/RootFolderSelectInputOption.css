@@ -13,6 +13,15 @@
   }
 }
 
+.value {
+  display: flex;
+}
+
+.seriesFolder {
+  flex: 0 0 auto;
+  color: $disabledColor;
+}
+
 .freeSpace {
   margin-left: 15px;
   color: $darkGray;

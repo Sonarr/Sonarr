@@ -35,12 +35,18 @@
 .message {
   margin-top: 30px;
   text-align: center;
+  font-weight: 300;
+  font-size: $largeFontSize;
 }
 
 .helpText {
   margin-bottom: 10px;
-  font-weight: 300;
   font-size: 24px;
+}
+
+.noSeriesText {
+  margin-top: 80px;
+  margin-bottom: 20px;
 }
 
 .noResults {

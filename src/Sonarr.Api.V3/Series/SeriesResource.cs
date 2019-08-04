@@ -56,6 +56,7 @@ namespace Sonarr.Api.V3.Series
         public string ImdbId { get; set; }
         public string TitleSlug { get; set; }
         public string RootFolderPath { get; set; }
+        public string Folder { get; set; }
         public string Certification { get; set; }
         public List<string> Genres { get; set; }
         public HashSet<int> Tags { get; set; }

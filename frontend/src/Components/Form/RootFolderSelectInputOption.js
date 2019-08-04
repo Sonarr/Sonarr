@@ -7,14 +7,20 @@ import styles from './RootFolderSelectInputOption.css';
 
 function RootFolderSelectInputOption(props) {
   const {
+    id,
     value,
     freeSpace,
+    seriesFolder,
     isMobile,
+    isWindows,
     ...otherProps
   } = props;
 
+  const slashCharacter = isWindows ? '\\' : '/';
+
   return (
     <EnhancedSelectInputOption
+      id={id}
       isMobile={isMobile}
       {...otherProps}
     >
@@ -23,7 +29,18 @@ function RootFolderSelectInputOption(props) {
         isMobile && styles.isMobile
       )}
       >
-        <div>{value}</div>
+        <div className={styles.value}>
+          {value}
+
+          {
+            seriesFolder && id !== 'addNew' ?
+              <div className={styles.seriesFolder}>
+                {slashCharacter}
+                {seriesFolder}
+              </div> :
+              null
+          }
+        </div>
 
         {
           freeSpace != null &&
@@ -37,9 +54,12 @@ function RootFolderSelectInputOption(props) {
 }
 
 RootFolderSelectInputOption.propTypes = {
+  id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   freeSpace: PropTypes.number,
-  isMobile: PropTypes.bool.isRequired
+  seriesFolder: PropTypes.string,
+  isMobile: PropTypes.bool.isRequired,
+  isWindows: PropTypes.bool
 };
 
 export default RootFolderSelectInputOption;

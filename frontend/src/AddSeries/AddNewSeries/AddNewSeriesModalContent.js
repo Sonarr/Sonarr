@@ -66,9 +66,11 @@ class AddNewSeriesModalContent extends Component {
       languageProfileId,
       seriesType,
       seasonFolder,
+      folder,
       tags,
       showLanguageProfile,
       isSmallScreen,
+      isWindows,
       onModalClose,
       onInputChange,
       ...otherProps
@@ -115,6 +117,15 @@ class AddNewSeriesModalContent extends Component {
                   <FormInputGroup
                     type={inputTypes.ROOT_FOLDER_SELECT}
                     name="rootFolderPath"
+                    valueOptions={{
+                      seriesFolder: folder,
+                      isWindows
+                    }}
+                    selectedValueOptions={{
+                      seriesFolder: folder,
+                      isWindows
+                    }}
+                    helpText={`'${folder}' subfolder will be created automatically`}
                     onChange={onInputChange}
                     {...rootFolderPath}
                   />
@@ -260,9 +271,11 @@ AddNewSeriesModalContent.propTypes = {
   languageProfileId: PropTypes.object,
   seriesType: PropTypes.object.isRequired,
   seasonFolder: PropTypes.object.isRequired,
+  folder: PropTypes.string.isRequired,
   tags: PropTypes.object.isRequired,
   showLanguageProfile: PropTypes.bool.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
+  isWindows: PropTypes.bool.isRequired,
   onModalClose: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
   onAddSeriesPress: PropTypes.func.isRequired

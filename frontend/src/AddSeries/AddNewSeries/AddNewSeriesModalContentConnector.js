@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { setAddSeriesDefault, addSeries } from 'Store/Actions/addSeriesActions';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
+import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import selectSettings from 'Store/Selectors/selectSettings';
 import AddNewSeriesModalContent from './AddNewSeriesModalContent';
 
@@ -12,7 +13,8 @@ function createMapStateToProps() {
     (state) => state.addSeries,
     (state) => state.settings.languageProfiles,
     createDimensionsSelector(),
-    (addSeriesState, languageProfiles, dimensions) => {
+    createSystemStatusSelector(),
+    (addSeriesState, languageProfiles, dimensions, systemStatus) => {
       const {
         isAdding,
         addError,
@@ -32,6 +34,7 @@ function createMapStateToProps() {
         isSmallScreen: dimensions.isSmallScreen,
         validationErrors,
         validationWarnings,
+        isWindows: systemStatus.isWindows,
         ...settings
       };
     }

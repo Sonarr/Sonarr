@@ -53,6 +53,7 @@ class AddNewSeriesSearchResult extends Component {
       overview,
       statistics,
       ratings,
+      folder,
       images,
       isExistingSeries,
       isSmallScreen
@@ -160,6 +161,7 @@ class AddNewSeriesSearchResult extends Component {
           title={title}
           year={year}
           overview={overview}
+          folder={folder}
           images={images}
           onModalClose={this.onAddSeriesModalClose}
         />
@@ -178,6 +180,7 @@ AddNewSeriesSearchResult.propTypes = {
   overview: PropTypes.string,
   statistics: PropTypes.object.isRequired,
   ratings: PropTypes.object.isRequired,
+  folder: PropTypes.string.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   isExistingSeries: PropTypes.bool.isRequired,
   isSmallScreen: PropTypes.bool.isRequired

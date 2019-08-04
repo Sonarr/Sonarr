@@ -20,7 +20,7 @@ function NoSeries(props) {
   return (
     <div>
       <div className={styles.message}>
-        No series found, to get started you'll want to add a new series or import some existing ones.
+        No series found, to get started you'll want to import your existing series or add a new series.
       </div>
 
       <div className={styles.buttonContainer}>
