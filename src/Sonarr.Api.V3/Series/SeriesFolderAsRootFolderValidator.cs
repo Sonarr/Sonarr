@@ -31,7 +31,9 @@ namespace Sonarr.Api.V3.Series
 
             if (seriesFolder == rootFolder) return false;
 
-            return seriesFolder.LevenshteinDistance(rootFolder) <= Math.Max(1, seriesFolder.Length * 0.2);
+            var distance = seriesFolder.LevenshteinDistance(rootFolder);
+
+            return distance >= Math.Max(1, seriesFolder.Length * 0.2);
         }
     }
 }
