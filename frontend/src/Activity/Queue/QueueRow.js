@@ -352,6 +352,7 @@ class QueueRow extends Component {
         <RemoveQueueItemModal
           isOpen={isRemoveQueueItemModalOpen}
           sourceTitle={title}
+          canIgnore={!!(series && episode)}
           onRemovePress={this.onRemoveQueueItemModalConfirmed}
           onModalClose={this.onRemoveQueueItemModalClose}
         />

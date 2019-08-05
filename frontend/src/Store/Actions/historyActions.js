@@ -150,6 +150,17 @@ export const defaultState = {
           type: filterTypes.EQUAL
         }
       ]
+    },
+    {
+      key: 'ignored',
+      label: 'Ignored',
+      filters: [
+        {
+          key: 'eventType',
+          value: '7',
+          type: filterTypes.EQUAL
+        }
+      ]
     }
   ]
 

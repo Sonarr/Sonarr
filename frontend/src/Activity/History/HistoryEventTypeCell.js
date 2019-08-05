@@ -19,6 +19,8 @@ function getIconName(eventType) {
       return icons.DELETE;
     case 'episodeFileRenamed':
       return icons.ORGANIZE;
+    case 'downloadIgnored':
+      return icons.IGNORE;
     default:
       return icons.UNKNOWN;
   }
@@ -47,6 +49,8 @@ function getTooltip(eventType, data) {
       return 'Episode file deleted';
     case 'episodeFileRenamed':
       return 'Episode file renamed';
+    case 'downloadIgnored':
+      return 'Episode Download Ignored';
     default:
       return 'Unknown event';
   }

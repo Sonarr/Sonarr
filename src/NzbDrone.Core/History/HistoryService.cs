@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Marr.Data.QGen;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
@@ -11,11 +10,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.History
 {
@@ -39,7 +34,8 @@ namespace NzbDrone.Core.History
                                   IHandle<DownloadFailedEvent>,
                                   IHandle<EpisodeFileDeletedEvent>,
                                   IHandle<EpisodeFileRenamedEvent>,
-                                  IHandle<SeriesDeletedEvent>
+                                  IHandle<SeriesDeletedEvent>,
+                                  IHandle<DownloadIgnoredEvent>
     {
         private readonly IHistoryRepository _historyRepository;
         private readonly Logger _logger;
@@ -305,6 +301,33 @@ namespace NzbDrone.Core.History
 
                 _historyRepository.Insert(history);
             }
+        }
+
+        public void Handle(DownloadIgnoredEvent message)
+        {
+            var historyToAdd = new List<History>();
+
+            foreach (var episodeId in message.EpisodeIds)
+            {
+                var history = new History
+                              {
+                                  EventType = HistoryEventType.DownloadIgnored,
+                                  Date = DateTime.UtcNow,
+                                  Quality = message.Quality,
+                                  SourceTitle = message.SourceTitle,
+                                  SeriesId = message.SeriesId,
+                                  EpisodeId = episodeId,
+                                  DownloadId = message.DownloadId,
+                                  Language = message.Language
+                              };
+
+                history.Data.Add("DownloadClient", message.DownloadClient);
+                history.Data.Add("Message", message.Message);
+
+                historyToAdd.Add(history);
+            }
+
+            _historyRepository.InsertMany(historyToAdd);
         }
 
         public void Handle(SeriesDeletedEvent message)

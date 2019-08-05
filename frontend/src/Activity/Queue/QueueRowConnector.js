@@ -43,8 +43,8 @@ class QueueRowConnector extends Component {
     this.props.grabQueueItem({ id: this.props.id });
   }
 
-  onRemoveQueueItemPress = (blacklist) => {
-    this.props.removeQueueItem({ id: this.props.id, blacklist });
+  onRemoveQueueItemPress = (payload) => {
+    this.props.removeQueueItem({ id: this.props.id, ...payload });
   }
 
   //
