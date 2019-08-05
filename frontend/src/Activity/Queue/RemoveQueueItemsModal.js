@@ -21,26 +21,41 @@ class RemoveQueueItemsModal extends Component {
     super(props, context);
 
     this.state = {
+      remove: true,
       blacklist: false
     };
   }
 
   //
-  // Listeners
+  // Control
+
+   resetState = function() {
+     this.setState({
+       remove: true,
+       blacklist: false
+     });
+   }
+
+   //
+   // Listeners
+
+   onRemoveChange = ({ value }) => {
+     this.setState({ remove: value });
+   }
 
   onBlacklistChange = ({ value }) => {
     this.setState({ blacklist: value });
   }
 
-  onRemoveQueueItemConfirmed = () => {
-    const blacklist = this.state.blacklist;
+  onRemoveConfirmed = () => {
+    const state = this.state;
 
-    this.setState({ blacklist: false });
-    this.props.onRemovePress(blacklist);
+    this.resetState();
+    this.props.onRemovePress(state);
   }
 
   onModalClose = () => {
-    this.setState({ blacklist: false });
+    this.resetState();
     this.props.onModalClose();
   }
 
@@ -50,10 +65,11 @@ class RemoveQueueItemsModal extends Component {
   render() {
     const {
       isOpen,
-      selectedCount
+      selectedCount,
+      canIgnore
     } = this.props;
 
-    const blacklist = this.state.blacklist;
+    const { remove, blacklist } = this.state;
 
     return (
       <Modal
@@ -74,7 +90,23 @@ class RemoveQueueItemsModal extends Component {
             </div>
 
             <FormGroup>
-              <FormLabel>Blacklist Release</FormLabel>
+              <FormLabel>Remove From Download Client</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.CHECK}
+                name="remove"
+                value={remove}
+                helpTextWarning="Removing will remove the download and the file(s) from the download client."
+                isDisabled={!canIgnore}
+                onChange={this.onRemoveChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel>
+                Blacklist Release{selectedCount > 1 ? 's' : ''}
+              </FormLabel>
+
               <FormInputGroup
                 type={inputTypes.CHECK}
                 name="blacklist"
@@ -93,7 +125,7 @@ class RemoveQueueItemsModal extends Component {
 
             <Button
               kind={kinds.DANGER}
-              onPress={this.onRemoveQueueItemConfirmed}
+              onPress={this.onRemoveConfirmed}
             >
               Remove
             </Button>
@@ -107,6 +139,7 @@ class RemoveQueueItemsModal extends Component {
 RemoveQueueItemsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   selectedCount: PropTypes.number.isRequired,
+  canIgnore: PropTypes.bool.isRequired,
   onRemovePress: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

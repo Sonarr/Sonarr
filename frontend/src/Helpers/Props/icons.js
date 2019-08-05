@@ -145,6 +145,7 @@ export const HEALTH = fasMedkit;
 export const HEART = fasHeart;
 export const HISTORY = fasHistory;
 export const HOUSEKEEPING = fasHome;
+export const IGNORE = fasTimesCircle;
 export const INFO = fasInfoCircle;
 export const INTERACTIVE = fasUser;
 export const KEYBOARD = farKeyboard;

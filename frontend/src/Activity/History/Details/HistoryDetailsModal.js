@@ -23,6 +23,8 @@ function getHeaderTitle(eventType) {
       return 'Episode File Deleted';
     case 'episodeFileRenamed':
       return 'Episode File Renamed';
+    case 'downloadIgnored':
+      return 'Download Ignored';
     default:
       return 'Unknown';
   }
