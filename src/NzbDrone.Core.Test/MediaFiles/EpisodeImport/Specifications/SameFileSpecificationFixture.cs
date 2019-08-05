@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Marr.Data;
 using NUnit.Framework;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
@@ -91,6 +92,19 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .ToList();
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_accepted_if_file_cannot_be_fetched()
+        {
+            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
+                .TheFirst(1)
+                .With(e => e.EpisodeFileId = 1)
+                .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>((EpisodeFile)null))
+                .Build()
+                .ToList();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

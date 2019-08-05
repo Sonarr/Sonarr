@@ -30,6 +30,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
+            var episodeFile = episodeFiles.First().Value;
+
+            if (episodeFile == null)
+            {
+                var episode = localEpisode.Episodes.First();
+                _logger.Trace("Unable to get episode file details from the DB. EpisodeId: {0} EpisodeFileId: {1}", episode.Id, episode.EpisodeFileId);
+
+                return Decision.Accept();
+            }
+
             if (episodeFiles.First().Value.Size == localEpisode.Size)
             {
                 _logger.Debug("'{0}' Has the same filesize as existing file", localEpisode.Path);
