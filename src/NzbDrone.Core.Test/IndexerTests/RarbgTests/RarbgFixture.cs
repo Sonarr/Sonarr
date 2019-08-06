@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.IndexerTests.RarbgTests
             torrentInfo.Title.Should().Be("Sense8.S01E01.WEBRip.x264-FGT");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             torrentInfo.DownloadUrl.Should().Be("magnet:?xt=urn:btih:d8bde635f573acb390c7d7e7efc1556965fdc802&dn=Sense8.S01E01.WEBRip.x264-FGT&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce");
-            torrentInfo.InfoUrl.Should().Be("https://torrentapi.org/redirect_to_info.php?token=i5cx7b9agd&p=8_6_4_4_5_6__d8bde635f5");
+            torrentInfo.InfoUrl.Should().Be("https://torrentapi.org/redirect_to_info.php?token=i5cx7b9agd&p=8_6_4_4_5_6__d8bde635f5&app_id=Sonarr");
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
             torrentInfo.PublishDate.Should().Be(DateTime.Parse("2015-06-05 16:58:11 +0000").ToUniversalTime());
             torrentInfo.Size.Should().Be(564198371);
