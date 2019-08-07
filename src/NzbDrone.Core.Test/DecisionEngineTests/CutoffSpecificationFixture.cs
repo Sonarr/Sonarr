@@ -260,5 +260,30 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
                 10).Should().BeTrue();
         }
+
+        [Test]
+        public void should_return_true_if_cutoffs_are_met_but_is_a_revision_upgrade()
+        {
+            QualityProfile _profile = new QualityProfile
+                                      {
+                                          Cutoff = Quality.HDTV1080p.Id,
+                                          Items = Qualities.QualityFixture.GetDefaultQualities(),
+                                      };
+
+            LanguageProfile _langProfile = new LanguageProfile
+                                           {
+                                               Cutoff = Language.English,
+                                               Languages = LanguageFixture.GetDefaultLanguages()
+                                           };
+
+            Subject.CutoffNotMet(
+                _profile,
+                _langProfile,
+                new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)),
+                Language.English,
+                NoPreferredWordScore,
+                new QualityModel(Quality.WEBDL1080p, new Revision(version: 2)),
+                NoPreferredWordScore).Should().BeTrue();
+        }
     }
 }

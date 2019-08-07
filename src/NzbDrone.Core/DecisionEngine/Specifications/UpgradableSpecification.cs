@@ -87,14 +87,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public bool QualityCutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
-            var qualityCompare = new QualityModelComparer(profile).Compare(currentQuality.Quality.Id, profile.Cutoff);
+            var cutoffCompare = new QualityModelComparer(profile).Compare(currentQuality.Quality.Id, profile.Cutoff);
 
-            if (qualityCompare < 0)
+            if (cutoffCompare < 0)
             {
                 return true;
             }
 
-            if (qualityCompare == 0 && newQuality != null && IsRevisionUpgrade(currentQuality, newQuality))
+            if (newQuality != null && IsRevisionUpgrade(currentQuality, newQuality))
             {
                 return true;
             }
