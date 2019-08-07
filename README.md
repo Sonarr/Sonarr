@@ -20,7 +20,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ### Requirements
 
-* [Visual Studio 2017] (https://www.visualstudio.com/vs/)
+* [Visual Studio 2017](https://www.visualstudio.com/vs/)
 * [Git](https://git-scm.com/downloads)
 * [NodeJS](https://nodejs.org/en/download/)
 * [Yarn](https://yarnpkg.com/)
