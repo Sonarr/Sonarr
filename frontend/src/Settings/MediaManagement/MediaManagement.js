@@ -316,6 +316,7 @@ class MediaManagement extends Component {
                       type={inputTypes.PATH}
                       name="recycleBin"
                       helpText="Episode files will go here when deleted instead of being permanently deleted"
+                      helpTextWarning="Files in the recycle bin older than a week will be cleaned up automatically"
                       onChange={onInputChange}
                       {...settings.recycleBin}
                     />
