@@ -18,8 +18,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         private Mock<IAugmentQuality> _fileExtensionAugmenter;
         private Mock<IAugmentQuality> _nameAugmenter;
 
-        private IEnumerable<IAugmentQuality> _qualityAugmenters;
-
         [SetUp]
         public void Setup()
         {

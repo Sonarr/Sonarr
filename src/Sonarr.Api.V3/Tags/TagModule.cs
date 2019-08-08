@@ -17,14 +17,14 @@ namespace Sonarr.Api.V3.Tags
         {
             _tagService = tagService;
 
-            GetResourceById = Get;
+            GetResourceById = GetTag;
             GetResourceAll = GetAll;
             CreateResource = Create;
             UpdateResource = Update;
-            DeleteResource = Delete;
+            DeleteResource = DeleteTag;
         }
 
-        private TagResource Get(int id)
+        private TagResource GetTag(int id)
         {
             return _tagService.GetTag(id).ToResource();
         }
@@ -44,7 +44,7 @@ namespace Sonarr.Api.V3.Tags
             _tagService.Update(resource.ToModel());
         }
 
-        private void Delete(int id)
+        private void DeleteTag(int id)
         {
             _tagService.Delete(id);
         }

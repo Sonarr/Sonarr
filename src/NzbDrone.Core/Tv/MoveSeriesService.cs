@@ -5,7 +5,6 @@ using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
 
@@ -17,7 +16,6 @@ namespace NzbDrone.Core.Tv
         private readonly IBuildFileNames _filenameBuilder;
         private readonly IDiskProvider _diskProvider;
         private readonly IDiskTransferService _diskTransferService;
-        private readonly IRootFolderService _rootFolderService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
