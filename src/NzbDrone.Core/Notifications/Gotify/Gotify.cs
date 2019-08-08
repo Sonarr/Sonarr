@@ -29,6 +29,11 @@ namespace NzbDrone.Core.Notifications.Gotify
             _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
         }
 
+        public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
+        {
+            _proxy.SendNotification(HEALTH_ISSUE_TITLE, healthCheck.Message, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
