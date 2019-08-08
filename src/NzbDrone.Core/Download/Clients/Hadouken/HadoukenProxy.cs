@@ -21,7 +21,6 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
     public class HadoukenProxy : IHadoukenProxy
     {
-        private static int _callId;
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
@@ -147,7 +146,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             }
             catch(Exception ex)
             {
-                _logger.ErrorException("Failed to map Hadouken torrent data.", ex);
+                _logger.Error(ex, "Failed to map Hadouken torrent data.");
             }
 
             return torrent;

@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.TvTests
         private List<Episode> _deletedEpisodes;
         private Tuple<Series, List<Episode>> _gameOfThrones;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixture()
         {
             UseRealHttp();

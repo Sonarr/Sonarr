@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Extras.Metadata
                         {
                             _aggregationService.Augment(localEpisode, false);
                         }
-                        catch (AugmentingFailedException ex)
+                        catch (AugmentingFailedException)
                         {
                             _logger.Debug("Unable to parse extra file: {0}", possibleMetadataFile);
                             continue;

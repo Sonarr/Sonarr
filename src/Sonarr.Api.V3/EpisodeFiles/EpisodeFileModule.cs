@@ -23,7 +23,6 @@ namespace Sonarr.Api.V3.EpisodeFiles
     {
         private readonly IMediaFileService _mediaFileService;
         private readonly IDeleteMediaFiles _mediaFileDeletionService;
-        private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly ISeriesService _seriesService;
         private readonly IUpgradableSpecification _upgradableSpecification;
 

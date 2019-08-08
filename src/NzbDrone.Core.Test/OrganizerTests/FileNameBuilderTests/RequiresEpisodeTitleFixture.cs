@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -14,7 +13,6 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
     {
         private Series _series;
         private Episode _episode;
-        private EpisodeFile _episodeFile;
         private NamingConfig _namingConfig;
 
         [SetUp]

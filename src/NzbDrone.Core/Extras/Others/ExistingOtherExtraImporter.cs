@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Extras.Others
                 {
                     _aggregationService.Augment(localEpisode, false);
                 }
-                catch (AugmentingFailedException ex)
+                catch (AugmentingFailedException)
                 {
                     _logger.Debug("Unable to parse extra file: {0}", possibleExtraFile);
                     continue;

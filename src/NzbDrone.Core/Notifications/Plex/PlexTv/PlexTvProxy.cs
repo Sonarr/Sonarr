@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
             {
                 throw new NzbDroneClientException(ex.Response.StatusCode, "Unable to connect to plex.tv");
             }
-            catch (WebException ex)
+            catch (WebException)
             {
                 throw new NzbDroneClientException(HttpStatusCode.BadRequest, "Unable to connect to plex.tv");
             }

@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                     {
                         _aggregationService.Augment(localEpisode, false);
                     }
-                    catch (AugmentingFailedException ex)
+                    catch (AugmentingFailedException)
                     {
                         _logger.Debug("Unable to parse extra file: {0}", possibleSubtitleFile);
                         continue;
