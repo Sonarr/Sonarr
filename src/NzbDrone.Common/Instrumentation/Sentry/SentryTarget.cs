@@ -4,52 +4,123 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Data.SQLite;
 using NLog;
 using NLog.Common;
 using NLog.Targets;
 using NzbDrone.Common.EnvironmentInfo;
-using SharpRaven;
-using SharpRaven.Data;
+using Sentry;
+using Sentry.Protocol;
 
 namespace NzbDrone.Common.Instrumentation.Sentry
 {
     [Target("Sentry")]
     public class SentryTarget : TargetWithLayout
     {
-        private readonly RavenClient _client;
-
-        private static readonly IDictionary<LogLevel, ErrorLevel> LoggingLevelMap = new Dictionary<LogLevel, ErrorLevel>
-        {
-            {LogLevel.Debug, ErrorLevel.Debug},
-            {LogLevel.Error, ErrorLevel.Error},
-            {LogLevel.Fatal, ErrorLevel.Fatal},
-            {LogLevel.Info, ErrorLevel.Info},
-            {LogLevel.Trace, ErrorLevel.Debug},
-            {LogLevel.Warn, ErrorLevel.Warning},
+        // don't report uninformative SQLite exceptions
+        // busy/locked are benign https://forums.sonarr.tv/t/owin-sqlite-error-5-database-is-locked/5423/11
+        // The others will be user configuration problems and silt up Sentry
+        private static readonly HashSet<SQLiteErrorCode> FilteredSQLiteErrors = new HashSet<SQLiteErrorCode> {
+            SQLiteErrorCode.Busy,
+            SQLiteErrorCode.Locked,
+            SQLiteErrorCode.Perm,
+            SQLiteErrorCode.ReadOnly,
+            SQLiteErrorCode.IoErr,
+            SQLiteErrorCode.Corrupt,
+            SQLiteErrorCode.Full,
+            SQLiteErrorCode.CantOpen,
+            SQLiteErrorCode.Auth
         };
+
+        // use string and not Type so we don't need a reference to the project
+        // where these are defined
+        private static readonly HashSet<string> FilteredExceptionTypeNames = new HashSet<string> {
+            // UnauthorizedAccessExceptions will just be user configuration issues
+            "UnauthorizedAccessException",
+            // Filter out people stuck in boot loops
+            "CorruptDatabaseException",
+            // This also filters some people in boot loops
+            "TinyIoCResolutionException"
+        };
+
+        public static readonly List<string> FilteredExceptionMessages = new List<string> {
+            // Swallow the many, many exceptions flowing through from Jackett
+            "Jackett.Common.IndexerException"
+        };
+
+        // exception types in this list will additionally have the exception message added to the
+        // sentry fingerprint.  Make sure that this message doesn't vary by exception
+        // (e.g. containing a path or a url) so that the sentry grouping is sensible
+        private static readonly HashSet<string> IncludeExceptionMessageTypes = new HashSet<string> {
+            "SQLiteException"
+        };
+        
+        private static readonly IDictionary<LogLevel, SentryLevel> LoggingLevelMap = new Dictionary<LogLevel, SentryLevel>
+        {
+            {LogLevel.Debug, SentryLevel.Debug},
+            {LogLevel.Error, SentryLevel.Error},
+            {LogLevel.Fatal, SentryLevel.Fatal},
+            {LogLevel.Info, SentryLevel.Info},
+            {LogLevel.Trace, SentryLevel.Debug},
+            {LogLevel.Warn, SentryLevel.Warning},
+        };
+
+        private static readonly IDictionary<LogLevel, BreadcrumbLevel> BreadcrumbLevelMap = new Dictionary<LogLevel, BreadcrumbLevel>
+        {
+            {LogLevel.Debug, BreadcrumbLevel.Debug},
+            {LogLevel.Error, BreadcrumbLevel.Error},
+            {LogLevel.Fatal, BreadcrumbLevel.Critical},
+            {LogLevel.Info, BreadcrumbLevel.Info},
+            {LogLevel.Trace, BreadcrumbLevel.Debug},
+            {LogLevel.Warn, BreadcrumbLevel.Warning},
+        };
+
+        private readonly IDisposable _sdk;
+        private bool _disposed;
 
         private readonly SentryDebounce _debounce;
         private bool _unauthorized;
 
-
+        public bool FilterEvents { get; set; }
+        public string UpdateBranch { get; set; }
+        public Version DatabaseVersion { get; set; }
+        public int DatabaseMigration { get; set; }
+        
         public SentryTarget(string dsn)
         {
-            _client = new RavenClient(new Dsn(dsn), new SonarrJsonPacketFactory(), new SentryRequestFactory(), new MachineNameUserFactory())
-            {
-                Compression = true,
-                Environment = RuntimeInfo.IsProduction ? "production" : "development",
-                Release = BuildInfo.Release,
-                ErrorOnCapture = OnError
-            };
+            _sdk = SentrySdk.Init(o =>
+                                  {
+                                      o.Dsn = new Dsn(dsn);
+                                      o.AttachStacktrace = true;
+                                      o.MaxBreadcrumbs = 200;
+                                      o.SendDefaultPii = true;
+                                      o.Debug = false;
+                                      o.DiagnosticsLevel = SentryLevel.Debug;
+                                      o.Release = BuildInfo.Release;
+                                      o.BeforeSend = x => SentryCleanser.CleanseEvent(x);
+                                      o.BeforeBreadcrumb = x => SentryCleanser.CleanseBreadcrumb(x);
+                                  });
 
-
-            _client.Tags.Add("osfamily", OsInfo.Os.ToString());
-            _client.Tags.Add("runtime", PlatformInfo.PlatformName);
-            _client.Tags.Add("culture", Thread.CurrentThread.CurrentCulture.Name);
-            _client.Tags.Add("branch", BuildInfo.Branch);
-            _client.Tags.Add("version", BuildInfo.Version.ToString());
-
+            SentrySdk.ConfigureScope(scope =>
+                                     {
+                                         scope.User = new User {
+                                             Username = HashUtil.AnonymousToken()
+                                         };
+                                         
+                                         scope.SetTag("osfamily", OsInfo.Os.ToString());
+                                         scope.SetTag("runtime", PlatformInfo.PlatformName);
+                                         scope.SetTag("culture", Thread.CurrentThread.CurrentCulture.Name);
+                                         scope.SetTag("branch", BuildInfo.Branch);
+                                         scope.SetTag("version", BuildInfo.Version.ToString());
+                                         scope.SetTag("production", RuntimeInfo.IsProduction.ToString());
+                                     });
+            
             _debounce = new SentryDebounce();
+
+            // initialize to true and reconfigure later
+            // Otherwise it will default to false and any errors occuring
+            // before config file gets read will not be filtered
+            FilterEvents = true;
         }
 
         private void OnError(Exception ex)
@@ -79,28 +150,31 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
             var fingerPrint = new List<string>
             {
-                logEvent.Level.Ordinal.ToString(),
-                logEvent.LoggerName
+                logEvent.Level.ToString(),
+                logEvent.LoggerName,
+                logEvent.Message
             };
 
             var ex = logEvent.Exception;
 
             if (ex != null)
             {
-                var exception = ex.GetType().Name;
-
+                fingerPrint.Add(ex.GetType().FullName);
+                fingerPrint.Add(ex.TargetSite.ToString());
                 if (ex.InnerException != null)
                 {
-                    exception += ex.InnerException.GetType().Name;
+                    fingerPrint.Add(ex.InnerException.GetType().FullName);
                 }
-
-                fingerPrint.Add(exception);
+                else if (IncludeExceptionMessageTypes.Contains(ex.GetType().Name))
+                {
+                    fingerPrint.Add(ex?.Message);
+                }
             }
 
             return fingerPrint;
         }
 
-        private bool IsSentryMessage(LogEventInfo logEvent)
+        public bool IsSentryMessage(LogEventInfo logEvent)
         {
             if (logEvent.Properties.ContainsKey("Sentry"))
             {
@@ -109,6 +183,24 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
             if (logEvent.Level >= LogLevel.Error && logEvent.Exception != null)
             {
+                if (FilterEvents)
+                {
+                    if (logEvent.Exception is SQLiteException sqliteException && FilteredSQLiteErrors.Contains(sqliteException.ResultCode))
+                    {
+                        return false;
+                    }
+
+                    if (FilteredExceptionTypeNames.Contains(logEvent.Exception.GetType().Name))
+                    {
+                        return false;
+                    }
+                    
+                    if (FilteredExceptionMessages.Any(x => logEvent.Exception.Message.Contains(x)))
+                    {
+                        return false;
+                    }
+                }
+
                 return true;
             }
 
@@ -125,6 +217,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
             try
             {
+                SentrySdk.AddBreadcrumb(logEvent.FormattedMessage, logEvent.LoggerName, level: BreadcrumbLevelMap[logEvent.Level]);
+
                 // don't report non-critical events without exceptions
                 if (!IsSentryMessage(logEvent))
                 {
@@ -137,9 +231,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     return;
                 }
 
-                var extras = logEvent.Properties.ToDictionary(x => x.Key.ToString(), x => x.Value.ToString());
+                var extras = logEvent.Properties.ToDictionary(x => x.Key.ToString(), x => (object)x.Value.ToString());
                 extras.Remove("Sentry");
-                _client.Logger = logEvent.LoggerName;
 
                 if (logEvent.Exception != null)
                 {
@@ -149,46 +242,58 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     }
                 }
 
-                var sentryMessage = new SentryMessage(logEvent.Message, logEvent.Parameters);
-
                 var sentryEvent = new SentryEvent(logEvent.Exception)
                 {
                     Level = LoggingLevelMap[logEvent.Level],
-                    Message = sentryMessage,
-                    Extra = extras,
-                    Fingerprint =
-                    {
-                        logEvent.Level.ToString(),
-                        logEvent.LoggerName,
-                        logEvent.Message
-                    }
+                    Logger = logEvent.LoggerName,
+                    Message = logEvent.FormattedMessage,
+                    Environment = UpdateBranch
                 };
 
-                if (logEvent.Exception != null)
-                {
-                    sentryEvent.Fingerprint.Add(logEvent.Exception.GetType().FullName);
-                }
+                sentryEvent.SetExtras(extras);
+                sentryEvent.SetFingerprint(fingerPrint);
 
-                if (logEvent.Properties.ContainsKey("Sentry"))
-                {
-                    sentryEvent.Fingerprint.Clear();
-                    Array.ForEach((string[])logEvent.Properties["Sentry"], sentryEvent.Fingerprint.Add);
-                }
-
+                // this can't be in the constructor as at that point OsInfo won't have
+                // populated these values yet
                 var osName = Environment.GetEnvironmentVariable("OS_NAME");
                 var osVersion = Environment.GetEnvironmentVariable("OS_VERSION");
                 var runTimeVersion = Environment.GetEnvironmentVariable("RUNTIME_VERSION");
 
-                sentryEvent.Tags.Add("os_name", osName);
-                sentryEvent.Tags.Add("os_version", $"{osName} {osVersion}");
-                sentryEvent.Tags.Add("runtime_version", $"{PlatformInfo.PlatformName} {runTimeVersion}");
+                sentryEvent.SetTag("os_name", osName);
+                sentryEvent.SetTag("os_version", $"{osName} {osVersion}");
+                sentryEvent.SetTag("runtime_version", $"{PlatformInfo.PlatformName} {runTimeVersion}");
+                if (DatabaseVersion != default(Version))
+                {
+                    sentryEvent.SetTag("sqlite_version", $"{DatabaseVersion}");
+                }
 
-                _client.Capture(sentryEvent);
+                SentrySdk.CaptureEvent(sentryEvent);
             }
             catch (Exception e)
             {
                 OnError(e);
             }
+        }
+
+        // https://stackoverflow.com/questions/2496311/implementing-idisposable-on-a-subclass-when-the-parent-also-implements-idisposab
+        protected override void Dispose(bool disposing)
+        {
+            // Only do something if we're not already disposed
+            if (_disposed)
+            {
+                // If disposing == true, we're being called from a call to base.Dispose().  In this case, we Dispose() our logger
+                // If we're being called from a finalizer, our logger will get finalized as well, so no need to do anything.
+                if (disposing)
+                {
+                    _sdk?.Dispose();
+                }
+                // Flag us as disposed.  This allows us to handle multiple calls to Dispose() as well as ObjectDisposedException
+                _disposed = true;
+            }
+
+            // This should always be safe to call multiple times!
+            // We could include it in the check for disposed above, but I left it out to demonstrate that it's safe
+            base.Dispose(disposing);
         }
     }
 }

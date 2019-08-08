@@ -7,7 +7,7 @@
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NLog" Version="4.6.6" />
-    <PackageReference Include="SharpRaven" Version="2.4.0" />
+    <PackageReference Include="Sentry" Version="1.2.0" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
@@ -17,6 +17,9 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <ItemGroup>

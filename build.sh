@@ -196,9 +196,9 @@ PackageMono()
     echo "Adding CurlSharp.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Common/CurlSharp.dll.config $outputFolderLinux
 
-    echo "Adding unix System.Runtime.InteropServices.RuntimeInformation.dll (for SharpRaven)"
-    cp $sourceFolder/packages/System.Runtime.InteropServices.RuntimeInformation.4.3.0/runtimes/unix/lib/netstandard1.1/System.Runtime.InteropServices.RuntimeInformation.dll $outputFolderLinux
-    cp $sourceFolder/packages/System.Runtime.InteropServices.RuntimeInformation.4.3.0/runtimes/unix/lib/netstandard1.1/System.Runtime.InteropServices.RuntimeInformation.dll $outputFolderLinux/Sonarr.Update
+    # Is blacklisted by mono from loading from appdir, instead loading from mono GAC.
+    echo "Remove System.Runtime.InteropServices.RuntimeInformation.dll (uses win32 interop)"
+    rm $outputFolderLinux/System.Runtime.InteropServices.RuntimeInformation.dll
 
     echo "Renaming Sonarr.Console.exe to Sonarr.exe"
     rm $outputFolderLinux/Sonarr.exe*
