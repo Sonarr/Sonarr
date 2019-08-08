@@ -28,6 +28,11 @@ namespace NzbDrone.Core.Notifications.Prowl
             _prowlService.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
+        public override void OnHealthIssue(HealthCheck.HealthCheck message)
+        {
+            _prowlService.SendNotification(HEALTH_ISSUE_TITLE, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

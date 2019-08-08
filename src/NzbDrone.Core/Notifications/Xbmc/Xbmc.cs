@@ -41,6 +41,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(series);
         }
 
+        public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
+        {
+            Notify(Settings, HEALTH_ISSUE_TITLE_BRANDED, healthCheck.Message);
+        }
+
         public override string Name => "Kodi";
 
         public override ValidationResult Test()

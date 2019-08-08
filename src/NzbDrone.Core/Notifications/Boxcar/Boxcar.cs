@@ -26,6 +26,11 @@ namespace NzbDrone.Core.Notifications.Boxcar
             _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE , message.Message, Settings);
         }
 
+        public override void OnHealthIssue(HealthCheck.HealthCheck message)
+        {
+            _proxy.SendNotification(HEALTH_ISSUE_TITLE, message.Message, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

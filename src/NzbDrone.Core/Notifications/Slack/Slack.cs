@@ -70,6 +70,23 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
+        {
+            var attachments = new List<Attachment>
+                              {
+                                  new Attachment
+                                  {
+                                      Title = healthCheck.Source.Name,
+                                      Text = healthCheck.Message,
+                                      Color = healthCheck.Type == HealthCheck.HealthCheckResult.Warning ? "warning" : "danger"
+                                  }
+                              };
+
+            var payload = CreatePayload("Health Issue", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
