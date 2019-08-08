@@ -48,10 +48,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     if (!fileReleaseGroup.Equals(releaseGroup, StringComparison.InvariantCultureIgnoreCase))
                     {
                         _logger.Debug(
-                            "Release is a repack for a different release group. Release Group: {0}. File release group: {0}",
+                            "Release is a repack for a different release group. Release Group: {0}. File release group: {1}",
                             releaseGroup, fileReleaseGroup);
                         return Decision.Reject(
-                            "Release is a repack for a different release group. Release Group: {0}. File release group: {0}",
+                            "Release is a repack for a different release group. Release Group: {0}. File release group: {1}",
                             releaseGroup, fileReleaseGroup);
                     }
                 }
