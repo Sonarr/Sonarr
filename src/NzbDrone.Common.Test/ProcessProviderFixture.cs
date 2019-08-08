@@ -13,7 +13,7 @@ using NzbDrone.Test.Dummy;
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class ProcessProviderTests : TestBase<ProcessProvider>
+    public class ProcessProviderFixture : TestBase<ProcessProvider>
     {
 
         [SetUp]
@@ -78,6 +78,7 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
+        [Explicit]
         public void Should_be_able_to_start_powershell()
         {
             WindowsOnly();
