@@ -64,6 +64,7 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        [Retry(5)]
         public void MoveFile_should_overwrite_existing_file()
         {
             var source1 = GetTempFilePath();
