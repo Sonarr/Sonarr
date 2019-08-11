@@ -20,7 +20,12 @@
   height: 250px;
 }
 
+.content {
+  flex: 0 1 100%;
+}
+
 .title {
+  display: flex;
   font-weight: 300;
   font-size: 36px;
 }
@@ -28,6 +33,18 @@
 .year {
   margin-left: 10px;
   color: $disabledColor;
+}
+
+.tvdbLink {
+  composes: link from '~Components/Link/Link.css';
+
+  margin-top: -4px;
+  margin-left: auto;
+  color: $textColor;
+}
+
+.tvdbLinkIcon {
+  margin-left: 10px;
 }
 
 .alreadyExistsIcon {

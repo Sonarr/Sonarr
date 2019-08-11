@@ -1,6 +1,7 @@
 const sonarrBlue = '#35c5f4';
 
 module.exports = {
+  textColor: '#515253',
   defaultColor: '#333',
   disabledColor: '#999',
   dimColor: '#555',

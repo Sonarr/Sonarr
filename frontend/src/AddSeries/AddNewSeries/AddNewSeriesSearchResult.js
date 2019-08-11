@@ -39,6 +39,10 @@ class AddNewSeriesSearchResult extends Component {
     this.setState({ isNewAddSeriesModalOpen: false });
   }
 
+  onTVDBLinkPress = (event) => {
+    event.stopPropagation();
+  }
+
   //
   // Render
 
@@ -89,7 +93,7 @@ class AddNewSeriesSearchResult extends Component {
               />
           }
 
-          <div>
+          <div className={styles.content}>
             <div className={styles.title}>
               {title}
 
@@ -111,6 +115,18 @@ class AddNewSeriesSearchResult extends Component {
                   /> :
                   null
               }
+
+              <Link
+                className={styles.tvdbLink}
+                to={`http://www.thetvdb.com/?tab=series&id=${tvdbId}`}
+                onPress={this.onTVDBLinkPress}
+              >
+                <Icon
+                  className={styles.tvdbLinkIcon}
+                  name={icons.EXTERNAL_LINK}
+                  size={28}
+                />
+              </Link>
             </div>
 
             <div>
