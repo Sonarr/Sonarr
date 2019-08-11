@@ -94,6 +94,12 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("RecycleBin", value); }
         }
 
+        public int RecycleBinCleanupDays
+        {
+            get { return GetValueInt("RecycleBinCleanupDays", 7); }
+            set { SetValue("RecycleBinCleanupDays", value); }
+        }
+
         public int RssSyncInterval
         {
             get { return GetValueInt("RssSyncInterval", 15); }

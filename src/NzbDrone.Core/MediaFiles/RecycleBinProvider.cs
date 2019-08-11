@@ -157,11 +157,19 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            _logger.Info("Removing items older than 7 days from the recycling bin");
+            var cleanupDays = _configService.RecycleBinCleanupDays;
+
+            if (cleanupDays == 0)
+            {
+                _logger.Info("Automatic cleanup of Recycle Bin is disabled");
+                return;
+            }
+
+            _logger.Info("Removing items older than {0} days from the recycling bin", cleanupDays);
 
             foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.AllDirectories))
             {
-                if (_diskProvider.FileGetLastWrite(file).AddDays(7) > DateTime.UtcNow)
+                if (_diskProvider.FileGetLastWrite(file).AddDays(cleanupDays) > DateTime.UtcNow)
                 {
                     _logger.Debug("File hasn't expired yet, skipping: {0}", file);
                     continue;

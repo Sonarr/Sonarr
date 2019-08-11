@@ -316,9 +316,25 @@ class MediaManagement extends Component {
                       type={inputTypes.PATH}
                       name="recycleBin"
                       helpText="Episode files will go here when deleted instead of being permanently deleted"
-                      helpTextWarning="Files in the recycle bin older than a week will be cleaned up automatically"
                       onChange={onInputChange}
                       {...settings.recycleBin}
+                    />
+                  </FormGroup>
+
+                  <FormGroup
+                    advancedSettings={advancedSettings}
+                    isAdvanced={true}
+                  >
+                    <FormLabel>Recycling Bin Cleanup</FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.NUMBER}
+                      name="recycleBinCleanupDays"
+                      helpText="Set to 0 to disable automatic cleanup"
+                      helpTextWarning="Files in the recycle bin older than the selected number of days will be cleaned up automatically"
+                      min={0}
+                      onChange={onInputChange}
+                      {...settings.recycleBinCleanupDays}
                     />
                   </FormGroup>
                 </FieldSet>
