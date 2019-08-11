@@ -10,6 +10,7 @@ namespace NzbDrone.Common.Test.DiskTests
     public abstract class DiskProviderFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
     {
         [Test]
+        [Retry(5)]
         public void directory_exist_should_be_able_to_find_existing_folder()
         {
             Subject.FolderExists(TempFolder).Should().BeTrue();
@@ -43,6 +44,7 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        [Retry(5)]
         public void FolderWritable_should_return_false_for_unwritable_directory()
         {
             var tempFolder = GetTempFilePath();
@@ -122,6 +124,7 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        [Retry(5)]
         public void empty_folder_should_return_folder_modified_date()
         {
             var tempfolder = new DirectoryInfo(TempFolder);
