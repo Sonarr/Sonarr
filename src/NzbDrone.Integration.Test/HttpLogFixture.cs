@@ -9,6 +9,7 @@ namespace NzbDrone.Integration.Test
     public class HttpLogFixture : IntegrationTest
     {
         [Test]
+        [Retry(5)]
         public void should_log_on_error()
         {
             var config = HostConfig.Get(1);
