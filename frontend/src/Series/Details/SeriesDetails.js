@@ -23,6 +23,7 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import EpisodeFileEditorModal from 'EpisodeFile/Editor/EpisodeFileEditorModal';
+import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
 import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileNameConnector';
 import SeriesPoster from 'Series/SeriesPoster';
@@ -34,7 +35,6 @@ import SeriesDetailsSeasonConnector from './SeriesDetailsSeasonConnector';
 import SeriesTagsConnector from './SeriesTagsConnector';
 import SeriesDetailsLinks from './SeriesDetailsLinks';
 import styles from './SeriesDetails.css';
-import InteractiveImportModal from '../../InteractiveImport/InteractiveImportModal';
 
 const defaultFontSize = parseInt(fonts.defaultFontSize);
 const lineHeight = parseFloat(fonts.lineHeight);
@@ -638,6 +638,7 @@ class SeriesDetails extends Component {
 
           <InteractiveImportModal
             isOpen={isInteractiveImportModalOpen}
+            seriesId={id}
             folder={path}
             allowSeriesChange={false}
             showFilterExistingFiles={true}

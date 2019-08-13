@@ -27,8 +27,9 @@ namespace Sonarr.Api.V3.ManualImport
             var folder = (string)Request.Query.folder;
             var downloadId = (string)Request.Query.downloadId;
             var filterExistingFiles = Request.GetBooleanQueryParameter("filterExistingFiles", true);
+            var seriesId = Request.GetNullableIntegerQueryParameter("seriesId", null);
 
-            return _manualImportService.GetMediaFiles(folder, downloadId, filterExistingFiles).ToResource().Select(AddQualityWeight).ToList();
+            return _manualImportService.GetMediaFiles(folder, downloadId, seriesId, filterExistingFiles).ToResource().Select(AddQualityWeight).ToList();
         }
 
         private Response ReprocessItems()

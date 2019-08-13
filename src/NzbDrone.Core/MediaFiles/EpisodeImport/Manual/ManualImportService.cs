@@ -20,7 +20,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 {
     public interface IManualImportService
     {
-        List<ManualImportItem> GetMediaFiles(string path, string downloadId, bool filterExistingFiles);
+        List<ManualImportItem> GetMediaFiles(string path, string downloadId, int? seriesId, bool filterExistingFiles);
         ManualImportItem ReprocessItem(string path, string downloadId, int seriesId);
     }
 
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             _logger = logger;
         }
 
-        public List<ManualImportItem> GetMediaFiles(string path, string downloadId, bool filterExistingFiles)
+        public List<ManualImportItem> GetMediaFiles(string path, string downloadId, int? seriesId, bool filterExistingFiles)
         {
             if (downloadId.IsNotNullOrWhiteSpace())
             {
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 return new List<ManualImportItem> { ProcessFile(rootFolder, rootFolder, path, downloadId) };
             }
 
-            return ProcessFolder(path, path, downloadId, filterExistingFiles);
+            return ProcessFolder(path, path, downloadId, seriesId, filterExistingFiles);
         }
 
         public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId)
@@ -102,11 +102,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return ProcessFile(rootFolder, rootFolder, path, downloadId, series);
         }
 
-        private List<ManualImportItem> ProcessFolder(string rootFolder, string baseFolder, string downloadId, bool filterExistingFiles)
+        private List<ManualImportItem> ProcessFolder(string rootFolder, string baseFolder, string downloadId, int? seriesId, bool filterExistingFiles)
         {
             DownloadClientItem downloadClientItem = null;
             var directoryInfo = new DirectoryInfo(baseFolder);
-            var series = _parsingService.GetSeries(directoryInfo.Name);
+
+            var series = seriesId.HasValue ?
+                _seriesService.GetSeries(seriesId.Value) :
+                _parsingService.GetSeries(directoryInfo.Name);
 
             if (downloadId.IsNotNullOrWhiteSpace())
             {
@@ -119,20 +122,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 }
             }
 
-            // Try a lookup by the path if the series is still unknown, this will handle
-            // the case where the series folder doesn't match the series title.
-            if (series == null)
-            {
-                series = _seriesService.FindByPath(rootFolder);
-            }
-
             if (series == null)
             {
                 var files = _diskScanService.FilterFiles(baseFolder, _diskScanService.GetVideoFiles(baseFolder, false));
                 var subfolders = _diskScanService.FilterFiles(baseFolder, _diskProvider.GetDirectories(baseFolder));
 
                 var processedFiles = files.Select(file => ProcessFile(rootFolder, baseFolder, file, downloadId));
-                var processedFolders = subfolders.SelectMany(subfolder => ProcessFolder(rootFolder, subfolder, downloadId, filterExistingFiles));
+                var processedFolders = subfolders.SelectMany(subfolder => ProcessFolder(rootFolder, subfolder, downloadId, null, filterExistingFiles));
 
                 return processedFiles.Concat(processedFolders).Where(i => i != null).ToList();
             }

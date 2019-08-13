@@ -66,5 +66,17 @@ namespace Sonarr.Http.Extensions
 
             return defaultValue;
         }
+
+        public static int? GetNullableIntegerQueryParameter(this Request request, string parameter, int? defaultValue = null)
+        {
+            var parameterValue = request.Query[parameter];
+
+            if (parameterValue.HasValue)
+            {
+                return int.Parse(parameterValue.Value);
+            }
+
+            return defaultValue;
+        }
     }
 }

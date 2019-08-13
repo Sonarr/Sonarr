@@ -28,7 +28,9 @@ namespace NzbDrone.Api.ManualImport
             var downloadId = (string)downloadIdQuery.Value;
             var filterExistingFiles = Request.GetBooleanQueryParameter("filterExistingFiles", true);
 
-            return _manualImportService.GetMediaFiles(folder, downloadId, filterExistingFiles).ToResource().Select(AddQualityWeight).ToList();
+            return _manualImportService.GetMediaFiles(folder, downloadId, null, filterExistingFiles)
+                                       .ToResource()
+                                       .Select(AddQualityWeight).ToList();
         }
 
         private ManualImportResource AddQualityWeight(ManualImportResource item)
