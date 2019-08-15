@@ -6,6 +6,12 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 
+const logLevelOptions = [
+  { key: 'info', value: 'Info' },
+  { key: 'debug', value: 'Debug' },
+  { key: 'trace', value: 'Trace' }
+];
+
 function LoggingSettings(props) {
   const {
     settings,
@@ -15,12 +21,6 @@ function LoggingSettings(props) {
   const {
     logLevel
   } = settings;
-
-  const logLevelOptions = [
-    { key: 'info', value: 'Info' },
-    { key: 'debug', value: 'Debug' },
-    { key: 'trace', value: 'Trace' }
-  ];
 
   return (
     <FieldSet legend="Logging">

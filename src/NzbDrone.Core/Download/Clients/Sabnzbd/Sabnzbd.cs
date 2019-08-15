@@ -51,18 +51,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private IEnumerable<DownloadClientItem> GetQueue()
         {
-            SabnzbdQueue sabQueue;
-
-            try
-            {
-                sabQueue = _proxy.GetQueue(0, 0, Settings);
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.Warn(ex, "Couldn't get download queue. {0}", ex.Message);
-                return Enumerable.Empty<DownloadClientItem>();
-            }
-
+            var sabQueue = _proxy.GetQueue(0, 0, Settings);
             var queueItems = new List<DownloadClientItem>();
 
             foreach (var sabQueueItem in sabQueue.Items)

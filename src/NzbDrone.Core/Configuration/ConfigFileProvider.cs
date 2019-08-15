@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Configuration
 
         public string Branch => GetValue("Branch", "master").ToLowerInvariant();
 
-        public string LogLevel => GetValue("LogLevel", "Info");
+        public string LogLevel => GetValue("LogLevel", "info");
         public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
 
         public string SslCertHash => GetValue("SslCertHash", "");
