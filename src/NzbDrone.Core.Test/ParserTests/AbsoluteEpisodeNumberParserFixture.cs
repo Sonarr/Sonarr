@@ -131,6 +131,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[HorribleSubs] Haikyuu!! (01-25) [1080p] (Batch)", "Haikyuu!!", new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 })]
         [TestCase("Hunter X Hunter (2011) Episode 99-100 [1080p] [Dual.Audio] [x265]", "Hunter X Hunter (2011)", new[] { 99, 100 })]
         [TestCase("Twin Star Exorcists 1-13 (English Dub) [720p]", "Twin Star Exorcists", new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 })]
+        [TestCase("Series.Title.Ep01-12.Complete.English.AC3.DL.1080p.BluRay.x264", "Series Title", new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 })]
 //        [TestCase("", "", new[] { 0 })]
         public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int[] absoluteEpisodeNumbers)
         {
