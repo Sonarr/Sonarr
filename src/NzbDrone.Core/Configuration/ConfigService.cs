@@ -196,6 +196,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SkipFreeSpaceCheckWhenImporting", value); }
         }
 
+        public int MinimumFreeSpaceWhenImporting
+        {
+            get { return GetValueInt("MinimumFreeSpaceWhenImporting", 100); }
+
+            set { SetValue("MinimumFreeSpaceWhenImporting", value); }
+        }
+
         public bool CopyUsingHardlinks
         {
             get { return GetValueBoolean("CopyUsingHardlinks", true); }

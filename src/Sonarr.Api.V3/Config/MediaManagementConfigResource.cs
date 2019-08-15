@@ -25,6 +25,7 @@ namespace Sonarr.Api.V3.Config
 
         public EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
         public bool SkipFreeSpaceCheckWhenImporting { get; set; }
+        public int MinimumFreeSpaceWhenImporting { get; set; }
         public bool CopyUsingHardlinks { get; set; }
         public bool ImportExtraFiles { get; set; }
         public string ExtraFileExtensions { get; set; }
@@ -54,6 +55,7 @@ namespace Sonarr.Api.V3.Config
 
                 EpisodeTitleRequired = model.EpisodeTitleRequired,
                 SkipFreeSpaceCheckWhenImporting = model.SkipFreeSpaceCheckWhenImporting,
+                MinimumFreeSpaceWhenImporting = model.MinimumFreeSpaceWhenImporting,
                 CopyUsingHardlinks = model.CopyUsingHardlinks,
                 ImportExtraFiles = model.ImportExtraFiles,
                 ExtraFileExtensions = model.ExtraFileExtensions,

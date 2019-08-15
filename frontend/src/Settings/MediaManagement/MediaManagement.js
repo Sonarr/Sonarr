@@ -170,6 +170,23 @@ class MediaManagement extends Component {
                         isAdvanced={true}
                         size={sizes.MEDIUM}
                       >
+                        <FormLabel>Minimum Free Space</FormLabel>
+
+                        <FormInputGroup
+                          type={inputTypes.NUMBER}
+                          unit='MB'
+                          name="minimumFreeSpaceWhenImporting"
+                          helpText="Prevent import if it would leave less than this amount of disk space available"
+                          onChange={onInputChange}
+                          {...settings.minimumFreeSpaceWhenImporting}
+                        />
+                      </FormGroup>
+
+                      <FormGroup
+                        advancedSettings={advancedSettings}
+                        isAdvanced={true}
+                        size={sizes.MEDIUM}
+                      >
                         <FormLabel>Use Hardlinks instead of Copy</FormLabel>
 
                         <FormInputGroup
