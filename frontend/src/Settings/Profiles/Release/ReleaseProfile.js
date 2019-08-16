@@ -9,10 +9,6 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import EditReleaseProfileModalConnector from './EditReleaseProfileModalConnector';
 import styles from './ReleaseProfile.css';
 
-function sortPreferred(preferred) {
-  return preferred.slice().sort((a, b) => b.value - a.value);
-}
-
 class ReleaseProfile extends Component {
 
   //
@@ -22,18 +18,9 @@ class ReleaseProfile extends Component {
     super(props, context);
 
     this.state = {
-      sortedPreferred: sortPreferred(props.preferred),
       isEditReleaseProfileModalOpen: false,
       isDeleteReleaseProfileModalOpen: false
     };
-  }
-
-  componentDidUpdate(prevProps) {
-    const { preferred } = this.props;
-
-    if (prevProps.preferred !== preferred) {
-      this.setState({ sortedPreferred: sortPreferred(preferred) });
-    }
   }
 
   //
@@ -70,12 +57,12 @@ class ReleaseProfile extends Component {
       id,
       required,
       ignored,
+      preferred,
       tags,
       tagList
     } = this.props;
 
     const {
-      sortedPreferred,
       isEditReleaseProfileModalOpen,
       isDeleteReleaseProfileModalOpen
     } = this.state;
@@ -126,7 +113,7 @@ class ReleaseProfile extends Component {
 
         <div>
           {
-            sortedPreferred.map((item) => {
+            preferred.map((item) => {
               const isPreferred = item.value >= 0;
 
               return (

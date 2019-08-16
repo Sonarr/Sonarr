@@ -18,18 +18,24 @@ namespace NzbDrone.Core.Profiles.Releases
 
     public class ReleaseProfileService : IReleaseProfileService
     {
+        private readonly ReleaseProfilePreferredComparer _preferredComparer;
         private readonly IRestrictionRepository _repo;
         private readonly Logger _logger;
 
         public ReleaseProfileService(IRestrictionRepository repo, Logger logger)
         {
+            _preferredComparer = new ReleaseProfilePreferredComparer();
+
             _repo = repo;
             _logger = logger;
         }
 
         public List<ReleaseProfile> All()
         {
-            return _repo.All().ToList();
+            var all = _repo.All().ToList();
+            all.ForEach(r => r.Preferred.Sort(_preferredComparer));
+
+            return all;
         }
 
         public List<ReleaseProfile> AllForTag(int tagId)
@@ -54,11 +60,15 @@ namespace NzbDrone.Core.Profiles.Releases
 
         public ReleaseProfile Add(ReleaseProfile restriction)
         {
+            restriction.Preferred.Sort(_preferredComparer);
+
             return _repo.Insert(restriction);
         }
 
         public ReleaseProfile Update(ReleaseProfile restriction)
         {
+            restriction.Preferred.Sort(_preferredComparer);
+
             return _repo.Update(restriction);
         }
     }

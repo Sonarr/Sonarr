@@ -18,4 +18,12 @@ namespace NzbDrone.Core.Profiles.Releases
             Tags = new HashSet<int>();
         }
     }
+
+    public class ReleaseProfilePreferredComparer : IComparer<KeyValuePair<string, int>>
+    {
+        public int Compare(KeyValuePair<string, int> x, KeyValuePair<string, int> y)
+        {
+            return y.Value.CompareTo(x.Value);
+        }
+    }
 }
