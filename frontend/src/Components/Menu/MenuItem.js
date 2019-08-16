@@ -35,7 +35,7 @@ class MenuItem extends Component {
 MenuItem.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
-  isDisabled: PropTypes.node.isRequired
+  isDisabled: PropTypes.bool.isRequired
 };
 
 MenuItem.defaultProps = {
