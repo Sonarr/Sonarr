@@ -94,6 +94,7 @@ class SeriesIndexRow extends Component {
       added,
       statistics,
       latestSeason,
+      year,
       path,
       genres,
       ratings,
@@ -342,6 +343,17 @@ class SeriesIndexRow extends Component {
               );
             }
 
+            if (name === 'year') {
+              return (
+                <VirtualTableRowCell
+                  key={name}
+                  className={styles[name]}
+                >
+                  {year}
+                </VirtualTableRowCell>
+              );
+            }
+
             if (name === 'path') {
               return (
                 <VirtualTableRowCell
@@ -503,6 +515,7 @@ SeriesIndexRow.propTypes = {
   added: PropTypes.string,
   statistics: PropTypes.object.isRequired,
   latestSeason: PropTypes.object,
+  year: PropTypes.number,
   path: PropTypes.string.isRequired,
   genres: PropTypes.arrayOf(PropTypes.string).isRequired,
   ratings: PropTypes.object.isRequired,

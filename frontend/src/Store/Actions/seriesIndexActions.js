@@ -133,6 +133,12 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'year',
+      label: 'Year',
+      isSortable: true,
+      isVisible: false
+    },
+    {
       name: 'path',
       label: 'Path',
       isSortable: true,

@@ -66,6 +66,12 @@
   flex: 0 0 130px;
 }
 
+.year {
+  composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 80px;
+}
+
 .path {
   composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
 
