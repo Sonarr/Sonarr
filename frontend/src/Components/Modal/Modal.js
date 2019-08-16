@@ -33,6 +33,7 @@ class Modal extends Component {
     this._node = document.getElementById('portal-root');
     this._backgroundRef = null;
     this._modalId = getUniqueElememtId();
+    this._bodyScrollTop = 0;
   }
 
   componentDidMount() {
@@ -73,8 +74,8 @@ class Modal extends Component {
     if (openModals.length === 1) {
       if (isIOS()) {
         setScrollLock(true);
-        const offset = document.body.scrollTop;
-        document.body.style.top = `${offset * -1}px`;
+        const scrollTop = document.body.scrollTop;
+        this._bodyScrollTop = scrollTop;
         elementClass(document.body).add(styles.modalOpenIOS);
       } else {
         elementClass(document.body).add(styles.modalOpen);
@@ -90,9 +91,8 @@ class Modal extends Component {
       setScrollLock(false);
 
       if (isIOS()) {
-        const offset = parseInt(document.body.style.top);
         elementClass(document.body).remove(styles.modalOpenIOS);
-        document.body.scrollTop = (offset * -1);
+        document.body.scrollTop = this._bodyScrollTop;
       } else {
         elementClass(document.body).remove(styles.modalOpen);
       }

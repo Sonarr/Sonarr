@@ -39,6 +39,7 @@ class Menu extends Component {
 
     this._scheduleUpdate = null;
     this._menuButtonId = getUniqueElememtId();
+    this._menuContentId = getUniqueElememtId();
 
     this.state = {
       isMenuOpen: false,
@@ -99,12 +100,14 @@ class Menu extends Component {
     window.addEventListener('resize', this.onWindowResize);
     window.addEventListener('scroll', this.onWindowScroll, { capture: true });
     window.addEventListener('click', this.onWindowClick);
+    window.addEventListener('touchstart', this.onTouchStart);
   }
 
   _removeListener() {
     window.removeEventListener('resize', this.onWindowResize);
     window.removeEventListener('scroll', this.onWindowScroll, { capture: true });
     window.removeEventListener('click', this.onWindowClick);
+    window.removeEventListener('touchstart', this.onTouchStart);
   }
 
   //
@@ -118,6 +121,30 @@ class Menu extends Component {
     }
 
     if (!menuButton.contains(event.target) && this.state.isMenuOpen) {
+      this.setState({ isMenuOpen: false });
+      this._removeListener();
+    }
+  }
+
+  onTouchStart = (event) => {
+    const menuButton = document.getElementById(this._menuButtonId);
+    const menuContent = document.getElementById(this._menuContentId);
+
+    if (!menuButton || !menuContent) {
+      return;
+    }
+
+    if (event.targetTouches.length !== 1) {
+      return;
+    }
+
+    const target = event.targetTouches[0].target;
+
+    if (
+      !menuButton.contains(target) &&
+      !menuContent.contains(target) &&
+      this.state.isMenuOpen
+    ) {
       this.setState({ isMenuOpen: false });
       this._removeListener();
     }

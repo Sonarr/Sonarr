@@ -12,6 +12,7 @@ class MenuContent extends Component {
     const {
       forwardedRef,
       className,
+      id,
       children,
       style,
       isOpen
@@ -19,6 +20,7 @@ class MenuContent extends Component {
 
     return (
       <div
+        id={id}
         ref={forwardedRef}
         className={className}
         style={style}
@@ -38,6 +40,7 @@ class MenuContent extends Component {
 MenuContent.propTypes = {
   forwardedRef: PropTypes.func,
   className: PropTypes.string,
+  id: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   style: PropTypes.object,
   isOpen: PropTypes.bool
