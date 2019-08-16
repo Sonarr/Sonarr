@@ -8,9 +8,9 @@
     <PackageReference Include="FluentAssertions" Version="4.19.0" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="Moq" Version="4.0.10827" />
-    <PackageReference Include="NLog" Version="4.5.3" />
+    <PackageReference Include="NLog" Version="4.6.6" />
     <PackageReference Include="NUnit" Version="3.6.0" />
-    <PackageReference Include="RestSharp" Version="105.2.3" />
+    <PackageReference Include="RestSharp" Version="106.6.10" />
     <PackageReference Include="Unity" Version="2.1.505.2" />
   </ItemGroup>
   <ItemGroup>

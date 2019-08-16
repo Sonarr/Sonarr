@@ -9,7 +9,7 @@
     <PackageReference Include="Nancy" Version="1.4.4" />
     <PackageReference Include="Nancy.Authentication.Basic" Version="1.4.1" />
     <PackageReference Include="Nancy.Authentication.Forms" Version="1.4.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />

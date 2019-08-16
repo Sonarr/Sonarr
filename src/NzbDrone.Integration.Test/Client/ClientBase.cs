@@ -104,14 +104,14 @@ namespace NzbDrone.Integration.Test.Client
         public TResource Post(TResource body, HttpStatusCode statusCode = HttpStatusCode.Created)
         {
             var request = BuildRequest();
-            request.AddBody(body);
+            request.AddJsonBody(body);
             return Post<TResource>(request, statusCode);
         }
 
         public TResource Put(TResource body, HttpStatusCode statusCode = HttpStatusCode.Accepted)
         {
             var request = BuildRequest();
-            request.AddBody(body);
+            request.AddJsonBody(body);
             return Put<TResource>(request, statusCode);
         }
 
@@ -142,14 +142,14 @@ namespace NzbDrone.Integration.Test.Client
         public object InvalidPost(TResource body, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
         {
             var request = BuildRequest();
-            request.AddBody(body);
+            request.AddJsonBody(body);
             return Post<object>(request, statusCode);
         }
 
         public object InvalidPut(TResource body, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
         {
             var request = BuildRequest();
-            request.AddBody(body);
+            request.AddJsonBody(body);
             return Put<object>(request, statusCode);
         }
 

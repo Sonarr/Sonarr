@@ -8,7 +8,7 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.5.3" />
+    <PackageReference Include="NLog" Version="4.6.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogentriesCore\LogentriesCore.csproj" />

@@ -22,7 +22,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             body.Add("publishDate", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture));
 
             var request = ReleasePush.BuildRequest();
-            request.AddBody(body);
+            request.AddJsonBody(body);
             var result = ReleasePush.Post<ReleaseResource>(request, HttpStatusCode.OK);
 
             result.Should().NotBeNull();

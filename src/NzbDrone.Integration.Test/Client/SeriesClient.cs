@@ -14,15 +14,15 @@ namespace NzbDrone.Integration.Test.Client
 
         public List<SeriesResource> Lookup(string term)
         {
-            var request = BuildRequest("lookup?term={term}");
-            request.AddUrlSegment("term", term);
+            var request = BuildRequest("lookup");
+            request.AddQueryParameter("term", term);
             return Get<List<SeriesResource>>(request);
         }
 
         public List<SeriesResource> Editor(List<SeriesResource> series)
         {
             var request = BuildRequest("editor");
-            request.AddBody(series);
+            request.AddJsonBody(series);
             return Put<List<SeriesResource>>(request);
         }
 

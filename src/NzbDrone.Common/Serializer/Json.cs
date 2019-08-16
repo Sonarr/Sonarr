@@ -29,7 +29,7 @@ namespace NzbDrone.Common.Serializer
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            serializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            serializerSettings.Converters.Add(new StringEnumConverter { NamingStrategy = new CamelCaseNamingStrategy() });
             serializerSettings.Converters.Add(new VersionConverter());
             serializerSettings.Converters.Add(new HttpUriConverter());
 

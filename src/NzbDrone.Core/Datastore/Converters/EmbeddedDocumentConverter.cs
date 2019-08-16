@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Datastore.Converters
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            SerializerSetting.Converters.Add(new StringEnumConverter { NamingStrategy = new CamelCaseNamingStrategy() });
             SerializerSetting.Converters.Add(new VersionConverter());
 
             foreach (var converter in converters)

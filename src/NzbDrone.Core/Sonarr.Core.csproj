@@ -7,11 +7,11 @@
     <PackageReference Include="FluentMigrator.Runner" Version="1.6.2" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="ImageResizer" Version="3.4.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="NLog" Version="4.5.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NLog" Version="4.6.6" />
     <PackageReference Include="OAuth" Version="1.0.3" />
     <PackageReference Include="Prowlin" Version="0.9.4456.26422" />
-    <PackageReference Include="RestSharp" Version="105.2.3" />
+    <PackageReference Include="RestSharp" Version="106.6.10" />
     <PackageReference Include="TinyTwitter" Version="1.1.2" />
     <PackageReference Include="xmlrpcnet" Version="2.5.0" />
   </ItemGroup>
