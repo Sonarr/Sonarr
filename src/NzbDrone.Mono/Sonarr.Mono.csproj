@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <Platforms>x86</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.5.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\Libraries\Mono.Posix.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

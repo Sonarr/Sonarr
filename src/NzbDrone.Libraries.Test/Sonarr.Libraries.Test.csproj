@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net462</TargetFramework>
     <Platforms>x86</Platforms>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
+  </ItemGroup>
 </Project>

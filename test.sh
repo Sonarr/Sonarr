@@ -15,7 +15,7 @@ rm -f "$TEST_LOG_FILE"
 # Uncomment to log test output to a file instead of the console
 # export SONARR_TESTS_LOG_OUTPUT="File"
 
-NUNIT="$TEST_DIR/NUnit.ConsoleRunner.3.2.0/tools/nunit3-console.exe"
+NUNIT="$TEST_DIR/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe"
 NUNIT_COMMAND="$NUNIT"
 NUNIT_PARAMS="--teamcity --workers=1"
 

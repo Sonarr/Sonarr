@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net462</TargetFramework>
+    <Platforms>x86</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.5.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
+  </ItemGroup>
+</Project>

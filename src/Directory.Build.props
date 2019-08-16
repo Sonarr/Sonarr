@@ -1,0 +1,69 @@
+<Project>
+  <!-- Common to all Sonarr Projects -->
+  <PropertyGroup>
+    <SonarrRootDir>$(MSBuildThisFileDirectory)..\</SonarrRootDir>
+
+    <!-- Specifies the type of output -->
+    <SonarrOutputType>Library</SonarrOutputType>
+    <SonarrOutputType Condition="$(MSBuildProjectName.Contains('.Test'))">Test</SonarrOutputType>
+    <SonarrOutputType Condition="'$(MSBuildProjectName)'=='ServiceInstall'">Exe</SonarrOutputType>
+    <SonarrOutputType Condition="'$(MSBuildProjectName)'=='ServiceUninstall'">Exe</SonarrOutputType>
+    <SonarrOutputType Condition="'$(MSBuildProjectName)'=='Sonarr'">Exe</SonarrOutputType>
+    <SonarrOutputType Condition="'$(MSBuildProjectName)'=='Sonarr.Console'">Exe</SonarrOutputType>
+    <SonarrOutputType Condition="'$(MSBuildProjectName)'=='Sonarr.Update'">Update</SonarrOutputType>
+
+    <!-- Specifies whether it's one of our own libraries -->
+    <SonarrProject>false</SonarrProject>
+    <SonarrProject Condition="$(MSBuildProjectName.StartsWith('Sonarr'))">true</SonarrProject>
+    <SonarrProject Condition="$(MSBuildProjectName.StartsWith('ServiceInstall'))">true</SonarrProject>
+    <SonarrProject Condition="$(MSBuildProjectName.StartsWith('ServiceUninstall'))">true</SonarrProject>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Centralize intermediate and default outputs -->
+    <IntermediateOutputPath>$(SonarrRootDir)_temp\obj\$(Configuration)\$(MSBuildProjectName)\</IntermediateOutputPath>
+    <OutputPath>$(SonarrRootDir)_temp\bin\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
+
+    <!-- Output to _output and _tests respectively -->
+    <OutputPath Condition="'$(SonarrProject)'=='true'">$(SonarrRootDir)_output\</OutputPath>
+    <OutputPath Condition="'$(SonarrOutputType)'=='Test'">$(SonarrRootDir)_tests\</OutputPath>
+    <OutputPath Condition="'$(SonarrOutputType)'=='Update'">$(SonarrRootDir)_output\Sonarr.Update\</OutputPath>
+
+    <!-- Paths relative to project file for better readability -->
+    <IntermediateOutputPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)'))</IntermediateOutputPath>
+    <OutputPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)', '$(OutputPath)'))</OutputPath>
+
+    <!-- below net4.7.1 the new portable pdb format has no line numbers, pdb to mdb probably doesn't like it either -->
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
+  <!-- Test projects need bindingRedirects -->
+  <PropertyGroup Condition="'$(SonarrOutputType)'=='Test'">
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
+  <!-- Set the Product and Version info for our own projects -->
+  <PropertyGroup Condition="'$(SonarrProject)'=='true'">
+    <Product>Sonarr</Product>
+    <Company>sonarr.tv</Company>
+    <Copyright>Copyright 2014-$([System.DateTime]::Now.ToString('yyyy')) sonarr.tv (GNU General Public v3)</Copyright>
+    
+    <!-- Should be replaced by CI -->
+    <AssemblyVersion>10.0.0.*</AssemblyVersion>
+
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    
+    <Deterministic Condition="$(AssemblyVersion.EndsWith('*'))">False</Deterministic>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- We don't want separate framework directories till we go dotnet core -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!-- For now keep the NzbDrone namespace -->
+    <RootNamespace Condition="'$(SonarrProject)'=='true'">$(MSBuildProjectName.Replace('Sonarr','NzbDrone'))</RootNamespace>
+  </PropertyGroup>
+</Project>

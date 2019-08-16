@@ -10,7 +10,6 @@
     <PackageReference Include="Nancy.Authentication.Basic" Version="1.4.1" />
     <PackageReference Include="Nancy.Authentication.Forms" Version="1.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="NLog" Version="4.5.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />

@@ -4,13 +4,12 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.MediaCoverTests
 {
     [TestFixture]
-    public class ImageResizerFixture : CoreTest<ImageResizer>
+    public class ImageResizerFixture : CoreTest<MediaCover.ImageResizer>
     {
         [SetUp]
         public void SetUp()

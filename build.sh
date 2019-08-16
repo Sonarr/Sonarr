@@ -5,7 +5,6 @@ outputFolderLinux='./_output_linux'
 outputFolderMacOS='./_output_macos'
 outputFolderMacOSApp='./_output_macos_app'
 testPackageFolder='./_tests/'
-testSearchPattern='*.Test/bin/x86/Release'
 sourceFolder='./src'
 slnFile=$sourceFolder/Sonarr.sln
 updateFolder=$outputFolder/Sonarr.Update
@@ -47,7 +46,7 @@ UpdateVersionNumber()
         verBuild=`echo "${BUILD_NUMBER}" | cut -d. -f4`
         BUILD_NUMBER=$verMajorMinorRevision.$verBuild
         echo "##teamcity[buildNumber '$BUILD_NUMBER']"
-        sed -i "s/^[[]assembly: Assembly\(File\|Informational\)\?Version[(]\"[0-9.*]\+\"[)]/[assembly: Assembly\1Version(\"$BUILD_NUMBER\")/g" ./src/NzbDrone*/Properties/AssemblyInfo.cs ./src/Sonarr*/Properties/AssemblyInfo.cs ./src/ServiceHelpers/*/Properties/AssemblyInfo.cs ./src/Common/CommonVersionInfo.cs
+        sed -i "s/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$BUILD_NUMBER<\/AssemblyVersion>/g" ./src/Directory.Build.props
     fi
 }
 
@@ -122,6 +121,7 @@ Build()
     ProgressStart 'Build'
 
     rm -rf $outputFolder
+    rm -rf $testPackageFolder
 
     if [ $runtime = "dotnet" ] ; then
         BuildWithMSBuild
@@ -270,18 +270,12 @@ PackageTests()
 {
     ProgressStart 'Creating Test Package'
 
-    rm -rf $testPackageFolder
-    mkdir $testPackageFolder
-
-    find $sourceFolder -path $testSearchPattern -exec cp -r -u -T "{}" $testPackageFolder \;
-
     if [ $runtime = "dotnet" ] ; then
-        $nuget install NUnit.ConsoleRunner -Version 3.2.0 -Output $testPackageFolder
+        $nuget install NUnit.ConsoleRunner -Version 3.10.0 -Output $testPackageFolder
     else
-        mono $nuget install NUnit.ConsoleRunner -Version 3.2.0 -Output $testPackageFolder
+        mono $nuget install NUnit.ConsoleRunner -Version 3.10.0 -Output $testPackageFolder
     fi
 
-    cp $outputFolder/*.dll $testPackageFolder
     cp ./test.sh $testPackageFolder
 
     echo "Creating MDBs for tests"

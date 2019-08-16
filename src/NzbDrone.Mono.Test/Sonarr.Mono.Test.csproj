@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <Platforms>x86</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Common.Test\Sonarr.Common.Test.csproj" />
+    <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
+    <ProjectReference Include="..\NzbDrone.Mono\Sonarr.Mono.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\Libraries\Mono.Posix.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Files\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+</ItemGroup>
+</Project>

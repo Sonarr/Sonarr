@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <Platforms>x86</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Host\Sonarr.Host.csproj" />
+    <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
+    <ProjectReference Include="..\NzbDrone.Test.Dummy\Sonarr.Test.Dummy.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ExternalModules\CurlSharp\libs\i386\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

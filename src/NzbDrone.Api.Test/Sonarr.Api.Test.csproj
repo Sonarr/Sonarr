@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <Platforms>x86</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NBuilder" Version="4.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
+    <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
+    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
+  </ItemGroup>
+</Project>

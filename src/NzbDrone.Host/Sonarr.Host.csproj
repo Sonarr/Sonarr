@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <Platforms>x86</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.SignalR.SelfHost" Version="2.4.0" />
+    <PackageReference Include="Nancy.Owin" Version="1.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Api\Sonarr.Api.csproj" />
+    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
+    <ProjectReference Include="..\NzbDrone.Mono\Sonarr.Mono.csproj" />
+    <ProjectReference Include="..\NzbDrone.SignalR\Sonarr.SignalR.csproj" />
+    <ProjectReference Include="..\NzbDrone.Windows\Sonarr.Windows.csproj" />
+    <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
+    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Interop.NetFwTypeLib">
+      <HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>
+</Project>
