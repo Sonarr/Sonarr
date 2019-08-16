@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using FluentAssertions;
@@ -43,8 +44,8 @@ namespace NzbDrone.Test.Common
 
     public abstract class TestBase : LoggingTest
     {
-
         private static readonly Random _random = new Random();
+        private static int _nextUid;
 
         private AutoMoqer _mocker;
         protected AutoMoqer Mocker
@@ -84,7 +85,21 @@ namespace NzbDrone.Test.Common
             }
         }
 
-        protected string TempFolder { get; private set; }
+        private string _tempFolder;
+        protected string TempFolder
+        {
+            get
+            {
+                if (_tempFolder == null)
+                {
+                    _tempFolder = Path.Combine(TestContext.CurrentContext.TestDirectory, "_temp_" + GetUID());
+
+                    Directory.CreateDirectory(_tempFolder);
+                }
+
+                return _tempFolder;
+            }
+        }
 
         [SetUp]
         public void TestBaseSetup()
@@ -93,9 +108,7 @@ namespace NzbDrone.Test.Common
 
             LogManager.ReconfigExistingLoggers();
 
-            TempFolder = Path.Combine(TestContext.CurrentContext.TestDirectory, "_temp_" + DateTime.Now.Ticks);
-
-            Directory.CreateDirectory(TempFolder);
+            _tempFolder = null;
         }
 
         [TearDown]
@@ -103,9 +116,25 @@ namespace NzbDrone.Test.Common
         {
             _mocker = null;
 
+            DeleteTempFolder(_tempFolder);
+        }
+
+
+        public static string GetUID()
+        {
+            return Process.GetCurrentProcess().Id + "_" + DateTime.Now.Ticks + "_" + Interlocked.Increment(ref _nextUid);
+        }
+
+        public static void DeleteTempFolder(string folder)
+        {
+            if (folder == null)
+            {
+                return;
+            }
+
             try
             {
-                var tempFolder = new DirectoryInfo(TempFolder);
+                var tempFolder = new DirectoryInfo(folder);
                 if (tempFolder.Exists)
                 {
                     foreach (var file in tempFolder.GetFiles("*", SearchOption.AllDirectories))

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Principal;
 using System.ServiceProcess;
 using FluentAssertions;
 using NUnit.Framework;
@@ -61,6 +62,10 @@ namespace NzbDrone.Common.Test
         [Test]
         public void Service_should_be_installed_and_then_uninstalled()
         {
+            if (!IsAnAdministrator())
+            {
+                Assert.Inconclusive("Can't run test without Administrator rights");
+            }
 
             Subject.ServiceExist(TEMP_SERVICE_NAME).Should().BeFalse("Service already installed");
             Subject.Install(TEMP_SERVICE_NAME);
@@ -100,8 +105,13 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void should_throw_if_starting_a_running_serivce()
+        public void should_throw_if_starting_a_running_service()
         {
+            if (!IsAnAdministrator())
+            {
+                Assert.Inconclusive("Can't run test without Administrator rights");
+            }
+
             Subject.GetService(ALWAYS_INSTALLED_SERVICE).Status
                .Should().NotBe(ServiceControllerStatus.Running);
 
@@ -126,6 +136,11 @@ namespace NzbDrone.Common.Test
                 .Should().Be(ServiceControllerStatus.Stopped);
 
             ExceptionVerification.ExpectedWarns(1);
+        }
+        private static bool IsAnAdministrator()
+        {
+            var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
 }

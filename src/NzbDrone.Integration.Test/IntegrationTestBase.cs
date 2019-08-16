@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -126,7 +127,7 @@ namespace NzbDrone.Integration.Test
         [SetUp]
         public void IntegrationSetUp()
         {
-            TempDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "_test_" + DateTime.UtcNow.Ticks);
+            TempDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "_test_" + Process.GetCurrentProcess().Id + "_" + DateTime.UtcNow.Ticks);
 
             // Wait for things to get quiet, otherwise the previous test might influence the current one.
             Commands.WaitAll();
@@ -149,6 +150,17 @@ namespace NzbDrone.Integration.Test
 
                 _signalrConnection = null;
                 _signalRReceived = new List<SignalRMessage>();
+            }
+
+            if (Directory.Exists(TempDirectory))
+            {
+                try
+                {
+                    Directory.Delete(TempDirectory, true);
+                }
+                catch
+                {
+                }
             }
         }
 
