@@ -69,7 +69,9 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
         private T ProcessRequest<T>(HadoukenSettings settings, string method, params object[] parameters)
         {
-            var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, "api");
+            var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase);
+            baseUrl = HttpUri.CombinePath(baseUrl, "api");
+
             var requestBuilder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
             requestBuilder.LogResponseContent = true;
             requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);

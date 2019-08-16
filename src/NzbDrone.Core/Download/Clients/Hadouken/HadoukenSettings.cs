@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -11,6 +12,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         {
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(1, 65535);
+            RuleFor(c => c.UrlBase).ValidUrlBase().When(c => c.UrlBase.IsNotNullOrWhiteSpace());
 
             RuleFor(c => c.Username).NotEmpty()
                                     .WithMessage("Username must not be empty.");
@@ -37,16 +39,19 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox)]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Username", Type = FieldType.Textbox)]
+        [FieldDefinition(2, Label = "Url Base", Type = FieldType.Textbox, Advanced = true, HelpText = "Adds a prefix to the Hadouken url, e.g. http://[host]:[port]/[urlBase]/api")]
+        public string UrlBase { get; set; }
+
+        [FieldDefinition(3, Label = "Username", Type = FieldType.Textbox)]
         public string Username { get; set; }
 
-        [FieldDefinition(3, Label = "Password", Type = FieldType.Password)]
+        [FieldDefinition(4, Label = "Password", Type = FieldType.Password)]
         public string Password { get; set; }
 
-        [FieldDefinition(4, Label = "Category", Type = FieldType.Textbox)]
+        [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox)]
         public string Category { get; set; }
 
-        [FieldDefinition(5, Label = "Use SSL", Type = FieldType.Checkbox, Advanced = true)]
+        [FieldDefinition(6, Label = "Use SSL", Type = FieldType.Checkbox, Advanced = true)]
         public bool UseSsl { get; set; }
 
         public NzbDroneValidationResult Validate()

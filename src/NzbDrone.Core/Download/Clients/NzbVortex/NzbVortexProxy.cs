@@ -116,7 +116,9 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
         
         private HttpRequestBuilder BuildRequest(NzbVortexSettings settings)
         {
-            var requestBuilder = new HttpRequestBuilder(true, settings.Host, settings.Port, "api");
+            var baseUrl = HttpRequestBuilder.BuildBaseUrl(true, settings.Host, settings.Port, settings.UrlBase);
+            baseUrl = HttpUri.CombinePath(baseUrl, "api");
+            var requestBuilder = new HttpRequestBuilder(baseUrl);
             requestBuilder.LogResponseContent = true;
 
             return requestBuilder;
