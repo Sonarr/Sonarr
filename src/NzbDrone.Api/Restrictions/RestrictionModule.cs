@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Profiles.Releases;
@@ -22,14 +23,12 @@ namespace NzbDrone.Api.Restrictions
             UpdateResource = UpdateRestriction;
             DeleteResource = DeleteRestriction;
 
-            SharedValidator.Custom(restriction =>
+            SharedValidator.RuleFor(r => r).Custom((restriction, context) =>
             {
                 if (restriction.Ignored.IsNullOrWhiteSpace() && restriction.Required.IsNullOrWhiteSpace())
                 {
-                    return new ValidationFailure("", "Either 'Must contain' or 'Must not contain' is required");
+                    context.AddFailure("Either 'Must contain' or 'Must not contain' is required");
                 }
-
-                return null;
             });
         }
 

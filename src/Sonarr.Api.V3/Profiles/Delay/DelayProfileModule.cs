@@ -32,14 +32,12 @@ namespace Sonarr.Api.V3.Profiles.Delay
             SharedValidator.RuleFor(d => d.UsenetDelay).GreaterThanOrEqualTo(0);
             SharedValidator.RuleFor(d => d.TorrentDelay).GreaterThanOrEqualTo(0);
 
-            SharedValidator.Custom(delayProfile =>
+            SharedValidator.RuleFor(d => d).Custom((delayProfile, context) =>
             {
                 if (!delayProfile.EnableUsenet && !delayProfile.EnableTorrent)
                 {
-                    return new ValidationFailure("", "Either Usenet or Torrent should be enabled");
+                    context.AddFailure("Either Usenet or Torrent should be enabled");
                 }
-
-                return null;
             });
         }
 

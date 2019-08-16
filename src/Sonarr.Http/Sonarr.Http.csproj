@@ -4,7 +4,7 @@
     <Platforms>x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="6.2.1.0" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="Nancy" Version="1.4.4" />
     <PackageReference Include="Nancy.Authentication.Basic" Version="1.4.1" />
     <PackageReference Include="Nancy.Authentication.Forms" Version="1.4.1" />

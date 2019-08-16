@@ -18,7 +18,7 @@ namespace Sonarr.Http.REST
             rule.DisplayName = new StaticStringSource(fieldName);
 
             AddRule(rule);
-            return new RuleBuilder<TResource, TProperty>(rule);
+            return new RuleBuilder<TResource, TProperty>(rule, this);
         }
 
         private static object GetValue(object container, Func<TResource, IEnumerable<Field>> fieldListAccessor, string fieldName)

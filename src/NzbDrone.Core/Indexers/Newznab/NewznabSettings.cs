@@ -37,14 +37,12 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public NewznabSettingsValidator()
         {
-            Custom(newznab =>
+            RuleFor(c => c).Custom((c, context) =>
             {
-                if (newznab.Categories.Empty() && newznab.AnimeCategories.Empty())
+                if (c.Categories.Empty() && c.AnimeCategories.Empty())
                 {
-                    return new ValidationFailure("", "Either 'Categories' or 'Anime Categories' must be provided");
+                    context.AddFailure("Either 'Categories' or 'Anime Categories' must be provided");
                 }
-
-                return null;
             });
 
             RuleFor(c => c.BaseUrl).ValidRootUrl();

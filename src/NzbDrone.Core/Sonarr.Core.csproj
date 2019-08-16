@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentMigrator.Runner" Version="1.6.2" />
-    <PackageReference Include="FluentValidation" Version="6.2.1.0" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="ImageResizer" Version="3.4.3" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="NLog" Version="4.5.3" />

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Profiles.Releases;
@@ -21,14 +22,12 @@ namespace Sonarr.Api.V3.Profiles.Release
             UpdateResource = Update;
             DeleteResource = DeleteReleaseProfile;
 
-            SharedValidator.Custom(restriction =>
+            SharedValidator.RuleFor(d => d).Custom((restriction, context) =>
             {
                 if (restriction.Ignored.IsNullOrWhiteSpace() && restriction.Required.IsNullOrWhiteSpace() && restriction.Preferred.Empty())
                 {
-                    return new ValidationFailure("", "'Must contain', 'Must not contain' or 'Preferred' is required");
+                    context.AddFailure("'Must contain', 'Must not contain' or 'Preferred' is required");
                 }
-
-                return null;
             });
         }
 
