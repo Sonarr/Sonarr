@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.Datastore
             var loadedEpisodeFile = Db.Single<Episode>().EpisodeFile.Value;
 
             loadedEpisodeFile.Should().NotBeNull();
-            loadedEpisodeFile.ShouldBeEquivalentTo(episodeFile,
+            loadedEpisodeFile.Should().BeEquivalentTo(episodeFile,
                 options => options
                     .IncludingAllRuntimeProperties()
                     .Excluding(c => c.DateAdded)

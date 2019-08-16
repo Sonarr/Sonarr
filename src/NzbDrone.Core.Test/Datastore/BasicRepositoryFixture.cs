@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.Datastore
             Subject.Insert(_basicType);
             var storeObject = Subject.Get(_basicType.Id);
 
-            storeObject.ShouldBeEquivalentTo(_basicType, o=>o.IncludingAllRuntimeProperties());
+            storeObject.Should().BeEquivalentTo(_basicType, o=>o.IncludingAllRuntimeProperties());
         }
 
         [Test]

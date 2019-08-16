@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             items.Should().HaveCount(4);
             items.Select(v => v.Quality).Should().BeEquivalentTo(7, 20, 19, 21);
             items.Select(v => v.Allowed).Should().BeEquivalentTo(true, false, true, false);
-            items.Select(v => v.Name).Should().BeEquivalentTo(null, null, null, null);
+            items.Select(v => v.Name).Should().BeEquivalentTo(null, null, null, (string)null);
         }
 
         [Test]

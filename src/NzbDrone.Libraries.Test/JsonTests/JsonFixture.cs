@@ -23,7 +23,7 @@ namespace NzbDrone.Libraries.Test.JsonTests
             var quality = new TypeWithNumbers { Int32 = int.MaxValue, Int64 = long.MaxValue, nullableWithValue = 12 };
             var result = Json.Deserialize<TypeWithNumbers>(quality.ToJson());
 
-            result.ShouldBeEquivalentTo(quality, o => o.IncludingAllRuntimeProperties());
+            result.Should().BeEquivalentTo(quality, o => o.IncludingAllRuntimeProperties());
         }
 
         [Test]

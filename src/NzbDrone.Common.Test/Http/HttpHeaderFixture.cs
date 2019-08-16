@@ -35,7 +35,7 @@ namespace NzbDrone.Common.Test.Http
             var httpheader = new HttpHeader(headers);
 
             Action action = () => httpheader.GetEncodingFromContentType();
-            action.ShouldThrow<ArgumentException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [Test]

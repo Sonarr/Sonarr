@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             
             var requests = Builder<IndexerRequest>.CreateListOfSize(paging ? 100 : 1)
                 .All()
-                .WithConstructor(() => new IndexerRequest("http://my.feed.local/", HttpAccept.Rss))
+                .WithFactory(() => new IndexerRequest("http://my.feed.local/", HttpAccept.Rss))
                 .With(v => v.HttpRequest.Method = HttpMethod.GET)
                 .Build();
 

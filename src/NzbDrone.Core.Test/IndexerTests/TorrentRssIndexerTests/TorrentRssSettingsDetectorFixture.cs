@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
                 {
                     UseEZTVFormat = true,
                     UseEnclosureUrl = false,
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = false,
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = false,
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = true,
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = true,
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = false,
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = true,
@@ -169,7 +169,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = true,
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = true,
@@ -209,7 +209,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = false,
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var settings = Subject.Detect(_indexerSettings);
 
-            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            settings.Should().BeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
                 UseEnclosureUrl = true,

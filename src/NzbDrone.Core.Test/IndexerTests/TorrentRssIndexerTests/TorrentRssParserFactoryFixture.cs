@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var detection2 = Subject.GetParser(_indexerSettings1);
 
-            detection1.ShouldBeEquivalentTo(detection2);
+            detection1.Should().BeEquivalentTo(detection2);
 
             VerifyDetectionCount(1);
         }
