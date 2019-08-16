@@ -2,6 +2,7 @@
   @add-mixin scrollbar;
   @add-mixin scrollbarTrack;
   @add-mixin scrollbarThumb;
+  -webkit-overflow-scrolling: touch;
 }
 
 .none {
@@ -24,5 +25,13 @@
 
   &.autoScroll {
     overflow-x: auto;
+  }
+}
+
+.both {
+  overflow: scroll;
+
+  &.autoScroll {
+    overflow: auto;
   }
 }

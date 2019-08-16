@@ -48,7 +48,7 @@ ModalBody.propTypes = {
   className: PropTypes.string,
   innerClassName: PropTypes.string,
   children: PropTypes.node,
-  scrollDirection: PropTypes.oneOf([scrollDirections.NONE, scrollDirections.HORIZONTAL, scrollDirections.VERTICAL])
+  scrollDirection: PropTypes.oneOf(scrollDirections.all)
 };
 
 ModalBody.defaultProps = {

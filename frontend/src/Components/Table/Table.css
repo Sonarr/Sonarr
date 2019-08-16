@@ -1,5 +1,7 @@
 .tableContainer {
-  overflow-x: auto;
+  &.horizontalScroll {
+    overflow-x: auto;
+  }
 }
 
 .table {
@@ -10,7 +12,12 @@
 
 @media only screen and (max-width: $breakpointSmall) {
   .tableContainer {
-    overflow-y: hidden;
-    width: 100%;
+    min-width: 100%;
+    width: fit-content;
+
+    &.horizontalScroll {
+      overflow-y: hidden;
+      width: 100%;
+    }
   }
 }

@@ -66,7 +66,7 @@ class Scroller extends Component {
 
 Scroller.propTypes = {
   className: PropTypes.string,
-  scrollDirection: PropTypes.oneOf([scrollDirections.NONE, scrollDirections.HORIZONTAL, scrollDirections.VERTICAL]).isRequired,
+  scrollDirection: PropTypes.oneOf(scrollDirections.all).isRequired,
   autoScroll: PropTypes.bool.isRequired,
   scrollTop: PropTypes.number,
   children: PropTypes.node,

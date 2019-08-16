@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { scrollDirections } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalHeader from 'Components/Modal/ModalHeader';
@@ -21,7 +22,7 @@ function SeasonInteractiveSearchModalContent(props) {
         Interactive Search  {seasonNumber != null && <SeasonNumber seasonNumber={seasonNumber} />}
       </ModalHeader>
 
-      <ModalBody>
+      <ModalBody scrollDirection={scrollDirections.BOTH}>
         <InteractiveSearchConnector
           type="season"
           searchPayload={{

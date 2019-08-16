@@ -144,6 +144,7 @@ class FileBrowserModalContent extends Component {
           <Scroller
             ref={this.setScrollerRef}
             className={styles.scroller}
+            scrollDirection={scrollDirections.BOTH}
           >
             {
               !!error &&
@@ -152,7 +153,10 @@ class FileBrowserModalContent extends Component {
 
             {
               isPopulated && !error &&
-                <Table columns={columns}>
+                <Table
+                  horizontalScroll={false}
+                  columns={columns}
+                >
                   <TableBody>
                     {
                       emptyParent &&

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
+import classNames from 'classnames';
 import { icons, scrollDirections } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
 import Scroller from 'Components/Scroller/Scroller';
@@ -28,6 +29,7 @@ function getTableHeaderCellProps(props) {
 function Table(props) {
   const {
     className,
+    horizontalScroll,
     selectAll,
     columns,
     optionsComponent,
@@ -41,14 +43,22 @@ function Table(props) {
 
   return (
     <Scroller
-      className={styles.tableContainer}
-      scrollDirection={scrollDirections.HORIZONTAL}
+      className={classNames(
+        styles.tableContainer,
+        horizontalScroll && styles.horizontalScroll
+      )}
+      scrollDirection={
+        horizontalScroll ?
+          scrollDirections.HORIZONTAL :
+          scrollDirections.NONE
+      }
     >
       <table className={className}>
         <TableHeader>
           {
-            selectAll &&
-              <TableSelectAllHeaderCell {...otherProps} />
+            selectAll ?
+              <TableSelectAllHeaderCell {...otherProps} /> :
+              null
           }
 
           {
@@ -111,6 +121,7 @@ function Table(props) {
 
 Table.propTypes = {
   className: PropTypes.string,
+  horizontalScroll: PropTypes.bool.isRequired,
   selectAll: PropTypes.bool.isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   optionsComponent: PropTypes.elementType,
@@ -123,6 +134,7 @@ Table.propTypes = {
 
 Table.defaultProps = {
   className: styles.table,
+  horizontalScroll: true,
   selectAll: false
 };
 

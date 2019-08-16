@@ -5,7 +5,7 @@ import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
-import { align, icons, kinds } from 'Helpers/Props';
+import { align, icons, kinds, scrollDirections } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -246,7 +246,7 @@ class InteractiveImportModalContent extends Component {
           Manual Import - {title || folder}
         </ModalHeader>
 
-        <ModalBody>
+        <ModalBody scrollDirection={scrollDirections.BOTH}>
           {
             showFilterExistingFiles &&
               <div className={styles.filterContainer}>
@@ -299,6 +299,7 @@ class InteractiveImportModalContent extends Component {
             isPopulated && !!items.length && !isFetching && !isFetching &&
               <Table
                 columns={columns}
+                horizontalScroll={false}
                 selectAll={true}
                 allSelected={allSelected}
                 allUnselected={allUnselected}
