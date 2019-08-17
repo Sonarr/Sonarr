@@ -1,7 +1,16 @@
 .link {
   composes: link from '~Components/Link/Link.css';
+}
 
-  display: block;
+.unavailablePath {
+  display: flex;
+  align-items: center;
+}
+
+.unavailableLabel {
+  composes: label from '~Components/Label.css';
+
+  margin-left: 10px;
 }
 
 .freeSpace,
