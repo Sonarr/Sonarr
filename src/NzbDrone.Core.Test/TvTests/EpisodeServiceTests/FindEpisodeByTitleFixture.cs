@@ -93,5 +93,19 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             episode.Should().NotBeNull();
             episode.Title.Should().Be(expectedTitle);
         }
+
+        [Test]
+        public void should_handle_special_with_apostrophe_in_title()
+        {
+            var releaseTitle = "The.Profit.S06E00.An.Inside.Look-Sweet.Petes.720p.HDTV.";
+            var title = "An Inside Look- Sweet Petes";
+
+            GivenEpisodesWithTitles(title);
+
+            var episode = Subject.FindEpisodeByTitle(1, 0, releaseTitle);
+
+            episode.Should().NotBeNull();
+            episode.Title.Should().Be(title);
+        }
     }
 }

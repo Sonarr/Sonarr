@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
@@ -108,15 +109,27 @@ namespace NzbDrone.Core.Tv
         {
             // TODO: can replace this search mechanism with something smarter/faster/better
             var normalizedReleaseTitle = Parser.Parser.NormalizeEpisodeTitle(releaseTitle);
+            var cleanNormalizedReleaseTitle = Parser.Parser.CleanSeriesTitle(normalizedReleaseTitle);
             var episodes = _episodeRepository.GetEpisodes(seriesId, seasonNumber);
 
-            var matches = episodes.Select(
-                episode => new
-                           {
-                               Position = normalizedReleaseTitle.IndexOf(Parser.Parser.NormalizeEpisodeTitle(episode.Title), StringComparison.CurrentCultureIgnoreCase),
-                               Length = Parser.Parser.NormalizeEpisodeTitle(episode.Title).Length,
-                               Episode = episode
-                           })
+            var possibleMatches = episodes.SelectMany(
+                episode => new[]
+                {
+                    new
+                    {
+                        Position = normalizedReleaseTitle.IndexOf(Parser.Parser.NormalizeEpisodeTitle(episode.Title), StringComparison.CurrentCultureIgnoreCase),
+                        Length = Parser.Parser.NormalizeEpisodeTitle(episode.Title).Length,
+                        Episode = episode
+                    },
+                    new
+                    {
+                        Position = cleanNormalizedReleaseTitle.IndexOf(Parser.Parser.CleanSeriesTitle(Parser.Parser.NormalizeEpisodeTitle(episode.Title)), StringComparison.CurrentCultureIgnoreCase),
+                        Length = Parser.Parser.NormalizeEpisodeTitle(episode.Title).Length,
+                        Episode = episode
+                    }
+                });
+
+                var matches = possibleMatches
                                 .Where(e => e.Episode.Title.Length > 0 && e.Position >= 0)
                                 .OrderBy(e => e.Position)
                                 .ThenByDescending(e => e.Length)
