@@ -17,7 +17,7 @@ import { updateItem } from './baseActions';
 
 const MONITOR_TIMEOUT = 1000;
 const seasonsToUpdate = {};
-let seasonMonitorToggleTimeout = null;
+const seasonMonitorToggleTimeouts = {};
 
 //
 // Variables
@@ -271,15 +271,18 @@ export const actionHandlers = handleThunks({
   },
 
   [TOGGLE_SEASON_MONITORED]: function(getState, payload, dispatch) {
-    if (seasonMonitorToggleTimeout) {
-      seasonMonitorToggleTimeout = clearTimeout(seasonMonitorToggleTimeout);
-    }
-
     const {
       seriesId: id,
       seasonNumber,
       monitored
     } = payload;
+
+    const seasonMonitorToggleTimeout = seasonMonitorToggleTimeouts[id];
+
+    if (seasonMonitorToggleTimeout) {
+      clearTimeout(seasonMonitorToggleTimeout);
+      delete seasonMonitorToggleTimeouts[id];
+    }
 
     const series = getState().series.items.find((s) => s.id === id);
     const seasons = _.cloneDeep(series.seasons);
@@ -296,7 +299,7 @@ export const actionHandlers = handleThunks({
     seasonsToUpdate[seasonNumber] = monitored;
     season.monitored = monitored;
 
-    seasonMonitorToggleTimeout = setTimeout(() => {
+    seasonMonitorToggleTimeouts[id] = setTimeout(() => {
       createAjaxRequest({
         url: `/series/${id}`,
         method: 'PUT',
