@@ -134,6 +134,11 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Plus belle la vie - S14E3533 FRENCH WEBRIP H.264 AAC (09.05.2018)", "Plus belle la vie", 14, 3533)]
         [TestCase("The 100 - S01E02 - Earth Skills HDTV-1080p AVC DTS [EN+FR+ES+PT+DA+FI+NB+SV]", "The 100", 1, 2)]
         [TestCase("Series Title - S01E01 - Day 100 [SDTV]", "Series Title", 1, 1)]
+        [TestCase("Series.Title.S01.Ep.01.English.AC3.DL.1080p.BluRay-Sonarr", "Series Title", 1, 1)]
+        [TestCase("Series.Title.S01.E.01.English.AC3.DL.1080p.BluRay-Sonarr", "Series Title", 1, 1)]
+        [TestCase("Series.Title.S01.Ep01.English.AC3.DL.1080p.BluRay-Sonarr", "Series Title", 1, 1)]
+        [TestCase("Series.Title.S01.E01.English.AC3.DL.1080p.BluRay-Sonarr", "Series Title", 1, 1)]
+        [TestCase("Series.Title.S01EP01.English.AC3.DL.1080p.BluRay-Sonarr", "Series Title", 1, 1)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
