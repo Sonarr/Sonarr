@@ -69,6 +69,7 @@
     "gulp-watch": "5.0.1",
     "gulp-wrap": "0.15.0",
     "history": "4.9.0",
+    "html-webpack-plugin": "3.2.0",
     "jdu": "1.0.0",
     "jquery": "3.4.1",
     "loader-utils": "^1.1.0",
