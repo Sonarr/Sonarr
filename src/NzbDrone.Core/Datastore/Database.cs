@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Datastore
     {
         IDataMapper GetDataMapper();
         Version Version { get; }
+        long Size { get; }
         void Vacuum();
     }
 
@@ -36,6 +37,16 @@ namespace NzbDrone.Core.Datastore
             {
                 var version = _datamapperFactory().ExecuteScalar("SELECT sqlite_version()").ToString();
                 return new Version(version);
+            }
+        }
+
+        public long Size
+        {
+            get
+            {
+                var page_count = _datamapperFactory().ExecuteScalar("PRAGMA page_count;");
+                var page_size = _datamapperFactory().ExecuteScalar("PRAGMA page_size;");
+                return Convert.ToInt64(page_count) * Convert.ToInt64(page_size);
             }
         }
 

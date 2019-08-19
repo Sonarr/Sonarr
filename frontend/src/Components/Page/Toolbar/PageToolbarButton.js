@@ -41,6 +41,7 @@ function PageToolbarButton(props) {
 }
 
 PageToolbarButton.propTypes = {
+  ...Link.propTypes,
   label: PropTypes.string.isRequired,
   iconName: PropTypes.object.isRequired,
   spinningName: PropTypes.object,

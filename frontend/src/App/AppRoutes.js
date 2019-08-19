@@ -33,6 +33,7 @@ import BackupsConnector from 'System/Backup/BackupsConnector';
 import UpdatesConnector from 'System/Updates/UpdatesConnector';
 import LogsTableConnector from 'System/Events/LogsTableConnector';
 import Logs from 'System/Logs/Logs';
+import Diagnostic from 'Diagnostic/Diagnostic';
 
 function AppRoutes(props) {
   const {
@@ -227,6 +228,15 @@ function AppRoutes(props) {
       <Route
         path="/system/logs/files"
         component={Logs}
+      />
+
+      {/*
+        Diagnostics
+      */}
+
+      <Route
+        path="/diag"
+        component={Diagnostic}
       />
 
       {/*

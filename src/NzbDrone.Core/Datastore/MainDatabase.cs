@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Datastore
         }
 
         public Version Version => _database.Version;
+        public long Size => _database.Size;
 
         public void Vacuum()
         {

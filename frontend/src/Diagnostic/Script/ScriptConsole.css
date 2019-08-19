@@ -1,0 +1,6 @@
+.split {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  height: 100%;
+}

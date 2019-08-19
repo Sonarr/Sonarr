@@ -119,6 +119,11 @@ const config = {
     rules: [
       {
         test: /\.worker\.js$/,
+        issuer: {
+          // monaco-editor includes the editor.worker.js in other language workers,
+          // don't use worker-loader in that case
+          exclude: /monaco-editor/
+        },
         use: {
           loader: 'worker-loader',
           options: {

@@ -3,7 +3,7 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-EXCLUDE_MODULEREFS = crypt32 httpapi __Internal ole32.dll libmonosgen-2.0
+EXCLUDE_MODULEREFS = crypt32 httpapi __Internal ole32.dll libmonosgen-2.0 clr mscorlib mscoree.dll Microsoft.DiaSymReader.Native.x86.dll Microsoft.DiaSymReader.Native.amd64.dll
 
 %:
 	dh $@ --with=systemd --with=cli

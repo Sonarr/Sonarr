@@ -9,5 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Api\Sonarr.Api.csproj" />
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
+    <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
   </ItemGroup>
 </Project>
