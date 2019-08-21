@@ -3,7 +3,7 @@ using Nancy;
 
 namespace NzbDrone.Api.Profiles
 {
-    class LegacyProfileModule : NzbDroneApiModule
+    public class LegacyProfileModule : NzbDroneApiModule
     {
         public LegacyProfileModule()
             : base("qualityprofile")

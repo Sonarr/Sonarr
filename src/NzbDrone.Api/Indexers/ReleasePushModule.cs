@@ -11,7 +11,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Api.Indexers
 {
-    class ReleasePushModule : ReleaseModuleBase
+    public class ReleasePushModule : ReleaseModuleBase
     {
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IProcessDownloadDecisions _downloadDecisionProcessor;
