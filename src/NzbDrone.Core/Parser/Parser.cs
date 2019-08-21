@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Parser
 //                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Daily episodes without title (2018-10-12, 20181012) (Strict pattern to avoid false matches)
-                new Regex(@"^(?<airyear>19[6-9]\d|20\d\d)(?<sep>[-]?)(?<airmonth>0\d|1[0-2])\k<sep>(?<airday>[0-2]\d|3[01])(?!\d)",
+                new Regex(@"^(?<airyear>19[6-9]\d|20\d\d)(?<sep>[-_]?)(?<airmonth>0\d|1[0-2])\k<sep>(?<airday>[0-2]\d|3[01])(?!\d)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Multi-Part episodes without a title (S01E05.S01E06)
