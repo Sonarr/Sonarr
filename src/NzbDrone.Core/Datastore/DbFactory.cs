@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Datastore
             Environment.SetEnvironmentVariable("No_Expand", "true");
             Environment.SetEnvironmentVariable("No_SQLiteXmlConfigFile", "true");
             Environment.SetEnvironmentVariable("No_PreLoadSQLite", "true");
+            Environment.SetEnvironmentVariable("No_SQLiteFunctions", "true");
         }
 
         public static void RegisterDatabase(IContainer container)

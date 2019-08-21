@@ -12,7 +12,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace Sonarr.Api.V3.Indexers
 {
-    class ReleasePushModule : ReleaseModuleBase
+    public class ReleasePushModule : ReleaseModuleBase
     {
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IProcessDownloadDecisions _downloadDecisionProcessor;

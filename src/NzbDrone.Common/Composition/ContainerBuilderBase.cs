@@ -23,7 +23,7 @@ namespace NzbDrone.Common.Composition
 
             foreach (var assembly in assemblies)
             {
-                _loadedTypes.AddRange(Assembly.Load(assembly).GetTypes());
+                _loadedTypes.AddRange(Assembly.Load(assembly).GetExportedTypes());
             }
 
             Container = new Container(new TinyIoCContainer(), _loadedTypes);
