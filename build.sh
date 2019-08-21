@@ -47,6 +47,7 @@ UpdateVersionNumber()
         BUILD_NUMBER=$verMajorMinorRevision.$verBuild
         echo "##teamcity[buildNumber '$BUILD_NUMBER']"
         sed -i "s/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$BUILD_NUMBER<\/AssemblyVersion>/g" ./src/Directory.Build.props
+        sed -i "s/<AssemblyConfiguration>[\$()A-Za-z-]\+<\/AssemblyConfiguration>/<AssemblyConfiguration>${BRANCH:-dev}<\/AssemblyConfiguration>/g" ./src/Directory.Build.props
     fi
 }
 
