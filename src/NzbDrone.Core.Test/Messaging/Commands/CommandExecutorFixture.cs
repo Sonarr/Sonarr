@@ -18,7 +18,6 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         private CommandQueue _commandQueue;
         private Mock<IExecute<CommandA>> _executorA;
         private Mock<IExecute<CommandB>> _executorB;
-        private bool _commandExecuted = false;
 
         [SetUp]
         public void Setup()
@@ -53,26 +52,34 @@ namespace NzbDrone.Core.Test.Messaging.Commands
                   .Returns(_commandQueue.GetConsumingEnumerable);
         }
 
-        private void QueueAndWaitForExecution(CommandModel commandModel)
+        private void QueueAndWaitForExecution(CommandModel commandModel, bool waitPublish = false)
         {
-            Thread.Sleep(10);
+            var waitEventComplete = new ManualResetEventSlim();
+            var waitEventPublish = new ManualResetEventSlim();
 
             Mocker.GetMock<IManageCommandQueue>()
                   .Setup(s => s.Complete(It.Is<CommandModel>(c => c == commandModel), It.IsAny<string>()))
-                  .Callback(() => _commandExecuted = true);
+                  .Callback(() => waitEventComplete.Set());
 
             Mocker.GetMock<IManageCommandQueue>()
                   .Setup(s => s.Fail(It.Is<CommandModel>(c => c == commandModel), It.IsAny<string>(), It.IsAny<Exception>()))
-                  .Callback(() => _commandExecuted = true);
+                  .Callback(() => waitEventComplete.Set());
+
+            Mocker.GetMock<IEventAggregator>()
+                  .Setup(s => s.PublishEvent<CommandExecutedEvent>(It.IsAny<CommandExecutedEvent>()))
+                  .Callback(() => waitEventPublish.Set());
 
             _commandQueue.Add(commandModel);
 
-            while (!_commandExecuted)
+            if (!waitEventComplete.Wait(2000))
             {
-                Thread.Sleep(100);
+                Assert.Fail("Command did not Complete/Fail within 2 sec");
             }
 
-            Thread.Sleep(10);
+            if (waitPublish && !waitEventPublish.Wait(500))
+            {
+                Assert.Fail("Command did not Publish within 500 msec");
+            }
         }
 
         [Test]
@@ -138,8 +145,6 @@ namespace NzbDrone.Core.Test.Messaging.Commands
 
             VerifyEventPublished<CommandExecutedEvent>();
 
-            Thread.Sleep(10);
-
             ExceptionVerification.ExpectedErrors(1);
         }
 
@@ -175,18 +180,17 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             QueueAndWaitForExecution(commandModel);
 
             Mocker.GetMock<IManageCommandQueue>()
-                  .Setup(s => s.Complete(It.Is<CommandModel>(c => c == commandModel), commandA.CompletionMessage))
-                  .Callback(() => _commandExecuted = true);
+                  .Verify(s => s.Complete(It.Is<CommandModel>(c => c == commandModel), commandA.CompletionMessage), Times.Once());
         }
 
         [Test]
         public void should_use_last_progress_message_if_completion_message_is_null()
         {
             GivenCommandQueue();
-            var commandA = new CommandA();
+            var commandB = new CommandB();
             var commandModel = new CommandModel
             {
-                Body = commandA,
+                Body = commandB,
                 Message = "Do work"
             };
 
@@ -195,8 +199,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             QueueAndWaitForExecution(commandModel);
 
             Mocker.GetMock<IManageCommandQueue>()
-                  .Setup(s => s.Complete(It.Is<CommandModel>(c => c == commandModel), commandModel.Message))
-                  .Callback(() => _commandExecuted = true);
+                  .Verify(s => s.Complete(It.Is<CommandModel>(c => c == commandModel), commandModel.Message), Times.Once());
         }
     }
 
