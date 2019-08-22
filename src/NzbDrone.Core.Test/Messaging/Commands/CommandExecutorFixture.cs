@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
 
             VerifyEventPublished<CommandExecutedEvent>();
 
-            ExceptionVerification.ExpectedErrors(1);
+            ExceptionVerification.WaitForErrors(1, 500);
         }
 
         [Test]
