@@ -40,7 +40,7 @@ namespace NzbDrone.Integration.Test.Client
             return request;
         }
 
-        public T Execute<T>(IRestRequest request, HttpStatusCode statusCode) where T : class, new()
+        public string Execute(IRestRequest request, HttpStatusCode statusCode)
         {
             _logger.Info("{0}: {1}", request.Method, _restClient.BuildUri(request));
 
@@ -58,7 +58,14 @@ namespace NzbDrone.Integration.Test.Client
 
             response.StatusCode.Should().Be(statusCode);
 
-            return Json.Deserialize<T>(response.Content);
+            return response.Content;
+        }
+
+        public T Execute<T>(IRestRequest request, HttpStatusCode statusCode) where T : class, new()
+        {
+            var content = Execute(request, statusCode);
+
+            return Json.Deserialize<T>(content);
         }
 
         private static void AssertDisableCache(IList<Parameter> headers)

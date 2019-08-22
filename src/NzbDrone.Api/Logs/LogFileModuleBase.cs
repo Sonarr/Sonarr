@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NzbDrone.Common.Disk;
 using Nancy;
 using Nancy.Responses;
+using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using Sonarr.Http;
 
@@ -54,6 +55,8 @@ namespace NzbDrone.Api.Logs
 
         private Response GetLogFileResponse(string filename)
         {
+            LogManager.Flush();
+
             var filePath = GetLogFilePath(filename);
 
             if (!_diskProvider.FileExists(filePath))
