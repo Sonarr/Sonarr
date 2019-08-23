@@ -103,11 +103,22 @@ namespace NzbDrone.Common.Instrumentation
                     : "https://4ee3580e01d8407c96a7430fbc953512:5f2d07227a0b4fde99dea07041a3ff93@sentry.sonarr.tv/10";
             }
 
-            var target = new SentryTarget(dsn)
+            Target target;
+            try
             {
-                Name = "sentryTarget",
-                Layout = "${message}"
-            };
+                target = new SentryTarget(dsn)
+                {
+                    Name = "sentryTarget",
+                    Layout = "${message}"
+                };
+            }
+            catch (Exception ex)
+            {
+                LogManager.GetLogger(nameof(NzbDroneLogger)).Debug(ex, "Failed to load dependency, may need an OS update");
+
+                // We still need the logging rules, so use a null target.
+                target = new NullTarget();
+            }
 
             var loggingRule = new LoggingRule("*", updateClient ? LogLevel.Trace : LogLevel.Warn, target);
             LogManager.Configuration.AddTarget("sentryTarget", target);

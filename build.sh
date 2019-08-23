@@ -197,9 +197,28 @@ PackageMono()
     echo "Adding CurlSharp.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Common/CurlSharp.dll.config $outputFolderLinux
 
-    # Is blacklisted by mono from loading from appdir, instead loading from mono GAC.
-    echo "Remove System.Runtime.InteropServices.RuntimeInformation.dll (uses win32 interop)"
-    rm $outputFolderLinux/System.Runtime.InteropServices.RuntimeInformation.dll
+    # Below we deal with some mono incompatibilities with windows-only dotnet core/standard libs    
+    # See: https://github.com/mono/mono/blob/master/tools/nuget-hash-extractor/download.sh
+    # That list defines assemblies that are prohibited from being loaded from the appdir, instead loading from mono GAC.
+
+    # We have debian dependencies to get these installed
+    for assembly in System.IO.Compression System.Runtime.InteropServices.RuntimeInformation System.Net.Http
+    do
+        if [ -e $outputFolderLinux/$assembly.dll ]  ; then
+            echo "Remove $assembly.dll (uses win32 interop)"
+            rm $outputFolderLinux/$assembly.dll
+        fi
+    done
+
+    # These assemblies have facades in mono-devel, but we don't have them.
+    for assembly in System.Globalization.Extensions System.Text.Encoding.CodePages System.Threading.Overlapped
+    do
+        if [ -e $outputFolderLinux/$assembly.dll ]  ; then
+            echo "Warn: Facade $assembly.dll (uses win32 interop)"
+            rm $outputFolderLinux/$assembly.dll
+            #exit 1
+        fi
+    done
 
     echo "Renaming Sonarr.Console.exe to Sonarr.exe"
     rm $outputFolderLinux/Sonarr.exe*
