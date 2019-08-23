@@ -68,7 +68,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.SignalR", "NzbDrone.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marr.Data", "Marr.Data\Marr.Data.csproj", "{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marr.Data", "Marr.Data\Marr.Data.csproj", "{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Mono", "NzbDrone.Mono\Sonarr.Mono.csproj", "{15AD7579-A314-4626-B556-663F51D97CD1}"
 EndProject
@@ -82,11 +82,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Windows.Test", "NzbD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Mono.Test", "NzbDrone.Mono.Test\Sonarr.Mono.Test.csproj", "{40D72824-7D02-4A77-9106-8FE0EEA2B997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoTorrent", "MonoTorrent\MonoTorrent.csproj", "{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoTorrent", "MonoTorrent\MonoTorrent.csproj", "{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogentriesCore", "LogentriesCore\LogentriesCore.csproj", "{90D6E9FC-7B88-4E1B-B018-8FA742274558}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogentriesCore", "LogentriesCore\LogentriesCore.csproj", "{90D6E9FC-7B88-4E1B-B018-8FA742274558}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogentriesNLog", "LogentriesNLog\LogentriesNLog.csproj", "{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogentriesNLog", "LogentriesNLog\LogentriesNLog.csproj", "{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{90D6E9FC-7B88-4E1B-B018-8FA742274558} = {90D6E9FC-7B88-4E1B-B018-8FA742274558}
 	EndProjectSection
