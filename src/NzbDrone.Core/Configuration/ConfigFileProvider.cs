@@ -363,11 +363,6 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureDefaultConfigFile();
             DeleteOldValues();
-
-            if (!AnalyticsEnabled)
-            {
-                NzbDroneLogger.UnRegisterRemoteLoggers();
-            }
         }
 
         public void Execute(ResetApiKeyCommand message)

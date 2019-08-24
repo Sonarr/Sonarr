@@ -198,25 +198,25 @@ PackageMono()
     # See: https://github.com/mono/mono/blob/master/tools/nuget-hash-extractor/download.sh
     # That list defines assemblies that are prohibited from being loaded from the appdir, instead loading from mono GAC.
 
-    # We have debian dependencies to get these installed
-    for assembly in System.IO.Compression System.Runtime.InteropServices.RuntimeInformation System.Net.Http
+    # We have debian dependencies to get these installed or facades from mono 5.10+
+    for assembly in System.IO.Compression System.Runtime.InteropServices.RuntimeInformation System.Net.Http System.Globalization.Extensions System.Text.Encoding.CodePages System.Threading.Overlapped
     do
-        if [ -e $outputFolderLinux/$assembly.dll ]  ; then
-            echo "Remove $assembly.dll (uses win32 interop)"
-            rm $outputFolderLinux/$assembly.dll
+        if [ -e $outputFolderLinux/$assembly.dll ]; then
+            if [ -e $sourceFolder/Libraries/Mono/$assembly.dll ]; then
+                echo "Copy Mono-specific facade $assembly.dll (uses win32 interop)"
+                cp $sourceFolder/Libraries/Mono/$assembly.dll $outputFolderLinux/$assembly.dll
+            else
+                echo "Remove $assembly.dll (uses win32 interop)"
+                rm $outputFolderLinux/$assembly.dll
+            fi
+            
         fi
     done
 
-    # These assemblies have facades in mono-devel, but we don't have them.
-    for assembly in System.Globalization.Extensions System.Text.Encoding.CodePages System.Threading.Overlapped
-    do
-        if [ -e $outputFolderLinux/$assembly.dll ]  ; then
-            echo "Warn: Facade $assembly.dll (uses win32 interop)"
-            rm $outputFolderLinux/$assembly.dll
-            #exit 1
-        fi
-    done
-
+    # Remove Http binding redirect by renaming it
+    # We don't need this anymore once our minimum mono version is 5.10
+    sed -i "s/System.Net.Http/System.Net.Http.Mono/g" $outputFolderLinux/Sonarr.Console.exe.config
+       
     echo "Renaming Sonarr.Console.exe to Sonarr.exe"
     rm $outputFolderLinux/Sonarr.exe*
     for file in $outputFolderLinux/Sonarr.Console.exe*; do

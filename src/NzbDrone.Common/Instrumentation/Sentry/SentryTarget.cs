@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
-using System.Data.SQLite;
 using NLog;
 using NLog.Common;
 using NLog.Targets;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using Sentry;
 using Sentry.Protocol;
 
@@ -75,6 +77,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             {LogLevel.Warn, BreadcrumbLevel.Warning},
         };
 
+        private readonly DateTime _startTime = DateTime.UtcNow;
         private readonly IDisposable _sdk;
         private bool _disposed;
 
@@ -82,10 +85,11 @@ namespace NzbDrone.Common.Instrumentation.Sentry
         private bool _unauthorized;
 
         public bool FilterEvents { get; set; }
-        public string UpdateBranch { get; set; }
         public Version DatabaseVersion { get; set; }
         public int DatabaseMigration { get; set; }
         
+        public bool SentryEnabled { get; set; }
+
         public SentryTarget(string dsn)
         {
             _sdk = SentrySdk.Init(o =>
@@ -93,34 +97,71 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                                       o.Dsn = new Dsn(dsn);
                                       o.AttachStacktrace = true;
                                       o.MaxBreadcrumbs = 200;
-                                      o.SendDefaultPii = true;
+                                      o.SendDefaultPii = false;
+                                      o.AttachStacktrace = true;
                                       o.Debug = false;
                                       o.DiagnosticsLevel = SentryLevel.Debug;
                                       o.Release = BuildInfo.Release;
+                                      if (PlatformInfo.IsMono)
+                                      {
+                                          // Mono 6.0 broke GzipStream.WriteAsync
+                                          // TODO: Check specific version
+                                          o.RequestBodyCompressionLevel = System.IO.Compression.CompressionLevel.NoCompression;
+                                      }
                                       o.BeforeSend = x => SentryCleanser.CleanseEvent(x);
                                       o.BeforeBreadcrumb = x => SentryCleanser.CleanseBreadcrumb(x);
+                                      o.Environment = BuildInfo.Branch;
                                   });
 
-            SentrySdk.ConfigureScope(scope =>
-                                     {
-                                         scope.User = new User {
-                                             Username = HashUtil.AnonymousToken()
-                                         };
-                                         
-                                         scope.SetTag("osfamily", OsInfo.Os.ToString());
-                                         scope.SetTag("runtime", PlatformInfo.PlatformName);
-                                         scope.SetTag("culture", Thread.CurrentThread.CurrentCulture.Name);
-                                         scope.SetTag("branch", BuildInfo.Branch);
-                                         scope.SetTag("version", BuildInfo.Version.ToString());
-                                         scope.SetTag("production", RuntimeInfo.IsProduction.ToString());
-                                     });
-            
+            InitializeScope();
+
             _debounce = new SentryDebounce();
 
             // initialize to true and reconfigure later
             // Otherwise it will default to false and any errors occuring
             // before config file gets read will not be filtered
             FilterEvents = true;
+
+            SentryEnabled = true;
+        }
+
+        public void InitializeScope()
+        {
+            SentrySdk.ConfigureScope(scope =>
+            {
+                scope.User = new User
+                {
+                    Id = HashUtil.AnonymousToken()
+                };
+
+                scope.Contexts.App.Name = BuildInfo.AppName;
+                scope.Contexts.App.Version = BuildInfo.Version.ToString();
+                scope.Contexts.App.StartTime = _startTime;
+                scope.Contexts.App.Hash = HashUtil.AnonymousToken();
+                scope.Contexts.App.Build = BuildInfo.Release; // Git commit cache?
+
+                scope.SetTag("culture", Thread.CurrentThread.CurrentCulture.Name);
+                scope.SetTag("branch", BuildInfo.Branch);
+
+                if (DatabaseVersion != default(Version))
+                {
+                    scope.SetTag("sqlite_version", $"{DatabaseVersion}");
+                }
+            });
+        }
+
+        public void UpdateScope(IOsInfo osInfo)
+        {
+            SentrySdk.ConfigureScope(scope =>
+            {
+                if (osInfo.Name != null && PlatformInfo.IsMono)
+                {
+                    // Sentry auto-detection of non-Windows platforms isn't that accurate on certain devices.
+                    scope.Contexts.OperatingSystem.Name = osInfo.Name.FirstCharToUpper();
+                    scope.Contexts.OperatingSystem.RawDescription = osInfo.FullName;
+                    scope.Contexts.OperatingSystem.Version = osInfo.Version.ToString();
+                }
+            });
         }
 
         private void OnError(Exception ex)
@@ -246,26 +287,11 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 {
                     Level = LoggingLevelMap[logEvent.Level],
                     Logger = logEvent.LoggerName,
-                    Message = logEvent.FormattedMessage,
-                    Environment = UpdateBranch
+                    Message = logEvent.FormattedMessage
                 };
 
                 sentryEvent.SetExtras(extras);
                 sentryEvent.SetFingerprint(fingerPrint);
-
-                // this can't be in the constructor as at that point OsInfo won't have
-                // populated these values yet
-                var osName = Environment.GetEnvironmentVariable("OS_NAME");
-                var osVersion = Environment.GetEnvironmentVariable("OS_VERSION");
-                var runTimeVersion = Environment.GetEnvironmentVariable("RUNTIME_VERSION");
-
-                sentryEvent.SetTag("os_name", osName);
-                sentryEvent.SetTag("os_version", $"{osName} {osVersion}");
-                sentryEvent.SetTag("runtime_version", $"{PlatformInfo.PlatformName} {runTimeVersion}");
-                if (DatabaseVersion != default(Version))
-                {
-                    sentryEvent.SetTag("sqlite_version", $"{DatabaseVersion}");
-                }
 
                 SentrySdk.CaptureEvent(sentryEvent);
             }

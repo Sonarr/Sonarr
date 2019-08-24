@@ -35,7 +35,7 @@ namespace NzbDrone.Update
                 Logger.Info("Starting Sonarr Update Client");
 
                 _container = UpdateContainerBuilder.Build(startupContext);
-
+                _container.Resolve<InitializeLogger>().Initialize();
                 _container.Resolve<UpdateApp>().Start(args);
 
                 Logger.Info("Update completed successfully");

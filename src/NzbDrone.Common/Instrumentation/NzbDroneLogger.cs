@@ -60,18 +60,6 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.ReconfigExistingLoggers();
         }
 
-        public static void UnRegisterRemoteLoggers()
-        {
-            var sentryRules = LogManager.Configuration.LoggingRules.Where(r => r.Targets.Any(t => t.Name == "sentryTarget"));
-
-            foreach (var rules in sentryRules)
-            {
-                rules.Targets.Clear();
-            }
-
-            LogManager.ReconfigExistingLoggers();
-        }
-
         private static void RegisterLogEntries()
         {
             var target = new LogentriesTarget();
@@ -92,15 +80,15 @@ namespace NzbDrone.Common.Instrumentation
             if (updateClient)
             {
                 dsn = RuntimeInfo.IsProduction
-                    ? "https://b85aa82c65b84b0e99e3b7c281438357:392b5bc007974147a922c5d841c47cf9@sentry.sonarr.tv/11"
-                    : "https://6168f0946aba4e60ac23e469ac08eac5:bd59e8454ccc454ea27a90cff1f814ca@sentry.sonarr.tv/9";
+                    ? "https://80777986b95f44a1a90d1eb2f3af1e36@sentry.sonarr.tv/11"
+                    : "https://6168f0946aba4e60ac23e469ac08eac5@sentry.sonarr.tv/9";
 
             }
             else
             {
                 dsn = RuntimeInfo.IsProduction
-                    ? "https://a013727b8d224e719894e1e13ff4966b:c95ca1f9ca02418d829db10c2938baf4@sentry.sonarr.tv/8"
-                    : "https://4ee3580e01d8407c96a7430fbc953512:5f2d07227a0b4fde99dea07041a3ff93@sentry.sonarr.tv/10";
+                    ? "https://e2adcbe52caf46aeaebb6b1dcdfe10a1@sentry.sonarr.tv/8"
+                    : "https://4ee3580e01d8407c96a7430fbc953512@sentry.sonarr.tv/10";
             }
 
             Target target;
@@ -114,6 +102,7 @@ namespace NzbDrone.Common.Instrumentation
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Failed to load dependency, may need an OS update: " + ex.ToString());
                 LogManager.GetLogger(nameof(NzbDroneLogger)).Debug(ex, "Failed to load dependency, may need an OS update");
 
                 // We still need the logging rules, so use a null target.

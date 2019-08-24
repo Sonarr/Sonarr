@@ -13,7 +13,6 @@ namespace NzbDrone.Windows.EnvironmentInfo
         {
             _logger = logger;
             var version = GetFrameworkVersion();
-            Environment.SetEnvironmentVariable("RUNTIME_VERSION", version.ToString());
             Version = version;
         }
 
