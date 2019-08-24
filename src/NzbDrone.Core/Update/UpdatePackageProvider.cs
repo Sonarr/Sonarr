@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NzbDrone.Common.Cloud;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Analytics;
 
 namespace NzbDrone.Core.Update
 {
@@ -15,14 +16,16 @@ namespace NzbDrone.Core.Update
     public class UpdatePackageProvider : IUpdatePackageProvider
     {
         private readonly IHttpClient _httpClient;
-        private readonly IPlatformInfo _platformInfo;
         private readonly IHttpRequestBuilderFactory _requestBuilder;
+        private readonly IPlatformInfo _platformInfo;
+        private readonly IAnalyticsService _analyticsService;
 
-        public UpdatePackageProvider(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder, IPlatformInfo platformInfo)
+        public UpdatePackageProvider(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder, IAnalyticsService analyticsService, IPlatformInfo platformInfo)
         {
-            _httpClient = httpClient;
             _platformInfo = platformInfo;
+            _analyticsService = analyticsService;
             _requestBuilder = requestBuilder.Services;
+            _httpClient = httpClient;
         }
 
         public UpdatePackage GetLatestUpdate(string branch, Version currentVersion)
@@ -32,10 +35,15 @@ namespace NzbDrone.Core.Update
                                          .AddQueryParam("version", currentVersion)
                                          .AddQueryParam("os", OsInfo.Os.ToString().ToLowerInvariant())
                                          .AddQueryParam("runtimeVer", _platformInfo.Version)
-                                         .SetSegment("branch", branch)
-                                         .Build();
+                                         .SetSegment("branch", branch);
 
-            var update = _httpClient.Get<UpdatePackageAvailable>(request).Resource;
+            if (_analyticsService.IsEnabled)
+            {
+                // Send if the system is active so we know which versions to deprecate/ignore
+                request.AddQueryParam("active", _analyticsService.InstallIsActive.ToString().ToLower());
+            }
+
+            var update = _httpClient.Get<UpdatePackageAvailable>(request.Build()).Resource;
 
             if (!update.Available) return null;
 
@@ -49,10 +57,15 @@ namespace NzbDrone.Core.Update
                                          .AddQueryParam("version", currentVersion)
                                          .AddQueryParam("os", OsInfo.Os.ToString().ToLowerInvariant())
                                          .AddQueryParam("runtimeVer", _platformInfo.Version)
-                                         .SetSegment("branch", branch)
-                                         .Build();
+                                         .SetSegment("branch", branch);
 
-            var updates = _httpClient.Get<List<UpdatePackage>>(request);
+            if (_analyticsService.IsEnabled)
+            {
+                // Send if the system is active so we know which versions to deprecate/ignore
+                request.AddQueryParam("active", _analyticsService.InstallIsActive.ToString().ToLower());
+            }
+
+            var updates = _httpClient.Get<List<UpdatePackage>>(request.Build());
 
             return updates.Resource;
         }
