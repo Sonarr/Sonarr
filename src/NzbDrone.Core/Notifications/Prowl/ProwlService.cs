@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using Prowlin;
 
 namespace NzbDrone.Core.Notifications.Prowl
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.Notifications.Prowl
             {
                 var notification = new Prowlin.Notification
                                    {
-                                       Application = "Sonarr",
+                                       Application = BuildInfo.AppName,
                                        Description = message,
                                        Event = title,
                                        Priority = priority,

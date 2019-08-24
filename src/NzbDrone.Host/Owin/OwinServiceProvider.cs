@@ -8,6 +8,7 @@ using Microsoft.Owin.Hosting.Engine;
 using Microsoft.Owin.Hosting.Services;
 using Microsoft.Owin.Hosting.Tracing;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Host.Owin.MiddleWare;
 using Owin;
@@ -70,7 +71,7 @@ namespace NzbDrone.Host.Owin
 
         private void BuildApp(IAppBuilder appBuilder)
         {
-            appBuilder.Properties["host.AppName"] = "Sonarr";
+            appBuilder.Properties["host.AppName"] = BuildInfo.AppName;
 
             foreach (var middleWare in _owinMiddleWares.OrderBy(c => c.Order))
             {

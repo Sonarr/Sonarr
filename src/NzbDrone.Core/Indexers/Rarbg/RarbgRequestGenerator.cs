@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -114,7 +115,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
             requestBuilder.AddQueryParam("limit", "100");
             requestBuilder.AddQueryParam("token", _tokenProvider.GetToken(Settings));
             requestBuilder.AddQueryParam("format", "json_extended");
-            requestBuilder.AddQueryParam("app_id", "Sonarr");
+            requestBuilder.AddQueryParam("app_id", BuildInfo.AppName);
 
             yield return new IndexerRequest(requestBuilder.Build());
         }

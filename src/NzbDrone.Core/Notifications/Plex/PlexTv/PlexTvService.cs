@@ -31,10 +31,10 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
             var requestBuilder = new HttpRequestBuilder("https://plex.tv/api/v2/pins")
                                  .Accept(HttpAccept.Json)
                                  .AddQueryParam("X-Plex-Client-Identifier", clientIdentifier)
-                                 .AddQueryParam("X-Plex-Product", "Sonarr")
+                                 .AddQueryParam("X-Plex-Product", BuildInfo.AppName)
                                  .AddQueryParam("X-Plex-Platform", "Windows")
                                  .AddQueryParam("X-Plex-Platform-Version", "7")
-                                 .AddQueryParam("X-Plex-Device-Name", "Sonarr")
+                                 .AddQueryParam("X-Plex-Device-Name", BuildInfo.AppName)
                                  .AddQueryParam("X-Plex-Version", BuildInfo.Version.ToString())
                                  .AddQueryParam("strong", true);
 
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
                                  .AddQueryParam("clientID", clientIdentifier)
                                  .AddQueryParam("forwardUrl", callbackUrl)
                                  .AddQueryParam("code", pinCode)
-                                 .AddQueryParam("context[device][product]", "Sonarr")
+                                 .AddQueryParam("context[device][product]", BuildInfo.AppName)
                                  .AddQueryParam("context[device][platform]", "Windows")
                                  .AddQueryParam("context[device][platformVersion]", "7")
                                  .AddQueryParam("context[device][version]", BuildInfo.Version.ToString());

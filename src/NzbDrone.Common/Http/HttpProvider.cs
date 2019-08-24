@@ -24,7 +24,7 @@ namespace NzbDrone.Common.Http
         public HttpProvider(Logger logger)
         {
             _logger = logger;
-            _userAgent = string.Format("Sonarr {0}", BuildInfo.Version);
+            _userAgent = $"{BuildInfo.AppName}/{BuildInfo.Version.ToString(2)}";
             ServicePointManager.Expect100Continue = false;
         }
 
