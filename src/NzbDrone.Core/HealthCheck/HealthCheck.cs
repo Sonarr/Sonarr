@@ -46,7 +46,8 @@ namespace NzbDrone.Core.HealthCheck
     public enum HealthCheckResult
     {
         Ok = 0,
-        Warning = 1,
-        Error = 2
+        Notice = 1,
+        Warning = 2,
+        Error = 3
     }
 }

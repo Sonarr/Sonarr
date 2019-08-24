@@ -1,4 +1,2 @@
 ignores msbuild
 ignores libmediainfo0v5
-ignores libcurl3
-ignores libcurl4

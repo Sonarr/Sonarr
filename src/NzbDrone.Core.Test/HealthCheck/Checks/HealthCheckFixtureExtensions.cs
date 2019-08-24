@@ -11,6 +11,16 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             result.Type.Should().Be(HealthCheckResult.Ok);
         }
 
+        public static void ShouldBeNotice(this Core.HealthCheck.HealthCheck result, string message = null)
+        {
+            result.Type.Should().Be(HealthCheckResult.Notice);
+
+            if (message.IsNotNullOrWhiteSpace())
+            {
+                result.Message.Should().Contain(message);
+            }
+        }
+
         public static void ShouldBeWarning(this Core.HealthCheck.HealthCheck result, string message = null)
         {
             result.Type.Should().Be(HealthCheckResult.Warning);

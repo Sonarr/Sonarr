@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using NLog;
+using NLog.Fluent;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Instrumentation.Extensions;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
@@ -26,11 +28,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             var monoVersion = _platformInfo.Version;
 
-            if (monoVersion >= new Version("5.0.0") && Environment.GetEnvironmentVariable("MONO_TLS_PROVIDER") == "legacy")
+            if (monoVersion >= new Version("5.8.0") && Environment.GetEnvironmentVariable("MONO_TLS_PROVIDER") == "legacy")
             {
-                // Mono 5.0 still has issues in combination with libmediainfo, so disabling this check for now.
-                //_logger.Debug("Mono version 5.0.0 or higher and legacy TLS provider is selected, recommending user to switch to btls.");
-                //return new HealthCheck(GetType(), HealthCheckResult.Warning, "Sonarr now supports Mono 5.x with btls enabled, consider removing MONO_TLS_PROVIDER=legacy option");
+                _logger.Debug()
+                       .Message("Mono version {0} and legacy TLS provider is selected, recommending user to switch to btls.", monoVersion)
+                       .WriteSentryDebug("LegacyTlsProvider", monoVersion.ToString())
+                       .Write();
+
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Sonarr Mono 4.x tls workaround still enabled, consider removing MONO_TLS_PROVIDER=legacy environment option");
             }
 
             return new HealthCheck(GetType());

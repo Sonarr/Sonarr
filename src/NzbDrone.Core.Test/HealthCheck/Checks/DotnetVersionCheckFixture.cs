@@ -7,19 +7,19 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
     [TestFixture]
-    public class MonoVersionCheckFixture : CoreTest<MonoVersionCheck>
+    public class DotnetVersionCheckFixture : CoreTest<DotnetVersionCheck>
     {
         private void GivenOutput(string version)
         {
-            MonoOnly();
+            WindowsOnly();
 
             Mocker.GetMock<IPlatformInfo>()
                   .SetupGet(s => s.Version)
                   .Returns(new Version(version));
         }
 
-        [TestCase("5.18")]
-        [TestCase("5.20")]
+        [TestCase("4.7.2")]
+        [TestCase("4.8")]
         public void should_return_ok(string version)
         {
             GivenOutput(version);
@@ -27,7 +27,9 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Subject.Check().ShouldBeOk();
         }
 
-        [TestCase("5.16")]
+        [TestCase("4.6.2")]
+        [TestCase("4.7")]
+        [TestCase("4.7.1")]
         public void should_return_notice(string version)
         {
             GivenOutput(version);
@@ -35,8 +37,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Subject.Check().ShouldBeNotice();
         }
 
-        [TestCase("5.4")]
-        [TestCase("5.8")]
         public void should_return_warning(string version)
         {
             GivenOutput(version);
@@ -44,19 +44,9 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Subject.Check().ShouldBeWarning();
         }
 
-        [TestCase("2.10.2")]
-        [TestCase("2.10.8.1")]
-        [TestCase("3.0.0.1")]
-        [TestCase("3.2.0.1")]
-        [TestCase("3.2.1")]
-        [TestCase("3.2.7")]
-        [TestCase("3.6.1")]
-        [TestCase("3.8")]
-        [TestCase("3.10")]
-        [TestCase("4.0.0.0")]
-        [TestCase("4.2")]
-        [TestCase("4.4.0")]
-        [TestCase("4.4.1")]
+        [TestCase("4.5")]
+        [TestCase("4.5.2")]
+        [TestCase("4.6.1")]
         public void should_return_error(string version)
         {
             GivenOutput(version);

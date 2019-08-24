@@ -31,7 +31,6 @@ namespace NzbDrone.Host
             AutoRegisterImplementations<NzbDronePersistentConnection>();
 
             Container.Register<INancyBootstrapper, SonarrBootstrapper>();
-            Container.Register<IHttpDispatcher, FallbackHttpDispatcher>();
         }
     }
 }

@@ -12,7 +12,6 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExternalModules\CurlSharp\CurlSharp\CurlSharp.csproj" />
     <ProjectReference Include="..\LogentriesNLog\LogentriesNLog.csproj" />
   </ItemGroup>
   <ItemGroup>

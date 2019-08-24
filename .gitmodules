@@ -1,4 +1,0 @@
-[submodule "src/ExternalModules/CurlSharp"]
-	path = src/ExternalModules/CurlSharp
-	url = https://github.com/Sonarr/CurlSharp.git
-	branch = master

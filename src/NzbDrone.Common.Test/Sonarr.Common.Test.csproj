@@ -11,9 +11,4 @@
   <ItemGroup>
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\ExternalModules\CurlSharp\libs\i386\*.*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>

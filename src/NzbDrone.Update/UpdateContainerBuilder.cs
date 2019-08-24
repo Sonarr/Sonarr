@@ -10,7 +10,7 @@ namespace NzbDrone.Update
         private UpdateContainerBuilder(IStartupContext startupContext, List<string> assemblies)
             : base(startupContext, assemblies)
         {
-            Container.Register<IHttpDispatcher, FallbackHttpDispatcher>();
+
         }
 
         public static IContainer Build(IStartupContext startupContext)

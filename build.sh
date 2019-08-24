@@ -194,9 +194,6 @@ PackageMono()
     echo "Adding Sonarr.Core.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $outputFolderLinux
 
-    echo "Adding CurlSharp.dll.config (for dllmap)"
-    cp $sourceFolder/NzbDrone.Common/CurlSharp.dll.config $outputFolderLinux
-
     # Below we deal with some mono incompatibilities with windows-only dotnet core/standard libs    
     # See: https://github.com/mono/mono/blob/master/tools/nuget-hash-extractor/download.sh
     # That list defines assemblies that are prohibited from being loaded from the appdir, instead loading from mono GAC.
@@ -307,12 +304,6 @@ PackageTests()
 
     echo "Adding Sonarr.Core.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $testPackageFolder
-
-    echo "Adding CurlSharp.dll.config (for dllmap)"
-    cp $sourceFolder/NzbDrone.Common/CurlSharp.dll.config $testPackageFolder
-
-    echo "Copying CurlSharp libraries"
-    cp $sourceFolder/ExternalModules/CurlSharp/libs/i386/* $testPackageFolder
 
     ProgressEnd 'Creating Test Package'
 }
