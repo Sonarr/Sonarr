@@ -59,6 +59,7 @@ function RootFolders(props) {
                 key={rootFolder.id}
                 id={rootFolder.id}
                 path={rootFolder.path}
+                accessible={rootFolder.accessible}
                 freeSpace={rootFolder.freeSpace}
                 unmappedFolders={rootFolder.unmappedFolders}
               />

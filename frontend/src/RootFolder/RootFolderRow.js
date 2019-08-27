@@ -13,13 +13,13 @@ function RootFolderRow(props) {
   const {
     id,
     path,
+    accessible,
     freeSpace,
     unmappedFolders,
     onDeletePress
   } = props;
 
-  const unmappedFoldersCount = unmappedFolders.length || '-';
-  const isUnavailable = freeSpace == null;
+  const isUnavailable = !accessible;
 
   return (
     <TableRow>
@@ -47,11 +47,11 @@ function RootFolderRow(props) {
       </TableRowCell>
 
       <TableRowCell className={styles.freeSpace}>
-        {freeSpace ? formatBytes(freeSpace) : '-'}
+        {(isUnavailable || isNaN(freeSpace)) ? '-' : formatBytes(freeSpace)}
       </TableRowCell>
 
       <TableRowCell className={styles.unmappedFolders}>
-        {unmappedFoldersCount}
+        {isUnavailable ? '-' : unmappedFolders.length}
       </TableRowCell>
 
       <TableRowCell className={styles.actions}>
@@ -68,6 +68,7 @@ function RootFolderRow(props) {
 RootFolderRow.propTypes = {
   id: PropTypes.number.isRequired,
   path: PropTypes.string.isRequired,
+  accessible: PropTypes.bool.isRequired,
   freeSpace: PropTypes.number,
   unmappedFolders: PropTypes.arrayOf(PropTypes.object).isRequired,
   onDeletePress: PropTypes.func.isRequired

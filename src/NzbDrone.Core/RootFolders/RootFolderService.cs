@@ -183,12 +183,12 @@ namespace NzbDrone.Core.RootFolders
             {
                 if (_diskProvider.FolderExists(rootFolder.Path))
                 {
+                    rootFolder.Accessible = true;
                     rootFolder.FreeSpace = _diskProvider.GetAvailableSpace(rootFolder.Path);
                     rootFolder.TotalSpace = _diskProvider.GetTotalSize(rootFolder.Path);
                     rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
                 }
-            })
-                .Wait(5000);
+            }).Wait(5000);
         }
     }
 }

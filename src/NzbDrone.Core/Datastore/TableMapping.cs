@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Config>().RegisterModel("Config");
 
             Mapper.Entity<RootFolder>().RegisterModel("RootFolders")
+                  .Ignore(r => r.Accessible)
                   .Ignore(r => r.FreeSpace)
                   .Ignore(r => r.TotalSpace);
 
