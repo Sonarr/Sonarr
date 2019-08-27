@@ -3,6 +3,8 @@ using Nancy;
 using Nancy.Authentication.Forms;
 using Nancy.Extensions;
 using Nancy.ModelBinding;
+using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 
@@ -10,12 +12,12 @@ namespace Sonarr.Http.Authentication
 {
     public class AuthenticationModule : NancyModule
     {
-        private readonly IUserService _userService;
+        private readonly IAuthenticationService _authService;
         private readonly IConfigFileProvider _configFileProvider;
 
-        public AuthenticationModule(IUserService userService, IConfigFileProvider configFileProvider)
+        public AuthenticationModule(IAuthenticationService authService, IConfigFileProvider configFileProvider)
         {
-            _userService = userService;
+            _authService = authService;
             _configFileProvider = configFileProvider;
             Post["/login"] = x => Login(this.Bind<LoginResource>());
             Get["/logout"] = x => Logout();
@@ -23,7 +25,7 @@ namespace Sonarr.Http.Authentication
 
         private Response Login(LoginResource resource)
         {
-            var user = _userService.FindUser(resource.Username, resource.Password);
+            var user = _authService.Login(Context, resource.Username, resource.Password);
 
             if (user == null)
             {
@@ -43,6 +45,8 @@ namespace Sonarr.Http.Authentication
 
         private Response Logout()
         {
+            _authService.Logout(Context);
+
             return this.LogoutAndRedirect(_configFileProvider.UrlBase + "/");
         }
     }

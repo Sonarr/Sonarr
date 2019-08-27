@@ -57,6 +57,8 @@ namespace NzbDrone.Common.Instrumentation
                 RegisterAppFile(appFolderInfo);
             }
 
+            RegisterAuthLogger();
+
             LogManager.ReconfigExistingLoggers();
         }
 
@@ -193,6 +195,23 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration.AddTarget("updateFile", fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
+        }
+
+        private static void RegisterAuthLogger()
+        {
+            var consoleTarget = LogManager.Configuration.FindTargetByName("console");
+            var fileTarget = LogManager.Configuration.FindTargetByName("appFileInfo");
+
+            var target = consoleTarget ?? fileTarget ?? new NullTarget();
+
+            // Send Auth to Console and info app file, but not the log database
+            var rule = new LoggingRule("Auth", LogLevel.Info, target) { Final = true };
+            if (consoleTarget != null && fileTarget != null)
+            {
+                rule.Targets.Add(fileTarget);
+            }
+
+            LogManager.Configuration.LoggingRules.Insert(0, rule);
         }
 
         public static Logger GetLogger(Type obj)

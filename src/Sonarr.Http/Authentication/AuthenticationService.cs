@@ -4,7 +4,9 @@ using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Authentication.Forms;
 using Nancy.Security;
+using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using Sonarr.Http.Extensions;
@@ -13,22 +15,73 @@ namespace Sonarr.Http.Authentication
 {
     public interface IAuthenticationService : IUserValidator, IUserMapper
     {
+        void SetContext(NancyContext context);
+
+        void LogUnauthorized(NancyContext context);
+        User Login(NancyContext context, string username, string password);
+        void Logout(NancyContext context);
         bool IsAuthenticated(NancyContext context);
     }
 
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IUserService _userService;
+        private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
         private static readonly NzbDroneUser AnonymousUser = new NzbDroneUser { UserName = "Anonymous" };
-        
+        private readonly IUserService _userService;
+        private readonly NancyContext _nancyContext;
+
         private static string API_KEY;
         private static AuthenticationType AUTH_METHOD;
 
-        public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)
+        [ThreadStatic]
+        private static NancyContext _context; 
+
+        public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService, NancyContext nancyContext)
         {
             _userService = userService;
+            _nancyContext = nancyContext;
             API_KEY = configFileProvider.ApiKey;
             AUTH_METHOD = configFileProvider.AuthenticationMethod;
+        }
+
+        public void SetContext(NancyContext context)
+        {
+            // Validate and GetUserIdentifier don't have access to the NancyContext so get it from the pipeline earlier
+            _context = context;
+        }
+
+        public User Login(NancyContext context, string username, string password)
+        {
+            if (AUTH_METHOD == AuthenticationType.None)
+            {
+                return null;
+            }
+
+            var user = _userService.FindUser(username, password);
+
+            if (user != null)
+            {
+                LogSuccess(context, username);
+
+                return user;
+            }
+
+            LogFailure(context, username);
+
+            return null;
+        }
+
+        public void Logout(NancyContext context)
+        {
+            if (AUTH_METHOD == AuthenticationType.None)
+            {
+                return;
+            }
+
+            if (context.CurrentUser != null)
+            {
+                LogLogout(context, context.CurrentUser.UserName);
+            }
         }
 
         public IUserIdentity Validate(string username, string password)
@@ -42,8 +95,16 @@ namespace Sonarr.Http.Authentication
 
             if (user != null)
             {
+                if (AUTH_METHOD != AuthenticationType.Basic)
+                {
+                    // Don't log success for basic auth
+                    LogSuccess(_context, username);
+                }
+
                 return new NzbDroneUser { UserName = user.Username };
             }
+
+            LogFailure(_context, username);
 
             return null;
         }
@@ -61,6 +122,8 @@ namespace Sonarr.Http.Authentication
             {
                 return new NzbDroneUser { UserName = user.Username };
             }
+
+            LogInvalidated(_context);
 
             return null;
         }
@@ -137,6 +200,31 @@ namespace Sonarr.Http.Authentication
             }
 
             return context.Request.Headers.Authorization;
+        }
+
+        public void LogUnauthorized(NancyContext context)
+        {
+            _authLogger.Info("Auth-Unauthorized ip {0} url '{1}'", context.Request.UserHostAddress, context.Request.Url.ToString());
+        }
+
+        private void LogInvalidated(NancyContext context)
+        {
+            _authLogger.Info("Auth-Invalidated ip {0}", context.Request.UserHostAddress);
+        }
+
+        private void LogFailure(NancyContext context, string username)
+        {
+            _authLogger.Warn("Auth-Failure ip {0} username '{1}'", context.Request.UserHostAddress, username);
+        }
+
+        private void LogSuccess(NancyContext context, string username)
+        {
+            _authLogger.Info("Auth-Success ip {0} username '{1}'", context.Request.UserHostAddress, username);
+        }
+
+        private void LogLogout(NancyContext context, string username)
+        {
+            _authLogger.Info("Auth-Logout ip {0} username '{1}'", context.Request.UserHostAddress, username);
         }
     }
 }
