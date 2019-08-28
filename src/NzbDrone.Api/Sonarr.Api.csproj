@@ -6,9 +6,9 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="Ical.Net" Version="2.2.32" />
-    <PackageReference Include="Nancy" Version="1.4.4" />
-    <PackageReference Include="Nancy.Authentication.Basic" Version="1.4.1" />
-    <PackageReference Include="Nancy.Authentication.Forms" Version="1.4.1" />
+    <PackageReference Include="Nancy" Version="2.0.0" />
+    <PackageReference Include="Nancy.Authentication.Basic" Version="2.0.0" />
+    <PackageReference Include="Nancy.Authentication.Forms" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
   <ItemGroup>
