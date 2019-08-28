@@ -43,8 +43,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
             UpdateResource = SetQuality;
             DeleteResource = DeleteEpisodeFile;
 
-            Put["/editor"] = episodeFiles => SetQuality();
-            Delete["/bulk"] = episodeFiles => DeleteEpisodeFiles();
+            Put("/editor",  episodeFiles => SetQuality());
+            Delete("/bulk",  episodeFiles => DeleteEpisodeFiles());
         }
 
         private EpisodeFileResource GetEpisodeFile(int id)
@@ -97,7 +97,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
             _mediaFileService.Update(episodeFile);
         }
 
-        private Response SetQuality()
+        private object SetQuality()
         {
             var resource = Request.Body.FromJson<EpisodeFileListResource>();
             var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
@@ -119,8 +119,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
             var series = _seriesService.GetSeries(episodeFiles.First().SeriesId);
 
-            return episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification))
-                               .AsResponse(HttpStatusCode.Accepted);
+            return ResponseWithCode(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification))
+                               , HttpStatusCode.Accepted);
         }
 
         private void DeleteEpisodeFile(int id)
@@ -137,7 +137,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
             _mediaFileDeletionService.DeleteEpisodeFile(series, episodeFile);
         }
 
-        private Response DeleteEpisodeFiles()
+        private object DeleteEpisodeFiles()
         {
             var resource = Request.Body.FromJson<EpisodeFileListResource>();
             var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
@@ -148,7 +148,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 _mediaFileDeletionService.DeleteEpisodeFile(series, episodeFile);
             }
 
-            return new object().AsResponse();
+            return new object();
         }
 
         public void Handle(EpisodeFileAddedEvent message)

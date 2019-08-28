@@ -14,7 +14,6 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
-using Sonarr.Http.Extensions;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace Sonarr.Api.V3.Indexers
@@ -58,12 +57,12 @@ namespace Sonarr.Api.V3.Indexers
             PostValidator.RuleFor(s => s.Guid).NotEmpty();
 
             GetResourceAll = GetReleases;
-            Post["/"] = x => DownloadRelease(ReadResourceFromRequest());
+            Post("/",  x => DownloadRelease(ReadResourceFromRequest()));
 
             _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
         }
 
-        private Response DownloadRelease(ReleaseResource release)
+        private object DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
@@ -130,7 +129,7 @@ namespace Sonarr.Api.V3.Indexers
                 throw new NzbDroneClientException(HttpStatusCode.Conflict, "Getting release from indexer failed");
             }
 
-            return release.AsResponse();
+            return release;
         }
 
         private List<ReleaseResource> GetReleases()

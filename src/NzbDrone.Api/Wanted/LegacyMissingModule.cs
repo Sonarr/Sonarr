@@ -7,13 +7,13 @@ namespace NzbDrone.Api.Wanted
     {
         public LegacyMissingModule() : base("missing")
         {
-            Get["/"] = x =>
+            Get("/", x =>
             {
                 string queryString = ConvertQueryParams(Request.Query);
                 var url = string.Format("/api/wanted/missing?{0}", queryString);
 
                 return Response.AsRedirect(url);
-            };
+            });
         }
 
         private string ConvertQueryParams(DynamicDictionary query)

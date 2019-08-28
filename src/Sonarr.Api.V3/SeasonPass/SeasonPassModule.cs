@@ -15,10 +15,10 @@ namespace Sonarr.Api.V3.SeasonPass
         {
             _seriesService = seriesService;
             _episodeMonitoredService = episodeMonitoredService;
-            Post["/"] = series => UpdateAll();
+            Post("/",  series => UpdateAll());
         }
 
-        private Response UpdateAll()
+        private object UpdateAll()
         {
             //Read from request
             var request = Request.Body.FromJson<SeasonPassResource>();
@@ -54,7 +54,7 @@ namespace Sonarr.Api.V3.SeasonPass
                 _episodeMonitoredService.SetEpisodeMonitoredStatus(series, request.MonitoringOptions);
             }
 
-            return "ok".AsResponse(HttpStatusCode.Accepted);
+            return ResponseWithCode("ok", HttpStatusCode.Accepted);
         }
     }
 }

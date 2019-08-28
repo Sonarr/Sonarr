@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Nancy;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Backup;
 using Sonarr.Http;
-using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.System.Backup
@@ -32,8 +30,8 @@ namespace Sonarr.Api.V3.System.Backup
             GetResourceAll = GetBackupFiles;
             DeleteResource = DeleteBackup;
 
-            Post[@"/restore/(?<id>[\d]{1,10})"] = x => Restore((int)x.Id);
-            Post["/restore/upload"] = x => UploadAndRestore();
+            Post(@"/restore/(?<id>[\d]{1,10})",  x => Restore((int)x.Id));
+            Post("/restore/upload",  x => UploadAndRestore());
         }
 
         public List<BackupResource> GetBackupFiles()
@@ -65,7 +63,7 @@ namespace Sonarr.Api.V3.System.Backup
             _diskProvider.DeleteFile(path);
         }
 
-        public Response Restore(int id)
+        public object Restore(int id)
         {
             var backup = GetBackup(id);
 
@@ -81,10 +79,10 @@ namespace Sonarr.Api.V3.System.Backup
             return new
                    {
                        RestartRequired = true
-                   }.AsResponse();
+                   };
         }
 
-        public Response UploadAndRestore()
+        public object UploadAndRestore()
         {
             var files = Context.Request.Files.ToList();
 
@@ -112,7 +110,7 @@ namespace Sonarr.Api.V3.System.Backup
             return new
                    {
                        RestartRequired = true
-                   }.AsResponse();
+                   };
         }
 
         private string GetBackupPath(NzbDrone.Core.Backup.Backup backup)

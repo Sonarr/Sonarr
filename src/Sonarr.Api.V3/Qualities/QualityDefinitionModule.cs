@@ -18,7 +18,7 @@ namespace Sonarr.Api.V3.Qualities
             GetResourceAll = GetAll;
             GetResourceById = GetById;
             UpdateResource = Update;
-            Put["/update"] = d => UpdateMany();
+            Put("/update",  d => UpdateMany());
         }
 
         private void Update(QualityDefinitionResource resource)
@@ -37,7 +37,7 @@ namespace Sonarr.Api.V3.Qualities
             return _qualityDefinitionService.All().ToResource();
         }
 
-        private Response UpdateMany()
+        private object UpdateMany()
         {
             //Read from request
             var qualityDefinitions = Request.Body.FromJson<List<QualityDefinitionResource>>()
@@ -46,9 +46,9 @@ namespace Sonarr.Api.V3.Qualities
 
             _qualityDefinitionService.UpdateMany(qualityDefinitions);
 
-            return _qualityDefinitionService.All()
+            return ResponseWithCode(_qualityDefinitionService.All()
                                             .ToResource()
-                                            .AsResponse(HttpStatusCode.Accepted);
+                                            , HttpStatusCode.Accepted);
         }
     }
 }

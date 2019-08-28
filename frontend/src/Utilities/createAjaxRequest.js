@@ -40,7 +40,7 @@ export default function createAjaxRequest(originalAjaxOptions) {
     }
   }
 
-  const ajaxOptions = { ...originalAjaxOptions };
+  const ajaxOptions = { dataType: 'json', ...originalAjaxOptions };
 
   if (isRelative(ajaxOptions)) {
     moveBodyToQuery(ajaxOptions);

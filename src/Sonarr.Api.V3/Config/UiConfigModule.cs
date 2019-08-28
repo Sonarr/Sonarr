@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Reflection;
-using NzbDrone.Core.Configuration;
-using Sonarr.Http;
+﻿using NzbDrone.Core.Configuration;
 
 namespace Sonarr.Api.V3.Config
 {

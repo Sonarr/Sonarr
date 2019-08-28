@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using Nancy;
-using Sonarr.Http.Extensions;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using System.Linq;
 using Sonarr.Http;
-using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api.Series
 {
@@ -17,14 +15,14 @@ namespace NzbDrone.Api.Series
             : base("/series/lookup")
         {
             _searchProxy = searchProxy;
-            Get["/"] = x => Search();
+            Get("/",  x => Search());
         }
 
 
-        private Response Search()
+        private object Search()
         {
             var tvDbResults = _searchProxy.SearchForNewSeries((string)Request.Query.term);
-            return MapToResource(tvDbResults).AsResponse();
+            return MapToResource(tvDbResults);
         }
 
 

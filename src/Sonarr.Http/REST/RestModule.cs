@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Nancy;
+using Nancy.Responses.Negotiation;
 using Newtonsoft.Json;
 using NzbDrone.Core.Datastore;
 using Sonarr.Http.Extensions;
@@ -72,13 +73,13 @@ namespace Sonarr.Http.REST
             set
             {
                 _deleteResource = value;
-                Delete[ID_ROUTE] = options =>
+                Delete(ID_ROUTE, options =>
                 {
                     ValidateId(options.Id);
                     DeleteResource((int)options.Id);
 
-                    return new object().AsResponse();
-                };
+                    return new object();
+                });
             }
         }
 
@@ -88,7 +89,7 @@ namespace Sonarr.Http.REST
             set
             {
                 _getResourceById = value;
-                Get[ID_ROUTE] = options =>
+                Get(ID_ROUTE, options =>
                     {
                         ValidateId(options.Id);
                         try
@@ -100,13 +101,13 @@ namespace Sonarr.Http.REST
                                 return new NotFoundResponse();
                             }
 
-                            return resource.AsResponse();
+                            return resource;
                         }
                         catch (ModelNotFoundException)
                         {
                             return new NotFoundResponse();
                         }
-                    };
+                    });
             }
         }
 
@@ -117,11 +118,11 @@ namespace Sonarr.Http.REST
             {
                 _getResourceAll = value;
 
-                Get[ROOT_ROUTE] = options =>
+                Get(ROOT_ROUTE, options =>
                 {
                     var resource = GetResourceAll();
-                    return resource.AsResponse();
-                };
+                    return resource;
+                });
             }
         }
 
@@ -132,11 +133,11 @@ namespace Sonarr.Http.REST
             {
                 _getResourcePaged = value;
 
-                Get[ROOT_ROUTE] = options =>
+                Get(ROOT_ROUTE, options =>
                 {
                     var resource = GetResourcePaged(ReadPagingResourceFromRequest());
-                    return resource.AsResponse();
-                };
+                    return resource;
+                });
             }
         }
 
@@ -147,11 +148,11 @@ namespace Sonarr.Http.REST
             {
                 _getResourceSingle = value;
 
-                Get[ROOT_ROUTE] = options =>
+                Get(ROOT_ROUTE, options =>
                 {
                     var resource = GetResourceSingle();
-                    return resource.AsResponse();
-                };
+                    return resource;
+                });
             }
         }
 
@@ -161,12 +162,11 @@ namespace Sonarr.Http.REST
             set
             {
                 _createResource = value;
-                Post[ROOT_ROUTE] = options =>
+                Post(ROOT_ROUTE, options =>
                 {
                     var id = CreateResource(ReadResourceFromRequest());
-                    return GetResourceById(id).AsResponse(HttpStatusCode.Created);
-                };
-
+                    return ResponseWithCode(GetResourceById(id), HttpStatusCode.Created);
+                });
             }
         }
 
@@ -176,21 +176,26 @@ namespace Sonarr.Http.REST
             set
             {
                 _updateResource = value;
-                Put[ROOT_ROUTE] = options =>
+                Put(ROOT_ROUTE, options =>
                     {
                         var resource = ReadResourceFromRequest();
                         UpdateResource(resource);
-                        return GetResourceById(resource.Id).AsResponse(HttpStatusCode.Accepted);
-                    };
+                        return ResponseWithCode(GetResourceById(resource.Id), HttpStatusCode.Accepted);
+                    });
 
-                Put[ID_ROUTE] = options =>
+                Put(ID_ROUTE, options =>
                     {
                         var resource = ReadResourceFromRequest();
                         resource.Id = options.Id;
                         UpdateResource(resource);
-                        return GetResourceById(resource.Id).AsResponse(HttpStatusCode.Accepted);
-                    };
+                        return ResponseWithCode(GetResourceById(resource.Id), HttpStatusCode.Accepted);
+                    });
             }
+        }
+
+        protected Negotiator ResponseWithCode(object model, HttpStatusCode statusCode)
+        {
+            return Negotiate.WithModel(model).WithStatusCode(statusCode);
         }
 
         protected TResource ReadResourceFromRequest(bool skipValidate = false)

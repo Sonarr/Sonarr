@@ -2,7 +2,6 @@
 using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
-using Nancy;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
@@ -10,7 +9,6 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
-using Sonarr.Http.Extensions;
 
 namespace Sonarr.Api.V3.Indexers
 {
@@ -36,10 +34,10 @@ namespace Sonarr.Api.V3.Indexers
             PostValidator.RuleFor(s => s.Protocol).NotEmpty();
             PostValidator.RuleFor(s => s.PublishDate).NotEmpty();
 
-            Post["/push"] = x => ProcessRelease(ReadResourceFromRequest());
+            Post("/push",  x => ProcessRelease(ReadResourceFromRequest()));
         }
 
-        private Response ProcessRelease(ReleaseResource release)
+        private object ProcessRelease(ReleaseResource release)
         {
             _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl);
 
@@ -59,7 +57,7 @@ namespace Sonarr.Api.V3.Indexers
                 throw new ValidationException(new List<ValidationFailure>{ new ValidationFailure("Title", "Unable to parse", release.Title) });
             }
 
-            return MapDecisions(new [] { firstDecision }).AsResponse();
+            return MapDecisions(new [] { firstDecision });
         }
 
         private void ResolveIndexer(ReleaseInfo release)

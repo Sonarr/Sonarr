@@ -6,7 +6,6 @@ using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.SeriesStats;
 using Sonarr.Http;
-using Sonarr.Http.Extensions;
 
 namespace Sonarr.Api.V3.Series
 {
@@ -20,13 +19,13 @@ namespace Sonarr.Api.V3.Series
         {
             _searchProxy = searchProxy;
             _fileNameBuilder = fileNameBuilder;
-            Get["/"] = x => Search();
+            Get("/",  x => Search());
         }
 
-        private Response Search()
+        private object Search()
         {
             var tvDbResults = _searchProxy.SearchForNewSeries((string)Request.Query.term);
-            return MapToResource(tvDbResults).AsResponse();
+            return MapToResource(tvDbResults);
         }
 
         private IEnumerable<SeriesResource> MapToResource(IEnumerable<NzbDrone.Core.Tv.Series> series)

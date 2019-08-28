@@ -26,7 +26,7 @@ namespace NzbDrone.Api.Logs
             _configFileProvider = configFileProvider;
             GetResourceAll = GetLogFilesResponse;
 
-            Get[LOGFILE_ROUTE] = options => GetLogFileResponse(options.filename);
+            Get(LOGFILE_ROUTE,  options => GetLogFileResponse(options.filename));
         }
 
         private List<LogFileResource> GetLogFilesResponse()
@@ -53,7 +53,7 @@ namespace NzbDrone.Api.Logs
             return result.OrderByDescending(l => l.LastWriteTime).ToList();
         }
 
-        private Response GetLogFileResponse(string filename)
+        private object GetLogFileResponse(string filename)
         {
             LogManager.Flush();
 

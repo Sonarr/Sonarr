@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Nancy.Bootstrapper;
-using Sonarr.Http;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Http.Dispatchers;
 using NzbDrone.SignalR;
+using Sonarr.Http;
 
 namespace NzbDrone.Host
 {

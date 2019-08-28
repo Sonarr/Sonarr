@@ -32,9 +32,9 @@ namespace Sonarr.Http.Extensions
             return Json.Deserialize(value, type);
         }
 
-        public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)
+        public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, NancyContext context, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            var response = new JsonResponse<TModel>(model, NancySerializer) { StatusCode = statusCode };
+            var response = new JsonResponse<TModel>(model, NancySerializer, context.Environment) { StatusCode = statusCode };
             response.Headers.DisableCache();
 
             return response;

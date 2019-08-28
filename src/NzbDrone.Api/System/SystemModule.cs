@@ -1,6 +1,4 @@
-﻿using Nancy;
-using Nancy.Routing;
-using Sonarr.Http.Extensions;
+﻿using Nancy.Routing;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
@@ -37,13 +35,13 @@ namespace NzbDrone.Api.System
             _configFileProvider = configFileProvider;
             _database = database;
             _lifecycleService = lifecycleService;
-            Get["/status"] = x => GetStatus();
-            Get["/routes"] = x => GetRoutes();
-            Post["/shutdown"] = x => Shutdown();
-            Post["/restart"] = x => Restart();
+            Get("/status",  x => GetStatus());
+            Get("/routes",  x => GetRoutes());
+            Post("/shutdown",  x => Shutdown());
+            Post("/restart",  x => Restart());
         }
 
-        private Response GetStatus()
+        private object GetStatus()
         {
             return new
             {
@@ -68,24 +66,24 @@ namespace NzbDrone.Api.System
                 UrlBase = _configFileProvider.UrlBase,
                 RuntimeVersion = _platformInfo.Version,
                 RuntimeName = PlatformInfo.Platform
-            }.AsResponse();
+            };
         }
 
-        private Response GetRoutes()
+        private object GetRoutes()
         {
-            return _routeCacheProvider.GetCache().Values.AsResponse();
+            return _routeCacheProvider.GetCache().Values;
         }
 
-        private Response Shutdown()
+        private object Shutdown()
         {
             _lifecycleService.Shutdown();
-            return "".AsResponse();
+            return "";
         }
 
-        private Response Restart()
+        private object Restart()
         {
             _lifecycleService.Restart();
-            return "".AsResponse();
+            return "";
         }
     }
 }

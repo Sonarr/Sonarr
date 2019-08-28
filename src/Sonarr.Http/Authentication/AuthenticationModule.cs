@@ -3,9 +3,6 @@ using Nancy;
 using Nancy.Authentication.Forms;
 using Nancy.Extensions;
 using Nancy.ModelBinding;
-using NLog;
-using NzbDrone.Common.Instrumentation;
-using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 
 namespace Sonarr.Http.Authentication
@@ -19,8 +16,8 @@ namespace Sonarr.Http.Authentication
         {
             _authService = authService;
             _configFileProvider = configFileProvider;
-            Post["/login"] = x => Login(this.Bind<LoginResource>());
-            Get["/logout"] = x => Logout();
+            Post("/login",  x => Login(this.Bind<LoginResource>()));
+            Get("/logout",  x => Logout());
         }
 
         private Response Login(LoginResource resource)

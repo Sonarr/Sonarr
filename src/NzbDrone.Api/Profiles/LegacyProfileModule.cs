@@ -8,13 +8,13 @@ namespace NzbDrone.Api.Profiles
         public LegacyProfileModule()
             : base("qualityprofile")
         {
-            Get["/"] = x =>
+            Get("/", x =>
             {
                 string queryString = ConvertQueryParams(Request.Query);
                 var url = string.Format("/api/profile?{0}", queryString);
 
                 return Response.AsRedirect(url);
-            };
+            });
         }
 
         private string ConvertQueryParams(DynamicDictionary query)

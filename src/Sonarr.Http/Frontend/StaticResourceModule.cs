@@ -18,8 +18,8 @@ namespace Sonarr.Http.Frontend
             _requestMappers = requestMappers;
             _logger = logger;
 
-            Get["/{resource*}"] = x => Index();
-            Get["/"] = x => Index();
+            Get("/{resource*}",  x => Index());
+            Get("/",  x => Index());
         }
 
         private Response Index()

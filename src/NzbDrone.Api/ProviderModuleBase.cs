@@ -3,15 +3,12 @@ using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using Nancy;
-using Sonarr.Http.Extensions;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
-using Newtonsoft.Json;
 using NzbDrone.Common.Serializer;
 using Sonarr.Http;
 using Sonarr.Http.ClientSchema;
-using Sonarr.Http.Mapping;
 
 namespace NzbDrone.Api
 {
@@ -27,9 +24,9 @@ namespace NzbDrone.Api
         {
             _providerFactory = providerFactory;
 
-            Get["schema"] = x => GetTemplates();
-            Post["test"] = x => Test(ReadResourceFromRequest(true));
-            Post["action/{action}"] = x => RequestAction(x.action, ReadResourceFromRequest(true));
+            Get("schema",  x => GetTemplates());
+            Post("test",  x => Test(ReadResourceFromRequest(true)));
+            Post("action/{action}",  x => RequestAction(x.action, ReadResourceFromRequest(true)));
 
             GetResourceAll = GetAll;
             GetResourceById = GetProviderById;
@@ -146,7 +143,7 @@ namespace NzbDrone.Api
             _providerFactory.Delete(id);
         }
 
-        private Response GetTemplates()
+        private object GetTemplates()
         {
             var defaultDefinitions = _providerFactory.GetDefaultDefinitions().OrderBy(p => p.ImplementationName).ToList();
 
@@ -170,10 +167,10 @@ namespace NzbDrone.Api
                 result.Add(providerResource);
             }
 
-            return result.AsResponse();
+            return result;
         }
 
-        private Response Test(TProviderResource providerResource)
+        private object Test(TProviderResource providerResource)
         {
             // Don't validate when getting the definition so we can validate afterwards (avoids validation being skipped because the provider is disabled)
             var providerDefinition = GetDefinition(providerResource, true, false);
@@ -185,7 +182,7 @@ namespace NzbDrone.Api
         }
 
 
-        private Response RequestAction(string action, TProviderResource providerResource)
+        private object RequestAction(string action, TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, true, false);
 

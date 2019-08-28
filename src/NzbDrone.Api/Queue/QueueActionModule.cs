@@ -1,6 +1,5 @@
 ﻿using System;
 using Nancy;
-using Nancy.Responses;
 using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 using NzbDrone.Core.Download;
@@ -37,12 +36,12 @@ namespace NzbDrone.Api.Queue
             _pendingReleaseService = pendingReleaseService;
             _downloadService = downloadService;
 
-            Delete[@"/(?<id>[\d]{1,10})"] = x => Remove((int)x.Id);
-            Post["/import"] = x => Import();
-            Post["/grab"] = x => Grab();
+            Delete(@"/(?<id>[\d]{1,10})",  x => Remove((int)x.Id));
+            Post("/import",  x => Import());
+            Post("/grab",  x => Grab());
         }
 
-        private Response Remove(int id)
+        private object Remove(int id)
         {
             var blacklist = false;
             var blacklistQuery = Request.Query.blacklist;
@@ -58,7 +57,7 @@ namespace NzbDrone.Api.Queue
             {
                 _pendingReleaseService.RemovePendingQueueItems(pendingRelease.Id);
 
-                return new object().AsResponse();
+                return new object();
             }
 
             var trackedDownload = GetTrackedDownload(id);
@@ -82,20 +81,20 @@ namespace NzbDrone.Api.Queue
                 _failedDownloadService.MarkAsFailed(trackedDownload.DownloadItem.DownloadId);
             }
 
-            return new object().AsResponse();
+            return new object();
         }
 
-        private JsonResponse<QueueResource> Import()
+        private object Import()
         {
             var resource = Request.Body.FromJson<QueueResource>();
             var trackedDownload = GetTrackedDownload(resource.Id);
                 
             _completedDownloadService.Process(trackedDownload, true);
 
-            return resource.AsResponse();
+            return resource;
         }
 
-        private JsonResponse<QueueResource> Grab()
+        private object Grab()
         {
             var resource = Request.Body.FromJson<QueueResource>();
 
@@ -108,7 +107,7 @@ namespace NzbDrone.Api.Queue
 
             _downloadService.DownloadReport(pendingRelease.RemoteEpisode);
 
-            return resource.AsResponse();
+            return resource;
         }
 
         private TrackedDownload GetTrackedDownload(int queueId)

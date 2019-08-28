@@ -14,7 +14,9 @@ namespace Sonarr.Http.ErrorManagement
         public void Handle(HttpStatusCode statusCode, NancyContext context)
         {
             if (statusCode == HttpStatusCode.SeeOther || statusCode == HttpStatusCode.OK)
+            {
                 return;
+            }
 
             if (statusCode == HttpStatusCode.Continue)
             {
@@ -23,13 +25,17 @@ namespace Sonarr.Http.ErrorManagement
             }
 
             if (statusCode == HttpStatusCode.Unauthorized)
+            {
                 return;
+            }
 
             if (context.Response.ContentType == "text/html" || context.Response.ContentType == "text/plain")
+            {
                 context.Response = new ErrorModel
-                    {
-                            Message = statusCode.ToString()
-                    }.AsResponse(statusCode);
+                {
+                    Message = statusCode.ToString()
+                }.AsResponse(context, statusCode);
+            }
         }
     }
 }

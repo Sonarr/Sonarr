@@ -12,10 +12,10 @@ namespace NzbDrone.Api.SeasonPass
             : base("/seasonpass")
         {
             _episodeMonitoredService = episodeMonitoredService;
-            Post["/"] = series => UpdateAll();
+            Post("/",  series => UpdateAll());
         }
 
-        private Response UpdateAll()
+        private object UpdateAll()
         {
             //Read from request
             var request = Request.Body.FromJson<SeasonPassResource>();
@@ -25,7 +25,7 @@ namespace NzbDrone.Api.SeasonPass
                 _episodeMonitoredService.SetEpisodeMonitoredStatus(s, request.MonitoringOptions);
             }
 
-            return "ok".AsResponse(HttpStatusCode.Accepted);
+            return ResponseWithCode("ok", HttpStatusCode.Accepted);
         }
     }
 }

@@ -14,16 +14,16 @@ namespace Sonarr.Api.V3.Series
             : base("/series/import")
         {
             _addSeriesService = addSeriesService;
-            Post["/"] = x => Import();
+            Post("/",  x => Import());
         }
 
 
-        private Response Import()
+        private object Import()
         {
             var resource = Request.Body.FromJson<List<SeriesResource>>();
             var newSeries = resource.ToModel();
 
-            return _addSeriesService.AddSeries(newSeries).ToResource().AsResponse();
+            return _addSeriesService.AddSeries(newSeries).ToResource();
         }
     }
 }

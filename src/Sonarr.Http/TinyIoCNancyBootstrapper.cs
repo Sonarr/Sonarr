@@ -6,6 +6,7 @@ using System.Reflection;
 using Nancy;
 using Nancy.Diagnostics;
 using Nancy.Bootstrapper;
+using Nancy.Configuration;
 
 namespace Sonarr.Http
 {
@@ -50,6 +51,47 @@ namespace Sonarr.Http
         protected override sealed INancyEngine GetEngineInternal()
         {
             return this.ApplicationContainer.Resolve<INancyEngine>();
+        }
+
+                //
+        // Summary:
+        //     Gets the Nancy.Configuration.INancyEnvironmentConfigurator used by th.
+        //
+        // Returns:
+        //     An Nancy.Configuration.INancyEnvironmentConfigurator instance.
+        protected override INancyEnvironmentConfigurator GetEnvironmentConfigurator()
+        {
+            return this.ApplicationContainer.Resolve<INancyEnvironmentConfigurator>();
+        }
+
+        //
+        // Summary:
+        //     Get the Nancy.Configuration.INancyEnvironment instance.
+        //
+        // Returns:
+        //     An configured Nancy.Configuration.INancyEnvironment instance.
+        //
+        // Remarks:
+        //     The boostrapper must be initialised (Nancy.Bootstrapper.INancyBootstrapper.Initialise)
+        //     prior to calling this.
+        public override INancyEnvironment GetEnvironment()
+        {
+            return this.ApplicationContainer.Resolve<INancyEnvironment>();
+        }
+
+        //
+        // Summary:
+        //     Registers an Nancy.Configuration.INancyEnvironment instance in the container.
+        //
+        // Parameters:
+        //   container:
+        //     The container to register into.
+        //
+        //   environment:
+        //     The Nancy.Configuration.INancyEnvironment instance to register.
+        protected override void RegisterNancyEnvironment(TinyIoCContainer container, INancyEnvironment environment)
+        {
+            ApplicationContainer.Register<INancyEnvironment>(environment);
         }
 
         /// <summary>
