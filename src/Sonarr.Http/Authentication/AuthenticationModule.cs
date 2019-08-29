@@ -19,8 +19,8 @@ namespace Sonarr.Http.Authentication
         {
             _authService = authService;
             _configFileProvider = configFileProvider;
-            Post["/login"] = x => Login(this.Bind<LoginResource>());
-            Get["/logout"] = x => Logout();
+            Post("/login",  x => Login(this.Bind<LoginResource>()));
+            Get("/logout",  x => Logout());
         }
 
         private Response Login(LoginResource resource)

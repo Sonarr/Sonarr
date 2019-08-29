@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Authentication.Forms;
-using Nancy.Security;
 using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using Sonarr.Http.Extensions;
@@ -26,7 +26,7 @@ namespace Sonarr.Http.Authentication
     public class AuthenticationService : IAuthenticationService
     {
         private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
-        private static readonly NzbDroneUser AnonymousUser = new NzbDroneUser { UserName = "Anonymous" };
+        private const string AnonymousUser = "Anonymous";
         private readonly IUserService _userService;
         private readonly NancyContext _nancyContext;
 
@@ -80,15 +80,15 @@ namespace Sonarr.Http.Authentication
 
             if (context.CurrentUser != null)
             {
-                LogLogout(context, context.CurrentUser.UserName);
+                LogLogout(context, context.CurrentUser.Identity.Name);
             }
         }
 
-        public IUserIdentity Validate(string username, string password)
+        public ClaimsPrincipal Validate(string username, string password)
         {
             if (AUTH_METHOD == AuthenticationType.None)
             {
-                return AnonymousUser;
+                return new ClaimsPrincipal(new GenericIdentity(AnonymousUser));
             }
 
             var user = _userService.FindUser(username, password);
@@ -101,7 +101,7 @@ namespace Sonarr.Http.Authentication
                     LogSuccess(_context, username);
                 }
 
-                return new NzbDroneUser { UserName = user.Username };
+                return new ClaimsPrincipal(new GenericIdentity(user.Username));
             }
 
             LogFailure(_context, username);
@@ -109,18 +109,18 @@ namespace Sonarr.Http.Authentication
             return null;
         }
 
-        public IUserIdentity GetUserFromIdentifier(Guid identifier, NancyContext context)
+        public ClaimsPrincipal GetUserFromIdentifier(Guid identifier, NancyContext context)
         {
             if (AUTH_METHOD == AuthenticationType.None)
             {
-                return AnonymousUser;
+                return new ClaimsPrincipal(new GenericIdentity(AnonymousUser));
             }
 
             var user = _userService.FindUser(identifier);
 
             if (user != null)
             {
-                return new NzbDroneUser { UserName = user.Username };
+                return new ClaimsPrincipal(new GenericIdentity(user.Username));
             }
 
             LogInvalidated(_context);

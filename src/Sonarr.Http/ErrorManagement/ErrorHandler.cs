@@ -29,7 +29,7 @@ namespace Sonarr.Http.ErrorManagement
                 context.Response = new ErrorModel
                     {
                             Message = statusCode.ToString()
-                    }.AsResponse(statusCode);
+                    }.AsResponse(context, statusCode);
         }
     }
 }

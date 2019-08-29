@@ -51,7 +51,10 @@ namespace Sonarr.Http
             return _tinyIoCContainer;
         }
 
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration => new DiagnosticsConfiguration { Password = @"password" };
+        public override void Configure(Nancy.Configuration.INancyEnvironment environment)
+        {
+            environment.Diagnostics(password: @"password");
+        }
 
         protected override byte[] FavIcon => null;
     }

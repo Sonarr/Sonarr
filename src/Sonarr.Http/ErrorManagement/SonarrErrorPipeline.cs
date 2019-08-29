@@ -27,14 +27,14 @@ namespace Sonarr.Http.ErrorManagement
             if (exception is ApiException apiException)
             {
                 _logger.Warn(apiException, "API Error");
-                return apiException.ToErrorResponse();
+                return apiException.ToErrorResponse(context);
             }
             
             if (exception is ValidationException validationException)
             {
                 _logger.Warn("Invalid request {0}", validationException.Message);
 
-                return validationException.Errors.AsResponse(HttpStatusCode.BadRequest);
+                return validationException.Errors.AsResponse(context, HttpStatusCode.BadRequest);
             }
 
             if (exception is NzbDroneClientException clientException)
@@ -43,7 +43,7 @@ namespace Sonarr.Http.ErrorManagement
                 {
                     Message = exception.Message,
                     Description = exception.ToString()
-                }.AsResponse((HttpStatusCode)clientException.StatusCode);
+                }.AsResponse(context, (HttpStatusCode)clientException.StatusCode);
             }
 
             if (exception is ModelNotFoundException notFoundException)
@@ -52,7 +52,7 @@ namespace Sonarr.Http.ErrorManagement
                 {
                     Message = exception.Message,
                     Description = exception.ToString()
-                }.AsResponse(HttpStatusCode.NotFound);
+                }.AsResponse(context, HttpStatusCode.NotFound);
             }
 
             if (exception is ModelConflictException conflictException)
@@ -61,7 +61,7 @@ namespace Sonarr.Http.ErrorManagement
                 {
                     Message = exception.Message,
                     Description = exception.ToString()
-                }.AsResponse(HttpStatusCode.Conflict);
+                }.AsResponse(context, HttpStatusCode.Conflict);
             }
 
             if (exception is SQLiteException sqLiteException)
@@ -72,7 +72,7 @@ namespace Sonarr.Http.ErrorManagement
                         return new ErrorModel
                         {
                             Message = exception.Message,
-                        }.AsResponse(HttpStatusCode.Conflict);
+                        }.AsResponse(context, HttpStatusCode.Conflict);
                 }
 
                 _logger.Error(sqLiteException, "[{0} {1}]", context.Request.Method, context.Request.Path);
@@ -84,7 +84,7 @@ namespace Sonarr.Http.ErrorManagement
             {
                 Message = exception.Message,
                 Description = exception.ToString()
-            }.AsResponse(HttpStatusCode.InternalServerError);
+            }.AsResponse(context, HttpStatusCode.InternalServerError);
         }
     }
 }
