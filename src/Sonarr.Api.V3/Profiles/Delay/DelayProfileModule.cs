@@ -24,7 +24,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
             UpdateResource = Update;
             CreateResource = Create;
             DeleteResource = DeleteProfile;
-            Put[@"/reorder/(?<id>[\d]{1,10})"] = options => Reorder(options.Id);
+            Put(@"/reorder/(?<id>[\d]{1,10})",  options => Reorder(options.Id));
 
             SharedValidator.RuleFor(d => d.Tags).NotEmpty().When(d => d.Id != 1);
             SharedValidator.RuleFor(d => d.Tags).EmptyCollection<DelayProfileResource, int>().When(d => d.Id == 1);
@@ -75,14 +75,14 @@ namespace Sonarr.Api.V3.Profiles.Delay
             return _delayProfileService.All().ToResource();
         }
 
-        private Response Reorder(int id)
+        private object Reorder(int id)
         {
             ValidateId(id);
 
             var afterIdQuery = Request.Query.After;
             int? afterId = afterIdQuery.HasValue ? Convert.ToInt32(afterIdQuery.Value) : null;
 
-            return _delayProfileService.Reorder(id, afterId).ToResource().AsResponse();
+            return _delayProfileService.Reorder(id, afterId).ToResource();
         }
     }
 }

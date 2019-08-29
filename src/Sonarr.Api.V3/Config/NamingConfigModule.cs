@@ -33,7 +33,7 @@ namespace Sonarr.Api.V3.Config
             GetResourceById = GetNamingConfig;
             UpdateResource = UpdateNamingConfig;
 
-            Get["/examples"] = x => GetExamples(this.Bind<NamingConfigResource>());
+            Get("/examples",  x => GetExamples(this.Bind<NamingConfigResource>()));
 
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 5);
             SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
@@ -71,7 +71,7 @@ namespace Sonarr.Api.V3.Config
             return GetNamingConfig();
         }
 
-        private JsonResponse<NamingExampleResource> GetExamples(NamingConfigResource config)
+        private object GetExamples(NamingConfigResource config)
         {
             if (config.Id == 0)
             {
@@ -119,7 +119,7 @@ namespace Sonarr.Api.V3.Config
                 ? null
                 : _filenameSampleService.GetSpecialsFolderSample(nameSpec);
 
-            return sampleResource.AsResponse();
+            return sampleResource;
         }
 
         private void ValidateFormatResult(NamingConfig nameSpec)

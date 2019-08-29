@@ -19,7 +19,7 @@ namespace Sonarr.Api.V3.ManualImport
             _manualImportService = manualImportService;
 
             GetResourceAll = GetMediaFiles;
-            Post["/"] = x => ReprocessItems();
+            Post("/",  x => ReprocessItems());
         }
 
         private List<ManualImportResource> GetMediaFiles()
@@ -32,7 +32,7 @@ namespace Sonarr.Api.V3.ManualImport
             return _manualImportService.GetMediaFiles(folder, downloadId, seriesId, filterExistingFiles).ToResource().Select(AddQualityWeight).ToList();
         }
 
-        private Response ReprocessItems()
+        private object ReprocessItems()
         {
             var items = Request.Body.FromJson<List<ManualImportReprocessResource>>();
 
@@ -44,7 +44,7 @@ namespace Sonarr.Api.V3.ManualImport
                 item.Episodes = processedItem.Episodes.ToResource();
             }
 
-            return items.AsResponse();
+            return items;
         }
 
         private ManualImportResource AddQualityWeight(ManualImportResource item)

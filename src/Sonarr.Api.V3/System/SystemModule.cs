@@ -42,13 +42,13 @@ namespace Sonarr.Api.V3.System
             _database = database;
             _lifecycleService = lifecycleService;
             _deploymentInfoProvider = deploymentInfoProvider;
-            Get["/status"] = x => GetStatus();
-            Get["/routes"] = x => GetRoutes();
-            Post["/shutdown"] = x => Shutdown();
-            Post["/restart"] = x => Restart();
+            Get("/status",  x => GetStatus());
+            Get("/routes",  x => GetRoutes());
+            Post("/shutdown",  x => Shutdown());
+            Post("/restart",  x => Restart());
         }
 
-        private Response GetStatus()
+        private object GetStatus()
         {
             return new
                    {
@@ -78,24 +78,24 @@ namespace Sonarr.Api.V3.System
                        PackageVersion = _deploymentInfoProvider.PackageVersion,
                        PackageAuthor = _deploymentInfoProvider.PackageAuthor,
                        PackageUpdateMechanism = _deploymentInfoProvider.PackageUpdateMechanism
-            }.AsResponse();
+            };
         }
 
-        private Response GetRoutes()
+        private object GetRoutes()
         {
-            return _routeCacheProvider.GetCache().Values.AsResponse();
+            return _routeCacheProvider.GetCache().Values;
         }
 
-        private Response Shutdown()
+        private object Shutdown()
         {
             Task.Factory.StartNew(() => _lifecycleService.Shutdown());
-            return new { ShuttingDown = true }.AsResponse();
+            return new { ShuttingDown = true };
         }
 
-        private Response Restart()
+        private object Restart()
         {
             Task.Factory.StartNew(() => _lifecycleService.Restart());
-            return new { Restarting = true }.AsResponse();
+            return new { Restarting = true };
         }
     }
 }

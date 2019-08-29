@@ -26,10 +26,10 @@ namespace Sonarr.Api.V3
             _providerFactory = providerFactory;
             _resourceMapper = resourceMapper;
 
-            Get["schema"] = x => GetTemplates();
-            Post["test"] = x => Test(ReadResourceFromRequest(true));
-            Post["testall"] = x => TestAll();
-            Post["action/{action}"] = x => RequestAction(x.action, ReadResourceFromRequest(true));
+            Get("schema",  x => GetTemplates());
+            Post("test",  x => Test(ReadResourceFromRequest(true)));
+            Post("testall",  x => TestAll());
+            Post("action/{action}",  x => RequestAction(x.action, ReadResourceFromRequest(true)));
 
             GetResourceAll = GetAll;
             GetResourceById = GetProviderById;
@@ -112,7 +112,7 @@ namespace Sonarr.Api.V3
             _providerFactory.Delete(id);
         }
 
-        private Response GetTemplates()
+        private object GetTemplates()
         {
             var defaultDefinitions = _providerFactory.GetDefaultDefinitions().OrderBy(p => p.ImplementationName).ToList();
 
@@ -133,10 +133,10 @@ namespace Sonarr.Api.V3
                 result.Add(providerResource);
             }
 
-            return result.AsResponse();
+            return result;
         }
 
-        private Response Test(TProviderResource providerResource)
+        private object Test(TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, true);
 
@@ -145,7 +145,7 @@ namespace Sonarr.Api.V3
             return "{}";
         }
 
-        private Response TestAll()
+        private object TestAll()
         {
             var providerDefinitions = _providerFactory.All()
                                                       .Where(c => c.Settings.Validate().IsValid && c.Enable)
@@ -163,10 +163,10 @@ namespace Sonarr.Api.V3
                            });
             }
 
-            return result.AsResponse(result.Any(c => !c.IsValid) ? HttpStatusCode.BadRequest : HttpStatusCode.OK);
+            return ResponseWithCode(result, result.Any(c => !c.IsValid) ? HttpStatusCode.BadRequest : HttpStatusCode.OK);
         }
 
-        private Response RequestAction(string action, TProviderResource providerResource)
+        private object RequestAction(string action, TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, true, false);
 

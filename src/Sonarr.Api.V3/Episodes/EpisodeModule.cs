@@ -20,8 +20,8 @@ namespace Sonarr.Api.V3.Episodes
             : base(episodeService, seriesService, upgradableSpecification, signalRBroadcaster)
         {
             GetResourceAll = GetEpisodes;
-            Put[@"/(?<id>[\d]{1,10})"] = x => SetEpisodeMonitored(x.Id);
-            Put["/monitor"] = x => SetEpisodesMonitored();
+            Put(@"/(?<id>[\d]{1,10})",  x => SetEpisodeMonitored(x.Id));
+            Put("/monitor",  x => SetEpisodesMonitored());
         }
 
         private List<EpisodeResource> GetEpisodes()
@@ -57,23 +57,23 @@ namespace Sonarr.Api.V3.Episodes
             return MapToResource(_episodeService.GetEpisodes(episodeIds), false, false, includeImages);
         }
 
-        private Response SetEpisodeMonitored(int id)
+        private object SetEpisodeMonitored(int id)
         {
             var resource = Request.Body.FromJson<EpisodeResource>();
             _episodeService.SetEpisodeMonitored(id, resource.Monitored);
 
-            return MapToResource(_episodeService.GetEpisode(id), false, false, false).AsResponse(HttpStatusCode.Accepted);
+            return ResponseWithCode(MapToResource(_episodeService.GetEpisode(id), false, false, false), HttpStatusCode.Accepted);
         }
 
-        private Response SetEpisodesMonitored()
+        private object SetEpisodesMonitored()
         {
             var includeImages = Request.GetBooleanQueryParameter("includeImages", false);
             var resource = Request.Body.FromJson<EpisodesMonitoredResource>();
 
             _episodeService.SetMonitored(resource.EpisodeIds, resource.Monitored);
 
-            return MapToResource(_episodeService.GetEpisodes(resource.EpisodeIds), false, false, includeImages)
-                .AsResponse(HttpStatusCode.Accepted);
+            return ResponseWithCode(MapToResource(_episodeService.GetEpisodes(resource.EpisodeIds), false, false, includeImages)
+                , HttpStatusCode.Accepted);
         }
     }
 }

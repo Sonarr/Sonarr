@@ -29,12 +29,12 @@ namespace Sonarr.Api.V3.Queue
             _broadcastDebounce = new Debouncer(BroadcastChange, TimeSpan.FromSeconds(5));
 
 
-            Get["/"] = x => GetQueueStatusResponse();
+            Get("/",  x => GetQueueStatusResponse());
         }
 
-        private JsonResponse<QueueStatusResource> GetQueueStatusResponse()
+        private object GetQueueStatusResponse()
         {
-            return GetQueueStatus().AsResponse();
+            return GetQueueStatus();
         }
 
         private QueueStatusResource GetQueueStatus()

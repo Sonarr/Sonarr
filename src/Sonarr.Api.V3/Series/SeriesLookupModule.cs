@@ -20,13 +20,13 @@ namespace Sonarr.Api.V3.Series
         {
             _searchProxy = searchProxy;
             _fileNameBuilder = fileNameBuilder;
-            Get["/"] = x => Search();
+            Get("/",  x => Search());
         }
 
-        private Response Search()
+        private object Search()
         {
             var tvDbResults = _searchProxy.SearchForNewSeries((string)Request.Query.term);
-            return MapToResource(tvDbResults).AsResponse();
+            return MapToResource(tvDbResults);
         }
 
         private IEnumerable<SeriesResource> MapToResource(IEnumerable<NzbDrone.Core.Tv.Series> series)
