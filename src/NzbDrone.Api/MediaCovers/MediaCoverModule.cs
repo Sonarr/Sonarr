@@ -22,10 +22,10 @@ namespace NzbDrone.Api.MediaCovers
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
 
-            Get[MEDIA_COVER_ROUTE] = options => GetMediaCover(options.seriesId, options.filename);
+            Get(MEDIA_COVER_ROUTE,  options => GetMediaCover(options.seriesId, options.filename));
         }
 
-        private Response GetMediaCover(int seriesId, string filename)
+        private object GetMediaCover(int seriesId, string filename)
         {
             var filePath = Path.Combine(_appFolderInfo.GetAppDataPath(), "MediaCover", seriesId.ToString(), filename);
 

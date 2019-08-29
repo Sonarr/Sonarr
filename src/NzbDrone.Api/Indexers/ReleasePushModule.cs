@@ -30,7 +30,7 @@ namespace NzbDrone.Api.Indexers
             _indexerFactory = indexerFactory;
             _logger = logger;
 
-            Post["/push"] = x => ProcessRelease(ReadResourceFromRequest());
+            Post("/push",  x => ProcessRelease(ReadResourceFromRequest()));
 
             PostValidator.RuleFor(s => s.Title).NotEmpty();
             PostValidator.RuleFor(s => s.DownloadUrl).NotEmpty();
@@ -38,7 +38,7 @@ namespace NzbDrone.Api.Indexers
             PostValidator.RuleFor(s => s.PublishDate).NotEmpty();
         }
 
-        private Response ProcessRelease(ReleaseResource release)
+        private object ProcessRelease(ReleaseResource release)
         {
             _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl);
 
@@ -51,7 +51,7 @@ namespace NzbDrone.Api.Indexers
             var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info });
             _downloadDecisionProcessor.ProcessDecisions(decisions);
 
-            return MapDecisions(decisions).First().AsResponse();
+            return MapDecisions(decisions).First();
         }
 
         private void ResolveIndexer(ReleaseInfo release)

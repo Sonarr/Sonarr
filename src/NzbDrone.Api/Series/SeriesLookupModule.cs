@@ -17,14 +17,14 @@ namespace NzbDrone.Api.Series
             : base("/series/lookup")
         {
             _searchProxy = searchProxy;
-            Get["/"] = x => Search();
+            Get("/",  x => Search());
         }
 
 
-        private Response Search()
+        private object Search()
         {
             var tvDbResults = _searchProxy.SearchForNewSeries((string)Request.Query.term);
-            return MapToResource(tvDbResults).AsResponse();
+            return MapToResource(tvDbResults);
         }
 
 

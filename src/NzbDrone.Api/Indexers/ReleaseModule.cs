@@ -43,7 +43,7 @@ namespace NzbDrone.Api.Indexers
             _logger = logger;
 
             GetResourceAll = GetReleases;
-            Post["/"] = x => DownloadRelease(this.Bind<ReleaseResource>());
+            Post("/",  x => DownloadRelease(this.Bind<ReleaseResource>()));
 
             PostValidator.RuleFor(s => s.DownloadAllowed).Equal(true);
             PostValidator.RuleFor(s => s.Guid).NotEmpty();
@@ -51,7 +51,7 @@ namespace NzbDrone.Api.Indexers
             _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
         }
 
-        private Response DownloadRelease(ReleaseResource release)
+        private object DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
@@ -72,7 +72,7 @@ namespace NzbDrone.Api.Indexers
                 throw new NzbDroneClientException(HttpStatusCode.Conflict, "Getting release from indexer failed");
             }
 
-            return release.AsResponse();
+            return release;
         }
 
         private List<ReleaseResource> GetReleases()

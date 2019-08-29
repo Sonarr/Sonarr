@@ -17,10 +17,10 @@ namespace NzbDrone.Api.Series
         {
             _seriesService = seriesService;
             _languageProfileService = languageProfileService;
-            Put["/"] = series => SaveAll();
+            Put("/",  series => SaveAll());
         }
 
-        private Response SaveAll()
+        private object SaveAll()
         {
             var resources = Request.Body.FromJson<List<SeriesResource>>();
 
@@ -41,9 +41,9 @@ namespace NzbDrone.Api.Series
                 return updatedSeries;
             }).ToList();
 
-            return _seriesService.UpdateSeries(seriesToUpdate, true)
+            return ResponseWithCode(_seriesService.UpdateSeries(seriesToUpdate, true)
                                  .ToResource(false)
-                                 .AsResponse(HttpStatusCode.Accepted);
+                                 , HttpStatusCode.Accepted);
         }
     }
 }
