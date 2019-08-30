@@ -53,5 +53,17 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Subject.Check().ShouldBeError();
         }
+
+        [Test]
+        public void should_return_ok_for_net462_on_Win1511()
+        {
+            Mocker.GetMock<IOsInfo>()
+                  .SetupGet(v => v.Version)
+                  .Returns("10.0.14392");
+
+            GivenOutput("4.6.2");
+
+            Subject.Check().ShouldBeOk();
+        }
     }
 }
