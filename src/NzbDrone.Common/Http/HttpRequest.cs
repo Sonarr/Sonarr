@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -43,6 +44,7 @@ namespace NzbDrone.Common.Http
         public bool StoreResponseCookie { get; set; }
         public TimeSpan RequestTimeout { get; set; }
         public TimeSpan RateLimit { get; set; }
+        public Stream ResponseStream { get; set; }
 
         public override string ToString()
         {

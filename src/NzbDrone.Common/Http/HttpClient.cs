@@ -131,7 +131,7 @@ namespace NzbDrone.Common.Http
                 response = interceptor.PostResponse(response);
             }
 
-            if (request.LogResponseContent)
+            if (request.LogResponseContent && response.ResponseData != null)
             {
                 _logger.Trace("Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
             }
@@ -240,9 +240,12 @@ namespace NzbDrone.Common.Http
                 _logger.Debug("Downloading [{0}] to [{1}]", url, fileName);
 
                 var stopWatch = Stopwatch.StartNew();
-                var webClient = new GZipWebClient();
-                webClient.Headers.Add(HttpRequestHeader.UserAgent, _userAgentBuilder.GetUserAgent());
-                webClient.DownloadFile(url, fileName);
+                using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    var request = new HttpRequest(url);
+                    request.ResponseStream = fileStream;
+                    var response = Get(request);
+                }
                 stopWatch.Stop();
                 _logger.Debug("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
             }

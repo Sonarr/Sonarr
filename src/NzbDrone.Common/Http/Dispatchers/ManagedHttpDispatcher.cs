@@ -33,7 +33,7 @@ namespace NzbDrone.Common.Http.Dispatchers
         {
             var webRequest = (HttpWebRequest)WebRequest.Create((Uri)request.Url);
 
-            if (PlatformInfo.IsMono)
+            if (PlatformInfo.IsMono && request.ResponseStream == null)
             {
                 // On Mono GZipStream/DeflateStream leaks memory if an exception is thrown, use an intermediate buffer in that case.
                 webRequest.AutomaticDecompression = DecompressionMethods.None;
@@ -121,19 +121,27 @@ namespace NzbDrone.Common.Http.Dispatchers
                 {
                     try
                     {
-                        data = responseStream.ToBytes();
-
-                        if (PlatformInfo.IsMono && httpWebResponse.ContentEncoding == "gzip")
+                        if (request.ResponseStream != null)
                         {
-                            using (var compressedStream = new MemoryStream(data))
-                            using (var gzip = new GZipStream(compressedStream, CompressionMode.Decompress))
-                            using (var decompressedStream = new MemoryStream())
-                            {
-                                gzip.CopyTo(decompressedStream);
-                                data = decompressedStream.ToArray();
-                            }
+                            // A target ResponseStream was specified, write to that instead.
+                            responseStream.CopyTo(request.ResponseStream);
+                        }
+                        else
+                        {
+                            data = responseStream.ToBytes();
 
-                            httpWebResponse.Headers.Remove("Content-Encoding");
+                            if (PlatformInfo.IsMono && httpWebResponse.ContentEncoding == "gzip")
+                            {
+                                using (var compressedStream = new MemoryStream(data))
+                                using (var gzip = new GZipStream(compressedStream, CompressionMode.Decompress))
+                                using (var decompressedStream = new MemoryStream())
+                                {
+                                    gzip.CopyTo(decompressedStream);
+                                    data = decompressedStream.ToArray();
+                                }
+
+                                httpWebResponse.Headers.Remove("Content-Encoding");
+                            }
                         }
                     }
                     catch (Exception ex)
