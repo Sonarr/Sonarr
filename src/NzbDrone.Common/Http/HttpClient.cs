@@ -249,6 +249,10 @@ namespace NzbDrone.Common.Http
                     var response = Get(request);
                 }
                 stopWatch.Stop();
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
                 File.Move(fileNamePart, fileName);
                 _logger.Debug("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
             }
