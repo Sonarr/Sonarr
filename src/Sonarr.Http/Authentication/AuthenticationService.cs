@@ -28,7 +28,6 @@ namespace Sonarr.Http.Authentication
         private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
         private const string AnonymousUser = "Anonymous";
         private readonly IUserService _userService;
-        private readonly NancyContext _nancyContext;
 
         private static string API_KEY;
         private static AuthenticationType AUTH_METHOD;
@@ -36,10 +35,9 @@ namespace Sonarr.Http.Authentication
         [ThreadStatic]
         private static NancyContext _context; 
 
-        public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService, NancyContext nancyContext)
+        public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)
         {
             _userService = userService;
-            _nancyContext = nancyContext;
             API_KEY = configFileProvider.ApiKey;
             AUTH_METHOD = configFileProvider.AuthenticationMethod;
         }
