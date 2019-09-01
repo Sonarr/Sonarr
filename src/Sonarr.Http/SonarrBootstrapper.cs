@@ -57,7 +57,10 @@ namespace Sonarr.Http
             get
             {
                 // We don't support Xml Serialization atm
-                return NancyInternalConfiguration.WithOverrides(x => x.ResponseProcessors.Remove(typeof(XmlProcessor)));
+                return NancyInternalConfiguration.WithOverrides(x => {
+                    x.ResponseProcessors.Remove(typeof(ViewProcessor));
+                    x.ResponseProcessors.Remove(typeof(XmlProcessor));
+                });
             }
         }
 
