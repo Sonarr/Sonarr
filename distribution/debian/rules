@@ -3,7 +3,7 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-EXCLUDE_MODULEREFS = crypt32 httpapi __Internal
+EXCLUDE_MODULEREFS = crypt32 httpapi __Internal ole32.dll libmonosgen-2.0
 
 %:
 	dh $@ --with=systemd --with=cli

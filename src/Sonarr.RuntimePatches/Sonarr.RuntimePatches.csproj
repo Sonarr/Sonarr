@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">  
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <Platforms>x86</Platforms>
+  </PropertyGroup>  
+  <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.0.1" />
+  </ItemGroup>
+</Project>

@@ -102,12 +102,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                                       o.Debug = false;
                                       o.DiagnosticsLevel = SentryLevel.Debug;
                                       o.Release = BuildInfo.Release;
-                                      if (PlatformInfo.IsMono)
-                                      {
-                                          // Mono 6.0 broke GzipStream.WriteAsync
-                                          // TODO: Check specific version
-                                          o.RequestBodyCompressionLevel = System.IO.Compression.CompressionLevel.NoCompression;
-                                      }
                                       o.BeforeSend = x => SentryCleanser.CleanseEvent(x);
                                       o.BeforeBreadcrumb = x => SentryCleanser.CleanseBreadcrumb(x);
                                       o.Environment = BuildInfo.Branch;

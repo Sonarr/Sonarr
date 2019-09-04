@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Console", "NzbDrone.Console\Sonarr.Console.csproj", "{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -96,6 +96,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Http", "Sonarr.Http\Sonarr.Http.csproj", "{5370BFF7-1BD7-46BC-AF06-7D9EA5CDA1D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Host.Test", "NzbDrone.Host.Test\Sonarr.Host.Test.csproj", "{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.RuntimePatches", "Sonarr.RuntimePatches\Sonarr.RuntimePatches.csproj", "{F3F63718-63C6-432F-BDDC-C960AD95EC82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -284,6 +286,12 @@ Global
 		{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5}.Mono|x86.Build.0 = Release|x86
 		{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5}.Release|x86.ActiveCfg = Release|x86
 		{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5}.Release|x86.Build.0 = Release|x86
+		{F3F63718-63C6-432F-BDDC-C960AD95EC82}.Debug|x86.ActiveCfg = Debug|x86
+		{F3F63718-63C6-432F-BDDC-C960AD95EC82}.Debug|x86.Build.0 = Debug|x86
+		{F3F63718-63C6-432F-BDDC-C960AD95EC82}.Mono|x86.ActiveCfg = Release|x86
+		{F3F63718-63C6-432F-BDDC-C960AD95EC82}.Mono|x86.Build.0 = Release|x86
+		{F3F63718-63C6-432F-BDDC-C960AD95EC82}.Release|x86.ActiveCfg = Release|x86
+		{F3F63718-63C6-432F-BDDC-C960AD95EC82}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -315,6 +323,7 @@ Global
 		{90D6E9FC-7B88-4E1B-B018-8FA742274558} = {F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}
 		{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB} = {F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}
 		{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5} = {57A04B72-8088-4F75-A582-1158CF8291F7}
+		{F3F63718-63C6-432F-BDDC-C960AD95EC82} = {0F0D4998-8F5D-4467-A909-BB192C4B3B4B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;packages\Unity.2.1.505.2\lib\NET35

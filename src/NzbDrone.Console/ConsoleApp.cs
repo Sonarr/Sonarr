@@ -6,6 +6,7 @@ using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Host;
 using NzbDrone.Host.AccessControl;
+using NzbDrone.RuntimePatches;
 
 namespace NzbDrone.Console
 {
@@ -23,6 +24,8 @@ namespace NzbDrone.Console
 
         public static void Main(string[] args)
         {
+            RuntimePatcher.Initialize();
+
             try
             {
                 var startupArgs = new StartupContext(args);
