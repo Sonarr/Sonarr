@@ -12,8 +12,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(1, 65535);
 
-            RuleFor(c => c.TvCategory).Matches("^[-a-z]*$").WithMessage("Allowed characters a-z and -");
-            RuleFor(c => c.TvImportedCategory).Matches("^[-a-z]*$").WithMessage("Allowed characters a-z and -");
+            RuleFor(c => c.TvCategory).Matches("^[-a-z0-9]*$").WithMessage("Allowed characters a-z, 0-9 and -");
+            RuleFor(c => c.TvImportedCategory).Matches("^[-a-z0-9]*$").WithMessage("Allowed characters a-z, 0-9 and -");
         }
     }
 
