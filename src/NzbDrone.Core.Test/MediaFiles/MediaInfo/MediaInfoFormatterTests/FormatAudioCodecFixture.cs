@@ -30,6 +30,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("TrueHD, A_TRUEHD, , , ", "", "TrueHD")]
         [TestCase("MLP FBA, A_TRUEHD, , , ", "TrueHD", "TrueHD")]
         [TestCase("MLP FBA, A_TRUEHD, , , 16-ch", "Atmos", "TrueHD Atmos")]
+        [TestCase("Atmos / TrueHD, A_TRUEHD, , , ", "TrueHD.Atmos.7.1", "TrueHD Atmos")]
+        [TestCase("Atmos / TrueHD / AC-3, 131, , , ", "", "TrueHD Atmos")]
         [TestCase("WMA, 161, , , ", "Droned.wmv", "WMA")]
         [TestCase("WMA, 162, Pro, , ", "B.N.S04E18.720p.WEB-DL", "WMA")]
         [TestCase("Opus, A_OPUS, , , ", "Roadkill Ep3x11 - YouTube.webm", "Opus")]
@@ -44,6 +46,9 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("E-AC-3, A_EAC3, , , JOC", "EAC3", "EAC3")]
         [TestCase("E-AC-3, A_EAC3, , , ", "DD5.1", "EAC3")]
         [TestCase("AC-3, A_AC3, , , ", "DD5.1", "AC3")]
+        [TestCase("A_QUICKTIME, A_QUICKTIME, , , ", "", "")]
+        [TestCase("ADPCM, 2, , , ", "Custom?", "PCM")]
+        [TestCase("ADPCM, ima4, , , ", "Custom", "PCM")]
         public void should_format_audio_format(string audioFormatPack, string sceneName, string expectedFormat)
         {
             var split = audioFormatPack.Split(new string[] { ", " }, System.StringSplitOptions.None);

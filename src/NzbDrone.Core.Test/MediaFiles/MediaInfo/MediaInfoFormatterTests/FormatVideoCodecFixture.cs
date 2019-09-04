@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("MPEG-4 Visual, 20, Simple@L1, Lavc52.29.0", "Will.And.Grace.S08E14.WS.DVDrip.XviD.I.Love.L.Gay-Obfuscated", "XviD")]
         [TestCase("MPEG-4 Visual, 20, Advanced Simple@L5, XviD0046", "", "XviD")]
         [TestCase("mp4v, mp4v, , ", "American.Chopper.S06E07.Mountain.Creek.Bike.DSR.XviD-KRS", "XviD")]
+        [TestCase("mp43, V_MS/VFW/FOURCC / mp43, , ", "Bubble.Guppies.S01E13.480p.WEB-DL.H.264-BTN-Custom", "")]
         public void should_format_video_format(string videoFormatPack, string sceneName, string expectedFormat)
         {
             var split = videoFormatPack.Split(new string[] { ", " }, System.StringSplitOptions.None);

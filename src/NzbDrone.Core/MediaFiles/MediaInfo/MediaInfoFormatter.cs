@@ -38,38 +38,43 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return FormatAudioCodecLegacy(mediaInfo, sceneName);
             }
 
-            var audioFormat = mediaInfo.AudioFormat;
+            var audioFormat = mediaInfo.AudioFormat.Trim().Split(new[] { " / " }, StringSplitOptions.RemoveEmptyEntries);
             var audioCodecID = mediaInfo.AudioCodecID ?? string.Empty;
             var audioProfile = mediaInfo.AudioProfile ?? string.Empty;
             var audioCodecLibrary = mediaInfo.AudioCodecLibrary ?? string.Empty;
             var splitAdditionalFeatures = (mediaInfo.AudioAdditionalFeatures ?? string.Empty).Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
-            if (audioFormat.IsNullOrWhiteSpace())
+            if (audioFormat.Empty())
             {
                 return string.Empty;
             }
-
-            if (audioFormat.EqualsIgnoreCase("AC-3"))
+            
+            if (audioFormat.ContainsIgnoreCase("Atmos"))
             {
-                return "AC3";
+                return "TrueHD Atmos";
             }
 
-            if (audioFormat.EqualsIgnoreCase("E-AC-3"))
+            if (audioFormat.ContainsIgnoreCase("MLP FBA"))
             {
-                return "EAC3";
-            }
-
-            if (audioFormat.EqualsIgnoreCase("AAC"))
-            {
-                if (audioCodecID == "A_AAC/MPEG4/LC/SBR")
+                if (splitAdditionalFeatures.ContainsIgnoreCase("16-ch"))
                 {
-                    return "HE-AAC";
+                    return "TrueHD Atmos";
                 }
 
-                return "AAC";
+                return "TrueHD";
             }
 
-            if (audioFormat.EqualsIgnoreCase("DTS"))
+            if (audioFormat.ContainsIgnoreCase("TrueHD"))
+            {
+                return "TrueHD";
+            }
+
+            if (audioFormat.ContainsIgnoreCase("FLAC"))
+            {
+                return "FLAC";
+            }
+
+            if (audioFormat.ContainsIgnoreCase("DTS"))
             {
                 if (splitAdditionalFeatures.ContainsIgnoreCase("XLL"))
                 {
@@ -93,17 +98,32 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "DTS";
             }
 
-            if (audioFormat.EqualsIgnoreCase("FLAC"))
+            if (audioFormat.ContainsIgnoreCase("E-AC-3"))
             {
-                return "FLAC";
+                return "EAC3";
             }
 
-            if (audioFormat.Trim().EqualsIgnoreCase("mp3"))
+            if (audioFormat.ContainsIgnoreCase("AC-3"))
+            {
+                return "AC3";
+            }
+
+            if (audioFormat.ContainsIgnoreCase("AAC"))
+            {
+                if (audioCodecID == "A_AAC/MPEG4/LC/SBR")
+                {
+                    return "HE-AAC";
+                }
+
+                return "AAC";
+            }
+
+            if (audioFormat.ContainsIgnoreCase("mp3"))
             {
                 return "MP3";
             }
 
-            if (audioFormat.EqualsIgnoreCase("MPEG Audio"))
+            if (audioFormat.ContainsIgnoreCase("MPEG Audio"))
             {
                 if (mediaInfo.AudioCodecID == "55" || mediaInfo.AudioCodecID == "A_MPEG/L3" || mediaInfo.AudioProfile == "Layer 3")
                 {
@@ -116,47 +136,42 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 }
             }
 
-            if (audioFormat.EqualsIgnoreCase("Opus"))
+            if (audioFormat.ContainsIgnoreCase("Opus"))
             {
                 return "Opus";
             }
 
-            if (audioFormat.EqualsIgnoreCase("PCM"))
+            if (audioFormat.ContainsIgnoreCase("PCM"))
             {
                 return "PCM";
             }
 
-            if (audioFormat.EqualsIgnoreCase("TrueHD"))
+            if (audioFormat.ContainsIgnoreCase("ADPCM"))
             {
-                return "TrueHD";
+                return "PCM";
             }
 
-            if (audioFormat.EqualsIgnoreCase("MLP FBA"))
-            {
-                if (splitAdditionalFeatures.ContainsIgnoreCase("16-ch"))
-                {
-                    return "TrueHD Atmos";
-                }
-
-                return "TrueHD";
-            }
-
-            if (audioFormat.EqualsIgnoreCase("Vorbis"))
+            if (audioFormat.ContainsIgnoreCase("Vorbis"))
             {
                 return "Vorbis";
             }
 
-            if (audioFormat == "WMA")
+            if (audioFormat.ContainsIgnoreCase("WMA"))
             {
                 return "WMA";
             }
 
+            if (audioFormat.ContainsIgnoreCase("A_QUICKTIME"))
+            {
+                return "";
+            }
+
             Logger.Debug()
-                  .Message("Unknown audio format: '{0}' in '{1}'.", string.Join(", ", audioFormat, audioCodecID, audioProfile, audioCodecLibrary), sceneName)
-                  .WriteSentryWarn("UnknownAudioFormat", mediaInfo.ContainerFormat, audioFormat, audioCodecID)
+                  .Message("Unknown audio format: '{0}' in '{1}'.", string.Join(", ", mediaInfo.AudioFormat, audioCodecID, audioProfile, audioCodecLibrary, mediaInfo.AudioAdditionalFeatures), sceneName)
+                  .WriteSentryWarn("UnknownAudioFormat", mediaInfo.ContainerFormat, mediaInfo.AudioFormat, audioCodecID)
                   .Write();
 
-            return audioFormat;
+            return mediaInfo.AudioFormat;
         }
 
         public static string FormatAudioCodecLegacy(MediaInfoModel mediaInfo, string sceneName)
@@ -328,6 +343,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             if (videoFormat.EqualsIgnoreCase("XviD"))
             {
                 return "XviD";
+            }
+
+            if (videoFormat.EqualsIgnoreCase("mp43"))
+            {
+                return "";
             }
 
             Logger.Debug()
