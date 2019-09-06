@@ -79,6 +79,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
+        public void should_put_reals_before_non_reals()
+        {
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p, new Revision(version: 1, real: 0)), Language.English);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p, new Revision(version: 1, real: 1)), Language.English);
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Revision.Real.Should().Be(1);
+        }
+
+        [Test]
         public void should_put_propers_before_non_propers()
         {
             var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p, new Revision(version: 1)), Language.English);
@@ -533,6 +547,30 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Quality.Should().Be(Quality.WEBDL1080p);
             qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version.Should().Be(1);
+            qualifiedReports.First().RemoteEpisode.PreferredWordScore.Should().Be(10);
+        }
+
+        [Test]
+        public void should_prefer_score_over_real_when_download_propers_is_do_not_prefer()
+        {
+            Mocker.GetMock<IConfigService>()
+                  .Setup(s => s.DownloadPropersAndRepacks)
+                  .Returns(ProperDownloadTypes.DoNotPrefer);
+
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.WEBDL1080p, new Revision(1, 0)), Language.English);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.WEBDL1080p, new Revision(1, 1)), Language.English);
+
+            remoteEpisode1.PreferredWordScore = 10;
+            remoteEpisode2.PreferredWordScore = 0;
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Quality.Should().Be(Quality.WEBDL1080p);
+            qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version.Should().Be(1);
+            qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Revision.Real.Should().Be(0);
             qualifiedReports.First().RemoteEpisode.PreferredWordScore.Should().Be(10);
         }
     }
