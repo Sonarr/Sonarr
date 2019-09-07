@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Mono.Unix;
+using Mono.Unix.Native;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
@@ -126,6 +127,35 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
 
             mount.Should().NotBeNull();
             mount.RootDirectory.Should().Be(rootDir);
+        }
+
+        [Test]
+        public void should_copy_folder_permissions()
+        {
+            var src = GetTempFilePath();
+            var dst = GetTempFilePath();
+
+            Directory.CreateDirectory(src);
+
+            // Toggle one of the permission flags
+            Syscall.stat(src, out var origStat);
+            Syscall.chmod(src, origStat.st_mode ^ FilePermissions.S_IWGRP);
+
+            // Verify test setup
+            Syscall.stat(src, out var srcStat);
+            srcStat.st_mode.Should().NotBe(origStat.st_mode);
+
+            Subject.CreateFolder(dst);
+
+            // Verify test setup
+            Syscall.stat(dst, out var dstStat);
+            dstStat.st_mode.Should().Be(origStat.st_mode);
+
+            Subject.CopyPermissions(src, dst, false);
+
+            // Verify CopyPermissions
+            Syscall.stat(dst, out dstStat);
+            dstStat.st_mode.Should().Be(srcStat.st_mode);
         }
     }
 }

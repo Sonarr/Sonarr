@@ -76,6 +76,8 @@ namespace NzbDrone.Common.Disk
             if (!_diskProvider.FolderExists(targetPath))
             {
                 _diskProvider.CreateFolder(targetPath);
+
+                _diskProvider.CopyPermissions(sourcePath, targetPath);
             }
 
             var result = mode;

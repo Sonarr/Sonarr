@@ -75,6 +75,29 @@ namespace NzbDrone.Mono.Disk
             SetOwner(path, user, group);
         }
 
+        public override void CopyPermissions(string sourcePath, string targetPath, bool includeOwner)
+        {
+            try
+            {
+                Syscall.stat(sourcePath, out var srcStat);
+                Syscall.stat(targetPath, out var tgtStat);
+
+                if (srcStat.st_mode != tgtStat.st_mode)
+                {
+                    Syscall.chmod(targetPath, srcStat.st_mode);
+                }
+
+                if (includeOwner && (srcStat.st_uid != tgtStat.st_uid || srcStat.st_gid != tgtStat.st_gid))
+                {
+                    Syscall.chown(targetPath, srcStat.st_uid, srcStat.st_gid);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex, "Failed to copy permissions from {0} to {1}", sourcePath, targetPath);
+            }
+        }
+
         protected override List<IMount> GetAllMounts()
         {
             return _procMountProvider.GetMounts()
