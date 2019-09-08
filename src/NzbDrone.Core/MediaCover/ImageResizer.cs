@@ -1,5 +1,9 @@
-﻿using ImageResizer;
-using NzbDrone.Common.Disk;
+﻿using NzbDrone.Common.Disk;
+using NzbDrone.Common.EnvironmentInfo;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Memory;
 
 namespace NzbDrone.Core.MediaCover
 {
@@ -11,29 +15,40 @@ namespace NzbDrone.Core.MediaCover
     public class ImageResizer : IImageResizer
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly bool _enabled;
 
-        public ImageResizer(IDiskProvider diskProvider)
+        public ImageResizer(IDiskProvider diskProvider, IPlatformInfo platformInfo)
         {
             _diskProvider = diskProvider;
+
+            // Random segfaults on mono 5.0 and 5.4
+            if (PlatformInfo.IsMono && platformInfo.Version < new System.Version(5, 8))
+            {
+                return;
+            }
+
+            _enabled = true;
+
+            // More conservative memory allocation
+            SixLabors.ImageSharp.Configuration.Default.MemoryAllocator = new SimpleGcMemoryAllocator();
+
+            // Thumbnails don't need super high quality
+            SixLabors.ImageSharp.Configuration.Default.ImageFormatsManager.SetEncoder(JpegFormat.Instance, new JpegEncoder
+            {
+                Quality = 92
+            });
         }
 
         public void Resize(string source, string destination, int height)
         {
+            if (!_enabled) return;
+
             try
             {
-                GdiPlusInterop.CheckGdiPlus();
-
-                using (var sourceStream = _diskProvider.OpenReadStream(source))
+                using (var image = Image.Load(source))
                 {
-                    using (var outputStream = _diskProvider.OpenWriteStream(destination))
-                    {
-                        var settings = new Instructions();
-                        settings.Height = height;
-
-                        var job = new ImageJob(sourceStream, outputStream, settings);
-
-                        ImageBuilder.Current.Build(job);
-                    }
+                    image.Mutate(x => x.Resize(0, height));
+                    image.Save(destination);
                 }
             }
             catch

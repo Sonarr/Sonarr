@@ -192,6 +192,24 @@ PatchMono()
             
         fi
     done
+
+    # Copy more stable version of Vectors for mono <5.12
+    if [ -e $path/System.Numerics.Vectors.dll ]; then
+        packageDir="$HOME/.nuget/packages/system.numerics.vectors/4.5.0"
+
+        if [ ! -d "$HOME/.nuget/packages/system.numerics.vectors/4.5.0" ]; then
+            # May reside in the NuGetFallback folder, which is harder to find
+            # Download somewhere to get the real cache populated
+            if [ $runtime = "dotnet" ] ; then
+                $nuget install System.Numerics.Vectors -Version 4.5.0 -Output ./_temp/System.Numerics.Vectors
+            else
+                mono $nuget install System.Numerics.Vectors -Version 4.5.0 -Output ./_temp/System.Numerics.Vectors
+            fi
+            rm -rf ./_temp/System.Numerics.Vectors
+        fi
+        # Copy the netstandard2.0 version rather than net46
+        cp "$packageDir/lib/netstandard2.0/System.Numerics.Vectors.dll" $path/
+    fi
 }
 
 PackageMono()
