@@ -21,8 +21,6 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         }
 
-        public override bool SupportsTransactions => true;
-
         public override void Process(AlterColumnExpression expression)
         {
             var tableDefinition = GetTableSchema(expression.TableName);
