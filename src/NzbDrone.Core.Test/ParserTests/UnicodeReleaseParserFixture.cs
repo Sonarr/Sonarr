@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[喵萌奶茶屋&LoliHouse]玛娜利亚魔法学院/巴哈姆特之怒Manaria Friends - 03 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "巴哈姆特之怒Manaria Friends", "喵萌奶茶屋&LoliHouse", 3)]
         [TestCase("[悠哈璃羽字幕社&拉斯观测组&LoliHouse] 刀剑神域: Alicization / Sword Art Online: Alicization - 17 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Sword Art Online Alicization", "悠哈璃羽字幕社&拉斯观测组&LoliHouse", 17)]
         [TestCase("[ZERO字幕組]嫁給非人類·Jingai-san no Yome[11][BIG5][1080p]", "Jingai-san no Yome", "ZERO字幕組", 11)]
+        [TestCase("[Lilith-Raws] 艾梅洛閣下 II 世事件簿 -魔眼蒐集列車 Grace note- / Lord El-Melloi II Case Files - 04 [BiliBili][WEB-DL][1080p][AVC AAC][CHT][MKV]", "Lord El-Melloi II Case Files", "Lilith-Raws", 4)]
         public void should_parse_unbracketed_chinese_anime_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
