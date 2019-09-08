@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.ObjectBuilder;
+using Unity.Builder;
+using Unity.Extension;
 
 namespace NzbDrone.Test.Common.AutoMoq.Unity
 {

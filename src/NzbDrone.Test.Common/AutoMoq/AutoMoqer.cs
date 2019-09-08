@@ -6,11 +6,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Microsoft.Practices.Unity;
+using Unity;
 using Moq;
 using Moq.Language.Flow;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common.AutoMoq.Unity;
+using Unity.Resolution;
 
 [assembly: InternalsVisibleTo("AutoMoq.Tests")]
 
