@@ -46,15 +46,13 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                         opt.PreviewOnly = false;
                         opt.Timeout = TimeSpan.FromSeconds(60);
                     })
-#pragma warning disable 612
-                // This is marked obsolete but the alternative is constructor injection in every migration...
-                .Configure<RunnerOptions>(opt => opt.ApplicationContext = migrationContext)
-#pragma warning restore 612
                 .BuildServiceProvider();
 
             using (var scope = serviceProvider.CreateScope())
             {
                 var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+
+                MigrationContext.Current = migrationContext;
 
                 if (migrationContext.DesiredVersion.HasValue)
                 {
@@ -65,6 +63,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                     runner.MigrateUp();
                 }
 
+                MigrationContext.Current = null;
             }
 
             sw.Stop();
