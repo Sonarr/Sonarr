@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Test.Framework;
+using SixLabors.ImageSharp;
 
 namespace NzbDrone.Core.Test.MediaCoverTests
 {
@@ -14,14 +15,6 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         [SetUp]
         public void SetUp()
         {
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(v => v.OpenReadStream(It.IsAny<string>()))
-                  .Returns<string>(s => new FileStream(s, FileMode.Open));
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(v => v.OpenWriteStream(It.IsAny<string>()))
-                  .Returns<string>(s => new FileStream(s, FileMode.Create));
-
             Mocker.GetMock<IDiskProvider>()
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns<string>(s => File.Exists(s));
@@ -45,9 +38,11 @@ namespace NzbDrone.Core.Test.MediaCoverTests
             fileInfo.Exists.Should().BeTrue();
             fileInfo.Length.Should().BeInRange(1000, 30000);
 
-            var image = System.Drawing.Image.FromFile(resizedFile);
-            image.Height.Should().Be(170);
-            image.Width.Should().Be(170);
+            using (var image = Image.Load(resizedFile))
+            {
+                image.Height.Should().Be(170);
+                image.Width.Should().Be(170);
+            }
         }
 
         [Test]

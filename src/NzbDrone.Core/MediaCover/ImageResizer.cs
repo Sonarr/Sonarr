@@ -1,5 +1,8 @@
-﻿using ImageResizer;
-using NzbDrone.Common.Disk;
+﻿using NzbDrone.Common.Disk;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Memory;
 
 namespace NzbDrone.Core.MediaCover
 {
@@ -15,25 +18,25 @@ namespace NzbDrone.Core.MediaCover
         public ImageResizer(IDiskProvider diskProvider)
         {
             _diskProvider = diskProvider;
+
+            // More conservative memory allocation
+            SixLabors.ImageSharp.Configuration.Default.MemoryAllocator = new SimpleGcMemoryAllocator();
+
+            // Thumbnails don't need super high quality
+            SixLabors.ImageSharp.Configuration.Default.ImageFormatsManager.SetEncoder(JpegFormat.Instance, new JpegEncoder
+            {
+                Quality = 92
+            });
         }
 
         public void Resize(string source, string destination, int height)
         {
             try
             {
-                GdiPlusInterop.CheckGdiPlus();
-
-                using (var sourceStream = _diskProvider.OpenReadStream(source))
+                using (var image = Image.Load(source))
                 {
-                    using (var outputStream = _diskProvider.OpenWriteStream(destination))
-                    {
-                        var settings = new Instructions();
-                        settings.Height = height;
-
-                        var job = new ImageJob(sourceStream, outputStream, settings);
-
-                        ImageBuilder.Current.Build(job);
-                    }
+                    image.Mutate(x => x.Resize(0, height));
+                    image.Save(destination);
                 }
             }
             catch

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -34,6 +35,10 @@ namespace NzbDrone.Core.MediaCover
         private readonly Logger _logger;
 
         private readonly string _coverRootFolder;
+
+        // ImageSharp is slow on ARM (no hardware acceleration on mono yet)
+        // So limit the number of concurrent resizing tasks
+        private static SemaphoreSlim _semaphore = new SemaphoreSlim((int)Math.Ceiling(Environment.ProcessorCount / 2.0));
 
         public MediaCoverService(IImageResizer resizer,
                                  IHttpClient httpClient,
@@ -85,6 +90,8 @@ namespace NzbDrone.Core.MediaCover
 
         private void EnsureCovers(Series series)
         {
+            var toResize = new List<Tuple<MediaCover, bool>>();
+
             foreach (var cover in series.Images)
             {
                 var fileName = GetCoverPath(series.Id, cover.CoverType);
@@ -106,7 +113,21 @@ namespace NzbDrone.Core.MediaCover
                     _logger.Error(e, "Couldn't download media cover for {0}", series);
                 }
 
-                EnsureResizedCovers(series, cover, !alreadyExists);
+                toResize.Add(Tuple.Create(cover, alreadyExists));
+            }
+
+            try
+            {
+                _semaphore.Wait();
+
+                foreach (var tuple in toResize)
+                {
+                    EnsureResizedCovers(series, tuple.Item1, !tuple.Item2);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
 
