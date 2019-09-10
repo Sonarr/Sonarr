@@ -1,8 +1,12 @@
-﻿using System.Data.SQLite;
+﻿using System;
 using System.Diagnostics;
 using System.Reflection;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
+using FluentMigrator.Runner.Processors;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -13,56 +17,59 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
     public class MigrationController : IMigrationController
     {
-        private readonly IAnnouncer _announcer;
+        private readonly Logger _logger;
+        private readonly ILoggerProvider _migrationLoggerProvider;
 
-        public MigrationController(IAnnouncer announcer)
+        public MigrationController(Logger logger,
+                                   ILoggerProvider migrationLoggerProvider)
         {
-            _announcer = announcer;
+            _logger = logger;
+            _migrationLoggerProvider = migrationLoggerProvider;
         }
 
         public void Migrate(string connectionString, MigrationContext migrationContext)
         {
             var sw = Stopwatch.StartNew();
 
-            _announcer.Heading("Migrating " + connectionString);
+            _logger.Info("*** Migrating {0} ***", connectionString);
 
-            var assembly = Assembly.GetExecutingAssembly();
+            var serviceProvider = new ServiceCollection()
+                .AddLogging(lb => lb.AddProvider(_migrationLoggerProvider))
+                .AddFluentMigratorCore()
+                .ConfigureRunner(
+                    builder => builder
+                    .AddNzbDroneSQLite()
+                    .WithGlobalConnectionString(connectionString)
+                    .WithMigrationsIn(Assembly.GetExecutingAssembly()))
+                .Configure<TypeFilterOptions>(opt => opt.Namespace = "NzbDrone.Core.Datastore.Migration")
+                .Configure<ProcessorOptions>(opt => {
+                        opt.PreviewOnly = false;
+                        opt.Timeout = TimeSpan.FromSeconds(60);
+                    })
+#pragma warning disable 612
+                // This is marked obsolete but the alternative is constructor injection in every migration...
+                .Configure<RunnerOptions>(opt => opt.ApplicationContext = migrationContext)
+#pragma warning restore 612
+                .BuildServiceProvider();
 
-            var runnerContext = new RunnerContext(_announcer)
+            using (var scope = serviceProvider.CreateScope())
             {
-                Namespace = "NzbDrone.Core.Datastore.Migration",
-                ApplicationContext = migrationContext
-            };
-
-            var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
-            var factory = new NzbDroneSqliteProcessorFactory();
-            var processor = factory.Create(connectionString, _announcer, options);
-
-            try
-            {
-                var runner = new MigrationRunner(assembly, runnerContext, processor);
+                var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
 
                 if (migrationContext.DesiredVersion.HasValue)
                 {
-                    runner.MigrateUp(migrationContext.DesiredVersion.Value, true);
+                    runner.MigrateUp(migrationContext.DesiredVersion.Value);
                 }
                 else
                 {
-                    runner.MigrateUp(true);
+                    runner.MigrateUp();
                 }
 
-                processor.Dispose();
-            }
-            catch (SQLiteException)
-            {
-                processor.Dispose();
-                SQLiteConnection.ClearAllPools();
-                throw;
             }
 
             sw.Stop();
 
-            _announcer.ElapsedTime(sw.Elapsed);
+            _logger.Debug("Took: {0}", sw.Elapsed);
         }
     }
 }
