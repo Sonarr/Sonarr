@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using FluentMigrator;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration;
+using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
@@ -89,9 +89,9 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             history.DownloadId.Should().Be("123");
         }
 
-        private void InsertHistory(MigrationBase migrationBase, Dictionary<string, string> data)
+        private void InsertHistory(NzbDroneMigrationBase migration, Dictionary<string, string> data)
         {
-            migrationBase.Insert.IntoTable("History").Row(new
+            migration.Insert.IntoTable("History").Row(new
             {
                 EpisodeId = 1,
                 SeriesId = 1,

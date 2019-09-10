@@ -4,7 +4,9 @@
     <Platforms>x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentMigrator.Runner" Version="3.2.1" />
+    <PackageReference Include="FluentMigrator" Version="4.0.0-alpha.268" />
+    <PackageReference Include="FluentMigrator.Runner" Version="4.0.0-alpha.268" />
+    <PackageReference Include="FluentMigrator.Runner.SQLite" Version="4.0.0-alpha.268" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="ImageResizer" Version="4.2.5" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
