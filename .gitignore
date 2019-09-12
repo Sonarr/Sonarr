@@ -119,7 +119,9 @@ node_modules/
 _output*
 _rawPackage/
 _dotTrace*
-_tests/
+_tests*
+_publish*
+_temp*
 *.Result.xml
 setup/Output/
 *.~is
@@ -137,6 +139,5 @@ output/*
 .DS_Store
 
 _start
-_temp_*/**/*
 
 src/.idea/

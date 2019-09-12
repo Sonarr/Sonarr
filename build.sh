@@ -1,14 +1,16 @@
 #! /bin/bash
 msBuildVersion='15.0'
 outputFolder='./_output'
+outputFolderWindows='./_output_windows'
 outputFolderLinux='./_output_linux'
 outputFolderMacOS='./_output_macos'
 outputFolderMacOSApp='./_output_macos_app'
-testPackageFolder='./_tests/'
+testPackageFolder='./_tests'
+testPackageFolderWindows='./_tests_windows'
+testPackageFolderLinux='./_tests_linux'
 sourceFolder='./src'
 slnFile=$sourceFolder/Sonarr.sln
-updateFolder=$outputFolder/Sonarr.Update
-updateFolderMono=$outputFolderLinux/Sonarr.Update
+updateSubFolder=Sonarr.Update
 
 nuget='tools/nuget/nuget.exe';
 vswhere='tools/vswhere/vswhere.exe';
@@ -168,6 +170,30 @@ CreateMdbs()
     fi
 }
 
+PatchMono()
+{
+    local path=$1
+
+    # Below we deal with some mono incompatibilities with windows-only dotnet core/standard libs    
+    # See: https://github.com/mono/mono/blob/master/tools/nuget-hash-extractor/download.sh
+    # That list defines assemblies that are prohibited from being loaded from the appdir, instead loading from mono GAC.
+
+    # We have debian dependencies to get these installed or facades from mono 5.10+
+    for assembly in System.IO.Compression System.Runtime.InteropServices.RuntimeInformation System.Net.Http System.Globalization.Extensions System.Text.Encoding.CodePages System.Threading.Overlapped
+    do
+        if [ -e $path/$assembly.dll ]; then
+            if [ -e $sourceFolder/Libraries/Mono/$assembly.dll ]; then
+                echo "Copy Mono-specific facade $assembly.dll (uses win32 interop)"
+                cp $sourceFolder/Libraries/Mono/$assembly.dll $path/$assembly.dll
+            else
+                echo "Remove $assembly.dll (uses win32 interop)"
+                rm $path/$assembly.dll
+            fi
+            
+        fi
+    done
+}
+
 PackageMono()
 {
     ProgressStart 'Creating Mono Package'
@@ -191,32 +217,15 @@ PackageMono()
     rm -f $outputFolderLinux/sqlite3.*
     rm -f $outputFolderLinux/MediaInfo.*
 
+    PatchMono $outputFolderLinux
+
     echo "Adding Sonarr.Core.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $outputFolderLinux
-
-    # Below we deal with some mono incompatibilities with windows-only dotnet core/standard libs    
-    # See: https://github.com/mono/mono/blob/master/tools/nuget-hash-extractor/download.sh
-    # That list defines assemblies that are prohibited from being loaded from the appdir, instead loading from mono GAC.
-
-    # We have debian dependencies to get these installed or facades from mono 5.10+
-    for assembly in System.IO.Compression System.Runtime.InteropServices.RuntimeInformation System.Net.Http System.Globalization.Extensions System.Text.Encoding.CodePages System.Threading.Overlapped
-    do
-        if [ -e $outputFolderLinux/$assembly.dll ]; then
-            if [ -e $sourceFolder/Libraries/Mono/$assembly.dll ]; then
-                echo "Copy Mono-specific facade $assembly.dll (uses win32 interop)"
-                cp $sourceFolder/Libraries/Mono/$assembly.dll $outputFolderLinux/$assembly.dll
-            else
-                echo "Remove $assembly.dll (uses win32 interop)"
-                rm $outputFolderLinux/$assembly.dll
-            fi
-            
-        fi
-    done
 
     # Remove Http binding redirect by renaming it
     # We don't need this anymore once our minimum mono version is 5.10
     sed -i "s/System.Net.Http/System.Net.Http.Mono/g" $outputFolderLinux/Sonarr.Console.exe.config
-       
+
     echo "Renaming Sonarr.Console.exe to Sonarr.exe"
     rm $outputFolderLinux/Sonarr.exe*
     for file in $outputFolderLinux/Sonarr.Console.exe*; do
@@ -227,7 +236,7 @@ PackageMono()
     rm $outputFolderLinux/Sonarr.Windows.*
 
     echo "Adding Sonarr.Mono to UpdatePackage"
-    cp $outputFolderLinux/Sonarr.Mono.* $updateFolderMono
+    cp $outputFolderLinux/Sonarr.Mono.* $outputFolderLinux/$updateSubFolder/
 
     ProgressEnd 'Creating Mono Package'
 }
@@ -283,42 +292,92 @@ PackageMacOSApp()
     ProgressEnd 'Creating macOS App Package'
 }
 
-PackageTests()
+PackageTestsMono()
 {
-    ProgressStart 'Creating Test Package'
+    ProgressStart 'Creating Mono Test Package'
+
+    rm -rf $testPackageFolderLinux
+
+    echo "Copying Binaries"
+    cp -r $testPackageFolder $testPackageFolderLinux
 
     if [ $runtime = "dotnet" ] ; then
-        $nuget install NUnit.ConsoleRunner -Version 3.10.0 -Output $testPackageFolder
+        $nuget install NUnit.ConsoleRunner -Version 3.10.0 -Output $testPackageFolderLinux
     else
-        mono $nuget install NUnit.ConsoleRunner -Version 3.10.0 -Output $testPackageFolder
+        mono $nuget install NUnit.ConsoleRunner -Version 3.10.0 -Output $testPackageFolderLinux
     fi
 
-    cp ./test.sh $testPackageFolder
+    echo "Creating MDBs"
+    CreateMdbs $testPackageFolderLinux
 
-    echo "Creating MDBs for tests"
-    CreateMdbs $testPackageFolder
+    echo "Removing PDBs"
+    find $testPackageFolderLinux -name "*.pdb" -exec rm "{}" \;
 
-    rm -f $testPackageFolder/*.log.config
-
-    CleanFolder $testPackageFolder true
+    PatchMono $testPackageFolderLinux
 
     echo "Adding Sonarr.Core.dll.config (for dllmap)"
-    cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $testPackageFolder
+    cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $testPackageFolderLinux
 
-    ProgressEnd 'Creating Test Package'
+    # Remove Http binding redirect by renaming it
+    # We don't need this anymore once our minimum mono version is 5.10
+    sed -i "s/System.Net.Http/System.Net.Http.Mono/g" $testPackageFolderLinux/Sonarr.Common.Test.dll.config
+
+    cp ./test.sh $testPackageFolderLinux/
+    dos2unix $testPackageFolderLinux/test.sh
+
+    echo "Removing Sonarr.Windows"
+    rm $testPackageFolderLinux/Sonarr.Windows.*
+
+    rm -f $testPackageFolderLinux/*.log.config
+
+    CleanFolder $testPackageFolderLinux true
+
+    ProgressEnd 'Creating Linux Test Package'
 }
 
-CleanupWindowsPackage()
+PackageTestsWindows()
 {
-    ProgressStart 'Cleaning Windows Package'
+    ProgressStart 'Creating Windows Test Package'
+
+    rm -rf $testPackageFolderWindows
+
+    echo "Copying Binaries"
+    cp -r $testPackageFolder $testPackageFolderWindows
+
+    if [ $runtime = "dotnet" ] ; then
+        $nuget install NUnit.ConsoleRunner -Version 3.10.0 -Output $testPackageFolderWindows
+    else
+        mono $nuget install NUnit.ConsoleRunner -Version 3.10.0 -Output $testPackageFolderWindows
+    fi
+
+    cp ./test.sh $testPackageFolderWindows
 
     echo "Removing Sonarr.Mono"
-    rm -f $outputFolder/Sonarr.Mono.*
+    rm -f $testPackageFolderWindows/Sonarr.Mono.*
+
+    rm -f $testPackageFolderWindows/*.log.config
+
+    CleanFolder $testPackageFolderWindows true
+
+    ProgressEnd 'Creating Windows Test Package'
+}
+
+PackageWindows()
+{
+    ProgressStart 'Creating Windows Package'
+
+    rm -rf $outputFolderWindows
+    
+    echo "Copying Binaries"
+    cp -r $outputFolder $outputFolderWindows
+
+    echo "Removing Sonarr.Mono"
+    rm -f $outputFolderWindows/Sonarr.Mono.*
 
     echo "Adding Sonarr.Windows to UpdatePackage"
-    cp $outputFolder/Sonarr.Windows.* $updateFolder
+    cp $outputFolderWindows/Sonarr.Windows.* $outputFolderWindows/$updateSubFolder/
 
-    ProgressEnd 'Cleaning Windows Package'
+    ProgressEnd 'Creating Windows Package'
 }
 
 PublishArtifacts()
@@ -326,10 +385,11 @@ PublishArtifacts()
     ProgressStart 'Publishing Artifacts'
 
     # Tests
-    echo "##teamcity[publishArtifacts '_tests/** => tests.zip']"
+    echo "##teamcity[publishArtifacts '$testPackageFolderWindows/** => tests.windows.zip']"
+    echo "##teamcity[publishArtifacts '$testPackageFolderLinux/** => tests.linux.zip']"
 
     # Releases
-    echo "##teamcity[publishArtifacts '$outputFolder/** => Sonarr.$BRANCH.$BUILD_NUMBER.windows.zip!Sonarr']"
+    echo "##teamcity[publishArtifacts '$outputFolderWindows/** => Sonarr.$BRANCH.$BUILD_NUMBER.windows.zip!Sonarr']"
     echo "##teamcity[publishArtifacts '$outputFolderLinux/** => Sonarr.$BRANCH.$BUILD_NUMBER.linux.tar.gz!Sonarr']"
     echo "##teamcity[publishArtifacts '$outputFolderMacOS/** => Sonarr.$BRANCH.$BUILD_NUMBER.macos.tar.gz!Sonarr']"
     echo "##teamcity[publishArtifacts '$outputFolderMacOSApp/** => Sonarr.$BRANCH.$BUILD_NUMBER.macos.zip']"
@@ -359,6 +419,7 @@ RunGulp
 PackageMono
 PackageMacOS
 PackageMacOSApp
-PackageTests
-CleanupWindowsPackage
+PackageTestsMono
+PackageTestsWindows
+PackageWindows
 PublishArtifacts
