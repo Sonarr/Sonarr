@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Model;
@@ -68,8 +69,10 @@ namespace NzbDrone.Common.Test
         {
             var process = StartDummyProcess();
 
+            Thread.Sleep(500);
+
             Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
-                   .BeTrue("excepted one dummy process to be already running");
+                   .BeTrue("one running dummy process");
 
             process.Kill();
             process.WaitForExit();
@@ -132,6 +135,8 @@ namespace NzbDrone.Common.Test
         {
             var dummy1 = StartDummyProcess();
             var dummy2 = StartDummyProcess();
+
+            Thread.Sleep(500);
 
             Subject.KillAll(DummyApp.DUMMY_PROCCESS_NAME);
 

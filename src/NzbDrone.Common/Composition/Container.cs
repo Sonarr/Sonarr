@@ -54,7 +54,6 @@ namespace NzbDrone.Common.Composition
             var factory = CreateSingletonImplementationFactory(implementation);
 
             _container.Register(service, factory);
-            _container.Register(service, factory, implementation.FullName);
         }
 
         public IEnumerable<T> ResolveAll<T>() where T : class

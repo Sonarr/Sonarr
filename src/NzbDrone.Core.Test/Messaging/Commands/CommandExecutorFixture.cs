@@ -71,9 +71,9 @@ namespace NzbDrone.Core.Test.Messaging.Commands
 
             _commandQueue.Add(commandModel);
 
-            if (!waitEventComplete.Wait(2000))
+            if (!waitEventComplete.Wait(15000))
             {
-                Assert.Fail("Command did not Complete/Fail within 2 sec");
+                Assert.Fail("Command did not Complete/Fail within 15 sec");
             }
 
             if (waitPublish && !waitEventPublish.Wait(500))
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
 
             Subject.Handle(new ApplicationStartedEvent());
 
-            QueueAndWaitForExecution(commandModel);
+            QueueAndWaitForExecution(commandModel, true);
 
             VerifyEventPublished<CommandExecutedEvent>();
 
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
 
             Subject.Handle(new ApplicationStartedEvent());
 
-            QueueAndWaitForExecution(commandModel);
+            QueueAndWaitForExecution(commandModel, true);
 
             VerifyEventPublished<CommandExecutedEvent>();
         }

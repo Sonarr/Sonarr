@@ -65,19 +65,19 @@ namespace NzbDrone.App.Test
         }
 
         [Test]
-        public void should_return_same_instance_of_singletons()
+        public void should_return_same_instance_via_resolve_and_resolveall()
         {
-            var first = _container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
-            var second = _container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
+            var first = (DownloadMonitoringService)_container.Resolve<IHandle<TrackedDownloadsRemovedEvent>>();
+            var second = _container.ResolveAll<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
 
             first.Should().BeSameAs(second);
         }
 
         [Test]
-        public void should_return_same_instance_of_singletons_by_different_same_interface()
+        public void should_return_same_instance_of_singletons_by_same_interface()
         {
-            var first = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
-            var second = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var first = _container.ResolveAll<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var second = _container.ResolveAll<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
 
             first.Should().BeSameAs(second);
         }
@@ -85,7 +85,7 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_return_same_instance_of_singletons_by_different_interfaces()
         {
-            var first = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var first = _container.ResolveAll<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
             var second = (DownloadMonitoringService)_container.Resolve<IExecute<CheckForFinishedDownloadCommand>>();
 
             first.Should().BeSameAs(second);
