@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
-using NzbDrone.Windows.EnvironmentInfo;
 
 namespace NzbDrone.Windows.Test.EnvironmentInfo
 {
     [TestFixture]
     [Platform("Win")]
-    public class DotNetPlatformInfoFixture : TestBase<DotNetPlatformInfo>
+    public class DotNetPlatformInfoFixture : TestBase<PlatformInfo>
     {
         [Test]
         public void should_get_framework_version()
