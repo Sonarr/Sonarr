@@ -63,6 +63,7 @@ namespace NzbDrone.Console
                 System.Console.WriteLine("");
                 System.Console.WriteLine("");
                 Logger.Fatal(ex, "EPIC FAIL!");
+                System.Console.WriteLine("EPIC FAIL! " + ex.ToString());
                 Exit(ExitCodes.UnknownFailure);
             }
             

@@ -53,7 +53,18 @@ namespace NzbDrone.Common.Composition
         {
             var factory = CreateSingletonImplementationFactory(implementation);
 
+            // For Resolve and ResolveAll
             _container.Register(service, factory);
+
+            // For ctor(IEnumerable<T>)
+            var enumerableType = typeof(IEnumerable<>).MakeGenericType(service);
+            _container.Register(enumerableType, (c, p) =>
+            {
+                var instance = factory(c, p);
+                var result = Array.CreateInstance(service, 1);
+                result.SetValue(instance, 0);
+                return result;
+            });
         }
 
         public IEnumerable<T> ResolveAll<T>() where T : class
@@ -67,6 +78,7 @@ namespace NzbDrone.Common.Composition
             {
                 var factory = CreateSingletonImplementationFactory(implementation);
 
+                // For ResolveAll and ctor(IEnumerable<T>)
                 _container.Register(service, factory, implementation.FullName);
             }
         }
