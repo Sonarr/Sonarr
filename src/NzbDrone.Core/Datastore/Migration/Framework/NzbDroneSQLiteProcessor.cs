@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using FluentMigrator.Expressions;
 using FluentMigrator.Model;
 using FluentMigrator.Runner.Generators.SQLite;
-using FluentMigrator.Runner.Processors.SQLite;
-using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
+using FluentMigrator.Runner.Processors.SQLite;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {

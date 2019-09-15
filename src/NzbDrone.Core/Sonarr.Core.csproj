@@ -4,7 +4,6 @@
     <Platforms>x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentMigrator" Version="4.0.0-alpha.268" />
     <PackageReference Include="FluentMigrator.Runner" Version="4.0.0-alpha.268" />
     <PackageReference Include="FluentMigrator.Runner.SQLite" Version="4.0.0-alpha.268" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
