@@ -324,7 +324,7 @@ class SeriesDetailsSeason extends Component {
 
                   <MenuItem
                     onPress={this.onInteractiveSearchPress}
-                    isDisabled={!episodeCount}
+                    isDisabled={!totalEpisodeCount}
                   >
                     <Icon
                       className={styles.actionMenuIcon}
@@ -360,7 +360,7 @@ class SeriesDetailsSeason extends Component {
 
                   <MenuItem
                     onPress={this.onHistoryPress}
-                    isDisabled={!episodeCount}
+                    isDisabled={!totalEpisodeCount}
                   >
                     <Icon
                       className={styles.actionMenuIcon}
@@ -388,7 +388,7 @@ class SeriesDetailsSeason extends Component {
                   name={icons.INTERACTIVE}
                   title="Interactive search for all episodes in this season"
                   size={24}
-                  isDisabled={!episodeCount}
+                  isDisabled={!totalEpisodeCount}
                   onPress={this.onInteractiveSearchPress}
                 />
 
@@ -415,7 +415,7 @@ class SeriesDetailsSeason extends Component {
                   name={icons.HISTORY}
                   title="View history for this season"
                   size={24}
-                  isDisabled={!episodeCount}
+                  isDisabled={!totalEpisodeCount}
                   onPress={this.onHistoryPress}
                 />
               </div>
