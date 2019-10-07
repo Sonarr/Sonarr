@@ -104,9 +104,16 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
             var distinctMappings = mappings.DistinctBy(v => v.TvdbId).ToList();
 
-            if (distinctMappings.Count <= 1)
+            if (distinctMappings.Count == 0)
             {
-                return distinctMappings.FirstOrDefault();
+                return null;
+            }
+
+            if (distinctMappings.Count == 1)
+            {
+                var mapping = distinctMappings.First();
+                _logger.Debug("Found scene mapping for: {0}. TVDB ID for mapping: {1}", seriesTitle, mapping.TvdbId);
+                return distinctMappings.First();
             }
 
             throw new InvalidSceneMappingException(mappings, releaseTitle);
