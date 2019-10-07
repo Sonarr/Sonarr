@@ -90,5 +90,11 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             Parser.Parser.ParseTitle(fileName).Should().BeNull();
         }
+
+        [TestCase("Big Forest (2018) Complete 360p HDTV AAC H.264-NEXT")]
+        public void should_not_parse_invalid_release_name(string fileName)
+        {
+            Parser.Parser.ParseTitle(fileName).Should().BeNull();
+        }
     }
 }
