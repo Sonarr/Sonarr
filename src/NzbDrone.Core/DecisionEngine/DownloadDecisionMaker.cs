@@ -113,6 +113,16 @@ namespace NzbDrone.Core.DecisionEngine
                             decision = GetDecisionForReport(remoteEpisode, searchCriteria);
                         }
                     }
+
+                    if (parsedEpisodeInfo == null || parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace() && searchCriteria != null)
+                    {
+                        var remoteEpisode = new RemoteEpisode
+                        {
+                            Release = report
+                        };
+
+                        decision = new DownloadDecision(remoteEpisode, new Rejection("Unable to parse release"));
+                    }
                 }
                 catch (Exception e)
                 {

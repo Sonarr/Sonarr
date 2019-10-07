@@ -151,19 +151,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenSpecifications(_pass1, _pass2, _pass3);
             _reports[0].Title = "Not parsable";
 
-            var results = Subject.GetRssDecision(_reports).ToList();
+            Subject.GetRssDecision(_reports).ToList();
 
             Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()), Times.Never());
 
             _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
             _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
             _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
-
-            results.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_attempt_to_map_episode_series_title_is_blank()
+        public void should_not_attempt_to_map_episode_if_series_title_is_blank()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
             _reports[0].Title = "1937 - Snow White and the Seven Dwarves";
@@ -177,6 +175,21 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
 
             results.Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_rejected_result_for_unparsable_search()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+            _reports[0].Title = "1937 - Snow White and the Seven Dwarves";
+
+            Subject.GetSearchDecision(_reports, new SingleEpisodeSearchCriteria()).ToList();
+
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()), Times.Never());
+
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
         }
 
         [Test]
