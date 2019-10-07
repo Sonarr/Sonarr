@@ -17,16 +17,19 @@ namespace NzbDrone.Core.Extras.Subtitles
     public class SubtitleService : ExtraFileManager<SubtitleFile>
     {
         private readonly ISubtitleFileService _subtitleFileService;
+        private readonly IMediaFileAttributeService _mediaFileAttributeService;
         private readonly Logger _logger;
 
         public SubtitleService(IConfigService configService,
                                IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
                                ISubtitleFileService subtitleFileService,
+                               IMediaFileAttributeService mediaFileAttributeService,
                                Logger logger)
             : base(configService, diskProvider, diskTransferService, logger)
         {
             _subtitleFileService = subtitleFileService;
+            _mediaFileAttributeService = mediaFileAttributeService;
             _logger = logger;
         }
 
@@ -92,7 +95,9 @@ namespace NzbDrone.Core.Extras.Subtitles
                 var subtitleFile = ImportFile(series, episodeFile, path, readOnly, extension, suffix);
                 subtitleFile.Language = language;
 
+                _mediaFileAttributeService.SetFilePermissions(path);
                 _subtitleFileService.Upsert(subtitleFile);
+
 
                 return subtitleFile;
             }

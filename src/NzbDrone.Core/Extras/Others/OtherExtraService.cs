@@ -15,15 +15,18 @@ namespace NzbDrone.Core.Extras.Others
     public class OtherExtraService : ExtraFileManager<OtherExtraFile>
     {
         private readonly IOtherExtraFileService _otherExtraFileService;
+        private readonly IMediaFileAttributeService _mediaFileAttributeService;
 
         public OtherExtraService(IConfigService configService,
                                  IDiskProvider diskProvider,
                                  IDiskTransferService diskTransferService,
                                  IOtherExtraFileService otherExtraFileService,
+                                 IMediaFileAttributeService mediaFileAttributeService,
                                  Logger logger)
             : base(configService, diskProvider, diskTransferService, logger)
         {
             _otherExtraFileService = otherExtraFileService;
+            _mediaFileAttributeService = mediaFileAttributeService;
         }
 
         public override int Order => 2;
@@ -67,6 +70,7 @@ namespace NzbDrone.Core.Extras.Others
         {
             var extraFile = ImportFile(series, episodeFile, path, readOnly, extension, null);
 
+            _mediaFileAttributeService.SetFilePermissions(path);
             _otherExtraFileService.Upsert(extraFile);
 
             return extraFile;
