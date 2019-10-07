@@ -259,6 +259,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     details.Add(new XElement("displayseason"));
                     details.Add(new XElement("displayepisode"));
 
+                    var uniqueId = new XElement("uniqueid", episode.Id);
+                    uniqueId.SetAttributeValue("type", "sonarr");
+                    uniqueId.SetAttributeValue("default", true);
+                    details.Add(uniqueId);
+
                     if (image == null)
                     {
                         details.Add(new XElement("thumb"));
