@@ -1,13 +1,13 @@
 ﻿using FluentValidation.Results;
 using NLog;
 using System;
-using OAuth;
 using System.Net;
 using System.Collections.Specialized;
 using System.IO;
 using System.Web;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.OAuth;
 
 namespace NzbDrone.Core.Notifications.Twitter
 {

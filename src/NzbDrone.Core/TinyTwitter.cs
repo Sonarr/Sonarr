@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -58,59 +57,6 @@ namespace TinyTwitter
                 .AddParameter("text", message)
                 .AddParameter("screen_name", screenName)
                 .Execute();
-        }
-
-        public IEnumerable<Tweet> GetHomeTimeline(long? sinceId = null, long? maxId = null, int? count = 20)
-        {
-            return GetTimeline("https://api.twitter.com/1.1/statuses/home_timeline.json", sinceId, maxId, count, "");
-        }
-
-        public IEnumerable<Tweet> GetMentions(long? sinceId = null, long? maxId = null, int? count = 20)
-        {
-            return GetTimeline("https://api.twitter.com/1.1/statuses/mentions.json", sinceId, maxId, count, "");
-        }
-
-        public IEnumerable<Tweet> GetUserTimeline(long? sinceId = null, long? maxId = null, int? count = 20, string screenName = "")
-        {
-            return GetTimeline("https://api.twitter.com/1.1/statuses/user_timeline.json", sinceId, maxId, count, screenName);
-        }
-
-        private IEnumerable<Tweet> GetTimeline(string url, long? sinceId, long? maxId, int? count, string screenName)
-        {
-            var builder = new RequestBuilder(oauth, "GET", url);
-
-            if (sinceId.HasValue)
-                builder.AddParameter("since_id", sinceId.Value.ToString());
-
-            if (maxId.HasValue)
-                builder.AddParameter("max_id", maxId.Value.ToString());
-
-            if (count.HasValue)
-                builder.AddParameter("count", count.Value.ToString());
-
-            if (screenName != "")
-                builder.AddParameter("screen_name", screenName);
-
-            var responseContent = builder.Execute();
-
-            var tweets = (object[])JsonConvert.DeserializeObject(responseContent);
-
-            return tweets.Cast<Dictionary<string, object>>().Select(tweet =>
-            {
-                var user = ((Dictionary<string, object>)tweet["user"]);
-                var date = DateTime.ParseExact(tweet["created_at"].ToString(),
-                    "ddd MMM dd HH:mm:ss zz00 yyyy",
-                    CultureInfo.InvariantCulture).ToLocalTime();
-
-                return new Tweet
-                {
-                    Id = (long)tweet["id"],
-                    CreatedAt = date,
-                    Text = (string)tweet["text"],
-                    UserName = (string)user["name"],
-                    ScreenName = (string)user["screen_name"]
-                };
-            }).ToArray();
         }
 
         #region RequestBuilder
