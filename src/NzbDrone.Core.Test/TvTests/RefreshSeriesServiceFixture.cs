@@ -124,6 +124,30 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
+        public void should_mark_as_deleted_if_tvdb_id_not_found()
+        {
+            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Status == SeriesStatusType.Deleted), It.IsAny<bool>()), Times.Once());
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_not_remark_as_deleted_if_tvdb_id_not_found()
+        {
+            _series.Status = SeriesStatusType.Deleted;
+
+            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
         public void should_update_if_tvdb_id_changed()
         {
             var newSeriesInfo = _series.JsonClone();
