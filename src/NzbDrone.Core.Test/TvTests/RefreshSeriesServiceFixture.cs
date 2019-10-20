@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Test.TvTests
                                          .Build();
 
             _series = Builder<Series>.CreateNew()
+                                     .With(s => s.Status = SeriesStatusType.Continuing)
                                      .With(s => s.Seasons = new List<Season>
                                                             {
                                                                 season1
