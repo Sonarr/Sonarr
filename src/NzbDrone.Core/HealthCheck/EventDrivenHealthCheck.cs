@@ -35,7 +35,7 @@ namespace NzbDrone.Core.HealthCheck
                 return false;
             }
 
-            if (EventFilter == null && !EventFilter.ShouldCheckOnEvent((TEvent)message))
+            if (EventFilter != null && !EventFilter.ShouldCheckOnEvent((TEvent)message))
             {
                 return false;
             }
