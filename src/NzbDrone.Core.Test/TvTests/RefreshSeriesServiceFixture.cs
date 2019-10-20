@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Test.TvTests
             Subject.Execute(new RefreshSeriesCommand(_series.Id));
 
             Mocker.GetMock<ISeriesService>()
-                .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>()), Times.Never());
+                .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Status == SeriesStatusType.Deleted), It.IsAny<bool>()), Times.Once());
 
             ExceptionVerification.ExpectedErrors(1);
         }

@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.TvTests
         public void Setup()
         {
             _series = Builder<Series>.CreateNew()
-                                     .With(v => v.Status == SeriesStatusType.Continuing)
+                                     .With(v => v.Status = SeriesStatusType.Continuing)
                                      .Build();
 
             Mocker.GetMock<IEpisodeService>()
