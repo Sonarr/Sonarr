@@ -3,6 +3,7 @@ import React from 'react';
 import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import VirtualTableRowCell from 'Components/Table/Cells/TableRowCell';
+import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import styles from './SeriesStatusCell.css';
 
 function SeriesStatusCell(props) {
@@ -13,6 +14,8 @@ function SeriesStatusCell(props) {
     component: Component,
     ...otherProps
   } = props;
+
+  const statusDetails = getSeriesStatusDetails(status);
 
   return (
     <Component
@@ -27,8 +30,8 @@ function SeriesStatusCell(props) {
 
       <Icon
         className={styles.statusIcon}
-        name={status === 'ended' ? icons.SERIES_ENDED : icons.SERIES_CONTINUING}
-        title={status === 'ended' ? 'Ended' : 'Continuing'}
+        name={statusDetails.icon}
+        title={`${statusDetails.title}: ${statusDetails.message}`}
 
       />
     </Component>

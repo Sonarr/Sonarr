@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import TableRow from 'Components/Table/TableRow';
@@ -8,6 +7,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import SeasonPassSeason from './SeasonPassSeason';
+import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import styles from './SeasonPassRow.css';
 
 class SeasonPassRow extends Component {
@@ -30,6 +30,8 @@ class SeasonPassRow extends Component {
       onSeasonMonitoredPress
     } = this.props;
 
+    const statusDetails = getSeriesStatusDetails(status);
+
     return (
       <TableRow>
         <TableSelectCell
@@ -41,8 +43,8 @@ class SeasonPassRow extends Component {
         <TableRowCell className={styles.status}>
           <Icon
             className={styles.statusIcon}
-            name={status === 'ended' ? icons.SERIES_ENDED : icons.SERIES_CONTINUING}
-            title={status === 'ended' ? 'Ended' : 'Continuing'}
+            name={statusDetails.icon}
+            title={statusDetails.title}
 
           />
         </TableRowCell>

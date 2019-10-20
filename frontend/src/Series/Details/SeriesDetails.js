@@ -34,6 +34,7 @@ import SeriesAlternateTitles from './SeriesAlternateTitles';
 import SeriesDetailsSeasonConnector from './SeriesDetailsSeasonConnector';
 import SeriesTagsConnector from './SeriesTagsConnector';
 import SeriesDetailsLinks from './SeriesDetailsLinks';
+import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import styles from './SeriesDetails.css';
 
 const defaultFontSize = parseInt(fonts.defaultFontSize);
@@ -216,7 +217,7 @@ class SeriesDetails extends Component {
       overviewHeight
     } = this.state;
 
-    const continuing = status === 'continuing';
+    const statusDetails = getSeriesStatusDetails(status);
 
     let episodeFilesCountMessage = 'No episode files';
 
@@ -465,16 +466,16 @@ class SeriesDetails extends Component {
 
                   <Label
                     className={styles.detailsLabel}
-                    title={continuing ? 'More episodes/another season is expected' : 'No additional episodes or or another season is expected'}
+                    title={statusDetails.message}
                     size={sizes.LARGE}
                   >
                     <Icon
-                      name={continuing ? icons.SERIES_CONTINUING : icons.SERIES_ENDED}
+                      name={statusDetails.icon}
                       size={17}
                     />
 
                     <span className={styles.qualityProfileName}>
-                      {continuing ? 'Continuing' : 'Ended'}
+                      {statusDetails.title}
                     </span>
                   </Label>
 
