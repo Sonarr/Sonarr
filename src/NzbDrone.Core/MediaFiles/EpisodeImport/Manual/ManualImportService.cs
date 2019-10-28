@@ -142,56 +142,65 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
         private ManualImportItem ProcessFile(string rootFolder, string baseFolder, string file, string downloadId, Series series = null)
         {
-            DownloadClientItem downloadClientItem = null;
-            var relativeFile = baseFolder.GetRelativePath(file);
-
-            if (series == null)
+            try
             {
-                _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
-            }
-
-            if (series == null)
-            {
-                series = _parsingService.GetSeries(relativeFile);
-            }
-
-            if (downloadId.IsNotNullOrWhiteSpace())
-            {
-                var trackedDownload = _trackedDownloadService.Find(downloadId);
-                downloadClientItem = trackedDownload?.DownloadItem;
+                DownloadClientItem downloadClientItem = null;
+                var relativeFile = baseFolder.GetRelativePath(file);
 
                 if (series == null)
                 {
-                    series = trackedDownload?.RemoteEpisode?.Series;
+                    _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
                 }
-            }
 
-            if (series == null)
-            {
-                var relativeParseInfo = Parser.Parser.ParsePath(relativeFile);
-
-                if (relativeParseInfo != null)
+                if (series == null)
                 {
-                    series = _seriesService.FindByTitle(relativeParseInfo.SeriesTitle);
+                    series = _parsingService.GetSeries(relativeFile);
+                }
+
+                if (downloadId.IsNotNullOrWhiteSpace())
+                {
+                    var trackedDownload = _trackedDownloadService.Find(downloadId);
+                    downloadClientItem = trackedDownload?.DownloadItem;
+
+                    if (series == null)
+                    {
+                        series = trackedDownload?.RemoteEpisode?.Series;
+                    }
+                }
+
+                if (series == null)
+                {
+                    var relativeParseInfo = Parser.Parser.ParsePath(relativeFile);
+
+                    if (relativeParseInfo != null)
+                    {
+                        series = _seriesService.FindByTitle(relativeParseInfo.SeriesTitle);
+                    }
+                }
+
+                if (series == null)
+                {
+                    var localEpisode = new LocalEpisode();
+                    localEpisode.Path = file;
+                    localEpisode.Quality = QualityParser.ParseQuality(file);
+                    localEpisode.Language = LanguageParser.ParseLanguage(file);
+                    localEpisode.Size = _diskProvider.GetFileSize(file);
+
+                    return MapItem(new ImportDecision(localEpisode, new Rejection("Unknown Series")), rootFolder,
+                        downloadId, null);
+                }
+
+                var importDecisions = _importDecisionMaker.GetImportDecisions(new List<string> {file}, series,
+                    downloadClientItem, null, SceneSource(series, baseFolder));
+
+                if (importDecisions.Any())
+                {
+                    return MapItem(importDecisions.First(), rootFolder, downloadId, null);
                 }
             }
-
-            if (series == null)
+            catch (Exception ex)
             {
-                var localEpisode = new LocalEpisode();
-                localEpisode.Path = file;
-                localEpisode.Quality = QualityParser.ParseQuality(file);
-                localEpisode.Language = LanguageParser.ParseLanguage(file);
-                localEpisode.Size = _diskProvider.GetFileSize(file);
-
-                return MapItem(new ImportDecision(localEpisode, new Rejection("Unknown Series")), rootFolder, downloadId, null);
-            }
-
-            var importDecisions = _importDecisionMaker.GetImportDecisions(new List<string> {file}, series, downloadClientItem, null, SceneSource(series, baseFolder));
-
-            if (importDecisions.Any())
-            {
-                return MapItem(importDecisions.First(), rootFolder, downloadId, null);
+                _logger.Warn(ex, "Failed to process file: {0}", file);
             }
 
             return new ManualImportItem

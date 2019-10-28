@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         }
 
         private void LogItemChange(TrackedDownload trackedDownload, DownloadClientItem existingItem, DownloadClientItem downloadItem)
-	{
+	    {
             if (existingItem == null ||
                 existingItem.Status != downloadItem.Status ||
                 existingItem.CanBeRemoved != downloadItem.CanBeRemoved ||
