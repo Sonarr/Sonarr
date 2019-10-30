@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import getUniqueElementId from 'Utilities/getUniqueElementId';
 import Scroller from 'Components/Scroller/Scroller';
 import styles from './MenuContent.css';
 
@@ -47,7 +48,8 @@ MenuContent.propTypes = {
 };
 
 MenuContent.defaultProps = {
-  className: styles.menuContent
+  className: styles.menuContent,
+  id: getUniqueElementId()
 };
 
 export default MenuContent;
