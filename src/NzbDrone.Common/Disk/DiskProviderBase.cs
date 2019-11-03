@@ -482,7 +482,7 @@ namespace NzbDrone.Common.Disk
 
         public void RemoveEmptySubfolders(string path)
         {
-            var subfolders = GetDirectories(path);
+            var subfolders = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
             var files = GetFiles(path, SearchOption.AllDirectories);
 
             foreach (var subfolder in subfolders)
