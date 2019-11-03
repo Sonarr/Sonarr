@@ -139,6 +139,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S01.Ep01.English.AC3.DL.1080p.BluRay-Sonarr", "Series Title", 1, 1)]
         [TestCase("Series.Title.S01.E01.English.AC3.DL.1080p.BluRay-Sonarr", "Series Title", 1, 1)]
         [TestCase("Series.Title.S01EP01.English.AC3.DL.1080p.BluRay-Sonarr", "Series Title", 1, 1)]
+        [TestCase("tvs-amgo-dd51-dl-7p-azhd-x264-103", "tvs-amgo-dd51-dl-7p-azhd", 1, 3)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
