@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                     default: // new status in API? default to downloading
                         item.Message = "Unknown download state: " + torrent.State;
-                        _logger.Warn(item.Message);
+                        _logger.Info(item.Message);
                         item.Status = DownloadItemStatus.Downloading;
                         break;
                 }
