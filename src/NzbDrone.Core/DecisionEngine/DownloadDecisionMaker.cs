@@ -114,14 +114,27 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                     }
 
-                    if (parsedEpisodeInfo == null || parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace() && searchCriteria != null)
+                    if (searchCriteria != null)
                     {
-                        var remoteEpisode = new RemoteEpisode
+                        if (parsedEpisodeInfo == null)
                         {
-                            Release = report
-                        };
+                            parsedEpisodeInfo = new ParsedEpisodeInfo
+                            {
+                                Language = LanguageParser.ParseLanguage(report.Title),
+                                Quality = QualityParser.ParseQuality(report.Title)
+                            };
+                        }
 
-                        decision = new DownloadDecision(remoteEpisode, new Rejection("Unable to parse release"));
+                        if (parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace())
+                        {
+                            var remoteEpisode = new RemoteEpisode
+                            {
+                                Release = report,
+                                ParsedEpisodeInfo = parsedEpisodeInfo
+                            };
+
+                            decision = new DownloadDecision(remoteEpisode, new Rejection("Unable to parse release"));
+                        }
                     }
                 }
                 catch (Exception e)

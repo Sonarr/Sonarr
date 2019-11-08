@@ -163,9 +163,8 @@ namespace Sonarr.Api.V3.Indexers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Episode search failed: " + ex.Message);
+                throw new NzbDroneClientException(HttpStatusCode.InternalServerError, ex.Message);
             }
-
-            return new List<ReleaseResource>();
         }
 
         private List<ReleaseResource> GetSeasonReleases(int seriesId, int seasonNumber)
@@ -184,9 +183,8 @@ namespace Sonarr.Api.V3.Indexers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Season search failed: " + ex.Message);
+                throw new NzbDroneClientException(HttpStatusCode.InternalServerError, ex.Message);
             }
-
-            return new List<ReleaseResource>();
         }
 
         private List<ReleaseResource> GetRss()
