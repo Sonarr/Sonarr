@@ -5,6 +5,8 @@ import delayProfiles from './Settings/delayProfiles';
 import downloadClients from './Settings/downloadClients';
 import downloadClientOptions from './Settings/downloadClientOptions';
 import general from './Settings/general';
+import importLists from './Settings/importLists';
+import importListExclusions from './Settings/importListExclusions';
 import indexerOptions from './Settings/indexerOptions';
 import indexers from './Settings/indexers';
 import languageProfiles from './Settings/languageProfiles';
@@ -23,6 +25,8 @@ export * from './Settings/delayProfiles';
 export * from './Settings/downloadClients';
 export * from './Settings/downloadClientOptions';
 export * from './Settings/general';
+export * from './Settings/importLists';
+export * from './Settings/importListExclusions';
 export * from './Settings/indexerOptions';
 export * from './Settings/indexers';
 export * from './Settings/languageProfiles';
@@ -52,6 +56,8 @@ export const defaultState = {
   downloadClients: downloadClients.defaultState,
   downloadClientOptions: downloadClientOptions.defaultState,
   general: general.defaultState,
+  importLists: importLists.defaultState,
+  importListExclusions: importListExclusions.defaultState,
   indexerOptions: indexerOptions.defaultState,
   indexers: indexers.defaultState,
   languageProfiles: languageProfiles.defaultState,
@@ -89,6 +95,8 @@ export const actionHandlers = handleThunks({
   ...downloadClients.actionHandlers,
   ...downloadClientOptions.actionHandlers,
   ...general.actionHandlers,
+  ...importLists.actionHandlers,
+  ...importListExclusions.actionHandlers,
   ...indexerOptions.actionHandlers,
   ...indexers.actionHandlers,
   ...languageProfiles.actionHandlers,
@@ -117,6 +125,8 @@ export const reducers = createHandleActions({
   ...downloadClients.reducers,
   ...downloadClientOptions.reducers,
   ...general.reducers,
+  ...importLists.reducers,
+  ...importListExclusions.reducers,
   ...indexerOptions.reducers,
   ...indexers.reducers,
   ...languageProfiles.reducers,

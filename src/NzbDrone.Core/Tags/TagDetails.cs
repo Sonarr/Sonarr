@@ -11,12 +11,13 @@ namespace NzbDrone.Core.Tags
         public List<int> NotificationIds { get; set; }
         public List<int> RestrictionIds { get; set; }
         public List<int> DelayProfileIds { get; set; }
+        public List<int> ImportListIds { get; set; }
 
         public bool InUse
         {
             get
             {
-                return (SeriesIds.Any() || NotificationIds.Any() || RestrictionIds.Any() || DelayProfileIds.Any());
+                return (SeriesIds.Any() || NotificationIds.Any() || RestrictionIds.Any() || DelayProfileIds.Any() || ImportListIds.Any());
             }
         }
     }

@@ -199,7 +199,8 @@ export const deleteSeries = createThunk(DELETE_SERIES, (payload) => {
   return {
     ...payload,
     queryParams: {
-      deleteFiles: payload.deleteFiles
+      deleteFiles: payload.deleteFiles,
+      addImportListExclusion: payload.addImportListExclusion
     }
   };
 });

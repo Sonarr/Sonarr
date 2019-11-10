@@ -9,6 +9,7 @@ namespace Sonarr.Api.V3.Tags
     {
         public string Label { get; set; }
         public List<int> DelayProfileIds { get; set; }
+        public List<int> ImportListIds { get; set; }
         public List<int> NotificationIds { get; set; }
         public List<int> RestrictionIds { get; set; }
         public List<int> SeriesIds { get; set; }
@@ -25,6 +26,7 @@ namespace Sonarr.Api.V3.Tags
                 Id = model.Id,
                 Label = model.Label,
                 DelayProfileIds = model.DelayProfileIds,
+                ImportListIds = model.ImportListIds,
                 NotificationIds = model.NotificationIds,
                 RestrictionIds = model.RestrictionIds,
                 SeriesIds = model.SeriesIds

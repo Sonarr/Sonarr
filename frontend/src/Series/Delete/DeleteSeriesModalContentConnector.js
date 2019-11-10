@@ -24,10 +24,11 @@ class DeleteSeriesModalContentConnector extends Component {
   //
   // Listeners
 
-  onDeletePress = (deleteFiles) => {
+  onDeletePress = (deleteFiles, addImportListExclusion) => {
     this.props.deleteSeries({
       id: this.props.seriesId,
-      deleteFiles
+      deleteFiles,
+      addImportListExclusion
     });
 
     this.props.onModalClose(true);

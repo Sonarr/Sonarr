@@ -53,6 +53,7 @@ class Tag extends Component {
     const {
       label,
       delayProfileIds,
+      importListIds,
       notificationIds,
       restrictionIds,
       seriesIds
@@ -65,6 +66,7 @@ class Tag extends Component {
 
     const isTagUsed = !!(
       delayProfileIds.length ||
+      importListIds.length ||
       notificationIds.length ||
       restrictionIds.length ||
       seriesIds.length
@@ -98,6 +100,13 @@ class Tag extends Component {
               }
 
               {
+                !!importListIds.length &&
+                  <div>
+                    {importListIds.length} import list{importListIds.length > 1 && 's'}
+                  </div>
+              }
+
+              {
                 !!notificationIds.length &&
                   <div>
                     {notificationIds.length} connection{notificationIds.length > 1 && 's'}
@@ -125,6 +134,7 @@ class Tag extends Component {
           isTagUsed={isTagUsed}
           seriesIds={seriesIds}
           delayProfileIds={delayProfileIds}
+          importListIds={importListIds}
           notificationIds={notificationIds}
           restrictionIds={restrictionIds}
           isOpen={isDetailsModalOpen}
@@ -150,6 +160,7 @@ Tag.propTypes = {
   id: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   delayProfileIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  importListIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   notificationIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   restrictionIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   seriesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -158,6 +169,7 @@ Tag.propTypes = {
 
 Tag.defaultProps = {
   delayProfileIds: [],
+  importListIds: [],
   notificationIds: [],
   restrictionIds: [],
   seriesIds: []
