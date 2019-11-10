@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTitle(string title, int year);
         Series FindByTitleInexact(string title);
         Series FindByPath(string path);
-        void DeleteSeries(int seriesId, bool deleteFiles);
+        void DeleteSeries(int seriesId, bool deleteFiles, bool addImportListExclusion = false);
         List<Series> GetAllSeries();
         List<Series> AllForTag(int tagId);
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
@@ -145,11 +145,11 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.FindByTitle(title.CleanSeriesTitle(), year);
         }
 
-        public void DeleteSeries(int seriesId, bool deleteFiles)
+        public void DeleteSeries(int seriesId, bool deleteFiles, bool addImportListExclusion = false)
         {
             var series = _seriesRepository.Get(seriesId);
             _seriesRepository.Delete(seriesId);
-            _eventAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles));
+            _eventAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles, addImportListExclusion));
         }
 
         public List<Series> GetAllSeries()

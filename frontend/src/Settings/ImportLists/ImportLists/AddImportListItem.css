@@ -1,0 +1,44 @@
+.list {
+  composes: card from '~Components/Card.css';
+
+  position: relative;
+  width: 300px;
+  height: 100px;
+}
+
+.underlay {
+  @add-mixin cover;
+}
+
+.overlay {
+  @add-mixin linkOverlay;
+
+  padding: 10px;
+}
+
+.name {
+  text-align: center;
+  font-weight: lighter;
+  font-size: 24px;
+}
+
+.actions {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.presetsMenu {
+  composes: menu from '~Components/Menu/Menu.css';
+
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.presetsMenuButton {
+  composes: button from '~Components/Link/Button.css';
+
+  &::after {
+    margin-left: 5px;
+    content: '\25BE';
+  }
+}

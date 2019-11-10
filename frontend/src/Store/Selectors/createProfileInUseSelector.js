@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { createSelector } from 'reselect';
 import createAllSeriesSelector from './createAllSeriesSelector';
 
@@ -6,12 +5,13 @@ function createProfileInUseSelector(profileProp) {
   return createSelector(
     (state, { id }) => id,
     createAllSeriesSelector(),
-    (id, series) => {
+    (state) => state.settings.importLists.items,
+    (id, series, lists) => {
       if (!id) {
         return false;
       }
 
-      return _.some(series, { [profileProp]: id });
+      return series.some((s) => s[profileProp] === id) || lists.some((list) => list[profileProp] === id);
     }
   );
 }

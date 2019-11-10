@@ -40,6 +40,8 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Update.History;
+using NzbDrone.Core.ImportLists.Exclusions;
+using NzbDrone.Core.ImportLists;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -80,6 +82,10 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<DownloadClientDefinition>().RegisterDefinition("DownloadClients")
                   .Ignore(d => d.Protocol)
                   .Ignore(d => d.Tags);
+
+            Mapper.Entity<ImportListDefinition>().RegisterDefinition("ImportLists")
+                .Ignore(i => i.ListType)
+                .Ignore(i => i.Enable);
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
@@ -135,6 +141,7 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<IndexerStatus>().RegisterModel("IndexerStatus");
             Mapper.Entity<DownloadClientStatus>().RegisterModel("DownloadClientStatus");
+            Mapper.Entity<ImportListStatus>().RegisterModel("ImportListStatus");
 
             Mapper.Entity<CustomFilter>().RegisterModel("CustomFilters");
 
@@ -142,6 +149,7 @@ namespace NzbDrone.Core.Datastore
                   .AutoMapChildModels();
 
             Mapper.Entity<UpdateHistory>().RegisterModel("UpdateHistory");
+            Mapper.Entity<ImportListExclusion>().RegisterModel("ImportListExclusions");
         }
 
         private static void RegisterMappers()

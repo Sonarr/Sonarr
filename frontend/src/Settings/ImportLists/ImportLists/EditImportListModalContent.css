@@ -1,0 +1,15 @@
+.deleteButton {
+  composes: button from '~Components/Link/Button.css';
+
+  margin-right: auto;
+}
+
+.hideLanguageProfile {
+  composes: group from '~Components/Form/FormGroup.css';
+
+  display: none;
+}
+
+.labelIcon {
+  margin-left: 8px;
+}

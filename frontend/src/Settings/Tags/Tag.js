@@ -53,6 +53,7 @@ class Tag extends Component {
     const {
       label,
       delayProfileIds,
+      importListIds,
       notificationIds,
       restrictionIds,
       seriesIds
@@ -65,6 +66,7 @@ class Tag extends Component {
 
     const isTagUsed = !!(
       delayProfileIds.length ||
+      importListIds.length ||
       notificationIds.length ||
       restrictionIds.length ||
       seriesIds.length
@@ -84,31 +86,43 @@ class Tag extends Component {
           isTagUsed &&
             <div>
               {
-                !!seriesIds.length &&
+                seriesIds.length ?
                   <div>
                     {seriesIds.length} series
-                  </div>
+                  </div> :
+                  null
               }
 
               {
-                !!delayProfileIds.length &&
+                delayProfileIds.length ?
                   <div>
                     {delayProfileIds.length} delay profile{delayProfileIds.length > 1 && 's'}
-                  </div>
+                  </div> :
+                  null
               }
 
               {
-                !!notificationIds.length &&
+                importListIds.length ?
+                  <div>
+                    {importListIds.length} import list{importListIds.length > 1 && 's'}
+                  </div> :
+                  null
+              }
+
+              {
+                notificationIds.length ?
                   <div>
                     {notificationIds.length} connection{notificationIds.length > 1 && 's'}
-                  </div>
+                  </div> :
+                  null
               }
 
               {
-                !!restrictionIds.length &&
+                restrictionIds.length ?
                   <div>
                     {restrictionIds.length} restriction{restrictionIds.length > 1 && 's'}
-                  </div>
+                  </div> :
+                  null
               }
             </div>
         }
@@ -125,6 +139,7 @@ class Tag extends Component {
           isTagUsed={isTagUsed}
           seriesIds={seriesIds}
           delayProfileIds={delayProfileIds}
+          importListIds={importListIds}
           notificationIds={notificationIds}
           restrictionIds={restrictionIds}
           isOpen={isDetailsModalOpen}
@@ -150,6 +165,7 @@ Tag.propTypes = {
   id: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   delayProfileIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  importListIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   notificationIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   restrictionIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   seriesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -158,6 +174,7 @@ Tag.propTypes = {
 
 Tag.defaultProps = {
   delayProfileIds: [],
+  importListIds: [],
   notificationIds: [],
   restrictionIds: [],
   seriesIds: []

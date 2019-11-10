@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
@@ -22,12 +23,14 @@ namespace NzbDrone.Core.Profiles.Qualities
     public class QualityProfileService : IProfileService, IHandle<ApplicationStartedEvent>
     {
         private readonly IProfileRepository _profileRepository;
+        private readonly IImportListFactory _importListFactory;
         private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
-        public QualityProfileService(IProfileRepository profileRepository, ISeriesService seriesService, Logger logger)
+        public QualityProfileService(IProfileRepository profileRepository, IImportListFactory importListFactory, ISeriesService seriesService, Logger logger)
         {
             _profileRepository = profileRepository;
+            _importListFactory = importListFactory;
             _seriesService = seriesService;
             _logger = logger;
         }
@@ -44,7 +47,7 @@ namespace NzbDrone.Core.Profiles.Qualities
 
         public void Delete(int id)
         {
-            if (_seriesService.GetAllSeries().Any(c => c.QualityProfileId == id))
+            if (_seriesService.GetAllSeries().Any(c => c.QualityProfileId == id) || _importListFactory.All().Any(c => c.QualityProfileId == id))
             {
                 var profile = _profileRepository.Get(id);
                 throw new QualityProfileInUseException(profile.Name);

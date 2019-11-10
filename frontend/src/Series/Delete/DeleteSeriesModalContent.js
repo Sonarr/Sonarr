@@ -22,7 +22,8 @@ class DeleteSeriesModalContent extends Component {
     super(props, context);
 
     this.state = {
-      deleteFiles: false
+      deleteFiles: false,
+      addImportListExclusion: false
     };
   }
 
@@ -33,11 +34,16 @@ class DeleteSeriesModalContent extends Component {
     this.setState({ deleteFiles: value });
   }
 
+  onAddImportListExclusionChange = ({ value }) => {
+    this.setState({ addImportListExclusion: value });
+  }
+
   onDeleteSeriesConfirmed = () => {
     const deleteFiles = this.state.deleteFiles;
+    const addImportListExclusion = this.state.addImportListExclusion;
 
-    this.setState({ deleteFiles: false });
-    this.props.onDeletePress(deleteFiles);
+    this.setState({ deleteFiles: false, addImportListExclusion: false });
+    this.props.onDeletePress(deleteFiles, addImportListExclusion);
   }
 
   //
@@ -57,6 +63,7 @@ class DeleteSeriesModalContent extends Component {
     } = statistics;
 
     const deleteFiles = this.state.deleteFiles;
+    const addImportListExclusion = this.state.addImportListExclusion;
     let deleteFilesLabel = `Delete ${episodeFileCount} Episode Files`;
     let deleteFilesHelpText = 'Delete the episode files and series folder';
 
@@ -82,6 +89,19 @@ class DeleteSeriesModalContent extends Component {
 
             {path}
           </div>
+
+          <FormGroup>
+            <FormLabel>Add List Exclusion</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="addImportListExclusion"
+              value={addImportListExclusion}
+              helpText="Prevent series from being added to Sonarr by lists"
+              kind={kinds.DANGER}
+              onChange={this.onAddImportListExclusionChange}
+            />
+          </FormGroup>
 
           <FormGroup>
             <FormLabel>{deleteFilesLabel}</FormLabel>
