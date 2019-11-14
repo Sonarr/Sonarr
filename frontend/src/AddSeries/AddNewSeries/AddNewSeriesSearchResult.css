@@ -1,10 +1,15 @@
 .searchResult {
-  display: flex;
+  position: relative;
   margin: 20px 0;
   padding: 20px;
   width: 100%;
-  background-color: $white;
   color: inherit;
+}
+
+.underlay {
+  @add-mixin cover;
+
+  background-color: $white;
   transition: background 500ms;
 
   &:hover {
@@ -12,6 +17,13 @@
     color: inherit;
     text-decoration: none;
   }
+}
+
+.overlay {
+  @add-mixin linkOverlay;
+
+  position: relative;
+  display: flex;
 }
 
 .poster {

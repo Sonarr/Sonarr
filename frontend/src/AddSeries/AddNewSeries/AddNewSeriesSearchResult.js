@@ -77,11 +77,13 @@ class AddNewSeriesSearchResult extends Component {
     }
 
     return (
-      <div>
+      <div className={styles.searchResult}>
         <Link
-          className={styles.searchResult}
+          className={styles.underlay}
           {...linkProps}
-        >
+        />
+
+        <div className={styles.overlay}>
           {
             isSmallScreen ?
               null :
@@ -169,7 +171,7 @@ class AddNewSeriesSearchResult extends Component {
               {overview}
             </div>
           </div>
-        </Link>
+        </div>
 
         <AddNewSeriesModal
           isOpen={isNewAddSeriesModalOpen && !isExistingSeries}
