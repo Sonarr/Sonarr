@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Parser
                 new RegexReplace(@".*?\.(S\d{2}E\d{2,4}\..*)", "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase)
             };
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<chinese>\[(?:CH[ST]|BIG5|GB)\]|简|繁|字幕组)",
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<chinese>\[(?:CH[ST]|BIG5|GB)\]|简|繁|字幕)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex CaseSensitiveLanguageRegex = new Regex(@"(?<lithuanian>\bLT\b)|(?<czech>\bCZ\b)",

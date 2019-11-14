@@ -108,6 +108,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[abc] My Series - 01 [简繁外挂]")]
         [TestCase("[abc] My Series - 01 [简繁内封字幕]")]
         [TestCase("[ABC字幕组] My Series - 01 [HDTV]")]
+        [TestCase("[喵萌奶茶屋&LoliHouse] 拳愿阿修罗 / Kengan Ashura - 17 [WebRip 1080p HEVC-10bit AAC][中日双语字幕]")]
         public void should_parse_language_chinese(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
