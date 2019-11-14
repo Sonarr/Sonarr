@@ -25,6 +25,9 @@ namespace Sonarr.Api.V3.Series
             if (seriesResource == null) return true;
 
             var rootFolderPath = context.PropertyValue.ToString();
+
+            if (rootFolderPath.IsNullOrWhiteSpace()) return true;
+
             var rootFolder = new DirectoryInfo(rootFolderPath).Name;
             var series = seriesResource.ToModel();
             var seriesFolder = _fileNameBuilder.GetSeriesFolder(series);

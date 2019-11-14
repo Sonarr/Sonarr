@@ -95,6 +95,27 @@ class RootFolderSelectInputConnector extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const {
+      name,
+      value,
+      values,
+      onChange
+    } = this.props;
+
+    if (prevProps.values === values) {
+      return;
+    }
+
+    if (!value && values.length && values.some((v) => !!v.key && v.key !== ADD_NEW_KEY)) {
+      const defaultValue = values[0];
+
+      if (defaultValue.key !== ADD_NEW_KEY) {
+        onChange({ name, value: defaultValue.key });
+      }
+    }
+  }
+
   //
   // Listeners
 
