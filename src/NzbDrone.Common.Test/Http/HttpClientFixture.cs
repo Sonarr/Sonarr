@@ -302,6 +302,31 @@ namespace NzbDrone.Common.Test.Http
         }
 
         [Test]
+        public void should_not_write_redirect_content_to_stream()
+        {
+            var file = GetTempFilePath();
+
+            using (var fileStream = new FileStream(file, FileMode.Create))
+            {
+                var request = new HttpRequest($"http://{_httpBinHost}/redirect/1");
+                request.AllowAutoRedirect = false;
+                request.ResponseStream = fileStream;
+
+                var response = Subject.Get(request);
+
+                response.StatusCode.Should().Be(HttpStatusCode.Redirect);
+            }
+
+            ExceptionVerification.ExpectedErrors(1);
+
+            File.Exists(file).Should().BeTrue();
+
+            var fileInfo = new FileInfo(file);
+
+            fileInfo.Length.Should().Be(0);
+        }
+
+        [Test]
         public void should_send_cookie()
         {
             var request = new HttpRequest($"http://{_httpBinHost}/get");
