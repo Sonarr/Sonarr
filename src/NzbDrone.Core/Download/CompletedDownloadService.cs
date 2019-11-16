@@ -111,7 +111,9 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            if (importResults.Count(c => c.Result == ImportResultType.Imported) >= Math.Max(1, trackedDownload.RemoteEpisode.Episodes.Count))
+            var importedEpisodes = importResults.Where(c => c.Result == ImportResultType.Imported).SelectMany(c => c.ImportDecision.LocalEpisode.Episodes).ToList();
+
+            if (importedEpisodes.Count() >= Math.Max(1, trackedDownload.RemoteEpisode.Episodes.Count))
             {
                 trackedDownload.State = TrackedDownloadStage.Imported;
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
