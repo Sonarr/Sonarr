@@ -288,15 +288,31 @@ namespace NzbDrone.Common.Disk
                 }
             }
 
-            // We force a transactional transfer if the transfer occurs between mounts and one of the mounts is cifs, it would be a copy anyway.
-            if (verificationMode == DiskTransferVerificationMode.TryTransactional && OsInfo.IsNotWindows)
+            // Adjust the transfer mode depending on the filesystems
+            if (verificationMode == DiskTransferVerificationMode.TryTransactional)
             {
                 var sourceMount = _diskProvider.GetMount(sourcePath);
                 var targetMount = _diskProvider.GetMount(targetPath);
 
-                if (sourceMount != null && targetMount != null && sourceMount.RootDirectory != targetMount.RootDirectory &&
-                    (sourceMount.DriveFormat == "cifs" || targetMount.DriveFormat == "cifs"))
+                var isSameMount = (sourceMount != null && targetMount != null && sourceMount.RootDirectory == targetMount.RootDirectory);
+
+                var sourceDriveFormat = sourceMount?.DriveFormat ?? string.Empty;
+                var targetDriveFormat = targetMount?.DriveFormat ?? string.Empty;
+
+                if (isSameMount)
                 {
+                    // No transaction needed for operations on same mount, force VerifyOnly
+                    verificationMode = DiskTransferVerificationMode.VerifyOnly;
+                }
+                else if (sourceDriveFormat.Contains("mergerfs") || sourceDriveFormat.Contains("rclone") ||
+                         targetDriveFormat.Contains("mergerfs") || targetDriveFormat.Contains("rclone"))
+                {
+                    // Cloud storage filesystems don't need any Transactional stuff and it hurts performance, force VerifyOnly
+                    verificationMode = DiskTransferVerificationMode.VerifyOnly;
+                }
+                else if ((sourceDriveFormat == "cifs" || targetDriveFormat == "cifs") && OsInfo.IsNotWindows)
+                {
+                    // Force Transactional on a cifs mount due to the likeliness of move failures on certain scenario's on mono
                     verificationMode = DiskTransferVerificationMode.Transactional;
                 }
             }

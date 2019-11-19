@@ -20,14 +20,36 @@ namespace NzbDrone.Common.Test.DiskTests
         private readonly string _tempTargetPath = @"C:\target\my.video.mkv.partial~".AsOsAgnostic();
         private readonly string _nfsFile = ".nfs01231232";
 
+        private MockMount _sourceMount;
+        private MockMount _targetMount;
+
         [SetUp]
         public void SetUp()
         {
             Mocker.GetMock<IDiskProvider>(MockBehavior.Strict);
 
+            _sourceMount = new MockMount()
+            {
+                Name = "source",
+                RootDirectory = @"C:\source".AsOsAgnostic()
+            };
+            _targetMount = new MockMount()
+            {
+                Name = "target",
+                RootDirectory = @"C:\target".AsOsAgnostic()
+            };
+
             Mocker.GetMock<IDiskProvider>()
                 .Setup(v => v.GetMount(It.IsAny<string>()))
                 .Returns((IMount)null);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.GetMount(It.Is<string>(p => p.StartsWith(_sourceMount.RootDirectory))))
+                .Returns(_sourceMount);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.GetMount(It.Is<string>(p => p.StartsWith(_targetMount.RootDirectory))))
+                .Returns(_targetMount);
 
             WithEmulatedDiskProvider();
 
@@ -46,6 +68,27 @@ namespace NzbDrone.Common.Test.DiskTests
         public void should_not_use_verified_transfer_on_windows()
         {
             WindowsOnly();
+
+            Subject.VerificationMode.Should().Be(DiskTransferVerificationMode.VerifyOnly);
+
+            var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
+        }
+
+        [TestCase("fuse.mergerfs")]
+        [TestCase("fuse.rclone")]
+        [TestCase("mergerfs")]
+        [TestCase("rclone")]
+        public void should_not_use_verified_transfer_on_specific_filesystems(string fs)
+        {
+            MonoOnly();
+            
+            _targetMount.DriveFormat = fs;
 
             Subject.VerificationMode.Should().Be(DiskTransferVerificationMode.VerifyOnly);
 
