@@ -80,17 +80,20 @@ namespace NzbDrone.Common.Test.DiskTests
                 .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
         }
 
-        [TestCase("fuse.mergerfs")]
-        [TestCase("fuse.rclone")]
-        [TestCase("mergerfs")]
-        [TestCase("rclone")]
-        public void should_not_use_verified_transfer_on_specific_filesystems(string fs)
+        [TestCase("fuse.mergerfs", "")]
+        [TestCase("fuse.rclone", "")]
+        [TestCase("mergerfs", "")]
+        [TestCase("rclone", "")]
+        [TestCase("", "fuse.mergerfs")]
+        [TestCase("", "fuse.rclone")]
+        [TestCase("", "mergerfs")]
+        [TestCase("", "rclone")]
+        public void should_not_use_verified_transfer_on_specific_filesystems(string fsSource, string fsTarget)
         {
             MonoOnly();
-            
-            _targetMount.DriveFormat = fs;
 
-            Subject.VerificationMode.Should().Be(DiskTransferVerificationMode.VerifyOnly);
+            _sourceMount.DriveFormat = fsSource;
+            _targetMount.DriveFormat = fsTarget;
 
             var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
 
