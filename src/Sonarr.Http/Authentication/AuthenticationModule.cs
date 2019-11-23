@@ -34,7 +34,7 @@ namespace Sonarr.Http.Authentication
 
             if (resource.RememberMe)
             {
-                expiry = DateTime.UtcNow.AddDays(7);
+                expiry = DateTime.UtcNow.AddYears(1);
             }
 
             return this.LoginAndRedirect(user.Identifier, expiry, _configFileProvider.UrlBase + "/");
