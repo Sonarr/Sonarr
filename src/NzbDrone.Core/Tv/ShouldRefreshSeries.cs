@@ -34,9 +34,9 @@ namespace NzbDrone.Core.Tv
                 return false;
             }
 
-            if (series.Status == SeriesStatusType.Continuing)
+            if (series.Status != SeriesStatusType.Ended)
             {
-                _logger.Trace("Series {0} is continuing, should refresh.", series.Title);
+                _logger.Trace("Series {0} is not ended, should refresh.", series.Title);
                 return true;
             }
 

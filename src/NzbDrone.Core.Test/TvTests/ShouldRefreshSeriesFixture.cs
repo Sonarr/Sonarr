@@ -34,6 +34,16 @@ namespace NzbDrone.Core.Test.TvTests
             _series.Status = SeriesStatusType.Ended;
         }
 
+        private void GivenSeriesIsDeleted()
+        {
+            _series.Status = SeriesStatusType.Deleted;
+        }
+
+        private void GivenSeriesIsUpcoming()
+        {
+            _series.Status = SeriesStatusType.Upcoming;
+        }
+
         private void GivenSeriesLastRefreshedMonthsAgo()
         {
             _series.LastInfoSync = DateTime.UtcNow.AddDays(-90);
@@ -130,6 +140,24 @@ namespace NzbDrone.Core.Test.TvTests
             GivenRecentlyAired();
 
             Subject.ShouldRefresh(_series).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_if_deleted_series_last_refreshed_more_than_6_hours_ago()
+        {
+            GivenSeriesLastRefreshedHalfADayAgo();
+            GivenSeriesIsDeleted();
+
+            Subject.ShouldRefresh(_series).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_upcoming_series_last_refreshed_more_than_6_hours_ago()
+        {
+            GivenSeriesLastRefreshedHalfADayAgo();
+            GivenSeriesIsUpcoming();
+
+            Subject.ShouldRefresh(_series).Should().BeTrue();
         }
     }
 }
