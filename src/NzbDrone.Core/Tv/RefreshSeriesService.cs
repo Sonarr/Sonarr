@@ -162,17 +162,17 @@ namespace NzbDrone.Core.Tv
 
             if (isNew)
             {
-                _logger.Trace("Forcing refresh of {0}. Reason: New series", series);
+                _logger.Trace("Forcing rescan of {0}. Reason: New series", series);
                 shouldRescan = true;
             }
             else if (rescanAfterRefresh == RescanAfterRefreshType.Never)
             {
-                _logger.Trace("Skipping refresh of {0}. Reason: never recan after refresh", series);
+                _logger.Trace("Skipping rescan of {0}. Reason: never rescan after refresh", series);
                 shouldRescan = false;
             }
             else if (rescanAfterRefresh == RescanAfterRefreshType.AfterManual && trigger != CommandTrigger.Manual)
             {
-                _logger.Trace("Skipping refresh of {0}. Reason: not after automatic scans", series);
+                _logger.Trace("Skipping rescan of {0}. Reason: not after automatic scans", series);
                 shouldRescan = false;
             }
 

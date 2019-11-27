@@ -39,7 +39,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (subject.Release.Size == 0)
             {
-                _logger.Debug("Release has unknown size, skipping size check.");
+                _logger.Debug("Release has unknown size, skipping size check");
                 return Decision.Accept();
             }
 
@@ -62,7 +62,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
             if (!qualityDefinition.MaxSize.HasValue || qualityDefinition.MaxSize.Value == 0)
             {
-                _logger.Debug("Max size is unlimited - skipping check.");
+                _logger.Debug("Max size is unlimited, skipping size check");
+            }
+            else if (subject.Series.Runtime == 0)
+            {
+                _logger.Debug("Series runtime is 0, unable to validate size until it is available, rejecting");
+                return Decision.Reject("Series runtime is 0, unable to validate size until it is available");
             }
             else
             {
@@ -100,12 +105,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     var runtimeMessage = subject.Episodes.Count == 1 ? $"{subject.Series.Runtime}min" : $"{subject.Episodes.Count}x {subject.Series.Runtime}min";
 
-                    _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2} for {3}), rejecting.", subject, subject.Release.Size, maxSize, runtimeMessage);
+                    _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2} for {3}), rejecting", subject, subject.Release.Size, maxSize, runtimeMessage);
                     return Decision.Reject("{0} is larger than maximum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), maxSize.SizeSuffix(), runtimeMessage);
                 }
             }
 
-            _logger.Debug("Item: {0}, meets size constraints.", subject);
+            _logger.Debug("Item: {0}, meets size constraints", subject);
             return Decision.Accept();
         }
     }
