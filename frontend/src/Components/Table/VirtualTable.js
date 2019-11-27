@@ -52,10 +52,10 @@ class VirtualTable extends Component {
   }
 
   componentDidUpdate(prevProps, preState) {
-    const scrollIndex = this.props.scrollIndex;
+    const { scrollIndex, rowHeight } = this.props;
 
     if (scrollIndex != null && scrollIndex !== prevProps.scrollIndex) {
-      const scrollTop = (scrollIndex + 1) * ROW_HEIGHT + 20;
+      const scrollTop = (scrollIndex + 1) * rowHeight + 20;
 
       this.props.onScroll({ scrollTop });
     }
@@ -165,6 +165,7 @@ VirtualTable.propTypes = {
   header: PropTypes.node.isRequired,
   headerHeight: PropTypes.number.isRequired,
   rowRenderer: PropTypes.func.isRequired,
+  rowHeight: PropTypes.number.isRequired,
   onRender: PropTypes.func.isRequired,
   onScroll: PropTypes.func.isRequired
 };
