@@ -106,7 +106,7 @@ namespace Sonarr.Api.V3.Series
 
             foreach (var seriesId in resource.SeriesIds)
             {
-                _seriesService.DeleteSeries(seriesId, false);
+                _seriesService.DeleteSeries(seriesId, resource.DeleteFiles);
             }
 
             return new object();

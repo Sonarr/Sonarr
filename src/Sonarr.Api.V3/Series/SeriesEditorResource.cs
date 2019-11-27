@@ -15,6 +15,7 @@ namespace Sonarr.Api.V3.Series
         public List<int> Tags { get; set; }
         public ApplyTags ApplyTags { get; set; }
         public bool MoveFiles { get; set; }
+        public bool DeleteFiles { get; set; }
     }
 
     public enum ApplyTags
