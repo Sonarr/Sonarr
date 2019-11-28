@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Backup
             _diskProvider.EnsureFolder(_backupTempFolder);
             _diskProvider.EnsureFolder(GetBackupFolder(backupType));
 
-            var backupFilename = string.Format("sonarr_backup_{0:yyyy.MM.dd_HH.mm.ss}.zip", DateTime.Now);
+            var backupFilename = string.Format("sonarr_backup_v{0}_{1:yyyy.MM.dd_HH.mm.ss}.zip", BuildInfo.Version, DateTime.Now);
             var backupPath = Path.Combine(GetBackupFolder(backupType), backupFilename);
 
             Cleanup();
