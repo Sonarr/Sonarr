@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
@@ -9,6 +8,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 {
     [CheckOn(typeof(SeriesUpdatedEvent))]
     [CheckOn(typeof(SeriesDeletedEvent), CheckOnCondition.FailedOnly)]
+    [CheckOn(typeof(SeriesRefreshCompleteEvent))]
     public class RemovedSeriesCheck : HealthCheckBase, ICheckOnCondition<SeriesUpdatedEvent>, ICheckOnCondition<SeriesDeletedEvent>
     {
         private readonly ISeriesService _seriesService;

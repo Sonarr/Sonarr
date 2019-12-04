@@ -249,6 +249,8 @@ namespace NzbDrone.Core.Tv
                     }
                 }
             }
+
+            _eventAggregator.PublishEvent(new SeriesRefreshCompleteEvent());
         }
     }
 }
