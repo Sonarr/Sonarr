@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Backup
 
         private string _backupTempFolder;
 
-        public static readonly Regex BackupFileRegex = new Regex(@"(nzbdrone|sonarr)_backup_[._0-9]+\.zip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        public static readonly Regex BackupFileRegex = new Regex(@"(nzbdrone|sonarr)_backup_(v[0-9.]+_)?[._0-9]+\.zip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public BackupService(IMainDatabase maindDb,
                              IMakeDatabaseBackup makeDatabaseBackup,
