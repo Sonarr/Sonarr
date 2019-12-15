@@ -23,6 +23,11 @@ const columns = [
     isVisible: true
   },
   {
+    name: 'lastDuration',
+    label: 'Last Duration',
+    isVisible: true
+  },
+  {
     name: 'nextExecution',
     label: 'Next Execution',
     isVisible: true

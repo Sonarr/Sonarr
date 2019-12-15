@@ -55,6 +55,7 @@ namespace Sonarr.Api.V3.System.Tasks
                 TaskName = taskName,
                 Interval = scheduledTask.Interval,
                 LastExecution = scheduledTask.LastExecution,
+                LastStartTime = scheduledTask.LastStartTime,
                 NextExecution = scheduledTask.LastExecution.AddMinutes(scheduledTask.Interval)
             };
         }

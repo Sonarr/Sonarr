@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Messaging.Commands
             where TCommand : Command;
         CommandModel Push<TCommand>(TCommand command, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified)
             where TCommand : Command;
-        CommandModel Push(string commandName, DateTime? lastExecutionTime, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified);
+        CommandModel Push(string commandName, DateTime? lastExecutionTime, DateTime? lastStartTime, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified);
         IEnumerable<CommandModel> Queue(CancellationToken cancellationToken);
         List<CommandModel> All();
         CommandModel Get(int id);
@@ -136,10 +136,11 @@ namespace NzbDrone.Core.Messaging.Commands
             }
         }
 
-        public CommandModel Push(string commandName, DateTime? lastExecutionTime, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified)
+        public CommandModel Push(string commandName, DateTime? lastExecutionTime, DateTime? lastStartTime, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified)
         {
             dynamic command = GetCommand(commandName);
             command.LastExecutionTime = lastExecutionTime;
+            command.LastStartTime = lastStartTime;
             command.Trigger = trigger;
 
             return Push(command, priority, trigger);

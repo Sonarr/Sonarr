@@ -208,9 +208,14 @@ namespace NzbDrone.Core.Jobs
                 _logger.Trace("Updating last run time for: {0}", scheduledTask.TypeName);
 
                 var lastExecution = DateTime.UtcNow;
+                var startTime = message.Command.StartedAt.Value;
 
-                _scheduledTaskRepository.SetLastExecutionTime(scheduledTask.Id, lastExecution);
-                _cache.Find(scheduledTask.TypeName).LastExecution = lastExecution;
+                _scheduledTaskRepository.SetLastExecutionTime(scheduledTask.Id, lastExecution, startTime);
+
+                var cached = _cache.Find(scheduledTask.TypeName);
+
+                cached.LastExecution = lastExecution;
+                cached.LastStartTime = startTime;
             }
         }
 

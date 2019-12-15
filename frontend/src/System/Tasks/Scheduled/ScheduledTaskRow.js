@@ -7,6 +7,7 @@ import TableRow from 'Components/Table/TableRow';
 import { icons } from 'Helpers/Props';
 import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
+import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
 import styles from './ScheduledTaskRow.css';
 
 function getFormattedDates(props) {
@@ -91,6 +92,8 @@ class ScheduledTaskRow extends Component {
       name,
       interval,
       lastExecution,
+      lastStartTime,
+      lastDuration,
       nextExecution,
       isQueued,
       isExecuting,
@@ -108,6 +111,7 @@ class ScheduledTaskRow extends Component {
     const executeNow = !isDisabled && moment().isAfter(nextExecution);
     const hasNextExecutionTime = !isDisabled && !executeNow;
     const duration = moment.duration(interval, 'minutes').humanize().replace(/an?(?=\s)/, '1');
+    const hasLastStartTime = moment(lastStartTime).isAfter('2010-01-01');
 
     return (
       <TableRow>
@@ -124,6 +128,21 @@ class ScheduledTaskRow extends Component {
         >
           {lastExecutionTime}
         </TableRowCell>
+
+        {
+          !hasLastStartTime &&
+            <TableRowCell className={styles.lastDuration}>-</TableRowCell>
+        }
+
+        {
+          hasLastStartTime &&
+            <TableRowCell
+              className={styles.lastDuration}
+              title={lastDuration}
+            >
+              {formatTimeSpan(lastDuration)}
+            </TableRowCell>
+        }
 
         {
           isDisabled &&
@@ -169,6 +188,8 @@ ScheduledTaskRow.propTypes = {
   name: PropTypes.string.isRequired,
   interval: PropTypes.number.isRequired,
   lastExecution: PropTypes.string.isRequired,
+  lastStartTime: PropTypes.string.isRequired,
+  lastDuration: PropTypes.string.isRequired,
   nextExecution: PropTypes.string.isRequired,
   isQueued: PropTypes.bool.isRequired,
   isExecuting: PropTypes.bool.isRequired,

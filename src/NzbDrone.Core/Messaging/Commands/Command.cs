@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public string Name { get; private set; }
         public DateTime? LastExecutionTime { get; set; }
+        public DateTime? LastStartTime { get; set; }
         public CommandTrigger Trigger { get; set; }
         public bool SuppressMessages { get; set; }
 

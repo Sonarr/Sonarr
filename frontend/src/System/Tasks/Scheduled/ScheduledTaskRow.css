@@ -5,6 +5,7 @@
 }
 
 .lastExecution,
+.lastDuration,
 .nextExecution {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
