@@ -39,12 +39,13 @@ namespace NzbDrone.Core.Datastore.Migration
         // Early Radarr versions can mess up Sonarr's database if they point to the same config. Fixup the damage.        
         private void FixupMigration111()
         {
+            var builder = new SQLiteConnectionStringBuilder(ConnectionString);
+            builder.Pooling = false;
+
             // In order to get the expressions we need to check the database directly
-            using (var connection = new SQLiteConnection(ConnectionString))
+            using (var connection = new SQLiteConnection(builder.ToString()))
             using (var command = connection.CreateCommand())
             {
-                SQLiteConnection.ClearPool(connection);
-
                 connection.Open();
                 command.CommandText = "SELECT Description FROM VersionInfo WHERE Version = 111";
 
