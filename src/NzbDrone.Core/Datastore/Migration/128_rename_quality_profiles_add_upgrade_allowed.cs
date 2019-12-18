@@ -43,6 +43,8 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var connection = new SQLiteConnection(ConnectionString))
             using (var command = connection.CreateCommand())
             {
+                SQLiteConnection.ClearPool(connection);
+
                 connection.Open();
                 command.CommandText = "SELECT Description FROM VersionInfo WHERE Version = 111";
 
