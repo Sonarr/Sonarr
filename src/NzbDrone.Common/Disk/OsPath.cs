@@ -71,6 +71,11 @@ namespace NzbDrone.Common.Disk
                 case OsPathKind.Windows:
                     return path.Replace('/', '\\');
                 case OsPathKind.Unix:
+                    path = path.Replace('\\', '/');
+                    while (path.Contains("//"))
+                    {
+                        path = path.Replace("//", "/");
+                    }
                     return path.Replace('\\', '/');
             }
 
