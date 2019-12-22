@@ -76,7 +76,7 @@ namespace NzbDrone.Common.Disk
                     {
                         path = path.Replace("//", "/");
                     }
-                    return path.Replace('\\', '/');
+                    return path;
             }
 
             return path;
