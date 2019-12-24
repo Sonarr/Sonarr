@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
@@ -39,9 +42,50 @@ namespace NzbDrone.Windows.Disk
         {
             Ensure.That(filename, () => filename).IsValidPath();
 
-            var fs = File.GetAccessControl(filename);
+            var fileInfo = new FileInfo(filename);
+            var fs = fileInfo.GetAccessControl(AccessControlSections.Access);
             fs.SetAccessRuleProtection(false, false);
-            File.SetAccessControl(filename, fs);
+            fileInfo.SetAccessControl(fs);
+        }
+
+        public override void SetEveryonePermissions(string filename)
+        {
+            var accountSid = WellKnownSidType.WorldSid;
+            var rights = FileSystemRights.Modify;
+            var controlType = AccessControlType.Allow;
+
+            try
+            {
+                var sid = new SecurityIdentifier(accountSid, null);
+
+                var directoryInfo = new DirectoryInfo(filename);
+                var directorySecurity = directoryInfo.GetAccessControl(AccessControlSections.Access);
+
+                var rules = directorySecurity.GetAccessRules(true, false, typeof(SecurityIdentifier));
+
+                if (rules.OfType<FileSystemAccessRule>().Any(acl => acl.AccessControlType == controlType && (acl.FileSystemRights & rights) == rights && acl.IdentityReference.Equals(sid)))
+                {
+                    return;
+                }
+
+                var accessRule = new FileSystemAccessRule(sid, rights,
+                                                          InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                                                          PropagationFlags.InheritOnly, controlType);
+
+                bool modified;
+                directorySecurity.ModifyAccessRule(AccessControlModification.Add, accessRule, out modified);
+
+                if (modified)
+                {
+                    directoryInfo.SetAccessControl(directorySecurity);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Warn(e, "Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType);
+                throw;
+            }
+
         }
 
         public override void SetPermissions(string path, string mask, string user, string group)
