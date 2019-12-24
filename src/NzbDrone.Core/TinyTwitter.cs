@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -7,7 +8,6 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web.Script.Serialization;
 
 namespace TinyTwitter
 {
@@ -93,9 +93,7 @@ namespace TinyTwitter
 
             var responseContent = builder.Execute();
 
-            var serializer = new JavaScriptSerializer();
-
-            var tweets = (object[])serializer.DeserializeObject(responseContent);
+            var tweets = (object[])JsonConvert.DeserializeObject(responseContent);
 
             return tweets.Cast<Dictionary<string, object>>().Select(tweet =>
             {
