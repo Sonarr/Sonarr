@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
-    <Platforms>x86</Platforms>
+    <Platforms>x64</Platforms>
     
     <Version>9.0.21022</Version>
   </PropertyGroup>
