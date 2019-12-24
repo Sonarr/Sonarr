@@ -8,6 +8,7 @@
     <PackageReference Include="NLog" Version="4.6.6" />
     <PackageReference Include="Sentry" Version="1.2.0" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
+    <PackageReference Include="System.Data.SQLite.Core.Lidarr" Version="1.0.111-5" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
@@ -15,9 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Configuration.Install" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <ItemGroup>
