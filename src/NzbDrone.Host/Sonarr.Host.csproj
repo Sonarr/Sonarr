@@ -16,8 +16,8 @@
     <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Interop.NetFwTypeLib">
-      <HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
+    <Reference Include="Interop.NetFwTypeLib" Condition="'$(RuntimeIdentifier)'=='win-x64'">
+      <HintPath>..\Libraries\FirewallApi\$(Platform)\Interop.NetFwTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System.ServiceProcess" />
