@@ -31,6 +31,7 @@ namespace NzbDrone.Common.Disk
 
         public abstract long? GetAvailableSpace(string path);
         public abstract void InheritFolderPermissions(string filename);
+        public abstract void SetEveryonePermissions(string filename);
         public abstract void SetPermissions(string path, string mask);
         public abstract void CopyPermissions(string sourcePath, string targetPath);
         public abstract long? GetTotalSize(string path);
@@ -322,42 +323,6 @@ namespace NzbDrone.Common.Disk
             }
 
             return parent.FullName;
-        }
-
-        public void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType)
-        {
-            try
-            {
-                var sid = new SecurityIdentifier(accountSid, null);
-
-                var directoryInfo = new DirectoryInfo(filename);
-                var directorySecurity = directoryInfo.GetAccessControl(AccessControlSections.Access);
-
-                var rules = directorySecurity.GetAccessRules(true, false, typeof(SecurityIdentifier));
-
-                if (rules.OfType<FileSystemAccessRule>().Any(acl => acl.AccessControlType == controlType && (acl.FileSystemRights & rights) == rights && acl.IdentityReference.Equals(sid)))
-                {
-                    return;
-                }
-
-                var accessRule = new FileSystemAccessRule(sid, rights,
-                                                          InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
-                                                          PropagationFlags.InheritOnly, controlType);
-
-                bool modified;
-                directorySecurity.ModifyAccessRule(AccessControlModification.Add, accessRule, out modified);
-
-                if (modified)
-                {
-                    directoryInfo.SetAccessControl(directorySecurity);
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Warn(e, "Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType);
-                throw;
-            }
-
         }
 
         private static void RemoveReadOnly(string path)
