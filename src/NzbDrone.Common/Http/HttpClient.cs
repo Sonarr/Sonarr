@@ -26,6 +26,8 @@ namespace NzbDrone.Common.Http
 
     public class HttpClient : IHttpClient
     {
+        private const int MaxRedirects = 5;
+
         private readonly Logger _logger;
         private readonly IRateLimitService _rateLimitService;
         private readonly ICached<CookieContainer> _cookieContainerCache;
@@ -68,7 +70,7 @@ namespace NzbDrone.Common.Http
 
                     _logger.Trace("Redirected to {0}", request.Url);
 
-                    if (autoRedirectChain.Count > 3)
+                    if (autoRedirectChain.Count > MaxRedirects)
                     {
                         throw new WebException($"Too many automatic redirections were attempted for {autoRedirectChain.Join(" -> ")}", WebExceptionStatus.ProtocolError);
                     }
