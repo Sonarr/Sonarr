@@ -232,6 +232,28 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("South Park - S15E06 - City Sushi [HDTV-720p]");
         }
+        
+        [TestCase("Some Escaped {{ String", "Some Escaped { String")]
+        [TestCase("Some Escaped }} String", "Some Escaped } String")]
+        [TestCase("Some Escaped {{Series Title}} String", "Some Escaped {Series Title} String")]
+        [TestCase("Some Escaped {{{Series Title}}} String", "Some Escaped {South Park} String")]
+        public void should_escape_token_in_format(string format, string expected)
+        {
+            _namingConfig.StandardEpisodeFormat = format;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(expected);
+        }
+
+        [Test]
+        public void should_escape_token_in_title()
+        {
+            _namingConfig.StandardEpisodeFormat = "Some Unescaped {Series Title} String";
+            _series.Title = "My {Quality Full} Title";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("Some Unescaped My {Quality Full} Title String");
+        }
 
         [Test]
         public void use_file_name_when_sceneName_is_null()

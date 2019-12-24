@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Organizer
         private readonly ICached<bool> _requiresAbsoluteEpisodeNumberCache;
         private readonly Logger _logger;
 
-        private static readonly Regex TitleRegex = new Regex(@"\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9]+))?(?<suffix>[- ._)\]]*)\}",
+        private static readonly Regex TitleRegex = new Regex(@"(?<escaped>\{\{|\}\})|\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9]+))?(?<suffix>[- ._)\]]*)\}",
                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Organizer
                 AddMediaInfoTokens(tokenHandlers, episodeFile);
                 AddPreferredWords(tokenHandlers, series, episodeFile, preferredWords);
 
-                var component = ReplaceTokens(splitPattern, tokenHandlers, namingConfig).Trim();
+                var component = ReplaceTokens(splitPattern, tokenHandlers, namingConfig, true).Trim();
                 var maxEpisodeTitleLength = 255 - GetLengthWithoutEpisodeTitle(component, namingConfig);
 
                 AddEpisodeTitleTokens(tokenHandlers, episodes, maxEpisodeTitleLength);
@@ -548,8 +548,8 @@ namespace NzbDrone.Core.Organizer
 
         private void AddEpisodeTitlePlaceholderTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers)
         {
-            tokenHandlers["{Episode Title}"] = m => m.RegexMatch.Value;
-            tokenHandlers["{Episode CleanTitle}"] = m => m.RegexMatch.Value;
+            tokenHandlers["{Episode Title}"] = m => null;
+            tokenHandlers["{Episode CleanTitle}"] = m => null;
         }
 
         private void AddEpisodeTitleTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes, int maxLength)
@@ -709,13 +709,23 @@ namespace NzbDrone.Core.Organizer
             }
         }
 
-        private string ReplaceTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, NamingConfig namingConfig)
+        private string ReplaceTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, NamingConfig namingConfig, bool escape = false)
         {
-            return TitleRegex.Replace(pattern, match => ReplaceToken(match, tokenHandlers, namingConfig));
+            return TitleRegex.Replace(pattern, match => ReplaceToken(match, tokenHandlers, namingConfig, escape));
         }
 
-        private string ReplaceToken(Match match, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, NamingConfig namingConfig)
+        private string ReplaceToken(Match match, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, NamingConfig namingConfig, bool escape)
         {
+            if (match.Groups["escaped"].Success)
+            {
+                if (escape)
+                    return match.Value;
+                else if (match.Value == "{{")
+                    return "{";
+                else if (match.Value == "}}")
+                    return "}";
+            }
+
             var tokenMatch = new TokenMatch
             {
                 RegexMatch = match,
@@ -733,7 +743,15 @@ namespace NzbDrone.Core.Organizer
 
             var tokenHandler = tokenHandlers.GetValueOrDefault(tokenMatch.Token, m => string.Empty);
 
-            var replacementText = tokenHandler(tokenMatch).Trim();
+            var replacementText = tokenHandler(tokenMatch);
+
+            if (replacementText == null)
+            {
+                // Preserve original token if handler returned null
+                return match.Value;
+            }
+            
+            replacementText = replacementText.Trim();
 
             if (tokenMatch.Token.All(t => !char.IsLetter(t) || char.IsLower(t)))
             {
@@ -754,6 +772,11 @@ namespace NzbDrone.Core.Organizer
             if (!replacementText.IsNullOrWhiteSpace())
             {
                 replacementText = tokenMatch.Prefix + replacementText + tokenMatch.Suffix;
+            }
+
+            if (escape)
+            {
+                replacementText = replacementText.Replace("{", "{{").Replace("}", "}}");
             }
 
             return replacementText;
