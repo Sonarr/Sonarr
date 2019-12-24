@@ -9,12 +9,6 @@ namespace Marr.Data.QGen
     /// </summary>
     internal class QueryFactory
     {
-        private const string DB_SqlClient = "System.Data.SqlClient.SqlClientFactory";
-        private const string DB_OleDb = "System.Data.OleDb.OleDbFactory";
-        private const string DB_SqlCeClient = "System.Data.SqlServerCe.SqlCeProviderFactory";
-        private const string DB_SystemDataOracleClient = "System.Data.OracleClientFactory";
-        private const string DB_OracleDataAccessClient = "Oracle.DataAccess.Client.OracleClientFactory";
-        private const string DB_FireBirdClient = "FirebirdSql.Data.FirebirdClient.FirebirdClientFactory";
         private const string DB_SQLiteClient = "System.Data.SQLite.SQLiteFactory";
         
         public static IQuery CreateUpdateQuery(ColumnMapCollection columns, IDataMapper dataMapper, string target, string whereClause)
@@ -47,12 +41,6 @@ namespace Marr.Data.QGen
             string providerString = dataMapper.ProviderFactory.ToString();
             switch (providerString)
             {
-                case DB_SqlClient:
-                    return new RowCountQueryDecorator(innerQuery);
-
-                case DB_SqlCeClient:
-                    return new RowCountQueryDecorator(innerQuery);
-
                 case DB_SQLiteClient:
                     return new SqliteRowCountQueryDecorator(innerQuery);
 
@@ -68,12 +56,6 @@ namespace Marr.Data.QGen
             string providerString = dataMapper.ProviderFactory.ToString();
             switch (providerString)
             {
-                case DB_SqlClient:
-                    return new PagingQueryDecorator(innerQuery, skip, take);
-
-                case DB_SqlCeClient:
-                    return new PagingQueryDecorator(innerQuery, skip, take);
-
                 case DB_SQLiteClient:
                     return new SqlitePagingQueryDecorator(innerQuery, skip, take);
 
@@ -87,21 +69,6 @@ namespace Marr.Data.QGen
             string providerString = dataMapper.ProviderFactory.ToString();
             switch (providerString)
             {
-                case DB_SqlClient:
-                    return new SqlServerDialect();
-
-                case DB_OracleDataAccessClient:
-                    return new OracleDialect();
-
-                case DB_SystemDataOracleClient:
-                    return new OracleDialect();
-
-                case DB_SqlCeClient:
-                    return new SqlServerCeDialect();
-
-                case DB_FireBirdClient:
-                    return new FirebirdDialect();
-
                 case DB_SQLiteClient:
                     return new SqliteDialect();
 
