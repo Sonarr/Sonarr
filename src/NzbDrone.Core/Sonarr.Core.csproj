@@ -40,7 +40,10 @@
     <None Include="..\Libraries\Sqlite\sqlite3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Libraries\MediaInfo\MediaInfo.dll">
+    <None Include="..\Libraries\MediaInfo\$(Platform)\MediaInfo.dll" Condition="'$(RuntimeIdentifier)'=='win-x64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Libraries\MediaInfo\$(Platform)\libmediainfo.0.dylib" Condition="'$(RuntimeIdentifier)'=='osx-x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
