@@ -48,8 +48,8 @@ Name: "startupShortcut"; Description: "Create shortcut in Startup folder (Starts
 Name: "none"; Description: "Do not start automatically"; GroupDescription: "Start automatically"; Flags: exclusive unchecked
 
 [Files]
-Source: "..\_output\Sonarr.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\_output\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\_output_windows\Sonarr.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\_output_windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -76,4 +76,27 @@ var
   ResultCode: Integer;
 begin
   Exec(ExpandConstant('{commonappdata}\NzbDrone\bin\NzbDrone.Console.exe'), '/u', '', 0, ewWaitUntilTerminated, ResultCode)
+end;
+
+function Framework472IsNotInstalled(): Boolean;
+var
+  bSuccess: Boolean;
+  regVersion: Cardinal;
+begin
+  Result := True;
+bSuccess := RegQueryDWordValue(HKLM, 'Software\Microsoft\NET Framework Setup\NDP\v4\Full', 'Release', regVersion);
+  if (True = bSuccess) and (regVersion >= 461808) then begin
+    Result := False;
+  end;
+end;
+
+function InitializeSetup(): Boolean;
+begin
+    if Framework472IsNotInstalled() then begin
+        MsgBox('Sonarr requires Microsoft .NET Framework 4.7.2 or higher.'#13#13
+            'Please use Windows Update to install this version'#13
+            'or download it from https://dotnet.microsoft.com/download/dotnet-framework.', mbInformation, MB_OK);
+        result := false;
+    end else
+        result := true;
 end;
