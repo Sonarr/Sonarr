@@ -12,6 +12,8 @@ sourceFolder='./src'
 slnFile=$sourceFolder/Sonarr.sln
 updateSubFolder=Sonarr.Update
 
+sqlitePackageDir="$HOME/.nuget/packages/system.data.sqlite.core.lidarr/1.0.111-5"
+
 nuget='tools/nuget/nuget.exe';
 vswhere='tools/vswhere/vswhere.exe';
 
@@ -88,16 +90,17 @@ CleanFolder()
 
 BuildWithMSBuild()
 {
-    installationPath=`$vswhere -latest -products \* -requires Microsoft.Component.MSBuild -property installationPath`
-    installationPath=${installationPath/C:\\/\/c\/}
-    installationPath=${installationPath//\\/\/}
-    msBuild="$installationPath/MSBuild/$msBuildVersion/Bin"
-    echo $msBuild
+    msBuildPath=`$vswhere -latest -products \* -requires Microsoft.Component.MSBuild -find MSBuild\\\\\*\*\\\\Bin\\\\MSBuild.exe`
+    msBuildPath=${msBuildPath/C:\\/\/c\/}
+    msBuildPath=${msBuildPath//\\/\/}
+    msBuildDir=$(dirname "$msBuildPath")
 
-    export PATH=$msBuild:$PATH
-    CheckExitCode MSBuild.exe $slnFile //p:Configuration=Release //p:Platform=x86 //t:Clean //m
+    echo $msBuildDir
+
+    export PATH=$msBuildDir:$PATH
+    CheckExitCode MSBuild.exe $slnFile //p:Configuration=Release //p:Platform=x64 //t:Clean //m
     $nuget restore $slnFile
-    CheckExitCode MSBuild.exe $slnFile //p:Configuration=Release //p:Platform=x86 //t:Build //m //p:AllowedReferenceRelatedFileExtensions=.pdb
+    CheckExitCode MSBuild.exe $slnFile //p:Configuration=Release //p:Platform=x64 //t:Build //m //p:AllowedReferenceRelatedFileExtensions=.pdb
 }
 
 BuildWithXbuild()
@@ -134,9 +137,6 @@ Build()
 
     CleanFolder $outputFolder false
 
-    echo "Removing Mono.Posix.dll"
-    rm $outputFolder/Mono.Posix.dll
-
     ProgressEnd 'Build'
 }
 
@@ -170,48 +170,6 @@ CreateMdbs()
     fi
 }
 
-PatchMono()
-{
-    local path=$1
-
-    # Below we deal with some mono incompatibilities with windows-only dotnet core/standard libs    
-    # See: https://github.com/mono/mono/blob/master/tools/nuget-hash-extractor/download.sh
-    # That list defines assemblies that are prohibited from being loaded from the appdir, instead loading from mono GAC.
-
-    # We have debian dependencies to get these installed or facades from mono 5.10+
-    for assembly in System.IO.Compression System.Runtime.InteropServices.RuntimeInformation System.Net.Http System.Globalization.Extensions System.Text.Encoding.CodePages System.Threading.Overlapped
-    do
-        if [ -e $path/$assembly.dll ]; then
-            if [ -e $sourceFolder/Libraries/Mono/$assembly.dll ]; then
-                echo "Copy Mono-specific facade $assembly.dll (uses win32 interop)"
-                cp $sourceFolder/Libraries/Mono/$assembly.dll $path/$assembly.dll
-            else
-                echo "Remove $assembly.dll (uses win32 interop)"
-                rm $path/$assembly.dll
-            fi
-            
-        fi
-    done
-
-    # Copy more stable version of Vectors for mono <5.12
-    if [ -e $path/System.Numerics.Vectors.dll ]; then
-        packageDir="$HOME/.nuget/packages/system.numerics.vectors/4.5.0"
-
-        if [ ! -d "$HOME/.nuget/packages/system.numerics.vectors/4.5.0" ]; then
-            # May reside in the NuGetFallback folder, which is harder to find
-            # Download somewhere to get the real cache populated
-            if [ $runtime = "dotnet" ] ; then
-                $nuget install System.Numerics.Vectors -Version 4.5.0 -Output ./_temp/System.Numerics.Vectors
-            else
-                mono $nuget install System.Numerics.Vectors -Version 4.5.0 -Output ./_temp/System.Numerics.Vectors
-            fi
-            rm -rf ./_temp/System.Numerics.Vectors
-        fi
-        # Copy the netstandard2.0 version rather than net46
-        cp "$packageDir/lib/netstandard2.0/System.Numerics.Vectors.dll" $path/
-    fi
-}
-
 PackageMono()
 {
     ProgressStart 'Creating Mono Package'
@@ -235,14 +193,8 @@ PackageMono()
     rm -f $outputFolderLinux/sqlite3.*
     rm -f $outputFolderLinux/MediaInfo.*
 
-    PatchMono $outputFolderLinux
-
     echo "Adding Sonarr.Core.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $outputFolderLinux
-
-    # Remove Http binding redirect by renaming it
-    # We don't need this anymore once our minimum mono version is 5.10
-    sed -i "s/System.Net.Http/System.Net.Http.Mono/g" $outputFolderLinux/Sonarr.Console.exe.config
 
     echo "Renaming Sonarr.Console.exe to Sonarr.exe"
     rm $outputFolderLinux/Sonarr.exe*
@@ -273,11 +225,11 @@ PackageMacOS()
     echo "Copying Binaries"
     cp -r $outputFolderLinux/* $outputFolderMacOS
 
-    echo "Adding sqlite dylibs"
-    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOS
+    echo "Adding sqlite dylib"
+    cp "$sqlitePackageDir/runtimes/osx-x64/native/net46"/* $outputFolderMacOS
 
     echo "Adding MediaInfo dylib"
-    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderMacOS
+    cp $sourceFolder/Libraries/MediaInfo/x64/*.dylib $outputFolderMacOS
 
     ProgressEnd 'Creating MacOS Package'
 }
@@ -298,11 +250,11 @@ PackageMacOSApp()
     echo "Copying Binaries"
     cp -r $outputFolderLinux/* $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
 
-    echo "Adding sqlite dylibs"
-    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+    echo "Adding sqlite dylib"
+    cp "$sqlitePackageDir/runtimes/osx-x64/native/net46"/* $outputFolderMacOS
 
     echo "Adding MediaInfo dylib"
-    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+    cp $sourceFolder/Libraries/MediaInfo/x64/*.dylib $outputFolderMacOS
 
     echo "Removing Update Folder"
     rm -r $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr.Update
@@ -331,14 +283,8 @@ PackageTestsMono()
     echo "Removing PDBs"
     find $testPackageFolderLinux -name "*.pdb" -exec rm "{}" \;
 
-    PatchMono $testPackageFolderLinux
-
     echo "Adding Sonarr.Core.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $testPackageFolderLinux
-
-    # Remove Http binding redirect by renaming it
-    # We don't need this anymore once our minimum mono version is 5.10
-    sed -i "s/System.Net.Http/System.Net.Http.Mono/g" $testPackageFolderLinux/Sonarr.Common.Test.dll.config
 
     cp ./test.sh $testPackageFolderLinux/
     dos2unix $testPackageFolderLinux/test.sh

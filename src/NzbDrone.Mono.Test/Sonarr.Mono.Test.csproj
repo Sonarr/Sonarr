@@ -10,6 +10,7 @@
   <ItemGroup>
     <Reference Include="Mono.Posix">
       <HintPath>..\Libraries\Mono.Posix.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
