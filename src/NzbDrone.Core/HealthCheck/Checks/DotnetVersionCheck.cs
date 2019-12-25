@@ -28,12 +28,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             // Target .Net version, which would allow us to increase our target framework
             var targetVersion = new Version("4.7.2");
-            if (Version.TryParse(_osInfo.Version, out var osVersion) && osVersion < new Version("10.0.14393"))
-            {
-                // Windows 10 LTSB 1511 and before do not support 4.7.x
-                targetVersion = new Version("4.6.2");
-            }
-
             if (dotnetVersion >= targetVersion)
             {
                 _logger.Debug("Dotnet version is {0} or better: {1}", targetVersion, dotnetVersion);
@@ -41,13 +35,28 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
 
             // Supported .net version but below our desired target
-            var stableVersion = new Version("4.6.2");
+            var stableVersion = new Version("4.7.2");
             if (dotnetVersion >= stableVersion)
             {
                 _logger.Debug("Dotnet version is {0} or better: {1}", stableVersion, dotnetVersion);
                 return new HealthCheck(GetType(), HealthCheckResult.Notice,
                     $"Currently installed .Net Framework {dotnetVersion} is supported but we recommend upgrading to at least {targetVersion}.",
                     "#currently-installed-net-framework-is-supported-but-upgrading-is-recommended");
+            }
+
+            if (Version.TryParse(_osInfo.Version, out var osVersion) && osVersion < new Version("10.0.14393"))
+            {
+                return new HealthCheck(GetType(), HealthCheckResult.Error,
+                    $"Currently installed .Net Framework {dotnetVersion} is no longer supported. However your Operating System cannot be upgraded to {targetVersion}.",
+                    "#currently-installed-net-framework-is-old-and-unsupported");
+            }
+
+            var oldVersion = new Version("4.6.2");
+            if (dotnetVersion >= oldVersion)
+            {
+                return new HealthCheck(GetType(), HealthCheckResult.Error,
+                    $"Currently installed .Net Framework {dotnetVersion} is no longer supported. Please upgrade the .Net Framework to at least {targetVersion}.",
+                    "#currently-installed-net-framework-is-old-and-unsupported");
             }
 
             return new HealthCheck(GetType(), HealthCheckResult.Error,
