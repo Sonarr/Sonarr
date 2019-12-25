@@ -1,7 +1,7 @@
 FROM ubuntu:xenial AS builder
 
 ENV DEBIAN_FRONTEND noninteractive 
-ENV MONO_VERSION 5.14
+ENV MONO_VERSION 5.18
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
     echo "deb http://download.mono-project.com/repo/debian stable-xenial/snapshots/$MONO_VERSION main" > /etc/apt/sources.list.d/mono-official-stable.list && \

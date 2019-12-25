@@ -27,9 +27,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Subject.Check().ShouldBeOk();
         }
 
-        [TestCase("4.6.2")]
-        [TestCase("4.7")]
-        [TestCase("4.7.1")]
         public void should_return_notice(string version)
         {
             GivenOutput(version);
@@ -47,6 +44,9 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [TestCase("4.5")]
         [TestCase("4.5.2")]
         [TestCase("4.6.1")]
+        [TestCase("4.6.2")]
+        [TestCase("4.7")]
+        [TestCase("4.7.1")]
         public void should_return_error(string version)
         {
             GivenOutput(version);
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         }
 
         [Test]
-        public void should_return_ok_for_net462_on_Win1511()
+        public void should_return_nok_for_net462_on_Win1511()
         {
             Mocker.GetMock<IOsInfo>()
                   .SetupGet(v => v.Version)
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             GivenOutput("4.6.2");
 
-            Subject.Check().ShouldBeOk();
+            Subject.Check().ShouldBeError();
         }
     }
 }

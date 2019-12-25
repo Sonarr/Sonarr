@@ -43,7 +43,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
 
             // Stable Mono versions
-            var stableVersion = new Version("5.16");
+            var stableVersion = new Version("5.18");
             if (monoVersion >= stableVersion)
             {
                 _logger.Debug("Mono version is {0} or better: {1}", stableVersion, monoVersion);
@@ -51,15 +51,13 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     $"Currently installed Mono version {monoVersion} is supported but upgrading to {bestVersion} is recommended.",
                     "#currently-installed-mono-version-is-supported-but-upgrading-is-recommended");
             }
-
-            // Old but supported Mono versions, there are known bugs
-            var supportedVersion = new Version("5.4");
-            if (monoVersion >= supportedVersion)
+            
+            var oldVersion = new Version("5.4");
+            if (monoVersion >= oldVersion)
             {
-                _logger.Debug("Mono version is {0} or better: {1}", supportedVersion, monoVersion);
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, 
-                    $"Currently installed Mono version {monoVersion} is supported but has some known issues. Please upgrade Mono to version {bestVersion}.", 
-                    "#currently-installed-mono-version-is-supported-but-upgrading-is-recommended");
+                return new HealthCheck(GetType(), HealthCheckResult.Error,
+                $"Currently installed Mono version {monoVersion} is no longer supported. Please upgrade Mono to version {bestVersion}.",
+                "#currently-installed-mono-version-is-old-and-unsupported");
             }
 
             return new HealthCheck(GetType(), HealthCheckResult.Error, 

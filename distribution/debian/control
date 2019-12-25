@@ -7,8 +7,8 @@ Vcs-Git: git@github.com:Sonarr/Sonarr.git
 Vcs-Browser: https://github.com/Sonarr/Sonarr
 Build-Depends:  debhelper (>= 9),
                 dh-systemd (>= 1.5),
-                mono-devel (>= 5.4),
-                libmono-cil-dev (>= 5.4),
+                mono-devel (>= 5.18),
+                libmono-cil-dev (>= 5.18),
                 cli-common-dev (>= 0.9+xamarin5)
 
 Package: sonarr
@@ -16,7 +16,7 @@ Architecture: all
 Provides: nzbdrone
 Conflicts: nzbdrone
 Replaces: nzbdrone
-Depends: adduser, libsqlite3-0 (>= 3.7), libmediainfo0v5 (>= 0.7.52) | libmediainfo0 (>= 0.7.52), mono-runtime (>= 5.4), ca-certificates-mono, libmono-system-net-http4.0-cil (>= 4.0.0~alpha1), ${cli:Depends}, ${misc:Depends}
+Depends: adduser, libsqlite3-0 (>= 3.7), libmediainfo0v5 (>= 0.7.52) | libmediainfo0 (>= 0.7.52), mono-runtime (>= 5.18), ca-certificates-mono, libmono-system-net-http4.0-cil (>= 4.0.0~alpha1), ${cli:Depends}, ${misc:Depends}
 Recommends: libmediainfo0v5 (>= 18.03) | libmediainfo0 (>= 18.03)
 Suggests: sqlite3 (>= 3.7), mediainfo (>= 0.7.52)
 Description: Internet PVR

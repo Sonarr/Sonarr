@@ -16,6 +16,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
 
 RUN apt-get update && apt-get install -y \ 
         libmono-system-runtime4.0-cil \
+        libmono-system-net-http4.0-cil \
         && rm -rf /var/lib/apt/lists/*
 
 COPY startup.sh /startup.sh
