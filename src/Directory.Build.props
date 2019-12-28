@@ -106,4 +106,10 @@
     <!-- For now keep the NzbDrone namespace -->
     <RootNamespace Condition="'$(SonarrProject)'=='true'">$(MSBuildProjectName.Replace('Sonarr','NzbDrone'))</RootNamespace>
   </PropertyGroup>
+
+  <!-- Get the reference assemblies for build agent -->
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.0" />
+  </ItemGroup>
+  
 </Project>
