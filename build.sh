@@ -108,7 +108,7 @@ BuildWithXbuild()
     export MONO_IOMAP=case
     CheckExitCode xbuild /t:Clean $slnFile
     mono $nuget restore $slnFile
-    CheckExitCode xbuild /p:Configuration=Release /p:Platform=x86 /t:Build /p:AllowedReferenceRelatedFileExtensions=.pdb $slnFile
+    CheckExitCode xbuild /p:Configuration=Release /p:Platform=x64 /t:Build /p:AllowedReferenceRelatedFileExtensions=.pdb $slnFile
 }
 
 LintUI()
@@ -170,6 +170,36 @@ CreateMdbs()
     fi
 }
 
+PatchMono()
+{
+    local path=$1
+
+    # Copy over the netstandard.dll facade since mono has no separate package for it and includes it in mono-devel
+    for assembly in netstandard System.Runtime
+    do
+       echo "Copy Mono-specific facade $assembly.dll"
+                cp $sourceFolder/Libraries/Mono/$assembly.dll $path/$assembly.dll
+    done
+
+    # Copy more stable version of Vectors for mono <5.12
+    if [ -e $path/System.Numerics.Vectors.dll ]; then
+        packageDir="$HOME/.nuget/packages/system.numerics.vectors/4.5.0"
+
+        if [ ! -d "$HOME/.nuget/packages/system.numerics.vectors/4.5.0" ]; then
+            # May reside in the NuGetFallback folder, which is harder to find
+            # Download somewhere to get the real cache populated
+            if [ $runtime = "dotnet" ] ; then
+                $nuget install System.Numerics.Vectors -Version 4.5.0 -Output ./_temp/System.Numerics.Vectors
+            else
+                mono $nuget install System.Numerics.Vectors -Version 4.5.0 -Output ./_temp/System.Numerics.Vectors
+            fi
+            rm -rf ./_temp/System.Numerics.Vectors
+        fi
+        # Copy the netstandard2.0 version rather than net46
+        cp "$packageDir/lib/netstandard2.0/System.Numerics.Vectors.dll" $path/
+    fi
+}
+
 PackageMono()
 {
     ProgressStart 'Creating Mono Package'
@@ -192,6 +222,8 @@ PackageMono()
     echo "Removing native windows binaries Sqlite, MediaInfo"
     rm -f $outputFolderLinux/sqlite3.*
     rm -f $outputFolderLinux/MediaInfo.*
+
+    PatchMono $outputFolderLinux
 
     echo "Adding Sonarr.Core.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $outputFolderLinux
@@ -282,6 +314,8 @@ PackageTestsMono()
 
     echo "Removing PDBs"
     find $testPackageFolderLinux -name "*.pdb" -exec rm "{}" \;
+
+    PatchMono $testPackageFolderLinux
 
     echo "Adding Sonarr.Core.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Core/Sonarr.Core.dll.config $testPackageFolderLinux
