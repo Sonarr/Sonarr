@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
                                                                 (?<bluray>BluRay|Blu-Ray|HD-?DVD|BD(?!$))|
-                                                                (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|MaxdomeHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DDP?5[. ]1)|\d+0p[-. ]WEB[-. ]|WEB-DLMux|\b\s\/\sWEB\s\/\s\b)|
+                                                                (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|MaxdomeHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DDP?5[. ]1)|\d+0p(?:[-. ]AMZN)?[-. ]WEB[-. ]|WEB-DLMux|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ])|
                                                                 (?<webrip>WebRip|Web-Rip|WEBMux)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRip)|
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Parser
                                                                 (?<pdtv>PDTV)|
                                                                 (?<sdtv>SDTV)|
                                                                 (?<tvrip>TVRip)
-                                                                )\b",
+                                                                )(?:\b|$|[ .])",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
         private static readonly Regex RawHDRegex = new Regex(@"\b(?<rawhd>RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD|MPEG[-_. ]?2)\b",
@@ -95,8 +95,8 @@ namespace NzbDrone.Core.Parser
                 return result;
             }
 
-            var test = SourceRegex.Matches(normalizedName);
-            var sourceMatch = SourceRegex.Matches(normalizedName).OfType<Match>().LastOrDefault();
+            var sourceMatches = SourceRegex.Matches(normalizedName);
+            var sourceMatch = sourceMatches.OfType<Match>().LastOrDefault();
             var resolution = ParseResolution(normalizedName);
             var codecRegex = CodecRegex.Match(normalizedName);
             var remuxMatch = RemuxRegex.IsMatch(normalizedName);

@@ -222,6 +222,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Played.S01E08.Pro.Gamer.1440p.BKPL.WEB-DL.H.264-LiGHT", false)]
         [TestCase("Good.Luck.Charlie.S04E11.Teddy's.Choice.FHD.1080p.Web-DL", false)]
         [TestCase("Outlander.S04E03.The.False.Bride.1080p.NF.WEB.DDP5.1.x264-NTb[rartv]", false)]
+        [TestCase("Legacies.S02E02.This.Year.Will.Be.Different.1080p.AMZN.WEB...", false)]
+        [TestCase("Legacies.S02E02.This.Year.Will.Be.Different.1080p.AMZN.WEB.", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
