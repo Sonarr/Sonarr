@@ -54,9 +54,9 @@ class Tooltip extends Component {
     } else if ((/^bottom/).test(data.placement)) {
       data.styles.maxHeight = windowHeight - bottom - 20;
     } else if ((/^right/).test(data.placement)) {
-      data.styles.maxWidth = windowWidth - right - 30;
+      data.styles.maxWidth = windowWidth - right - 35;
     } else {
-      data.styles.maxWidth = left - 30;
+      data.styles.maxWidth = left - 35;
     }
 
     return data;
