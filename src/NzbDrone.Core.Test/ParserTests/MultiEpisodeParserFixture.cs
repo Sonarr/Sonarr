@@ -62,6 +62,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Are.You.Human.Too.E07-E08.180612.1080p-NEXT", "Are You Human Too", 1, new[] { 7, 8 })]
         [TestCase("Are You Human Too? E11-E12 1080p HDTV AAC H.264-NEXT", "Are You Human Too", 1, new[] { 11, 12 })]
         [TestCase("The Series Title (2010) - [S01E01-02-03] - Episode Title", "The Series Title (2010)", 1, new [] { 1, 2, 3 })]
+        [TestCase("[AqusiQ-TorrentS.pl]The.Name.of.the.Rose.S01E05-06.PL.2160p-Ralf[shogho]", "The Name of the Rose", 1, new[] { 5, 6 })]
+        [TestCase("[AgusiQ-TorrentS.pl] The.Name.of.the.Rose.S01E05-E06.PL.1080i.Ralf [jans12]", "The Name of the Rose", 1, new[] { 5, 6 })]
+        [TestCase("The.Name.of.the.Rose.S01E05-6.PL.1080p.WEBRip.x264-666", "The Name of the Rose", 1, new[] { 5, 6 })]
         //[TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
