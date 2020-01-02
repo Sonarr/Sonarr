@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { sizes } from 'Helpers/Props';
+import { sizes, icons } from 'Helpers/Props';
 import Link from 'Components/Link/Link';
+import Icon from 'Components/Icon';
 import styles from './NamingOption.css';
 
 class NamingOption extends Component {
@@ -39,6 +40,7 @@ class NamingOption extends Component {
       token,
       tokenSeparator,
       example,
+      footNote,
       tokenCase,
       isFullFilename,
       size
@@ -60,6 +62,11 @@ class NamingOption extends Component {
 
         <div className={styles.example}>
           {example.replace(/ /g, tokenSeparator)}
+
+          {
+            footNote !== 0 &&
+            <Icon className={styles.footNote} name={icons.FOOTNOTE} />
+          }
         </div>
       </Link>
     );
@@ -69,6 +76,7 @@ class NamingOption extends Component {
 NamingOption.propTypes = {
   token: PropTypes.string.isRequired,
   example: PropTypes.string.isRequired,
+  footNote: PropTypes.number.isRequired,
   tokenSeparator: PropTypes.string.isRequired,
   tokenCase: PropTypes.string.isRequired,
   isFullFilename: PropTypes.bool.isRequired,
@@ -77,6 +85,7 @@ NamingOption.propTypes = {
 };
 
 NamingOption.defaultProps = {
+  footNote: 0,
   size: sizes.SMALL,
   isFullFilename: false
 };

@@ -24,6 +24,7 @@ import {
 import {
   faArrowCircleLeft as fasArrowCircleLeft,
   faArrowCircleRight as fasArrowCircleRight,
+  faAsterisk as fasAsterisk,
   faBackward as fasBackward,
   faBars as fasBars,
   faBolt as fasBolt,
@@ -138,6 +139,7 @@ export const EXTERNAL_LINK = fasExternalLinkAlt;
 export const FATAL = fasTimesCircle;
 export const FILE = farFile;
 export const FILTER = fasFilter;
+export const FOOTNOTE = fasAsterisk;
 export const FOLDER = farFolder;
 export const FOLDER_OPEN = fasFolderOpen;
 export const GROUP = farObjectGroup;

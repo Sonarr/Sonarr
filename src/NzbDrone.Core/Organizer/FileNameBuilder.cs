@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Organizer
         private readonly ICached<bool> _requiresAbsoluteEpisodeNumberCache;
         private readonly Logger _logger;
 
-        private static readonly Regex TitleRegex = new Regex(@"(?<escaped>\{\{|\}\})|\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9]+))?(?<suffix>[- ._)\]]*)\}",
+        private static readonly Regex TitleRegex = new Regex(@"(?<escaped>\{\{|\}\})|\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9+-]+(?<!-)))?(?<suffix>[- ._)\]]*)\}",
                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
@@ -601,24 +601,6 @@ namespace NzbDrone.Core.Organizer
             var audioLanguages = episodeFile.MediaInfo.AudioLanguages ?? string.Empty;
             var subtitles = episodeFile.MediaInfo.Subtitles ?? string.Empty;
 
-            var mediaInfoAudioLanguages = GetLanguagesToken(audioLanguages);
-            if (!mediaInfoAudioLanguages.IsNullOrWhiteSpace())
-            {
-                mediaInfoAudioLanguages = $"[{mediaInfoAudioLanguages}]";
-            }
-
-            var mediaInfoAudioLanguagesAll = mediaInfoAudioLanguages;
-            if (mediaInfoAudioLanguages == "[EN]")
-            {
-                mediaInfoAudioLanguages = string.Empty;
-            }
-
-            var mediaInfoSubtitleLanguages = GetLanguagesToken(subtitles);
-            if (!mediaInfoSubtitleLanguages.IsNullOrWhiteSpace())
-            {
-                mediaInfoSubtitleLanguages = $"[{mediaInfoSubtitleLanguages}]";
-            }
-
             var videoBitDepth = episodeFile.MediaInfo.VideoBitDepth > 0 ? episodeFile.MediaInfo.VideoBitDepth.ToString() : string.Empty;
             var audioChannelsFormatted = audioChannels > 0 ?
                                 audioChannels.ToString("F1", CultureInfo.InvariantCulture) :
@@ -631,15 +613,15 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{MediaInfo Audio}"] = m => audioCodec;
             tokenHandlers["{MediaInfo AudioCodec}"] = m => audioCodec;
             tokenHandlers["{MediaInfo AudioChannels}"] = m => audioChannelsFormatted;
-            tokenHandlers["{MediaInfo AudioLanguages}"] = m => mediaInfoAudioLanguages;
-            tokenHandlers["{MediaInfo AudioLanguagesAll}"] = m => mediaInfoAudioLanguagesAll;
+            tokenHandlers["{MediaInfo AudioLanguages}"] = m => GetLanguagesToken(audioLanguages, m.CustomFormat, true, true);
+            tokenHandlers["{MediaInfo AudioLanguagesAll}"] = m => GetLanguagesToken(audioLanguages, m.CustomFormat, false, true);
 
-            tokenHandlers["{MediaInfo SubtitleLanguages}"] = m => mediaInfoSubtitleLanguages;
-            tokenHandlers["{MediaInfo SubtitleLanguagesAll}"] = m => mediaInfoSubtitleLanguages;
+            tokenHandlers["{MediaInfo SubtitleLanguages}"] = m => GetLanguagesToken(subtitles, m.CustomFormat, false, true);
+            tokenHandlers["{MediaInfo SubtitleLanguagesAll}"] = m => GetLanguagesToken(subtitles, m.CustomFormat, false, true);
 
             tokenHandlers["{MediaInfo Simple}"] = m => $"{videoCodec} {audioCodec}";
 
-            tokenHandlers["{MediaInfo Full}"] = m => $"{videoCodec} {audioCodec}{mediaInfoAudioLanguages} {mediaInfoSubtitleLanguages}";
+            tokenHandlers["{MediaInfo Full}"] = m => $"{videoCodec} {audioCodec}{GetLanguagesToken(audioLanguages, m.CustomFormat, true, true)} {GetLanguagesToken(subtitles, m.CustomFormat, false, true)}";
 
             tokenHandlers[MediaInfoVideoDynamicRangeToken] =
                 m => MediaInfoFormatter.FormatVideoDynamicRange(episodeFile.MediaInfo);
@@ -662,7 +644,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Preferred Words}"] = m => string.Join(" ", preferredWords);
         }
 
-        private string GetLanguagesToken(string mediaInfoLanguages)
+        private string GetLanguagesToken(string mediaInfoLanguages, string filter, bool skipEnglishOnly, bool quoted)
         {
             List<string> tokens = new List<string>();
             foreach (var item in mediaInfoLanguages.Split('/'))
@@ -686,7 +668,45 @@ namespace NzbDrone.Core.Organizer
                 }
             }
 
-            return string.Join("+", tokens.Distinct());
+            tokens = tokens.Distinct().ToList();
+            
+            var filteredTokens = tokens;
+
+            // Exclude or filter
+            if (filter.IsNotNullOrWhiteSpace())
+            {
+                if (filter.StartsWith("-"))
+                {
+                    filteredTokens = tokens.Except(filter.Split('-')).ToList();
+                }
+                else
+                {
+                    filteredTokens = filter.Split('+').Intersect(tokens).ToList();
+                }
+            }
+
+            // Replace with wildcard (maybe too limited)
+            if (filter.IsNotNullOrWhiteSpace() && filter.EndsWith("+") && filteredTokens.Count != tokens.Count)
+            {
+                filteredTokens.Add("--");
+            }
+
+
+            if (skipEnglishOnly && filteredTokens.Count == 1 && filteredTokens.First() == "EN")
+            {
+                return string.Empty;
+            }
+
+            var response = string.Join("+", filteredTokens);
+
+            if (quoted && response.IsNotNullOrWhiteSpace())
+            {
+                return $"[{response}]";
+            }
+            else
+            {
+                return response;
+            }
         }
 
         private void UpdateMediaInfoIfNeeded(string pattern, EpisodeFile episodeFile, Series series)

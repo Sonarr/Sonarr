@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { sizes } from 'Helpers/Props';
+import { sizes, icons } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
 import Button from 'Components/Link/Button';
+import Icon from 'Components/Icon';
 import SelectInput from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
 import Modal from 'Components/Modal/Modal';
@@ -90,12 +91,12 @@ const qualityTokens = [
 
 const mediaInfoTokens = [
   { token: '{MediaInfo Simple}', example: 'x264 DTS' },
-  { token: '{MediaInfo Full}', example: 'x264 DTS [EN+DE]' },
+  { token: '{MediaInfo Full}', example: 'x264 DTS [EN+DE]', footNote: 1 },
 
   { token: '{MediaInfo AudioCodec}', example: 'DTS' },
   { token: '{MediaInfo AudioChannels}', example: '5.1' },
-  { token: '{MediaInfo AudioLanguages}', example: '[EN+DE]' },
-  { token: '{MediaInfo SubtitleLanguages}', example: '[DE]' },
+  { token: '{MediaInfo AudioLanguages}', example: '[EN+DE]', footNote: 1 },
+  { token: '{MediaInfo SubtitleLanguages}', example: '[DE]', footNote: 1 },
 
   { token: '{MediaInfo VideoCodec}', example: 'x264' },
   { token: '{MediaInfo VideoBitDepth}', example: '10' },
@@ -444,7 +445,7 @@ class NamingModal extends Component {
                   <FieldSet legend="Media Info">
                     <div className={styles.groups}>
                       {
-                        mediaInfoTokens.map(({ token, example }) => {
+                        mediaInfoTokens.map(({ token, example, footNote }) => {
                           return (
                             <NamingOption
                               key={token}
@@ -452,6 +453,7 @@ class NamingModal extends Component {
                               value={value}
                               token={token}
                               example={example}
+                              footNote={footNote}
                               tokenSeparator={tokenSeparator}
                               tokenCase={tokenCase}
                               onPress={this.onOptionPress}
@@ -460,6 +462,14 @@ class NamingModal extends Component {
                         }
                         )
                       }
+                    </div>
+
+                    <div className={styles.footNote}>
+                      <Icon className={styles.icon} name={icons.FOOTNOTE} />
+                      <div>
+                        MediaInfo Full/AudioLanguages/SubtitleLanguages support a <code>:EN+DE</code> suffix allowing you to filter the languages included in the filename. Use <code>-DE</code> to exclude specific languages.
+                      Appending <code>+</code> (eg <code>:EN+</code>) will output <code>[EN]</code>/<code>[EN+--]</code>/<code>[--]</code> depending on excluded languages. For example <code>{'{'}MediaInfo Full:EN+DE{'}'}</code>.
+                      </div>
                     </div>
                   </FieldSet>
 

@@ -796,6 +796,29 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be(expected);
         }
 
+        [TestCase("English/German", "", "[EN+DE]")]
+        [TestCase("English/Dutch/German", "", "[EN+NL+DE]")]
+        [TestCase("English/German", ":DE", "[DE]")]
+        [TestCase("English/Dutch/German", ":EN+NL", "[EN+NL]")]
+        [TestCase("English/Dutch/German", ":NL+EN", "[NL+EN]")]
+        [TestCase("English/Dutch/German", ":-NL", "[EN+DE]")]
+        [TestCase("English/Dutch/German", ":DE+", "[DE+-]")]
+        [TestCase("English/Dutch/German", ":DE+NO.", "[DE].")]
+        [TestCase("English/Dutch/German", ":-EN-", "[NL+DE]-")]
+        public void should_format_subtitle_languages_all(string subtitleLanguages, string format, string expected)
+        {
+            _episodeFile.ReleaseGroup = null;
+
+            GivenMediaInfoModel(subtitles: subtitleLanguages);
+
+
+            _namingConfig.StandardEpisodeFormat = "{MediaInfo SubtitleLanguages" + format +"}End";
+
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(expected + "End");
+        }
+
         [TestCase(8, "BT.601 NTSC", "BT.709", "South.Park.S15E06.City.Sushi")]
         [TestCase(10, "BT.2020", "PQ", "South.Park.S15E06.City.Sushi.HDR")]
         [TestCase(10, "BT.2020", "HLG", "South.Park.S15E06.City.Sushi.HDR")]
