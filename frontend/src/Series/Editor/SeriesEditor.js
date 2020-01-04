@@ -62,6 +62,12 @@ function getColumns(showLanguageProfile) {
       isVisible: true
     },
     {
+      name: 'sizeOnDisk',
+      label: 'Size',
+      isSortable: true,
+      isVisible: true
+    },
+    {
       name: 'tags',
       label: 'Tags',
       isSortable: false,

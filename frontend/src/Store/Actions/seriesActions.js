@@ -140,6 +140,10 @@ export const sortPredicates = {
     }
 
     return result;
+  },
+
+  sizeOnDisk: function(item, direction) {
+    return item.statistics.sizeOnDisk;
   }
 };
 

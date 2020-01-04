@@ -10,6 +10,7 @@ import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import SeriesStatusCell from 'Series/Index/Table/SeriesStatusCell';
 import styles from './SeriesEditorRow.css';
+import formatBytes from 'Utilities/Number/formatBytes';
 
 class SeriesEditorRow extends Component {
 
@@ -37,6 +38,7 @@ class SeriesEditorRow extends Component {
       seasonFolder,
       path,
       tags,
+      statistics,
       columns,
       isSelected,
       onSelectedChange
@@ -91,6 +93,10 @@ class SeriesEditorRow extends Component {
         </TableRowCell>
 
         <TableRowCell>
+          {formatBytes(statistics.sizeOnDisk)}
+        </TableRowCell>
+
+        <TableRowCell>
           <TagListConnector
             tags={tags}
           />
@@ -114,6 +120,7 @@ SeriesEditorRow.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   isSelected: PropTypes.bool,
+  statistics: PropTypes.object.isRequired,
   onSelectedChange: PropTypes.func.isRequired
 };
 
