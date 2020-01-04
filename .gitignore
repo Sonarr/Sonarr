@@ -141,3 +141,6 @@ output/*
 _start
 
 src/.idea/
+
+#JetBrains Rider
+.idea
