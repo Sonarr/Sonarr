@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Grid, WindowScroller } from 'react-virtualized';
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
-import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
+import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
 import dimensions from 'Styles/Variables/dimensions';
 import { sortDirections } from 'Helpers/Props';
 import Measure from 'Components/Measure';
@@ -84,7 +84,7 @@ class SeriesIndexOverviews extends Component {
       jumpToCharacter
     } = this.props;
 
-    const itemsChanged = hasDifferentItems(prevProps.items, items);
+    const itemsChanged = hasDifferentItemsOrOrder(prevProps.items, items);
     const overviewOptionsChanged = !_.isMatch(prevProps.overviewOptions, overviewOptions);
 
     if (
