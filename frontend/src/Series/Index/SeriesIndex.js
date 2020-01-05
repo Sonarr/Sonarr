@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
+import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
 import { align, icons, sortDirections } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
@@ -67,10 +67,9 @@ class SeriesIndex extends Component {
       scrollTop
     } = this.props;
 
-    if (
-      hasDifferentItems(prevProps.items, items) ||
-      sortKey !== prevProps.sortKey ||
-      sortDirection !== prevProps.sortDirection
+    if (sortKey !== prevProps.sortKey ||
+        sortDirection !== prevProps.sortDirection ||
+        hasDifferentItemsOrOrder(prevProps.items, items)
     ) {
       this.setJumpBarItems();
     }
