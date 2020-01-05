@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -10,6 +11,7 @@ namespace NzbDrone.Core.Tv
         bool SeriesPathExists(string path);
         Series FindByTitle(string cleanTitle);
         Series FindByTitle(string cleanTitle, int year);
+        List<Series> FindByTitleInexact(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByPath(string path);
@@ -17,9 +19,12 @@ namespace NzbDrone.Core.Tv
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
     {
+        protected IMainDatabase _database;
+
         public SeriesRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
+            _database = database;
         }
 
         public bool SeriesPathExists(string path)
@@ -42,6 +47,14 @@ namespace NzbDrone.Core.Tv
             return Query.Where(s => s.CleanTitle == cleanTitle)
                         .AndWhere(s => s.Year == year)
                         .SingleOrDefault();
+        }
+
+        public List<Series> FindByTitleInexact(string cleanTitle)
+        {
+            var mapper = _database.GetDataMapper();
+            mapper.AddParameter("CleanTitle", cleanTitle);
+
+            return mapper.Query<Series>().Where($"instr(@CleanTitle, [t0].[CleanTitle])");
         }
 
         public Series FindByTvdbId(int tvdbId)

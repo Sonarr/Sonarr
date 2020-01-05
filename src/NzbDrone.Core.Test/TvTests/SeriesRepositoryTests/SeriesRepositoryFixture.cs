@@ -49,5 +49,53 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
 
 
         }
+
+        private void GivenSeries()
+        {
+            var series = Builder<Series>.CreateListOfSize(2)
+                .TheFirst(1)
+                .With(x => x.CleanTitle = "crown")
+                .TheNext(1)
+                .With(x => x.CleanTitle = "crownextralong")
+                .BuildList();
+
+            Subject.InsertMany(series);
+        }
+
+        [TestCase("crow")]
+        [TestCase("rownc")]
+        public void should_find_no_inexact_matches(string cleanTitle)
+        {
+            GivenSeries();
+
+            var found = Subject.FindByTitleInexact(cleanTitle);
+            found.Should().BeEmpty();
+        }
+
+
+        [TestCase("crowna")]
+        [TestCase("acrown")]
+        [TestCase("acrowna")]
+        public void should_find_one_inexact_match(string cleanTitle)
+        {
+            GivenSeries();
+
+            var found = Subject.FindByTitleInexact(cleanTitle);
+            found.Should().HaveCount(1);
+            found.First().CleanTitle.Should().Be("crown");
+        }
+
+        [TestCase("crownextralong")]
+        [TestCase("crownextralonga")]
+        [TestCase("acrownextralong")]
+        [TestCase("acrownextralonga")]
+        public void should_find_two_inexact_matches(string cleanTitle)
+        {
+            GivenSeries();
+
+            var found = Subject.FindByTitleInexact(cleanTitle);
+            found.Should().HaveCount(2);
+            found.Select(x => x.CleanTitle).Should().BeEquivalentTo(new [] {"crown", "crownextralong"});
+        }
     }
 }
