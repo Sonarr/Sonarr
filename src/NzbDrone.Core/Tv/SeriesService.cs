@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Tv
         {
             // find any series clean title within the provided release title
             string cleanTitle = title.CleanSeriesTitle();
-            var list = _seriesRepository.All().Where(s => cleanTitle.Contains(s.CleanTitle)).ToList();
+            var list = _seriesRepository.FindByTitleInexact(cleanTitle);
             if (!list.Any())
             {
                 // no series matched
