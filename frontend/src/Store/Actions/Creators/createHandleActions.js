@@ -16,6 +16,13 @@ const blacklistedProperties = [
   'id'
 ];
 
+function createItemMap(data) {
+  return data.reduce((acc, d, index) => {
+    acc[d.id] = index;
+    return acc;
+  }, {});
+}
+
 export default function createHandleActions(handlers, defaultState, section) {
   return handleActions({
 
@@ -42,6 +49,7 @@ export default function createHandleActions(handlers, defaultState, section) {
 
         if (_.isArray(payload.data)) {
           newState.items = payload.data;
+          newState.itemMap = createItemMap(payload.data);
         } else {
           newState.item = payload.data;
         }
@@ -75,6 +83,7 @@ export default function createHandleActions(handlers, defaultState, section) {
           newState.items.splice(index, 1, { ...item, ...otherProps });
         } else if (!updateOnly) {
           newState.items.push({ ...otherProps });
+          newState.itemMap = createItemMap(newState.items);
         }
 
         return updateSectionState(state, payloadSection, newState);
@@ -110,6 +119,8 @@ export default function createHandleActions(handlers, defaultState, section) {
 
         newState.items = [...newState.items];
         _.remove(newState.items, { id: payload.id });
+
+        newState.itemMap = createItemMap(newState.items);
 
         return updateSectionState(state, payloadSection, newState);
       }
