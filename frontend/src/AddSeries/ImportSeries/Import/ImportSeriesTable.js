@@ -2,6 +2,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import VirtualTable from 'Components/Table/VirtualTable';
+import VirtualTableRow from 'Components/Table/VirtualTableRow';
 import ImportSeriesHeader from './ImportSeriesHeader';
 import ImportSeriesRowConnector from './ImportSeriesRowConnector';
 
@@ -112,15 +113,19 @@ class ImportSeriesTable extends Component {
     const item = items[rowIndex];
 
     return (
-      <ImportSeriesRowConnector
+      <VirtualTableRow
         key={key}
         style={style}
-        rootFolderId={rootFolderId}
-        showLanguageProfile={showLanguageProfile}
-        isSelected={selectedState[item.id]}
-        onSelectedChange={onSelectedChange}
-        id={item.id}
-      />
+      >
+        <ImportSeriesRowConnector
+          key={item.id}
+          rootFolderId={rootFolderId}
+          showLanguageProfile={showLanguageProfile}
+          isSelected={selectedState[item.id]}
+          onSelectedChange={onSelectedChange}
+          id={item.id}
+        />
+      </VirtualTableRow>
     );
   }
 
@@ -133,12 +138,10 @@ class ImportSeriesTable extends Component {
       allSelected,
       allUnselected,
       isSmallScreen,
-      contentBody,
+      scroller,
       showLanguageProfile,
-      scrollTop,
       selectedState,
-      onSelectAllChange,
-      onScroll
+      onSelectAllChange
     } = this.props;
 
     if (!items.length) {
@@ -148,10 +151,9 @@ class ImportSeriesTable extends Component {
     return (
       <VirtualTable
         items={items}
-        contentBody={contentBody}
+        scroller={scroller}
         isSmallScreen={isSmallScreen}
         rowHeight={52}
-        scrollTop={scrollTop}
         overscanRowCount={2}
         rowRenderer={this.rowRenderer}
         header={
@@ -163,7 +165,6 @@ class ImportSeriesTable extends Component {
           />
         }
         selectedState={selectedState}
-        onScroll={onScroll}
       />
     );
   }
@@ -183,15 +184,13 @@ ImportSeriesTable.propTypes = {
   selectedState: PropTypes.object.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
   allSeries: PropTypes.arrayOf(PropTypes.object),
-  contentBody: PropTypes.object.isRequired,
+  scroller: PropTypes.instanceOf(Element).isRequired,
   showLanguageProfile: PropTypes.bool.isRequired,
-  scrollTop: PropTypes.number.isRequired,
   onSelectAllChange: PropTypes.func.isRequired,
   onSelectedChange: PropTypes.func.isRequired,
   onRemoveSelectedStateItem: PropTypes.func.isRequired,
   onSeriesLookup: PropTypes.func.isRequired,
-  onSetImportSeriesValue: PropTypes.func.isRequired,
-  onScroll: PropTypes.func.isRequired
+  onSetImportSeriesValue: PropTypes.func.isRequired
 };
 
 export default ImportSeriesTable;

@@ -30,6 +30,8 @@ class Scroller extends Component {
 
   _setScrollerRef = (ref) => {
     this._scroller = ref;
+
+    this.props.registerScroller(ref);
   }
 
   //
@@ -43,6 +45,7 @@ class Scroller extends Component {
       children,
       scrollTop,
       onScroll,
+      registerScroller,
       ...otherProps
     } = this.props;
 
@@ -70,12 +73,14 @@ Scroller.propTypes = {
   autoScroll: PropTypes.bool.isRequired,
   scrollTop: PropTypes.number,
   children: PropTypes.node,
-  onScroll: PropTypes.func
+  onScroll: PropTypes.func,
+  registerScroller: PropTypes.func
 };
 
 Scroller.defaultProps = {
   scrollDirection: scrollDirections.VERTICAL,
-  autoScroll: true
+  autoScroll: true,
+  registerScroller: () => {}
 };
 
 export default Scroller;
