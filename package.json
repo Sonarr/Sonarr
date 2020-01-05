@@ -122,7 +122,8 @@
     "stylelint-order": "3.0.1",
     "url-loader": "2.0.1",
     "webpack": "4.35.3",
-    "webpack-stream": "5.2.1"
+    "webpack-stream": "5.2.1",
+    "worker-loader": "2.0.0"
   },
   "main": "index.js",
   "browserslist": [

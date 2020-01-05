@@ -117,6 +117,15 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            name: '[name].js'
+          }
+        }
+      },
+      {
         test: /\.js?$/,
         exclude: /(node_modules|JsLibraries)/,
         use: [
