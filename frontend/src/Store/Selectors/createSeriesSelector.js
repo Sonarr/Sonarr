@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
-import createAllSeriesSelector from './createAllSeriesSelector';
 
 function createSeriesSelector() {
   return createSelector(
     (state, { seriesId }) => seriesId,
-    createAllSeriesSelector(),
-    (seriesId, allSeries) => {
-      return allSeries.find((series) => series.id === seriesId);
+    (state) => state.series.itemMap,
+    (state) => state.series.items,
+    (seriesId, itemMap, allSeries) => {
+      return allSeries[itemMap[seriesId]];
     }
   );
 }
