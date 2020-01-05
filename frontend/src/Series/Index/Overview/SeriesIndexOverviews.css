@@ -1,3 +1,11 @@
 .grid {
   flex: 1 0 auto;
 }
+
+.container {
+  &:hover {
+    .content {
+      background-color: $tableRowHoverBackgroundColor;
+    }
+  }
+}

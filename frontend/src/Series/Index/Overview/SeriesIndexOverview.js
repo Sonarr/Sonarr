@@ -70,7 +70,6 @@ class SeriesIndexOverview extends Component {
 
   render() {
     const {
-      style,
       id,
       title,
       overview,
@@ -121,7 +120,7 @@ class SeriesIndexOverview extends Component {
     const overviewHeight = contentHeight - titleRowHeight;
 
     return (
-      <div className={styles.container} style={style}>
+      <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.poster}>
             <div className={styles.posterContainer}>
@@ -242,7 +241,6 @@ class SeriesIndexOverview extends Component {
 }
 
 SeriesIndexOverview.propTypes = {
-  style: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   overview: PropTypes.string.isRequired,

@@ -67,7 +67,6 @@ class SeriesIndexPoster extends Component {
 
   render() {
     const {
-      style,
       id,
       title,
       monitored,
@@ -115,147 +114,144 @@ class SeriesIndexPoster extends Component {
     };
 
     return (
-      <div className={styles.container} style={style}>
-        <div className={styles.content}>
-          <div className={styles.posterContainer}>
-            <Label className={styles.controls}>
-              <SpinnerIconButton
-                className={styles.action}
-                name={icons.REFRESH}
-                title="Refresh series"
-                isSpinning={isRefreshingSeries}
-                onPress={onRefreshSeriesPress}
-              />
-
-              {
-                showSearchAction &&
-                  <SpinnerIconButton
-                    className={styles.action}
-                    name={icons.SEARCH}
-                    title="Search for monitored episodes"
-                    isSpinning={isSearchingSeries}
-                    onPress={onSearchPress}
-                  />
-              }
-
-              <IconButton
-                className={styles.action}
-                name={icons.EDIT}
-                title="Edit Series"
-                onPress={this.onEditSeriesPress}
-              />
-            </Label>
+      <div className={styles.content}>
+        <div className={styles.posterContainer}>
+          <Label className={styles.controls}>
+            <SpinnerIconButton
+              className={styles.action}
+              name={icons.REFRESH}
+              title="Refresh series"
+              isSpinning={isRefreshingSeries}
+              onPress={onRefreshSeriesPress}
+            />
 
             {
-              status === 'ended' &&
-                <div
-                  className={styles.ended}
-                  title="Ended"
+              showSearchAction &&
+                <SpinnerIconButton
+                  className={styles.action}
+                  name={icons.SEARCH}
+                  title="Search for monitored episodes"
+                  isSpinning={isSearchingSeries}
+                  onPress={onSearchPress}
                 />
             }
 
-            <Link
-              className={styles.link}
-              style={elementStyle}
-              to={link}
-            >
-              <SeriesPoster
-                style={elementStyle}
-                images={images}
-                size={250}
-                lazy={false}
-                overflow={true}
-                onError={this.onPosterLoadError}
-                onLoad={this.onPosterLoad}
+            <IconButton
+              className={styles.action}
+              name={icons.EDIT}
+              title="Edit Series"
+              onPress={this.onEditSeriesPress}
+            />
+          </Label>
+
+          {
+            status === 'ended' &&
+              <div
+                className={styles.ended}
+                title="Ended"
               />
-
-              {
-                hasPosterError &&
-                  <div className={styles.overlayTitle}>
-                    {title}
-                  </div>
-              }
-            </Link>
-          </div>
-
-          <SeriesIndexProgressBar
-            monitored={monitored}
-            status={status}
-            episodeCount={episodeCount}
-            episodeFileCount={episodeFileCount}
-            totalEpisodeCount={totalEpisodeCount}
-            posterWidth={posterWidth}
-            detailedProgressBar={detailedProgressBar}
-          />
-
-          {
-            showTitle &&
-              <div className={styles.title}>
-                {title}
-              </div>
           }
 
-          {
-            showMonitored &&
-              <div className={styles.title}>
-                {monitored ? 'Monitored' : 'Unmonitored'}
-              </div>
-          }
+          <Link
+            className={styles.link}
+            style={elementStyle}
+            to={link}
+          >
+            <SeriesPoster
+              style={elementStyle}
+              images={images}
+              size={250}
+              lazy={false}
+              overflow={true}
+              onError={this.onPosterLoadError}
+              onLoad={this.onPosterLoad}
+            />
 
-          {
-            showQualityProfile &&
-              <div className={styles.title}>
-                {qualityProfile.name}
-              </div>
-          }
-
-          {
-            nextAiring &&
-              <div className={styles.nextAiring}>
-                {
-                  getRelativeDate(
-                    nextAiring,
-                    shortDateFormat,
-                    showRelativeDates,
-                    {
-                      timeFormat,
-                      timeForToday: true
-                    }
-                  )
-                }
-              </div>
-          }
-
-          <SeriesIndexPosterInfo
-            seasonCount={seasonCount}
-            qualityProfile={qualityProfile}
-            showQualityProfile={showQualityProfile}
-            showRelativeDates={showRelativeDates}
-            shortDateFormat={shortDateFormat}
-            timeFormat={timeFormat}
-            {...otherProps}
-          />
-
-          <EditSeriesModalConnector
-            isOpen={isEditSeriesModalOpen}
-            seriesId={id}
-            onModalClose={this.onEditSeriesModalClose}
-            onDeleteSeriesPress={this.onDeleteSeriesPress}
-          />
-
-          <DeleteSeriesModal
-            isOpen={isDeleteSeriesModalOpen}
-            seriesId={id}
-            onModalClose={this.onDeleteSeriesModalClose}
-          />
+            {
+              hasPosterError &&
+                <div className={styles.overlayTitle}>
+                  {title}
+                </div>
+            }
+          </Link>
         </div>
+
+        <SeriesIndexProgressBar
+          monitored={monitored}
+          status={status}
+          episodeCount={episodeCount}
+          episodeFileCount={episodeFileCount}
+          totalEpisodeCount={totalEpisodeCount}
+          posterWidth={posterWidth}
+          detailedProgressBar={detailedProgressBar}
+        />
+
+        {
+          showTitle &&
+            <div className={styles.title}>
+              {title}
+            </div>
+        }
+
+        {
+          showMonitored &&
+            <div className={styles.title}>
+              {monitored ? 'Monitored' : 'Unmonitored'}
+            </div>
+        }
+
+        {
+          showQualityProfile &&
+            <div className={styles.title}>
+              {qualityProfile.name}
+            </div>
+        }
+
+        {
+          nextAiring &&
+            <div className={styles.nextAiring}>
+              {
+                getRelativeDate(
+                  nextAiring,
+                  shortDateFormat,
+                  showRelativeDates,
+                  {
+                    timeFormat,
+                    timeForToday: true
+                  }
+                )
+              }
+            </div>
+        }
+
+        <SeriesIndexPosterInfo
+          seasonCount={seasonCount}
+          qualityProfile={qualityProfile}
+          showQualityProfile={showQualityProfile}
+          showRelativeDates={showRelativeDates}
+          shortDateFormat={shortDateFormat}
+          timeFormat={timeFormat}
+          {...otherProps}
+        />
+
+        <EditSeriesModalConnector
+          isOpen={isEditSeriesModalOpen}
+          seriesId={id}
+          onModalClose={this.onEditSeriesModalClose}
+          onDeleteSeriesPress={this.onDeleteSeriesPress}
+        />
+
+        <DeleteSeriesModal
+          isOpen={isDeleteSeriesModalOpen}
+          seriesId={id}
+          onModalClose={this.onDeleteSeriesModalClose}
+        />
       </div>
     );
   }
 }
 
 SeriesIndexPoster.propTypes = {
-  style: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
