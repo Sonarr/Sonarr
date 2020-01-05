@@ -1,29 +1,18 @@
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
-import Fuse from 'fuse.js';
 import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import keyboardShortcuts, { shortcuts } from 'Components/keyboardShortcuts';
 import SeriesSearchResult from './SeriesSearchResult';
+import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import FuseWorker from './fuse.worker';
 import styles from './SeriesSearchInput.css';
 
+const LOADING_TYPE = 'suggestionsLoading';
 const ADD_NEW_TYPE = 'addNew';
-
-const fuseOptions = {
-  shouldSort: true,
-  includeMatches: true,
-  threshold: 0.3,
-  location: 0,
-  distance: 100,
-  maxPatternLength: 32,
-  minMatchCharLength: 1,
-  keys: [
-    'title',
-    'alternateTitles.title',
-    'tags.label'
-  ]
-};
+const workerInstance = new FuseWorker();
 
 class SeriesSearchInput extends Component {
 
@@ -43,6 +32,7 @@ class SeriesSearchInput extends Component {
 
   componentDidMount() {
     this.props.bindShortcut(shortcuts.SERIES_SEARCH_INPUT.key, this.focusInput);
+    workerInstance.addEventListener('message', this.onSuggestionsReceived, false);
   }
 
   //
@@ -79,6 +69,16 @@ class SeriesSearchInput extends Component {
         <div className={styles.addNewSeriesSuggestion}>
           Search for {query}
         </div>
+      );
+    }
+
+    if (item.type === LOADING_TYPE) {
+      return (
+        <LoadingIndicator
+          className={styles.loading}
+          rippleClassName={styles.ripple}
+          size={30}
+        />
       );
     }
 
@@ -154,35 +154,30 @@ class SeriesSearchInput extends Component {
   }
 
   onSuggestionsFetchRequested = ({ value }) => {
-    const { series } = this.props;
-    let suggestions = [];
-
-    if (value.length === 1) {
-      suggestions = series.reduce((acc, s) => {
-        if (s.firstCharacter === value.toLowerCase()) {
-          acc.push({
-            item: s,
-            indices: [
-              [0, 0]
-            ],
-            matches: [
-              {
-                value: s.title,
-                key: 'title'
-              }
-            ],
-            arrayIndex: 0
-          });
+    this.setState({
+      suggestions: [
+        {
+          type: LOADING_TYPE,
+          title: value
         }
+      ]
+    });
+    this.requestSuggestions(value);
+  };
 
-        return acc;
-      }, []);
-    } else {
-      const fuse = new Fuse(series, fuseOptions);
-      suggestions = fuse.search(value);
-    }
+  requestSuggestions = _.debounce((value) => {
+    const payload = {
+      value,
+      series: this.props.series
+    };
 
-    this.setState({ suggestions });
+    workerInstance.postMessage(payload);
+  }, 250);
+
+  onSuggestionsReceived = (message) => {
+    this.setState({
+      suggestions: message.data
+    });
   }
 
   onSuggestionsClearRequested = () => {

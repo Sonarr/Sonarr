@@ -3,6 +3,18 @@
   align-items: center;
 }
 
+.loading {
+  margin-top: 18px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.ripple {
+  composes: ripple from '~Components/Loading/LoadingIndicator.css';
+
+  border: 2px solid $toolbarColor;
+}
+
 .input {
   margin-left: 8px;
   width: 200px;
