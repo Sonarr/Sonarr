@@ -12,7 +12,6 @@ import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import ProgressBar from 'Components/ProgressBar';
 import TagListConnector from 'Components/TagListConnector';
 import CheckInput from 'Components/Form/CheckInput';
-import VirtualTableRow from 'Components/Table/VirtualTableRow';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
@@ -79,7 +78,6 @@ class SeriesIndexRow extends Component {
 
   render() {
     const {
-      style,
       id,
       monitored,
       status,
@@ -126,7 +124,7 @@ class SeriesIndexRow extends Component {
     } = this.state;
 
     return (
-      <VirtualTableRow style={style}>
+      <>
         {
           columns.map((column) => {
             const {
@@ -494,13 +492,12 @@ class SeriesIndexRow extends Component {
           seriesId={id}
           onModalClose={this.onDeleteSeriesModalClose}
         />
-      </VirtualTableRow>
+      </>
     );
   }
 }
 
 SeriesIndexRow.propTypes = {
-  style: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
   monitored: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,

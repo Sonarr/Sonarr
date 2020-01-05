@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
 import { sortDirections } from 'Helpers/Props';
 import VirtualTable from 'Components/Table/VirtualTable';
+import VirtualTableRow from 'Components/Table/VirtualTableRow';
 import SeriesIndexItemConnector from 'Series/Index/SeriesIndexItemConnector';
 import SeriesIndexHeaderConnector from './SeriesIndexHeaderConnector';
 import SeriesIndexRow from './SeriesIndexRow';
@@ -50,16 +51,20 @@ class SeriesIndexTable extends Component {
     const series = items[rowIndex];
 
     return (
-      <SeriesIndexItemConnector
+      <VirtualTableRow
         key={key}
-        component={SeriesIndexRow}
         style={style}
-        columns={columns}
-        seriesId={series.id}
-        languageProfileId={series.languageProfileId}
-        qualityProfileId={series.qualityProfileId}
-        showBanners={showBanners}
-      />
+      >
+        <SeriesIndexItemConnector
+          key={series.id}
+          component={SeriesIndexRow}
+          columns={columns}
+          seriesId={series.id}
+          languageProfileId={series.languageProfileId}
+          qualityProfileId={series.qualityProfileId}
+          showBanners={showBanners}
+        />
+      </VirtualTableRow>
     );
   }
 
@@ -108,6 +113,7 @@ class SeriesIndexTable extends Component {
         sortDirection={sortDirection}
         onRender={onRender}
         onScroll={onScroll}
+        isScrollingOptOut={true}
       />
     );
   }

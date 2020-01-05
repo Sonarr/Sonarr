@@ -1,9 +1,5 @@
 $hoverScale: 1.05;
 
-.container {
-  padding: 10px;
-}
-
 .content {
   transition: all 200ms ease-in;
 

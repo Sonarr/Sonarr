@@ -220,24 +220,30 @@ class SeriesIndexPosters extends Component {
     }
 
     return (
-      <SeriesIndexItemConnector
+      <div
+        className={styles.container}
         key={key}
-        component={SeriesIndexPoster}
-        sortKey={sortKey}
-        posterWidth={posterWidth}
-        posterHeight={posterHeight}
-        detailedProgressBar={detailedProgressBar}
-        showTitle={showTitle}
-        showMonitored={showMonitored}
-        showQualityProfile={showQualityProfile}
-        showRelativeDates={showRelativeDates}
-        shortDateFormat={shortDateFormat}
-        timeFormat={timeFormat}
         style={style}
-        seriesId={series.id}
-        languageProfileId={series.languageProfileId}
-        qualityProfileId={series.qualityProfileId}
-      />
+      >
+        <SeriesIndexItemConnector
+          key={series.id}
+          component={SeriesIndexPoster}
+          sortKey={sortKey}
+          posterWidth={posterWidth}
+          posterHeight={posterHeight}
+          detailedProgressBar={detailedProgressBar}
+          showTitle={showTitle}
+          showMonitored={showMonitored}
+          showQualityProfile={showQualityProfile}
+          showRelativeDates={showRelativeDates}
+          shortDateFormat={shortDateFormat}
+          timeFormat={timeFormat}
+          style={style}
+          seriesId={series.id}
+          languageProfileId={series.languageProfileId}
+          qualityProfileId={series.qualityProfileId}
+        />
+      </div>
     );
   }
 
@@ -297,6 +303,7 @@ class SeriesIndexPosters extends Component {
                 overscanRowCount={2}
                 cellRenderer={this.cellRenderer}
                 onSectionRendered={this.onSectionRendered}
+                isScrollingOptOut={true}
               />
             );
           }

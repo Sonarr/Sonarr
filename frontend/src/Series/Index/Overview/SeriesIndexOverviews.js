@@ -185,24 +185,30 @@ class SeriesIndexOverviews extends Component {
     }
 
     return (
-      <SeriesIndexItemConnector
+      <div
+        className={styles.container}
         key={key}
-        component={SeriesIndexOverview}
-        sortKey={sortKey}
-        posterWidth={posterWidth}
-        posterHeight={posterHeight}
-        rowHeight={rowHeight}
-        overviewOptions={overviewOptions}
-        showRelativeDates={showRelativeDates}
-        shortDateFormat={shortDateFormat}
-        longDateFormat={longDateFormat}
-        timeFormat={timeFormat}
-        isSmallScreen={isSmallScreen}
         style={style}
-        seriesId={series.id}
-        languageProfileId={series.languageProfileId}
-        qualityProfileId={series.qualityProfileId}
-      />
+      >
+        <SeriesIndexItemConnector
+          key={series.id}
+          component={SeriesIndexOverview}
+          sortKey={sortKey}
+          posterWidth={posterWidth}
+          posterHeight={posterHeight}
+          rowHeight={rowHeight}
+          overviewOptions={overviewOptions}
+          showRelativeDates={showRelativeDates}
+          shortDateFormat={shortDateFormat}
+          longDateFormat={longDateFormat}
+          timeFormat={timeFormat}
+          isSmallScreen={isSmallScreen}
+          style={style}
+          seriesId={series.id}
+          languageProfileId={series.languageProfileId}
+          qualityProfileId={series.qualityProfileId}
+        />
+      </div>
     );
   }
 
@@ -258,6 +264,7 @@ class SeriesIndexOverviews extends Component {
                 overscanRowCount={2}
                 cellRenderer={this.cellRenderer}
                 onSectionRendered={this.onSectionRendered}
+                isScrollingOptOut={true}
               />
             );
           }
