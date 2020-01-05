@@ -186,6 +186,15 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
+        public void should_fix_double_slashes_unix()
+        {
+            var osPath = new OsPath(@"/just/a//test////to/verify the/slashes/");
+
+            osPath.Kind.Should().Be(OsPathKind.Unix);
+            osPath.FullPath.Should().Be(@"/just/a/test/to/verify the/slashes/");
+        }
+
+        [Test]
         public void should_combine_mixed_slashes()
         {
             var left = new OsPath(@"C:/on/windows/transmission");
