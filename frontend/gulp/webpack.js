@@ -6,17 +6,20 @@ const webpack = require('webpack');
 const errorHandler = require('./helpers/errorHandler');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const uiFolder = 'UI';
 const frontendFolder = path.join(__dirname, '..');
 const srcFolder = path.join(frontendFolder, 'src');
 const isProduction = process.argv.indexOf('--production') > -1;
+const isProfiling = isProduction && process.argv.indexOf('--profile') > -1;
 
 const distFolder = path.resolve(frontendFolder, '..', '_output', uiFolder);
 
 console.log('Source Folder:', srcFolder);
 console.log('Output Folder:', distFolder);
 console.log('isProduction:', isProduction);
+console.log('isProfiling:', isProduction);
 
 const cssVarsFiles = [
   '../src/Styles/Variables/colors',
@@ -212,6 +215,24 @@ const config = {
     ]
   }
 };
+
+if (isProfiling) {
+  config.resolve.alias['react-dom$'] = 'react-dom/profiling';
+  config.resolve.alias['scheduler/tracing'] = 'scheduler/tracing-profiling';
+
+  config.optimization.minimizer = [
+    new TerserPlugin({
+      cache: true,
+      parallel: true,
+      sourceMap: true, // Must be set to true if using source-maps in production
+      terserOptions: {
+        mangle: false,
+        keep_classnames: true,
+        keep_fnames: true
+      }
+    })
+  ];
+}
 
 gulp.task('webpack', () => {
   return webpackStream(config)
