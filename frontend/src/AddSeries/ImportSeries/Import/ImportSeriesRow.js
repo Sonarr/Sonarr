@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { inputTypes } from 'Helpers/Props';
 import FormInputGroup from 'Components/Form/FormInputGroup';
-import VirtualTableRow from 'Components/Table/VirtualTableRow';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import VirtualTableSelectCell from 'Components/Table/Cells/VirtualTableSelectCell';
 import ImportSeriesSelectSeriesConnector from './SelectSeries/ImportSeriesSelectSeriesConnector';
@@ -10,7 +9,6 @@ import styles from './ImportSeriesRow.css';
 
 function ImportSeriesRow(props) {
   const {
-    style,
     id,
     monitor,
     qualityProfileId,
@@ -26,7 +24,7 @@ function ImportSeriesRow(props) {
   } = props;
 
   return (
-    <VirtualTableRow style={style}>
+    <>
       <VirtualTableSelectCell
         inputClassName={styles.selectInput}
         id={id}
@@ -93,12 +91,11 @@ function ImportSeriesRow(props) {
           onInputChange={onInputChange}
         />
       </VirtualTableRowCell>
-    </VirtualTableRow>
+    </>
   );
 }
 
 ImportSeriesRow.propTypes = {
-  style: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   monitor: PropTypes.string.isRequired,
   qualityProfileId: PropTypes.number.isRequired,

@@ -21,17 +21,15 @@ class ImportSeries extends Component {
       allSelected: false,
       allUnselected: false,
       lastToggled: null,
-      selectedState: {},
-      contentBody: null,
-      scrollTop: 0
+      selectedState: {}
     };
   }
 
   //
   // Control
 
-  setContentBodyRef = (ref) => {
-    this.setState({ contentBody: ref });
+  setScrollerRef = (ref) => {
+    this.setState({ scroller: ref });
   }
 
   //
@@ -94,13 +92,13 @@ class ImportSeries extends Component {
       allSelected,
       allUnselected,
       selectedState,
-      contentBody
+      scroller
     } = this.state;
 
     return (
       <PageContent title="Import Series">
         <PageContentBodyConnector
-          ref={this.setContentBodyRef}
+          registerScroller={this.setScrollerRef}
           onScroll={this.onScroll}
         >
           {
@@ -121,20 +119,18 @@ class ImportSeries extends Component {
           }
 
           {
-            !rootFoldersError && rootFoldersPopulated && !!unmappedFolders.length && contentBody &&
+            !rootFoldersError && rootFoldersPopulated && !!unmappedFolders.length && scroller &&
               <ImportSeriesTableConnector
                 rootFolderId={rootFolderId}
                 unmappedFolders={unmappedFolders}
                 allSelected={allSelected}
                 allUnselected={allUnselected}
                 selectedState={selectedState}
-                contentBody={contentBody}
+                scroller={scroller}
                 showLanguageProfile={showLanguageProfile}
-                scrollTop={this.state.scrollTop}
                 onSelectAllChange={this.onSelectAllChange}
                 onSelectedChange={this.onSelectedChange}
                 onRemoveSelectedStateItem={this.onRemoveSelectedStateItem}
-                onScroll={this.onScroll}
               />
           }
         </PageContentBodyConnector>
