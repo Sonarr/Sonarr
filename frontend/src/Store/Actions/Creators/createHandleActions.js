@@ -72,18 +72,31 @@ export default function createHandleActions(handlers, defaultState, section) {
       if (section === baseSection) {
         const newState = getSectionState(state, payloadSection);
         const items = newState.items;
-        const index = _.findIndex(items, { id: payload.id });
+
+        if (!newState.itemMap) {
+          newState.itemMap = createItemMap(items);
+        }
+
+        const index = payload.id in newState.itemMap ? newState.itemMap[payload.id] : -1;
 
         newState.items = [...items];
 
         // TODO: Move adding to it's own reducer
         if (index >= 0) {
           const item = items[index];
+          const newItem = { ...item, ...otherProps };
 
-          newState.items.splice(index, 1, { ...item, ...otherProps });
+          // if the item to update is equal to existing, then don't actually update
+          // to prevent costly reselections
+          if (_.isEqual(item, newItem)) {
+            return state;
+          }
+
+          newState.items.splice(index, 1, newItem);
         } else if (!updateOnly) {
-          newState.items.push({ ...otherProps });
-          newState.itemMap = createItemMap(newState.items);
+          const newIndex = newState.items.push({ ...otherProps }) - 1;
+
+          newState.itemMap[payload.id] = newIndex;
         }
 
         return updateSectionState(state, payloadSection, newState);
