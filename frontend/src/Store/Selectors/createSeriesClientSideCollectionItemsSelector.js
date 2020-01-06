@@ -1,6 +1,6 @@
-import { createSelector } from 'reselect';
-import createDeepEqualSelector from './createDeepEqualSelector';
+import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
 import createClientSideCollectionSelector from './createClientSideCollectionSelector';
+import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
 
 function createUnoptimizedSelector(uiSection) {
   return createSelector(
@@ -26,8 +26,17 @@ function createUnoptimizedSelector(uiSection) {
   );
 }
 
+function seriesListEqual(a, b) {
+  return hasDifferentItemsOrOrder(a, b);
+}
+
+const createSeriesEqualSelector = createSelectorCreator(
+  defaultMemoize,
+  seriesListEqual
+);
+
 function createSeriesClientSideCollectionItemsSelector(uiSection) {
-  return createDeepEqualSelector(
+  return createSeriesEqualSelector(
     createUnoptimizedSelector(uiSection),
     (series) => series
   );
