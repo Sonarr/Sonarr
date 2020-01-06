@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
             Subject.SetEpisodeMonitoredStatus(_series, null);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>()), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
 
             Mocker.GetMock<IEpisodeService>()
                   .Verify(v => v.UpdateEpisodes(It.IsAny<List<Episode>>()), Times.Never());
@@ -273,13 +273,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
         private void VerifySeasonMonitored(Func<Season, bool> predicate)
         {
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Where(predicate).All(n => n.Monitored)), It.IsAny<bool>()));
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Where(predicate).All(n => n.Monitored)), It.IsAny<bool>(), It.IsAny<bool>()));
         }
 
         private void VerifySeasonNotMonitored(Func<Season, bool> predicate)
         {
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Where(predicate).All(n => !n.Monitored)), It.IsAny<bool>()));
+                  .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Where(predicate).All(n => !n.Monitored)), It.IsAny<bool>(), It.IsAny<bool>()));
         }
     }
 }

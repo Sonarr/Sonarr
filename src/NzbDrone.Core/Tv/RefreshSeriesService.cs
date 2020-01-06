@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Tv
                 if (series.Status != SeriesStatusType.Deleted)
                 {
                     series.Status = SeriesStatusType.Deleted;
-                    _seriesService.UpdateSeries(series);
+                    _seriesService.UpdateSeries(series, publishUpdatedEvent: false);
                     _logger.Debug("Series marked as deleted on tvdb for {0}", series.Title);
                     _eventAggregator.PublishEvent(new SeriesUpdatedEvent(series));
                 }
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Tv
 
             series.Seasons = UpdateSeasons(series, seriesInfo);
 
-            _seriesService.UpdateSeries(series);
+            _seriesService.UpdateSeries(series, publishUpdatedEvent: false);
             _refreshEpisodeService.RefreshEpisodeInfo(series, episodes);
 
             _logger.Debug("Finished series refresh for {0}", series.Title);

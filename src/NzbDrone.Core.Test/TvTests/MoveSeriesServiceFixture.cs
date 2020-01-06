@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.TvTests
             ExceptionVerification.ExpectedErrors(1);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>()), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]

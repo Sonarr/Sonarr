@@ -102,8 +102,9 @@ namespace NzbDrone.Core.MediaCover
             return Path.Combine(_coverRootFolder, seriesId.ToString());
         }
 
-        private void EnsureCovers(Series series)
+        private bool EnsureCovers(Series series)
         {
+            bool updated = false;
             var toResize = new List<Tuple<MediaCover, bool>>();
 
             foreach (var cover in series.Images)
@@ -116,6 +117,7 @@ namespace NzbDrone.Core.MediaCover
                     if (!alreadyExists)
                     {
                         DownloadCover(series, cover);
+                        updated = true;
                     }
                 }
                 catch (WebException e)
@@ -143,6 +145,8 @@ namespace NzbDrone.Core.MediaCover
             {
                 _semaphore.Release();
             }
+
+            return updated;
         }
 
         private void DownloadCover(Series series, MediaCover cover)
@@ -200,8 +204,11 @@ namespace NzbDrone.Core.MediaCover
 
         public void HandleAsync(SeriesUpdatedEvent message)
         {
-            EnsureCovers(message.Series);
-            _eventAggregator.PublishEvent(new MediaCoversUpdatedEvent(message.Series));
+            var updated = EnsureCovers(message.Series);
+            if (updated)
+            {
+                _eventAggregator.PublishEvent(new MediaCoversUpdatedEvent(message.Series));
+            }
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
