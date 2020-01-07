@@ -201,6 +201,26 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         private bool AddSeriesSearchParameters(BroadcastheNetTorrentQuery parameters, SearchCriteriaBase searchCriteria)
         {
+            if (Settings.IncludeSceneReleases)
+            {
+                parameters.Origin.Add("Scene");
+            }
+
+            if (Settings.IncludeP2PReleases)
+            {
+                parameters.Origin.Add("P2P");
+            }
+
+            if (Settings.IncludeUserReleases)
+            {
+                parameters.Origin.Add("User");
+            }
+
+            if (Settings.IncludeInternalReleases)
+            {
+                parameters.Origin.Add("Internal");
+            }
+
             if (searchCriteria.Series.TvdbId != 0)
             {
                 parameters.Tvdb = string.Format("{0}", searchCriteria.Series.TvdbId);
