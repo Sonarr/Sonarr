@@ -20,6 +20,7 @@ import SeriesTypeSelectInput from './SeriesTypeSelectInput';
 import EnhancedSelectInput from './EnhancedSelectInput';
 import EnhancedSelectInputConnector from './EnhancedSelectInputConnector';
 import TagInputConnector from './TagInputConnector';
+import TagSelectInputConnector from './TagSelectInputConnector';
 import TextTagInputConnector from './TextTagInputConnector';
 import TextInput from './TextInput';
 import FormInputHelpText from './FormInputHelpText';
@@ -83,6 +84,9 @@ function getComponent(type) {
 
     case inputTypes.TEXT_TAG:
       return TextTagInputConnector;
+
+    case inputTypes.TAG_SELECT:
+      return TagSelectInputConnector;
 
     default:
       return TextInput;
