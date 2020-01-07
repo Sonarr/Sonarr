@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         [FieldDefinition(6, Type = FieldType.Checkbox, Label = "Include User Releases", Advanced = true, HelpText = "Include releases with User origin in results")]
         public bool IncludeUserReleases { get; set; }
 
-        [FieldDefinition(6, Type = FieldType.Checkbox, Label = "Include Internal Releases", Advanced = true, HelpText = "Include releases with Internal origin in results")]
+        [FieldDefinition(7, Type = FieldType.Checkbox, Label = "Include Internal Releases", Advanced = true, HelpText = "Include releases with Internal origin in results")]
         public bool IncludeInternalReleases { get; set; }
 
         public NzbDroneValidationResult Validate()
