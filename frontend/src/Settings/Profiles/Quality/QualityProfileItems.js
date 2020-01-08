@@ -74,7 +74,7 @@ class QualityProfileItems extends Component {
 
         <div>
           <FormInputHelpText
-            text="Qualities higher in the list are more preferred. Only checked qualities are wanted"
+            text="Qualities higher in the list are more preferred. Qualities within the same group are equal. Only checked qualities are wanted"
           />
 
           {
