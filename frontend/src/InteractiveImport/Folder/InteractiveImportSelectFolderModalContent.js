@@ -93,7 +93,7 @@ class InteractiveImportSelectFolderModalContent extends Component {
                 >
                   <TableBody>
                     {
-                      recentFolders.map((recentFolder) => {
+                      recentFolders.slice(0).reverse().map((recentFolder) => {
                         return (
                           <RecentFolderRow
                             key={recentFolder.folder}
