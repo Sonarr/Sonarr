@@ -63,7 +63,7 @@ class EnhancedSelectInputOption extends Component {
 
 EnhancedSelectInputOption.propTypes = {
   className: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   isSelected: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   isHidden: PropTypes.bool.isRequired,
