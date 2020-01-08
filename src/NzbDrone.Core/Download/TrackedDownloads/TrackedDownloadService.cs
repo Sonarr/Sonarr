@@ -110,19 +110,27 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     var firstHistoryItem = historyItems.First();
                     var state = GetStateFromHistory(firstHistoryItem.EventType);
 
+                    trackedDownload.State = state;
+
+                    // TODO: Restore check to confirm all files were imported
+                    // This will treat partially imported downloads as imported (as it was before), which means a partially imported download after a
+                    // restart will get marked as imported without importing the restart of the files.
+
                     // One potential issue here is if the latest is imported, but other episodes are ignored or never imported.
                     // It's unlikely that will happen, but could happen if additional episodes are added to season after it's already imported.
-                    
-                    if (state == TrackedDownloadState.Imported)
-                    {
-                        var allImported = _trackedDownloadAlreadyImported.IsImported(trackedDownload, historyItems);
 
-                        trackedDownload.State = allImported ? TrackedDownloadState.Imported : TrackedDownloadState.Downloading;
-                    }
-                    else
-                    {
-                        trackedDownload.State = state;
-                    }
+//                    if (state == TrackedDownloadState.Imported)
+//                    {
+//                        trackedDownload.State = TrackedDownloadState.Imported;
+//
+//                        var allImported = _trackedDownloadAlreadyImported.IsImported(trackedDownload, historyItems);
+//
+//                        trackedDownload.State = allImported ? TrackedDownloadState.Imported : TrackedDownloadState.Downloading;
+//                    }
+//                    else
+//                    {
+//                        trackedDownload.State = state;
+//                    }
 
                     var grabbedEvent = historyItems.FirstOrDefault(v => v.EventType == HistoryEventType.Grabbed);
                     trackedDownload.Indexer = grabbedEvent?.Data["indexer"];
