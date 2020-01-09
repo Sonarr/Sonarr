@@ -1,5 +1,5 @@
 #! /bin/bash
-msBuildVersion='Current'
+msBuildVersion='15.0'
 outputFolder='./_output'
 outputFolderWindows='./_output_windows'
 outputFolderLinux='./_output_linux'
