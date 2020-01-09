@@ -6,9 +6,9 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
-namespace NzbDrone.Core.Indexers.BroadcastheNet
+namespace NzbDrone.Core.Indexers.BroadcasTheNet
 {
-    public class BroadcastheNetParser : IParseIndexerResponse
+    public class BroadcasTheNetParser : IParseIndexerResponse
     {
         private static readonly Regex RegexProtocol = new Regex("^https?:", RegexOptions.Compiled);
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             }
 
 
-            JsonRpcResponse<BroadcastheNetTorrents> jsonResponse = new HttpResponse<JsonRpcResponse<BroadcastheNetTorrents>>(indexerResponse.HttpResponse).Resource;
+            JsonRpcResponse<BroadcasTheNetTorrents> jsonResponse = new HttpResponse<JsonRpcResponse<BroadcasTheNetTorrents>>(indexerResponse.HttpResponse).Resource;
 
             if (jsonResponse.Error != null || jsonResponse.Result == null)
             {

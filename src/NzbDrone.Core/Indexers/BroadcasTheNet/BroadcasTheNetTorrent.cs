@@ -1,6 +1,6 @@
-﻿namespace NzbDrone.Core.Indexers.BroadcastheNet
+﻿namespace NzbDrone.Core.Indexers.BroadcasTheNet
 {
-    public class BroadcastheNetTorrent
+    public class BroadcasTheNetTorrent
     {
         public string GroupName { get; set; }
         public int GroupID { get; set; }

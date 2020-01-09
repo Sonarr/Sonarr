@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.BroadcastheNet;
+using NzbDrone.Core.Indexers.BroadcasTheNet;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -13,22 +13,22 @@ using FluentAssertions;
 namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
 {
     [TestFixture]
-    public class BroadcastheNetFixture : CoreTest<BroadcastheNet>
+    public class BroadcastheNetFixture : CoreTest<BroadcasTheNet>
     {
         [SetUp]
         public void Setup()
         {
             Subject.Definition = new IndexerDefinition()
                 {
-                    Name = "BroadcastheNet",
-                    Settings = new BroadcastheNetSettings() { ApiKey = "abc", BaseUrl = "https://api.broadcasthe.net/" }
+                    Name = "BroadcasTheNet",
+                    Settings = new BroadcasTheNetSettings() { ApiKey = "abc", BaseUrl = "https://api.broadcasthe.net/" }
                 };
         }
 
         [Test]
         public void should_parse_recent_feed_from_BroadcastheNet()
         {
-            var recentFeed = ReadAllText(@"Files/Indexers/BroadcastheNet/RecentFeed.json");
+            var recentFeed = ReadAllText(@"Files/Indexers/BroadcasTheNet/RecentFeed.json");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.POST)))
@@ -137,9 +137,9 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
         [Test]
         public void should_replace_https_http_as_needed()
         {
-            var recentFeed = ReadAllText(@"Files/Indexers/BroadcastheNet/RecentFeed.json");
+            var recentFeed = ReadAllText(@"Files/Indexers/BroadcasTheNet/RecentFeed.json");
 
-            (Subject.Definition.Settings as BroadcastheNetSettings).BaseUrl = "http://api.broadcasthe.net/";
+            (Subject.Definition.Settings as BroadcasTheNetSettings).BaseUrl = "http://api.broadcasthe.net/";
 
             recentFeed = recentFeed.Replace("http:", "https:");
 

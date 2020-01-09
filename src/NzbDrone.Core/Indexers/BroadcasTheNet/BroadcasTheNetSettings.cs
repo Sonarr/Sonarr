@@ -2,9 +2,9 @@
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
 
-namespace NzbDrone.Core.Indexers.BroadcastheNet
+namespace NzbDrone.Core.Indexers.BroadcasTheNet
 {
-    public class BroadcastheNetSettingsValidator : AbstractValidator<BroadcastheNetSettings>
+    public class BroadcastheNetSettingsValidator : AbstractValidator<BroadcasTheNetSettings>
     {
         public BroadcastheNetSettingsValidator()
         {
@@ -15,11 +15,11 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         }
     }
 
-    public class BroadcastheNetSettings : ITorrentIndexerSettings
+    public class BroadcasTheNetSettings : ITorrentIndexerSettings
     {
         private static readonly BroadcastheNetSettingsValidator Validator = new BroadcastheNetSettingsValidator();
 
-        public BroadcastheNetSettings()
+        public BroadcasTheNetSettings()
         {
             BaseUrl = "http://api.broadcasthe.net/";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;

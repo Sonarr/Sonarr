@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace NzbDrone.Core.Indexers.BroadcastheNet
+namespace NzbDrone.Core.Indexers.BroadcasTheNet
 {
-    public class BroadcastheNetTorrentQuery
+    public class BroadcasTheNetTorrentQuery
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Id { get; set; }
@@ -31,9 +31,9 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Age { get; set; }
 
-        public BroadcastheNetTorrentQuery Clone()
+        public BroadcasTheNetTorrentQuery Clone()
         {
-            return MemberwiseClone() as BroadcastheNetTorrentQuery;
+            return MemberwiseClone() as BroadcasTheNetTorrentQuery;
         }
     }
 }

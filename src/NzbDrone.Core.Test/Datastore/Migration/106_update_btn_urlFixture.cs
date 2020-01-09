@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 c.Insert.IntoTable("Indexers").Row(new
                 {
                     Name = "btn_old_url",
-                    Implementation = "BroadcastheNet",
+                    Implementation = "BroadcasTheNet",
                     Settings = new BroadcastheNetSettings106
                     {
                         BaseUrl = oldUrl
                     }.ToJson(),
-                    ConfigContract = "BroadcastheNetSettings"
+                    ConfigContract = "BroadcasTheNetSettings"
                 });
             });
 
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     {
                         BaseUrl = "http://api.btnapps.net",
                     }.ToJson(),
-                    ConfigContract = "BroadcastheNetSettings"
+                    ConfigContract = "BroadcasTheNetSettings"
                 });
             });
 
