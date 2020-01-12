@@ -26,6 +26,7 @@ namespace NzbDrone.Core.MediaCover
         IHandleAsync<SeriesDeletedEvent>,
         IMapCoversToLocal
     {
+        private readonly IMediaCoverProxy _mediaCoverProxy;
         private readonly IImageResizer _resizer;
         private readonly IHttpClient _httpClient;
         private readonly IDiskProvider _diskProvider;
@@ -40,7 +41,8 @@ namespace NzbDrone.Core.MediaCover
         // So limit the number of concurrent resizing tasks
         private static SemaphoreSlim _semaphore = new SemaphoreSlim((int)Math.Ceiling(Environment.ProcessorCount / 2.0));
 
-        public MediaCoverService(IImageResizer resizer,
+        public MediaCoverService(IMediaCoverProxy mediaCoverProxy,
+                                 IImageResizer resizer,
                                  IHttpClient httpClient,
                                  IDiskProvider diskProvider,
                                  IAppFolderInfo appFolderInfo,
@@ -49,6 +51,7 @@ namespace NzbDrone.Core.MediaCover
                                  IEventAggregator eventAggregator,
                                  Logger logger)
         {
+            _mediaCoverProxy = mediaCoverProxy;
             _resizer = resizer;
             _httpClient = httpClient;
             _diskProvider = diskProvider;
@@ -69,16 +72,27 @@ namespace NzbDrone.Core.MediaCover
 
         public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers)
         {
-            foreach (var mediaCover in covers)
+            if (seriesId == 0)
             {
-                var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
-
-                mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
-
-                if (_diskProvider.FileExists(filePath))
+                // Series isn't in Sonarr yet, map via a proxy to circument referrer issues
+                foreach (var mediaCover in covers)
                 {
-                    var lastWrite = _diskProvider.FileGetLastWrite(filePath);
-                    mediaCover.Url += "?lastWrite=" + lastWrite.Ticks;
+                    mediaCover.Url = _mediaCoverProxy.RegisterUrl(mediaCover.Url);
+                }
+            }
+            else
+            {
+                foreach (var mediaCover in covers)
+                {
+                    var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
+
+                    mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
+
+                    if (_diskProvider.FileExists(filePath))
+                    {
+                        var lastWrite = _diskProvider.FileGetLastWrite(filePath);
+                        mediaCover.Url += "?lastWrite=" + lastWrite.Ticks;
+                    }
                 }
             }
         }

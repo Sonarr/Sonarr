@@ -100,7 +100,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
                 var httpResponse = _httpClient.Get<List<ShowResource>>(httpRequest);
 
-                return httpResponse.Resource.SelectList(MapSearhResult);
+                return httpResponse.Resource.SelectList(MapSearchResult);
             }
             catch (HttpException)
             {
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             }
         }
 
-        private Series MapSearhResult(ShowResource show)
+        private Series MapSearchResult(ShowResource show)
         {
             var series = _seriesService.FindByTvdbId(show.TvdbId);
 

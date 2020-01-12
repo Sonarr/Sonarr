@@ -13,12 +13,14 @@ namespace Sonarr.Api.V3.Series
     {
         private readonly ISearchForNewSeries _searchProxy;
         private readonly IBuildFileNames _fileNameBuilder;
+        private readonly IMapCoversToLocal _coverMapper;
 
-        public SeriesLookupModule(ISearchForNewSeries searchProxy, IBuildFileNames fileNameBuilder)
+        public SeriesLookupModule(ISearchForNewSeries searchProxy, IBuildFileNames fileNameBuilder, IMapCoversToLocal coverMapper)
             : base("/series/lookup")
         {
             _searchProxy = searchProxy;
             _fileNameBuilder = fileNameBuilder;
+            _coverMapper = coverMapper;
             Get("/",  x => Search());
         }
 
@@ -33,6 +35,9 @@ namespace Sonarr.Api.V3.Series
             foreach (var currentSeries in series)
             {
                 var resource = currentSeries.ToResource();
+
+                _coverMapper.ConvertToLocalUrls(resource.Id, resource.Images);
+
                 var poster = currentSeries.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Poster);
 
                 if (poster != null)
