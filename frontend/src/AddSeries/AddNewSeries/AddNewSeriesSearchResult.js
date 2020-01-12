@@ -165,6 +165,17 @@ class AddNewSeriesSearchResult extends Component {
                   </Label> :
                   null
               }
+
+              {
+                status === 'upcoming' ?
+                  <Label
+                    kind={kinds.INFO}
+                    size={sizes.LARGE}
+                  >
+                  Upcoming
+                  </Label> :
+                  null
+              }
             </div>
 
             <div className={styles.overview}>

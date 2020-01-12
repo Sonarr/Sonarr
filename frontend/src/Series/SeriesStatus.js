@@ -21,6 +21,12 @@ export function getSeriesStatusDetails(status) {
       title: 'Ended',
       message: 'No additional episodes or or another season is expected'
     };
+  } else if (status === 'upcoming') {
+    statusDetails = {
+      icon: icons.SERIES_CONTINUING,
+      title: 'Upcoming',
+      message: 'Series has been announced but no exact air date yet'
+    };
   }
 
   return statusDetails;

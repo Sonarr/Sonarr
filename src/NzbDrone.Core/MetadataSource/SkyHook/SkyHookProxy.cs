@@ -244,6 +244,11 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                 return SeriesStatusType.Ended;
             }
 
+            if (status.Equals("upcoming", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return SeriesStatusType.Upcoming;
+            }
+
             return SeriesStatusType.Continuing;
         }
 

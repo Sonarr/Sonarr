@@ -1,15 +1,16 @@
 import React from 'react';
 import FilterBuilderRowValue from './FilterBuilderRowValue';
 
-const protocols = [
+const seriesStatusList = [
   { id: 'continuing', name: 'Continuing' },
+  { id: 'upcoming', name: 'Upcoming' },
   { id: 'ended', name: 'Ended' }
 ];
 
 function SeriesStatusFilterBuilderRowValue(props) {
   return (
     <FilterBuilderRowValue
-      tagList={protocols}
+      tagList={seriesStatusList}
       {...props}
     />
   );
