@@ -21,12 +21,14 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
     public class PushBulletProxy : IPushBulletProxy
     {
+        private readonly IRestClientFactory _restClientFactory;
         private readonly Logger _logger;
         private const string PUSH_URL = "https://api.pushbullet.com/v2/pushes";
         private const string DEVICE_URL = "https://api.pushbullet.com/v2/devices";
 
-        public PushBulletProxy(Logger logger)
+        public PushBulletProxy(IRestClientFactory restClientFactory, Logger logger)
         {
+            _restClientFactory = restClientFactory;
             _logger = logger;
         }
 
@@ -96,7 +98,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
         {
             try
             {
-                var client = RestClientFactory.BuildClient(DEVICE_URL);
+                var client = _restClientFactory.BuildClient(DEVICE_URL);
                 var request = new RestRequest(Method.GET);
 
                 client.Authenticator = new HttpBasicAuthenticator(settings.ApiKey, string.Empty);
@@ -175,7 +177,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
         {
             try
             {
-                var client = RestClientFactory.BuildClient(PUSH_URL);
+                var client = _restClientFactory.BuildClient(PUSH_URL);
 
                 request.AddParameter("type", "note");
                 request.AddParameter("title", title);

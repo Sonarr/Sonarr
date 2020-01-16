@@ -17,18 +17,9 @@ namespace NzbDrone.Core.Http
 
         public HttpProxySettings GetProxySettings(HttpRequest request)
         {
-            if (!_configService.ProxyEnabled)
-            {
+            var proxySettings = GetProxySettings();
+            if (proxySettings == null)
                 return null;
-            }
-            
-            var proxySettings = new HttpProxySettings(_configService.ProxyType,
-                                _configService.ProxyHostname,
-                                _configService.ProxyPort,
-                                _configService.ProxyBypassFilter,
-                                _configService.ProxyBypassLocalAddresses,
-                                _configService.ProxyUsername,
-                                _configService.ProxyPassword);
 
             if (ShouldProxyBeBypassed(proxySettings, request.Url))
             {
@@ -36,6 +27,22 @@ namespace NzbDrone.Core.Http
             }
 
             return proxySettings;
+        }
+
+        public HttpProxySettings GetProxySettings()
+        {
+            if (!_configService.ProxyEnabled)
+            {
+                return null;
+            }
+
+            return new HttpProxySettings(_configService.ProxyType,
+                                _configService.ProxyHostname,
+                                _configService.ProxyPort,
+                                _configService.ProxyBypassFilter,
+                                _configService.ProxyBypassLocalAddresses,
+                                _configService.ProxyUsername,
+                                _configService.ProxyPassword);
         }
 
         public bool ShouldProxyBeBypassed(HttpProxySettings proxySettings, HttpUri url)

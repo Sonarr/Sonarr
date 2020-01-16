@@ -16,11 +16,13 @@ namespace NzbDrone.Core.Notifications.Boxcar
 
     public class BoxcarProxy : IBoxcarProxy
     {
+        private readonly IRestClientFactory _restClientFactory;
         private readonly Logger _logger;
         private const string URL = "https://new.boxcar.io/api/notifications";
 
-        public BoxcarProxy(Logger logger)
+        public BoxcarProxy(IRestClientFactory restClientFactory, Logger logger)
         {
+            _restClientFactory = restClientFactory;
             _logger = logger;
         }
 
@@ -71,7 +73,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
         {
             try
             {
-                var client = RestClientFactory.BuildClient(URL);
+                var client = _restClientFactory.BuildClient(URL);
 
                 request.AddParameter("user_credentials", settings.Token);
                 request.AddParameter("notification[title]", title);
