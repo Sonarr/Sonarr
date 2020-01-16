@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Common.Http.Proxy;
 using RestSharp;
 using NzbDrone.Core.Rest;
 using System.Web;
@@ -18,11 +19,13 @@ namespace NzbDrone.Core.Notifications.Telegram
 
     public class TelegramProxy : ITelegramProxy
     {
+        private readonly IRestClientFactory _restClientFactory;
         private readonly Logger _logger;
         private const string URL = "https://api.telegram.org";
 
-        public TelegramProxy(Logger logger)
+        public TelegramProxy(IRestClientFactory restClientFactory, Logger logger)
         {
+            _restClientFactory = restClientFactory;
             _logger = logger;
         }
 
@@ -30,7 +33,8 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
             //Format text to add the title before and bold using markdown
             var text = $"<b>{HttpUtility.HtmlEncode(title)}</b>\n{HttpUtility.HtmlEncode(message)}";
-            var client = RestClientFactory.BuildClient(URL);
+            var client = _restClientFactory.BuildClient(URL);
+
             var request = new RestRequest("bot{token}/sendmessage", Method.POST);
 
             request.AddUrlSegment("token", settings.BotToken);
@@ -54,9 +58,11 @@ namespace NzbDrone.Core.Notifications.Telegram
             {
                 _logger.Error(ex, "Unable to send test message");
 
-                var restException = ex as RestException;
-
-                if (restException != null && restException.Response.StatusCode == HttpStatusCode.BadRequest)
+                if (ex is WebException webException)
+                {
+                    return new ValidationFailure("Connection", $"{webException.Status.ToString()}: {webException.Message}");
+                }
+                else if (ex is RestException restException && restException.Response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     var error = Json.Deserialize<TelegramError>(restException.Response.Content);
                     var property = error.Description.ContainsIgnoreCase("chat not found") ? "ChatId" : "BotToken";

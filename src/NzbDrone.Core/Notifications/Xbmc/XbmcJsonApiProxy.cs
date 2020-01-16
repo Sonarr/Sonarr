@@ -21,10 +21,12 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
     public class XbmcJsonApiProxy : IXbmcJsonApiProxy
     {
+        private readonly IRestClientFactory _restClientFactory;
         private readonly Logger _logger;
 
-        public XbmcJsonApiProxy(Logger logger)
+        public XbmcJsonApiProxy(IRestClientFactory restClientFactory, Logger logger)
         {
+            _restClientFactory = restClientFactory;
             _logger = logger;
         }
 
@@ -110,7 +112,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         private IRestClient BuildClient(XbmcSettings settings)
         {
             var url = string.Format(@"http://{0}/jsonrpc", settings.Address);
-            var client = RestClientFactory.BuildClient(url);
+            var client = _restClientFactory.BuildClient(url);
 
             if (!settings.Username.IsNullOrWhiteSpace())
             {

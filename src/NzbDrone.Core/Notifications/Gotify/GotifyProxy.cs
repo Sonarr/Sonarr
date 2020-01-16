@@ -10,9 +10,16 @@ namespace NzbDrone.Core.Notifications.Gotify
 
     public class GotifyProxy : IGotifyProxy
     {
+        private readonly IRestClientFactory _restClientFactory;
+
+        public GotifyProxy(IRestClientFactory restClientFactory)
+        {
+            _restClientFactory = restClientFactory;
+        }
+
         public void SendNotification(string title, string message, GotifySettings settings)
         {
-            var client = RestClientFactory.BuildClient(settings.Server);
+            var client = _restClientFactory.BuildClient(settings.Server);
             var request = new RestRequest("message", Method.POST);
 
             request.AddQueryParameter("token", settings.AppToken);
