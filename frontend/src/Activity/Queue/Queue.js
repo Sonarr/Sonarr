@@ -71,7 +71,7 @@ class Queue extends Component {
 
     const selectedIds = this.getSelectedIds();
     const isPendingSelected = _.some(this.props.items, (item) => {
-      return selectedIds.indexOf(item.id) > -1 && item.status === 'Delay';
+      return selectedIds.indexOf(item.id) > -1 && item.status === 'delay';
     });
 
     if (isPendingSelected !== this.state.isPendingSelected) {
