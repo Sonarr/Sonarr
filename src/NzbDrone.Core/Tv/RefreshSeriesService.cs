@@ -130,12 +130,13 @@ namespace NzbDrone.Core.Tv
                 {
                     if (season.SeasonNumber == 0)
                     {
+                        _logger.Debug("Ignoring season 0 for series [{0}] {1} by default", series.TvdbId, series.Title);
                         season.Monitored = false;
                         continue;
                     }
 
-                    _logger.Debug("New season ({0}) for series: [{1}] {2}, setting monitored to true", season.SeasonNumber, series.TvdbId, series.Title);
-                    season.Monitored = true;
+                    _logger.Debug("New season ({0}) for series: [{1}] {2}, setting monitored to {3}", season.SeasonNumber, series.TvdbId, series.Title, series.Monitored.ToString().ToLowerInvariant());
+                    season.Monitored = series.Monitored;
                 }
 
                 else
