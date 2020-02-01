@@ -5,15 +5,17 @@ function formatTime(date, timeFormat, { includeMinuteZero = false, includeSecond
     return '';
   }
 
+  const time = moment(date);
+
   if (includeSeconds) {
     timeFormat = timeFormat.replace(/\(?:mm\)?/, ':mm:ss');
-  } else if (includeMinuteZero) {
+  } else if (includeMinuteZero || time.minute() !== 0) {
     timeFormat = timeFormat.replace('(:mm)', ':mm');
   } else {
     timeFormat = timeFormat.replace('(:mm)', '');
   }
 
-  return moment(date).format(timeFormat);
+  return time.format(timeFormat);
 }
 
 export default formatTime;
