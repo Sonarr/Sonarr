@@ -1,10 +1,10 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { queueLookupSeries, setImportSeriesValue } from 'Store/Actions/importSeriesActions';
 import createImportSeriesItemSelector from 'Store/Selectors/createImportSeriesItemSelector';
+import * as seriesTypes from 'Utilities/Series/seriesTypes';
 import ImportSeriesSelectSeries from './ImportSeriesSelectSeries';
 
 function createMapStateToProps() {
@@ -41,13 +41,23 @@ class ImportSeriesSelectSeriesConnector extends Component {
   onSeriesSelect = (tvdbId) => {
     const {
       id,
-      items
+      items,
+      onInputChange
     } = this.props;
+
+    const selectedSeries = items.find((item) => item.tvdbId === tvdbId);
 
     this.props.setImportSeriesValue({
       id,
-      selectedSeries: _.find(items, { tvdbId })
+      selectedSeries
     });
+
+    if (selectedSeries.seriesType !== seriesTypes.STANDARD) {
+      onInputChange({
+        name: 'seriesType',
+        value: selectedSeries.seriesType
+      });
+    }
   }
 
   //
@@ -69,6 +79,7 @@ ImportSeriesSelectSeriesConnector.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object),
   selectedSeries: PropTypes.object,
   isSelected: PropTypes.bool,
+  onInputChange: PropTypes.func.isRequired,
   queueLookupSeries: PropTypes.func.isRequired,
   setImportSeriesValue: PropTypes.func.isRequired
 };

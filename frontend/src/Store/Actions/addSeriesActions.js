@@ -6,6 +6,7 @@ import getSectionState from 'Utilities/State/getSectionState';
 import updateSectionState from 'Utilities/State/updateSectionState';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import getNewSeries from 'Utilities/Series/getNewSeries';
+import * as seriesTypes from 'Utilities/Series/seriesTypes';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createSetSettingValueReducer from './Creators/Reducers/createSetSettingValueReducer';
 import createHandleActions from './Creators/createHandleActions';
@@ -34,7 +35,7 @@ export const defaultState = {
     monitor: monitorOptions[0].key,
     qualityProfileId: 0,
     languageProfileId: 0,
-    seriesType: 'standard',
+    seriesType: seriesTypes.STANDARD,
     seasonFolder: true,
     tags: []
   }

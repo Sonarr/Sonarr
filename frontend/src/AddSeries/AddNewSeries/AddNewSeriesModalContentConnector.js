@@ -55,14 +55,13 @@ class AddNewSeriesModalContentConnector extends Component {
     this.props.setAddSeriesDefault({ [name]: value });
   }
 
-  onAddSeriesPress = (searchForMissingEpisodes) => {
+  onAddSeriesPress = (searchForMissingEpisodes, seriesType) => {
     const {
       tvdbId,
       rootFolderPath,
       monitor,
       qualityProfileId,
       languageProfileId,
-      seriesType,
       seasonFolder,
       tags
     } = this.props;
@@ -73,7 +72,7 @@ class AddNewSeriesModalContentConnector extends Component {
       monitor: monitor.value,
       qualityProfileId: qualityProfileId.value,
       languageProfileId: languageProfileId.value,
-      seriesType: seriesType.value,
+      seriesType,
       seasonFolder: seasonFolder.value,
       tags: tags.value,
       searchForMissingEpisodes

@@ -90,6 +90,7 @@ function ImportSeriesRow(props) {
         <ImportSeriesSelectSeriesConnector
           id={id}
           isExistingSeries={isExistingSeries}
+          onInputChange={onInputChange}
         />
       </VirtualTableRowCell>
     </VirtualTableRow>

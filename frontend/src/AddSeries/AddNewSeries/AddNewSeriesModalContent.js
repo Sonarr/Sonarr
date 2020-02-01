@@ -14,6 +14,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import Popover from 'Components/Tooltip/Popover';
 import SeriesPoster from 'Series/SeriesPoster';
+import * as seriesTypes from 'Utilities/Series/seriesTypes';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
 import styles from './AddNewSeriesModalContent.css';
@@ -27,8 +28,17 @@ class AddNewSeriesModalContent extends Component {
     super(props, context);
 
     this.state = {
+      seriesType: props.initialSeriesType === seriesTypes.STANDARD ?
+        props.seriesType.value :
+        props.initialSeriesType,
       searchForMissingEpisodes: false
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.seriesType.value !== prevProps.seriesType.value) {
+      this.setState({ seriesType: this.props.seriesType.value });
+    }
   }
 
   //
@@ -47,7 +57,12 @@ class AddNewSeriesModalContent extends Component {
   }
 
   onAddSeriesPress = () => {
-    this.props.onAddSeriesPress(this.state.searchForMissingEpisodes);
+    const {
+      searchForMissingEpisodes,
+      seriesType
+    } = this.state;
+
+    this.props.onAddSeriesPress(searchForMissingEpisodes, seriesType);
   }
 
   //
@@ -200,6 +215,7 @@ class AddNewSeriesModalContent extends Component {
                     name="seriesType"
                     onChange={onInputChange}
                     {...seriesType}
+                    value={this.state.seriesType}
                   />
                 </FormGroup>
 
@@ -262,6 +278,7 @@ AddNewSeriesModalContent.propTypes = {
   title: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   overview: PropTypes.string,
+  initialSeriesType: PropTypes.string.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   isAdding: PropTypes.bool.isRequired,
   addError: PropTypes.object,

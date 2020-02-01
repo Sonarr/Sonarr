@@ -5,6 +5,7 @@ import createAjaxRequest from 'Utilities/createAjaxRequest';
 import getSectionState from 'Utilities/State/getSectionState';
 import updateSectionState from 'Utilities/State/updateSectionState';
 import getNewSeries from 'Utilities/Series/getNewSeries';
+import * as seriesTypes from 'Utilities/Series/seriesTypes';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createHandleActions from './Creators/createHandleActions';
 import { set, removeItem, updateItem } from './baseActions';
@@ -149,7 +150,9 @@ export const actionHandlers = handleThunks({
     abortCurrentLookup = abortRequest;
 
     request.done((data) => {
-      dispatch(updateItem({
+      const selectedSeries = queued.selectedSeries || data[0];
+
+      const itemProps = {
         section,
         id: queued.id,
         isFetching: false,
@@ -157,9 +160,15 @@ export const actionHandlers = handleThunks({
         error: null,
         items: data,
         isQueued: false,
-        selectedSeries: queued.selectedSeries || data[0],
+        selectedSeries,
         updateOnly: true
-      }));
+      };
+
+      if (selectedSeries.seriesType !== seriesTypes.STANDARD) {
+        itemProps.seriesType = selectedSeries.seriesType;
+      }
+
+      dispatch(updateItem(itemProps));
     });
 
     request.fail((xhr) => {

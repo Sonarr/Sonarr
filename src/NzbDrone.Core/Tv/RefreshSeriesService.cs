@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Commands;
@@ -23,7 +22,6 @@ namespace NzbDrone.Core.Tv
         private readonly ISeriesService _seriesService;
         private readonly IRefreshEpisodeService _refreshEpisodeService;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IDailySeriesService _dailySeriesService;
         private readonly IDiskScanService _diskScanService;
         private readonly ICheckIfSeriesShouldBeRefreshed _checkIfSeriesShouldBeRefreshed;
         private readonly IConfigService _configService;
@@ -33,7 +31,7 @@ namespace NzbDrone.Core.Tv
                                     ISeriesService seriesService,
                                     IRefreshEpisodeService refreshEpisodeService,
                                     IEventAggregator eventAggregator,
-                                    IDailySeriesService dailySeriesService,
+                                    
                                     IDiskScanService diskScanService,
                                     ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
                                     IConfigService configService,
@@ -43,7 +41,6 @@ namespace NzbDrone.Core.Tv
             _seriesService = seriesService;
             _refreshEpisodeService = refreshEpisodeService;
             _eventAggregator = eventAggregator;
-            _dailySeriesService = dailySeriesService;
             _diskScanService = diskScanService;
             _checkIfSeriesShouldBeRefreshed = checkIfSeriesShouldBeRefreshed;
             _configService = configService;
@@ -100,11 +97,6 @@ namespace NzbDrone.Core.Tv
             series.Actors = seriesInfo.Actors;
             series.Genres = seriesInfo.Genres;
             series.Certification = seriesInfo.Certification;
-
-            if (_dailySeriesService.IsDailySeries(series.TvdbId))
-            {
-                series.SeriesType = SeriesTypes.Daily;
-            }
 
             try
             {
