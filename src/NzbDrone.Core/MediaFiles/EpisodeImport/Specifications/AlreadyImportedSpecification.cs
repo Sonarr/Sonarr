@@ -1,5 +1,6 @@
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
@@ -39,14 +40,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 var episodeHistory = _historyService.FindByEpisodeId(episode.Id);
                 var lastImported = episodeHistory.FirstOrDefault(h => h.EventType == HistoryEventType.DownloadFolderImported);
+                var lastGrabbed = episodeHistory.FirstOrDefault(h => h.EventType == HistoryEventType.Grabbed);
 
                 if (lastImported == null)
                 {
                     continue;
                 }
 
-                // TODO: Ignore last imported check if the same release was grabbed again
-                // See: https://github.com/Sonarr/Sonarr/issues/2393
+                // If the release was grabbed again after importing don't reject it
+                if (lastGrabbed != null && lastGrabbed.Date.After(lastImported.Date))
+                {
+                    continue;
+                }
 
                 if (lastImported.DownloadId == downloadClientItem.DownloadId)
                 {
