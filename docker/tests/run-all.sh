@@ -21,10 +21,10 @@ done
 # excess goes to the swap and will slow down the entire system
 
 # Preferred versions
-MONO_VERSIONS="6.0 5.20 5.18"
+MONO_VERSIONS="6.8 6.6 6.4 6.0 5.20 5.18"
 
 # Future versions
-MONO_VERSIONS="$MONO_VERSIONS 6.4=preview-xenial"
+MONO_VERSIONS="$MONO_VERSIONS 6.10=preview-xenial"
 
 # Supported versions 
 MONO_VERSIONS="$MONO_VERSIONS 5.16 5.14 5.12 5.10 5.8 5.4"
