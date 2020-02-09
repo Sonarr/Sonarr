@@ -21,7 +21,15 @@ namespace NzbDrone.Core.SeriesStats
             {
                 DateTime nextAiring;
 
-                if (!DateTime.TryParse(NextAiringString, out nextAiring)) return null;
+                try
+                {
+                    if (!DateTime.TryParse(NextAiringString, out nextAiring)) return null;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    // GHI 3518: Can throw on mono (6.x?) despite being a Try*
+                    return null;
+                }
 
                 return nextAiring;
             }
@@ -33,7 +41,15 @@ namespace NzbDrone.Core.SeriesStats
             {
                 DateTime previousAiring;
 
-                if (!DateTime.TryParse(PreviousAiringString, out previousAiring)) return null;
+                try
+                {
+                    if (!DateTime.TryParse(PreviousAiringString, out previousAiring)) return null;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    // GHI 3518: Can throw on mono (6.x?) despite being a Try*
+                    return null;
+                }
 
                 return previousAiring;
             }
