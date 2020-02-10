@@ -7,6 +7,7 @@ using Mono.Unix.Native;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 
@@ -16,6 +17,7 @@ namespace NzbDrone.Mono.Disk
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProvider));
 
+        private readonly Logger _logger;
         private readonly IProcMountProvider _procMountProvider;
         private readonly ISymbolicLinkResolver _symLinkResolver;
 
@@ -23,10 +25,11 @@ namespace NzbDrone.Mono.Disk
         // `unchecked((uint)-1)` and `uint.MaxValue` are the same thing.
         private const uint UNCHANGED_ID = uint.MaxValue;
 
-        public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver)
+        public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver, Logger logger)
         {
             _procMountProvider = procMountProvider;
             _symLinkResolver = symLinkResolver;
+            _logger = logger;
         }
 
         public override IMount GetMount(string path)
@@ -166,6 +169,10 @@ namespace NzbDrone.Mono.Disk
                     newFile.CreateSymbolicLinkTo(fullPath);
                 }
             }
+            else if (PlatformInfo.GetVersion() > new Version(6, 0) && (!FileExists(destination) || overwrite))
+            {
+                TransferFilePatched(source, destination, overwrite, false);
+            }
             else
             {
                 base.CopyFileInternal(source, destination, overwrite);
@@ -207,9 +214,120 @@ namespace NzbDrone.Mono.Disk
                     throw;
                 }
             }
+            else if (PlatformInfo.GetVersion() > new Version(6, 0) && !FileExists(destination))
+            {
+                TransferFilePatched(source, destination, false, true);
+            }
             else
             {
                 base.MoveFileInternal(source, destination);
+            }
+        }
+        
+        private void TransferFilePatched(string source, string destination, bool overwrite, bool move)
+        {
+            // Mono 6.x throws errors if permissions or timestamps cannot be set
+            // - In 6.0 it'll leave a full length file
+            // - In 6.6 it'll leave a zero length file
+            // Catch the exception and attempt to handle these edgecases
+
+            try
+            {
+                if (move)
+                {
+                    base.MoveFileInternal(source, destination);
+                }
+                else
+                {
+                    base.CopyFileInternal(source, destination, overwrite);
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                var srcInfo = new FileInfo(source);
+                var dstInfo = new FileInfo(destination);
+                var exists = dstInfo.Exists && srcInfo.Exists;
+
+                if (exists && dstInfo.Length == 0 && srcInfo.Length != 0)
+                {
+                    // mono >=6.6 bug: zero length file since chmod happens at the start
+                    _logger.Debug("Mono failed to {2} file likely due to known mono bug, attempting to {2} directly. '{0}' -> '{1}'", source, destination, move ? "move" : "copy");
+
+                    try
+                    {
+                        _logger.Trace("Copying content from {0} to {1} ({2} bytes)", source, destination, srcInfo.Length);
+                        using (var srcStream = new FileStream(source, FileMode.Open, FileAccess.Read))
+                        using (var dstStream = new FileStream(destination, FileMode.Create, FileAccess.Write))
+                        {
+                            srcStream.CopyTo(dstStream);
+                        }
+                    }
+                    catch
+                    {
+                        // If it fails again then bail
+                        throw;
+                    }
+                }
+                else if (exists && dstInfo.Length == srcInfo.Length)
+                {
+                    // mono 6.0, 6.4 bug: full length file since utime and chmod happens at the end
+                    _logger.Debug("Mono failed to {2} file likely due to known mono bug, attempting to {2} directly. '{0}' -> '{1}'", source, destination, move ? "move" : "copy");
+
+                    // Check at least part of the file since UnauthorizedAccess can happen due to legitimate reasons too
+                    var checkLength = (int)Math.Min(64 * 1024, dstInfo.Length);
+                    if (checkLength > 0)
+                    {
+                        var srcData = new byte[checkLength];
+                        var dstData = new byte[checkLength];
+
+                        _logger.Trace("Check last {0} bytes from {1}", checkLength, destination);
+
+                        using (var srcStream = new FileStream(source, FileMode.Open, FileAccess.Read))
+                        using (var dstStream = new FileStream(destination, FileMode.Open, FileAccess.Read))
+                        {
+                            srcStream.Position = srcInfo.Length - checkLength;
+                            dstStream.Position = dstInfo.Length - checkLength;
+
+                            srcStream.Read(srcData, 0, checkLength);
+                            dstStream.Read(dstData, 0, checkLength);
+                        }
+
+                        for (var i = 0; i < checkLength; i++)
+                        {
+                            if (srcData[i] != dstData[i])
+                            {
+                                // Files aren't the same, the UnauthorizedAccess was unrelated
+                                _logger.Trace("Copy was incomplete, rethrowing original error");
+                                throw;
+                            }
+                        }
+
+                        _logger.Trace("Copy was complete, finishing {0} operation", move ? "move" : "copy");
+                    }
+                }
+                else
+                {
+                    // Unrecognized situation, the UnauthorizedAccess was unrelated
+                    throw;
+                }
+
+                if (exists)
+                {
+                    try
+                    {
+                        dstInfo.LastWriteTimeUtc = srcInfo.LastWriteTimeUtc;
+                    }
+                    catch
+                    {
+                        _logger.Debug("Unable to change last modified date for {0}, skipping.", destination);
+                    }
+
+                    if (move)
+                    {
+                        _logger.Trace("Removing source file {0}", source);
+                        File.Delete(source);
+                    }
+                }
             }
         }
 
