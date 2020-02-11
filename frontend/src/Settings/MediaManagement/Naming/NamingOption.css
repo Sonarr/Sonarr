@@ -34,14 +34,14 @@
 .example {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   flex: 0 0 50%;
   padding: 6px 16px;
   background-color: #ddd;
-  justify-content: space-between;
 
   .footNote {
-    color: #aaa;
     padding: 2px;
+    color: #aaa;
   }
 }
 
