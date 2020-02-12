@@ -56,7 +56,7 @@
 .megabytesPerMinute {
   display: flex;
   justify-content: space-between;
-  flex: 0 0 250px;
+  flex: 0 0 400px;
 }
 
 .sizeInput {

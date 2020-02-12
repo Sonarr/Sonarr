@@ -15,6 +15,7 @@ namespace Sonarr.Api.V3.Qualities
 
         public double? MinSize { get; set; }
         public double? MaxSize { get; set; }
+        public double? PreferredSize { get; set; }
     }
 
     public static class QualityDefinitionResourceMapper
@@ -33,7 +34,8 @@ namespace Sonarr.Api.V3.Qualities
                 Title = model.Title,
                 Weight = model.Weight,
                 MinSize = model.MinSize,
-                MaxSize = model.MaxSize
+                MaxSize = model.MaxSize,
+                PreferredSize = model.PreferredSize
             };
         }
 
@@ -51,7 +53,8 @@ namespace Sonarr.Api.V3.Qualities
                 Title = resource.Title,
                 Weight = resource.Weight,
                 MinSize = resource.MinSize,
-                MaxSize = resource.MaxSize
+                MaxSize = resource.MaxSize,
+                PreferredSize = resource.PreferredSize
             };
         }
 

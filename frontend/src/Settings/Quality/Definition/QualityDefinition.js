@@ -51,7 +51,8 @@ class QualityDefinition extends Component {
 
     this.state = {
       sliderMinSize: getSliderValue(props.minSize, slider.min),
-      sliderMaxSize: getSliderValue(props.maxSize, slider.max)
+      sliderMaxSize: getSliderValue(props.maxSize, slider.max),
+      sliderPreferredSize: getSliderValue(props.preferredSize, (slider.max - 3))
     };
   }
 
@@ -93,14 +94,16 @@ class QualityDefinition extends Component {
   //
   // Listeners
 
-  onSliderChange = ([sliderMinSize, sliderMaxSize]) => {
+  onSliderChange = ([sliderMinSize, sliderPreferredSize, sliderMaxSize]) => {
     this.setState({
       sliderMinSize,
-      sliderMaxSize
+      sliderMaxSize,
+      sliderPreferredSize
     });
 
     this.props.onSizeChange({
       minSize: roundNumber(Math.pow(sliderMinSize, 1.1)),
+      preferredSize: sliderPreferredSize === (slider.max - 3) ? null : roundNumber(Math.pow(sliderPreferredSize, 1.1)),
       maxSize: sliderMaxSize === slider.max ? null : roundNumber(Math.pow(sliderMaxSize, 1.1))
     });
   };
@@ -108,12 +111,14 @@ class QualityDefinition extends Component {
   onAfterSliderChange = () => {
     const {
       minSize,
-      maxSize
+      maxSize,
+      preferredSize
     } = this.props;
 
     this.setState({
       sliderMiSize: getSliderValue(minSize, slider.min),
-      sliderMaxSize: getSliderValue(maxSize, slider.max)
+      sliderMaxSize: getSliderValue(maxSize, slider.max),
+      sliderPreferredSize: getSliderValue(preferredSize, (slider.max - 3)) // fix
     });
   };
 
@@ -126,7 +131,22 @@ class QualityDefinition extends Component {
 
     this.props.onSizeChange({
       minSize,
-      maxSize: this.props.maxSize
+      maxSize: this.props.maxSize,
+      preferredSize: this.props.preferredSize
+    });
+  };
+
+  onPreferredSizeChange = ({ value }) => {
+    const preferredSize = value === (MAX - 3) ? null : getValue(value);
+
+    this.setState({
+      sliderPreferredSize: getSliderValue(preferredSize, slider.preferred)
+    });
+
+    this.props.onSizeChange({
+      minSize: this.props.minSize,
+      maxSize: this.props.maxSize,
+      preferredSize
     });
   };
 
@@ -139,7 +159,8 @@ class QualityDefinition extends Component {
 
     this.props.onSizeChange({
       minSize: this.props.minSize,
-      maxSize
+      maxSize,
+      preferredSize: this.props.preferredSize
     });
   };
 
@@ -153,17 +174,22 @@ class QualityDefinition extends Component {
       title,
       minSize,
       maxSize,
+      preferredSize,
       advancedSettings,
       onTitleChange
     } = this.props;
 
     const {
       sliderMinSize,
-      sliderMaxSize
+      sliderMaxSize,
+      sliderPreferredSize
     } = this.state;
 
     const minBytes = minSize * 1024 * 1024;
     const minSixty = `${formatBytes(minBytes * 60)}/h`;
+
+    const preferredBytes = preferredSize * 1024 * 1024;
+    const preferredSixty = preferredBytes ? `${formatBytes(preferredBytes * 60)}/h` : 'Unlimited';
 
     const maxBytes = maxSize && maxSize * 1024 * 1024;
     const maxSixty = maxBytes ? `${formatBytes(maxBytes * 60)}/h` : 'Unlimited';
@@ -188,9 +214,10 @@ class QualityDefinition extends Component {
             min={slider.min}
             max={slider.max}
             step={slider.step}
-            minDistance={MIN_DISTANCE * 5}
-            value={[sliderMinSize, sliderMaxSize]}
+            minDistance={3}
+            value={[sliderMinSize, sliderPreferredSize, sliderMaxSize]}
             withTracks={true}
+            allowCross={false}
             snapDragDisabled={true}
             renderThumb={this.thumbRenderer}
             renderTrack={this.trackRenderer}
@@ -209,6 +236,22 @@ class QualityDefinition extends Component {
                   <QualityDefinitionLimits
                     bytes={minBytes}
                     message="No minimum for any runtime"
+                  />
+                }
+                position={tooltipPositions.BOTTOM}
+              />
+            </div>
+
+            <div>
+              <Popover
+                anchor={
+                  <Label kind={kinds.SUCCESS}>{preferredSixty}</Label>
+                }
+                title="Preferred Size"
+                body={
+                  <QualityDefinitionLimits
+                    bytes={preferredBytes}
+                    message="No limit for any runtime"
                   />
                 }
                 position={tooltipPositions.BOTTOM}
@@ -244,10 +287,25 @@ class QualityDefinition extends Component {
                   name={`${id}.min`}
                   value={minSize || MIN}
                   min={MIN}
-                  max={maxSize ? maxSize - MIN_DISTANCE : MAX - MIN_DISTANCE}
+                  max={preferredSize ? preferredSize - 5 : MAX - 5}
                   step={0.1}
                   isFloat={true}
                   onChange={this.onMinSizeChange}
+                />
+              </div>
+
+              <div>
+                Preferred
+
+                <NumberInput
+                  className={styles.sizeInput}
+                  name={`${id}.min`}
+                  value={preferredSize || MAX - 5}
+                  min={MIN}
+                  max={maxSize ? maxSize - 5 : MAX - 5}
+                  step={0.1}
+                  isFloat={true}
+                  onChange={this.onPreferredSizeChange}
                 />
               </div>
 
@@ -278,6 +336,7 @@ QualityDefinition.propTypes = {
   title: PropTypes.string.isRequired,
   minSize: PropTypes.number,
   maxSize: PropTypes.number,
+  preferredSize: PropTypes.number,
   advancedSettings: PropTypes.bool.isRequired,
   onTitleChange: PropTypes.func.isRequired,
   onSizeChange: PropTypes.func.isRequired
