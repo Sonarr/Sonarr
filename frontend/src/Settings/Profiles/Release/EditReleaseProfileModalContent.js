@@ -113,7 +113,7 @@ function EditReleaseProfileModalContent(props) {
             <FormInputGroup
               type={inputTypes.CHECK}
               name="includePreferredWhenRenaming"
-              helpText="Include in {Preferred Words} renaming format"
+              helpText={indexerId.value === 0 ? 'Include in {Preferred Words} renaming format' : 'Only supported when Indexer is set to (All)'}
               {...includePreferredWhenRenaming}
               onChange={onInputChange}
               isDisabled={indexerId.value !== 0}
