@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import sortByName from 'Utilities/Array/sortByName';
 import { icons } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
 import Card from 'Components/Card';
@@ -59,7 +58,7 @@ class LanguageProfiles extends Component {
         >
           <div className={styles.languageProfiles}>
             {
-              items.sort(sortByName).map((item) => {
+              items.map((item) => {
                 return (
                   <LanguageProfile
                     key={item.id}

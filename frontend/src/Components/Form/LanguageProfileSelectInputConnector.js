@@ -4,15 +4,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import sortByName from 'Utilities/Array/sortByName';
+import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import SelectInput from './SelectInput';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.languageProfiles,
+    createSortedSectionSelector('settings.languageProfiles', sortByName),
     (state, { includeNoChange }) => includeNoChange,
     (state, { includeMixed }) => includeMixed,
     (languageProfiles, includeNoChange, includeMixed) => {
-      const values = _.map(languageProfiles.items.sort(sortByName), (languageProfile) => {
+      const values = _.map(languageProfiles.items, (languageProfile) => {
         return {
           key: languageProfile.id,
           value: languageProfile.name

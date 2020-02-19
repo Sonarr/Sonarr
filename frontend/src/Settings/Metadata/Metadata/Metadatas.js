@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import sortByName from 'Utilities/Array/sortByName';
 import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import Metadata from './Metadata';
@@ -20,7 +19,7 @@ function Metadatas(props) {
       >
         <div className={styles.metadatas}>
           {
-            items.sort(sortByName).map((item) => {
+            items.map((item) => {
               return (
                 <Metadata
                   key={item.id}

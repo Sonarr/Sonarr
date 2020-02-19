@@ -2,13 +2,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import sortByName from 'Utilities/Array/sortByName';
+import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import { fetchLanguageProfiles, deleteLanguageProfile, cloneLanguageProfile } from 'Store/Actions/settingsActions';
 import LanguageProfiles from './LanguageProfiles';
 
 function createMapStateToProps() {
   return createSelector(
     (state) => state.settings.advancedSettings,
-    (state) => state.settings.languageProfiles,
+    createSortedSectionSelector('settings.languageProfiles', sortByName),
     (advancedSettings, languageProfiles) => {
       return {
         advancedSettings,

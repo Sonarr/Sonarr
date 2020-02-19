@@ -2,17 +2,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import sortByName from 'Utilities/Array/sortByName';
+import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import { fetchDownloadClients, deleteDownloadClient } from 'Store/Actions/settingsActions';
 import DownloadClients from './DownloadClients';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.downloadClients,
-    (downloadClients) => {
-      return {
-        ...downloadClients
-      };
-    }
+    createSortedSectionSelector('settings.downloadClients', sortByName),
+    (downloadClients) => downloadClients
   );
 }
 

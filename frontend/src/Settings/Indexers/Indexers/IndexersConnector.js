@@ -2,17 +2,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import sortByName from 'Utilities/Array/sortByName';
+import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import { fetchIndexers, deleteIndexer } from 'Store/Actions/settingsActions';
 import Indexers from './Indexers';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.indexers,
-    (indexers) => {
-      return {
-        ...indexers
-      };
-    }
+    createSortedSectionSelector('settings.indexers', sortByName),
+    (indexers) => indexers
   );
 }
 
