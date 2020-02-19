@@ -4,15 +4,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import sortByName from 'Utilities/Array/sortByName';
+import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import SelectInput from './SelectInput';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.qualityProfiles,
+    createSortedSectionSelector('settings.qualityProfiles', sortByName),
     (state, { includeNoChange }) => includeNoChange,
     (state, { includeMixed }) => includeMixed,
     (qualityProfiles, includeNoChange, includeMixed) => {
-      const values = _.map(qualityProfiles.items.sort(sortByName), (qualityProfile) => {
+      const values = _.map(qualityProfiles.items, (qualityProfile) => {
         return {
           key: qualityProfile.id,
           value: qualityProfile.name

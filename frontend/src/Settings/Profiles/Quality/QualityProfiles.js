@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import sortByName from 'Utilities/Array/sortByName';
 import { icons } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
 import Card from 'Components/Card';
@@ -59,7 +58,7 @@ class QualityProfiles extends Component {
         >
           <div className={styles.qualityProfiles}>
             {
-              items.sort(sortByName).map((item) => {
+              items.map((item) => {
                 return (
                   <QualityProfile
                     key={item.id}

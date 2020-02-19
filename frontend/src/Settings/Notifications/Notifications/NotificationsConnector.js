@@ -2,17 +2,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import sortByName from 'Utilities/Array/sortByName';
+import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import { fetchNotifications, deleteNotification } from 'Store/Actions/settingsActions';
 import Notifications from './Notifications';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.notifications,
-    (notifications) => {
-      return {
-        ...notifications
-      };
-    }
+    createSortedSectionSelector('settings.notifications', sortByName),
+    (notifications) => notifications
   );
 }
 

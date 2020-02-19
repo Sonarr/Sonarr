@@ -11,7 +11,7 @@ function createMapStateToProps() {
     createAllSeriesSelector(),
     (items) => {
       return {
-        items: items.sort((a, b) => {
+        items: [...items].sort((a, b) => {
           if (a.sortTitle < b.sortTitle) {
             return -1;
           }
