@@ -63,6 +63,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[CR] Sailor Moon - 004 [480p][48CE2D0F]", false)]
         [TestCase("[Hatsuyuki] Naruto Shippuuden - 363 [848x480][ADE35E38]", false)]
         [TestCase("Muppet.Babies.S03.TVRip.XviD-NOGRP", false)]
+        [TestCase("[HorribleSubs] ID INVADED - 03 [360p].mkv", false)]
         public void should_parse_sdtv_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.SDTV, proper);
@@ -74,6 +75,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("the.shield.1x13.circles.ws.xvidvd-tns", false)]
         [TestCase("the_x-files.9x18.sunshine_days.ac3.ws_dvdrip_xvid-fov.avi", false)]
         [TestCase("[FroZen] Miyuki - 23 [DVD][7F6170E6]", false)]
+        [TestCase("[AniDL] Vandread - 26 -[360p][DVD][D - A][Exiled - Destiny]", false)]
         public void should_parse_dvd_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.DVD, proper);
