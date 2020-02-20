@@ -25,8 +25,7 @@ const requiresRestartKeys = [
   'sslCertHash',
   'authenticationMethod',
   'username',
-  'password',
-  'apiKey'
+  'password'
 ];
 
 class GeneralSettings extends Component {
@@ -46,8 +45,14 @@ class GeneralSettings extends Component {
     const {
       settings,
       isSaving,
-      saveError
+      saveError,
+      isResettingApiKey
     } = this.props;
+
+    if (!isResettingApiKey && prevProps.isResettingApiKey) {
+      this.setState({ isRestartRequiredModalOpen: true });
+      return;
+    }
 
     if (isSaving || saveError || !prevProps.isSaving) {
       return;
