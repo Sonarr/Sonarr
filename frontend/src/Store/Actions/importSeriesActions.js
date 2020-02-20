@@ -164,7 +164,7 @@ export const actionHandlers = handleThunks({
         updateOnly: true
       };
 
-      if (selectedSeries.seriesType !== seriesTypes.STANDARD) {
+      if (selectedSeries && selectedSeries.seriesType !== seriesTypes.STANDARD) {
         itemProps.seriesType = selectedSeries.seriesType;
       }
 
