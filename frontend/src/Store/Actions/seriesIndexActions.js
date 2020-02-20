@@ -227,7 +227,7 @@ export const defaultState = {
     episodeCount: function(item) {
       const { statistics = {} } = item;
 
-      return statistics.episodeCount;
+      return statistics.totalEpisodeCount || 0;
     },
 
     seasonCount: function(item) {
