@@ -36,6 +36,7 @@ namespace Sonarr.Api.V3.Profiles.Release
                 {
                     context.AddFailure(nameof(ReleaseProfile.IndexerId), "Indexer does not exist");
                 }
+                context.AddFailure(nameof(ReleaseProfile.Preferred), "Indexer does not exist");
             });
         }
 
