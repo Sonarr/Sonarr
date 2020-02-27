@@ -53,6 +53,9 @@ namespace NzbDrone.Core.Tv
 
             try
             {
+                // Ensure the parent of the series folder exists, this will often just be the root folder, but
+                // in cases where people are using subfolders for first letter (etc) it may not yet exist.
+                _diskProvider.CreateFolder(new DirectoryInfo(destinationPath).Parent.FullName);
                 _diskTransferService.TransferFolder(sourcePath, destinationPath, TransferMode.Move);
 
                 _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, series.Path);
