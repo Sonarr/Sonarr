@@ -13,7 +13,7 @@ function hasDifferentItems(prevItems, currentItems, idProp = 'id') {
     currentItemIds.add(currentItem[idProp]);
   });
 
-  return prevItems.every((prevItem) => currentItemIds.has(prevItem[idProp]));
+  return prevItems.some((prevItem) => !currentItemIds.has(prevItem[idProp]));
 }
 
 export default hasDifferentItems;
