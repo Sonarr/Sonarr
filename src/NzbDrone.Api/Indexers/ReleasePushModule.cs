@@ -77,7 +77,7 @@ namespace NzbDrone.Api.Indexers
                 }
                 catch (ModelNotFoundException)
                 {
-                    _logger.Debug("Push Release {0} not associated with known indexer {0}.", release.Title, release.IndexerId);
+                    _logger.Debug("Push Release {0} not associated with known indexer {1}.", release.Title, release.IndexerId);
                     release.IndexerId = 0;
                 }
             }
