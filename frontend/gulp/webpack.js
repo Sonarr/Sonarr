@@ -19,7 +19,7 @@ const distFolder = path.resolve(frontendFolder, '..', '_output', uiFolder);
 console.log('Source Folder:', srcFolder);
 console.log('Output Folder:', distFolder);
 console.log('isProduction:', isProduction);
-console.log('isProfiling:', isProduction);
+console.log('isProfiling:', isProfiling);
 
 const cssVarsFiles = [
   '../src/Styles/Variables/colors',
