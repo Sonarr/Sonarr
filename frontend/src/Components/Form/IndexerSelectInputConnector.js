@@ -56,12 +56,6 @@ class IndexerSelectInputConnector extends Component {
     if (!this.props.isPopulated) {
       this.props.dispatchFetchIndexers();
     }
-
-    const {
-      name,
-      value,
-      values
-    } = this.props;
   }
 
   //
