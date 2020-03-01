@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("DTS, A_DTS, , , ES XXCH", "DTS", "DTS-ES")]
         [TestCase("DTS, A_DTS, , , XBR", "DTSHD-HRA", "DTS-HD HRA")]
         [TestCase("DTS, A_DTS, , , DTS", "DTS", "DTS")]
-        [TestCase("E-AC-3, A_EAC3, , , JOC", "EAC3", "EAC3")]
+        [TestCase("E-AC-3, A_EAC3, , , JOC", "Carbon.Copy.S02E01.The.Phreak.Lady.1080p.NF.Webrip.x265.10bit.EAC3.5.1.Atmos-RGP", "EAC3 Atmos")]
         [TestCase("E-AC-3, A_EAC3, , , ", "DD5.1", "EAC3")]
         [TestCase("AC-3, A_AC3, , , ", "DD5.1", "AC3")]
         [TestCase("A_QUICKTIME, A_QUICKTIME, , , ", "", "")]
