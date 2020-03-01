@@ -1,5 +1,7 @@
 import { createAction } from 'redux-actions';
 import { createThunk } from 'Store/thunks';
+import getSectionState from 'Utilities/State/getSectionState';
+import updateSectionState from 'Utilities/State/updateSectionState';
 import selectProviderSchema from 'Utilities/State/selectProviderSchema';
 import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
 import createSetProviderFieldValueReducer from 'Store/Actions/Creators/Reducers/createSetProviderFieldValueReducer';
@@ -21,6 +23,7 @@ const section = 'settings.indexers';
 export const FETCH_INDEXERS = 'settings/indexers/fetchIndexers';
 export const FETCH_INDEXER_SCHEMA = 'settings/indexers/fetchIndexerSchema';
 export const SELECT_INDEXER_SCHEMA = 'settings/indexers/selectIndexerSchema';
+export const CLONE_INDEXER = 'settings/indexers/cloneIndexer';
 export const SET_INDEXER_VALUE = 'settings/indexers/setIndexerValue';
 export const SET_INDEXER_FIELD_VALUE = 'settings/indexers/setIndexerFieldValue';
 export const SAVE_INDEXER = 'settings/indexers/saveIndexer';
@@ -36,6 +39,7 @@ export const TEST_ALL_INDEXERS = 'settings/indexers/testAllIndexers';
 export const fetchIndexers = createThunk(FETCH_INDEXERS);
 export const fetchIndexerSchema = createThunk(FETCH_INDEXER_SCHEMA);
 export const selectIndexerSchema = createAction(SELECT_INDEXER_SCHEMA);
+export const cloneIndexer = createAction(CLONE_INDEXER);
 
 export const saveIndexer = createThunk(SAVE_INDEXER);
 export const cancelSaveIndexer = createThunk(CANCEL_SAVE_INDEXER);
@@ -113,6 +117,30 @@ export default {
 
         return selectedSchema;
       });
+    },
+
+    [CLONE_INDEXER]: function(state, { payload }) {
+      const id = payload.id;
+      const newState = getSectionState(state, section);
+      const item = newState.items.find((i) => i.id === id);
+
+      // Use selectedSchema so `createProviderSettingsSelector` works properly
+      const selectedSchema = { ...item };
+      delete selectedSchema.id;
+      delete selectedSchema.name;
+
+      selectedSchema.fields = selectedSchema.fields.map((field) => {
+        return { ...field };
+      });
+
+      newState.selectedSchema = selectedSchema;
+
+      // Set the name in pendingChanges
+      newState.pendingChanges = {
+        name: `${item.name} - Copy`
+      };
+
+      return updateSectionState(state, section, newState);
     }
   }
 
