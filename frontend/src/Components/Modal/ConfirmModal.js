@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { kinds, sizes } from 'Helpers/Props';
+import keyboardShortcuts from 'Components/keyboardShortcuts';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import Modal from 'Components/Modal/Modal';
@@ -21,8 +22,13 @@ function ConfirmModal(props) {
     hideCancelButton,
     isSpinning,
     onConfirm,
-    onCancel
+    onCancel,
+    bindShortcut
   } = props;
+
+  useEffect(() => {
+    bindShortcut('enter', onConfirm);
+  }, [onConfirm]);
 
   return (
     <Modal
@@ -49,7 +55,7 @@ function ConfirmModal(props) {
           }
 
           <SpinnerButton
-            data-autofocus={true}
+            autoFocus={true}
             kind={kind}
             isSpinning={isSpinning}
             onPress={onConfirm}
@@ -74,7 +80,8 @@ ConfirmModal.propTypes = {
   hideCancelButton: PropTypes.bool,
   isSpinning: PropTypes.bool.isRequired,
   onConfirm: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired
+  onCancel: PropTypes.func.isRequired,
+  bindShortcut: PropTypes.func.isRequired
 };
 
 ConfirmModal.defaultProps = {
@@ -85,4 +92,4 @@ ConfirmModal.defaultProps = {
   isSpinning: false
 };
 
-export default ConfirmModal;
+export default keyboardShortcuts(ConfirmModal);

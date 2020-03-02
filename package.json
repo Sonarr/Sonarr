@@ -96,6 +96,7 @@
     "react-dnd-html5-backend": "9.3.2",
     "react-document-title": "2.0.3",
     "react-dom": "16.8.6",
+    "react-focus-lock": "2.2.1",
     "react-google-recaptcha": "1.1.0",
     "react-lazyload": "2.6.2",
     "react-measure": "1.4.7",

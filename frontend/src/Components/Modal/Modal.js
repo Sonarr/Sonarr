@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import FocusLock from 'react-focus-lock';
 import classNames from 'classnames';
 import elementClass from 'element-class';
 import getUniqueElememtId from 'Utilities/getUniqueElementId';
@@ -181,31 +182,33 @@ class Modal extends Component {
     }
 
     return ReactDOM.createPortal(
-      <div
-        className={styles.modalContainer}
-      >
+      <FocusLock disabled={false}>
         <div
-          ref={this._setBackgroundRef}
-          className={backdropClassName}
-          onMouseDown={this.onBackdropBeginPress}
-          onMouseUp={this.onBackdropEndPress}
+          className={styles.modalContainer}
         >
           <div
-            className={classNames(
-              className,
-              styles[size]
-            )}
-            style={style}
+            ref={this._setBackgroundRef}
+            className={backdropClassName}
+            onMouseDown={this.onBackdropBeginPress}
+            onMouseUp={this.onBackdropEndPress}
           >
-            <ErrorBoundary
-              errorComponent={ModalError}
-              onModalClose={onModalClose}
+            <div
+              className={classNames(
+                className,
+                styles[size]
+              )}
+              style={style}
             >
-              {children}
-            </ErrorBoundary>
+              <ErrorBoundary
+                errorComponent={ModalError}
+                onModalClose={onModalClose}
+              >
+                {children}
+              </ErrorBoundary>
+            </div>
           </div>
         </div>
-      </div>,
+      </FocusLock>,
       this._node
     );
   }

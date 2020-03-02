@@ -23,6 +23,8 @@ class Scroller extends Component {
     if (this.props.scrollTop != null) {
       this._scroller.scrollTop = scrollTop;
     }
+
+    this._scroller.focus({ preventScroll: true });
   }
 
   //
@@ -58,6 +60,7 @@ class Scroller extends Component {
           styles[scrollDirection],
           autoScroll && styles.autoScroll
         )}
+        tabIndex={-1}
         {...otherProps}
       >
         {children}
