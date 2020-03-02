@@ -32,7 +32,7 @@ class PageContentBody extends Component {
       ...otherProps
     } = this.props;
 
-    const ScrollerComponent = isSmallScreen ? Scroller : OverlayScroller;
+    const ScrollerComponent = OverlayScroller;
 
     return (
       <ScrollerComponent
