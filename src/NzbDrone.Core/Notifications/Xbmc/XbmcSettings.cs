@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         [FieldDefinition(5, Label = "GUI Notification", Type = FieldType.Checkbox)]
         public bool Notify { get; set; }
 
-        [FieldDefinition(6, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Checkbox)]
+        [FieldDefinition(6, Label = "Update Library", HelpText = "Update Library on Import & Rename?", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
         [FieldDefinition(7, Label = "Clean Library", HelpText = "Clean Library after update?", Type = FieldType.Checkbox)]
