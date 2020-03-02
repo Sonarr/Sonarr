@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { isLocked } from 'Utilities/scrollLock';
 import { scrollDirections } from 'Helpers/Props';
 import OverlayScroller from 'Components/Scroller/OverlayScroller';
+import Scroller from 'Components/Scroller/Scroller';
 import styles from './PageContentBody.css';
 
 class PageContentBody extends Component {
@@ -31,7 +32,7 @@ class PageContentBody extends Component {
       ...otherProps
     } = this.props;
 
-    const ScrollerComponent = OverlayScroller;
+    const ScrollerComponent = isSmallScreen ? Scroller : OverlayScroller;
 
     return (
       <ScrollerComponent
