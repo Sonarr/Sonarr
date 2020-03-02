@@ -135,7 +135,7 @@ class FilterBuilderRowValue extends Component {
         tagList={tagList}
         allowNew={!tagList.length}
         kind={kinds.DEFAULT}
-        delimiters={[9, 13]}
+        delimiters={['Tab', 'Enter']}
         maxSuggestionsLength={100}
         minQueryLength={0}
         tagComponent={FilterBuilderRowValueTag}

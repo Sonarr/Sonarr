@@ -100,9 +100,9 @@ class TagInput extends Component {
       suggestions
     } = this.state;
 
-    const keyCode = event.keyCode;
+    const key = event.key;
 
-    if (keyCode === 8 && !value.length) {
+    if (key === 'Backspace' && !value.length) {
       const index = tags.length - 1;
 
       if (index >= 0) {
@@ -116,7 +116,7 @@ class TagInput extends Component {
       event.preventDefault();
     }
 
-    if (delimiters.includes(keyCode)) {
+    if (delimiters.includes(key)) {
       const selectedIndex = this._autosuggestRef.highlightedSuggestionIndex;
       const tag = getTag(value, selectedIndex, suggestions, allowNew);
 
@@ -256,7 +256,7 @@ TagInput.propTypes = {
   allowNew: PropTypes.bool.isRequired,
   kind: PropTypes.oneOf(kinds.all).isRequired,
   placeholder: PropTypes.string.isRequired,
-  delimiters: PropTypes.arrayOf(PropTypes.number).isRequired,
+  delimiters: PropTypes.arrayOf(PropTypes.string).isRequired,
   minQueryLength: PropTypes.number.isRequired,
   hasError: PropTypes.bool,
   hasWarning: PropTypes.bool,
@@ -271,8 +271,7 @@ TagInput.defaultProps = {
   allowNew: true,
   kind: kinds.INFO,
   placeholder: '',
-  // Tab, enter, space and comma
-  delimiters: [9, 13, 32, 188],
+  delimiters: ['Tab', 'Enter', ' ', ','],
   minQueryLength: 1,
   tagComponent: TagInputTag
 };
