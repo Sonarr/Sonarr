@@ -29,6 +29,7 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.CustomFilters;
+using NzbDrone.Core.Download.History;
 using NzbDrone.Core.Extras.Metadata;
 using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.Extras.Others;
@@ -134,6 +135,9 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<DownloadClientStatus>().RegisterModel("DownloadClientStatus");
 
             Mapper.Entity<CustomFilter>().RegisterModel("CustomFilters");
+
+            Mapper.Entity<DownloadHistory>().RegisterModel("DownloadHistory")
+                  .AutoMapChildModels();
         }
 
         private static void RegisterMappers()

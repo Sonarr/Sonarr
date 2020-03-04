@@ -25,6 +25,7 @@ namespace NzbDrone.Core.History
         List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType);
         List<History> Find(string downloadId, HistoryEventType eventType);
         List<History> FindByDownloadId(string downloadId);
+        string FindDownloadId(EpisodeImportedEvent trackedDownload);
         List<History> Since(DateTime date, HistoryEventType? eventType);
     }
 
@@ -91,16 +92,14 @@ namespace NzbDrone.Core.History
             return _historyRepository.FindByDownloadId(downloadId);
         }
 
-        private string FindDownloadId(EpisodeImportedEvent trackedDownload)
+        public string FindDownloadId(EpisodeImportedEvent trackedDownload)
         {
             _logger.Debug("Trying to find downloadId for {0} from history", trackedDownload.ImportedEpisode.Path);
 
             var episodeIds = trackedDownload.EpisodeInfo.Episodes.Select(c => c.Id).ToList();
-
             var allHistory = _historyRepository.FindDownloadHistory(trackedDownload.EpisodeInfo.Series.Id, trackedDownload.ImportedEpisode.Quality);
 
-
-            //Find download related items for these episdoes
+            //Find download related items for these episodes
             var episodesHistory = allHistory.Where(h => episodeIds.Contains(h.EpisodeId)).ToList();
 
             var processedDownloadId = episodesHistory

@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download
             var downloadId = history.DownloadId;
             if (downloadId.IsNullOrWhiteSpace())
             {
-                PublishDownloadFailedEvent(new List<History.History> { history }, "Manually marked as failed");
+                PublishDownloadFailedEvent(new List<Core.History.History> { history }, "Manually marked as failed");
             }
             else
             {
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Download
             PublishDownloadFailedEvent(grabbedItems, failure, trackedDownload);
         }
 
-        private void PublishDownloadFailedEvent(List<History.History> historyItems, string message, TrackedDownload trackedDownload = null)
+        private void PublishDownloadFailedEvent(List<Core.History.History> historyItems, string message, TrackedDownload trackedDownload = null)
         {
             var historyItem = historyItems.First();
 
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Download
                 EpisodeIds = historyItems.Select(h => h.EpisodeId).ToList(),
                 Quality = historyItem.Quality,
                 SourceTitle = historyItem.SourceTitle,
-                DownloadClient = historyItem.Data.GetValueOrDefault(History.History.DOWNLOAD_CLIENT),
+                DownloadClient = historyItem.Data.GetValueOrDefault(Core.History.History.DOWNLOAD_CLIENT),
                 DownloadId = historyItem.DownloadId,
                 Message = message,
                 Data = historyItem.Data,

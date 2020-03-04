@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Download.History;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         private readonly IParsingService _parsingService;
         private readonly IHistoryService _historyService;
         private readonly IEventAggregator _eventAggregator;
-        private readonly ITrackedDownloadAlreadyImported _trackedDownloadAlreadyImported;
+        private readonly IDownloadHistoryService _downloadHistoryService;
         private readonly Logger _logger;
         private readonly ICached<TrackedDownload> _cache;
 
@@ -33,13 +34,13 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                                       ICacheManager cacheManager,
                                       IHistoryService historyService,
                                       IEventAggregator eventAggregator,
-                                      ITrackedDownloadAlreadyImported trackedDownloadAlreadyImported,
+                                      IDownloadHistoryService downloadHistoryService,
                                       Logger logger)
         {
             _parsingService = parsingService;
             _historyService = historyService;
             _eventAggregator = eventAggregator;
-            _trackedDownloadAlreadyImported = trackedDownloadAlreadyImported;
+            _downloadHistoryService = downloadHistoryService;
             _cache = cacheManager.GetCache<TrackedDownload>(GetType());
             _logger = logger;
         }
@@ -105,34 +106,19 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0);
                 }
 
+                var downloadHistory = _downloadHistoryService.GetLatestDownloadHistoryItem(downloadItem.DownloadId);
+
+                if (downloadHistory != null)
+                {
+                    var state = GetStateFromHistory(downloadHistory.EventType);
+                    trackedDownload.State = state;
+                }
+
                 if (historyItems.Any())
                 {
                     var firstHistoryItem = historyItems.First();
-                    var state = GetStateFromHistory(firstHistoryItem.EventType);
-
-                    trackedDownload.State = state;
-
-                    // TODO: Restore check to confirm all files were imported
-                    // This will treat partially imported downloads as imported (as it was before), which means a partially imported download after a
-                    // restart will get marked as imported without importing the restart of the files.
-
-                    // One potential issue here is if the latest is imported, but other episodes are ignored or never imported.
-                    // It's unlikely that will happen, but could happen if additional episodes are added to season after it's already imported.
-
-//                    if (state == TrackedDownloadState.Imported)
-//                    {
-//                        trackedDownload.State = TrackedDownloadState.Imported;
-//
-//                        var allImported = _trackedDownloadAlreadyImported.IsImported(trackedDownload, historyItems);
-//
-//                        trackedDownload.State = allImported ? TrackedDownloadState.Imported : TrackedDownloadState.Downloading;
-//                    }
-//                    else
-//                    {
-//                        trackedDownload.State = state;
-//                    }
-
                     var grabbedEvent = historyItems.FirstOrDefault(v => v.EventType == HistoryEventType.Grabbed);
+
                     trackedDownload.Indexer = grabbedEvent?.Data["indexer"];
 
                     if (parsedEpisodeInfo == null ||
@@ -201,15 +187,15 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
         }
 
-        private static TrackedDownloadState GetStateFromHistory(HistoryEventType eventType)
+        private static TrackedDownloadState GetStateFromHistory(DownloadHistoryEventType eventType)
         {
             switch (eventType)
             {
-                case HistoryEventType.DownloadFolderImported:
+                case DownloadHistoryEventType.DownloadImported:
                     return TrackedDownloadState.Imported;
-                case HistoryEventType.DownloadFailed:
+                case DownloadHistoryEventType.DownloadFailed:
                     return TrackedDownloadState.Failed;
-                case HistoryEventType.DownloadIgnored:
+                case DownloadHistoryEventType.DownloadIgnored:
                     return TrackedDownloadState.Ignored;
                 default:
                     return TrackedDownloadState.Downloading;
