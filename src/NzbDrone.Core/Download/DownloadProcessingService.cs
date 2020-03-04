@@ -33,14 +33,6 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        private void RemoveCompletedDownloads(List<TrackedDownload> trackedDownloads)
-        {
-            foreach (var trackedDownload in trackedDownloads.Where(c => c.DownloadItem.CanBeRemoved && c.State == TrackedDownloadState.Imported))
-            {
-                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
-            }
-        }
-
         public void Execute(ProcessMonitoredDownloadsCommand message)
         {
             var enableCompletedDownloadHandling = _configService.EnableCompletedDownloadHandling;
@@ -64,13 +56,6 @@ namespace NzbDrone.Core.Download
                 {
                     _logger.Debug(e, "Failed to process download: {0}", trackedDownload.DownloadItem.Title);
                 }
-
-            }
-
-            if (enableCompletedDownloadHandling && _configService.RemoveCompletedDownloads)
-            {
-                // Remove tracked downloads that are now complete
-                RemoveCompletedDownloads(trackedDownloads);
             }
 
             _eventAggregator.PublishEvent(new DownloadsProcessedEvent());
