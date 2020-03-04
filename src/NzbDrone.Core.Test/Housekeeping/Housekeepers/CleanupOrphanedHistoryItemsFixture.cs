@@ -1,6 +1,7 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.History;
 using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -9,7 +10,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {
     [TestFixture]
-    public class CleanupOrphanedHistoryItemsFixture : DbTest<CleanupOrphanedHistoryItems, History.History>
+    public class CleanupOrphanedHistoryItemsFixture : DbTest<CleanupOrphanedHistoryItems, EpisodeHistory>
     {
         private Series _series;
         private Episode _episode;
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         {
             GivenEpisode();
 
-            var history = Builder<History.History>.CreateNew()
+            var history = Builder<EpisodeHistory>.CreateNew()
                                                   .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.EpisodeId = _episode.Id)
                                                   .BuildNew();
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         {
             GivenSeries();
 
-            var history = Builder<History.History>.CreateNew()
+            var history = Builder<EpisodeHistory>.CreateNew()
                                                   .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.SeriesId = _series.Id)
                                                   .BuildNew();
@@ -70,7 +71,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             GivenSeries();
             GivenEpisode();
 
-            var history = Builder<History.History>.CreateListOfSize(2)
+            var history = Builder<EpisodeHistory>.CreateListOfSize(2)
                                                   .All()
                                                   .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.EpisodeId = _episode.Id)
@@ -91,7 +92,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             GivenSeries();
             GivenEpisode();
 
-            var history = Builder<History.History>.CreateListOfSize(2)
+            var history = Builder<EpisodeHistory>.CreateListOfSize(2)
                                                   .All()
                                                   .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.SeriesId = _series.Id)

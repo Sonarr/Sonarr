@@ -21,7 +21,7 @@ namespace Sonarr.Api.V3.History
         public DateTime Date { get; set; }
         public string DownloadId { get; set; }
 
-        public HistoryEventType EventType { get; set; }
+        public EpisodeHistoryEventType EventType { get; set; }
 
         public Dictionary<string, string> Data { get; set; }
 
@@ -31,7 +31,7 @@ namespace Sonarr.Api.V3.History
 
     public static class HistoryResourceMapper
     {
-        public static HistoryResource ToResource(this NzbDrone.Core.History.History model)
+        public static HistoryResource ToResource(this EpisodeHistory model)
         {
             if (model == null) return null;
 

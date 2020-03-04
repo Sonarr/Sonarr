@@ -9,20 +9,20 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.History
 {
-    public interface IHistoryRepository : IBasicRepository<History>
+    public interface IHistoryRepository : IBasicRepository<EpisodeHistory>
     {
-        History MostRecentForEpisode(int episodeId);
-        List<History> FindByEpisodeId(int episodeId);
-        History MostRecentForDownloadId(string downloadId);
-        List<History> FindByDownloadId(string downloadId);
-        List<History> GetBySeries(int seriesId, HistoryEventType? eventType);
-        List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType);
-        List<History> FindDownloadHistory(int idSeriesId, QualityModel quality);
+        EpisodeHistory MostRecentForEpisode(int episodeId);
+        List<EpisodeHistory> FindByEpisodeId(int episodeId);
+        EpisodeHistory MostRecentForDownloadId(string downloadId);
+        List<EpisodeHistory> FindByDownloadId(string downloadId);
+        List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType);
+        List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType);
+        List<EpisodeHistory> FindDownloadHistory(int idSeriesId, QualityModel quality);
         void DeleteForSeries(int seriesId);
-        List<History> Since(DateTime date, HistoryEventType? eventType);
+        List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType);
     }
 
-    public class HistoryRepository : BasicRepository<History>, IHistoryRepository
+    public class HistoryRepository : BasicRepository<EpisodeHistory>, IHistoryRepository
     {
 
         public HistoryRepository(IMainDatabase database, IEventAggregator eventAggregator)
@@ -30,33 +30,33 @@ namespace NzbDrone.Core.History
         {
         }
 
-        public History MostRecentForEpisode(int episodeId)
+        public EpisodeHistory MostRecentForEpisode(int episodeId)
         {
             return Query.Where(h => h.EpisodeId == episodeId)
                         .OrderByDescending(h => h.Date)
                         .FirstOrDefault();
         }
 
-        public List<History> FindByEpisodeId(int episodeId)
+        public List<EpisodeHistory> FindByEpisodeId(int episodeId)
         {
             return Query.Where(h => h.EpisodeId == episodeId)
                         .OrderByDescending(h => h.Date)
                         .ToList();
         }
 
-        public History MostRecentForDownloadId(string downloadId)
+        public EpisodeHistory MostRecentForDownloadId(string downloadId)
         {
             return Query.Where(h => h.DownloadId == downloadId)
              .OrderByDescending(h => h.Date)
              .FirstOrDefault();
         }
 
-        public List<History> FindByDownloadId(string downloadId)
+        public List<EpisodeHistory> FindByDownloadId(string downloadId)
         {
             return Query.Where(h => h.DownloadId == downloadId);
         }
 
-        public List<History> GetBySeries(int seriesId, HistoryEventType? eventType)
+        public List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType)
         {
             var query = Query.Where(h => h.SeriesId == seriesId);
 
@@ -68,9 +68,9 @@ namespace NzbDrone.Core.History
             return query.OrderByDescending(h => h.Date).ToList();
         }
 
-        public List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType)
+        public List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType)
         {
-            var query = Query.Join<History, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
+            var query = Query.Join<EpisodeHistory, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
                              .Where(h => h.SeriesId == seriesId)
                              .AndWhere(h => h.Episode.SeasonNumber == seasonNumber);
 
@@ -84,14 +84,14 @@ namespace NzbDrone.Core.History
             return query;
         }
 
-        public List<History> FindDownloadHistory(int idSeriesId, QualityModel quality)
+        public List<EpisodeHistory> FindDownloadHistory(int idSeriesId, QualityModel quality)
         {
             return Query.Where(h =>
                  h.SeriesId == idSeriesId &&
                  h.Quality == quality &&
-                 (h.EventType == HistoryEventType.Grabbed ||
-                 h.EventType == HistoryEventType.DownloadFailed ||
-                 h.EventType == HistoryEventType.DownloadFolderImported)
+                 (h.EventType == EpisodeHistoryEventType.Grabbed ||
+                 h.EventType == EpisodeHistoryEventType.DownloadFailed ||
+                 h.EventType == EpisodeHistoryEventType.DownloadFolderImported)
                  ).ToList();
         }
 
@@ -100,15 +100,15 @@ namespace NzbDrone.Core.History
             Delete(c => c.SeriesId == seriesId);
         }
 
-        protected override SortBuilder<History> GetPagedQuery(QueryBuilder<History> query, PagingSpec<History> pagingSpec)
+        protected override SortBuilder<EpisodeHistory> GetPagedQuery(QueryBuilder<EpisodeHistory> query, PagingSpec<EpisodeHistory> pagingSpec)
         {
-            var baseQuery = query.Join<History, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
-                                 .Join<History, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id);
+            var baseQuery = query.Join<EpisodeHistory, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
+                                 .Join<EpisodeHistory, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id);
 
             return base.GetPagedQuery(baseQuery, pagingSpec);
         }
 
-        public List<History> Since(DateTime date, HistoryEventType? eventType)
+        public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)
         {
             var query = Query.Where(h => h.Date >= date);
 

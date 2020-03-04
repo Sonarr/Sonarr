@@ -20,7 +20,7 @@ namespace NzbDrone.Api.History
         public string DownloadId { get; set; }
         public Language Language { get; set; }
 
-        public HistoryEventType EventType { get; set; }
+        public EpisodeHistoryEventType EventType { get; set; }
 
         public Dictionary<string, string> Data { get; set; }
 
@@ -30,7 +30,7 @@ namespace NzbDrone.Api.History
 
     public static class HistoryResourceMapper
     {
-        public static HistoryResource ToResource(this Core.History.History model)
+        public static HistoryResource ToResource(this EpisodeHistory model)
         {
             if (model == null) return null;
 

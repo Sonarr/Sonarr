@@ -49,7 +49,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 _logger.Debug("Checking current status of episode [{0}] in history", episode.Id);
                 var mostRecent = _historyService.MostRecentForEpisode(episode.Id);
 
-                if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
+                if (mostRecent != null && mostRecent.EventType == EpisodeHistoryEventType.Grabbed)
                 {
                     var recent = mostRecent.Date.After(DateTime.UtcNow.AddHours(-12));
 

@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private QualityModel _hdtv720p;
         private QualityModel _hdtv1080p;
         private RemoteEpisode _remoteEpisode;
-        private List<History.History> _history;
+        private List<EpisodeHistory> _history;
 
         [SetUp]
         public void Setup()
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                               .Build()
             };
 
-            _history = new List<History.History>();
+            _history = new List<EpisodeHistory>();
 
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.EnableCompletedDownloadHandling)
@@ -75,9 +75,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                   .Returns(false);
         }
 
-        private void GivenHistoryItem(string downloadId, string sourceTitle, QualityModel quality, HistoryEventType eventType)
+        private void GivenHistoryItem(string downloadId, string sourceTitle, QualityModel quality, EpisodeHistoryEventType eventType)
         {
-            _history.Add(new History.History
+            _history.Add(new EpisodeHistory
                          {
                              DownloadId = downloadId,
                              SourceTitle = sourceTitle,
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_accepted_if_episode_does_not_have_imported_event()
         {
-            GivenHistoryItem(Guid.NewGuid().ToString().ToUpper(), TITLE, _hdtv720p, HistoryEventType.Grabbed);
+            GivenHistoryItem(Guid.NewGuid().ToString().ToUpper(), TITLE, _hdtv720p, EpisodeHistoryEventType.Grabbed);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -122,8 +122,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             var downloadId = Guid.NewGuid().ToString().ToUpper();
 
-            GivenHistoryItem(downloadId, TITLE, _hdtv720p, HistoryEventType.Grabbed);
-            GivenHistoryItem(downloadId, TITLE, _hdtv720p, HistoryEventType.DownloadFolderImported);
+            GivenHistoryItem(downloadId, TITLE, _hdtv720p, EpisodeHistoryEventType.Grabbed);
+            GivenHistoryItem(downloadId, TITLE, _hdtv720p, EpisodeHistoryEventType.DownloadFolderImported);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -133,8 +133,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             var downloadId = Guid.NewGuid().ToString().ToUpper();
 
-            GivenHistoryItem(downloadId, TITLE, _hdtv720p, HistoryEventType.Grabbed);
-            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, HistoryEventType.DownloadFolderImported);
+            GivenHistoryItem(downloadId, TITLE, _hdtv720p, EpisodeHistoryEventType.Grabbed);
+            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, EpisodeHistoryEventType.DownloadFolderImported);
 
             _remoteEpisode.Release = Builder<TorrentInfo>.CreateNew()
                                                          .With(t => t.DownloadProtocol = DownloadProtocol.Torrent)
@@ -149,8 +149,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             var downloadId = Guid.NewGuid().ToString().ToUpper();
 
-            GivenHistoryItem(null, TITLE, _hdtv720p, HistoryEventType.Grabbed);
-            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, HistoryEventType.DownloadFolderImported);
+            GivenHistoryItem(null, TITLE, _hdtv720p, EpisodeHistoryEventType.Grabbed);
+            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, EpisodeHistoryEventType.DownloadFolderImported);
 
             _remoteEpisode.Release = Builder<TorrentInfo>.CreateNew()
                                                          .With(t => t.DownloadProtocol = DownloadProtocol.Torrent)
@@ -165,8 +165,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             var downloadId = Guid.NewGuid().ToString().ToUpper();
 
-            GivenHistoryItem(downloadId, TITLE, _hdtv720p, HistoryEventType.Grabbed);
-            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, HistoryEventType.DownloadFolderImported);
+            GivenHistoryItem(downloadId, TITLE, _hdtv720p, EpisodeHistoryEventType.Grabbed);
+            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, EpisodeHistoryEventType.DownloadFolderImported);
 
             _remoteEpisode.Release = Builder<TorrentInfo>.CreateNew()
                                                          .With(t => t.DownloadProtocol = DownloadProtocol.Torrent)
@@ -181,8 +181,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             var downloadId = Guid.NewGuid().ToString().ToUpper();
 
-            GivenHistoryItem(downloadId, TITLE, _hdtv720p, HistoryEventType.Grabbed);
-            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, HistoryEventType.DownloadFolderImported);
+            GivenHistoryItem(downloadId, TITLE, _hdtv720p, EpisodeHistoryEventType.Grabbed);
+            GivenHistoryItem(downloadId, TITLE, _hdtv1080p, EpisodeHistoryEventType.DownloadFolderImported);
 
             _remoteEpisode.Release = Builder<TorrentInfo>.CreateNew()
                                                          .With(t => t.DownloadProtocol = DownloadProtocol.Torrent)

@@ -21,8 +21,8 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
         {
             Mocker.GetMock<IHistoryService>()
                 .Setup(s => s.FindByDownloadId(It.Is<string>(sr => sr == "35238")))
-                .Returns(new List<History.History>(){
-                 new History.History(){
+                .Returns(new List<EpisodeHistory>(){
+                 new EpisodeHistory(){
                      DownloadId = "35238",
                      SourceTitle = "TV Series S01",
                      SeriesId = 5,
@@ -61,6 +61,12 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             {
                 Title = "The torrent release folder",
                 DownloadId = "35238",
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                {
+                    Protocol = client.Protocol,
+                    Id = client.Id,
+                    Name = client.Name
+                }
             };
 
             var trackedDownload = Subject.TrackDownload(client, item);
@@ -90,8 +96,8 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
 
             Mocker.GetMock<IHistoryService>()
                 .Setup(s => s.FindByDownloadId(It.Is<string>(sr => sr == "35238")))
-                .Returns(new List<History.History>(){
-                 new History.History(){
+                .Returns(new List<EpisodeHistory>(){
+                 new EpisodeHistory(){
                      DownloadId = "35238",
                      SourceTitle = "TV Series Special",
                      SeriesId = 5,
@@ -117,6 +123,12 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             {
                 Title = "The torrent release folder",
                 DownloadId = "35238",
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                {
+                    Protocol = client.Protocol,
+                    Id = client.Id,
+                    Name = client.Name
+                }
             };
 
             var trackedDownload = Subject.TrackDownload(client, item);

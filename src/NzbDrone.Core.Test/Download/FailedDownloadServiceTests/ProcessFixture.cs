@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
     public class ProcessFixture : CoreTest<FailedDownloadService>
     {
         private TrackedDownload _trackedDownload;
-        private List<History.History> _grabHistory;
+        private List<EpisodeHistory> _grabHistory;
 
         [SetUp]
         public void Setup()
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
                                                     .With(h => h.Title = "Drone.S01E01.HDTV")
                                                     .Build();
 
-            _grabHistory = Builder<History.History>.CreateListOfSize(2).BuildList();
+            _grabHistory = Builder<EpisodeHistory>.CreateListOfSize(2).BuildList();
 
             var remoteEpisode = new RemoteEpisode
             {
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
 
 
             Mocker.GetMock<IHistoryService>()
-                  .Setup(s => s.Find(_trackedDownload.DownloadItem.DownloadId, HistoryEventType.Grabbed))
+                  .Setup(s => s.Find(_trackedDownload.DownloadItem.DownloadId, EpisodeHistoryEventType.Grabbed))
                   .Returns(_grabHistory);
 
         }
@@ -54,8 +54,8 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
         private void GivenNoGrabbedHistory()
         {
             Mocker.GetMock<IHistoryService>()
-                .Setup(s => s.Find(_trackedDownload.DownloadItem.DownloadId, HistoryEventType.Grabbed))
-                .Returns(new List<History.History>());
+                .Setup(s => s.Find(_trackedDownload.DownloadItem.DownloadId, EpisodeHistoryEventType.Grabbed))
+                .Returns(new List<EpisodeHistory>());
         }
 
         [Test]

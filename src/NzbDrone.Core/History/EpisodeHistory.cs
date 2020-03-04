@@ -7,11 +7,11 @@ using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.History
 {
-    public class History : ModelBase
+    public class EpisodeHistory : ModelBase
     {
         public const string DOWNLOAD_CLIENT = "downloadClient";
 
-        public History()
+        public EpisodeHistory()
         {
             Data = new Dictionary<string, string>();
         }
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.History
         public DateTime Date { get; set; }
         public Episode Episode { get; set; }
         public Series Series { get; set; }
-        public HistoryEventType EventType { get; set; }
+        public EpisodeHistoryEventType EventType { get; set; }
         public Dictionary<string, string> Data { get; set; }
         public Language Language { get; set; }
 
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.History
 
     }
 
-    public enum HistoryEventType
+    public enum EpisodeHistoryEventType
     {
         Unknown = 0,
         Grabbed = 1,
