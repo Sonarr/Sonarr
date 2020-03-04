@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Messaging.Commands;
@@ -14,18 +16,21 @@ namespace NzbDrone.Core.Download
         private readonly IFailedDownloadService _failedDownloadService;
         private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ILogger _logger;
 
         public DownloadProcessingService(IConfigService configService,
                                          ICompletedDownloadService completedDownloadService,
                                          IFailedDownloadService failedDownloadService,
                                          ITrackedDownloadService trackedDownloadService,
-                                         IEventAggregator eventAggregator)
+                                         IEventAggregator eventAggregator,
+                                         ILogger logger)
         {
             _configService = configService;
             _completedDownloadService = completedDownloadService;
             _failedDownloadService = failedDownloadService;
             _trackedDownloadService = trackedDownloadService;
             _eventAggregator = eventAggregator;
+            _logger = logger;
         }
 
         private void RemoveCompletedDownloads(List<TrackedDownload> trackedDownloads)
@@ -43,15 +48,23 @@ namespace NzbDrone.Core.Download
 
             foreach (var trackedDownload in trackedDownloads)
             {
-                if (trackedDownload.State == TrackedDownloadState.FailedPending)
+                try
                 {
-                    _failedDownloadService.ProcessFailed(trackedDownload);
+                    if (trackedDownload.State == TrackedDownloadState.FailedPending)
+                    {
+                        _failedDownloadService.ProcessFailed(trackedDownload);
+                    }
+
+                    if (enableCompletedDownloadHandling && trackedDownload.State == TrackedDownloadState.ImportPending)
+                    {
+                        _completedDownloadService.Import(trackedDownload);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.Debug(e, "Failed to process download: {0}", trackedDownload.DownloadItem.Title);
                 }
 
-                if (enableCompletedDownloadHandling && trackedDownload.State == TrackedDownloadState.ImportPending)
-                {
-                    _completedDownloadService.Import(trackedDownload);
-                }
             }
 
             if (enableCompletedDownloadHandling && _configService.RemoveCompletedDownloads)
