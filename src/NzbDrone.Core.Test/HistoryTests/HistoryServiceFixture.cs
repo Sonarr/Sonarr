@@ -13,6 +13,7 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Qualities;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
@@ -68,14 +69,19 @@ namespace NzbDrone.Core.Test.HistoryTests
 
             var downloadClientItem = new DownloadClientItem
                                      {
-                                         DownloadClient = "sab",
+                                         DownloadClientInfo = new DownloadClientItemClientInfo
+                                         {
+                                             Protocol = DownloadProtocol.Usenet,
+                                             Id = 1,
+                                             Name = "sab"
+                                         },
                                          DownloadId = "abcd"
                                      };
 
             Subject.Handle(new EpisodeImportedEvent(localEpisode, episodeFile, new List<EpisodeFile>(), true, downloadClientItem));
 
             Mocker.GetMock<IHistoryRepository>()
-                .Verify(v => v.Insert(It.Is<History.History>(h => h.SourceTitle == Path.GetFileNameWithoutExtension(localEpisode.Path))));
+                .Verify(v => v.Insert(It.Is<EpisodeHistory>(h => h.SourceTitle == Path.GetFileNameWithoutExtension(localEpisode.Path))));
         }
     }
 }

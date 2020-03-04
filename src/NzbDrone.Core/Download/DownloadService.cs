@@ -5,7 +5,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.TPL;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
@@ -98,6 +97,8 @@ namespace NzbDrone.Core.Download
 
             var episodeGrabbedEvent = new EpisodeGrabbedEvent(remoteEpisode);
             episodeGrabbedEvent.DownloadClient = downloadClient.Name;
+            episodeGrabbedEvent.DownloadClientId = downloadClient.Definition.Id;
+            episodeGrabbedEvent.DownloadClientName = downloadClient.Definition.Name;
 
             if (!string.IsNullOrWhiteSpace(downloadClientId))
             {

@@ -8,13 +8,13 @@ using NzbDrone.Core.Qualities;
 namespace NzbDrone.Core.Test.HistoryTests
 {
     [TestFixture]
-    public class HistoryRepositoryFixture : DbTest<HistoryRepository, History.History>
+    public class HistoryRepositoryFixture : DbTest<HistoryRepository, EpisodeHistory>
     {
 
         [Test]
         public void should_read_write_dictionary()
         {
-            var history = Builder<History.History>.CreateNew()
+            var history = Builder<EpisodeHistory>.CreateNew()
                 .With(c => c.Quality = new QualityModel())
                 .BuildNew();
 
@@ -30,16 +30,16 @@ namespace NzbDrone.Core.Test.HistoryTests
         [Test]
         public void should_get_download_history()
         {
-            var historyBluray = Builder<History.History>.CreateNew()
+            var historyBluray = Builder<EpisodeHistory>.CreateNew()
                 .With(c => c.Quality = new QualityModel(Quality.Bluray1080p))
                 .With(c => c.SeriesId = 12)
-                .With(c => c.EventType = HistoryEventType.Grabbed)
+                .With(c => c.EventType = EpisodeHistoryEventType.Grabbed)
                 .BuildNew();
 
-            var historyDvd = Builder<History.History>.CreateNew()
+            var historyDvd = Builder<EpisodeHistory>.CreateNew()
                 .With(c => c.Quality = new QualityModel(Quality.DVD))
                 .With(c => c.SeriesId = 12)
-                .With(c => c.EventType = HistoryEventType.Grabbed)
+                .With(c => c.EventType = EpisodeHistoryEventType.Grabbed)
              .BuildNew();
 
             Subject.Insert(historyBluray);

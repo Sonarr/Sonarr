@@ -32,7 +32,7 @@ namespace NzbDrone.Api.History
             Post("/failed",  x => MarkAsFailed());
         }
 
-        protected HistoryResource MapToResource(Core.History.History model)
+        protected HistoryResource MapToResource(EpisodeHistory model)
         {
             var resource = model.ToResource();
 
@@ -50,12 +50,12 @@ namespace NzbDrone.Api.History
         private PagingResource<HistoryResource> GetHistory(PagingResource<HistoryResource> pagingResource)
         {
             var episodeId = Request.Query.EpisodeId;
-            var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, Core.History.History>("date", SortDirection.Descending);
+            var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, EpisodeHistory>("date", SortDirection.Descending);
             var filter = pagingResource.Filters.FirstOrDefault();
 
             if (filter != null && filter.Key == "eventType")
             {
-                var filterValue = (HistoryEventType)Convert.ToInt32(filter.Value);
+                var filterValue = (EpisodeHistoryEventType)Convert.ToInt32(filter.Value);
                 pagingSpec.FilterExpressions.Add(v => v.EventType == filterValue);
             }
 
@@ -79,11 +79,11 @@ namespace NzbDrone.Api.History
             }
 
             DateTime date = DateTime.Parse(queryDate.Value);
-            HistoryEventType? eventType = null;
+            EpisodeHistoryEventType? eventType = null;
 
             if (queryEventType.HasValue)
             {
-                eventType = (HistoryEventType)Convert.ToInt32(queryEventType.Value);
+                eventType = (EpisodeHistoryEventType)Convert.ToInt32(queryEventType.Value);
             }
 
             return _historyService.Since(date, eventType).Select(MapToResource).ToList();

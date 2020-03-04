@@ -11,7 +11,7 @@ namespace NzbDrone.Core.MediaFiles.Events
         public EpisodeFile ImportedEpisode { get; private set; }
         public List<EpisodeFile> OldFiles { get; private set; }
         public bool NewDownload { get; private set; }
-        public string DownloadClient { get; private set; }
+        public DownloadClientItemClientInfo DownloadClientInfo { get; set; }
         public string DownloadId { get; private set; }
 
         public EpisodeImportedEvent(LocalEpisode episodeInfo, EpisodeFile importedEpisode, List<EpisodeFile> oldFiles, bool newDownload, DownloadClientItem downloadClientItem)
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.Events
 
             if (downloadClientItem != null)
             {
-                DownloadClient = downloadClientItem.DownloadClient;
+                DownloadClientInfo = downloadClientItem.DownloadClientInfo;
                 DownloadId = downloadClientItem.DownloadId;
             }
         }

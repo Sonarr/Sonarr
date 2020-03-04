@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Notifications
                 EpisodeFile = message.ImportedEpisode,
                 OldFiles = message.OldFiles,
                 SourcePath = message.EpisodeInfo.Path,
-                DownloadClient = message.DownloadClient,
+                DownloadClient = message.DownloadClientInfo?.Name,
                 DownloadId = message.DownloadId
             };
 

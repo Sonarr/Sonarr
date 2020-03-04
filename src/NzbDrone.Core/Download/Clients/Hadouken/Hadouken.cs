@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
                 var item = new DownloadClientItem
                 {
-                    DownloadClient = Definition.Name,
+                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this),
                     DownloadId = torrent.InfoHash.ToUpper(),
                     OutputPath = outputPath + torrent.Name,
                     RemainingSize = torrent.TotalSize - torrent.DownloadedBytes,

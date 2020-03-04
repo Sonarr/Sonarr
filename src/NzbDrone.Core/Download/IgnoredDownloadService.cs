@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Download
                                           Language = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Language,
                                           Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
                                           SourceTitle = trackedDownload.DownloadItem.Title,
-                                          DownloadClient = trackedDownload.DownloadItem.DownloadClient,
+                                          DownloadClientInfo = trackedDownload.DownloadItem.DownloadClientInfo,
                                           DownloadId = trackedDownload.DownloadItem.DownloadId,
                                           Message = "Manually ignored"
                                       };

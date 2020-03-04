@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 }
 
                 var queueItem = new DownloadClientItem();
-                queueItem.DownloadClient = Definition.Name;
+                queueItem.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this);
                 queueItem.DownloadId = sabQueueItem.Id;
                 queueItem.Category = sabQueueItem.Category;
                 queueItem.Title = sabQueueItem.Title;
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 var historyItem = new DownloadClientItem
                 {
-                    DownloadClient = Definition.Name,
+                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this),
                     DownloadId = sabHistoryItem.Id,
                     Category = sabHistoryItem.Category,
                     Title = sabHistoryItem.Title,

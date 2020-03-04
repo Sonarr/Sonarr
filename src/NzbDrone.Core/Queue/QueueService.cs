@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Queue
                 RemoteEpisode = trackedDownload.RemoteEpisode,
                 DownloadId = trackedDownload.DownloadItem.DownloadId,
                 Protocol = trackedDownload.Protocol,
-                DownloadClient = trackedDownload.DownloadItem.DownloadClient,
+                DownloadClient = trackedDownload.DownloadItem.DownloadClientInfo.Name,
                 Indexer = trackedDownload.Indexer,
                 OutputPath = trackedDownload.DownloadItem.OutputPath.ToString()
             };

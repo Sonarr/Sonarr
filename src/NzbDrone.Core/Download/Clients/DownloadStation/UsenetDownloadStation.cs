@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 var item = new DownloadClientItem()
                 {
                     Category = Settings.TvCategory,
-                    DownloadClient = Definition.Name,
+                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this),
                     DownloadId = CreateDownloadId(nzb.Id, serialNumber),
                     Title = nzb.Title,
                     TotalSize = nzb.Size,

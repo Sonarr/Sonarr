@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 item.Title = torrent.Name;
                 item.TotalSize = torrent.Size;
                 item.Category = torrent.Label;
-                item.DownloadClient = Definition.Name;
+                item.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this);
                 item.RemainingSize = torrent.Remaining;
                 item.SeedRatio = torrent.Ratio;
 
