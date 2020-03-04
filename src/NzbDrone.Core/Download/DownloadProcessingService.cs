@@ -16,14 +16,14 @@ namespace NzbDrone.Core.Download
         private readonly IFailedDownloadService _failedDownloadService;
         private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly IEventAggregator _eventAggregator;
-        private readonly ILogger _logger;
+        private readonly Logger _logger;
 
         public DownloadProcessingService(IConfigService configService,
                                          ICompletedDownloadService completedDownloadService,
                                          IFailedDownloadService failedDownloadService,
                                          ITrackedDownloadService trackedDownloadService,
                                          IEventAggregator eventAggregator,
-                                         ILogger logger)
+                                         Logger logger)
         {
             _configService = configService;
             _completedDownloadService = completedDownloadService;
