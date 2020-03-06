@@ -37,6 +37,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 }
 
                 var qualityCompare = qualityComparer.Compare(localEpisode.Quality.Quality, episodeFile.Quality.Quality);
+                var languageCompare = languageComparer.Compare(localEpisode.Language, episodeFile.Language);
 
                 if (qualityCompare < 0)
                 {
@@ -44,14 +45,21 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     return Decision.Reject("Not an upgrade for existing episode file(s)");
                 }
 
-                if (qualityCompare == 0 && downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
+
+                // Same quality, is not a language upgrade, propers/repacks are preferred and it is not a revision update
+                // This will allow language upgrades of a lower revision to be imported, which are allowed to be grabbed,
+                // they just don't import automatically.
+
+                if (qualityCompare == 0 &&
+                    languageCompare <= 0 &&
+                    downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                     localEpisode.Quality.Revision.CompareTo(episodeFile.Quality.Revision) < 0)
                 {
-                    _logger.Debug("This file isn't a quality upgrade for all episodes. Skipping {0}", localEpisode.Path);
+                    _logger.Debug("This file isn't a quality revision upgrade for all episodes. Skipping {0}", localEpisode.Path);
                     return Decision.Reject("Not an upgrade for existing episode file(s)");
                 }
 
-                if (languageComparer.Compare(localEpisode.Language, episodeFile.Language) < 0 && qualityCompare == 0)
+                if (languageCompare < 0 && qualityCompare == 0)
                 {
                     _logger.Debug("This file isn't a language upgrade for all episodes. Skipping {0}", localEpisode.Path);
                     return Decision.Reject("Not an upgrade for existing episode file(s)");
