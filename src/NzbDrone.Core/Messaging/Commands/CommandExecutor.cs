@@ -63,13 +63,15 @@ namespace NzbDrone.Core.Messaging.Commands
 
         private void ExecuteCommand<TCommand>(TCommand command, CommandModel commandModel) where TCommand : Command
         {
-            var handlerContract = typeof(IExecute<>).MakeGenericType(command.GetType());
-            var handler = (IExecute<TCommand>)_serviceFactory.Build(handlerContract);
-
-            _logger.Trace("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
+            IExecute<TCommand> handler = null;
 
             try
             {
+                var handlerContract = typeof(IExecute<>).MakeGenericType(command.GetType());
+                handler = (IExecute<TCommand>)_serviceFactory.Build(handlerContract);
+
+                _logger.Trace("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
+
                 _commandQueueManager.Start(commandModel);
                 BroadcastCommandUpdate(commandModel);
 
@@ -104,9 +106,12 @@ namespace NzbDrone.Core.Messaging.Commands
                 {
                     ProgressMessageContext.CommandModel = null;
                 }
-            }
 
-            _logger.Trace("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, commandModel.Duration.ToString());
+                if (handler != null)
+                {
+                    _logger.Trace("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, commandModel.Duration.ToString());
+                }
+            }
         }
 
         private void BroadcastCommandUpdate(CommandModel command)
