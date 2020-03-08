@@ -95,7 +95,7 @@ chown -R $USER:$GROUP /usr/lib/sonarr
 sed -i "s:User=sonarr:User=$USER:g; s:Group=sonarr:Group=$GROUP:g; s:-data=/var/lib/sonarr:-data=$CONFDIR:g" /lib/systemd/system/sonarr.service
 
 #BEGIN BUILTIN UPDATER
-if [ $1 = "upgrade" ] && [ "$UPDATER" = "BuiltIn" ]; then
+if [ "$UPDATER" = "BuiltIn" ]; then
   # If we upgraded, signal Sonarr to do an update check on startup instead of scheduled.
   touch $CONFDIR/update_required
   chown $USER:$GROUP $CONFDIR/update_required
