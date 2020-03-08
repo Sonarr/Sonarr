@@ -342,6 +342,10 @@ namespace NzbDrone.Core.Parser
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly RegexReplace WebsitePostfixRegex = new RegexReplace(@"\[\s*[-a-z]+(\.[a-z0-9]+)+\s*\]$",
+                                                                string.Empty,
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private static readonly Regex SixDigitAirDateRegex = new Regex(@"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])",
                                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -435,8 +439,9 @@ namespace NzbDrone.Core.Parser
 
                 var simpleTitle = SimpleTitleRegex.Replace(releaseTitle);
 
-                // TODO: Quick fix stripping [url] - prefixes.
+                // TODO: Quick fix stripping [url] - prefixes and postfixes.
                 simpleTitle = WebsitePrefixRegex.Replace(simpleTitle);
+                simpleTitle = WebsitePostfixRegex.Replace(simpleTitle);
 
                 simpleTitle = CleanTorrentSuffixRegex.Replace(simpleTitle);
 
