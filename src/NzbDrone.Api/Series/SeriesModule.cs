@@ -264,7 +264,10 @@ namespace NzbDrone.Api.Series
 
         public void Handle(MediaCoversUpdatedEvent message)
         {
-            BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
+            if (message.Updated)
+            {
+                BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
+            }
         }
     }
 }

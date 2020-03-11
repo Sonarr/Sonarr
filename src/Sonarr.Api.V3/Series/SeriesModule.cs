@@ -280,7 +280,10 @@ namespace Sonarr.Api.V3.Series
 
         public void Handle(MediaCoversUpdatedEvent message)
         {
-            BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
+            if (message.Updated)
+            {
+                BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
+            }
         }
     }
 }
