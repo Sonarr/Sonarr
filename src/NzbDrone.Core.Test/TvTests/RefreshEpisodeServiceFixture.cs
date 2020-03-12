@@ -9,6 +9,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.TvTests
 {
@@ -77,12 +78,14 @@ namespace NzbDrone.Core.Test.TvTests
         {
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
                 .Returns(new List<Episode>());
-
+            
             Subject.RefreshEpisodeInfo(GetSeries(), GetEpisodes());
 
             _insertedEpisodes.Should().HaveSameCount(GetEpisodes());
             _updatedEpisodes.Should().BeEmpty();
             _deletedEpisodes.Should().BeEmpty();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -144,6 +147,63 @@ namespace NzbDrone.Core.Test.TvTests
 
             _updatedEpisodes.Should().HaveSameCount(GetEpisodes());
             _updatedEpisodes.Should().OnlyContain(e => e.Monitored == true);
+        }
+
+        [Test]
+        public void should_not_set_monitored_status_for_old_episodes_to_false_if_recent_enough()
+        {
+            var series = GetSeries();
+            series.Seasons = new List<Season>();
+            series.Seasons.Add(new Season { SeasonNumber = 1, Monitored = true });
+
+            var episodes = GetEpisodes().OrderBy(v => v.SeasonNumber).ThenBy(v => v.EpisodeNumber).Take(5).ToList();
+
+            episodes[1].AirDateUtc = DateTime.UtcNow.AddDays(-15);
+            episodes[2].AirDateUtc = DateTime.UtcNow.AddDays(-10);
+            episodes[3].AirDateUtc = DateTime.UtcNow.AddDays(1);
+
+            var existingEpisodes = episodes.Skip(4).ToList();
+
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
+                .Returns(existingEpisodes);
+
+            Subject.RefreshEpisodeInfo(series, episodes);
+
+            _insertedEpisodes = _insertedEpisodes.OrderBy(v => v.EpisodeNumber).ToList();
+
+            _insertedEpisodes.Should().HaveCount(4);
+            _insertedEpisodes[0].Monitored.Should().Be(true);
+            _insertedEpisodes[1].Monitored.Should().Be(true);
+            _insertedEpisodes[2].Monitored.Should().Be(true);
+            _insertedEpisodes[3].Monitored.Should().Be(true);
+        }
+
+        [Test]
+        public void should_set_monitored_status_for_old_episodes_to_false_if_no_episodes_existed()
+        {
+            var series = GetSeries();
+            series.Seasons = new List<Season>();
+
+            var episodes = GetEpisodes().OrderBy(v => v.SeasonNumber).ThenBy(v => v.EpisodeNumber).Take(4).ToList();
+
+            episodes[1].AirDateUtc = DateTime.UtcNow.AddDays(-15);
+            episodes[2].AirDateUtc = DateTime.UtcNow.AddDays(-10);
+            episodes[3].AirDateUtc = DateTime.UtcNow.AddDays(1);
+
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
+                .Returns(new List<Episode>());
+
+            Subject.RefreshEpisodeInfo(series, episodes);
+
+            _insertedEpisodes = _insertedEpisodes.OrderBy(v => v.EpisodeNumber).ToList();
+
+            _insertedEpisodes.Should().HaveSameCount(episodes);
+            _insertedEpisodes[0].Monitored.Should().Be(false);
+            _insertedEpisodes[1].Monitored.Should().Be(false);
+            _insertedEpisodes[2].Monitored.Should().Be(false);
+            _insertedEpisodes[3].Monitored.Should().Be(true);
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
