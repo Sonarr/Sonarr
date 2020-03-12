@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Tv
 
             var existingEpisodes = _episodeService.GetEpisodeBySeries(series.Id);
             var seasons = series.Seasons;
+            var hasExisting = existingEpisodes.Any();
 
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
@@ -85,6 +86,8 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
+            UnmonitorReaddedEpisodes(series, newList, hasExisting);
+
             var allEpisodes = new List<Episode>();
             allEpisodes.AddRange(newList);
             allEpisodes.AddRange(updateList);
@@ -118,6 +121,41 @@ namespace NzbDrone.Core.Tv
 
             var season = seasons.SingleOrDefault(c => c.SeasonNumber == episode.SeasonNumber);
             return season == null || season.Monitored;
+        }
+
+
+        private void UnmonitorReaddedEpisodes(Series series, List<Episode> episodes, bool hasExisting)
+        {
+            if (series.AddOptions != null)
+            {
+                return;
+            }
+
+            var threshold = DateTime.UtcNow.AddDays(-14);
+
+            var oldEpisodes = episodes.Where(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(threshold)).ToList();
+
+            if (oldEpisodes.Any())
+            {
+                if (hasExisting)
+                {
+                    _logger.Warn("Show {0} ({1}) had {2} old episodes appear, please check monitored status.", series.TvdbId, series.Title, oldEpisodes.Count);
+                }
+                else
+                {
+                    threshold = DateTime.UtcNow.AddDays(-1);
+
+                    foreach (var episode in episodes)
+                    {
+                        if (episode.AirDateUtc.HasValue && episode.AirDateUtc.Value.Before(threshold))
+                        {
+                            episode.Monitored = false;
+                        }
+                    }
+
+                    _logger.Warn("Show {0} ({1}) had {2} old episodes appear, unmonitored aired episodes to prevent unexpected downloads.", series.TvdbId, series.Title, oldEpisodes.Count);
+                }
+            }
         }
 
         private void AdjustMultiEpisodeAirTime(Series series, IEnumerable<Episode> allEpisodes)

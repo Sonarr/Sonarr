@@ -73,7 +73,9 @@ namespace NzbDrone.Core.Tv
                     return;
                 }
 
-                var previouslyAired = message.Added.Where(a => a.AirDateUtc.HasValue && a.AirDateUtc.Value.Before(DateTime.UtcNow.AddDays(1)) && a.Monitored).ToList();
+                var previouslyAired = message.Added.Where(a => a.AirDateUtc.HasValue
+                    && a.AirDateUtc.Value.Between(DateTime.UtcNow.AddDays(-14), DateTime.UtcNow.AddDays(1))
+                    && a.Monitored).ToList();
 
                 if (previouslyAired.Empty())
                 {
