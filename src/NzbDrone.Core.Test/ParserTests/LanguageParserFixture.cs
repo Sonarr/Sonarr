@@ -228,6 +228,8 @@ namespace NzbDrone.Core.Test.ParserTests
 
 
         [TestCase("Russian.Puppets.S01E07.Cold.Action.HDTV.XviD-Droned")]
+        [TestCase("Russian.Puppets.S01E07E08.Cold.Action.HDTV.XviD-Droned")]
+        [TestCase("Russian.Puppets.S01.1080p.WEBRip.DDP5.1.x264-Drone")]
         public void should_not_parse_series_or_episode_title(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
