@@ -45,6 +45,7 @@
   display: flex;
   justify-content: center;
   max-width: 90%;
+  max-height: 100%;
   width: 350px !important;
   height: auto !important;
 }
