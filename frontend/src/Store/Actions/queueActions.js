@@ -77,6 +77,7 @@ export const defaultState = {
       {
         name: 'episode.title',
         label: 'Episode Title',
+        isSortable: true,
         isVisible: true
       },
       {
