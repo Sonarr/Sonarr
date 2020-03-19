@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Messaging.Events;
 
 
@@ -36,17 +37,21 @@ namespace NzbDrone.Core.Tv
         {
             cleanTitle = cleanTitle.ToLowerInvariant();
 
-            return Query.Where(s => s.CleanTitle == cleanTitle)
-                        .SingleOrDefault();
+            var series = Query.Where(s => s.CleanTitle == cleanTitle)
+                                        .ToList();
+
+            return ReturnSingleSeriesOrThrow(series);
         }
 
         public Series FindByTitle(string cleanTitle, int year)
         {
             cleanTitle = cleanTitle.ToLowerInvariant();
 
-            return Query.Where(s => s.CleanTitle == cleanTitle)
-                        .AndWhere(s => s.Year == year)
-                        .SingleOrDefault();
+            var series = Query.Where(s => s.CleanTitle == cleanTitle)
+                                        .AndWhere(s => s.Year == year)
+                                        .ToList();
+
+            return ReturnSingleSeriesOrThrow(series);
         }
 
         public List<Series> FindByTitleInexact(string cleanTitle)
@@ -71,6 +76,21 @@ namespace NzbDrone.Core.Tv
         {
             return Query.Where(s => s.Path == path)
                         .FirstOrDefault();
+        }
+
+        private Series ReturnSingleSeriesOrThrow(List<Series> series)
+        {
+            if (series.Count == 0)
+            {
+                return null;
+            }
+
+            if (series.Count == 1)
+            {
+                return series.First();
+            }
+
+            throw new MultipleSeriesFoundException("Expected one series, but found {0}. Matching series: {1}", series.Count, string.Join(",", series));
         }
     }
 }

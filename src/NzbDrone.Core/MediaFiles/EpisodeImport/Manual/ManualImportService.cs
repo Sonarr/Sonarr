@@ -105,11 +105,25 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         private List<ManualImportItem> ProcessFolder(string rootFolder, string baseFolder, string downloadId, int? seriesId, bool filterExistingFiles)
         {
             DownloadClientItem downloadClientItem = null;
+            Series series = null;
+
             var directoryInfo = new DirectoryInfo(baseFolder);
 
-            var series = seriesId.HasValue ?
-                _seriesService.GetSeries(seriesId.Value) :
-                _parsingService.GetSeries(directoryInfo.Name);
+            if (seriesId.HasValue)
+            {
+                series = _seriesService.GetSeries(seriesId.Value);
+            }
+            else
+            {
+                try
+                {
+                    series = _parsingService.GetSeries(directoryInfo.Name);
+                }
+                catch (MultipleSeriesFoundException e)
+                {
+                    _logger.Warn(e, "Unable to find series from title");
+                }
+            }
 
             if (downloadId.IsNotNullOrWhiteSpace())
             {
