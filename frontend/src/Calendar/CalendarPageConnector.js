@@ -3,11 +3,14 @@ import { createSelector } from 'reselect';
 import moment from 'moment';
 import { isCommandExecuting } from 'Utilities/Command';
 import isBefore from 'Utilities/Date/isBefore';
+import * as commandNames from 'Commands/commandNames';
 import withCurrentPage from 'Components/withCurrentPage';
+import { executeCommand } from 'Store/Actions/commandActions';
 import { searchMissing, setCalendarDaysCount, setCalendarFilter } from 'Store/Actions/calendarActions';
 import createSeriesCountSelector from 'Store/Selectors/createSeriesCountSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import CalendarPage from './CalendarPage';
 
 function createMissingEpisodeIdsSelector() {
@@ -59,6 +62,7 @@ function createMapStateToProps() {
     createSeriesCountSelector(),
     createUISettingsSelector(),
     createMissingEpisodeIdsSelector(),
+    createCommandExecutingSelector(commandNames.RSS_SYNC),
     createIsSearchingSelector(),
     (
       selectedFilterKey,
@@ -66,6 +70,7 @@ function createMapStateToProps() {
       seriesCount,
       uiSettings,
       missingEpisodeIds,
+      isRssSyncExecuting,
       isSearchingForMissing
     ) => {
       return {
@@ -74,6 +79,7 @@ function createMapStateToProps() {
         colorImpairedMode: uiSettings.enableColorImpairedMode,
         hasSeries: !!seriesCount,
         missingEpisodeIds,
+        isRssSyncExecuting,
         isSearchingForMissing
       };
     }
@@ -82,6 +88,12 @@ function createMapStateToProps() {
 
 function createMapDispatchToProps(dispatch, props) {
   return {
+    onRssSyncPress() {
+      dispatch(executeCommand({
+        name: commandNames.RSS_SYNC
+      }));
+    },
+
     onSearchMissingPress(episodeIds) {
       dispatch(searchMissing({ episodeIds }));
     },
