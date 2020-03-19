@@ -28,12 +28,8 @@ namespace Sonarr.Api.V3.Episodes
         {
             var seriesIdQuery = Request.Query.SeriesId;
             var episodeIdsQuery = Request.Query.EpisodeIds;
+            var episodeFileIdQuery = Request.Query.EpisodeFileId;
             var includeImages = Request.GetBooleanQueryParameter("includeImages", false);
-
-            if (!seriesIdQuery.HasValue && !episodeIdsQuery.HasValue)
-            {
-                throw new BadRequestException("seriesId or episodeIds must be provided");
-            }
 
             if (seriesIdQuery.HasValue)
             {
@@ -47,14 +43,25 @@ namespace Sonarr.Api.V3.Episodes
 
                 return MapToResource(_episodeService.GetEpisodeBySeries(seriesId), false, false, includeImages);
             }
+            else if (episodeIdsQuery.HasValue)
+            {
+                string episodeIdsValue = episodeIdsQuery.Value.ToString();
 
-            string episodeIdsValue = episodeIdsQuery.Value.ToString();
+                var episodeIds = episodeIdsValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                .Select(e => Convert.ToInt32(e))
+                                                .ToList();
 
-            var episodeIds = episodeIdsValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                                            .Select(e => Convert.ToInt32(e))
-                                            .ToList();
+                return MapToResource(_episodeService.GetEpisodes(episodeIds), false, false, includeImages);
+            }
+            else if (episodeFileIdQuery.HasValue)
+            {
+                int episodeFileId = Convert.ToInt32(episodeFileIdQuery.Value);
 
-            return MapToResource(_episodeService.GetEpisodes(episodeIds), false, false, includeImages);
+                return MapToResource(_episodeService.GetEpisodesByFileId(episodeFileId), false, false, includeImages);
+
+            }
+
+            throw new BadRequestException("seriesId or episodeIds must be provided");
         }
 
         private object SetEpisodeMonitored(int id)
