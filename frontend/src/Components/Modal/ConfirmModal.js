@@ -23,11 +23,16 @@ function ConfirmModal(props) {
     isSpinning,
     onConfirm,
     onCancel,
-    bindShortcut
+    bindShortcut,
+    unbindShortcut
   } = props;
 
   useEffect(() => {
-    bindShortcut('enter', onConfirm);
+    if (isOpen) {
+      bindShortcut('enter', onConfirm);
+    } else {
+      unbindShortcut('enter', onConfirm);
+    }
   }, [onConfirm]);
 
   return (
@@ -81,7 +86,8 @@ ConfirmModal.propTypes = {
   isSpinning: PropTypes.bool.isRequired,
   onConfirm: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
-  bindShortcut: PropTypes.func.isRequired
+  bindShortcut: PropTypes.func.isRequired,
+  unbindShortcut: PropTypes.func.isRequired
 };
 
 ConfirmModal.defaultProps = {
