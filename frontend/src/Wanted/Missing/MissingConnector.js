@@ -121,9 +121,10 @@ class MissingConnector extends Component {
     });
   }
 
-  onSearchAllMissingPress = () => {
+  onSearchAllMissingPress = (monitored) => {
     this.props.executeCommand({
-      name: commandNames.MISSING_EPISODE_SEARCH
+      name: commandNames.MISSING_EPISODE_SEARCH,
+      monitored
     });
   }
 

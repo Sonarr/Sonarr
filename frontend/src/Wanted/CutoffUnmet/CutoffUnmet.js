@@ -100,7 +100,15 @@ class CutoffUnmet extends Component {
   }
 
   onSearchAllCutoffUnmetConfirmed = () => {
-    this.props.onSearchAllCutoffUnmetPress();
+    const {
+      selectedFilterKey,
+      onSearchAllCutoffUnmetPress
+    } = this.props;
+
+    // TODO: Custom filters will need to check whether there is a monitored
+    // filter once implemented.
+
+    onSearchAllCutoffUnmetPress(selectedFilterKey === 'monitored');
     this.setState({ isConfirmSearchAllCutoffUnmetModalOpen: false });
   }
 

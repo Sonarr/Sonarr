@@ -171,7 +171,7 @@ namespace Sonarr.Api.V3.Indexers
         {
             try
             {
-                var decisions = _nzbSearchService.SeasonSearch(seriesId, seasonNumber, false, true, true);
+                var decisions = _nzbSearchService.SeasonSearch(seriesId, seasonNumber, false, false, true, true);
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);

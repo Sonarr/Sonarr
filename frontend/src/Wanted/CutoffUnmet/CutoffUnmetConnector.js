@@ -130,9 +130,10 @@ class CutoffUnmetConnector extends Component {
     });
   }
 
-  onSearchAllCutoffUnmetPress = () => {
+  onSearchAllCutoffUnmetPress = (monitored) => {
     this.props.executeCommand({
-      name: commandNames.CUTOFF_UNMET_EPISODE_SEARCH
+      name: commandNames.CUTOFF_UNMET_EPISODE_SEARCH,
+      monitored
     });
   }
 

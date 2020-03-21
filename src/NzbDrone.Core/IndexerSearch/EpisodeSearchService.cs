@@ -40,9 +40,9 @@ namespace NzbDrone.Core.IndexerSearch
             _logger = logger;
         }
 
-        private void SearchForMissingEpisodes(List<Episode> episodes, bool userInvokedSearch)
+        private void SearchForEpisodes(List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch)
         {
-            _logger.ProgressInfo("Performing missing search for {0} episodes", episodes.Count);
+            _logger.ProgressInfo("Performing search for {0} episodes", episodes.Count);
             var downloadedCount = 0;
 
             foreach (var series in episodes.GroupBy(e => e.SeriesId))
@@ -55,11 +55,11 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         try
                         {
-                            decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true, userInvokedSearch, false);
+                            decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, season.ToList(), monitoredOnly, userInvokedSearch, false);
                         }
                         catch (Exception ex)
                         {
-                            _logger.Error(ex, "Unable to search for missing episodes in season {0} of [{1}]", season.Key, series.Key);
+                            _logger.Error(ex, "Unable to search for episodes in season {0} of [{1}]", season.Key, series.Key);
                             continue;
                         }
                     }
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.IndexerSearch
                         }
                         catch (Exception ex)
                         {
-                            _logger.Error(ex, "Unable to search for missing episode: [{0}]", season.First());
+                            _logger.Error(ex, "Unable to search for episode: [{0}]", season.First());
                             continue;
                         }
                     }
@@ -83,7 +83,12 @@ namespace NzbDrone.Core.IndexerSearch
                 }
             }
 
-            _logger.ProgressInfo("Completed missing search for {0} episodes. {1} reports downloaded.", episodes.Count, downloadedCount);
+            _logger.ProgressInfo("Completed search for {0} episodes. {1} reports downloaded.", episodes.Count, downloadedCount);
+        }
+
+        private bool IsMonitored(bool episodeMonitored, bool seriesMonitored)
+        {
+            return episodeMonitored && seriesMonitored;
         }
         
         public void Execute(EpisodeSearchCommand message)
@@ -99,12 +104,13 @@ namespace NzbDrone.Core.IndexerSearch
 
         public void Execute(MissingEpisodeSearchCommand message)
         {
+            var monitored = message.Monitored;
             List<Episode> episodes;
 
             if (message.SeriesId.HasValue)
             {
                 episodes = _episodeService.GetEpisodeBySeries(message.SeriesId.Value)
-                                          .Where(e => e.Monitored &&
+                                          .Where(e => e.Monitored == monitored &&
                                                  !e.HasFile &&
                                                  e.AirDateUtc.HasValue &&
                                                  e.AirDateUtc.Value.Before(DateTime.UtcNow))
@@ -121,7 +127,14 @@ namespace NzbDrone.Core.IndexerSearch
                                      SortKey = "Id"
                                  };
 
-                pagingSpec.FilterExpressions.Add(v => v.Monitored == true &&v.Series.Monitored == true);
+                if (monitored)
+                {
+                    pagingSpec.FilterExpressions.Add(v => v.Monitored == true && v.Series.Monitored == true);
+                }
+                else
+                {
+                    pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
+                }
 
                 episodes = _episodeService.EpisodesWithoutFiles(pagingSpec).Records.ToList();
             }
@@ -129,27 +142,12 @@ namespace NzbDrone.Core.IndexerSearch
             var queue = _queueService.GetQueue().Where(q => q.Episode != null).Select(q => q.Episode.Id);
             var missing = episodes.Where(e => !queue.Contains(e.Id)).ToList();
 
-            SearchForMissingEpisodes(missing, message.Trigger == CommandTrigger.Manual);
+            SearchForEpisodes(missing, monitored, message.Trigger == CommandTrigger.Manual);
         }
 
         public void Execute(CutoffUnmetEpisodeSearchCommand message)
         {
-            Expression<Func<Episode, bool>> filterExpression;
-
-            if (message.SeriesId.HasValue)
-            {
-                filterExpression = v =>
-                                   v.SeriesId == message.SeriesId.Value &&
-                                   v.Monitored == true &&
-                                   v.Series.Monitored == true;
-            }
-
-            else
-            {
-                filterExpression = v =>
-                                   v.Monitored == true &&
-                                   v.Series.Monitored == true;
-            }
+            var monitored = message.Monitored;
 
             var pagingSpec = new PagingSpec<Episode>
                              {
@@ -159,14 +157,25 @@ namespace NzbDrone.Core.IndexerSearch
                                  SortKey = "Id"
                              };
 
-            pagingSpec.FilterExpressions.Add(filterExpression);
+            if (message.SeriesId.HasValue)
+            {
+                pagingSpec.FilterExpressions.Add(v => v.SeriesId == message.SeriesId.Value);
+            }
+
+            if (monitored)
+            {
+                pagingSpec.FilterExpressions.Add(v => v.Monitored == true && v.Series.Monitored == true);
+            }
+            else
+            {
+                pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
+            }
 
             var episodes = _episodeCutoffService.EpisodesWhereCutoffUnmet(pagingSpec).Records.ToList();
-
             var queue = _queueService.GetQueue().Where(q => q.Episode != null).Select(q => q.Episode.Id);
-            var missing = episodes.Where(e => !queue.Contains(e.Id)).ToList();
+            var cutoffUnmet = episodes.Where(e => !queue.Contains(e.Id)).ToList();
 
-            SearchForMissingEpisodes(missing, message.Trigger == CommandTrigger.Manual);
+            SearchForEpisodes(cutoffUnmet, monitored, message.Trigger == CommandTrigger.Manual);
         }
     }
 }

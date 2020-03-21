@@ -97,7 +97,15 @@ class Missing extends Component {
   }
 
   onSearchAllMissingConfirmed = () => {
-    this.props.onSearchAllMissingPress();
+    const {
+      selectedFilterKey,
+      onSearchAllMissingPress
+    } = this.props;
+
+    // TODO: Custom filters will need to check whether there is a monitored
+    // filter once implemented.
+
+    onSearchAllMissingPress(selectedFilterKey === 'monitored');
     this.setState({ isConfirmSearchAllMissingModalOpen: false });
   }
 

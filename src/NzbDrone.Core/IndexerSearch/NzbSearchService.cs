@@ -21,7 +21,8 @@ namespace NzbDrone.Core.IndexerSearch
     {
         List<DownloadDecision> EpisodeSearch(int episodeId, bool userInvokedSearch, bool interactiveSearch);
         List<DownloadDecision> EpisodeSearch(Episode episode, bool userInvokedSearch, bool interactiveSearch);
-        List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, bool missingOnly, bool userInvokedSearch, bool interactiveSearch);
+        List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, bool missingOnly, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch);
+        List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch);
     }
 
     public class NzbSearchService : ISearchForNzb
@@ -83,15 +84,20 @@ namespace NzbDrone.Core.IndexerSearch
             return SearchSingle(series, episode, userInvokedSearch, interactiveSearch);
         }
 
-        public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, bool missingOnly, bool userInvokedSearch, bool interactiveSearch)
+        public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, bool missingOnly, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
         {
-            var series = _seriesService.GetSeries(seriesId);
             var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
 
             if (missingOnly)
             {
-                episodes = episodes.Where(e => e.Monitored && !e.HasFile).ToList();
+                episodes = episodes.Where(e => !e.HasFile).ToList();
             }
+
+            return SeasonSearch(seriesId, seasonNumber, episodes, monitoredOnly, userInvokedSearch, interactiveSearch);
+        }
+        public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
+        {
+            var series = _seriesService.GetSeries(seriesId);
 
             if (series.SeriesType == SeriesTypes.Anime)
             {
@@ -130,7 +136,7 @@ namespace NzbDrone.Core.IndexerSearch
                         var searchSpec = Get<SingleEpisodeSearchCriteria>(series, sceneSeasonEpisodes.ToList(), userInvokedSearch, interactiveSearch);
 
                         searchSpec.SeasonNumber = sceneSeasonEpisodes.Key;
-                        searchSpec.MonitoredEpisodesOnly = true;
+                        searchSpec.MonitoredEpisodesOnly = monitoredOnly;
 
                         if (episode.SceneSeasonNumber.HasValue && episode.SceneEpisodeNumber.HasValue)
                         {
@@ -148,6 +154,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         var searchSpec = Get<SeasonSearchCriteria>(series, sceneSeasonEpisodes.ToList(), userInvokedSearch, interactiveSearch);
                         searchSpec.SeasonNumber = sceneSeasonEpisodes.Key;
+                        searchSpec.MonitoredEpisodesOnly = monitoredOnly;
 
                         var decisions = Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
                         downloadDecisions.AddRange(decisions);
@@ -158,6 +165,7 @@ namespace NzbDrone.Core.IndexerSearch
             {
                 var searchSpec = Get<SeasonSearchCriteria>(series, episodes, userInvokedSearch, interactiveSearch);
                 searchSpec.SeasonNumber = seasonNumber;
+                searchSpec.MonitoredEpisodesOnly = monitoredOnly;
 
                 var decisions = Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
                 downloadDecisions.AddRange(decisions);
