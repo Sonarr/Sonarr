@@ -77,7 +77,8 @@ namespace NzbDrone.Core.MediaCover
                 // Series isn't in Sonarr yet, map via a proxy to circument referrer issues
                 foreach (var mediaCover in covers)
                 {
-                    mediaCover.Url = _mediaCoverProxy.RegisterUrl(mediaCover.Url);
+                    mediaCover.RemoteUrl = mediaCover.Url;
+                    mediaCover.Url = _mediaCoverProxy.RegisterUrl(mediaCover.RemoteUrl);
                 }
             }
             else
@@ -86,6 +87,7 @@ namespace NzbDrone.Core.MediaCover
                 {
                     var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
 
+                    mediaCover.RemoteUrl = mediaCover.Url;
                     mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
 
                     if (_diskProvider.FileExists(filePath))

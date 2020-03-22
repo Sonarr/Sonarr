@@ -42,7 +42,7 @@ namespace Sonarr.Api.V3.Series
 
                 if (poster != null)
                 {
-                    resource.RemotePoster = poster.Url;
+                    resource.RemotePoster = poster.RemoteUrl;
                 }
 
                 resource.Folder = _fileNameBuilder.GetSeriesFolder(currentSeries);
