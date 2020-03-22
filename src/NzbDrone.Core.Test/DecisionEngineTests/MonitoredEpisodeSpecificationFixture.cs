@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_false_if_episode_is_not_monitored_for_season_search()
         {
             WithFirstEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SeasonSearchCriteria()).Accepted.Should().BeFalse();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SeasonSearchCriteria { MonitoredEpisodesOnly = true}).Accepted.Should().BeFalse();
         }
 
         [Test]
