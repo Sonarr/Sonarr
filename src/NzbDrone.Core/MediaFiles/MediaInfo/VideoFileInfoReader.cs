@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -45,6 +46,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                 if (filename.ToLower().EndsWith(".ts"))
                 {
+                    // For .ts files we often have to scan more of the file to get all the info we need
                     mediaInfo.Option("ParseSpeed", "0.3");
                 }
                 else
@@ -65,14 +67,30 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     int videoRuntime;
                     int generalRuntime;
 
-                    //Runtime
+                    // Runtime
                     int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
                     int.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "PlayTime"), out audioRuntime);
                     int.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out generalRuntime);
 
+                    // Audio Channels
+                    var audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
+                    var audioChannelPositions = mediaInfo.Get(StreamKind.Audio, 0, "ChannelPositions/String2");
+                    int.TryParse(audioChannelsStr, out var audioChannels);
+
                     if (audioRuntime == 0 && videoRuntime == 0 && generalRuntime == 0)
                     {
+                        // No runtime, ask mediainfo to scan the whole file
                         mediaInfo.Option("ParseSpeed", "1.0");
+
+                        using (var stream = _diskProvider.OpenReadStream(filename))
+                        {
+                            open = mediaInfo.Open(stream);
+                        }
+                    }
+                    else if (audioChannels > 2 && audioChannelPositions.IsNullOrWhiteSpace())
+                    {
+                        // Some files with DTS don't have ChannelPositions unless more of the file is scanned
+                        mediaInfo.Option("ParseSpeed", "0.3");
 
                         using (var stream = _diskProvider.OpenReadStream(filename))
                         {
@@ -121,6 +139,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
 
                     string audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
+                    int.TryParse(audioChannelsStr, out audioChannels);
 
                     var audioChannelPositions = mediaInfo.Get(StreamKind.Audio, 0, "ChannelPositions/String2");
                     var audioChannelPositionsText = mediaInfo.Get(StreamKind.Audio, 0, "ChannelPositions");
@@ -130,7 +149,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     string videoProfile = mediaInfo.Get(StreamKind.Video, 0, "Format_Profile").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
                     string audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
 
-                    int.TryParse(audioChannelsStr, out audioChannels);
                     var mediaInfoModel = new MediaInfoModel
                     {
                         ContainerFormat = mediaInfo.Get(StreamKind.General, 0, "Format"),
