@@ -148,6 +148,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:[-._ ][e])(?<episode>\d{2,3}(?!\d+))(?:(?:\-?[e])(?<episode>\d{2,3}(?!\d+)))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Episodes with airdate and part (2018.04.28.Part.2)
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])[-_. ]+Part[-_. ]?(?<part>[1-9])",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Mini-Series, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
                 new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -808,7 +812,7 @@ namespace NzbDrone.Core.Parser
                 //Try to Parse as a daily show
                 var airmonth = Convert.ToInt32(matchCollection[0].Groups["airmonth"].Value);
                 var airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
-
+                
                 //Swap day and month if month is bigger than 12 (scene fail)
                 if (airmonth > 12)
                 {
@@ -843,12 +847,23 @@ namespace NzbDrone.Core.Parser
                     ReleaseTitle = releaseTitle,
                     AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
                 };
+
+                var partMatch = matchCollection[0].Groups["part"];
+
+                if (partMatch.Success)
+                {
+                    result.DailyPart = Convert.ToInt32(partMatch.Value);
+                }
             }
 
             if (lastSeasonEpisodeStringIndex != releaseTitle.Length)
+            {
                 result.ReleaseTokens = releaseTitle.Substring(lastSeasonEpisodeStringIndex);
+            }
             else
+            {
                 result.ReleaseTokens = releaseTitle;
+            }
 
             result.SeriesTitle = seriesName;
             result.SeriesTitleInfo = GetSeriesTitleInfo(result.SeriesTitle);

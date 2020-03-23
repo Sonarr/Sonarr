@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.QGen;
 using NLog;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Messaging.Events;
@@ -17,8 +16,7 @@ namespace NzbDrone.Core.Tv
     {
         Episode Find(int seriesId, int season, int episodeNumber);
         Episode Find(int seriesId, int absoluteEpisodeNumber);
-        Episode Get(int seriesId, string date);
-        Episode Find(int seriesId, string date);
+        List<Episode> Find(int seriesId, string date);
         List<Episode> GetEpisodes(int seriesId);
         List<Episode> GetEpisodes(int seriesId, int seasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
@@ -61,21 +59,11 @@ namespace NzbDrone.Core.Tv
                         .SingleOrDefault();
         }
 
-        public Episode Get(int seriesId, string date)
+        public List<Episode> Find(int seriesId, string date)
         {
-            var episode = FindOneByAirDate(seriesId, date);
-
-            if (episode == null)
-            {
-                throw new InvalidOperationException("Expected at one episode");
-            }
-
-            return episode;
-        }
-
-        public Episode Find(int seriesId, string date)
-        {
-            return FindOneByAirDate(seriesId, date);
+            return Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.AirDate == date)
+                        .ToList();
         }
 
         public List<Episode> GetEpisodes(int seriesId)

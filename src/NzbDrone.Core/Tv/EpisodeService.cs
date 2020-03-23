@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
@@ -21,8 +20,7 @@ namespace NzbDrone.Core.Tv
         Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
-        Episode GetEpisode(int seriesId, string date);
-        Episode FindEpisode(int seriesId, string date);
+        Episode FindEpisode(int seriesId, string date, int? part);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
         List<Episode> EpisodesWithFiles(int seriesId);
@@ -85,14 +83,9 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.FindEpisodesBySceneNumbering(seriesId, sceneAbsoluteEpisodeNumber);
         }
 
-        public Episode GetEpisode(int seriesId, string date)
+        public Episode FindEpisode(int seriesId, string date, int? part)
         {
-            return _episodeRepository.Get(seriesId, date);
-        }
-
-        public Episode FindEpisode(int seriesId, string date)
-        {
-            return _episodeRepository.Find(seriesId, date);
+            return FindOneByAirDate(seriesId, date, part);
         }
 
         public List<Episode> GetEpisodeBySeries(int seriesId)
@@ -239,6 +232,35 @@ namespace NzbDrone.Core.Tv
                 _episodeRepository.SetFileId(episode.Id, message.EpisodeFile.Id);
                 _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.RelativePath, episode);
             }
+        }
+
+        private Episode FindOneByAirDate(int seriesId, string date, int? part)
+        {
+            var episodes = _episodeRepository.Find(seriesId, date);
+
+            if (!episodes.Any()) return null;
+
+            if (episodes.Count == 1) return episodes.First();
+
+            _logger.Debug("Multiple episodes with the same air date were found, will exclude specials");
+
+            var regularEpisodes = episodes.Where(e => e.SeasonNumber > 0).ToList();
+
+            if (regularEpisodes.Count == 1 && !part.HasValue)
+            {
+                _logger.Debug("Left with one episode after excluding specials");
+                return regularEpisodes.First();
+            }
+            else if (part.HasValue && part.Value <= regularEpisodes.Count)
+            {
+                var sortedEpisodes = regularEpisodes.OrderBy(e => e.SeasonNumber)
+                                                               .ThenBy(e => e.EpisodeNumber)
+                                                                .ToList();
+
+                return sortedEpisodes[part.Value - 1];
+            }
+
+            throw new InvalidOperationException("Multiple episodes with the same air date found");
         }
     }
 }

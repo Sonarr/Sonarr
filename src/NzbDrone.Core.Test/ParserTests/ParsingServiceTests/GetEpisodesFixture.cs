@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId);
 
             Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>()), Times.Once());
+                .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>(), null), Times.Once());
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId,  _series.TvRageId, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>()), Times.Never());
+                .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>(), null), Times.Never());
         }
 
         [Test]
@@ -110,7 +110,20 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>()), Times.Once());
+                .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>(), null), Times.Once());
+        }
+
+        [Test]
+        public void should_get_daily_episode_episode_should_lookup_including_daily_part()
+        {
+            GivenDailySeries();
+            GivenDailyParseResult();
+            _parsedEpisodeInfo.DailyPart = 1;
+
+            Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>(), 1), Times.Once());
         }
 
         [Test]
@@ -125,7 +138,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>()), Times.Never());
+                .Verify(v => v.FindEpisode(It.IsAny<int>(), It.IsAny<string>(), null), Times.Never());
         }
 
         [Test]

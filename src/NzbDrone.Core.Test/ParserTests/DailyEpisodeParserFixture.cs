@@ -44,6 +44,23 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeFalse();
         }
 
+        [TestCase("Series.Title.2015.09.07.Part1.720p.HULU.WEBRip.AAC2.0.H.264-Sonarr", "Series Title", 2015, 9, 7, 1)]
+        [TestCase("Series.Title.2015.09.07.Part2.720p.HULU.WEBRip.AAC2.0.H.264-Sonarr", "Series Title", 2015, 9, 7, 2)]
+        [TestCase("Series.Title.2015.09.07.Part.1.720p.HULU.WEBRip.AAC2.0.H.264-Sonarr", "Series Title", 2015, 9, 7, 1)]
+        [TestCase("Series.Title.2015.09.07.Part.2.720p.HULU.WEBRip.AAC2.0.H.264-Sonarr", "Series Title", 2015, 9, 7, 2)]
+        public void should_parse_daily_episode_with_multiple_parts(string postTitle, string title, int year, int month, int day, int part)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            var airDate = new DateTime(year, month, day);
+            result.Should().NotBeNull();
+            result.SeriesTitle.Should().Be(title);
+            result.AirDate.Should().Be(airDate.ToString(Episode.AIR_DATE_FORMAT));
+            result.EpisodeNumbers.Should().BeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
+            result.DailyPart.Should().Be(part);
+        }
+
         [TestCase("Conan {year} {month} {day} Emma Roberts HDTV XviD BFF")]
         [TestCase("The Tonight Show With Jay Leno {year} {month} {day} 1080i HDTV DD5 1 MPEG2 TrollHD")]
         [TestCase("The.Daily.Show.{year}.{month}.{day}.Johnny.Knoxville.iTouch-MW")]
