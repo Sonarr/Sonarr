@@ -15,7 +15,6 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.RootFolderTests
 {
     [TestFixture]
-
     public class RootFolderServiceFixture : CoreTest<RootFolderService>
     {
         [SetUp]

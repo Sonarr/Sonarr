@@ -1,6 +1,7 @@
 using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -14,20 +15,23 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly ISeriesService _seriesService;
         private readonly IDiskProvider _diskProvider;
+        private readonly IRootFolderService _rootFolderService;
 
-        public RootFolderCheck(ISeriesService seriesService, IDiskProvider diskProvider)
+        public RootFolderCheck(ISeriesService seriesService, IDiskProvider diskProvider, IRootFolderService rootFolderService)
         {
             _seriesService = seriesService;
             _diskProvider = diskProvider;
+            _rootFolderService = rootFolderService;
         }
 
         public override HealthCheck Check()
         {
-            var missingRootFolders = _seriesService.GetAllSeries()
-                                                   .Select(s => _diskProvider.GetParentFolder(s.Path))
-                                                   .Distinct()
-                                                   .Where(s => !_diskProvider.FolderExists(s))
-                                                   .ToList();
+            var rootFolders = _seriesService.GetAllSeries()
+                                                           .Select(s => _rootFolderService.GetBestRootFolderPath(s.Path))
+                                                           .Distinct();
+
+            var missingRootFolders = rootFolders.Where(s => !_diskProvider.FolderExists(s))
+                                                          .ToList();
 
             if (missingRootFolders.Any())
             {

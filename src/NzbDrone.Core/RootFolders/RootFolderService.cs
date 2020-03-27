@@ -171,7 +171,7 @@ namespace NzbDrone.Core.RootFolders
 
             if (possibleRootFolder == null)
             {
-                return Path.GetDirectoryName(path);
+                return _diskProvider.GetParentFolder(path);
             }
 
             return possibleRootFolder.Path;
