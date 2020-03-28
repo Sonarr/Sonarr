@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.RootFolderTests
 {
@@ -21,23 +22,23 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void should_return_root_folder_that_is_parent_path()
         {
-            GivenRootFolders(@"C:\Test\TV", @"D:\Test\TV");
-            Subject.GetBestRootFolderPath(@"C:\Test\TV\Series Title").Should().Be(@"C:\Test\TV");
+            GivenRootFolders(@"C:\Test\TV".AsOsAgnostic(), @"D:\Test\TV".AsOsAgnostic());
+            Subject.GetBestRootFolderPath(@"C:\Test\TV\Series Title".AsOsAgnostic()).Should().Be(@"C:\Test\TV".AsOsAgnostic());
         }
 
         [Test]
         public void should_return_root_folder_that_is_grandparent_path()
         {
-            GivenRootFolders(@"C:\Test\TV", @"D:\Test\TV");
-            Subject.GetBestRootFolderPath(@"C:\Test\TV\S\Series Title").Should().Be(@"C:\Test\TV");
+            GivenRootFolders(@"C:\Test\TV".AsOsAgnostic(), @"D:\Test\TV".AsOsAgnostic());
+            Subject.GetBestRootFolderPath(@"C:\Test\TV\S\Series Title".AsOsAgnostic()).Should().Be(@"C:\Test\TV".AsOsAgnostic());
         }
 
         [Test]
         public void should_get_parent_path_from_diskProvider_if_matching_root_folder_is_not_found()
         {
-            var seriesPath = @"T:\Test\TV\Series Title";
+            var seriesPath = @"T:\Test\TV\Series Title".AsOsAgnostic();
 
-            GivenRootFolders(@"C:\Test\TV", @"D:\Test\TV");
+            GivenRootFolders(@"C:\Test\TV".AsOsAgnostic(), @"D:\Test\TV".AsOsAgnostic());
             Subject.GetBestRootFolderPath(seriesPath);
 
             Mocker.GetMock<IDiskProvider>()
