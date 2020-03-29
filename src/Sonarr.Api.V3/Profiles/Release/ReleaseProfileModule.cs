@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
@@ -35,6 +36,11 @@ namespace Sonarr.Api.V3.Profiles.Release
                 if (restriction.Enabled && restriction.IndexerId != 0 && !_indexerFactory.Exists(restriction.IndexerId))
                 {
                     context.AddFailure(nameof(ReleaseProfile.IndexerId), "Indexer does not exist");
+                }
+
+                if (restriction.Preferred.Any(p => p.Key.IsNullOrWhiteSpace()))
+                {
+                    context.AddFailure("Preferred", "Term cannot be empty or consist of only spaces");
                 }
             });
         }
