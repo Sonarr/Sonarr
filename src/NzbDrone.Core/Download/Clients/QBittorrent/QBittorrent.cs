@@ -164,14 +164,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                     case "queuedDL": // queuing is enabled and torrent is queued for download
                     case "checkingDL": // same as checkingUP, but torrent has NOT finished downloading
+                    case "checkingUP": // torrent has finished downloading and is being checked. Set when `recheck torrent on completion` is enabled. In the event the check fails we shouldn't treat it as completed.
                         item.Status = DownloadItemStatus.Queued;
                         break;
 
                     case "pausedUP": // torrent is paused and has finished downloading:
-                    case "uploading": // torrent is being seeded and data is being transfered
+                    case "uploading": // torrent is being seeded and data is being transferred
                     case "stalledUP": // torrent is being seeded, but no connection were made
                     case "queuedUP": // queuing is enabled and torrent is queued for upload
-                    case "checkingUP": // torrent has finished downloading and is being checked
                     case "forcedUP": // torrent has finished downloading and is being forcibly seeded
                         item.Status = DownloadItemStatus.Completed;
                         item.RemainingTime = TimeSpan.Zero; // qBittorrent sends eta=8640000 for completed torrents
@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                     case "forcedDL": //torrent is being downloaded, and was forced started 
                     case "moving": // torrent is being moved from a folder
-                    case "downloading": // torrent is being downloaded and data is being transfered
+                    case "downloading": // torrent is being downloaded and data is being transferred
                         item.Status = DownloadItemStatus.Downloading;
                         break;
 
