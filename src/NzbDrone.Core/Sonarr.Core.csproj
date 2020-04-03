@@ -6,6 +6,7 @@
   <ItemGroup>
     <PackageReference Include="FluentMigrator.Runner" Version="1.6.2" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
+    <PackageReference Include="SendGrid" Version="9.13.2" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
