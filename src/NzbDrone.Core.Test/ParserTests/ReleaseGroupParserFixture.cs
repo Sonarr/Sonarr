@@ -78,6 +78,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Absolute.Power.S02E06.The.House.of.Lords.DVDRip.x264-MaG-Chamele0n", "MaG")]
         [TestCase("The.Walking.Dead.S08E08.1080p.BluRay.x264-ROVERS-4P", "ROVERS")]
         [TestCase("Stranger.Things.S01E02.720p.BluRay.X264-REWARD-4Planet", "REWARD")]
+        [TestCase("Vikings.S01E01.Rites.of.Passage.1080p.BluRay.x264-DON-AlteZachen", "DON")]
         public void should_not_include_repost_in_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
