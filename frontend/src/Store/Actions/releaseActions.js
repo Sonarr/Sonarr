@@ -261,17 +261,16 @@ export const reducers = createHandleActions({
     const guid = payload.guid;
     const newState = Object.assign({}, state);
     const items = newState.items;
-
-    // Return early if there aren't any items (the user closed the modal)
-    if (!items.length) {
-      return;
-    }
-
     const index = items.findIndex((item) => item.guid === guid);
-    const item = Object.assign({}, items[index], payload);
 
-    newState.items = [...items];
-    newState.items.splice(index, 1, item);
+    // Don't try to update if there isnt a matching item (the user closed the modal)
+
+    if (index >= 0) {
+      const item = Object.assign({}, items[index], payload);
+
+      newState.items = [...items];
+      newState.items.splice(index, 1, item);
+    }
 
     return newState;
   },

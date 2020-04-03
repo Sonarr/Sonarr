@@ -35,6 +35,10 @@ function EpisodeQuality(props) {
     isCutoffNotMet
   } = props;
 
+  if (!quality) {
+    return null;
+  }
+
   return (
     <Label
       className={className}
