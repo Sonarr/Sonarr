@@ -21,6 +21,7 @@ namespace NzbDrone.Api.Queue
         public TimeSpan? Timeleft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
         public string Status { get; set; }
+        public string TrackedDownloadState { get; set; }
         public string TrackedDownloadStatus { get; set; }
         public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }
         public string DownloadId { get; set; }
@@ -46,6 +47,7 @@ namespace NzbDrone.Api.Queue
                 Timeleft = model.Timeleft,
                 EstimatedCompletionTime = model.EstimatedCompletionTime,
                 Status = model.Status,
+                TrackedDownloadState = model.TrackedDownloadState.ToString(),
                 TrackedDownloadStatus = model.TrackedDownloadStatus.ToString(),
                 StatusMessages = model.StatusMessages,
                 DownloadId = model.DownloadId,
