@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using RestSharp;
 using NzbDrone.Core.Rest;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Notifications.Join
@@ -16,23 +17,23 @@ namespace NzbDrone.Core.Notifications.Join
 
     public class JoinProxy : IJoinProxy
     {
-        private readonly IRestClientFactory _restClientFactory;
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
         private const string URL = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?";
 
-        public JoinProxy(IRestClientFactory restClientFactory, Logger logger)
+        public JoinProxy(IHttpClient httpClient, Logger logger)
         {
-            _restClientFactory = restClientFactory;
+            _httpClient = httpClient;
             _logger = logger;
         }
 
         public void SendNotification(string title, string message, JoinSettings settings)
         {
-            var request = new RestRequest(Method.GET);
+            var method = HttpMethod.GET;
 
             try
             {
-                SendNotification(title, message, request, settings);
+                SendNotification(title, message, method, settings);
             }
             catch (JoinException ex)
             {
@@ -61,7 +62,7 @@ namespace NzbDrone.Core.Notifications.Join
                 _logger.Error(ex, "Unable to send test Join message.");
                 return new ValidationFailure("ApiKey", ex.Message);
             }
-            catch (RestException ex)
+            catch (HttpException ex)
             {
                 _logger.Error(ex, "Unable to send test Join message. Server connection failed.");
                 return new ValidationFailure("ApiKey", "Unable to connect to Join API. Please try again later.");
@@ -73,32 +74,34 @@ namespace NzbDrone.Core.Notifications.Join
             }
         }
 
-        private void SendNotification(string title, string message, RestRequest request, JoinSettings settings)
+        private void SendNotification(string title, string message, HttpMethod method, JoinSettings settings)
         {
-
-            var client = _restClientFactory.BuildClient(URL);
+            var requestBuilder = new HttpRequestBuilder(URL);
 
             if (settings.DeviceNames.IsNotNullOrWhiteSpace())
             {
-                request.AddParameter("deviceNames", settings.DeviceNames);
+                requestBuilder.AddQueryParam("deviceNames", settings.DeviceNames);
             }
             else if (settings.DeviceIds.IsNotNullOrWhiteSpace())
             {
-                request.AddParameter("deviceIds", settings.DeviceIds);
+                requestBuilder.AddQueryParam("deviceIds", settings.DeviceIds);
             }
             else
             {
-                request.AddParameter("deviceId", "group.all");
+                requestBuilder.AddQueryParam("deviceId", "group.all");
             }
 
-            request.AddParameter("apikey", settings.ApiKey);
-            request.AddParameter("title", title);
-            request.AddParameter("text", message);
-            request.AddParameter("icon", "https://cdn.rawgit.com/Sonarr/Sonarr/develop/Logo/256.png"); // Use the Sonarr logo.
-            request.AddParameter("smallicon", "https://cdn.rawgit.com/Sonarr/Sonarr/develop/Logo/96-Outline-White.png"); // 96x96px with outline at 88x88px on a transparent background.
-            request.AddParameter("priority", settings.Priority);
+            var request = requestBuilder.AddQueryParam("apikey", settings.ApiKey)
+                          .AddQueryParam("title", title)
+                          .AddQueryParam("text", message)
+                          .AddQueryParam("icon", "https://cdn.rawgit.com/Sonarr/Sonarr/phantom-develop/Logo/256.png") // Use the Radarr logo.
+                          .AddQueryParam("smallicon", "https://cdn.rawgit.com/Sonarr/Sonarr/phantom-develop/Logo/96-Outline-White.png") // 96x96px with outline at 88x88px on a transparent background.
+                          .AddQueryParam("priority", settings.Priority)
+                          .Build();
 
-            var response = client.ExecuteAndValidate(request);
+            request.Method = method;
+
+            var response = _httpClient.Execute(request);
             var res = Json.Deserialize<JoinResponseModel>(response.Content);
 
             if (res.success) return;

@@ -4,11 +4,9 @@ using System.Linq;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
-using RestSharp;
-using NzbDrone.Core.Rest;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
-using RestSharp.Authenticators;
 
 namespace NzbDrone.Core.Notifications.PushBullet
 {
@@ -21,14 +19,14 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
     public class PushBulletProxy : IPushBulletProxy
     {
-        private readonly IRestClientFactory _restClientFactory;
-        private readonly Logger _logger;
         private const string PUSH_URL = "https://api.pushbullet.com/v2/pushes";
         private const string DEVICE_URL = "https://api.pushbullet.com/v2/devices";
+        private readonly IHttpClient _httpClient;
+        private readonly Logger _logger;
 
-        public PushBulletProxy(IRestClientFactory restClientFactory, Logger logger)
+        public PushBulletProxy(IHttpClient httpClient, Logger logger)
         {
-            _restClientFactory = restClientFactory;
+            _httpClient = httpClient;
             _logger = logger;
         }
 
@@ -98,15 +96,18 @@ namespace NzbDrone.Core.Notifications.PushBullet
         {
             try
             {
-                var client = _restClientFactory.BuildClient(DEVICE_URL);
-                var request = new RestRequest(Method.GET);
+                var requestBuilder = new HttpRequestBuilder(DEVICE_URL);
 
-                client.Authenticator = new HttpBasicAuthenticator(settings.ApiKey, string.Empty);
-                var response = client.ExecuteAndValidate(request);
+                var request = requestBuilder.Build();
+
+                request.Method = HttpMethod.GET;
+                request.AddBasicAuthentication(settings.ApiKey, string.Empty);
+
+                var response = _httpClient.Execute(request);
 
                 return Json.Deserialize<PushBulletDevicesResponse>(response.Content).Devices;
             }
-            catch (RestException ex)
+            catch (HttpException ex)
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -127,7 +128,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
                 SendNotification(title, body, settings);
             }
-            catch (RestException ex)
+            catch (HttpException ex)
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -147,51 +148,61 @@ namespace NzbDrone.Core.Notifications.PushBullet
             return null;
         }
 
-        private RestRequest BuildDeviceRequest(string deviceId)
+        private HttpRequestBuilder BuildDeviceRequest(string deviceId)
         {
-            var request = new RestRequest(Method.POST);
+            var requestBuilder = new HttpRequestBuilder(PUSH_URL).Post();
             long integerId;
+
+            if (deviceId.IsNullOrWhiteSpace())
+            {
+                return requestBuilder;
+            }
 
             if (long.TryParse(deviceId, out integerId))
             {
-                request.AddParameter("device_id", integerId);
+                requestBuilder.AddFormParameter("device_id", integerId);
             }
 
             else
             {
-                request.AddParameter("device_iden", deviceId);
+                requestBuilder.AddFormParameter("device_iden", deviceId);
             }
 
-            return request;
+            return requestBuilder;
         }
 
-        private RestRequest BuildChannelRequest(string channelTag)
+        private HttpRequestBuilder BuildChannelRequest(string channelTag)
         {
-            var request = new RestRequest(Method.POST);
-            request.AddParameter("channel_tag", channelTag);
+            var requestBuilder = new HttpRequestBuilder(PUSH_URL).Post();
 
-            return request;
+            if (channelTag.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.AddFormParameter("channel_tag", channelTag);
+            }
+
+            return requestBuilder;
         }
 
-        private void SendNotification(string title, string message, RestRequest request, PushBulletSettings settings)
+        private void SendNotification(string title, string message, HttpRequestBuilder requestBuilder, PushBulletSettings settings)
         {
             try
             {
-                var client = _restClientFactory.BuildClient(PUSH_URL);
-
-                request.AddParameter("type", "note");
-                request.AddParameter("title", title);
-                request.AddParameter("body", message);
+                requestBuilder.AddFormParameter("type", "note")
+                    .AddFormParameter("title", title)
+                    .AddFormParameter("body", message);
 
                 if (settings.SenderId.IsNotNullOrWhiteSpace())
                 {
-                    request.AddParameter("source_device_iden", settings.SenderId);
+                    requestBuilder.AddFormParameter("source_device_iden", settings.SenderId);
                 }
 
-                client.Authenticator = new HttpBasicAuthenticator(settings.ApiKey, string.Empty);
-                client.ExecuteAndValidate(request);
+                var request = requestBuilder.Build();
+
+                request.AddBasicAuthentication(settings.ApiKey, string.Empty);
+
+                _httpClient.Execute(request);
             }
-            catch (RestException ex)
+            catch (HttpException ex)
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {

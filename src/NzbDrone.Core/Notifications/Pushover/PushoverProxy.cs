@@ -2,8 +2,7 @@ using System;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
-using RestSharp;
-using NzbDrone.Core.Rest;
+using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
@@ -15,40 +14,42 @@ namespace NzbDrone.Core.Notifications.Pushover
 
     public class PushoverProxy : IPushoverProxy
     {
-        private readonly IRestClientFactory _restClientFactory;
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
         private const string URL = "https://api.pushover.net/1/messages.json";
 
-        public PushoverProxy(IRestClientFactory restClientFactory, Logger logger)
+        public PushoverProxy(IHttpClient httpClient, Logger logger)
         {
-            _restClientFactory = restClientFactory;
+            _httpClient = httpClient;
             _logger = logger;
         }
 
         public void SendNotification(string title, string message, PushoverSettings settings)
         {
-            var client = _restClientFactory.BuildClient(URL);
-            var request = new RestRequest(Method.POST);
-            request.AddParameter("token", settings.ApiKey);
-            request.AddParameter("user", settings.UserKey);
-            request.AddParameter("device", string.Join(",", settings.Devices));
-            request.AddParameter("title", title);
-            request.AddParameter("message", message);
-            request.AddParameter("priority", settings.Priority);
+            var requestBuilder = new HttpRequestBuilder(URL).Post();
+
+            requestBuilder.AddFormParameter("token", settings.ApiKey)
+                          .AddFormParameter("user", settings.UserKey)
+                          .AddFormParameter("device", string.Join(",", settings.Devices))
+                          .AddFormParameter("title", title)
+                          .AddFormParameter("message", message)
+                          .AddFormParameter("priority", settings.Priority);
 
             if ((PushoverPriority)settings.Priority == PushoverPriority.Emergency)
             {
-                request.AddParameter("retry", settings.Retry);
-                request.AddParameter("expire", settings.Expire);
+                requestBuilder.AddFormParameter("retry", settings.Retry);
+                requestBuilder.AddFormParameter("expire", settings.Expire);
             }
 
             if (!settings.Sound.IsNullOrWhiteSpace())
             {
-                request.AddParameter("sound", settings.Sound);
+                requestBuilder.AddFormParameter("sound", settings.Sound);
             }
 
 
-            client.ExecuteAndValidate(request);
+            var request = requestBuilder.Build();
+
+            _httpClient.Post(request);
         }
 
         public ValidationFailure Test(PushoverSettings settings)

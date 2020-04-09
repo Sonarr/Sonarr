@@ -1,8 +1,7 @@
-﻿using NLog;
+using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Slack.Payloads;
-using NzbDrone.Core.Rest;
 
 namespace NzbDrone.Core.Notifications.Slack
 {
@@ -36,7 +35,7 @@ namespace NzbDrone.Core.Notifications.Slack
 
                 _httpClient.Execute(request);
             }
-            catch (RestException ex)
+            catch (HttpException ex)
             {
                 _logger.Error(ex, "Unable to post payload {0}", payload);
                 throw new SlackExeption("Unable to post payload", ex);

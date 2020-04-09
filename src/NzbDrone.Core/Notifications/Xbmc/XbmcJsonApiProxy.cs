@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Xbmc.Model;
-using NzbDrone.Core.Rest;
-using RestSharp;
-using RestSharp.Authenticators;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
@@ -21,87 +19,66 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
     public class XbmcJsonApiProxy : IXbmcJsonApiProxy
     {
-        private readonly IRestClientFactory _restClientFactory;
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public XbmcJsonApiProxy(IRestClientFactory restClientFactory, Logger logger)
+        public XbmcJsonApiProxy(IHttpClient httpClient, Logger logger)
         {
-            _restClientFactory = restClientFactory;
+            _httpClient = httpClient;
             _logger = logger;
         }
 
         public string GetJsonVersion(XbmcSettings settings)
         {
-            var request = new RestRequest();
-            return ProcessRequest(request, settings, "JSONRPC.Version");
+            return ProcessRequest(settings, "JSONRPC.Version");
         }
 
         public void Notify(XbmcSettings settings, string title, string message)
         {
-            var request = new RestRequest();
-
-            var parameters = new Dictionary<string, object>();
-            parameters.Add("title", title);
-            parameters.Add("message", message);
-            parameters.Add("image", "https://raw.github.com/Sonarr/Sonarr/develop/Logo/64.png");
-            parameters.Add("displaytime", settings.DisplayTime * 1000);
-
-            ProcessRequest(request, settings, "GUI.ShowNotification", parameters);
+            ProcessRequest(settings, "GUI.ShowNotification", title, message, "https://raw.github.com/Sonarr/Sonarr/phantom-develop/Logo/64.png", settings.DisplayTime * 1000);
         }
 
         public string UpdateLibrary(XbmcSettings settings, string path)
         {
-            var request = new RestRequest();
-            var parameters = new Dictionary<string, object>();
-            parameters.Add("directory", path);
-
-            if (path.IsNullOrWhiteSpace())
-            {
-                parameters = null;
-            }
-
-            var response = ProcessRequest(request, settings, "VideoLibrary.Scan", parameters);
+            var response = ProcessRequest(settings, "VideoLibrary.Scan", path);
 
             return Json.Deserialize<XbmcJsonResult<string>>(response).Result;
         }
 
         public void CleanLibrary(XbmcSettings settings)
         {
-            var request = new RestRequest();
-
-            ProcessRequest(request, settings, "VideoLibrary.Clean");
+            ProcessRequest(settings, "VideoLibrary.Clean");
         }
 
         public List<ActivePlayer> GetActivePlayers(XbmcSettings settings)
         {
-            var request = new RestRequest();
-
-            var response = ProcessRequest(request, settings, "Player.GetActivePlayers");
+            var response = ProcessRequest(settings, "Player.GetActivePlayers");
 
             return Json.Deserialize<ActivePlayersEdenResult>(response).Result;
         }
 
         public List<TvShow> GetSeries(XbmcSettings settings)
         {
-            var request = new RestRequest();
-            var parameters = new Dictionary<string, object>();
-            parameters.Add("properties", new[] { "file", "imdbnumber" });
-
-            var response = ProcessRequest(request, settings, "VideoLibrary.GetTvShows", parameters);
+            var response = ProcessRequest(settings, "VideoLibrary.GetMovies", new[] { "file", "imdbnumber" });
 
             return Json.Deserialize<TvShowResponse>(response).Result.TvShows;
         }
 
-        private string ProcessRequest(IRestRequest request, XbmcSettings settings, string method, Dictionary<string, object> parameters = null)
+        private string ProcessRequest(XbmcSettings settings, string method, params object[] parameters)
         {
-            var client = BuildClient(settings);
+            var url = string.Format(@"http://{0}/jsonrpc", settings.Address);
+            var requestBuilder = new JsonRpcRequestBuilder(url, method, parameters);
 
-            request.Method = Method.POST;
-            request.RequestFormat = DataFormat.Json;
-            request.JsonSerializer = new JsonNetSerializer();
-            request.AddBody(new { jsonrpc = "2.0", method = method, id = 10, @params = parameters });
+            requestBuilder.LogResponseContent = true;
 
-            var response = client.ExecuteAndValidate(request);
+            var request = requestBuilder.Build();
+
+            if (!settings.Username.IsNullOrWhiteSpace())
+            {
+                request.AddBasicAuthentication(settings.Username, settings.Password);
+            }
+
+            var response = _httpClient.Execute(request);
             _logger.Trace("Response: {0}", response.Content);
 
             CheckForError(response);
@@ -109,20 +86,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             return response.Content;
         }
 
-        private IRestClient BuildClient(XbmcSettings settings)
-        {
-            var url = string.Format(@"http://{0}/jsonrpc", settings.Address);
-            var client = _restClientFactory.BuildClient(url);
-
-            if (!settings.Username.IsNullOrWhiteSpace())
-            {
-                client.Authenticator = new HttpBasicAuthenticator(settings.Username, settings.Password);
-            }
-
-            return client;
-        }
-
-        private void CheckForError(IRestResponse response)
+        private void CheckForError(HttpResponse response)
         {
 
             if (string.IsNullOrWhiteSpace(response.Content))

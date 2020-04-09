@@ -2,7 +2,6 @@ using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Discord.Payloads;
-using NzbDrone.Core.Rest;
 
 namespace NzbDrone.Core.Notifications.Discord
 {
@@ -36,7 +35,7 @@ namespace NzbDrone.Core.Notifications.Discord
 
                  _httpClient.Execute(request);
             }
-            catch (RestException ex)
+            catch (HttpException ex)
             {
                 _logger.Error(ex, "Unable to post payload {0}", payload);
                 throw new DiscordException("Unable to post payload", ex);

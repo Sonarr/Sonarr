@@ -1,5 +1,5 @@
-using RestSharp;
-using NzbDrone.Core.Rest;
+using System.Net;
+using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Notifications.Gotify
 {
@@ -10,24 +10,35 @@ namespace NzbDrone.Core.Notifications.Gotify
 
     public class GotifyProxy : IGotifyProxy
     {
-        private readonly IRestClientFactory _restClientFactory;
+        private readonly IHttpClient _httpClient;
 
-        public GotifyProxy(IRestClientFactory restClientFactory)
+        public GotifyProxy(IHttpClient httpClient)
         {
-            _restClientFactory = restClientFactory;
+            _httpClient = httpClient;
         }
 
         public void SendNotification(string title, string message, GotifySettings settings)
         {
-            var client = _restClientFactory.BuildClient(settings.Server);
-            var request = new RestRequest("message", Method.POST);
+            try
+            {
+                var request = new HttpRequestBuilder(settings.Server).Post()
+                .AddFormParameter("token", settings.AppToken)
+                .AddFormParameter("title", title)
+                .AddFormParameter("message", message)
+                .AddFormParameter("priority", settings.Priority)
+                .Build();
 
-            request.AddQueryParameter("token", settings.AppToken);
-            request.AddParameter("title", title);
-            request.AddParameter("message", message);
-            request.AddParameter("priority", settings.Priority);
+                _httpClient.Post(request);
+            }
+            catch (HttpException ex)
+            {
+                if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new GotifyException("Unauthorized - AuthToken is invalid");
+                }
 
-            client.ExecuteAndValidate(request);
+                throw new GotifyException("Unable to connect to Gotify. Status Code: {0}", ex);
+            }
         }
     }
 }
