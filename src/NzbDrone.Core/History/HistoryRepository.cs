@@ -65,9 +65,7 @@ namespace NzbDrone.Core.History
                 query.AndWhere(h => h.EventType == eventType);
             }
 
-            query.OrderByDescending(h => h.Date);
-
-            return query;
+            return query.OrderByDescending(h => h.Date).ToList();
         }
 
         public List<History> GetBySeason(int seriesId, int seasonNumber, HistoryEventType? eventType)
