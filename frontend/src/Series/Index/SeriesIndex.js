@@ -255,10 +255,7 @@ class SeriesIndex extends Component {
                 null
             }
 
-            {
-              (view === 'posters' || view === 'overview') &&
-                <PageToolbarSeparator />
-            }
+            <PageToolbarSeparator />
 
             <SeriesIndexViewMenu
               view={view}

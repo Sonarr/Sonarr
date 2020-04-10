@@ -19,7 +19,7 @@ export function getSeriesStatusDetails(status) {
     statusDetails = {
       icon: icons.SERIES_ENDED,
       title: 'Ended',
-      message: 'No additional episodes or or another season is expected'
+      message: 'No additional episodes or seasons are expected'
     };
   } else if (status === 'upcoming') {
     statusDetails = {
