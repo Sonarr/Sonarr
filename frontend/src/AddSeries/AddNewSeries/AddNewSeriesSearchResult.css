@@ -62,6 +62,7 @@
 .alreadyExistsIcon {
   margin-left: 10px;
   color: #37bc9b;
+  pointer-events: all;
 }
 
 .overview {
