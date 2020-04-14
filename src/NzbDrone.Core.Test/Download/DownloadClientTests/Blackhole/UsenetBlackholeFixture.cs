@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
                 .Setup(c => c.OpenWriteStream(It.IsAny<string>()))
                 .Returns(() => new FileStream(GetTempFilePath(), FileMode.Create));
 
-            Mocker.GetMock<IDiskScanService>().Setup(c => c.FilterFiles(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.FilterPaths(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
                   .Returns<string, IEnumerable<string>>((b, s) => s.ToList());
         }
 

@@ -16,7 +16,6 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -25,7 +24,7 @@ namespace NzbDrone.Core.MediaFiles
         void Scan(Series series);
         string[] GetVideoFiles(string path, bool allDirectories = true);
         string[] GetNonVideoFiles(string path, bool allDirectories = true);
-        List<string> FilterFiles(string basePath, IEnumerable<string> files);
+        List<string> FilterPaths(string basePath, IEnumerable<string> files);
     }
 
     public class DiskScanService :
@@ -63,7 +62,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/|^)(?:extras|@eadir|\.@__thumb|extrafanart|plex versions|\.[^\\/]+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/|^)(?:extras|@eadir|\.@__thumb|extrafanart|plex versions|\.[^\\/]+)(?:\\|\/|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ExcludedFilesRegex = new Regex(@"^\._|^Thumbs\.db$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public void Scan(Series series)
@@ -106,7 +105,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var videoFilesStopwatch = Stopwatch.StartNew();
-            var mediaFileList = FilterFiles(series.Path, GetVideoFiles(series.Path)).ToList();
+            var mediaFileList = FilterPaths(series.Path, GetVideoFiles(series.Path)).ToList();
             videoFilesStopwatch.Stop();
             _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 
@@ -166,10 +165,10 @@ namespace NzbDrone.Core.MediaFiles
             return mediaFileList.ToArray();
         }
 
-        public List<string> FilterFiles(string basePath, IEnumerable<string> files)
+        public List<string> FilterPaths(string basePath, IEnumerable<string> paths)
         {
-            return files.Where(file => !ExcludedSubFoldersRegex.IsMatch(basePath.GetRelativePath(file)))
-                        .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)))
+            return paths.Where(path => !ExcludedSubFoldersRegex.IsMatch(basePath.GetRelativePath(path)))
+                        .Where(path => !ExcludedFilesRegex.IsMatch(Path.GetFileName(path)))
                         .ToList();
         }
 

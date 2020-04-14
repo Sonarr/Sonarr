@@ -138,8 +138,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
             if (series == null)
             {
-                var files = _diskScanService.FilterFiles(baseFolder, _diskScanService.GetVideoFiles(baseFolder, false));
-                var subfolders = _diskScanService.FilterFiles(baseFolder, _diskProvider.GetDirectories(baseFolder));
+                // Filter paths based on the rootFolder, so files in subfolders that should be ignored are ignored.
+                // It will lead to some extra directories being checked for files, but it saves the processing of them and is cleaner than
+                // teaching FilterPaths to know whether it's processing a file or a folder and changing it's filtering based on that.
+
+                var files = _diskScanService.FilterPaths(rootFolder, _diskScanService.GetVideoFiles(baseFolder, false));
+                var subfolders = _diskScanService.FilterPaths(rootFolder, _diskProvider.GetDirectories(baseFolder));
 
                 var processedFiles = files.Select(file => ProcessFile(rootFolder, baseFolder, file, downloadId));
                 var processedFolders = subfolders.SelectMany(subfolder => ProcessFolder(rootFolder, subfolder, downloadId, null, filterExistingFiles));

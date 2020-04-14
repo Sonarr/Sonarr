@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Extras
             _logger.Debug("Looking for existing extra files in {0}", series.Path);
 
             var filesOnDisk = _diskScanService.GetNonVideoFiles(series.Path);
-            var possibleExtraFiles = _diskScanService.FilterFiles(series.Path, filesOnDisk);
+            var possibleExtraFiles = _diskScanService.FilterPaths(series.Path, filesOnDisk);
 
             var filteredFiles = possibleExtraFiles;
             var importedFiles = new List<string>();

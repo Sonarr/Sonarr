@@ -173,7 +173,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var folderInfo = Parser.Parser.ParseTitle(directoryInfo.Name);
-            var videoFiles = _diskScanService.FilterFiles(directoryInfo.FullName, _diskScanService.GetVideoFiles(directoryInfo.FullName));
+            var videoFiles = _diskScanService.FilterPaths(directoryInfo.FullName, _diskScanService.GetVideoFiles(directoryInfo.FullName));
 
             if (downloadClientItem == null)
             {
