@@ -106,6 +106,7 @@ class SeriesIndexPosters extends Component {
 
     this._isInitialized = false;
     this._grid = null;
+    this._padding = props.isSmallScreen ? columnPaddingSmallScreen : columnPadding;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -113,7 +114,8 @@ class SeriesIndexPosters extends Component {
       items,
       sortKey,
       posterOptions,
-      jumpToCharacter
+      jumpToCharacter,
+      isSmallScreen
     } = this.props;
 
     const {
@@ -125,7 +127,7 @@ class SeriesIndexPosters extends Component {
 
     if (prevProps.sortKey !== sortKey ||
         prevProps.posterOptions !== posterOptions) {
-      this.calculateGrid();
+      this.calculateGrid(width, isSmallScreen);
     }
 
     if (this._grid &&
@@ -165,10 +167,9 @@ class SeriesIndexPosters extends Component {
       posterOptions
     } = this.props;
 
-    const padding = isSmallScreen ? columnPaddingSmallScreen : columnPadding;
     const columnWidth = calculateColumnWidth(width, posterOptions.size, isSmallScreen);
     const columnCount = Math.max(Math.floor(width / columnWidth), 1);
-    const posterWidth = columnWidth - padding;
+    const posterWidth = columnWidth - this._padding * 2;
     const posterHeight = calculatePosterHeight(posterWidth);
     const rowHeight = calculateRowHeight(posterHeight, sortKey, isSmallScreen, posterOptions);
 
@@ -213,9 +214,11 @@ class SeriesIndexPosters extends Component {
 
     return (
       <div
-        className={styles.container}
         key={key}
-        style={style}
+        style={{
+          ...style,
+          padding: this._padding
+        }}
       >
         <SeriesIndexItemConnector
           key={series.id}
