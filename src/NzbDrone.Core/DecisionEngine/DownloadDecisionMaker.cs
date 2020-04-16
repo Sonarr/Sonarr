@@ -104,7 +104,7 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                         else if (remoteEpisode.Episodes.Empty())
                         {
-                            decision = new DownloadDecision(remoteEpisode, new Rejection("Unable to parse episodes from release name"));
+                            decision = new DownloadDecision(remoteEpisode, new Rejection("Unable to identify correct episode(s) using release name and scene mappings"));
                         }
                         else
                         {

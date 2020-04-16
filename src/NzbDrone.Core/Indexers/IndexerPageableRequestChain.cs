@@ -32,6 +32,13 @@ namespace NzbDrone.Core.Indexers
             _chains.Last().Add(new IndexerPageableRequest(request));
         }
 
+        public void AddToTier(int tierIndex, IEnumerable<IndexerRequest> request)
+        {
+            if (request == null) return;
+
+            _chains[tierIndex].Add(new IndexerPageableRequest(request));
+        }
+
         public void AddTier(IEnumerable<IndexerRequest> request)
         {
             AddTier();

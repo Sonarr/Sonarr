@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.IndexerSearch.Definitions
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public Series Series { get; set; }
         public List<string> SceneTitles { get; set; }
+        public List<SceneMapping> SceneMappings { get; set; }
         public List<Episode> Episodes { get; set; }
         public virtual bool MonitoredEpisodesOnly { get; set; }
         public virtual bool UserInvokedSearch { get; set; }

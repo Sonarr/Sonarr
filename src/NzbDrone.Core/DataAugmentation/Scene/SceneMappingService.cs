@@ -15,11 +15,13 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     public interface ISceneMappingService
     {
         List<string> GetSceneNames(int tvdbId, List<int> seasonNumbers, List<int> sceneSeasonNumbers);
+        List<SceneMapping> GetSceneMappings(int tvdbId, List<int> seasonNumbers);
         int? FindTvdbId(string sceneTitle, string releaseTitle);
         List<SceneMapping> FindByTvdbId(int tvdbId);
         SceneMapping FindSceneMapping(string sceneTitle, string releaseTitle);
         int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle);
         int? GetTvdbSeasonNumber(string seriesTitle, string releaseTitle);
+        int GetTvdbSeasonNumber(string seriesTitle, string releaseTitle, int sceneSeasonNumber);
         int? GetSceneSeasonNumber(int tvdbId, int seasonNumber);
     }
 
@@ -64,6 +66,21 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                                 .Select(n => n.SearchTerm).Distinct().ToList();
 
             return FilterNonEnglish(names);
+        }
+
+        public List<SceneMapping> GetSceneMappings(int tvdbId, List<int> seasonNumbers)
+        {
+            var mappings = FindByTvdbId(tvdbId);
+
+            if (mappings == null)
+            {
+                return new List<SceneMapping>();
+            }
+
+            return mappings.Where(n => seasonNumbers.Contains(n.SeasonNumber ?? -1) &&
+                                       (n.SceneSeasonNumber ?? -1) != -1)
+                           .Where(n => IsEnglish(n.SearchTerm))
+                           .ToList();
         }
 
         public int? FindTvdbId(string seriesTitle)
@@ -127,6 +144,20 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         public int? GetTvdbSeasonNumber(string seriesTitle, string releaseTitle)
         {
             return FindSceneMapping(seriesTitle, releaseTitle)?.SeasonNumber;
+        }
+
+        public int GetTvdbSeasonNumber(string seriesTitle, string releaseTitle, int sceneSeasonNumber)
+        {
+            var sceneMapping = FindSceneMapping(seriesTitle, releaseTitle);
+
+            if (sceneMapping != null && sceneMapping.SeasonNumber.HasValue && sceneMapping.SeasonNumber.Value >= 0 &&
+                sceneMapping.SceneSeasonNumber <= sceneSeasonNumber)
+            {
+                var offset = sceneSeasonNumber - sceneMapping.SceneSeasonNumber.Value;
+                return sceneMapping.SeasonNumber.Value + offset;
+            }
+
+            return sceneSeasonNumber;
         }
 
         public int? GetSceneSeasonNumber(int tvdbId, int seasonNumber)
@@ -266,7 +297,12 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         private List<string> FilterNonEnglish(List<string> titles)
         {
-            return titles.Where(title => title.All(c => c <= 255)).ToList();
+            return titles.Where(IsEnglish).ToList();
+        }
+
+        private bool IsEnglish(string title)
+        {
+            return title.All(c => c <= 255);
         }
 
         public void Handle(SeriesRefreshStartingEvent message)

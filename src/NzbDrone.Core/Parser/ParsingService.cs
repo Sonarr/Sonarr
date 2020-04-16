@@ -402,13 +402,9 @@ namespace NzbDrone.Core.Parser
 
             if (sceneSource)
             {
-                var sceneMapping = _sceneMappingService.FindSceneMapping(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle);
-
-                if (sceneMapping != null && sceneMapping.SeasonNumber.HasValue && sceneMapping.SeasonNumber.Value >= 0 &&
-                    sceneMapping.SceneSeasonNumber == seasonNumber)
-                {
-                    seasonNumber = sceneMapping.SeasonNumber.Value;
-                }
+                seasonNumber = _sceneMappingService.GetTvdbSeasonNumber(parsedEpisodeInfo.SeriesTitle,
+                                                                        parsedEpisodeInfo.ReleaseTitle,
+                                                                        parsedEpisodeInfo.SeasonNumber);
             }
 
             if (parsedEpisodeInfo.EpisodeNumbers == null)

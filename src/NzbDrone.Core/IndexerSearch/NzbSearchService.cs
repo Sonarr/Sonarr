@@ -280,6 +280,9 @@ namespace NzbDrone.Core.IndexerSearch
             spec.SceneTitles = _sceneMapping.GetSceneNames(series.TvdbId,
                                                            episodes.Select(e => e.SeasonNumber).Distinct().ToList(),
                                                            episodes.Select(e => e.SceneSeasonNumber ?? e.SeasonNumber).Distinct().ToList());
+            spec.SceneMappings = _sceneMapping.GetSceneMappings(series.TvdbId,
+                                                           episodes.Select(e => e.SeasonNumber).Distinct().ToList());
+
 
             if (!spec.SceneTitles.Contains(series.Title))
             {

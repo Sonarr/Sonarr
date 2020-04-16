@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
+import padNumber from 'Utilities/Number/padNumber';
 import styles from './SceneInfo.css';
 
 function SceneInfo(props) {
@@ -60,6 +61,10 @@ function SceneInfo(props) {
                         key={alternateTitle.title}
                       >
                         {alternateTitle.title}
+                        {
+                          alternateTitle.sceneSeasonNumber !== -1 &&
+                            <span> (S{padNumber(alternateTitle.sceneSeasonNumber, 2)})</span>
+                        }
                       </div>
                     );
                   })

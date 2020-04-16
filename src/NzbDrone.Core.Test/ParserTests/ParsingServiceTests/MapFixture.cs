@@ -51,6 +51,10 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
                 SeasonNumber = _episodes.First().SeasonNumber,
                 Episodes = _episodes
             };
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(v => v.GetTvdbSeasonNumber(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                  .Returns<string, string, int>((s, r, i) => i);
         }
 
         private void GivenMatchBySeriesTitle()
