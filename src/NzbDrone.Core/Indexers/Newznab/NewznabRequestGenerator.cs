@@ -47,6 +47,19 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+        private bool SupportsTvTitleSearch
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.SupportedTvSearchParameters != null &&
+                       capabilities.SupportedTvSearchParameters.Contains("title") &&
+                       capabilities.SupportedTvSearchParameters.Contains("season") &&
+                       capabilities.SupportedTvSearchParameters.Contains("ep");
+            }
+        }
+
         private bool SupportsTvdbSearch
         {
             get
@@ -275,7 +288,19 @@ namespace NzbDrone.Core.Indexers.Newznab
                 }
             }
 
-            if (SupportsTvSearch)
+
+            if (SupportsTvTitleSearch)
+            {
+                chain.AddTier();
+                foreach (var searchTerm in searchCriteria.SceneTitles)
+                {
+                    chain.Add(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
+                        string.Format("&title={0}{1}",
+                        Uri.EscapeDataString(searchTerm),
+                        parameters)));
+                }
+            }
+            else if (SupportsTvSearch)
             {
                 chain.AddTier();
                 foreach (var queryTitle in searchCriteria.QueryTitles)
@@ -290,16 +315,29 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         private void AddSceneTitlePageableRequests(IndexerPageableRequestChain chain, IEnumerable<int> categories, SearchCriteriaBase searchCriteria, Func<SceneMapping, string> parametersFunc)
         {
-            foreach (var sceneMappingGroup in searchCriteria.SceneMappings.GroupBy(v => v.SceneSeasonNumber))
+            if (searchCriteria.SceneMappings != null)
             {
-                var parameters = parametersFunc(sceneMappingGroup.First());
-
-                foreach (var searchTerm in sceneMappingGroup.Select(v => v.SearchTerm).Distinct())
+                foreach (var sceneMappingGroup in searchCriteria.SceneMappings.GroupBy(v => v.SceneSeasonNumber))
                 {
-                    chain.AddToTier(0, GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                        string.Format("&q={0}{1}",
-                        NewsnabifyTitle(searchTerm),
-                        parameters)));
+                    var parameters = parametersFunc(sceneMappingGroup.First());
+
+                    foreach (var searchTerm in sceneMappingGroup.Select(v => v.SearchTerm).Distinct())
+                    {
+                        if (SupportsTvTitleSearch)
+                        {
+                            chain.AddToTier(0, GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
+                                string.Format("&title={0}{1}",
+                                Uri.EscapeDataString(searchTerm),
+                                parameters)));
+                        }
+                        else if (SupportsTvSearch)
+                        {
+                            chain.AddToTier(0, GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
+                                string.Format("&q={0}{1}",
+                                NewsnabifyTitle(searchTerm),
+                                parameters)));
+                        }
+                    }
                 }
             }
         }
