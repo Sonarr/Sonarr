@@ -1,4 +1,5 @@
 using System.IO;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Test.Framework;
@@ -29,6 +30,17 @@ namespace NzbDrone.Core.Test.Download
             var fileContent = GivenNzbFile(filename);
 
             Assert.Throws<InvalidNzbException>(() => Subject.Validate(filename, fileContent));
+        }
+
+        [Test]
+        public void should_throw_on_newznab_error()
+        {
+            var filename = "NewznabError";
+            var fileContent = GivenNzbFile(filename);
+
+            var ex = Assert.Throws<InvalidNzbException>(() => Subject.Validate(filename, fileContent));
+
+            ex.Message.Should().Contain("201 - Incorrect parameter");
         }
 
         [Test]

@@ -11,5 +11,21 @@ namespace NzbDrone.Common.Extensions
         {
             return container.Descendants().Where(c => c.Name.LocalName.Equals(localName, StringComparison.InvariantCultureIgnoreCase));
         }
+
+        public static bool TryGetAttributeValue(this XElement element, string name, out string value)
+        {
+            var attr = element.Attribute(name);
+
+            if (attr != null)
+            {
+                value = attr.Value;
+                return true;
+            }
+            else
+            {
+                value = null;
+                return false;
+            }
+        }
     }
 }
