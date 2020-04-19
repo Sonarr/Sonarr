@@ -64,6 +64,7 @@ class OverlayScroller extends Component {
 
     return (
       <div
+        className={styles.track}
         style={finalStyle}
         {...props}
       />
@@ -82,6 +83,7 @@ class OverlayScroller extends Component {
 
     return (
       <div
+        className={styles.track}
         style={finalStyle}
         {...props}
       />
