@@ -72,8 +72,9 @@ export default function createHandleActions(handlers, defaultState, section) {
       if (section === baseSection) {
         const newState = getSectionState(state, payloadSection);
         const items = newState.items;
+        const itemMap = newState.itemMap ?? {};
 
-        const index = payload.id in newState.itemMap ? newState.itemMap[payload.id] : -1;
+        const index = payload.id in itemMap ? itemMap[payload.id] : -1;
 
         newState.items = [...items];
 
@@ -92,7 +93,7 @@ export default function createHandleActions(handlers, defaultState, section) {
         } else if (!updateOnly) {
           const newIndex = newState.items.push({ ...otherProps }) - 1;
 
-          newState.itemMap = { ...newState.itemMap };
+          newState.itemMap = { ...itemMap };
           newState.itemMap[payload.id] = newIndex;
         }
 

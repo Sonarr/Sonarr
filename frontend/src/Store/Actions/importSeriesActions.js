@@ -221,12 +221,12 @@ export const actionHandlers = handleThunks({
     const addedIds = [];
 
     const allNewSeries = ids.reduce((acc, id) => {
-      const item = _.find(items, { id });
+      const item = items.find((i) => i.id === id);
       const selectedSeries = item.selectedSeries;
 
       // Make sure we have a selected series and
       // the same series hasn't been added yet.
-      if (selectedSeries && !_.some(acc, { tvdbId: selectedSeries.tvdbId })) {
+      if (selectedSeries && !acc.some((a) => a.tvdbId === selectedSeries.tvdbId)) {
         const newSeries = getNewSeries(_.cloneDeep(selectedSeries), item);
         newSeries.path = item.path;
 
@@ -318,7 +318,7 @@ export const reducers = createHandleActions({
   [SET_IMPORT_SERIES_VALUE]: function(state, { payload }) {
     const newState = getSectionState(state, section);
     const items = newState.items;
-    const index = _.findIndex(items, { id: payload.id });
+    const index = items.findIndex((item) => item.id === payload.id);
 
     newState.items = [...items];
 
