@@ -72,8 +72,12 @@ export default function createHandleActions(handlers, defaultState, section) {
       if (section === baseSection) {
         const newState = getSectionState(state, payloadSection);
         const items = newState.items;
-        const itemMap = newState.itemMap ?? {};
 
+        // Client side collections that are created by adding items to an
+        // existing array may not have an itemMap, the array is probably empty,
+        // but on the offchance it's not create a new item map based on the
+        // items in the array.
+        const itemMap = newState.itemMap ?? createItemMap(items);
         const index = payload.id in itemMap ? itemMap[payload.id] : -1;
 
         newState.items = [...items];
