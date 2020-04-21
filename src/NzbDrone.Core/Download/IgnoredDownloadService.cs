@@ -26,13 +26,14 @@ namespace NzbDrone.Core.Download
         public bool IgnoreDownload(TrackedDownload trackedDownload)
         {
             var series = trackedDownload.RemoteEpisode.Series;
-            var episodes = trackedDownload.RemoteEpisode.Episodes;
 
-            if (series == null || episodes.Empty())
+            if (series == null)
             {
-                _logger.Warn("Unable to ignore download for unknown series/episode");
+                _logger.Warn("Unable to ignore download for unknown series");
                 return false;
             }
+
+            var episodes = trackedDownload.RemoteEpisode.Episodes;
 
             var downloadIgnoredEvent = new DownloadIgnoredEvent
                                       {
