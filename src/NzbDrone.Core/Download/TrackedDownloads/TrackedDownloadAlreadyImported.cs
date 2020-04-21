@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
             var allEpisodesImportedInHistory = trackedDownload.RemoteEpisode.Episodes.All(e =>
             {
-                var lastHistoryItem = historyItems.FirstOrDefault(h => h.EpisodeId == e.Id);
+                var lastHistoryItem = historyItems.FirstOrDefault(h => h.DownloadId == trackedDownload.DownloadItem.DownloadId && h.EpisodeId == e.Id);
 
                 if (lastHistoryItem == null)
                 {
