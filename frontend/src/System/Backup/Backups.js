@@ -5,7 +5,7 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
@@ -93,7 +93,7 @@ class Backups extends Component {
           </PageToolbarSection>
         </PageToolbar>
 
-        <PageContentBodyConnector>
+        <PageContentBody>
           {
             isFetching && !isPopulated &&
               <LoadingIndicator />
@@ -141,7 +141,7 @@ class Backups extends Component {
                 </TableBody>
               </Table>
           }
-        </PageContentBodyConnector>
+        </PageContentBody>
 
         <RestoreBackupModalConnector
           isOpen={this.state.isRestoreModalOpen}

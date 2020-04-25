@@ -12,7 +12,7 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TablePager from 'Components/Table/TablePager';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
@@ -201,7 +201,7 @@ class Missing extends Component {
           </PageToolbarSection>
         </PageToolbar>
 
-        <PageContentBodyConnector>
+        <PageContentBody>
           {
             isFetching && !isPopulated &&
               <LoadingIndicator />
@@ -280,7 +280,7 @@ class Missing extends Component {
             isOpen={isInteractiveImportModalOpen}
             onModalClose={this.onInteractiveImportModalClose}
           />
-        </PageContentBodyConnector>
+        </PageContentBody>
       </PageContent>
     );
   }

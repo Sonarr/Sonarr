@@ -8,7 +8,7 @@ import SpinnerButton from 'Components/Link/SpinnerButton';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import UpdateChanges from './UpdateChanges';
 import styles from './Updates.css';
 
@@ -45,7 +45,7 @@ class Updates extends Component {
 
     return (
       <PageContent title="Updates">
-        <PageContentBodyConnector>
+        <PageContentBody>
           {
             !isPopulated && !hasError &&
               <LoadingIndicator />
@@ -194,7 +194,7 @@ class Updates extends Component {
                 Failed to update settings
               </div>
           }
-        </PageContentBodyConnector>
+        </PageContentBody>
       </PageContent>
     );
   }

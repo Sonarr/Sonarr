@@ -1,16 +1,16 @@
 import React from 'react';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import ScheduledTasksConnector from './Scheduled/ScheduledTasksConnector';
 import QueuedTasksConnector from './Queued/QueuedTasksConnector';
 
 function Tasks() {
   return (
     <PageContent title="Tasks">
-      <PageContentBodyConnector>
+      <PageContentBody>
         <ScheduledTasksConnector />
         <QueuedTasksConnector />
-      </PageContentBodyConnector>
+      </PageContentBody>
     </PageContent>
   );
 }

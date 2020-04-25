@@ -1,17 +1,17 @@
 import React from 'react';
 import ErrorBoundaryError from 'Components/Error/ErrorBoundaryError';
-import PageContentBodyConnector from './PageContentBodyConnector';
+import PageContentBody from './PageContentBody';
 import styles from './PageContentError.css';
 
 function PageContentError(props) {
   return (
     <div className={styles.content}>
-      <PageContentBodyConnector>
+      <PageContentBody>
         <ErrorBoundaryError
           {...props}
           message='There was an error loading this page'
         />
-      </PageContentBodyConnector>
+      </PageContentBody>
     </div>
   );
 }

@@ -8,7 +8,7 @@ import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import TextInput from 'Components/Form/TextInput';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import AddNewSeriesSearchResultConnector from './AddNewSeriesSearchResultConnector';
 import styles from './AddNewSeries.css';
 
@@ -88,7 +88,7 @@ class AddNewSeries extends Component {
 
     return (
       <PageContent title="Add New Series">
-        <PageContentBodyConnector>
+        <PageContentBody>
           <div className={styles.searchContainer}>
             <div className={styles.searchIconContainer}>
               <Icon
@@ -191,7 +191,7 @@ class AddNewSeries extends Component {
           }
 
           <div />
-        </PageContentBodyConnector>
+        </PageContentBody>
       </PageContent>
     );
   }

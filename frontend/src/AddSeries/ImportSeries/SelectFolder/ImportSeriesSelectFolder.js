@@ -7,7 +7,7 @@ import FieldSet from 'Components/FieldSet';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FileBrowserModal from 'Components/FileBrowser/FileBrowserModal';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import RootFolders from 'RootFolder/RootFolders';
 import styles from './ImportSeriesSelectFolder.css';
 
@@ -53,7 +53,7 @@ class ImportSeriesSelectFolder extends Component {
 
     return (
       <PageContent title="Import Series">
-        <PageContentBodyConnector>
+        <PageContentBody>
           {
             isFetching && !isPopulated &&
               <LoadingIndicator />
@@ -132,7 +132,7 @@ class ImportSeriesSelectFolder extends Component {
                 />
               </div>
           }
-        </PageContentBodyConnector>
+        </PageContentBody>
       </PageContent>
     );
   }

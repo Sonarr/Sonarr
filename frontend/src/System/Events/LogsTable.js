@@ -7,7 +7,7 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
@@ -73,7 +73,7 @@ function LogsTable(props) {
         </PageToolbarSection>
       </PageToolbar>
 
-      <PageContentBodyConnector>
+      <PageContentBody>
         {
           isFetching && !isPopulated &&
           <LoadingIndicator />
@@ -116,7 +116,7 @@ function LogsTable(props) {
             />
           </div>
         }
-      </PageContentBodyConnector>
+      </PageContentBody>
     </PageContent>
   );
 }

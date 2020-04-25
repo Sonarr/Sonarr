@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import QualityDefinitionsConnector from './Definition/QualityDefinitionsConnector';
 
@@ -54,12 +54,12 @@ class Quality extends Component {
           onSavePress={this.onSavePress}
         />
 
-        <PageContentBodyConnector>
+        <PageContentBody>
           <QualityDefinitionsConnector
             onChildMounted={this.onChildMounted}
             onChildStateChange={this.onChildStateChange}
           />
-        </PageContentBodyConnector>
+        </PageContentBody>
       </PageContent>
     );
   }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import QualityProfilesConnector from './Quality/QualityProfilesConnector';
 import LanguageProfilesConnector from './Language/LanguageProfilesConnector';
@@ -24,14 +24,14 @@ class Profiles extends Component {
           showSave={false}
         />
 
-        <PageContentBodyConnector>
+        <PageContentBody>
           <DndProvider backend={HTML5Backend}>
             <QualityProfilesConnector />
             <LanguageProfilesConnector />
             <DelayProfilesConnector />
             <ReleaseProfilesConnector />
           </DndProvider>
-        </PageContentBodyConnector>
+        </PageContentBody>
       </PageContent>
     );
   }

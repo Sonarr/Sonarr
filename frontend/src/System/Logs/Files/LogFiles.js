@@ -6,7 +6,7 @@ import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
@@ -73,7 +73,7 @@ class LogFiles extends Component {
             />
           </PageToolbarSection>
         </PageToolbar>
-        <PageContentBodyConnector>
+        <PageContentBody>
           <Alert>
             <div>
               Log files are located in: {location}
@@ -119,7 +119,7 @@ class LogFiles extends Component {
             !isFetching && !items.length &&
               <div>No log files</div>
           }
-        </PageContentBodyConnector>
+        </PageContentBody>
       </PageContent>
     );
   }

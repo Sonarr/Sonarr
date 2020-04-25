@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import HealthConnector from './Health/HealthConnector';
 import DiskSpaceConnector from './DiskSpace/DiskSpaceConnector';
 import AboutConnector from './About/AboutConnector';
@@ -14,12 +14,12 @@ class Status extends Component {
   render() {
     return (
       <PageContent title="Status">
-        <PageContentBodyConnector>
+        <PageContentBody>
           <HealthConnector />
           <DiskSpaceConnector />
           <AboutConnector />
           <MoreInfo />
-        </PageContentBodyConnector>
+        </PageContentBody>
       </PageContent>
     );
   }

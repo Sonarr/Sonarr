@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'Components/Link/Link';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import SettingsToolbarConnector from './SettingsToolbarConnector';
 import styles from './Settings.css';
 
@@ -12,7 +12,7 @@ function Settings() {
         hasPendingChanges={false}
       />
 
-      <PageContentBodyConnector>
+      <PageContentBody>
         <Link
           className={styles.link}
           to="/settings/mediamanagement"
@@ -122,7 +122,7 @@ function Settings() {
         <div className={styles.summary}>
           Calendar, date and color impaired options
         </div>
-      </PageContentBodyConnector>
+      </PageContentBody>
     </PageContent>
   );
 }

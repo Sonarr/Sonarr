@@ -5,7 +5,7 @@ import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
-import PageContentBodyConnector from 'Components/Page/PageContentBodyConnector';
+import PageContentBody from 'Components/Page/PageContentBody';
 import ImportSeriesTableConnector from './ImportSeriesTableConnector';
 import ImportSeriesFooterConnector from './ImportSeriesFooterConnector';
 
@@ -97,7 +97,7 @@ class ImportSeries extends Component {
 
     return (
       <PageContent title="Import Series">
-        <PageContentBodyConnector
+        <PageContentBody
           registerScroller={this.setScrollerRef}
           onScroll={this.onScroll}
         >
@@ -133,7 +133,7 @@ class ImportSeries extends Component {
                 onRemoveSelectedStateItem={this.onRemoveSelectedStateItem}
               />
           }
-        </PageContentBodyConnector>
+        </PageContentBody>
 
         {
           !rootFoldersError && rootFoldersPopulated && !!unmappedFolders.length &&
