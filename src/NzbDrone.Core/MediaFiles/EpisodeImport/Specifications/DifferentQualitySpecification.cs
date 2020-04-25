@@ -32,7 +32,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            var test = _historyService.FindByDownloadId(downloadClientItem.DownloadId);
             var grabbedEpisodeHistory = _historyService.FindByDownloadId(downloadClientItem.DownloadId)
                                                        .OrderByDescending(h => h.Date)
                                                        .FirstOrDefault(h => h.EventType == EpisodeHistoryEventType.Grabbed);

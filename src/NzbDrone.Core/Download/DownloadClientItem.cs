@@ -6,7 +6,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download
 {
-    [DebuggerDisplay("{DownloadClientName}:{Title}")]
+    [DebuggerDisplay("{DownloadClientInfo?.Name}:{Title}")]
     public class DownloadClientItem
     {
         public DownloadClientItemClientInfo DownloadClientInfo { get; set; }
