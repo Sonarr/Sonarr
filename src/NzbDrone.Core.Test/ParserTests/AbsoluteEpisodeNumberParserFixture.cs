@@ -99,6 +99,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Abc Abc 484 VOSTFR par Abc-Abc (1280*720) - version MQ", "Abc Abc", 484, 0, 0)]
         [TestCase("Abc - Abc Abc Abc - 107 VOSTFR par Fansub-Miracle Sharingan (1920x1080) - HQ_Draft", "Abc - Abc Abc Abc", 107, 0, 0)]
         [TestCase("Abc Abc Abc Abc Episode 10 VOSTFR (1920x1080) Miracle Sharingan Fansub.MKV - Team - (À suivre)", "Abc Abc Abc Abc", 10, 0, 0)]
+        [TestCase("[Glenn] Ani ni Tsukeru Kusuri wa Nai! 3 - 11 (1080p AAC)[C34B2B3B].mkv", "Ani ni Tsukeru Kusuri wa Nai! 3", 11, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
@@ -126,19 +127,24 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Special.Should().BeTrue();
         }
 
-        [TestCase("[ANBU-AonE]_Naruto_26-27_[F224EF26].avi", "Naruto", new[] { 26, 27 })]
-        [TestCase("[Doutei] Recently, My Sister is Unusual - 01-12 [BD][720p-AAC]", "Recently, My Sister is Unusual", new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 })]
-        [TestCase("Series Title (2010) - 01-02-03 - Episode Title (1) HDTV-720p", "Series Title (2010)", new [] { 1, 2, 3 })]
-        [TestCase("[RlsGrp] Series Title (2010) - S01E01-02-03 - 001-002-003 - Episode Title HDTV-720p v2", "Series Title (2010)", new[] { 1, 2, 3 })]
-        [TestCase("[RlsGrp] Series Title (2010) - S01E01-02 - 001-002 - Episode Title HDTV-720p v2", "Series Title (2010)", new[] { 1, 2 })]
-        [TestCase("Series Title (2010) - S01E01-02 (001-002) - Episode Title (1) HDTV-720p v2 [RlsGrp]", "Series Title (2010)", new[] { 1, 2 })]
-        [TestCase("[HorribleSubs] Haikyuu!! (01-25) [1080p] (Batch)", "Haikyuu!!", new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 })]
-        [TestCase("Hunter X Hunter (2011) Episode 99-100 [1080p] [Dual.Audio] [x265]", "Hunter X Hunter (2011)", new[] { 99, 100 })]
-        [TestCase("Twin Star Exorcists 1-13 (English Dub) [720p]", "Twin Star Exorcists", new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 })]
-        [TestCase("Series.Title.Ep01-12.Complete.English.AC3.DL.1080p.BluRay.x264", "Series Title", new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 })]
-//        [TestCase("", "", new[] { 0 })]
-        public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int[] absoluteEpisodeNumbers)
+        [TestCase("[ANBU-AonE]_Naruto_26-27_[F224EF26].avi", "Naruto", 26, 27)]
+        [TestCase("[Doutei] Recently, My Sister is Unusual - 01-12 [BD][720p-AAC]", "Recently, My Sister is Unusual", 1, 12)]
+        [TestCase("Series Title (2010) - 01-02-03 - Episode Title (1) HDTV-720p", "Series Title (2010)", 1, 3)]
+        [TestCase("[RlsGrp] Series Title (2010) - S01E01-02-03 - 001-002-003 - Episode Title HDTV-720p v2", "Series Title (2010)", 1, 3)]
+        [TestCase("[RlsGrp] Series Title (2010) - S01E01-02 - 001-002 - Episode Title HDTV-720p v2", "Series Title (2010)", 1, 2)]
+        [TestCase("Series Title (2010) - S01E01-02 (001-002) - Episode Title (1) HDTV-720p v2 [RlsGrp]", "Series Title (2010)", 1, 2)]
+        [TestCase("[HorribleSubs] Haikyuu!! (01-25) [1080p] (Batch)", "Haikyuu!!", 1, 25)]
+        [TestCase("Hunter X Hunter (2011) Episode 99-100 [1080p] [Dual.Audio] [x265]", "Hunter X Hunter (2011)", 99, 100)]
+        [TestCase("Twin Star Exorcists 1-13 (English Dub) [720p]", "Twin Star Exorcists", 1, 13)]
+        [TestCase("Series.Title.Ep01-12.Complete.English.AC3.DL.1080p.BluRay.x264", "Series Title", 1, 12)]
+        [TestCase("[Judas] Black Clover 091-123 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs]", "Black Clover", 91, 123 )]
+        [TestCase("[Judas] Black Clover - 091-123 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs]", "Black Clover", 91, 123)]
+        [TestCase("[HorribleSubs] Black Clover 01 - 119 [1080p] [Batch]", "Black Clover", 1, 119)]
+        //        [TestCase("", "", 1, 2)]
+        public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int firstAbsoluteEpisodeNumber, int lastAbsoluteEpisodeNumber)
         {
+            var absoluteEpisodeNumbers = Enumerable.Range(firstAbsoluteEpisodeNumber, lastAbsoluteEpisodeNumber - firstAbsoluteEpisodeNumber + 1)
+                                                        .ToArray();
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Should().BeEquivalentTo(absoluteEpisodeNumbers);
