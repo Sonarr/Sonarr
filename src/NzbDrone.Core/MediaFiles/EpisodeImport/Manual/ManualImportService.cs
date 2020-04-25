@@ -364,7 +364,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     }
                 }
 
-                if (groupedTrackedDownload.Select(c => c.ImportResult).Count(c => c.Result == ImportResultType.Imported) >= Math.Max(1, trackedDownload.RemoteEpisode.Episodes.Count))
+                var allEpisodesImported = groupedTrackedDownload.Select(c => c.ImportResult)
+                                                                    .Where(c => c.Result == ImportResultType.Imported)
+                                                                   .SelectMany(c => c.ImportDecision.LocalEpisode.Episodes).Count() >= 
+                                                                                Math.Max(1, trackedDownload.RemoteEpisode.Episodes.Count);
+
+                if (allEpisodesImported)
                 {
                     trackedDownload.State = TrackedDownloadState.Imported;
                     _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
