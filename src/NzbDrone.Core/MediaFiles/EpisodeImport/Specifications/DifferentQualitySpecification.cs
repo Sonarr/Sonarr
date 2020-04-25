@@ -47,8 +47,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             if (qualityCompare != 0)
             {
-                _logger.Debug("Quality of file ({0}) does not match quality of grabbed history ({1})", localEpisode.Quality, grabbedEpisodeHistory.Quality);
-                return Decision.Reject("Not an upgrade for existing episode file(s)");
+                _logger.Debug("Quality of file ({0}) does not match quality of grabbed release ({1})", localEpisode.Quality, grabbedEpisodeHistory.Quality);
+                return Decision.Reject("Quality of file ({0}) not match quality of grabbed release ({1})", localEpisode.Quality, grabbedEpisodeHistory.Quality);
             }
 
             return Decision.Accept();
