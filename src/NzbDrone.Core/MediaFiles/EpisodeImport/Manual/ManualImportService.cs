@@ -319,7 +319,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     localEpisode.FolderEpisodeInfo = Parser.Parser.ParseTitle(file.FolderName);
                 }
 
-                localEpisode = _aggregationService.Augment(localEpisode, false);
+                localEpisode = _aggregationService.Augment(localEpisode, trackedDownload?.DownloadItem, false);
 
                 // Apply the user-chosen values.
                 localEpisode.Series = series;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles.Events;
@@ -13,6 +14,7 @@ namespace NzbDrone.Core.Download.History
     {
         bool DownloadAlreadyImported(string downloadId);
         DownloadHistory GetLatestDownloadHistoryItem(string downloadId);
+        DownloadHistory GetLatestGrab(string downloadId);
     }
 
     public class DownloadHistoryService : IDownloadHistoryService,
@@ -84,6 +86,12 @@ namespace NzbDrone.Core.Download.History
             }
 
             return null;
+        }
+
+        public DownloadHistory GetLatestGrab(string downloadId)
+        {
+            return _repository.FindByDownloadId(downloadId)
+                              .FirstOrDefault(d => d.EventType == DownloadHistoryEventType.DownloadGrabbed);
         }
 
         public void Handle(EpisodeGrabbedEvent message)

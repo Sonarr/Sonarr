@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         {
             _localEpisode.FileEpisodeInfo = GetParsedEpisodeInfo(Language.English);
 
-            Subject.Aggregate(_localEpisode, false).Language.Should().Be(_localEpisode.FileEpisodeInfo.Language);
+            Subject.Aggregate(_localEpisode, null, false).Language.Should().Be(_localEpisode.FileEpisodeInfo.Language);
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _localEpisode.FolderEpisodeInfo = GetParsedEpisodeInfo(Language.English);
             _localEpisode.FileEpisodeInfo = GetParsedEpisodeInfo(Language.English);
 
-            Subject.Aggregate(_localEpisode, false).Language.Should().Be(_localEpisode.FolderEpisodeInfo.Language);
+            Subject.Aggregate(_localEpisode, null, false).Language.Should().Be(_localEpisode.FolderEpisodeInfo.Language);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _localEpisode.FolderEpisodeInfo = GetParsedEpisodeInfo(Language.English);
             _localEpisode.FileEpisodeInfo = GetParsedEpisodeInfo(Language.English);
 
-            Subject.Aggregate(_localEpisode, false).Language.Should().Be(_localEpisode.DownloadClientEpisodeInfo.Language);
+            Subject.Aggregate(_localEpisode, null, false).Language.Should().Be(_localEpisode.DownloadClientEpisodeInfo.Language);
 
         }
 
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _localEpisode.FolderEpisodeInfo = GetParsedEpisodeInfo(Language.English);
             _localEpisode.FileEpisodeInfo = GetParsedEpisodeInfo(Language.French);
 
-            Subject.Aggregate(_localEpisode, false).Language.Should().Be(_localEpisode.FileEpisodeInfo.Language);
+            Subject.Aggregate(_localEpisode, null, false).Language.Should().Be(_localEpisode.FileEpisodeInfo.Language);
         }
     }
 }

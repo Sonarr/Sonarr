@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _logger = logger;
         }
 
-        public LocalEpisode Aggregate(LocalEpisode localEpisode, bool otherFiles)
+        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
         {
             // Get languages in preferred order, download client item, folder and finally file.
             // Non-English languages will be preferred later, in the event there is a conflict

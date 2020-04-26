@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
                                                     .With(l => l.MediaInfo = null)
                                                     .Build();
 
-            Subject.AugmentQuality(localEpisode).Should().Be(null);
+            Subject.AugmentQuality(localEpisode, null).Should().Be(null);
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
                                                     .With(l => l.MediaInfo = mediaInfo)
                                                     .Build();
 
-            Subject.AugmentQuality(localEpisode).Should().Be(null);
+            Subject.AugmentQuality(localEpisode, null).Should().Be(null);
         }
 
         [TestCase(4096, 2160)] // True 4K
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
                                                     .With(l => l.MediaInfo = mediaInfo)
                                                     .Build();
 
-            var result = Subject.AugmentQuality(localEpisode);
+            var result = Subject.AugmentQuality(localEpisode, null);
 
             result.Should().NotBe(null);
             result.Resolution.Should().Be(expectedResolution);

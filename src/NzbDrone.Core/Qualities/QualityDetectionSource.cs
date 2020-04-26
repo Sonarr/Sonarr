@@ -2,6 +2,7 @@
 {
     public enum QualityDetectionSource
     {
+        Unknown,
         Name,
         Extension,
         MediaInfo

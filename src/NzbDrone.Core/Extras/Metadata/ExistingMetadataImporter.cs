@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
                         try
                         {
-                            _aggregationService.Augment(localEpisode, false);
+                            _aggregationService.Augment(localEpisode, null, false);
                         }
                         catch (AugmentingFailedException)
                         {

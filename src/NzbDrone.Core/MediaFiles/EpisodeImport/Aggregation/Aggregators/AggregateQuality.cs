@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augmenters.Quality;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -19,55 +20,65 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _logger = logger;
         }
 
-        public LocalEpisode Aggregate(LocalEpisode localEpisode, bool otherFiles)
+        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
         {
-            var augmentedQualities = _augmentQualities.Select(a => a.AugmentQuality(localEpisode))
+            var augmentedQualities = _augmentQualities.OrderBy(a => a.Order)
+                                                      .Select(a => a.AugmentQuality(localEpisode, downloadClientItem))
                                                       .Where(a => a != null)
-                                                      .OrderBy(a => a.SourceConfidence);
+                                                      .ToList();
 
             var source = QualitySource.Unknown;
             var sourceConfidence = Confidence.Default;
             var resolution = 0;
             var resolutionConfidence = Confidence.Default;
-            var revison = new Revision();
+            var revision = new Revision();
 
             foreach (var augmentedQuality in augmentedQualities)
             {
-                if (augmentedQuality.Source > source ||
+                if (source == QualitySource.Unknown ||
                     augmentedQuality.SourceConfidence > sourceConfidence && augmentedQuality.Source != QualitySource.Unknown)
                 {
                     source = augmentedQuality.Source;
                     sourceConfidence = augmentedQuality.SourceConfidence;
                 }
 
-                if (augmentedQuality.Resolution > resolution ||
+                if (resolution == 0 ||
                     augmentedQuality.ResolutionConfidence > resolutionConfidence && augmentedQuality.Resolution > 0)
                 {
                     resolution = augmentedQuality.Resolution;
                     resolutionConfidence = augmentedQuality.ResolutionConfidence;
                 }
 
-                if (augmentedQuality.Revision != null && augmentedQuality.Revision > revison)
+                if (augmentedQuality.Revision != null && augmentedQuality.Revision > revision)
                 {
-                    revison = augmentedQuality.Revision;
+                    revision = augmentedQuality.Revision;
                 }
             }
 
             _logger.Trace("Finding quality. Source: {0}. Resolution: {1}", source, resolution);
 
-            var quality = new QualityModel(QualityFinder.FindBySourceAndResolution(source, resolution), revison);
+            var quality = new QualityModel(QualityFinder.FindBySourceAndResolution(source, resolution), revision);
 
             if (resolutionConfidence == Confidence.MediaInfo)
             {
-                quality.QualityDetectionSource = QualityDetectionSource.MediaInfo;
+                quality.ResolutionDetectionSource = QualityDetectionSource.MediaInfo;
             }
-            else if (sourceConfidence == Confidence.Fallback || resolutionConfidence == Confidence.Fallback)
+            else if (resolutionConfidence == Confidence.Fallback)
             {
-                quality.QualityDetectionSource = QualityDetectionSource.Extension;
+                quality.ResolutionDetectionSource = QualityDetectionSource.Extension;
             }
             else
             {
-                quality.QualityDetectionSource = QualityDetectionSource.Name;
+                quality.ResolutionDetectionSource = QualityDetectionSource.Name;
+            }
+
+            if (sourceConfidence == Confidence.Fallback)
+            {
+                quality.SourceDetectionSource = QualityDetectionSource.Extension;
+            }
+            else
+            {
+                quality.SourceDetectionSource = QualityDetectionSource.Name;
             }
 
             _logger.Debug("Using quality: {0}", quality);
