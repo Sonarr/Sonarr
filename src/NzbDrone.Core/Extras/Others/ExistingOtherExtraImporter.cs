@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Extras.Others
 
                 try
                 {
-                    _aggregationService.Augment(localEpisode, false);
+                    _aggregationService.Augment(localEpisode, null, false);
                 }
                 catch (AugmentingFailedException)
                 {

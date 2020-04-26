@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                                    Series = _series
                                };
 
-            Subject.Aggregate(localEpisode, false);
+            Subject.Aggregate(localEpisode, null, false);
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetEpisodes(fileEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 Series = _series
             };
 
-            Subject.Aggregate(localEpisode, true);
+            Subject.Aggregate(localEpisode, null, true);
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetEpisodes(fileEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 Series = _series
             };
 
-            Subject.Aggregate(localEpisode, false);
+            Subject.Aggregate(localEpisode, null, false);
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetEpisodes(fileEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 Series = _series
             };
 
-            Subject.Aggregate(localEpisode, false);
+            Subject.Aggregate(localEpisode, null, false);
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetEpisodes(folderEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                                    Series = _series
                                };
 
-            Subject.Aggregate(localEpisode, false);
+            Subject.Aggregate(localEpisode, null, false);
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetEpisodes(fileEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                   .Setup(s => s.ParseSpecialEpisodeTitle(fileEpisodeInfo, It.IsAny<string>(), _series))
                   .Returns(specialEpisodeInfo);
 
-            Subject.Aggregate(localEpisode, false);
+            Subject.Aggregate(localEpisode, null, false);
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetEpisodes(specialEpisodeInfo, _series, localEpisode.SceneSource, null), Times.Once());

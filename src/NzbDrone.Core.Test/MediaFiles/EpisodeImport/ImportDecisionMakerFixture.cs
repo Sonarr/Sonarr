@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
     {
         private List<string> _videoFiles;
         private LocalEpisode _localEpisode;
+        private DownloadClientItem _downloadClientItem;
         private Series _series;
         private QualityModel _quality;
 
@@ -92,8 +93,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         private void GivenAugmentationSuccess()
         {
             Mocker.GetMock<IAggregationService>()
-                  .Setup(s => s.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()))
-                  .Callback<LocalEpisode, bool>((localEpisode, otherFiles) =>
+                  .Setup(s => s.Augment(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>(), It.IsAny<bool>()))
+                  .Callback<LocalEpisode, DownloadClientItem, bool>((localEpisode, downloadClientItem, otherFiles) =>
                   {
                       localEpisode.Episodes = _localEpisode.Episodes;
                   });
@@ -163,7 +164,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenSpecifications(_pass1);
 
             Mocker.GetMock<IAggregationService>()
-                  .Setup(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()))
+                  .Setup(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>(), It.IsAny<bool>()))
                   .Throws<TestException>();
 
             _videoFiles = new List<string>
@@ -178,7 +179,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Subject.GetImportDecisions(_videoFiles, _series);
 
             Mocker.GetMock<IAggregationService>()
-                  .Verify(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()), Times.Exactly(_videoFiles.Count));
+                  .Verify(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>(), It.IsAny<bool>()), Times.Exactly(_videoFiles.Count));
 
             ExceptionVerification.ExpectedErrors(3);
         }
@@ -199,7 +200,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             var decisions = Subject.GetImportDecisions(_videoFiles, _series);
 
             Mocker.GetMock<IAggregationService>()
-                  .Verify(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()), Times.Exactly(_videoFiles.Count));
+                  .Verify(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>(), It.IsAny<bool>()), Times.Exactly(_videoFiles.Count));
 
             decisions.Should().HaveCount(3);
             decisions.First().Rejections.Should().NotBeEmpty();
@@ -209,7 +210,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         public void should_return_a_decision_when_exception_is_caught()
         {
             Mocker.GetMock<IAggregationService>()
-                  .Setup(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<bool>()))
+                  .Setup(c => c.Augment(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>(), It.IsAny<bool>()))
                   .Throws<TestException>();
 
             _videoFiles = new List<string>

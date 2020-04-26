@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _parsingService = parsingService;
         }
 
-        public LocalEpisode Aggregate(LocalEpisode localEpisode, bool otherFiles)
+        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
         {
             localEpisode.Episodes = GetEpisodes(localEpisode, otherFiles);
 

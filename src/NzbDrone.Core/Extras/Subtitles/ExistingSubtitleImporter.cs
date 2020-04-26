@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     try
                     {
-                        _aggregationService.Augment(localEpisode, false);
+                        _aggregationService.Augment(localEpisode, null, false);
                     }
                     catch (AugmentingFailedException)
                     {

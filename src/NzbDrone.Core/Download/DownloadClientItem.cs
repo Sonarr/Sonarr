@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Download
         public string DownloadId { get; set; }
         public string Category { get; set; }
         public string Title { get; set; }
-
         public long TotalSize { get; set; }
         public long RemainingSize { get; set; }
         public TimeSpan? RemainingTime { get; set; }

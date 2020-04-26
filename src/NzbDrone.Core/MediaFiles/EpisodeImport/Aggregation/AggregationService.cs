@@ -4,6 +4,7 @@ using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
 {
     public interface IAggregationService
     {
-        LocalEpisode Augment(LocalEpisode localEpisode, bool otherFiles);
+        LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles);
     }
 
     public class AggregationService : IAggregationService
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
             _logger = logger;
         }
 
-        public LocalEpisode Augment(LocalEpisode localEpisode, bool otherFiles)
+        public LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
         {
             var isMediaFile = MediaFileExtensions.Extensions.Contains(Path.GetExtension(localEpisode.Path));
 
@@ -61,7 +62,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
             {
                 try
                 {
-                    augmenter.Aggregate(localEpisode, otherFiles);
+                    augmenter.Aggregate(localEpisode, downloadClientItem, otherFiles);
                 }
                 catch (Exception ex)
                 {

@@ -1,3 +1,4 @@
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 
@@ -5,7 +6,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
 {
     public class AugmentQualityFromFileName : IAugmentQuality
     {
-        public AugmentQualityResult AugmentQuality(LocalEpisode localEpisode)
+        public int Order => 1;
+
+        public AugmentQualityResult AugmentQuality(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             var quality = localEpisode.FileEpisodeInfo?.Quality;
 
@@ -14,14 +17,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
                 return null;
             }
 
-            var confidence = quality.QualityDetectionSource == QualityDetectionSource.Extension
-                ? Confidence.Fallback
-                : Confidence.Tag;
+            var sourceConfidence = quality.SourceDetectionSource == QualityDetectionSource.Name
+                ? Confidence.Tag
+                : Confidence.Fallback;
+
+            var resolutionConfidence = quality.ResolutionDetectionSource == QualityDetectionSource.Name
+                ? Confidence.Tag
+                : Confidence.Fallback;
 
             return new AugmentQualityResult(quality.Quality.Source,
-                                            confidence,
+                                            sourceConfidence,
                                             quality.Quality.Resolution,
-                                            confidence,
+                                            resolutionConfidence,
                                             quality.Revision);
         }
     }

@@ -101,7 +101,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             try
             {
-                _aggregationService.Augment(localEpisode, otherFiles);
+                _aggregationService.Augment(localEpisode, downloadClientItem, otherFiles);
 
                 if (localEpisode.Episodes.Empty())
                 {
