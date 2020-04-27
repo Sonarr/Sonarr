@@ -7,21 +7,42 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
     {
         public LocalEpisode Aggregate(LocalEpisode localEpisode, bool otherFiles)
         {
-            var releaseGroup = localEpisode.DownloadClientEpisodeInfo?.ReleaseGroup;
+            // Prefer ReleaseGroup from DownloadClient/Folder if they're not a season pack
+            var releaseGroup = GetReleaseGroup(localEpisode.DownloadClientEpisodeInfo, true);
 
             if (releaseGroup.IsNullOrWhiteSpace())
             {
-                releaseGroup = localEpisode.FolderEpisodeInfo?.ReleaseGroup;
+                releaseGroup = GetReleaseGroup(localEpisode.FolderEpisodeInfo, true);
             }
 
             if (releaseGroup.IsNullOrWhiteSpace())
             {
-                releaseGroup = localEpisode.FileEpisodeInfo?.ReleaseGroup;
+                releaseGroup = GetReleaseGroup(localEpisode.FileEpisodeInfo, false);
             }
 
+            if (releaseGroup.IsNullOrWhiteSpace())
+            {
+                releaseGroup = GetReleaseGroup(localEpisode.DownloadClientEpisodeInfo, false);
+            }
+
+            if (releaseGroup.IsNullOrWhiteSpace())
+            {
+                releaseGroup = GetReleaseGroup(localEpisode.FolderEpisodeInfo, false);
+            }
+            
             localEpisode.ReleaseGroup = releaseGroup;
 
             return localEpisode;
+        }
+
+        private string GetReleaseGroup(ParsedEpisodeInfo episodeInfo, bool skipFullSeason)
+        {
+            if (episodeInfo == null || episodeInfo.FullSeason && skipFullSeason)
+            {
+                return null;
+            }
+
+            return episodeInfo.ReleaseGroup;
         }
     }
 }
