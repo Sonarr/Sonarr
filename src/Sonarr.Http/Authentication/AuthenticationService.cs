@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Principal;
 using Nancy;
@@ -202,27 +203,70 @@ namespace Sonarr.Http.Authentication
 
         public void LogUnauthorized(NancyContext context)
         {
-            _authLogger.Info("Auth-Unauthorized ip {0} url '{1}'", context.Request.UserHostAddress, context.Request.Url.ToString());
+            _authLogger.Info("Auth-Unauthorized ip {0} url '{1}'", GetRemoteIP(context), context.Request.Url.ToString());
         }
 
         private void LogInvalidated(NancyContext context)
         {
-            _authLogger.Info("Auth-Invalidated ip {0}", context.Request.UserHostAddress);
+            _authLogger.Info("Auth-Invalidated ip {0}", GetRemoteIP(context));
         }
 
         private void LogFailure(NancyContext context, string username)
         {
-            _authLogger.Warn("Auth-Failure ip {0} username '{1}'", context.Request.UserHostAddress, username);
+            _authLogger.Warn("Auth-Failure ip {0} username '{1}'", GetRemoteIP(context), username);
         }
 
         private void LogSuccess(NancyContext context, string username)
         {
-            _authLogger.Info("Auth-Success ip {0} username '{1}'", context.Request.UserHostAddress, username);
+            _authLogger.Info("Auth-Success ip {0} username '{1}'", GetRemoteIP(context), username);
         }
 
         private void LogLogout(NancyContext context, string username)
         {
-            _authLogger.Info("Auth-Logout ip {0} username '{1}'", context.Request.UserHostAddress, username);
+            _authLogger.Info("Auth-Logout ip {0} username '{1}'", GetRemoteIP(context), username);
+        }
+
+        private string GetRemoteIP(NancyContext context)
+        {
+            if (context == null || context.Request == null)
+            {
+                return "Unknown";
+            }
+
+            var remoteAddress = context.Request.UserHostAddress;
+            IPAddress remoteIP;
+
+            // Only check if forwarded by a local network reverse proxy
+            if (IPAddress.TryParse(remoteAddress, out remoteIP) && remoteIP.IsLocalAddress())
+            {
+                var realIPHeader = context.Request.Headers["X-Real-IP"];
+                if (realIPHeader.Any())
+                {
+                    return realIPHeader.First().ToString();
+                }
+
+                var forwardedForHeader = context.Request.Headers["X-Forwarded-For"];
+                if (forwardedForHeader.Any())
+                {
+                    // Get the first address that was forwarded by a local IP to prevent remote clients faking another proxy
+                    foreach (var forwardedForAddress in forwardedForHeader.SelectMany(v => v.Split(',')).Select(v => v.Trim()).Reverse())
+                    {
+                        if (!IPAddress.TryParse(forwardedForAddress, out remoteIP))
+                        {
+                            return remoteAddress;
+                        }
+
+                        if (!remoteIP.IsLocalAddress())
+                        {
+                            return forwardedForAddress;
+                        }
+
+                        remoteAddress = forwardedForAddress;
+                    }
+                }
+            }
+
+            return remoteAddress;
         }
     }
 }

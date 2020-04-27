@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Security
             }
 
             if (certificateValidation == CertificateValidationType.DisabledForLocalAddresses &&
-                ipAddresses.All(i => i.IsIPv6LinkLocal || i.IsLocalAddress()))
+                ipAddresses.All(i => i.IsLocalAddress()))
             {
                 return true;
             }
