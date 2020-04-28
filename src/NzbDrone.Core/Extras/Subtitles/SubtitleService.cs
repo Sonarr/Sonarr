@@ -35,6 +35,11 @@ namespace NzbDrone.Core.Extras.Subtitles
 
         public override int Order => 1;
 
+        public override IEnumerable<ExtraFile> CreateAfterMediaCoverUpdate(Series series)
+        {
+            return Enumerable.Empty<SubtitleFile>();
+        }
+
         public override IEnumerable<ExtraFile> CreateAfterSeriesScan(Series series, List<EpisodeFile> episodeFiles)
         {
             return Enumerable.Empty<SubtitleFile>();
@@ -45,7 +50,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             return Enumerable.Empty<SubtitleFile>();
         }
 
-        public override IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, string seriesFolder, string seasonFolder)
+        public override IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder)
         {
             return Enumerable.Empty<SubtitleFile>();
         }

@@ -56,6 +56,31 @@ namespace NzbDrone.Core.Extras.Metadata
 
         public override int Order => 0;
 
+        public override IEnumerable<ExtraFile> CreateAfterMediaCoverUpdate(Series series)
+        {
+            var metadataFiles = _metadataFileService.GetFilesBySeries(series.Id);
+            _cleanMetadataService.Clean(series);
+
+            if (!_diskProvider.FolderExists(series.Path))
+            {
+                _logger.Info("Series folder does not exist, skipping metadata image creation");
+                return Enumerable.Empty<MetadataFile>();
+            }
+
+            var files = new List<MetadataFile>();
+
+            foreach (var consumer in _metadataFactory.Enabled())
+            {
+                var consumerFiles = GetMetadataFilesForConsumer(consumer, metadataFiles);
+
+                files.AddRange(ProcessSeriesImages(consumer, series, consumerFiles));
+            }
+
+            _metadataFileService.Upsert(files);
+
+            return files;
+        }
+
         public override IEnumerable<ExtraFile> CreateAfterSeriesScan(Series series, List<EpisodeFile> episodeFiles)
         {
             var metadataFiles = _metadataFileService.GetFilesBySeries(series.Id);
@@ -104,7 +129,7 @@ namespace NzbDrone.Core.Extras.Metadata
             return files;
         }
 
-        public override IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, string seriesFolder, string seasonFolder)
+        public override IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder)
         {
             var metadataFiles = _metadataFileService.GetFilesBySeries(series.Id);
 

@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Extras
     public class ExtraService : IExtraService,
                                 IHandle<MediaCoversUpdatedEvent>,
                                 IHandle<EpisodeFolderCreatedEvent>,
+                                IHandle<SeriesScannedEvent>,
                                 IHandle<SeriesRenamedEvent>
     {
         private readonly IMediaFileService _mediaFileService;
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Extras
         {
             ImportExtraFiles(localEpisode, episodeFile, isReadOnly);
             
-            CreateAfterImport(localEpisode.Series, episodeFile);
+            CreateAfterEpisodeImport(localEpisode.Series, episodeFile);
         }
 
         private void ImportExtraFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly)
@@ -121,7 +122,7 @@ namespace NzbDrone.Core.Extras
             }
         }
 
-        private void CreateAfterImport(Series series, EpisodeFile episodeFile)
+        private void CreateAfterEpisodeImport(Series series, EpisodeFile episodeFile)
         {
             foreach (var extraFileManager in _extraFileManagers)
             {
@@ -130,6 +131,19 @@ namespace NzbDrone.Core.Extras
         }
 
         public void Handle(MediaCoversUpdatedEvent message)
+        {
+            if (message.Updated)
+            {
+                var series = message.Series;
+
+                foreach (var extraFileManager in _extraFileManagers)
+                {
+                    extraFileManager.CreateAfterMediaCoverUpdate(series);
+                }
+            }
+        }
+
+        public void Handle(SeriesScannedEvent message)
         {
             var series = message.Series;
             var episodeFiles = GetEpisodeFiles(series.Id);
@@ -146,7 +160,7 @@ namespace NzbDrone.Core.Extras
 
             foreach (var extraFileManager in _extraFileManagers)
             {
-                extraFileManager.CreateAfterEpisodeImport(series, message.SeriesFolder, message.SeasonFolder);
+                extraFileManager.CreateAfterEpisodeFolder(series, message.SeriesFolder, message.SeasonFolder);
             }
         }
 

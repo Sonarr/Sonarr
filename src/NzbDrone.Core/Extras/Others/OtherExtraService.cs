@@ -31,6 +31,11 @@ namespace NzbDrone.Core.Extras.Others
 
         public override int Order => 2;
 
+        public override IEnumerable<ExtraFile> CreateAfterMediaCoverUpdate(Series series)
+        {
+            return Enumerable.Empty<ExtraFile>();
+        }
+
         public override IEnumerable<ExtraFile> CreateAfterSeriesScan(Series series, List<EpisodeFile> episodeFiles)
         {
             return Enumerable.Empty<ExtraFile>();
@@ -41,7 +46,7 @@ namespace NzbDrone.Core.Extras.Others
             return Enumerable.Empty<ExtraFile>();
         }
 
-        public override IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, string seriesFolder, string seasonFolder)
+        public override IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder)
         {
             return Enumerable.Empty<ExtraFile>();
         }
