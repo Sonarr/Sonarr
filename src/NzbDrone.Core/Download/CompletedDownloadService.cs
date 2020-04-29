@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NzbDrone.Common.EnvironmentInfo;
@@ -17,6 +18,7 @@ namespace NzbDrone.Core.Download
     {
         void Check(TrackedDownload trackedDownload);
         void Import(TrackedDownload trackedDownload);
+        bool VerifyImport(TrackedDownload trackedDownload, List<ImportResult> importResults);
     }
 
     public class CompletedDownloadService : ICompletedDownloadService
@@ -106,6 +108,31 @@ namespace NzbDrone.Core.Download
             var importResults = _downloadedEpisodesImportService.ProcessPath(outputPath, ImportMode.Auto,
                 trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
 
+            if (VerifyImport(trackedDownload, importResults))
+            {
+                return;
+            }
+
+            trackedDownload.State = TrackedDownloadState.ImportPending;
+
+            if (importResults.Empty())
+            {
+                trackedDownload.Warn("No files found are eligible for import in {0}", outputPath);
+            }
+
+            if (importResults.Any(c => c.Result != ImportResultType.Imported))
+            {
+                var statusMessages = importResults
+                    .Where(v => v.Result != ImportResultType.Imported)
+                    .Select(v => new TrackedDownloadStatusMessage(Path.GetFileName(v.ImportDecision.LocalEpisode.Path), v.Errors))
+                    .ToArray();
+
+                trackedDownload.Warn(statusMessages);
+            }
+        }
+
+        public bool VerifyImport(TrackedDownload trackedDownload, List<ImportResult> importResults)
+        {
             var allEpisodesImported = importResults.Where(c => c.Result == ImportResultType.Imported)
                                                    .SelectMany(c => c.ImportDecision.LocalEpisode.Episodes)
                                                    .Count() >= Math.Max(1,
@@ -115,7 +142,7 @@ namespace NzbDrone.Core.Download
             {
                 trackedDownload.State = TrackedDownloadState.Imported;
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
-                return;
+                return true;
             }
 
             // Double check if all episodes were imported by checking the history if at least one
@@ -139,26 +166,11 @@ namespace NzbDrone.Core.Download
                 {
                     trackedDownload.State = TrackedDownloadState.Imported;
                     _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
-                    return;
+                    return true;
                 }
             }
 
-            trackedDownload.State = TrackedDownloadState.ImportPending;
-
-            if (importResults.Empty())
-            {
-                trackedDownload.Warn("No files found are eligible for import in {0}", outputPath);
-            }
-
-            if (importResults.Any(c => c.Result != ImportResultType.Imported))
-            {
-                var statusMessages = importResults
-                    .Where(v => v.Result != ImportResultType.Imported)
-                    .Select(v => new TrackedDownloadStatusMessage(Path.GetFileName(v.ImportDecision.LocalEpisode.Path), v.Errors))
-                    .ToArray();
-
-                trackedDownload.Warn(statusMessages);
-            }
+            return false;
         }
     }
 }

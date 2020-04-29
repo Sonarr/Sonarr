@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -17,16 +18,19 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
         private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly IDiskProvider _diskProvider;
+        private readonly ICompletedDownloadService _completedDownloadService;
         private readonly Logger _logger;
 
         public DownloadedEpisodesCommandService(IDownloadedEpisodesImportService downloadedEpisodesImportService,
                                                 ITrackedDownloadService trackedDownloadService,
                                                 IDiskProvider diskProvider,
+                                                ICompletedDownloadService completedDownloadService,
                                                 Logger logger)
         {
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
             _trackedDownloadService = trackedDownloadService;
             _diskProvider = diskProvider;
+            _completedDownloadService = completedDownloadService;
             _logger = logger;
         }
 
@@ -46,14 +50,14 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.Debug("External directory scan request for known download {0}. [{1}]", message.DownloadClientId, message.Path);
 
-                    return _downloadedEpisodesImportService.ProcessPath(message.Path, message.ImportMode, trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
-                }
-                else
-                {
-                    _logger.Warn("External directory scan request for unknown download {0}, attempting normal import. [{1}]", message.DownloadClientId, message.Path);
+                    var importResults = _downloadedEpisodesImportService.ProcessPath(message.Path, message.ImportMode, trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
 
-                    return _downloadedEpisodesImportService.ProcessPath(message.Path, message.ImportMode);
+                    _completedDownloadService.VerifyImport(trackedDownload, importResults);
+
+                    return importResults;
                 }
+                 
+                _logger.Warn("External directory scan request for unknown download {0}, attempting normal import. [{1}]", message.DownloadClientId, message.Path);
             }
 
             return _downloadedEpisodesImportService.ProcessPath(message.Path, message.ImportMode);
