@@ -33,9 +33,13 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        private void RemoveCompletedDownloads(List<TrackedDownload> trackedDownloads)
+        private void RemoveCompletedDownloads()
         {
-            foreach (var trackedDownload in trackedDownloads.Where(c => c.DownloadItem.CanBeRemoved && c.State == TrackedDownloadState.Imported))
+            var trackedDownloads = _trackedDownloadService.GetTrackedDownloads()
+                                                          .Where(t => !t.DownloadItem.Removed && t.DownloadItem.CanBeRemoved && t.State == TrackedDownloadState.Imported)
+                                                          .ToList();
+
+            foreach (var trackedDownload in trackedDownloads)
             {
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
             }
@@ -56,27 +60,22 @@ namespace NzbDrone.Core.Download
                     if (trackedDownload.State == TrackedDownloadState.FailedPending)
                     {
                         _failedDownloadService.ProcessFailed(trackedDownload);
-                        continue;
                     }
-
-                    if (enableCompletedDownloadHandling && trackedDownload.State == TrackedDownloadState.ImportPending)
+                    else if (enableCompletedDownloadHandling && trackedDownload.State == TrackedDownloadState.ImportPending)
                     {
                         _completedDownloadService.Import(trackedDownload);
-                        continue;
-                    }
-
-                    if (removeCompletedDownloads &&
-                        trackedDownload.DownloadItem.Removed &&
-                        trackedDownload.DownloadItem.CanBeRemoved &&
-                        trackedDownload.State == TrackedDownloadState.Imported)
-                    {
-                        _eventAggregator.PublishEvent(new DownloadCanBeRemovedEvent(trackedDownload));
                     }
                 }
                 catch (Exception e)
                 {
                     _logger.Debug(e, "Failed to process download: {0}", trackedDownload.DownloadItem.Title);
                 }
+            }
+
+            // Imported downloads are no longer trackable so process them after processing trackable downloads
+            if (removeCompletedDownloads)
+            {
+                RemoveCompletedDownloads();
             }
 
             _eventAggregator.PublishEvent(new DownloadsProcessedEvent());
