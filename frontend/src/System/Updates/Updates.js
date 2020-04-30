@@ -40,6 +40,7 @@ class Updates extends Component {
     const externalUpdaterMessages = {
       external: 'Unable to update Sonarr directly, Sonarr is configured to use an external update mechanism',
       apt: 'Unable to update Sonarr directly, use apt to install the update',
+      aur: 'Unable to update Sonarr directly, use the AUR to install the update'
       docker: 'Unable to update Sonarr directly, update the docker container to receive the update'
     };
 
