@@ -226,6 +226,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Outlander.S04E03.The.False.Bride.1080p.NF.WEB.DDP5.1.x264-NTb[rartv]", false)]
         [TestCase("Legacies.S02E02.This.Year.Will.Be.Different.1080p.AMZN.WEB...", false)]
         [TestCase("Legacies.S02E02.This.Year.Will.Be.Different.1080p.AMZN.WEB.", false)]
+        [TestCase("Series Title - S01E11 2020 1080p Viva MKV WEB", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);

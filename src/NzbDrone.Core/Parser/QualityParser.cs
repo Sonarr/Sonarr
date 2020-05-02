@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
                                                                 (?<bluray>BluRay|Blu-Ray|HD-?DVD|BD(?!$))|
-                                                                (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|MaxdomeHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DDP?5[. ]1)|\d+0p(?:[-. ]AMZN)?[-. ]WEB[-. ]|WEB-DLMux|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ])|
+                                                                (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|MaxdomeHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DDP?5[. ]1)|[. ](?-i:WEB)$|\d+0p(?:[-. ]AMZN)?[-. ]WEB[-. ]|WEB-DLMux|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ])|
                                                                 (?<webrip>WebRip|Web-Rip|WEBMux)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRip)|
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Parser
 
         public static QualityModel ParseQualityName(string name)
         {
-            var normalizedName = name.Replace('_', ' ').Trim().ToLower();
+            var normalizedName = name.Replace('_', ' ').Trim();
             var result = ParseQualityModifiers(name, normalizedName);
 
             if (RawHDRegex.IsMatch(normalizedName))
@@ -253,13 +253,13 @@ namespace NzbDrone.Core.Parser
                     sourceMatch.Groups["dsr"].Success ||
                     sourceMatch.Groups["tvrip"].Success)
                 {
-                    if (resolution == Resolution.R1080p || normalizedName.Contains("1080p"))
+                    if (resolution == Resolution.R1080p || normalizedName.ContainsIgnoreCase("1080p"))
                     {
                         result.Quality = Quality.HDTV1080p;
                         return result;
                     }
 
-                    if (resolution == Resolution.R720p || normalizedName.Contains("720p"))
+                    if (resolution == Resolution.R720p || normalizedName.ContainsIgnoreCase("720p"))
                     {
                         result.Quality = Quality.HDTV720p;
                         return result;
@@ -281,19 +281,19 @@ namespace NzbDrone.Core.Parser
             if (AnimeBlurayRegex.Match(normalizedName).Success)
             {
                 if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
-                    resolution == Resolution.R576p || normalizedName.Contains("480p"))
+                    resolution == Resolution.R576p || normalizedName.ContainsIgnoreCase("480p"))
                 {
                     result.Quality = Quality.DVD;
                     return result;
                 }
 
-                if (resolution == Resolution.R1080p || normalizedName.Contains("1080p"))
+                if (resolution == Resolution.R1080p || normalizedName.ContainsIgnoreCase("1080p"))
                 {
                     result.Quality = remuxMatch ? Quality.Bluray1080pRemux : Quality.Bluray1080p;
                     return result;
                 }
 
-                if (resolution == Resolution.R2160p || normalizedName.Contains("2160p"))
+                if (resolution == Resolution.R2160p || normalizedName.ContainsIgnoreCase("2160p"))
                 {
                     result.Quality = remuxMatch ? Quality.Bluray2160pRemux : Quality.Bluray2160p;
                     return result;
@@ -350,9 +350,9 @@ namespace NzbDrone.Core.Parser
                 result.Quality = Quality.SDTV;
             }
 
-            if (normalizedName.Contains("1280x720"))
+            if (normalizedName.ContainsIgnoreCase("1280x720"))
             {
-                if (normalizedName.Contains("bluray"))
+                if (normalizedName.ContainsIgnoreCase("bluray"))
                 {
                     result.Quality = Quality.Bluray720p;
                 }
@@ -360,9 +360,9 @@ namespace NzbDrone.Core.Parser
                 result.Quality = Quality.HDTV720p;
             }
 
-            if (normalizedName.Contains("1920x1080"))
+            if (normalizedName.ContainsIgnoreCase("1920x1080"))
             {
-                if (normalizedName.Contains("bluray"))
+                if (normalizedName.ContainsIgnoreCase("bluray"))
                 {
                     result.Quality = Quality.Bluray1080p;
                 }
@@ -370,17 +370,17 @@ namespace NzbDrone.Core.Parser
                 result.Quality = Quality.HDTV1080p;
             }
 
-            if (normalizedName.Contains("bluray720p"))
+            if (normalizedName.ContainsIgnoreCase("bluray720p"))
             {
                 result.Quality = Quality.Bluray720p;
             }
 
-            if (normalizedName.Contains("bluray1080p"))
+            if (normalizedName.ContainsIgnoreCase("bluray1080p"))
             {
                 result.Quality = Quality.Bluray1080p;
             }
 
-            if (normalizedName.Contains("bluray2160p"))
+            if (normalizedName.ContainsIgnoreCase("bluray2160p"))
             {
                 result.Quality = Quality.Bluray2160p;
             }
