@@ -10,6 +10,7 @@ using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Languages;
+using System.Text;
 
 namespace NzbDrone.Core.Parser
 {
@@ -657,7 +658,7 @@ namespace NzbDrone.Core.Parser
 
             return title;
         }
-        
+
         private static SeriesTitleInfo GetSeriesTitleInfo(string title)
         {
             var seriesTitleInfo = new SeriesTitleInfo();
@@ -748,8 +749,8 @@ namespace NzbDrone.Core.Parser
 
                     if (absoluteEpisodeCaptures.Any())
                     {
-                        var first = Convert.ToDecimal(absoluteEpisodeCaptures.First().Value, CultureInfo.InvariantCulture);
-                        var last = Convert.ToDecimal(absoluteEpisodeCaptures.Last().Value, CultureInfo.InvariantCulture);
+                        var first = ParseDecimal(absoluteEpisodeCaptures.First().Value);
+                        var last = ParseDecimal(absoluteEpisodeCaptures.Last().Value);
 
                         if (first > last)
                         {
@@ -816,7 +817,7 @@ namespace NzbDrone.Core.Parser
                 //Try to Parse as a daily show
                 var airmonth = Convert.ToInt32(matchCollection[0].Groups["airmonth"].Value);
                 var airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
-                
+
                 //Swap day and month if month is bigger than 12 (scene fail)
                 if (airmonth > 12)
                 {
@@ -936,7 +937,9 @@ namespace NzbDrone.Core.Parser
         {
             int number;
 
-            if (int.TryParse(value, out number))
+            var normalized = value.Normalize(NormalizationForm.FormKC);
+
+            if (int.TryParse(normalized, out number))
             {
                 return number;
             }
@@ -947,6 +950,21 @@ namespace NzbDrone.Core.Parser
             {
                 return number;
             }
+
+            throw new FormatException(string.Format("{0} isn't a number", value));
+        }
+
+        private static decimal ParseDecimal(string value)
+        {
+            decimal number;
+
+            var normalized = value.Normalize(NormalizationForm.FormKC);
+
+            if (decimal.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out number))
+            {
+                return number;
+            }
+
 
             throw new FormatException(string.Format("{0} isn't a number", value));
         }

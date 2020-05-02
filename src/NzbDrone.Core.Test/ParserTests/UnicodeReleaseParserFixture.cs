@@ -67,5 +67,17 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
         }
+
+        [TestCase("[Subz] My Series - １５８ [h264 10-bit][1080p]", "My Series", 158)]
+        public void should_parse_unicode_digits(string postTitle, string title, int absoluteEpisodeNumber)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.SeriesTitle.Should().Be(title);
+            result.AbsoluteEpisodeNumbers.Should().NotBeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEquivalentTo(new[] { absoluteEpisodeNumber });
+            result.SpecialAbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
+        }
     }
 }
