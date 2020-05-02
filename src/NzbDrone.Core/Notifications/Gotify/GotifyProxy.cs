@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Notifications.Gotify
         {
             try
             {
-                var request = new HttpRequestBuilder(settings.Server).Post()
+                var request = new HttpRequestBuilder(settings.Server).Resource("message").Post()
                 .AddQueryParam("token", settings.AppToken)
                 .AddFormParameter("title", title)
                 .AddFormParameter("message", message)
