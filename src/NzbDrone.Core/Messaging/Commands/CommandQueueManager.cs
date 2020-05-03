@@ -54,39 +54,42 @@ namespace NzbDrone.Core.Messaging.Commands
         {
             _logger.Trace("Publishing {0} commands", commands.Count);
 
-            var commandModels = new List<CommandModel>();
-            var existingCommands = _commandQueue.QueuedOrStarted();
-
-            foreach (var command in commands)
+            lock (_commandQueue)
             {
-                var existing = existingCommands.SingleOrDefault(c => c.Name == command.Name && CommandEqualityComparer.Instance.Equals(c.Body, command));
+                var commandModels = new List<CommandModel>();
+                var existingCommands = _commandQueue.QueuedOrStarted();
 
-                if (existing != null)
+                foreach (var command in commands)
                 {
-                    continue;
+                    var existing = existingCommands.FirstOrDefault(c => c.Name == command.Name && CommandEqualityComparer.Instance.Equals(c.Body, command));
+
+                    if (existing != null)
+                    {
+                        continue;
+                    }
+
+                    var commandModel = new CommandModel
+                    {
+                        Name = command.Name,
+                        Body = command,
+                        QueuedAt = DateTime.UtcNow,
+                        Trigger = CommandTrigger.Unspecified,
+                        Priority = CommandPriority.Normal,
+                        Status = CommandStatus.Queued
+                    };
+
+                    commandModels.Add(commandModel);
                 }
 
-                var commandModel = new CommandModel
+                _repo.InsertMany(commandModels);
+
+                foreach (var commandModel in commandModels)
                 {
-                    Name = command.Name,
-                    Body = command,
-                    QueuedAt = DateTime.UtcNow,
-                    Trigger = CommandTrigger.Unspecified,
-                    Priority = CommandPriority.Normal,
-                    Status = CommandStatus.Queued
-                };
+                    _commandQueue.Add(commandModel);
+                }
 
-                commandModels.Add(commandModel);
+                return commandModels;
             }
-
-            _repo.InsertMany(commandModels);
-
-            foreach (var commandModel in commandModels)
-            {
-                _commandQueue.Add(commandModel);
-            }
-
-            return commandModels;
         }
 
         public CommandModel Push<TCommand>(TCommand command, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified) where TCommand : Command
