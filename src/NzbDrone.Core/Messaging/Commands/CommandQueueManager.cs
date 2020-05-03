@@ -96,32 +96,35 @@ namespace NzbDrone.Core.Messaging.Commands
             _logger.Trace("Publishing {0}", command.Name);
             _logger.Trace("Checking if command is queued or started: {0}", command.Name);
 
-            var existingCommands = QueuedOrStarted(command.Name);
-            var existing = existingCommands.SingleOrDefault(c => CommandEqualityComparer.Instance.Equals(c.Body, command));
-
-            if (existing != null)
+            lock (_commandQueue)
             {
-                _logger.Trace("Command is already in progress: {0}", command.Name);
+                var existingCommands = QueuedOrStarted(command.Name);
+                var existing = existingCommands.FirstOrDefault(c => CommandEqualityComparer.Instance.Equals(c.Body, command));
 
-                return existing;
+                if (existing != null)
+                {
+                    _logger.Trace("Command is already in progress: {0}", command.Name);
+
+                    return existing;
+                }
+
+                var commandModel = new CommandModel
+                {
+                    Name = command.Name,
+                    Body = command,
+                    QueuedAt = DateTime.UtcNow,
+                    Trigger = trigger,
+                    Priority = priority,
+                    Status = CommandStatus.Queued
+                };
+
+                _logger.Trace("Inserting new command: {0}", commandModel.Name);
+
+                _repo.Insert(commandModel);
+                _commandQueue.Add(commandModel);
+
+                return commandModel;
             }
-
-            var commandModel = new CommandModel
-            {
-                Name = command.Name,
-                Body = command,
-                QueuedAt = DateTime.UtcNow,
-                Trigger = trigger,
-                Priority = priority,
-                Status = CommandStatus.Queued
-            };
-
-            _logger.Trace("Inserting new command: {0}", commandModel.Name);
-
-            _repo.Insert(commandModel);
-            _commandQueue.Add(commandModel);
-
-            return commandModel;
         }
 
         public CommandModel Push(string commandName, DateTime? lastExecutionTime, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified)
