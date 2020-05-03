@@ -7,18 +7,21 @@ import { fetchUpdates } from 'Store/Actions/systemActions';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import * as commandNames from 'Commands/commandNames';
 import Updates from './Updates';
 
 function createMapStateToProps() {
   return createSelector(
     (state) => state.app.version,
+    createSystemStatusSelector(),
     (state) => state.system.updates,
     (state) => state.settings.general,
     createUISettingsSelector(),
     createCommandExecutingSelector(commandNames.APPLICATION_UPDATE),
     (
       currentVersion,
+      status,
       updates,
       generalSettings,
       uiSettings,
@@ -41,6 +44,7 @@ function createMapStateToProps() {
         items,
         isInstallingUpdate,
         updateMechanism: generalSettings.item.updateMechanism,
+        updateMechanismMessage: status.packageUpdateMechanismMessage,
         shortDateFormat: uiSettings.shortDateFormat
       };
     }

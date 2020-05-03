@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Configuration
         string PackageAuthor { get; }
         string PackageBranch { get; }
         UpdateMechanism PackageUpdateMechanism { get; }
+        string PackageUpdateMechanismMessage { get; }
 
         string ReleaseVersion { get; }
         string ReleaseBranch { get; }
@@ -45,6 +46,7 @@ namespace NzbDrone.Core.Configuration
                 PackageVersion = ReadValue(data, "PackageVersion");
                 PackageAuthor = ReadValue(data, "PackageAuthor");
                 PackageUpdateMechanism = ReadEnumValue(data, "UpdateMethod", UpdateMechanism.BuiltIn);
+                PackageUpdateMechanismMessage = ReadValue(data, "UpdateMethodMessage");
                 PackageBranch = ReadValue(data, "Branch");
 
                 ReleaseVersion = ReadValue(data, "ReleaseVersion");
@@ -98,6 +100,7 @@ namespace NzbDrone.Core.Configuration
         public string PackageAuthor { get; private set; }
         public string PackageBranch { get; private set; }
         public UpdateMechanism PackageUpdateMechanism { get; private set; }
+        public string PackageUpdateMechanismMessage { get; private set; }
 
         public string ReleaseVersion { get; private set; }
         public string ReleaseBranch { get; set; }

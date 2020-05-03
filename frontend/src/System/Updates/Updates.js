@@ -5,6 +5,7 @@ import { icons, kinds } from 'Helpers/Props';
 import formatDate from 'Utilities/Date/formatDate';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import SpinnerButton from 'Components/Link/SpinnerButton';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import PageContent from 'Components/Page/PageContent';
@@ -27,6 +28,7 @@ class Updates extends Component {
       items,
       isInstallingUpdate,
       updateMechanism,
+      updateMechanismMessage,
       shortDateFormat,
       onInstallLatestPress
     } = this.props;
@@ -37,10 +39,11 @@ class Updates extends Component {
     const hasUpdateToInstall = hasUpdates && _.some(items, { installable: true, latest: true });
     const noUpdateToInstall = hasUpdates && !hasUpdateToInstall;
 
+    const externalUpdaterPrefix = 'Unable to update Sonarr directly,';
     const externalUpdaterMessages = {
-      external: 'Unable to update Sonarr directly, Sonarr is configured to use an external update mechanism',
-      apt: 'Unable to update Sonarr directly, use apt to install the update',
-      docker: 'Unable to update Sonarr directly, update the docker container to receive the update'
+      external: 'Sonarr is configured to use an external update mechanism',
+      apt: 'use apt to install the update',
+      docker: 'update the docker container to receive the update'
     };
 
     return (
@@ -78,7 +81,7 @@ class Updates extends Component {
                       />
 
                       <div className={styles.message}>
-                        {externalUpdaterMessages[updateMechanism] || externalUpdaterMessages.external}
+                        {externalUpdaterPrefix} <InlineMarkdown data={updateMechanismMessage || externalUpdaterMessages[updateMechanism] || externalUpdaterMessages.external} />
                       </div>
                     </Fragment>
                 }
@@ -210,6 +213,7 @@ Updates.propTypes = {
   items: PropTypes.array.isRequired,
   isInstallingUpdate: PropTypes.bool.isRequired,
   updateMechanism: PropTypes.string,
+  updateMechanismMessage: PropTypes.string,
   shortDateFormat: PropTypes.string.isRequired,
   onInstallLatestPress: PropTypes.func.isRequired
 };
