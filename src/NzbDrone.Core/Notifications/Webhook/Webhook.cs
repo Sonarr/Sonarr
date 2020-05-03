@@ -34,7 +34,9 @@ namespace NzbDrone.Core.Notifications.Webhook
                     QualityVersion = quality.Revision.Version,
                     ReleaseGroup = remoteEpisode.ParsedEpisodeInfo.ReleaseGroup
                 }),
-                Release = new WebhookRelease(quality, remoteEpisode)
+                Release = new WebhookRelease(quality, remoteEpisode),
+                DownloadClient = message.DownloadClient,
+                DownloadId = message.DownloadId
             };
 
             _proxy.SendWebhook(payload, Settings);
@@ -57,7 +59,9 @@ namespace NzbDrone.Core.Notifications.Webhook
                     SceneName = episodeFile.SceneName
                 }),
                 EpisodeFile = new WebhookEpisodeFile(episodeFile),
-                IsUpgrade = message.OldFiles.Any()
+                IsUpgrade = message.OldFiles.Any(),
+                DownloadClient = message.DownloadClient,
+                DownloadId = message.DownloadId
             };
 
             _proxy.SendWebhook(payload, Settings);
