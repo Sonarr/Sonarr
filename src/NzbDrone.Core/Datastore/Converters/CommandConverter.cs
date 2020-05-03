@@ -25,11 +25,15 @@ namespace NzbDrone.Core.Datastore.Converters
 
             var ordinal = context.DataRecord.GetOrdinal("Name");
             var contract = context.DataRecord.GetString(ordinal);
-            var impType = typeof (Command).Assembly.FindTypeByName(contract + "Command");
+            var impType = typeof(Command).Assembly.FindTypeByName(contract + "Command");
 
             if (impType == null)
             {
-                throw new CommandNotFoundException(contract);
+                var result = Json.Deserialize<UnknownCommand>(stringValue);
+
+                result.ContractName = contract;
+
+                return result;
             }
 
             return Json.Deserialize(stringValue, impType);

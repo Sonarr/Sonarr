@@ -67,8 +67,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
             try
             {
-                var handlerContract = typeof(IExecute<>).MakeGenericType(command.GetType());
-                handler = (IExecute<TCommand>)_serviceFactory.Build(handlerContract);
+                handler = (IExecute<TCommand>)_serviceFactory.Build(typeof(IExecute<TCommand>));
 
                 _logger.Trace("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
 
