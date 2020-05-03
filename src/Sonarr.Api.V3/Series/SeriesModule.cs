@@ -120,6 +120,7 @@ namespace Sonarr.Api.V3.Series
             MapCoversToLocal(seriesResources.ToArray());
             LinkSeriesStatistics(seriesResources, seriesStats);
             PopulateAlternateTitles(seriesResources);
+            seriesResources.ForEach(LinkRootFolderPath);
 
             return seriesResources;
         }
