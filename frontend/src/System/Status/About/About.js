@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import titleCase from 'Utilities/String/titleCase';
 import FieldSet from 'Components/FieldSet';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import StartTime from './StartTime';
@@ -39,7 +40,7 @@ class About extends Component {
             packageVersion &&
               <DescriptionListItem
                 title="Package Version"
-                data={(packageAuthor ? `${packageVersion} by ${packageAuthor}` : packageVersion)}
+                data={(packageAuthor ? <span> {packageVersion} {' by '} <InlineMarkdown data={packageAuthor} /> </span> : packageVersion)}
               />
           }
 
