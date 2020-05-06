@@ -16,10 +16,11 @@ class InlineMarkdown extends Component {
     // For now only replace links
     const markdownBlocks = [];
     if (data) {
-      const matches = data.matchAll(/\[(.+?)\]\((.+?)\)/g);
-      let endIndex = 0;
+      const regex = RegExp(/\[(.+?)\]\((.+?)\)/g);
 
-      for (const match of matches) {
+      let endIndex = 0;
+      let match = null;
+      while ((match = regex.exec(data)) !== null) {
         if (match.index > endIndex) {
           markdownBlocks.push(data.substr(endIndex, match.index - endIndex));
         }
