@@ -16,7 +16,7 @@ echo Updating changelog for $BuildVersion
 sed -i "s:{version}:$BuildVersion:g; s:{branch}:$BuildBranch:g;" debian/changelog
 sed -i "s:{version}:$BuildVersion:g; s:{updater}:$PackageUpdater:g" debian/preinst debian/postinst debian/postrm
 sed -i '/#BEGIN BUILTIN UPDATER/,/#END BUILTIN UPDATER/d' debian/preinst debian/postinst debian/postrm
-echo "# Do Not Edit\nPackageVersion=$BuildVersion\nReleaseVersion=$BuildVersion\nUpdateMethod=$PackageUpdater\nBranch=$BuildBranch" > package_info
+echo "# Do Not Edit\nPackageVersion=$BuildVersion\nPackageAuthor=[Team Sonarr](https://sonarr.tv)\nReleaseVersion=$BuildVersion\nUpdateMethod=$PackageUpdater\nBranch=$BuildBranch" > package_info
 
 echo Running debuild for $BuildVersion
 if [ -z "${TEST_OUTPUT}" ]; then
@@ -33,7 +33,7 @@ echo Updating changelog for $BootstrapVersion
 sed -i "s:{version}:$BootstrapVersion:g; s:{branch}:$BuildBranch:g;" debian/changelog
 sed -i "s:{version}:$BuildVersion:g; s:{updater}:$BootstrapUpdater:g" debian/preinst debian/postinst debian/postrm
 sed -i '/#BEGIN BUILTIN UPDATER/d; /#END BUILTIN UPDATER/d' debian/preinst debian/postinst debian/postrm
-echo "# Do Not Edit\nPackageVersion=$BootstrapVersion\nReleaseVersion=$BuildVersion\nUpdateMethod=$BootstrapUpdater\nBranch=$BuildBranch" > package_info
+echo "# Do Not Edit\nPackageVersion=$BootstrapVersion\nPackageAuthor=[Team Sonarr](https://sonarr.tv)\nReleaseVersion=$BuildVersion\nUpdateMethod=$BootstrapUpdater\nBranch=$BuildBranch" > package_info
 
 echo Running debuild for $BootstrapVersion
 if [ -z "${TEST_OUTPUT}" ]; then

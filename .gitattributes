@@ -5,7 +5,7 @@
 # when checked out on windows
 *.sh text eol=lf
 distribution/debian/* text eol=lf
-macOS/Sonarr text eol=lf
+distribution/osx/Sonarr text eol=lf
 
 # Custom for Visual Studio
 *.cs     diff=csharp

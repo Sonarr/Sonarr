@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
 
@@ -14,13 +16,15 @@ namespace NzbDrone.Host
     {
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IProcessProvider _processProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly IStartupContext _startupContext;
         private readonly Logger _logger;
 
-        public SpinService(IRuntimeInfo runtimeInfo, IProcessProvider processProvider, IStartupContext startupContext, Logger logger)
+        public SpinService(IRuntimeInfo runtimeInfo, IProcessProvider processProvider, IDiskProvider diskProvider, IStartupContext startupContext, Logger logger)
         {
             _runtimeInfo = runtimeInfo;
             _processProvider = processProvider;
+            _diskProvider = diskProvider;
             _startupContext = startupContext;
             _logger = logger;
         }
@@ -38,8 +42,31 @@ namespace NzbDrone.Host
             {
                 var restartArgs = GetRestartArgs();
 
-                _logger.Info("Attempting restart with arguments: {0}", restartArgs);
-                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, restartArgs);
+                var path = _runtimeInfo.ExecutingApplication;
+                var installationFolder = Path.GetDirectoryName(path);
+
+                _logger.Info("Attempting restart with arguments: {0} {1}", path, restartArgs);
+
+                if (OsInfo.IsOsx)
+                {
+                    if (installationFolder.EndsWith(".app/Contents/MacOS/bin"))
+                    {
+                        // New MacOS App stores Sonarr binaries in MacOS/bin and has a shim in MacOS
+                        // Run the app bundle instead of the binary
+                        path = Path.GetDirectoryName(installationFolder);
+                        path = Path.GetDirectoryName(path);
+                        path = Path.GetDirectoryName(path);
+                    }
+                    else if (installationFolder.EndsWith(".app/Contents/MacOS"))
+                    {
+                        // Old MacOS App stores Sonarr binaries in MacOS together with shell script
+                        // Run the app bundle instead
+                        path = Path.GetDirectoryName(installationFolder);
+                        path = Path.GetDirectoryName(path);
+                    }
+                }
+                
+                _processProvider.SpawnNewProcess(path, restartArgs);
             }
         }
 

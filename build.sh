@@ -266,13 +266,23 @@ PackageMacOS()
 
     rm -rf $outputFolderMacOS
     mkdir $outputFolderMacOS
-
-    echo "Adding Startup script"
-    cp ./macOS/Sonarr $outputFolderMacOS
-    dos2unix $outputFolderMacOS/Sonarr
-
+    
     echo "Copying Binaries"
     cp -r $outputFolderLinux/* $outputFolderMacOS
+
+    echo "Adding Sonarr Launcher"
+    cp ./distribution/osx/Launcher/dist/Launcher $outputFolderMacOS/
+    mv $outputFolderMacOS/Sonarr.exe $outputFolderMacOS/Sonarr.exe.bak
+    mv $outputFolderMacOS/Launcher $outputFolderMacOS/Sonarr
+    mv $outputFolderMacOS/Sonarr.exe.bak $outputFolderMacOS/Sonarr.exe
+    chmod +x $outputFolderMacOS/Sonarr
+
+    echo "Adding Sonarr.Update Launcher"
+    cp ./distribution/osx/Launcher/dist/Launcher $outputFolderMacOS/Sonarr.Update/
+    mv $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe.bak
+    mv $outputFolderMacOS/Sonarr.Update/Launcher $outputFolderMacOS/Sonarr.Update/Sonarr.Update
+    mv $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe.bak $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe
+    chmod +x $outputFolderMacOS/Sonarr.Update/Sonarr.Update
 
     echo "Adding sqlite dylibs"
     cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOS
@@ -289,24 +299,27 @@ PackageMacOSApp()
 
     rm -rf $outputFolderMacOSApp
     mkdir $outputFolderMacOSApp
-    cp -r ./macOS/Sonarr.app $outputFolderMacOSApp
+    cp -r ./distribution/osx/Sonarr.app $outputFolderMacOSApp
     mkdir -p $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
 
-    echo "Adding Startup script"
-    cp ./macOS/Sonarr $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
-    dos2unix $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr
+    echo "Adding Sonarr Launcher"
+    cp ./distribution/osx/Launcher/dist/Launcher $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/
+    mv $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Launcher $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr
+    chmod +x $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr
 
     echo "Copying Binaries"
-    cp -r $outputFolderLinux/* $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+    mkdir -p $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin
+    cp -r $outputFolderLinux/* $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin/
 
     echo "Adding sqlite dylibs"
-    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin/
 
     echo "Adding MediaInfo dylib"
-    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
+    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin/
 
     echo "Removing Update Folder"
-    rm -r $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr.Update
+    rm -r $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin/Sonarr.Update
+    echo "# Do Not Edit\nPackageVersion=${BUILD_NUMBER}\nPackageAuthor=[Team Sonarr](https://sonarr.tv)\nReleaseVersion=${BUILD_NUMBER}\nUpdateMethod=$PackageUpdater\nBranch=${Branch:-master}" > $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/package_info
 
     ProgressEnd 'Creating macOS App Package'
 }

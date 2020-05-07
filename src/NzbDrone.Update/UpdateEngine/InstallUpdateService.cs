@@ -113,10 +113,24 @@ namespace NzbDrone.Update.UpdateEngine
                     _logger.Info("Copying new files to target folder");
                     _diskTransferService.MirrorFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder);
 
-                    // Set executable flag on Sonarr app
+                    // Handle OSX package update and set executable flag on Sonarr app
                     if (OsInfo.IsOsx)
                     {
-                        _diskProvider.SetPermissions(Path.Combine(installationFolder, "Sonarr"), "0755", null, null);
+                        var shimPath = Path.Combine(installationFolder, "Sonarr");
+                        var realShimPath = Path.Combine(installationFolder, "../Sonarr");
+
+                        if (installationFolder.EndsWith("/MacOS/bin") && _diskProvider.FileExists(realShimPath))
+                        {
+                            // New MacOS App stores Sonarr binaries in MacOS/bin and has a shim in MacOS
+                            // Delete the shim in the downloaded update, we shouldn't update the shim unnecessarily
+                            _diskProvider.DeleteFile(shimPath);
+                        }
+                        else
+                        {
+                            // Old MacOS App stores Sonarr binaries in MacOS together with shell script
+                            // Make shim executable
+                            _diskProvider.SetPermissions(shimPath, "0755", null, null);
+                        }
                     }
                 }
                 catch (Exception e)

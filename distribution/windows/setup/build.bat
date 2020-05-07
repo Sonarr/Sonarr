@@ -4,4 +4,4 @@ echo ##teamcity[progressStart 'Building setup file']
 inno\ISCC.exe sonarr.iss
 echo ##teamcity[progressFinish 'Building setup file']
 
-echo ##teamcity[publishArtifacts 'setup\output\*.exe']
+echo ##teamcity[publishArtifacts 'distribution\windows\setup\output\*.exe']
