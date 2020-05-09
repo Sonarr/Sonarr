@@ -52,8 +52,8 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 - Run `yarn build` to build the UI
 - Open `Sonarr.sln` in Visual Studio
-- Make sure `NzbDrone.Console` is set as the startup project
-- Build `NzbDrone.Windows` and `NzbDrone.Mono` projects
+- Make sure `Sonarr.Console` is set as the startup project
+- Build `Sonarr.Windows` and `Sonarr.Mono` projects
 - Build Solution
 
 ### UI Development
