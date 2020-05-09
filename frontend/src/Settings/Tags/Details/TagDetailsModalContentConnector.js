@@ -9,11 +9,31 @@ function findMatchingItems(ids, items) {
   });
 }
 
-function createMatchingSeriesSelector() {
+function createUnorderedMatchingSeriesSelector() {
   return createSelector(
     (state, { seriesIds }) => seriesIds,
     createAllSeriesSelector(),
     findMatchingItems
+  );
+}
+
+function createMatchingSeriesSelector() {
+  return createSelector(
+    createUnorderedMatchingSeriesSelector(),
+    (series) => {
+      return series.sort((seriesA, seriesB) => {
+        const sortTitleA = seriesA.sortTitle;
+        const sortTitleB = seriesB.sortTitle;
+
+        if (sortTitleA > sortTitleB) {
+          return 1;
+        } else if (sortTitleA < sortTitleB) {
+          return -1;
+        }
+
+        return 0;
+      });
+    }
   );
 }
 
