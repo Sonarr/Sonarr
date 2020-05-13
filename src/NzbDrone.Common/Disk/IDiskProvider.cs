@@ -21,6 +21,7 @@ namespace NzbDrone.Common.Disk
         bool FileExists(string path);
         bool FileExists(string path, StringComparison stringComparison);
         bool FolderWritable(string path);
+        bool FolderEmpty(string path);
         string[] GetDirectories(string path);
         string[] GetFiles(string path, SearchOption searchOption);
         long GetFolderSize(string path);

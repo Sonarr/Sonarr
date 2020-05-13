@@ -69,23 +69,28 @@ namespace NzbDrone.Core.MediaFiles
         {
             var rootFolder = _rootFolderService.GetBestRootFolderPath(series.Path);
 
-            if (!_diskProvider.FolderExists(rootFolder))
-            {
-                _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderDoesNotExist));
-                return;
-            }
+            var seriesFolderExists = _diskProvider.FolderExists(series.Path);
 
-            if (_diskProvider.GetDirectories(rootFolder).Empty())
+            if (!seriesFolderExists)
             {
-                _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderIsEmpty));
-                return;
+                if (!_diskProvider.FolderExists(rootFolder))
+                {
+                    _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
+                    _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderDoesNotExist));
+                    return;
+                }
+
+                if (_diskProvider.FolderEmpty(rootFolder))
+                {
+                    _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
+                    _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderIsEmpty));
+                    return;
+                }
             }
 
             _logger.ProgressInfo("Scanning {0}", series.Title);
 
-            if (!_diskProvider.FolderExists(series.Path))
+            if (!seriesFolderExists)
             {
                 if (_configService.CreateEmptySeriesFolders)
                 {

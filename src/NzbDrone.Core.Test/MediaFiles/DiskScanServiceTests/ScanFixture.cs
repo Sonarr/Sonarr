@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -56,6 +57,10 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
                   .Setup(s => s.GetDirectories(_rootFolder))
                   .Returns(subfolders);
 
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderEmpty(_rootFolder))
+                  .Returns(subfolders.Empty());
+
             foreach (var folder in subfolders)
             {
                 Mocker.GetMock<IDiskProvider>()
@@ -84,7 +89,10 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             ExceptionVerification.ExpectedWarns(1);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.FolderExists(_series.Path), Times.Never());
+                  .Verify(v => v.GetFiles(_series.Path, SearchOption.AllDirectories), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.CreateFolder(_series.Path), Times.Never());
 
             Mocker.GetMock<IMediaFileTableCleanupService>()
                   .Verify(v => v.Clean(It.IsAny<Series>(), It.IsAny<List<string>>()), Times.Never());
@@ -100,7 +108,10 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             ExceptionVerification.ExpectedWarns(1);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.FolderExists(_series.Path), Times.Never());
+                  .Verify(v => v.GetFiles(_series.Path, SearchOption.AllDirectories), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.CreateFolder(_series.Path), Times.Never());
 
             Mocker.GetMock<IMediaFileTableCleanupService>()
                   .Verify(v => v.Clean(It.IsAny<Series>(), It.IsAny<List<string>>()), Times.Never());
