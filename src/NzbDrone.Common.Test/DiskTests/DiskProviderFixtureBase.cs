@@ -212,6 +212,38 @@ namespace NzbDrone.Common.Test.DiskTests
             Subject.GetParentFolder(path).Should().Be(parent);
         }
 
+        [Test]
+        public void RemoveEmptySubfolders_should_remove_nested_empty_folder()
+        {
+            var mainDir = GetTempFilePath();
+            var subDir1 = Path.Combine(mainDir, "depth1");
+            var subDir2 = Path.Combine(subDir1, "depth2");
+            Directory.CreateDirectory(subDir2);
+
+            Subject.RemoveEmptySubfolders(mainDir);
+
+            Directory.Exists(mainDir).Should().Be(true);
+            Directory.Exists(subDir1).Should().Be(false);
+        }
+
+        [Test]
+        public void RemoveEmptySubfolders_should_not_remove_nested_nonempty_folder()
+        {
+            var mainDir = GetTempFilePath();
+            var subDir1 = Path.Combine(mainDir, "depth1");
+            var subDir2 = Path.Combine(subDir1, "depth2");
+            var file = Path.Combine(subDir1, "file1.txt");
+            Directory.CreateDirectory(subDir2);
+            File.WriteAllText(file, "I should not be deleted");
+
+            Subject.RemoveEmptySubfolders(mainDir);
+
+            Directory.Exists(mainDir).Should().Be(true);
+            Directory.Exists(subDir1).Should().Be(true);
+            Directory.Exists(subDir2).Should().Be(false);
+            File.Exists(file).Should().Be(true);
+        }
+
         private void DoHardLinkRename(FileShare fileShare)
         {
             var sourceDir = GetTempFilePath();

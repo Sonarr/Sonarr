@@ -202,13 +202,11 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (_configService.DeleteEmptyFolders)
             {
-                if (_diskProvider.GetFiles(path, SearchOption.AllDirectories).Empty())
+                _diskProvider.RemoveEmptySubfolders(path);
+
+                if (_diskProvider.FolderEmpty(path))
                 {
                     _diskProvider.DeleteFolder(path, true);
-                }
-                else
-                {
-                    _diskProvider.RemoveEmptySubfolders(path);
                 }
             }
         }

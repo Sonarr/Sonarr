@@ -145,7 +145,7 @@ namespace NzbDrone.Common.Disk
         {
             Ensure.That(path, () => path).IsValidPath();
 
-            return Directory.EnumerateDirectories(path).Empty();
+            return Directory.EnumerateFileSystemEntries(path).Empty();
         }
 
         public string[] GetDirectories(string path)
@@ -489,14 +489,21 @@ namespace NzbDrone.Common.Disk
 
         public void RemoveEmptySubfolders(string path)
         {
-            var subfolders = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
-            var files = GetFiles(path, SearchOption.AllDirectories);
-
-            foreach (var subfolder in subfolders)
+            // Depth first search for empty subdirectories
+            foreach (var subdir in Directory.EnumerateDirectories(path))
             {
-                if (files.None(f => subfolder.IsParentPath(f)))
+                RemoveEmptySubfolders(subdir);
+
+                if (Directory.EnumerateFileSystemEntries(subdir).Empty())
                 {
-                    DeleteFolder(subfolder, false);
+                    try
+                    {
+                        Directory.Delete(subdir, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Warn(ex, "Failed to remove empty directory {0}", subdir);
+                    }
                 }
             }
         }
