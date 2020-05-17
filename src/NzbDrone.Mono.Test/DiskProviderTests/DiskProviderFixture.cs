@@ -151,7 +151,7 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             Syscall.stat(dst, out var dstStat);
             dstStat.st_mode.Should().Be(origStat.st_mode);
 
-            Subject.CopyPermissions(src, dst, false);
+            Subject.CopyPermissions(src, dst);
 
             // Verify CopyPermissions
             Syscall.stat(dst, out dstStat);

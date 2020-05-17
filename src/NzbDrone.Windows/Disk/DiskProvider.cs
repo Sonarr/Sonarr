@@ -44,12 +44,12 @@ namespace NzbDrone.Windows.Disk
             File.SetAccessControl(filename, fs);
         }
 
-        public override void SetPermissions(string path, string mask, string user, string group)
+        public override void SetPermissions(string path, string mask)
         {
 
         }
 
-        public override void CopyPermissions(string sourcePath, string targetPath, bool includeOwner)
+        public override void CopyPermissions(string sourcePath, string targetPath)
         {
 
         }

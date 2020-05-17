@@ -85,7 +85,7 @@ namespace NzbDrone.Core.MediaFiles
 
             try
             {
-                _diskProvider.SetPermissions(path, permissions, _configService.ChownUser, _configService.ChownGroup);
+                _diskProvider.SetPermissions(path, permissions);
             }
 
             catch (Exception ex)

@@ -72,13 +72,21 @@ namespace NzbDrone.Mono.Disk
             }
         }
 
-        public override void SetPermissions(string path, string mask, string user, string group)
+        public override void SetPermissions(string path, string mask)
         {
-            SetPermissions(path, mask);
-            SetOwner(path, user, group);
+            Logger.Debug("Setting permissions: {0} on {1}", mask, path);
+
+            var filePermissions = NativeConvert.FromOctalPermissionString(mask);
+
+            if (Syscall.chmod(path, filePermissions) < 0)
+            {
+                var error = Stdlib.GetLastError();
+
+                throw new LinuxPermissionsException("Error setting file permissions: " + error);
+            }
         }
 
-        public override void CopyPermissions(string sourcePath, string targetPath, bool includeOwner)
+        public override void CopyPermissions(string sourcePath, string targetPath)
         {
             try
             {
@@ -88,11 +96,6 @@ namespace NzbDrone.Mono.Disk
                 if (srcStat.st_mode != tgtStat.st_mode)
                 {
                     Syscall.chmod(targetPath, srcStat.st_mode);
-                }
-
-                if (includeOwner && (srcStat.st_uid != tgtStat.st_uid || srcStat.st_gid != tgtStat.st_gid))
-                {
-                    Syscall.chown(targetPath, srcStat.st_uid, srcStat.st_gid);
                 }
             }
             catch (Exception ex)
@@ -358,39 +361,6 @@ namespace NzbDrone.Mono.Disk
             {
                 Logger.Debug(ex, string.Format("Hardlink '{0}' to '{1}' failed.", source, destination));
                 return false;
-            }
-        }
-
-        private void SetPermissions(string path, string mask)
-        {
-            Logger.Debug("Setting permissions: {0} on {1}", mask, path);
-
-            var filePermissions = NativeConvert.FromOctalPermissionString(mask);
-
-            if (Syscall.chmod(path, filePermissions) < 0)
-            {
-                var error = Stdlib.GetLastError();
-
-                throw new LinuxPermissionsException("Error setting file permissions: " + error);
-            }
-        }
-
-        private void SetOwner(string path, string user, string group)
-        {
-            if (string.IsNullOrWhiteSpace(user) && string.IsNullOrWhiteSpace(group))
-            {
-                Logger.Debug("User and Group for chown not configured, skipping chown.");
-                return;
-            }
-
-            var userId = GetUserId(user);
-            var groupId = GetGroupId(group);
-
-            if (Syscall.chown(path, userId, groupId) < 0)
-            {
-                var error = Stdlib.GetLastError();
-
-                throw new LinuxPermissionsException("Error setting file owner and/or group: " + error);
             }
         }
 
