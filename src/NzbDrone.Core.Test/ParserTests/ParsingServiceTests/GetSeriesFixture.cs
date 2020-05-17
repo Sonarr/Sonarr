@@ -1,5 +1,7 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -42,6 +44,19 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Mocker.GetMock<ISeriesService>()
                   .Verify(s => s.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear,
                                              parsedEpisodeInfo.SeriesTitleInfo.Year), Times.Once());
+        }
+
+        [Test]
+        public void should_parse_concatenated_title()
+        {
+            var series = new Series { TvdbId = 100 };
+            Mocker.GetMock<ISeriesService>().Setup(v => v.FindByTitle("Welcome")).Returns(series);
+            Mocker.GetMock<ISceneMappingService>().Setup(v => v.FindTvdbId("Mairimashita", It.IsAny<string>())).Returns(100);
+
+            var result = Subject.GetSeries("Welcome (Mairimashita).S01E01.720p.WEB-DL-Viva");
+
+            result.Should().NotBeNull();
+            result.TvdbId.Should().Be(100);
         }
     }
 }
