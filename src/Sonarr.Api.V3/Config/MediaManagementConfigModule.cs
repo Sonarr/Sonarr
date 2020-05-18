@@ -11,7 +11,6 @@ namespace Sonarr.Api.V3.Config
         {
             SharedValidator.RuleFor(c => c.RecycleBinCleanupDays).GreaterThanOrEqualTo(0);
             SharedValidator.RuleFor(c => c.FileChmod).NotEmpty();
-            SharedValidator.RuleFor(c => c.FolderChmod).NotEmpty();
             SharedValidator.RuleFor(c => c.RecycleBin).IsValidPath().SetValidator(pathExistsValidator).When(c => !string.IsNullOrWhiteSpace(c.RecycleBin));
             SharedValidator.RuleFor(c => c.MinimumFreeSpaceWhenImporting).GreaterThanOrEqualTo(100);
         }

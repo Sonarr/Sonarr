@@ -16,7 +16,6 @@ namespace NzbDrone.Api.Config
 
         public bool SetPermissionsLinux { get; set; }
         public string FileChmod { get; set; }
-        public string FolderChmod { get; set; }
 
         public bool SkipFreeSpaceCheckWhenImporting { get; set; }
         public bool CopyUsingHardlinks { get; set; }
@@ -40,7 +39,6 @@ namespace NzbDrone.Api.Config
 
                 SetPermissionsLinux = model.SetPermissionsLinux,
                 FileChmod = model.FileChmod,
-                FolderChmod = model.FolderChmod,
 
                 SkipFreeSpaceCheckWhenImporting = model.SkipFreeSpaceCheckWhenImporting,
                 CopyUsingHardlinks = model.CopyUsingHardlinks,

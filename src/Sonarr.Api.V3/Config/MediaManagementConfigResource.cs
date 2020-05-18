@@ -19,7 +19,6 @@ namespace Sonarr.Api.V3.Config
 
         public bool SetPermissionsLinux { get; set; }
         public string FileChmod { get; set; }
-        public string FolderChmod { get; set; }
 
         public EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
         public bool SkipFreeSpaceCheckWhenImporting { get; set; }
@@ -47,7 +46,6 @@ namespace Sonarr.Api.V3.Config
 
                 SetPermissionsLinux = model.SetPermissionsLinux,
                 FileChmod = model.FileChmod,
-                FolderChmod = model.FolderChmod,
 
                 EpisodeTitleRequired = model.EpisodeTitleRequired,
                 SkipFreeSpaceCheckWhenImporting = model.SkipFreeSpaceCheckWhenImporting,

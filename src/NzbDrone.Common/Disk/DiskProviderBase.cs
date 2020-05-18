@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Text;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
@@ -358,6 +359,31 @@ namespace NzbDrone.Common.Disk
                 throw;
             }
 
+        }
+
+        protected static string GetFolderPermissions(string filePermissions)
+        {
+            var builder = new StringBuilder();
+
+            if (filePermissions.Length == 4)
+            {
+                filePermissions = filePermissions.Substring(1);
+                builder.Append("0");
+            }
+
+            foreach (char c in filePermissions)
+            {
+                int value = (int) char.GetNumericValue(c);
+
+                if (value > 0 && value % 2 == 0)
+                {
+                    value++;
+                }
+
+                builder.Append(value);
+            }
+
+            return builder.ToString();
         }
 
         private static void RemoveReadOnly(string path)

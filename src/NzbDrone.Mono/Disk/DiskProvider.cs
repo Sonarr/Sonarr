@@ -76,13 +76,18 @@ namespace NzbDrone.Mono.Disk
         {
             Logger.Debug("Setting permissions: {0} on {1}", mask, path);
 
-            var filePermissions = NativeConvert.FromOctalPermissionString(mask);
+            if (Directory.Exists(path))
+            {
+                mask = GetFolderPermissions(mask);
+            }
 
-            if (Syscall.chmod(path, filePermissions) < 0)
+            var permissions = NativeConvert.FromOctalPermissionString(mask);
+
+            if (Syscall.chmod(path, permissions) < 0)
             {
                 var error = Stdlib.GetLastError();
 
-                throw new LinuxPermissionsException("Error setting file permissions: " + error);
+                throw new LinuxPermissionsException("Error setting permissions: " + error);
             }
         }
 

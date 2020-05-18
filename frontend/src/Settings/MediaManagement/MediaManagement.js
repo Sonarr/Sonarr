@@ -387,25 +387,12 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.TEXT}
                           name="fileChmod"
-                          helpText="Octal, applied to media files when imported/renamed by Sonarr"
+                          helpTexts={[
+                            'Octal, applied to media files when imported/renamed by Sonarr',
+                            'The same mode is applied to series/season folders with the execute bit added, e.g., 0644 becomes 0755'
+                          ]}
                           onChange={onInputChange}
                           {...settings.fileChmod}
-                        />
-                      </FormGroup>
-
-                      <FormGroup
-                        advancedSettings={advancedSettings}
-                        isAdvanced={true}
-                      >
-                        <FormLabel>Folder chmod mode</FormLabel>
-
-                        <FormInputGroup
-                          type={inputTypes.TEXT}
-                          name="folderChmod"
-                          helpText="Octal, applied to series/season folders created by Sonarr"
-                          values={fileDateOptions}
-                          onChange={onInputChange}
-                          {...settings.folderChmod}
                         />
                       </FormGroup>
                     </FieldSet>
