@@ -157,5 +157,67 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             Syscall.stat(dst, out dstStat);
             dstStat.st_mode.Should().Be(srcStat.st_mode);
         }
+
+        [Test]
+        public void should_set_file_permissions()
+        {
+            var tempFile = GetTempFilePath();
+
+            File.WriteAllText(tempFile, "File1");
+            SetWritePermissions(tempFile, false);
+
+            // Verify test setup
+            Syscall.stat(tempFile, out var fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0444");
+
+            Subject.SetPermissions(tempFile, "644");
+            Syscall.stat(tempFile, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0644");
+
+            Subject.SetPermissions(tempFile, "0644");
+            Syscall.stat(tempFile, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0644");
+
+            Subject.SetPermissions(tempFile, "1664");
+            Syscall.stat(tempFile, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("1664");
+        }
+
+        [Test]
+        public void should_set_folder_permissions()
+        {
+            var tempPath = GetTempFilePath();
+
+            Directory.CreateDirectory(tempPath);
+            SetWritePermissions(tempPath, false);
+
+            // Verify test setup
+            Syscall.stat(tempPath, out var fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0555");
+
+            Subject.SetPermissions(tempPath, "644");
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0755");
+
+            Subject.SetPermissions(tempPath, "0644");
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0755");
+
+            Subject.SetPermissions(tempPath, "1664");
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0775");
+
+            Subject.SetPermissions(tempPath, "775");
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0775");
+
+            Subject.SetPermissions(tempPath, "640");
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0750");
+
+            Subject.SetPermissions(tempPath, "0041");
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0051");
+        }
     }
 }
