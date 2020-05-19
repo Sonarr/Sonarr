@@ -41,6 +41,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("www.Torrenting.com - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "Revenge")]
         [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "Seed")]
         [TestCase("Reno.911.S01.DVDRip.DD2.0.x264-DEEP", "Reno 911")]
+        [TestCase("www.Torrenting.org - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "Revenge")]
         public void should_parse_series_name(string postTitle, string title)
         {
             var result = Parser.Parser.ParseSeriesName(postTitle).CleanSeriesTitle();
