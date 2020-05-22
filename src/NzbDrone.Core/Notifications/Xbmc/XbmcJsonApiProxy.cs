@@ -40,7 +40,16 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public string UpdateLibrary(XbmcSettings settings, string path)
         {
-            var response = ProcessRequest(settings, "VideoLibrary.Scan", path);
+            string response;
+
+            if (path == null)
+            {
+                response = ProcessRequest(settings, "VideoLibrary.Scan");
+            }
+            else
+            {
+                response = ProcessRequest(settings, "VideoLibrary.Scan", path);
+            }
 
             return Json.Deserialize<XbmcJsonResult<string>>(response).Result;
         }
