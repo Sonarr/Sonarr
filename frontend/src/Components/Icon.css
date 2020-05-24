@@ -25,3 +25,7 @@
 .warning {
   color: $warningColor;
 }
+
+.purple {
+  color: $purple;
+}

@@ -51,10 +51,6 @@ function QueueStatusCell(props) {
   let iconKind = kinds.DEFAULT;
   let title = 'Downloading';
 
-  if (hasWarning) {
-    iconKind = kinds.WARNING;
-  }
-
   if (status === 'paused') {
     iconName = icons.PAUSED;
     title = 'Paused';
@@ -71,15 +67,22 @@ function QueueStatusCell(props) {
 
     if (trackedDownloadState === 'importPending') {
       title += ' - Waiting to Import';
+      iconKind = kinds.PURPLE;
     }
 
     if (trackedDownloadState === 'importing') {
       title += ' - Importing';
+      iconKind = kinds.PURPLE;
     }
 
     if (trackedDownloadState === 'failedPending') {
       title += ' - Waiting to Process';
+      iconKind = kinds.DANGER;
     }
+  }
+
+  if (hasWarning) {
+    iconKind = kinds.WARNING;
   }
 
   if (status === 'delay') {
