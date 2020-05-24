@@ -269,6 +269,7 @@ namespace NzbDrone.Core.History
                     SourceTitle = message.EpisodeFile.Path,
                     SeriesId = message.EpisodeFile.SeriesId,
                     EpisodeId = episode.Id,
+                    Language = message.EpisodeFile.Language
                 };
 
                 history.Data.Add("Reason", message.Reason.ToString());
