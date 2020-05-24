@@ -8,7 +8,16 @@
   }
 }
 
+.inputWrapper {
+  flex: 1 0 0;
+}
+
+.buttonWrapper {
+  flex: 0 0 22px;
+}
+
 .keyInput,
 .valueInput {
+  width: 100%;
   border: none;
 }
