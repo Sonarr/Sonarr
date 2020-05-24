@@ -26,6 +26,12 @@
   display: flex;
 }
 
+.sizeOnDisk {
+  margin-left: 10px;
+  color: #777;
+  font-size: $defaultFontSize;
+}
+
 .expandButton {
   composes: link from '~Components/Link/Link.css';
 
@@ -114,5 +120,9 @@
   .expandButtonIcon {
     position: static;
     margin: 0;
+  }
+
+  .sizeOnDisk {
+    display: none;
   }
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isAfter from 'Utilities/Date/isAfter';
 import isBefore from 'Utilities/Date/isBefore';
+import formatBytes from 'Utilities/Number/formatBytes';
 import getToggledRange from 'Utilities/Table/getToggledRange';
 import { align, icons, kinds, sizes, tooltipPositions } from 'Helpers/Props';
 import Icon from 'Components/Icon';
@@ -33,6 +34,7 @@ function getSeasonStatistics(episodes) {
   let totalEpisodeCount = 0;
   let monitoredEpisodeCount = 0;
   let hasMonitoredEpisodes = false;
+  const sizeOnDisk = 0;
 
   episodes.forEach((episode) => {
     if (episode.episodeFileId || (episode.monitored && isBefore(episode.airDateUtc))) {
@@ -56,7 +58,8 @@ function getSeasonStatistics(episodes) {
     episodeFileCount,
     totalEpisodeCount,
     monitoredEpisodeCount,
-    hasMonitoredEpisodes
+    hasMonitoredEpisodes,
+    sizeOnDisk
   };
 }
 
@@ -205,6 +208,7 @@ class SeriesDetailsSeason extends Component {
       seasonNumber,
       items,
       columns,
+      statistics,
       isSaving,
       isExpanded,
       isSearching,
@@ -271,11 +275,20 @@ class SeriesDetailsSeason extends Component {
                     totalEpisodeCount={totalEpisodeCount}
                     monitoredEpisodeCount={monitoredEpisodeCount}
                     episodeFileCount={episodeFileCount}
+                    sizeOnDisk={statistics.sizeOnDisk}
                   />
                 </div>
               }
               position={tooltipPositions.BOTTOM}
             />
+
+            {
+              statistics.sizeOnDisk ?
+                <div className={styles.sizeOnDisk}>
+                  {formatBytes(statistics.sizeOnDisk)}
+                </div> :
+                null
+            }
           </div>
 
           <Link
@@ -504,6 +517,7 @@ SeriesDetailsSeason.propTypes = {
   seasonNumber: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  statistics: PropTypes.object.isRequired,
   isSaving: PropTypes.bool,
   isExpanded: PropTypes.bool,
   isSearching: PropTypes.bool.isRequired,

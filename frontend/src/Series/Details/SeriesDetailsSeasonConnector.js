@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -27,8 +26,8 @@ function createMapStateToProps() {
         seasonNumber
       }));
 
-      const episodesInSeason = _.filter(episodes.items, { seasonNumber });
-      const sortedEpisodes = _.orderBy(episodesInSeason, 'episodeNumber', 'desc');
+      const episodesInSeason = episodes.items.filter((episode) => episode.seasonNumber === seasonNumber);
+      const sortedEpisodes = episodesInSeason.sort((a, b) => b.episodeNumber - a.episodeNumber);
 
       return {
         items: sortedEpisodes,
