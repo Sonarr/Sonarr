@@ -13,7 +13,7 @@
 .episodeNumber {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
-  width: 50px;
+  width: 70px;
 }
 
 .size {
