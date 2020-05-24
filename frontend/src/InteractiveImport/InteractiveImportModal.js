@@ -47,6 +47,7 @@ class InteractiveImportModal extends Component {
     return (
       <Modal
         isOpen={isOpen}
+        closeOnBackgroundClick={false}
         onModalClose={onModalClose}
       >
         {
