@@ -41,7 +41,8 @@ namespace NzbDrone.Core.Download
 
             foreach (var trackedDownload in trackedDownloads)
             {
-                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
+                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload,
+                    trackedDownload.RemoteEpisode.Series.Id));
             }
         }
 

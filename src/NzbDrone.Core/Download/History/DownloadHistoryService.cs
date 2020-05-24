@@ -88,6 +88,12 @@ namespace NzbDrone.Core.Download.History
 
         public void Handle(EpisodeGrabbedEvent message)
         {
+            // Don't store grabbed events for clients that don't download IDs
+            if (message.DownloadId.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
             var history = new DownloadHistory
             {
                 EventType = DownloadHistoryEventType.DownloadGrabbed,
@@ -155,7 +161,7 @@ namespace NzbDrone.Core.Download.History
             var history = new DownloadHistory
             {
                 EventType = DownloadHistoryEventType.DownloadImported,
-                SeriesId = message.TrackedDownload.RemoteEpisode.Series.Id,
+                SeriesId = message.SeriesId,
                 DownloadId = message.TrackedDownload.DownloadItem.DownloadId,
                 SourceTitle = message.TrackedDownload.DownloadItem.OutputPath.ToString(),
                 Date = DateTime.UtcNow,

@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Download
             if (allEpisodesImported)
             {
                 trackedDownload.State = TrackedDownloadState.Imported;
-                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
+                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id));
                 return true;
             }
 
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Download
                 if (allEpisodesImportedInHistory)
                 {
                     trackedDownload.State = TrackedDownloadState.Imported;
-                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
+                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id));
                     return true;
                 }
             }

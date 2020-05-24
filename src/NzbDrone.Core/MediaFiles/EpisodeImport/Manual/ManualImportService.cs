@@ -372,7 +372,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 if (allEpisodesImported)
                 {
                     trackedDownload.State = TrackedDownloadState.Imported;
-                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
+                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, imported.First().ImportDecision.LocalEpisode.Series.Id));
                 }
             }
         }
