@@ -93,6 +93,33 @@ export const defaultState = {
 
       // Default to false
       return false;
+    },
+
+    rejectionCount: function(item, value, type) {
+      const rejectionCount = item.rejections.length;
+
+      switch (type) {
+        case filterTypes.EQUAL:
+          return rejectionCount === value;
+
+        case filterTypes.GREATER_THAN:
+          return rejectionCount > value;
+
+        case filterTypes.GREATER_THAN_OR_EQUAL:
+          return rejectionCount >= value;
+
+        case filterTypes.LESS_THAN:
+          return rejectionCount < value;
+
+        case filterTypes.LESS_THAN_OR_EQUAL:
+          return rejectionCount <= value;
+
+        case filterTypes.NOT_EQUAL:
+          return rejectionCount !== value;
+
+        default:
+          return false;
+      }
     }
   },
 
@@ -141,8 +168,8 @@ export const defaultState = {
       valueType: filterBuilderValueTypes.QUALITY
     },
     {
-      name: 'rejections',
-      label: 'Rejections',
+      name: 'rejectionCount',
+      label: 'Rejection Count',
       type: filterBuilderTypes.NUMBER
     }
   ],
