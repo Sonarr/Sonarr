@@ -10,12 +10,12 @@ function QueueDetails(props) {
     size,
     sizeleft,
     estimatedCompletionTime,
-    status: queueStatus,
+    status,
+    trackedDownloadState,
+    trackedDownloadStatus,
     errorMessage,
     progressBar
   } = props;
-
-  const status = queueStatus.toLowerCase();
 
   const progress = (100 - sizeleft / size * 100);
 
@@ -39,7 +39,35 @@ function QueueDetails(props) {
       );
     }
 
-    // TODO: show an icon when download is complete, but not imported yet?
+    if (trackedDownloadStatus === 'warning') {
+      return (
+        <Icon
+          name={icons.DOWNLOAD}
+          kind={kinds.WARNING}
+          title={'Downloaded - Unable to Import: check logs for details'}
+        />
+      );
+    }
+
+    if (trackedDownloadState === 'importPending') {
+      return (
+        <Icon
+          name={icons.DOWNLOAD}
+          kind={kinds.PURPLE}
+          title={'Downloaded - Waiting to Import'}
+        />
+      );
+    }
+
+    if (trackedDownloadState === 'importing') {
+      return (
+        <Icon
+          name={icons.DOWNLOAD}
+          kind={kinds.PURPLE}
+          title={'Downloaded - Importing'}
+        />
+      );
+    }
   }
 
   if (errorMessage) {
@@ -90,6 +118,8 @@ QueueDetails.propTypes = {
   sizeleft: PropTypes.number.isRequired,
   estimatedCompletionTime: PropTypes.string,
   status: PropTypes.string.isRequired,
+  trackedDownloadState: PropTypes.string.isRequired,
+  trackedDownloadStatus: PropTypes.string.isRequired,
   errorMessage: PropTypes.string,
   progressBar: PropTypes.node.isRequired
 };

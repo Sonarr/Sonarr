@@ -27,7 +27,7 @@ function EpisodeStatus(props) {
       size
     } = queueItem;
 
-    const progress = (100 - sizeleft / size * 100);
+    const progress = size ? (100 - sizeleft / size * 100) : 0;
 
     return (
       <div className={styles.center}>
