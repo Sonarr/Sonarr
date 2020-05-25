@@ -530,4 +530,8 @@ SeriesDetailsSeason.propTypes = {
   onSearchPress: PropTypes.func.isRequired
 };
 
+SeriesDetailsSeason.defaultProps = {
+  statistics: {}
+};
+
 export default SeriesDetailsSeason;
