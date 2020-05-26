@@ -205,7 +205,7 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
 
             Subject.SetPermissions(tempPath, "1664");
             Syscall.stat(tempPath, out fileStat);
-            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0775");
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("1775");
 
             Subject.SetPermissions(tempPath, "775");
             Syscall.stat(tempPath, out fileStat);

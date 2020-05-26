@@ -76,12 +76,12 @@ namespace NzbDrone.Mono.Disk
         {
             Logger.Debug("Setting permissions: {0} on {1}", mask, path);
 
+            var permissions = NativeConvert.FromOctalPermissionString(mask);
+
             if (Directory.Exists(path))
             {
-                mask = GetFolderPermissions(mask);
+                permissions = GetFolderPermissions(permissions);
             }
-
-            var permissions = NativeConvert.FromOctalPermissionString(mask);
 
             if (Syscall.chmod(path, permissions) < 0)
             {

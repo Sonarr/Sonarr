@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
+using Mono.Unix.Native;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
@@ -361,29 +362,11 @@ namespace NzbDrone.Common.Disk
 
         }
 
-        protected static string GetFolderPermissions(string filePermissions)
+        protected static FilePermissions GetFolderPermissions(FilePermissions permissions)
         {
-            var builder = new StringBuilder();
+            permissions |= (FilePermissions) ((int) (permissions & (FilePermissions.S_IRUSR | FilePermissions.S_IRGRP | FilePermissions.S_IROTH)) >> 2);
 
-            if (filePermissions.Length == 4)
-            {
-                filePermissions = filePermissions.Substring(1);
-                builder.Append("0");
-            }
-
-            foreach (char c in filePermissions)
-            {
-                int value = (int) char.GetNumericValue(c);
-
-                if (value > 0 && value % 2 == 0)
-                {
-                    value++;
-                }
-
-                builder.Append(value);
-            }
-
-            return builder.ToString();
+            return permissions;
         }
 
         private static void RemoveReadOnly(string path)
