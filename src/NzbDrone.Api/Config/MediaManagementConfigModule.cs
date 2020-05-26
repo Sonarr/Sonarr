@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 
 namespace NzbDrone.Api.Config
@@ -9,7 +10,7 @@ namespace NzbDrone.Api.Config
         public MediaManagementConfigModule(IConfigService configService, PathExistsValidator pathExistsValidator)
             : base(configService)
         {
-            SharedValidator.RuleFor(c => c.FileChmod).NotEmpty();
+            SharedValidator.RuleFor(c => c.FileChmod).NotEmpty().ValidFileChmod();
             SharedValidator.RuleFor(c => c.RecycleBin).IsValidPath().SetValidator(pathExistsValidator).When(c => !string.IsNullOrWhiteSpace(c.RecycleBin));
         }
 

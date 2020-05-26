@@ -254,7 +254,7 @@ namespace NzbDrone.Core.Configuration
 
         public string FileChmod
         {
-            get { return GetValue("FileChmod", "0644"); }
+            get { return GetValue("FileChmod", "644"); }
 
             set { SetValue("FileChmod", value); }
         }

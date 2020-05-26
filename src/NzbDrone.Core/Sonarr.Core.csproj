@@ -28,6 +28,9 @@
     <Reference Include="Growl.CoreLibrary">
       <HintPath>..\Libraries\Growl.CoreLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\Libraries\Mono.Posix.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.SQLite">
       <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
     </Reference>
