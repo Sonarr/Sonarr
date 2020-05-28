@@ -295,6 +295,7 @@ namespace NzbDrone.Core.History
                     SourceTitle = message.OriginalPath,
                     SeriesId = message.EpisodeFile.SeriesId,
                     EpisodeId = episode.Id,
+                    Language = message.EpisodeFile.Language
                 };
 
                 history.Data.Add("SourcePath", sourcePath);
