@@ -3,6 +3,7 @@ import { batchActions } from 'redux-batched-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { filterBuilderTypes, filterBuilderValueTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
+import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
 import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
 import createHandleActions from './Creators/createHandleActions';
@@ -29,6 +30,65 @@ export const defaultState = {
   selectedFilterKey: 'all',
   filters,
   filterPredicates,
+
+  columns: [
+    {
+      name: 'status',
+      columnLabel: 'Status',
+      isSortable: true,
+      isVisible: true,
+      isModifiable: false
+    },
+    {
+      name: 'sortTitle',
+      label: 'Series Title',
+      isSortable: true,
+      isVisible: true,
+      isModifiable: false
+    },
+    {
+      name: 'qualityProfileId',
+      label: 'Quality Profile',
+      isSortable: true,
+      isVisible: true
+    },
+    {
+      name: 'languageProfileId',
+      label: 'Language Profile',
+      isSortable: false,
+      isVisible: true
+    },
+    {
+      name: 'seriesType',
+      label: 'Type',
+      isSortable: true,
+      isVisible: true
+    },
+    {
+      name: 'seasonFolder',
+      label: 'Season Folder',
+      isSortable: true,
+      isVisible: true
+    },
+    {
+      name: 'path',
+      label: 'Path',
+      isSortable: true,
+      isVisible: true
+    },
+    {
+      name: 'sizeOnDisk',
+      label: 'Size on Disk',
+      isSortable: true,
+      isVisible: false
+    },
+    {
+      name: 'tags',
+      label: 'Tags',
+      isSortable: false,
+      isVisible: true
+    }
+  ],
 
   filterBuilderProps: [
     {
@@ -71,6 +131,12 @@ export const defaultState = {
       type: filterBuilderTypes.EXACT
     },
     {
+      name: 'sizeOnDisk',
+      label: 'Size on Disk',
+      type: filterBuilderTypes.NUMBER,
+      valueType: filterBuilderValueTypes.BYTES
+    },
+    {
       name: 'tags',
       label: 'Tags',
       type: filterBuilderTypes.ARRAY,
@@ -95,6 +161,8 @@ export const SET_SERIES_EDITOR_SORT = 'seriesEditor/setSeriesEditorSort';
 export const SET_SERIES_EDITOR_FILTER = 'seriesEditor/setSeriesEditorFilter';
 export const SAVE_SERIES_EDITOR = 'seriesEditor/saveSeriesEditor';
 export const BULK_DELETE_SERIES = 'seriesEditor/bulkDeleteSeries';
+export const SET_SERIES_EDITOR_TABLE_OPTION = 'seriesIndex/setSeriesEditorTableOption';
+
 //
 // Action Creators
 
@@ -102,6 +170,8 @@ export const setSeriesEditorSort = createAction(SET_SERIES_EDITOR_SORT);
 export const setSeriesEditorFilter = createAction(SET_SERIES_EDITOR_FILTER);
 export const saveSeriesEditor = createThunk(SAVE_SERIES_EDITOR);
 export const bulkDeleteSeries = createThunk(BULK_DELETE_SERIES);
+export const setSeriesEditorTableOption = createAction(SET_SERIES_EDITOR_TABLE_OPTION);
+
 //
 // Action Handlers
 
@@ -184,6 +254,7 @@ export const actionHandlers = handleThunks({
 
 export const reducers = createHandleActions({
 
+  [SET_SERIES_EDITOR_TABLE_OPTION]: createSetTableOptionReducer(section),
   [SET_SERIES_EDITOR_SORT]: createSetClientSideCollectionSortReducer(section),
   [SET_SERIES_EDITOR_FILTER]: createSetClientSideCollectionFilterReducer(section)
 

@@ -3,13 +3,16 @@ import React, { Component } from 'react';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
-import { align, sortDirections } from 'Helpers/Props';
+import { align, icons, sortDirections } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import FilterMenu from 'Components/Menu/FilterMenu';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import NoSeries from 'Series/NoSeries';
@@ -17,58 +20,6 @@ import OrganizeSeriesModal from './Organize/OrganizeSeriesModal';
 import SeriesEditorRowConnector from './SeriesEditorRowConnector';
 import SeriesEditorFooter from './SeriesEditorFooter';
 import SeriesEditorFilterModalConnector from './SeriesEditorFilterModalConnector';
-
-function getColumns(showLanguageProfile) {
-  return [
-    {
-      name: 'status',
-      isSortable: true,
-      isVisible: true
-    },
-    {
-      name: 'sortTitle',
-      label: 'Title',
-      isSortable: true,
-      isVisible: true
-    },
-    {
-      name: 'qualityProfileId',
-      label: 'Quality Profile',
-      isSortable: true,
-      isVisible: true
-    },
-    {
-      name: 'languageProfileId',
-      label: 'Language Profile',
-      isSortable: true,
-      isVisible: showLanguageProfile
-    },
-    {
-      name: 'seriesType',
-      label: 'Series Type',
-      isSortable: false,
-      isVisible: true
-    },
-    {
-      name: 'seasonFolder',
-      label: 'Season Folder',
-      isSortable: true,
-      isVisible: true
-    },
-    {
-      name: 'path',
-      label: 'Path',
-      isSortable: true,
-      isVisible: true
-    },
-    {
-      name: 'tags',
-      label: 'Tags',
-      isSortable: false,
-      isVisible: true
-    }
-  ];
-}
 
 class SeriesEditor extends Component {
 
@@ -83,8 +34,7 @@ class SeriesEditor extends Component {
       allUnselected: false,
       lastToggled: null,
       selectedState: {},
-      isOrganizingSeriesModalOpen: false,
-      columns: getColumns(props.showLanguageProfile)
+      isOrganizingSeriesModalOpen: false
     };
   }
 
@@ -152,6 +102,7 @@ class SeriesEditor extends Component {
       error,
       totalItems,
       items,
+      columns,
       selectedFilterKey,
       filters,
       customFilters,
@@ -162,7 +113,7 @@ class SeriesEditor extends Component {
       isDeleting,
       deleteError,
       isOrganizingSeries,
-      showLanguageProfile,
+      onTableOptionChange,
       onSortPress,
       onFilterSelect
     } = this.props;
@@ -170,8 +121,7 @@ class SeriesEditor extends Component {
     const {
       allSelected,
       allUnselected,
-      selectedState,
-      columns
+      selectedState
     } = this.state;
 
     const selectedSeriesIds = this.getSelectedIds();
@@ -181,6 +131,18 @@ class SeriesEditor extends Component {
         <PageToolbar>
           <PageToolbarSection />
           <PageToolbarSection alignContent={align.RIGHT}>
+            <TableOptionsModalWrapper
+              columns={columns}
+              onTableOptionChange={onTableOptionChange}
+            >
+              <PageToolbarButton
+                label="Options"
+                iconName={icons.TABLE}
+              />
+            </TableOptionsModalWrapper>
+
+            <PageToolbarSeparator />
+
             <FilterMenu
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}
@@ -249,7 +211,8 @@ class SeriesEditor extends Component {
           isDeleting={isDeleting}
           deleteError={deleteError}
           isOrganizingSeries={isOrganizingSeries}
-          showLanguageProfile={showLanguageProfile}
+          columns={columns}
+          showLanguageProfile={columns.find((column) => column.name === 'languageProfileId').isVisible}
           onSaveSelected={this.onSaveSelected}
           onOrganizeSeriesPress={this.onOrganizeSeriesPress}
         />
@@ -270,6 +233,7 @@ SeriesEditor.propTypes = {
   error: PropTypes.object,
   totalItems: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   sortKey: PropTypes.string,
   sortDirection: PropTypes.oneOf(sortDirections.all),
   selectedFilterKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -280,7 +244,7 @@ SeriesEditor.propTypes = {
   isDeleting: PropTypes.bool.isRequired,
   deleteError: PropTypes.object,
   isOrganizingSeries: PropTypes.bool.isRequired,
-  showLanguageProfile: PropTypes.bool.isRequired,
+  onTableOptionChange: PropTypes.func.isRequired,
   onSortPress: PropTypes.func.isRequired,
   onFilterSelect: PropTypes.func.isRequired,
   onSaveSelected: PropTypes.func.isRequired

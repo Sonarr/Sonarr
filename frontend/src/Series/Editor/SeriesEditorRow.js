@@ -1,7 +1,7 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import titleCase from 'Utilities/String/titleCase';
+import formatBytes from 'Utilities/Number/formatBytes';
 import TagListConnector from 'Components/TagListConnector';
 import CheckInput from 'Components/Form/CheckInput';
 import TableRow from 'Components/Table/TableRow';
@@ -36,6 +36,7 @@ class SeriesEditorRow extends Component {
       seriesType,
       seasonFolder,
       path,
+      statistics,
       tags,
       columns,
       isSelected,
@@ -50,51 +51,109 @@ class SeriesEditorRow extends Component {
           onSelectedChange={onSelectedChange}
         />
 
-        <SeriesStatusCell
-          monitored={monitored}
-          status={status}
-        />
-
-        <TableRowCell className={styles.title}>
-          <SeriesTitleLink
-            titleSlug={titleSlug}
-            title={title}
-          />
-        </TableRowCell>
-
-        <TableRowCell>
-          {qualityProfile.name}
-        </TableRowCell>
-
         {
-          _.find(columns, { name: 'languageProfileId' }).isVisible &&
-            <TableRowCell>
-              {languageProfile.name}
-            </TableRowCell>
+          columns.map((column) => {
+            const {
+              name,
+              isVisible
+            } = column;
+
+            if (!isVisible) {
+              return null;
+            }
+
+            if (name === 'status') {
+              return (
+                <SeriesStatusCell
+                  key={name}
+                  monitored={monitored}
+                  status={status}
+                />
+              );
+            }
+
+            if (name === 'sortTitle') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.title}
+                >
+                  <SeriesTitleLink
+
+                    titleSlug={titleSlug}
+                    title={title}
+                  />
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'qualityProfileId') {
+              return (
+                <TableRowCell key={name}>
+                  {qualityProfile.name}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'languageProfileId') {
+              return (
+                <TableRowCell key={name}>
+                  {languageProfile.name}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'seriesType') {
+              return (
+                <TableRowCell key={name}>
+                  {titleCase(seriesType)}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'seasonFolder') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.seasonFolder}
+                >
+                  <CheckInput
+                    name="seasonFolder"
+                    value={seasonFolder}
+                    isDisabled={true}
+                    onChange={this.onSeasonFolderChange}
+                  />
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'path') {
+              return (
+                <TableRowCell key={name}>
+                  {path}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'sizeOnDisk') {
+              return (
+                <TableRowCell key={name}>
+                  {formatBytes(statistics.sizeOnDisk)}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'tags') {
+              return (
+                <TableRowCell key={name}>
+                  <TagListConnector
+                    tags={tags}
+                  />
+                </TableRowCell>
+              );
+            }
+          })
         }
-
-        <TableRowCell>
-          {titleCase(seriesType)}
-        </TableRowCell>
-
-        <TableRowCell className={styles.seasonFolder}>
-          <CheckInput
-            name="seasonFolder"
-            value={seasonFolder}
-            isDisabled={true}
-            onChange={this.onSeasonFolderChange}
-          />
-        </TableRowCell>
-
-        <TableRowCell>
-          {path}
-        </TableRowCell>
-
-        <TableRowCell>
-          <TagListConnector
-            tags={tags}
-          />
-        </TableRowCell>
       </TableRow>
     );
   }
@@ -111,6 +170,7 @@ SeriesEditorRow.propTypes = {
   seriesType: PropTypes.string.isRequired,
   seasonFolder: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
+  statistics: PropTypes.object.isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   isSelected: PropTypes.bool,

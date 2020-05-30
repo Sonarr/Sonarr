@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import { setSeriesEditorSort, setSeriesEditorFilter, saveSeriesEditor } from 'Store/Actions/seriesEditorActions';
+import { setSeriesEditorSort, setSeriesEditorFilter, setSeriesEditorTableOption, saveSeriesEditor } from 'Store/Actions/seriesEditorActions';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import { executeCommand } from 'Store/Actions/commandActions';
 import * as commandNames from 'Commands/commandNames';
@@ -12,13 +12,11 @@ import SeriesEditor from './SeriesEditor';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.languageProfiles,
     createClientSideCollectionSelector('series', 'seriesEditor'),
     createCommandExecutingSelector(commandNames.RENAME_SERIES),
-    (languageProfiles, series, isOrganizingSeries) => {
+    (series, isOrganizingSeries) => {
       return {
         isOrganizingSeries,
-        showLanguageProfile: languageProfiles.items.length > 1,
         ...series
       };
     }
@@ -28,6 +26,7 @@ function createMapStateToProps() {
 const mapDispatchToProps = {
   dispatchSetSeriesEditorSort: setSeriesEditorSort,
   dispatchSetSeriesEditorFilter: setSeriesEditorFilter,
+  dispatchSetSeriesEditorTableOption: setSeriesEditorTableOption,
   dispatchSaveSeriesEditor: saveSeriesEditor,
   dispatchFetchRootFolders: fetchRootFolders,
   dispatchExecuteCommand: executeCommand
@@ -53,6 +52,10 @@ class SeriesEditorConnector extends Component {
     this.props.dispatchSetSeriesEditorFilter({ selectedFilterKey });
   }
 
+  onTableOptionChange = (payload) => {
+    this.props.dispatchSetSeriesEditorTableOption(payload);
+  }
+
   onSaveSelected = (payload) => {
     this.props.dispatchSaveSeriesEditor(payload);
   }
@@ -74,6 +77,7 @@ class SeriesEditorConnector extends Component {
         onSortPress={this.onSortPress}
         onFilterSelect={this.onFilterSelect}
         onSaveSelected={this.onSaveSelected}
+        onTableOptionChange={this.onTableOptionChange}
       />
     );
   }
@@ -82,6 +86,7 @@ class SeriesEditorConnector extends Component {
 SeriesEditorConnector.propTypes = {
   dispatchSetSeriesEditorSort: PropTypes.func.isRequired,
   dispatchSetSeriesEditorFilter: PropTypes.func.isRequired,
+  dispatchSetSeriesEditorTableOption: PropTypes.func.isRequired,
   dispatchSaveSeriesEditor: PropTypes.func.isRequired,
   dispatchFetchRootFolders: PropTypes.func.isRequired,
   dispatchExecuteCommand: PropTypes.func.isRequired

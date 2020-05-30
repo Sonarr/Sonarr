@@ -145,7 +145,7 @@ class SeriesEditorFooter extends Component {
       isSaving,
       isDeleting,
       isOrganizingSeries,
-      showLanguageProfile,
+      columns,
       onOrganizeSeriesPress
     } = this.props;
 
@@ -192,84 +192,129 @@ class SeriesEditorFooter extends Component {
           />
         </div>
 
-        <div className={styles.inputContainer}>
-          <SeriesEditorFooterLabel
-            label="Quality Profile"
-            isSaving={isSaving && qualityProfileId !== NO_CHANGE}
-          />
-
-          <QualityProfileSelectInputConnector
-            name="qualityProfileId"
-            value={qualityProfileId}
-            includeNoChange={true}
-            isDisabled={!selectedCount}
-            onChange={this.onInputChange}
-          />
-        </div>
-
         {
-          showLanguageProfile &&
-            <div className={styles.inputContainer}>
-              <SeriesEditorFooterLabel
-                label="Language Profile"
-                isSaving={isSaving && languageProfileId !== NO_CHANGE}
-              />
+          columns.map((column) => {
+            const {
+              name,
+              isVisible
+            } = column;
 
-              <LanguageProfileSelectInputConnector
-                name="languageProfileId"
-                value={languageProfileId}
-                includeNoChange={true}
-                isDisabled={!selectedCount}
-                onChange={this.onInputChange}
-              />
-            </div>
+            if (!isVisible) {
+              return null;
+            }
+
+            if (name === 'qualityProfileId') {
+              return (
+                <div
+                  key={name}
+                  className={styles.inputContainer}
+                >
+                  <SeriesEditorFooterLabel
+                    label="Quality Profile"
+                    isSaving={isSaving && qualityProfileId !== NO_CHANGE}
+                  />
+
+                  <QualityProfileSelectInputConnector
+                    name="qualityProfileId"
+                    value={qualityProfileId}
+                    includeNoChange={true}
+                    isDisabled={!selectedCount}
+                    onChange={this.onInputChange}
+                  />
+                </div>
+              );
+            }
+
+            if (name === 'languageProfileId') {
+              return (
+                <div
+                  key={name}
+                  className={styles.inputContainer}
+                >
+                  <SeriesEditorFooterLabel
+                    label="Language Profile"
+                    isSaving={isSaving && languageProfileId !== NO_CHANGE}
+                  />
+
+                  <LanguageProfileSelectInputConnector
+                    name="languageProfileId"
+                    value={languageProfileId}
+                    includeNoChange={true}
+                    isDisabled={!selectedCount}
+                    onChange={this.onInputChange}
+                  />
+                </div>
+              );
+            }
+
+            if (name === 'seriesType') {
+              return (
+                <div
+                  key={name}
+                  className={styles.inputContainer}
+                >
+                  <SeriesEditorFooterLabel
+                    label="Series Type"
+                    isSaving={isSaving && seriesType !== NO_CHANGE}
+                  />
+
+                  <SeriesTypeSelectInput
+                    name="seriesType"
+                    value={seriesType}
+                    includeNoChange={true}
+                    isDisabled={!selectedCount}
+                    onChange={this.onInputChange}
+                  />
+                </div>
+              );
+            }
+
+            if (name === 'seasonFolder') {
+              return (
+                <div
+                  key={name}
+                  className={styles.inputContainer}
+                >
+                  <SeriesEditorFooterLabel
+                    label="Season Folder"
+                    isSaving={isSaving && seasonFolder !== NO_CHANGE}
+                  />
+
+                  <SelectInput
+                    name="seasonFolder"
+                    value={seasonFolder}
+                    values={seasonFolderOptions}
+                    isDisabled={!selectedCount}
+                    onChange={this.onInputChange}
+                  />
+                </div>
+              );
+            }
+
+            if (name === 'path') {
+              return (
+                <div
+                  key={name}
+                  className={styles.inputContainer}
+                >
+                  <SeriesEditorFooterLabel
+                    label="Root Folder"
+                    isSaving={isSaving && rootFolderPath !== NO_CHANGE}
+                  />
+
+                  <RootFolderSelectInputConnector
+                    name="rootFolderPath"
+                    value={rootFolderPath}
+                    includeNoChange={true}
+                    isDisabled={!selectedCount}
+                    selectedValueOptions={{ includeFreeSpace: false }}
+                    onChange={this.onInputChange}
+                  />
+                </div>
+              );
+            }
+          })
         }
-
-        <div className={styles.inputContainer}>
-          <SeriesEditorFooterLabel
-            label="Series Type"
-            isSaving={isSaving && seriesType !== NO_CHANGE}
-          />
-
-          <SeriesTypeSelectInput
-            name="seriesType"
-            value={seriesType}
-            includeNoChange={true}
-            isDisabled={!selectedCount}
-            onChange={this.onInputChange}
-          />
-        </div>
-
-        <div className={styles.inputContainer}>
-          <SeriesEditorFooterLabel
-            label="Season Folder"
-            isSaving={isSaving && seasonFolder !== NO_CHANGE}
-          />
-
-          <SelectInput
-            name="seasonFolder"
-            value={seasonFolder}
-            values={seasonFolderOptions}
-            isDisabled={!selectedCount}
-            onChange={this.onInputChange}
-          />
-        </div>
-
-        <div className={styles.inputContainer}>
-          <SeriesEditorFooterLabel
-            label="Root Folder"
-            isSaving={isSaving && rootFolderPath !== NO_CHANGE}
-          />
-
-          <RootFolderSelectInputConnector
-            name="rootFolderPath"
-            value={rootFolderPath}
-            includeNoChange={true}
-            isDisabled={!selectedCount}
-            selectedValueOptions={{ includeFreeSpace: false }}
-            onChange={this.onInputChange}
-          />
-        </div>
 
         <div className={styles.buttonContainer}>
           <div className={styles.buttonContainerContent}>
@@ -346,6 +391,7 @@ SeriesEditorFooter.propTypes = {
   deleteError: PropTypes.object,
   isOrganizingSeries: PropTypes.bool.isRequired,
   showLanguageProfile: PropTypes.bool.isRequired,
+  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   onSaveSelected: PropTypes.func.isRequired,
   onOrganizeSeriesPress: PropTypes.func.isRequired
 };

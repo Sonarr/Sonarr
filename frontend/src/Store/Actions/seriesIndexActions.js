@@ -236,12 +236,6 @@ export const defaultState = {
       return statistics.seasonCount;
     },
 
-    sizeOnDisk: function(item) {
-      const { statistics = {} } = item;
-
-      return statistics.sizeOnDisk;
-    },
-
     ratings: function(item) {
       const { ratings = {} } = item;
 
