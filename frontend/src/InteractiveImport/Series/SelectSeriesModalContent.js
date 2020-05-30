@@ -62,7 +62,10 @@ class SelectSeriesModalContent extends Component {
             onChange={this.onFilterChange}
           />
 
-          <Scroller className={styles.scroller}>
+          <Scroller
+            className={styles.scroller}
+            autoFocus={false}
+          >
             {
               items.map((item) => {
                 return item.title.toLowerCase().includes(filter) ?

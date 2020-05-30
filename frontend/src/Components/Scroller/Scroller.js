@@ -17,6 +17,8 @@ class Scroller extends Component {
 
   componentDidMount() {
     const {
+      scrollDirection,
+      autoFocus,
       scrollTop
     } = this.props;
 
@@ -24,7 +26,9 @@ class Scroller extends Component {
       this._scroller.scrollTop = scrollTop;
     }
 
-    this._scroller.focus({ preventScroll: true });
+    if (autoFocus && scrollDirection !== scrollDirections.NONE) {
+      this._scroller.focus({ preventScroll: true });
+    }
   }
 
   //
@@ -73,6 +77,7 @@ class Scroller extends Component {
 Scroller.propTypes = {
   className: PropTypes.string,
   scrollDirection: PropTypes.oneOf(scrollDirections.all).isRequired,
+  autoFocus: PropTypes.bool.isRequired,
   autoScroll: PropTypes.bool.isRequired,
   scrollTop: PropTypes.number,
   children: PropTypes.node,
@@ -82,6 +87,7 @@ Scroller.propTypes = {
 
 Scroller.defaultProps = {
   scrollDirection: scrollDirections.VERTICAL,
+  autoFocus: true,
   autoScroll: true,
   registerScroller: () => {}
 };
