@@ -44,12 +44,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (lastImported == null)
                 {
+                    _logger.Trace("Episode file has not been imported");
                     continue;
                 }
 
                 // If the release was grabbed again after importing don't reject it
                 if (lastGrabbed != null && lastGrabbed.Date.After(lastImported.Date))
                 {
+                    _logger.Trace("Episode file was grabbed again after importing");
                     continue;
                 }
 

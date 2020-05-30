@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -29,13 +30,15 @@ namespace NzbDrone.Core.Download
         private readonly IParsingService _parsingService;
         private readonly ISeriesService _seriesService;
         private readonly ITrackedDownloadAlreadyImported _trackedDownloadAlreadyImported;
+        private readonly Logger _logger;
 
         public CompletedDownloadService(IEventAggregator eventAggregator,
                                         IHistoryService historyService,
                                         IDownloadedEpisodesImportService downloadedEpisodesImportService,
                                         IParsingService parsingService,
                                         ISeriesService seriesService,
-                                        ITrackedDownloadAlreadyImported trackedDownloadAlreadyImported)
+                                        ITrackedDownloadAlreadyImported trackedDownloadAlreadyImported,
+                                        Logger logger)
         {
             _eventAggregator = eventAggregator;
             _historyService = historyService;
@@ -140,6 +143,7 @@ namespace NzbDrone.Core.Download
 
             if (allEpisodesImported)
             {
+                _logger.Debug("All episodes were imported for {0}", trackedDownload.DownloadItem.Title);
                 trackedDownload.State = TrackedDownloadState.Imported;
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id));
                 return true;
@@ -164,12 +168,14 @@ namespace NzbDrone.Core.Download
 
                 if (allEpisodesImportedInHistory)
                 {
+                    _logger.Debug("All episodes were imported in history for {0}", trackedDownload.DownloadItem.Title);
                     trackedDownload.State = TrackedDownloadState.Imported;
                     _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id));
                     return true;
                 }
             }
 
+            _logger.Debug("Not all episodes have been imported for {0}", trackedDownload.DownloadItem.Title);
             return false;
         }
     }
