@@ -65,6 +65,15 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
+        public void should_accept_when_file_is_in_series_folder()
+        {
+            _localEpisode.ExistingFile = true;
+            _localEpisode.Episodes.First().Title = "TBA";
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_accept_when_did_not_air_recently_but_title_is_TBA()
         {
             _localEpisode.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-7);

@@ -31,6 +31,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
+            if (localEpisode.ExistingFile)
+            {
+                _logger.Debug("{0} is in series folder, skipping check", localEpisode.Path);
+                return Decision.Accept();
+            }
+
             var episodeTitleRequired = _configService.EpisodeTitleRequired;
 
             if (episodeTitleRequired == EpisodeTitleRequiredType.Never)
