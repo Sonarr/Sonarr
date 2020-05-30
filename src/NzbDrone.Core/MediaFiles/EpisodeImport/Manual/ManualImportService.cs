@@ -353,12 +353,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             foreach (var groupedTrackedDownload in importedTrackedDownload.GroupBy(i => i.TrackedDownload.DownloadItem.DownloadId).ToList())
             {
                 var trackedDownload = groupedTrackedDownload.First().TrackedDownload;
+                var importedSeries = imported.First().ImportDecision.LocalEpisode.Series;
 
                 if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath.FullPath))
                 {
                     if (_downloadedEpisodesImportService.ShouldDeleteFolder(
-                            new DirectoryInfo(trackedDownload.DownloadItem.OutputPath.FullPath),
-                            trackedDownload.RemoteEpisode.Series) && trackedDownload.DownloadItem.CanMoveFiles)
+                            new DirectoryInfo(trackedDownload.DownloadItem.OutputPath.FullPath), importedSeries) &&
+                        trackedDownload.DownloadItem.CanMoveFiles)
                     {
                         _diskProvider.DeleteFolder(trackedDownload.DownloadItem.OutputPath.FullPath, true);
                     }
@@ -372,7 +373,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 if (allEpisodesImported)
                 {
                     trackedDownload.State = TrackedDownloadState.Imported;
-                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, imported.First().ImportDecision.LocalEpisode.Series.Id));
+                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, importedSeries.Id));
                 }
             }
         }
