@@ -74,6 +74,7 @@
   composes: buton from '~Components/Link/IconButton.css';
 
   display: flex;
+  align-items: center;
   justify-content: center;
   flex-shrink: 0;
   margin-right: 5px;

@@ -87,16 +87,17 @@ class KeyValueListInputItem extends Component {
           />
         </div>
 
-        {
-          !isNew &&
-            <div className={styles.buttonWrapper}>
+        <div className={styles.buttonWrapper}>
+          {
+            isNew ?
+              null :
               <IconButton
                 name={icons.REMOVE}
                 tabIndex={-1}
                 onPress={this.onRemovePress}
               />
-            </div>
-        }
+          }
+        </div>
       </div>
     );
   }
