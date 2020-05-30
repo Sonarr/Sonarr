@@ -172,7 +172,7 @@ class FilterBuilderModalContent extends Component {
               filters.map((filter, index) => {
                 return (
                   <FilterBuilderRow
-                    key={index}
+                    key={`${filter.key}-${index}`}
                     index={index}
                     sectionItems={sectionItems}
                     filterBuilderProps={filterBuilderProps}
