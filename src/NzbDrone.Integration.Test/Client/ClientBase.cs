@@ -56,7 +56,7 @@ namespace NzbDrone.Integration.Test.Client
 
             response.ErrorMessage.Should().BeNullOrWhiteSpace();
 
-            response.StatusCode.Should().Be(statusCode);
+            response.StatusCode.Should().Be(statusCode, response.Content ?? string.Empty);
 
             return response.Content;
         }
