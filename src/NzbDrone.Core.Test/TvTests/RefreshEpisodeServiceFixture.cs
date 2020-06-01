@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_not_set_monitored_status_for_old_episodes_to_false_if_recent_enough()
+        public void should_not_set_monitored_status_for_old_episodes_to_false_if_episodes_existed()
         {
             var series = GetSeries();
             series.Seasons = new List<Season>();
@@ -176,6 +176,8 @@ namespace NzbDrone.Core.Test.TvTests
             _insertedEpisodes[1].Monitored.Should().Be(true);
             _insertedEpisodes[2].Monitored.Should().Be(true);
             _insertedEpisodes[3].Monitored.Should().Be(true);
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

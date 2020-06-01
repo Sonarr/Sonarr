@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Download
             _parsingService = parsingService;
             _seriesService = seriesService;
             _trackedDownloadAlreadyImported = trackedDownloadAlreadyImported;
+            _logger = logger;
         }
 
         public void Check(TrackedDownload trackedDownload)

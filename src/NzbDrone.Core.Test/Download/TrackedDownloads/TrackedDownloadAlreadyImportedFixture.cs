@@ -7,6 +7,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using FizzWare.NBuilder;
+using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.Test.Download.TrackedDownloads
 {
@@ -26,8 +27,12 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                                                       .With(r => r.Episodes = _episodes)
                                                       .Build();
 
+            var downloadItem = Builder<DownloadClientItem>.CreateNew()
+                                                         .Build();
+
             _trackedDownload = Builder<TrackedDownload>.CreateNew()
                                                        .With(t => t.RemoteEpisode = remoteEpisode)
+                                                       .With(t => t.DownloadItem = downloadItem)
                                                        .Build();
 
             _historyItems = new List<EpisodeHistory>();
