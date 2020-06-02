@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.Extensions;
 
@@ -41,6 +43,8 @@ namespace NzbDrone.Common.Instrumentation
                 new Regex(@"(?<=\?|&)(authkey|torrent_pass)=(?<secret>[^&=]+?)(?=""|&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase)
             };
 
+        private static readonly Regex CleanseRemoteIPRegex = new Regex(@"(?:Auth-\w+(?<!Failure|Unauthorized) ip|from) (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", RegexOptions.Compiled);
+
         public static string Cleanse(string message)
         {
             if (message.IsNullOrWhiteSpace())
@@ -62,7 +66,27 @@ namespace NzbDrone.Common.Instrumentation
                     });
             }
 
+            message = CleanseRemoteIPRegex.Replace(message, CleanseRemoteIP);
+
             return message;
+        }
+
+        private static string CleanseRemoteIP(Match match)
+        {
+            var group = match.Groups[1];
+            var valueAll = match.Value;
+            var valueIP = group.Value;
+
+            if (IPAddress.TryParse(valueIP, out var address) && !address.IsLocalAddress())
+            {
+                var prefix = match.Value.Substring(0, group.Index - match.Index);
+                var postfix = match.Value.Substring(group.Index + group.Length - match.Index);
+                var items = valueIP.Split('.');
+
+                return $"{prefix}{items[0]}.*.*.{items[0]}{postfix}";
+            }
+
+            return match.Value;
         }
     }
 }

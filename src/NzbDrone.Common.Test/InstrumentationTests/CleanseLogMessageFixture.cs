@@ -51,5 +51,26 @@ namespace NzbDrone.Common.Test.InstrumentationTests
             cleansedMessage.Should().NotContain("mySecret");
             cleansedMessage.Should().NotContain("01233210");
         }
+
+        [TestCase(@"Some message (from 32.2.3.5 user agent)")]
+        [TestCase(@"Auth-Invalidated ip 32.2.3.5")]
+        [TestCase(@"Auth-Success ip 32.2.3.5")]
+        [TestCase(@"Auth-Logout ip 32.2.3.5")]
+        public void should_clean_ipaddress(string message)
+        {
+            var cleansedMessage = CleanseLogMessage.Cleanse(message);
+
+            cleansedMessage.Should().NotContain(".2.3.");
+        }
+
+        [TestCase(@"Some message (from 10.2.3.2 user agent)")]
+        [TestCase(@"Auth-Unauthorized ip 32.2.3.5")]
+        [TestCase(@"Auth-Failure ip 32.2.3.5")]
+        public void should_not_clean_ipaddress(string message)
+        {
+            var cleansedMessage = CleanseLogMessage.Cleanse(message);
+
+            cleansedMessage.Should().Be(message);
+        }
     }
 }
