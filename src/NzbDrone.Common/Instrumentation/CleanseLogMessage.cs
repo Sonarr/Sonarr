@@ -83,7 +83,7 @@ namespace NzbDrone.Common.Instrumentation
                 var postfix = match.Value.Substring(group.Index + group.Length - match.Index);
                 var items = valueIP.Split('.');
 
-                return $"{prefix}{items[0]}.*.*.{items[0]}{postfix}";
+                return $"{prefix}{items[0]}.*.*.{items[3]}{postfix}";
             }
 
             return match.Value;
