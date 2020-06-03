@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Notifications.Plex.PlexTv;
@@ -13,11 +16,23 @@ namespace NzbDrone.Core.Notifications.Plex.Server
     {
         private readonly IPlexServerService _plexServerService;
         private readonly IPlexTvService _plexTvService;
+        private readonly Logger _logger;
 
-        public PlexServer(IPlexServerService plexServerService, IPlexTvService plexTvService)
+        class PlexUpdateQueue
+        {
+            public Dictionary<int, Series> Pending { get; } = new Dictionary<int, Series>();
+            public bool Refreshing { get; set; }
+        }
+
+        private readonly ICached<PlexUpdateQueue> _pendingSeriesCache;
+
+        public PlexServer(IPlexServerService plexServerService, IPlexTvService plexTvService, ICacheManager cacheManager, Logger logger)
         {
             _plexServerService = plexServerService;
             _plexTvService = plexTvService;
+            _logger = logger;
+
+            _pendingSeriesCache = cacheManager.GetRollingCache<PlexUpdateQueue>(GetType(), "pendingSeries", TimeSpan.FromDays(1));
         }
 
         public override string Link => "https://www.plex.tv/";
@@ -37,7 +52,63 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         {
             if (Settings.UpdateLibrary)
             {
-                _plexServerService.UpdateLibrary(series, Settings);
+                _logger.Debug("Scheduling library update for series {0} {1}", series.Id, series.Title);
+                var queue = _pendingSeriesCache.Get(Settings.Host, () => new PlexUpdateQueue());
+                lock (queue)
+                {
+                    queue.Pending[series.Id] = series;
+                }
+            }
+        }
+
+        public override void ProcessQueue()
+        {
+            PlexUpdateQueue queue = _pendingSeriesCache.Find(Settings.Host);
+            if (queue == null)
+            {
+                return;
+            }
+
+            lock (queue)
+            {
+                if (queue.Refreshing)
+                {
+                    return;
+                }
+                queue.Refreshing = true;
+            }
+            try
+            {
+                while (true)
+                {
+                    List<Series> refreshingSeries;
+                    lock (queue)
+                    {
+                        if (queue.Pending.Empty())
+                        {
+                            queue.Refreshing = false;
+                            return;
+                        }
+
+                        refreshingSeries = queue.Pending.Values.ToList();
+                        queue.Pending.Clear();
+                    }
+
+                    if (Settings.UpdateLibrary)
+                    {
+                        _logger.Debug("Performing library update for {0} series", refreshingSeries.Count);
+                        _plexServerService.UpdateLibrary(refreshingSeries, Settings);
+                    }
+                }
+            }
+            catch
+            {
+                lock (queue)
+                {
+                    queue.Refreshing = false;
+                }
+
+                throw;
             }
         }
 

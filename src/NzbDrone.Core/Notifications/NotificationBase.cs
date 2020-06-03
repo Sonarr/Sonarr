@@ -49,6 +49,11 @@ namespace NzbDrone.Core.Notifications
 
         }
 
+        public virtual void ProcessQueue()
+        {
+
+        }
+
         public bool SupportsOnGrab => HasConcreteImplementation("OnGrab");
         public bool SupportsOnRename => HasConcreteImplementation("OnRename");
         public bool SupportsOnDownload => HasConcreteImplementation("OnDownload");
@@ -76,6 +81,5 @@ namespace NzbDrone.Core.Notifications
 
             return !method.DeclaringType.IsAbstract;
         }
-
     }
 }

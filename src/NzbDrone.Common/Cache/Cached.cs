@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Cache
 {
@@ -30,35 +31,49 @@ namespace NzbDrone.Common.Cache
         }
 
         private readonly ConcurrentDictionary<string, CacheItem> _store;
+        private readonly TimeSpan? _defaultLifeTime;
+        private readonly bool _rollingExpiry;
 
-        public Cached()
+        public Cached(TimeSpan? defaultLifeTime = null, bool rollingExpiry = false)
         {
             _store = new ConcurrentDictionary<string, CacheItem>();
+            _defaultLifeTime = defaultLifeTime;
+            _rollingExpiry = rollingExpiry;
         }
 
-        public void Set(string key, T value, TimeSpan? lifetime = null)
+        public void Set(string key, T value, TimeSpan? lifeTime = null)
         {
             Ensure.That(key, () => key).IsNotNullOrWhiteSpace();
-            _store[key] = new CacheItem(value, lifetime);
+            _store[key] = new CacheItem(value, lifeTime ?? _defaultLifeTime);
         }
 
         public T Find(string key)
         {
-            CacheItem value;
-            _store.TryGetValue(key, out value);
-
-            if (value == null)
+            CacheItem cacheItem;
+            if (!_store.TryGetValue(key, out cacheItem))
             {
                 return default(T);
             }
 
-            if (value.IsExpired())
+            if (cacheItem.IsExpired())
             {
-                _store.TryRemove(key, out value);
-                return default(T);
+                if (TryRemove(key, cacheItem))
+                {
+                    return default(T);
+                }
+
+                if (!_store.TryGetValue(key, out cacheItem))
+                {
+                    return default(T);
+                }
             }
 
-            return value.Object;
+            if (_rollingExpiry && _defaultLifeTime.HasValue)
+            {
+                _store.TryUpdate(key, new CacheItem(cacheItem.Object, _defaultLifeTime.Value), cacheItem);
+            }
+
+            return cacheItem.Object;
         }
 
         public void Remove(string key)
@@ -73,20 +88,31 @@ namespace NzbDrone.Common.Cache
         {
             Ensure.That(key, () => key).IsNotNullOrWhiteSpace();
 
-            CacheItem cacheItem;
-            T value;
+            lifeTime = lifeTime ?? _defaultLifeTime;
 
-            if (!_store.TryGetValue(key, out cacheItem) || cacheItem.IsExpired())
+            CacheItem cacheItem;
+
+            if (_store.TryGetValue(key, out cacheItem) && !cacheItem.IsExpired())
             {
-                value = function();
-                Set(key, value, lifeTime);
+                if (_rollingExpiry && lifeTime.HasValue)
+                {
+                    _store.TryUpdate(key, new CacheItem(cacheItem.Object, lifeTime), cacheItem);
+                }
             }
             else
             {
-                value = cacheItem.Object;
+                var newCacheItem = new CacheItem(function(), lifeTime);
+                if (cacheItem != null && _store.TryUpdate(key, newCacheItem, cacheItem))
+                {
+                    cacheItem = newCacheItem;
+                }
+                else
+                {
+                    cacheItem = _store.GetOrAdd(key, newCacheItem);
+                }
             }
 
-            return value;
+            return cacheItem.Object;
         }
 
         public void Clear()
@@ -96,9 +122,11 @@ namespace NzbDrone.Common.Cache
 
         public void ClearExpired()
         {
-            foreach (var cached in _store.Where(c => c.Value.IsExpired()))
+            var collection = (ICollection<KeyValuePair<string, CacheItem>>)_store;
+
+            foreach (var cached in _store.Where(c => c.Value.IsExpired()).ToList())
             {
-                Remove(cached.Key);
+                collection.Remove(cached);
             }
         }
 
@@ -108,6 +136,13 @@ namespace NzbDrone.Common.Cache
             {
                 return _store.Values.Select(c => c.Object).ToList();
             }
+        }
+
+        private bool TryRemove(string key, CacheItem value)
+        {
+            var collection = (ICollection<KeyValuePair<string, CacheItem>>)_store;
+
+            return collection.Remove(new KeyValuePair<string, CacheItem>(key, value));
         }
 
     }

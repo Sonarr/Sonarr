@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Notifications
         void OnDownload(DownloadMessage message);
         void OnRename(Series series);
         void OnHealthIssue(HealthCheck.HealthCheck healthCheck);
+        void ProcessQueue();
         bool SupportsOnGrab { get; }
         bool SupportsOnDownload { get; }
         bool SupportsOnUpgrade { get; }

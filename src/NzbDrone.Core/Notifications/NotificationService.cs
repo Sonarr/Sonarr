@@ -17,7 +17,10 @@ namespace NzbDrone.Core.Notifications
         : IHandle<EpisodeGrabbedEvent>,
           IHandle<EpisodeImportedEvent>,
           IHandle<SeriesRenamedEvent>,
-          IHandle<HealthCheckFailedEvent>
+          IHandle<HealthCheckFailedEvent>,
+          IHandleAsync<DownloadsProcessedEvent>,
+          IHandleAsync<RenameCompletedEvent>,
+          IHandleAsync<HealthCheckCompleteEvent>
     {
         private readonly INotificationFactory _notificationFactory;
         private readonly Logger _logger;
@@ -201,6 +204,36 @@ namespace NzbDrone.Core.Notifications
                 catch (Exception ex)
                 {
                     _logger.Warn(ex, "Unable to send OnHealthIssue notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void HandleAsync(DownloadsProcessedEvent message)
+        {
+            ProcessQueue();
+        }
+
+        public void HandleAsync(RenameCompletedEvent message)
+        {
+            ProcessQueue();
+        }
+
+        public void HandleAsync(HealthCheckCompleteEvent message)
+        {
+            ProcessQueue();
+        }
+
+        private void ProcessQueue()
+        {
+            foreach (var notification in _notificationFactory.GetAvailableProviders())
+            {
+                try
+                {
+                    notification.ProcessQueue();
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to process notification queue for " + notification.Definition.Name);
                 }
             }
         }

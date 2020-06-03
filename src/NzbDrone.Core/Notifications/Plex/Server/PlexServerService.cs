@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation.Results;
@@ -13,6 +14,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
     public interface IPlexServerService
     {
         void UpdateLibrary(Series series, PlexServerSettings settings);
+        void UpdateLibrary(IEnumerable<Series> series, PlexServerSettings settings);
         ValidationFailure Test(PlexServerSettings settings);
     }
 
@@ -33,9 +35,15 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
         public void UpdateLibrary(Series series, PlexServerSettings settings)
         {
+            UpdateLibrary(new[] { series }, settings);
+        }
+
+        public void UpdateLibrary(IEnumerable<Series> multipleSeries, PlexServerSettings settings)
+        {
             try
             {
                 _logger.Debug("Sending Update Request to Plex Server");
+                var watch = Stopwatch.StartNew();
 
                 var version = _versionCache.Get(settings.Host, () => GetVersion(settings), TimeSpan.FromHours(2));
                 ValidateVersion(version);
@@ -45,16 +53,34 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
                 if (partialUpdates)
                 {
-                    UpdatePartialSection(series, sections, settings);
-                }
+                    var partiallyUpdated = true;
 
+                    foreach (var series in multipleSeries)
+                    {
+                        partiallyUpdated &= UpdatePartialSection(series, sections, settings);
+
+                        if (!partiallyUpdated)
+                        {
+                            break;
+                        }
+                    }
+
+                    // Only update complete sections if all partial updates failed
+                    if (!partiallyUpdated)
+                    {
+                        _logger.Debug("Unable to update partial section, updating all TV sections");
+                        sections.ForEach(s => UpdateSection(s.Id, settings));
+                    }
+                }
                 else
                 {
                     sections.ForEach(s => UpdateSection(s.Id, settings));
                 }
+
+                _logger.Debug("Finished sending Update Request to Plex Server (took {0} ms)", watch.ElapsedMilliseconds);
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Warn(ex, "Failed to Update Plex host: " + settings.Host);
                 throw;
@@ -125,7 +151,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             _plexServerProxy.Update(sectionId, settings);
         }
 
-        private void UpdatePartialSection(Series series, List<PlexSection> sections, PlexServerSettings settings)
+        private bool UpdatePartialSection(Series series, List<PlexSection> sections, PlexServerSettings settings)
         {
             var partiallyUpdated = false;
 
@@ -142,12 +168,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                 }
             }
 
-            // Only update complete sections if all partial updates failed
-            if (!partiallyUpdated)
-            {
-                _logger.Debug("Unable to update partial section, updating all TV sections");
-                sections.ForEach(s => UpdateSection(s.Id, settings));
-            }
+            return partiallyUpdated;
         }
 
         private int? GetMetadataId(int sectionId, Series series, string language, PlexServerSettings settings)
@@ -161,6 +182,8 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         {
             try
             {
+                _versionCache.Remove(settings.Host);
+                _partialUpdateCache.Remove(settings.Host);
                 var sections = GetSections(settings);
 
                 if (sections.Empty())

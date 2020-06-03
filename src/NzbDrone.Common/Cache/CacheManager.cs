@@ -8,6 +8,7 @@ namespace NzbDrone.Common.Cache
     {
         ICached<T> GetCache<T>(Type host);
         ICached<T> GetCache<T>(Type host, string name);
+        ICached<T> GetRollingCache<T>(Type host, string name, TimeSpan defaultLifeTime);
         ICachedDictionary<T> GetCacheDictionary<T>(Type host, string name, Func<IDictionary<string, T>> fetchFunc = null, TimeSpan? lifeTime = null);
         void Clear();
         ICollection<ICached> Caches { get; }
@@ -42,6 +43,14 @@ namespace NzbDrone.Common.Cache
             Ensure.That(name, () => name).IsNotNullOrWhiteSpace();
 
             return (ICached<T>)_cache.Get(host.FullName + "_" + name, () => new Cached<T>());
+        }
+
+        public ICached<T> GetRollingCache<T>(Type host, string name, TimeSpan defaultLifeTime)
+        {
+            Ensure.That(host, () => host).IsNotNull();
+            Ensure.That(name, () => name).IsNotNullOrWhiteSpace();
+
+            return (ICached<T>)_cache.Get(host.FullName + "_" + name, () => new Cached<T>(defaultLifeTime, true));
         }
 
         public ICachedDictionary<T> GetCacheDictionary<T>(Type host, string name, Func<IDictionary<string, T>> fetchFunc = null, TimeSpan? lifeTime = null)
