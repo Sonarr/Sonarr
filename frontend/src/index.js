@@ -1,4 +1,6 @@
-import './preload.js';
+import './preload';
+import './polyfills';
+
 import React from 'react';
 import { render } from 'react-dom';
 import { createBrowserHistory } from 'history';

@@ -10,8 +10,7 @@ gulp.task('build',
       'webpack',
       'copyHtml',
       'copyFonts',
-      'copyImages',
-      'copyJs'
+      'copyImages'
     )
   )
 );
