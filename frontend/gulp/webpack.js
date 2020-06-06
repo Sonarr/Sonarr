@@ -13,6 +13,7 @@ const frontendFolder = path.join(__dirname, '..');
 const srcFolder = path.join(frontendFolder, 'src');
 const isProduction = process.argv.indexOf('--production') > -1;
 const isProfiling = isProduction && process.argv.indexOf('--profile') > -1;
+const inlineWebWorkers = true;
 
 const distFolder = path.resolve(frontendFolder, '..', '_output', uiFolder);
 
@@ -121,7 +122,9 @@ const config = {
         use: {
           loader: 'worker-loader',
           options: {
-            name: '[name].js'
+            name: '[name].js',
+            inline: inlineWebWorkers,
+            fallback: !inlineWebWorkers
           }
         }
       },
