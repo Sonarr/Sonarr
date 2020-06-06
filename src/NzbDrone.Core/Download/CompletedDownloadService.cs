@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Download
             if (importResults.Any(c => c.Result != ImportResultType.Imported))
             {
                 var statusMessages = importResults
-                    .Where(v => v.Result != ImportResultType.Imported)
+                    .Where(v => v.Result != ImportResultType.Imported && v.ImportDecision.LocalEpisode != null)
                     .Select(v => new TrackedDownloadStatusMessage(Path.GetFileName(v.ImportDecision.LocalEpisode.Path), v.Errors))
                     .ToArray();
 
