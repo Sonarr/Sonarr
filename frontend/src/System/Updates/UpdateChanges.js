@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import styles from './UpdateChanges.css';
 
 class UpdateChanges extends Component {
@@ -25,7 +26,7 @@ class UpdateChanges extends Component {
             changes.map((change, index) => {
               return (
                 <li key={index}>
-                  {change}
+                  <InlineMarkdown data={change} />
                 </li>
               );
             })
