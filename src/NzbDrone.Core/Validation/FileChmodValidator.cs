@@ -1,5 +1,3 @@
-using System;
-using FluentValidation;
 using FluentValidation.Validators;
 using NzbDrone.Common.Disk;
 
