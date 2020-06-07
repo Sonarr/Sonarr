@@ -103,10 +103,23 @@ namespace NzbDrone.Mono.Disk
             try
             {
                 var permissions = NativeConvert.FromOctalPermissionString(mask);
-                return (permissions & (FilePermissions.S_ISGID | FilePermissions.S_ISUID | FilePermissions.S_ISVTX |
-                                       FilePermissions.S_IXUSR | FilePermissions.S_IXGRP | FilePermissions.S_IXOTH |
-                                       FilePermissions.S_IRUSR | FilePermissions.S_IWUSR)) ==
-                       (FilePermissions.S_IRUSR | FilePermissions.S_IWUSR);
+
+                if ((permissions & (FilePermissions.S_ISUID | FilePermissions.S_ISGID | FilePermissions.S_ISVTX)) != 0)
+                {
+                    return false;
+                }
+
+                if ((permissions & (FilePermissions.S_IXUSR | FilePermissions.S_IXGRP | FilePermissions.S_IXOTH)) != 0)
+                {
+                    return false;
+                }
+
+                if ((permissions & (FilePermissions.S_IRUSR | FilePermissions.S_IWUSR)) != (FilePermissions.S_IRUSR | FilePermissions.S_IWUSR))
+                {
+                    return false;
+                }
+
+                return true;
             }
             catch (FormatException)
             {
