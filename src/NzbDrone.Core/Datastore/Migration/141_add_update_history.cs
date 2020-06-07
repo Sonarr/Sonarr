@@ -18,14 +18,6 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("Date").AsDateTime().NotNullable().Indexed()
                   .WithColumn("Version").AsString().NotNullable()
                   .WithColumn("EventType").AsInt32().NotNullable();
-
-            Insert.IntoTable("UpdateHistory")
-                  .Row(new
-                  {
-                      Date = new UtcConverter().ToDB(DateTime.UtcNow).ToString(),
-                      Version = BuildInfo.Version.ToString(),
-                      EventType = 2
-                  });
         }
     }
 }

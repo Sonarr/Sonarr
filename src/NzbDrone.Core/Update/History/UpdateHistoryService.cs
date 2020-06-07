@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
@@ -17,24 +18,42 @@ namespace NzbDrone.Core.Update.History
     {
         private readonly IUpdateHistoryRepository _repository;
         private readonly IEventAggregator _eventAggregator;
+        private readonly Logger _logger;
         private Version _prevVersion;
 
-        public UpdateHistoryService(IUpdateHistoryRepository repository, IEventAggregator eventAggregator)
+        public UpdateHistoryService(IUpdateHistoryRepository repository, IEventAggregator eventAggregator, Logger logger)
         {
             _repository = repository;
             _eventAggregator = eventAggregator;
+            _logger = logger;
         }
 
         public Version PreviouslyInstalled()
         {
-            var history = _repository.PreviouslyInstalled();
+            try
+            {
+                var history = _repository.PreviouslyInstalled();
 
-            return history?.Version;
+                return history?.Version;
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Failed to determine previously installed version");
+                return null;
+            }
         }
 
         public List<UpdateHistory> InstalledSince(DateTime dateTime)
         {
-            return _repository.InstalledSince(dateTime);
+            try
+            {
+                return _repository.InstalledSince(dateTime);
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Failed to get list of previously installed versions");
+                return new List<UpdateHistory>();
+            }
         }
 
         public void Handle(ApplicationStartedEvent message)
@@ -45,19 +64,29 @@ namespace NzbDrone.Core.Update.History
                 return;
             }
 
-            var history = _repository.LastInstalled();
+            UpdateHistory history;
+            try
+            {
+                history = _repository.LastInstalled();
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Cleaning corrupted update history");
+                _repository.Purge();
+                history = null;
+            }
 
             if (history == null || history.Version != BuildInfo.Version)
-            {
-                _prevVersion = history.Version;
-
-                _repository.Insert(new UpdateHistory
                 {
-                    Date = DateTime.UtcNow,
-                    Version = BuildInfo.Version,
-                    EventType = UpdateHistoryEventType.Installed
-                });
-            }
+                    _prevVersion = history?.Version;
+
+                    _repository.Insert(new UpdateHistory
+                    {
+                        Date = DateTime.UtcNow,
+                        Version = BuildInfo.Version,
+                        EventType = UpdateHistoryEventType.Installed
+                    });
+                }
         }
 
         public void HandleAsync(ApplicationStartedEvent message)
