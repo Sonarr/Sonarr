@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Update;
+using NzbDrone.Core.Update.History;
 using Sonarr.Http;
 
 namespace Sonarr.Api.V3.Update
@@ -9,10 +11,12 @@ namespace Sonarr.Api.V3.Update
     public class UpdateModule : SonarrRestModule<UpdateResource>
     {
         private readonly IRecentUpdateProvider _recentUpdateProvider;
+        private readonly IUpdateHistoryService _updateHistoryService;
 
-        public UpdateModule(IRecentUpdateProvider recentUpdateProvider)
+        public UpdateModule(IRecentUpdateProvider recentUpdateProvider, IUpdateHistoryService updateHistoryService)
         {
             _recentUpdateProvider = recentUpdateProvider;
+            _updateHistoryService = updateHistoryService;
             GetResourceAll = GetRecentUpdates;
         }
 
@@ -37,6 +41,18 @@ namespace Sonarr.Api.V3.Update
                 if (installed != null)
                 {
                     installed.Installed = true;
+                }
+
+                var installDates = _updateHistoryService.InstalledSince(resources.Last().ReleaseDate)
+                                                        .DistinctBy(v => v.Version)
+                                                        .ToDictionary(v => v.Version);
+
+                foreach (var resource in resources)
+                {
+                    if (installDates.TryGetValue(resource.Version, out var installDate))
+                    {
+                        resource.InstalledOn = installDate.Date;
+                    }
                 }
             }
 

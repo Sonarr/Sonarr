@@ -45,7 +45,9 @@ function createMapStateToProps() {
         isInstallingUpdate,
         updateMechanism: generalSettings.item.updateMechanism,
         updateMechanismMessage: status.packageUpdateMechanismMessage,
-        shortDateFormat: uiSettings.shortDateFormat
+        shortDateFormat: uiSettings.shortDateFormat,
+        longDateFormat: uiSettings.longDateFormat,
+        timeFormat: uiSettings.timeFormat
       };
     }
   );

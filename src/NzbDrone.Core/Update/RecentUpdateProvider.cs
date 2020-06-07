@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Update.History;
 
 namespace NzbDrone.Core.Update
 {
@@ -13,18 +15,23 @@ namespace NzbDrone.Core.Update
     {
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IUpdatePackageProvider _updatePackageProvider;
+        private readonly IUpdateHistoryService _updateHistoryService;
 
         public RecentUpdateProvider(IConfigFileProvider configFileProvider,
-                                   IUpdatePackageProvider updatePackageProvider)
+                                    IUpdatePackageProvider updatePackageProvider,
+                                    IUpdateHistoryService updateHistoryService)
         {
             _configFileProvider = configFileProvider;
             _updatePackageProvider = updatePackageProvider;
+            _updateHistoryService = updateHistoryService;
         }
 
         public List<UpdatePackage> GetRecentUpdatePackages()
         {
             var branch = _configFileProvider.Branch;
-            return _updatePackageProvider.GetRecentUpdates(branch, BuildInfo.Version);
+            var version = BuildInfo.Version;
+            var prevVersion = _updateHistoryService.PreviouslyInstalled();
+            return _updatePackageProvider.GetRecentUpdates(branch, version, prevVersion);
         }
     }
 }

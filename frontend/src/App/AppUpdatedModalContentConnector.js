@@ -8,8 +8,9 @@ import AppUpdatedModalContent from './AppUpdatedModalContent';
 function createMapStateToProps() {
   return createSelector(
     (state) => state.app.version,
+    (state) => state.app.prevVersion,
     (state) => state.system.updates,
-    (version, updates) => {
+    (version, prevVersion, updates) => {
       const {
         isPopulated,
         error,
@@ -18,6 +19,7 @@ function createMapStateToProps() {
 
       return {
         version,
+        prevVersion,
         isPopulated,
         error,
         items

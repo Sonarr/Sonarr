@@ -17,6 +17,7 @@ namespace Sonarr.Api.V3.Update
         public string FileName { get; set; }
         public string Url { get; set; }
         public bool Installed { get; set; }
+        public DateTime? InstalledOn { get; set; }
         public bool Installable { get; set; }
         public bool Latest { get; set; }
         public UpdateChanges Changes { get; set; }

@@ -117,6 +117,9 @@ export const reducers = createHandleActions({
     };
 
     if (state.version !== version) {
+      if (!state.prevVersion) {
+        newState.prevVersion = state.version;
+      }
       newState.isUpdated = true;
     }
 
