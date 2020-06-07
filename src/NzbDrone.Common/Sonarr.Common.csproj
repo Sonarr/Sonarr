@@ -15,9 +15,6 @@
     <ProjectReference Include="..\LogentriesNLog\LogentriesNLog.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Mono.Posix">
-      <HintPath>..\Libraries\Mono.Posix.dll</HintPath>
-    </Reference>
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data.SQLite">
       <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>

@@ -7,11 +7,11 @@ namespace Sonarr.Api.V3.Config
 {
     public class MediaManagementConfigModule : SonarrConfigModule<MediaManagementConfigResource>
     {
-        public MediaManagementConfigModule(IConfigService configService, PathExistsValidator pathExistsValidator)
+        public MediaManagementConfigModule(IConfigService configService, PathExistsValidator pathExistsValidator, FileChmodValidator fileChmodValidator)
             : base(configService)
         {
             SharedValidator.RuleFor(c => c.RecycleBinCleanupDays).GreaterThanOrEqualTo(0);
-            SharedValidator.RuleFor(c => c.FileChmod).NotEmpty().ValidFileChmod();
+            SharedValidator.RuleFor(c => c.FileChmod).SetValidator(fileChmodValidator).When(c => !string.IsNullOrEmpty(c.FileChmod));
             SharedValidator.RuleFor(c => c.RecycleBin).IsValidPath().SetValidator(pathExistsValidator).When(c => !string.IsNullOrWhiteSpace(c.RecycleBin));
             SharedValidator.RuleFor(c => c.MinimumFreeSpaceWhenImporting).GreaterThanOrEqualTo(100);
         }

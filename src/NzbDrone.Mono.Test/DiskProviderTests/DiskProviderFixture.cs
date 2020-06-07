@@ -219,5 +219,27 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0051");
         }
+
+        [Test]
+        public void IsValidFilePermissionMask_should_return_correct()
+        {
+            // Files may not be executable
+            Subject.IsValidFilePermissionMask("0777").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("0544").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("0454").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("0445").Should().BeFalse();
+
+            // No special bits should be set
+            Subject.IsValidFilePermissionMask("1644").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("2644").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("4644").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("7644").Should().BeFalse();
+
+            // Files should be readable and writeable by owner
+            Subject.IsValidFilePermissionMask("0400").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("0000").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("0200").Should().BeFalse();
+            Subject.IsValidFilePermissionMask("0600").Should().BeTrue();
+        }
     }
 }

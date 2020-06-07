@@ -91,6 +91,29 @@ namespace NzbDrone.Mono.Disk
             }
         }
 
+        private static FilePermissions GetFolderPermissions(FilePermissions permissions)
+        {
+            permissions |= (FilePermissions) ((int) (permissions & (FilePermissions.S_IRUSR | FilePermissions.S_IRGRP | FilePermissions.S_IROTH)) >> 2);
+
+            return permissions;
+        }
+
+        public override bool IsValidFilePermissionMask(string mask)
+        {
+            try
+            {
+                var permissions = NativeConvert.FromOctalPermissionString(mask);
+                return (permissions & (FilePermissions.S_ISGID | FilePermissions.S_ISUID | FilePermissions.S_ISVTX |
+                                       FilePermissions.S_IXUSR | FilePermissions.S_IXGRP | FilePermissions.S_IXOTH |
+                                       FilePermissions.S_IRUSR | FilePermissions.S_IWUSR)) ==
+                       (FilePermissions.S_IRUSR | FilePermissions.S_IWUSR);
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
         public override void CopyPermissions(string sourcePath, string targetPath)
         {
             try

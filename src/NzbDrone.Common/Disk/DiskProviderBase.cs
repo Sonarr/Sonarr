@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using Mono.Unix.Native;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
@@ -361,13 +360,6 @@ namespace NzbDrone.Common.Disk
 
         }
 
-        protected static FilePermissions GetFolderPermissions(FilePermissions permissions)
-        {
-            permissions |= (FilePermissions) ((int) (permissions & (FilePermissions.S_IRUSR | FilePermissions.S_IRGRP | FilePermissions.S_IROTH)) >> 2);
-
-            return permissions;
-        }
-
         private static void RemoveReadOnly(string path)
         {
             if (File.Exists(path))
@@ -522,6 +514,11 @@ namespace NzbDrone.Common.Disk
             {
                 stream.CopyTo(fileStream);
             }
+        }
+
+        public virtual bool IsValidFilePermissionMask(string mask)
+        {
+            throw new NotSupportedException();
         }
     }
 }

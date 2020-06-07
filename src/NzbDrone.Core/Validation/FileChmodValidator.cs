@@ -1,27 +1,25 @@
 using System;
 using FluentValidation;
-using Mono.Unix.Native;
+using FluentValidation.Validators;
+using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.Validation
 {
-    public static class FileChmodValidator
+    public class FileChmodValidator : PropertyValidator
     {
-        public static IRuleBuilderOptions<T, string> ValidFileChmod<T>(this IRuleBuilder<T, string> ruleBuilder)
+        private readonly IDiskProvider _diskProvider;
+
+        public FileChmodValidator(IDiskProvider diskProvider)
+            : base("Must contain a valid Unix permissions octal")
         {
-            return ruleBuilder.Must(x =>
-            {
-                try
-                {
-                    var permissions = NativeConvert.FromOctalPermissionString(x);
-                    return (permissions & (FilePermissions.S_ISGID | FilePermissions.S_ISUID | FilePermissions.S_ISVTX |
-                                           FilePermissions.S_IXUSR | FilePermissions.S_IXGRP |
-                                           FilePermissions.S_IXOTH)) == 0;
-                }
-                catch (FormatException)
-                {
-                    return false;
-                }
-            }).WithMessage("Must contain a valid octal of Unix permissions");
+            _diskProvider = diskProvider;
+        }
+
+        protected override bool IsValid(PropertyValidatorContext context)
+        {
+            if (context.PropertyValue == null) return false;
+
+            return _diskProvider.IsValidFilePermissionMask(context.PropertyValue.ToString());
         }
     }
 }
