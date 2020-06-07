@@ -389,7 +389,7 @@ class MediaManagement extends Component {
                           name="fileChmod"
                           helpTexts={[
                             'Octal, applied to media files when imported/renamed by Sonarr',
-                            'The same mode is applied to series/season folders with the execute bit added, e.g., 644 becomes 755'
+                            'The same mode is applied to series/season folders with the execute bit added, e.g., 0644 becomes 0755'
                           ]}
                           onChange={onInputChange}
                           {...settings.fileChmod}
