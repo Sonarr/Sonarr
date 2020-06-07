@@ -371,7 +371,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="setPermissionsLinux"
-                          helpText="Should chmod/chown be run when files are imported/renamed?"
+                          helpText="Should chmod be run when files are imported/renamed?"
                           helpTextWarning="If you're unsure what these settings do, do not alter them."
                           onChange={onInputChange}
                           {...settings.setPermissionsLinux}
@@ -387,57 +387,12 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.TEXT}
                           name="fileChmod"
-                          helpText="Octal, applied to media files when imported/renamed by Sonarr"
+                          helpTexts={[
+                            'Octal, applied to media files when imported/renamed by Sonarr',
+                            'The same mode is applied to series/season folders with the execute bit added, e.g., 0644 becomes 0755'
+                          ]}
                           onChange={onInputChange}
                           {...settings.fileChmod}
-                        />
-                      </FormGroup>
-
-                      <FormGroup
-                        advancedSettings={advancedSettings}
-                        isAdvanced={true}
-                      >
-                        <FormLabel>Folder chmod mode</FormLabel>
-
-                        <FormInputGroup
-                          type={inputTypes.TEXT}
-                          name="folderChmod"
-                          helpText="Octal, applied to series/season folders created by Sonarr"
-                          values={fileDateOptions}
-                          onChange={onInputChange}
-                          {...settings.folderChmod}
-                        />
-                      </FormGroup>
-
-                      <FormGroup
-                        advancedSettings={advancedSettings}
-                        isAdvanced={true}
-                      >
-                        <FormLabel>chown User</FormLabel>
-
-                        <FormInputGroup
-                          type={inputTypes.TEXT}
-                          name="chownUser"
-                          helpText="Username or uid. Use uid for remote file systems."
-                          values={fileDateOptions}
-                          onChange={onInputChange}
-                          {...settings.chownUser}
-                        />
-                      </FormGroup>
-
-                      <FormGroup
-                        advancedSettings={advancedSettings}
-                        isAdvanced={true}
-                      >
-                        <FormLabel>chown Group</FormLabel>
-
-                        <FormInputGroup
-                          type={inputTypes.TEXT}
-                          name="chownGroup"
-                          helpText="Group name or gid. Use gid for remote file systems."
-                          values={fileDateOptions}
-                          onChange={onInputChange}
-                          {...settings.chownGroup}
                         />
                       </FormGroup>
                     </FieldSet>

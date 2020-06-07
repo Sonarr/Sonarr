@@ -259,27 +259,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("FileChmod", value); }
         }
 
-        public string FolderChmod
-        {
-            get { return GetValue("FolderChmod", "0755"); }
-
-            set { SetValue("FolderChmod", value); }
-        }
-
-        public string ChownUser
-        {
-            get { return GetValue("ChownUser", ""); }
-
-            set { SetValue("ChownUser", value); }
-        }
-
-        public string ChownGroup
-        {
-            get { return GetValue("ChownGroup", ""); }
-
-            set { SetValue("ChownGroup", value); }
-        }
-
         public int FirstDayOfWeek
         {
             get { return GetValueInt("FirstDayOfWeek", (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek); }

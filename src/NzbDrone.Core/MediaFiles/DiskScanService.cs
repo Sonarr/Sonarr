@@ -186,8 +186,8 @@ namespace NzbDrone.Core.MediaFiles
 
             try
             {
-                var permissions = _configService.FolderChmod;
-                _diskProvider.SetPermissions(path, permissions, _configService.ChownUser, _configService.ChownGroup);
+                var permissions = _configService.FileChmod;
+                _diskProvider.SetPermissions(path, permissions);
             }
 
             catch (Exception ex)

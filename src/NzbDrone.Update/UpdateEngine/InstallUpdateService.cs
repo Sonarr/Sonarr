@@ -129,7 +129,7 @@ namespace NzbDrone.Update.UpdateEngine
                         {
                             // Old MacOS App stores Sonarr binaries in MacOS together with shell script
                             // Make shim executable
-                            _diskProvider.SetPermissions(shimPath, "0755", null, null);
+                            _diskProvider.SetPermissions(shimPath, "0755");
                         }
                     }
                 }
