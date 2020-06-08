@@ -46,10 +46,12 @@ namespace NzbDrone.RuntimePatches.Mono
 
             var patchable = codes.Matches(OpCodes.Ldstr, OpCodes.Ldc_I4_1, OpCodes.Call, OpCodes.Ret);
 
+            Instance.DebugOpcodes("Before", codes);
+           
             var targetType = method.DeclaringType;
-            var copyMethod = targetType.GetMethod("Copy");
-            var disposeMethod = targetType.GetMethod("Dispose");
-            var setFlagsMethod = targetType.GetMethod("SetFlags");
+            var copyMethod = targetType.GetMethod("Copy", new Type[0]);
+            var disposeMethod = targetType.GetMethod("Dispose", new Type[0]);
+            var setFlagsMethod = targetType.GetMethod("SetFlags", new[] { typeof(ulong) });
 
             if (patchable && copyMethod != null && disposeMethod != null && setFlagsMethod != null)
             {
@@ -64,9 +66,11 @@ namespace NzbDrone.RuntimePatches.Mono
                 codes.Add(new CodeInstruction(OpCodes.Callvirt, disposeMethod));    // Dispose the original
                 codes.Add(new CodeInstruction(OpCodes.Ldloc, copy));
                 codes.Add(new CodeInstruction(OpCodes.Dup));
-                codes.Add(new CodeInstruction(OpCodes.Ldc_I4, 0x8000));             // X509_V_FLAG_TRUSTED_FIRST
+                codes.Add(new CodeInstruction(OpCodes.Ldc_I8, 0x8000L));            // X509_V_FLAG_TRUSTED_FIRST
                 codes.Add(new CodeInstruction(OpCodes.Call, setFlagsMethod));       // SetFlags is an or-operation
                 codes.Add(new CodeInstruction(OpCodes.Ret));
+
+                Instance.DebugOpcodes("After", codes);
 
                 Instance.Debug($"Patch applied to method {method.GetSimplifiedName()}");
             }

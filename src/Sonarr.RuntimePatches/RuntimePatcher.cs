@@ -9,9 +9,26 @@ namespace NzbDrone.RuntimePatches
     {
         public static void Initialize()
         {
-            var env = Environment.GetEnvironmentVariable("DISABLE_RUNTIMEPATCHES");
-            if (env != "1")
+            var envDisableRuntimePatches = Environment.GetEnvironmentVariable("DISABLE_RUNTIMEPATCHES");
+            var envDebugRuntimePatches = Environment.GetEnvironmentVariable("DEBUG_RUNTIMEPATCHES");
+
+            if (envDisableRuntimePatches != "1")
             {
+                if (envDebugRuntimePatches == "1")
+                {
+                    RuntimePatchBase.IsDebug = true;
+                }
+                else if (envDebugRuntimePatches == "0")
+                {
+                    RuntimePatchBase.IsDebug = false;
+                }
+                else
+                {
+#if DEBUG
+                    RuntimePatchBase.IsDebug = true;
+#endif
+                }
+
                 try
                 {
                     ApplyPatches();

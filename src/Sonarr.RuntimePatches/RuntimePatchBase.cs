@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
 
@@ -7,6 +8,8 @@ namespace NzbDrone.RuntimePatches
     public abstract class RuntimePatchBase
     {
         private Harmony _harmony;
+
+        internal static bool IsDebug;
 
         public virtual bool ShouldPatch() => true;
         protected abstract void Patch();
@@ -101,11 +104,24 @@ namespace NzbDrone.RuntimePatches
             return null;
         }
 
+        protected void DebugOpcodes(string prefix, List<CodeInstruction> codes)
+        {
+            if (IsDebug)
+            {
+                Log($"Opcodes {prefix}:");
+                foreach (var code in codes)
+                {
+                    Console.WriteLine($"  {code}");
+                }
+            }
+        }
+
         protected void Debug(string log)
         {
-#if DEBUG
-            Log(log);
-#endif
+            if (IsDebug)
+            {
+                Log(log);
+            }
         }
 
         protected void Error(string log)
