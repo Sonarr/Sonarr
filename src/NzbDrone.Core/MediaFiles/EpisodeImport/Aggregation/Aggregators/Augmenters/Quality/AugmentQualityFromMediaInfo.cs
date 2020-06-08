@@ -45,7 +45,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
                 return AugmentQualityResult.ResolutionOnly(720, Confidence.MediaInfo);
             }
 
-            if (width > 0 || height > 0)
+            if (width > 0 && height > 0)
             {
                 _logger.Trace("Resolution {0}x{1} considered 480p", width, height);
                 return AugmentQualityResult.ResolutionOnly(480, Confidence.MediaInfo);
