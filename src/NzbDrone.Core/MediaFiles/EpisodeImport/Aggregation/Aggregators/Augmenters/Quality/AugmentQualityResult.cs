@@ -4,6 +4,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
 {
     public class AugmentQualityResult
     {
+        public string Name { get; set; }
         public QualitySource Source { get; set; }
         public Confidence SourceConfidence { get; set; }
         public int Resolution { get; set; }

@@ -9,6 +9,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
     public class AugmentQualityFromReleaseName : IAugmentQuality
     {
         public int Order => 5;
+        public string Name => "ReleaseName";
 
         private readonly IDownloadHistoryService _downloadHistoryService;
 
