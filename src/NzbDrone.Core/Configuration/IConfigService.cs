@@ -51,6 +51,9 @@ namespace NzbDrone.Core.Configuration
         int MaximumSize { get; set; }
         int MinimumAge { get; set; }
 
+        // Indexers to Download client mapping
+        //TODO: Actually specify the config options for it.
+
         //UI
         int FirstDayOfWeek { get; set; }
         string CalendarWeekColumnHeader { get; set; }
