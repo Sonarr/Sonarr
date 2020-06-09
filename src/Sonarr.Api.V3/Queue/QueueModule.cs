@@ -145,15 +145,15 @@ namespace Sonarr.Api.V3.Queue
                 case "status":
                     return q => q.Status;
                 case "series.sortTitle":
-                    return q => q.Series?.SortTitle;
+                    return q => q.Series?.SortTitle ?? string.Empty;
                 case "title":
                     return q => q.Title;
                 case "episode":
                     return q => q.Episode;
                 case "episode.airDateUtc":
-                    return q => q.Episode?.AirDateUtc;
+                    return q => q.Episode?.AirDateUtc ?? DateTime.MinValue;
                 case "episode.title":
-                    return q => q.Episode?.Title;
+                    return q => q.Episode?.Title ?? string.Empty;
                 case "language":
                     return q => q.Language;
                 case "quality":
