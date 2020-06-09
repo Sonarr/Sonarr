@@ -152,6 +152,8 @@ class SeriesEditorRow extends Component {
                 </TableRowCell>
               );
             }
+
+            return null;
           })
         }
       </TableRow>

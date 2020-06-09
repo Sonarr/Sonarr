@@ -313,6 +313,8 @@ class SeriesEditorFooter extends Component {
                 </div>
               );
             }
+
+            return null;
           })
         }
 
