@@ -17,7 +17,7 @@ function SeriesSearchResult(props) {
   let alternateTitle = null;
   let tag = null;
 
-  if (match.key === 'alternateTitles.cleanTitle') {
+  if (match.key === 'alternateTitles.title') {
     alternateTitle = alternateTitles[match.arrayIndex];
   } else if (match.key === 'tags.label') {
     tag = tags[match.arrayIndex];

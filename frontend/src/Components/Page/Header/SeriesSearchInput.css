@@ -4,15 +4,15 @@
 }
 
 .loading {
-  margin-top: 18px;
-  margin-bottom: 18px;
-  text-align: center;
+  display: inline-block;
+  position: absolute;
+  margin-left: 5px;
 }
 
 .ripple {
   composes: ripple from '~Components/Loading/LoadingIndicator.css';
 
-  border: 2px solid $toolbarColor;
+  border: 1px solid $toolbarColor;
 }
 
 .input {
