@@ -40,6 +40,10 @@ function mergeUpdates(items, version, prevVersion) {
 
   const mergedUpdate = Object.assign({}, appliedUpdates[0], { changes: appliedChanges });
 
+  if (!appliedChanges.new.length && !appliedChanges.fixed.length) {
+    mergedUpdate.changes = null;
+  }
+
   return mergedUpdate;
 }
 
