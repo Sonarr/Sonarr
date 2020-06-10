@@ -20,15 +20,17 @@ namespace NzbDrone.Mono.Disk
         private readonly Logger _logger;
         private readonly IProcMountProvider _procMountProvider;
         private readonly ISymbolicLinkResolver _symLinkResolver;
+        private readonly ICreateRefLink _createRefLink;
 
         // Mono supports sending -1 for a uint to indicate that the owner or group should not be set
         // `unchecked((uint)-1)` and `uint.MaxValue` are the same thing.
         private const uint UNCHANGED_ID = uint.MaxValue;
 
-        public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver, Logger logger)
+        public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver, ICreateRefLink createRefLink, Logger logger)
         {
             _procMountProvider = procMountProvider;
             _symLinkResolver = symLinkResolver;
+            _createRefLink = createRefLink;
             _logger = logger;
         }
 
@@ -175,6 +177,19 @@ namespace NzbDrone.Mono.Disk
             var mount = GetMount(path);
 
             return mount?.TotalSize;
+        }
+
+        protected override void CloneFileInternal(string source, string destination, bool overwrite)
+        {
+            if (!File.Exists(destination) && !UnixFileSystemInfo.GetFileSystemEntry(source).IsSymbolicLink)
+            {
+                if (_createRefLink.TryCreateRefLink(source, destination))
+                {
+                    return;
+                }
+            }
+
+            CopyFileInternal(source, destination, overwrite);
         }
 
         protected override void CopyFileInternal(string source, string destination, bool overwrite)
@@ -379,6 +394,11 @@ namespace NzbDrone.Mono.Disk
             }
         }
 
+        public override bool TryRenameFile(string source, string destination)
+        {
+            return Syscall.rename(source, destination) == 0;
+        }
+
         public override bool TryCreateHardLink(string source, string destination)
         {
             try
@@ -395,6 +415,11 @@ namespace NzbDrone.Mono.Disk
                 Logger.Debug(ex, string.Format("Hardlink '{0}' to '{1}' failed.", source, destination));
                 return false;
             }
+        }
+
+        public override bool TryCreateRefLink(string source, string destination)
+        {
+            return _createRefLink.TryCreateRefLink(source, destination);
         }
 
         private uint GetUserId(string user)

@@ -29,10 +29,13 @@ namespace NzbDrone.Common.Disk
         long GetFileSize(string path);
         void CreateFolder(string path);
         void DeleteFile(string path);
+        void CloneFile(string source, string destination, bool overwrite = false);
         void CopyFile(string source, string destination, bool overwrite = false);
         void MoveFile(string source, string destination, bool overwrite = false);
         void MoveFolder(string source, string destination);
+        bool TryRenameFile(string source, string destination);
         bool TryCreateHardLink(string source, string destination);
+        bool TryCreateRefLink(string source, string destination);
         void DeleteFolder(string path, bool recursive);
         string ReadAllText(string filePath);
         void WriteAllText(string filename, string contents);

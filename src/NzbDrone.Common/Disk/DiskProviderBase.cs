@@ -199,6 +199,24 @@ namespace NzbDrone.Common.Disk
             File.Delete(path);
         }
 
+        public void CloneFile(string source, string destination, bool overwrite = false)
+        {
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
+
+            if (source.PathEquals(destination))
+            {
+                throw new IOException(string.Format("Source and destination can't be the same {0}", source));
+            }
+
+            CloneFileInternal(source, destination, overwrite);
+        }
+
+        protected virtual void CloneFileInternal(string source, string destination, bool overwrite = false)
+        {
+            CopyFileInternal(source, destination, overwrite);
+        }
+
         public void CopyFile(string source, string destination, bool overwrite = false)
         {
             Ensure.That(source, () => source).IsValidPath();
@@ -249,7 +267,17 @@ namespace NzbDrone.Common.Disk
             File.Move(source, destination);
         }
 
+        public virtual bool TryRenameFile(string source, string destination)
+        {
+            return false;
+        }
+
         public abstract bool TryCreateHardLink(string source, string destination);
+
+        public virtual bool TryCreateRefLink(string source, string destination)
+        {
+            return false;
+        }
 
         public void DeleteFolder(string path, bool recursive)
         {
