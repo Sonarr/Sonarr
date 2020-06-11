@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);
 
             Mocker.GetMock<IDiskTransferService>()
-                  .Verify(v => v.TransferFolder(path, @"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic(), TransferMode.Move, true), Times.Once());
+                  .Verify(v => v.TransferFolder(path, @"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic(), TransferMode.Move), Times.Once());
         }
 
         [Test]

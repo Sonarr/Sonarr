@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
 
-            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic(), TransferMode.Move, false, true), Times.Once());
+            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic(), TransferMode.Move, false), Times.Once());
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
 
-            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\S01E01_2.avi".AsOsAgnostic(), TransferMode.Move, false, true), Times.Once());
+            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\S01E01_2.avi".AsOsAgnostic(), TransferMode.Move, false), Times.Once());
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path, "30 Rock");
 
-            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\30 Rock\S01E01.avi".AsOsAgnostic(), TransferMode.Move, false, true), Times.Once());
+            Mocker.GetMock<IDiskTransferService>().Verify(v => v.TransferFile(path, @"C:\Test\Recycle Bin\30 Rock\S01E01.avi".AsOsAgnostic(), TransferMode.Move, false), Times.Once());
         }
     }
 }

@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.TvTests
         private void GivenFailedMove()
         {
             Mocker.GetMock<IDiskTransferService>()
-                  .Setup(s => s.TransferFolder(It.IsAny<string>(), It.IsAny<string>(), TransferMode.Move, true))
+                  .Setup(s => s.TransferFolder(It.IsAny<string>(), It.IsAny<string>(), TransferMode.Move))
                   .Throws<IOException>();
         }
 
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.TvTests
             Subject.Execute(_command);
 
             Mocker.GetMock<IDiskTransferService>()
-                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move, It.IsAny<bool>()), Times.Once());
+                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move), Times.Once());
 
             Mocker.GetMock<IBuildFileNames>()
                   .Verify(v => v.GetSeriesFolder(It.IsAny<Series>(), null), Times.Never());
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test.TvTests
             Subject.Execute(_bulkCommand);
 
             Mocker.GetMock<IDiskTransferService>()
-                  .Verify(v => v.TransferFolder(_bulkCommand.Series.First().SourcePath, expectedPath, TransferMode.Move, It.IsAny<bool>()), Times.Once());
+                  .Verify(v => v.TransferFolder(_bulkCommand.Series.First().SourcePath, expectedPath, TransferMode.Move), Times.Once());
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.TvTests
             Subject.Execute(_command);
             
             Mocker.GetMock<IDiskTransferService>()
-                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move, It.IsAny<bool>()), Times.Never());
+                  .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move), Times.Never());
 
             Mocker.GetMock<IBuildFileNames>()
                   .Verify(v => v.GetSeriesFolder(It.IsAny<Series>(), null), Times.Never());

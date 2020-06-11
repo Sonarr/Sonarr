@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Update
             }
 
             _logger.Info("Preparing client");
-            _diskTransferService.TransferFolder(_appFolderInfo.GetUpdateClientFolder(), updateSandboxFolder, TransferMode.Move, false);
+            _diskTransferService.TransferFolder(_appFolderInfo.GetUpdateClientFolder(), updateSandboxFolder, TransferMode.Move);
 
             _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
             _logger.ProgressInfo("Sonarr will restart shortly.");
