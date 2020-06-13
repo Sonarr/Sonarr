@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Setup(s => s.GetDirectories(rootFolder.Path))
                   .Returns(folders);
 
-            var unmappedFolders = Subject.Get(rootFolder.Id).UnmappedFolders;
+            var unmappedFolders = Subject.Get(rootFolder.Id, true).UnmappedFolders;
 
             unmappedFolders.Count.Should().BeGreaterThan(0);
             unmappedFolders.Should().NotContain(u => u.Name == subFolder);
