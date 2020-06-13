@@ -114,6 +114,7 @@ class ImportSeries extends Component {
           {
             !rootFoldersError &&
             !rootFoldersFetching &&
+            rootFoldersPopulated &&
             !unmappedFolders.length ?
               <div>
                 All series in {path} have been imported
@@ -124,6 +125,7 @@ class ImportSeries extends Component {
           {
             !rootFoldersError &&
             !rootFoldersFetching &&
+            rootFoldersPopulated &&
             !!unmappedFolders.length &&
             scroller ?
               <ImportSeriesTableConnector
