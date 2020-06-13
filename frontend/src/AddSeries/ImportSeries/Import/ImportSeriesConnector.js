@@ -76,6 +76,7 @@ class ImportSeriesConnector extends Component {
 
   componentDidMount() {
     const {
+      rootFolderId,
       qualityProfiles,
       languageProfiles,
       defaultQualityProfileId,
@@ -84,9 +85,7 @@ class ImportSeriesConnector extends Component {
       dispatchSetAddSeriesDefault
     } = this.props;
 
-    if (!this.props.rootFoldersPopulated) {
-      dispatchFetchRootFolders();
-    }
+    dispatchFetchRootFolders({ id: rootFolderId, timeout: false });
 
     let setDefaults = false;
     const setDefaultPayload = {};
@@ -154,6 +153,8 @@ const routeMatchShape = createRouteMatchShape({
 
 ImportSeriesConnector.propTypes = {
   match: routeMatchShape.isRequired,
+  rootFolderId: PropTypes.number.isRequired,
+  rootFoldersFetching: PropTypes.bool.isRequired,
   rootFoldersPopulated: PropTypes.bool.isRequired,
   qualityProfiles: PropTypes.arrayOf(PropTypes.object).isRequired,
   languageProfiles: PropTypes.arrayOf(PropTypes.object).isRequired,

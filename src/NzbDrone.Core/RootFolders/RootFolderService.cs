@@ -2,7 +2,6 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common;
@@ -18,7 +17,7 @@ namespace NzbDrone.Core.RootFolders
         List<RootFolder> AllWithUnmappedFolders();
         RootFolder Add(RootFolder rootDir);
         void Remove(int id);
-        RootFolder Get(int id);
+        RootFolder Get(int id, bool timeout);
         string GetBestRootFolderPath(string path);
     }
 
@@ -71,7 +70,7 @@ namespace NzbDrone.Core.RootFolders
                 {
                     if (folder.Path.IsPathValid())
                     {
-                        GetDetails(folder);
+                        GetDetails(folder, true);
                     }
                 }
                 //We don't want an exception to prevent the root folders from loading in the UI, so they can still be deleted
@@ -111,7 +110,7 @@ namespace NzbDrone.Core.RootFolders
 
             _rootFolderRepository.Insert(rootFolder);
 
-            GetDetails(rootFolder);
+            GetDetails(rootFolder, true);
 
             return rootFolder;
         }
@@ -155,10 +154,10 @@ namespace NzbDrone.Core.RootFolders
             return results.OrderBy(u => u.Name, StringComparer.InvariantCultureIgnoreCase).ToList();
         }
 
-        public RootFolder Get(int id)
+        public RootFolder Get(int id, bool timeout)
         {
             var rootFolder = _rootFolderRepository.Get(id);
-            GetDetails(rootFolder);
+            GetDetails(rootFolder, timeout);
 
             return rootFolder;
         }
@@ -177,7 +176,7 @@ namespace NzbDrone.Core.RootFolders
             return possibleRootFolder.Path;
         }
 
-        private void GetDetails(RootFolder rootFolder)
+        private void GetDetails(RootFolder rootFolder, bool timeout)
         {
             Task.Run(() =>
             {
@@ -188,7 +187,7 @@ namespace NzbDrone.Core.RootFolders
                     rootFolder.TotalSpace = _diskProvider.GetTotalSize(rootFolder.Path);
                     rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
                 }
-            }).Wait(5000);
+            }).Wait(timeout ? 5000 : -1);
         }
     }
 }
