@@ -14,11 +14,11 @@
 }
 
 .path {
-  @add-mixin truncate;
   flex: 0 1 auto;
 }
 
 .seriesFolder {
+  @add-mixin truncate;
   flex: 0 1 auto;
   color: $disabledColor;
 }
