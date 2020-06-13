@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NLog.Fluent;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
@@ -159,21 +161,33 @@ namespace NzbDrone.Core.Download
             // Since imports should be relatively fast and these types of data changes are infrequent this should be quite
             // safe, but commenting for future benefit.
 
-            if (importResults.Any(c => c.Result == ImportResultType.Imported))
+            var atLeastOneEpisodeImported = importResults.Any(c => c.Result == ImportResultType.Imported);
+
+            var historyItems = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId)
+                                              .OrderByDescending(h => h.Date)
+                                              .ToList();
+
+            var allEpisodesImportedInHistory = _trackedDownloadAlreadyImported.IsImported(trackedDownload, historyItems);
+
+            if (allEpisodesImportedInHistory)
             {
-                var historyItems = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId)
-                                                  .OrderByDescending(h => h.Date)
-                                                  .ToList();
-
-                var allEpisodesImportedInHistory = _trackedDownloadAlreadyImported.IsImported(trackedDownload, historyItems);
-
-                if (allEpisodesImportedInHistory)
+                if (atLeastOneEpisodeImported)
                 {
                     _logger.Debug("All episodes were imported in history for {0}", trackedDownload.DownloadItem.Title);
                     trackedDownload.State = TrackedDownloadState.Imported;
                     _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id));
+
                     return true;
                 }
+
+                _logger.Debug()
+                       .Message("No Episodes were just imported, but all episodes were previously imported, possible issue with download history.")
+                       .Property("SeriesId", trackedDownload.RemoteEpisode.Series.Id)
+                       .Property("DownloadId", trackedDownload.DownloadItem.DownloadId)
+                       .Property("Title", trackedDownload.DownloadItem.Title)
+                       .Property("Path", trackedDownload.DownloadItem.OutputPath.ToString())
+                       .WriteSentryWarn("DownloadHistoryIncomplete")
+                       .Write();
             }
 
             _logger.Debug("Not all episodes have been imported for {0}", trackedDownload.DownloadItem.Title);
