@@ -410,9 +410,21 @@ namespace NzbDrone.Mono.Disk
                 fileInfo.CreateLink(destination);
                 return true;
             }
+            catch (UnixIOException ex)
+            {
+                if (ex.ErrorCode == Errno.EXDEV)
+                {
+                    Logger.Trace("Hardlink '{0}' to '{1}' failed due to cross-device access.", source, destination);
+                }
+                else
+                {
+                    Logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
+                }
+                return false;
+            }
             catch (Exception ex)
             {
-                Logger.Debug(ex, string.Format("Hardlink '{0}' to '{1}' failed.", source, destination));
+                Logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
                 return false;
             }
         }
