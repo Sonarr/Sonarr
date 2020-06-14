@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Net;
 using System.Text;
 using Mono.Unix;
 using Mono.Unix.Native;
@@ -11,8 +13,6 @@ namespace NzbDrone.Mono.Disk
         string GetCompleteRealPath(string path);
     }
 
-    // Mono's own implementation doesn't handle exceptions very well.
-    // All of this code was copied from mono with minor changes.
     public class SymbolicLinkResolver : ISymbolicLinkResolver
     {
         private readonly Logger _logger;
@@ -28,33 +28,26 @@ namespace NzbDrone.Mono.Disk
 
             try
             {
-                string[] dirs;
-                int lastIndex;
-                GetPathComponents(path, out dirs, out lastIndex);
+                var realPath = path;
+                for (var links = 0; links < 32; links++)
+                {
+                    var wasSymLink = TryFollowFirstSymbolicLink(ref realPath);
+                    if (!wasSymLink)
+                    {
+                        return realPath;
+                    }
+                }
 
-                var realPath = new StringBuilder();
-                if (dirs.Length > 0)
-                {
-                    var dir = UnixPath.IsPathRooted(path) ? "/" : "";
-                    dir += dirs[0];
-                    realPath.Append(GetRealPath(dir));
-                }
-                for (var i = 1; i < lastIndex; ++i)
-                {
-                    realPath.Append("/").Append(dirs[i]);
-                    var realSubPath = GetRealPath(realPath.ToString());
-                    realPath.Remove(0, realPath.Length);
-                    realPath.Append(realSubPath);
-                }
-                return realPath.ToString();
+                var ex = new UnixIOException(Errno.ELOOP);
+                _logger.Warn("Failed to check for symlinks in the path {0}: {1}", path, ex.Message);
+                return path;
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, string.Format("Failed to check for symlinks in the path {0}", path));
+                _logger.Debug(ex, "Failed to check for symlinks in the path {0}", path);
                 return path;
             }
         }
-
 
         private static void GetPathComponents(string path, out string[] components, out int lastIndex)
         {
@@ -87,23 +80,77 @@ namespace NzbDrone.Mono.Disk
             lastIndex = target;
         }
 
-        public string GetRealPath(string path)
+        private bool TryFollowFirstSymbolicLink(ref string path)
         {
-            do
+            string[] dirs;
+            int lastIndex;
+            GetPathComponents(path, out dirs, out lastIndex);
+
+            if (lastIndex == 0)
             {
-                var link = UnixPath.TryReadLink(path);
+                return false;
+            }
 
-                if (link == null)
+            var realPath = "";
+
+            for (var i = 0; i < lastIndex; ++i)
+            {
+                if (i != 0 || UnixPath.IsPathRooted(path))
                 {
-                    var errno = Stdlib.GetLastError();
-                    if (errno != Errno.EINVAL)
-                    {
-                        _logger.Trace("Checking path {0} for symlink returned error {1}, assuming it's not a symlink.", path, errno);
-                    }
-
-                    return path;
+                    realPath = string.Concat(realPath, UnixPath.DirectorySeparatorChar, dirs[i]);
+                }
+                else
+                {
+                    realPath = string.Concat(realPath, dirs[i]);
                 }
 
+                var pathValid = TryFollowSymbolicLink(ref realPath, out var wasSymLink);
+
+                if (!pathValid || wasSymLink)
+                {
+                    // If the path does not exist, or it was a symlink then we need to concat the remaining dir components and start over (or return)
+                    var count = lastIndex - i - 1;
+                    if (count > 0)
+                    {
+                        realPath = string.Concat(realPath, UnixPath.DirectorySeparatorChar, string.Join(UnixPath.DirectorySeparatorChar.ToString(), dirs, i + 1, lastIndex - i - 1));
+                    }
+                    path = realPath;
+                    return pathValid;
+                }
+            }
+
+            return false;
+        }
+
+        private bool TryFollowSymbolicLink(ref string path, out bool wasSymLink)
+        {
+            if (!UnixFileSystemInfo.TryGetFileSystemEntry(path, out var fsentry) || !fsentry.Exists)
+            {
+                wasSymLink = false;
+                return false;
+            }
+
+            if (!fsentry.IsSymbolicLink)
+            {
+                wasSymLink = false;
+                return true;
+            }
+
+            var link = UnixPath.TryReadLink(path);
+
+            if (link == null)
+            {
+                var errno = Stdlib.GetLastError();
+                if (errno != Errno.EINVAL)
+                {
+                    _logger.Trace("Checking path {0} for symlink returned error {1}, assuming it's not a symlink.", path, errno);
+                }
+
+                wasSymLink = true;
+                return false;
+            }
+            else
+            {
                 if (UnixPath.IsPathRooted(link))
                 {
                     path = link;
@@ -113,8 +160,10 @@ namespace NzbDrone.Mono.Disk
                     path = UnixPath.GetDirectoryName(path) + UnixPath.DirectorySeparatorChar + link;
                     path = UnixPath.GetCanonicalPath(path);
                 }
-            } while (true);
-        } 
 
+                wasSymLink = true;
+                return true;
+            }
+        }
     }
 }
