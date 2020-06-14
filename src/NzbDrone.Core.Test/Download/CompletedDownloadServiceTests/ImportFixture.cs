@@ -65,6 +65,9 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                   .Setup(s => s.GetSeries("Drone.S01E01.HDTV"))
                   .Returns(remoteEpisode.Series);
 
+            Mocker.GetMock<IHistoryService>()
+                  .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
+                  .Returns(new List<EpisodeHistory>());
         }
 
         private RemoteEpisode BuildRemoteEpisode()
