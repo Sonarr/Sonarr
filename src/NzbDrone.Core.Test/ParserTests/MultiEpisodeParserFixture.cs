@@ -67,6 +67,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Name.of.the.Rose.S01E05-6.PL.1080p.WEBRip.x264-666", "The Name of the Rose", 1, new[] { 5, 6 })]
         [TestCase("Series Title - S15E06-07 - City Sushi HDTV-720p", "Series Title", 15, new[] { 6, 7 })]
         [TestCase("Series Title - S01E01-02-03 - Episode Title HDTV-720p", "Series Title", 1, new[] { 1, 2, 3 })]
+        [TestCase("Series Title - [02x01x02] - Episode 1", "Series Title", 2, new [] { 1, 2})]
+        [TestCase("Series Title - [02x01-x02] - Episode 1", "Series Title", 2, new [] { 1, 2})]
+        [TestCase("Series Title - [02x01-02] - Episode 1", "Series Title", 2, new [] { 1, 2})]
         //[TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {

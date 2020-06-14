@@ -205,6 +205,12 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:_|-|\s|\.)+S(?<season>\d{2}(?!\d+))(\W-\W)E(?<episode>(?<!\d+)\d{2}(?!\d+))(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Season and episode numbers in square brackets (single and mult-episode)
+                // Series Title - [02x01] - Episode 1
+                // Series Title - [02x01x02] - Episode 1
+                new Regex(@"^(?<title>.+?)?(?:[-_\W](?<![()\[!]))+\[(?<season>(?<!\d+)\d{1,2})(?:(?:-|x){1,2}(?<episode>\d{2}))+\].+?(?:\.|$)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled), 
+
                 // Anime - Title with season number - Absolute Episode Number (Title S01 - EP14)
                 new Regex(@"^(?<title>.+?S\d{1,2})[-_. ]{3,}(?:EP)?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|[-]))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
