@@ -6,7 +6,7 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Twitter
 {
-    class Twitter : NotificationBase<TwitterSettings>
+    public class Twitter : NotificationBase<TwitterSettings>
     {
 
         private readonly ITwitterService _twitterService;

@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         public object Unknown28 { get; set; }
     }
 
-    class UTorrentTorrentJsonConverter : JsonConverter
+    public class UTorrentTorrentJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

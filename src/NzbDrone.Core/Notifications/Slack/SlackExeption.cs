@@ -3,7 +3,7 @@ using NzbDrone.Common.Exceptions;
 
 namespace NzbDrone.Core.Notifications.Slack
 {
-    class SlackExeption : NzbDroneException
+    public class SlackExeption : NzbDroneException
     {
         public SlackExeption(string message) : base(message)
         {

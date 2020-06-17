@@ -3,7 +3,7 @@ using NzbDrone.Common.Exceptions;
 
 namespace NzbDrone.Core.Notifications.Discord
 {
-    class DiscordException : NzbDroneException
+    public class DiscordException : NzbDroneException
     {
         public DiscordException(string message) : base(message)
         {

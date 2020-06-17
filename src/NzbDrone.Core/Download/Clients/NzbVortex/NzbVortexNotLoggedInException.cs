@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Core.Download.Clients.NzbVortex
 {
-    class NzbVortexNotLoggedInException : DownloadClientException
+    public class NzbVortexNotLoggedInException : DownloadClientException
     {
         public NzbVortexNotLoggedInException() : this("Authentication is required")
         {
