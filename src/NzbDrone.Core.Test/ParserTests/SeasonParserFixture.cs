@@ -80,6 +80,7 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("The Wire S01-05 WS BDRip X264-REWARD-No Rars", "The Wire", 1)]
+        [TestCase("Seinfault.S01-S09.1080p.AMZN.WEB-DL.DDP2.0.H.264-NTb", "Seinfault", 1)]
         public void should_parse_multi_season_release(string postTitle, string title, int firstSeason)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
