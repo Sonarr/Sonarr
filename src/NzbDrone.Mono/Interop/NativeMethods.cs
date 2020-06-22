@@ -20,7 +20,7 @@ namespace NzbDrone.Mono.Interop
 
         public static SafeUnixHandle open(string pathname, OpenFlags flags)
         {
-            return new SafeUnixHandle(Syscall.open(pathname, flags));
+            return new SafeUnixHandle(Syscall.open(pathname, flags, FilePermissions.DEFFILEMODE));
         }
 
         internal static int clone_file(SafeUnixHandle link_fd, SafeUnixHandle src_fd)
