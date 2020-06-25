@@ -249,6 +249,11 @@ namespace NzbDrone.Common.Http
                     var request = new HttpRequest(url);
                     request.ResponseStream = fileStream;
                     var response = Get(request);
+
+                    if (response.Headers.ContentType != null && response.Headers.ContentType.Contains("text/html"))
+                    {
+                        throw new HttpException(request, response, "Site responded with html content.");
+                    }
                 }
                 stopWatch.Stop();
                 if (File.Exists(fileName))
