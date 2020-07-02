@@ -25,7 +25,7 @@ namespace NzbDrone.Core.MediaFiles
         void Scan(Series series);
         string[] GetVideoFiles(string path, bool allDirectories = true);
         string[] GetNonVideoFiles(string path, bool allDirectories = true);
-        List<string> FilterPaths(string basePath, IEnumerable<string> files);
+        List<string> FilterPaths(string basePath, IEnumerable<string> files, bool filterExtras = true);
     }
 
     public class DiskScanService :
@@ -69,7 +69,8 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/|^)(?:extras|@eadir|\.@__thumb|extrafanart|plex versions|\.[^\\/]+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedExtrasSubFolderRegex = new Regex(@"(?:\\|\/|^)(?:extras|extrafanart|behind the scenes|deleted scenes|featurettes|interviews|scenes|samples|shorts|trailers)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/|^)(?:@eadir|\.@__thumb|plex versions|\.[^\\/]+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ExcludedFilesRegex = new Regex(@"^\._|^Thumbs\.db$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public void Scan(Series series)
@@ -217,11 +218,18 @@ namespace NzbDrone.Core.MediaFiles
             return mediaFileList.ToArray();
         }
 
-        public List<string> FilterPaths(string basePath, IEnumerable<string> paths)
+        public List<string> FilterPaths(string basePath, IEnumerable<string> paths, bool filterExtras = true)
         {
-            return paths.Where(path => !ExcludedSubFoldersRegex.IsMatch(basePath.GetRelativePath(path)))
+            var filteredPaths = paths.Where(path => !ExcludedSubFoldersRegex.IsMatch(basePath.GetRelativePath(path)))
                         .Where(path => !ExcludedFilesRegex.IsMatch(Path.GetFileName(path)))
                         .ToList();
+
+            if (filterExtras)
+            {
+                filteredPaths = filteredPaths.Where(path => !ExcludedExtrasSubFolderRegex.IsMatch(basePath.GetRelativePath(path))).ToList();
+            }
+
+            return filteredPaths;
         }
 
         private void SetPermissions(string path)

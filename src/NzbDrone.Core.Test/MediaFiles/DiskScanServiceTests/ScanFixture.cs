@@ -172,6 +172,50 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
+        public void should_not_scan_various_extras_subfolders()
+        {
+            GivenSeriesFolder();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "Behind the Scenes", "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Deleted Scenes", "file2.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Featurettes", "file3.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Interviews", "file4.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Samples", "file5.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Scenes", "file6.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Shorts", "file7.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Trailers", "file8.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Series Title S01E01 (1080p BluRay x265 10bit Tigole).mkv").AsOsAgnostic(),
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_not_scan_featurettes_subfolders()
+        {
+            GivenSeriesFolder();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "Featurettes", "An Epic Reborn.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Featurettes", "Deleted & Alternate Scenes.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Featurettes", "En Garde - Multi-Angle Dailies.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Featurettes", "Layer-By-Layer - Sound Design - Multiple Audio.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Series Title S01E01 (1080p BluRay x265 10bit Tigole).mkv").AsOsAgnostic(),
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
         public void should_clean_but_not_import_if_series_folder_does_not_exist_and_create_folder_enabled()
         {
             GivenRootFolder(_otherSeriesFolder);
