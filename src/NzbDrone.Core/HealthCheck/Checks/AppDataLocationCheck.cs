@@ -1,5 +1,6 @@
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
@@ -7,7 +8,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IAppFolderInfo _appFolderInfo;
 
-        public AppDataLocationCheck(IAppFolderInfo appFolderInfo)
+        public AppDataLocationCheck(IAppFolderInfo appFolderInfo, ILocalizationService localizationService)
+            : base(localizationService)
         {
             _appFolderInfo = appFolderInfo;
         }
@@ -17,7 +19,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             if (_appFolderInfo.StartUpFolder.IsParentPath(_appFolderInfo.AppDataFolder) ||
                 _appFolderInfo.StartUpFolder.PathEquals(_appFolderInfo.AppDataFolder))
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Updating will not be possible to prevent deleting AppData on Update", "#updating-will-not-be-possible-to-prevent-deleting-appdata-on-update");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, _localizationService.GetLocalizedString("AppDataLocationHealthCheckMessage"), "#updating-will-not-be-possible-to-prevent-deleting-appdata-on-update");
             }
 
             return new HealthCheck(GetType());

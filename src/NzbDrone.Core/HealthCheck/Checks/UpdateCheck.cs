@@ -5,6 +5,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.HealthCheck.Checks
@@ -22,7 +23,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
                            IAppFolderInfo appFolderInfo,
                            ICheckUpdateService checkUpdateService,
                            IConfigFileProvider configFileProvider,
-                           IOsInfo osInfo)
+                           IOsInfo osInfo,
+                           ILocalizationService localizationService)
+            : base(localizationService)
         {
             _diskProvider = diskProvider;
             _appFolderInfo = appFolderInfo;
@@ -44,15 +47,15 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
-                        string.Format("Cannot install update because startup folder '{0}' is in an App Translocation folder.", startupFolder),
-                        "#cannot-install-update-because-startup-folder-is-in-an-app-translocation-folder");
+                        string.Format(_localizationService.GetLocalizedString("UpdateStartupTranslocationHealthCheckMessage"), startupFolder),
+                        "#cannot-install-update-because-startup-folder-is-in-an-app-translocation-folder.");
                 }
 
                 if (!_diskProvider.FolderWritable(startupFolder))
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
-                        string.Format("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", startupFolder, Environment.UserName),
+                        string.Format(_localizationService.GetLocalizedString("UpdateStartupNotWritableHealthCheckMessage"), startupFolder, Environment.UserName),
                         "#cannot-install-update-because-startup-folder-is-not-writable-by-the-user");
                 }
 
@@ -60,14 +63,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
-                        string.Format("Cannot install update because UI folder '{0}' is not writable by the user '{1}'.", uiFolder, Environment.UserName),
+                        string.Format(_localizationService.GetLocalizedString("UpdateUINotWritableHealthCheckMessage"), uiFolder, Environment.UserName),
                         "#cannot-install-update-because-ui-folder-is-not-writable-by-the-user");
                 }
             }
 
             if (BuildInfo.BuildDateTime < DateTime.UtcNow.AddDays(-14) && _checkUpdateService.AvailableUpdate() != null)
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "New update is available");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, _localizationService.GetLocalizedString("UpdateAvailableHealthCheckMessage"));
             }
 
             return new HealthCheck(GetType());

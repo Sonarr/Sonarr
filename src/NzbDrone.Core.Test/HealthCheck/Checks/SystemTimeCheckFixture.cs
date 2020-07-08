@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Moq;
 using NUnit.Framework;
@@ -6,6 +6,7 @@ using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.HealthCheck.Checks;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
@@ -18,6 +19,10 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         public void Setup()
         {
             Mocker.SetConstant<ISonarrCloudRequestBuilder>(new SonarrCloudRequestBuilder());
+
+            Mocker.GetMock<ILocalizationService>()
+                .Setup(s => s.GetLocalizedString(It.IsAny<string>()))
+                .Returns("Some Warning Message");
         }
 
         private void GivenServerTime(DateTime dateTime)

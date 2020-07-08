@@ -1,6 +1,7 @@
-﻿using System.Linq;
+using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
@@ -13,7 +14,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly IImportListFactory _providerFactory;
         private readonly IImportListStatusService _providerStatusService;
 
-        public ImportListStatusCheck(IImportListFactory providerFactory, IImportListStatusService providerStatusService)
+        public ImportListStatusCheck(IImportListFactory providerFactory, IImportListStatusService providerStatusService, ILocalizationService localizationService)
+            : base(localizationService)
         {
             _providerFactory = providerFactory;
             _providerStatusService = providerStatusService;
@@ -35,10 +37,16 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (backOffProviders.Count == enabledProviders.Count)
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Error, "All import lists are unavailable due to failures", "#import-lists-are-unavailable-due-to-failures");
+                return new HealthCheck(GetType(),
+                    HealthCheckResult.Error,
+                    _localizationService.GetLocalizedString("ImportListStatusAllUnavailableHealthCheckMessage"),
+                    "#import-lists-are-unavailable-due-to-failures");
             }
 
-            return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format("Import lists unavailable due to failures: {0}", string.Join(", ", backOffProviders.Select(v => v.ImportList.Definition.Name))), "#import-lists-are-unavailable-due-to-failures");
+            return new HealthCheck(GetType(),
+                HealthCheckResult.Warning,
+                string.Format(_localizationService.GetLocalizedString("ImportListStatusUnavailableHealthCheckMessage"), string.Join(", ", backOffProviders.Select(v => v.ImportList.Definition.Name))),
+                "#import-lists-are-unavailable-due-to-failures");
         }
     }
 }

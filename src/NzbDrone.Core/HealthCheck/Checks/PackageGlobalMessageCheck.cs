@@ -1,5 +1,6 @@
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
@@ -7,7 +8,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IDeploymentInfoProvider _deploymentInfoProvider;
 
-        public PackageGlobalMessageCheck(IDeploymentInfoProvider deploymentInfoProvider)
+        public PackageGlobalMessageCheck(IDeploymentInfoProvider deploymentInfoProvider, ILocalizationService localizationService)
+            : base(localizationService)
         {
             _deploymentInfoProvider = deploymentInfoProvider;
         }

@@ -1,5 +1,6 @@
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
@@ -12,7 +13,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IIndexerFactory _indexerFactory;
 
-        public IndexerSearchCheck(IIndexerFactory indexerFactory)
+        public IndexerSearchCheck(IIndexerFactory indexerFactory, ILocalizationService localizationService)
+            : base(localizationService)
         {
             _indexerFactory = indexerFactory;
         }
@@ -23,21 +25,21 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (automaticSearchEnabled.Empty())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "No indexers available with Automatic Search enabled, Sonarr will not provide any automatic search results", "#no-indexers-available-with-automatic-search-enabled-sonarr-will-not-provide-any-automatic-search-results");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, _localizationService.GetLocalizedString("IndexerSearchNoAutomaticHealthCheckMessage"), "#no-indexers-available-with-automatic-search-enabled-sonarr-will-not-provide-any-automatic-search-results");
             }
 
             var interactiveSearchEnabled = _indexerFactory.InteractiveSearchEnabled(false);
 
             if (interactiveSearchEnabled.Empty())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "No indexers available with Interactive Search enabled, Sonarr will not provide any interactive search results", "#no-indexers-available-with-interactive-search-enabled");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, _localizationService.GetLocalizedString("IndexerSearchNoInteractiveHealthCheckMessage"), "#no-indexers-available-with-interactive-search-enabled");
             }
 
             var active = _indexerFactory.AutomaticSearchEnabled(true);
 
             if (active.Empty())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "All search-capable indexers are temporarily unavailable due to recent indexer errors", "#indexers-are-unavailable-due-to-failures");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, _localizationService.GetLocalizedString("IndexerSearchNoAvailableIndexersHealthCheckMessage"), "#indexers-are-unavailable-due-to-failures");
             }
 
             return new HealthCheck(GetType());

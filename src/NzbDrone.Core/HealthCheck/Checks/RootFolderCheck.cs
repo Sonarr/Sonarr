@@ -1,5 +1,6 @@
 using System.Linq;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
@@ -17,7 +18,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly IDiskProvider _diskProvider;
         private readonly IRootFolderService _rootFolderService;
 
-        public RootFolderCheck(ISeriesService seriesService, IDiskProvider diskProvider, IRootFolderService rootFolderService)
+        public RootFolderCheck(ISeriesService seriesService, IDiskProvider diskProvider, IRootFolderService rootFolderService, ILocalizationService localizationService)
+            : base(localizationService)
         {
             _seriesService = seriesService;
             _diskProvider = diskProvider;
@@ -37,11 +39,16 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 if (missingRootFolders.Count == 1)
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, "Missing root folder: " + missingRootFolders.First(), "#missing-root-folder");
+                    return new HealthCheck(GetType(),
+                        HealthCheckResult.Error,
+                        string.Format(_localizationService.GetLocalizedString("RootFolderMissingHealthCheckMessage"), missingRootFolders.First()),
+                        "#missing-root-folder");
                 }
 
-                var message = string.Format("Multiple root folders are missing: {0}", string.Join(" | ", missingRootFolders));
-                return new HealthCheck(GetType(), HealthCheckResult.Error, message, "#missing-root-folder");
+                return new HealthCheck(GetType(),
+                    HealthCheckResult.Error,
+                    string.Format(_localizationService.GetLocalizedString("RootFolderMultipleMissingHealthCheckMessage"), string.Join(" | ", missingRootFolders)),
+                    "#missing-root-folder");
             }
 
             return new HealthCheck(GetType());

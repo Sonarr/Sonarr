@@ -4,6 +4,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.ThingiProvider.Events;
@@ -21,7 +22,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly Logger _logger;
 
         public DownloadClientSortingCheck(IProvideDownloadClient downloadClientProvider,
-                                      Logger logger)
+                                          Logger logger,
+                                          ILocalizationService localizationService)
+            : base(localizationService)
         {
             _downloadClientProvider = downloadClientProvider;
             _logger = logger;
@@ -42,7 +45,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     {
                         return new HealthCheck(GetType(),
                             HealthCheckResult.Warning,
-                            $"Download client {clientName} has {status.SortingMode} sorting enabled for Sonarr's category. You should disable sorting in your download client to avoid import issues.",
+                            string.Format(_localizationService.GetLocalizedString("DownloadClientSortingHealthCheckMessage"), clientName, status.SortingMode),
                             "#download-folder-and-library-folder-not-different-folders");
                     }
                 }
