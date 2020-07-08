@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using FizzWare.NBuilder;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.HealthCheck.Checks;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -38,6 +40,10 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Mocker.GetMock<ISeriesService>()
                 .Setup(v => v.GetAllSeries())
                 .Returns(series);
+
+            Mocker.GetMock<ILocalizationService>()
+                .Setup(s => s.GetLocalizedString(It.IsAny<string>()))
+                .Returns("Some Warning Message");
         }
 
         [Test]

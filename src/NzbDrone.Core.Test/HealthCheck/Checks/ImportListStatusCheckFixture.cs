@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
@@ -24,6 +25,10 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Mocker.GetMock<IImportListStatusService>()
                    .Setup(v => v.GetBlockedProviders())
                    .Returns(_blockedImportLists);
+
+            Mocker.GetMock<ILocalizationService>()
+                .Setup(s => s.GetLocalizedString(It.IsAny<string>()))
+                .Returns("Some Warning Message");
         }
 
         private Mock<IImportList> GivenImportList(int id, double backoffHours, double failureHours)

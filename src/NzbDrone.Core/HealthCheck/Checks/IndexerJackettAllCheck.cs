@@ -3,6 +3,7 @@ using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Torznab;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
@@ -14,7 +15,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IIndexerFactory _providerFactory;
 
-        public IndexerJackettAllCheck(IIndexerFactory providerFactory)
+        public IndexerJackettAllCheck(IIndexerFactory providerFactory, ILocalizationService localizationService)
+            : base(localizationService)
         {
             _providerFactory = providerFactory;
         }
@@ -37,8 +39,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Warning,
-                string.Format("Indexers using the unsupported Jackett 'all' endpoint: {0}",
-                    string.Join(", ", jackettAllProviders.Select(i => i.Name))),
+                string.Format(_localizationService.GetLocalizedString("IndexerJackettAllHealthCheckMessage"), string.Join(", ", jackettAllProviders.Select(i => i.Name))),
                 "#jackett-all-endpoint-used");
         }
     }

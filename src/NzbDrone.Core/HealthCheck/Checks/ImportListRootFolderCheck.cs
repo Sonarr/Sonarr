@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Tv.Events;
 
@@ -16,7 +17,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly IImportListFactory _importListFactory;
         private readonly IDiskProvider _diskProvider;
 
-        public ImportListRootFolderCheck(IImportListFactory importListFactory, IDiskProvider diskProvider)
+        public ImportListRootFolderCheck(IImportListFactory importListFactory, IDiskProvider diskProvider, ILocalizationService localizationService)
+            : base(localizationService)
         {
             _importListFactory = importListFactory;
             _diskProvider = diskProvider;
@@ -49,11 +51,17 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 if (missingRootFolders.Count == 1)
                 {
                     var missingRootFolder = missingRootFolders.First();
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, $"Missing root folder for import list(s): {FormatRootFolder(missingRootFolder.Key, missingRootFolder.Value)}", "#import-list-missing-root-folder");
+
+                    return new HealthCheck(GetType(),
+                        HealthCheckResult.Error,
+                        string.Format(_localizationService.GetLocalizedString("ImportListRootFolderMissingRootHealthCheckMessage"), FormatRootFolder(missingRootFolder.Key, missingRootFolder.Value)),
+                        "#import-list-missing-root-folder");
                 }
 
-                var message = string.Format("Multiple root folders are missing for import lists: {0}", string.Join(" | ", missingRootFolders.Select(m => FormatRootFolder(m.Key, m.Value))));
-                return new HealthCheck(GetType(), HealthCheckResult.Error, message, "#import-list-missing-root-folder");
+                return new HealthCheck(GetType(),
+                    HealthCheckResult.Error,
+                    string.Format(_localizationService.GetLocalizedString("ImportListRootFolderMultipleMissingRootsHealthCheckMessage"), string.Join(" | ", missingRootFolders.Select(m => FormatRootFolder(m.Key, m.Value)))),
+                    "#import-list-missing-root-folder");
             }
 
             return new HealthCheck(GetType());

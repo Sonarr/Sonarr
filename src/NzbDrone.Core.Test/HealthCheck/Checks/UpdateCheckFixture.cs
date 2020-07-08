@@ -4,6 +4,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.HealthCheck.Checks;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 
@@ -12,6 +13,14 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
     [TestFixture]
     public class UpdateCheckFixture : CoreTest<UpdateCheck>
     {
+        [SetUp]
+        public void Setup()
+        {
+            Mocker.GetMock<ILocalizationService>()
+                  .Setup(s => s.GetLocalizedString(It.IsAny<string>()))
+                  .Returns("Some Warning Message");
+        }
+
         [Test]
         public void should_return_error_when_app_folder_is_write_protected()
         {

@@ -1,6 +1,8 @@
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.HealthCheck.Checks;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
@@ -8,6 +10,14 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
     [TestFixture]
     public class ImportMechanismCheckFixture : CoreTest<ImportMechanismCheck>
     {
+        [SetUp]
+        public void Setup()
+        {
+            Mocker.GetMock<ILocalizationService>()
+                  .Setup(s => s.GetLocalizedString(It.IsAny<string>()))
+                  .Returns("Some Warning Message");
+        }
+
         private void GivenCompletedDownloadHandling(bool? enabled = null)
         {
             if (enabled.HasValue)
