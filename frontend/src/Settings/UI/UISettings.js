@@ -19,7 +19,7 @@ export const firstDayOfWeekOptions = [
 export const weekColumnOptions = [
   { key: 'ddd M/D', value: 'Tue 3/25' },
   { key: 'ddd MM/DD', value: 'Tue 03/25' },
-  { key: 'ddd D/M', value: 'Tue 25/03' },
+  { key: 'ddd D/M', value: 'Tue 25/3' },
   { key: 'ddd DD/MM', value: 'Tue 25/03' }
 ];
 
