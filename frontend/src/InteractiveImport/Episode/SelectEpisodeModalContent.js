@@ -5,6 +5,7 @@ import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import { kinds } from 'Helpers/Props';
+import TextInput from 'Components/Form/TextInput';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -46,6 +47,7 @@ class SelectEpisodeModalContent extends Component {
     this.state = {
       allSelected: false,
       allUnselected: false,
+      filter: '',
       lastToggled: null,
       selectedState: {}
     };
@@ -60,6 +62,10 @@ class SelectEpisodeModalContent extends Component {
 
   //
   // Listeners
+
+  onFilterChange = ({ value }) => {
+    this.setState({ filter: value.toLowerCase() });
+  }
 
   onSelectAllChange = ({ value }) => {
     this.setState(selectAll(this.state.selectedState, value));
@@ -95,6 +101,7 @@ class SelectEpisodeModalContent extends Component {
     const {
       allSelected,
       allUnselected,
+      filter,
       selectedState
     } = this.state;
 
@@ -127,6 +134,15 @@ class SelectEpisodeModalContent extends Component {
               <div>{errorMessage}</div>
           }
 
+          <TextInput
+            className={styles.filterInput}
+            placeholder="Filter episode titles"
+            name="filter"
+            value={filter}
+            autoFocus={true}
+            onChange={this.onFilterChange}
+          />
+
           {
             isPopulated && !!items.length &&
               <Table
@@ -142,7 +158,7 @@ class SelectEpisodeModalContent extends Component {
                 <TableBody>
                   {
                     items.map((item) => {
-                      return (
+                      return item.title.toLowerCase().includes(filter) ? (
                         <SelectEpisodeRow
                           key={item.id}
                           id={item.id}
@@ -152,7 +168,7 @@ class SelectEpisodeModalContent extends Component {
                           isSelected={selectedState[item.id]}
                           onSelectedChange={this.onSelectedChange}
                         />
-                      );
+                      ) : null;
                     })
                   }
                 </TableBody>

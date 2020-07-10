@@ -1,3 +1,10 @@
+.filterInput {
+  composes: input from '~Components/Form/TextInput.css';
+
+  flex: 0 0 auto;
+  margin-bottom: 20px;
+}
+
 .footer {
   composes: modalFooter from '~Components/Modal/ModalFooter.css';
 
