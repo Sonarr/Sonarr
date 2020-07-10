@@ -66,7 +66,7 @@ function BackupSettings(props) {
           type={inputTypes.NUMBER}
           name="backupRetention"
           unit="days"
-          helpText="Automatic backups older the retention will be cleaned up automatically"
+          helpText="Automatic backups older than the retention period will be cleaned up automatically"
           onChange={onInputChange}
           {...backupRetention}
         />
