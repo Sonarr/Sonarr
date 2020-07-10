@@ -104,6 +104,7 @@ class SelectEpisodeModalContent extends Component {
       filter,
       selectedState
     } = this.state;
+    const filterEpisodeNumber = parseInt(filter);
 
     const errorMessage = getErrorMessage(error, 'Unable to load episodes');
 
@@ -136,7 +137,7 @@ class SelectEpisodeModalContent extends Component {
 
           <TextInput
             className={styles.filterInput}
-            placeholder="Filter episode titles"
+            placeholder="Filter episode title or number"
             name="filter"
             value={filter}
             autoFocus={true}
@@ -158,17 +159,20 @@ class SelectEpisodeModalContent extends Component {
                 <TableBody>
                   {
                     items.map((item) => {
-                      return item.title.toLowerCase().includes(filter) ? (
-                        <SelectEpisodeRow
-                          key={item.id}
-                          id={item.id}
-                          episodeNumber={item.episodeNumber}
-                          title={item.title}
-                          airDate={item.airDate}
-                          isSelected={selectedState[item.id]}
-                          onSelectedChange={this.onSelectedChange}
-                        />
-                      ) : null;
+                      return item.title.toLowerCase().includes(filter) ||
+                        item.episodeNumber === filterEpisodeNumber ?
+                        (
+                          <SelectEpisodeRow
+                            key={item.id}
+                            id={item.id}
+                            episodeNumber={item.episodeNumber}
+                            title={item.title}
+                            airDate={item.airDate}
+                            isSelected={selectedState[item.id]}
+                            onSelectedChange={this.onSelectedChange}
+                          />
+                        ) :
+                        null;
                     })
                   }
                 </TableBody>
