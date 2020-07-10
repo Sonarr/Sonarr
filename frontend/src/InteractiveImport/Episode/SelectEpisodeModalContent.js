@@ -4,13 +4,15 @@ import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
-import { kinds } from 'Helpers/Props';
+import { kinds, scrollDirections } from 'Helpers/Props';
+import TextInput from 'Components/Form/TextInput';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import Scroller from 'Components/Scroller/Scroller';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import SelectEpisodeRow from './SelectEpisodeRow';
@@ -46,6 +48,7 @@ class SelectEpisodeModalContent extends Component {
     this.state = {
       allSelected: false,
       allUnselected: false,
+      filter: '',
       lastToggled: null,
       selectedState: {}
     };
@@ -60,6 +63,10 @@ class SelectEpisodeModalContent extends Component {
 
   //
   // Listeners
+
+  onFilterChange = ({ value }) => {
+    this.setState({ filter: value.toLowerCase() });
+  }
 
   onSelectAllChange = ({ value }) => {
     this.setState(selectAll(this.state.selectedState, value));
@@ -95,8 +102,10 @@ class SelectEpisodeModalContent extends Component {
     const {
       allSelected,
       allUnselected,
+      filter,
       selectedState
     } = this.state;
+    const filterEpisodeNumber = parseInt(filter);
 
     const errorMessage = getErrorMessage(error, 'Unable to load episodes');
 
@@ -116,53 +125,73 @@ class SelectEpisodeModalContent extends Component {
 
         </ModalHeader>
 
-        <ModalBody>
-          {
-            isFetching &&
-              <LoadingIndicator />
-          }
+        <ModalBody
+          className={styles.modalBody}
+          scrollDirection={scrollDirections.NONE}
+        >
+          <TextInput
+            className={styles.filterInput}
+            placeholder="Filter episodes by title or number"
+            name="filter"
+            value={filter}
+            autoFocus={true}
+            onChange={this.onFilterChange}
+          />
 
-          {
-            error &&
-              <div>{errorMessage}</div>
-          }
+          <Scroller
+            className={styles.scroller}
+            autoFocus={false}
+          >
+            {
+              isFetching ? <LoadingIndicator /> : null
+            }
 
-          {
-            isPopulated && !!items.length &&
-              <Table
-                columns={columns}
-                selectAll={true}
-                allSelected={allSelected}
-                allUnselected={allUnselected}
-                sortKey={sortKey}
-                sortDirection={sortDirection}
-                onSortPress={onSortPress}
-                onSelectAllChange={this.onSelectAllChange}
-              >
-                <TableBody>
-                  {
-                    items.map((item) => {
-                      return (
-                        <SelectEpisodeRow
-                          key={item.id}
-                          id={item.id}
-                          episodeNumber={item.episodeNumber}
-                          title={item.title}
-                          airDate={item.airDate}
-                          isSelected={selectedState[item.id]}
-                          onSelectedChange={this.onSelectedChange}
-                        />
-                      );
-                    })
-                  }
-                </TableBody>
-              </Table>
-          }
+            {
+              error ? <div>{errorMessage}</div> : null
+            }
 
-          {
-            isPopulated && !items.length &&
-              'No episodes were found for the selected season'
-          }
+            {
+              isPopulated && !!items.length ?
+                <Table
+                  columns={columns}
+                  selectAll={true}
+                  allSelected={allSelected}
+                  allUnselected={allUnselected}
+                  sortKey={sortKey}
+                  sortDirection={sortDirection}
+                  onSortPress={onSortPress}
+                  onSelectAllChange={this.onSelectAllChange}
+                >
+                  <TableBody>
+                    {
+                      items.map((item) => {
+                        return item.title.toLowerCase().includes(filter) ||
+                          item.episodeNumber === filterEpisodeNumber ?
+                          (
+                            <SelectEpisodeRow
+                              key={item.id}
+                              id={item.id}
+                              episodeNumber={item.episodeNumber}
+                              title={item.title}
+                              airDate={item.airDate}
+                              isSelected={selectedState[item.id]}
+                              onSelectedChange={this.onSelectedChange}
+                            />
+                          ) :
+                          null;
+                      })
+                    }
+                  </TableBody>
+                </Table> :
+                null
+            }
+
+            {
+              isPopulated && !items.length ?
+                'No episodes were found for the selected season' :
+                null
+            }
+          </Scroller>
         </ModalBody>
 
         <ModalFooter className={styles.footer}>

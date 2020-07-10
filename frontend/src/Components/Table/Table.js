@@ -52,6 +52,7 @@ function Table(props) {
           scrollDirections.HORIZONTAL :
           scrollDirections.NONE
       }
+      autoFocus={false}
     >
       <table className={className}>
         <TableHeader>
