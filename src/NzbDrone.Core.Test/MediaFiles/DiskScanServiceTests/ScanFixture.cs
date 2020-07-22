@@ -423,6 +423,24 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
+        public void should_exclude_inline_extra_files()
+        {
+            GivenSeriesFolder();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "Series Title S01E01.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Deleted Scenes-deleted.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "The World of Pandora-other.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
         public void should_exclude_osx_metadata_files()
         {
             GivenSeriesFolder();
