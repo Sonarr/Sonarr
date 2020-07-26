@@ -376,7 +376,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             catch (Exception ex)
             {
                 _logger.Error(ex, ex.Message);
-                return new ValidationFailure("Host", "Unable to connect to SABnzbd");
+                return new NzbDroneValidationFailure("Host", "Unable to connect to SABnzbd")
+                       {
+                           DetailedDescription = ex.Message
+                       };
             }
         }
 

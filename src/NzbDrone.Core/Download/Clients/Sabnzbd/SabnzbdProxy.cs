@@ -185,11 +185,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             catch (HttpException ex)
             {
-                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings", ex);
+                throw new DownloadClientException("Unable to connect to SABnzbd, {0}", ex, ex.Message);
             }
             catch (WebException ex)
             {
-                throw new DownloadClientUnavailableException("Unable to connect to SABnzbd, please check your settings", ex);
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to SABnzbd, certificate validation failed.", ex);
+                }
+
+                throw new DownloadClientUnavailableException("Unable to connect to SABnzbd, {0}", ex, ex.Message);
             }
 
             CheckForError(response);

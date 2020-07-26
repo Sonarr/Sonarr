@@ -11,7 +11,7 @@ function FormInputHelpText(props) {
     className,
     text,
     link,
-    linkTooltip,
+    tooltip,
     isError,
     isWarning,
     isCheckInput
@@ -28,16 +28,27 @@ function FormInputHelpText(props) {
       {text}
 
       {
-        !!link &&
+        link ?
           <Link
             className={styles.link}
             to={link}
-            title={linkTooltip}
+            title={tooltip}
           >
             <Icon
               name={icons.EXTERNAL_LINK}
             />
-          </Link>
+          </Link> :
+          null
+      }
+
+      {
+        !link && tooltip ?
+          <Icon
+            containerClassName={styles.details}
+            name={icons.INFO}
+            title={tooltip}
+          /> :
+          null
       }
     </div>
   );
@@ -47,7 +58,7 @@ FormInputHelpText.propTypes = {
   className: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   link: PropTypes.string,
-  linkTooltip: PropTypes.string,
+  tooltip: PropTypes.string,
   isError: PropTypes.bool,
   isWarning: PropTypes.bool,
   isCheckInput: PropTypes.bool
