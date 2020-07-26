@@ -100,6 +100,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Abc - Abc Abc Abc - 107 VOSTFR par Fansub-Miracle Sharingan (1920x1080) - HQ_Draft", "Abc - Abc Abc Abc", 107, 0, 0)]
         [TestCase("Abc Abc Abc Abc Episode 10 VOSTFR (1920x1080) Miracle Sharingan Fansub.MKV - Team - (À suivre)", "Abc Abc Abc Abc", 10, 0, 0)]
         [TestCase("[Glenn] Ani ni Tsukeru Kusuri wa Nai! 3 - 11 (1080p AAC)[C34B2B3B].mkv", "Ani ni Tsukeru Kusuri wa Nai! 3", 11, 0, 0)]
+        [TestCase("Tatort.E1135.Lasst.den.Mond.am.Himmel.stehen.GERMAN.1080p.WEBRip.x264-Group", "Tatort", 1135, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
