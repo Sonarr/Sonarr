@@ -117,23 +117,27 @@ namespace NzbDrone.Core.MediaFiles
         [EventHandleOrder(EventHandleOrder.Last)]
         public void Handle(EpisodeFileDeletedEvent message)
         {
-            if (message.Reason == DeleteMediaFileReason.Upgrade)
-            {
-                return;
-            }
-
             if (_configService.DeleteEmptyFolders)
             {
                 var series = message.EpisodeFile.Series.Value;
-                var seasonFolder = message.EpisodeFile.Path.GetParentPath();
+                var seriesPath = series.Path;
+                var folder = message.EpisodeFile.Path.GetParentPath();
 
-                if (_diskProvider.GetFiles(series.Path, SearchOption.AllDirectories).Empty())
+                while (seriesPath.IsParentPath(folder))
                 {
-                    _diskProvider.DeleteFolder(series.Path, true);
+                    if (_diskProvider.FolderExists(folder))
+                    {
+                        _diskProvider.RemoveEmptySubfolders(folder);
+                    }
+
+                    folder = folder.GetParentPath();
                 }
-                else if (_diskProvider.GetFiles(seasonFolder, SearchOption.AllDirectories).Empty())
+
+                _diskProvider.RemoveEmptySubfolders(seriesPath);
+
+                if (_diskProvider.FolderEmpty(seriesPath))
                 {
-                    _diskProvider.RemoveEmptySubfolders(seasonFolder);
+                    _diskProvider.DeleteFolder(seriesPath, true);
                 }
             }
         }
