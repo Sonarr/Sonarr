@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(QualityParser));
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
-                                                                (?<bluray>BluRay|Blu-Ray|HD-?DVD|BD(?!$))|
+                                                                (?<bluray>BluRay|Blu-Ray|HD-?DVD|BDMux|BD(?!$))|
                                                                 (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|MaxdomeHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DDP?5[. ]1)|[. ](?-i:WEB)$|\d+0p(?:[-. ]AMZN)?[-. ]WEB[-. ]|WEB-DLMux|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ])|
                                                                 (?<webrip>WebRip|Web-Rip|WEBMux)|
                                                                 (?<hdtv>HDTV)|
@@ -341,12 +341,19 @@ namespace NzbDrone.Core.Parser
                 }
                 else
                 {
-                    var quality = MediaFileExtensions.GetQualityForExtension(Path.GetExtension(name));
-
-                    if (quality != Quality.Unknown)
+                    try
                     {
-                        result.SourceDetectionSource = QualityDetectionSource.Extension;
-                        source = quality.Source;
+                        var quality = MediaFileExtensions.GetQualityForExtension(Path.GetExtension(name));
+
+                        if (quality != Quality.Unknown)
+                        {
+                            result.SourceDetectionSource = QualityDetectionSource.Extension;
+                            source = quality.Source;
+                        }
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Logger.Debug(ex, "Unable to parse quality from extension");
                     }
                 }
 

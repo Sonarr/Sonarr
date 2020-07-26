@@ -3,6 +3,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -135,6 +136,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Survivorman.The.Lost.Pilots.Summer.HR.WS.PDTV.x264-DHD", false)]
         [TestCase("Victoria S01E07 - Motor zmen (CZ)[TvRip][HEVC][720p]", false)]
         [TestCase("flashpoint.S05E06.720p.HDTV.x264-FHD", false)]
+        [TestCase("Series.Title.1x01.ITA.720p.x264-RlsGrp [01/54] - \"series.title.1x01.ita.720p.x264-rlsgrp.nfo\"", false)]
         public void should_parse_hdtv720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV720p, proper);
@@ -277,6 +279,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Battlestar.Galactica.S01E01.33.720p.HDDVD.x264-SiNNERS.mkv", false)]
         [TestCase("The.Expanse.S01E07.RERIP.720p.BluRay.x264-DEMAND", true)]
         [TestCase("Sans.Laisser.De.Traces.FRENCH.720p.BluRay.x264-FHD", false)]
+        [TestCase("Orphan.Black.1x01.Selezione.Naturale.ITA.720p.BDMux.x264-NovaRip", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
