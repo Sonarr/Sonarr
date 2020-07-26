@@ -42,6 +42,7 @@ namespace Sonarr.Api.V3.ManualImport
 
                 item.SeasonNumber = processedItem.SeasonNumber;
                 item.Episodes = processedItem.Episodes.ToResource();
+                item.Rejections = processedItem.Rejections;
             }
 
             return items;
