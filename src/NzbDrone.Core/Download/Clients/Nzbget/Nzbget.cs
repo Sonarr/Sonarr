@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
     {
         private readonly INzbgetProxy _proxy;
         private readonly string[] _successStatus = { "SUCCESS", "NONE" };
-        private readonly string[] _deleteFailedStatus =  { "HEALTH", "DUPE", "SCAN", "COPY" };
+        private readonly string[] _deleteFailedStatus =  { "HEALTH", "DUPE", "SCAN", "COPY", "BAD" };
 
         public Nzbget(INzbgetProxy proxy,
                       IHttpClient httpClient,
