@@ -1,6 +1,6 @@
 .tooltipContainer {
   z-index: $popperZIndex;
-  margin: 10px 15px;
+  margin: 10px 10px;
 }
 
 .tooltip {
@@ -28,6 +28,10 @@
   border-color: transparent;
 }
 
+.arrowDisabled {
+  display: none;
+}
+
 .arrow::after {
   border-width: 10px;
   content: '';
@@ -35,7 +39,6 @@
 
 .top {
   bottom: -11px;
-  left: 50%;
   margin-left: -11px;
   border-bottom-width: 0;
 
@@ -64,7 +67,6 @@
 }
 
 .right {
-  top: 50%;
   left: -11px;
   margin-top: -11px;
   border-left-width: 0;
@@ -95,7 +97,6 @@
 
 .bottom {
   top: -11px;
-  left: 50%;
   margin-left: -11px;
   border-top-width: 0;
 
@@ -124,7 +125,6 @@
 }
 
 .left {
-  top: 50%;
   right: -11px;
   margin-top: -11px;
   border-right-width: 0;

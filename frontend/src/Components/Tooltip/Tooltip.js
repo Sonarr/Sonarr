@@ -54,7 +54,7 @@ class Tooltip extends Component {
     } else if ((/^bottom/).test(data.placement)) {
       data.styles.maxHeight = windowHeight - bottom - 20;
     } else if ((/^right/).test(data.placement)) {
-      data.styles.maxWidth = windowWidth - right - 35;
+      data.styles.maxWidth = windowWidth - right - 50;
     } else {
       data.styles.maxWidth = left - 35;
     }
@@ -132,16 +132,16 @@ class Tooltip extends Component {
                 fn: this.computeMaxSize
               },
               preventOverflow: {
-              // Fixes positioning for tooltips in the queue
-              // and likely others.
-                escapeWithReference: true
+                // Fixes positioning for tooltips in the queue
+                // and likely others.
+                escapeWithReference: false
               },
               flip: {
                 enabled: canFlip
               }
             }}
           >
-            {({ ref, style, placement, scheduleUpdate }) => {
+            {({ ref, style, placement, arrowProps, scheduleUpdate }) => {
               this._scheduleUpdate = scheduleUpdate;
 
               return (
@@ -152,6 +152,15 @@ class Tooltip extends Component {
                   onMouseEnter={this.onMouseEnter}
                   onMouseLeave={this.onMouseLeave}
                 >
+                  <div
+                    className={this.state.isOpen ? classNames(
+                      styles.arrow,
+                      styles[kind],
+                      styles[placement.split('-')[0]]
+                    ) : styles.arrowDisabled}
+                    ref={arrowProps.ref}
+                    style={arrowProps.style}
+                  />
                   {
                     this.state.isOpen ?
                       <div
@@ -160,14 +169,6 @@ class Tooltip extends Component {
                           styles[kind]
                         )}
                       >
-                        <div
-                          className={classNames(
-                            styles.arrow,
-                            styles[kind],
-                            styles[placement.split('-')[0]]
-                          )}
-                        />
-
                         <div
                           className={bodyClassName}
                         >
