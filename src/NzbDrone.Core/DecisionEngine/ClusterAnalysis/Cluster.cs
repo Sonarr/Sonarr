@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NzbDrone.Core.DecisionEngine.Clustering
+namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
 {
     public class Cluster<T> : IEnumerable<T>
     {

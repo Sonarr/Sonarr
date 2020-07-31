@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine.Clustering;
+using NzbDrone.Core.DecisionEngine.ClusterAnalysis;
 
-namespace NzbDrone.Core.Test.DecisionEngineTests.Clustering
+namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
 {
     public class InstanceInClusterGroupComparerFixture
     {

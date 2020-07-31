@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NzbDrone.Core.Test.DecisionEngineTests.Clustering
+namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
 {
     public class TestClusterCandidate : IEquatable<TestClusterCandidate>, IComparable<TestClusterCandidate>
     {

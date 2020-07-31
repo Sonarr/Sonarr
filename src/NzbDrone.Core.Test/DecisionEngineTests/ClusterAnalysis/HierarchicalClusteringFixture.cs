@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine.Clustering;
+using NzbDrone.Core.DecisionEngine.ClusterAnalysis;
 
-namespace NzbDrone.Core.Test.DecisionEngineTests.Clustering
+namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
 {
     [TestFixture]
     public class HierarchicalClusteringFixture

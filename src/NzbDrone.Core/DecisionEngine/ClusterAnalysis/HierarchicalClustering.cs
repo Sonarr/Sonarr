@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NzbDrone.Core.DecisionEngine.Clustering
+namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
 {
     public interface IAnalyseClusters<T>
     {

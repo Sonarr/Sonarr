@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NzbDrone.Core.DecisionEngine.Clustering
+namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
 {
     public sealed class ClusterGroupComparer<T> : IComparer<ClusterGroup<T>>
     {

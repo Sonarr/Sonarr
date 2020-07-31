@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace NzbDrone.Core.DecisionEngine.Clustering
+namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
 {
     public class ClusterGroup<T> : IComparable<ClusterGroup<T>>, IEnumerable<T>
     {
