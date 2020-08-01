@@ -64,14 +64,14 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
 
         public bool ImmediatelyContains(Cluster<T> cluster) => cluster == _left || cluster == _right;
 
-        public ISet<ISet<T>> GetClusteredInstances(Func<double, bool> predicate)
+        public ISet<ISet<T>> GetClusteredInstances(double distanceClusterPoint)
         {
             if (!IsMerged) return new HashSet<ISet<T>> {Instance != null ? new HashSet<T> {Instance} : new HashSet<T>()};
 
-            var left = _left.GetClusteredInstances(predicate);
-            var right = _right.GetClusteredInstances(predicate);
+            var left = _left.GetClusteredInstances(distanceClusterPoint);
+            var right = _right.GetClusteredInstances(distanceClusterPoint);
 
-            if (predicate(Distance))
+            if (Distance > distanceClusterPoint)
             {
                 return new HashSet<ISet<T>>(left.Concat(right));
             }

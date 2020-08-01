@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
         {
             var subject = new HierarchicalClustering<TestClusterCandidate>(distanceFunction, linkageFunction);
             var results = subject.Cluster(candidates);
-            var clustered = results.GetClusteredInstances(d => d > cutPoint);
+            var clustered = results.GetClusteredInstances(cutPoint);
             clustered.Count.Should().Be(expectedClusterResults.Count);
 
             var count = expectedClusterResults
