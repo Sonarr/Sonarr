@@ -21,10 +21,20 @@ export default function(itemValue, filterValue, type) {
         isBefore(itemValue)
       );
 
+    case filterTypes.NOT_IN_LAST:
+      return (
+        isBefore(itemValue, { [filterValue.time]: filterValue.value * -1 })
+      );
+
     case filterTypes.IN_NEXT:
       return (
         isAfter(itemValue) &&
         isBefore(itemValue, { [filterValue.time]: filterValue.value })
+      );
+
+    case filterTypes.NOT_IN_NEXT:
+      return (
+        isAfter(itemValue, { [filterValue.time]: filterValue.value })
       );
 
     default:

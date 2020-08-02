@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isString from 'Utilities/String/isString';
-import { IN_LAST, IN_NEXT } from 'Helpers/Props/filterTypes';
+import { IN_LAST, NOT_IN_LAST, IN_NEXT, NOT_IN_NEXT } from 'Helpers/Props/filterTypes';
 import NumberInput from 'Components/Form/NumberInput';
 import SelectInput from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
@@ -18,7 +18,12 @@ const timeOptions = [
 ];
 
 function isInFilter(filterType) {
-  return filterType === IN_LAST || filterType === IN_NEXT;
+  return (
+    filterType === IN_LAST ||
+    filterType === NOT_IN_LAST ||
+    filterType === IN_NEXT ||
+    filterType === NOT_IN_NEXT
+  );
 }
 
 class DateFilterBuilderRowValue extends Component {

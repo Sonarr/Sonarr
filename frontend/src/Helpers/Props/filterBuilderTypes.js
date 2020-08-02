@@ -24,7 +24,9 @@ export const possibleFilterTypes = {
     { key: filterTypes.LESS_THAN, value: 'is before' },
     { key: filterTypes.GREATER_THAN, value: 'is after' },
     { key: filterTypes.IN_LAST, value: 'in the last' },
-    { key: filterTypes.IN_NEXT, value: 'in the next' }
+    { key: filterTypes.NOT_IN_LAST, value: 'not in the last' },
+    { key: filterTypes.IN_NEXT, value: 'in the next' },
+    { key: filterTypes.NOT_IN_NEXT, value: 'not in the next' }
   ],
 
   [EXACT]: [
