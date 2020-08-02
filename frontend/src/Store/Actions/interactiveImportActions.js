@@ -149,12 +149,14 @@ export const actionHandlers = handleThunks({
       ...currentIds.map((id) => updateItem({
         section,
         id,
-        isReprocessing: false
+        isReprocessing: false,
+        updateOnly: true
       })),
       ...payload.ids.map((id) => updateItem({
         section,
         id,
-        isReprocessing: true
+        isReprocessing: true,
+        updateOnly: true
       }))
     ]));
 
@@ -186,7 +188,8 @@ export const actionHandlers = handleThunks({
         data.map((item) => updateItem({
           section,
           ...item,
-          isReprocessing: false
+          isReprocessing: false,
+          updateOnly: true
         }))
       ));
     });
@@ -200,7 +203,8 @@ export const actionHandlers = handleThunks({
         payload.ids.map((id) => updateItem({
           section,
           id,
-          isReprocessing: false
+          isReprocessing: false,
+          updateOnly: true
         }))
       ));
     });
