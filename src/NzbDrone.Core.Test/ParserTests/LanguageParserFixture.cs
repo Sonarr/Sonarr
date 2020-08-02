@@ -210,7 +210,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Language.Id.Should().Be(Language.Hebrew.Id);
         }
 
-
         [TestCase("Prison.Break.S05E01.WEBRip.x264.AC3.LT.EN-CNN")]
         public void should_parse_language_lithuanian(string postTitle)
         {
@@ -218,14 +217,12 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Language.Id.Should().Be(Language.Lithuanian.Id);
         }
 
-
         [TestCase("The.​Walking.​Dead.​S07E11.​WEB Rip.​XviD.​Louige-​CZ.​EN.​5.​1")]
         public void should_parse_language_czech(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Language.Id.Should().Be(Language.Czech.Id);
         }
-
 
         [TestCase("Russian.Puppets.S01E07.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Russian.Puppets.S01E07E08.Cold.Action.HDTV.XviD-Droned")]
@@ -235,6 +232,5 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Language.Name.Should().Be(Language.English.Name);
         }
-
     }
 }

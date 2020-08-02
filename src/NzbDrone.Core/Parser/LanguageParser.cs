@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static Language ParseLanguage(string title)
+        public static Language ParseLanguage(string title, bool defaultToEnglish = true)
         {
             foreach (var regex in CleanSeriesTitleRegex)
             {
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Parser
                 return regexLanguage;
             }
 
-            return Language.English;
+            return defaultToEnglish ? Language.English : Language.Unknown;
         }
 
         public static Language ParseSubtitleLanguage(string fileName)

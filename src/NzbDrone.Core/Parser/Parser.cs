@@ -581,9 +581,8 @@ namespace NzbDrone.Core.Parser
         public static string NormalizeEpisodeTitle(string title)
         {
             var match = SpecialEpisodeTitleRegex
-                .Select(v => v.Match(title))
-                .Where(v => v.Success)
-                .FirstOrDefault();
+                        .Select(v => v.Match(title))
+                        .FirstOrDefault(v => v.Success);
 
             if (match != null)
             {
