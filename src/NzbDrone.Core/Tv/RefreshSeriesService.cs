@@ -47,8 +47,12 @@ namespace NzbDrone.Core.Tv
             _logger = logger;
         }
 
-        private void RefreshSeriesInfo(Series series)
+        private Series RefreshSeriesInfo(int seriesId)
         {
+            // Get the series before updating, that way any changes made to the series after the refresh started,
+            // but before this series was refreshed won't be lost.
+            var series = _seriesService.GetSeries(seriesId);
+
             _logger.ProgressInfo("Updating {0}", series.Title);
 
             Series seriesInfo;
@@ -115,6 +119,8 @@ namespace NzbDrone.Core.Tv
 
             _logger.Debug("Finished series refresh for {0}", series.Title);
             _eventAggregator.PublishEvent(new SeriesUpdatedEvent(series));
+
+            return series;
         }
 
         private List<Season> UpdateSeasons(Series series, Series seriesInfo)
@@ -196,7 +202,7 @@ namespace NzbDrone.Core.Tv
 
                 try
                 {
-                    RefreshSeriesInfo(series);
+                    series = RefreshSeriesInfo(message.SeriesId.Value);
                     RescanSeries(series, isNew, trigger);
                 }
                 catch (SeriesNotFoundException)
@@ -216,29 +222,30 @@ namespace NzbDrone.Core.Tv
 
                 foreach (var series in allSeries)
                 {
-                    if (trigger == CommandTrigger.Manual || _checkIfSeriesShouldBeRefreshed.ShouldRefresh(series))
+                    var seriesLocal = series;
+                    if (trigger == CommandTrigger.Manual || _checkIfSeriesShouldBeRefreshed.ShouldRefresh(seriesLocal))
                     {
                         try
                         {
-                            RefreshSeriesInfo(series);
+                            seriesLocal = RefreshSeriesInfo(seriesLocal.Id);
                         }
                         catch (SeriesNotFoundException)
                         {
-                            _logger.Error("Series '{0}' (tvdbid {1}) was not found, it may have been removed from TheTVDB.", series.Title, series.TvdbId);
+                            _logger.Error("Series '{0}' (tvdbid {1}) was not found, it may have been removed from TheTVDB.", seriesLocal.Title, seriesLocal.TvdbId);
                             continue;
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e, "Couldn't refresh info for {0}", series);
+                            _logger.Error(e, "Couldn't refresh info for {0}", seriesLocal);
                         }
 
-                        RescanSeries(series, false, trigger);
+                        RescanSeries(seriesLocal, false, trigger);
                     }
 
                     else
                     {
-                        _logger.Info("Skipping refresh of series: {0}", series.Title);
-                        RescanSeries(series, false, trigger);
+                        _logger.Info("Skipping refresh of series: {0}", seriesLocal.Title);
+                        RescanSeries(seriesLocal, false, trigger);
                     }
                 }
             }
