@@ -17,6 +17,20 @@ function getAlternateTitles(seasonNumber, sceneSeasonNumber, alternateTitles) {
   });
 }
 
+function getWarningMessage(unverifiedSceneNumbering, seriesType, absoluteEpisodeNumber) {
+  const messages = [];
+
+  if (unverifiedSceneNumbering) {
+    messages.push('Scene number hasn\'t been verified yet');
+  }
+
+  if (seriesType === 'anime' && !absoluteEpisodeNumber) {
+    messages.push('Episode does not have an absolute episode number');
+  }
+
+  return messages.join('\n');
+}
+
 function EpisodeNumber(props) {
   const {
     seasonNumber,
@@ -37,6 +51,8 @@ function EpisodeNumber(props) {
     sceneEpisodeNumber !== undefined ||
     (seriesType === 'anime' && sceneAbsoluteEpisodeNumber !== undefined) ||
     !!alternateTitles.length;
+
+  const warningMessage = getWarningMessage(unverifiedSceneNumbering, seriesType, absoluteEpisodeNumber);
 
   return (
     <span>
@@ -94,24 +110,16 @@ function EpisodeNumber(props) {
       }
 
       {
-        unverifiedSceneNumbering &&
+        warningMessage ?
           <Icon
             className={styles.warning}
             name={icons.WARNING}
             kind={kinds.WARNING}
-            title="Scene number hasn't been verified yet"
-          />
+            title={warningMessage}
+          /> :
+          null
       }
 
-      {
-        seriesType === 'anime' && !absoluteEpisodeNumber &&
-          <Icon
-            className={styles.warning}
-            name={icons.WARNING}
-            kind={kinds.WARNING}
-            title="Episode does not have an absolute episode number"
-          />
-      }
     </span>
   );
 }
