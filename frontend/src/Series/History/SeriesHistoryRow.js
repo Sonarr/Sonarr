@@ -101,7 +101,7 @@ class SeriesHistoryRow extends Component {
           />
         </TableRowCell>
 
-        <TableRowCell>
+        <TableRowCell className={styles.sourceTitle}>
           {sourceTitle}
         </TableRowCell>
 
