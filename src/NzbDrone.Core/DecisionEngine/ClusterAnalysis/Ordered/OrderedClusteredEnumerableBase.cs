@@ -17,12 +17,12 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
         }
 
         public abstract IOrderedEnumerable<ClusteredElement<TElement>> ApplyOrdering(IEnumerable<ClusteredElement<TElement>> source);
-        public abstract IEnumerable<ClusteredElement<TElement>> ApplyClusterings(IEnumerable<ClusteredElement<TElement>> source);
+        public abstract IEnumerable<ClusteredElement<TElement>> ApplyClustering(IEnumerable<ClusteredElement<TElement>> source);
 
 
         public IEnumerator<TElement> GetEnumerator()
         {
-            var clusters = ApplyClusterings(_source.Select(e => new ClusteredElement<TElement>(e)));
+            var clusters = ApplyClustering(_source.Select(e => new ClusteredElement<TElement>(e)));
             return ApplyOrdering(clusters).Select(ce => ce.Element).GetEnumerator();
         }
 
@@ -33,13 +33,12 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
 
         public IOrderedClusteredEnumerable<TElement> CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending)
         {
-            return new OrderedOrderedClusteredEnumerable<TElement,TKey>(_source, this, keySelector, comparer, descending);
+            return new OrderedEnumerable<TElement,TKey>(_source, this, keySelector, comparer, descending);
         }
 
-        public IOrderedClusteredEnumerable<TElement> CreateClusterOrderedEnumerable(Func<TElement, TElement, double> distanceFunction, Func<double, double, double> linkageFunction,
-            double clusterDistanceCutPoint, Func<TElement, double> clusterValueFunc, bool descending)
+        public IOrderedClusteredEnumerable<TElement> CreateClusterOrderedEnumerable(Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint, bool descending)
         {
-            return new ClusterOrderedEnumerable<TElement>(_source, this, distanceFunction, linkageFunction, clusterDistanceCutPoint, clusterValueFunc, descending);
+            return new ClusterOrderedEnumerable<TElement>(_source, this, distanceValueSelector, clusterDistanceCutPoint, descending);
         }
     }
 }

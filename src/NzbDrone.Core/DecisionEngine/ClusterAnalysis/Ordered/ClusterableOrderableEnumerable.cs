@@ -26,15 +26,14 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
         public IOrderedClusteredEnumerable<TElement> CreateOrderedEnumerable<TKey>(
             Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending)
         {
-            return new OrderedOrderedClusteredEnumerable<TElement, TKey>(_source, null, keySelector, comparer, descending);
+            return new OrderedEnumerable<TElement, TKey>(_source, null, keySelector, comparer, descending);
         }
 
         public IOrderedClusteredEnumerable<TElement> CreateClusterOrderedEnumerable(
-            Func<TElement, TElement, double> distanceFunction, Func<double, double, double> linkageFunction,
-            double clusterDistanceCutPoint, Func<TElement, double> clusterValueFunc, bool descending)
+            Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint, bool descending)
         {
-            return new ClusterOrderedEnumerable<TElement>(_source, null, distanceFunction, linkageFunction,
-                clusterDistanceCutPoint, clusterValueFunc, descending);
+            return new ClusterOrderedEnumerable<TElement>(_source, null, distanceValueSelector, clusterDistanceCutPoint,
+                descending);
         }
     }
 }

@@ -18,6 +18,5 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
             get => _clusterValues[id];
             set => _clusterValues[id] = value;
         }
-
     }
 }

@@ -7,22 +7,18 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
 {
     public sealed class ClusterOrderedEnumerable<TElement> : OrderedClusteredEnumerableBase<TElement>
     {
-        private readonly Func<ClusteredElement<TElement>, ClusteredElement<TElement>, double> _distanceFunction;
-        private readonly Func<double, double, double> _linkageFunction;
+        private readonly Func<TElement, double> _distanceValueSelector;
         private readonly double _clusterDistanceCutPoint;
-        private readonly Func<TElement, double> _clusterValueFunc;
         private readonly bool _descending;
         private readonly Guid _id = Guid.NewGuid();
         private readonly Func<ClusteredElement<TElement>, double> _keySelector;
 
         public ClusterOrderedEnumerable(IEnumerable<TElement> source, OrderedClusteredEnumerableBase<TElement> parent,
-            Func<TElement, TElement, double> distanceFunction, Func<double, double, double> linkageFunction,
-            double clusterDistanceCutPoint, Func<TElement, double> clusterValueFunc, bool descending) : base(source, parent)
+            Func<TElement, double> distanceValueSelector,
+            double clusterDistanceCutPoint, bool descending) : base(source, parent)
         {
-            _distanceFunction = (ce1, ce2) => distanceFunction(ce1.Element, ce2.Element);
-            _linkageFunction = linkageFunction;
+            _distanceValueSelector = distanceValueSelector;
             _clusterDistanceCutPoint = clusterDistanceCutPoint;
-            _clusterValueFunc = clusterValueFunc;
             _descending = descending;
             _keySelector = ce => ce[_id];
         }
@@ -35,40 +31,39 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
                 return _descending ? source.OrderByDescending(_keySelector) : source.OrderBy(_keySelector);
             }
 
-            var parentOrdering = Parent?.ApplyOrdering(source);
+            var parentOrdering = Parent.ApplyOrdering(source);
             return _descending ? parentOrdering.ThenByDescending(_keySelector) : parentOrdering.ThenBy(_keySelector);
         }
 
         private IEnumerable<ClusteredElement<TElement>> Cluster(IEnumerable<ClusteredElement<TElement>> source)
         {
-            var hca = new HierarchicalClustering<ClusteredElement<TElement>>(_distanceFunction, _linkageFunction);
-            var results = hca.Cluster(source);
-            var clusters = results.GetClusteredInstances(_clusterDistanceCutPoint);
-            foreach (var cluster in clusters)
-            {
-                ApplyClusterAverage(cluster);
-            }
+            var clusters = source
+                .ClusterBy(ce => _distanceValueSelector(ce.Element), _clusterDistanceCutPoint);
 
-            return clusters.SelectMany(cluster => cluster);
+            return ApplyClusterAverage(clusters);
         }
 
-        private void ApplyClusterAverage(ISet<ClusteredElement<TElement>> cluster)
+        private IEnumerable<ClusteredElement<TElement>> ApplyClusterAverage(IEnumerable<Clustering<ClusteredElement<TElement>>> clusters)
         {
-            var avg = cluster.Average(ce => _clusterValueFunc(ce.Element));
+            var results = new List<ClusteredElement<TElement>>();
+            foreach (var cluster in clusters)
             foreach (var clusteredElement in cluster)
             {
-                clusteredElement[_id] = avg;
+                clusteredElement[_id] = cluster.AverageValue;
+                results.Add(clusteredElement);
             }
+
+            return results;
         }
 
-        public override IEnumerable<ClusteredElement<TElement>> ApplyClusterings(IEnumerable<ClusteredElement<TElement>> source)
+        public override IEnumerable<ClusteredElement<TElement>> ApplyClustering(IEnumerable<ClusteredElement<TElement>> source)
         {
             if (Parent == null)
             {
                 return Cluster(source);
             }
 
-            var parentClustering = Parent?.ApplyClusterings(source);
+            var parentClustering = Parent.ApplyClustering(source);
             return Cluster(parentClustering);
         }
     }

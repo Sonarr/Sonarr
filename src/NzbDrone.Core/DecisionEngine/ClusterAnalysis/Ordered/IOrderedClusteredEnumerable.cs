@@ -9,7 +9,6 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
             IComparer<TKey> comparer, bool descending);
 
         IOrderedClusteredEnumerable<TElement> CreateClusterOrderedEnumerable(
-            Func<TElement, TElement, double> distanceFunction, Func<double, double, double> linkageFunction,
-            double clusterDistanceCutPoint, Func<TElement, double> clusterValueFunc, bool descending);
+            Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint, bool descending);
     }
 }
