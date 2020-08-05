@@ -12,6 +12,8 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             RuleFor(c => c.Username).NotEmpty();
             RuleFor(c => c.ApiKey).NotEmpty();
             RuleFor(c => c.Delay).GreaterThanOrEqualTo(0);
+
+            RuleFor(c => c.SearchPriority).InclusiveBetween(0, 100);
         }
     }
 
@@ -22,6 +24,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         public OmgwtfnzbsSettings()
         {
             Delay = 30;
+            SearchPriority = IndexerDefaults.SEARCH_PRIORITY;
         }
 
         // Unused since Omg has a hardcoded url.
@@ -35,6 +38,9 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
         [FieldDefinition(2, Label = "Delay", HelpText = "Time in minutes to delay new nzbs before they appear on the RSS feed", Advanced = true)]
         public int Delay { get; set; }
+
+        [FieldDefinition(3, Type = FieldType.Number, Label = "Search Priority", HelpText = "Search Priority from 0 (Highest) to 100 (Lowest). Default: 100.")]
+        public int SearchPriority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

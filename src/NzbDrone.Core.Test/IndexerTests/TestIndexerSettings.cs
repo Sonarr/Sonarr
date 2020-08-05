@@ -13,5 +13,6 @@ namespace NzbDrone.Core.Test.IndexerTests
         }
 
         public string BaseUrl { get; set; }
+        public int SearchPriority { get; set; }
     }
 }

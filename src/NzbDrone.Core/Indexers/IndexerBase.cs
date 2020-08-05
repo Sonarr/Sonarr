@@ -79,6 +79,7 @@ namespace NzbDrone.Core.Indexers
                 c.IndexerId = Definition.Id;
                 c.Indexer = Definition.Name;
                 c.DownloadProtocol = Protocol;
+                c.SearchPriority = Settings?.SearchPriority ?? IndexerDefaults.SEARCH_PRIORITY;
             });
 
             return result;

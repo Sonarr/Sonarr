@@ -28,6 +28,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             var comparers = new List<CompareDelegate>
             {
+                CompareSearchPriority,
                 CompareQuality,
                 CompareLanguage,
                 ComparePreferredWordScore,
@@ -60,6 +61,11 @@ namespace NzbDrone.Core.DecisionEngine
         private int CompareAll(params int[] comparers)
         {
             return comparers.Select(comparer => comparer).FirstOrDefault(result => result != 0);
+        }
+
+        private int CompareSearchPriority(DownloadDecision x, DownloadDecision y)
+        {
+            return CompareByReverse(x.RemoteEpisode.Release, y.RemoteEpisode.Release, release => release.SearchPriority);
         }
 
         private int CompareQuality(DownloadDecision x, DownloadDecision y)

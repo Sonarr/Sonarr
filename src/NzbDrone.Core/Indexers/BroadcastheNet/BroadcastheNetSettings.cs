@@ -12,6 +12,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             RuleFor(c => c.ApiKey).NotEmpty();
 
             RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator(1.0, 24*60, 5*24*60));
+
+            RuleFor(c => c.SearchPriority).InclusiveBetween(0, 100);
         }
     }
 
@@ -23,6 +25,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             BaseUrl = "http://api.broadcasthe.net/";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
+            SearchPriority = IndexerDefaults.SEARCH_PRIORITY;
         }
 
         [FieldDefinition(0, Label = "API URL", Advanced = true, HelpText = "Do not change this unless you know what you're doing. Since your API key will be sent to that host.")]
@@ -36,6 +39,9 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         [FieldDefinition(3)]
         public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
+
+        [FieldDefinition(4, Type = FieldType.Number, Label = "Search Priority", HelpText = "Search Priority from 0 (Highest) to 100 (Lowest). Default: 100.")]
+        public int SearchPriority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

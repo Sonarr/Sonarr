@@ -68,7 +68,8 @@ class Indexer extends Component {
       enableAutomaticSearch,
       enableInteractiveSearch,
       supportsRss,
-      supportsSearch
+      supportsSearch,
+      fields
     } = this.props;
 
     return (
@@ -112,6 +113,10 @@ class Indexer extends Component {
                 Interactive Search
               </Label>
           }
+
+          <Label kind={kinds.SUCCESS}>
+            Priority: {fields.find(({name}) => name === 'searchPriority').value}
+          </Label>
 
           {
             !enableRss && !enableAutomaticSearch && !enableInteractiveSearch &&

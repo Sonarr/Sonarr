@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Indexers.Nyaa
             RuleFor(c => c.AdditionalParameters).Matches("(&[a-z]+=[a-z0-9_]+)*", RegexOptions.IgnoreCase);
 
             RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
+
+            RuleFor(c => c.SearchPriority).InclusiveBetween(0, 100);
         }
     }
 
@@ -25,6 +27,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
             BaseUrl = "";
             AdditionalParameters = "&cats=1_37&filter=1";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
+            SearchPriority = IndexerDefaults.SEARCH_PRIORITY;
         }
 
         [FieldDefinition(0, Label = "Website URL")]
@@ -38,6 +41,9 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         [FieldDefinition(3)]
         public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
+
+        [FieldDefinition(4, Type = FieldType.Number, Label = "Search Priority", HelpText = "Search Priority from 0 (Highest) to 100 (Lowest). Default: 100.")]
+        public int SearchPriority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
