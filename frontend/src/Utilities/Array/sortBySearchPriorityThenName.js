@@ -1,5 +1,5 @@
 function sortBySearchPriorityThenName(a, b) {
-    return (a.fields.find(({name}) => name === 'searchPriority').value - b.fields.find(({name}) => name === 'searchPriority').value) || a.name.localeCompare(b.name);
-  }
+  return (a.priority - b.priority) || a.name.localeCompare(b.name);
+}
   
-  export default sortBySearchPriorityThenName;
+export default sortBySearchPriorityThenName;

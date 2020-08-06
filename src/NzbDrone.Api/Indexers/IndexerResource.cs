@@ -9,5 +9,6 @@ namespace NzbDrone.Api.Indexers
         public bool SupportsRss { get; set; }
         public bool SupportsSearch { get; set; }
         public DownloadProtocol Protocol { get; set; }
+        public int Priority { get; set; }
     }
 }

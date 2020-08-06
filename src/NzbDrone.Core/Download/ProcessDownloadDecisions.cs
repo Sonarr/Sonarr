@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Download
 
                 try
                 {
-                    _logger.Info("Downloading release {0} at search priority {1}.", remoteEpisode.Release.Indexer, remoteEpisode.Release.SearchPriority);
+                    _logger.Info("Downloading release {0} at search priority {1}.", remoteEpisode.Release.Indexer, remoteEpisode.Release.IndexerPriority);
                     _downloadService.DownloadReport(remoteEpisode);
                     grabbed.Add(report);
                 }

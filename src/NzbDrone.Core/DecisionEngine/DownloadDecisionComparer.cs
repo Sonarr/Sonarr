@@ -28,11 +28,11 @@ namespace NzbDrone.Core.DecisionEngine
         {
             var comparers = new List<CompareDelegate>
             {
-                CompareSearchPriority,
                 CompareQuality,
                 CompareLanguage,
                 ComparePreferredWordScore,
                 CompareProtocol,
+                CompareIndexerPriority,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
                 ComparePeersIfTorrent,
@@ -63,9 +63,9 @@ namespace NzbDrone.Core.DecisionEngine
             return comparers.Select(comparer => comparer).FirstOrDefault(result => result != 0);
         }
 
-        private int CompareSearchPriority(DownloadDecision x, DownloadDecision y)
+        private int CompareIndexerPriority(DownloadDecision x, DownloadDecision y)
         {
-            return CompareByReverse(x.RemoteEpisode.Release, y.RemoteEpisode.Release, release => release.SearchPriority);
+            return CompareByReverse(x.RemoteEpisode.Release, y.RemoteEpisode.Release, release => release.IndexerPriority);
         }
 
         private int CompareQuality(DownloadDecision x, DownloadDecision y)

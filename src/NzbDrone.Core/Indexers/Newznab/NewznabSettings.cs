@@ -50,8 +50,6 @@ namespace NzbDrone.Core.Indexers.Newznab
             RuleFor(c => c.ApiKey).NotEmpty().When(ShouldHaveApiKey);
             RuleFor(c => c.AdditionalParameters).Matches(AdditionalParametersRegex)
                                                 .When(c => !c.AdditionalParameters.IsNullOrWhiteSpace());
-
-            RuleFor(c => c.SearchPriority).InclusiveBetween(0, 100);
         }
     }
 
@@ -64,7 +62,6 @@ namespace NzbDrone.Core.Indexers.Newznab
             ApiPath = "/api";
             Categories = new[] { 5030, 5040 };
             AnimeCategories = Enumerable.Empty<int>();
-            SearchPriority = IndexerDefaults.SEARCH_PRIORITY;
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -85,10 +82,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         [FieldDefinition(5, Label = "Additional Parameters", HelpText = "Additional Newznab parameters", Advanced = true)]
         public string AdditionalParameters { get; set; }
 
-        [FieldDefinition(6, Type = FieldType.Number, Label = "Search Priority", HelpText = "Search Priority from 0 (Highest) to 100 (Lowest). Default: 100.")]
-        public int SearchPriority { get; set; }
-
-        // Field 7 is used by TorznabSettings MinimumSeeders
+        // Field 6 is used by TorznabSettings MinimumSeeders
         // If you need to add another field here, update TorznabSettings as well and this comment
 
         public virtual NzbDroneValidationResult Validate()

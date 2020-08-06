@@ -4,6 +4,6 @@
     {
         public const int MINIMUM_SEEDERS = 1;
 
-        public const int SEARCH_PRIORITY = 100;
+        public const int PRIORITY = 100;
     }
 }

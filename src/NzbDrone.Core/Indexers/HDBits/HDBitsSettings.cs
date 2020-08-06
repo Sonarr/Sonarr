@@ -12,8 +12,6 @@ namespace NzbDrone.Core.Indexers.HDBits
             RuleFor(c => c.ApiKey).NotEmpty();
 
             RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
-
-            RuleFor(c => c.SearchPriority).InclusiveBetween(0, 100);
         }
     }
 
@@ -25,7 +23,6 @@ namespace NzbDrone.Core.Indexers.HDBits
         {
             BaseUrl = "https://hdbits.org";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
-            SearchPriority = IndexerDefaults.SEARCH_PRIORITY;
         }
 
         [FieldDefinition(0, Label = "Username")]
@@ -42,9 +39,6 @@ namespace NzbDrone.Core.Indexers.HDBits
 
         [FieldDefinition(4)]
         public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
-
-        [FieldDefinition(5, Type = FieldType.Number, Label = "Search Priority", HelpText = "Search Priority from 0 (Highest) to 100 (Lowest). Default: 100.")]
-        public int SearchPriority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

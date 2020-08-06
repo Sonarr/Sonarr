@@ -42,7 +42,8 @@ function EditIndexerModalContent(props) {
     enableInteractiveSearch,
     supportsRss,
     supportsSearch,
-    fields
+    fields,
+    priority
   } = item;
 
   return (
@@ -131,7 +132,20 @@ function EditIndexerModalContent(props) {
                   );
                 })
               }
+              
+              <FormGroup>
+                <FormLabel>Indexer Priority</FormLabel>
 
+                <FormInputGroup
+                  type={inputTypes.NUMBER}
+                  name="priority"
+                  helpText="Indexer Priority from 1 (Highest) to 100 (Lowest). Default: 100."
+                  min={1}
+                  max={100}
+                  {...priority}
+                  onChange={onInputChange}
+                />
+              </FormGroup>
             </Form>
         }
       </ModalBody>

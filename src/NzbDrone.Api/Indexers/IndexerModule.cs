@@ -18,6 +18,7 @@ namespace NzbDrone.Api.Indexers
             resource.SupportsRss = definition.SupportsRss;
             resource.SupportsSearch = definition.SupportsSearch;
             resource.Protocol = definition.Protocol;
+            resource.Priority = definition.Priority;
         }
 
         protected override void MapToModel(IndexerDefinition definition, IndexerResource resource)
@@ -27,6 +28,7 @@ namespace NzbDrone.Api.Indexers
             definition.EnableRss = resource.EnableRss;
             definition.EnableAutomaticSearch = resource.EnableSearch;
             definition.EnableInteractiveSearch = resource.EnableSearch;
+            definition.Priority = resource.Priority;
         }
 
         protected override void Validate(IndexerDefinition definition, bool includeWarnings)
