@@ -1,18 +1,16 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Tv;
-using Prowlin;
 
 namespace NzbDrone.Core.Notifications.Prowl
 {
     public class Prowl : NotificationBase<ProwlSettings>
     {
-        private readonly IProwlService _prowlService;
+        private readonly IProwlProxy _prowlProxy;
 
-        public Prowl(IProwlService prowlService)
+        public Prowl(IProwlProxy prowlProxy)
         {
-            _prowlService = prowlService;
+            _prowlProxy = prowlProxy;
         }
 
         public override string Link => "https://www.prowlapp.com/";
@@ -20,24 +18,24 @@ namespace NzbDrone.Core.Notifications.Prowl
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            _prowlService.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlProxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings.ApiKey, (ProwlPriority)Settings.Priority);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            _prowlService.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlProxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings.ApiKey, (ProwlPriority)Settings.Priority);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck message)
         {
-            _prowlService.SendNotification(HEALTH_ISSUE_TITLE, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlProxy.SendNotification(HEALTH_ISSUE_TITLE, message.Message, Settings.ApiKey, (ProwlPriority)Settings.Priority);
         }
 
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
-            failures.AddIfNotNull(_prowlService.Test(Settings));
+            failures.AddIfNotNull(_prowlProxy.Test(Settings));
 
             return new ValidationResult(failures);
         }
