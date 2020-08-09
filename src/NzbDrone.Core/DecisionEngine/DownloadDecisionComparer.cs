@@ -32,9 +32,9 @@ namespace NzbDrone.Core.DecisionEngine
                 CompareLanguage,
                 ComparePreferredWordScore,
                 CompareProtocol,
-                CompareIndexerPriority,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
+                CompareIndexerPriority,
                 ComparePeersIfTorrent,
                 CompareAgeIfUsenet,
                 CompareSize
