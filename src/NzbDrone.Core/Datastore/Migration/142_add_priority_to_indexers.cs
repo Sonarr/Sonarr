@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Alter.Table("Indexers").AddColumn("Priority").AsInt32().NotNullable().WithDefaultValue(IndexerDefaults.PRIORITY);
+            Alter.Table("Indexers").AddColumn("Priority").AsInt32().NotNullable().WithDefaultValue(100);
         }
     }
 }

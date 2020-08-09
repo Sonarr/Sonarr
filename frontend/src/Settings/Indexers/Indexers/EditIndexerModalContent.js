@@ -132,8 +132,9 @@ function EditIndexerModalContent(props) {
                   );
                 })
               }
-              
-              <FormGroup>
+               <FormGroup
+                  advancedSettings={advancedSettings}
+                  isAdvanced={true}>
                 <FormLabel>Indexer Priority</FormLabel>
 
                 <FormInputGroup

@@ -114,7 +114,7 @@ class Indexer extends Component {
               </Label>
           }
 
-          <Label kind={kinds.SUCCESS}>
+          <Label kind={kinds.DEFAULT}>
             Priority: {priority}
           </Label>
 
