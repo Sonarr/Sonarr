@@ -341,6 +341,11 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^\d{6}_\d{2}$"),
             };
 
+        private static readonly Regex[] SeasonFolderRegexes = new Regex[]
+            {
+                new Regex(@"^(Season[ ._-]*\d+|Specials)$", RegexOptions.Compiled)
+            };
+
         //Regex to detect whether the title was reversed.
         private static readonly Regex ReversedTitleRegex = new Regex(@"(?:^|[-._ ])(p027|p0801|\d{2,3}E\d{2}S)[-._ ]", RegexOptions.Compiled);
 
@@ -914,6 +919,12 @@ namespace NzbDrone.Core.Parser
             if (RejectHashedReleasesRegexes.Any(v => v.IsMatch(titleWithoutExtension)))
             {
                 Logger.Debug("Rejected Hashed Release Title: " + title);
+                return false;
+            }
+
+            if (SeasonFolderRegexes.Any(v => v.IsMatch(titleWithoutExtension)))
+            {
+                Logger.Debug("Rejected Season Folder Release Title: " + title);
                 return false;
             }
 

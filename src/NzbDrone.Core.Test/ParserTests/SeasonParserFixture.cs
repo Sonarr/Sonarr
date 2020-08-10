@@ -92,5 +92,12 @@ namespace NzbDrone.Core.Test.ParserTests
             result.IsPartialSeason.Should().BeFalse();
             result.IsMultiSeason.Should().BeTrue();
         }
+
+        [Test]
+        public void should_not_parse_season_folders()
+        {
+            var result = Parser.Parser.ParseTitle("Season 3");
+            result.Should().BeNull();
+        }
     }
 }
