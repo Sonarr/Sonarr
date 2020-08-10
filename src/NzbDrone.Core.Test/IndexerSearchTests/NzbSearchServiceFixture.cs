@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -65,7 +66,8 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .With(v => v.EpisodeNumber, episodeNumber)
                 .With(v => v.SceneSeasonNumber, sceneSeasonNumber)
                 .With(v => v.SceneEpisodeNumber, sceneEpisodeNumber)
-                .With(v => v.AirDate = (airDate ?? $"{2000 + seasonNumber}-{episodeNumber:00}-05"))
+                .With(v => v.AirDate = (airDate ?? $"{2000 + seasonNumber}-{(episodeNumber % 12) + 1:00}-05"))
+                .With(v => v.AirDateUtc = DateTime.ParseExact(v.AirDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToUniversalTime())
                 .With(v => v.Monitored = true)
                 .Build();
 
