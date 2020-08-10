@@ -259,7 +259,7 @@ namespace NzbDrone.Core.Organizer
         {
             try
             {
-                return _buildFileNames.BuildFileName(episodes, series, episodeFile, nameSpec, _preferredWords);
+                return _buildFileNames.BuildFileName(episodes, series, episodeFile, "", nameSpec, _preferredWords);
             }
             catch (NamingFormatException)
             {

@@ -94,6 +94,23 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         [Test]
+        public void should_truncate_with_extension()
+        {
+            _series.Title = "The Fantastic Life of Mr. Sisko";
+            
+            _episodes[0].SeasonNumber = 2;
+            _episodes[0].EpisodeNumber = 18;
+            _episodes[0].Title = "This title has to be 197 characters in length, combined with the series title, quality and episode number it becomes 254ish and the extension puts it above the 255 limit and triggers the truncation";
+            _episodeFile.Quality.Quality = Quality.Bluray1080p;
+            _episodes = _episodes.Take(1).ToList();
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}";
+
+            var result = Subject.BuildFileName(_episodes, _series, _episodeFile, ".mkv");
+            result.Length.Should().BeLessOrEqualTo(255);
+            result.Should().Be("The Fantastic Life of Mr. Sisko - S02E18 - This title has to be 197 characters in length, combined with the series title, quality and episode number it becomes 254ish and the extension puts it above the 255 limit and triggers the trunc... Bluray-1080p.mkv");
+        }
+
+        [Test]
         public void should_truncate_with_ellipsis_between_first_and_last_episode_titles()
         {
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}";

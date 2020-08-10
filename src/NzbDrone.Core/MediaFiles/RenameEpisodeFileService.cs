@@ -90,8 +90,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
 
                 var seasonNumber = episodesInFile.First().SeasonNumber;
-                var newName = _filenameBuilder.BuildFileName(episodesInFile, series, file);
-                var newPath = _filenameBuilder.BuildFilePath(series, seasonNumber, newName, Path.GetExtension(episodeFilePath));
+                var newPath = _filenameBuilder.BuildFilePath(episodesInFile, series, file, Path.GetExtension(episodeFilePath));
 
                 if (!episodeFilePath.PathEquals(newPath, StringComparison.Ordinal))
                 {

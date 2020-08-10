@@ -1,9 +1,11 @@
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.OrganizerTests
@@ -32,16 +34,26 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [TestCase("30 Rock - S00E05 - Episode Title", 0, true, "Season {season}", @"C:\Test\30 Rock\MySpecials\30 Rock - S00E05 - Episode Title.mkv")]
         public void CalculateFilePath_SeasonFolder_SingleNumber(string filename, int seasonNumber, bool useSeasonFolder, string seasonFolderFormat, string expectedPath)
         {
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(1)
+                .All()
+                .With(s => s.Title = "Episode Title")
+                .With(s => s.SeasonNumber = seasonNumber)
+                .With(s => s.EpisodeNumber = 5)
+                .Build().ToList();
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Title = "30 Rock")
                 .With(s => s.Path = @"C:\Test\30 Rock".AsOsAgnostic())
                 .With(s => s.SeasonFolder = useSeasonFolder)
+                .With(s => s.SeriesType = SeriesTypes.Standard)
+                .Build();
+            var fakeEpisodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(s => s.SceneName = filename)
                 .Build();
 
             namingConfig.SeasonFolderFormat = seasonFolderFormat;
             namingConfig.SpecialsFolderFormat = "MySpecials";
 
-            Subject.BuildFilePath(fakeSeries, seasonNumber, filename, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
+            Subject.BuildFilePath(fakeEpisodes, fakeSeries, fakeEpisodeFile, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
         }
 
         [Test]
@@ -51,15 +63,25 @@ namespace NzbDrone.Core.Test.OrganizerTests
             var seasonNumber = 1;
             var expectedPath = @"C:\Test\NCIS - Los Angeles\NCIS - Los Angeles Season 1\S01E05 - Episode Title.mkv";
 
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(1)
+                .All()
+                .With(s => s.Title = "Episode Title")
+                .With(s => s.SeasonNumber = seasonNumber)
+                .With(s => s.EpisodeNumber = 5)
+                .Build().ToList();
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Title = "NCIS: Los Angeles")
                 .With(s => s.Path = @"C:\Test\NCIS - Los Angeles".AsOsAgnostic())
                 .With(s => s.SeasonFolder = true)
+                .With(s => s.SeriesType = SeriesTypes.Standard)
+                .Build();
+            var fakeEpisodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(s => s.SceneName = filename)
                 .Build();
 
             namingConfig.SeasonFolderFormat = "{Series Title} Season {season:0}";
-
-            Subject.BuildFilePath(fakeSeries, seasonNumber, filename, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
+            
+            Subject.BuildFilePath(fakeEpisodes, fakeSeries, fakeEpisodeFile, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
         }
     }
 }

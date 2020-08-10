@@ -4,9 +4,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FluentMigrator.Builders.Create.Column;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
@@ -18,8 +21,8 @@ namespace NzbDrone.Core.Organizer
 {
     public interface IBuildFileNames
     {
-        string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig namingConfig = null, List<string> preferredWords = null);
-        string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
+        string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, List<string> preferredWords = null);
+        string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, List<string> preferredWords = null);
         string BuildSeasonPath(Series series, int seasonNumber);
         BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
@@ -96,7 +99,7 @@ namespace NzbDrone.Core.Organizer
             _logger = logger;
         }
 
-        public string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig namingConfig = null, List<string> preferredWords = null)
+        private string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, int maxPath, NamingConfig namingConfig = null, List<string> preferredWords = null)
         {
             if (namingConfig == null)
             {
@@ -105,7 +108,7 @@ namespace NzbDrone.Core.Organizer
 
             if (!namingConfig.RenameEpisodes)
             {
-                return GetOriginalTitle(episodeFile);
+                return GetOriginalTitle(episodeFile) + extension;
             }
 
             if (namingConfig.StandardEpisodeFormat.IsNullOrWhiteSpace() && series.SeriesType == SeriesTypes.Standard)
@@ -140,9 +143,9 @@ namespace NzbDrone.Core.Organizer
             var splitPatterns = pattern.Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
             var components = new List<string>();
 
-            foreach (var s in splitPatterns)
+            for (var i = 0; i < splitPatterns.Length; i++)
             {
-                var splitPattern = s;
+                var splitPattern = splitPatterns[i];
                 var tokenHandlers = new Dictionary<string, Func<TokenMatch, string>>(FileNameBuilderTokenEqualityComparer.Instance);
                 splitPattern = AddSeasonEpisodeNumberingTokens(splitPattern, tokenHandlers, episodes, namingConfig);
                 splitPattern = AddAbsoluteNumberingTokens(splitPattern, tokenHandlers, series, episodes, namingConfig);
@@ -159,7 +162,12 @@ namespace NzbDrone.Core.Organizer
                 AddPreferredWords(tokenHandlers, series, episodeFile, preferredWords);
 
                 var component = ReplaceTokens(splitPattern, tokenHandlers, namingConfig, true).Trim();
-                var maxEpisodeTitleLength = 255 - GetLengthWithoutEpisodeTitle(component, namingConfig);
+                var maxPathSegmentLength = LongPathSupport.MaxFileNameLength;
+                if (i == splitPatterns.Length - 1)
+                {
+                    maxPathSegmentLength -= extension.Length;
+                }
+                var maxEpisodeTitleLength = maxPathSegmentLength - GetLengthWithoutEpisodeTitle(component, namingConfig);
 
                 AddEpisodeTitleTokens(tokenHandlers, episodes, maxEpisodeTitleLength);
                 component = ReplaceTokens(component, tokenHandlers, namingConfig).Trim();
@@ -171,18 +179,25 @@ namespace NzbDrone.Core.Organizer
                 components.Add(component);
             }
 
-            return string.Join(Path.DirectorySeparatorChar.ToString(), components);
+            return string.Join(Path.DirectorySeparatorChar.ToString(), components) + extension;
         }
 
-        public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
+        public string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, List<string> preferredWords = null)
+        {
+            return BuildFileName(episodes, series, episodeFile, extension, LongPathSupport.MaxFilePathLength, namingConfig, preferredWords);
+        }
+
+        public string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, List<string> preferredWords = null)
         {
             Ensure.That(extension, () => extension).IsNotNullOrWhiteSpace();
+            
+            var seasonPath = BuildSeasonPath(series, episodes.First().SeasonNumber);
+            var remainingPathLength = LongPathSupport.MaxFilePathLength - seasonPath.Length - 1;
+            var fileName = BuildFileName(episodes, series, episodeFile, extension, remainingPathLength, namingConfig, preferredWords);
 
-            var path = BuildSeasonPath(series, seasonNumber);
-
-            return Path.Combine(path, fileName + extension);
+            return Path.Combine(seasonPath, fileName);
         }
-
+        
         public string BuildSeasonPath(Series series, int seasonNumber)
         {
             var path = series.Path;
