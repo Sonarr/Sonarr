@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.UI;
 using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.MediaFiles;
@@ -343,7 +344,7 @@ namespace NzbDrone.Core.Parser
                 {
                     try
                     {
-                        var quality = MediaFileExtensions.GetQualityForExtension(Path.GetExtension(name));
+                        var quality = MediaFileExtensions.GetQualityForExtension(name.GetPathExtension());
 
                         if (quality != Quality.Unknown)
                         {

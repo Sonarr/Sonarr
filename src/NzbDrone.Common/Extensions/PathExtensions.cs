@@ -57,6 +57,17 @@ namespace NzbDrone.Common.Extensions
             return string.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), comparison.Value);
         }
 
+        public static string GetPathExtension(this string path)
+        {
+            var idx = path.LastIndexOf('.');
+            if (idx == -1 || idx == path.Length - 1)
+            {
+                return string.Empty;
+            }
+
+            return path.Substring(idx);
+        }
+
         public static string GetRelativePath(this string parentPath, string childPath)
         {
             if (!parentPath.IsParentPath(childPath))
