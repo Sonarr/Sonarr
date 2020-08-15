@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Policy;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
@@ -8,6 +9,7 @@ namespace NzbDrone.Core.Notifications
     {
         public string Message { get; set; }
         public Series Series { get; set; }
+        public Episode Episode { get; set; }
         public EpisodeFile EpisodeFile { get; set; }
         public List<EpisodeFile> OldFiles { get; set; }
         public string SourcePath { get; set; }
