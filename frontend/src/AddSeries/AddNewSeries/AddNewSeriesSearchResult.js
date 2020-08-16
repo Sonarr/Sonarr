@@ -97,39 +97,45 @@ class AddNewSeriesSearchResult extends Component {
           }
 
           <div className={styles.content}>
-            <div className={styles.title}>
-              {title}
+            <div className={styles.titleRow}>
+              <div className={styles.titleContainer}>
+                <div className={styles.title}>
+                  {title}
 
-              {
-                !title.contains(year) && year ?
-                  <span className={styles.year}>
+                  {
+                    !title.contains(year) && year ?
+                      <span className={styles.year}>
                     ({year})
-                  </span> :
-                  null
-              }
+                      </span> :
+                      null
+                  }
+                </div>
+              </div>
 
-              {
-                isExistingSeries ?
+              <div className={styles.icons}>
+                {
+                  isExistingSeries ?
+                    <Icon
+                      className={styles.alreadyExistsIcon}
+                      name={icons.CHECK_CIRCLE}
+                      size={36}
+                      title="Already in your library"
+                    /> :
+                    null
+                }
+
+                <Link
+                  className={styles.tvdbLink}
+                  to={`http://www.thetvdb.com/?tab=series&id=${tvdbId}`}
+                  onPress={this.onTVDBLinkPress}
+                >
                   <Icon
-                    className={styles.alreadyExistsIcon}
-                    name={icons.CHECK_CIRCLE}
-                    size={36}
-                    title="Already in your library"
-                  /> :
-                  null
-              }
-
-              <Link
-                className={styles.tvdbLink}
-                to={`http://www.thetvdb.com/?tab=series&id=${tvdbId}`}
-                onPress={this.onTVDBLinkPress}
-              >
-                <Icon
-                  className={styles.tvdbLinkIcon}
-                  name={icons.EXTERNAL_LINK}
-                  size={28}
-                />
-              </Link>
+                    className={styles.tvdbLinkIcon}
+                    name={icons.EXTERNAL_LINK}
+                    size={28}
+                  />
+                </Link>
+              </div>
             </div>
 
             <div>

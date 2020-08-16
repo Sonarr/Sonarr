@@ -34,10 +34,20 @@
 
 .content {
   flex: 0 1 100%;
+  overflow: hidden;
+}
+
+.titleRow {
+  display: flex;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 1 auto;
 }
 
 .title {
-  display: flex;
   font-weight: 300;
   font-size: 36px;
 }
@@ -45,6 +55,14 @@
 .year {
   margin-left: 10px;
   color: $disabledColor;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 0 auto;
+  height: 55px;
 }
 
 .tvdbLink {
@@ -67,4 +85,11 @@
 
 .overview {
   margin-top: 20px;
+}
+
+@media only screen and (max-width: $breakpointMedium) {
+  .titleRow {
+    justify-content: space-between;
+    overflow: hidden;
+  }
 }
