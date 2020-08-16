@@ -161,7 +161,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (isQualityUpgrade && !qualityProfile.UpgradeAllowed)
             {
-                _logger.Debug("Quality profile allows upgrades, skipping");
+                _logger.Debug("Quality profile does not allow upgrades, skipping");
                 return false;
             }
 
