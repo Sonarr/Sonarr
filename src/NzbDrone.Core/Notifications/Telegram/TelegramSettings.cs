@@ -24,7 +24,8 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(1, Label = "Chat ID", HelpLink = "http://stackoverflow.com/a/37396871/882971", HelpText = "You must start a conversation with the bot or add it to your group to receive messages")]
         public string ChatId { get; set; }
 
-        public bool IsValid => !string.IsNullOrWhiteSpace(ChatId) && !string.IsNullOrWhiteSpace(BotToken);
+        [FieldDefinition(2, Label = "Send Silently", Type = FieldType.Checkbox, HelpText = "Sends the message silently. Users will receive a notification with no sound")]
+        public bool SendSilently { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
