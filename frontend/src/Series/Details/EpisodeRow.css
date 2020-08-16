@@ -16,6 +16,12 @@
   width: 65px;
 }
 
+.episodeNumberAnime {
+  composes: episodeNumber;
+
+  width: 95px;
+}
+
 .size {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 

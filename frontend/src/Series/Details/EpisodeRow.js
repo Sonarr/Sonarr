@@ -104,7 +104,7 @@ class EpisodeRow extends Component {
               return (
                 <TableRowCell
                   key={name}
-                  className={styles.episodeNumber}
+                  className={seriesType === 'anime' ? styles.episodeNumberAnime : styles.episodeNumber}
                 >
                   <EpisodeNumber
                     seasonNumber={seasonNumber}
