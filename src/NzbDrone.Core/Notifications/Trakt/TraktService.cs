@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Notifications.Trakt
         {
             var audioChannels = episodeFile.MediaInfo != null ? MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo).ToString("0.0") : string.Empty;
 
-            // Map cases where Radarr doesn't handle MI correctly, can purge once mediainfo handling is improved
+            // Map cases where Sonarr doesn't handle MI correctly, can purge once mediainfo handling is improved
             if (audioChannels == "8.0")
             {
                 audioChannels = "7.1";

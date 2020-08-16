@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Policy;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
