@@ -22,7 +22,7 @@ function ConnectionLostModal(props) {
     >
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Connnection Lost
+          Connection Lost
         </ModalHeader>
 
         <ModalBody>
