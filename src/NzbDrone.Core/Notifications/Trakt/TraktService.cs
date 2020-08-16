@@ -58,6 +58,7 @@ namespace NzbDrone.Core.Notifications.Trakt
             try
             {
                 GetUserName(settings.AccessToken);
+                
                 return null;
             }
             catch (HttpException ex)
@@ -65,15 +66,18 @@ namespace NzbDrone.Core.Notifications.Trakt
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _logger.Error(ex, "Access Token is invalid: " + ex.Message);
+                    
                     return new ValidationFailure("Token", "Access Token is invalid");
                 }
 
                 _logger.Error(ex, "Unable to send test message: " + ex.Message);
+                
                 return new ValidationFailure("Token", "Unable to send test message");
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message: " + ex.Message);
+                
                 return new ValidationFailure("", "Unable to send test message");
             }
         }
@@ -143,6 +147,8 @@ namespace NzbDrone.Core.Notifications.Trakt
                     break;
                 case QualitySource.Television:
                 case QualitySource.TelevisionRaw:
+                    traktSource = "vhs";
+                    break;
                 case QualitySource.DVD:
                     traktSource = "dvd";
                     break;
@@ -164,16 +170,16 @@ namespace NzbDrone.Core.Notifications.Trakt
                     traktResolution = "uhd_4k";
                     break;
                 case 1080:
-                    traktResolution = string.Format("hd_1080{0}", scanIdentifier);
+                    traktResolution = $"hd_1080{scanIdentifier}";
                     break;
                 case 720:
                     traktResolution = "hd_720p";
                     break;
                 case 576:
-                    traktResolution = string.Format("sd_576{0}", scanIdentifier);
+                    traktResolution = $"sd_576{scanIdentifier}";
                     break;
                 case 480:
-                    traktResolution = string.Format("sd_480{0}", scanIdentifier);
+                    traktResolution = $"sd_480{scanIdentifier}";
                     break;
             }
 
