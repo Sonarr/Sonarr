@@ -480,11 +480,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                         if (channelSplit.Count() == 3)
                         {
-                            positions += decimal.Parse(string.Format("{0}.{1}", channelSplit[1], channelSplit[2]));
+                            positions += decimal.Parse(string.Format("{0}.{1}", channelSplit[1], channelSplit[2]), CultureInfo.InvariantCulture);
                         }
                         else
                         {
-                            positions += decimal.Parse(channel);
+                            positions += decimal.Parse(channel, CultureInfo.InvariantCulture);
                         }
                     }
 

@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.MediaInfo;
@@ -124,6 +126,22 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(7.1m);
+        }
+
+        [Test]
+        public void should_ignore_culture_on_channel_summary()
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
+
+            var mediaInfoModel = new MediaInfoModel
+            {
+                AudioChannelsContainer = 2,
+                AudioChannelPositions = "3/2/0.1",
+                AudioChannelPositionsTextContainer = null,
+                SchemaRevision = 3
+            };
+
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(5.1m);
         }
 
         [Test]
