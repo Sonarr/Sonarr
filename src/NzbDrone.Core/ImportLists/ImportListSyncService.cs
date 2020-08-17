@@ -127,7 +127,6 @@ namespace NzbDrone.Core.ImportLists
                         {
                             SearchForMissingEpisodes = monitored,
                             Monitor = importList.ShouldMonitor
-                            
                         }
                     });
                 }

@@ -58,17 +58,19 @@ function EditImportListModalContent(props) {
 
       <ModalBody>
         {
-          isFetching &&
-            <LoadingIndicator />
+          isFetching ?
+            <LoadingIndicator /> :
+            null
         }
 
         {
-          !isFetching && !!error &&
-            <div>Unable to add a new list, please try again.</div>
+          !isFetching && !!error ?
+            <div>Unable to add a new list, please try again.</div> :
+            null
         }
 
         {
-          !isFetching && !error &&
+          !isFetching && !error ?
             <Form {...otherProps}>
               <FormGroup>
                 <FormLabel>Name</FormLabel>
@@ -187,7 +189,8 @@ function EditImportListModalContent(props) {
                 </div>
               }
 
-            </Form>
+            </Form> :
+            null
         }
       </ModalBody>
       <ModalFooter>

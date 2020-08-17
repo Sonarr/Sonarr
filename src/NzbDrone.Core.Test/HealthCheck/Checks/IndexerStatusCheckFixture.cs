@@ -26,10 +26,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                    .Returns(_blockedIndexers);
         }
 
-        private Mock<IIndexer> GivenIndexer(int i, double backoffHours, double failureHours)
+        private Mock<IIndexer> GivenIndexer(int id, double backoffHours, double failureHours)
         {
-            var id = i;
-
             var mockIndexer = new Mock<IIndexer>();
             mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition { Id = id });
             mockIndexer.SetupGet(s => s.SupportsSearch).Returns(true);

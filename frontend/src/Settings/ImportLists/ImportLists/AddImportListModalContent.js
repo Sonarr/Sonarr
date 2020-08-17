@@ -36,17 +36,19 @@ class AddImportListModalContent extends Component {
 
         <ModalBody>
           {
-            isSchemaFetching &&
-              <LoadingIndicator />
+            isSchemaFetching ?
+              <LoadingIndicator /> :
+              null
           }
 
           {
-            !isSchemaFetching && !!schemaError &&
-              <div>Unable to add a new list, please try again.</div>
+            !isSchemaFetching && !!schemaError ?
+              <div>Unable to add a new list, please try again.</div> :
+              null
           }
 
           {
-            isSchemaPopulated && !schemaError &&
+            isSchemaPopulated && !schemaError ?
               <div>
 
                 <Alert kind={kinds.INFO}>
@@ -75,7 +77,8 @@ class AddImportListModalContent extends Component {
                     );
                   })
                 }
-              </div>
+              </div> :
+              null
           }
         </ModalBody>
         <ModalFooter>

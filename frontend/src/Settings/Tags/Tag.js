@@ -86,38 +86,43 @@ class Tag extends Component {
           isTagUsed &&
             <div>
               {
-                !!seriesIds.length &&
+                seriesIds.length ?
                   <div>
                     {seriesIds.length} series
-                  </div>
+                  </div> :
+                  null
               }
 
               {
-                !!delayProfileIds.length &&
+                delayProfileIds.length ?
                   <div>
                     {delayProfileIds.length} delay profile{delayProfileIds.length > 1 && 's'}
-                  </div>
+                  </div> :
+                  null
               }
 
               {
-                !!importListIds.length &&
+                importListIds.length ?
                   <div>
                     {importListIds.length} import list{importListIds.length > 1 && 's'}
-                  </div>
+                  </div> :
+                  null
               }
 
               {
-                !!notificationIds.length &&
+                notificationIds.length ?
                   <div>
                     {notificationIds.length} connection{notificationIds.length > 1 && 's'}
-                  </div>
+                  </div> :
+                  null
               }
 
               {
-                !!restrictionIds.length &&
+                restrictionIds.length ?
                   <div>
                     {restrictionIds.length} restriction{restrictionIds.length > 1 && 's'}
-                  </div>
+                  </div> :
+                  null
               }
             </div>
         }

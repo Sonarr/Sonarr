@@ -26,10 +26,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                    .Returns(_blockedImportLists);
         }
 
-        private Mock<IImportList> GivenImportList(int i, double backoffHours, double failureHours)
+        private Mock<IImportList> GivenImportList(int id, double backoffHours, double failureHours)
         {
-            var id = i;
-
             var mockImportList = new Mock<IImportList>();
             mockImportList.SetupGet(s => s.Definition).Returns(new ImportListDefinition { Id = id });
 

@@ -26,24 +26,24 @@ namespace NzbDrone.Core.Test.ImportListTests
             _importListReports = new List<ImportListItemInfo>{importListItem1};
 
             Mocker.GetMock<IFetchAndParseImportList>()
-                .Setup(v => v.Fetch())
-                .Returns(_importListReports);
+                  .Setup(v => v.Fetch())
+                  .Returns(_importListReports);
 
             Mocker.GetMock<ISearchForNewSeries>()
-                .Setup(v => v.SearchForNewSeries(It.IsAny<string>()))
-                .Returns(new List<Series>());
+                  .Setup(v => v.SearchForNewSeries(It.IsAny<string>()))
+                  .Returns(new List<Series>());
 
             Mocker.GetMock<IImportListFactory>()
-                .Setup(v => v.Get(It.IsAny<int>()))
-                .Returns(new ImportListDefinition{ ShouldMonitor = MonitorTypes.All });
+                  .Setup(v => v.Get(It.IsAny<int>()))
+                  .Returns(new ImportListDefinition{ ShouldMonitor = MonitorTypes.All });
 
             Mocker.GetMock<IFetchAndParseImportList>()
-                .Setup(v => v.Fetch())
-                .Returns(_importListReports);
+                  .Setup(v => v.Fetch())
+                  .Returns(_importListReports);
 
             Mocker.GetMock<IImportListExclusionService>()
-                .Setup(v => v.All())
-                .Returns(new List<ImportListExclusion>());
+                  .Setup(v => v.All())
+                  .Returns(new List<ImportListExclusion>());
         }
 
         private void WithTvdbId()
@@ -54,26 +54,26 @@ namespace NzbDrone.Core.Test.ImportListTests
         private void WithExistingSeries()
         {
             Mocker.GetMock<ISeriesService>()
-                .Setup(v => v.FindByTvdbId(_importListReports.First().TvdbId))
-                .Returns(new Series{TvdbId = _importListReports.First().TvdbId });
+                  .Setup(v => v.FindByTvdbId(_importListReports.First().TvdbId))
+                  .Returns(new Series{TvdbId = _importListReports.First().TvdbId });
         }
 
         private void WithExcludedSeries()
         {
             Mocker.GetMock<IImportListExclusionService>()
-                .Setup(v => v.All())
-                .Returns(new List<ImportListExclusion> {
-                    new ImportListExclusion {
-                        TvdbId = 81189
-                    }
-                });
+                  .Setup(v => v.All())
+                  .Returns(new List<ImportListExclusion> {
+                      new ImportListExclusion {
+                          TvdbId = 81189
+                      }
+                  });
         }
 
         private void WithMonitorType(MonitorTypes monitor)
         {
             Mocker.GetMock<IImportListFactory>()
-                .Setup(v => v.Get(It.IsAny<int>()))
-                .Returns(new ImportListDefinition{ ShouldMonitor = monitor });
+                  .Setup(v => v.Get(It.IsAny<int>()))
+                  .Returns(new ImportListDefinition{ ShouldMonitor = monitor });
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(new ImportListSyncCommand());
 
             Mocker.GetMock<ISearchForNewSeries>()
-                .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Once());
+                  .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Once());
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(new ImportListSyncCommand());
 
             Mocker.GetMock<ISearchForNewSeries>()
-                .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Never());
+                  .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Never());
         }
 
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(new ImportListSyncCommand());
 
             Mocker.GetMock<IAddSeriesService>()
-                .Verify(v => v.AddSeries(It.Is<List<Series>>(t=>t.Count == 0)));
+                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t=>t.Count == 0)));
         }
 
         [TestCase(MonitorTypes.None, false)]
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(new ImportListSyncCommand());
 
             Mocker.GetMock<IAddSeriesService>()
-                .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 1 && t.First().Monitored == expectedSeriesMonitored)));
+                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 1 && t.First().Monitored == expectedSeriesMonitored)));
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(new ImportListSyncCommand());
 
             Mocker.GetMock<IAddSeriesService>()
-                .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 0)));
+                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 0)));
         }
     }
 }

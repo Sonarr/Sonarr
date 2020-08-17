@@ -19,25 +19,25 @@ namespace NzbDrone.Core.Test.ImportListTests
             _epoch = DateTime.UtcNow;
 
             Mocker.GetMock<IRuntimeInfo>()
-                .SetupGet(v => v.StartTime)
-                .Returns(_epoch - TimeSpan.FromHours(1));
+                  .SetupGet(v => v.StartTime)
+                  .Returns(_epoch - TimeSpan.FromHours(1));
         }
 
         private void WithStatus(ImportListStatus status)
         {
             Mocker.GetMock<IImportListStatusRepository>()
-                .Setup(v => v.FindByProviderId(1))
-                .Returns(status);
+                  .Setup(v => v.FindByProviderId(1))
+                  .Returns(status);
 
             Mocker.GetMock<IImportListStatusRepository>()
-                .Setup(v => v.All())
-                .Returns(new[] { status });
+                  .Setup(v => v.All())
+                  .Returns(new[] { status });
         }
 
         private void VerifyUpdate()
         {
             Mocker.GetMock<IImportListStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<ImportListStatus>()), Times.Once());
+                  .Verify(v => v.Upsert(It.IsAny<ImportListStatus>()), Times.Once());
         }
 
         private void VerifyNoUpdate()

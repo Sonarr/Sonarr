@@ -108,7 +108,7 @@ export default {
     [SELECT_IMPORT_LIST_SCHEMA]: (state, { payload }) => {
       return selectProviderSchema(state, section, payload, (selectedSchema) => {
         selectedSchema.enableAutomaticAdd = true;
-        selectedSchema.shouldMonitor = 'entireSeries';
+        selectedSchema.shouldMonitor = 'all';
 
         return selectedSchema;
       });

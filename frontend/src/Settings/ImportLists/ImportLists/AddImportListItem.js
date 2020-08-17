@@ -33,7 +33,7 @@ class AddImportListItem extends Component {
       onImportListSelect
     } = this.props;
 
-    const hasPresets = !!presets && !!presets.length;
+    const hasPresets = !!(presets && presets.length);
 
     return (
       <div
