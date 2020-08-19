@@ -38,7 +38,8 @@ namespace NzbDrone.Core.ImportLists.Sonarr
 
                 foreach (var item in remoteSeries)
                 {
-                    if (!Settings.ProfileIds.Any() || Settings.ProfileIds.Contains(item.QualityProfileId))
+                    if ((!Settings.ProfileIds.Any() || Settings.ProfileIds.Contains(item.QualityProfileId)) &&
+                        (!Settings.TagIds.Any() || Settings.TagIds.Any(tagId => item.Tags.Any(itemTagId => itemTagId == tagId))))
                     {
                         series.Add(new ImportListItemInfo
                         {
@@ -60,29 +61,44 @@ namespace NzbDrone.Core.ImportLists.Sonarr
 
         public override object RequestAction(string action, IDictionary<string, string> query)
         {
-            if (action == "getDevices")
+            // Return early if there is not an API key
+            if (Settings.ApiKey.IsNullOrWhiteSpace())
             {
-                // Return early if there is not an API key
-                if (Settings.ApiKey.IsNullOrWhiteSpace())
+                return new
                 {
-                    return new
-                    {
-                        devices = new List<object>()
-                    };
-                }
+                    devices = new List<object>()
+                };
+            }
 
+            if (action == "getProfiles")
+            {
                 Settings.Validate().Filter("ApiKey").ThrowOnError();
 
-                var devices = _sonarrV3Proxy.GetProfiles(Settings);
+                var profiles = _sonarrV3Proxy.GetProfiles(Settings);
 
                 return new
                 {
-                    options = devices.OrderBy(d => d.Name, StringComparer.InvariantCultureIgnoreCase)
+                    options = profiles.OrderBy(d => d.Name, StringComparer.InvariantCultureIgnoreCase)
                                             .Select(d => new
                                             {
                                                 id = d.Id,
                                                 name = d.Name
                                             })
+                };
+            }
+
+            if (action == "getTags")
+            {
+                var tags = _sonarrV3Proxy.GetTags(Settings);
+
+                return new
+                {
+                    options = tags.OrderBy(d => d.Label, StringComparer.InvariantCultureIgnoreCase)
+                        .Select(d => new
+                        {
+                            id = d.Id,
+                            name = d.Label
+                        })
                 };
             }
 

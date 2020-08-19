@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Annotations
         public int Order { get; private set; }
         public string Label { get; set; }
         public string Hint { get; set; }
+        public string RequestAction { get; set; }
     }
 
     public class FieldSelectOption

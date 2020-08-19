@@ -13,6 +13,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
     {
         List<SonarrSeries> GetSeries(SonarrSettings settings);
         List<SonarrProfile> GetProfiles(SonarrSettings settings);
+        List<SonarrTag> GetTags(SonarrSettings settings);
         ValidationFailure Test(SonarrSettings settings);
     }
 
@@ -35,6 +36,11 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         public List<SonarrProfile> GetProfiles(SonarrSettings settings)
         {
             return Execute<SonarrProfile>("/api/v3/qualityprofile", settings);
+        }
+
+        public List<SonarrTag> GetTags(SonarrSettings settings)
+        {
+            return Execute<SonarrTag>("/api/v3/tag", settings);
         }
 
         public ValidationFailure Test(SonarrSettings settings)
