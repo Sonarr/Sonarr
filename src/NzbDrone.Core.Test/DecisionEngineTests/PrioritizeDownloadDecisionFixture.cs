@@ -14,6 +14,7 @@ using FluentAssertions;
 using FizzWare.NBuilder;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DecisionEngine.ClusterAnalysis;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
@@ -28,6 +29,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void Setup()
         {
             GivenPreferredDownloadProtocol(DownloadProtocol.Usenet);
+            GivenNotUsingClusterAnalysis();
         }
 
         private Episode GivenEpisode(int id)
@@ -77,6 +79,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                   {
                       PreferredProtocol = downloadProtocol
                   });
+        }
+
+        private void GivenNotUsingClusterAnalysis()
+        {
+            Mocker.GetMock<IConfigService>()
+                .Setup(s => s.UseClusterAnalysis)
+                .Returns(false);
+        }
+
+        private void GivenUsingClusterAnalysis()
+        {
+            Mocker.GetMock<IConfigService>()
+                .Setup(s => s.UseClusterAnalysis)
+                .Returns(true);
         }
 
         [Test]
@@ -165,6 +181,66 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisodeHdLargeYoung);
+        }
+
+        [Test]
+        public void should_order_by_largest_rounded_to_200mb()
+        {
+
+            var decisions = new List<DownloadDecision>
+            {
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1199.Megabytes())),
+
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1200.Megabytes())),
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1250.Megabytes())),
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1300.Megabytes())),
+
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1400.Megabytes())),
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1500.Megabytes())),
+            };
+
+            var expectedDecisions = new List<DownloadDecision>
+            {
+                decisions[4],
+                decisions[5],
+                decisions[1],
+                decisions[2],
+                decisions[3],
+                decisions[0]
+            };
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.Should().Equal(expectedDecisions);
+        }
+
+        [Test]
+        public void should_order_by_largest_cluster_200mb()
+        {
+            GivenUsingClusterAnalysis();
+
+            var decisions = new List<DownloadDecision>
+            {
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1199.Megabytes())),
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1200.Megabytes())),
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1250.Megabytes())),
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1300.Megabytes())),
+
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1400.Megabytes())),
+                new DownloadDecision(GivenRemoteEpisode(new List<Episode> {GivenEpisode(1)}, new QualityModel(Quality.HDTV720p), Language.English, size: 1500.Megabytes())),
+            };
+            
+            var expectedDecisions = new List<DownloadDecision>
+            {
+                decisions[4],
+                decisions[5],
+                decisions[0],
+                decisions[1],
+                decisions[2],
+                decisions[3]
+            };
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.Should().Equal(expectedDecisions);
         }
 
         [Test]

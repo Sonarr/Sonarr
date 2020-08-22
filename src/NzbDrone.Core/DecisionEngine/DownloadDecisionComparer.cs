@@ -37,8 +37,12 @@ namespace NzbDrone.Core.DecisionEngine
                 CompareIndexerPriority,
                 ComparePeersIfTorrent,
                 CompareAgeIfUsenet,
-                CompareSize
             };
+
+            if (!_configService.UseClusterAnalysis)
+            {
+                comparers.Add(CompareSize);
+            }
 
             return comparers.Select(comparer => comparer(x, y)).FirstOrDefault(result => result != 0);
         }

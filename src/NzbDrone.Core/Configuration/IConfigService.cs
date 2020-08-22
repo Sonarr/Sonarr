@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Configuration
 
         bool AutoRedownloadFailed { get; set; }
         bool RemoveFailedDownloads { get; set; }
+        bool UseClusterAnalysis { get; set; }
 
         //Media Management
         bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }

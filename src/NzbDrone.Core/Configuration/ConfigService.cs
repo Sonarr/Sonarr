@@ -155,6 +155,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("RemoveFailedDownloads", value); }
         }
 
+        public bool UseClusterAnalysis
+        {
+            get { return GetValueBoolean("UseClusterAnalysis", false); }
+
+            set { SetValue("UseClusterAnalysis", value); }
+        }
+
         public bool CreateEmptySeriesFolders
         {
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
