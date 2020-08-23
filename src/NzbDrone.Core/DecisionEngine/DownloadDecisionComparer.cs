@@ -39,11 +39,6 @@ namespace NzbDrone.Core.DecisionEngine
                 CompareAgeIfUsenet,
             };
 
-            if (!_configService.UseClusterAnalysis)
-            {
-                comparers.Add(CompareSize);
-            }
-
             return comparers.Select(comparer => comparer(x, y)).FirstOrDefault(result => result != 0);
         }
 
@@ -186,13 +181,6 @@ namespace NzbDrone.Core.DecisionEngine
 
                 return 1;
             });
-        }
-
-        private int CompareSize(DownloadDecision x, DownloadDecision y)
-        {
-            // TODO: Is smaller better? Smaller for usenet could mean no par2 files.
-
-            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Release.Size.Round(200.Megabytes()));
         }
     }
 }
