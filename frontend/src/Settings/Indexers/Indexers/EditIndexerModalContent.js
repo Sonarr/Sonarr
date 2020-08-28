@@ -140,9 +140,9 @@ function EditIndexerModalContent(props) {
                 <FormInputGroup
                   type={inputTypes.NUMBER}
                   name="priority"
-                  helpText="Indexer Priority from 1 (Highest) to 100 (Lowest). Default: 100."
+                  helpText="Indexer Priority from 1 (Highest) to 50 (Lowest). Default: 25."
                   min={1}
-                  max={100}
+                  max={50}
                   {...priority}
                   onChange={onInputChange}
                 />

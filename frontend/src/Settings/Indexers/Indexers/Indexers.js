@@ -76,6 +76,7 @@ class Indexers extends Component {
                   <Indexer
                     key={item.id}
                     {...item}
+                    showPriority={items.some((index) => index.priority != 25)}
                     onCloneIndexerPress={this.onCloneIndexerPress}
                     onConfirmDeleteIndexer={onConfirmDeleteIndexer}
                   />
