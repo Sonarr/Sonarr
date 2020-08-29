@@ -79,6 +79,25 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
             result.Select(t => t.Id).Should().Equal(3, 2, 1, 4, 6, 5);
 
         }
+
+        [Test]
+        public void should_order_recursively_without_clusters()
+        {
+            var source = new List<int> {101, 204, 203, 105, 103};
+            var expectedOrder = source
+                .OrderByDescending(v => v / 100)
+                .ThenBy(v => v % 100)
+                .ToList();
+
+            var orderedWithClusteredOrderedEnumerable = source
+                .Cluster()
+                .OrderByDescending(v => v / 100)
+                .ThenBy(v => v % 100)
+                .ToList();
+
+            // 203, 204, 101, 103, 105
+            orderedWithClusteredOrderedEnumerable.Should().Equal(expectedOrder);
+        }
     }
 
     internal class ClusteredEnumerableTestCandidate
