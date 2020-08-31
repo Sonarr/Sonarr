@@ -83,6 +83,7 @@ namespace NzbDrone.Core.Tv
             }
 
             series.Title = seriesInfo.Title;
+            series.Year = seriesInfo.Year;
             series.TitleSlug = seriesInfo.TitleSlug;
             series.TvRageId = seriesInfo.TvRageId;
             series.TvMazeId = seriesInfo.TvMazeId;
