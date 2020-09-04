@@ -25,7 +25,7 @@ function OrganizeSeriesModalContent(props) {
 
       <ModalBody>
         <Alert>
-          Tip: To preview a rename... select "Cancel" then any series title and use the
+          Tip: To preview a rename, select "Cancel", then select any series title and use the
           <Icon
             className={styles.renameIcon}
             name={icons.ORGANIZE}
