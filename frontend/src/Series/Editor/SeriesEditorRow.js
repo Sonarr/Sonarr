@@ -36,7 +36,7 @@ class SeriesEditorRow extends Component {
       seriesType,
       seasonFolder,
       path,
-      statistics,
+      statistics = {},
       tags,
       columns,
       isSelected,
