@@ -39,7 +39,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
                 if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
-                                                           languageProfile, 
+                                                           languageProfile,
                                                            file.Quality, 
                                                            file.Language,
                                                            _episodeFilePreferredWordCalculator.Calculate(subject.Series, file),
