@@ -1,13 +1,15 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds } from 'Helpers/Props';
+import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import CheckInput from 'Components/Form/CheckInput';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import PageContentFooter from 'Components/Page/PageContentFooter';
+import Popover from 'Components/Tooltip/Popover';
 import styles from './ImportSeriesFooter.css';
 
 const MIXED = 'mixed';
@@ -118,6 +120,7 @@ class ImportSeriesFooter extends Component {
       isSeriesTypeMixed,
       hasUnsearchedItems,
       showLanguageProfile,
+      importError,
       onImportPress,
       onLookupPress,
       onCancelLookupPress
@@ -226,38 +229,71 @@ class ImportSeriesFooter extends Component {
             </SpinnerButton>
 
             {
-              isLookingUpSeries &&
+              isLookingUpSeries ?
                 <Button
                   className={styles.loadingButton}
                   kind={kinds.WARNING}
                   onPress={onCancelLookupPress}
                 >
                   Cancel Processing
-                </Button>
+                </Button> :
+                null
             }
 
             {
-              hasUnsearchedItems &&
+              hasUnsearchedItems ?
                 <Button
                   className={styles.loadingButton}
                   kind={kinds.SUCCESS}
                   onPress={onLookupPress}
                 >
                   Start Processing
-                </Button>
+                </Button> :
+                null
             }
 
             {
-              isLookingUpSeries &&
+              isLookingUpSeries ?
                 <LoadingIndicator
                   className={styles.loading}
                   size={24}
-                />
+                /> :
+                null
             }
 
             {
-              isLookingUpSeries &&
-                'Processing Folders'
+              isLookingUpSeries ?
+                'Processing Folders' :
+                null
+            }
+
+            {
+              importError ?
+                <Popover
+                  anchor={
+                    <Icon
+                      className={styles.importError}
+                      name={icons.WARNING}
+                      kind={kinds.WARNING}
+                    />
+                  }
+                  title="Import Errors"
+                  body={
+                    <ul>
+                      {
+                        importError.responseJSON.map((error, index) => {
+                          return (
+                            <li key={index}>
+                              {error.errorMessage}
+                            </li>
+                          );
+                        })
+                      }
+                    </ul>
+                  }
+                  position={tooltipPositions.RIGHT}
+                /> :
+                null
             }
           </div>
         </div>
@@ -282,6 +318,7 @@ ImportSeriesFooter.propTypes = {
   isSeasonFolderMixed: PropTypes.bool.isRequired,
   hasUnsearchedItems: PropTypes.bool.isRequired,
   showLanguageProfile: PropTypes.bool.isRequired,
+  importError: PropTypes.object,
   onInputChange: PropTypes.func.isRequired,
   onImportPress: PropTypes.func.isRequired,
   onLookupPress: PropTypes.func.isRequired,

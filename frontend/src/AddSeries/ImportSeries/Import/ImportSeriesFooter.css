@@ -31,3 +31,7 @@
   margin: 0 10px 0 12px;
   text-align: left;
 }
+
+.importError {
+  margin-left: 10px;
+}

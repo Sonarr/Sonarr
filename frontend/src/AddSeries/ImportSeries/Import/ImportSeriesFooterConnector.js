@@ -27,7 +27,8 @@ function createMapStateToProps() {
       const {
         isLookingUpSeries,
         isImporting,
-        items
+        items,
+        importError
       } = importSeries;
 
       const isMonitorMixed = isMixed(items, selectedIds, defaultMonitor, 'monitor');
@@ -51,6 +52,7 @@ function createMapStateToProps() {
         isLanguageProfileIdMixed,
         isSeriesTypeMixed,
         isSeasonFolderMixed,
+        importError,
         hasUnsearchedItems
       };
     }

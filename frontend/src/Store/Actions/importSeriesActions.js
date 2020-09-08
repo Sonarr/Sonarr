@@ -249,7 +249,8 @@ export const actionHandlers = handleThunks({
         set({
           section,
           isImporting: false,
-          isImported: true
+          isImported: true,
+          importError: null
         }),
 
         ...data.map((series) => updateItem({ section: 'series', ...series })),
@@ -261,19 +262,19 @@ export const actionHandlers = handleThunks({
     });
 
     promise.fail((xhr) => {
-      dispatch(batchActions(
+      dispatch(batchActions([
         set({
           section,
           isImporting: false,
-          isImported: true
+          isImported: true,
+          importError: xhr
         }),
 
-        addedIds.map((id) => updateItem({
+        ...addedIds.map((id) => updateItem({
           section,
-          id,
-          importError: xhr
+          id
         }))
-      ));
+      ]));
     });
   }
 });
