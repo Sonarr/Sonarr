@@ -84,8 +84,10 @@ namespace Sonarr.Api.V3
         private void UpdateProvider(TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, false);
+            var existingDefinition = _providerFactory.Get(providerDefinition.Id);
 
-            if (providerDefinition.Enable)
+            // Only test existing definitions if it was previously disabled
+            if (providerDefinition.Enable && !existingDefinition.Enable)
             {
                 Test(providerDefinition, false);
             }
