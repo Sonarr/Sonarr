@@ -25,23 +25,24 @@
   margin-left: 8px;
 }
 
-.searchForMissingEpisodesLabelContainer {
+.searchLabelContainer {
   display: flex;
+  justify-content: flex-end;
   margin-top: 2px;
 }
 
-.searchForMissingEpisodesLabel {
+.searchLabel {
   margin-right: 8px;
   font-weight: normal;
 }
 
-.searchForMissingEpisodesContainer {
+.searchInputContainer {
   composes: container from '~Components/Form/CheckInput.css';
 
   flex: 0 1 0;
 }
 
-.searchForMissingEpisodesInput {
+.searchInput {
   composes: input from '~Components/Form/CheckInput.css';
 
   margin-top: 0;

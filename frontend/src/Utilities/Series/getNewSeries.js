@@ -8,12 +8,14 @@ function getNewSeries(series, payload) {
     seriesType,
     seasonFolder,
     tags,
-    searchForMissingEpisodes = false
+    searchForMissingEpisodes = false,
+    searchForCutoffUnmetEpisodes = false
   } = payload;
 
   const addOptions = {
     monitor,
-    searchForMissingEpisodes
+    searchForMissingEpisodes,
+    searchForCutoffUnmetEpisodes
   };
 
   series.addOptions = addOptions;

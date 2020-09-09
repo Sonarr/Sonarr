@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Tv
         private SortBuilder<Episode> EpisodesWhereCutoffUnmetQuery(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, List<LanguagesBelowCutoff> languagesBelowCutoff, int startingSeasonNumber)
         {
             return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                             .Join<Episode, EpisodeFile>(JoinType.Left, e => e.EpisodeFile, (e, s) => e.EpisodeFileId == s.Id)
+                             .Join<Episode, EpisodeFile>(JoinType.Left, e => e.EpisodeFile, (e, f) => e.EpisodeFileId == f.Id)
                              .Where(pagingSpec.FilterExpressions.FirstOrDefault())
                              .AndWhere(e => e.EpisodeFileId != 0)
                              .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)

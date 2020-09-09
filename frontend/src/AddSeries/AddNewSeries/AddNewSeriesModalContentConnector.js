@@ -55,7 +55,7 @@ class AddNewSeriesModalContentConnector extends Component {
     this.props.setAddSeriesDefault({ [name]: value });
   }
 
-  onAddSeriesPress = (searchForMissingEpisodes, seriesType) => {
+  onAddSeriesPress = (searchForMissingEpisodes, searchForCutoffUnmetEpisodes, seriesType) => {
     const {
       tvdbId,
       rootFolderPath,
@@ -75,7 +75,8 @@ class AddNewSeriesModalContentConnector extends Component {
       seriesType,
       seasonFolder: seasonFolder.value,
       tags: tags.value,
-      searchForMissingEpisodes
+      searchForMissingEpisodes,
+      searchForCutoffUnmetEpisodes
     });
   }
 

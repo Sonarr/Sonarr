@@ -40,9 +40,25 @@ namespace NzbDrone.Core.Tv
             _logger.Info("[{0}] was recently added, performing post-add actions", series.Title);
             _episodeMonitoredService.SetEpisodeMonitoredStatus(series, series.AddOptions);
 
-            if (series.AddOptions.SearchForMissingEpisodes)
+            // If both options are enabled search for the whole series, which will only include monitored episodes.
+            // This way multiple searches for the same season are skipped, though a season that can't be upgraded may be
+            // searched, but the logs will be more explicit.
+
+            if (series.AddOptions.SearchForMissingEpisodes && series.AddOptions.SearchForCutoffUnmetEpisodes)
             {
-                _commandQueueManager.Push(new MissingEpisodeSearchCommand(series.Id));
+                _commandQueueManager.Push(new SeriesSearchCommand(series.Id));
+            }
+            else
+            {
+                if (series.AddOptions.SearchForMissingEpisodes)
+                {
+                    _commandQueueManager.Push(new MissingEpisodeSearchCommand(series.Id));
+                }
+
+                if (series.AddOptions.SearchForCutoffUnmetEpisodes)
+                {
+                    _commandQueueManager.Push(new CutoffUnmetEpisodeSearchCommand(series.Id));
+                }
             }
 
             series.AddOptions = null;

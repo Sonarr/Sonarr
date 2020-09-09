@@ -31,7 +31,8 @@ class AddNewSeriesModalContent extends Component {
       seriesType: props.initialSeriesType === seriesTypes.STANDARD ?
         props.seriesType.value :
         props.initialSeriesType,
-      searchForMissingEpisodes: false
+      searchForMissingEpisodes: false,
+      searchForCutoffUnmetEpisodes: false
     };
   }
 
@@ -48,6 +49,10 @@ class AddNewSeriesModalContent extends Component {
     this.setState({ searchForMissingEpisodes: value });
   }
 
+  onSearchForCutoffUnmetEpisodesChange = ({ value }) => {
+    this.setState({ searchForCutoffUnmetEpisodes: value });
+  }
+
   onQualityProfileIdChange = ({ value }) => {
     this.props.onInputChange({ name: 'qualityProfileId', value: parseInt(value) });
   }
@@ -59,10 +64,15 @@ class AddNewSeriesModalContent extends Component {
   onAddSeriesPress = () => {
     const {
       searchForMissingEpisodes,
+      searchForCutoffUnmetEpisodes,
       seriesType
     } = this.state;
 
-    this.props.onAddSeriesPress(searchForMissingEpisodes, seriesType);
+    this.props.onAddSeriesPress(
+      searchForMissingEpisodes,
+      searchForCutoffUnmetEpisodes,
+      seriesType
+    );
   }
 
   //
@@ -90,6 +100,11 @@ class AddNewSeriesModalContent extends Component {
       onInputChange,
       ...otherProps
     } = this.props;
+
+    const {
+      searchForMissingEpisodes,
+      searchForCutoffUnmetEpisodes
+    } = this.state;
 
     return (
       <ModalContent onModalClose={onModalClose}>
@@ -246,19 +261,35 @@ class AddNewSeriesModalContent extends Component {
         </ModalBody>
 
         <ModalFooter className={styles.modalFooter}>
-          <label className={styles.searchForMissingEpisodesLabelContainer}>
-            <span className={styles.searchForMissingEpisodesLabel}>
+          <div>
+            <label className={styles.searchLabelContainer}>
+              <span className={styles.searchLabel}>
               Start search for missing episodes
-            </span>
+              </span>
 
-            <CheckInput
-              containerClassName={styles.searchForMissingEpisodesContainer}
-              className={styles.searchForMissingEpisodesInput}
-              name="searchForMissingEpisodes"
-              value={this.state.searchForMissingEpisodes}
-              onChange={this.onSearchForMissingEpisodesChange}
-            />
-          </label>
+              <CheckInput
+                containerClassName={styles.searchInputContainer}
+                className={styles.searchInput}
+                name="searchForMissingEpisodes"
+                value={searchForMissingEpisodes}
+                onChange={this.onSearchForMissingEpisodesChange}
+              />
+            </label>
+
+            <label className={styles.searchLabelContainer}>
+              <span className={styles.searchLabel}>
+              Start search for cutoff unmet episodes
+              </span>
+
+              <CheckInput
+                containerClassName={styles.searchInputContainer}
+                className={styles.searchInput}
+                name="searchForCutoffUnmetEpisodes"
+                value={searchForCutoffUnmetEpisodes}
+                onChange={this.onSearchForCutoffUnmetEpisodesChange}
+              />
+            </label>
+          </div>
 
           <SpinnerButton
             className={styles.addButton}

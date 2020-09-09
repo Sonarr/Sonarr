@@ -159,7 +159,8 @@ namespace NzbDrone.Core.IndexerSearch
 
             if (message.SeriesId.HasValue)
             {
-                pagingSpec.FilterExpressions.Add(v => v.SeriesId == message.SeriesId.Value);
+                var seriesId = message.SeriesId.Value;
+                pagingSpec.FilterExpressions.Add(v => v.SeriesId == seriesId);
             }
 
             if (monitored)
