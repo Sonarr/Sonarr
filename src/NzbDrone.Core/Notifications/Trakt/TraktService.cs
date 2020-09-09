@@ -204,6 +204,8 @@ namespace NzbDrone.Core.Notifications.Trakt
                     traktAudioFormat = "dolby_truehd";
                     break;
                 case "EAC3 Atmos":
+                    traktAudioFormat = "dolby_digital_plus_atmos";
+                    break;
                 case "TrueHD Atmos":
                     traktAudioFormat = "dolby_atmos";
                     break;
@@ -221,8 +223,10 @@ namespace NzbDrone.Core.Notifications.Trakt
                     traktAudioFormat = "dts_x";
                     break;
                 case "MP3":
-                case "MP2":
                     traktAudioFormat = "mp3";
+                    break;
+                case "MP2":
+                    traktAudioFormat = "mp2";
                     break;
                 case "Vorbis":
                     traktAudioFormat = "ogg";
@@ -240,7 +244,7 @@ namespace NzbDrone.Core.Notifications.Trakt
                     traktAudioFormat = "flac";
                     break;
                 case "Opus":
-                    traktAudioFormat = "ogg";
+                    traktAudioFormat = "ogg_opus";
                     break;
             }
 
