@@ -4,7 +4,7 @@ using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(142)]
+    [Migration(143)]
     public class add_priority_to_indexers : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
