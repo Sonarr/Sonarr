@@ -86,8 +86,12 @@ namespace NzbDrone.Core.ImportLists
                 {
                     var mappedSeries = _seriesSearchService.SearchForNewSeries(report.Title)
                         .FirstOrDefault();
-                    report.TvdbId = mappedSeries.TvdbId;
-                    report.Title = mappedSeries?.Title;
+
+                    if (mappedSeries != null)
+                    {
+                        report.TvdbId = mappedSeries.TvdbId;
+                        report.Title = mappedSeries?.Title;
+                    }
                 }
 
                 // Check to see if series in DB
