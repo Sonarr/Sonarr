@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Indexers
 
         public abstract string Name { get; }
         public abstract DownloadProtocol Protocol { get; }
+        public int Priority { get; set; }
 
         public abstract bool SupportsRss { get; }
         public abstract bool SupportsSearch { get; }
@@ -79,6 +80,7 @@ namespace NzbDrone.Core.Indexers
                 c.IndexerId = Definition.Id;
                 c.Indexer = Definition.Name;
                 c.DownloadProtocol = Protocol;
+                c.IndexerPriority = ((IndexerDefinition)Definition).Priority;
             });
 
             return result;

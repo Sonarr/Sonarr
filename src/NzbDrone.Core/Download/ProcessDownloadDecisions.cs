@@ -73,6 +73,7 @@ namespace NzbDrone.Core.Download
 
                 try
                 {
+                    _logger.Trace("Grabbing from Indexer {0} at priority {1}.", remoteEpisode.Release.Indexer, remoteEpisode.Release.IndexerPriority);
                     _downloadService.DownloadReport(remoteEpisode);
                     grabbed.Add(report);
                 }
