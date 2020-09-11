@@ -62,8 +62,8 @@ class Indexers extends Component {
       isAddIndexerModalOpen,
       isEditIndexerModalOpen
     } = this.state;
-    
-    const showPriority = items.some((index) => index.priority != 25);
+
+    const showPriority = items.some((index) => index.priority !== 25);
 
     return (
       <FieldSet legend="Indexers">
