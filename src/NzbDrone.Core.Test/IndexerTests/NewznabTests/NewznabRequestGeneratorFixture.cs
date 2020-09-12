@@ -279,6 +279,21 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         }
 
         [Test]
+        public void should_fallback_to_title_for_anime_search()
+        {
+            _capabilities.SupportedSearchParameters = new[] { "q", "title" };
+            _capabilities.SupportsAggregateIdSearch = true;
+
+            var results = Subject.GetSearchRequests(_animeSearchCriteria);
+            results.Tiers.Should().Be(1);
+
+            var page = results.GetTier(0).First().First();
+
+            page.Url.Query.Should().NotContain("q=");
+            page.Url.Query.Should().Contain("title=");
+        }
+
+        [Test]
         public void should_url_encode_title()
         {
             _capabilities.SupportedTvSearchParameters = new[] { "q", "title", "tvdbid", "rid", "season", "ep" };
@@ -295,6 +310,23 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             pageTier2.Url.Query.Should().NotContain("rid=10");
             pageTier2.Url.Query.Should().NotContain("q=");
             pageTier2.Url.Query.Should().Contain("title=Elith%20%26%20Little");
+        }
+
+        [Test]
+        public void should_url_encode_title_for_anime()
+        {
+            _capabilities.SupportedSearchParameters = new[] { "q", "title" };
+            _capabilities.SupportsAggregateIdSearch = true;
+
+            _animeSearchCriteria.SceneTitles[0] = "Shinryaku!? Ika Musume";
+
+            var results = Subject.GetSearchRequests(_animeSearchCriteria);
+            results.Tiers.Should().Be(1);
+
+            var page = results.GetTier(0).First().First();
+
+            page.Url.Query.Should().NotContain("q=");
+            page.Url.Query.Should().Contain("title=Shinryaku%21%3F%20Ika%20Musume");
         }
 
         [Test]

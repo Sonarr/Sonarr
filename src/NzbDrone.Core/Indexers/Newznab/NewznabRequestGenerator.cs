@@ -34,6 +34,17 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+        private bool SupportsTitleSearch
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.SupportedSearchParameters != null &&
+                       capabilities.SupportedSearchParameters.Contains("title");
+            }
+        }
+
         private bool SupportsTvSearch
         {
             get
@@ -197,7 +208,17 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            if (SupportsSearch)
+            if (SupportsTitleSearch)
+            {
+                foreach (var searchTerm in searchCriteria.SceneTitles)
+                {
+                    pageableRequests.Add(GetPagedRequests(MaxPages, Settings.AnimeCategories, "search",
+                        string.Format("&title={0}+{1:00}",
+                        Uri.EscapeDataString(searchTerm),
+                        searchCriteria.AbsoluteEpisodeNumber)));
+                }
+            }
+            else if (SupportsSearch)
             {
                 foreach (var queryTitle in searchCriteria.QueryTitles)
                 {
