@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(new ImportListSyncCommand());
 
             Mocker.GetMock<IAddSeriesService>()
-                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t=>t.Count == 0)));
+                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t=>t.Count == 0), It.IsAny<bool>()));
         }
 
         [TestCase(MonitorTypes.None, false)]
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(new ImportListSyncCommand());
 
             Mocker.GetMock<IAddSeriesService>()
-                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 1 && t.First().Monitored == expectedSeriesMonitored)));
+                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 1 && t.First().Monitored == expectedSeriesMonitored), It.IsAny<bool>()));
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             Subject.Execute(new ImportListSyncCommand());
 
             Mocker.GetMock<IAddSeriesService>()
-                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 0)));
+                  .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 0), It.IsAny<bool>()));
         }
     }
 }

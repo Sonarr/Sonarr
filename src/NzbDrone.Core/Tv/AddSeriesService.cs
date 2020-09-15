@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Tv
     public interface IAddSeriesService
     {
         Series AddSeries(Series newSeries);
-        List<Series> AddSeries(List<Series> newSeries);
+        List<Series> AddSeries(List<Series> newSeries, bool ignoreErrors = false);
     }
 
     public class AddSeriesService : IAddSeriesService
@@ -53,18 +53,29 @@ namespace NzbDrone.Core.Tv
             return newSeries;
         }
 
-        public List<Series> AddSeries(List<Series> newSeries)
+        public List<Series> AddSeries(List<Series> newSeries, bool ignoreErrors = false)
         {
             var added = DateTime.UtcNow;
             var seriesToAdd = new List<Series>();
 
             foreach (var s in newSeries)
             {
-                // TODO: Verify if adding skyhook data will be slow
-                var series = AddSkyhookData(s);
-                series = SetPropertiesAndValidate(series);
-                series.Added = added;
-                seriesToAdd.Add(series);
+                try
+                {
+                    var series = AddSkyhookData(s);
+                    series = SetPropertiesAndValidate(series);
+                    series.Added = added;
+                    seriesToAdd.Add(series);
+                }
+                catch (ValidationException ex)
+                {
+                    if (!ignoreErrors)
+                    {
+                        throw;
+                    }
+
+                    _logger.Debug("tvdbid {0} was not added due to validation failures. {1}", s.TvdbId, ex.Message);
+                }
             }
 
             return _seriesService.AddSeries(seriesToAdd);

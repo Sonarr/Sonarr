@@ -136,7 +136,7 @@ namespace NzbDrone.Core.ImportLists
                 }
             }
 
-            _addSeriesService.AddSeries(seriesToAdd);
+            _addSeriesService.AddSeries(seriesToAdd, true);
 
             var message = string.Format("Import List Sync Completed. Items found: {0}, Series added: {1}", reports.Count, seriesToAdd.Count);
 
