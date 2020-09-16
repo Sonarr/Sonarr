@@ -21,7 +21,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
             TraktListType = (int)TraktPopularListType.Popular;
         }
 
-        [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(TraktPopularListType), HelpText = "Type of list your seeking to import from")]
+        [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(TraktPopularListType), HelpText = "Type of list you're seeking to import from")]
         public int TraktListType { get; set; }
     }
 }

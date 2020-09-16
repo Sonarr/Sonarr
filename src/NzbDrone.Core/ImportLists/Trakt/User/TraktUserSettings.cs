@@ -22,7 +22,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
             TraktListType = (int)TraktUserListType.UserWatchList;
         }
 
-        [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(TraktUserListType), HelpText = "Type of list your seeking to import from")]
+        [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(TraktUserListType), HelpText = "Type of list you're seeking to import from")]
         public int TraktListType { get; set; }
     }
 }
