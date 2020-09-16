@@ -24,6 +24,11 @@ namespace NzbDrone.Core.Download.Clients.Vuze
         {
         }
 
+        public override void RemoveItem(string downloadId, bool deleteData)
+        {
+            _proxy.RemoveTorrent(downloadId, deleteData, Settings);
+        }
+
         protected override OsPath GetOutputPath(OsPath outputPath, TransmissionTorrent torrent)
         {
             // Vuze has similar behavior as uTorrent:
