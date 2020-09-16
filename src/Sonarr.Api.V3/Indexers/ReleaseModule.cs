@@ -12,6 +12,8 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 using HttpStatusCode = System.Net.HttpStatusCode;
@@ -41,7 +43,10 @@ namespace Sonarr.Api.V3.Indexers
                              IEpisodeService episodeService,
                              IParsingService parsingService,
                              ICacheManager cacheManager,
-                             Logger logger)
+                             ILanguageProfileService languageProfileService,
+                             IQualityProfileService qualityProfileService,
+                             Logger logger) :
+            base(languageProfileService, qualityProfileService)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
             _nzbSearchService = nzbSearchService;

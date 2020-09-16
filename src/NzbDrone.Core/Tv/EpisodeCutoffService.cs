@@ -17,13 +17,13 @@ namespace NzbDrone.Core.Tv
     public class EpisodeCutoffService : IEpisodeCutoffService
     {
         private readonly IEpisodeRepository _episodeRepository;
-        private readonly IProfileService _profileService;
+        private readonly IQualityProfileService _qualityProfileService;
         private readonly ILanguageProfileService _languageProfileService;
 
-        public EpisodeCutoffService(IEpisodeRepository episodeRepository, IProfileService profileService, ILanguageProfileService languageProfileService, Logger logger)
+        public EpisodeCutoffService(IEpisodeRepository episodeRepository, IQualityProfileService qualityProfileService, ILanguageProfileService languageProfileService, Logger logger)
         {
             _episodeRepository = episodeRepository;
-            _profileService = profileService;
+            _qualityProfileService = qualityProfileService;
             _languageProfileService = languageProfileService;
         }
 
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Tv
         {
             var qualitiesBelowCutoff = new List<QualitiesBelowCutoff>();
             var languagesBelowCutoff = new List<LanguagesBelowCutoff>();
-            var profiles = _profileService.All();
+            var profiles = _qualityProfileService.All();
             var languageProfiles = _languageProfileService.All();
             
             //Get all items less than the cutoff

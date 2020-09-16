@@ -5,18 +5,18 @@ namespace Sonarr.Api.V3.Profiles.Quality
 {
     public class QualityProfileSchemaModule : SonarrRestModule<QualityProfileResource>
     {
-        private readonly IProfileService _profileService;
+        private readonly IQualityProfileService _qualityProfileService;
 
-        public QualityProfileSchemaModule(IProfileService profileService)
+        public QualityProfileSchemaModule(IQualityProfileService qualityProfileService)
             : base("/qualityprofile/schema")
         {
-            _profileService = profileService;
+            _qualityProfileService = qualityProfileService;
             GetResourceSingle = GetSchema;
         }
 
         private QualityProfileResource GetSchema()
         {
-            var qualityProfile = _profileService.GetDefaultProfile(string.Empty);
+            var qualityProfile = _qualityProfileService.GetDefaultProfile(string.Empty);
 
             return qualityProfile.ToResource();
         }

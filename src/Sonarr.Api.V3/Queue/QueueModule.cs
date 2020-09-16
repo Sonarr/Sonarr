@@ -29,7 +29,7 @@ namespace Sonarr.Api.V3.Queue
                            IQueueService queueService,
                            IPendingReleaseService pendingReleaseService,
                            ILanguageProfileService languageProfileService,
-                           QualityProfileService qualityProfileService)
+                           IQualityProfileService qualityProfileService)
             : base(broadcastSignalRMessage)
         {
             _queueService = queueService;

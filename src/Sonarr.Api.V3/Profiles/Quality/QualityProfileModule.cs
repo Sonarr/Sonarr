@@ -7,11 +7,11 @@ namespace Sonarr.Api.V3.Profiles.Quality
 {
     public class ProfileModule : SonarrRestModule<QualityProfileResource>
     {
-        private readonly IProfileService _profileService;
+        private readonly IQualityProfileService _qualityProfileService;
 
-        public ProfileModule(IProfileService profileService)
+        public ProfileModule(IQualityProfileService qualityProfileService)
         {
-            _profileService = profileService;
+            _qualityProfileService = qualityProfileService;
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Cutoff).ValidCutoff();
             SharedValidator.RuleFor(c => c.Items).ValidItems();
@@ -26,30 +26,30 @@ namespace Sonarr.Api.V3.Profiles.Quality
         private int Create(QualityProfileResource resource)
         {
             var model = resource.ToModel();
-            model = _profileService.Add(model);
+            model = _qualityProfileService.Add(model);
             return model.Id;
         }
 
         private void DeleteProfile(int id)
         {
-            _profileService.Delete(id);
+            _qualityProfileService.Delete(id);
         }
 
         private void Update(QualityProfileResource resource)
         {
             var model = resource.ToModel();
 
-            _profileService.Update(model);
+            _qualityProfileService.Update(model);
         }
 
         private QualityProfileResource GetById(int id)
         {
-            return _profileService.Get(id).ToResource();
+            return _qualityProfileService.Get(id).ToResource();
         }
 
         private List<QualityProfileResource> GetAll()
         {
-            return _profileService.All().ToResource();
+            return _qualityProfileService.All().ToResource();
         }
     }
 }

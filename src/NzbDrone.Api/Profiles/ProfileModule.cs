@@ -7,11 +7,11 @@ namespace NzbDrone.Api.Profiles
 {
     public class ProfileModule : SonarrRestModule<ProfileResource>
     {
-        private readonly IProfileService _profileService;
+        private readonly IQualityProfileService _qualityProfileService;
 
-        public ProfileModule(IProfileService profileService)
+        public ProfileModule(IQualityProfileService qualityProfileService)
         {
-            _profileService = profileService;
+            _qualityProfileService = qualityProfileService;
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Cutoff).NotNull();
             SharedValidator.RuleFor(c => c.Items).MustHaveAllowedQuality();
@@ -27,29 +27,29 @@ namespace NzbDrone.Api.Profiles
         {
             var model = resource.ToModel();
 
-            return _profileService.Add(model).Id;
+            return _qualityProfileService.Add(model).Id;
         }
 
         private void DeleteProfile(int id)
         {
-            _profileService.Delete(id);
+            _qualityProfileService.Delete(id);
         }
 
         private void Update(ProfileResource resource)
         {
             var model = resource.ToModel();
 
-            _profileService.Update(model);
+            _qualityProfileService.Update(model);
         }
 
         private ProfileResource GetById(int id)
         {
-            return _profileService.Get(id).ToResource();
+            return _qualityProfileService.Get(id).ToResource();
         }
 
         private List<ProfileResource> GetAll()
         {
-            return _profileService.All().ToResource();
+            return _qualityProfileService.All().ToResource();
         }
     }
 }
