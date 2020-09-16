@@ -20,7 +20,7 @@ function mergeUpdates(items, version, prevVersion) {
 
   if (installedPreviouslyIndex === -1) {
     installedPreviouslyIndex = items.length;
-  } else if (installedPreviouslyIndex === installedIndex && items.size()) {
+  } else if (installedPreviouslyIndex === installedIndex && items.length) {
     installedPreviouslyIndex += 1;
   }
 
