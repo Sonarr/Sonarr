@@ -169,8 +169,9 @@ namespace Sonarr.Api.V3.Series
         private void DeleteSeries(int id)
         {
             var deleteFiles = Request.GetBooleanQueryParameter("deleteFiles");
+            var addImportListExclusion = Request.GetBooleanQueryParameter("addImportListExclusion");
 
-            _seriesService.DeleteSeries(id, deleteFiles);
+            _seriesService.DeleteSeries(id, deleteFiles, addImportListExclusion);
         }
 
         private SeriesResource GetSeriesResource(NzbDrone.Core.Tv.Series series, bool includeSeasonImages)

@@ -98,7 +98,6 @@ class DeleteSeriesModalContent extends Component {
               name="addImportListExclusion"
               value={addImportListExclusion}
               helpText="Prevent series from being added to Sonarr by lists"
-              kind={kinds.DANGER}
               onChange={this.onAddImportListExclusionChange}
             />
           </FormGroup>

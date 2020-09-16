@@ -147,7 +147,7 @@ namespace NzbDrone.Api.Series
                 deleteFiles = Convert.ToBoolean(deleteFilesQuery.Value);
             }
 
-            _seriesService.DeleteSeries(id, deleteFiles);
+            _seriesService.DeleteSeries(id, deleteFiles, false);
         }
 
         private SeriesResource MapToResource(Core.Tv.Series series, bool includeSeasonImages)
