@@ -60,6 +60,8 @@ namespace NzbDrone.Core.Tv
 
             foreach (var s in newSeries)
             {
+                _logger.Info("Adding Series {0} Path: [{1}]", s, s.Path);
+
                 try
                 {
                     var series = AddSkyhookData(s);
@@ -91,11 +93,11 @@ namespace NzbDrone.Core.Tv
             }
             catch (SeriesNotFoundException)
             {
-                _logger.Error("tvdbid {0} was not found, it may have been removed from TheTVDB.", newSeries.TvdbId);
+                _logger.Error("tvdbid {0} was not found, it may have been removed from TheTVDB.  Path: {1}", newSeries.TvdbId, newSeries.Path);
                 
                 throw new ValidationException(new List<ValidationFailure>
                                               {
-                                                  new ValidationFailure("TvdbId", "A series with this ID was not found", newSeries.TvdbId)
+                                                  new ValidationFailure("TvdbId", $"A series with this ID was not found. Path: {newSeries.Path}", newSeries.TvdbId)
                                               });
             }
 
