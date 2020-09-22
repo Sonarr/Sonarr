@@ -30,10 +30,10 @@ function ConfirmModal(props) {
   useEffect(() => {
     if (isOpen) {
       bindShortcut('enter', onConfirm);
-    } else {
-      unbindShortcut('enter', onConfirm);
+
+      return () => unbindShortcut('enter', onConfirm);
     }
-  }, [onConfirm]);
+  }, [isOpen, onConfirm]);
 
   return (
     <Modal
