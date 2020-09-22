@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Parser.Model
         public DownloadProtocol DownloadProtocol { get; set; }
         public int TvdbId { get; set; }
         public int TvRageId { get; set; }
+        public string ImdbId { get; set; }
         public DateTime PublishDate { get; set; }
 
         public string Origin { get; set; }

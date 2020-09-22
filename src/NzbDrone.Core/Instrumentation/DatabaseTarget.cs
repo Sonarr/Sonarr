@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Handle(ApplicationShutdownRequested message)
         {
-            if (LogManager.Configuration.LoggingRules.Contains(Rule))
+            if (LogManager.Configuration != null && LogManager.Configuration.LoggingRules.Contains(Rule))
             {
                 UnRegister();
             }
