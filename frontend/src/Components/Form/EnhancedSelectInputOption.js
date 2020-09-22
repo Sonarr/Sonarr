@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
+import CheckInput from './CheckInput';
 import styles from './EnhancedSelectInputOption.css';
 
 class EnhancedSelectInputOption extends Component {
@@ -20,15 +21,21 @@ class EnhancedSelectInputOption extends Component {
     onSelect(id);
   }
 
+  onCheckPress = () => {
+    // CheckInput requires a handler. Swallow the change event because onPress will already handle it via event propagation.
+  }
+
   //
   // Render
 
   render() {
     const {
       className,
+      id,
       isSelected,
       isDisabled,
       isHidden,
+      isMultiSelect,
       isMobile,
       children
     } = this.props;
@@ -37,8 +44,8 @@ class EnhancedSelectInputOption extends Component {
       <Link
         className={classNames(
           className,
-          isSelected && styles.isSelected,
-          isDisabled && styles.isDisabled,
+          isSelected && !isMultiSelect && styles.isSelected,
+          isDisabled && !isMultiSelect && styles.isDisabled,
           isHidden && styles.isHidden,
           isMobile && styles.isMobile
         )}
@@ -46,6 +53,19 @@ class EnhancedSelectInputOption extends Component {
         isDisabled={isDisabled}
         onPress={this.onPress}
       >
+
+        {
+          isMultiSelect &&
+            <CheckInput
+              className={styles.optionCheckInput}
+              containerClassName={styles.optionCheck}
+              name={`select-${id}`}
+              value={isSelected}
+              isDisabled={isDisabled}
+              onChange={this.onCheckPress}
+            />
+        }
+
         {children}
 
         {
@@ -67,6 +87,7 @@ EnhancedSelectInputOption.propTypes = {
   isSelected: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   isHidden: PropTypes.bool.isRequired,
+  isMultiSelect: PropTypes.bool.isRequired,
   isMobile: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
   onSelect: PropTypes.func.isRequired
@@ -75,7 +96,8 @@ EnhancedSelectInputOption.propTypes = {
 EnhancedSelectInputOption.defaultProps = {
   className: styles.option,
   isDisabled: false,
-  isHidden: false
+  isHidden: false,
+  isMultiSelect: false
 };
 
 export default EnhancedSelectInputOption;

@@ -11,6 +11,16 @@
   }
 }
 
+.optionCheck {
+  composes: container from '~./CheckInput.css';
+  flex: 0 0 0;
+}
+
+.optionCheckInput {
+  composes: input from '~./CheckInput.css';
+  margin-top: 0px;
+}
+
 .isSelected {
   background-color: #e2e2e2;
 

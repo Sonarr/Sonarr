@@ -6,14 +6,23 @@ import styles from './HintedSelectInputOption.css';
 
 function HintedSelectInputOption(props) {
   const {
+    id,
     value,
     hint,
+    isSelected,
+    isDisabled,
+    isMultiSelect,
     isMobile,
     ...otherProps
   } = props;
 
   return (
     <EnhancedSelectInputOption
+      id={id}
+      isSelected={isSelected}
+      isDisabled={isDisabled}
+      isHidden={isDisabled}
+      isMultiSelect={isMultiSelect}
       isMobile={isMobile}
       {...otherProps}
     >
@@ -36,9 +45,19 @@ function HintedSelectInputOption(props) {
 }
 
 HintedSelectInputOption.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   value: PropTypes.string.isRequired,
   hint: PropTypes.node,
+  isSelected: PropTypes.bool.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
+  isMultiSelect: PropTypes.bool.isRequired,
   isMobile: PropTypes.bool.isRequired
+};
+
+HintedSelectInputOption.defaultProps = {
+  isDisabled: false,
+  isHidden: false,
+  isMultiSelect: false
 };
 
 export default HintedSelectInputOption;

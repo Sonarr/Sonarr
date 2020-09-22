@@ -1,15 +1,21 @@
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue';
+import Label from 'Components/Label';
 import styles from './HintedSelectInputSelectedValue.css';
 
 function HintedSelectInputSelectedValue(props) {
   const {
     value,
+    values,
     hint,
+    isMultiSelect,
     includeHint,
     ...otherProps
   } = props;
+
+  const valuesMap = isMultiSelect && _.keyBy(values, 'key');
 
   return (
     <EnhancedSelectInputSelectedValue
@@ -17,7 +23,21 @@ function HintedSelectInputSelectedValue(props) {
       {...otherProps}
     >
       <div className={styles.valueText}>
-        {value}
+        {
+          isMultiSelect &&
+            value.map((key, index) => {
+              const v = valuesMap[key];
+              return (
+                <Label key={key}>
+                  {v ? v.value : key}
+                </Label>
+              );
+            })
+        }
+
+        {
+          !isMultiSelect && value
+        }
       </div>
 
       {
@@ -31,12 +51,15 @@ function HintedSelectInputSelectedValue(props) {
 }
 
 HintedSelectInputSelectedValue.propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))]).isRequired,
+  values: PropTypes.arrayOf(PropTypes.object).isRequired,
   hint: PropTypes.string,
+  isMultiSelect: PropTypes.bool.isRequired,
   includeHint: PropTypes.bool.isRequired
 };
 
 HintedSelectInputSelectedValue.defaultProps = {
+  isMultiSelect: false,
   includeHint: true
 };
 
