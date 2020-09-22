@@ -29,10 +29,10 @@ namespace NzbDrone.Core.Notifications.Webhook
         [FieldDefinition(1, Label = "Method", Type = FieldType.Select, SelectOptions = typeof(WebhookMethod), HelpText = "Which HTTP method to use submit to the Webservice")]
         public int Method { get; set; }
 
-        [FieldDefinition(2, Label = "Username")]
+        [FieldDefinition(2, Label = "Username", Privacy = PrivacyLevel.UserName)]
         public string Username { get; set; }
 
-        [FieldDefinition(3, Label = "Password", Type = FieldType.Password)]
+        [FieldDefinition(3, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
         public NzbDroneValidationResult Validate()

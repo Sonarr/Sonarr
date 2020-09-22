@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Notifications.Discord
         [FieldDefinition(0, Label = "Webhook URL", HelpText = "Discord channel webhook url")]
         public string WebHookUrl { get; set; }
 
-        [FieldDefinition(1, Label = "Username", HelpText = "The username to post as, defaults to Discord webhook default")]
+        [FieldDefinition(1, Label = "Username", Privacy = PrivacyLevel.UserName, HelpText = "The username to post as, defaults to Discord webhook default")]
         public string Username { get; set; }
 
         [FieldDefinition(2, Label = "Avatar", HelpText = "Change the avatar that is used for messages from this integration", Type = FieldType.Textbox)]

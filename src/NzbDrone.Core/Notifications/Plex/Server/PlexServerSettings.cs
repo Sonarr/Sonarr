@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "Auth Token", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(3, Label = "Auth Token", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
         public string AuthToken { get; set; }
 
         [FieldDefinition(4, Label = "Authenticate with Plex.tv", Type = FieldType.OAuth)]

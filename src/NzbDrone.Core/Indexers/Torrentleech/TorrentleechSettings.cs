@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         [FieldDefinition(0, Label = "Website URL")]
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(1, Label = "API Key")]
+        [FieldDefinition(1, Label = "API Key", Privacy = PrivacyLevel.ApiKey)]
         public string ApiKey { get; set; }
 
         [FieldDefinition(2, Type = FieldType.Number, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]

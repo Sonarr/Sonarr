@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Growl
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Password")]
+        [FieldDefinition(2, Label = "Password", Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host) && !string.IsNullOrWhiteSpace(Password) && Port > 0;

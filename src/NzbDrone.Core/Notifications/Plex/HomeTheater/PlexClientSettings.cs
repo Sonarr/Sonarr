@@ -29,10 +29,10 @@ namespace NzbDrone.Core.Notifications.Plex.HomeTheater
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Username")]
+        [FieldDefinition(2, Label = "Username", Privacy = PrivacyLevel.UserName)]
         public string Username { get; set; }
 
-        [FieldDefinition(3, Label = "Password")]
+        [FieldDefinition(3, Label = "Password", Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host);

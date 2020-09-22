@@ -43,10 +43,10 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [FieldDefinition(3, Label = "Use SSL", Type = FieldType.Checkbox)]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(4, Label = "Username", Type = FieldType.Textbox)]
+        [FieldDefinition(4, Label = "Username", Type = FieldType.Textbox, Privacy = PrivacyLevel.UserName)]
         public string Username { get; set; }
 
-        [FieldDefinition(5, Label = "Password", Type = FieldType.Password)]
+        [FieldDefinition(5, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
         [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional.")]

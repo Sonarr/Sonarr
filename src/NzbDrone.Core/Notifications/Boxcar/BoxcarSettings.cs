@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
     {
         private static readonly BoxcarSettingsValidator Validator = new BoxcarSettingsValidator();
 
-        [FieldDefinition(0, Label = "Access Token", HelpText = "Your Access Token, from your Boxcar account settings: https://new.boxcar.io/account/edit", HelpLink = "https://new.boxcar.io/account/edit")]
+        [FieldDefinition(0, Label = "Access Token", Privacy = PrivacyLevel.ApiKey, HelpText = "Your Access Token, from your Boxcar account settings: https://new.boxcar.io/account/edit", HelpLink = "https://new.boxcar.io/account/edit")]
         public string Token { get; set; }
 
         public NzbDroneValidationResult Validate()

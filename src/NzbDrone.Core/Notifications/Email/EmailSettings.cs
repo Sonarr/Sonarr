@@ -34,10 +34,10 @@ namespace NzbDrone.Core.Notifications.Email
         [FieldDefinition(2, Label = "SSL", Type = FieldType.Checkbox)]
         public bool Ssl { get; set; }
 
-        [FieldDefinition(3, Label = "Username")]
+        [FieldDefinition(3, Label = "Username", Privacy = PrivacyLevel.UserName)]
         public string Username { get; set; }
 
-        [FieldDefinition(4, Label = "Password", Type = FieldType.Password)]
+        [FieldDefinition(4, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
         [FieldDefinition(5, Label = "From Address")]
