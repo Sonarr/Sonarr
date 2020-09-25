@@ -55,17 +55,17 @@ namespace NzbDrone.Core.Indexers.Torznab
         private IndexerDefinition GetDefinition(string name, TorznabSettings settings)
         {
             return new IndexerDefinition
-                   {
-                       EnableRss = false,
-                       EnableAutomaticSearch = false,
-                       EnableInteractiveSearch = false,
-                       Name = name,
-                       Implementation = GetType().Name,
-                       Settings = settings,
-                       Protocol = DownloadProtocol.Usenet,
-                       SupportsRss = SupportsRss,
-                       SupportsSearch = SupportsSearch
-                   };
+            {
+                EnableRss = false,
+                EnableAutomaticSearch = false,
+                EnableInteractiveSearch = false,
+                Name = name,
+                Implementation = GetType().Name,
+                Settings = settings,
+                Protocol = DownloadProtocol.Usenet,
+                SupportsRss = SupportsRss,
+                SupportsSearch = SupportsSearch
+            };
         }
 
         private TorznabSettings GetSettings(string url, string apiPath = null, int[] categories = null, int[] animeCategories = null)
@@ -123,6 +123,29 @@ namespace NzbDrone.Core.Indexers.Torznab
 
                 return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
             }
+        }
+
+        public override object RequestAction(string action, IDictionary<string, string> query)
+        {
+            if (action == "newznabCategories")
+            {
+                List<NewznabCategory> categories = null;
+                try
+                {
+                    categories = _capabilitiesProvider.GetCapabilities(Settings).Categories;
+                }
+                catch
+                {
+                    // Use default categories
+                }
+
+                return new
+                {
+                    options = NewznabCategoryFieldOptionsConverter.GetFieldSelectOptions(categories)
+                };
+            }
+
+            return base.RequestAction(action, query);
         }
     }
 }

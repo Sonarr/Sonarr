@@ -18,6 +18,7 @@ import IndexerSelectInputConnector from './IndexerSelectInputConnector';
 import RootFolderSelectInputConnector from './RootFolderSelectInputConnector';
 import SeriesTypeSelectInput from './SeriesTypeSelectInput';
 import EnhancedSelectInput from './EnhancedSelectInput';
+import EnhancedSelectInputConnector from './EnhancedSelectInputConnector';
 import TagInputConnector from './TagInputConnector';
 import TextTagInputConnector from './TextTagInputConnector';
 import TextInput from './TextInput';
@@ -70,6 +71,9 @@ function getComponent(type) {
 
     case inputTypes.SELECT:
       return EnhancedSelectInput;
+
+    case inputTypes.DYNAMIC_SELECT:
+      return EnhancedSelectInputConnector;
 
     case inputTypes.SERIES_TYPE_SELECT:
       return SeriesTypeSelectInput;

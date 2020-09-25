@@ -32,6 +32,7 @@ class EnhancedSelectInputOption extends Component {
     const {
       className,
       id,
+      depth,
       isSelected,
       isDisabled,
       isHidden,
@@ -53,6 +54,11 @@ class EnhancedSelectInputOption extends Component {
         isDisabled={isDisabled}
         onPress={this.onPress}
       >
+
+        {
+          depth !== 0 &&
+          <div style={{ width: `${depth * 20}px` }} />
+        }
 
         {
           isMultiSelect &&
@@ -84,6 +90,7 @@ class EnhancedSelectInputOption extends Component {
 EnhancedSelectInputOption.propTypes = {
   className: PropTypes.string.isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  depth: PropTypes.number.isRequired,
   isSelected: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   isHidden: PropTypes.bool.isRequired,
@@ -95,6 +102,7 @@ EnhancedSelectInputOption.propTypes = {
 
 EnhancedSelectInputOption.defaultProps = {
   className: styles.option,
+  depth: 0,
   isDisabled: false,
   isHidden: false,
   isMultiSelect: false

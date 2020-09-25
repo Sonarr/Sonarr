@@ -10,6 +10,7 @@ import { icons, sizes, scrollDirections } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Portal from 'Components/Portal';
 import Link from 'Components/Link/Link';
+import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Measure from 'Components/Measure';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -295,6 +296,7 @@ class EnhancedSelectInput extends Component {
       value,
       values,
       isDisabled,
+      isFetching,
       hasError,
       hasWarning,
       valueOptions,
@@ -355,9 +357,21 @@ class EnhancedSelectInput extends Component {
                         styles.dropdownArrowContainer
                       }
                     >
-                      <Icon
-                        name={icons.CARET_DOWN}
-                      />
+
+                      {
+                        isFetching &&
+                          <LoadingIndicator
+                            className={styles.loading}
+                            size={20}
+                          />
+                      }
+
+                      {
+                        !isFetching &&
+                          <Icon
+                            name={icons.CARET_DOWN}
+                          />
+                      }
                     </div>
                   </Link>
                 </Measure>
@@ -483,6 +497,7 @@ EnhancedSelectInput.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.arrayOf(PropTypes.number)]).isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
   isDisabled: PropTypes.bool.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   hasError: PropTypes.bool,
   hasWarning: PropTypes.bool,
   valueOptions: PropTypes.object.isRequired,
@@ -496,6 +511,7 @@ EnhancedSelectInput.defaultProps = {
   className: styles.enhancedSelect,
   disabledClassName: styles.isDisabled,
   isDisabled: false,
+  isFetching: false,
   valueOptions: {},
   selectedValueOptions: {},
   selectedValueComponent: HintedSelectInputSelectedValue,

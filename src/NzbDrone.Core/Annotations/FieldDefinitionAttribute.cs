@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Annotations
         public FieldType Type { get; set; }
         public bool Advanced { get; set; }
         public Type SelectOptions { get; set; }
+        public string SelectOptionsProviderAction { get; set; }
         public string Section { get; set; }
         public HiddenType Hidden { get; set; }
         public PrivacyLevel Privacy { get; set; }
@@ -36,6 +37,15 @@ namespace NzbDrone.Core.Annotations
         public int Order { get; private set; }
         public string Label { get; set; }
         public string Hint { get; set; }
+    }
+
+    public class FieldSelectOption
+    {
+        public int Value { get; set; }
+        public string Name { get; set; }
+        public int Order { get; set; }
+        public string Hint { get; set; }
+        public int? ParentValue { get; set; }
     }
 
     public enum FieldType
