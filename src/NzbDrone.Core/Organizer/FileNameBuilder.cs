@@ -13,6 +13,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -671,9 +672,23 @@ namespace NzbDrone.Core.Organizer
             var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
             for (int i = 0; i < tokens.Count; i++)
             {
+                if (tokens[i] == "Swedis")
+                { 
+                    // Probably typo in mediainfo (should be 'Swedish')
+                    tokens[i] = "SV";
+                    continue;
+                }
+
+                if (tokens[i] == "Chinese" && OsInfo.IsNotWindows)
+                {
+                    // Mono only has 'Chinese (Simplified)' & 'Chinese (Traditional)'
+                    tokens[i] = "ZH";
+                    continue;
+                }
+
                 try
                 {
-                    var cultureInfo = cultures.FirstOrDefault(p => p.EnglishName == tokens[i]);
+                    var cultureInfo = cultures.FirstOrDefault(p => p.EnglishName.RemoveAccent() == tokens[i]);
 
                     if (cultureInfo != null)
                         tokens[i] = cultureInfo.TwoLetterISOLanguageName.ToUpper();

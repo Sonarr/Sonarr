@@ -526,6 +526,27 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be("South.Park.S15E06.City.Sushi.X264.DTS[EN+ES].[EN+ES+IT]");
         }
 
+        [TestCase("Norwegian Bokmal", "NB")]
+        [TestCase("Swedis", "SV")]
+        [TestCase("Chinese", "ZH")]
+        public void should_format_languagecodes_properly(string language, string code)
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
+
+            _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
+            {
+                VideoCodec = "AVC",
+                AudioFormat = "DTS",
+                AudioChannels = 6,
+                AudioLanguages = "English",
+                Subtitles = language,
+                SchemaRevision = 3
+            };
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be($"South.Park.S15E06.City.Sushi.X264.DTS.[{code}]");
+        }
+
         [Test]
         public void should_exclude_english_in_mediainfo_audio_language()
         {
