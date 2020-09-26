@@ -84,6 +84,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
         public void should_order_recursively_without_clusters()
         {
             var source = new List<int> {101, 204, 203, 105, 103};
+
             var expectedOrder = source
                 .OrderByDescending(v => v / 100)
                 .ThenBy(v => v % 100)
@@ -97,6 +98,22 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
 
             // 203, 204, 101, 103, 105
             orderedWithClusteredOrderedEnumerable.Should().Equal(expectedOrder);
+        }
+
+
+        [Test]
+        public void should_order_recursively()
+        {
+            var source = new List<int> { 101, 204, 203, 105, 103 };
+
+
+            var result = source
+                .Cluster()
+                .OrderBy(v => v / 100)
+                .ThenByClusterDescending(v => v % 100, 2)
+                .ToList();
+
+            result.Should().Equal(new List<int> {105, 101, 103, 204, 203});
         }
     }
 
