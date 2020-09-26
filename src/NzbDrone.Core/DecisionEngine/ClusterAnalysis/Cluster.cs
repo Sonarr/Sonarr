@@ -12,6 +12,8 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
         public readonly T Instance;
         public readonly int Id;
         public readonly double Distance;
+        public readonly bool IsMerged;
+        public readonly bool HasInstance;
 
         public static Cluster<T> Empty() => new Cluster<T>();
 
@@ -19,34 +21,40 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
         {
             get
             {
-                if (_left == null && _right == null && Instance == null) return new List<T>();
-                if (_left == null && _right == null) return new List<T> {Instance};
+                if (_left == null && _right == null && !HasInstance) return new List<T>();
+                if (_left == null && _right == null) return new List<T> { Instance };
 
                 var leftContents = _left?.Contents ?? new List<T>();
                 var rightContents = _right?.Contents ?? new List<T>();
-                
+
                 return leftContents.Concat(rightContents);
             }
         }
 
-        private Cluster() : this(null, null, 0, default(T), 0)
+        private Cluster() : this(null, null, 0, default(T), 0, false, false)
         {
 
         }
 
         public Cluster(Cluster<T> left, Cluster<T> right, double distance, int id)
-            : this(left, right, distance, default(T), id)
+            : this(left, right, distance, default(T), id, left != null && right != null, false)
         {
-            
         }
 
         public Cluster(Cluster<T> left, Cluster<T> right, double distance, T instance, int id)
+            : this(left, right, distance, instance, id, left != null && right != null && instance == null, instance != null)
+        {
+        }
+
+        private Cluster(Cluster<T> left, Cluster<T> right, double distance, T instance, int id, bool isMerged, bool hasInstance)
         {
             _left = left;
             _right = right;
             Instance = instance;
             Distance = distance;
             Id = id;
+            IsMerged = isMerged;
+            HasInstance = hasInstance;
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -58,8 +66,6 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
         {
             return GetEnumerator();
         }
-
-        public bool IsMerged => _left != null && _right != null && Instance == null;
 
         public bool ImmediatelyContains(Cluster<T> cluster) => cluster == _left || cluster == _right;
 
