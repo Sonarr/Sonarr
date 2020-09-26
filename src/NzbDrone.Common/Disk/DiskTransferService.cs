@@ -245,15 +245,17 @@ namespace NzbDrone.Common.Disk
 
             _logger.Debug("{0} [{1}] > [{2}]", mode, sourcePath, targetPath);
 
-            var originalSize = _diskProvider.GetFileSize(sourcePath);
-
             if (sourcePath == targetPath)
             {
                 throw new IOException(string.Format("Source and destination can't be the same {0}", sourcePath));
             }
 
+            var originalSize = _diskProvider.GetFileSize(sourcePath);
+
             if (sourcePath.PathEquals(targetPath, StringComparison.InvariantCultureIgnoreCase))
             {
+                // Shortcut for dealing with inplace rename
+
                 if (mode.HasFlag(TransferMode.HardLink) || mode.HasFlag(TransferMode.Copy))
                 {
                     throw new IOException(string.Format("Source and destination can't be the same {0}", sourcePath));
@@ -266,7 +268,7 @@ namespace NzbDrone.Common.Disk
                     _diskProvider.MoveFile(sourcePath, tempPath, true);
                     try
                     {
-                        ClearTargetPath(sourcePath, targetPath, overwrite);
+                        ClearTargetPath(targetPath, overwrite);
 
                         _diskProvider.MoveFile(tempPath, targetPath);
 
@@ -296,7 +298,77 @@ namespace NzbDrone.Common.Disk
                 throw new IOException(string.Format("Destination cannot be a child of the source [{0}] => [{1}]", sourcePath, targetPath));
             }
 
-            ClearTargetPath(sourcePath, targetPath, overwrite);
+            var targetFileExists = _diskProvider.FileExists(targetPath);
+            var targetFilePotentiallySame = targetFileExists && Path.GetFileName(sourcePath).EqualsIgnoreCase(Path.GetFileName(targetPath)) && _diskProvider.GetFileSize(targetPath) == originalSize;
+
+            // If the target file exists and has the same name ans size then it _could_ be that they're actually pointing to the same actual file via softlinks.
+            // This is reasonably easy to determine in linux, but on windows it's more tricky.
+            // Depending on 'overwrite' and Move/Copy we have to take different actions.
+
+            if (targetFileExists)
+            {
+                if (targetFilePotentiallySame)
+                {
+                    var targetBackupPath = targetPath + ".backup~";
+
+                    if (mode.HasFlag(TransferMode.HardLink) || mode.HasFlag(TransferMode.Copy))
+                    {
+                        // Copy doesn't allow renames, only overwrite
+                        if (!overwrite)
+                        {
+                            throw new DestinationAlreadyExistsException($"Destination {targetPath} already exists.");
+                        }
+
+                        _diskProvider.MoveFile(targetPath, targetBackupPath, true);
+                        if (!_diskProvider.FileExists(sourcePath))
+                        {
+                            // They were the same file, Copy/Hardlink can't handle that, so revert and throw
+                            // Note that on windows this can actually cause the casing to change
+                            _diskProvider.MoveFile(targetBackupPath, targetPath);
+
+                            throw new IOException(string.Format("Source and destination can't be the same {0}", sourcePath));
+                        }
+                    }
+                    else if (mode.HasFlag(TransferMode.Move))
+                    {
+                        // Move allows a rename of same file, or overwrite different file
+                        _diskProvider.MoveFile(targetPath, targetBackupPath, true);
+                        if (!_diskProvider.FileExists(sourcePath))
+                        {
+                            // They were the same file, treat this as if it's a rename in place
+                            _diskProvider.MoveFile(targetBackupPath, targetPath);
+
+                            return TransferMode.Move;
+                        }
+                        else
+                        {
+                            // They were different files, only allow the move if overwrite is enabled, otherwise revert and throw
+                            if (overwrite)
+                            {
+                                _diskProvider.DeleteFile(targetBackupPath);
+                            }
+                            else
+                            {
+                                _diskProvider.MoveFile(targetBackupPath, targetPath);
+                                throw new DestinationAlreadyExistsException($"Destination {targetPath} already exists.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return TransferMode.None;
+                    }
+                }
+                else
+                {
+                    if (!overwrite)
+                    {
+                        throw new DestinationAlreadyExistsException($"Destination {targetPath} already exists.");
+                    }
+
+                    _diskProvider.DeleteFile(targetPath);
+                }
+            }
 
             if (mode.HasFlag(TransferMode.HardLink))
             {
@@ -322,7 +394,7 @@ namespace NzbDrone.Common.Disk
 
             var isCifs = targetDriveFormat == "cifs";
             var isBtrfs = sourceDriveFormat == "btrfs" && targetDriveFormat == "btrfs";
-           
+
             if (mode.HasFlag(TransferMode.Copy))
             {
                 if (isBtrfs)
@@ -363,7 +435,7 @@ namespace NzbDrone.Common.Disk
                     _diskProvider.DeleteFile(sourcePath);
                     return TransferMode.Move;
                 }
-               
+
                 TryMoveFileVerified(sourcePath, targetPath, originalSize);
                 return TransferMode.Move;
             }
@@ -371,7 +443,7 @@ namespace NzbDrone.Common.Disk
             return TransferMode.None;
         }
 
-        private void ClearTargetPath(string sourcePath, string targetPath, bool overwrite)
+        private void ClearTargetPath(string targetPath, bool overwrite)
         {
             if (_diskProvider.FileExists(targetPath))
             {
