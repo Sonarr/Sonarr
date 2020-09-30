@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Tv;
@@ -13,10 +14,12 @@ namespace NzbDrone.Core.MediaFiles
     public class EpisodeFilePreferredWordCalculator : IEpisodeFilePreferredWordCalculator
     {
         private readonly IPreferredWordService _preferredWordService;
+        private readonly Logger _logger;
 
-        public EpisodeFilePreferredWordCalculator(IPreferredWordService preferredWordService)
+        public EpisodeFilePreferredWordCalculator(IPreferredWordService preferredWordService, Logger logger)
         {
             _preferredWordService = preferredWordService;
+            _logger = logger;
         }
         public int Calculate(Series series, EpisodeFile episodeFile)
         {
@@ -25,6 +28,10 @@ namespace NzbDrone.Core.MediaFiles
             if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
             {
                 scores.Add(_preferredWordService.Calculate(series, episodeFile.SceneName, 0));
+            }
+            else
+            {
+                _logger.Trace("No stored scene name for {0}", episodeFile);
             }
 
             // Calculate using RelativePath or Path, but not both
