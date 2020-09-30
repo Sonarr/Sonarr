@@ -36,6 +36,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-X.MA.5.1.x264-RlsGroup","RlsGroup")]
         [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-MA.5.1.x264-RlsGroup","RlsGroup")]
         [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-ES.5.1.x264-RlsGroup","RlsGroup")]
+        [TestCase("SomeShow.S20E13.1080p.Blu-Ray.DTS-ES.5.1.x264-RlsGroup","RlsGroup")]
         //[TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
         {
