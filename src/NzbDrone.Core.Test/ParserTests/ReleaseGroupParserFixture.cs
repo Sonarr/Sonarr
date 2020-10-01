@@ -31,6 +31,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Black Monday S01 E01-E02 1080p AMZN WEBRip DDP5.1 x264 monkee", null)]
         [TestCase("Series.Title.S01E05.The-Aniversary.WEBDL-1080p.mkv", null)]
         [TestCase("Series.Title.S01E05.The-Aniversary.HDTV-1080p.mkv", null)]
+        [TestCase("Shameless US (2010) S04 (1080p BDRip x265 10bit DTS-HD MA 5 1 - WEM)[TAoE]",null)]
+        [TestCase("The.Expanse.S03E04.2160p.Amazon.WEBRip.DTS-HD.MA.5.1.x264",null)]
+        [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-X.MA.5.1.x264",null)]
+        [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-MA.5.1.x264",null)]
+        [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-ES.5.1.x264",null)]
+        [TestCase("SomeShow.S20E13.1080p.Blu-Ray.DTS-ES.5.1.x264",null)]
         //[TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
         {
