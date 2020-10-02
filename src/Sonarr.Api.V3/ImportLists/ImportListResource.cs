@@ -10,6 +10,8 @@ namespace Sonarr.Api.V3.ImportLists
         public string RootFolderPath { get; set; }
         public int QualityProfileId { get; set; }
         public int LanguageProfileId { get; set; }
+        public SeriesTypes SeriesType { get; set; }
+        public bool SeasonFolder { get; set; }
         public ImportListType ListType { get; set; }
         public int ListOrder { get; set; }
     }
@@ -30,6 +32,8 @@ namespace Sonarr.Api.V3.ImportLists
             resource.RootFolderPath = definition.RootFolderPath;
             resource.QualityProfileId = definition.QualityProfileId;
             resource.LanguageProfileId = definition.LanguageProfileId;
+            resource.SeriesType = definition.SeriesType;
+            resource.SeasonFolder = definition.SeasonFolder;
             resource.ListType = definition.ListType;
             resource.ListOrder = (int) definition.ListType;
 
@@ -50,6 +54,8 @@ namespace Sonarr.Api.V3.ImportLists
             definition.RootFolderPath = resource.RootFolderPath;
             definition.QualityProfileId = resource.QualityProfileId;
             definition.LanguageProfileId = resource.LanguageProfileId;
+            definition.SeriesType = resource.SeriesType;
+            definition.SeasonFolder = resource.SeasonFolder;
             definition.ListType = resource.ListType;
 
             return definition;

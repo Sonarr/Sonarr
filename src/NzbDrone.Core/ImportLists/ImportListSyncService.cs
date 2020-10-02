@@ -125,13 +125,14 @@ namespace NzbDrone.Core.ImportLists
                         RootFolderPath = importList.RootFolderPath,
                         QualityProfileId = importList.QualityProfileId,
                         LanguageProfileId = importList.LanguageProfileId,
+                        SeriesType = importList.SeriesType,
+                        SeasonFolder = importList.SeasonFolder,
                         Tags = importList.Tags,
-                        SeasonFolder = true,
                         AddOptions = new AddSeriesOptions
-                        {
-                            SearchForMissingEpisodes = monitored,
-                            Monitor = importList.ShouldMonitor
-                        }
+                                     {
+                                         SearchForMissingEpisodes = monitored,
+                                         Monitor = importList.ShouldMonitor
+                                     }
                     });
                 }
             }

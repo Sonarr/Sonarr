@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import Icon from 'Components/Icon';
@@ -46,6 +47,8 @@ function EditImportListModalContent(props) {
     rootFolderPath,
     qualityProfileId,
     languageProfileId,
+    seriesType,
+    seasonFolder,
     tags,
     fields
   } = item;
@@ -138,7 +141,7 @@ function EditImportListModalContent(props) {
                 <FormInputGroup
                   type={inputTypes.QUALITY_PROFILE_SELECT}
                   name="qualityProfileId"
-                  helpText={'Quality Profile list items should be added with'}
+                  helpText={'Quality Profile list items will be added with'}
                   {...qualityProfileId}
                   onChange={onInputChange}
                 />
@@ -150,9 +153,45 @@ function EditImportListModalContent(props) {
                 <FormInputGroup
                   type={inputTypes.LANGUAGE_PROFILE_SELECT}
                   name="languageProfileId"
-                  helpText={'Language Profile list items should be added with'}
+                  helpText={'Language Profile list items will be added with'}
                   {...languageProfileId}
                   onChange={onInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>
+                    Series Type
+
+                  <Popover
+                    anchor={
+                      <Icon
+                        className={styles.labelIcon}
+                        name={icons.INFO}
+                      />
+                    }
+                    title="Series Types"
+                    body={<SeriesTypePopoverContent />}
+                    position={tooltipPositions.RIGHT}
+                  />
+                </FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.SERIES_TYPE_SELECT}
+                  name="seriesType"
+                  onChange={onInputChange}
+                  {...seriesType}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Season Folder</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.CHECK}
+                  name="seasonFolder"
+                  onChange={onInputChange}
+                  {...seasonFolder}
                 />
               </FormGroup>
 
@@ -162,7 +201,7 @@ function EditImportListModalContent(props) {
                 <FormInputGroup
                   type={inputTypes.TAG}
                   name="tags"
-                  helpText="Add series from this list with these tags"
+                  helpText="Tags list items will be added with"
                   {...tags}
                   onChange={onInputChange}
                 />
