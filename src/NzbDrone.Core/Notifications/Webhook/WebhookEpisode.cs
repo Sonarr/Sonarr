@@ -23,10 +23,5 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string Title { get; set; }
         public string AirDate { get; set; }
         public DateTime? AirDateUtc { get; set; }
-
-        public string Quality { get; set; }
-        public int QualityVersion { get; set; }
-        public string ReleaseGroup { get; set; }
-        public string SceneName { get; set; }
     }
 }

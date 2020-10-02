@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Core.Tv;
@@ -27,13 +28,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             {
                 EventType = "Grab",
                 Series = new WebhookSeries(message.Series),
-                Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)
-                {
-                    // TODO: Stop passing these parameters inside an episode v3
-                    Quality = quality.Quality.Name,
-                    QualityVersion = quality.Revision.Version,
-                    ReleaseGroup = remoteEpisode.ParsedEpisodeInfo.ReleaseGroup
-                }),
+                Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
                 Release = new WebhookRelease(quality, remoteEpisode),
                 DownloadClient = message.DownloadClient,
                 DownloadId = message.DownloadId
@@ -50,19 +45,22 @@ namespace NzbDrone.Core.Notifications.Webhook
             {
                 EventType = "Download",
                 Series = new WebhookSeries(message.Series),
-                Episodes = episodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)
-                {
-                    // TODO: Stop passing these parameters inside an episode v3
-                    Quality = episodeFile.Quality.Quality.Name,
-                    QualityVersion = episodeFile.Quality.Revision.Version,
-                    ReleaseGroup = episodeFile.ReleaseGroup,
-                    SceneName = episodeFile.SceneName
-                }),
+                Episodes = episodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = new WebhookEpisodeFile(episodeFile),
                 IsUpgrade = message.OldFiles.Any(),
                 DownloadClient = message.DownloadClient,
                 DownloadId = message.DownloadId
             };
+
+            if (message.OldFiles.Any())
+            {
+                payload.DeletedFiles = message.OldFiles.ConvertAll(x => new WebhookEpisodeFile(x)
+                                                                        {
+                                                                            Path = Path.Combine(message.Series.Path,
+                                                                                x.RelativePath)
+                                                                        }
+                );
+            }
 
             _proxy.SendWebhook(payload, Settings);
         }
