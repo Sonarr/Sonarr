@@ -7,7 +7,6 @@
         Paused,
         Checking,
         Downloading,
-        ToPP,           // TODO: Remove in v3
         QuickCheck,
         Verifying,
         Repairing,

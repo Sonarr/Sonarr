@@ -54,8 +54,7 @@ namespace NzbDrone.Api.Indexers
         public DownloadProtocol Protocol { get; set; }
 
 
-        // TODO: Remove in v3
-        // Used to support the original Release Push implementation
+        // Used to support the original Release Push implementation, removed in v3
         // JsonIgnore so we don't serialize it, but can still parse it
         [JsonIgnore]
         public DownloadProtocol DownloadProtocol
