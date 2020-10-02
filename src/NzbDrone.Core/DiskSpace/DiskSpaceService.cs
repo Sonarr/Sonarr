@@ -42,9 +42,9 @@ namespace NzbDrone.Core.DiskSpace
 
         private IEnumerable<string> GetSeriesRootPaths()
         {
-            return _seriesService.GetAllSeries()
-                .Where(s => _diskProvider.FolderExists(s.Path))
-                .Select(s => _diskProvider.GetPathRoot(s.Path))
+            return _seriesService.GetAllSeriesPaths()
+                .Where(s => _diskProvider.FolderExists(s))
+                .Select(s => _diskProvider.GetPathRoot(s))
                 .Distinct();
         }
 

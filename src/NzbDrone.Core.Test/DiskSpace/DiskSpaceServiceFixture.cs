@@ -47,11 +47,11 @@ namespace NzbDrone.Core.Test.DiskSpace
             GivenSeries();
         }
 
-        private void GivenSeries(params Series[] series)
+        private void GivenSeries(params string[] seriesPaths)
         {
             Mocker.GetMock<ISeriesService>()
-                  .Setup(v => v.GetAllSeries())
-                  .Returns(series.ToList());
+                  .Setup(v => v.GetAllSeriesPaths())
+                  .Returns(seriesPaths.ToList());
         }
 
         private void GivenExistingFolder(string folder)
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.DiskSpace
         [Test]
         public void should_check_diskspace_for_series_folders()
         {
-            GivenSeries(new Series { Path = _seriesFolder });
+            GivenSeries(_seriesFolder);
 
             GivenExistingFolder(_seriesFolder);
 
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.DiskSpace
         [Test]
         public void should_check_diskspace_for_same_root_folder_only_once()
         {
-            GivenSeries(new Series { Path = _seriesFolder }, new Series { Path = _seriesFolder2 });
+            GivenSeries(_seriesFolder, _seriesFolder2);
 
             GivenExistingFolder(_seriesFolder);
             GivenExistingFolder(_seriesFolder2);
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.DiskSpace
         [Test]
         public void should_not_check_diskspace_for_missing_series_folders()
         {
-            GivenSeries(new Series { Path = _seriesFolder });
+            GivenSeries(_seriesFolder);
 
             var freeSpace = Subject.GetFreeSpace();
 
