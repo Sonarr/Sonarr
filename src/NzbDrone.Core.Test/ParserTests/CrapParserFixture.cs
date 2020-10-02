@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("ah63jka93jf0jh26ahjas961.mkv")]
         [TestCase("qrdSD3rYzWb7cPdVIGSn4E7")]
         [TestCase("QZC4HDl7ncmzyUj9amucWe1ddKU1oFMZDd8r0dEDUsTd")]
+        [TestCase("abc.xyz.af6021c37f7852")]
         public void should_not_parse_crap(string title)
         {
             Parser.Parser.ParseTitle(title).Should().BeNull();

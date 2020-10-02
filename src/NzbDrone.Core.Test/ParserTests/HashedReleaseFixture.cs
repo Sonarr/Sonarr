@@ -108,6 +108,13 @@ namespace NzbDrone.Core.Test.ParserTests
                 "Droned",
                 Quality.HDTV720p,
                 null
+            },
+            new object[]
+            {
+                @"C:\Test\Series.Title.S02E24.720p.HDTV.H.264\abc.xyz.af6021c37f7852.mkv".AsOsAgnostic(),
+                "Series Title",
+                Quality.HDTV720p,
+                null
             }
         };
 

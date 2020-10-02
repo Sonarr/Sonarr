@@ -258,7 +258,7 @@ namespace NzbDrone.Core.Parser
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 1103/1113 naming
-                new Regex(@"^(?<title>.+?)?(?:(?:[-_\W](?<![()\[!]))*(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+|\W(?:e|ep|x)\d+)))+(\W+|_|$)(?!\\)",
+                new Regex(@"^(?<title>.+?)?(?:(?:[-_. ](?<![()\[!]))*(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+|\W(?:e|ep|x)\d+)))+([-_. ]+|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with single digit episode number (S01E1, S01E5E6, etc)
@@ -333,6 +333,9 @@ namespace NzbDrone.Core.Parser
 
                 //abc - Started appearing January 2015
                 new Regex(@"^abc$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+
+                //abc - Started appearing 2020
+                new Regex(@"^abc[-_. ]xyz", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
                 //b00bs - Started appearing January 2015
                 new Regex(@"^b00bs$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
