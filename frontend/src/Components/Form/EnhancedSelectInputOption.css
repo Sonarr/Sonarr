@@ -20,7 +20,7 @@
 .optionCheckInput {
   composes: input from '~./CheckInput.css';
 
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .isSelected {
