@@ -110,7 +110,7 @@
     "react-virtualized": "9.21.1",
     "redux": "4.0.5",
     "redux-actions": "2.6.5",
-    "redux-batched-actions": "0.4.1",
+    "redux-batched-actions": "0.5.0",
     "redux-localstorage": "0.4.1",
     "redux-thunk": "2.3.0",
     "require-nocache": "1.0.0",
