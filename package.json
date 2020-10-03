@@ -55,7 +55,7 @@
     "eslint-plugin-react": "7.21.3",
     "esprint": "0.7.0",
     "file-loader": "4.0.0",
-    "filesize": "4.1.2",
+    "filesize": "6.1.0",
     "fuse.js": "6.4.1",
     "gulp": "4.0.2",
     "gulp-cached": "1.1.1",
