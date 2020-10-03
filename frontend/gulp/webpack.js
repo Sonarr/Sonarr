@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const errorHandler = require('./helpers/errorHandler');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPluginHtmlTags = require('html-webpack-plugin/lib/html-tags');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const uiFolder = 'UI';
@@ -13,7 +14,7 @@ const frontendFolder = path.join(__dirname, '..');
 const srcFolder = path.join(frontendFolder, 'src');
 const isProduction = process.argv.indexOf('--production') > -1;
 const isProfiling = isProduction && process.argv.indexOf('--profile') > -1;
-const inlineWebWorkers = true;
+const inlineWebWorkers = 'no-fallback';
 
 const distFolder = path.resolve(frontendFolder, '..', '_output', uiFolder);
 
@@ -31,14 +32,19 @@ const cssVarsFiles = [
 ].map(require.resolve);
 
 // Override the way HtmlWebpackPlugin injects the scripts
+// TODO: Find a better way to get these paths without
 HtmlWebpackPlugin.prototype.injectAssetsIntoHtml = function(html, assets, assetTags) {
-  const head = assetTags.head.map((v) => {
-    v.attributes = { rel: 'stylesheet', type: 'text/css', href: `/${v.attributes.href.replace('\\', '/')}` };
-    return this.createHtmlTag(v);
+  const head = assetTags.headTags.map((v) => {
+    const href = v.attributes.href
+      .replace('\\', '/')
+      .replace('%5C', '/');
+
+    v.attributes = { rel: 'stylesheet', type: 'text/css', href: `/${href}` };
+    return HtmlWebpackPluginHtmlTags.htmlTagObjectToString(v, this.options.xhtml);
   });
-  const body = assetTags.body.map((v) => {
+  const body = assetTags.bodyTags.map((v) => {
     v.attributes = { src: `/${v.attributes.src}` };
-    return this.createHtmlTag(v);
+    return HtmlWebpackPluginHtmlTags.htmlTagObjectToString(v, this.options.xhtml);
   });
 
   return html
@@ -122,9 +128,8 @@ const config = {
         use: {
           loader: 'worker-loader',
           options: {
-            name: '[name].js',
-            inline: inlineWebWorkers,
-            fallback: !inlineWebWorkers
+            filename: '[name].js',
+            inline: inlineWebWorkers
           }
         }
       },
