@@ -47,7 +47,7 @@
     "core-js": "3.6.5",
     "create-react-class": "15.6.3",
     "css-loader": "3.0.0",
-    "del": "5.0.0",
+    "del": "6.0.0",
     "element-class": "0.2.2",
     "esformatter": "0.11.3",
     "eslint": "7.10.0",
