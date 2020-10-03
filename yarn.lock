@@ -7864,10 +7864,10 @@ react-side-effect@^1.0.2:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
 
-react-slider@0.11.2:
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/react-slider/-/react-slider-0.11.2.tgz#ae014e1454c3cdd5f28b5c2495b2a08abd9971e6"
-  integrity sha512-y49ZwJJ7OcPdihgt71xYI8GRdAzpFuSLQR8b+cKotutxqf8MAEPEtqvWKlg+3ZQRe5PMN6oWbIb7wEYDF8XhNQ==
+react-slider@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/react-slider/-/react-slider-1.0.11.tgz#d782e3dbfee22fd314ad0fb970da74f74c7e214f"
+  integrity sha512-NQSae3kCM+on7nXrDN33afQH95HHMVYF/NwibEKsXjIVuQIs9EON8YWGYwNVy1xOPXG3ZcHWusPyA/5AqpvOoA==
 
 react-tabs@3.1.1:
   version "3.1.1"
@@ -7877,10 +7877,10 @@ react-tabs@3.1.1:
     clsx "^1.1.0"
     prop-types "^15.5.0"
 
-react-text-truncate@0.14.1:
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/react-text-truncate/-/react-text-truncate-0.14.1.tgz#1bdf420d22c3fc2ff740ebc84f8c659e7f2b5e9f"
-  integrity sha512-4sqxw0H+E4xu9zqSD9IEJAEaBfhfu01DgV3WPS+YAT88/YLAemh1kJDL8448KJ2EqAs5i3C3/14o1/XYsr5Bxw==
+react-text-truncate@0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/react-text-truncate/-/react-text-truncate-0.16.0.tgz#03bbb942437dfba5cc0faf614f1339f888926f80"
+  integrity sha512-hMFXhUHgIBCCDaOfOsZAFeO4DGfG/paLyaS/F+X11CXseuScpxmMBUW6Luwjk9/FlGrVJWNGy1FSfK6b4yyiIg==
   dependencies:
     prop-types "^15.5.7"
 
