@@ -66,8 +66,27 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 - [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)	
 - Copyright 2010-2020
 
-### Sponsors
+### Supporters
 
-- [JetBrains](http://www.jetbrains.com/) for providing us with free licenses to their great tools
-    - [ReSharper](http://www.jetbrains.com/resharper/)
-    - [TeamCity](http://www.jetbrains.com/teamcity/)
+This project would not be possible without the support of our users and software providers. [**Become a sponsor or backer**](https://opencollective.com/sonarr) to help us out!
+
+#### Sponsors
+
+[![Sponsors](https://opencollective.com/sonarr/tiers/sponsor.svg)](https://opencollective.com/sonarr/contribute/sponsor-21443/checkout)
+
+#### Flexible Sponsors
+
+[![Flexible Sponsors](https://opencollective.com/sonarr/tiers/flexible-sponsor.svg?avatarHeight=54)](https://opencollective.com/sonarr/contribute/flexible-sponsor-21457/checkout)
+
+#### Backers
+
+[![Backers](https://opencollective.com/sonarr/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/sonarr/contribute/backer-21442/checkout)
+
+#### JetBrains
+
+Thank you to [<img src="/Logo/Jetbrains/jetbrains.svg" alt="JetBrains" width="32"> JetBrains](http://www.jetbrains.com/) for providing us with free licenses to their great tools
+
+* [<img src="/Logo/Jetbrains/teamcity.svg" alt="TeamCity" width="32"> TeamCity](http://www.jetbrains.com/teamcity/)
+* [<img src="/Logo/Jetbrains/resharper.svg" alt="ReSharper" width="32"> ReSharper](http://www.jetbrains.com/resharper/)
+* [<img src="/Logo/Jetbrains/dottrace.svg" alt="dotTrace" width="32"> dotTrace](http://www.jetbrains.com/dottrace/)
+
