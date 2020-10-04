@@ -5,7 +5,28 @@ import classNames from 'classnames';
 import { isMobile as isMobileUtil } from 'Utilities/mobile';
 import { kinds, tooltipPositions } from 'Helpers/Props';
 import Portal from 'Components/Portal';
+import dimensions from 'Styles/Variables/dimensions';
 import styles from './Tooltip.css';
+
+let maxWidth = null;
+
+function getMaxWidth() {
+  const windowWidth = window.innerWidth;
+
+  if (windowWidth > parseInt(dimensions.breakpointLarge)) {
+    maxWidth = 800;
+  }
+
+  if (windowWidth > parseInt(dimensions.breakpointMedium)) {
+    maxWidth = 650;
+  }
+
+  if (windowWidth > parseInt(dimensions.breakpointSmall)) {
+    maxWidth = 500;
+  }
+
+  maxWidth = 450;
+}
 
 class Tooltip extends Component {
 
@@ -17,6 +38,7 @@ class Tooltip extends Component {
 
     this._scheduleUpdate = null;
     this._closeTimeout = null;
+    this._maxWidth = maxWidth || getMaxWidth();
 
     this.state = {
       isOpen: false
@@ -54,9 +76,11 @@ class Tooltip extends Component {
     } else if ((/^bottom/).test(data.placement)) {
       data.styles.maxHeight = windowHeight - bottom - 20;
     } else if ((/^right/).test(data.placement)) {
-      data.styles.maxWidth = windowWidth - right - 50;
+      data.styles.maxWidth = Math.min(this._maxWidth, windowWidth - right - 20);
+      data.styles.maxHeight = top - 20;
     } else {
-      data.styles.maxWidth = left - 35;
+      data.styles.maxWidth = Math.min(this._maxWidth, left - 20);
+      data.styles.maxHeight = top - 20;
     }
 
     return data;
@@ -144,10 +168,16 @@ class Tooltip extends Component {
             {({ ref, style, placement, arrowProps, scheduleUpdate }) => {
               this._scheduleUpdate = scheduleUpdate;
 
+              const popperPlacement = placement ? placement.split('-')[0] : position;
+              const vertical = popperPlacement === 'top' || popperPlacement === 'bottom';
+
               return (
                 <div
                   ref={ref}
-                  className={styles.tooltipContainer}
+                  className={classNames(
+                    styles.tooltipContainer,
+                    vertical ? styles.verticalContainer : styles.horizontalContainer
+                  )}
                   style={style}
                   onMouseEnter={this.onMouseEnter}
                   onMouseLeave={this.onMouseLeave}
@@ -156,7 +186,7 @@ class Tooltip extends Component {
                     className={this.state.isOpen ? classNames(
                       styles.arrow,
                       styles[kind],
-                      styles[placement.split('-')[0]]
+                      styles[popperPlacement]
                     ) : styles.arrowDisabled}
                     ref={arrowProps.ref}
                     style={arrowProps.style}
@@ -201,7 +231,7 @@ Tooltip.defaultProps = {
   bodyClassName: styles.body,
   kind: kinds.DEFAULT,
   position: tooltipPositions.TOP,
-  canFlip: true
+  canFlip: false
 };
 
 export default Tooltip;

@@ -156,3 +156,35 @@
 .body {
   padding: 5px;
 }
+
+.verticalContainer {
+  max-height: 300px;
+}
+
+.horizontalContainer {
+  max-width: calc($breakpointExtraSmall - 20px);
+}
+
+@media only screen and (min-width: $breakpointExtraSmall) {
+  .horizontalContainer {
+    max-width: calc($breakpointSmall * 0.8);
+  }
+}
+
+@media only screen and (min-width: $breakpointSmall) {
+  .horizontalContainer {
+    max-width: calc($breakpointMedium * 0.8);
+  }
+}
+
+@media only screen and (min-width: $breakpointMedium) {
+  .horizontalContainer {
+    max-width: calc($breakpointLarge * 0.8);
+  }
+}
+
+/* @media only screen and (max-width: $breakpointLarge) {
+  .horizontalContainer {
+    max-width: calc($breakpointLarge * 0.8);
+  }
+} */
