@@ -61,7 +61,7 @@ class FilterMenuContent extends Component {
         {
           showCustomFilters &&
             <MenuItem onPress={onCustomFiltersPress}>
-                Custom Filters
+              Custom Filters
             </MenuItem>
         }
       </MenuContent>

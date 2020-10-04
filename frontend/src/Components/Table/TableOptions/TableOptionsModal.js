@@ -136,7 +136,7 @@ class TableOptionsModal extends Component {
             isOpen ?
               <ModalContent onModalClose={onModalClose}>
                 <ModalHeader>
-            Table Options
+                  Table Options
                 </ModalHeader>
 
                 <ModalBody>
@@ -231,7 +231,7 @@ class TableOptionsModal extends Component {
                   <Button
                     onPress={onModalClose}
                   >
-              Close
+                    Close
                   </Button>
                 </ModalFooter>
               </ModalContent> :

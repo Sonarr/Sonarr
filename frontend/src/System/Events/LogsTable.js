@@ -82,7 +82,7 @@ function LogsTable(props) {
         {
           isPopulated && !error && !items.length &&
           <div>
-                No events found
+            No events found
           </div>
         }
 

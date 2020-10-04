@@ -264,7 +264,7 @@ class AddNewSeriesModalContent extends Component {
           <div>
             <label className={styles.searchLabelContainer}>
               <span className={styles.searchLabel}>
-              Start search for missing episodes
+                Start search for missing episodes
               </span>
 
               <CheckInput
@@ -278,7 +278,7 @@ class AddNewSeriesModalContent extends Component {
 
             <label className={styles.searchLabelContainer}>
               <span className={styles.searchLabel}>
-              Start search for cutoff unmet episodes
+                Start search for cutoff unmet episodes
               </span>
 
               <CheckInput

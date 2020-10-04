@@ -167,7 +167,7 @@ function TagDetailsModalContent(props) {
             isDisabled={isTagUsed}
             onPress={onDeleteTagPress}
           >
-              Delete
+            Delete
           </Button>
         }
 

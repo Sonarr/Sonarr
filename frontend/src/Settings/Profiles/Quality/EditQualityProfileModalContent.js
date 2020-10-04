@@ -176,7 +176,7 @@ class EditQualityProfileModalContent extends Component {
                           upgradeAllowed.value &&
                             <FormGroup size={sizes.EXTRA_SMALL}>
                               <FormLabel size={sizes.SMALL}>
-                              Upgrade Until
+                                Upgrade Until
                               </FormLabel>
 
                               <FormInputGroup

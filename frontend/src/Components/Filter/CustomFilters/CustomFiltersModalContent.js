@@ -24,7 +24,7 @@ function CustomFiltersModalContent(props) {
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-          Custom Filters
+        Custom Filters
       </ModalHeader>
 
       <ModalBody>
@@ -58,7 +58,7 @@ function CustomFiltersModalContent(props) {
         <Button
           onPress={onModalClose}
         >
-            Close
+          Close
         </Button>
       </ModalFooter>
     </ModalContent>

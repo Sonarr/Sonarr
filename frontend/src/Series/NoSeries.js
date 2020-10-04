@@ -11,7 +11,7 @@ function NoSeries(props) {
     return (
       <div>
         <div className={styles.message}>
-        All series are hidden due to the applied filter.
+          All series are hidden due to the applied filter.
         </div>
       </div>
     );

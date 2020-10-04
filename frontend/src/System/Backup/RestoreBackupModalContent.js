@@ -200,7 +200,7 @@ class RestoreBackupModalContent extends Component {
           </div>
 
           <Button onPress={onModalClose}>
-              Cancel
+            Cancel
           </Button>
 
           <SpinnerButton
@@ -209,7 +209,7 @@ class RestoreBackupModalContent extends Component {
             isSpinning={isRestoring}
             onPress={this.onRestorePress}
           >
-              Restore
+            Restore
           </SpinnerButton>
         </ModalFooter>
       </ModalContent>

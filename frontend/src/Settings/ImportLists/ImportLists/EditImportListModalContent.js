@@ -161,7 +161,7 @@ function EditImportListModalContent(props) {
 
               <FormGroup>
                 <FormLabel>
-                    Series Type
+                  Series Type
 
                   <Popover
                     anchor={

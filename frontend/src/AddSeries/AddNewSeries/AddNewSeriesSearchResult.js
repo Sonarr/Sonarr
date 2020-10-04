@@ -105,7 +105,7 @@ class AddNewSeriesSearchResult extends Component {
                   {
                     !title.contains(year) && year ?
                       <span className={styles.year}>
-                    ({year})
+                        ({year})
                       </span> :
                       null
                   }
@@ -168,7 +168,7 @@ class AddNewSeriesSearchResult extends Component {
                     kind={kinds.DANGER}
                     size={sizes.LARGE}
                   >
-                  Ended
+                    Ended
                   </Label> :
                   null
               }
@@ -179,7 +179,7 @@ class AddNewSeriesSearchResult extends Component {
                     kind={kinds.INFO}
                     size={sizes.LARGE}
                   >
-                  Upcoming
+                    Upcoming
                   </Label> :
                   null
               }

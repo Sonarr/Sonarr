@@ -174,7 +174,7 @@ class ImportSeriesSelectSeries extends Component {
                         kind={kinds.WARNING}
                       />
 
-                No match found!
+                      No match found!
                     </div> :
                     null
                 }
@@ -189,7 +189,7 @@ class ImportSeriesSelectSeries extends Component {
                         kind={kinds.WARNING}
                       />
 
-                Search failed, please try again later.
+                      Search failed, please try again later.
                     </div> :
                     null
                 }
