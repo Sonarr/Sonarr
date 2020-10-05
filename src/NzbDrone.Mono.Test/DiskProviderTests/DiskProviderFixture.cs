@@ -170,15 +170,15 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             Syscall.stat(tempFile, out var fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0444");
 
-            Subject.SetPermissions(tempFile, "644");
+            Subject.SetPermissions(tempFile, "755", null);
             Syscall.stat(tempFile, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0644");
 
-            Subject.SetPermissions(tempFile, "0644");
+            Subject.SetPermissions(tempFile, "0755", null);
             Syscall.stat(tempFile, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0644");
 
-            Subject.SetPermissions(tempFile, "1664");
+            Subject.SetPermissions(tempFile, "1775", null);
             Syscall.stat(tempFile, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("1664");
         }
@@ -195,51 +195,49 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             Syscall.stat(tempPath, out var fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0555");
 
-            Subject.SetPermissions(tempPath, "644");
+            Subject.SetPermissions(tempPath, "755", null);
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0755");
 
-            Subject.SetPermissions(tempPath, "0644");
+            Subject.SetPermissions(tempPath, "0755", null);
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0755");
 
-            Subject.SetPermissions(tempPath, "1664");
+            Subject.SetPermissions(tempPath, "1775", null);
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("1775");
 
-            Subject.SetPermissions(tempPath, "775");
+            Subject.SetPermissions(tempPath, "775", null);
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0775");
 
-            Subject.SetPermissions(tempPath, "640");
+            Subject.SetPermissions(tempPath, "750", null);
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0750");
 
-            Subject.SetPermissions(tempPath, "0041");
+            Subject.SetPermissions(tempPath, "0051", null);
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0051");
         }
 
         [Test]
-        public void IsValidFilePermissionMask_should_return_correct()
+        public void IsValidFolderPermissionMask_should_return_correct()
         {
-            // Files may not be executable
-            Subject.IsValidFilePermissionMask("0777").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("0544").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("0454").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("0445").Should().BeFalse();
-
             // No special bits should be set
-            Subject.IsValidFilePermissionMask("1644").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("2644").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("4644").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("7644").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("1755").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("2755").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("4755").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("7755").Should().BeFalse();
 
-            // Files should be readable and writeable by owner
-            Subject.IsValidFilePermissionMask("0400").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("0000").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("0200").Should().BeFalse();
-            Subject.IsValidFilePermissionMask("0600").Should().BeTrue();
+            // Folder should be readable and writeable by owner
+            Subject.IsValidFolderPermissionMask("0000").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("0100").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("0200").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("0300").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("0400").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("0500").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("0600").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("0700").Should().BeTrue();
         }
     }
 }

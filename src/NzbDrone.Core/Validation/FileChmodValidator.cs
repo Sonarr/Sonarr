@@ -3,11 +3,11 @@ using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.Validation
 {
-    public class FileChmodValidator : PropertyValidator
+    public class FolderChmodValidator : PropertyValidator
     {
         private readonly IDiskProvider _diskProvider;
 
-        public FileChmodValidator(IDiskProvider diskProvider)
+        public FolderChmodValidator(IDiskProvider diskProvider)
             : base("Must contain a valid Unix permissions octal")
         {
             _diskProvider = diskProvider;
@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Validation
         {
             if (context.PropertyValue == null) return false;
 
-            return _diskProvider.IsValidFilePermissionMask(context.PropertyValue.ToString());
+            return _diskProvider.IsValidFolderPermissionMask(context.PropertyValue.ToString());
         }
     }
 }
