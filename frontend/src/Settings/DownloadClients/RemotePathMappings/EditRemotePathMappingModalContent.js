@@ -140,7 +140,7 @@ EditRemotePathMappingModalContent.propTypes = {
   isSaving: PropTypes.bool.isRequired,
   saveError: PropTypes.object,
   item: PropTypes.shape(remotePathMappingShape).isRequired,
-  downloadClientHosts: PropTypes.arrayOf(PropTypes.string).isRequired,
+  downloadClientHosts: PropTypes.arrayOf(PropTypes.object).isRequired,
   onInputChange: PropTypes.func.isRequired,
   onSavePress: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired,

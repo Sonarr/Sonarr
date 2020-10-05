@@ -13,19 +13,15 @@ let maxWidth = null;
 function getMaxWidth() {
   const windowWidth = window.innerWidth;
 
-  if (windowWidth > parseInt(dimensions.breakpointLarge)) {
+  if (windowWidth >= parseInt(dimensions.breakpointLarge)) {
     maxWidth = 800;
-  }
-
-  if (windowWidth > parseInt(dimensions.breakpointMedium)) {
+  } else if (windowWidth >= parseInt(dimensions.breakpointMedium)) {
     maxWidth = 650;
-  }
-
-  if (windowWidth > parseInt(dimensions.breakpointSmall)) {
+  } else if (windowWidth >= parseInt(dimensions.breakpointSmall)) {
     maxWidth = 500;
+  } else {
+    maxWidth = 450;
   }
-
-  maxWidth = 450;
 }
 
 class Tooltip extends Component {
