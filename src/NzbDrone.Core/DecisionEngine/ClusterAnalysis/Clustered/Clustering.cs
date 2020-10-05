@@ -5,12 +5,9 @@ using System.Linq;
 
 namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Clustered
 {
-    public class Clustering<TSource> : IEnumerable<TSource>
+    public class Clustering<TSource> : IGrouping<double, TSource>
     {
         private readonly ISet<TSource> _instances;
-        public double MinValue { get; }
-        public double MaxValue { get; }
-        public double AverageValue { get; }
 
         public Clustering(ISet<TSource> instances, Func<TSource, double> clusterValueFunc)
         {
@@ -30,9 +27,7 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Clustered
 
             var seed = new AggregateInfo {Min = double.MaxValue, Max = double.MinValue, Sum = 0, Count = 0};
             var info = _instances.Aggregate(seed, AggregateInstances);
-            MaxValue = info.Max;
-            MinValue = info.Min;
-            AverageValue = info.Sum / info.Count;
+            Key = info.Sum / info.Count;
         }
 
         private class AggregateInfo
@@ -52,5 +47,7 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Clustered
         {
             return GetEnumerator();
         }
+
+        public double Key { get; }
     }
 }

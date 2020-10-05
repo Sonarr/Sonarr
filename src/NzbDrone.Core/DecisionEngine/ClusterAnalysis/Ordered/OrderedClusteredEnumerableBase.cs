@@ -5,25 +5,26 @@ using System.Linq;
 
 namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
 {
-    public abstract class OrderedClusteredEnumerableBase<TElement> : IOrderedClusteredEnumerable<TElement>
+    public class OrderedClusteredEnumerableBase<TElement> : IOrderedClusteredEnumerable<TElement>
     {
-        protected readonly OrderedClusteredEnumerableBase<TElement> Parent;
-        private readonly IEnumerable<TElement> _source;
-
-        protected OrderedClusteredEnumerableBase(IEnumerable<TElement> source, OrderedClusteredEnumerableBase<TElement> parent)
+        protected OrderedClusteredEnumerableBase<TElement> Next;
+        protected readonly IEnumerable<TElement> Source;
+        
+        public IOrderedClusteredEnumerable<TElement> CreateOrderedGroupedEnumerable<TKey>(Func<TElement, TKey> keySelector, bool descending, IComparer<TKey> comparer)
         {
-            _source = source;
-            Parent = parent;
+            Append(new OrderedClusteredEnumerable<TElement, TKey>(Source, descending, comparer, s => s.GroupBy(keySelector)));
+            return this;
         }
 
-        public abstract IOrderedEnumerable<ClusteredElement<TElement>> ApplyOrdering(IEnumerable<ClusteredElement<TElement>> source);
-        public abstract IEnumerable<ClusteredElement<TElement>> ApplyClustering(IEnumerable<ClusteredElement<TElement>> source);
-
+        public IOrderedClusteredEnumerable<TElement> CreateOrderedClusteredEnumerable<TKey>(Func<TElement, double> keySelector, bool descending, double distanceCutPoint)
+        {
+            Append(new OrderedClusteredEnumerable<TElement, double>(Source, descending, null, s => s.ClusterBy(keySelector, distanceCutPoint)));
+            return this;
+        }
 
         public IEnumerator<TElement> GetEnumerator()
         {
-            var clusters = ApplyClustering(_source.Select(e => new ClusteredElement<TElement>(e)));
-            return ApplyOrdering(clusters).Select(ce => ce.Element).GetEnumerator();
+            return Apply(Source).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -31,14 +32,26 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
             return GetEnumerator();
         }
 
-        public IOrderedClusteredEnumerable<TElement> CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending)
+        public virtual IEnumerable<TElement> Apply(IEnumerable<TElement> source)
         {
-            return new OrderedEnumerable<TElement,TKey>(_source, this, keySelector, comparer, descending);
+            return Next == null ? source : Next.Apply(source);
         }
 
-        public IOrderedClusteredEnumerable<TElement> CreateClusterOrderedEnumerable(Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint, bool descending)
+        protected void Append(OrderedClusteredEnumerableBase<TElement> next)
         {
-            return new ClusterOrderedEnumerable<TElement>(_source, this, distanceValueSelector, clusterDistanceCutPoint, descending);
+            if (Next == null)
+            {
+                Next = next;
+            }
+            else
+            {
+                Next.Append(next);
+            }
+        }
+
+        public OrderedClusteredEnumerableBase(IEnumerable<TElement> source)
+        {
+            Source = source;
         }
     }
 }

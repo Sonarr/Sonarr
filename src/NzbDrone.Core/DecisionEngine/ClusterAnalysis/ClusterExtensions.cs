@@ -19,52 +19,66 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
 
         public static IOrderedClusteredEnumerable<TElement> Cluster<TElement>(this IEnumerable<TElement> source)
         {
-            return new ClusterableOrderableEnumerable<TElement>(source);
+            return new OrderedClusteredEnumerableBase<TElement>(source);
         }
 
-        public static IOrderedClusteredEnumerable<TElement> OrderByCluster<TElement>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint)
+        public static IOrderedClusteredEnumerable<TElement> OrderBy<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, TKey> keySelector)
         {
-            return new ClusterOrderedEnumerable<TElement>(source, null, distanceValueSelector, clusterDistanceCutPoint, false);
+            return Cluster(source).CreateOrderedGroupedEnumerable(keySelector, false, null);
         }
 
-        public static IOrderedClusteredEnumerable<TElement> OrderByClusterDescending<TElement>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint)
+        public static IOrderedClusteredEnumerable<TElement> OrderByDescending<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, TKey> keySelector)
         {
-            return new ClusterOrderedEnumerable<TElement>(source, null, distanceValueSelector, clusterDistanceCutPoint, true);
+            return Cluster(source).CreateOrderedGroupedEnumerable(keySelector, true, null);
         }
 
-        public static IOrderedClusteredEnumerable<TElement> ThenByCluster<TElement>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint)
+        public static IOrderedClusteredEnumerable<TElement> OrderBy<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, TKey> keySelector, IComparer<TKey> comparer)
         {
-            return source.CreateClusterOrderedEnumerable(distanceValueSelector, clusterDistanceCutPoint, false);
+            return Cluster(source).CreateOrderedGroupedEnumerable(keySelector, false, comparer);
         }
 
-        public static IOrderedClusteredEnumerable<TElement> ThenByClusterDescending<TElement>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint)
+        public static IOrderedClusteredEnumerable<TElement> OrderByDescending<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, TKey> keySelector, IComparer<TKey> comparer)
         {
-            return source.CreateClusterOrderedEnumerable(distanceValueSelector, clusterDistanceCutPoint, true);
+            return Cluster(source).CreateOrderedGroupedEnumerable(keySelector, true, comparer);
         }
 
-        public static IOrderedClusteredEnumerable<TElement> OrderBy<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source,
-            Func<TElement, TKey> keySelector, IComparer<TKey> comparer = null)
+        public static IOrderedClusteredEnumerable<TElement> ThenBy<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, TKey> keySelector)
         {
-            return new OrderedEnumerable<TElement, TKey>(source, null, keySelector, comparer, false);
+            return source.CreateOrderedGroupedEnumerable(keySelector, false, null);
         }
 
-        public static IOrderedClusteredEnumerable<TElement> OrderByDescending<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source,
-            Func<TElement, TKey> keySelector, IComparer<TKey> comparer = null)
+        public static IOrderedClusteredEnumerable<TElement> ThenByDescending<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, TKey> keySelector)
         {
-            return new OrderedEnumerable<TElement, TKey>(source, null, keySelector, comparer, true);
+            return source.CreateOrderedGroupedEnumerable(keySelector, true, null);
         }
 
-        public static IOrderedClusteredEnumerable<TElement> ThenBy<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source,
-            Func<TElement, TKey> keySelector, IComparer<TKey> comparer = null)
+        public static IOrderedClusteredEnumerable<TElement> ThenBy<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, TKey> keySelector, IComparer<TKey> comparer)
         {
-            return source.CreateOrderedEnumerable(keySelector, comparer, false);
+            return source.CreateOrderedGroupedEnumerable(keySelector, false, comparer);
         }
 
-        public static IOrderedClusteredEnumerable<TElement> ThenByDescending<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source,
-            Func<TElement, TKey> keySelector, IComparer<TKey> comparer = null)
+        public static IOrderedClusteredEnumerable<TElement> ThenByDescending<TElement, TKey>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, TKey> keySelector, IComparer<TKey> comparer)
         {
-            return source.CreateOrderedEnumerable(keySelector, comparer, true);
+            return source.CreateOrderedGroupedEnumerable(keySelector, true, comparer);
         }
 
+        public static IOrderedClusteredEnumerable<TElement> OrderByCluster<TElement>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, double> keySelector, double distanceCutPoint)
+        {
+            return Cluster(source).CreateOrderedClusteredEnumerable<TElement>(keySelector, false, distanceCutPoint);
+        }
+
+        public static IOrderedClusteredEnumerable<TElement> OrderByClusterDescending<TElement>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, double> keySelector, double distanceCutPoint)
+        {
+            return Cluster(source).CreateOrderedClusteredEnumerable<TElement>(keySelector, true, distanceCutPoint);
+        }
+        public static IOrderedClusteredEnumerable<TElement> ThenByCluster<TElement>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, double> keySelector, double distanceCutPoint)
+        {
+            return source.CreateOrderedClusteredEnumerable<TElement>(keySelector, false, distanceCutPoint);
+        }
+
+        public static IOrderedClusteredEnumerable<TElement> ThenByClusterDescending<TElement>(this IOrderedClusteredEnumerable<TElement> source, Func<TElement, double> keySelector, double distanceCutPoint)
+        {
+            return source.CreateOrderedClusteredEnumerable<TElement>(keySelector, true, distanceCutPoint);
+        }
     }
 }

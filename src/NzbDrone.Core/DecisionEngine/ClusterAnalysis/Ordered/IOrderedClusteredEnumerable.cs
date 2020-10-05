@@ -5,10 +5,11 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis.Ordered
 {
     public interface IOrderedClusteredEnumerable<TElement> : IEnumerable<TElement>
     {
-        IOrderedClusteredEnumerable<TElement> CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector,
-            IComparer<TKey> comparer, bool descending);
+        IOrderedClusteredEnumerable<TElement> CreateOrderedGroupedEnumerable<TKey>(Func<TElement, TKey> keySelector,
+            bool descending, IComparer<TKey> comparer);
 
-        IOrderedClusteredEnumerable<TElement> CreateClusterOrderedEnumerable(
-            Func<TElement, double> distanceValueSelector, double clusterDistanceCutPoint, bool descending);
+        IOrderedClusteredEnumerable<TElement> CreateOrderedClusteredEnumerable<TKey>(
+            Func<TElement, double> keySelector, bool descending, double distanceCutPoint);
+
     }
 }

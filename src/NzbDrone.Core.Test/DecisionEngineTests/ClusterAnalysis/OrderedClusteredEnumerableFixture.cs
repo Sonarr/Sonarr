@@ -6,7 +6,7 @@ using NzbDrone.Core.DecisionEngine.ClusterAnalysis;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
 {
-    public class ClusterOrderedEnumerableFixture
+    public class OrderedClusteredEnumerableFixture
     {
         [Test]
         public void should_order_by_cluster_descending_then_by_duration()
@@ -106,6 +106,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
         {
             var source = new List<int> { 101, 204, 203, 105, 103 };
 
+            var clusters = source.ClusterBy(v => v % 100, 2).ToList();
+
 
             var result = source
                 .Cluster()
@@ -115,6 +117,22 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
 
             result.Should().Equal(new List<int> {105, 101, 103, 204, 203});
         }
+
+        [Test]
+        public void should_order_recursively_and_by_cluster()
+        {
+            var source = new List<int> { 9, 6, 5, 4, 2, 1 };
+
+            var result = source
+                .Cluster()
+                .OrderBy(v => v >= 5)
+                .ThenByCluster(v => v, 2)
+                .ToList();
+
+            result.Should().Equal(new List<int> { 2, 1, 4, 6, 5, 9 });
+        }
+
+
     }
 
     internal class ClusteredEnumerableTestCandidate
