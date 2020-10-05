@@ -88,7 +88,7 @@ namespace NzbDrone.Windows.Disk
 
         }
 
-        public override void SetPermissions(string path, string mask)
+        public override void SetPermissions(string path, string mask, string group)
         {
 
         }

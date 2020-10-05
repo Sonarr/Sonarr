@@ -66,16 +66,26 @@ namespace NzbDrone.Mono.Disk
             
         }
 
-        public override void SetPermissions(string path, string mask)
+        public override void SetPermissions(string path, string mask, string group)
         {
             Logger.Debug("Setting permissions: {0} on {1}", mask, path);
 
             var permissions = NativeConvert.FromOctalPermissionString(mask);
 
-            if (Directory.Exists(path))
+            if (File.Exists(path))
             {
-                permissions = GetFolderPermissions(permissions);
+                permissions = GetFilePermissions(permissions);
             }
+
+            // Preserve non-access permissions
+            if (Syscall.stat(path, out var curStat) < 0)
+            {
+                var error = Stdlib.GetLastError();
+
+                throw new LinuxPermissionsException("Error getting current permissions: " + error);
+            }
+
+            permissions |= curStat.st_mode & ~FilePermissions.ACCESSPERMS;
 
             if (Syscall.chmod(path, permissions) < 0)
             {
@@ -83,33 +93,39 @@ namespace NzbDrone.Mono.Disk
 
                 throw new LinuxPermissionsException("Error setting permissions: " + error);
             }
+
+            var groupId = GetGroupId(group);
+
+            if (Syscall.chown(path, unchecked((uint)-1), groupId) < 0)
+            {
+                var error = Stdlib.GetLastError();
+
+                throw new LinuxPermissionsException("Error setting group: " + error);
+            }
         }
 
-        private static FilePermissions GetFolderPermissions(FilePermissions permissions)
+        private static FilePermissions GetFilePermissions(FilePermissions permissions)
         {
-            permissions |= (FilePermissions) ((int) (permissions & (FilePermissions.S_IRUSR | FilePermissions.S_IRGRP | FilePermissions.S_IROTH)) >> 2);
+            permissions &= ~(FilePermissions.S_IXUSR | FilePermissions.S_IXGRP | FilePermissions.S_IXOTH);
 
             return permissions;
         }
 
-        public override bool IsValidFilePermissionMask(string mask)
+        public override bool IsValidFolderPermissionMask(string mask)
         {
             try
             {
                 var permissions = NativeConvert.FromOctalPermissionString(mask);
 
-                if ((permissions & (FilePermissions.S_ISUID | FilePermissions.S_ISGID | FilePermissions.S_ISVTX)) != 0)
+                if ((permissions & ~FilePermissions.ACCESSPERMS) != 0)
                 {
+                    // Only allow access permissions
                     return false;
                 }
 
-                if ((permissions & (FilePermissions.S_IXUSR | FilePermissions.S_IXGRP | FilePermissions.S_IXOTH)) != 0)
+                if ((permissions & FilePermissions.S_IRWXU) != FilePermissions.S_IRWXU)
                 {
-                    return false;
-                }
-
-                if ((permissions & (FilePermissions.S_IRUSR | FilePermissions.S_IWUSR)) != (FilePermissions.S_IRUSR | FilePermissions.S_IWUSR))
-                {
+                    // We expect at least full owner permissions (700)
                     return false;
                 }
 

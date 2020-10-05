@@ -23,6 +23,7 @@ import TagInputConnector from './TagInputConnector';
 import TagSelectInputConnector from './TagSelectInputConnector';
 import TextTagInputConnector from './TextTagInputConnector';
 import TextInput from './TextInput';
+import UMaskInput from './UMaskInput';
 import FormInputHelpText from './FormInputHelpText';
 import styles from './FormInputGroup.css';
 
@@ -87,6 +88,9 @@ function getComponent(type) {
 
     case inputTypes.TAG_SELECT:
       return TagSelectInputConnector;
+
+    case inputTypes.UMASK:
+      return UMaskInput;
 
     default:
       return TextInput;
@@ -195,7 +199,7 @@ function FormInputGroup(props) {
       }
 
       {
-        !checkInput && helpTextWarning &&
+        (!checkInput || helpText) && helpTextWarning &&
           <FormInputHelpText
             text={helpTextWarning}
             isWarning={true}

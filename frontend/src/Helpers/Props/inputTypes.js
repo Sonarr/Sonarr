@@ -19,6 +19,7 @@ export const TAG = 'tag';
 export const TEXT = 'text';
 export const TEXT_TAG = 'textTag';
 export const TAG_SELECT = 'tagSelect';
+export const UMASK = 'umask';
 
 export const all = [
   AUTO_COMPLETE,
@@ -41,5 +42,6 @@ export const all = [
   TAG,
   TEXT,
   TEXT_TAG,
-  TAG_SELECT
+  TAG_SELECT,
+  UMASK
 ];
