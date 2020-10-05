@@ -54,28 +54,28 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
         {
             Cluster<T> minClusterLeft = null;
             Cluster<T> minClusterRight = null;
-            var minXIndex = int.MaxValue;
-            var minYIndex = int.MaxValue;
+            var minClusterLeftIndex = int.MaxValue;
+            var minClusterRightIndex = int.MaxValue;
             var minDistance = double.MaxValue;
 
             void DifferentIndexAction(int xIndex, int yIndex)
             {
-                var distance = _distanceMatrix[clusters[xIndex].Id, clusters[yIndex].Id];
+                var distance = _distanceMatrix[clusters[xIndex].DistanceMatrixIndex, clusters[yIndex].DistanceMatrixIndex];
                 
                 if (distance >= minDistance) return;
 
                 minClusterLeft = clusters[xIndex];
                 minClusterRight = clusters[yIndex];
-                minXIndex = xIndex;
-                minYIndex = yIndex;
+                minClusterLeftIndex = xIndex;
+                minClusterRightIndex = yIndex;
                 minDistance = distance;
 
             }
 
             ReflectiveMatrixIterate(null, DifferentIndexAction, clusters.Length);
 
-            var minCluster = new Cluster<T>(minClusterLeft, minClusterRight, minDistance, minClusterLeft.Id);
-            UpdateDistanceMatrix(clusters, minXIndex, minYIndex, minCluster);
+            var minCluster = new Cluster<T>(minClusterLeft, minClusterRight, minDistance, minClusterLeft.DistanceMatrixIndex);
+            UpdateDistanceMatrix(clusters, minClusterLeftIndex, minClusterRightIndex, minCluster);
 
             return minCluster;
         }
@@ -87,39 +87,39 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
             void DifferentIndexAction(int xIndex, int yIndex)
             {
                 var distance = _distanceFunction(clusters[xIndex].Instance, clusters[yIndex].Instance);
-                _distanceMatrix[clusters[xIndex].Id, clusters[yIndex].Id] = distance;
-                _distanceMatrix[clusters[yIndex].Id, clusters[xIndex].Id] = distance;
+                _distanceMatrix[clusters[xIndex].DistanceMatrixIndex, clusters[yIndex].DistanceMatrixIndex] = distance;
+                _distanceMatrix[clusters[yIndex].DistanceMatrixIndex, clusters[xIndex].DistanceMatrixIndex] = distance;
             }
 
             void SameIndexAction(int xIndex, int yIndex)
             {
-                _distanceMatrix[clusters[xIndex].Id, clusters[yIndex].Id] = 0;
+                _distanceMatrix[clusters[xIndex].DistanceMatrixIndex, clusters[yIndex].DistanceMatrixIndex] = 0;
             }
 
             ReflectiveMatrixIterate(SameIndexAction, DifferentIndexAction, clusters.Length);
 
         }
 
-        private void UpdateDistanceMatrix(Cluster<T>[] clusters, int minXIndex, int minYIndex, Cluster<T> minCluster)
+        private void UpdateDistanceMatrix(Cluster<T>[] clusters, int minClusterLeftIndex, int minClusterRightIndex, Cluster<T> minCluster)
         {
             // add new row and column for the merged cluster (which is actually re-using a row/column in the matrix
             // for one of the merged clusters)
             // distance is the max (linkage function) of the distances between each element of the merged cluster
             // and each of the remaining elements
 
-            var minXCluster = clusters[minXIndex];
-            var minYCluster = clusters[minYIndex];
+            var minClusterLeft = clusters[minClusterLeftIndex];
+            var minClusterRight = clusters[minClusterRightIndex];
 
             for (var index = 0; index < clusters.Length; index++)
             {
-                if(index == minXIndex || index == minYIndex) continue;
+                if(index == minClusterLeftIndex || index == minClusterRightIndex) continue;
 
-                var distanceBetweenMinXAndIndex = _distanceMatrix[minXCluster.Id, clusters[index].Id];
-                var distanceBetweenMinYAndIndex = _distanceMatrix[minYCluster.Id, clusters[index].Id];
+                var distanceBetweenMinLeftAndIndex = _distanceMatrix[minClusterLeft.DistanceMatrixIndex, clusters[index].DistanceMatrixIndex];
+                var distanceBetweenMinRightAndIndex = _distanceMatrix[minClusterRight.DistanceMatrixIndex, clusters[index].DistanceMatrixIndex];
 
-                var distance = _linkageFunction(distanceBetweenMinXAndIndex, distanceBetweenMinYAndIndex);
-                _distanceMatrix[minCluster.Id, clusters[index].Id] = distance;
-                _distanceMatrix[clusters[index].Id, minCluster.Id] = distance;
+                var distance = _linkageFunction(distanceBetweenMinLeftAndIndex, distanceBetweenMinRightAndIndex);
+                _distanceMatrix[minCluster.DistanceMatrixIndex, clusters[index].DistanceMatrixIndex] = distance;
+                _distanceMatrix[clusters[index].DistanceMatrixIndex, minCluster.DistanceMatrixIndex] = distance;
             }
         }
 

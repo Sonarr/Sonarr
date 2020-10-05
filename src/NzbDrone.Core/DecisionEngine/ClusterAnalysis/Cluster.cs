@@ -10,7 +10,7 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
         private readonly Cluster<T> _right;
         
         public readonly T Instance;
-        public readonly int Id;
+        public readonly int DistanceMatrixIndex;
         public readonly double Distance;
         public readonly bool IsMerged;
         public readonly bool HasInstance;
@@ -41,18 +41,18 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
         {
         }
 
-        public Cluster(Cluster<T> left, Cluster<T> right, double distance, T instance, int id)
-            : this(left, right, distance, instance, id, left != null && right != null && instance == null, instance != null)
+        public Cluster(Cluster<T> left, Cluster<T> right, double distance, T instance, int distanceMatrixIndex)
+            : this(left, right, distance, instance, distanceMatrixIndex, left != null && right != null && instance == null, instance != null)
         {
         }
 
-        private Cluster(Cluster<T> left, Cluster<T> right, double distance, T instance, int id, bool isMerged, bool hasInstance)
+        private Cluster(Cluster<T> left, Cluster<T> right, double distance, T instance, int distanceMatrixIndex, bool isMerged, bool hasInstance)
         {
             _left = left;
             _right = right;
             Instance = instance;
             Distance = distance;
-            Id = id;
+            DistanceMatrixIndex = distanceMatrixIndex;
             IsMerged = isMerged;
             HasInstance = hasInstance;
         }
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.DecisionEngine.ClusterAnalysis
 
         public ISet<ISet<T>> GetClusteredInstances(double distanceClusterPoint)
         {
-            if (!IsMerged) return new HashSet<ISet<T>> {Instance != null ? new HashSet<T> {Instance} : new HashSet<T>()};
+            if (!IsMerged) return new HashSet<ISet<T>> {HasInstance ? new HashSet<T> {Instance} : new HashSet<T>()};
 
             var left = _left.GetClusteredInstances(distanceClusterPoint);
             var right = _right.GetClusteredInstances(distanceClusterPoint);
