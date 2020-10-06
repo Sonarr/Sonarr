@@ -71,7 +71,8 @@ class SeriesIndexOverviews extends Component {
       items,
       sortKey,
       overviewOptions,
-      jumpToCharacter
+      jumpToCharacter,
+      isSmallScreen
     } = this.props;
 
     const {
@@ -81,13 +82,17 @@ class SeriesIndexOverviews extends Component {
 
     if (prevProps.sortKey !== sortKey ||
         prevProps.overviewOptions !== overviewOptions) {
-      this.calculateGrid();
+      this.calculateGrid(this.state.width, isSmallScreen);
     }
 
-    if (this._grid &&
+    if (
+      this._grid &&
         (prevState.width !== width ||
             prevState.rowHeight !== rowHeight ||
-            hasDifferentItemsOrOrder(prevProps.items, items))) {
+            hasDifferentItemsOrOrder(prevProps.items, items) ||
+            prevProps.overviewOptions !== overviewOptions
+        )
+    ) {
       // recomputeGridSize also forces Grid to discard its cache of rendered cells
       this._grid.recomputeGridSize();
     }

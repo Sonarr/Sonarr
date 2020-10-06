@@ -15,7 +15,6 @@ const rows = [
     name: 'monitored',
     showProp: 'showMonitored',
     valueProp: 'monitored'
-
   },
   {
     name: 'network',

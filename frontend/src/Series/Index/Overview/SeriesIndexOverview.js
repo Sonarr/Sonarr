@@ -101,7 +101,8 @@ class SeriesIndexOverview extends Component {
       seasonCount,
       episodeCount,
       episodeFileCount,
-      totalEpisodeCount
+      totalEpisodeCount,
+      sizeOnDisk
     } = statistics;
 
     const {
@@ -212,6 +213,7 @@ class SeriesIndexOverview extends Component {
                 nextAiring={nextAiring}
                 seasonCount={seasonCount}
                 qualityProfile={qualityProfile}
+                sizeOnDisk={sizeOnDisk}
                 showRelativeDates={showRelativeDates}
                 shortDateFormat={shortDateFormat}
                 longDateFormat={longDateFormat}
