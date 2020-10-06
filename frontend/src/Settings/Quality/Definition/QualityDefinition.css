@@ -24,7 +24,7 @@
   height: 20px;
 }
 
-.bar {
+.track {
   top: 9px;
   margin: 0 5px;
   height: 3px;
@@ -36,7 +36,7 @@
   }
 }
 
-.handle {
+.thumb {
   top: 1px;
   z-index: 0 !important;
   width: 18px;

@@ -69,6 +69,27 @@ class QualityDefinition extends Component {
   }
 
   //
+  // Control
+
+  trackRenderer(props, state) {
+    return (
+      <div
+        {...props}
+        className={styles.track}
+      />
+    );
+  }
+
+  thumbRenderer(props, state) {
+    return (
+      <div
+        {...props}
+        className={styles.thumb}
+      />
+    );
+  }
+
+  //
   // Listeners
 
   onSliderChange = ([sliderMinSize, sliderMaxSize]) => {
@@ -162,16 +183,16 @@ class QualityDefinition extends Component {
 
         <div className={styles.sizeLimit}>
           <ReactSlider
+            className={styles.slider}
             min={slider.min}
             max={slider.max}
             step={slider.step}
             minDistance={10}
             value={[sliderMinSize, sliderMaxSize]}
-            withBars={true}
+            withTracks={true}
             snapDragDisabled={true}
-            className={styles.slider}
-            barClassName={styles.bar}
-            handleClassName={styles.handle}
+            renderThumb={this.thumbRenderer}
+            renderTrack={this.trackRenderer}
             onChange={this.onSliderChange}
             onAfterChange={this.onAfterSliderChange}
           />
