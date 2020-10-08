@@ -63,6 +63,14 @@ class EnhancedSelectInputConnector extends Component {
   //
   // Lifecycle
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      refetchRequired: false
+    };
+  }
+
   componentDidMount = () => {
     this._populate();
   }
@@ -72,12 +80,21 @@ class EnhancedSelectInputConnector extends Component {
     const nextKey = getProviderDataKey(this.props.providerData);
 
     if (!_.isEqual(prevKey, nextKey)) {
-      this._populateDelayed();
+      this.setState({ refetchRequired: true });
     }
   }
 
   componentWillUnmount = () => {
     this._cleanup();
+  }
+
+  //
+  // Listeners
+
+  onOpen = () => {
+    if (this.state.refetchRequired) {
+      this._populate();
+    }
   }
 
   //
@@ -92,6 +109,7 @@ class EnhancedSelectInputConnector extends Component {
     } = this.props;
 
     if (selectOptionsProviderAction) {
+      this.setState({ refetchRequired: false });
       dispatchFetchOptions({
         section: selectOptionsProviderAction,
         action: selectOptionsProviderAction,
@@ -100,10 +118,6 @@ class EnhancedSelectInputConnector extends Component {
       });
     }
   }
-
-  _populateDelayed = _.debounce(() => {
-    this._populate();
-  }, 1000, { leading: false, trailing: true });
 
   _cleanup() {
     const {
@@ -123,6 +137,7 @@ class EnhancedSelectInputConnector extends Component {
     return (
       <EnhancedSelectInput
         {...this.props}
+        onOpen={this.onOpen}
       />
     );
   }

@@ -251,6 +251,10 @@ class EnhancedSelectInput extends Component {
       this._addListener();
     }
 
+    if (!this.state.isOpen) {
+      this.props.onOpen();
+    }
+
     this.setState({ isOpen: !this.state.isOpen });
   }
 
@@ -504,6 +508,7 @@ EnhancedSelectInput.propTypes = {
   selectedValueOptions: PropTypes.object.isRequired,
   selectedValueComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
   optionComponent: PropTypes.elementType,
+  onOpen: PropTypes.func,
   onChange: PropTypes.func.isRequired
 };
 
