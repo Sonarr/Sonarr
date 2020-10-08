@@ -73,10 +73,10 @@ namespace NzbDrone.Core.Indexers.Newznab
         [FieldDefinition(2, Label = "API Key", Privacy = PrivacyLevel.ApiKey)]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(3, Label = "Categories", HelpText = "Comma Separated list, leave blank to disable standard/daily shows")]
+        [FieldDefinition(3, Label = "Categories", Type = FieldType.Select, SelectOptionsProviderAction = "newznabCategories", HelpText = "Comma Separated list, leave blank to disable standard/daily shows")]
         public IEnumerable<int> Categories { get; set; }
 
-        [FieldDefinition(4, Label = "Anime Categories", HelpText = "Comma Separated list, leave blank to disable anime")]
+        [FieldDefinition(4, Label = "Anime Categories", Type = FieldType.Select, SelectOptionsProviderAction = "newznabCategories", HelpText = "Comma Separated list, leave blank to disable anime")]
         public IEnumerable<int> AnimeCategories { get; set; }
 
         [FieldDefinition(5, Label = "Additional Parameters", HelpText = "Additional Newznab parameters", Advanced = true)]

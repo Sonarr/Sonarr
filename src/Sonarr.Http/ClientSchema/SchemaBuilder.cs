@@ -106,7 +106,14 @@ namespace Sonarr.Http.ClientSchema
 
                     if (fieldAttribute.Type == FieldType.Select)
                     {
-                        field.SelectOptions = GetSelectOptions(fieldAttribute.SelectOptions);
+                        if (fieldAttribute.SelectOptionsProviderAction.IsNotNullOrWhiteSpace())
+                        {
+                            field.SelectOptionsProviderAction = fieldAttribute.SelectOptionsProviderAction;
+                        }
+                        else
+                        {
+                            field.SelectOptions = GetSelectOptions(fieldAttribute.SelectOptions);
+                        }
                     }
 
                     if (fieldAttribute.Hidden != HiddenType.Visible)

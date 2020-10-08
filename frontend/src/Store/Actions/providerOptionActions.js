@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { createAction } from 'redux-actions';
 import requestAction from 'Utilities/requestAction';
 import updateSectionState from 'Utilities/State/updateSectionState';
@@ -9,6 +10,9 @@ import { set } from './baseActions';
 // Variables
 
 export const section = 'providerOptions';
+
+const lastActions = {};
+let lastActionId = 0;
 
 //
 // State
@@ -23,8 +27,8 @@ export const defaultState = {
 //
 // Actions Types
 
-export const FETCH_OPTIONS = 'devices/fetchOptions';
-export const CLEAR_OPTIONS = 'devices/clearOptions';
+export const FETCH_OPTIONS = 'providers/fetchOptions';
+export const CLEAR_OPTIONS = 'providers/clearOptions';
 
 //
 // Action Creators
@@ -38,30 +42,55 @@ export const clearOptions = createAction(CLEAR_OPTIONS);
 export const actionHandlers = handleThunks({
 
   [FETCH_OPTIONS]: function(getState, payload, dispatch) {
+    const subsection = `${section}.${payload.section}`;
+
+    if (lastActions[payload.section] && _.isEqual(payload, lastActions[payload.section].payload)) {
+      return;
+    }
+
+    const actionId = ++lastActionId;
+
+    lastActions[payload.section] = {
+      actionId,
+      payload
+    };
+
     dispatch(set({
-      section,
+      section: subsection,
       isFetching: true
     }));
 
     const promise = requestAction(payload);
 
     promise.done((data) => {
-      dispatch(set({
-        section,
-        isFetching: false,
-        isPopulated: true,
-        error: null,
-        items: data.options || []
-      }));
+      if (lastActions[payload.section]) {
+        if (lastActions[payload.section].actionId === actionId) {
+          lastActions[payload.section] = null;
+        }
+
+        dispatch(set({
+          section: subsection,
+          isFetching: false,
+          isPopulated: true,
+          error: null,
+          items: data.options || []
+        }));
+      }
     });
 
     promise.fail((xhr) => {
-      dispatch(set({
-        section,
-        isFetching: false,
-        isPopulated: false,
-        error: xhr
-      }));
+      if (lastActions[payload.section]) {
+        if (lastActions[payload.section].actionId === actionId) {
+          lastActions[payload.section] = null;
+        }
+
+        dispatch(set({
+          section: subsection,
+          isFetching: false,
+          isPopulated: false,
+          error: xhr
+        }));
+      }
     });
   }
 });
@@ -71,8 +100,12 @@ export const actionHandlers = handleThunks({
 
 export const reducers = createHandleActions({
 
-  [CLEAR_OPTIONS]: function(state) {
-    return updateSectionState(state, section, defaultState);
+  [CLEAR_OPTIONS]: function(state, { payload }) {
+    const subsection = `${section}.${payload.section}`;
+
+    lastActions[payload.section] = null;
+
+    return updateSectionState(state, subsection, defaultState);
   }
 
-}, defaultState, section);
+}, {}, section);

@@ -6,7 +6,7 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 
-function getType(type, value) {
+function getType({ type, selectOptionsProviderAction }) {
   switch (type) {
     case 'captcha':
       return inputTypes.CAPTCHA;
@@ -23,6 +23,9 @@ function getType(type, value) {
     case 'filePath':
       return inputTypes.PATH;
     case 'select':
+      if (selectOptionsProviderAction) {
+        return inputTypes.DYNAMIC_SELECT;
+      }
       return inputTypes.SELECT;
     case 'tag':
       return inputTypes.TEXT_TAG;
@@ -85,7 +88,7 @@ function ProviderFieldFormGroup(props) {
       <FormLabel>{label}</FormLabel>
 
       <FormInputGroup
-        type={getType(type, value)}
+        type={getType(props)}
         name={name}
         label={label}
         helpText={helpText}
@@ -105,7 +108,8 @@ function ProviderFieldFormGroup(props) {
 
 const selectOptionsShape = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired
+  value: PropTypes.number.isRequired,
+  hint: PropTypes.string
 };
 
 ProviderFieldFormGroup.propTypes = {
@@ -122,6 +126,7 @@ ProviderFieldFormGroup.propTypes = {
   errors: PropTypes.arrayOf(PropTypes.object).isRequired,
   warnings: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectOptions: PropTypes.arrayOf(PropTypes.shape(selectOptionsShape)),
+  selectOptionsProviderAction: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
 

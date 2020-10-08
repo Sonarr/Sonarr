@@ -13,6 +13,7 @@ export const LANGUAGE_PROFILE_SELECT = 'languageProfileSelect';
 export const INDEXER_SELECT = 'indexerSelect';
 export const ROOT_FOLDER_SELECT = 'rootFolderSelect';
 export const SELECT = 'select';
+export const DYNAMIC_SELECT = 'dynamicSelect';
 export const SERIES_TYPE_SELECT = 'seriesTypeSelect';
 export const TAG = 'tag';
 export const TEXT = 'text';
@@ -34,6 +35,7 @@ export const all = [
   INDEXER_SELECT,
   ROOT_FOLDER_SELECT,
   SELECT,
+  DYNAMIC_SELECT,
   SERIES_TYPE_SELECT,
   TAG,
   TEXT,
