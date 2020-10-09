@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.CanMoveFiles = true;
                 historyItem.CanBeRemoved = true;
 
-                if (item.DeleteStatus == "MANUAL")
+                if (item.DeleteStatus == "MANUAL" && item.MarkStatus != "BAD")
                 {
                     continue;
                 }
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
                 if (!_successStatus.Contains(item.DeleteStatus) && item.DeleteStatus.IsNotNullOrWhiteSpace())
                 {
-                    if (_deleteFailedStatus.Contains(item.DeleteStatus))
+                    if (_deleteFailedStatus.Contains(item.DeleteStatus) || _deleteFailedStatus.Contains(item.MarkStatus))
                     {
                         historyItem.Status = DownloadItemStatus.Failed;
                     }
