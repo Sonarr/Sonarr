@@ -70,14 +70,23 @@ namespace NzbDrone.Core.IndexerSearch
 
                 return SearchDaily(series, episode, userInvokedSearch, interactiveSearch);
             }
+
             if (series.SeriesType == SeriesTypes.Anime)
             {
+                if (episode.SeasonNumber == 0 &&
+                    episode.SceneAbsoluteEpisodeNumber == null &&
+                    episode.AbsoluteEpisodeNumber == null)
+                {
+                    // Search for special episodes in season 0 that don't have absolute episode numbers
+                    return SearchSpecial(series, new List<Episode> { episode }, userInvokedSearch, interactiveSearch);
+                }
+
                 return SearchAnime(series, episode, userInvokedSearch, interactiveSearch);
             }
 
             if (episode.SeasonNumber == 0)
             {
-                // search for special episodes in season 0
+                // Search for special episodes in season 0
                 return SearchSpecial(series, new List<Episode> { episode }, userInvokedSearch, interactiveSearch);
             }
 
