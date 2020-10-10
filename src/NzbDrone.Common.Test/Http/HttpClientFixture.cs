@@ -20,6 +20,7 @@ using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Common.Test.Http
 {
+    [Ignore("httpbin is bugged")]
     [IntegrationTest]
     [TestFixture(typeof(ManagedHttpDispatcher))]
     public class HttpClientFixture<TDispatcher> : TestBase<HttpClient> where TDispatcher : IHttpDispatcher
