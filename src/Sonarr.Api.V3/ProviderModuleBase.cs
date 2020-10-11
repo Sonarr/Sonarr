@@ -7,6 +7,7 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 using Sonarr.Http;
+using Sonarr.Http.Extensions;
 
 namespace Sonarr.Api.V3
 {
@@ -84,10 +85,10 @@ namespace Sonarr.Api.V3
         private void UpdateProvider(TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, false);
-            var existingDefinition = _providerFactory.Get(providerDefinition.Id);
+            var forceSave = Request.GetBooleanQueryParameter("forceSave");
 
-            // Only test existing definitions if it was previously disabled
-            if (providerDefinition.Enable && !existingDefinition.Enable)
+            // Only test existing definitions if it is enabled and forceSave isn't set.
+            if (providerDefinition.Enable && !forceSave)
             {
                 Test(providerDefinition, false);
             }
