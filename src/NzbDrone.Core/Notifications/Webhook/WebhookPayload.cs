@@ -2,7 +2,6 @@
 {
     public class WebhookPayload
     {
-        public string EventType { get; set; }
-        public WebhookSeries Series { get; set; }
+        public WebhookEventType EventType { get; set; }
     }
 }

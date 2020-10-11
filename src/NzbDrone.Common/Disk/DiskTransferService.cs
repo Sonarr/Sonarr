@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading;
 using NLog;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Disk
@@ -27,11 +25,53 @@ namespace NzbDrone.Common.Disk
             _diskProvider = diskProvider;
             _logger = logger;
         }
+
+        private string ResolveRealParentPath(string path)
+        {
+            var parentPath = path.GetParentPath();
+            if (!_diskProvider.FolderExists(path))
+            {
+                return path;
+            }
+
+            parentPath = parentPath.GetActualCasing();
+            return parentPath + Path.DirectorySeparatorChar + Path.GetFileName(path);
+        }
         
         public TransferMode TransferFolder(string sourcePath, string targetPath, TransferMode mode)
         {
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
+
+            sourcePath = ResolveRealParentPath(sourcePath);
+            targetPath = ResolveRealParentPath(targetPath);
+
+            _logger.Debug("{0} Directory [{1}] > [{2}]", mode, sourcePath, targetPath);
+
+            if (sourcePath == targetPath)
+            {
+                throw new IOException(string.Format("Source and destination can't be the same {0}", sourcePath));
+            }
+
+            if (mode == TransferMode.Move && sourcePath.PathEquals(targetPath, StringComparison.InvariantCultureIgnoreCase) && _diskProvider.FolderExists(targetPath))
+            {
+                // Move folder out of the way to allow case-insensitive renames
+                var tempPath = sourcePath + ".backup~";
+                _logger.Trace("Rename Intermediate Directory [{0}] > [{1}]", sourcePath, tempPath);
+                _diskProvider.MoveFolder(sourcePath, tempPath);
+
+                if (!_diskProvider.FolderExists(targetPath))
+                {
+                    _logger.Trace("Rename Intermediate Directory [{0}] > [{1}]", tempPath, targetPath);
+                    _logger.Debug("Rename Directory [{0}] > [{1}]", sourcePath, targetPath);
+                    _diskProvider.MoveFolder(tempPath, targetPath);
+                    return mode;
+                }
+
+                // There were two separate folders, revert the intermediate rename and let the recursion deal with it
+                _logger.Trace("Rename Intermediate Directory [{0}] > [{1}]", tempPath, sourcePath);
+                _diskProvider.MoveFolder(tempPath, sourcePath);
+            }
 
             if (mode == TransferMode.Move && !_diskProvider.FolderExists(targetPath))
             {
@@ -41,7 +81,7 @@ namespace NzbDrone.Common.Disk
                 // If we're on the same mount, do a simple folder move.
                 if (sourceMount != null && targetMount != null && sourceMount.RootDirectory == targetMount.RootDirectory)
                 {
-                    _logger.Debug("Move Directory [{0}] > [{1}]", sourcePath, targetPath);
+                    _logger.Debug("Rename Directory [{0}] > [{1}]", sourcePath, targetPath);
                     _diskProvider.MoveFolder(sourcePath, targetPath);
                     return mode;
                 }
@@ -74,6 +114,13 @@ namespace NzbDrone.Common.Disk
 
             if (mode.HasFlag(TransferMode.Move))
             {
+                var totalSize = _diskProvider.GetFileInfos(sourcePath).Sum(v => v.Length);
+
+                if (totalSize > (100 * 1024L * 1024L))
+                {
+                    throw new IOException($"Large files still exist in {sourcePath} after folder move, not deleting source folder");
+                }
+
                 _diskProvider.DeleteFolder(sourcePath, true);
             }
 
@@ -87,7 +134,10 @@ namespace NzbDrone.Common.Disk
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
 
-            _logger.Debug("Mirror [{0}] > [{1}]", sourcePath, targetPath);
+            sourcePath = ResolveRealParentPath(sourcePath);
+            targetPath = ResolveRealParentPath(targetPath);
+
+            _logger.Debug("Mirror Folder [{0}] > [{1}]", sourcePath, targetPath);
 
             if (!_diskProvider.FolderExists(targetPath))
             {
@@ -186,6 +236,9 @@ namespace NzbDrone.Common.Disk
         {
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
+
+            sourcePath = ResolveRealParentPath(sourcePath);
+            targetPath = ResolveRealParentPath(targetPath);
 
             _logger.Debug("{0} [{1}] > [{2}]", mode, sourcePath, targetPath);
 

@@ -70,14 +70,23 @@ namespace NzbDrone.Core.IndexerSearch
 
                 return SearchDaily(series, episode, userInvokedSearch, interactiveSearch);
             }
+
             if (series.SeriesType == SeriesTypes.Anime)
             {
+                if (episode.SeasonNumber == 0 &&
+                    episode.SceneAbsoluteEpisodeNumber == null &&
+                    episode.AbsoluteEpisodeNumber == null)
+                {
+                    // Search for special episodes in season 0 that don't have absolute episode numbers
+                    return SearchSpecial(series, new List<Episode> { episode }, userInvokedSearch, interactiveSearch);
+                }
+
                 return SearchAnime(series, episode, userInvokedSearch, interactiveSearch);
             }
 
             if (episode.SeasonNumber == 0)
             {
-                // search for special episodes in season 0
+                // Search for special episodes in season 0
                 return SearchSpecial(series, new List<Episode> { episode }, userInvokedSearch, interactiveSearch);
             }
 
@@ -226,13 +235,23 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> SearchSpecial(Series series, List<Episode> episodes, bool userInvokedSearch, bool interactiveSearch)
         {
+            var downloadDecisions = new List<DownloadDecision>();
+            
             var searchSpec = Get<SpecialEpisodeSearchCriteria>(series, episodes, userInvokedSearch, interactiveSearch);
             // build list of queries for each episode in the form: "<series> <episode-title>"
             searchSpec.EpisodeQueryTitles = episodes.Where(e => !string.IsNullOrWhiteSpace(e.Title))
                                                     .SelectMany(e => searchSpec.QueryTitles.Select(title => title + " " + SearchCriteriaBase.GetQueryTitle(e.Title)))
                                                     .ToArray();
 
-            return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
+            downloadDecisions.AddRange(Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec));
+
+            // Search for each episode by season/episode number as well
+            foreach (var episode in episodes)
+            {
+                downloadDecisions.AddRange(SearchSingle(series, episode, userInvokedSearch, interactiveSearch));
+            }
+
+            return downloadDecisions;
         }
 
         private List<DownloadDecision> SearchAnimeSeason(Series series, List<Episode> episodes, bool userInvokedSearch, bool interactiveSearch)

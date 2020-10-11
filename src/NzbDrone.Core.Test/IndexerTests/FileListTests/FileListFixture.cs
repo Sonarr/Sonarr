@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.IndexerTests.FileListTests
         [Test]
         public void should_parse_recent_feed_from_FileList()
         {
-            var recentFeed = ReadAllText(@"Files/Indexers/FileList/recentfeed.json");
+            var recentFeed = ReadAllText(@"Files/Indexers/FileList/RecentFeed.json");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
