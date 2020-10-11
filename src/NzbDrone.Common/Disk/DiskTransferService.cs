@@ -29,13 +29,16 @@ namespace NzbDrone.Common.Disk
         private string ResolveRealParentPath(string path)
         {
             var parentPath = path.GetParentPath();
-            if (!_diskProvider.FolderExists(path))
+            if (!_diskProvider.FolderExists(parentPath))
             {
                 return path;
             }
 
-            parentPath = parentPath.GetActualCasing();
-            return parentPath + Path.DirectorySeparatorChar + Path.GetFileName(path);
+            var realParentPath = parentPath.GetActualCasing();
+
+            var partialChildPath = path.Substring(parentPath.Length);
+
+            return realParentPath + partialChildPath;
         }
         
         public TransferMode TransferFolder(string sourcePath, string targetPath, TransferMode mode)

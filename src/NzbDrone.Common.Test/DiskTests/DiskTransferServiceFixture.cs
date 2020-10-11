@@ -662,6 +662,23 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        public void MirrorFolder_should_handle_trailing_slash()
+        {
+            WithRealDiskProvider();
+
+            var original = GetFilledTempFolder();
+            var source = new DirectoryInfo(GetTempFilePath());
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            Subject.TransferFolder(original.FullName, source.FullName, TransferMode.Copy);
+
+            var count = Subject.MirrorFolder(source.FullName + Path.DirectorySeparatorChar, destination.FullName);
+
+            count.Should().Equals(3);
+            VerifyCopyFolder(original.FullName, destination.FullName);
+        }
+
+        [Test]
         public void TransferFolder_should_use_movefolder_if_on_same_mount()
         {
             WithEmulatedDiskProvider();
