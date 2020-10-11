@@ -126,6 +126,7 @@ function EditReleaseProfileModalContent(props) {
               type={inputTypes.INDEXER_SELECT}
               name="indexerId"
               helpText="Specify what indexer the profile applies to"
+              helpTextWarning="Using a specific indexer with preferred words can lead to duplicate releases being grabbed"
               {...indexerId}
               includeAny={true}
               onChange={onInputChange}
