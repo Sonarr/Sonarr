@@ -1,6 +1,8 @@
-﻿using NzbDrone.Core.Blacklisting;
+﻿using NzbDrone.Api.V3.Blacklist;
+using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Datastore;
 using Sonarr.Http;
+using Sonarr.Http.Extensions;
 
 namespace Sonarr.Api.V3.Blacklist
 {
@@ -13,6 +15,8 @@ namespace Sonarr.Api.V3.Blacklist
             _blacklistService = blacklistService;
             GetResourcePaged = GetBlacklist;
             DeleteResource = DeleteBlacklist;
+
+            Delete("/bulk", x => Remove());
         }
 
         private PagingResource<BlacklistResource> GetBlacklist(PagingResource<BlacklistResource> pagingResource)
@@ -25,6 +29,15 @@ namespace Sonarr.Api.V3.Blacklist
         private void DeleteBlacklist(int id)
         {
             _blacklistService.Delete(id);
+        }
+
+        private object Remove()
+        {
+            var resource = Request.Body.FromJson<BlacklistBulkResource>();
+
+            _blacklistService.Delete(resource.Ids);
+
+            return new object();
         }
     }
 }

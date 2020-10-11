@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { icons, kinds } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
+import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -40,6 +41,7 @@ class BlacklistRow extends Component {
 
   render() {
     const {
+      id,
       series,
       sourceTitle,
       language,
@@ -48,12 +50,20 @@ class BlacklistRow extends Component {
       protocol,
       indexer,
       message,
+      isSelected,
       columns,
+      onSelectedChange,
       onRemovePress
     } = this.props;
 
     return (
       <TableRow>
+        <TableSelectCell
+          id={id}
+          isSelected={isSelected}
+          onSelectedChange={onSelectedChange}
+        />
+
         {
           columns.map((column) => {
             const {
@@ -179,7 +189,9 @@ BlacklistRow.propTypes = {
   protocol: PropTypes.string.isRequired,
   indexer: PropTypes.string,
   message: PropTypes.string,
+  isSelected: PropTypes.bool.isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onSelectedChange: PropTypes.func.isRequired,
   onRemovePress: PropTypes.func.isRequired
 };
 

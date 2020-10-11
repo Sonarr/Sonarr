@@ -89,6 +89,10 @@ class BlacklistConnector extends Component {
     this.props.gotoBlacklistPage({ page });
   }
 
+  onRemoveSelected = (ids) => {
+    this.props.removeBlacklistItems({ ids });
+  }
+
   onSortPress = (sortKey) => {
     this.props.setBlacklistSort({ sortKey });
   }
@@ -124,6 +128,7 @@ class BlacklistConnector extends Component {
         onNextPagePress={this.onNextPagePress}
         onLastPagePress={this.onLastPagePress}
         onPageSelect={this.onPageSelect}
+        onRemoveSelected={this.onRemoveSelected}
         onSortPress={this.onSortPress}
         onTableOptionChange={this.onTableOptionChange}
         onClearBlacklistPress={this.onClearBlacklistPress}
@@ -143,6 +148,7 @@ BlacklistConnector.propTypes = {
   gotoBlacklistNextPage: PropTypes.func.isRequired,
   gotoBlacklistLastPage: PropTypes.func.isRequired,
   gotoBlacklistPage: PropTypes.func.isRequired,
+  removeBlacklistItems: PropTypes.func.isRequired,
   setBlacklistSort: PropTypes.func.isRequired,
   setBlacklistTableOption: PropTypes.func.isRequired,
   clearBlacklist: PropTypes.func.isRequired,

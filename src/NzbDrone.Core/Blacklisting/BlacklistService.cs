@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.Blacklisting
         bool Blacklisted(int seriesId, ReleaseInfo release);
         PagingSpec<Blacklist> Paged(PagingSpec<Blacklist> pagingSpec);
         void Delete(int id);
+        void Delete(List<int> ids);
     }
     public class BlacklistService : IBlacklistService,
 
@@ -63,6 +65,11 @@ namespace NzbDrone.Core.Blacklisting
         public void Delete(int id)
         {
             _blacklistRepository.Delete(id);
+        }
+
+        public void Delete(List<int> ids)
+        {
+            _blacklistRepository.DeleteMany(ids);
         }
 
         private bool SameNzb(Blacklist item, ReleaseInfo release)
