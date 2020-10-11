@@ -251,7 +251,7 @@ class EnhancedSelectInput extends Component {
       this._addListener();
     }
 
-    if (!this.state.isOpen) {
+    if (!this.state.isOpen && this.props.onOpen) {
       this.props.onOpen();
     }
 

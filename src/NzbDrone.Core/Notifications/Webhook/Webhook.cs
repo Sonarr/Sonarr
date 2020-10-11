@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Webhook
 
             var payload = new WebhookGrabPayload
             {
-                EventType = "Grab",
+                EventType = WebhookEventType.Grab,
                 Series = new WebhookSeries(message.Series),
                 Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
                 Release = new WebhookRelease(quality, remoteEpisode),
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Notifications.Webhook
 
             var payload = new WebhookImportPayload
             {
-                EventType = "Download",
+                EventType = WebhookEventType.Download,
                 Series = new WebhookSeries(message.Series),
                 Episodes = episodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = new WebhookEpisodeFile(episodeFile),
@@ -67,11 +67,25 @@ namespace NzbDrone.Core.Notifications.Webhook
 
         public override void OnRename(Series series)
         {
-            var payload = new WebhookPayload
+            var payload = new WebhookRenamePayload
             {
-                EventType = "Rename",
+                EventType = WebhookEventType.Rename,
                 Series = new WebhookSeries(series)
             };
+
+            _proxy.SendWebhook(payload, Settings);
+        }
+
+        public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
+        {
+            var payload = new WebhookHealthPayload
+                          {
+                              EventType = WebhookEventType.Health,
+                              Level = healthCheck.Type,
+                              Message = healthCheck.Message,
+                              Type = healthCheck.Source.Name,
+                              WikiUrl = healthCheck.WikiUrl?.ToString()
+                          };
 
             _proxy.SendWebhook(payload, Settings);
         }
@@ -93,7 +107,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             {
                 var payload = new WebhookGrabPayload
                     {
-                        EventType = "Test",
+                        EventType = WebhookEventType.Test,
                         Series = new WebhookSeries()
                         {
                             Id = 1,

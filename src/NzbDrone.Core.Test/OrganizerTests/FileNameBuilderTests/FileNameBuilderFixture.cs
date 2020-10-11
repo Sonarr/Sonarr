@@ -288,7 +288,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         [Test]
-        public void should_use_airDate_if_series_isDaily()
+        public void should_use_airDate_if_series_isDaily_and_not_a_special()
         {
             _namingConfig.DailyEpisodeFormat = "{Series Title} - {air-date} - {Episode Title}";
 
@@ -297,9 +297,32 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             _episode1.AirDate = "2012-12-13";
             _episode1.Title = "Kristen Stewart";
+            _episode1.SeasonNumber = 1;
+            _episode1.EpisodeNumber = 5;
+
+            _episodeFile.SeasonNumber = 1;
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("The Daily Show with Jon Stewart - 2012-12-13 - Kristen Stewart");
+        }
+
+        [Test]
+        public void should_use_standard_if_series_isDaily_special()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
+
+            _series.Title = "The Daily Show with Jon Stewart";
+            _series.SeriesType = SeriesTypes.Daily;
+
+            _episode1.AirDate = "2012-12-13";
+            _episode1.Title = "Kristen Stewart";
+            _episode1.SeasonNumber = 0;
+            _episode1.EpisodeNumber = 5;
+
+            _episodeFile.SeasonNumber = 0;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("The Daily Show with Jon Stewart - S00E05 - Kristen Stewart");
         }
 
         [Test]
@@ -312,6 +335,10 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             _episode1.AirDate = null;
             _episode1.Title = "Kristen Stewart";
+            _episode1.SeasonNumber = 1;
+            _episode1.EpisodeNumber = 5;
+
+            _episodeFile.SeasonNumber = 1;
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("The Daily Show with Jon Stewart - Unknown - Kristen Stewart");
