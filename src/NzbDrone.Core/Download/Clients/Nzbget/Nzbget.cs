@@ -131,16 +131,16 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.CanBeRemoved = true;
 
                 if (item.DeleteStatus == "MANUAL")
-				{
-					if (item.MarkStatus == "BAD")
-					{
-						historyItem.Status = DownloadItemStatus.Failed;
-					}
-					else
-					{
-						continue;
-					}
-				}
+		{
+		    if (item.MarkStatus == "BAD")
+		    {
+		        historyItem.Status = DownloadItemStatus.Failed;
+		    }
+		    else
+		    {
+		        continue;
+		    }
+		}
 
                 if (!_successStatus.Contains(item.ParStatus))
                 {
