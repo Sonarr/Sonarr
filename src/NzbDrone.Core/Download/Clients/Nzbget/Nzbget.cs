@@ -130,10 +130,17 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.CanMoveFiles = true;
                 historyItem.CanBeRemoved = true;
 
-                if (item.DeleteStatus == "MANUAL" && item.MarkStatus != "BAD")
-                {
-                    continue;
-                }
+                if (item.DeleteStatus == "MANUAL")
+				{
+					if (item.MarkStatus == "BAD")
+					{
+						historyItem.Status = DownloadItemStatus.Failed;
+					}
+					else
+					{
+						continue;
+					}
+				}
 
                 if (!_successStatus.Contains(item.ParStatus))
                 {
@@ -161,7 +168,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
                 if (!_successStatus.Contains(item.DeleteStatus) && item.DeleteStatus.IsNotNullOrWhiteSpace())
                 {
-                    if (_deleteFailedStatus.Contains(item.DeleteStatus) || _deleteFailedStatus.Contains(item.MarkStatus))
+                    if (_deleteFailedStatus.Contains(item.DeleteStatus))
                     {
                         historyItem.Status = DownloadItemStatus.Failed;
                     }
