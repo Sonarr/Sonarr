@@ -84,6 +84,12 @@ namespace NzbDrone.Update.UpdateEngine
 
             Verify(installationFolder, processId);
 
+            if (installationFolder.EndsWith(@"\bin\Sonarr") || installationFolder.EndsWith(@"/bin/Sonarr"))
+            {
+                installationFolder = installationFolder.GetParentPath();
+                _logger.Info("Fixed Installation Folder: {0}", installationFolder);
+            }
+
             var appType = _detectApplicationType.GetAppType();
 
             _processProvider.FindProcessByName(ProcessProvider.SONARR_CONSOLE_PROCESS_NAME);
