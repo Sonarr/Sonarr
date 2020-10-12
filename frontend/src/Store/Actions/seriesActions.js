@@ -121,7 +121,9 @@ export const filterPredicates = {
 
   sizeOnDisk: function(item, filterValue, type) {
     const predicate = filterTypePredicates[type];
-    const sizeOnDisk = item.statistics ? item.statistics.sizeOnDisk : 0;
+    const sizeOnDisk = item.statistics && item.statistics.sizeOnDisk ?
+      item.statistics.sizeOnDisk :
+      0;
 
     return predicate(sizeOnDisk, filterValue);
   }
@@ -145,7 +147,7 @@ export const sortPredicates = {
   sizeOnDisk: function(item) {
     const { statistics = {} } = item;
 
-    return statistics.sizeOnDisk;
+    return statistics.sizeOnDisk || 0;
   }
 };
 

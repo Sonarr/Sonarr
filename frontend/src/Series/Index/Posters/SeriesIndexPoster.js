@@ -97,7 +97,8 @@ class SeriesIndexPoster extends Component {
       seasonCount,
       episodeCount,
       episodeFileCount,
-      totalEpisodeCount
+      totalEpisodeCount,
+      sizeOnDisk
     } = statistics;
 
     const {
@@ -226,6 +227,7 @@ class SeriesIndexPoster extends Component {
 
         <SeriesIndexPosterInfo
           seasonCount={seasonCount}
+          sizeOnDisk={sizeOnDisk}
           qualityProfile={qualityProfile}
           showQualityProfile={showQualityProfile}
           showRelativeDates={showRelativeDates}
