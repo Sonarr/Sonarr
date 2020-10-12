@@ -9,7 +9,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
     [TestFixture]
-    public class IndexerStatusCheckFixture : CoreTest<IndexerStatusCheck>
+    public class IndexerLongTermStatusCheckFixture : CoreTest<IndexerLongTermStatusCheck>
     {
         private List<IIndexer> _indexers = new List<IIndexer>();
         private List<IndexerStatus> _blockedIndexers = new List<IndexerStatus>();
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_warning_if_indexer_unavailable()
         {
-            GivenIndexer(1, 2.0, 4.0);
+            GivenIndexer(1, 10.0, 24.0);
             GivenIndexer(2, 0.0, 0.0);
 
             Subject.Check().ShouldBeWarning();
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_error_if_all_indexers_unavailable()
         {
-            GivenIndexer(1, 2.0, 4.0);
+            GivenIndexer(1, 10.0, 24.0);
 
             Subject.Check().ShouldBeError();
         }
@@ -76,8 +76,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_warning_if_few_indexers_unavailable()
         {
-            GivenIndexer(1, 2.0, 4.0);
-            GivenIndexer(2, 2.0, 4.0);
+            GivenIndexer(1, 10.0, 24.0);
+            GivenIndexer(2, 10.0, 24.0);
             GivenIndexer(3, 0.0, 0.0);
 
             Subject.Check().ShouldBeWarning();
