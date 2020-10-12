@@ -17,6 +17,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series);
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource);
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource, bool filterExistingFiles);
+        ImportDecision GetDecision(LocalEpisode localEpisode, DownloadClientItem downloadClientItem);
     }
 
     public class ImportDecisionMaker : IMakeImportDecision
@@ -90,6 +91,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             return decisions;
         }
 
+        public ImportDecision GetDecision(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        {
+            var reasons = _specifications.Select(c => EvaluateSpec(c, localEpisode, downloadClientItem))
+                                         .Where(c => c != null);
+
+            return new ImportDecision(localEpisode, reasons.ToArray());
+        }
+
         private ImportDecision GetDecision(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
         {
             ImportDecision decision = null;
@@ -148,14 +157,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
 
             return decision;
-        }
-
-        private ImportDecision GetDecision(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
-        {
-            var reasons = _specifications.Select(c => EvaluateSpec(c, localEpisode, downloadClientItem))
-                                         .Where(c => c != null);
-
-            return new ImportDecision(localEpisode, reasons.ToArray());
         }
 
         private Rejection EvaluateSpec(IImportDecisionEngineSpecification spec, LocalEpisode localEpisode, DownloadClientItem downloadClientItem)

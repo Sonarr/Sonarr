@@ -9,11 +9,13 @@ using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
@@ -21,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
     public interface IManualImportService
     {
         List<ManualImportItem> GetMediaFiles(string path, string downloadId, int? seriesId, bool filterExistingFiles);
-        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId);
+        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, List<int> episodeIds, QualityModel quality, Language language);
     }
 
     public class ManualImportService : IExecute<ManualImportCommand>, IManualImportService
@@ -94,10 +96,31 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return ProcessFolder(path, path, downloadId, seriesId, filterExistingFiles);
         }
 
-        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId)
+        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, List<int> episodeIds, QualityModel quality, Language language)
         {
             var rootFolder = Path.GetDirectoryName(path);
             var series = _seriesService.GetSeries(seriesId);
+
+            if (episodeIds.Any())
+            {
+                var downloadClientItem = GetTrackedDownload(downloadId)?.DownloadItem;
+
+                var localEpisode = new LocalEpisode
+                                   {
+                                       Series = series,
+                                       Episodes = _episodeService.GetEpisodes(episodeIds),
+                                       FileEpisodeInfo = Parser.Parser.ParsePath(path),
+                                       DownloadClientEpisodeInfo = downloadClientItem == null ? null : Parser.Parser.ParseTitle(downloadClientItem.Title),
+                                       Path = path,
+                                       SceneSource = SceneSource(series, rootFolder),
+                                       ExistingFile = series.Path.IsParentPath(path),
+                                       Size = _diskProvider.GetFileSize(path),
+                                       Language = language,
+                                       Quality = quality
+                                   };
+
+                return MapItem(_importDecisionMaker.GetDecision(localEpisode, downloadClientItem), rootFolder, downloadId, null);
+            }
 
             return ProcessFile(rootFolder, rootFolder, path, downloadId, series);
         }
@@ -162,7 +185,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         {
             try
             {
-                DownloadClientItem downloadClientItem = null;
+                var trackedDownload = GetTrackedDownload(downloadId);
                 var relativeFile = baseFolder.GetRelativePath(file);
 
                 if (series == null)
@@ -175,15 +198,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     series = _parsingService.GetSeries(relativeFile);
                 }
 
-                if (downloadId.IsNotNullOrWhiteSpace())
+                if (trackedDownload != null && series == null)
                 {
-                    var trackedDownload = _trackedDownloadService.Find(downloadId);
-                    downloadClientItem = trackedDownload?.DownloadItem;
-
-                    if (series == null)
-                    {
-                        series = trackedDownload?.RemoteEpisode?.Series;
-                    }
+                    series = trackedDownload?.RemoteEpisode?.Series;
                 }
 
                 if (series == null)
@@ -209,7 +226,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 }
 
                 var importDecisions = _importDecisionMaker.GetImportDecisions(new List<string> {file}, series,
-                    downloadClientItem, null, SceneSource(series, baseFolder));
+                    trackedDownload?.DownloadItem, null, SceneSource(series, baseFolder));
 
                 if (importDecisions.Any())
                 {
@@ -234,6 +251,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         private bool SceneSource(Series series, string folder)
         {
             return !(series.Path.PathEquals(folder) || series.Path.IsParentPath(folder));
+        }
+
+        private TrackedDownload GetTrackedDownload(string downloadId)
+        {
+            if (downloadId.IsNotNullOrWhiteSpace())
+            {
+                var trackedDownload = _trackedDownloadService.Find(downloadId);
+                
+                return trackedDownload;
+            }
+
+            return null;
         }
 
         private ManualImportItem MapItem(ImportDecision decision, string rootFolder, string downloadId, string folderName)

@@ -169,6 +169,10 @@ export const actionHandlers = handleThunks({
         id,
         path: item.path,
         seriesId: item.series.id,
+        season: item.season,
+        episodeIds: item.episodes.map((e) => e.id),
+        quality: item.quality,
+        language: item.language,
         downloadId: item.downloadId
       };
     });

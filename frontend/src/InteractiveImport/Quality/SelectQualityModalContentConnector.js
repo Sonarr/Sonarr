@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import getQualities from 'Utilities/Quality/getQualities';
 import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
-import { updateInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
+import { updateInteractiveImportItems, reprocessInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
 import SelectQualityModalContent from './SelectQualityModalContent';
 
 function createMapStateToProps() {
@@ -31,7 +31,8 @@ function createMapStateToProps() {
 
 const mapDispatchToProps = {
   dispatchFetchQualityProfileSchema: fetchQualityProfileSchema,
-  dispatchUpdateInteractiveImportItems: updateInteractiveImportItems
+  dispatchUpdateInteractiveImportItems: updateInteractiveImportItems,
+  dispatchReprocessInteractiveImportItems: reprocessInteractiveImportItems
 };
 
 class SelectQualityModalContentConnector extends Component {
@@ -49,6 +50,12 @@ class SelectQualityModalContentConnector extends Component {
   // Listeners
 
   onQualitySelect = ({ qualityId, proper, real }) => {
+    const {
+      ids,
+      dispatchUpdateInteractiveImportItems,
+      dispatchReprocessInteractiveImportItems
+    } = this.props;
+
     const quality = _.find(this.props.items,
       (item) => item.id === qualityId);
 
@@ -57,13 +64,15 @@ class SelectQualityModalContentConnector extends Component {
       real: real ? 1 : 0
     };
 
-    this.props.dispatchUpdateInteractiveImportItems({
-      ids: this.props.ids,
+    dispatchUpdateInteractiveImportItems({
+      ids,
       quality: {
         quality,
         revision
       }
     });
+
+    dispatchReprocessInteractiveImportItems({ ids });
 
     this.props.onModalClose(true);
   }
@@ -89,6 +98,7 @@ SelectQualityModalContentConnector.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchFetchQualityProfileSchema: PropTypes.func.isRequired,
   dispatchUpdateInteractiveImportItems: PropTypes.func.isRequired,
+  dispatchReprocessInteractiveImportItems: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 

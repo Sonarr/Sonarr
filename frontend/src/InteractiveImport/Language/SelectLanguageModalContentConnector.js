@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { fetchLanguageProfileSchema } from 'Store/Actions/settingsActions';
-import { updateInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
+import { updateInteractiveImportItems, reprocessInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
 import SelectLanguageModalContent from './SelectLanguageModalContent';
 
 function createMapStateToProps() {
@@ -30,7 +30,8 @@ function createMapStateToProps() {
 
 const mapDispatchToProps = {
   dispatchFetchLanguageProfileSchema: fetchLanguageProfileSchema,
-  dispatchUpdateInteractiveImportItems: updateInteractiveImportItems
+  dispatchUpdateInteractiveImportItems: updateInteractiveImportItems,
+  dispatchReprocessInteractiveImportItems: reprocessInteractiveImportItems
 };
 
 class SelectLanguageModalContentConnector extends Component {
@@ -48,14 +49,22 @@ class SelectLanguageModalContentConnector extends Component {
   // Listeners
 
   onLanguageSelect = ({ value }) => {
+    const {
+      ids,
+      dispatchUpdateInteractiveImportItems,
+      dispatchReprocessInteractiveImportItems
+    } = this.props;
+
     const languageId = parseInt(value);
     const language = _.find(this.props.items,
       (item) => item.language.id === languageId).language;
 
-    this.props.dispatchUpdateInteractiveImportItems({
-      ids: this.props.ids,
+    dispatchUpdateInteractiveImportItems({
+      ids,
       language
     });
+
+    dispatchReprocessInteractiveImportItems({ ids });
 
     this.props.onModalClose(true);
   }
@@ -81,6 +90,7 @@ SelectLanguageModalContentConnector.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchFetchLanguageProfileSchema: PropTypes.func.isRequired,
   dispatchUpdateInteractiveImportItems: PropTypes.func.isRequired,
+  dispatchReprocessInteractiveImportItems: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 

@@ -6,7 +6,8 @@ import {
   updateInteractiveImportItem,
   fetchInteractiveImportEpisodes,
   setInteractiveImportEpisodesSort,
-  clearInteractiveImportEpisodes
+  clearInteractiveImportEpisodes,
+  reprocessInteractiveImportItems
 } from 'Store/Actions/interactiveImportActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import SelectEpisodeModalContent from './SelectEpisodeModalContent';
@@ -21,10 +22,11 @@ function createMapStateToProps() {
 }
 
 const mapDispatchToProps = {
-  fetchInteractiveImportEpisodes,
-  setInteractiveImportEpisodesSort,
-  clearInteractiveImportEpisodes,
-  updateInteractiveImportItem
+  dispatchFetchInteractiveImportEpisodes: fetchInteractiveImportEpisodes,
+  dispatchSetInteractiveImportEpisodesSort: setInteractiveImportEpisodesSort,
+  dispatchClearInteractiveImportEpisodes: clearInteractiveImportEpisodes,
+  dispatchUpdateInteractiveImportItem: updateInteractiveImportItem,
+  dispatchReprocessInteractiveImportItems: reprocessInteractiveImportItems
 };
 
 class SelectEpisodeModalContentConnector extends Component {
@@ -38,26 +40,28 @@ class SelectEpisodeModalContentConnector extends Component {
       seasonNumber
     } = this.props;
 
-    this.props.fetchInteractiveImportEpisodes({ seriesId, seasonNumber });
+    this.props.dispatchFetchInteractiveImportEpisodes({ seriesId, seasonNumber });
   }
 
   componentWillUnmount() {
     // This clears the episodes for the queue and hides the queue
     // We'll need another place to store episodes for manual import
-    this.props.clearInteractiveImportEpisodes();
+    this.props.dispatchClearInteractiveImportEpisodes();
   }
 
   //
   // Listeners
 
   onSortPress = (sortKey, sortDirection) => {
-    this.props.setInteractiveImportEpisodesSort({ sortKey, sortDirection });
+    this.props.dispatchSetInteractiveImportEpisodesSort({ sortKey, sortDirection });
   }
 
   onEpisodesSelect = (episodeIds) => {
     const {
       ids,
       items,
+      dispatchUpdateInteractiveImportItem,
+      dispatchReprocessInteractiveImportItems,
       onModalClose
     } = this.props;
 
@@ -78,11 +82,13 @@ class SelectEpisodeModalContentConnector extends Component {
       const startingIndex = index * episodesPerFile;
       const episodes = sortedEpisodes.slice(startingIndex, startingIndex + episodesPerFile);
 
-      this.props.updateInteractiveImportItem({
+      dispatchUpdateInteractiveImportItem({
         id,
         episodes
       });
     });
+
+    dispatchReprocessInteractiveImportItems({ ids });
 
     onModalClose(true);
   }
@@ -106,10 +112,11 @@ SelectEpisodeModalContentConnector.propTypes = {
   seriesId: PropTypes.number.isRequired,
   seasonNumber: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  fetchInteractiveImportEpisodes: PropTypes.func.isRequired,
-  setInteractiveImportEpisodesSort: PropTypes.func.isRequired,
-  clearInteractiveImportEpisodes: PropTypes.func.isRequired,
-  updateInteractiveImportItem: PropTypes.func.isRequired,
+  dispatchFetchInteractiveImportEpisodes: PropTypes.func.isRequired,
+  dispatchSetInteractiveImportEpisodesSort: PropTypes.func.isRequired,
+  dispatchClearInteractiveImportEpisodes: PropTypes.func.isRequired,
+  dispatchUpdateInteractiveImportItem: PropTypes.func.isRequired,
+  dispatchReprocessInteractiveImportItems: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 
