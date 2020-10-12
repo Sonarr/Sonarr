@@ -37,6 +37,7 @@ Compression=lzma2/normal
 AppContact={#ForumsURL}
 VersionInfoVersion={#BuildNumber}
 SetupLogging=yes
+OutputDir=output
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -59,6 +60,7 @@ Name: "{userstartup}\{#AppName}"; Filename: "{app}\Sonarr.exe"; WorkingDir: "{ap
 
 [InstallDelete]
 Name: "{commonappdata}\NzbDrone\bin"; Type: filesandordirs
+Name: "{app}"; Type: filesandordirs
 
 [Run]
 Filename: "{app}\Sonarr.Console.exe"; StatusMsg: "Removing previous Windows Service"; Parameters: "/u"; Flags: runhidden waituntilterminated;
