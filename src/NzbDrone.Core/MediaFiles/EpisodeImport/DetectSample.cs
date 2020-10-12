@@ -8,7 +8,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IDetectSample
     {
-        DetectSampleResult IsSample(Series series, string path, bool isSpecial);
+        DetectSampleResult IsSample(Series series, string path, bool isSpecial, MediaInfoModel mediaInfo = null);
     }
 
     public class DetectSample : IDetectSample
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _logger = logger;
         }
 
-        public DetectSampleResult IsSample(Series series, string path, bool isSpecial)
+        public DetectSampleResult IsSample(Series series, string path, bool isSpecial, MediaInfoModel mediaInfo = null)
         {
             if (isSpecial)
             {
@@ -44,26 +44,35 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 return DetectSampleResult.NotSample;
             }
 
-            // TODO: Use MediaInfo from the import process, no need to re-process the file again here
-            var runTime = _videoFileInfoReader.GetRunTime(path);
+            if (mediaInfo == null)
+            {
+                mediaInfo = _videoFileInfoReader.GetMediaInfo(path);
+            }
 
-            if (!runTime.HasValue)
+            if (mediaInfo == null)
             {
                 _logger.Error("Failed to get runtime from the file, make sure mediainfo is available");
                 return DetectSampleResult.Indeterminate;
             }
 
+            if (mediaInfo.Format == "MZ")
+            {
+                _logger.Error("Mediainfo indicates this file is an executable");
+                return DetectSampleResult.Executable;
+            }
+
+            var runtime = mediaInfo.RunTime;
             var minimumRuntime = GetMinimumAllowedRuntime(series);
 
-            if (runTime.Value.TotalMinutes.Equals(0))
+            if (runtime.TotalMinutes.Equals(0))
             {
                 _logger.Error("[{0}] has a runtime of 0, is it a valid video file?", path);
                 return DetectSampleResult.Sample;
             }
 
-            if (runTime.Value.TotalSeconds < minimumRuntime)
+            if (runtime.TotalSeconds < minimumRuntime)
             {
-                _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {2} seconds", path, runTime, minimumRuntime);
+                _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {2} seconds", path, mediaInfo, minimumRuntime);
                 return DetectSampleResult.Sample;
             }
 

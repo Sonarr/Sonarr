@@ -7,6 +7,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -26,6 +27,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IMediaFileService _mediaFileService;
         private readonly IAggregationService _aggregationService;
         private readonly IDiskProvider _diskProvider;
+        private readonly IAugmentMediaInfo _augmentMediaInfo;
         private readonly IDetectSample _detectSample;
         private readonly Logger _logger;
 
@@ -33,6 +35,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                                    IMediaFileService mediaFileService,
                                    IAggregationService aggregationService,
                                    IDiskProvider diskProvider,
+                                   IAugmentMediaInfo augmentMediaInfo,
                                    IDetectSample detectSample,
                                    Logger logger)
         {
@@ -40,6 +43,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _mediaFileService = mediaFileService;
             _aggregationService = aggregationService;
             _diskProvider = diskProvider;
+            _augmentMediaInfo = augmentMediaInfo;
             _detectSample = detectSample;
             _logger = logger;
         }
@@ -67,11 +71,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 downloadClientItemInfo = Parser.Parser.ParseTitle(downloadClientItem.Title);
             }
 
-            // If not importing from a scene source (series folder for example), then assume all files are not samples
-            // to avoid using media info on every file needlessly (especially if Analyse Media Files is disabled).
-            var nonSampleVideoFileCount = sceneSource ? GetNonSampleVideoFileCount(newFiles, series, downloadClientItemInfo, folderInfo) : videoFiles.Count;
-
             var decisions = new List<ImportDecision>();
+            var localEpisodes = new List<LocalEpisode>();
 
             foreach (var file in newFiles)
             {
@@ -86,8 +87,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     OtherVideoFiles = nonSampleVideoFileCount > 1
                 };
 
-                decisions.AddIfNotNull(GetDecision(localEpisode, downloadClientItem, nonSampleVideoFileCount > 1));
+                _augmentMediaInfo.Augment(localEpisode);
+
+                localEpisodes.Add(localEpisode);
             }
+
+            // If not importing from a scene source (series folder for example), then assume all files are not samples
+            // to avoid using media info on every file needlessly (especially if Analyse Media Files is disabled).
+            var otherFiles = sceneSource && GetNonSampleVideoFileCount(localEpisodes, series, downloadClientItemInfo, folderInfo) > 1;
+
+            decisions.AddRange(localEpisodes.Select(l => GetDecision(l, downloadClientItem, otherFiles)));
 
             return decisions;
         }
@@ -182,15 +191,15 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             return null;
         }
 
-        private int GetNonSampleVideoFileCount(List<string> videoFiles, Series series, ParsedEpisodeInfo downloadClientItemInfo, ParsedEpisodeInfo folderInfo)
+        private int GetNonSampleVideoFileCount(List<LocalEpisode> localEpisodes, Series series, ParsedEpisodeInfo downloadClientItemInfo, ParsedEpisodeInfo folderInfo)
         {
             var isPossibleSpecialEpisode = downloadClientItemInfo?.IsPossibleSpecialEpisode ?? false;
             // If we might already have a special, don't try to get it from the folder info.
             isPossibleSpecialEpisode = isPossibleSpecialEpisode || (folderInfo?.IsPossibleSpecialEpisode ?? false);
 
-            return videoFiles.Count(file =>
+            return localEpisodes.Count(localEpisode =>
             {
-                var sample = _detectSample.IsSample(series, file, isPossibleSpecialEpisode);
+                var sample = _detectSample.IsSample(series, localEpisode.Path, isPossibleSpecialEpisode, localEpisode.MediaInfo);
 
                 if (sample == DetectSampleResult.Sample)
                 {

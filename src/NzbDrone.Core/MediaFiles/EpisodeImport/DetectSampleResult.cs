@@ -4,6 +4,7 @@
     {
         Indeterminate,
         Sample,
-        NotSample
+        NotSample,
+        Executable
     }
 }

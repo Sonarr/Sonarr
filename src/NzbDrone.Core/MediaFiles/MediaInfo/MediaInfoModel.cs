@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
-using Newtonsoft.Json;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
@@ -43,5 +39,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         public string Subtitles { get; set; }
         public string ScanType { get; set; }
         public int SchemaRevision { get; set; }
+        public string Format { get; set; }
     }
 }

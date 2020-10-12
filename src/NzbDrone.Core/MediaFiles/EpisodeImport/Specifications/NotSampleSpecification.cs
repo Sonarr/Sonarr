@@ -29,14 +29,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             try
             {
-                var sample = _detectSample.IsSample(localEpisode.Series, localEpisode.Path, localEpisode.IsSpecial);
+                var sample = _detectSample.IsSample(localEpisode.Series, localEpisode.Path, localEpisode.IsSpecial, localEpisode.MediaInfo);
 
                 if (sample == DetectSampleResult.Sample)
                 {
                     return Decision.Reject("Sample");
                 }
 
-                else if (sample == DetectSampleResult.Indeterminate)
+                if (sample == DetectSampleResult.Executable)
+                {
+                    return Decision.Reject("Executable file instead of video file");
+                }
+
+                if (sample == DetectSampleResult.Indeterminate)
                 {
                     return Decision.Reject("Unable to determine if file is a sample");
                 }

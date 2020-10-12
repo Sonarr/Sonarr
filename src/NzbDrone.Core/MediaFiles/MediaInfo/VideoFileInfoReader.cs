@@ -10,7 +10,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
     public interface IVideoFileInfoReader
     {
         MediaInfoModel GetMediaInfo(string filename);
-        TimeSpan? GetRunTime(string filename);
     }
 
     public class VideoFileInfoReader : IVideoFileInfoReader
@@ -26,7 +25,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             _diskProvider = diskProvider;
             _logger = logger;
         }
-
 
         public MediaInfoModel GetMediaInfo(string filename)
         {
@@ -156,6 +154,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     string videoProfile = mediaInfo.Get(StreamKind.Video, 0, "Format_Profile").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
                     string audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile").Split(new string[] { " /" }, StringSplitOptions.None)[0].Trim();
 
+                    var format = mediaInfo.Get(StreamKind.General, 0, "Format").Split(new string[] { "/" }, StringSplitOptions.None)[0].Trim();
+
                     var mediaInfoModel = new MediaInfoModel
                     {
                         ContainerFormat = mediaInfo.Get(StreamKind.General, 0, "Format"),
@@ -189,7 +189,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         AudioLanguages = audioLanguages,
                         Subtitles = subtitles,
                         ScanType = scanType,
-                        SchemaRevision = CURRENT_MEDIA_INFO_SCHEMA_REVISION
+                        SchemaRevision = CURRENT_MEDIA_INFO_SCHEMA_REVISION,
+                        Format = format
                     };
 
                     return mediaInfoModel;
@@ -213,13 +214,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             return null;
-        }
-
-        public TimeSpan? GetRunTime(string filename)
-        {
-            var info = GetMediaInfo(filename);
-
-            return info?.RunTime;
         }
 
         private TimeSpan GetBestRuntime(int audio, int video, int general)

@@ -15,6 +15,7 @@ using FizzWare.NBuilder;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Profiles.Languages;
 
@@ -70,7 +71,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                 Quality = _quality,
                 Language = Language.Spanish,
                 Episodes = new List<Episode> { new Episode() },
-                Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.Spanish.XviD-OSiTV.avi"
+                Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.Spanish.XviD-OSiTV.avi",
+                MediaInfo = new MediaInfoModel()
             };
 
             GivenVideoFiles(new List<string> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.Spanish.XviD-OSiTV.avi".AsOsAgnostic() });
@@ -184,6 +186,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             ExceptionVerification.ExpectedErrors(3);
         }
 
+        [Test]
         public void should_not_throw_if_episodes_are_not_found()
         {
             GivenSpecifications(_pass1);
