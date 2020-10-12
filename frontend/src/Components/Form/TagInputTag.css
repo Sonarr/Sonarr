@@ -1,5 +1,25 @@
 .tag {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 31px;
+}
+
+.link {
   composes: link from '~Components/Link/Link.css';
 
-  height: 31px;
+  line-height: 1px;
+}
+
+.editContainer {
+  display: inline-block;
+  margin-left: 4px;
+  padding-left: 2px;
+  border-left: 1px solid #eee;
+}
+
+.editButton {
+  composes: button from '~Components/Link/IconButton.css';
+
+  width: auto;
 }

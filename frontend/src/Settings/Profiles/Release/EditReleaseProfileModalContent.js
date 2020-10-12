@@ -62,13 +62,14 @@ function EditReleaseProfileModalContent(props) {
             <FormLabel>Must Contain</FormLabel>
 
             <FormInputGroup
+              {...required}
               type={inputTypes.TEXT_TAG}
               name="required"
               helpText="The release must contain at least one of these terms (case insensitive)"
               kind={kinds.SUCCESS}
               placeholder="Add new restriction"
               delimiters={tagInputDelimiters}
-              {...required}
+              canEdit={true}
               onChange={onInputChange}
             />
           </FormGroup>
@@ -77,13 +78,14 @@ function EditReleaseProfileModalContent(props) {
             <FormLabel>Must Not Contain</FormLabel>
 
             <FormInputGroup
+              {...ignored}
               type={inputTypes.TEXT_TAG}
               name="ignored"
               helpText="The release will be rejected if it contains one or more of terms (case insensitive)"
               kind={kinds.DANGER}
               placeholder="Add new restriction"
               delimiters={tagInputDelimiters}
-              {...ignored}
+              canEdit={true}
               onChange={onInputChange}
             />
           </FormGroup>
