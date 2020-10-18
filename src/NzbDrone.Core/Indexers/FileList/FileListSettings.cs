@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FluentValidation;
-using Growl.Connector;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
