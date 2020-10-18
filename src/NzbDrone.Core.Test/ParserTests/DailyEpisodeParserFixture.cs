@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("20161024- Exotic Payback.21x41_720.mkv", "", 2016, 10, 24)]
         [TestCase("2018-11-14.1080.all.mp4", "", 2018, 11, 14)]
         [TestCase("2019_08_20_1080_all.mp4", "", 2019, 8, 20)]
+        [TestCase("Home and Away 20201013 Ep7432 [720p WebRip (x264)] [SUBS]", "Home and Away", 2020, 10, 13)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_daily_episode(string postTitle, string title, int year, int month, int day)
         {
