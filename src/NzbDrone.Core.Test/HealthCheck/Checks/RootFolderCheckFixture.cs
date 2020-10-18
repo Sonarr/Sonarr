@@ -20,8 +20,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                                         .ToList();
 
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.GetAllSeries())
-                  .Returns(series);
+                  .Setup(s => s.GetAllSeriesPaths())
+                  .Returns(series.Select(s => s.Path).ToList());
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetParentFolder(series.First().Path))
@@ -36,8 +36,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         public void should_not_return_error_when_no_series()
         {
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.GetAllSeries())
-                  .Returns(new List<Series>());
+                  .Setup(s => s.GetAllSeriesPaths())
+                  .Returns(new List<string>());
 
             Subject.Check().ShouldBeOk();
         }

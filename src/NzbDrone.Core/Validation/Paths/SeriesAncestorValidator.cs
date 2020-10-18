@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Validation.Paths
         {
             if (context.PropertyValue == null) return true;
 
-            return !_seriesService.GetAllSeries().Any(s => context.PropertyValue.ToString().IsParentPath(s.Path));
+            return !_seriesService.GetAllSeriesPaths().Any(s => context.PropertyValue.ToString().IsParentPath(s));
         }
     }
 }

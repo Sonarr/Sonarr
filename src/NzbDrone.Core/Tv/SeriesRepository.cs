@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByPath(string path);
+        List<string> AllSeriesPaths();
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -76,6 +77,13 @@ namespace NzbDrone.Core.Tv
         {
             return Query.Where(s => s.Path == path)
                         .FirstOrDefault();
+        }
+
+        public List<string> AllSeriesPaths()
+        {
+            var mapper = _database.GetDataMapper();
+
+            return mapper.Query<string>("SELECT Path from Series");
         }
 
         private Series ReturnSingleSeriesOrThrow(List<Series> series)

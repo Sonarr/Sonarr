@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using System.Linq;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.RootFolders;
@@ -26,9 +28,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            var rootFolders = _seriesService.GetAllSeries()
-                                                           .Select(s => _rootFolderService.GetBestRootFolderPath(s.Path))
-                                                           .Distinct();
+            var rootFolders = _seriesService.GetAllSeriesPaths().Select(s => _rootFolderService.GetBestRootFolderPath(s)).Distinct();
 
             var missingRootFolders = rootFolders.Where(s => !_diskProvider.FolderExists(s))
                                                           .ToList();
