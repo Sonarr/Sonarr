@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NzbDrone.Api.V3.Blacklist
+namespace Sonarr.Api.V3.Blacklist
 {
     public class BlacklistBulkResource
     {

@@ -1,5 +1,4 @@
-﻿using NzbDrone.Api.V3.Blacklist;
-using NzbDrone.Core.Blacklisting;
+﻿using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Datastore;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
