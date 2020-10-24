@@ -9,7 +9,7 @@ UPDATER={updater}
 # Existing nzbdrone packages do not have startup scripts and the process might still be running.
 # If the user manually installed nzbdrone then the process might still be running too.
 if [ $1 = "install" ]; then
-  psNzbDrone=`ps ax -o'user,pid,ppid,unit,args' | grep mono.*NzbDrone\\\\.exe || true`
+  psNzbDrone=`ps ax -o'user:20,pid,ppid,unit,args' | grep mono.*NzbDrone\\\\.exe || true`
   if [ ! -z "$psNzbDrone" ]; then
     # Get the user and optional systemd unit
     psNzbDroneUser=`echo "$psNzbDrone" | tr -s ' ' | cut -d ' ' -f 1`
