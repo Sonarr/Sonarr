@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 switch ((DiscordGrabFieldType)field)
                 {
                     case DiscordGrabFieldType.Overview:
-                        var overview = episodes.First().Overview;
+                        var overview = episodes.First().Overview ?? "";
                         discordField.Name = "Overview";
                         discordField.Value = overview.Length <= 300 ? overview : overview.Substring(0, 300) + "...";
                         break;
@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 switch ((DiscordImportFieldType)field)
                 {
                     case DiscordImportFieldType.Overview:
-                        var overview = episodes.First().Overview;
+                        var overview = episodes.First().Overview ?? "";
                         discordField.Name = "Overview";
                         discordField.Value = overview.Length <= 300 ? overview : overview.Substring(0, 300) + "...";
                         break;
