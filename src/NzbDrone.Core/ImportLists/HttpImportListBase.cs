@@ -12,6 +12,7 @@ using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists
 {
@@ -212,7 +213,9 @@ namespace NzbDrone.Core.ImportLists
 
                 if (releases.Empty())
                 {
-                    return new ValidationFailure(string.Empty, "No results were returned from your import list, please check your settings.");
+                    return new NzbDroneValidationFailure(string.Empty,
+                               "No results were returned from your import list, please check your settings.")
+                           {IsWarning = true};
                 }
             }
             catch (RequestLimitReachedException)
