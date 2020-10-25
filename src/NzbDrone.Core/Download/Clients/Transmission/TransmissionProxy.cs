@@ -305,6 +305,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to Transmission, certificate validation failed.", ex);
+                }
+
                 throw new DownloadClientUnavailableException("Unable to connect to Transmission, please check your settings", ex);
             }
         }

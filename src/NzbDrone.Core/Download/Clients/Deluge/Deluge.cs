@@ -260,7 +260,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to test connection");
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+
+                return new NzbDroneValidationFailure("Host", "Unable to connect to Deluge")
+                       {
+                           DetailedDescription = ex.Message
+                       };
             }
 
             return null;

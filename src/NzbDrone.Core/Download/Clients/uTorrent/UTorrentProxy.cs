@@ -228,6 +228,11 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to uTorrent, certificate validation failed.", ex);
+                }
+
                 throw new DownloadClientException("Unable to connect to uTorrent, please check your settings", ex);
             }
 

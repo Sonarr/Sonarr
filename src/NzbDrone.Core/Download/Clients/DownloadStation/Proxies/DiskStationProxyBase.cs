@@ -84,6 +84,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to Diskstation, certificate validation failed.", ex);
+                }
+
                 throw new DownloadClientUnavailableException("Unable to connect to Diskstation, please check your settings", ex);
             }
 

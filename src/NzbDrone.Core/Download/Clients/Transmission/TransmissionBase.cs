@@ -247,14 +247,15 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             {
                 _logger.Error(ex, ex.Message);
 
-                return new NzbDroneValidationFailure("Host", "Unable to connect")
-                {
-                    DetailedDescription = "Please verify the hostname and port."
-                };
+                return new NzbDroneValidationFailure("Host", "Unable to connect to Transmission")
+                       {
+                           DetailedDescription = ex.Message
+                       };
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to test");
+
                 return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
         }

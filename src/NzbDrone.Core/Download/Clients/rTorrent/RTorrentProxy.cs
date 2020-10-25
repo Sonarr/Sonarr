@@ -266,6 +266,11 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to rTorrent, certificate validation failed.", ex);
+                }
+
                 throw new DownloadClientUnavailableException("Unable to connect to rTorrent, please check your settings", ex);
             }
         }
