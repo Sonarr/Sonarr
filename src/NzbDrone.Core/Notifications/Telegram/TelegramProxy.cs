@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Notifications.Telegram
                                         .AddFormParameter("chat_id", settings.ChatId)
                                         .AddFormParameter("parse_mode", "HTML")
                                         .AddFormParameter("text", text)
+                                        .AddFormParameter("disable_notification", settings.SendSilently)
                                         .Build();
 
             _httpClient.Post(request);
