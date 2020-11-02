@@ -238,7 +238,7 @@ class MediaManagement extends Component {
                   legend="File Management"
                 >
                   <FormGroup size={sizes.MEDIUM}>
-                    <FormLabel>Ignore Deleted Episodes</FormLabel>
+                    <FormLabel>Unmonitor Deleted Episodes</FormLabel>
 
                     <FormInputGroup
                       type={inputTypes.CHECK}
