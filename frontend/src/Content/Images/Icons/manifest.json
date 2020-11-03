@@ -1,6 +1,6 @@
 {
     "name": "Sonarr",
-	"description": "PVR for Usenet and BitTorrent users",
+    "description": "PVR for Usenet and BitTorrent users",
     "icons": [
         {
             "src": "/Content/Images/Icons/android-chrome-192x192.png",
@@ -14,29 +14,29 @@
         }
     ],
     "theme_color": "#3a3f51",
-	"start_url": "/",
-	"scope": "/",
+    "start_url": "/",
+    "scope": "/",
     "display": "standalone",
-	"shortcuts": [
-		{
-			"name": "Add new...",
-			"url": "/add/new",
-			"icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
-		},
-		{
-			"name": "Calendar",
-			"url": "/calendar",
-			"icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
-		},
-		{
-			"name": "Queue",
-			"url": "/activity/queue",
-			"icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
-		},
-		{
-			"name": "Status",
-			"url": "/system/status",
-			"icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
-    	}
-	]
+    "shortcuts": [
+        {
+            "name": "Add new...",
+            "url": "/add/new",
+            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
+        },
+        {
+            "name": "Calendar",
+            "url": "/calendar",
+            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
+        },
+        {
+            "name": "Queue",
+            "url": "/activity/queue",
+            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
+        },
+        {
+            "name": "Status",
+            "url": "/system/status",
+            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
+        }
+    ]
 }
