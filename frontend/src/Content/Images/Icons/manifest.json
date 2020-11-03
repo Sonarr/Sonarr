@@ -22,22 +22,22 @@
         {
             "name": "Add new...",
             "url": "/add/new",
-            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
+            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "192x192" }]
         },
         {
             "name": "Calendar",
             "url": "/calendar",
-            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
+            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "192x192" }]
         },
         {
             "name": "Queue",
             "url": "/activity/queue",
-            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
+            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "192x192" }]
         },
         {
             "name": "Status",
             "url": "/system/status",
-            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "196x196" }]
+            "icons": [{ "src": "/Content/Images/Icons/android-chrome-192x192.png", "sizes": "192x192" }]
         }
     ]
 }
