@@ -139,7 +139,6 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     RemainingSize = (long)(torrent.Size * (1.0 - torrent.Progress)),
                     RemainingTime = GetRemainingTime(torrent),
                     SeedRatio = torrent.Ratio
-                    //OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath)),
                 };
 
                 // Avoid removing torrents that haven't reached the global max ratio.
