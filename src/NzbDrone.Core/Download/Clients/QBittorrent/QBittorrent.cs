@@ -138,18 +138,28 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this),
                     RemainingSize = (long)(torrent.Size * (1.0 - torrent.Progress)),
                     RemainingTime = GetRemainingTime(torrent),
-                    SeedRatio = torrent.Ratio,
-                    OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath)),
+                    SeedRatio = torrent.Ratio
+                    //OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath)),
                 };
 
                 // Avoid removing torrents that haven't reached the global max ratio.
                 // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
                 item.CanMoveFiles = item.CanBeRemoved = (torrent.State == "pausedUP" && HasReachedSeedLimit(torrent, config));
 
-                if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
+                if(!string.IsNullOrEmpty(torrent.ContentPath))
                 {
-                    item.OutputPath += torrent.Name;
+                    item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.ContentPath));
                 }
+                else //fallback using the old way for older qbittorrent v <= 4.3.0.1
+                {
+                    item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
+
+                    if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
+                    {
+                        item.OutputPath += torrent.Name;
+                    }
+                }
+
 
                 switch (torrent.State)
                 {
