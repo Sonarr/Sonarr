@@ -300,6 +300,12 @@ class SeriesDetails extends Component {
             <PageToolbarSeparator />
 
             <PageToolbarButton
+              label="Series Monitoring"
+              iconName={icons.MONITORED}
+              onPress={this.onMonitorOptionsPress}
+            />
+
+            <PageToolbarButton
               label="Edit"
               iconName={icons.EDIT}
               onPress={this.onEditSeriesPress}
@@ -309,14 +315,6 @@ class SeriesDetails extends Component {
               label="Delete"
               iconName={icons.DELETE}
               onPress={this.onDeleteSeriesPress}
-            />
-
-            <PageToolbarSeparator />
-
-            <PageToolbarButton
-              label="Series Monitor"
-              iconName={icons.EDIT}
-              onPress={this.onMonitorOptionsPress}
             />
 
           </PageToolbarSection>
