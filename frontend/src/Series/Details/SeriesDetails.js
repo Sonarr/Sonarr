@@ -34,6 +34,7 @@ import SeriesAlternateTitles from './SeriesAlternateTitles';
 import SeriesDetailsSeasonConnector from './SeriesDetailsSeasonConnector';
 import SeriesTagsConnector from './SeriesTagsConnector';
 import SeriesDetailsLinks from './SeriesDetailsLinks';
+import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import styles from './SeriesDetails.css';
 
@@ -71,6 +72,7 @@ class SeriesDetails extends Component {
       isDeleteSeriesModalOpen: false,
       isSeriesHistoryModalOpen: false,
       isInteractiveImportModalOpen: false,
+      isMonitorOptionsModalOpen: false,
       allExpanded: false,
       allCollapsed: false,
       expandedState: {},
@@ -130,6 +132,14 @@ class SeriesDetails extends Component {
 
   onSeriesHistoryModalClose = () => {
     this.setState({ isSeriesHistoryModalOpen: false });
+  }
+
+  onMonitorOptionsPress = () => {
+    this.setState({ isMonitorOptionsModalOpen: true });
+  }
+
+  onMonitorOptionsClose = () => {
+    this.setState({ isMonitorOptionsModalOpen: false });
   }
 
   onExpandAllPress = () => {
@@ -211,6 +221,7 @@ class SeriesDetails extends Component {
       isDeleteSeriesModalOpen,
       isSeriesHistoryModalOpen,
       isInteractiveImportModalOpen,
+      isMonitorOptionsModalOpen,
       allExpanded,
       allCollapsed,
       expandedState,
@@ -299,6 +310,15 @@ class SeriesDetails extends Component {
               iconName={icons.DELETE}
               onPress={this.onDeleteSeriesPress}
             />
+
+            <PageToolbarSeparator />
+
+            <PageToolbarButton
+              label="Series Monitor"
+              iconName={icons.EDIT}
+              onPress={this.onMonitorOptionsPress}
+            />
+
           </PageToolbarSection>
 
           <PageToolbarSection alignContent={align.RIGHT}>
@@ -646,6 +666,12 @@ class SeriesDetails extends Component {
             showImportMode={false}
             onModalClose={this.onInteractiveImportModalClose}
           />
+
+          <MonitoringOptionsModal
+            isOpen={isMonitorOptionsModalOpen}
+            seriesId={id}
+            onModalClose={this.onMonitorOptionsClose}
+          />
         </PageContentBody>
       </PageContent>
     );
@@ -664,6 +690,7 @@ SeriesDetails.propTypes = {
   statistics: PropTypes.object.isRequired,
   qualityProfileId: PropTypes.number.isRequired,
   monitored: PropTypes.bool.isRequired,
+  monitor: PropTypes.string,
   status: PropTypes.string.isRequired,
   network: PropTypes.string,
   overview: PropTypes.string.isRequired,
@@ -672,6 +699,7 @@ SeriesDetails.propTypes = {
   alternateTitles: PropTypes.arrayOf(PropTypes.string).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   isSaving: PropTypes.bool.isRequired,
+  saveError: PropTypes.object,
   isRefreshing: PropTypes.bool.isRequired,
   isSearching: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,

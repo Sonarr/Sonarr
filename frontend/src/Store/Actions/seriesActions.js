@@ -10,7 +10,7 @@ import createFetchHandler from './Creators/createFetchHandler';
 import createSaveProviderHandler from './Creators/createSaveProviderHandler';
 import createRemoveItemHandler from './Creators/createRemoveItemHandler';
 import createHandleActions from './Creators/createHandleActions';
-import { updateItem } from './baseActions';
+import { updateItem, set } from './baseActions';
 
 //
 // Local
@@ -176,6 +176,7 @@ export const DELETE_SERIES = 'series/deleteSeries';
 
 export const TOGGLE_SERIES_MONITORED = 'series/toggleSeriesMonitored';
 export const TOGGLE_SEASON_MONITORED = 'series/toggleSeasonMonitored';
+export const UPDATE_SERIES_MONITOR = 'series/updateSeriesMonitor';
 
 //
 // Action Creators
@@ -209,6 +210,7 @@ export const deleteSeries = createThunk(DELETE_SERIES, (payload) => {
 
 export const toggleSeriesMonitored = createThunk(TOGGLE_SERIES_MONITORED);
 export const toggleSeasonMonitored = createThunk(TOGGLE_SEASON_MONITORED);
+export const updateSeriesMonitor = createThunk(UPDATE_SERIES_MONITOR);
 
 export const setSeriesValue = createAction(SET_SERIES_VALUE, (payload) => {
   return {
@@ -377,8 +379,56 @@ export const actionHandlers = handleThunks({
           });
         });
     }, MONITOR_TIMEOUT);
-  }
+  },
 
+  [UPDATE_SERIES_MONITOR]: function(getState, payload, dispatch) {
+    const {
+      id,
+      monitored,
+      monitor
+    } = payload;
+
+    const series = [];
+    const seriesToUpdate = { id };
+    if (payload.hasOwnProperty('monitored')) {
+      seriesToUpdate.monitored = monitored;
+    }
+    series.push(seriesToUpdate);
+
+    dispatch(set({
+      section,
+      isSaving: true
+    }));
+
+    const promise = createAjaxRequest({
+      url: '/seasonPass',
+      method: 'POST',
+      data: JSON.stringify({
+        series,
+        monitoringOptions: { monitor }
+      }),
+      dataType: 'json'
+    }).request;
+
+    promise.done((data) => {
+      dispatch(fetchSeries());
+
+      dispatch(set({
+        section,
+        isSaving: false,
+        saveError: null
+      }));
+    });
+
+    promise.fail((xhr) => {
+      dispatch(set({
+        section,
+        isSaving: false,
+        saveError: xhr
+      }));
+    });
+    location.reload();
+  }
 });
 
 //
