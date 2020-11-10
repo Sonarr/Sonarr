@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Trakt
@@ -14,9 +13,20 @@ namespace NzbDrone.Core.ImportLists.Trakt
         public TraktSettingsBaseValidator()
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
-            RuleFor(c => c.AccessToken).NotEmpty();
-            RuleFor(c => c.RefreshToken).NotEmpty();
-            RuleFor(c => c.Expires).NotEmpty();
+
+            RuleFor(c => c.AccessToken).NotEmpty()
+                                       .OverridePropertyName("SignIn")
+                                       .WithMessage("Must authenticate with Trakt");
+
+            RuleFor(c => c.RefreshToken).NotEmpty()
+                                        .OverridePropertyName("SignIn")
+                                        .WithMessage("Must authenticate with Trakt")
+                                        .When(c => c.AccessToken.IsNotNullOrWhiteSpace());
+
+            RuleFor(c => c.Expires).NotEmpty()
+                                   .OverridePropertyName("SignIn")
+                                   .WithMessage("Must authenticate with Trakt")
+                                   .When(c => c.AccessToken.IsNotNullOrWhiteSpace() && c.RefreshToken.IsNotNullOrWhiteSpace());
 
             // Loose validation @TODO
             RuleFor(c => c.Rating)

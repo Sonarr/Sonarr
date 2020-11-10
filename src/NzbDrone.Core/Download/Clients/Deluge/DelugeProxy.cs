@@ -263,6 +263,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to Deluge, certificate validation failed.", ex);
+                }
+
                 throw new DownloadClientUnavailableException("Unable to connect to Deluge, please check your settings", ex);
             }
         }

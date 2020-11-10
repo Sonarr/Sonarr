@@ -45,9 +45,13 @@ class About extends Component {
           }
 
           {
-            isMonoRuntime &&
+            isMonoRuntime ?
               <DescriptionListItem
                 title="Mono Version"
+                data={runtimeVersion}
+              /> :
+              <DescriptionListItem
+                title=".net Version"
                 data={runtimeVersion}
               />
           }

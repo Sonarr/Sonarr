@@ -166,6 +166,11 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to NZBVortex, certificate validation failed.", ex);
+                }
+
                 throw new DownloadClientUnavailableException("Unable to connect to NZBVortex, please check your settings", ex);
             }
         }

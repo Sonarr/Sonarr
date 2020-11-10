@@ -55,6 +55,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to qBittorrent, certificate validation failed.", ex);
+                }
+
                 throw new DownloadClientException("Failed to connect to qBittorrent, check your settings.", ex);
             }
         }

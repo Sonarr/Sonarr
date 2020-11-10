@@ -90,6 +90,11 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new DownloadClientUnavailableException("Unable to connect to Hadouken, certificate validation failed.", ex);
+                }
+
                 throw new DownloadClientUnavailableException("Unable to connect to Hadouken, please check your settings", ex);
             }
 

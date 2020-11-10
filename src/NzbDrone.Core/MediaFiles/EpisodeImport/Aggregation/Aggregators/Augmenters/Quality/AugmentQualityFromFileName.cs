@@ -26,11 +26,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
                 ? Confidence.Tag
                 : Confidence.Fallback;
 
+            var revisionConfidends = quality.RevisionDetectionSource == QualityDetectionSource.Name
+                ? Confidence.Tag
+                : Confidence.Fallback;
+
             return new AugmentQualityResult(quality.Quality.Source,
                                             sourceConfidence,
                                             quality.Quality.Resolution,
                                             resolutionConfidence,
-                                            quality.Revision);
+                                            quality.Revision,
+                                            revisionConfidends);
         }
     }
 }

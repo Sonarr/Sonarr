@@ -2,9 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.UI;
 using NLog;
-using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.MediaFiles;
@@ -31,7 +29,7 @@ namespace NzbDrone.Core.Parser
                                                                 )(?:\b|$|[ .])",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
-        private static readonly Regex RawHDRegex = new Regex(@"\b(?<rawhd>RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD)\b",
+        private static readonly Regex RawHDRegex = new Regex(@"\b(?<rawhd>RawHD|Raw[-_. ]HD)\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex MPEG2Regex = new Regex(@"\b(?<mpeg2>MPEG[-_. ]?2)\b");
@@ -545,12 +543,14 @@ namespace NzbDrone.Core.Parser
             if (ProperRegex.IsMatch(normalizedName))
             {
                 result.Revision.Version = 2;
+                result.RevisionDetectionSource = QualityDetectionSource.Name;
             }
 
             if (RepackRegex.IsMatch(normalizedName))
             {
                 result.Revision.Version = 2;
                 result.Revision.IsRepack = true;
+                result.RevisionDetectionSource = QualityDetectionSource.Name;
             }
 
             var versionRegexResult = VersionRegex.Match(normalizedName);
@@ -558,6 +558,7 @@ namespace NzbDrone.Core.Parser
             if (versionRegexResult.Success)
             {
                 result.Revision.Version = Convert.ToInt32(versionRegexResult.Groups["version"].Value);
+                result.RevisionDetectionSource = QualityDetectionSource.Name;
             }
 
             // TODO: re-enable this when we have a reliable way to determine real
@@ -567,6 +568,7 @@ namespace NzbDrone.Core.Parser
             if (realRegexResult.Count > 0)
             {
                 result.Revision.Real = realRegexResult.Count;
+                result.RevisionDetectionSource = QualityDetectionSource.Name;
             }
 
             return result;
