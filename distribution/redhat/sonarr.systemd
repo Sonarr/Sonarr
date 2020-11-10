@@ -8,8 +8,8 @@ After=network.target
 [Service]
 Type=simple
 User=sonarr
-PIDFile=/var/lib/sonarr/.config/NzbDrone/nzbdrone.pid
-ExecStart=/usr/bin/mono /opt/sonarr/NzbDrone.exe
+PIDFile=/var/lib/sonarr/.config/Sonarr/nzbdrone.pid
+ExecStart=/usr/bin/mono /opt/sonarr/Sonarr.exe
 Restart=on-success
 
 # SCHED_OTHER is the default Linux time-sharing scheduler that is intended for

@@ -1,20 +1,13 @@
-%define sonarr_url_service  http://services.sonarr.tv/v1/update/master
-# default mock chroots do not provide python
-#%define sonarr_url_package  %( python -c 'import requests; print(requests.get("%{sonarr_url_service}").json()["updatePackage"]["url"].replace("windows","mono").replace("zip","tar.gz"))' )
-#%define sonarr_version      %( python -c 'import requests; print(requests.get("%{sonarr_url_service}").json()["updatePackage"]["version"])' )
-%define sonarr_url_package  %( curl -s "%{sonarr_url_service}" | tr -d '[[:space:]]' | sed -n 's#.*"url":"\\([^"]*\\)".*#\\1#p' | sed 's#windows#mono#g;s#zip$#tar.gz#' )
-%define sonarr_version      %( curl -s "%{sonarr_url_service}" | tr -d '[[:space:]]' | sed -n 's#.*"version":"\\([^"]*\\)".*#\\1#p' )
-
-
 Name:           sonarr
-Version:        %{sonarr_version}
+Version:        %{BuildVersion}
 
-Release:        1%{?dist}
+Release:        1%{?dist}.%{?BuildBranch}
+BuildArch:	noarch
 Summary:        PVR for Usenet and BitTorrent users
 
 License:        GPLv3+
 URL:            https://sonarr.tv/
-Source0:        %{sonarr_url_package}
+Source0:        Sonarr.phantom-%{BuildBranch}.%{version}.linux.tar.gz
 Source1:        copyright
 Source2:        license
 Source3:        sonarr.systemd
@@ -39,7 +32,7 @@ already downloaded when a better quality format becomes available.
 
 
 %prep
-%autosetup -n NzbDrone
+%autosetup -n Sonarr
 
 
 %install
@@ -54,6 +47,9 @@ install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
 install -m 0755 -d %{buildroot}%{_sharedstatedir}/sonarr
 # sonarr
 install -m 0755 -d %{buildroot}/opt/%{name}
+# Remove updater:
+rm -rf %{buildroot}/opt/%{name}/Sonarr.Update
+
 mv * %{buildroot}/opt/%{name}
 find %{buildroot}/opt/%{name} -type f -exec chmod 644 '{}' \;
 find %{buildroot}/opt/%{name} -type d -exec chmod 755 '{}' \;
@@ -96,5 +92,8 @@ fi
 
 
 %changelog
+* Mon Nov 09 2020 Eric Eisenhart <freiheit at gmail dot com>'
+- Updating for Sonarr v3
+
 * Fri Jan 02 2015 Yclept Nemo <"".join(chr(ord(c)-1) for c in "pscjtwjdjtAhnbjm/dpn")> - 2.0.0.2572-1.fc21
 - Initial package
