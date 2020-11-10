@@ -29,19 +29,19 @@ if [ ! -e redhat/Sonarr.phantom-${BuildBranch}.${BuildVersion}.linux.tar.gz ]; t
 fi
 
 echo === Building a .src.rpm package:
-mock --buildsrpm -r epel-7-x86_64 --sources redhat  --spec redhat/sonarr.spec --resultdir=./ --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch"
+mock --buildsrpm -r redhat/epel-7-x86_64.cfg --sources redhat  --spec redhat/sonarr.spec --resultdir=./ --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch"
 
 echo === Building for CentOS/RHEL/EPEL 8:
-mock -r epel-8-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist el8"
+mock -r redhat/epel-8-x86_64.cfg sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist el8"
 
 echo === Building for CentOS/RHEL/EPEL 7:
-mock -r epel-7-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist el7"
+mock -r redhat/epel-7-x86_64.cfg sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist el7"
 
 echo === Building for Fedora 34:
-mock -r fedora-34-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist fc34"
+mock -r redhat/fedora-34-x86_64.cfg sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist fc34"
 
 echo === Building for Fedora 33:
-mock -r fedora-33-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist fc33"
+mock -r redhat/fedora-33-x86_64.cfg sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist fc33"
 
 echo === Checking built RPMs with rpmlint
 rpmlint *.rpm
