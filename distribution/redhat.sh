@@ -16,8 +16,20 @@ BuildBranch=${dependent_build_branch:-develop}
 BootstrapVersion=`echo "$BuildVersion" | cut -d. -f1,2,3`
 BootstrapUpdater="BuiltIn"
 
+echo === Checking spec with rpmlint
+# Ignore failure
+rpmlint redhat/sonarr.spec || true
+
+echo === Fetch tarball if not present
+if [ ! -e redhat/Sonarr.phantom-${BuildBranch}.${BuildVersion}.linux.tar.gz ]; then
+  (
+    cd redhat
+    wget https://download.sonarr.tv/v3/phantom-${BuildBranch}/${BuildVersion}/Sonarr.phantom-${BuildBranch}.${BuildVersion}.linux.tar.gz 
+  )
+fi
+
 echo === Building a .src.rpm package:
-mock --buildsrpm --sources redhat  --spec redhat/sonarr.spec --resultdir=./ --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch"
+mock --buildsrpm -r epel-7-x86_64 --sources redhat  --spec redhat/sonarr.spec --resultdir=./ --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch"
 
 echo === Building for CentOS/RHEL/EPEL 8:
 mock -r epel-8-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist el8"
@@ -31,3 +43,5 @@ mock -r fedora-34-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --defi
 echo === Building for Fedora 33:
 mock -r fedora-33-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./  --define "BuildVersion $BuildVersion" --define "BuildBranch $BuildBranch" --define "dist fc33"
 
+echo === Checking built RPMs with rpmlint
+rpmlint *.rpm
