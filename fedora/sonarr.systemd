@@ -1,0 +1,36 @@
+[Unit]
+Description=Sonarr PVR
+Documentation=https://sonarr.tv/
+Wants=network.target
+After=network.target
+
+
+[Service]
+Type=simple
+User=sonarr
+PIDFile=/var/lib/sonarr/.config/NzbDrone/nzbdrone.pid
+ExecStart=/usr/bin/mono /opt/sonarr/NzbDrone.exe
+Restart=on-success
+
+# SCHED_OTHER is the default Linux time-sharing scheduler that is intended for
+# all threads that do not require the special real-time mechanisms.
+# see [man 7 sched]
+#CPUSchedulingPolicy=other
+# The default scheduling priority is 10.
+# see [man 1 getpriority]
+# see [man 1 nice]
+Nice=15
+
+# The best-effort scheduling class is the default for any process that hasn't
+# set a specific I/O priority. Priority levels range from 0 (highest) to 7
+# (lowest).
+# see [man 2 ioprio_set]
+#IOSchedulingClass=best-effort
+# The priority within the best-effort class will be dynamically derived from
+# the CPU nice level of the process: io_priority = (cpu_nice + 20) / 5.
+# see [man 1 ionice]
+#IOSchedulingPriority=7
+
+
+[Install]
+WantedBy=multi-user.target
