@@ -2,7 +2,7 @@ Name:           sonarr
 Version:        %{BuildVersion}
 
 Release:        1%{?dist}.%{?BuildBranch}
-BuildArch:	noarch
+BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
 License:        GPLv3+
@@ -12,7 +12,7 @@ Source1:        copyright
 Source2:        license
 Source3:        sonarr.systemd
 
-Requires:           sqlite >= 3.7
+Requires:           sqlite-libs >= 3.7
 Requires:           mediainfo >= 0.7.52
 Requires:           mono-complete >= 3.10
 
