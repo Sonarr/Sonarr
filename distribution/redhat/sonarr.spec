@@ -7,7 +7,7 @@ Summary:        PVR for Usenet and BitTorrent users
 
 License:        GPLv3+
 URL:            https://sonarr.tv/
-Source0:        https://download.sonarr.tv/v3/phantom-%{BuildBranc}/%{BuildVersion}/Sonarr.phantom-%{BuildBranch}.%{version}.linux.tar.gz
+Source0:        https://download.sonarr.tv/v3/phantom-%{BuildBranch}/%{BuildVersion}/Sonarr.phantom-%{BuildBranch}.%{version}.linux.tar.gz
 Source1:        copyright
 Source2:        license
 Source3:        sonarr.systemd
