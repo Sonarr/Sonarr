@@ -1,7 +1,7 @@
 Name:           sonarr
 Version:        %{BuildVersion}
 
-Release:        3%{?dist}.%{?BuildBranch}
+Release:        4%{?dist}.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
