@@ -1,7 +1,7 @@
 Name:           sonarr
 Version:        %{BuildVersion}
 
-Release:        6%{?dist}.%{?BuildBranch}
+Release:        7%{?dist}.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
@@ -14,10 +14,10 @@ Source3:        sonarr.systemd
 Source4:	package_info
 
 BuildRequires:      systemd
-BuildRequires:      pkgconfig(mono)
 
 Requires:           sqlite-libs >= 3.7
 Requires:           mediainfo >= 0.7.52
+Requires:           mono-complete
 
 Requires(pre):      shadow-utils
 Requires(postun):   shadow-utils
@@ -27,7 +27,6 @@ Requires(preun):    systemd
 Requires(postun):   systemd
 
 Provides: /opt/sonarr/Sonarr.exe
-
 
 %description
 Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS
