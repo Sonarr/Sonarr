@@ -1,7 +1,7 @@
 Name:           sonarr
 Version:        %{BuildVersion}
 
-Release:        4%{?dist}.%{?BuildBranch}
+Release:        6%{?dist}.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
@@ -11,6 +11,7 @@ Source0:        https://download.sonarr.tv/v3/phantom-%{BuildBranch}/%{BuildVers
 Source1:        copyright
 Source2:        license
 Source3:        sonarr.systemd
+Source4:	package_info
 
 BuildRequires:      systemd
 BuildRequires:      pkgconfig(mono)
@@ -59,7 +60,11 @@ install -m 0755 -d %{buildroot}%{_sharedstatedir}/sonarr
 # sonarr
 install -m 0755 -d %{buildroot}/opt/%{name}
 
+install -m 0644 %{SOURCE4} %{buildroot}/opt/%{name}/
+echo PackageVersion=%{version}-%{release} >>  %{buildroot}/opt/%{name}/package_info
+
 mv * %{buildroot}/opt/%{name}
+
 find %{buildroot}/opt/%{name} -type f -exec chmod 644 '{}' \;
 find %{buildroot}/opt/%{name} -type d -exec chmod 755 '{}' \;
 
