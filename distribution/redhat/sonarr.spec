@@ -1,7 +1,7 @@
 Name:           sonarr
 Version:        %{BuildVersion}
 
-Release:        1%{?dist}.%{?BuildBranch}
+Release:        2%{?dist}.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
@@ -34,6 +34,9 @@ already downloaded when a better quality format becomes available.
 %prep
 %autosetup -n Sonarr
 
+# Remove Updater
+rm -rf Sonarr.Update
+
 
 %install
 # documentation
@@ -47,8 +50,6 @@ install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
 install -m 0755 -d %{buildroot}%{_sharedstatedir}/sonarr
 # sonarr
 install -m 0755 -d %{buildroot}/opt/%{name}
-# Remove updater:
-rm -rf %{buildroot}/opt/%{name}/Sonarr.Update
 
 mv * %{buildroot}/opt/%{name}
 find %{buildroot}/opt/%{name} -type f -exec chmod 644 '{}' \;
