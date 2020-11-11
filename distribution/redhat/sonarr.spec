@@ -25,8 +25,6 @@ Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
 
-# These aren't in a standard place, so don't include them
-%global __provides_exclude_from ^/opt/%{name}/*.dll$
 Provides: /opt/sonarr/Sonarr.exe
 
 
