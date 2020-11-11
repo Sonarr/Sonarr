@@ -13,11 +13,10 @@ Source2:        license
 Source3:        sonarr.systemd
 
 BuildRequires:      systemd
-BuildRequires:      mono-devel
+BuildRequires:      pkgconfig(mono)
 
 Requires:           sqlite-libs >= 3.7
 Requires:           mediainfo >= 0.7.52
-Requires:           mono-complete >= 3.10
 
 Requires(pre):      shadow-utils
 Requires(postun):   shadow-utils
