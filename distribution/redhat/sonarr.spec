@@ -1,7 +1,7 @@
 Name:           sonarr
 Version:        %{BuildVersion}
 
-Release:        2%{?dist}.%{?BuildBranch}
+Release:        3%{?dist}.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
@@ -11,6 +11,9 @@ Source0:        https://download.sonarr.tv/v3/phantom-%{BuildBranch}/%{BuildVers
 Source1:        copyright
 Source2:        license
 Source3:        sonarr.systemd
+
+BuildRequires:      systemd
+BuildRequires:      mono-devel
 
 Requires:           sqlite-libs >= 3.7
 Requires:           mediainfo >= 0.7.52
@@ -22,7 +25,11 @@ Requires(postun):   shadow-utils
 Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
-BuildRequires:      systemd
+
+# These aren't in a standard place, so don't include them
+%global __provides_exclude_from ^/opt/%{name}/*.dll$
+Provides: /opt/sonarr/Sonarr.exe
+
 
 %description
 Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS
@@ -37,6 +44,10 @@ already downloaded when a better quality format becomes available.
 # Remove Updater
 rm -rf Sonarr.Update
 
+%build
+# Empty build just to make rpmlint happier.
+# This spec uses binaries built on windows by Sonarr team instead of
+# attempting to build on Linux.
 
 %install
 # documentation
