@@ -37,8 +37,14 @@ if [ ! -e redhat/Sonarr.phantom-${BuildBranch}.${BuildVersion}.linux.tar.gz ]; t
   )
 fi
 
+echo === Cleaning out old SRPMs
+rm -f *.src.rpm
+
 echo === Building a .src.rpm package:
 mock --buildsrpm -r epel-7-x86_64 --sources redhat  --spec $SpecFile --resultdir=./
+
+echo === Uploading to copr to ask them to build for us
+copr build --nowait sonarr-v3-test sonarr-${BuildVersion}-*.src.rpm || true
 
 echo === Building for CentOS/RHEL/EPEL 8:
 mock -r epel-8-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .el8"
