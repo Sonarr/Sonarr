@@ -58,9 +58,9 @@ install -m 0755 -d %{buildroot}%{_sharedstatedir}/sonarr
 # sonarr
 install -m 0755 -d %{buildroot}/opt/%{name}
 
-( 
-  echo "# Do Not Edit"
-  echo "PackageVersion=%{version}
+(
+  echo "# Do Not Edit\n"
+  echo "PackageVersion=%{version}"
   echo "PackageAuthor=[Team Sonarr](https://sonarr.tv)"
   echo "ReleaseVersion=%{version}"
   echo "UpdateMethod=yum"
