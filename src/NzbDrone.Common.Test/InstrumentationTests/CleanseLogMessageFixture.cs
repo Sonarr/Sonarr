@@ -40,6 +40,8 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         [TestCase(@",{""download_location"": ""C:\Users\\mySecret mySecret\\Downloads""}")]
         [TestCase(@",{""download_location"": ""/home/mySecret/Downloads""}")]
         [TestCase(@"auth.login(""mySecret"")")]
+        // Download Station
+        [TestCase(@"webapi/entry.cgi?api=(removed)&version=2&method=login&account=01233210&passwd=mySecret&format=sid&session=DownloadStation")]
         // BroadcastheNet
         [TestCase(@"method: ""getTorrents"", ""params"": [ ""mySecret"",")]
         [TestCase(@"getTorrents(""mySecret"", [asdfasdf], 100, 0)")]

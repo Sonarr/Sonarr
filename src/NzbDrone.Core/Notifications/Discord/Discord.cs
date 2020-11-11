@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 switch ((DiscordGrabFieldType)field)
                 {
                     case DiscordGrabFieldType.Overview:
-                        var overview = episodes.First().Overview;
+                        var overview = episodes.First().Overview ?? "";
                         discordField.Name = "Overview";
                         discordField.Value = overview.Length <= 300 ? overview : overview.Substring(0, 300) + "...";
                         break;
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 Url = $"http://thetvdb.com/?tab=series&id={series.TvdbId}",
                 Description = isUpgrade ? "Episode Upgraded" : "Episode Imported",
                 Title = GetTitle(series, episodes),
-                Color = isUpgrade ? (int)DiscordColors.Upgrade : (int)DiscordColors.Standard,
+                Color = isUpgrade ? (int)DiscordColors.Upgrade : (int)DiscordColors.Success,
                 Fields = new List<DiscordField>(),
                 Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
             };
@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 switch ((DiscordImportFieldType)field)
                 {
                     case DiscordImportFieldType.Overview:
-                        var overview = episodes.First().Overview;
+                        var overview = episodes.First().Overview ?? "";
                         discordField.Name = "Overview";
                         discordField.Value = overview.Length <= 300 ? overview : overview.Substring(0, 300) + "...";
                         break;

@@ -8,6 +8,8 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
         public TraktListSettingsValidator()
         : base()
         {
+            RuleFor(c => c.Username).NotEmpty();
+            RuleFor(c => c.Listname).NotEmpty();
         }
     }
 
