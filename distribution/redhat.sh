@@ -43,8 +43,11 @@ rm -f *.src.rpm
 echo === Building a .src.rpm package:
 mock --buildsrpm -r epel-7-x86_64 --sources redhat  --spec $SpecFile --resultdir=./
 
-echo === Uploading to copr to ask them to build for us
-copr build --nowait sonarr-v3-test sonarr-${BuildVersion}-*.src.rpm || true
+echo === Uploading to copr to ask them to build for us, and if that works nothing to do next
+copr build --nowait sonarr-v3-test sonarr-${BuildVersion}-*.src.rpm && exit 0
+
+echo === Looks like copr not an option, so trying to build locally with mock
+echo
 
 echo === Building for CentOS/RHEL/EPEL 8:
 mock -r epel-8-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .el8"
