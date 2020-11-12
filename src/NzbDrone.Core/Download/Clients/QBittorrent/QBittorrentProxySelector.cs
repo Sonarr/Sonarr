@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         QBittorrentPreferences GetConfig(QBittorrentSettings settings);
         List<QBittorrentTorrent> GetTorrents(QBittorrentSettings settings);
         QBittorrentTorrentProperties GetTorrentProperties(string hash, QBittorrentSettings settings);
+        List<QBittorrentTorrentFile> GetTorrentFiles(string hash, QBittorrentSettings settings);
 
         void AddTorrentFromUrl(string torrentUrl, QBittorrentSettings settings);
         void AddTorrentFromFile(string fileName, Byte[] fileContent, QBittorrentSettings settings);

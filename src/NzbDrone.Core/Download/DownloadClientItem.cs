@@ -24,6 +24,11 @@ namespace NzbDrone.Core.Download
         public bool CanMoveFiles { get; set; }
         public bool CanBeRemoved { get; set; }
         public bool Removed { get; set; }
+
+        public DownloadClientItem Clone()
+        {
+            return MemberwiseClone() as DownloadClientItem;
+        }
     }
 
     public class DownloadClientItemClientInfo
