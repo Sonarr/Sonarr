@@ -196,12 +196,21 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         public override DownloadClientInfo GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
+            var label = _proxy.GetLabelOptions(Settings);
+            OsPath destDir;
 
-            var destDir = new OsPath(config.GetValueOrDefault("download_location") as string);
-
-            if (config.GetValueOrDefault("move_completed", false).ToString() == "True")
+            if (label != null && label.ApplyMoveCompleted && label.MoveCompleted)
+            {
+                // if label exists and a label completed path exists and is enabled use it instead of global
+                destDir = new OsPath(label.MoveCompletedPath);
+            }
+            else if (config.GetValueOrDefault("move_completed", false).ToString() == "True")
             {
                 destDir = new OsPath(config.GetValueOrDefault("move_completed_path") as string);
+            }
+            else
+            {
+                destDir = new OsPath(config.GetValueOrDefault("download_location") as string);
             }
 
             var status = new DownloadClientInfo
