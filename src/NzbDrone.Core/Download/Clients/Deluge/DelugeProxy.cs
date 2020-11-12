@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         string[] GetAvailablePlugins(DelugeSettings settings);
         string[] GetEnabledPlugins(DelugeSettings settings);
         string[] GetAvailableLabels(DelugeSettings settings);
+        DelugeLabel GetLabelOptions(DelugeSettings settings);
         void SetTorrentLabel(string hash, string label, DelugeSettings settings);
         void SetTorrentConfiguration(string hash, string key, object value, DelugeSettings settings);
         void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, DelugeSettings settings);
@@ -153,6 +154,13 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         public string[] GetAvailableLabels(DelugeSettings settings)
         {
             var response = ProcessRequest<string[]>(settings, "label.get_labels");
+
+            return response;
+        }
+
+        public DelugeLabel GetLabelOptions(DelugeSettings settings)
+        {
+            var response = ProcessRequest<DelugeLabel>(settings, "label.get_options", settings.TvCategory);
 
             return response;
         }
