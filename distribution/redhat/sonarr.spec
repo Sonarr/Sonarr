@@ -133,6 +133,16 @@ firewall-cmd --add-service=%{name} --permanent
 
 
 %changelog
+* Fri Nov 13 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.994-10.develop
+- Bump release
+- Enable and start service and open firewall at end of install
+- Fix pidfile
+- Always restart
+- Don't build debuginfo packages, even if rpmbuild really wants to
+- Don't build SRPM, only binary RPM
+- More cleanup
+- Fixed another minor rpmlint issue
+
 * Mon Nov 09 2020 Eric Eisenhart <freiheit at gmail dot com>' - 3.0.4.994-9.develop
 - Updating for Sonarr v3
 
