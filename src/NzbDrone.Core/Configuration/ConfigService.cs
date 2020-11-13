@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Configuration
 
         public int DownloadClientHistoryLimit
         {
-            get { return GetValueInt("DownloadClientHistoryLimit", 30); }
+            get { return GetValueInt("DownloadClientHistoryLimit", 60); }
 
             set { SetValue("DownloadClientHistoryLimit", value); }
         }
