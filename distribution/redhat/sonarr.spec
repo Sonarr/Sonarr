@@ -60,8 +60,8 @@ install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
 
 # firewalld
 install -m 0755 -d %{buildroot}%{_prefix}/lib/firewalld/services/
-install -m 0655 %{SOURCE4} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
-install -m 0655 %{SOURCE5} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}-secure.xml
+install -m 0644 %{SOURCE4} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
+install -m 0644 %{SOURCE5} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}-secure.xml
 
 # sonarr user in /var
 install -m 0755 -d %{buildroot}%{_sharedstatedir}/%{name}
