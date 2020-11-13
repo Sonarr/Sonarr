@@ -4,13 +4,12 @@ Documentation=https://sonarr.tv/
 Wants=network.target
 After=network.target
 
-
 [Service]
 Type=simple
 User=sonarr
 PIDFile=/var/lib/sonarr/.config/Sonarr/nzbdrone.pid
 ExecStart=/usr/bin/mono /opt/sonarr/Sonarr.exe
-Restart=on-success
+Restart=always
 
 # SCHED_OTHER is the default Linux time-sharing scheduler that is intended for
 # all threads that do not require the special real-time mechanisms.
