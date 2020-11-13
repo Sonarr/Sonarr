@@ -1,18 +1,18 @@
 Name:           sonarr
 Version:        %{BuildVersion}
 
-Release:        8%{?dist}.%{?BuildBranch}
+Release:        9.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
 License:        GPLv3+
 URL:            https://sonarr.tv/
 Source0:        https://download.sonarr.tv/v3/phantom-%{BuildBranch}/%{BuildVersion}/Sonarr.phantom-%{BuildBranch}.%{version}.linux.tar.gz
-Source1:        copyright
-Source2:        license
-Source3:        sonarr.systemd
+Source3:        %{name}.systemd
+Source4:	%{name}.firewalld
+Source5:	%{name}-secure.firewalld
 
-BuildRequires:      systemd
+BuildRequires:      systemd-rpm-macros
 
 Requires:           sqlite-libs >= 3.7
 Requires:           mediainfo >= 0.7.52
@@ -25,7 +25,14 @@ Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
 
-Provides: /opt/sonarr/Sonarr.exe
+Provides: /opt/%{name}/Sonarr.exe
+
+# These prevent Sonarr's DLLs from auto-creating requires and provides
+# Doing that because RH's mono require/provide detection isn't working
+# right here 
+# (thinks it requires a different version of a library than it provides type problems)
+%global __provides_exclude_from ^/opt/%{name}/.*$
+%global __requires_exclude_from ^/opt/%{name}/.*$
 
 %description
 Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS
@@ -46,17 +53,23 @@ rm -rf Sonarr.Update
 # attempting to build on Linux.
 
 %install
-# documentation
-install -m 0755 -d %{buildroot}%{_defaultdocdir}/%{name}
-install -m 0644 %{SOURCE1} %{buildroot}%{_defaultdocdir}/%{name}
-install -m 0644 %{SOURCE2} %{buildroot}%{_defaultdocdir}/%{name}
+
 # systemd service
 install -m 0755 -d %{buildroot}%{_unitdir}
 install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
-# sonarr user
-install -m 0755 -d %{buildroot}%{_sharedstatedir}/sonarr
-# sonarr
+
+# firewalld
+install -m 0750 -d %{buildroot}%{_prefix}/lib/firewalld/services/
+install -m 0655 %{SOURCE4} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
+install -m 0655 %{SOURCE5} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}-secure.xml
+
+# sonarr user in /var
+install -m 0755 -d %{buildroot}%{_sharedstatedir}/%{name}
+
+# sonarr software itself
 install -m 0755 -d %{buildroot}/opt/%{name}
+
+
 
 (
   echo "# Do Not Edit\n"
@@ -74,43 +87,43 @@ find %{buildroot}/opt/%{name} -type d -exec chmod 755 '{}' \;
 
 
 %files
-%{_docdir}/%{name}*
-%{_unitdir}/%{name}*
-/opt/%{name}*
-%attr(-,sonarr,sonarr)%{_sharedstatedir}/sonarr
+%{_unitdir}/%{name}.service
+%dir %{_prefix}/lib/firewalld
+%dir %{_prefix}/lib/firewalld/services
+%{_prefix}/lib/firewalld/services/*.xml
+%dir /opt/%{name}
+/opt/%{name}/*
+%attr(-,sonarr,sonarr)%{_sharedstatedir}/%{name}
 
 
 %pre
-if ! getent group sonarr &>/dev/null; then
-    groupadd -r sonarr
-fi
-if ! getent passwd sonarr &>/dev/null; then
-    useradd -c "Sonarr user" -d %{_sharedstatedir}/sonarr -g sonarr -G users -r -s /sbin/nologin sonarr
-fi
-
+getent group %{name} >/dev/null || groupadd -r %{name}
+getent passwd %{name} >/dev/null || \
+    useradd -r -g %{name} -d d %{_sharedstatedir}/%{name} -s /sbin/nologin \
+    -c "Sonarr PVR for Usenet and BitTorrent Users " %{name}
+exit 0
 
 %post
 %systemd_post %{name}.service
-
+%firewalld_reload
 
 %preun
 %systemd_preun %{name}.service
 
-
 %postun
 %systemd_postun_with_restart %{name}.service
 if (($1==0)); then
-    if getent passwd sonarr &>/dev/null; then
-        userdel sonarr
+    if getent passwd %{name} &>/dev/null; then
+        userdel %{name}
     fi
-    if getent group sonarr &>/dev/null; then
-        groupdel sonarr
+    if getent group %{name} &>/dev/null; then
+        groupdel %{name}
     fi
 fi
 
 
 %changelog
-* Mon Nov 09 2020 Eric Eisenhart <freiheit at gmail dot com>'
+* Mon Nov 09 2020 Eric Eisenhart <freiheit at gmail dot com>' - 3.0.4.994-9
 - Updating for Sonarr v3
 
 * Fri Jan 02 2015 Yclept Nemo <"".join(chr(ord(c)-1) for c in "pscjtwjdjtAhnbjm/dpn")> - 2.0.0.2572-1.fc21
