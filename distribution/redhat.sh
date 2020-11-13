@@ -42,7 +42,7 @@ echo === Cleaning out old RPMS
 rm -f *.rpm */*.rpm
 
 echo === Building RPM and SRPM
-rpmbuild -D "_topdir $(pwd)" -D "_sourcedir $(pwd)" -D "_builddir $(pwd)" -D "_rpmdir $(pwd)" -D "_specdir $(pwd)" -D "_srcrpmdir $(pwd)" -bb sonarr-3.0.4.994-develop.spec
+rpmbuild -D "_topdir $(pwd)" -D "_sourcedir $(pwd)" -D "_builddir $(pwd)" -D "_rpmdir $(pwd)" -D "_specdir $(pwd)" -D "_srcrpmdir $(pwd)" --define "debug_package %{nil}" -bb sonarr-3.0.4.994-develop.spec
 
 mv */*.rpm ./
 
