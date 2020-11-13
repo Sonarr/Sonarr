@@ -59,7 +59,7 @@ install -m 0755 -d %{buildroot}%{_unitdir}
 install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
 
 # firewalld
-install -m 0750 -d %{buildroot}%{_prefix}/lib/firewalld/services/
+install -m 0755 -d %{buildroot}%{_prefix}/lib/firewalld/services/
 install -m 0655 %{SOURCE4} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
 install -m 0655 %{SOURCE5} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}-secure.xml
 
@@ -87,12 +87,16 @@ find %{buildroot}/opt/%{name} -type d -exec chmod 755 '{}' \;
 
 
 %files
-%{_unitdir}/%{name}.service
+%dir %{_unitdir}
+%attr(0644,root,root) %{_unitdir}/%{name}.service
+
 %dir %{_prefix}/lib/firewalld
 %dir %{_prefix}/lib/firewalld/services
-%{_prefix}/lib/firewalld/services/*.xml
+%attr(0644,root,root) %{_prefix}/lib/firewalld/services/*.xml
+
 %dir /opt/%{name}
-/opt/%{name}/*
+%attr(-,root,root) /opt/%{name}/*
+
 %attr(-,sonarr,sonarr)%{_sharedstatedir}/%{name}
 
 
@@ -112,18 +116,22 @@ exit 0
 
 %postun
 %systemd_postun_with_restart %{name}.service
-if (($1==0)); then
-    if getent passwd %{name} &>/dev/null; then
-        userdel %{name}
-    fi
-    if getent group %{name} &>/dev/null; then
-        groupdel %{name}
-    fi
-fi
+
+## This is dangerous, rpmlint doesn't like it,
+## and could break things if somebody uninstalls
+## and reinstalls (instead of upgrade)
+#if (($1==0)); then
+#    if getent passwd %{name} &>/dev/null; then
+#        userdel %{name}
+#    fi
+#    if getent group %{name} &>/dev/null; then
+#        groupdel %{name}
+#    fi
+#fi
 
 
 %changelog
-* Mon Nov 09 2020 Eric Eisenhart <freiheit at gmail dot com>' - 3.0.4.994-9
+* Mon Nov 09 2020 Eric Eisenhart <freiheit at gmail dot com>' - 3.0.4.994-9.develop
 - Updating for Sonarr v3
 
 * Fri Jan 02 2015 Yclept Nemo <"".join(chr(ord(c)-1) for c in "pscjtwjdjtAhnbjm/dpn")> - 2.0.0.2572-1.fc21

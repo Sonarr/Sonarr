@@ -47,4 +47,4 @@ rpmbuild -D "_topdir $(pwd)" -D "_sourcedir $(pwd)" -D "_builddir $(pwd)" -D "_r
 mv */*.rpm ./
 
 echo === Checking built RPMs with rpmlint
-rpmlint *.rpm
+rpmlint *.rpm | egrep -v 'dir-or-file-in-opt'
