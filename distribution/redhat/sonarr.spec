@@ -110,6 +110,8 @@ exit 0
 %post
 %systemd_post %{name}.service
 %firewalld_reload
+systemctl enable --now %{name}.service
+firewall-cmd --add-service=%{name} --permanent
 
 %preun
 %systemd_preun %{name}.service
