@@ -134,6 +134,8 @@ firewall-cmd --add-service=%{name} --permanent
 
 %changelog
 * Fri Nov 13 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.994-10.develop
+- Attempt to auto-maintain the rpm changelog?
+- Updated changelog
 - Bump release
 - Enable and start service and open firewall at end of install
 - Fix pidfile
@@ -142,9 +144,2857 @@ firewall-cmd --add-service=%{name} --permanent
 - Don't build SRPM, only binary RPM
 - More cleanup
 - Fixed another minor rpmlint issue
-
-* Mon Nov 09 2020 Eric Eisenhart <freiheit at gmail dot com>' - 3.0.4.994-9.develop
-- Updating for Sonarr v3
+- Cleaning up a few minor issues and generally making rpmlint happier
+- Updated to build RPM directly - Removed %{?dist} from Release (so that packages are cross-distro) - Excluded everything in /opt/sonarr from require and provides scanning,   so that don't need to worry if mono require/provide scanning is installed. - Added firewalld for secure port - Actually stuck both firewalld things into the right place - Updated a few things to match Fedora's packaging guidelines - Redid build process to build directly without mock
+- Experimental change to mock CLI to help it run under docker...
+- Don't do Copr (based on discord discussion to keep in-house)
+- Typo
+- Another attempt at package_info
+- Go all-in on copr if it's an option
+- Remove mono-devel from build process and instead only Require:mono-complete... The automatic requires finding is misidentifying some things and results in an uninstallable package.
+- Add copr build
+- Add "package_info" file to disable update notification things...
+- Guess sonarr requires its own DLLs, so let it provide them
+- Release bump
+- Replace the "mono-complete" require with a BuildRequire that pulls in /usr/bin/mono-find-requires so rpmbuild can autogenerate exact correct requirement list
+- Fix the "provides". Libraries are in non-standard location, so best not to have them show as "provided"
+- Fix Update removal
+- Merge branch 'phantom-rpm-package' of github.com:freiheit/Sonarr into phantom-rpm-package
+- Switch from passing --define vars to generating a spec with %defines at top, so that SRPM and .spec are usable without extra options
+- Fix typo
+- Make Source full URL to appropriate file
+- Ignore some generated files
+- Merge pull request #2 from Sonarr/phantom-develop
+- Giving up on that idea of pulling configs from newer mock in in order to enable building newer distros on Debian 10; those configs require too many things that are missing in Debian's old mock version.
+- Pull entire CentOS8 /etc/mock dir into local config so that can build newer distros than Debian's mock includes
+- Pull mock files in from RHEL8's mock (GPLv2+) and switch to using those, so that can build on systems with ancient mock versions (debian 10)
+- Update notes, including instructions for building on Debian
+- If tarball isn't there already, download from download.sonarr.tv
+- Make rpmlint happier
+- Update to build .src.rpm and noarch.rpm files for EL7/8 and FC33/34
+- Ignore .rpm files
+- Move orbisvicis' fedora build files to place more consistent with v3's debian build files
+- Merge pull request #1 from orbisvicis/develop
+- Fixed: Manual import when quality was selected before episodes
+- Fixed: Correctly storing v0 version during import, allowing them to be upgraded to v1 later
+- Fixed: wiki link for removed series health check
+- Show .net version in UI
+- Fixed: Telegram silent notifications
+- New: Discord notification upgrade colour
+- Change 'Ignore Deleted Episodes' to 'Unmonitor Deleted Episodes' for consistency
+-  New: Changed colour of Discord On Download notifications
+- Fixed: 1080i HDTV H264 incorrectly being detected as Raw HD
+- Fixed: Cleanse account and passwd from Download Station URLs
+- Fixed: Show TLS errors in UI when testing download clients
+- Improved Trakt list validation
+- Fixed: Show feed URL if incorrect mime type is found
+- Fixed: Discord notifications failing if episode overview is missing
+- Fixed phrasing when release match found by ID
+- Updated debian install script to handle longer user names
+- Fixed: Grab/Import fields for Discord notifications being duplicated
+- Pass no parameter instead of null parameter on Kodi Update
+- Kodi GetMovies fails due to Parameter Type
+- Resource missing from Gotify call
+- Gotify token as query parameter
+- New: Customizable Discord Notifications
+- TagSelect field type
+- New: Make Twitter NetStandard compatible
+- New: Remove Growl notifications
+- Rename migration 144
+- Convert Notifications from RestSharp to HttpClient
+- Fixed: Parsing of some daily episodes
+- Fix namespace for BlacklistBulkResource
+- Improve use of All() and speedup Unmapped Folder matching
+- Fixed: Limit Raw HD detection by MPEG-2 to HDTV sources
+- Fixed: Size on disk sorting and display
+- New: Ability to edit restriction terms in Release Profiles
+- Fix installer branch/build from testing
+- New: Differentiate between short term and long term (more than 6 hours) indexer failures
+- Fixed: (Windows) clean up extraneous files in build folder during installation
+- New: Reprocess items after selection in Manual Import
+- Fixed: Copying passwords
+- New: Bulk remove from Blacklist
+- New: Warning when combining preferred words with a specific indexer
+- Re-saving edited providers will forcibly save them
+- Fixed: Regression causing updater to fail (manual update required if on 3.0.3.971, see forums)
+- Fixed test file casing
+- Fixed: Dataloss when moving series folder to root folder with only different casing
+- Fixed: Parsing of URLs with double slashes in the path
+- Fixed: Use standard naming format for daily specials
+- New: Search for specials by season/episode number in addition to name
+- New: Search for anime specials without absolute episode numbers by name
+- Fixed: Webhooks using lower case event types (in the future this could change)
+- Ignore HttpClientFixture integration tests
+- New: Health events for Webhooks
+- Windows installer improvements
+- Fixed: Opening dropdowns
+- New: Newznab/Torznab categories dropdown with indexer provided category names
+- Fixed: Quality sliders
+- Fixed: Fixed size on disk not showing for series in overview view
+- Fix tooltip max width on larger screens
+- Update supporters and use jetbrains images
+- Add Open Collective Link
+- Regenerate yarn.lock after package updates
+- Appeasing the lint gods
+- Import lists in settings overview
+- Fixed: Episode history details tooltip jumping around
+- New: Add size to episode files in Webhook payload
+- Upgrade react-autosuggest
+- Upgrade react-google-recaptcha
+- Upgrade del
+- Upgrade webpack loaders
+- Upgrade stylelint
+- Upgrade react-lazyload
+- Upgrade redux-batched-actions
+- Upgrade esformatter
+- Upgrade filesize
+- Upgrade eslint, esprint
+- Upgrade react-slider and react-text-truncate
+- Upgrade react-dnd
+- Upgrade webpack and core-js
+- Upgrade a bunch of react/redux packages
+- Upgrade jquery, moment and qs
+- Upgrade fuse.js
+- Upgrade gulp
+- Upgrade clipboard, lodash, mobile-detect and mousetrap
+- Upgrade sentry
+- Upgrade Font Awesome
+- Upgrade babel
+- New: Pilot Episode monitoring option
+- Fixed stylelint too
+- Fixed lint
+- Fixed some mediainfo subtitle codes
+- Added MultiSelect input control for provider settings
+- New: Added FileList.io indexer support
+- Added PrivacyLevel option to FieldDefinition for later usage
+- New: Series type and season folder options for import lists
+- Fixed: Handle obfuscated files using abc.xyz pattern
+- Webhook clearnup/improvements
+- New: Renamed Growl application to Sonarr (breaking)
+- Some cleanup of things marked for removal in v3
+- Fixed: Filter DTS-ES when parsing Release Group
+- Log when scene name is not stored for file
+- Fixed: Indexer being disabled due to download client rejecting it
+- Fixed: Log path when import fails for series import
+- Fixed enter in modal confirmation dialogs
+- Handle ratelimit api response for newznab caps endpoint on certain newznab indexers that have caps behind the apikey
+- Fixed: Filter Extras folders when using Series Manual File Import function on series folder
+- Fixed: Update modal error
+- Fixed: Add list exclusion on delete
+- Fixed: Sorting interactive search by quality for unknown series results
+- Fixed: Spelling in Edit List modal
+- Fixed: Removing torrents from Vuze
+- Fixed: Prevent bulk add failure on single validation error for Lists
+- Indexer Priority ESLint fixes
+- Fixed language parser tests
+- Fixed tests/null reference for import lists
+- New: Don't forcibly retest indexers/download clients/connections on save if previously enabled
+- New: Option to search for upgrades when adding new series
+- Mark completed imports based on history as imported to remove from queue
+- Fixed: Import series spinning forever when error is returned
+- New: Index priority
+- New: Trakt.tv List Options
+- New: Sync with another Sonarr Instance List Option
+- New: List Support
+- Don't parse subtitle language as language
+- Fixed: Replace : with _ when getting output path from Transmission
+- Appease stylelint
+- Fixed: Series editor error when series is missing size
+- Fixed: Tooltips overflowing the screen width
+- Fixed: Error in logs when creating a new root folder
+- Fixed: Preview rename tip wording
+- Fixed: Update year during refresh
+- Fixed: Typo in Lost Connection modal
+- Fixed: Series navigation buttons hidden with some titles
+- Fixed: Links and already added icons overflowing on add series search results
+- Fixed: Overflow of absolute episode numbers with warning
+- Fixed: Long relative path when selecting episodes in  Manual Import hiding buttons
+- Fix grammar
+- New: Added silent notification option to telegram
+- Remove Prowlin Dependency
+- Tweaked test failing around midnight my timezone
+- Fixed: Include extension when calculating maximum episode title length when renaming files
+- Fixed: Prevent misinterpreting Season folder as anime release title
+- Fixed: Exception when parsing Quality in release title with colon
+- Fixed: Parsing anime with title ending in 100
+- Fixed: Manual Import adding empty rows after selecting series
+- Fixed: Long paths overflowing in series history
+- New: Not in Last/Next for date custom filters
+- Fixed: Don't use language parsed from episode title during import
+- Fixed: Edited series is reset after refresh
+- Fixed: Multiple warnings for episode combined into one tooltip
+- Fixed: Deleting empty episode folders on upgrade
+- Fixed: Parsing of article title leading to error loading Interactive Search
+- Fixed: Mark "BAD" Nzbget Downloads as Failed
+- Fixed: Long titles not finding matches in UI series search
+- New: Filter episodes by title or number in Manual Import
+- New: Show updated rejection reasons in manual import after selecting series
+- Fixed: Don't create empty series folder if delete empty folders is enabled
+- Don't process queue item without details
+- Fixed: Show more information in UI when testing SAB fails in some cases
+- Fixed: Parsing of some absolute episode numbers over 999
+- New: Improved parsing of season and episode inside square brackets
+- Fixed: Typo in the Week Column Header example
+- Fixed: Typo/unclear text in backup retention
+- Fixed: "Profile" to "Indexer" on Clone Button
+- Fixed: TheTVDB metadata images containing html content
+- Fixed: Failing file copy when running in docker on synology with btrfs
+- Fixed: Refreshing Plex Server series in high volume systems
+- Remove stacktrace if hardlink resulted in EXDEV.
+- Fixed: Performance of symbolic link detection and infinite recursion
+- Fixed: Added glusterfs to known network drive filesystems so it shows up in System
+- New: Fast copy using reflink on btrfs volumes
+- Fixed: Removed hardlink-based transactional file transfer logic (instead relying on explicit copy+delete for cifs)
+- Fixed: Rejecting another multi-season pack format
+- Fixed: Twitter Connect missing (you'll have to readd it in Connect)
+- Fix ImportFixture test
+- ImportSeries lint issue
+- Fix root folder unit test
+- Fixed: Exception thrown when marking download as complete
+- New: Ensure all unmapped folders are fetched when importing from a root folder
+- Fixed: Displayed root folder path getting truncated when adding a series with a long title
+- Prevent deletion of chowngroup we may need it later
+- lint... again
+- Fixed: Sorting of queue by series title when unknown items are included
+- Lazy Loading fuse-worker and fixed some potential timing issues when it's slow. Also keep last result while typing.
+- Fixed maintenance release not showing as such in AppUpdatedModal
+- Used ReflectionOnly and/or public types where possible to avoid loading related assemblies unnecessarily.
+- jsconfig for a bit of autocompletion and intellisense
+- Revised webpack bundling and updated worker loading, turned inline worker on by default.
+- Fixed error in opcode parameter that only shows itself in mono under 6.x
+- Fixup tests
+- Fixed: Quality Resolution determination using MediaInfo
+- Fixed corrupt Update History due to date-time notation
+- Use Newtonsoft in TinyTwitter
+- Moved Windows-only Permission function to Sonarr.Windows
+- Removed unused dialects from Marr so it compiles with less dependencies.
+- Fixed test
+- New: Show previously installed version in Updates UI
+- New: Removed chown and simplified chmod options for linux/osx
+- Allow inline markdown in the changelog for linking to wiki
+- New: Replaced launcher on OSX Catalina so that individual permissions can be assigned (note, will ignore permissions previously assigned to sh)
+- Fixed flaky test.
+- Added Plex url to cleanser
+- New: Use release quality source if not in downloaded file and resolution matches
+- Fixed: Error when processing release with files Sonarr is unable to parse
+- Fixed typo in Cleanse IP
+- Cleanse remote IP Address from trace log file
+- Fixed: Mono not validating cross-signed certficates properly
+- Support for Runtime Patches via Harmony
+- Fixed: Interactive search for anime season even if all episodes are unmonitored
+- Log contents on api errors during tests.
+- Fixed tests and missing logger initialization
+- Fixed typo
+- Additional logging when trying to complete tracked downloads
+- Mass Editor size and options
+- Fixed: Auto-focusing Filter series import during import series
+- Fixed: Deleting row from middle of filter builder leading to error
+- Fixed: Not removing seeded download if it was manual imported in some cases
+- Fixed manual import possible null series
+- Fix some styling issues in Quality Profile and Release Profiles
+- Fixed: Skip missing episode title check if file is already in series folder
+- Fixed: Episode file renamed event stored language properly
+- Fixed: Size on disk with seasons over 100
+- New: Show size on disk for each season
+- Fixed: Rejections custom filter for Interactive Search (now Rejections Count)
+- Calendar item/episode status fixes
+- Queue status/timeleft improvements
+- Fixed: Preferred words remove button in Firefox
+- Fixed: Width of episode column with warning
+- New: Don't close manual import when clicking outside the modal
+- Fixed: Manual import for unknown series items will properly mark as imported
+- Store language with deleted episode history
+- updated readme
+- New: SendGrid Notifications
+- Fixed: Added .org to website url filtering in parser
+- Fixed: Parsing anime dual language titles
+- Fixed recursion issue when emptying recycle bin
+- Updated kodi url
+- Fixed: Performance issue when scanning large root folder
+- Fixed: Don't lock command queue if updating is disabled
+- New: Use filename for preferred word score if it's higher than scene name
+- Fixed: Tag details list series in alphabetical order
+- Replaced matchAll usage since it's not available on all browsers
+- Added UserAgent to api request trace log
+- Lock CommandQueueManager.PushMany too
+- Skip unknown/removed commands still queued in the database
+- Fixed timing issue allowing multiple instances of the same command to be queued
+- Added UpdateMechanismMessage to allow package maintainers provide custom message
+- Inline markdown-style link for PackageAuthor
+- Parse WEB at the end of release title.
+- New: Add DownloadClient and DownloadId to Webhook notifications
+- Fixed: Root folder custom filter in Mass Editor
+- Prevent exception parsing unicode digits in absolute numbers.
+- Fixed: Imports triggered through API not being marked as imported/removed from client
+- Fixed: Imported downloads not being removed when seeding goals are met
+- Fixed: Generating Kodi episode metadata files when scanning series folder
+- Clarify that Post-Import Category torrents are not monitored by Sonarr.
+- Log Real IP on Authentication failure in case of a reverse proxy
+- Fixed: Parsing release group from file rather than folder in case of season packs
+- Add missing "does" to DifferentQualitySpec message
+- Fixed: Indicate unchecking Replace Illegal Characters will remove them
+- Fixed: Manual imports of multi-episode files being treated as fully imported
+- Fixed: Episodes removed from queue re-appearing on refresh
+- Fixed: Rejection message for quality mismatch
+- Fixed: Parsing of some anime batch releases
+- Fixed: Rotating mobile device when modal is open won't reset modal
+- Fixed: Remove seeded downloads if they've finished seeding after import
+- Revert: Prevent an edge case where a download is not marked as complete
+- Added support for title query parameter to newznab/torznab, receiving raw series title
+- New: Searching for episodes with season level scene mapping now possible instead of only via RssSync (Newznab/Torznab only)
+- Prevent an edge case where a download is not marked as complete
+- Don't reject for having the same file size
+- Fixed: Windows installer won't create shortcut if unchecked
+- Fixed: Can ignore queue items with unknown episodes
+- Small change to creating an itemMap during item update
+- Fixed: Import series failing to add items to process
+- Add class to allow for overriding scrollbar width
+- Fixed: Removed items in queue still showing until refresh
+- Fixed: Don't process downloads removed from the client
+- Don't re-trigger completed event
+- Track fully imported downloads in separate history table
+- Another mono 6.x workaround to use rename rather than expensive copy
+- Improved error message when nzb download contains an newznab error instead
+- Fixed: Ended overlay on series posters
+- More strict ExcludedSubFoldersRegex
+- Fixed: Filter direct excluded subfolders of the selected directory during manual import
+- Fix checkingUP qbit status unit test
+- Fixed sort in HistoryRepository
+- Fixed: Ignore .@__thumb folders
+- Fixed: Series toolbar button collapsing
+- Fixed: Tooltip for existing series on add new series item
+- Fixed: Queue not always clearing checked items when updated
+- Fixed: Strip AlteZachen from release group name
+- Fixed: Don't try to render quality when it's null
+- Fixed: Treated checkingUP status from Qbit as queued in case it fails to validate
+- Fixed: Tag inputs respect non-QWERTY layouts
+- Updated README
+- Fixed: Preferred word can't have a term that is empty or only spaces
+- GetBestRootFolderPathFixture OS Agnostic paths
+- Improve root folder health check
+- Fixed: Series Network filter breaking if network was not available
+- New: Parse multi-part episodes using date
+- Fix broken test
+- Fixed: Audio Channel Information missing in MediaInfo for certain mkv files with DTS audio
+- Fixed: RemotePoster on v3 api provides local url rather than thetvdb url
+- Fixed: Cutoff unmet searches rejecting releases incorrectly
+- Fixed: Enter on Delete profile confirmation deleting all unused profiles
+- Revert failing parsing tests
+- Fixed: Sorting queue by episode properties when not all items have an episode
+- Actually fixed error rending queue row when quality is missing
+- Fixed: Multiple series found during manual import prevents manual importing from folder
+- Fixed: Error rending queue row when quality is missing
+- New: RSS Sync button on Calendar
+- New: Filter episodes in API v3 by episode file ID
+- Added update check early in startup if the package requested a post-install update check
+- Increased mono dependency from 5.4 to 5.18 for debian
+- Added .NET Framework 4.7.2 requirement check to windows installer
+- Fixed: Workaround for mono 6.x file copy/move issues
+- Fixed scrolling issue in Root Path selector dropdown on mobile
+- Fixed: Wrongly parsing language in series title for season packs (episodes were already handled)
+- Fixed: Don't auto-search newly added episodes on tvdb that aired more than 2 weeks ago
+- More webook series properties
+- Fixed: Metadata files not being created after rescan
+- New: Ignore #recycle folders (Synology Recycle bin folder)
+- Fixed: Remove website post fix before parsing
+- Fixed: Broken tasks getting stuck in queue
+- Fixed: Not importing upgrade for preferred language
+- Update help text in Connections from Download to Import
+- Fixed: Handle qBit ForcedDL State
+- Fixed: Error occurred while executing task ProcessMonitoredDownloads
+- Fixed: Inaccessible path leading to import process being aborted before processing all items
+- Fixed: Re-add background to apple-touch-icon
+- OverlayScroller still needs to be used in PageContentBody
+- Linting
+- Fixed comment typo in webpack config
+- Fixed: Preferred is not an indexer field
+- Scrolling and hotkey improvements
+- Linting error
+- Fixed random typo
+- New: Added mediainfo formatting for E-AC3 Atmos
+- Belated removal of bitmetv and cleanup of usenet-crawler.
+- New: Added option to filter Release Profile to a specific indexer
+- New: Added aired-before field to kodi metadata to sort specials
+- New: Clone indexer button
+- Manual Import Sorting
+- Fix hasDifferentItems
+- Fixed: UI slowdowns while tasks are running
+- Trigger fewer signalr broadcasts
+- New: Faster processing of special releases
+- New: Improved Series list performance
+- Don't rerender all cells each scroll
+- Better selection of jump bar items
+- New: Faster searching of existing series
+- Faster series selector
+- Don't mutate state when sorting items
+- Faster hasDifferentItems and specialized OrOrder version
+- Option for production build with profiling
+- Fixed: Moving series folders in subfolders of the root folder when destination subfolder was missing
+- Fixed: Re-processing imported download causing task to fail
+- Fixed: Prompt to restart after resetting API key
+- Fixed: Sorting by episode count
+- Fixed: Parsing of 360p releases
+- Fixed: Import series when no results are returned from for a folder
+- Fixed: Empty list message for System: Events
+- Fixed stylelint errors
+- New: Added advanced subtitle/audio language filter to {MediaInfo ..}
+- Added Norwegian Bokmal alias
+- Added try-catch for DateTime.TryParse edgecase
+- Support for VS2019 build environment
+- Fixed: Representation of episode start time when not starting at the full hour in am/pm notation
+- Fixed: Don't monitor new seasons if series is not monitored
+- Improve default series type handling (for daily series)
+- Fixed: Rejecting import for a release that was grabbed again
+- Fixed: Typo in unmonitored series tooltip
+- Fixed: Force grabbing selected delayed items in queue
+- BTN: Fix name
+- Fixed: RestClient does not use global proxy settings
+- Fixed: Posters not always showing when searching for new shows
+- New: Added tvdb Upcoming series status
+- New: Limit recent folders in Manual import to 10 and descending order
+- Fix proptype warning for id of EnhancedSelectInputOption
+- New: Added help text for qualities in groups
+- Fixed: Previously imported downloads reappear in queue
+- Fixed missing interface for the CheckForFinishedDownloadCommand backward compat handling
+- Use msbuild instead of the deprecated xbuild
+- Fixed: Replace duplicate slashes from file names when importing
+- Option to ignore items when removing from queue instead of removing from client
+- Monitor and Process downloads separately
+- Fixed: Parsing of Extended Multi-episode format file names
+- Fixed: Regression in Multi-Episode format parser in previous release
+- Fixed: Parsing of poorly named double episode releases
+- Remove website prefixes with dashes in URL
+- Fixed: Improved quality parsing from truncated release names
+- Fixed: Details for episode history flashing on mobile devices
+- Fix typo in remove queue item modal
+- Fixed redirect test
+- Increased max redirects from 3 to 5
+- Fixed: Imports of multi-episode files did not trigger the download completion event and thus apply the PostImport category for supported download clients
+- New: Improve Chinese language detection
+- Remove PFMonkey.com from Presets
+- Add new X265 category to NZB Finder
+- Fixed: Inserting literal { or } in renaming format using {{ or }}
+- Disable pooling rather than clearing it
+- Clear the connection pool in the backdoor migration to prevent occasional conflicts with following migrations
+- Fixed regex in Backup list
+- Fixed: Rare scenario where early Radarr version messes up Sonarr database
+- Fixed: Test All not clearing health error
+- Fixed: Update deleted series health after refreshing series
+- Added NUnit3TestAdapter nuget so it can work without VS extension
+- Cleanse getnzb url
+- Fixed: Handle qBittorrent "moving" state
+- New: Added version number to backup filename
+- Fixed: Letter jump bar on series list not working correctly with banners
+- Improved some log messages
+- Fixed: Delete files from Series Mass Editor not actually deleting files
+- Fixed react error when displaying a series search result for an existing series
+- Fixed: Trying to add a series when root folders hadn't populated
+- Fixed: Refresh Deleted & Upcoming shows as frequently as Continuing ones
+- Tiny fix in test, left-over from my on-windows test.
+- Fixed: File imports on cloud drives slow due to transaction logic
+- Fixed: Corrupt image files when downloading from redirecting Url
+- Fixed: Interactive search results failing to show when processing failed
+- Fixed: Parsing of poor standard file names using dashes for separators
+- Fixed: Deletion of empty episode sub folders when an episode file is deleted
+- Default id for MenuContent
+- Ensure Season Folder Format will correctly replace illegal characters
+- Fixed: Set Default Sort Key for Blacklist Endpoint
+- Fixed: Manual Import failing to show files when processing fails
+- Fixed: Actually run Recycle Bin cleanup
+- Fixed: Remove background from apple-touch-icon
+- Fixed: Set permissions on extra and subtitle files
+- Fixed: Log matching scene mapping for title
+- Fixed: Allow Interactive Season Search when all episodes are unmonitored
+- Fixed: Include releases that failed to parse in search results
+- Fixed: Kodi episode metadata missing uniqueid
+- Fixed: Don't parse packs missing season number
+- Another failing test
+- Missing test on EventDrivenHealthCheck
+- Adding missing series Deleted UI elements
+- Fixed test failing due to rng
+- use TestContext.Progress rather than Console.WriteLine for NzbDroneRunner output
+- Added docker to run tests on various mono versions
+- New: Swap to ImageSharp library for resizing posters
+- New: Option to send notification when a Health Check warning occurs
+- Fix .gitattributes and normalize to LF in repository
+- New: Added health check warning to emphasis when a series was deleted instead of only logging it in System Events
+- New: Parsing Saison season packs as alternative to Season
+- Updated XBMC notification strings to Kodi
+- Fixed regression in container registration. Additional logging in case of integration test startup failures
+- Split up _tests into windows and linux
+- Moved Platform version determination to static
+- Fixed several failing/flaky mono unit tests
+- Fix integration tests on linux with debug build
+- Add digits to Deluge's category validator
+- Update unity
+- Fixed tests
+- Fixed: Copy linux permission mask when moving folder to recycle bin folder
+- Fixed: Disregard Real when user disabled proper preference
+- And a bunch of video codecs. Also fixed the dual-video channel issue.
+- New: Additional Atmos detection in MediaInfo
+- Fixed third-party clients calling api without Accept header
+- Removed obsolete code.
+- Updated Nancy to 2.0
+- Emacs gitignore
+- Fixed DownloadFile when file already exists
+- Fixed tests
+- noreferrer for images to allow images to be loaded from tvdb
+- Fixed: Download mediacover using configured proxy.
+- Added missing SentryEnabled check
+- Fixed: Removed .Net update notice on Windows LTSB 2015
+- Fixed: Root Folder display when free diskspace cannot be determined (FreeBSD)
+- New: Added Auth-* log entries for fail2ban purposes
+- Fixed: Added missing ca-certificates-mono dependency to debian package
+- Typo
+- Updated way Sentry gets configured and enabled.
+- Added BuildInfo.AppName to centralize 'Sonarr'
+- Revised webpack bundling
+- Added active detection for updatecheck so we know which os/runtime versions don't need to be supported anymore.
+- New: Removed libcurl http fallback since mono 5.16+ doesn't need it. Also bumped minimum mono version check to 5.16 (5.20 is the best choice atm)
+- Test framework version
+- Fixed: Missing debian package dependency and made them optional.
+- Cleanup obsolete files
+- Flaky CommandExecutorFixture tests
+- Flaky CommandExecutorFixture tests
+- Fixed typos
+- Fixed flaky test by flushing logs and getting them via the api
+- Another Daily format with no series title.
+- Fixed assembly configuration/branch attribute generation.
+- New: Replace SharpRaven with new Sentry SDK
+- Fixed several tests and test infrastructure issues
+- Fixed Automation Tests for Firefox and Sonarr v3 UI.
+- Updated xmlrpc and SocksProxy
+- Updated Test harnass, NUnit to 3.12.0, NBuilder to 6.0.0, Moq to 4.12.0, FluentAssertions to 5.8.0
+- Updated NLog to 4.6.6, Newtonsoft.Json to 12.0.2, RestSharp to 106.6.10
+- Updated FluentValidation to 8.4.0
+- Updated SharpZipLib to 1.2.0
+- Converted all projects to the new csproj format.
+- Removed excluded source files.
+- Fixed: Improve parsing of anime file names without standard release group/hash
+- New: Parse more poor p2p file naming
+- Fixed: Infinite spinner when toggling seasons on multiple series from season pass
+- Fixed: Special title matching when special title has an apostrophe
+- Fixed: Waiting a long time for unavailable root folders
+- New: Show Hardlink/Copy in manual import
+- New: URL Base support for NZBVortex, Hadouken, qBittorrent and uTorrent
+- New: Sort by series year in series list
+- New: Sort preferred words in profile on save
+- Menu fixes
+- Fixed: Scrolling of modals with tabular content in iOS
+- Fixed prop type warning on MenuItem
+- Fixed: Episode Progress custom filtering on series list page
+- New: Add Tabula Rasa Newznab Preset
+- Health UI improvements
+- New: Treat MaxdomeHD as Web-DL
+- New: User configurable minimum free disk space
+- New: Improved parsing of poorly named multi-episode anime-like releases
+- Fixed: Prevent moving to recycling bin causing a failed import
+- Retry HttpLogFixture
+- Fixed: Ensure correct series is used for Manual File Import from series details page
+- And another one to retry
+- New: Cleanup Recycling Bin folders older than X days (0 to disable)
+- New: Add TVDB Link to add new series search result
+- Retry up to 5 times for disk tests that sometimes fail
+- New: Add support for Lilith-Raws release group
+- Fixed: Logging file release group for repack
+- csproj update to match the file rename
+- Make powershell test explicit
+- Cleanup Multiple Compiler Warnings
+- More repost exclusions to clean release group
+- Fixed: Repack don't being grabbed when cutoff already met
+- New: Add warning that recycle bin will be cleaned up automatically after 1 week
+- Fix README hyperlink formatting
+- Fix RARBG parsing test
+- Fixed: Edge case where import fails due to DB relationship mismatch
+- Fixed: Improved failed series search messaging
+- Fix SeriesFolderAsRootFolderValidator
+- Fixed: RARBG links in Interactive Search
+- New: Add root folder from Media Management settings
+- New: Series folder hint when selecting a root folder while adding a new series
+- Fixed: Season actions on mobile not indicating when they are disabled
+- Fixed: Modal scrolling causing app to scroll on iOS
+- Fixed: Edit path on series index resetting cursor to end on change
+- New: Limit filenames to a maximum of 255 characters
+- Update yarn.lock
+- Interactive search fixes
+- New: Bulk select episodes in Manual Import
+- Fixed: Manual import from queue showing error when download name failed to parse
+- Fix setup package creation
+- Fix setup package creation
+- Appease eslint
+- Recycle bin file cleanup
+- Update redux
+- Upgrade sentry
+- Upgrade del
+- Upgrade various packages
+- Upgrade React DND
+- Update react router packages
+- Update react packages
+- Upgrade CSS packages
+- Upgrade font awesome
+- Upgrade linter packages
+- Set corejs version
+- Update webpack packages
+- Upgrade gulp tooling
+- Update babel packages
+- Fixed: Manage Episodes not showing whether language/quality meets cutoff
+- Fixed: Don't reject standard/absolute numbering mismatch due to season number
+- Fixed: Canceling editing a custom filter won't close the Custom filter modal
+- Fixed: Anime season searches rejecting season packs
+- Cleanup migration 131
+- Fixed: Season mismatch between file and folder not rejecting import
+- Fix NZBGet Delete Status Copy test
+- Add logging to Windows setup
+- New: Dim episode/air time on calendar
+- Fixed: Tags in settings getting cutoff
+- Fixed: Don't ignore Delete:Copy items in NZBGet
+- Fix stylelint once and for all (hopefully)
+- Fixed: Add tooltip to tag delete button when in use
+- Fixed: tag input alignment and height
+- Double instead of single quotes in CSS
+- UI fixes
+- Minor cleanup
+- Fixed: Stripping subtitles from series titles after parsing
+- Improve grammar in Import Series
+- Fix oAuth actions in UI
+- Remove unused prop
+- Remove unused import
+- Refetch series when signalR reconnects
+- Fix boolean for title prop warning
+- Fix stylelint
+- New: Show relative file name when selecting episode in Manual Import
+- Incremented package version
+- Fixed stylelint errors
+- Updated debian install script to handle old nzbdrone systemd unit named sonarr.service
+- Added alternative libcurl4 dependency to satisfy ubuntu cosmic.
+- Added alternative libmediainfo0 dependency for debian jessie
+- Updated debian build to fix stray msbuild dependency
+- Added MediaInfo AudioLanguagesAll.
+- Fixed: Heavy qbit api load when CDH Remove is disabled and Seeding time has been reached
+- New: Include HDR is naming examples
+- New: Update examples for Kodi metadata
+- Fixed: Monitoring latest season ignoring unaired episodes
+- Default to System Tray for Windows installer
+- Fixed: Parsing BD release group as Bluray quality
+- Add warning to remove from queue dialog
+- Darker border for calendar
+- New: Wider and taller scroll bar for the click to scrollers out there
+- Custom Filter improvements
+- Fixed: Workaround for mono 5.16+ bug preventing the closure of sockets on timeouts (Jackett connections)
+- Fixed: Executing powershell and python scripts directly in Connect->Custom Scripts
+- Added test for turkish FirstCharToUpper
+- Fixed: Delay profile being ignored for non-revision upgrades
+- New: Improve logging when checking if release is an upgrade for an existing file
+- New: Treat WEBMux as WebRip
+- New: Improve help text for extra file importing
+- New: Command line arguments for Custom Scripts are no longer supported
+- Created generic Hinted EnhancedSelectInput components and use it instead of SelectInput
+- Added test for turkish FirstCharToLower
+- Fixed: Tag deletion via api if tag is still in use
+- Fixed: Transmission seeding idle time handling
+- New: Remove some more retagging groups from filenames.
+- Fixed: Issue searching for series in the UI when tag is removed
+- Fixed: Remote path mapping host comparison ignores case
+- Fixed: Errors logged during import when existing episode file is partial removed in the DB
+- Fixed: Mass Editor not showing delete button on narrow screens
+- Small UI fixes
+- Clean up FirstCharacterToLower extension + tests
+- Fixed: Selecting a release from Interactive Search with an unknown episode
+- Wrong escape in help message
+- Fixed: Regression preventing empty qbittorrent category
+- New: Configurable Specials folder format
+- New: Ability to set a post-import label in Deluge, rTorrent, qBittorrent, and uTorrent
+- Support for primary and fallback download client
+- New: Round-robin over available Download Client instead of the first enabled one
+- Tweaked mediainfo api call to better handle unsupported locales.
+- New: Added downloadId filter to v3 history api for third-party applications
+- Added more logging to MediaInfo encoding check for linux.
+- Fix grammar and punctuation in DeleteSeriesModalContent
+- Fixed: tag input height not growing in height
+- Fixed: Various performance improvements for large collections
+- Fixed: Slow db migration when upgrading from v2 to v3 with a large collection
+- Fixed: Support for SignalR's Server Sent Events transport as an alternative to websockets and long polling
+- Fixed: Files not replacing a lower quality proper/repack
+- Don't double log exception setting file permissions
+- Fixed: Error logged when checking if v2+ anime release is a valid upgrade
+- New: TVDB ID filter when getting series from API
+- Fixed: Monitored status being reset after refresh when series is edited manually
+- Fixed: Parsing of WEB from some file names
+- Fixed NZBGet tests take 2
+- Fixed NZBGet tests
+- New: Additional information when Sonarr is unable to access a path during import
+- Fixed: Ignore deleted duplicates from Nzbget
+- Fixed: Don't import duplicate NFO extra files
+- Fixed: Importing of preferred release over a proper/repack
+- Fixed: Episode details on history episode file information
+- Fixed: Loading of fonts.css with a URL Base
+- Another entry into the hall of shame
+- Only check repacks for revision upgrades
+- Fixed: Queue tooltips appearing offscreen on mobile devices
+- FirstCharToLower
+- Tests for repack fix and improve behaviour when release group is unknown
+- Fixed: Repack check failing for episode file without a known release group
+- Remove old twitter keys
+- New: Remove 'AsRequested' suffix from release group names
+- Fixed: Possible issue with manual import of an unknown release
+- New: Option to not prefer repacks/propers (for use with Preferred Words)
+- Fixed: Ignore episode title when parsing release group
+- Appease stylelint
+- Extra warning for Windows Service issues when prompted to restart after changing host settings
+- Manual Import: Reprocess after selecting series
+- Fix SAB test
+- Ignore older episodes in latest season
+- New: Option to opt out of TBA episode title import delays
+- New: Restrict repack upgrades to the same release group
+- Fixed: Don't treat NZBs rejected by SABnzbd as successful
+- Added a unit test for the NZBGet Final dir fix
+- Only use NZBGet's FinalDir if it's not empty
+- New: Show health warning if system time is off expected time
+- Use popper placement for tooltip arrow
+- Improve tooltip performance
+- QualityDefinition UI fixes
+- Improve performance of search input selecting series
+- Throw exception if ports are the same at startup
+- Limit search input to first character matching when only one character is typed
+- New: Don't search for unaired anime episodes when searching for season
+- Re-order PMS settings and rename Kodi connection
+- New: Option to use HTTPS with Emby
+- Fixed: Don't allow HTTP and HTTPS to use the same port
+- Fixed tests after removing sentry logging
+- New: Reject multi-season releases
+- Fixed: Parsing of some anime batches
+- New: Log when release is matched by ID instead of title
+- Fixed: Cleaning percent signs from release names
+- Improve error messaging for missing information when searching
+- New: Use NZBget's FinalDir is set by post-processing script
+- Fixed typos.
+- Removed unused var
+- Use Portal component in AutoSuggestInput
+- Fixed: Backup path URL
+- Fixed: Root folder selection scrolling
+- Fixed: Math on quality definition limits
+- Fixed: Ensure max sized posters aren't returned for some devices
+- Fixed: Removed nzbs.org Newznab preset
+- Fixed: Support new feed url format IPTorrents
+- Fixed: Parsing of first aired date on Arabic systems
+- New: Tooltips for quality size limits
+- New: Detect mergerfs mounts
+- Fixed: Roksbox SeriesImages can lead to NullRef
+- New: Show tooltips for changeable columns on Manual Import
+- Fix VideoFileInfoReader tests after mediainfo update... take 2
+- Fixed: Air-time adjustment for Amazon/Hulu releasing 4+ episodes on one day
+- Fixed: Don't reject import with missing episode title if renaming is off
+- Menu separator shown when scrollbar is visible
+- New: Output Path column in Queue
+- Fixed: Don't include year 0 in series folder name
+- Replace react-tether with react-popper
+- Fix VideoFileInfoReader tests after MediaInfo upgrade
+- Fixed: Manual import of unknown series items in Activity: Queue
+- Fixed: Manage episode files for season text
+- Backup directory is a path
+- New: Gotify notifications
+- New: Sort preferred words by score when displaying in the UI
+- New: Upgrade MediaInfo to 18.12 (macOS and Windows)
+- Collapse calendar view buttons on narrower screens (<= 1200px)
+- Fixed: Refresh on series list spinning forever in some cases
+- Fixed: Long path support on Windows
+- Fixed: Series footer shows statistics based on filtered series list
+- New: Use IMDB ID when searching supported indexers
+- More renaming tokens
+- Fixed: Improve exception logging when unable to connect to Plex Media Server
+- updateMechanism isn't available while fetching
+- History details for unknown event type
+- Fixed: Use Download Client name for grabbed history events
+- Remove DownloadProtocol from v3 ReleaseResource
+- Fixed: Already Imported check failing for some torrent releases
+- Fixed: SSL Certificate validation when port is used
+- Improve certificate validation registration
+- Fix long path support overrides in mono
+- Fix case of LegendIconItem.css
+- New: Target .net 4.6.2
+- Update executable icon
+- Fixed: Certificate validation for local IP addresses instead of hostnames
+- Update docs
+- Fixed: Interactive search grabs rejected due to validation
+- Protocol instead of download protocol
+- DownloadProtocol is an integer for release/push
+- Send downloadProtocol in release/push integration test
+- HTTPS certificate validation options
+- Don't render table options modal content when it's closed
+- Improve series index performance during series refresh
+- Improve selectors in PageConnector to reduce re-rendering
+- Fixed: Return better error message if username or password is null for forms login
+- Fixed: Ensure loading message doesn't change on re-render
+- Better response if invalid JSON is received through the API
+- ReleasePushModule uses ReadResourceFromRequest
+- Series index selector improvements
+- More file browsing improvements
+- Fixed: Store columns for History table between refreshes
+- Fixed: Error on calendar with unknown items in the queue
+- Fixed: Error displayed occasionally after removing series from the series list
+- Better selection of executing commands in series list
+- PahtInputConnector default prop for includeFiles
+- Release module validation in v3
+- Fixed: Centering of expand/collapse icon for season
+- Fixed quality typo on manual import
+- Fixed eslint error.
+- Merge branch 'develop' into phantom-develop
+- Fixed: Sorting by age when releases are less than a day old
+- Fixed: Sorting of search results in series search box
+- Fix file browser when files should be included
+- New: Release title column in queue
+- Remove WhiteRev and BUYMORE suffixes from release group names
+- Fixed: Include all download items if no category is specified in rtorrent.
+- Continue Test in case of validation warnings.
+- Don't skip magnet links with included trackers if dht is disabled.
+- Fixed: Detecting if qbittorrent seeding time limit has been reached
+- Fixed: Parsing of some WEB releases
+- Fixed: Consistent icon position for toolbar buttons
+- Renamed Manual Import on series details page
+- Fixed: Queue count badge showing warning/error incorrectly
+- Eliminate gulp-flatten
+- Updated links in README.md
+- Fixed: Typo in ical url handling when choosing premieres only.
+- Fixed: Emby library update
+- Update readme with new requirements for v3
+- On Download to On Import on card
+- New: Discord Notifications
+- Added discord link to UI
+- Fixed: MediaInfo AudioCodec token helper in UI
+- More descriptive message if indexer connection test was successful but yielded no results.
+- Fixed: Plex authentication
+- Can't login with a username and a blank password
+- Parser: Removes any combination of 'rakuv*` from release group names.
+- Fixed typo in XDG_CONFIG_HOME handling.
+- Fixed: Interactive Search for Specials on BTN
+- Reverted in-memory signalr keypair in favor of a .config directory.
+- Linting error.
+- Fixed: Finetuned color-impaired mode styling in Calendar.
+- Make sure something appears in the trace file before trying to read it.
+- Wait for commands to finish between tests.
+- Removed Nyaa Integration tests and increased logging detail during integration tests.
+- Fixed: Not being able to use MediaInfo VideoDynamicRange token to renaming options.
+- Fixd test on mono.
+- Merge branch 'develop' into phantom-develop
+- Handle special mount filtering at a higher level.
+- autoprefixer and webpack use the same browser list config
+- Upgraded react and react-dom packages
+- Update react-tether package
+- Limit replacement of colons
+- Transpile UI for old browsers
+- Replaced gulp-util with ansi-colors, updated packages
+- New: Log conflicting TVDB ID when unknown series is an alias for another series
+- Another broken test
+- Fix broken tests
+- New: Replace colon with space and dash instead of just dash
+- Removed unused babel-plugin-transform-react-jsx-source
+- Fixed: All preferred words being added to filename
+- Fixed: Fonts not loading on reload
+- Appease stylelint
+- Fix index.css
+- Upgrade del
+- Upgraded to gulp 4
+- Handle Deluge v2 beta breaking change in their api.
+- fixed qbittorrent tests failing due to incorrect test setup. And http tests failed due to httpbin changing their output.
+- Upgrade eslint and stylelint-order... again
+- Upgraded to webpack 4
+- New: Indexer Seed Limit settings applied to new downloads for qBittorrent
+- Fixed: Magnet Link progress visualisation and adding magnet links if dht is disabled in qBittorrent
+- Fixed: qBittorrent api v2 support (qbit v4.1+)
+- Update redux, reselect and moved to connected-react-router
+- Fix route to series details from search input
+- RelativeDateCell PureComponent
+- Upgrade prop-types package
+- Fix page jump bar not rendering/rendering in the wrong order
+- Fix casing of RegexTermMatcher
+- Upgraded most react packages
+- Upgraded sentry, clipboard, filesize, moment, normalize.css and qs packages
+- Missing root folder health check icon
+- Upgrade linting and CSS packages
+- Upgrade fontawesome packages
+- Use fuse.js for series searching in UI
+- Updated yarn packages for node 10 support
+- Icon, SeriesIndexFooter -> PureComponent
+- Fixed: Include matching value of preferred word regex, not the actual regex
+- Fixed: Select all in Episode File editor
+- Remove logging of `Unable to format audio channels using 'AudioChannels'` due to old schema
+- New: Bulk select language and quality in Manual Import
+- Fixed: Don't add TV Maze ID to format if unknown
+- Fixed: SignalR requiring a home directory to function properly.
+- Downgrade event-stream
+- New: Added {MediaInfo VideoDynamicRange} renaming token to include HDR in the filename
+- New: Added parser support for common Chinese release formats
+- Fix filename in PostBuildEvent
+- Switch to https for httpbin URL test
+- Groups must contain multiple qualities
+- Fixed: Correct rejection message when profile does not allow upgrades
+- Pending releases have languages too
+- Fixed: Adding series with unknown IMDB ID and series folder includes IMDB ID
+- New: Setting monitor to None when adding series will unmonitor the series as well
+- Fixed: Select all on Activity: Queue
+- Fixed: Error when editing torrent indexer
+- Tweaked language parser since PR isn't merged yet.
+- Fixed: Season pack with Special in series title was treated as unknown special
+- New: Added support for DTS-HD MA and TrueHD Atmos in MediaInfo AudioCodec.
+- Simplified more RegexReplace instances.
+- Fixed error in unicode cleanup code removing most non-latin characters instead of just invalid ones.
+- New: Added Icelandic language and improved Chinese language detection
+- New: Sort queue by status
+- New: Highlight currently installed version on System: Updates
+- Root folder handler for signalR
+- Fixed: Banner not growing when most columns are hidden
+- Fixed: Improve readability of text on light blue labels
+- Fix QualityModelComparer test when respecting group order
+- ESlint error
+- Fixed: Regression in folder move logic preventing updater from working.
+- Fixed: Additional reverse title parser patterns.
+- Fixed: Importing completed downloads from NZBGet with post processing script failing
+- Fixed: Importing completed downloads from NZBGet with post processing script failing
+- Already is spelled already
+- Number input and max release size limit increased
+- Sort search input by sortTitle
+- Various UI fixes
+- Fixed: Don't use extended episode number as release group
+- Minimize data sent when adding a new Indexer, Download Client, etc
+- Updated yarn.lock with postcss-color-function
+- Fixed: Settings changes being cleared when leaving page despite confirmation they would be
+- Fixed: Quality Profile group order no longer used when ordering results
+- Fixed: Cutoff unmet episode search failing when there are unknown items in the queue
+- Fixed: poster not showing when adding a new series on a larger screen
+- Fixed: Ignore series title before SxxExx when parsing language.
+- Fixed: Korean shows with more than 2 digit episode numbers.
+- Allow -suffix in PackageVersion and added that and PackageAuthor to the About page.
+- Another path test fix
+- Fix path tests
+- Fixed: Importing of completed download when not a child of the download client output path
+- Fixed: Getting parent of UNC paths
+- Fixed getting parent path from a path without another slash
+- Fixed failing ConfigFileProvider tests due to ConsoleLogLevel property error.
+- Moved fast MoveSeriesFolder logic if same RootFolder into DiskTransferService.
+- Fixed: Failure to match S12E00 special due to episode file vs folder being parsed differently.
+- Added Console log level option in configfile, which defaults to Info.
+- New: Ability to forcibly grab a release from Interactive Search
+- New: Log when media info is unavailable for a file when building a file name
+- Fixed: Changing series view
+- Fixed: QueueSpecification failing when an unknown item is in the queue
+- Improve renaming of series folder within the same root folder
+- Tweaked Color-Impaired styling for Series Index.
+- Added missing references to test projects.
+- Merge branch 'develop' into phantom-develop
+- Fixed failing test
+- New: Limit indexer/download client backoff to 5 min during the first 15 min of application start.
+- Fixed: Erroneously matching Anime 10.5 special as 10.
+- Added 10-bit to parser cleanup.
+- Tweaked reverse title detection to handle triple digit episode numbers.
+- Update test for disabling cache
+- Another path test fix
+- Fix path tests
+- Set max-age=0 on resources that should not be cached
+- Fixed: Edit button for Remote Path Mapping hidden on small screens
+- Series type filter/sort
+- New: Table options in page toolbar in addition to table header
+- Fixed: Various issues with unknown items in queue
+- Fixed: Move series logging a failure and a success message
+- Fixed: Importing of completed download when not a child of the download client output path
+- UI styling/propType fixes
+- Fixed: Series index table header when banners are shown
+- Fixed: Getting parent of UNC paths
+- New: Alternate styling for progress bars when color impaired mode is enabled
+- New: Add root folder to media management settings
+- Fixed: Don't auto zoom when focusing inputs on mobile devices, namely iOS
+- Fixed: Calendar error after queue is refreshed
+- Fixed: Validation failures not being shown if adding a series fails
+- Fixed: Log events not loading from the first page when revisiting
+- Fixed: Failing to search for recently added series when there are unknown items in the queue
+- Fixed getting parent path from a path without another slash
+- Fixed: Mono bug causing memory leakage when http connections use gzip compression.
+- Fixed typo in postinst preventing it from properly upgrading v3 alpha installs.
+- Also deal with migrations where the user installed using a different user.
+- Increased debconf priority for username to high.
+- Also force branch if an external updater is used.
+- Updated selection in UpdateSettings for external updaters.
+- Added missing interval unit to Backup Settings.
+- Added specific external updater messages for Apt and Docker.
+- Add PackageUpdateMechanism to system/status response
+- Update UI
+- Added System.Native to the ignored list since afaik it's not used by SharpRaven.
+- Fixed failing tests.
+- Fixed wrong sed wildcard.
+- Parse the package_info file to determine whether the UpdateMechanism is configured properly.
+- Copy unix-specific System.Runtime.InteropServices.RuntimeInformation to linux output.
+- Added release_info to build output instead of only in the debian package.
+- Replace Major.Minor.Revision in the TC provided BuildNumber with the packageVersion.
+- Added support to migrate existing nzbdrone+systemd installs.
+- Added support to handle the BuiltIn Updater for 3.0.1 packages.
+- Various fixes
+- Purge should use the data folder as specified by debconf
+- Deal with wrong permissions for folders.
+- Moved from /opt back to /usr/lib based on debian policy.
+- Added debconf to allow user to set user, group and config dir. Only the group is high prio and thus asked for by default.
+- Added check in preinst to cancel install if NzbDrone is still running.
+- Tell dpkg that sonarr replaces nzbdrone instead of a pure conflict.
+- Move binaries to subdir for easier builtin updater changes.
+- Use clideps to determine mono dependencies instead of the monolithic libmono-cil-dev.
+- Use dh_systemd to configure systemd unit installation.
+- New: Parse release in square brackets at end of file name
+- Show unknown items in queue
+- Delay import when absolute episode number is missing
+- Add upgrade allowed to language and profiles
+- Preferred words
+- New: Default size limits
+- Upgrade signalR to 2.4.0
+- New: Series title first character renaming token
+- New: Option to disable rescanning of series folder after RefreshSeriesInfo
+- Fixed: Finding files with unexpected quality in the filename
+- Upgrade SharpRaven to 2.4.0
+- New: Renaming tokens for IMDB ID, TVDB ID and TV Maze ID
+- New: Choose extension for magnet links in Torrent Blackhole
+- New: Pushover device setting
+- New: Choose PushBullet device from the UI
+- New: Add tags to Kodi metadata
+- New: Series Title with Year renaming token
+- Removed NotifyMyAndroid and Pushalot
+- Fixed: Removed old Media Browser metadata
+- Interactive Season Search
+- Improved Command Queue
+- New: Improved Plex Media Server authentication (Manually update settings)
+- New: Bluray 1080p and 2160p remux qualities
+- Remove unused references
+- MSBuild 15
+- Updated Debian package
+- Secure URLs for Skyhook and Services
+- New: Backup options and restoration
+- New: Ability to rename using long paths when available
+- Fixed: Default Windows Service Account
+- ESLint and Stylelint during build
+- Migrate AppData folder
+- v3 Binaries
+- Update Logos
+- Removed anycpu from sln file
+- removed legacy UI components
+- removed idea folder
+- Removed old UI
+- v3 UI
+- Upgrade Owin to 3.1.0
+- Upgrade Nancy to 1.4.4
+- Upgrade signalR to 2.2.2
+- Target .net 4.6.1
+- New: Testing Custom Script executes the script and verifies the exit code
+- New: Separate automatic and interactive searches
+- Removed Drone Factory
+- Quality groups
+- New: Language Profiles
+- v3 API
+- Sonarr.sln
+- Simplified logo
+- Build fixes and cleanup
+- Fixed bad test due to skyhook now doing it's own fuzzy search.
+- DataMapper LazyLoaded needlessly keeping the parent mapper alive.
+- Fixed: Excessive memory usage due to sqlite cache configuration.
+- New: Store last search time for EpisodeSearch
+- New: Include OriginalFilePath with Episode Files
+- Fix Quality Detection with DDP5.1
+- Fixed: File names and release titles lacking a series title and starting with the Air date.
+- Updated error message if skyhook and other services respond with html content.
+- Improve logging when rejecting release with unmonitored episodes
+- New: Added warning for Download Station that 2FA is not supported
+- New: Added priority levels to Join Notifications
+- New: Parsing french anime releases with single absolute episode number
+- Fixed: Sort The A-Team properly in series list
+- New: Parse names with 1080i as 1080p if they are not RAW HD
+- New: Parse names with FHD as 1080p
+- Restrict 4k parsing to avoid false positives
+- Fixed: Handling of poorly formed items when parsing results from indexer
+- New: Parse names with 4k as 2160p
+- Fixed: Parsing of specials with only season and episode numbers in the file name
+- Remove file quality matches release import spec
+- Fixed: Don't clean Kodi library if Always Update is disabled and video is playing
+- Fixed: Use season number from episode instead of parsed from release for custom scripts
+- Fixed: Exclude /snap/* locations from disk space
+- Fixed: Don't use media info for non-video files
+- New: Compatibility with Hombrew-installed mono
+- Don't read response stream if it equals Stream.Null
+- New: Updated pushover app clone URL
+- Fixed: Parsing of new hashed release filenames (######_##.ext)
+- New: Add stopped option for rTorrent
+- More restrictions when using download client title or folder name for parsing
+- New: Add unique IDs to Kodi metadata
+- Fixed: Skip sample check when rescanning series folder
+- Fixed: Parsing multi-episode in square bracket
+- More flexible matching some anime releases
+- Fixed: Concurrent manual imports silently failing
+- Fixed: Too big eta in qbit api still occurring on official builds.
+- Fixed: Parsing of some anime releases with season number in title
+- Added missing UrlBase validation for SabnzbdSettings.
+- Fixed: Skip torrents in Deluge api that don't have hashes.
+- Deluge torrents that don't have a hash are skipped
+- New: Added optional UrlBase to Nzbget and Sabnzbd settings.
+- Fixed: Multi-file torrents in Vuze with different folder and file names
+- Fixed: .vtt files treated as subtitles
+- Fixed: Store BitRate_Nominal (VBR) mediainfo in database instead of only BitRate.
+- Fixed: Quality parser for the rare HD-DVD.
+- Fixed: Ignore /etc in System disk overview.
+- Disabled httpbin.org tests for now due to the site being flaky.
+- Added logging of json snippets on json deserialization errors.
+- Added third httpbin site.
+- Run http tests more gracefully.
+- Fixed: Regression with importing nested obfuscated directories.
+- Fixed: Parsing titles with question marks
+- Fixed: Parsing dates using underscores for separation
+- Fixed: Forced seeding in QBittorrent status treated as complete
+- Fixed: Regression causing Manual Import to ignore user provided information.
+- Fixed: Mini-series with multiple episode E01-E02.
+- Added {MediaInfo AudioLanguages} {.. SubtitleLanguages}
+- Handle empty Episode list during decision maker.
+- Fixed: Manual Import not using Release Group during renamer. [develop only]
+- Use FolderEpisodeInfo instead of parent of FileEpisodeInfo
+- Fixed: Initially pausing torrents in QBittorrent
+- Fixed WithData sample length not using parameter.
+- Also add as data to exception so sentry gets it.
+- Log indexer response to Trace if an exception occurs.
+- Fixed SeedConfigProvider failing on ReleasePush.
+- Update bug issue template
+- Fixed: Parsing of anime releases with year and EP before episode number
+- New: Treat 1440p releases as 1080p instead of 480p
+- Fixed validation error for Seed Ratio on btn.
+- Fixed broken test for nested settings.
+- Fixed broken tests.
+- Added a few more units.
+- Stop deluge torrent when they reach stop ratio
+- Fix parsing of entered time for seed time
+- Added warnings for minimum criteria for BTN.
+- Added fancy unit indicator to fields.
+- Added Seed Time and Season-Pack seed time.
+- Added nested settings for seed criteria.
+- Fixed more C#7.
+- New: Added advanced setting per indexer to override seed ratio limit for supported clients.
+- Added support for nested settings models so settings can be grouped together and reused for multiple providers.
+- Fixed mono debug check.
+- Update issue templates
+- Fixed: Setting inital state of torrents sent to QBittorrent
+- Fixed: Removed old warning that Torrent Blackhole does not support magnet links
+- Improve parsing of standard titles with junk in []
+- Improve parsing of non-standard date releases
+- New: Remove additional URL prefixes from release names
+- Don't read media info when disabled in settings
+- Fixed: Don't try to find episodes if parsing failed
+- Fixed: Rescan series if refresh fails
+- Upgrade NLog to 4.5.3
+- Switched to BigInteger for qbit eta as workaround for api bug, tyvm.
+- Fixed: Custom script unable to execute when release processed via /release/push API
+- Fixed: Improved parsing of iTunes named files
+- Fixed: Throw SonarrStartupException if can't access AppFolder Location
+- Fixed: Remove leading space from file names
+- Fixed RemoveGrabbed tests
+- Fixed RemoveRejected tests
+- Fixed: Suppress warnings for daily style extra files
+- Honor x264 tag in filename if mediainfo does not conclusively indicate h264.
+- Updated a few harder to detect MediaInfo VideoCodec formats.
+- Fixed missing existingfile flag.
+- Fixed db migration issue.
+- Fixed errors in MatchesFolderSpecification and tests.
+- Fixed: Hide fallback pending releases if temporarily delayed.
+- Cache EventAggregator Subscribers.
+- Added additional indexes to speed up DecisionMaker performance.
+- Refactored PendingRelease logic for performance.
+- Debounce Command Notifications.
+- Speed up sqlite3 initialization by disabling unused features.
+- New: Season Search for Daily series type.
+- New: Use media info during import to extract resolution for quality
+- Added missing bracket in issue template
+- Update issue template regarding title prefixes
+- Fixed: Updated AnimeTosho url.
+- Fixed: Pasting title into add new series search input will trigger search
+- Fix grammar in EditProfileViewTemplate
+- Revised deletion of cookies.
+- Merge branch 'nfo-detector' into develop
+- check if mono is running with --debug arg
+- Fixed: Revised handling of cookies in case of redirects.
+- Add form param before submitting request.
+- Fixed: Preserve existing watched status in Kodi nfo files on metadata refreshes (not file upgrades).
+- New: Detect Kodi .nfo vs Scene .nfo and handle as appropriate. Rename scene .nfo to .nfo-orig only when needed.
+- Moved tests.
+- Fixed: Recycle Metadata files on episode removal.
+- Fixed failing test and some flaky tests.
+- Fixed: Sorting for series "A.P. Bio"
+- Fixed: Parsing # in front of absolute numbers
+- Fixed: TheXEM mapping with one scene release to multiple tvdb episodes.
+- New: Required/Ignored restrictions now support /pattern/ regular expressions.
+- Fixed: Added errorcode 160 - Permission denied on FileStation for easier diagnostics
+- Add missing error check when adding a magnet link to deluge (#2295)
+- Fix typo
+- Fixed: Don't add category when removing torrent from qBittorrent
+- Fixed: Preserve existing watched status in Kodi nfo files on metadata refreshes (not file upgrades).
+- New: Detect Kodi .nfo vs Scene .nfo and handle as appropriate. Rename scene .nfo to .nfo-orig only when needed.
+- Moved tests.
+- Fixed: Recycle Metadata files on episode removal.
+- Fixed: Updated NLog to 4.5 RC6 to handle mono 5.10
+- Added console logging in case NLog fails to initialize.
+- New: Add MediaInfo to Episode Files returned from the API
+- Log response content from Kodi when checking for errors
+- Fixed: Parsing of WEB-DLMux files
+- Fix broken profile test
+- New: Opt-in to delete empty series/season folders
+- Remove empty series folders when create empty folders is false
+- Return total space when adding new root folder
+- Improve error message when deleting a profile that is in use
+- Fixed: Send category to qBittorrent when adding torrent/magnet
+- Fixed: Removexpost suffix from release groups
+- Fixed: Disable delete button on used quality profiles
+- API: Include total space with root folders
+- Don't reject paths under /srv
+- Fixed: Show error if System->Logs fails to load due to ad blocker.
+- Fixed typo in log file
+- Fixed: Show error message when manual import fails to load
+- Fixed: Remove Pre and postbot suffixes from release groups
+- Removed DailyEpisodeMatchSpecification in favour of SingleEpisodeSearchMatchSpecification
+- Fixed Season Special import.
+- Fixed Season Special import.
+- Ensure request exists before trying to get query parameters
+- New: Delay import of episodes without titles temporarily
+- Ensure request exists before trying to get query parameters
+- First try
+- Fixed broken DeleteEpisodeFileFixture tests
+- Added tests for DB Converters
+- Optionally include season images when fetching series from API
+- Log indexer when processing results
+- Add Paused above Use SSL for NZBGet
+- Add paused options for Deluge and Transmission
+- New: Device names for Join notifications
+- Reordered UI a bit and code cleanup.
+- Fixed: Parsing of prefixed range multi-episode filenames
+- New: Setting for absolute maximum size for a release
+- New: Consider all scene SxxE00 releases Specials as well.
+- Ignore macOS DS_Store files (#2356)
+- csproj fix
+- New: Run missing root folder health check when an import is successful
+- Fixed: Set air date to 1970-01-01 if episode aired before (mono)
+- Fixed: Improve logging for invalid NZB messages
+- Improve handling of multiple seasons in one file
+- Cleanup moment.js deprecated zone and add functions
+- Fixed failing tests in DownloadStation.
+- Fixed up comments.
+- Fixed: Mono internals does not properly copy/move symlinks, but instead copies the contents.
+- Fixed: Handling of unknown status types in DownloadStation.
+- Validate before deleting series folders
+- Rare timing issue on first-use causing duplicate naming config.
+- Fixed MediaCover endpoint.
+- Don't handle content requests in IndexHtmlMapper
+- Merge branch 'security-patch-2017-1' into develop
+- Fixed: Security Vulnerabilities allowing authentication to be bypassed (discovered by Kyle Neideck)
+- Improved handling of the Preflight OPTIONS request.
+- Fixed: Limit Cross-Origin access to api and specific shared resources.
+- Fixed: Case sensitivity in handling of static resource names.
+- Updated tests to allow for older versions of mediainfo
+- Updated tests to reflect changes in mediainfo
+- New: Upgrade MediaInfo to 17.10 (Windows/macOS)
+- Fixed: Sorting by episodes on series overview and poster views
+- Fixed: Import failures when audio channels are in an unexpected format
+- Add debug logging when formatting audio channels
+- New: Include APFS disks in disk space
+- Fixed: Sorting Manual Import by relative path
+- New: Channel setting for Slack notifications to override default channel
+- Log warnings when deleting an episode file and the root folder is missing/empty
+- New: Validate NZBs before sending to download client
+- New: Add authentication options to Webhook
+- Fixed: Parsing of resolution in TVRips
+- Fix namespace take 2
+- Fixed: Parsing when using episode number as folder name in naming config
+- Fix namespace
+- Trim quotes from dsm version parts.
+- Fallback to parsing Series from sub path during Manual Import.
+- Fixed: Incorrect parsing of filenames with [SDTV] suffix trigging Anime pattern.
+- Fixed: Regression preventing new downloads from bypassing the Download Client Back-off logic.
+- Fixed another flaky test.
+- Fixed: Telegram notification with underscore and other special characters.
+- Reverted the bindingredirect as well.
+- Downgraded Moq again since it causes failing tests on older mono versions due to bad Array covariance handling.
+- Fixed flaky test.
+- Fixed unrelated testcase.
+- Cache BestForTags briefly for better performance when processing releases.
+- Fixed: Progressively degrading performance issue in Pending/Delayed releases system.
+- New: Query 'Season 1.1' groups on BTN during manual single episode searches.
+- Fixed: Releases no longer available on the indexer should be removed from the pending queue.
+- Fixed Moq version conflict between packages.config and csproj in Api.Test by upgrading them all.
+- Fixed not setting MediaInfo SchemaRevision first time causing it to be fetched again during the series rescan.
+- Fixed: Raise ApplicationStartupEvent after Owin is running.
+- Improved test timing for CommandExecutor.
+- Shutdown logging before Environment.Exit.
+- Updated NLog from 4.4.3 to 4.4.12
+- Fix failing test
+- Updated ISSUE_TEMPLATE.md and added SUPPORT.md
+- Fixed: Default ports for uTorrent and qBittorrent
+- history/since API endpoint
+- Fixed: Not deleting episode files during upgrade when root folder is missing
+- Moved NotParentException to Disk namespace
+- Fixed: Better import error messages
+- Fixed: Execute On Grab script if release group is unknown
+- New: Add default calendar name for iCal
+- New: HDBits HEVC support
+- Fixed: All Day iCal events in local time
+- Fixed: Ambiguous date options
+- Fixed subpack parsing tests
+- Fixed: Parse and reject season extras
+- Fixed: Media Info audio channel parsing of dual mono audio
+- New: Log rejections/acceptance before importing files
+- Fixed: Long Deluge ETAs from breaking getting queue items
+- Set test log output via environment variable
+- Fixed: Don't ignore filenames that start with periods
+- Fixed: Case insensitive paths for static resources under Windows
+- Split wanted/missing and wanted/cutoffunmet imtegration tests
+- Fixed: Don't attempt to fetch a release if the download client is disabled
+- Move DB migration to start
+- New: Initial state for torrents added to qBittorrent
+- Log when running tray app
+- Move DB migration after application router
+- Don't get registered URLs until they need to be configured
+- Update help output for NzbDrone.Console
+- Fixed: Force priority items in paused SAB queue won't show as paused
+- Provider Status housekeeping
+- Fixed: Reject partial season packs
+- New: Parsing additional labels as WEB-DL releases
+- Fixed: Formatting of audio channels from media info for some files
+- New: Initial state for torrents added to UTorrent
+- Windows installer has option for startup folder and opening after install
+- Parse path in ParseModule
+- Backup API improvements
+- uTorrent start/stop on add
+- Added Lithuanian and Czech languages
+- Added Hebrew lanugage
+- Fix my typo
+- Opt out of updating episodes matching season monitored state when updating series
+- Fixed: Parsing 4k UHD as 2160p
+- Fixed: Size parsing of empty description from torrent RSS feeds
+- Remove extension from ReleaseTitle.
+- Added jackett apikey to log cleanser.
+- Fix inconsistent naming of qBittorrent in various places
+- Fixed: Logging error when accessing mount point
+- Fixed regression in suppressWarning.
+- More System->Disk Space cleanup.
+- Fixed test case for unavailable download client.
+- Fixed: Changes in http redirect logic causing failed grabs and >25% cpu usage.
+- Fixed typo.
+- Fixed: Hide some more irrelevant paths from System->Disk Space such as /boot.
+- Fixed: Use pending download if no download client is configured instead of logging a warning.
+- Added a few more codecs, not even halfway.
+- Fixed: TLS issue for OSX.
+- Revert "Change default tls provider so users won't have to set TLS_PROVIDER explicitly."
+- Lets not take any risks here.
+- Fixed: Recent changes to log messages prevented curl fallback from being triggered for tls1.2.
+- Added a bit more logging for Tracked Downloads.
+- Updated Sentry DSN.
+- Disable test on mono managed http.
+- Fixed: http->https redirects do not use the tls1.2 curl fallback.
+- Fixed: DownloadedEpisodeScan API should delete source folder if ImportMode is Move.
+- Added a bunch of extra MediaInfo formats.
+- Fixed unittests after MediaInfo change.
+- Updated MediaInfo schema and revised logic that Formats it. Also added logic to log events to Sentry.
+- Fixed: Backup fails after recent develop release on certain platforms. (Trouble updating? see github issue #2080)
+- Default to filename if there is no SceneName. And added Opus and MPEG-4 Visual.
+- Tweaked error message when TransferFile destination already exists.
+- VideoCodec formatter HEVC.
+- Better error message for DNS exceptions on mono.
+- Added additional codecs and more complete error message.
+- Include releaseTitle in InvalidSceneMappingException.
+- Change default tls provider so users won't have to set TLS_PROVIDER explicitly.
+- Fixed: Improved database backup journal handling.
+- Fixed: Slower daemon startup loop if Sonarr runs into non-recoverable errors such as unwritable pid/appfolder/config file.
+- Minor fixes from Sentry.
+- Fixed HttpUri parsing of domain names with underscores.
+- Disabled TLS health check warning.
+- Added License and Copyright file for completeness.
+- Fixed error in regex.
+- Fixed: Ignore '.unwanted' directory when importing.
+- Abort indexer Test if connection failed.
+- Check for whitespace in IsValidUrl.
+- Guard against null reference exception when parsing newznab capabilities
+- Cleanup exception messages
+- API Key for signalR connections
+- Fixed: Duplicate scene titles causes unnecessary indexer queries.
+- Fixed: Changed qbitTorrent 3.3.14 api.
+- New: Store episode renames in History
+- Fixed: Added FLAC to MediaInfo renamer audio codecs.
+- Fixed: Try to set last write time on files moved to recycle bin
+- Fixed: Remove TVRage URL Link
+- Sonarr stuck if Deluge didn't return an infohash. Also updated some logging.
+- Added XviD to MediaInfoFormatter.
+- Fixed: Calculates wrong age for releases pushed via ReleasePush api.
+- Fixed: Reject full bluray disc releases
+- Fixed: Roksbox metadata images being generated when settings are off
+- Fixed: Sending Slack notifications without an icon
+- Slack improvements
+- Disable Nyaa forcibly.
+- New: Added 'Series Title, The' renaming option
+- Update Nyaa Pantsu apiPath to the actual /feed/torznab url.
+- New: Added Nyaa Pantsu as Torznab preset for Anime.
+- New: Added AnimeTosho as Newznab and Torznab presets.
+- Fixed error in NzbGet KeepHistory check and updated tests.
+- Fixed: Support for Mono 5.x with the newer BoringTLS provider.
+- Webhook improvements
+- Reorder HttpMethods to match RestSharp
+- Fixed: Subtitle extensions should be case-insensitive.
+- Check if NzbGet KeepHistory value is set too high instead of only checking for 0.
+- Fixed: Show rounded age in minimum age rejection message
+- Fixed: Background logo when URL base is used
+- Fixed: Ignore case when importing extra files
+- Fixed: Added permanent Health Check warning to ensure Drone Factory is no longer used.
+- Don't log error on the shutdown the command execution pipeline.
+- Fixed regression in pending icon.
+- Fixed DetectSampleFixture.
+- Fixed: releases with unknown seeders show on the UI as - instead of 0 to be easier to distinguish.
+- Tweaked Newznab/Torznab handling of attr without value.
+- Tweaked SingleInstancePolicy not to cancel startup if AppData is overridden is set.
+- Log responses from qbit
+- Fixed: Time left cell for pending items in queue
+- Fixed: Grab/Delete buttons for pending releases in queue
+- Fixed: Improve sample rejection message when MediaInfo is not available
+- New: Download client and ID for custom scripts
+- Fixed: Changed Authentication cookie to prevent conflicts with other apps. (invalidates existing logins)
+- Fixed: Pending releases from blocked indexers should not be grabbed.
+- Prevent back-off escalation during grace period.
+- Fixed: Regression prevented indexers from being re-enabled after a successful Test.
+- New: Added Omgwtfnzbs UHD category.
+- Removed superfluous try catches so that DownloadClient backoff logic gets triggered.
+- Fixed: Redirect calls missing URL Base
+- Fixed: Logging full error message to database
+- Fixed: Twitter oAuth callback URL
+- Fixed: Error message when adding a Plex server without a TV library
+- Fixed broken test and add a couple more for ProcessDownloadDecisions
+- Fixed: Error when processing manual import decisions
+- Additional logging when an import decision cannot be made
+- Update EpisodeFileEditorLayoutTemplate.hbs
+- include css files in minification
+- Store releases when download client is unavailable
+- Removed ugly UUID= VolumeLabel from mounts.
+- Added missing ACC audio format.
+- Fixed: Minimum seeding check causing exception when release was pushed via api instead of by indexer.
+- Added ability for HealthChecks to run on specific events.
+- Added Status refreshes to Download Monitoring Service and allow DownloadService to report success (but not failure).
+- Fixed: Prevent Download Client from being queried every minute if it failed repeatedly similar to Indexer temporarily disabled logic.
+- Refactored IndexerStatusService into Thingy Provider architecture.
+- Fixed: Added wildcard to BTN season searches to pick up 'Season x - Episodes 1-10' formats.
+- Cleanup/fix EpisodeMonitoredService
+- Fixed: Ensure an API Key is set when starting Sonarr
+- Fixed: Don't use invalid scene mappings. Fixes #1627
+- New: Link to more information on RSS sync interval
+- Fixed: Follow 301 redirects when fetching torrents
+- Fixed up some errors and do the guid cache fix on the module instead of backend coz that would cause other issues.
+- Fixed: Processing of mixed newznab/torznab api such as the experimental animetosho api.
+- New: Ability to set minimum seeders on a per indexer basis
+- Fixed: Deleting an episode file from the UI that was already deleted from disk
+- Consistent formatting for MediaInfo in various locations
+- Fixed: Improved message when a conflicting slug is added
+- Fixed: Ignore file quality matching release quality for unknown quality releases
+- Fixed: Ignore file quality matching release quality for season packs
+- Renamed DownloadClientStatus to DownloadClientInfo to avoid conflict.
+- Renamed IndexerStatus.IndexerId to ProviderId.
+- Replaced Url with BaseUrl in most indexers.
+- Fixed: Regression in Quality fallback by extension.
+- Fixed: UI Series lookup autocomplete with diacritics.
+- Fixed: Multiple Scene Mapping exception even when the mappings pointed to the same tvdbid.
+- Fixed exception in MountCheck if RootDirectory cannot be found.
+- Fixed: Better error message when searching for episode without an absolute episode number
+- Fixed: Width in Kodi Metadata
+- New: Health Check warning if series folder is mounted with 'ro' option on linux
+- Fixed Scene Mapping error message.
+- Added ability to filter scene mappings by regex via services.
+- remove redundant IE meta tag as we use http header instead
+- use cleancss for minification
+- Fixed: Don't import the same file again
+- Clean up GrabbedReleaseQualityFixture
+- Fix unit test
+- New: Prevent automatic import if file quality differs from grabbed release quality
+- Update SocksWebProxy to fix #1641
+- Added test to validate season pack being grabbed when only one episode is monitored
+- Fixed: Sonarr UI Authentication cookie should be placed on path (UrlBase) instead of domain alone.
+- Placeholders for language profile migrations
+- Fixed missing icon preventing detailed explanation validation errors explanations from appearing.
+- Updated Transmission tests.
+- Fixed: Sonarr not importing torrents in Vuze if the torrent already finished seeding and was stopped.
+- Fixed: Incorrect imports with Vuze when torrent contains a single file.
+- Fixed: Smarter application update completed message
+- Added -Scrambled to the ReleaseGroup cleanup list.
+- Tweaked parser to handle S01.Ep01.
+- Moving and Removing of downloads in usenet clients
+- Fixed: Handling of priority setting when queueing is disabled in qBittorrent.
+- Fixed: Regression causing nzbToMedia imports to be copied instead of moved.
+- New: Check whether an existing episode file was deleted before grabbing an upgrade, to avoid timing issues in combination with Ignore Deleted Episodes.
+- Fixed: Double periods in extra file names after rename
+- Fix issue adding a series when TitleSlug for another series is null
+- Fixed: Sample check has too little margin for 2 min anime with 1 minute files. Lowered to 15 sec.
+- Fixed: Unable to execute custom scripts if IMDB ID is null
+- Apply Cleanse to Exception Data as well.
+- Fixed RssParser test.
+- Should not empty install folder, MirrorFolder will take care of it.
+- Added a few more files to ignore during file copy.
+- Sentry should use CleanseLogMessage.
+- Fixed: UnsupportedFeedException should log error for each item
+- Fixed: Failing Newznab capabilities request should trigger automatic indexer backoff logic.
+- Fixed: Sabnzbd/NzbGet not processing history items properly after last update.
+- fixed broken tests.
+- Cleanup of commented out code.
+- Fixed: Import from torrent Download Station should move since DS maintains an internal copy for seeding.
+- New: TvMaze and IMDB IDs added to custom script environment variables
+- New: Paths for deleted files when upgrading an existing file
+- New: Additional variables for custom script on grab events
+- New: Episode files sent to Recycling Bin are put into subfolders
+- Fixed spelling in message
+- Guard against a null file showing an exception in release rejections
+- Tweaked default config for extra files import.
+- Fixed: Sabnzbd error when tv sorting enabled for all categories.
+- True/False for config settings value
+- New: Explicit toggle for importing extra files
+- Revert Session name
+- Fixed: Newznab default capabilities erroneously cached if indexer is unavailable.
+- New: Updated MediaInfo to 0.7.93.
+- smallicon for Join notifications
+- Fixed: Zero length file causes MediaInfo hanging in 100% cpu load.
+- fixed sab tests.
+- Fixed: DownloadStation api client for DSM 5.x.
+- Update README.md
+- Fixed: Parsing releases with year added to the end of the series title
+- Use MaterialisingResponse for static resource responses
+- Fixed: Sabnzbd 2.0 api compatibility.
+- New: UHD category for RARBG
+- Fixed: Join grab messages
+- fixed typo setting custom directory for rtorrent.
+- Fixed: Refactored rtorrent interface to fix reliability issues with adding magnets & torrents.
+- Fixed: Timing issue in rtorrent handling of magnet links.
+- fixed broken project file.
+- Remove NCrunch.Framework
+- Upgrade CommonServiceLocator
+- Upgrade Microsoft.AspNet.SignalR.Client
+- Upgrade Selenium.*
+- Upgrade NUnit
+- Upgrade FluentAssertions
+- Upgrade TinyTwitter
+- Upgrade SharpRaven
+- Upgrade Ical.Net
+- Upgrade NLog
+- Fixed: Parsing headers that have a trailing semi-colon
+- Fixed: Deluge 1.3.14 API support due to changed json-rpc checks.
+- Broken ExtraFiles migration due to extentionless files
+- Fixed: Bad extension when importing extra files
+- Fixed: Delay profiles are no longer hidden under advanced settings
+- Log number of files found when getting video/non-video files
+- Include language in suffix when importing
+- Accept full language name as suffix.
+- New: Rename subtitles and extra files when renaming files
+- New: Import subtitles and extra files when importing media files
+- Fixed: DownloadStation interface stuck in infinite loop in some cases.
+- Fixed series scan tests.
+- Fixed Indexer Health Checks and tests.
+- Fixed: Clear EpisodeFile records from database if Series folder is missing, but root folder appears to be mounted.
+- Fixed: Health check failing and preventing others from running
+- Improve indexer health check messages
+- Fixed: Reduce parameters required to add a new series
+- Fixed: Clean RSS feed before detecting type
+- Added Download decision comparator test to confirm quality is preferred over seeders
+- Fixed: DownloadStation regression in queue detection.
+- Fixed: DownloadStation proxy failing if non-bt/nzb downloads exist.
+- turn task type enum into string
+- Fix for key not found, returning a generic error instead
+- Fixed: NZBGet delete:scan treated as failure
+- Updated analytics help text
+- Fixed typo in DL station hint text.
+- Fixed: Removed Womble indexer.
+- Fixed: Updated BTN api url.
+- Test if the OutputPath specified by TvDirectory/TvCategory exists.
+- New: Added support for nzb downloads in Synology Download Station.
+- Fixed: Saving nyaa settings
+- Verify LimeTorrents parsing
+- Fixed: Slow loading root folders caused them to never appear
+- Renamed DownloadStation implementation to TorrentDownloadStation.
+- Fixed: Permanently removed kickass rss/api implementation.
+- Added more sensible error for BTN html response.
+- Fixed double question mark in log.
+- New: Added omgwtfnzbs Newznab prefix
+- Fixed: Delete data when removing torrent from Download Station
+- Throw exception with error message return by diskstation (#1672)
+- New: Update Media info for Windows/macOS to 0.7.92.1
+- New: Added support for Synology Download Station as torrent client.
+- Fixed: Ignore .nfs* files during copy actions since those files are special NFS files that should never be touched.
+- Remove backslashes from BTN release titles.
+- New: Add paused option for NZBGet
+- Added tests for edge-case.
+- Fixed: Don't try to show diskspace usage non-existing drives.
+- Fixed: /var/lib/docker no longer shows up in DiskSpace. Caused warnings if the user used docker with zfs storage driver.
+- Fixed: Increased timeout when waiting for rtorrent to finish adding torrent.
+- New: Improve parsing of audio channels from MediaInfo output
+- New: Ensure folders are sorted alphabetically when importing
+- Update README.md
+- Fixed: Proper port validation for download clients and connections
+- Strip 2160p from titles before parsing
+- Fixed: Growl download notification title
+- Better Runtime names
+- don't log migrations during regular DB tests
+- include os name, runtime name in version tag for sentry
+- Create anonymous hash to detect issue duplication
+- AsOsAgnostic paths for root folder tests
+- Fixed: Pushover silent priority
+- Exclude .grab and Plex Version folders
+- Exclude .grab and Plex Version folders
+- Cleanup README (#1622)
+- Revert "New: Upgraded SQLite binares for macOS"
+- Revert "New: Upgraded SQLite binaries for Windows (3.16.0)"
+- Revert "Upgraded System.Data.SQLite to 1.0.104.0"
+- Option to convert ical feed items to all-day events
+- Upgraded System.Data.SQLite to 1.0.104.0
+- New: Switched nyaa.se to HTTPS
+- New: Upgraded SQLite binaries for Windows (3.16.0)
+- New: Upgraded SQLite binares for macOS
+- Use nameof
+- New: Prefer anime batch releases over single episode releases
+- Use DOGnzb name as the default rather than the URL
+- New: Reduced image file sizes
+- Fixed: Parsing of SABnzbd develop version
+- Added app.manifest to indicate proper windows 10 support
+- Sentry will now back-off if it's API key is revoked.
+- Smaller sentry payload, send machine name as user name
+- Revert "Use line number instead of message for sentry fingerprint"
+- The great logger.Error cleanup!
+- Moved Fatal logging to use nlog patterns
+- Added a one hour debounce of reporting the same errors to sentry
+- Use line number instead of message for sentry fingerprint
+- Apparently RemoveTarget doesn't do what you expect it to do.
+- Don't report errors that don't have exceptions
+- Fixed: OS Version detection shouldn't break user agents. Fixes #1611
+- Don't include null in sentry fingerprint if even has no exception
+- Added fingerprint to sentry events to allow better grouping
+- Added platform version error handling
+- Disable Sentry Reporting based on analytics flag
+- Added branch name to Assembly Info
+- Added Sentry error reporting
+- Consider /buildAgent/ to be a none production startup path
+- Updated bindingRedirect for Newtonsoft.Json
+- Removed duplicated code from ContainerBuilders
+- RIP
+- Added Windows Server detection logic
+- New: switched nyaa to HTTPS
+- New: Better platform detection specifically for Non-Windows Systems
+- Fixed linux build
+- Added Rider dir to git ignore.
+- Revert "Upgraded Moq" (Mono compatibility)
+- Fixed: Parsing of 2017x123 episode format
+- Upgraded Moq
+- Updated Newtonsoft.Json from 6.0.6 to 9.0.1
+- Upgraded Nlog, NCrunch
+- Notification API Cleanup
+- Rename Metadata Dir to fix build in *nix
+- Rename Metadata Dir Step 1
+- Rename QBittorent Dir to fix building in *nix
+- Rename QBittorent Dir Step 1
+- Upgraded MediaInfo from 0.7.74 to 0.7.91
+- Removed unused using statements
+- Upgraded DDay.iCal to Ical.Net
+- Because it's 2016!
+- Environment variables sometimes lie!
+- more kosher regex group names.
+- Added NoOp Performance Counter Manager
+- Fixed: Parsing of some anime releases that use Episode after the title
+- Fixed: Handle download clients sending invalid content-type header.
+- Fixed: Use Category from qBittorrent when set instead of Label
+- Added test for 4 digit season number and series title with year
+- Fixed: Parsing of mini episodes that contain the year in the title
+- Upgraded Nlog/RestSharp/Selenium
+- Upgraded Nancy!!!!
+- upgraded nbuilder/automoq
+- Upgrade fluentmigrator
+- Upgraded nunit/fluentassertion
+- Added Visual Studio folder (.vs) to the ignore file.
+- New: Validate PMS version before performing a library update
+- Fixed: Partial library updates for Plex Media Server 1.3
+- Fixed: Partial library updates for Plex Media Server 1.3
+- Fixed: Error handling of valid, empty responses from Plex Media Server
+- Fixed: Error handling of valid, empty responses from Plex Media Server
+- Fixed: Lingering Socks5 Proxy sockets when proxy is using dynamic ips
+- Fixed: Parsing of some Plex server responses before 1.3
+- New: Telegram notifications
+- Shorten 'MPEG-2 Video' to 'MPEG2'.
+- New: Support for Plex Media Server 1.3.0's new JSON responses
+- Fixed: Don't delete extra files after unlinking an episode file that still exists on disk
+- Added additional gdiplus check.
+- Update CONTRIBUTING.md
+- Fix GetAncestorFolders tests under mono
+- New: Added support to override Copy vs Move import logic for DownloadedEpisodesScan API and Manual Import UI.
+- New: Move subtitles/other extra files to Sonarr's Recycle Bin instead of permanently deleting
+- New: Health check warning for macOS when running from App Translocation folder
+- Fixed: mono 4.4.2 won't trigger mono version error
+- Saving settings failed if value was null.
+- Fixed: Mount handling logic of net namespaces as seen on QNAP.
+- Compile error when fixing FileBrowser not displaying drive letters on Windows.
+- Fixed: FileBrowser not displaying drive letters on Windows.
+- Added and fixed qBittorent tests
+- Removed unused disk provider
+- Fixed: Failing database migration of metadata files without extensions
+- Fixed: Email connection test reporting success incorrectly
+- New: Remove completed torrents from qBittorrent
+- Added TODO to remove ToPP SABnzbd status
+- Fixed: Handling of some really long qBittorrent ETAs
+- Fixed: Handle SABnzbd Propagating status
+- Capture exit code of nunit to avoid using failed tests as exit code
+- Fixed: Parsing of some poorly named standard episode release names
+- Fixed: login page being returned instead of unauthorized response
+- Update omgwtfnzbs URL
+- Added Sonarr-icon to Boxcar notification
+- Fixed typo
+- Re-added accidentally removed anime parsing Regex
+- Fixed: Parsing of multiple absolute episode number releases
+- Fixed: Updated IPTorrents url validation to changed format.
+- Fixed: Changed Quality Parser to avoid matching tags in the Episode title instead of the Quality tags.
+- Tweaked Nyaa Request Generator to avoid offset=1.
+- Fixed: Import episodes in season packs in numerical order
+- Fixed: Default redirect URL for forms auth will use URL Base if configured
+- Fixed: Tweaked ratelimit logic for rarbg api.
+- Upgraded mono version check (3.10 minimum and 4.4.x)
+- Fixed: Calendar api again includes series images. (Nzb360)
+- New: uTorrent differential api support to handle larger lists of torrents without hogging the api.
+- Join: Device ID entry and better error handling
+- Fixed: Filter qbittorrent torrent list on newer versions.
+- add downloadvolumefactor and uploadvolumefactor torznab attributes (#1464)
+- Clarified min/max size rejection message by including the episode runtime.
+- Fixed: Cleanup unused Tags during housekeeping.
+- New: Added filter by tag to iCal feed.
+- Fixed: Issue loading settings on some systems
+- Fixed: Suppress warning log messages when unable to parse non-video files
+- Fixed: Version check for SABnzbd develop
+- New: Added query parameter to ical feed to list premiers only.
+- Fixed: prevents autofill on new password fields in settings.
+- Removed conflicting criteria from IsProduction check.
+- Fixed: Added config validation to ensure NzbGet KeepHistory isn't set to 0.
+- Don't append the extension when using ParsePath
+- Fixed: Migrations using old SQLite versions (Prior to 3.7.15)
+- Fixed: Ignore extrafanart subfolder when scanning for extra files
+- Fixed: Generating metadata files after importing episode files
+- Fixed: Store metadata file extensions
+- Fixed: Prevent duplicate parsing of extra files
+- New: Parse existing subtitles and extra files
+- Fixed: Added fallback and log errors when Tls1.2 clashes with https certificate with obsolete md5 hash.
+- Fixed api blacklist, history, wanted/missing and wanted/cutoff requiring sortKey, now defaulting to an appropriate value (airDateUtc/date desc for most).
+- Fixed: Auto-Updater rollback logic tries to restore unchanged files.
+- Fixed: Removed requirement to disable sabnzbd pre-check for sab version 1.1.0 onward.
+- Fixed stupid error.
+- New: Support for TLS 1.1 and 1.2 connections when only .net 4.5 is installed.
+- Added additional categories to NZBFinder preset.
+- Changed exit statement to "Press enter to exit..." to match use of ReadLine() (#1425)
+- Merge branch 'pr/n1446_Awarua-' into develop
+- Cleanup
+- Fixed: Sabnzbd 1.1.0 rc4 queue api changed time format.
+- Fixed: Updated HDBits api to api changes.
+- Fixed issue #1445 where sabnzbd has changed the time format reported for downloads
+- Fixed tests for EpisodeFileMovingService
+- Don't blow if driveFormat is null when looking up DriveType
+- New: Ability to include unmonitored episodes in the iCAL feed
+- Fixed: Episode import when the series folder had a trailing slash and folder was not on disk
+- Fixed: Parsing absolute episode numbers preceeded by Episode
+- Fixed: Parsing of a multi-episode anime formats
+- Better Captcha message.
+- Fixed media info test
+- VideoBitDepth and AudioChannels in Filename examples
+- Fixed: MediaInfo.AudioChannels for some eac3 and mp3 files
+- Changed startup loglevel to avoid incorrect sonarr.debug/trace log entry.
+- Fixed: Manual Import failing to parse series title from certain nested folders.
+- Added .editorconfig
+- New: Added CAPTCHA support to Rarbg.
+- Audio codec E-AC-3 will be EAC3 in filenames
+- New: Join notifications
+- Fixed: Include afpfs mount points in free space checks
+- Move platform files to proper folders
+- Always include decimal place for AudioChannels
+- Fixed UpdateMediaInfoService tests
+- New: MediaInfo VideoBitDepth and AudioChannels
+- New: Added support to save .magnet to blackhole directory.
+- Reject m2ts (bluray) raw releases from BTN as well.
+- Fixed: AnimoTosho RSS feed size parsing.
+- Api errors now log statuscode too.
+- Improved Quality lookup.
+- Fixed: Allow series to be added unmonitored through the API
+- Fixed: Slack Icon is optional
+- Fixed: Incorrect matching of date in title
+- Adjusted Gzip stream to reduce response times.
+- Order the pipeline registration process.
+- Fixed: Significantly improved api performance.
+- Added additional index to episodes table to speed up certain queries.
+- Reset srcset on failed load.
+- Fixed Deluge and BTN cleanse password logic.
+- New: Added raw DVD check for BTN to prevent those pesky VIDEO_TS downloads.
+- Fixed cookie tests with expired dates.
+- Removed fanzub tests and disabled kickass tests.
+- Fixed: Forcibly disable kat when using the wrong domain.
+- Fixed: Calendar arrows on Edge browser.
+- Fixed: XEM series with only alternate season titles.
+- Fixed: Delete all history for series when series is removed from Sonarr
+- Fixed: Recreate log database if migration fails
+- GHI and PR Templates
+- Fixed: Parsing series title during manual import
+- Fixed: Kodi metadata AC3 audio codec
+- Fixed: Parsing Plex Media Server version 1.0
+- Fixed spelling mistake
+- Emby metadata name changes
+- Fixed: Adding label to torrents in qBittorrent v3.3.5
+- Fixed: More results in season searches when KAT
+- Updated NZBFinder URL
+- Fixed: Tweaked sample detection for short episodes.
+- Fixed: Roksbox metadata generation when series certification is not available
+- Fixed series filter 'missing' since percentOfEpisodes isn't always set.
+- Fixed relative path issue in Metadata handling.
+- Include full grab/import message for Slack notifications
+- AsOsAgnostic
+- New: Missing episodes series filter
+- Fixed: Metadata files incorrectly stored in database
+- New: Part One/Two/Three/.. parser support for mini series.
+- Added better log message when indexer reached daily grab limit.
+- Updated WEB regex.
+- New: Kodi metadata Stream Details
+- New: Slack notifications
+- Removed 6box
+- Fixed: Parsing WEB releases that use spaces instead of periods
+- Re-enabled calling synoindex after renaming
+- Fixed tests.
+- Fixed: Reduced spurious cpu usage on mono while idle.
+- Updated NLog to 4.3.4.
+- Fix regex for expanded series + episode number (S01 - E01)
+- Fixed Hadouken tests
+- Fixed: Ignore more folder names when browsing file system
+- New: Hadouken torrent client support
+- Updated to support Hadouken v5.1 and above
+- Basic Hadouken v5 implementation.
+- New: EpisodeTitles for Custom Scripts
+- Fixed: Parsing separated season and episode numbers (S01 - E01)
+- Better logger name for QualityParser
+- Replace octal characters from mounts in /proc/mounts
+- Log message makes sense now
+- Fixed Search tests.
+- Merge remote-tracking branch 'upstream/search-delays' into develop
+- New: Http/Socks proxy support.
+- Service now depends on HTTP Service (http)
+- Added round-robin over httpbin.org hosts for httpclient tests.
+- Final cleanup on proxy support.
+- FolderWritableValidator
+- Fixed: Error messages when config file is empty or contains invalid characters
+- Fixed: Perform health check after download clients or indexers are removed
+- Use wildcards when searching for single episodes on BTN
+- Fixed: Prefix Twitter notifications (Grabbed/Imported)
+- New: Vuze torrent client support
+- Fixed: Respect delays when searching after a failed DownloadRelease
+- Added logging of Sonarr API calls.
+- Using a tiered fallback is safer in case there is another data-loss and ids get reset.
+- Update HttpAccept.Rss to include application/xml
+- Fixed: HDBits release age incorrect.
+- Fixed: Adjusted BTN Recent Feed (RssSync) to better use their api db indexes.
+- Nice try uTorrent, you're not Deluge
+- Proxy BypassList tests
+- Fix tests failing due to lack of constructor less classes, after refactoring
+- Updating SocksWebProxy to fix issues with POST Requests
+- Fixed: Refreshing series that have duplicate season information
+- Fixed: Updating Emby Library
+- Fixed: An issue preventing access to settings due to extraneous data in the database
+- Fixed: Rare error when removing pending items that have been rejected
+- Moved Proxy types around and refactored/renamed a few things.
+- Create HttpProxySettingsProvider and fixed related issues.
+- Force to IPv4
+- Bug Fixes
+- Fixed: Plex Meda Server authentication
+- Fix merging issues & API changes - that conflict resolution did not detect
+- Proxy Support for Sonarr #732
+- Fixed: Sabnzbd 1.0.1 added two new status values.
+- Fixed: Manual Import not scrolling after using file browser
+- Return decisions when catching exceptions during decision making
+- Update package.json license expression (#1242)
+- Updated NzbGet tests.
+- Fixed: NzbGet DUPE/COPY status should be considered failure.
+- Fixed: Adding Nzb with {{password}} in name to NzbGet failed.
+- Removed redundant logging.
+- Release scoring
+- Don't throw after catching the exception during TearDown
+- Fixed: Don't force testing when updating connections, indexers or download clients
+- Fixed: Set permissions on series metadata images when they are created
+- Implement mono logic to not set owner/group with chown
+- Fixed: Default display time for Kodi notifications
+- Disabled unreliable lookup test.
+- Readded logging Download Client responses.
+- Better error handling in the Deluge ConnectDaemon code.
+- Refactored IntegrationTests to work with Nunit3 VS adapter.
+- Give a couple of timing-based tests a bit more breathing room.
+- Merge branch 'http-uri-combine-path' into develop
+- Fixed: uTorrent api proxy would fail on specific Win10 configurations. (The Phoenix Rises)
+- CombinePath now simple, uri resolve done via operator and CombineRelativePath.
+- Cleanup HttpUri.PathCombine
+- Upgrade to NUnit3
+- New: Prevent grabbing season packs if full season hasn't aired yet
+- ParsingService.GetEpisodes will use TVDB season number when available
+- Treat XEM aliases as SceneSeasonNumber
+- build.sh uses msbuild 14
+- use npm-cache if installed
+- Fixed: Newznab/Torznab used wrong query if tvrageid was unknown in combination with a specific indexer capability profile.
+- Fixed: Release Group detection didn't handle RLSGRP_English properly.
+- Fixed: Removed TrollHD from the RawHD detection regex since they now also release other sources.
+- New: Added RERIP as REPACK (Proper).
+- Don't set ACL if already set.
+- Reconfigure Logging early in the process to set the correct log level.
+- Updated NLog to 4.3.0-rc1.
+- Fixed: Some releases with date and season/episode numbers with multiple episodes on a single day
+- Fixed: Prevent root folders from being added under the startup folder
+- New: Safari Pinned tab icon
+- Fixed: Use new rTorrent commands when resolving magnets
+- New: Windows Phone theme
+- New: Mobile Chrome theme (Android 5.0+)
+- Run gulp using npm Simplifies usage of gulp and makes sure everyone is using same version
+- Updated OS X startup script to work with macports mono
+- Fixed: RSS Sync failing due to one broken indexer
+- New: Light green background color in Season Pass for seasons with all episodes downloaded.
+- Fixed: Allow underscore when validating hostnames
+- ItemViewContainer didn't exist sometimes for root folders
+- Include series type for CustomScript
+- Always validate settings when testing thingies
+- On grab for custom scripts
+- New: Added (fairly strict) regex for the new scene WEB quality = WEB-DL.
+- Add WebException handlers to prevent them reaching the UI.
+- Send Http auth without waiting for challenge.
+- Adding magnet to qbit should use FormData not QueryParam.
+- Fixed: UsenetBlackhole not importing since latest develop.
+- Fixed: Not uploading nzbs to Nzbget on linux since previous develop.
+- Fixed: Rarbg indexer broken on develop.
+- Merge branch 'blackhole-delay' into develop
+- New: Delaying Blackhole imports while they're still being updated.
+- Ensure auto-generated mocks are also registered in the test container.
+- Migrated all Download client proxies from RestSharp to HttpClient.
+- Replaced Uri with HttpUri.
+- Added support for FormData (AddFormParameter and AddFormUpload), which automatically gets converted to multipart/form-data or application/x-www-form-urlencoded.
+- Refactored HttpRequest and HttpRequestBuilder, moving most of the logic to the HttpRequestBuilder.
+- Fixed: Don't purge xem scene mapping cache when new series gets added.
+- Sort episodes in calendar by ep nr if airdate is the same.
+- Revert "Fixed: Sort episodes on the api by episode number when they air at the same time."
+- New: Trakt links on series details
+- Fixed: Anime season search won't search for missing episodes
+- Fixed: Sort episodes on the api by episode number when they air at the same time.
+- Updated FluentValidation
+- Update CONTRIBUTING.md
+- Fixed: Don't trigger SceneMapping update and Housekeeping right on the startup event.
+- Added version to logged exceptions.
+- Don't hammer thexem, kthxbai.
+- Default Plex Media Server "Update Library" to true
+- Don't die in MonoTorrent if nodes is an empty string.
+- Fixed: Warn if user has movie/date sorting enabled in Sabnzbd for the Sonarr category.
+- Clarified error message in MatchesFolderSpecification.
+- New: Changed the default of 'Use Hardlinks instead of Copy' to true. Most ppl seem to want that anyway.
+- Added TorrentRss test for ExtraTorrents, no other changes.
+- Fixed: Newznab should reject a Torznab feed.
+- Womble's has size parsing now
+- Don't use Sonarr as ReleaseGroup if the pattern contains an advanced prefix/suffix.
+- Write debug/trace log files separately to prevent trace from quickly rolling over debug.
+- Replaced <removed> with (removed) for the log cleanser so it doesn't mess with forums.
+- Couple more anime version test cases
+- Fixed Protocol returned for release/push endpoint
+- Fixed: Parses size in Wombles Description field so min/maxsize checks works on Wombles feed.
+- fixed failing torznab test
+- New: Use PageSize reported by newznab/torznab caps instead of hardcoded 100.
+- Added DrunkenSlug and SimplyNZBs as Newznab presets.
+- Handle 1.1x version from Sabnzbd
+- New: Explicitly enforce SABnzbd minimum version of 0.7.0
+- Fixed: Don't collapse episode titles when episode titles contain Part x only
+- Fixed: Use Protocol over DownloadProtocol for ReleasePushModule
+- Fiddled with the Back to the Top button a bit so it's better visible on the white background, also only on widescreen now.
+- Fixed: DownloadedEpisodesScan API command couldn't be used to process individual files.
+- Cleaned up 2160p changes and added migration and tests. Also reserved the quality ids for WEBRip etc.
+- New: Added support for UltraHD (2160p) quality
+- Updated db migration testing framework so we only run migrations up to the one we're testing.
+- Fixed: Daily + Standard with 3 digit episode numbers
+- Updated NLog to v4.2.3.
+- Fixed some compile warnings.
+- Fixed: Sample files of daily episodes should also be deleted after import.
+- Fixed: Replaced mono symlink resolve logic to better handle errors.
+- Add another nn preset.
+- Delete the subfolder not the parent folder
+- New: Remove empty subfolders after renaming FileSetLastWriteTime
+- New: Prefer regular episodes over specials when absolute numbers conflict
+- New: Pushover Silent and Emergency priorities
+- Revert "Fixed regression, mono should resolve symlinks while trying to find out the available/total space."
+- Fixed regression, mono should resolve symlinks while trying to find out the available/total space.
+- Fixed: Manual Import didn't revert to parent folder when trying to parse series leading to issues with obfuscated releases.
+- Certain log messages didn't include the exception.
+- Ignore -Obfuscated while parsing.
+- Fixed: Handling xml responses containing invalid html entities.
+- Fixed: Throw more specific error when there's an issue with the curl root certificate bundle.
+- Fixed: ZFS and other mounts now listed in the System page.
+- Merge pull request #1112 from cturra/nzbplanet-api
+- updating nzbplanet.net api url to reflect recent change
+- Added additional tier to search for daily series type on BTN to find faux-daily series with SxxExx groups instead of date groups.
+- New: Parsing of XofY mini series format
+- Merge pull request #1095 from ta264/fix-build-sh
+- Merge pull request #1100 from IvanBrazza/develop
+- Fixed: Delete confirmation message for Restriction
+- New: Setting Pushbullet source device
+- AutoComplete and file browser will show files when appropriate
+- Fix: xbuild doesn't support /m parameter
+- New: Prevent automatic update if UI folder is not writable
+- Fixed: Regression in parser incorrectly parsing S2015Exx.2015-01-01 notation.
+- Do or do not, there is no try.
+- Ensure rTorrent download is started even if the user doesn't have schedule=...,start_tied= in their rtorrent.rc.
+- Fixed: Misleading error message when Kickass/Torrent Rss indexer returned invalid xml.
+- Fixed: Incorrect api error when calling /api/episode without seriesId queryparam.
+- Fixed: Added support for Sabnzbd 0.8 history category queryparam.
+- Fixed: Don't apply indexer backoff on DNS and connection issues.
+- Fixed: Additional log cleanse Regex to keep even more sensitive information out of the logs.
+- New: Set full Download Directory in Transmission instead of just a Category.
+- Updated URL rewriter to handle torcache Referer weirdness.
+- Fixed: Magnet downloads weren't being started on RTorrent.
+- Updated SharpZipLib to include patches made since the last official release.
+- fixed build.sh
+- use build config to exclude xml doc rather than deleting them later
+- added nuget.exe to tools
+- removed msbuild integerated nuget restore
+- cleanup app.manifest for Service helpers, upgraded compat to windows 8.1
+- apparently new compilers alraedy embed the app.manifest into the app, no need for mt.exe anymore
+- Merge pull request #1066 from pra85/2016
+- cleanup
+- fixed gulp build
+- Replaced build.ps1 with warning
+- smarted mdb generation
+- upgraded pdb2mdb.exe to mono 4.2 Stable (4.2.1.102)
+- Update year range to 2016
+- Remove double slash in NZBVortex add URL
+- faster test packaging in build.sh
+- upgraded nuget packages
+- updated npm packages
+- Fixed: Manual Import Series selection
+- Merge pull request #960 from Sonarr/nzb-vortex
+- NZBVortex Download Client
+- Fixed broken test
+- Fixed Twitter notifications
+- New: Special searching on RARBG
+- Fixed: Parsing of queued specials from download client queue
+- Fixed: Use folder quality when better than file quality (regression)
+- Merge pull request #981 from Sonarr/ical-parameters
+- Selectable range for iCal
+- Increased timeout for Deluge to prevent timeout errors when posting large torrent files.
+- Fixed Ospath incorrectly detecting arbitrary colon as windows path.
+- Fix: Paths with colons prevent Sonarr from communicating with Transmission
+- Safety net to handle MaxSize=0. Some users still have 0 = unlimited in their db and migration failed for them.
+- Fixed: Indexer sites returning date as Retry-After header.
+- Fixed: Health Check produced warning if Sonarr binaries folder was not writable even when the external script update mechanism was selected.
+- Fixed Regex mistake in CleanLogMessage.
+- New: Better resolution posters on retina screens.
+- Fixed: Username must not be null or empty when logging in
+- Don't return series as subtype for /api/episode
+- New: Media file extension .webm
+- Fixed: Show a better error message when no episodes are parsed in a release
+- Fixed donate button.
+- Fixed: Curl Fallback should ignore invalid cookies.
+- Fixed: Improved parsing for single digit multi-episode titles
+- Fixed: RSS Sync Interval validation
+- Changed torrent blackhole message
+- New: Option to Hardlink or Copy instead of move for Torrent Blackhole
+- A few UI Fixes
+- Fixed: Hardlink/Copy files from QBittorrent
+- Fixed: Removed Titans of TV tracker
+- New: Newznab preset for Usenet Crawler
+- Merge pull request #779 from cbodley/qbittorrent
+- qbittorrent: client plugin based heavily on uTorrent
+- Update readme.md
+- Don't keep dylibs for WIndows and Linux builds
+- Fixed: Force grabbing some delayed releases
+- Fixed: Improved parsing of some multi-episode filenames
+- Re-order regex to prefer [1x01] over 101
+- Fixed: Prevent series from being added with an invalid Profile ID
+- Update CONTRIBUTING.md
+- New: Allow Uppercase in Transmission category
+- Fixed: Saving settings changes
+- Merge pull request #931 from Dahlgren/osx-development
+- Merge pull request #959 from roguecode/develop
+- Changing Indexer failure log message to local from UTC.
+- Include mediainfo and sqlite3 libraries for Mac Enables usage within MonoDevelop and Xamarin Studio including NUnit
+- Merge pull request #889 from Sonarr/quality-source
+- Fixed: Folder quality when file quality determined by its extension
+- Merge pull request #754 from Sonarr/real-releases
+- New: support for REAL releases
+- Merge pull request #928 from Dahlgren/mono-tests
+- Merge pull request #953 from zetas/nn_preset_nzbcat
+- ConfigServiceFixture shouldn't be touching the DB.
+- Adding new newznab preset for NZBCat
+- Fixed failing tests on Mono Test case unicode characters in escaped format
+- Merge pull request #941 from uzegonemad/hotfix/calendar-legend-width
+- give legend ul max width of 100%
+- Merge pull request #901 from brgaulin/jquery_upgrade
+- Merge pull request #942 from uzegonemad/hotfix/calendar-tooltip
+- Merge pull request #940 from uzegonemad/hotfix/fix-long-path-label
+- alter calendar tooltip container. fixes #857
+- Add wrapping to fix long paths in labels. Fixes #875
+- Fixed: Logging invalid version when failing to connect to Kodi
+- Fixed: Failing missing episode search when one search fails
+- Merge pull request #915 from uzegonemad/hotfix/scroll-up-zindex
+- fix z-index on scroll to top button
+- Fixed: Manual import when quality was not available after failed parsing
+- New: Manual search shows error when download fails
+- Fixed: Magnet links with torrent blackhole
+- Prevent regrab for all grabs
+- PFMonkey Newznab preset
+- Fixed: Stricter parsing of some release filenames
+- UI: Update jQuery to 1.11.3
+- Fixed: Log download client name when communication fails
+- Fixed: Test messaging when indexer API returns an error with a message
+- Fixed: Parsing anime series with number in title
+- Sanitize dognzb apikey in nzb fetch url.
+- Fixed handling cookies in different system languages.
+- Better UI messaging when searching for all specials in a series
+- Fixed sorting on Progress in Queue.
+- Degraded 101 regex to favour S01 regex to match prevent matching 3 digit series title.
+- Fixed: Added verified file transfer mode that doesn't revert to copy.
+- Don't try to process a download client item with an invalid path for the OS
+- Fixed: External links again open in new windows.
+- Fixed: Removal of common suffixes such as [ettv] while parsing.
+- Warning message when BTN API throw internal server error
+- History Spec handles both blackhole and CDH disabled scenarios
+- Tests passing for the wrong reason
+- lrn2spell
+- Extend Blackhole grace period to 12 hours
+- Debug log when release is accepted
+- Fixed: Torrent Blackhole client will not track torrents by hash
+- HistorySpecification checks cutoff as well
+- Fixed: SeasonPass didn't update Series monitored flag if only those were changed.
+- Bind SignalR to root SeriesCollection so typeahead gets the newest data.
+- Fixed: Don't produce scene mapping warnings if TheXEM only maps the second half of a season.
+- Fixed torznab searching without any id or q.
+- Fixed indeterministic test.
+- Fixed typo in nn caps and apikey error message.
+- Don't be so strict about dupe attr values.
+- Refactored the HttpDispatchers.
+- Merge branch 'nn-tvdbid' into develop
+- Merge branch 'pr/n721_ta264' into develop
+- Merge pull request #844 from Sonarr/history-spec-improvements
+- New: Blackhole won't grab another release if release in last hour meets the cutoff
+- Fixed namespace detection for EZRSS now DOCTYPE is gone.
+- Removed doctype from ezrss test.
+- Updated Selenium to 2.48
+- Added support for tvmaze.
+- Added support for querying newznab with multiple ids in one query.
+- Added tiered indexer requests to support fallback to wildcard queries.
+- Missing TvdbId on ReleaseResource.
+- New: Added support for newznab indexers using tvdbid for searching.
+- Show Specials in Wanted.
+- Fixed removing partials before trying to copy files.
+- Fixed rTorrent test
+- Merge pull request #824 from larsjohnsen/rtorrent-misc
+- Log description for invalid API key response
+- Fixed: Don't import single files that start with ._
+- New: Option to remove illegal characters
+- Don't error out if PMS returns no ID for a specific series
+- Add tests for CurlHttpClient and fix the failures
+- New: Show time instead of date if event occurs/occurred today
+- Fixed nullables.
+- Replaced built-in valuetypes with language keywords.
+- Clarified error message when parsed episode doesn't exist in the database.
+- rTorrent: Url Path displayed by default, misc
+- rTorrent: Fixed label bug
+- rTorrent: Fixed race condition
+- Fixed: Tooltips for series and season searches
+- Use X-Api-Key header in integration tests
+- Terminate Sonarr instance created during integration tests by Process ID
+- Removed Trakt to Tvdb migration workaround, so it actually removes the tvrageid when skyhook says so.
+- Fixed: TV Directory is not required for local rTorrent
+- Only apply kat peers fix for recent releases.
+- Fixed: Removed deferrer from external links, instead relying solely on the rel=noreferrer attribute (supported by Chrome and Firefox, but not all browser)
+- Merge pull request #768 from kmcc049/fix-bug-709
+- Fixed: Consistent display of sizes
+- Fixed: Missing Episode Search command wasn't stored properly in the db causing it to search for all series, instead of one.
+- Disable kickass seeds/peers info since they only report 0 on the rss.
+- Fixed composition.
+- Fixed: Removing torcache url query params to avoid redirect.
+- Fixed: Parse TVRip releases as SDTV
+- Fixed: Parsing 4-digit season packs
+- Fixed: Log error message when moving file to recycling bin fails
+- New: Custom Script Download contains SourcePath and SourceFolder
+- New: Custom Script environment variables use underscores instead of periods
+- Extremely long titles
+- Hide completed downloads when CDH is disabled
+- Path and Arguments were set to the same number for CustomScript
+- Merge pull request #774 from Sonarr/preserve-startup-args
+- Fixed: Preserve startup arguments during restart
+- Fixed: Only run a complete section update in Plex if all partial updates fail
+- Fixed: Import episodes in ascending numerical order
+- Show implementationName for metadata
+- return early for existing files in UnverifiedSceneNumberingSpecification
+- New: Add Webhook support to sonarr
+- Phantom: screen less files are defined in sonarr.less
+- upgraded postcss, webpack
+- switched web pack watch to poll mode
+- Succeeded instead of completed for testing
+- New: Warning message that Torrent Blackhole will move files, not copy or hard link
+- Convert onGrab from passing a string to passing an object with series and episode information
+- Fix build on linux and add build.sh
+- Fixed: Don't log all daily episodes parsing as unknown episodes
+- Merge pull request #747 from Sonarr/release-pushing
+- New: Ability to push releases to Sonarr via API for processing
+- Inital work for release pushing
+- Fix theme less file
+- Support for not adding a hash to some index elements
+- external less source maps, autoprefixer
+- Fixed: Better parsing of full season x265 releases
+- Added lazy load
+- mono and .net handle Uri escapes differently messing up the tests.
+- Fixed tests after Uri cleanup logic.
+- MediaInfo should use ParseSpeed > 0.2 for .ts files to get accurate readings.
+- Fixed: Indexers returning relative urls for grabs.
+- Fixed: Emby metadata added date will use series added date
+- Fixed SkyHookSearch tests.
+- New: Sonarr can now update series to use another tvdbid in case when tvdb removes a duplicate and Skyhook detects it.
+- Fixed log message for rss sync gap warning.
+- Fixed series refresh repeated too often if Sonarr is killed before Scheduled task finishes.
+- Fixed negative NzbGet DownloadLimit
+- Ignore duplicates when using history to identify an existing downloaditem.
+- Fixed: Don't check for missing TheXEM numbering when importing existing series.
+- Added source map to css files
+- Log number of episodes, not type
+- Fixed phantom build
+- Merge pull request #731 from Mirx/develop
+- New: Hungarian language support
+- Removed semi-colon
+- Fixed: rTorrent category is optional
+- Fixed paths for phantom
+- Fixed: Should ignore indexer provided tvrageid when scene naming exception exists.
+- Cleaned up project root.
+- Only list the matching ignored terms in the rejection.
+- New: Support 5-digit multi-episode releases
+- New: Sonarr logo is optional for Pushalot notifications
+- Fixed: Series failing to load when there were no seasons
+- Merge pull request #644 from Sonarr/twitter-notifications
+- Cleanup and refactoring of Twitter notifications
+- Inital work on Twitter notifications
+- Added missing property to CommandResource.
+- Fixed: Refreshing individual series incorrectly delayed the schedule task.
+- minor pageable code error.
+- Merge pull request #698 from srod/boxcar2
+- New: Boxcar 2 notifications
+- Fixed backbone.collectionview shim
+- Icon now completely hidden if spinner overlay is shown. Fixed season action margin.
+- Include indexers name in back-off healthcheck warning.
+- Actually added deepmodel shim.
+- Shim for deepmodel
+- Added shim for _
+- Merge pull request #690 from Sonarr/backgrid-pageable-reset
+- AsPageableMixin to make backbone.pageable to stay on same page during fetch
+- Updated spinner visualization.
+- Fixed: Readded series monitoring flag to Season Pass view.
+- Added link to existing series in add series view.
+- Fixed: Updated libcurl version mappings to use libcurl.4 instead of libcurl.3.
+- Fixed: indexer returning an empty page during the rss sync.
+- Rewrote the RequestGenerator to support paging and other refactorings.
+- New: Titans of TV tracker
+- Incorrect number of parameters.
+- Now logging nzb&torrent response sizes.
+- Show thexem outdated mappings message on the calendar as well.
+- Tooltips are now properly hidden if the element is removed from the dom.
+- Use IsProduction instead of IsDebug to toggle caching on/off
+- _output folder is considered a non-prodction folder
+- Added support for custom UI folder
+- Added support for live reload
+- Revert "Fixed: Disabled transactional file transfers since we don't want that feature in master yet."
+- Removed duplicate test.
+- New: Will now temporarily stop using an indexer if the indexer reported an error.
+- Fixed: Extrapolate scene numbering but won't auto import.
+- Removed duplicate file.
+- Custom scripts
+- Added rarbg error code for unknown series.
+- New: Added auto-detection of indexer capabilities to torznab.
+- reverted handlebars version
+- gulp getSonarr --branch=develop
+- Download and start Sonarr using gulp (Can work on UI without VS)
+- updated npm packages
+- Removed yargs dependency since it fails to install in windows
+- added phantom support in gulp
+- Don't list drives that aren't available.
+- Fixed: Disabled transactional file transfers since we don't want that feature in master yet.
+- Refactored VerifiedFile transfer to have a verified and transactional mode.
+- learning to spell
+- Renamed Activity to History in episode details modal
+- New: Show series ratings on series details
+- New: Show download client name in GUI notifications
+- Fixes Release restriction validation
+- Fixed: Sorting by timeleft on Activity: Queue
+- Merge pull request #674 from Sonarr/rtorrent-directory
+- New: Choose download folder for rTorrent
+- Formatting
+- Double clicking test and save won't retrigger button
+- Fixed: Do not monitor specials when monitoring missing
+- Fixed: Doki rss feed now uses correct url for torrent.
+- Applied workaround for CurlSharp GC handling.
+- Fixed curl multithreaded access.
+- Fixed regression in QueueService caused by pr650.
+- Fixed: Removing pending releases
+- Fixed broken unit test
+- Merge pull request #664 from Sonarr/plex-auth-fix
+- Update plex token cache when password is changed
+- Merge pull request #650 from Kayomani/develop
+- Removed trello from CONTRIBUTING as well.
+- Removed link to trello.
+- Fixed: Updater occasionally killed Sonarr twice before allowing it to be restarted by upstart.
+- Fixed thread concurrency issue on http cookie handling.
+- Removed dupe tests.
+- Actually commented out now...
+- Broken test that we can use once we have better parsing
+- Fixed: BTN Anime Season search.
+- Series is already available in model.
+- New: Added missing absolute episode number warning for anime to calendar view as well.
+- Don't log invalid date in rss as Error.
+- Added robots.txt
+- Fixed: Matching anime using full series title instead of cleaned title to be able to detect subtle!! differences`!! in titles!!!
+- New: Downloads can be tracked by the source name in addition to the download name
+- Fixed: Sonarr didn't clear scene mappings if a series was removed from TheXEM.
+- Fixed project files.
+- Unsaved file.
+- Fixed: TorrentRssParser incorrectly detected description element.
+- Merge pull request #653 from Sonarr/kickass-url-update
+- Merge pull request #654 from Sonarr/remove-pending
+- Updated migration number to 90
+- Update the kickass url to https://kat.cr
+- Updated FluentAssertion to 3.4.0
+- Fix: When removing pending items from the queue remove all releases for that episode
+- Updated readme.md
+- Show warning message for rTorrent that it doesn't support torrent removal
+- Fix the build
+- Use a list for ChannelTags and DeviceIds in Pushbullet settings
+- Removed eztv migration tests.
+- Removed HDAccess.net torznab preset since the site has stopped.
+- Fixed: Removed Eztv-like api support entirely since TorrentRss is now available.
+- Improved PushBullet implementation (v2 API, multiple devices, channels)
+- Merge pull request #647 from mike-tesch/patch-1
+- Update UpdateApp.cs
+- New: Fallback to libcurl/libssl on mono for https connections.
+- MediaInfo Dispose only when handle was created.
+- Fixed: Renaming episodes on OSX with case-insensitive filesystem.
+- Fixed: Updating empty Kodi library
+- Clear scrollbars on window resize
+- Upgrade to Bootstrap 3.3.5
+- Remove calendar header padding for scrollbar
+- Cleanup tabs
+- Fix ambiguous calls when compiling under mono
+- Fixed: Series poster controls
+- Fixed btn tests.
+- Fixed: BTN will now use http/https for grabbing downloads as specified by the settings instead of by the feed.
+- Ignore OS X metadata files in repo
+- Remove scrollbar from calendar
+- Upgrade FullCalendar and MomentJS
+- Upgraded bootstrap to 3.3.4
+- Merge pull request #139 from Sonarr/verified-file-transfer
+- Updated Rarbg to api v2.
+- Fixed: Downloading progress won't cutoff series title prematurely
+- Clean up some warnings
+- OS Agnostic Paths
+- Fixed: Speed up disk rescaning during series refresh
+- Fixed: Next airing on series list
+- seasonNumber not season
+- Refresh using sort order
+- Fixed: Size on disk display
+- Use protocol agnostic URLs for images on add series
+- Fixed: Improved error messaging for manual import
+- Poster x-class
+- New: Reload fanart and poster on series details after images are downloaded
+- Fix error when season stats are missing
+- New: Search for newly added past episodes after series is refreshed
+- Merge pull request #546 from Sonarr/season-pass
+- Improved season pass styling
+- Season pass overhaul
+- Fixed typo in UI.
+- Fixed: Calendar not showing some items on the last day of the week
+- GetCurrentProcessId for PidFileProvider
+- Disabled verified file transfer on windows.
+- New: Now checks the file size of moved episodes to verify if the transfer was completed successfully to be able to detect errors with mounted network storage.
+- Fixed: Torznab advanced setting 'Enable RageID Lookup' had wrong UI type.
+- New: Support for SSL connections to Plex Media Server
+- Strict parsing of anime releases that have a number at the end of the episode title
+- Suppress warnings for free space check on fixed disks
+- Fixed: Size Parsing in TorrentRss was a bit too tolerant.
+- Disabled unstable CI integration tests.
+- Prevent ProgressMessageTarget from ever reading the command from the database.
+- Fixed: Exiting from tray icon
+- Fixed: Editing episode file quality
+- Fixed: Early cleanup of completed tasks
+- Fixed: A bug caused way too much data being read during MediaInfo discovery (often the entire file).
+- Fixed: Added x/h265 to renamer.
+- More logging for CommandExecutor
+- Merge pull request #563 from Sonarr/plex-partial-updates
+- New: Support for updating single series in Plex Library
+- Better validation messaging for Newznab Categories
+- Ignore more signalr non-errors
+- And added a test for it.
+- Fixed transmission returning -1 as Eta.
+- Fixed transmission returning -1 as Eta.
+- Shift select range on Missing/Cutoff Unmet
+- Updated Rarbg to use ratelimit service.
+- Added RateLimit service to globally manager short duration ratelimits.
+- Updated MediaInfo to 0.7.74 (Windows and OS X)
+- Merge branch 'torrentrss' into develop
+- Merge branch 'rarbg-support' into develop
+- Merge branch 'metadata-creation' into develop
+- rTorrent: Fix load commands
+- Merge pull request #565 from larsjohnsen/rtorrent-fixes
+- Added tests and refactored TorrentRss code.
+- rTorrent: Update method names, enable compression on XMLRPC
+- Version and product for MyPlex Authentication
+- New: Add generic TorrentRssIndexer support.
+- Support for Season xx Episode yy multi-episode format
+- Fixed tests.
+- New: Added support for Rarbg as replacement for Eztv.
+- Fixed: Don't use folder quality when it is unknown and file quality is
+- Fixed: Series/season metadata also created on episode import.
+- HDBits fixup.
+- New: Add support for the HDBits torrent tracker.
+- Fixed: Added /transmission/ part to UrlBase in Transmission settings making it configurable.
+- Fixed: Parsing of season and episode inside square brackets
+- Log signalR errors as trace when they are network connection aborted
+- Make sure URL base doesn't start with http or https
+- Merge pull request #553 from larsjohnsen/settings-bind-address-fix
+- Fixed tiny cosmetic in rTorrent settings.
+- Merge branch 'qualitysize' into develop
+- Merge branch 'upstart-update' into develop
+- Merge branch 'pr/n222_larsjohnsen' into develop
+- New: Hand-off update logic to handle upstart/systemd and other auto-restart mechanisms.
+- Fixed: Unlimited MaxSize and increased granularity.
+- Settings: Remove misleading placeholder, fix error-message
+- Added advanced torznab option to disable rageid lookups for trackers only supporting title queries.
+- Fix torrent blacklisting when InfoHash is available
+- Recent folders for add series now show clickable cursor
+- New: Store last 5 used folders from manual import
+- Properly dispose filestream after getting mediainfo.
+- Updated kickass url... again
+- Download clients: New client rTorrent
+- Merge pull request #540 from larsjohnsen/source-misc-xbuild-support
+- Compilation: Misc changes to support XBuild
+- Merge pull request #539 from larsjohnsen/source-case-inconistancies
+- Merge pull request #544 from Sonarr/mediainfo-unicode
+- Fix tests
+- Don't filter excluded files twice
+- Test to make sure we scan files in root of series folder (no season folders)
+- Use HTTPS for piwik when loading via HTTPS
+- Integrated MediaInfo wrapper to be able to properly handle Unicode on Linux.
+- Stricter rejection of series subfolders
+- Only make manual import cells clickable when previous steps have been done
+- Manual Import sends progress messages
+- Remove Kodi specific settings from PHT Settings
+- DotSolutions update
+- Select input for select series in manual import
+- Modal Regions inherit from a common base
+- Interval for RSS is minutes
+- Compilation: Fix case inconsistencies
+- Fixed: Exclude OS X Metadata files when scanning for files
+- Ignore unicode test for now, fails on tc.
+- HashAlgorithm.ComputerHash isn't thread safe,
+- Fixed broken test.
+- Kickass Verified Only flag no longer an Advanced option to increase visibility.
+- Fixed manual import of unknown episodes.
+- Updated MediaInfo code for syno/linux.
+- Fixed: Fetching multiple pages for kickass to get more releases on the recent/rss feed due to small page size.
+- Casing for button text
+- Merge pull request #245 from Sonarr/skyhook-search
+- Use skyhook for searching
+- Title case for buttons
+- Updated Container to handle Singleton Implementations instead of Singleton Interfaces.
+- Fixed: A season pack import taking a long time should no longer cause the download to be deleted prematurely.
+- Transform buttons to title case
+- Prefix relative dates with "in" where appropriate
+- Releases instead of reports (but no results found)
+- Don't run DownloadCompletedEvent if DownloadItem not Completed.
+- New: Added HD4Free.xyz to Torznab presets since that site now supports it.
+- Its a good idea to remove testing elements before merging
+- Merge pull request #244 from Thirrian/sort-exception-fix
+- Fix for #242
+- Merge pull request #215 from Sonarr/manual-import
+- New: Manual Import episodes
+- Merge pull request #238 from Sonarr/blacklisting-v2
+- Blacklisting torrents and using more info to evaluate matches
+- Merge pull request #243 from Thirrian/tiny-ui-fix
+- Merge pull request #242 from Thirrian/sort-exception
+- Fixed: Don't delete downloads unless a file was imported
+- New: Limit grabs to 1 per second to reduce rapid API calls
+- Fixed: Do not replace a file unless it contains the same episodes
+- Move error div inside body tag
+- Add sort key for series "A.D. The Bible Continues"
+- Fixed some tests.
+- Changed the way the Database is registered with TinyIoC to make Logdb and future cachedb more accessible.
+- Add db name to Vacuum log message.
+- Merge pull request #230 from Chao-Man/develop
+- Fixed scrolling performance issues on Webkit based browsers. (Opera, Chrome, Safari)
+- Actually make it lower case...
+- Partial updates for command updates
+- Fixed: Nzbget will now properly remove data from original directory if Remove option is enabled. (nzbToMedia transcoding)
+- Log partial indexer response on parser error.
+- Fixed: Parsing some anime releases with multiple absolute episode numbers
+- Permissions can cause OWIN port registration to fail
+- Fixed: Generic SignalR messages no longer treated as errors
+- Fixed: Monitoring options not be applied when adding a new series to an empty root folder
+- Fixed: Ignore @eaDir inside Series folders
+- Fixed: Long sets of required/ignored words would overflow the view in Manual Search
+- Couple name fixes
+- Order provider based settings by name
+- New: Show age in minutes when less than 2 hours old (manual search/history)
+- Display names for Download clients
+- Display names for Indexers
+- Set default Metadata name
+- No longer titlecases notifications, indexers, etc
+- Display names for Notifications
+- Fixing scene mappings
+- Show reload when already on updates page
+- Remove invalid scene mappings.
+- New: Added Color-Impaired mode to UI settings.
+- Merge pull request #240 from Royal2000H/develop
+- Fixed: URL Base for favicon and Apple Touch icons
+- Cleanse some names
+- Fixed: Pushbullet settings typo
+- Fixed: Don't save invalid scene mappings into database
+- Fixed: Torznab parsing when enclosure is magent link
+- Fixed: Testing indexers, connections and download clients
+- Merge pull request #237 from Sonarr/osx-package-execute
+- Fixed: Set permissions on Sonarr.app (OS X)
+- Merge pull request #236 from Sonarr/db-locks
+- Fixed: DB locking due to Progress Messaging
+- Mapped Network Drive Validator
+- Merge pull request #231 from Sonarr/unmonitored-calendar
+- New: Option to show unmonitored episodes on calendar
+- Fixed: Better error messaging when import fails due to inaccessible path
+- Fixed: Table pagers show correct loading icon
+- jshint in WebStorm 10
+- Response cookies not stored by default.
+- Fixed: MediaInfo now also works on linux with unicode filenames.
+- Made optional resource properties nullable.
+- Hard test on dev nzbget version as requested.
+- Fixed: If Nzbget failed to add an nzb, Sonarr will try another but not blacklist it.
+- Fixed: Some anime season 1 parsing
+- API endpoint to parse a release title
+- Don't throw error when episode title matching doesn't find a match
+- New: Sort queue by series, episode and episode title
+- New: Toggle selected on Wanted: Missing to change monitored status
+- Fixed: Rename preview for Specials
+- New: Show quality in dropdowns with best at top (same as profiles)
+- Fixed: Wrap long release names in history details
+- Fixed: Improved special episode parsing for multiple matching titles
+- Search all missing fixes
+- Fixed: BitMeTv cookie will now also be used for the fetching the torrent file.
+- New: Added Advanced option to Nyaa to change query parameters for category and filter.
+- Fixed: No longer possible to add protocol to a Host field (that's what Url fields are for)
+- Fixed notification enable logic and test when On Upgrade is disabled.
+- Fixed icon colours
+- Merge pull request #206 from Sonarr/osxfullfsync
+- Fixed: NzbGet development version no longer fails validation check.
+- Fixed: Searching for unmonitored anime episodes during season/all missing searches
+- Toggle cell use spinForPromise
+- Use cache to check for running or started commands
+- Fixed: Scene numbered season searches when some episode weren't monitored
+- New: Choose the latest season when adding a new series
+- Fixed: navbar hover mobile styling
+- It is Not an Error Message
+- New: Synology Media Indexer support in Connect.
+- Added Nzbget version check for 12.0 or higher.
+- Failed DeleteStatus now only a Warning, also added null check to handle older NzbGet version.
+- Replaced a couple more NzbDrone with Sonarr. Left a couple that implied process name.
+- Merge pull request #229 from BrendenCA/fixtypo
+- Fixed a typo
+- Ugly indexer release name cleaned up before sending to Sab.
+- New: Restrict ports that Sonarr will allow for its webserver
+- Fixed: Better handling for Remote NAS errors.
+- Fixed typo
+- Fixed: sorting on episode list when new episodes are added during refresh
+- Fixed: Legitimate API redirects
+- Merge pull request #227 from c0unt0/develop
+- Allow startup on case sensitive file systems
+- Log full path when moving or copying
+- Separate log messages for hardlinking and copying
+- Merge pull request #190 from Sonarr/command-queue
+- Command queue
+- Fixed null config test
+- Fixed: Download Client with config Warnings won't be excluded
+- Merge pull request #224 from bjeanes/force-priority-for-nzbget
+- New: Added Torznab as generic indexer.
+- Fixed: Adjuted parser cleanup to properly handle anime titles with 10b instead of 10bit
+- Added another nzbgeek hashed pattern.
+- Giving a slightly more useful IPTorrent rss feed error.
+- Update test for redirect diagnostic.
+- Fixed TorrentBlackhole failing fatally on magnet link instead of falling back to torrent url.
+- Fixed: Blackhole clients cache nzb/torrent in memory before writing to the blackhole folder.
+- Fixed: Can now specify a cookie for BitMeTv.
+- Fixed: Season packs will no longer be grabbed if it contains an unmonitored episode.
+- Fixed: Only show best pending item in Queue
+- New: "Force" priority for NZBGet
+- Fixed: Import of single-file anime torrents.
+- Fixed: Added tooltips to Blackhole Watch/Torrent/Nzb Folder fields.
+- Fixed: Selecting range with shift-key in Series Editor should now work as intended.
+- Fixed: Validation of dot prefix in Transmission category.
+- New: Parse releases that have a 5 digit episode number
+- Fixed: piwik loading when accessing Sonarr via HTTPS
+- Test fixed
+- Merge pull request #218 from Sonarr/fanzub-url
+- Merge pull request #217 from Sonarr/transmission-category
+- Fixed: Added symbols and tooltips to Manual Search last two sort columns.
+- Fixed: Column sort direction will not toggle unless the same column is clicked again.
+- New: Added UrlBase to Deluge Settings to facilitate seedbox setups.
+- Removed deprecated code.
+- Removed duplicate tests.
+- Series editor cleanup
+- Fixed: Sorting on path in series editor
+- Fixed: Removed hardcoded dot prefix from the transmission category, making it configurable via the settings instead.
+- Merge pull request #214 from larsjohnsen/ui-connect-changes
+- UI: Separate setting groups & clarify tooltips
+- Fixed: Updating Kodi won't fail if a series has an IMDB ID instead of a TVDB ID
+- New: Fanzub url can now be modified (to be used only with alternative sites implementing the same api)
+- Added tooltip to Episode Delete button.
+- Disabled eztv test entirely.
+- Fixed: Empty Sabnzbd category is now properly handled. But added UI validation to recommend adding a category.
+- Merge pull request #205 from bdegier/develop
+- Fixed parsing specials with Scene.Title.S0x.Episode.Title format.
+- And the same fix for the actual import.
+- Fixed regex incompatible with mono.
+- No longer marks download as imported if no episodes were found.
+- Fixed: Activity->Queue didn't show manually downloaded specials for which the parser couldn't find an episode number.
+- Fixed a couple of logging errors.
+- Fixed: Hashes being parsed as 0e00 numbering.
+- Fixed: Force import won't trigger icon change on multiple items
+- Fixed: Improved parsing for anime episodes with leading release group
+- Merge pull request #213 from larsjohnsen/patch-4
+- Delete obsolete file: handlebars.run.min.js
+- Fixed: Cutoff will be respected when release is still in queue
+- Added SVG logo
+- Fixed: Preferring season packs over single episodes before comparing relative sizes.
+- New: Manual single episode searches on BTN will now also search for season packs to simplify manually grabbing a season pack.
+- Fixed: Menu button on mobile views
+- New: Added rudimentary Anime search by tvdb episodenumber to BTN.
+- Fixed: Episode/Season searches on BTN are now performed by tvdb numbering instead of scene numbering. (let us know if you run into problems with series with scene numbering)
+- Fixed: Now searching BTN by tvdbid instead of tvrageid to get results for certain series.
+- Removed extra 's' in file
+- Fixed tooltip for pending queue items.
+- Fixed sorting in episode file editor
+- Fixed: CDH can now remove items after import from NzbGet it didn't grab itself.
+- Fixed: Failed download handling should now only report a download wasn't grabbed by sonarr if the download actually failed.
+- Less wordy tooltip for season rename
+- Fixed: Ignore .AppleDouble subfolders of season folder
+- Merge pull request #208 from Sonarr/episode-file-editor
+- Episode file editor
+- Fixed search icons
+- Merge pull request #209 from Sonarr/font-awesome-4
+- Upgraded to FontAwesome 4.3.0
+- Update CONTRIBUTING.md
+- Clear log files
+- Don't try to set console logging when its not enabled
+- Fixed: Changed sqlite to use full fsync on osx to reduce the chance of corruption at the cost of some performance.
+- Added info to explain Generic providers such as Newznab.
+- Deduping tags only updates affected models
+- Fixed: UI notification after Sonarr updates
+- Added NZBFinder.ws as optional Indexer
+- Series details styling fixes
+- Updated stripbom.
+- UI Cleanup - Updated System, Tags and Wanted subtrees.
+- UI Cleanup - Updated Shared and Shims subtrees.
+- UI Cleanup - Updated Settings subtree.
+- UI Cleanup - Updated Series subtree.
+- UI Cleanup - Updated Rename and SeasonPass subtrees.
+- UI Cleanup - Updated Navbar, Profile, Quality and Release subtrees.
+- UI Cleanup - Updated root tree.
+- UI Cleanup - Updated Instrumentation, jQuery and Mixins subtrees.
+- UI Cleanup - Updated Health subtree.
+- UI Cleanup - Updated Form and Handlebars subtree.
+- UI Cleanup - Updated Episode subtree.
+- UI Cleanup - Updated Commands subtree.
+- UI Cleanup - Updated Cells subtree.
+- UI Cleanup - Updated Calendar subtree.
+- UI Cleanup - Updated AddSeries subtree.
+- UI Cleanup - Updated Activity subtree.
+- Remove unused parameter
+- Merge pull request #196 from Sonarr/dedupe-tags
+- De-dupe Tags
+- Fixed: Not properly getting the parent of a folder with a trailing slash
+- Tooltips should now be attached to a container close to the target element while avoiding button/input groups.
+- New: Logging level in settings will be used for Console logging
+- Fixed: Daily episodes that have date and season/episode numbers in the release name
+- Search improvements
+- commonjsed SearchResultView
+- Option to monitor no episodes on add
+- Help text for tags on notifications
+- Fixed and added tests.
+- Updated zero.clipboard to fix copy to clipboard function for requirejs.
+- Moved naming pattern in Rename preview dialog to top.
+- Manual search no longer permits downloading releases for which we can't find an episode until we can fix the association logic.
+- New: Added poster to Series Details overview in the large screen width category.
+- Update UI will still load if no updates are available
+- Metadata file improvements
+- Root folder improvements
+- Fixed default KAT url
+- Fixed error on load for poster item view
+- Fixed: Monitor from first season
+- AsOsAgnostic?
+- Parsing improvements
+- Merge pull request #180 from Sonarr/updatecheck-fixes
+- Merge pull request #184 from Sonarr/import-using-folder-name
+- Episode import improvements
+- updated download url in UpdateServiceFixture
+- separated vendor.js from main.js
+- updated html doctype
+- Include version in services Changes api call so the server knows how to redirect.
+- Fix: only add cache breaker to css/js files (exclude calendar, apple icons etc)
+- added alias for vent
+- Added back version check on ajaxSuccess
+- Reverting SignalR.Core/Infrastructure/CancellationTokenExtensions.cs to old version
+- different favicon for debug mode
+- Maybe?
+- more shim cleanup
+- cleaned up validation shims/modules
+- Merge pull request #191 from Sonarr/signalr-1-2-2
+- fixed ToTheTop
+- Fixed: Updated installation HealthCheck warning link to wiki.
+- Fixed some mono specific tests.
+- Reordered and renamed tabs in System.
+- Removed InstallUpdate, instead manually triggering ApplicationUpdate.
+- Fixed: Branch redirects will now occur during install of the a new update instead of during an update check.
+- InstallUpdate pre-check failures should now show a nice error on the UI.
+- Allow failing a Command using a specific message.
+- Fixed: Manually triggering Check Health will now also run health checks that normally only run on startup.
+- Added test to check Config behavior.
+- Fixed: Install Update UI should now report an error if the application folder is not writable instead of failing silently.
+- Added FolderWritable to DiskProvider to centralize the check.
+- Checks for update regardless of settings, but won't install it.
+- Upgraded SignalR to 1.2.2
+- Updated exception handler to ignore certain types of exceptions.
+- update jquery to 1.11.2
+- RSS Sync interval cannot be set to a 1-9 minutes (0 or 10+ only)
+- Fixed: All issues regarding Media Covers should be fixed now after apply this update. Refresh browser cache if still missing and report issues on forum.
+- Fixed: Health Checks on mono now shows correct wiki links.
+- Set RSS Sync to minimum 10 minutes
+- Spawn new mono processes with --debug
+- Fixed: Italians in title will not treat the episode as Italian language
+- Comment out parsing test
+- Don't search for episodes in series that haven't aired yet
+- updated npm packages
+- Handlebars 2.0
+- enable named views for smoke tests
+- Integration tests as well
+- Run nunit console on *nix with runtime 4.0 (for proper stacktraces)
+- Fixed: Wrong user name won't result in error message being generated
+- More parsing test cases
+- Fixed: Add series will update UI properly
+- disabled webpack jshit
+- Moved jshint config to .jshintrc
+- updated to webpack 1.5.3
+- don't add named views in production
+- Fixed: No longer leaves a corrupt file if MediaCover resize failed.
+- Logout button for forms Auth and fix UrlBase redirects
+- HeaderCell is a standard mixin
+- Fixed table header cell
+- Fixed webpack issues adding indexers/download clients/notifications
+- Spinner on add series buttons
+- Fixed: Remove from pending
+- rjs -> webpack
+- Reloading the page before restarting won't break the UI when changing authentication method
+- Merge pull request #156 from Sonarr/add-series-options
+- New: options when adding series, including the ability to search for all missing episodes
+- Fixed spacing for labels when series path is abnormally long
+- Merge pull request #183 from Sonarr/forms-auth
+- New: Forms authentication
+- Only use resized posters when the images are served from Sonarr.
+- Replaced trakt reference on ui with thetvdb.
+- Remove from queue improvements
+- Fixed: Removing pending items from Queue
+- Couple fixes
+- New: Show download protocol in Queue
+- Fixed: Transmission proxy should no longer produce paths with double slashes.
+- stripBom
+- Merge pull request #186 from Sonarr/sonarr-installer
+- stripBom
+- spelling
+- UI now loads the 250px image if available, and reverts to full size otherwise.
+- Fixed: Sonarr now installs as sonarr instead of NzbDrone
+- New: MediaCover api now includes several resized variants to save bandwidth for mobile apps.
+- Merge pull request #185 from SchadLucas/develop
+- Fixed spacing
+- Fixed: Do not allow adding of a series without a title
+- Fixed: Don't scan subfolders in series folders that start with a period
+- Increased requirejs timeout
+- Increased requirejs timeout
+- Better message when rejecting episode if its not an upgrade
+- Use URL_BASE in index mapper
+- 1 file, not 1 files
+- New: Show naming format on rename preview
+- Spelling
+- Rename preview shows same order as series details (descending)
+- Fixed: default sort order of episodes on series details
+- Fixed: Sorting by episode number on series details
+- Fixed: Extra checks in place to prevent config file corruption
+- Fixed: Forced english metadata for the search api.
+- Fixed: DownloadEpisodesScan api command regressed during a refactoring causing nzbToMedia to fail.
+- TrackedDownload cache, queue etc now use DownloadId instead of TrackedId so it can be found purely by the id provided by the download client.
+- Removed incorrect test.
+- Fixed: Error when entering unsupported character in tag
+- Use rss-download for omg RSS feed
+- Fixed hashed release name
+- Merge pull request #179 from Sonarr/title-mismatches
+- Show title mismatches, but don't import them automaticallys
+- Fixed: Use Orignal Filename token for renaming as only token
+- Fixed UrlBase for view updates
+- Fixed: Remove failed downloads from download client (when enabled)
+- Go to series instead of open series on episode modal
+- New: button on update notification to go to change log
+- Merge pull request #171 from Sonarr/remove-animezb
+- Fixed: Removed Animezb indexer
+- Fixed: Sorting by age in Manual Search now also considers fractions.
+- Fixed: No longer reports SxxExx as releasegroup if original title uses - separator.
+- Fixed: Remove on Activity page should now work for Blackhole items.
+- made sqlite version explicit in the connection string.
+- Added test case for 19-2 (2014)
+- Fixed: WDTV metadata title for episode uses 2 digit episode number
+- Fixed: Do not scan series folder if root folder is empty
+- Merge pull request #177 from scottrobertson/patch-1
+- Fixed some parsing issues
+- Rename piwik.js to piwikCheck.js to make Ghostery happy
+- Rename gulpFile.js to gulpfile.js
+- Merge pull request #176 from Sonarr/force-series-refresh
+- forcing lib update on upgrade
+- Disable test
+- Disable search after new episodes being added due to existing files not being counted
+- Merge pull request #174 from Sonarr/disable-eztv
+- Fixed: Disable EZTV when using the default URL
+- Fixed: Deleting items from download queue should now work as intended.
+- Clarify minimum age is in minutes
+- Fixed: Do not remove directories when they contain a RAR file over 10MB
+- Fixed: Parsing of absolute numbers inside of brackets
+- Fixed: XBMC notifications have a minimum display time of 2 seconds
+- Fixed: Don't search for newly added episodes if they aren't monitored
+- Merge pull request #170 from kenyonj/jk-fix-grammatical-error
+- Fixes small grammatical error
+- Fixed: support full any valid int32 as valid route ID
+- Merge pull request #167 from Sonarr/sqlite-journal-osx
+- removed [TV] from Kodi notifications
+- Fixed: Don't run netsh unless on Windows
+- Fixed: Conflicts with mono 3.12
+- New: omgwtfnzbs delay now configurable (advanced)
+- New: Show number of episodes on season status badge
+- Refresh status when series is refreshed
+- Revert "Don't show queue actions buttons until API side fixes are in"
+- Now generating unique ids for queue items sent to the api.
+- Fixing broken tests
+- Fixed: No not trim trailing "A" from series title when looking for a matching series
+- AirDateUtc comparison validation on Linux
+- Fixed: Don't recalculate episode air times for Netflix series
+- Collapse Pt or Pt. in episode title
+- Fixed: Default episode title to TBA if missing
+- Release group parsing improvements
+- Fixed: Another hashed release format
+- Fixed less
+- Add series formatting
+- Fixed: Show default poster view in Firefox
+- Don't show queue actions buttons until API side fixes are in
+- Fixed: Xbmc metadata no longer fails if an episode has no rating.
+- Fixed: Xbmc Metadata no longer fails when an actor has no image.
+- Fixed typo in Deluge default TvCategory.
+- Added comment to piwik.js about its usage
+- Merge pull request #161 from Sonarr/mediabrowser
+- New: MediaBrowser notifications
+- Fixed: Handle abc.mkv hashed filename
+- New: Skyhook! fixing your calendars!
+- Fedora build files v2
+- Log where the torrent request is being redirected to
+- fixed: changed Journaling for osx to prevent db corruption
+- Fixed: Greedy absolute number regex
+- Fixed: Parsing some numbers as absolute numbers incorrectly
+- OS Agnostic paths
+- Fixed: Show better error message when TV library isn't added to Plex server
+- Fixed: Import files for the series Extras
+- Fixed: Refreshing anime series won't cause an error
 
 * Fri Jan 02 2015 Yclept Nemo <"".join(chr(ord(c)-1) for c in "pscjtwjdjtAhnbjm/dpn")> - 2.0.0.2572-1.fc21
 - Initial package
