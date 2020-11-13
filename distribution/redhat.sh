@@ -16,6 +16,7 @@ BuildBranch=${dependent_build_branch:-develop}
 BootstrapVersion=`echo "$BuildVersion" | cut -d. -f1,2,3`
 BootstrapUpdater="BuiltIn"
 SpecFile="redhat/sonarr-$BuildVersion-$BuildBranch.spec"
+MOCKOPTS="--plugin-option mount:mount_enable=false"
 
 (
   echo "%define BuildVersion $BuildVersion"
@@ -41,32 +42,32 @@ echo === Cleaning out old SRPMs
 rm -f *.src.rpm
 
 echo === Building a .src.rpm package:
-mock --buildsrpm -r epel-7-x86_64 --sources redhat  --spec $SpecFile --resultdir=./
+mock $MOCKOPTS --buildsrpm -r epel-7-x86_64 --sources redhat  --spec $SpecFile --resultdir=./
 
 # No Copr
 # echo === Uploading to copr to ask them to build for us, and if that works nothing to do next
 # copr build --nowait sonarr-v3-test sonarr-${BuildVersion}-*.src.rpm && exit 0
 
 echo === Building for CentOS/RHEL/EPEL 8:
-mock -r epel-8-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .el8"
+mock $MOCKOPTS -r epel-8-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .el8"
 
 echo === Building for CentOS/RHEL/EPEL 7:
-mock -r epel-7-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .el7"
+mock $MOCKOPTS -r epel-7-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .el7"
 
 echo === Building for CentOS/RHEL/EPEL 6:
-mock -r epel-7-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .el6"
+mock $MOCKOPTS -r epel-7-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .el6"
 
 echo === Building for Fedora 34:
-mock -r fedora-34-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .fc34"
+mock $MOCKOPTS -r fedora-34-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .fc34"
 
 echo === Building for Fedora 33:
-mock -r fedora-33-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .fc33"
+mock $MOCKOPTS -r fedora-33-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .fc33"
 
 echo === Building for Fedora 32:
-mock -r fedora-32-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .fc32"
+mock $MOCKOPTS -r fedora-32-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .fc32"
 
 echo === Building for Fedora Rawhide:
-mock -r fedora-rawhide-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .rawhide"
+mock $MOCKOPTS -r fedora-rawhide-x86_64 sonarr-${BuildVersion}-*.src.rpm --resultdir=./ --define "dist .rawhide"
 
 echo === Checking built RPMs with rpmlint
 rpmlint *.rpm
