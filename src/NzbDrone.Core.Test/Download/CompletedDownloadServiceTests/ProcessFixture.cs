@@ -50,6 +50,10 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                   .Setup(c => c.Get(It.IsAny<int>()))
                   .Returns(Mocker.GetMock<IDownloadClient>().Object);
 
+            Mocker.GetMock<IProvideImportItemService>()
+                  .Setup(c => c.ProvideImportItem(It.IsAny<DownloadClientItem>(), It.IsAny<DownloadClientItem>()))
+                  .Returns((DownloadClientItem item, DownloadClientItem previous) => item);
+
             Mocker.GetMock<IHistoryService>()
                   .Setup(s => s.MostRecentForDownloadId(_trackedDownload.DownloadItem.DownloadId))
                   .Returns(new EpisodeHistory());

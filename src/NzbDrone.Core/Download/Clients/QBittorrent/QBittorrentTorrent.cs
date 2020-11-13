@@ -24,6 +24,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         [JsonProperty(PropertyName = "save_path")]
         public string SavePath { get; set; } // Torrent save path
 
+        [JsonProperty(PropertyName = "content_path")]
+        public string ContentPath { get; set; } // Torrent save path
+
         public float Ratio { get; set; } // Torrent share ratio
 
         [JsonProperty(PropertyName = "ratio_limit")] // Per torrent seeding ratio limit (-2 = use global, -1 = unlimited)
@@ -40,7 +43,15 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
     {
         public string Hash { get; set; } // Torrent hash
 
+        [JsonProperty(PropertyName = "save_path")]
+        public string SavePath { get; set; }
+
         [JsonProperty(PropertyName = "seeding_time")]
         public long SeedingTime { get; set; } // Torrent seeding time
+    }
+
+    public class QBittorrentTorrentFile
+    {
+        public string Name { get; set; }
     }
 }
