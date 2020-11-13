@@ -9,8 +9,8 @@ License:        GPLv3+
 URL:            https://sonarr.tv/
 Source0:        https://download.sonarr.tv/v3/phantom-%{BuildBranch}/%{BuildVersion}/Sonarr.phantom-%{BuildBranch}.%{version}.linux.tar.gz
 Source3:        %{name}.systemd
-Source4:	%{name}.firewalld
-Source5:	%{name}-secure.firewalld
+Source4:        %{name}.firewalld
+Source5:        %{name}-secure.firewalld
 
 BuildRequires:      systemd-rpm-macros
 
