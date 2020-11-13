@@ -19,6 +19,32 @@ SpecFile="sonarr-$BuildVersion-$BuildBranch.spec"
 
 cd redhat || exit 1
 
+echo === Generating spec file with BuildVersion/BuildBranch
+(
+  echo "%define BuildVersion $BuildVersion"
+  echo "%define BuildBranch $BuildBranch"
+  echo
+  cat sonarr.spec
+) > $SpecFile
+
+echo === Updating RPM changelog
+last_version=$(grep -A 2 "%changelog" $SpecFile | grep "^\*" | awk '{print $NF}')
+
+current_version=$(rpmspec -P $SpecFile | grep "^Version:" | awk '{print $2}')-$(rpmspec -P $SpecFile | grep "^Release:" | awk '{print $2}')
+
+if [ "$last_version" != "$current_version" ]; then
+   echo "No changelog for current release"
+   userstring=$(git log --pretty='format:%an <%ae>' -1)
+   since_hash=$(git blame sonarr.spec | grep "\*" | grep "$last_version$" | awk '{print $1}')
+   echo -e "* $(date +"%a %b %d %Y") $userstring - $current_version\n$(git log --pretty='format:- %s' $since_hash..HEAD)\n" > ./change
+   sed -i "/%changelog/ r ./change" sonarr.spec
+   echo "Added change to spec-file:"
+   cat ./change
+   git add sonarr.spec
+   git commit -m 'Updated changelog'
+   git push
+fi
+
 (
   echo "%define BuildVersion $BuildVersion"
   echo "%define BuildBranch $BuildBranch"
