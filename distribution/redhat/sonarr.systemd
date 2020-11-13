@@ -7,7 +7,7 @@ After=network.target
 [Service]
 Type=simple
 User=sonarr
-PIDFile=/var/lib/sonarr/.config/Sonarr/nzbdrone.pid
+PIDFile=/var/lib/sonarr/.config/Sonarr/sonarr.pid
 ExecStart=/usr/bin/mono /opt/sonarr/Sonarr.exe
 Restart=always
 
