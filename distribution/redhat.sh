@@ -39,19 +39,19 @@ if [ "$last_version" != "$current_version" ]; then
    echo -e "* $(date +"%a %b %d %Y") $userstring - $current_version\n$(git log --pretty='format:- %s' $since_hash..HEAD)\n" > ./change
    sed -i "/%changelog/ r ./change" sonarr.spec
    echo "Added change to spec-file:"
-   cat ./change
+   rm ./change
    git add sonarr.spec
    git commit -m 'Updated changelog'
    git push
 fi
 
+echo === Generating spec file with BuildVersion and updated ChangeLog
 (
   echo "%define BuildVersion $BuildVersion"
   echo "%define BuildBranch $BuildBranch"
   echo
   cat sonarr.spec
 ) > $SpecFile
-
 
 echo === Checking spec with rpmlint
 # Ignore failure
@@ -70,7 +70,11 @@ rm -f *.rpm */*.rpm
 echo === Building RPM and SRPM
 rpmbuild -D "_topdir $(pwd)" -D "_sourcedir $(pwd)" -D "_builddir $(pwd)" -D "_rpmdir $(pwd)" -D "_specdir $(pwd)" -D "_srcrpmdir $(pwd)" --define "debug_package %{nil}" -bb sonarr-3.0.4.994-develop.spec
 
+echo === Put RPMs in more predictable place
 mv */*.rpm ./
+
+echo === Throw away any empty directories that rpmbuild added
+find . -mindepth 1 -type d -print0 | xargs --null rmdir
 
 echo === Checking built RPMs with rpmlint
 rpmlint *.rpm | egrep -v 'dir-or-file-in-opt'
