@@ -76,6 +76,11 @@ namespace NzbDrone.Core
             return intList.Max();
         }
 
+        public static int GetByteCount(this string input)
+        {
+            return Encoding.UTF8.GetByteCount(input);
+        }
+
         public static string Truncate(this string s, int maxLength)
         {
             if (Encoding.UTF8.GetByteCount(s) <= maxLength)
