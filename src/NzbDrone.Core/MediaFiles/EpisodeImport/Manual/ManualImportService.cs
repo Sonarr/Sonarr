@@ -23,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
     public interface IManualImportService
     {
         List<ManualImportItem> GetMediaFiles(string path, string downloadId, int? seriesId, bool filterExistingFiles);
-        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, List<int> episodeIds, QualityModel quality, Language language);
+        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, QualityModel quality, Language language);
     }
 
     public class ManualImportService : IExecute<ManualImportCommand>, IManualImportService
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return ProcessFolder(path, path, downloadId, seriesId, filterExistingFiles);
         }
 
-        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, List<int> episodeIds, QualityModel quality, Language language)
+        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, QualityModel quality, Language language)
         {
             var rootFolder = Path.GetDirectoryName(path);
             var series = _seriesService.GetSeries(seriesId);
@@ -120,6 +120,32 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                    };
 
                 return MapItem(_importDecisionMaker.GetDecision(localEpisode, downloadClientItem), rootFolder, downloadId, null);
+            }
+
+            // This case will happen if the user selected a season, but didn't select the episodes in the season then changed the language or quality.
+            // Instead of overriding their season selection let it persist and reject it with an appropriate error.
+
+            if (seasonNumber.HasValue)
+            {
+                var downloadClientItem = GetTrackedDownload(downloadId)?.DownloadItem;
+
+                var localEpisode = new LocalEpisode
+                                   {
+                                       Series = series,
+                                       Episodes = new List<Episode>(),
+                                       FileEpisodeInfo = Parser.Parser.ParsePath(path),
+                                       DownloadClientEpisodeInfo = downloadClientItem == null
+                                           ? null
+                                           : Parser.Parser.ParseTitle(downloadClientItem.Title),
+                                       Path = path,
+                                       SceneSource = SceneSource(series, rootFolder),
+                                       ExistingFile = series.Path.IsParentPath(path),
+                                       Size = _diskProvider.GetFileSize(path),
+                                       Language = language,
+                                       Quality = quality
+                                   };
+
+                return MapItem(new ImportDecision(localEpisode, new Rejection("Episodes not selected")), rootFolder, downloadId, null);
             }
 
             return ProcessFile(rootFolder, rootFolder, path, downloadId, series);
