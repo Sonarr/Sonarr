@@ -354,6 +354,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Series = series;
                 localEpisode.Episodes = episodes;
                 localEpisode.Quality = file.Quality;
+                localEpisode.Language = file.Language;
 
                 //TODO: Cleanup non-tracked downloads
 
