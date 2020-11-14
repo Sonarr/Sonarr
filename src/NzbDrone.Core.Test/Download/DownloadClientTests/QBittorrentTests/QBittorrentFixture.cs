@@ -346,7 +346,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var result = Subject.GetImportItem(item, null);
 
-            result.OutputPath.FullPath.Should().Be(Path.Combine(torrent.SavePath, "Droned.S01.12") + Path.DirectorySeparatorChar);
+            result.OutputPath.FullPath.Should().Be(Path.Combine(torrent.SavePath, "Droned.S01.12"));
         }
 
         [Test]
