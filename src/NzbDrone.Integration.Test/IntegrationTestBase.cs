@@ -37,6 +37,7 @@ namespace NzbDrone.Integration.Test
     public abstract class IntegrationTestBase
     {
         protected RestClient RestClient { get; private set; }
+        protected RestClient RestClientv3 { get; private set; }
 
         public ClientBase<BlacklistResource> Blacklist;
         public CommandClient Commands;
@@ -45,6 +46,7 @@ namespace NzbDrone.Integration.Test
         public ClientBase<HistoryResource> History;
         public ClientBase<HostConfigResource> HostConfig;
         public IndexerClient Indexers;
+        public IndexerClient Indexersv3;
         public LogsClient Logs;
         public ClientBase<NamingConfigResource> NamingConfig;
         public NotificationClient Notifications;
@@ -100,6 +102,10 @@ namespace NzbDrone.Integration.Test
             RestClient.AddDefaultHeader("Authentication", ApiKey);
             RestClient.AddDefaultHeader("X-Api-Key", ApiKey);
 
+            RestClientv3 = new RestClient(RootUrl + "api/v3/");
+            RestClientv3.AddDefaultHeader("Authentication", ApiKey);
+            RestClientv3.AddDefaultHeader("X-Api-Key", ApiKey);
+
             Blacklist = new ClientBase<BlacklistResource>(RestClient, ApiKey);
             Commands = new CommandClient(RestClient, ApiKey);
             DownloadClients = new DownloadClientClient(RestClient, ApiKey);
@@ -107,6 +113,7 @@ namespace NzbDrone.Integration.Test
             History = new ClientBase<HistoryResource>(RestClient, ApiKey);
             HostConfig = new ClientBase<HostConfigResource>(RestClient, ApiKey, "config/host");
             Indexers = new IndexerClient(RestClient, ApiKey);
+            Indexersv3 = new IndexerClient(RestClientv3, ApiKey);
             Logs = new LogsClient(RestClient, ApiKey);
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, ApiKey, "config/naming");
             Notifications = new NotificationClient(RestClient, ApiKey);
