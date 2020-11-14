@@ -168,7 +168,7 @@ export const actionHandlers = handleThunks({
       return {
         id,
         path: item.path,
-        seriesId: item.series.id,
+        seriesId: item.series ? item.series.id : undefined,
         season: item.season,
         episodeIds: (item.episodes || []).map((e) => e.id),
         quality: item.quality,
