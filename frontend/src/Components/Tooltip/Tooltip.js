@@ -22,6 +22,8 @@ function getMaxWidth() {
   } else {
     maxWidth = 450;
   }
+
+  return maxWidth;
 }
 
 class Tooltip extends Component {
