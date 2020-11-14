@@ -43,11 +43,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
                 ? Confidence.Tag
                 : Confidence.Fallback;
 
-            var revisionConfidends = historyQuality.RevisionDetectionSource == QualityDetectionSource.Name
+            var revisionConfidence = historyQuality.RevisionDetectionSource == QualityDetectionSource.Name
                 ? Confidence.Tag
                 : Confidence.Fallback;
 
-            return new AugmentQualityResult(historyQuality.Quality.Source, sourceConfidence, historyQuality.Quality.Resolution, resolutionConfidence, historyQuality.Revision, revisionConfidends);
+            return new AugmentQualityResult(historyQuality.Quality.Source, sourceConfidence, historyQuality.Quality.Resolution, resolutionConfidence, historyQuality.Revision, revisionConfidence);
         }
     }
 }
