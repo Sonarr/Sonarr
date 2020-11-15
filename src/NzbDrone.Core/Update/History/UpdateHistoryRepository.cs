@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Update.History
         public UpdateHistory LastInstalled()
         {
             var history = Query.Where(v => v.EventType == UpdateHistoryEventType.Installed)
-                               .OrderBy(v => v.Date)
+                               .OrderByDescending(v => v.Date)
                                .Take(1)
                                .FirstOrDefault();
 
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Update.History
         public UpdateHistory PreviouslyInstalled()
         {
             var history = Query.Where(v => v.EventType == UpdateHistoryEventType.Installed)
-                               .OrderBy(v => v.Date)
+                               .OrderByDescending(v => v.Date)
                                .Skip(1)
                                .Take(1)
                                .FirstOrDefault();
