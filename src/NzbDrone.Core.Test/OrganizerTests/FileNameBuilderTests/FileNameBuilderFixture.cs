@@ -543,7 +543,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             {
                 VideoCodec = "AVC",
                 AudioFormat = "DTS",
-                AudioChannels = 6,
+                AudioChannelsContainer = 6,
                 AudioLanguages = "English/Spanish",
                 Subtitles = "English/Spanish/Italian",
                 SchemaRevision = 3
@@ -564,7 +564,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             {
                 VideoCodec = "AVC",
                 AudioFormat = "DTS",
-                AudioChannels = 6,
+                AudioChannelsContainer = 6,
                 AudioLanguages = "English",
                 Subtitles = language,
                 SchemaRevision = 3
@@ -583,7 +583,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             {
                 VideoCodec = "AVC",
                 AudioFormat = "DTS",
-                AudioChannels = 6,
+                AudioChannelsContainer = 6,
                 AudioLanguages = "English",
                 Subtitles = "English/Spanish/Italian",
                 SchemaRevision = 3
@@ -963,7 +963,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                 {
                     VideoCodec = "AVC",
                     AudioFormat = "DTS",
-                    AudioChannels = 6,
+                    AudioChannelsContainer = 6,
                     AudioLanguages = "English",
                     Subtitles = "English/Spanish/Italian",
                     VideoBitDepth = 10,
@@ -986,7 +986,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             {
                 VideoCodec = videoCodec,
                 AudioFormat = audioCodec,
-                AudioChannels = audioChannels,
+                AudioChannelsContainer = audioChannels,
                 AudioLanguages = audioLanguages,
                 Subtitles = subtitles,
                 VideoBitDepth = videoBitDepth,

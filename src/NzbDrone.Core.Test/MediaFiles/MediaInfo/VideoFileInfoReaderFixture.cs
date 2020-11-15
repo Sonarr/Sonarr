@@ -50,7 +50,10 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.AudioProfile.Should().BeOneOf("", "LC");
             info.AudioCodecLibrary.Should().Be("");
             info.AudioBitrate.Should().Be(128000);
-            info.AudioChannels.Should().Be(2);
+            info.AudioChannelsContainer.Should().Be(2);
+            info.AudioChannelsStream.Should().Be(0);
+            info.AudioChannelPositionsTextContainer.Should().Be("Front: L R");
+            info.AudioChannelPositionsTextStream.Should().Be("");
             info.AudioLanguages.Should().Be("English");
             info.Height.Should().Be(320);
             info.RunTime.Seconds.Should().Be(10);
@@ -89,7 +92,10 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.AudioProfile.Should().BeOneOf("", "LC");
             info.AudioCodecLibrary.Should().Be("");
             info.AudioBitrate.Should().Be(128000);
-            info.AudioChannels.Should().Be(2);
+            info.AudioChannelsContainer.Should().Be(2);
+            info.AudioChannelsStream.Should().Be(0);
+            info.AudioChannelPositionsTextContainer.Should().Be("Front: L R");
+            info.AudioChannelPositionsTextStream.Should().Be("");
             info.AudioLanguages.Should().Be("English");
             info.Height.Should().Be(320);
             info.RunTime.Seconds.Should().Be(10);
