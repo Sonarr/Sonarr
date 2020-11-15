@@ -11,7 +11,7 @@
 #   (note: can use that to escalate to root if can change spec)
 # - ran from "distribution" directory
 
-BuildVersion=${dependent_build_number:-3.0.4.994}
+BuildVersion=${dependent_build_number:-3.0.4.1002}
 BuildBranch=${dependent_build_branch:-develop}
 BootstrapVersion=`echo "$BuildVersion" | cut -d. -f1,2,3`
 BootstrapUpdater="BuiltIn"
@@ -68,7 +68,7 @@ echo === Cleaning out old RPMS
 rm -f *.rpm */*.rpm
 
 echo === Building RPM and SRPM
-rpmbuild -D "_topdir $(pwd)" -D "_sourcedir $(pwd)" -D "_builddir $(pwd)" -D "_rpmdir $(pwd)" -D "_specdir $(pwd)" -D "_srcrpmdir $(pwd)" --define "debug_package %{nil}" -bb sonarr-3.0.4.994-develop.spec
+rpmbuild -D "_topdir $(pwd)" -D "_sourcedir $(pwd)" -D "_builddir $(pwd)" -D "_rpmdir $(pwd)" -D "_specdir $(pwd)" -D "_srcrpmdir $(pwd)" --define "debug_package %{nil}" -bb sonarr-${BuildVersion}-develop.spec
 
 echo === Put RPMs in more predictable place
 mv */*.rpm ./
