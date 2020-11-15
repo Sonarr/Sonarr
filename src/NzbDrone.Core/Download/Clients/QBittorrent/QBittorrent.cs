@@ -246,23 +246,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             var result = item.Clone();
 
-            OsPath outputPath;
-            if (files.Count == 1)
+            // get the first subdirectory - QBittorrent returns `/` path separators even on windows...
+            var relativePath = new OsPath(files[0].Name);
+            while (!relativePath.Directory.IsEmpty)
             {
-                outputPath = savePath + files[0].Name;
+                relativePath = relativePath.Directory;
             }
-            else
-            {
-                // we have multiple files in the torrent so just get
-                // the first subdirectory
-                var relativePath = new OsPath(files[0].Name);
-                while (!relativePath.Directory.IsEmpty)
-                {
-                    relativePath = relativePath.Directory;
-                }
 
-                outputPath = savePath + relativePath.FileName;
-            }
+            var outputPath = savePath + relativePath.FileName;
 
             result.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
 

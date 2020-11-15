@@ -310,6 +310,39 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
+        public void single_file_torrent_with_folder_should_only_have_first_subfolder()
+        {
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = @"Droned.S01E01.Test\'s.1080p.WEB-DL-DRONE",
+                Size = 1000,
+                Progress = 0.7,
+                Eta = 8640000,
+                State = "stalledDL",
+                Label = "",
+                SavePath = @"C:\Torrents".AsOsAgnostic()
+            };
+
+            var file = new QBittorrentTorrentFile
+            {
+                Name = "Folder/Droned.S01E01.Tests.1080p.WEB-DL-DRONE.mkv"
+            };
+
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+            GivenTorrentFiles(torrent.Hash, new List<QBittorrentTorrentFile> { file });
+
+            var item = new DownloadClientItem
+            {
+                DownloadId = torrent.Hash
+            };
+
+            var result = Subject.GetImportItem(item, null);
+
+            result.OutputPath.FullPath.Should().Be(Path.Combine(torrent.SavePath, "Folder"));
+        }
+
+        [Test]
         public void multi_file_torrent_outputpath_should_have_sanitised_name()
         {
             var torrent = new QBittorrentTorrent
