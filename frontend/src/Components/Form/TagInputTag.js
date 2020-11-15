@@ -57,7 +57,6 @@ class TagInputTag extends Component {
           kind={kind}
         >
           <Link
-            className={styles.link}
             tabIndex={-1}
             onPress={this.onDelete}
           >
