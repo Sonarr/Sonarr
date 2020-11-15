@@ -8,6 +8,7 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Measure from 'Components/Measure';
+import MetadataAttribution from 'Components/MetadataAttribution';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -579,11 +580,13 @@ class SeriesDetails extends Component {
                 <Measure onMeasure={this.onMeasure}>
                   <div className={styles.overview}>
                     <TextTruncate
-                      line={Math.floor(overviewHeight / (defaultFontSize * lineHeight))}
+                      line={Math.floor(overviewHeight / (defaultFontSize * lineHeight)) - 1}
                       text={overview}
                     />
                   </div>
                 </Measure>
+
+                <MetadataAttribution />
               </div>
             </div>
           </div>

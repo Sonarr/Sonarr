@@ -138,7 +138,7 @@
 }
 
 .overview {
-  flex: 1 0 auto;
+  flex: 1 0 0;
   margin-top: 8px;
   min-height: 0;
   font-size: $intermediateFontSize;

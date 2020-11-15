@@ -35,7 +35,9 @@
 }
 
 .content {
+  display: flex;
   flex: 0 1 100%;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -93,5 +95,9 @@
   .titleRow {
     justify-content: space-between;
     overflow: hidden;
+  }
+
+  .overview {
+    margin-bottom: 20px;
   }
 }

@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+}
+
+.info {
+  margin-left: 30px;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-weight: 300;
+  font-size: 36px;
+}
+
+.image {
+  width: 213px;
+  height: 123px;
+}

@@ -4,6 +4,7 @@ import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
+import MetadataAttribution from 'Components/MetadataAttribution';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import SeriesPoster from 'Series/SeriesPoster';
 import AddNewSeriesModal from './AddNewSeriesModal';
@@ -188,6 +189,8 @@ class AddNewSeriesSearchResult extends Component {
             <div className={styles.overview}>
               {overview}
             </div>
+
+            <MetadataAttribution />
           </div>
         </div>
 

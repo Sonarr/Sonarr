@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+.attribution {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  color: var(--mediumGray);
+  font-size: $defaultFontSize;
+
+  &:hover {
+    color: var(--darkGray);
+    text-decoration: none;
+  }
+}

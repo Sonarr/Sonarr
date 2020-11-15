@@ -108,6 +108,13 @@ function Settings() {
           Metadata
         </Link>
 
+        <Link
+          className={styles.link}
+          to="/settings/metadatasource"
+        >
+          Metadata Source
+        </Link>
+
         <div className={styles.summary}>
           Create metadata files when episodes are imported or series are refreshed
         </div>

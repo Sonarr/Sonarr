@@ -1,6 +1,7 @@
 const sonarrBlue = '#35c5f4';
 const sonarrAlternateBlue = '#2193b5';
 const darkGray = '#888';
+const mediumGray = '#999';
 const gray = '#adadad';
 const black = '#000';
 const white = '#fff';
@@ -31,6 +32,7 @@ module.exports = {
   darkGray,
   gray,
   lightGray,
+  mediumGray,
 
   // Theme Colors
 
