@@ -218,9 +218,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 return fileName;
             }
 
-            if (SceneChecker.IsSceneTitle(localEpisode.FolderEpisodeInfo.ReleaseTitle))
+            var folderTitle = localEpisode.FolderEpisodeInfo?.ReleaseTitle;
+
+            if (folderTitle.IsNotNullOrWhiteSpace() && SceneChecker.IsSceneTitle(folderTitle))
             {
-                return localEpisode.FolderEpisodeInfo.ReleaseTitle;
+                return folderTitle;
             }
 
             return null;
