@@ -397,6 +397,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 if (file.FolderName.IsNotNullOrWhiteSpace())
                 {
                     localEpisode.FolderEpisodeInfo = Parser.Parser.ParseTitle(file.FolderName);
+                    localEpisode.SceneSource = !existingFile;
                 }
 
                 localEpisode = _aggregationService.Augment(localEpisode, trackedDownload?.DownloadItem, false);
