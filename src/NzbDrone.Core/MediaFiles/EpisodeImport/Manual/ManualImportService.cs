@@ -115,8 +115,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                        SceneSource = SceneSource(series, rootFolder),
                                        ExistingFile = series.Path.IsParentPath(path),
                                        Size = _diskProvider.GetFileSize(path),
-                                       Language = language,
-                                       Quality = quality
+                                       Language = language == Language.Unknown ? LanguageParser.ParseLanguage(path) : language,
+                                       Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality
                                    };
 
                 return MapItem(_importDecisionMaker.GetDecision(localEpisode, downloadClientItem), rootFolder, downloadId, null);
@@ -141,8 +141,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                        SceneSource = SceneSource(series, rootFolder),
                                        ExistingFile = series.Path.IsParentPath(path),
                                        Size = _diskProvider.GetFileSize(path),
-                                       Language = language,
-                                       Quality = quality
+                                       Language = language == Language.Unknown ? LanguageParser.ParseLanguage(path) : language,
+                                       Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality
                                    };
 
                 return MapItem(new ImportDecision(localEpisode, new Rejection("Episodes not selected")), rootFolder, downloadId, null);
@@ -191,7 +191,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 // It will lead to some extra directories being checked for files, but it saves the processing of them and is cleaner than
                 // teaching FilterPaths to know whether it's processing a file or a folder and changing it's filtering based on that.
 
+                // If the series is unknown for the directory and there are more than 100 files in the folder don't process the items before returning.
                 var files = _diskScanService.FilterPaths(rootFolder, _diskScanService.GetVideoFiles(baseFolder, false));
+
+                if (files.Count() > 100)
+                {
+                    return ProcessDownloadDirectory(rootFolder, files);
+                }
+
                 var subfolders = _diskScanService.FilterPaths(rootFolder, _diskProvider.GetDirectories(baseFolder));
 
                 var processedFiles = files.Select(file => ProcessFile(rootFolder, baseFolder, file, downloadId));
@@ -272,6 +279,24 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 Name = Path.GetFileNameWithoutExtension(file),
                 Rejections = new List<Rejection>()
             };
+        }
+
+        private List<ManualImportItem> ProcessDownloadDirectory(string rootFolder, List<string> videoFiles)
+        {
+            var items = new List<ManualImportItem>();
+
+            foreach (var file in videoFiles)
+            {
+                var localEpisode = new LocalEpisode();
+                localEpisode.Path = file;
+                localEpisode.Quality = new QualityModel(Quality.Unknown);
+                localEpisode.Language = Language.Unknown;
+                localEpisode.Size = _diskProvider.GetFileSize(file);
+
+                items.Add(MapItem(new ImportDecision(localEpisode), rootFolder, null, null));
+            }
+
+            return items;
         }
 
         private bool SceneSource(Series series, string folder)
