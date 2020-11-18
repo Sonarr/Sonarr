@@ -79,12 +79,12 @@ bootstrap_current_version=$(rpmspec -P $BootStrapSpecFile | grep "^Version:" | a
 if [ "$last_version" != "$current_version" ]; then
    echo "No changelog for current release"
    userstring=$(git log --pretty='format:%an <%ae>' -1)
-   since_hash=$(git blame sonarr.spec | grep "\*" | grep "$last_version$" | awk '{print $1}')
+   since_hash=$(git blame sonarr-bootstrap.spec | grep "\*" | grep "$last_version$" | awk '{print $1}')
    echo -e "* $(date +"%a %b %d %Y") $userstring - $current_version\n$(git log --pretty='format:- %s' $since_hash..HEAD)\n" | grep -v 'Updated changelog' > ./change
-   sed -i "/%changelog/ r ./change" sonarr.spec
+   sed -i "/%changelog/ r ./change" sonarr-bootstrap.spec
    echo "Added change to spec-file:"
    rm ./change
-   git add sonarr.spec
+   git add sonarr-bootstrap.spec
    git commit -m 'Updated changelog'
    git push
 fi
