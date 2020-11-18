@@ -135,6 +135,32 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-3.develop
+- Bump release tag
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Added tests for using folder name as scene name
+- Credit where credit is due
+- Give systemd a bit more time to restart sonarr after update
+- Fixed: Import single file torrents with a folder from QBittorrent
+- Fixed unit tests
+- Fixed: Scene Name not being stored properly during import if not linked to a download client item and filename is obfuscated
+- New: Don't process files during Manual Import if there are more than 100 items
+- Fixed duplicate UpdateHistory items
+- Fixed: Tags in tag editor in SafarIE
+- Readded Movies cat to the end of the Newznab list
+- Fixed: Truncating too long filenames with unicode characters
+- Protect against Qbittorrent edgecase if users add torrents manually with Keep top-level folder disabled
+- Return max tooltip width
+- Fixed: Reprocessing Manual Import items resetting season number if no episodes were selected
+- Fixed: Language chosen in manual import overridden during import
+- Fixed: Example file names for Daily Series
+- Spelling confidence
+- Fixed: Manual Import breaking if quality is selected before series
+- And forgot test of course
+- Fix for QBittorrent directory for specific torrents
+- Bumped Sabnzbd default history request size from 30 to 60
+- Fixed: QBittorrent imports when torrent name and folder name differ
+
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-2.develop
 - Update some provides/conflicts stuff so that it's clear you can't install both sonarr and sonnar-bootstrap
 - Build a bootstrap rpm (allows self-update), and do smarter detection of what version to build
