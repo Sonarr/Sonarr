@@ -78,7 +78,8 @@ install -m 0755 -d %{buildroot}/opt/%{name}
   echo "PackageVersion=%{version}"
   echo "PackageAuthor=[Team Sonarr](https://sonarr.tv)"
   echo "ReleaseVersion=%{version}"
-  echo "UpdateMethod=yum"
+  echo "UpdateMethod=External"
+  echo "UpdateMethodMessage=Update with: sudo yum update sonarr"
   echo "Branch=phantom-%{BuildBranch}" 
 ) > %{buildroot}/opt/%{name}/package_info
 
