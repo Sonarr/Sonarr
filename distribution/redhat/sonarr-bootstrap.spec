@@ -8,9 +8,9 @@ Summary:        PVR for Usenet and BitTorrent users; self-updating package
 License:        GPLv3+
 URL:            https://sonarr.tv/
 Source0:        https://download.sonarr.tv/v3/phantom-%{BuildBranch}/%{BuildVersion}/Sonarr.phantom-%{BuildBranch}.%{version}.linux.tar.gz
-Source3:        %{name}.systemd
-Source4:        %{name}.firewalld
-Source5:        %{name}-secure.firewalld
+Source3:        sonarr.systemd
+Source4:        sonarr.firewalld
+Source5:        sonarr-secure.firewalld
 
 BuildRequires:      systemd
 
@@ -25,14 +25,14 @@ Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
 
-Provides: /opt/%{name}/Sonarr.exe
+Provides: /opt/sonarr/Sonarr.exe
 
 # These prevent Sonarr's DLLs from auto-creating requires and provides
 # Doing that because RH's mono require/provide detection isn't working
 # right here 
 # (thinks it requires a different version of a library than it provides type problems)
-%global __provides_exclude_from ^/opt/%{name}/.*$
-%global __requires_exclude_from ^/opt/%{name}/.*$
+%global __provides_exclude_from ^/opt/sonarr/.*$
+%global __requires_exclude_from ^/opt/sonarr/.*$
 
 %description
 Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS
@@ -53,69 +53,69 @@ already downloaded when a better quality format becomes available.
 
 # systemd service
 install -m 0755 -d %{buildroot}%{_unitdir}
-install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
+install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/sonarr.service
 
 # firewalld
 install -m 0755 -d %{buildroot}%{_prefix}/lib/firewalld/services/
-install -m 0644 %{SOURCE4} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
-install -m 0644 %{SOURCE5} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}-secure.xml
+install -m 0644 %{SOURCE4} %{buildroot}%{_prefix}/lib/firewalld/services/sonarr.xml
+install -m 0644 %{SOURCE5} %{buildroot}%{_prefix}/lib/firewalld/services/sonarr-secure.xml
 
 # sonarr user in /var
-install -m 0755 -d %{buildroot}%{_sharedstatedir}/%{name}
+install -m 0755 -d %{buildroot}%{_sharedstatedir}/sonarr
 
 # sonarr software itself
-install -m 0755 -d %{buildroot}/opt/%{name}
+install -m 0755 -d %{buildroot}/opt/sonarr
 
 
-mv * %{buildroot}/opt/%{name}
+mv * %{buildroot}/opt/sonarr
 
-find %{buildroot}/opt/%{name} -type f -exec chmod 644 '{}' \;
-find %{buildroot}/opt/%{name} -type d -exec chmod 755 '{}' \;
+find %{buildroot}/opt/sonarr -type f -exec chmod 644 '{}' \;
+find %{buildroot}/opt/sonarr -type d -exec chmod 755 '{}' \;
 
 
 %files
 %defattr(0644,root,root,0755)
 %dir %{_unitdir}
-%{_unitdir}/%{name}.service
+%{_unitdir}/sonarr.service
 
 %dir %{_prefix}/lib/firewalld
 %dir %{_prefix}/lib/firewalld/services
 %{_prefix}/lib/firewalld/services/*.xml
 
-%attr(0755,sonnar,sonnar) %dir /opt/%{name}
-%verify(not md5 mode size mtime) %attr(-,sonarr,sonarr) /opt/%{name}/*
+%attr(0755,sonnar,sonnar) %dir /opt/sonarr
+%verify(not md5 mode size mtime) %attr(-,sonarr,sonarr) /opt/sonarr/*
 
-%attr(-,sonarr,sonarr)%{_sharedstatedir}/%{name}
+%attr(-,sonarr,sonarr)%{_sharedstatedir}/sonarr
 
 %pre
-getent group %{name} >/dev/null || groupadd -r %{name}
-getent passwd %{name} >/dev/null || \
-    useradd -r -g %{name} -d d %{_sharedstatedir}/%{name} -s /sbin/nologin \
-    -c "Sonarr PVR for Usenet and BitTorrent Users " %{name}
+getent group sonarr >/dev/null || groupadd -r sonarr
+getent passwd sonarr >/dev/null || \
+    useradd -r -g sonarr -d d %{_sharedstatedir}/sonarr -s /sbin/nologin \
+    -c "Sonarr PVR for Usenet and BitTorrent Users " sonarr
 exit 0
 
 %post
-%systemd_post %{name}.service
+%systemd_post sonarr.service
 %firewalld_reload
-systemctl enable --now %{name}.service
-firewall-cmd --add-service=%{name} --permanent
+systemctl enable --now sonarr.service
+firewall-cmd --add-service=sonarr --permanent
 
 %preun
-%systemd_preun %{name}.service
-firewall-cmd --remove-service=%{name} --permanent
+%systemd_preun sonarr.service
+firewall-cmd --remove-service=sonarr --permanent
 
 %postun
-%systemd_postun_with_restart %{name}.service
+%systemd_postun_with_restart sonarr.service
 
 ## This is dangerous, rpmlint doesn't like it,
 ## and could break things if somebody uninstalls
 ## and reinstalls (instead of upgrade)
 #if (($1==0)); then
-#    if getent passwd %{name} &>/dev/null; then
-#        userdel %{name}
+#    if getent passwd sonarr &>/dev/null; then
+#        userdel sonarr
 #    fi
-#    if getent group %{name} &>/dev/null; then
-#        groupdel %{name}
+#    if getent group sonarr &>/dev/null; then
+#        groupdel sonarr
 #    fi
 #fi
 
