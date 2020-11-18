@@ -136,6 +136,13 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Wed Nov 18 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1011-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fix package_info file
+- Update indexer category parameters for the other nyaa
+- Dropping release back to 1, to prep for next Version update
+- Minor typo in package_info
+
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-4.develop
 - Bump release tag to get an update
 - Fix useradd
