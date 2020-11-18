@@ -1,9 +1,9 @@
-Name:           sonarr
+Name:           sonarr-bootstrap
 Version:        %{BuildVersion}
 
 Release:        1.%{?BuildBranch}
 BuildArch:      noarch
-Summary:        PVR for Usenet and BitTorrent users
+Summary:        PVR for Usenet and BitTorrent users; self-updating package
 
 License:        GPLv3+
 URL:            https://sonarr.tv/
@@ -44,9 +44,6 @@ already downloaded when a better quality format becomes available.
 %prep
 %autosetup -n Sonarr
 
-# Remove Updater
-rm -rf Sonarr.Update
-
 %build
 # Empty build just to make rpmlint happier.
 # This spec uses binaries built on windows by Sonarr team instead of
@@ -70,16 +67,6 @@ install -m 0755 -d %{buildroot}%{_sharedstatedir}/%{name}
 install -m 0755 -d %{buildroot}/opt/%{name}
 
 
-
-(
-  echo "# Do Not Edit\n"
-  echo "PackageVersion=%{version}"
-  echo "PackageAuthor=[Team Sonarr](https://sonarr.tv)"
-  echo "ReleaseVersion=%{version}"
-  echo "UpdateMethod=yum"
-  echo "Branch=phantom-%{BuildBranch}" 
-) > %{buildroot}/opt/%{name}/package_info
-
 mv * %{buildroot}/opt/%{name}
 
 find %{buildroot}/opt/%{name} -type f -exec chmod 644 '{}' \;
@@ -87,18 +74,18 @@ find %{buildroot}/opt/%{name} -type d -exec chmod 755 '{}' \;
 
 
 %files
+%defattr(0644,root,root,0755)
 %dir %{_unitdir}
-%attr(0644,root,root) %{_unitdir}/%{name}.service
+%{_unitdir}/%{name}.service
 
 %dir %{_prefix}/lib/firewalld
 %dir %{_prefix}/lib/firewalld/services
-%attr(0644,root,root) %{_prefix}/lib/firewalld/services/*.xml
+%{_prefix}/lib/firewalld/services/*.xml
 
-%dir /opt/%{name}
-%attr(-,root,root) /opt/%{name}/*
+%attr(0755,sonnar,sonnar) %dir /opt/%{name}
+%verify(not md5 mode size mtime) %attr(-,sonarr,sonarr) /opt/%{name}/*
 
 %attr(-,sonarr,sonarr)%{_sharedstatedir}/%{name}
-
 
 %pre
 getent group %{name} >/dev/null || groupadd -r %{name}
@@ -133,10 +120,6 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
-* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-1.develop
-- More carefully select which spec files to ignore
-- Fix systemd requirement for EL7
-
 * Sun Nov 15 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1002-1.develop
 - Accidentally hard-coded "994" in one spot, fixed that. And since Version increased, bring Release back down to 1
 
