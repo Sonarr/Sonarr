@@ -105,7 +105,7 @@ find %{buildroot}/opt/%{name} -type d -exec chmod 755 '{}' \;
 %pre
 getent group %{name} >/dev/null || groupadd -r %{name}
 getent passwd %{name} >/dev/null || \
-    useradd -r -g %{name} -d d %{_sharedstatedir}/%{name} -s /sbin/nologin \
+    useradd -r -g %{name} -d %{_sharedstatedir}/%{name} -s /sbin/nologin \
     -c "Sonarr PVR for Usenet and BitTorrent Users " %{name}
 exit 0
 
