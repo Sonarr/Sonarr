@@ -1,7 +1,7 @@
 Name:           sonarr-bootstrap
 Version:        %{BuildVersion}
 
-Release:        1.%{?BuildBranch}
+Release:        3.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users; self-updating package
 
@@ -124,8 +124,6 @@ firewall-cmd --remove-service=sonarr --permanent
 %changelog
 * Sun Nov 15 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1002-1.develop
 - Accidentally hard-coded "994" in one spot, fixed that. And since Version increased, bring Release back down to 1
-
-* Sun Nov 15 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1002-10.develop
 - Clean up after ourselves
 - Saner changelog
 - Updated changelog

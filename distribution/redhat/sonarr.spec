@@ -1,7 +1,7 @@
 Name:           sonarr
 Version:        %{BuildVersion}
 
-Release:        2.%{?BuildBranch}
+Release:        3.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
@@ -136,33 +136,10 @@ firewall-cmd --remove-service=%{name} --permanent
 
 %changelog
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-2.develop
-- Updated changelog
 - Update some provides/conflicts stuff so that it's clear you can't install both sonarr and sonnar-bootstrap
 - Build a bootstrap rpm (allows self-update), and do smarter detection of what version to build
-- Updated changelog
-- Updated changelog
-- Updated changelog
-- Updated changelog
-
-* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-2.develop
 - Update some provides/conflicts stuff so that it's clear you can't install both sonarr and sonnar-bootstrap
 - Build a bootstrap rpm (allows self-update), and do smarter detection of what version to build
-- Updated changelog
-- Updated changelog
-- Updated changelog
-- Updated changelog
-
-* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-1.develop
-- Updated changelog
-
-* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-1.develop
-
-
-* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.994-1.develop
-- Updated changelog
-
-* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.994-1.develop
-
 
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-1.develop
 - More carefully select which spec files to ignore
@@ -170,11 +147,8 @@ firewall-cmd --remove-service=%{name} --permanent
 
 * Sun Nov 15 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1002-1.develop
 - Accidentally hard-coded "994" in one spot, fixed that. And since Version increased, bring Release back down to 1
-
-* Sun Nov 15 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1002-10.develop
 - Clean up after ourselves
 - Saner changelog
-- Updated changelog
 - Attempt to auto-maintain the rpm changelog?
 
 * Fri Nov 13 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.994-10.develop
