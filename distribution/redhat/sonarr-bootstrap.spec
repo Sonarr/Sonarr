@@ -1,7 +1,7 @@
 Name:           sonarr-bootstrap
 Version:        %{BuildVersion}
 
-Release:        3.%{?BuildBranch}
+Release:        1.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users; self-updating package
 
