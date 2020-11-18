@@ -62,7 +62,7 @@ if [ "$last_version" != "$current_version" ]; then
    echo "No changelog for current release"
    userstring=$(git log --pretty='format:%an <%ae>' -1)
    since_hash=$(git blame sonarr.spec | grep "\*" | grep "$last_version$" | awk '{print $1}')
-   echo -e "* $(date +"%a %b %d %Y") $userstring - $current_version\n$(git log --pretty='format:- %s' $since_hash..HEAD)\n" > ./change
+   echo -e "* $(date +"%a %b %d %Y") $userstring - $current_version\n$(git log --pretty='format:- %s' $since_hash..HEAD)\n" | grep -v 'Updated changelog' > ./change
    sed -i "/%changelog/ r ./change" sonarr.spec
    echo "Added change to spec-file:"
    rm ./change
@@ -80,7 +80,7 @@ if [ "$last_version" != "$current_version" ]; then
    echo "No changelog for current release"
    userstring=$(git log --pretty='format:%an <%ae>' -1)
    since_hash=$(git blame sonarr.spec | grep "\*" | grep "$last_version$" | awk '{print $1}')
-   echo -e "* $(date +"%a %b %d %Y") $userstring - $current_version\n$(git log --pretty='format:- %s' $since_hash..HEAD)\n" > ./change
+   echo -e "* $(date +"%a %b %d %Y") $userstring - $current_version\n$(git log --pretty='format:- %s' $since_hash..HEAD)\n" | grep -v 'Updated changelog' > ./change
    sed -i "/%changelog/ r ./change" sonarr.spec
    echo "Added change to spec-file:"
    rm ./change
@@ -89,7 +89,7 @@ if [ "$last_version" != "$current_version" ]; then
    git push
 fi
 
-echo === Generating spec file with BuildVersion and updated ChangeLog
+echo === Re-Generating spec file with BuildVersion and updated ChangeLog
 (
   echo "%define BuildVersion $BuildVersion"
   echo "%define BuildBranch $BuildBranch"
@@ -97,7 +97,7 @@ echo === Generating spec file with BuildVersion and updated ChangeLog
   cat sonarr.spec
 ) > $SpecFile
 
-echo === Generating bootstrap spec file with BuildVersion and updated ChangeLog
+echo === Re-Generating bootstrap spec file with BuildVersion and updated ChangeLog
 (
   echo "%define BuildVersion $BuildVersion"
   echo "%define BuildBranch $BuildBranch"
