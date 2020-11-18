@@ -133,6 +133,9 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.994-1.develop
+
+
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-1.develop
 - More carefully select which spec files to ignore
 - Fix systemd requirement for EL7
