@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Organizer
 
             episodes = episodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber).ToList();
 
-            if (series.SeriesType == SeriesTypes.Daily && episodeFile.SeasonNumber > 0)
+            if (series.SeriesType == SeriesTypes.Daily && episodes.First().SeasonNumber > 0)
             {
                 pattern = namingConfig.DailyEpisodeFormat;
             }
@@ -163,10 +163,10 @@ namespace NzbDrone.Core.Organizer
                 AddPreferredWords(tokenHandlers, series, episodeFile, preferredWords);
 
                 var component = ReplaceTokens(splitPattern, tokenHandlers, namingConfig, true).Trim();
-                var maxPathSegmentLength = LongPathSupport.MaxFileNameLength;
+                var maxPathSegmentLength = Math.Min(LongPathSupport.MaxFileNameLength, maxPath);
                 if (i == splitPatterns.Length - 1)
                 {
-                    maxPathSegmentLength -= extension.Length;
+                    maxPathSegmentLength -= extension.GetByteCount();
                 }
                 var maxEpisodeTitleLength = maxPathSegmentLength - GetLengthWithoutEpisodeTitle(component, namingConfig);
 
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Organizer
             Ensure.That(extension, () => extension).IsNotNullOrWhiteSpace();
             
             var seasonPath = BuildSeasonPath(series, episodes.First().SeasonNumber);
-            var remainingPathLength = LongPathSupport.MaxFilePathLength - seasonPath.Length - 1;
+            var remainingPathLength = LongPathSupport.MaxFilePathLength - seasonPath.GetByteCount() - 1;
             var fileName = BuildFileName(episodes, series, episodeFile, extension, remainingPathLength, namingConfig, preferredWords);
 
             return Path.Combine(seasonPath, fileName);
@@ -935,33 +935,35 @@ namespace NzbDrone.Core.Organizer
 
             var joined = string.Join(separator, titles);
 
-            if (joined.Length <= maxLength)
+            if (joined.GetByteCount() <= maxLength)
             {
                 return joined;
             }
 
             var firstTitle = titles.First();
+            var firstTitleLength = firstTitle.GetByteCount();
 
             if (titles.Count >= 2)
             {
                 var lastTitle = titles.Last();
-                if (firstTitle.Length + lastTitle.Length + 3 <= maxLength)
+                var lastTitleLength = lastTitle.GetByteCount();
+                if (firstTitleLength + lastTitleLength + 3 <= maxLength)
                 {
-                    return $"{firstTitle.Trim(' ', '.')}{{ellipsis}}{lastTitle}";
+                    return $"{firstTitle.TrimEnd(' ', '.')}{{ellipsis}}{lastTitle}";
                 }
             }
 
-            if (titles.Count > 1 && firstTitle.Length + 3 <= maxLength)
+            if (titles.Count > 1 && firstTitleLength + 3 <= maxLength)
             {
-                return $"{firstTitle.Trim(' ', '.')}{{ellipsis}}";
+                return $"{firstTitle.TrimEnd(' ', '.')}{{ellipsis}}";
             }
 
-            if (titles.Count == 1 && firstTitle.Length <= maxLength)
+            if (titles.Count == 1 && firstTitleLength <= maxLength)
             {
                 return firstTitle;
             }
 
-            return $"{firstTitle.Substring(0, maxLength - 3).Trim(' ', '.')}{{ellipsis}}";
+            return $"{firstTitle.Truncate(maxLength - 3).TrimEnd(' ', '.')}{{ellipsis}}";
         }
 
         private string CleanupEpisodeTitle(string title)
@@ -1023,7 +1025,7 @@ namespace NzbDrone.Core.Organizer
 
             var result = ReplaceTokens(pattern, tokenHandlers, namingConfig);
 
-            return result.Length;
+            return result.GetByteCount();
         }
     }
 

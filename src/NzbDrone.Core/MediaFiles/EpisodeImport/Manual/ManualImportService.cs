@@ -23,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
     public interface IManualImportService
     {
         List<ManualImportItem> GetMediaFiles(string path, string downloadId, int? seriesId, bool filterExistingFiles);
-        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, List<int> episodeIds, QualityModel quality, Language language);
+        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, QualityModel quality, Language language);
     }
 
     public class ManualImportService : IExecute<ManualImportCommand>, IManualImportService
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     return new List<ManualImportItem>();
                 }
 
-                path = trackedDownload.DownloadItem.OutputPath.FullPath;
+                path = trackedDownload.ImportItem.OutputPath.FullPath;
             }
 
             if (!_diskProvider.FolderExists(path))
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return ProcessFolder(path, path, downloadId, seriesId, filterExistingFiles);
         }
 
-        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, List<int> episodeIds, QualityModel quality, Language language)
+        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, QualityModel quality, Language language)
         {
             var rootFolder = Path.GetDirectoryName(path);
             var series = _seriesService.GetSeries(seriesId);
@@ -115,11 +115,37 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                        SceneSource = SceneSource(series, rootFolder),
                                        ExistingFile = series.Path.IsParentPath(path),
                                        Size = _diskProvider.GetFileSize(path),
-                                       Language = language,
-                                       Quality = quality
+                                       Language = language == Language.Unknown ? LanguageParser.ParseLanguage(path) : language,
+                                       Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality
                                    };
 
                 return MapItem(_importDecisionMaker.GetDecision(localEpisode, downloadClientItem), rootFolder, downloadId, null);
+            }
+
+            // This case will happen if the user selected a season, but didn't select the episodes in the season then changed the language or quality.
+            // Instead of overriding their season selection let it persist and reject it with an appropriate error.
+
+            if (seasonNumber.HasValue)
+            {
+                var downloadClientItem = GetTrackedDownload(downloadId)?.DownloadItem;
+
+                var localEpisode = new LocalEpisode
+                                   {
+                                       Series = series,
+                                       Episodes = new List<Episode>(),
+                                       FileEpisodeInfo = Parser.Parser.ParsePath(path),
+                                       DownloadClientEpisodeInfo = downloadClientItem == null
+                                           ? null
+                                           : Parser.Parser.ParseTitle(downloadClientItem.Title),
+                                       Path = path,
+                                       SceneSource = SceneSource(series, rootFolder),
+                                       ExistingFile = series.Path.IsParentPath(path),
+                                       Size = _diskProvider.GetFileSize(path),
+                                       Language = language == Language.Unknown ? LanguageParser.ParseLanguage(path) : language,
+                                       Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality
+                                   };
+
+                return MapItem(new ImportDecision(localEpisode, new Rejection("Episodes not selected")), rootFolder, downloadId, null);
             }
 
             return ProcessFile(rootFolder, rootFolder, path, downloadId, series);
@@ -165,7 +191,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 // It will lead to some extra directories being checked for files, but it saves the processing of them and is cleaner than
                 // teaching FilterPaths to know whether it's processing a file or a folder and changing it's filtering based on that.
 
+                // If the series is unknown for the directory and there are more than 100 files in the folder don't process the items before returning.
                 var files = _diskScanService.FilterPaths(rootFolder, _diskScanService.GetVideoFiles(baseFolder, false));
+
+                if (files.Count() > 100)
+                {
+                    return ProcessDownloadDirectory(rootFolder, files);
+                }
+
                 var subfolders = _diskScanService.FilterPaths(rootFolder, _diskProvider.GetDirectories(baseFolder));
 
                 var processedFiles = files.Select(file => ProcessFile(rootFolder, baseFolder, file, downloadId));
@@ -246,6 +279,24 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 Name = Path.GetFileNameWithoutExtension(file),
                 Rejections = new List<Rejection>()
             };
+        }
+
+        private List<ManualImportItem> ProcessDownloadDirectory(string rootFolder, List<string> videoFiles)
+        {
+            var items = new List<ManualImportItem>();
+
+            foreach (var file in videoFiles)
+            {
+                var localEpisode = new LocalEpisode();
+                localEpisode.Path = file;
+                localEpisode.Quality = new QualityModel(Quality.Unknown);
+                localEpisode.Language = Language.Unknown;
+                localEpisode.Size = _diskProvider.GetFileSize(file);
+
+                items.Add(MapItem(new ImportDecision(localEpisode), rootFolder, null, null));
+            }
+
+            return items;
         }
 
         private bool SceneSource(Series series, string folder)
@@ -346,6 +397,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 if (file.FolderName.IsNotNullOrWhiteSpace())
                 {
                     localEpisode.FolderEpisodeInfo = Parser.Parser.ParseTitle(file.FolderName);
+                    localEpisode.SceneSource = !existingFile;
                 }
 
                 localEpisode = _aggregationService.Augment(localEpisode, trackedDownload?.DownloadItem, false);
@@ -354,6 +406,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Series = series;
                 localEpisode.Episodes = episodes;
                 localEpisode.Quality = file.Quality;
+                localEpisode.Language = file.Language;
 
                 //TODO: Cleanup non-tracked downloads
 
@@ -383,14 +436,15 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             {
                 var trackedDownload = groupedTrackedDownload.First().TrackedDownload;
                 var importedSeries = imported.First().ImportDecision.LocalEpisode.Series;
+                var outputPath = trackedDownload.ImportItem.OutputPath.FullPath;
 
-                if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath.FullPath))
+                if (_diskProvider.FolderExists(outputPath))
                 {
                     if (_downloadedEpisodesImportService.ShouldDeleteFolder(
-                            new DirectoryInfo(trackedDownload.DownloadItem.OutputPath.FullPath), importedSeries) &&
+                            new DirectoryInfo(outputPath), importedSeries) &&
                         trackedDownload.DownloadItem.CanMoveFiles)
                     {
-                        _diskProvider.DeleteFolder(trackedDownload.DownloadItem.OutputPath.FullPath, true);
+                        _diskProvider.DeleteFolder(outputPath, true);
                     }
                 }
 

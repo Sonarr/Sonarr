@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Download
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IHistoryService _historyService;
+        private readonly IProvideImportItemService _importItemService;
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
         private readonly IParsingService _parsingService;
         private readonly ISeriesService _seriesService;
@@ -36,6 +37,7 @@ namespace NzbDrone.Core.Download
 
         public CompletedDownloadService(IEventAggregator eventAggregator,
                                         IHistoryService historyService,
+                                        IProvideImportItemService importItemService,
                                         IDownloadedEpisodesImportService downloadedEpisodesImportService,
                                         IParsingService parsingService,
                                         ISeriesService seriesService,
@@ -44,6 +46,7 @@ namespace NzbDrone.Core.Download
         {
             _eventAggregator = eventAggregator;
             _historyService = historyService;
+            _importItemService = importItemService;
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
             _parsingService = parsingService;
             _seriesService = seriesService;
@@ -57,6 +60,8 @@ namespace NzbDrone.Core.Download
             {
                 return;
             }
+
+            trackedDownload.ImportItem = _importItemService.ProvideImportItem(trackedDownload.DownloadItem, trackedDownload.ImportItem);
 
             // Only process tracked downloads that are still downloading
             if (trackedDownload.State != TrackedDownloadState.Downloading)
@@ -72,7 +77,7 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            var downloadItemOutputPath = trackedDownload.DownloadItem.OutputPath;
+            var downloadItemOutputPath = trackedDownload.ImportItem.OutputPath;
 
             if (downloadItemOutputPath.IsEmpty)
             {
@@ -110,7 +115,7 @@ namespace NzbDrone.Core.Download
         {
             trackedDownload.State = TrackedDownloadState.Importing;
 
-            var outputPath = trackedDownload.DownloadItem.OutputPath.FullPath;
+            var outputPath = trackedDownload.ImportItem.OutputPath.FullPath;
             var importResults = _downloadedEpisodesImportService.ProcessPath(outputPath, ImportMode.Auto,
                 trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
 
@@ -185,7 +190,7 @@ namespace NzbDrone.Core.Download
                            .Property("SeriesId", trackedDownload.RemoteEpisode.Series.Id)
                            .Property("DownloadId", trackedDownload.DownloadItem.DownloadId)
                            .Property("Title", trackedDownload.DownloadItem.Title)
-                           .Property("Path", trackedDownload.DownloadItem.OutputPath.ToString())
+                           .Property("Path", trackedDownload.ImportItem.OutputPath.ToString())
                            .WriteSentryWarn("DownloadHistoryIncomplete")
                            .Write();
                 }

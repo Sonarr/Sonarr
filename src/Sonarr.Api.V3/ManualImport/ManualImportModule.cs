@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nancy;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.Episodes;
@@ -38,11 +39,22 @@ namespace Sonarr.Api.V3.ManualImport
 
             foreach (var item in items)
             {
-                var processedItem = _manualImportService.ReprocessItem(item.Path, item.DownloadId, item.SeriesId, item.EpisodeIds ?? new List<int>(), item.Quality, item.Language);
+                var processedItem = _manualImportService.ReprocessItem(item.Path, item.DownloadId, item.SeriesId, item.SeasonNumber, item.EpisodeIds ?? new List<int>(), item.Quality, item.Language);
 
                 item.SeasonNumber = processedItem.SeasonNumber;
                 item.Episodes = processedItem.Episodes.ToResource();
                 item.Rejections = processedItem.Rejections;
+
+                // Only set the language/quality if they're unknown
+                if (item.Language == Language.Unknown)
+                {
+                    item.Language = processedItem.Language;
+                }
+
+                if (item.Quality?.Quality == Quality.Unknown)
+                {
+                    item.Quality = processedItem.Quality;
+                }
 
                 // Clear episode IDs in favour of the full episode
                 item.EpisodeIds = null;

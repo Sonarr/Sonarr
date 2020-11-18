@@ -106,6 +106,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return response;
         }
 
+        public List<QBittorrentTorrentFile> GetTorrentFiles(string hash, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource($"/query/propertiesFiles/{hash}");
+            var response = ProcessRequest<List<QBittorrentTorrentFile>>(request, settings);
+
+            return response;
+        }
+
         public void AddTorrentFromUrl(string torrentUrl, QBittorrentSettings settings)
         {
             var request = BuildRequest(settings).Resource("/command/download")
