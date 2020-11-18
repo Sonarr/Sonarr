@@ -384,16 +384,10 @@ export const actionHandlers = handleThunks({
   [UPDATE_SERIES_MONITOR]: function(getState, payload, dispatch) {
     const {
       id,
-      monitored,
       monitor
     } = payload;
 
-    const series = [];
     const seriesToUpdate = { id };
-    if (payload.hasOwnProperty('monitored')) {
-      seriesToUpdate.monitored = monitored;
-    }
-    series.push(seriesToUpdate);
 
     dispatch(set({
       section,
@@ -404,7 +398,9 @@ export const actionHandlers = handleThunks({
       url: '/seasonPass',
       method: 'POST',
       data: JSON.stringify({
-        series,
+        series: [
+          seriesToUpdate
+        ],
         monitoringOptions: { monitor }
       }),
       dataType: 'json'
@@ -427,7 +423,6 @@ export const actionHandlers = handleThunks({
         saveError: xhr
       }));
     });
-    location.reload();
   }
 });
 
