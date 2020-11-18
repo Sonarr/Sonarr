@@ -1,7 +1,7 @@
 Name:           sonarr
 Version:        %{BuildVersion}
 
-Release:        1.%{?BuildBranch}
+Release:        2.%{?BuildBranch}
 BuildArch:      noarch
 Summary:        PVR for Usenet and BitTorrent users
 
@@ -135,6 +135,14 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-2.develop
+- Update some provides/conflicts stuff so that it's clear you can't install both sonarr and sonnar-bootstrap
+- Build a bootstrap rpm (allows self-update), and do smarter detection of what version to build
+- Updated changelog
+- Updated changelog
+- Updated changelog
+- Updated changelog
+
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-1.develop
 - Updated changelog
 
