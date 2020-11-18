@@ -136,6 +136,15 @@ firewall-cmd --remove-service=%{name} --permanent
 
 %changelog
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-2.develop
+- Updated changelog
+- Update some provides/conflicts stuff so that it's clear you can't install both sonarr and sonnar-bootstrap
+- Build a bootstrap rpm (allows self-update), and do smarter detection of what version to build
+- Updated changelog
+- Updated changelog
+- Updated changelog
+- Updated changelog
+
+* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-2.develop
 - Update some provides/conflicts stuff so that it's clear you can't install both sonarr and sonnar-bootstrap
 - Build a bootstrap rpm (allows self-update), and do smarter detection of what version to build
 - Updated changelog
