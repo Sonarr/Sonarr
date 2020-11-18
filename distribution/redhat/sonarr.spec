@@ -12,7 +12,7 @@ Source3:        %{name}.systemd
 Source4:        %{name}.firewalld
 Source5:        %{name}-secure.firewalld
 
-BuildRequires:      systemd-rpm-macros
+BuildRequires:      systemd
 
 Requires:           sqlite-libs >= 3.7
 Requires:           mediainfo >= 0.7.52
