@@ -135,6 +135,11 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-4.develop
+- Bump release tag to get an update
+- Fix useradd
+- Update changelog
+
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-1.develop
 - Update changelog
 - Fix bootstrap changelog logic
