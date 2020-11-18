@@ -74,7 +74,7 @@ install -m 0755 -d %{buildroot}/opt/%{name}
 
 
 (
-  echo "# Do Not Edit\n"
+  echo "# Do Not Edit"
   echo "PackageVersion=%{version}"
   echo "PackageAuthor=[Team Sonarr](https://sonarr.tv)"
   echo "ReleaseVersion=%{version}"
