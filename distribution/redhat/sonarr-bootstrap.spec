@@ -26,6 +26,8 @@ Requires(preun):    systemd
 Requires(postun):   systemd
 
 Provides: /opt/sonarr/Sonarr.exe
+Provides: sonarr
+Conflicts: sonarr
 
 # These prevent Sonarr's DLLs from auto-creating requires and provides
 # Doing that because RH's mono require/provide detection isn't working
