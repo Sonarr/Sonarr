@@ -55,11 +55,8 @@ class MonitoringOptionsModalContent extends Component {
       monitor
     } = this.state;
 
-    const changes = {};
-
     if (monitor !== NO_CHANGE) {
-      changes.monitor = monitor;
-      onSavePress(changes);
+      onSavePress({ monitor });
     }
   }
 
@@ -68,8 +65,6 @@ class MonitoringOptionsModalContent extends Component {
 
   render() {
     const {
-      title,
-      item,
       isSaving,
       onInputChange,
       onModalClose,
@@ -83,7 +78,7 @@ class MonitoringOptionsModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Monitor Series - {title}
+          Monitor Series
         </ModalHeader>
 
         <ModalBody>
@@ -123,10 +118,7 @@ class MonitoringOptionsModalContent extends Component {
 
 MonitoringOptionsModalContent.propTypes = {
   seriesId: PropTypes.number.isRequired,
-  title: PropTypes.string,
-  item: PropTypes.object,
   saveError: PropTypes.object,
-  monitor: PropTypes.string,
   isSaving: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
   onSavePress: PropTypes.func.isRequired,

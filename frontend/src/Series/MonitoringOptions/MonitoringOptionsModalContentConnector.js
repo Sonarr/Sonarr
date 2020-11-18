@@ -1,8 +1,26 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import { updateSeriesMonitor } from 'Store/Actions/seriesActions';
 import MonitoringOptionsModalContent from './MonitoringOptionsModalContent';
+
+function createMapStateToProps() {
+  return createSelector(
+    (state) => state.series,
+    (seriesState) => {
+      const {
+        isSaving,
+        saveError
+      } = seriesState;
+
+      return {
+        isSaving,
+        saveError
+      };
+    }
+  );
+}
 
 const mapDispatchToProps = {
   dispatchUpdateMonitoringOptions: updateSeriesMonitor
@@ -26,10 +44,10 @@ class MonitoringOptionsModalContentConnector extends Component {
     this.setState({ name, value });
   }
 
-  onSavePress = (changes) => {
+  onSavePress = ({ monitor }) => {
     this.props.dispatchUpdateMonitoringOptions({
       id: this.props.seriesId,
-      monitor: changes.monitor
+      monitor
     });
   }
 
@@ -53,8 +71,7 @@ MonitoringOptionsModalContentConnector.propTypes = {
   saveError: PropTypes.object,
   dispatchUpdateMonitoringOptions: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired,
-  onSavePress: PropTypes.func,
-  monitor: PropTypes.string
+  onSavePress: PropTypes.func.isRequired
 };
 
-export default connect(undefined, mapDispatchToProps)(MonitoringOptionsModalContentConnector);
+export default connect(createMapStateToProps, mapDispatchToProps)(MonitoringOptionsModalContentConnector);
