@@ -123,7 +123,7 @@ firewall-cmd --remove-service=sonarr --permanent
 
 %changelog
 * Tue Nov 17 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1009-1.develop
-
+- Fork off a "bootstrap" version of the RPM that allows for self-update
 
 * Fri Nov 13 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.994-10.develop
 - RPM redone for Sonarr v3 beta
