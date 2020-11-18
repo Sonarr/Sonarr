@@ -122,13 +122,6 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
-* Sun Nov 15 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1002-1.develop
-- Accidentally hard-coded "994" in one spot, fixed that. And since Version increased, bring Release back down to 1
-- Clean up after ourselves
-- Saner changelog
-- Updated changelog
-- Attempt to auto-maintain the rpm changelog?
-
 * Fri Nov 13 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.994-10.develop
 - RPM redone for Sonarr v3 beta
 - auto-maintain the rpm changelog
