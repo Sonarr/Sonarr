@@ -389,6 +389,10 @@ export const actionHandlers = handleThunks({
 
     const seriesToUpdate = { id };
 
+    if (monitor !== 'None') {
+      seriesToUpdate.monitored = true;
+    }
+
     dispatch(set({
       section,
       isSaving: true
