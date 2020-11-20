@@ -123,7 +123,8 @@ namespace NzbDrone.Core.Tv
                 if (seasonNumber > 0 &&
                     seasonNumber == lastSeason &&
                     monitoringOptions.Monitor != MonitorTypes.FirstSeason &&
-                    monitoringOptions.Monitor != MonitorTypes.Pilot)
+                    monitoringOptions.Monitor != MonitorTypes.Pilot &&
+                    monitoringOptions.Monitor != MonitorTypes.None)
                 {
                     season.Monitored = true;
                 }
