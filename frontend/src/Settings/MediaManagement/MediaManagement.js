@@ -357,7 +357,7 @@ class MediaManagement extends Component {
                 </FieldSet>
 
                 {
-                  advancedSettings &&
+                  advancedSettings && isMono &&
                     <FieldSet
                       legend="Permissions"
                     >
