@@ -136,6 +136,13 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Sat Nov 21 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1017-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Reverted temporary dev debug code change
+- Fixed: Monitor 'None' won't monitor latest season
+- New: Validate that naming formats don't contain illegal characters
+- New: Displaying folder-based permissions in UI rather than file-based permissions and with selectable sane presets
+
 * Wed Nov 18 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1011-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fix package_info file
