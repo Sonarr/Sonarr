@@ -85,7 +85,11 @@ namespace NzbDrone.Mono.Disk
                 throw new LinuxPermissionsException("Error getting current permissions: " + error);
             }
 
-            permissions |= curStat.st_mode & ~FilePermissions.ACCESSPERMS;
+            // Preserve existing non-access permissions unless mask is 4 digits
+            if (mask.Length < 4)
+            {
+                permissions |= curStat.st_mode & ~FilePermissions.ACCESSPERMS;
+            }
 
             if (Syscall.chmod(path, permissions) < 0)
             {
