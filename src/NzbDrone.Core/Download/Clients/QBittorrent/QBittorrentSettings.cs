@@ -63,6 +63,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         [FieldDefinition(10, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use a secure connection. See Options -> Web UI -> 'Use HTTPS instead of HTTP' in qBittorrent.")]
         public bool UseSsl { get; set; }
 
+        [FieldDefinition(11, Label = "Sequential Download", Type = FieldType.Checkbox, Advanced = true, HelpText = "Download in sequential order")]
+        public bool SequentialDownload { get; set; }
+
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));

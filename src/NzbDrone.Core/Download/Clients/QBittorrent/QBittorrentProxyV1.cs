@@ -130,6 +130,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 request.AddFormParameter("paused", true);
             }
 
+            if (settings.SequentialDownload)
+            {
+                request.AddFormParameter("sequentialDownload", true);
+            }
+
             var result = ProcessRequest(request, settings);
 
             // Note: Older qbit versions returned nothing, so we can't do != "Ok." here.
@@ -153,6 +158,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
             {
                 request.AddFormParameter("paused", "true");
+            }
+
+            if (settings.SequentialDownload)
+            {
+                request.AddFormParameter("sequentialDownload", true);
             }
 
             var result = ProcessRequest(request, settings);
