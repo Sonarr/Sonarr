@@ -17,9 +17,29 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
     [Platform("Mono")]
     public class DiskProviderFixture : DiskProviderFixtureBase<DiskProvider>
     {
+        private string _tempPath;
+
         public DiskProviderFixture()
         {
             MonoOnly();
+        }
+
+        [TearDown]
+        public void MonoDiskProviderFixtureTearDown()
+        {
+            // Give ourselves back write permissions so we can delete it
+            if (_tempPath != null)
+            {
+                if (Directory.Exists(_tempPath))
+                {
+                    Syscall.chmod(_tempPath, FilePermissions.S_IRWXU);
+                }
+                else if (File.Exists(_tempPath))
+                {
+                    Syscall.chmod(_tempPath, FilePermissions.S_IRUSR | FilePermissions.S_IWUSR);
+                }
+                _tempPath = null;
+            }
         }
 
         protected override void SetWritePermissions(string path, bool writable)
@@ -29,17 +49,39 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
                 Assert.Inconclusive("Need non-root user to test write permissions.");
             }
 
+            SetWritePermissionsInternal(path, writable, false);
+        }
+
+        protected void SetWritePermissionsInternal(string path, bool writable, bool setgid)
+        {
             // Remove Write permissions, we're still owner so we can clean it up, but we'll have to do that explicitly.
 
-            var entry = UnixFileSystemInfo.GetFileSystemEntry(path);
+            Stat stat;
+            Syscall.stat(path, out stat);
+            FilePermissions mode = stat.st_mode;
 
             if (writable)
             {
-                entry.FileAccessPermissions |= FileAccessPermissions.UserWrite | FileAccessPermissions.GroupWrite | FileAccessPermissions.OtherWrite;
+                mode |= FilePermissions.S_IWUSR | FilePermissions.S_IWGRP | FilePermissions.S_IWOTH;
             }
             else
             {
-                entry.FileAccessPermissions &= ~(FileAccessPermissions.UserWrite | FileAccessPermissions.GroupWrite | FileAccessPermissions.OtherWrite);
+                mode &= ~(FilePermissions.S_IWUSR | FilePermissions.S_IWGRP | FilePermissions.S_IWOTH);
+            }
+
+
+            if (setgid)
+            {
+                mode |= FilePermissions.S_ISGID;
+            }
+            else
+            {
+                mode &= ~FilePermissions.S_ISGID;
+            }
+
+            if (stat.st_mode != mode)
+            {
+                Syscall.chmod(path, mode);
             }
         }
 
@@ -164,7 +206,8 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             var tempFile = GetTempFilePath();
 
             File.WriteAllText(tempFile, "File1");
-            SetWritePermissions(tempFile, false);
+            SetWritePermissionsInternal(tempFile, false, false);
+            _tempPath = tempFile;
 
             // Verify test setup
             Syscall.stat(tempFile, out var fileStat);
@@ -189,7 +232,8 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             var tempPath = GetTempFilePath();
 
             Directory.CreateDirectory(tempPath);
-            SetWritePermissions(tempPath, false);
+            SetWritePermissionsInternal(tempPath, false, false);
+            _tempPath = tempPath;
 
             // Verify test setup
             Syscall.stat(tempPath, out var fileStat);
@@ -199,19 +243,71 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0755");
 
-            Subject.SetPermissions(tempPath, "0755", null);
-            Syscall.stat(tempPath, out fileStat);
-            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0755");
-
-            Subject.SetPermissions(tempPath, "1775", null);
-            Syscall.stat(tempPath, out fileStat);
-            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("1775");
-
             Subject.SetPermissions(tempPath, "775", null);
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0775");
 
             Subject.SetPermissions(tempPath, "750", null);
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0750");
+
+            Subject.SetPermissions(tempPath, "051", null);
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0051");
+        }
+
+        [Test]
+        public void should_preserve_setgid_on_set_folder_permissions()
+        {
+            var tempPath = GetTempFilePath();
+
+            Directory.CreateDirectory(tempPath);
+            SetWritePermissionsInternal(tempPath, false, true);
+            _tempPath = tempPath;
+
+            // Verify test setup
+            Syscall.stat(tempPath, out var fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("2555");
+
+            Subject.SetPermissions(tempPath, "755", null);
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("2755");
+
+            Subject.SetPermissions(tempPath, "775", null);
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("2775");
+
+            Subject.SetPermissions(tempPath, "750", null);
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("2750");
+
+            Subject.SetPermissions(tempPath, "051", null);
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("2051");
+        }
+
+        [Test]
+        public void should_clear_setgid_on_set_folder_permissions()
+        {
+            var tempPath = GetTempFilePath();
+
+            Directory.CreateDirectory(tempPath);
+            SetWritePermissionsInternal(tempPath, false, true);
+            _tempPath = tempPath;
+
+            // Verify test setup
+            Syscall.stat(tempPath, out var fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("2555");
+
+            Subject.SetPermissions(tempPath, "0755", null);
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0755");
+
+            Subject.SetPermissions(tempPath, "0775", null);
+            Syscall.stat(tempPath, out fileStat);
+            NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0775");
+
+            Subject.SetPermissions(tempPath, "0750", null);
             Syscall.stat(tempPath, out fileStat);
             NativeConvert.ToOctalPermissionString(fileStat.st_mode).Should().Be("0750");
 
@@ -228,6 +324,16 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             Subject.IsValidFolderPermissionMask("2755").Should().BeFalse();
             Subject.IsValidFolderPermissionMask("4755").Should().BeFalse();
             Subject.IsValidFolderPermissionMask("7755").Should().BeFalse();
+
+            // Folder should be readable and writeable by owner
+            Subject.IsValidFolderPermissionMask("000").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("100").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("200").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("300").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("400").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("500").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("600").Should().BeFalse();
+            Subject.IsValidFolderPermissionMask("700").Should().BeTrue();
 
             // Folder should be readable and writeable by owner
             Subject.IsValidFolderPermissionMask("0000").Should().BeFalse();
