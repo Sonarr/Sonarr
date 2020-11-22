@@ -11,6 +11,7 @@ namespace NzbDrone.Common.Disk
         long? GetAvailableSpace(string path);
         void InheritFolderPermissions(string filename);
         void SetEveryonePermissions(string filename);
+        void SetFilePermissions(string path, string mask, string group);
         void SetPermissions(string path, string mask, string group);
         void CopyPermissions(string sourcePath, string targetPath);
         long? GetTotalSize(string path);
