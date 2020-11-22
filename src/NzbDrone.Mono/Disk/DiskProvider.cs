@@ -66,16 +66,28 @@ namespace NzbDrone.Mono.Disk
             
         }
 
+        public override void SetFilePermissions(string path, string mask, string group)
+        {
+            var permissions = NativeConvert.FromOctalPermissionString(mask);
+
+            SetPermissions(path, mask, group, permissions);
+        }
+
         public override void SetPermissions(string path, string mask, string group)
         {
-            Logger.Debug("Setting permissions: {0} on {1}", mask, path);
-
             var permissions = NativeConvert.FromOctalPermissionString(mask);
 
             if (File.Exists(path))
             {
                 permissions = GetFilePermissions(permissions);
             }
+
+            SetPermissions(path, mask, group, permissions);
+        }
+
+        protected void SetPermissions(string path, string mask, string group, FilePermissions permissions)
+        {
+            Logger.Debug("Setting permissions: {0} on {1}", mask, path);
 
             // Preserve non-access permissions
             if (Syscall.stat(path, out var curStat) < 0)
