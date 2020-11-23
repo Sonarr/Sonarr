@@ -136,6 +136,10 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Mon Nov 23 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1021-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Removed unnecessary importlists warning.
+
 * Sun Nov 22 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1020-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed binary execute permissions for osx and Radarr
