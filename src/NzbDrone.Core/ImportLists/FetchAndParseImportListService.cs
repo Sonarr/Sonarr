@@ -34,7 +34,7 @@ namespace NzbDrone.Core.ImportLists
 
             if (!importLists.Any())
             {
-                _logger.Warn("No available import lists. check your configuration.");
+                _logger.Debug("No enabled import lists, skipping.");
                 return result;
             }
 
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.ImportLists
 
             if (importList == null || !definition.EnableAutomaticAdd)
             {
-                _logger.Warn("No available import lists. check your configuration.");
+                _logger.Debug("Import list not enabled, skipping.");
                 return result;
             }
 
