@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support via Discord
+    url: https://discord.gg/M6BvZn5
+    about: Chat with users and devs on support and setup related topics.
+  - name: Support via Reddit
+    url: https://reddit.com/r/Sonarr
+    about: Discuss and search through support topics.
+  - name: Support via Forums
+    url: https://forums.sonarr.tv/
+    about: Discuss and search through support topics.
+  - name: Support via IRC
+    url: http://webchat.freenode.net/?channels=#sonarr
+    about: Chat with users and devs on support and setup related topics.
