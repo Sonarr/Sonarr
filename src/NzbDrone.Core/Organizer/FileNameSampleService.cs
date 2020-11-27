@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Organizer
                 VideoColourPrimaries = "BT.2020",
                 VideoTransferCharacteristics = "HLG",
                 AudioFormat = "DTS",
-                AudioChannels = 6,
+                AudioChannelsContainer = 6,
                 AudioChannelPositions = "3/2/0.1",
                 AudioLanguages = "English",
                 Subtitles = "English/German"
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Organizer
                 VideoColourPrimaries = "BT.2020",
                 VideoTransferCharacteristics = "HLG",
                 AudioFormat = "DTS",
-                AudioChannels = 6,
+                AudioChannelsContainer = 6,
                 AudioChannelPositions = "3/2/0.1",
                 AudioLanguages = "Japanese",
                 Subtitles = "Japanese/English"
