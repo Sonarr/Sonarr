@@ -440,10 +440,6 @@ export const actionHandlers = handleThunks({
         ...episodesToUpdate
       ]));
 
-      changedSeasons.forEach((s) => {
-        delete seasonsToUpdate[s.seasonNumber];
-      });
-
       dispatch(set({
         section,
         isSaving: false,
