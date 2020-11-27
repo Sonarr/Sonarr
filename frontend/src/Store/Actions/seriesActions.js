@@ -11,6 +11,7 @@ import createSaveProviderHandler from './Creators/createSaveProviderHandler';
 import createRemoveItemHandler from './Creators/createRemoveItemHandler';
 import createHandleActions from './Creators/createHandleActions';
 import { updateItem, set } from './baseActions';
+import { fetchEpisodes } from './episodeActions';
 
 //
 // Local
@@ -388,6 +389,7 @@ export const actionHandlers = handleThunks({
     } = payload;
 
     const seriesToUpdate = { id };
+    const originalepisodes = getState().episodes.items;
 
     if (monitor !== 'None') {
       seriesToUpdate.monitored = true;
@@ -409,27 +411,29 @@ export const actionHandlers = handleThunks({
       }),
       dataType: 'json'
     }).request;
-
     promise.done((data) => {
+
+      dispatch(fetchEpisodes({ seriesId: id }));
+
       const episodesToUpdate = getState().episodes.items.reduce((acc, episode) => {
         if (episode.seriesId !== id) {
           return acc;
         }
 
-        var monitored = false;
+        const changedepisode = originalepisodes.find((e) => e.seasonNumber === episode.seasonNumber && e.episodeNumber === episode.episodeNumber);
 
-        if (monitor === 'existing' && episode.hasFile === true) {
-          monitored = true;
+        if (!changedepisode) {
+          return acc;
         }
 
-        if (monitor === 'missing' && episode.hasFile === false) {
-          monitored = true;
+        if (episode.monitored === changedepisode.monitored) {
+          return acc;
         }
 
         acc.push(updateItem({
           id: episode.id,
           section: 'episodes',
-          monitored
+          monitored: changedepisode.monitored
         }));
 
         return acc;
