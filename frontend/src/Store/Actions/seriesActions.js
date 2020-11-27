@@ -388,8 +388,6 @@ export const actionHandlers = handleThunks({
     } = payload;
 
     const seriesToUpdate = { id };
-    const series = getState().series.items.find((s) => s.id === id);
-    const originalEpisodes = getState().episodes.items;
 
     if (monitor !== 'None') {
       seriesToUpdate.monitored = true;
@@ -413,23 +411,29 @@ export const actionHandlers = handleThunks({
     }).request;
 
     promise.done((data) => {
-      const changedSeasons = [];
-      const postUpdateSeries = getState().series.items.find((s) => s.id === id);
-      series.seasons.forEach((s) => {
-        if (s.monitored !== postUpdateSeries.seasons[s.seasonNumber].monitored) {
-          changedSeasons.push(s);
-        } else {
-          s.isSaving = true;
+      const episodesToUpdate = getState().episodes.items.reduce((acc, episode) => {
+        if (episode.seriesId !== id) {
+          return acc;
         }
-      }
-      );
 
-      const episodesToUpdate = getState().episodes.items;
-      if (episodesToUpdate === originalEpisodes) {
-        console.log('episodes are the same');
-      }
-      console.log(episodesToUpdate);
-      console.log(originalEpisodes);
+        var monitored = false; 
+
+        if (monitor === 'existing' && episode.hasFile === true) {
+          monitored = true;
+        }
+
+        if (monitor === 'missing' && episode.hasFile === false) {
+          monitored = true;
+        }
+
+        acc.push(updateItem({
+          id: episode.id,
+          section: 'episodes',
+          monitored
+        }));
+
+        return acc;
+      }, []);
 
       dispatch(batchActions([
         updateItem({
