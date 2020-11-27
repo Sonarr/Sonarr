@@ -511,26 +511,29 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         private static decimal? FormatAudioChannelsFromAudioChannels(MediaInfoModel mediaInfo)
         {
-            var audioChannels = mediaInfo.AudioChannelsContainer;
+            var audioChannelsContainer = mediaInfo.AudioChannelsContainer;
             var audioChannelsStream = mediaInfo.AudioChannelsStream;
 
             var audioFormat = (mediaInfo.AudioFormat ?? string.Empty).Trim().Split(new[] { " / " }, StringSplitOptions.RemoveEmptyEntries);
             var splitAdditionalFeatures = (mediaInfo.AudioAdditionalFeatures ?? string.Empty).Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             // Workaround https://github.com/MediaArea/MediaInfo/issues/299 for DTS-X Audio
-            if (audioFormat.ContainsIgnoreCase("DTS") && splitAdditionalFeatures.ContainsIgnoreCase("XLL") && splitAdditionalFeatures.ContainsIgnoreCase("X"))
+            if (audioFormat.ContainsIgnoreCase("DTS") &&
+                splitAdditionalFeatures.ContainsIgnoreCase("XLL") &&
+                splitAdditionalFeatures.ContainsIgnoreCase("X") &&
+                audioChannelsContainer > 0)
             {
-                return audioChannels - 1 + 0.1m;
+                return audioChannelsContainer - 1 + 0.1m;
             }
 
             if (mediaInfo.SchemaRevision > 5)
             {
-                return audioChannelsStream > 0 ? audioChannelsStream : audioChannels;
+                return audioChannelsStream > 0 ? audioChannelsStream : audioChannelsContainer;
             }
 
             if (mediaInfo.SchemaRevision >= 3)
             {
-                return audioChannels;
+                return audioChannelsContainer;
             }
 
             return null;
