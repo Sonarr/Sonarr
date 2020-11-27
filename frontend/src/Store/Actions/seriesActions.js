@@ -416,7 +416,7 @@ export const actionHandlers = handleThunks({
           return acc;
         }
 
-        var monitored = false; 
+        var monitored = false;
 
         if (monitor === 'existing' && episode.hasFile === true) {
           monitored = true;
