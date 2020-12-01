@@ -360,9 +360,29 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public override DownloadClientInfo GetStatus()
         {
+            var version = Proxy.GetApiVersion(Settings);
             var config = Proxy.GetConfig(Settings);
 
             var destDir = new OsPath(config.SavePath);
+
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace() && version >= Version.Parse("2.0"))
+            {
+                var label = Proxy.GetLabels(Settings)[Settings.TvCategory];
+
+                if (label.SavePath.IsNotNullOrWhiteSpace())
+                {
+                    var labelDir = new OsPath(label.SavePath);
+
+                    if (labelDir.IsRooted)
+                    {
+                        destDir = labelDir;
+                    }
+                    else
+                    {
+                        destDir = destDir + labelDir;
+                    }
+                }
+            }
 
             return new DownloadClientInfo
             {
