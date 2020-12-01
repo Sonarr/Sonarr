@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve Sonarr
+about: Support Requests will be closed immediately, if you are unsure go to our IRC, Forums, Reddit, or Discord first. Exceptions do not mean you found a bug!
 
 ---
 
@@ -16,8 +16,9 @@ Link to debug or trace log files.
 **System Information**
 
  - Sonarr Version: [e.g. 2.0.0.1]
- - Operating System: [e.g. Windows 10]
- - .net Framework (Windows) or mono (macOS/Linux) Version: [e.g. 4.5 or 5.12]
+ - Operating System: [e.g. Windows 10 2004]
+ - .net Framework (Windows) or mono (macOS/Linux) Version: [e.g. .net 4.5 or mono 5.12]
+ - Branch:
 
 **UI Bugs:**
  - OS: [e.g. Windows]

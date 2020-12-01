@@ -6,7 +6,7 @@ A few sentences describing the overall goals of the pull request's commits.
 
 #### Todos
 - [ ] Tests
-- [ ] Documentation
+- [ ] Wiki Updates
 
 
 #### Issues Fixed or Closed by this PR
