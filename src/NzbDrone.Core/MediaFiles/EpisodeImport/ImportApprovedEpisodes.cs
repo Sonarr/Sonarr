@@ -220,7 +220,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             var folderTitle = localEpisode.FolderEpisodeInfo?.ReleaseTitle;
 
-            if (folderTitle.IsNotNullOrWhiteSpace() && SceneChecker.IsSceneTitle(folderTitle))
+            if (localEpisode.FolderEpisodeInfo?.FullSeason == false &&
+                folderTitle.IsNotNullOrWhiteSpace() &&
+                SceneChecker.IsSceneTitle(folderTitle))
             {
                 return folderTitle;
             }

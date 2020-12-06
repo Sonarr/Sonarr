@@ -260,6 +260,22 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
+        public void should_not_use_folder_name_as_scenename_if_it_is_for_a_full_season()
+        {
+            GivenNewDownload();
+            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "aaaaa.mkv");
+            _approvedDecisions.First().LocalEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo
+                                                                        {
+                                                                            ReleaseTitle = "series.title.s02.dvdrip.xvid-ingot.mkv",
+                                                                            FullSeason = true
+            };
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == null)));
+        }
+
+        [Test]
         public void should_import_larger_files_first()
         {
             GivenExistingFileOnDisk();
@@ -467,6 +483,5 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}\\subfolder\\{name}.mkv".AsOsAgnostic())));
         }
-
     }
 }
