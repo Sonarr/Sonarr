@@ -389,7 +389,6 @@ export const actionHandlers = handleThunks({
     } = payload;
 
     const seriesToUpdate = { id };
-    const originalepisodes = getState().episodes.items;
 
     if (monitor !== 'None') {
       seriesToUpdate.monitored = true;
@@ -412,41 +411,7 @@ export const actionHandlers = handleThunks({
       dataType: 'json'
     }).request;
     promise.done((data) => {
-
       dispatch(fetchEpisodes({ seriesId: id }));
-
-      const episodesToUpdate = getState().episodes.items.reduce((acc, episode) => {
-        if (episode.seriesId !== id) {
-          return acc;
-        }
-
-        const changedepisode = originalepisodes.find((e) => e.seasonNumber === episode.seasonNumber && e.episodeNumber === episode.episodeNumber);
-
-        if (!changedepisode) {
-          return acc;
-        }
-
-        if (episode.monitored === changedepisode.monitored) {
-          return acc;
-        }
-
-        acc.push(updateItem({
-          id: episode.id,
-          section: 'episodes',
-          monitored: changedepisode.monitored
-        }));
-
-        return acc;
-      }, []);
-
-      dispatch(batchActions([
-        updateItem({
-          id,
-          section
-        }),
-
-        ...episodesToUpdate
-      ]));
 
       dispatch(set({
         section,
