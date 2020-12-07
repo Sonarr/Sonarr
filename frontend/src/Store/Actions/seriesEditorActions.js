@@ -55,7 +55,7 @@ export const defaultState = {
     {
       name: 'languageProfileId',
       label: 'Language Profile',
-      isSortable: false,
+      isSortable: true,
       isVisible: true
     },
     {
