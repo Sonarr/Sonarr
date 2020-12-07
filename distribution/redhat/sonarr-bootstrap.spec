@@ -122,6 +122,11 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Mon Dec 07 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1024-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Move config.yml for github
+- Fixed: Using folder as scene name for season packs
+
 * Wed Dec 02 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1023-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Update GitHub templates
