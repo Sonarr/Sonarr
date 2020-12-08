@@ -190,6 +190,11 @@ namespace NzbDrone.Windows.Disk
 
         private IMount GetReparsePoint(string path)
         {
+            if (!Directory.Exists(path))
+            {
+                return null;
+            }
+
             var di = new DirectoryInfo(path);
             var isReparsePoint = di.Attributes.HasFlag(FileAttributes.ReparsePoint);
 
