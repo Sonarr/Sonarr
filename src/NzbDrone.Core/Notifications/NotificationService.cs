@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Notifications
         : IHandle<EpisodeGrabbedEvent>,
           IHandle<EpisodeImportedEvent>,
           IHandle<SeriesRenamedEvent>,
+          IHandle<EpisodeFileDeletedEvent>,
           IHandle<HealthCheckFailedEvent>,
           IHandleAsync<DownloadsProcessedEvent>,
           IHandleAsync<RenameCompletedEvent>,
@@ -185,6 +186,30 @@ namespace NzbDrone.Core.Notifications
                 catch (Exception ex)
                 {
                     _logger.Warn(ex, "Unable to send OnRename notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(EpisodeFileDeletedEvent message)
+        {
+            var deleteMessage = new DeleteMessage();
+            deleteMessage.Message = GetMessage(message.EpisodeFile.Series, message.EpisodeFile.Episodes, message.EpisodeFile.Quality);
+            deleteMessage.Series = message.EpisodeFile.Series;
+            deleteMessage.EpisodeFile = message.EpisodeFile;
+            deleteMessage.Reason = message.Reason;
+
+            foreach (var notification in _notificationFactory.OnDeleteEnabled())
+            {
+                try
+                {
+                    if (ShouldHandleSeries(notification.Definition, deleteMessage.EpisodeFile.Series))
+                    {
+                        notification.OnDelete(deleteMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to send OnDelete notification to: " + notification.Definition.Name);
                 }
             }
         }

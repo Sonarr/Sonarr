@@ -27,6 +27,11 @@ namespace NzbDrone.Core.Notifications.Join
             _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE_BRANDED, message.Message, Settings);
         }
 
+        public override void OnDelete(DeleteMessage deleteMessage)
+        {
+            _proxy.SendNotification(EPISODE_DELETED_TITLE_BRANDED, deleteMessage.Message, Settings);
+        }
+
         public override void OnHealthIssue(HealthCheck.HealthCheck message)
         {
             _proxy.SendNotification(HEALTH_ISSUE_TITLE_BRANDED, message.Message, Settings);

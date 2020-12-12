@@ -127,6 +127,38 @@ namespace NzbDrone.Core.Notifications.CustomScript
             ExecuteScript(environmentVariables);
         }
 
+        public override void OnDelete(DeleteMessage deleteMessage)
+        {
+            var series = deleteMessage.Series;
+            var episodeFile = deleteMessage.EpisodeFile;
+
+            var environmentVariables = new StringDictionary();
+
+            environmentVariables.Add("Sonarr_EventType", "Deleted");
+            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
+            environmentVariables.Add("Sonarr_Series_Title", series.Title);
+            environmentVariables.Add("Sonarr_Series_Path", series.Path);
+            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
+            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
+            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
+            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
+            environmentVariables.Add("Sonarr_EpisodeFile_Id", episodeFile.Id.ToString());
+            environmentVariables.Add("Sonarr_EpisodeFile_EpisodeCount", episodeFile.Episodes.Value.Count.ToString());
+            environmentVariables.Add("Sonarr_EpisodeFile_RelativePath", episodeFile.RelativePath);
+            environmentVariables.Add("Sonarr_EpisodeFile_Path", Path.Combine(series.Path, episodeFile.RelativePath));
+            environmentVariables.Add("Sonarr_EpisodeFile_EpisodeIds", string.Join(",", episodeFile.Episodes.Value.Select(e => e.Id)));
+            environmentVariables.Add("Sonarr_EpisodeFile_SeasonNumber", episodeFile.SeasonNumber.ToString());
+            environmentVariables.Add("Sonarr_EpisodeFile_EpisodeNumbers", string.Join(",", episodeFile.Episodes.Value.Select(e => e.EpisodeNumber)));
+            environmentVariables.Add("Sonarr_EpisodeFile_EpisodeAirDates", string.Join(",", episodeFile.Episodes.Value.Select(e => e.AirDate)));
+            environmentVariables.Add("Sonarr_EpisodeFile_EpisodeAirDatesUtc", string.Join(",", episodeFile.Episodes.Value.Select(e => e.AirDateUtc)));
+            environmentVariables.Add("Sonarr_EpisodeFile_EpisodeTitles", string.Join("|", episodeFile.Episodes.Value.Select(e => e.Title)));
+            environmentVariables.Add("Sonarr_EpisodeFile_Quality", episodeFile.Quality.Quality.Name);
+            environmentVariables.Add("Sonarr_EpisodeFile_QualityVersion", episodeFile.Quality.Revision.Version.ToString());
+            environmentVariables.Add("Sonarr_EpisodeFile_ReleaseGroup", episodeFile.ReleaseGroup ?? string.Empty);
+            environmentVariables.Add("Sonarr_EpisodeFile_SceneName", episodeFile.SceneName ?? string.Empty);
+
+        }
+
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
             var environmentVariables = new StringDictionary();

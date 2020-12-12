@@ -235,6 +235,24 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnDelete(DeleteMessage deleteMessage)
+        {
+            var series = deleteMessage.Series;
+            var episodes = deleteMessage.EpisodeFile.Episodes;
+
+            var attachments = new List<Embed>
+                              {
+                                  new Embed
+                                  {
+                                      Title = GetTitle(series, episodes)
+                                  }
+                              };
+
+            var payload = CreatePayload("Deleted", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
             var attachments = new List<Embed>
