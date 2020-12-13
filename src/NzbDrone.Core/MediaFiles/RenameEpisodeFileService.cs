@@ -110,11 +110,39 @@ namespace NzbDrone.Core.MediaFiles
 
         private void RenameFiles(List<EpisodeFile> episodeFiles, Series series)
         {
-            var renamed = new List<EpisodeFile>();
+            var notRenamed = TryRenameFiles(episodeFiles, series);
+
+            while (notRenamed.Any())
+            {
+                var newNotRenamed = TryRenameFiles(notRenamed, series);
+
+                if (newNotRenamed.Count == notRenamed.Count) break;
+
+                notRenamed = newNotRenamed;
+            }
+
+            if (notRenamed.Empty() || episodeFiles.Count != notRenamed.Count)
+            {
+                _diskProvider.RemoveEmptySubfolders(series.Path);
+
+                _eventAggregator.PublishEvent(new SeriesRenamedEvent(series));
+            }
+        }
+
+        private List<EpisodeFile> TryRenameFiles(List<EpisodeFile> episodeFiles, Series series)
+        {
+            var existingFiles = new List<EpisodeFile>();
 
             foreach (var episodeFile in episodeFiles)
             {
                 var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+
+                if (_diskProvider.FileExists(episodeFilePath))
+                {
+                    existingFiles.Add(episodeFile);
+
+                    continue;
+                }
 
                 try
                 {
@@ -122,7 +150,6 @@ namespace NzbDrone.Core.MediaFiles
                     _episodeFileMover.MoveEpisodeFile(episodeFile, series);
 
                     _mediaFileService.Update(episodeFile);
-                    renamed.Add(episodeFile);
 
                     _logger.Debug("Renamed episode file: {0}", episodeFile);
 
@@ -138,12 +165,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            if (renamed.Any())
-            {
-                _diskProvider.RemoveEmptySubfolders(series.Path);
-
-                _eventAggregator.PublishEvent(new SeriesRenamedEvent(series));
-            }
+            return existingFiles;
         }
 
         public void Execute(RenameFilesCommand message)
