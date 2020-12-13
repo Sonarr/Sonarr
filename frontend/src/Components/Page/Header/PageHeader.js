@@ -53,7 +53,7 @@ class PageHeader extends Component {
         <div className={styles.logoContainer}>
           <Link
             className={styles.logoLink}
-            to={`${window.Sonarr.urlBase}/`}
+            to={'/'}
           >
             <img
               className={styles.logo}
