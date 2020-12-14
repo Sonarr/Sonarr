@@ -136,6 +136,12 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Mon Dec 14 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1026-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- All Wiki links now use the consolidated Servarr wiki
+- Fixed: '/series' URL Base breaking UI navigation
+- New: Added Series Monitoring Toggle to Series Details
+
 * Mon Dec 07 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1024-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Move config.yml for github
