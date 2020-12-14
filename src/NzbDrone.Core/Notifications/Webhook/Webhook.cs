@@ -76,6 +76,27 @@ namespace NzbDrone.Core.Notifications.Webhook
             _proxy.SendWebhook(payload, Settings);
         }
 
+        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
+        {
+            var payload = new WebhookEpisodeDeletePayload
+            {
+                EventType = WebhookEventType.Delete,
+                Series = new WebhookSeries(deleteMessage.Series),
+                Episodes = deleteMessage.EpisodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x))
+            };
+            _proxy.SendWebhook(payload, Settings);
+        }
+
+        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        {
+            var payload = new WebhookSeriesDeletePayload
+            {
+                EventType = WebhookEventType.Delete,
+                Series = new WebhookSeries(deleteMessage.Series),
+                DeletedFiles = deleteMessage.DeleteFiles
+            };
+        }
+
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
             var payload = new WebhookHealthPayload
