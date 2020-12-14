@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             {
                 TestLogger.Info("OnRename was called");
             }
-            public override void OnDelete(DeleteMessage message)
+            public override void OnDelete(EpisodeDeleteMessage message)
             {
                 TestLogger.Info("OnDelete was called");
             }

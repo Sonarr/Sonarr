@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
-        public override void OnDelete(DeleteMessage deleteMessage)
+        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
         {
             var attachments = new List<Attachment>
                               {
@@ -81,7 +81,26 @@ namespace NzbDrone.Core.Notifications.Slack
                                   }
                               };
 
-            var payload = CreatePayload("Deleted", attachments);
+            var payload = CreatePayload("Episode Deleted", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
+        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        {
+            string deletedFiles = deleteMessage.DeleteFiles ?
+                "Removed from Sonarr and disk" :
+                "Removed from Sonarr but NOT disk";
+            var attachments = new List<Attachment>
+                              {
+                                  new Attachment
+                                  {
+                                      Title = deleteMessage.Series.Title,
+                                      Text = deletedFiles
+                                  }
+                              };
+
+            var payload = CreatePayload("Series Deleted", attachments);
 
             _proxy.SendPayload(payload, Settings);
         }

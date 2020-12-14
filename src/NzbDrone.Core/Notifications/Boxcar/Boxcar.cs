@@ -26,9 +26,14 @@ namespace NzbDrone.Core.Notifications.Boxcar
             _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE , message.Message, Settings);
         }
 
-        public override void OnDelete(DeleteMessage deleteMessage)
+        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
+        }
+
+        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        {
+            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck message)

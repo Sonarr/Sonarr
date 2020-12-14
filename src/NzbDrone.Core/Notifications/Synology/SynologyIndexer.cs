@@ -47,12 +47,23 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override void OnDelete(DeleteMessage deleteMessage)
+        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
         {
             if (Settings.UpdateLibrary)
             {
                 var fullPath = Path.Combine(deleteMessage.Series.Path, deleteMessage.EpisodeFile.RelativePath);
                 _indexerProxy.DeleteFile(fullPath);
+            }
+        }
+
+        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        {
+            if (deleteMessage.DeleteFiles)
+            {
+                if (Settings.UpdateLibrary)
+                {
+                    _indexerProxy.DeleteFolder(deleteMessage.Series.Path);
+                }
             }
         }
 

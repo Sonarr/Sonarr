@@ -10,6 +10,7 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Notifications
 {
@@ -71,6 +72,16 @@ namespace NzbDrone.Core.Notifications
                                     episodeNumbers,
                                     episodeTitles,
                                     qualityString);
+        }
+
+        private string GetMessage(Series series, bool deleteFiles)
+        {
+            string deleteMessage = deleteFiles ? 
+                "Removed from Sonarr and disk" : 
+                "Removed from Sonarr but NOT disk";
+            return string.Format("{0} - {1}",
+                                    series.Title,
+                                    deleteMessage);
         }
 
         private bool ShouldHandleSeries(ProviderDefinition definition, Series series)
@@ -192,7 +203,7 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(EpisodeFileDeletedEvent message)
         {
-            var deleteMessage = new DeleteMessage();
+            var deleteMessage = new EpisodeDeleteMessage();
             deleteMessage.Message = GetMessage(message.EpisodeFile.Series, message.EpisodeFile.Episodes, message.EpisodeFile.Quality);
             deleteMessage.Series = message.EpisodeFile.Series;
             deleteMessage.EpisodeFile = message.EpisodeFile;
@@ -203,6 +214,29 @@ namespace NzbDrone.Core.Notifications
                 try
                 {
                     if (ShouldHandleSeries(notification.Definition, deleteMessage.EpisodeFile.Series))
+                    {
+                        notification.OnDelete(deleteMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to send OnDelete notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(SeriesDeletedEvent message)
+        {
+            var deleteMessage = new SeriesDeleteMessage();
+            deleteMessage.Message = GetMessage(message.Series, message.DeleteFiles);
+            deleteMessage.Series = message.Series;
+            deleteMessage.DeleteFiles = message.DeleteFiles;
+
+            foreach (var notification in _notificationFactory.OnDeleteEnabled())
+            {
+                try
+                {
+                    if (ShouldHandleSeries(notification.Definition, deleteMessage.Series))
                     {
                         notification.OnDelete(deleteMessage);
                     }

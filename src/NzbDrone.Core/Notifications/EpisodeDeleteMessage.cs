@@ -3,7 +3,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications
 {
-    public class DeleteMessage
+    public class EpisodeDeleteMessage
     {
         public string Message { get; set; }
         public Series Series { get; set; }

@@ -10,7 +10,8 @@ namespace NzbDrone.Core.Notifications
         void OnGrab(GrabMessage grabMessage);
         void OnDownload(DownloadMessage message);
         void OnRename(Series series);
-        void OnDelete(DeleteMessage deleteMessage);
+        void OnDelete(EpisodeDeleteMessage deleteMessage);
+        void OnDelete(SeriesDeleteMessage deleteMessage);
         void OnHealthIssue(HealthCheck.HealthCheck healthCheck);
         void ProcessQueue();
         bool SupportsOnGrab { get; }

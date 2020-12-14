@@ -127,14 +127,14 @@ namespace NzbDrone.Core.Notifications.CustomScript
             ExecuteScript(environmentVariables);
         }
 
-        public override void OnDelete(DeleteMessage deleteMessage)
+        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
         {
             var series = deleteMessage.Series;
             var episodeFile = deleteMessage.EpisodeFile;
 
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Deleted");
+            environmentVariables.Add("Sonarr_EventType", "Episode Deleted");
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
@@ -157,6 +157,24 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_EpisodeFile_ReleaseGroup", episodeFile.ReleaseGroup ?? string.Empty);
             environmentVariables.Add("Sonarr_EpisodeFile_SceneName", episodeFile.SceneName ?? string.Empty);
 
+        }
+
+        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        {
+            var series = deleteMessage.Series;
+            var environmentVariables = new StringDictionary();
+
+            environmentVariables.Add("Sonarr_EventType", "Series Deleted");
+            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
+            environmentVariables.Add("Sonarr_Series_Title", series.Title);
+            environmentVariables.Add("Sonarr_Series_Path", series.Path);
+            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
+            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
+            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
+            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
+            environmentVariables.Add("Sonarr_Series_DeleteFiles", deleteMessage.DeleteFiles.ToString());
+
+            ExecuteScript(environmentVariables);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)

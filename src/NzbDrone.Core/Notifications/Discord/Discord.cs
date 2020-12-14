@@ -235,7 +235,7 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
-        public override void OnDelete(DeleteMessage deleteMessage)
+        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
         {
             var series = deleteMessage.Series;
             var episodes = deleteMessage.EpisodeFile.Episodes;
@@ -248,7 +248,27 @@ namespace NzbDrone.Core.Notifications.Discord
                                   }
                               };
 
-            var payload = CreatePayload("Deleted", attachments);
+            var payload = CreatePayload("Episode Deleted", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        {
+            var series = deleteMessage.Series;
+            string deletedFiles = deleteMessage.DeleteFiles ?
+                "Removed from Sonarr and disk" :
+                "Removed from Sonarr but NOT disk";
+
+            var attachments = new List<Embed>
+                              {
+                                  new Embed
+                                  {
+                                      Title = series.Title,
+                                      Description = deletedFiles
+                                  }
+                              };
+
+            var payload = CreatePayload("Series Deleted", attachments);
 
             _proxy.SendPayload(payload, Settings);
         }

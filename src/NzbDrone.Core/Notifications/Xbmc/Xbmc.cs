@@ -36,7 +36,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(message.Series, message.OldFiles.Any());
         }
 
-        public override void OnDelete(DeleteMessage deleteMessage)
+        public override void OnRename(Series series)
+        {
+            UpdateAndClean(series);
+        }
+        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
         {
             const string header = "Sonarr - Deleted";
 
@@ -44,9 +48,15 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(deleteMessage.Series, true);
         }
 
-        public override void OnRename(Series series)
+        public override void OnDelete(SeriesDeleteMessage deleteMessage)
         {
-            UpdateAndClean(series);
+            if (deleteMessage.DeleteFiles)
+            {
+                const string header = "Sonarr - Deleted";
+
+                Notify(Settings, header, deleteMessage.Message);
+                UpdateAndClean(deleteMessage.Series, true);
+            }
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
