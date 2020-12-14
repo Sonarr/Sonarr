@@ -39,7 +39,7 @@ namespace Sonarr.Api.V3
                 Tags = definition.Tags,
                 Fields = SchemaBuilder.ToSchema(definition.Settings),
 
-                InfoLink = string.Format("https://github.com/Sonarr/Sonarr/wiki/Supported-{0}#{1}",
+                InfoLink = string.Format("https://wiki.servarr.com/Sonarr_Supported_{0}",
                     typeof(TProviderResource).Name.Replace("Resource", "s"),
                     definition.Implementation.ToLower())
             };
