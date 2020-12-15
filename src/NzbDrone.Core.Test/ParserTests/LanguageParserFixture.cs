@@ -19,9 +19,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("2 Broke Girls - S01E01 - Pilot.eng.sub")]
         [TestCase("2 Broke Girls - S01E01 - Pilot.English.sub")]
         [TestCase("2 Broke Girls - S01E01 - Pilot.english.sub")]
-        [TestCase("The.Spanish.Princess.S02E08.Peace.1080p.AMZN.WEBRip.DDP5.1.x264-NTb")]
         [TestCase("The Spanish Princess S02E02 Flodden 720p AMZN WEB-DL DDP5 1 H 264-NTb")]
-        [TestCase("The.Spanish.Princess.S02E07.1080p.WEB.H264-GGWP")]
         [TestCase("The.Spanish.Princess.S02E02.1080p.WEB.H264-CAKES")]
         [TestCase("The.Spanish.Princess.S02E06.Field.of.Cloth.of.Gold.1080p.AMZN.WEBRip.DDP5.1.x264-NTb")]
         public void should_parse_language_english(string postTitle)
