@@ -171,7 +171,7 @@ export const defaultState = {
     {
       name: 'tags',
       label: 'Tags',
-      isSortable: false,
+      isSortable: true,
       isVisible: false
     },
     {
