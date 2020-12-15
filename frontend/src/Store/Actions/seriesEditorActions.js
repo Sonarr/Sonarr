@@ -55,7 +55,7 @@ export const defaultState = {
     {
       name: 'languageProfileId',
       label: 'Language Profile',
-      isSortable: false,
+      isSortable: true,
       isVisible: true
     },
     {
@@ -85,7 +85,7 @@ export const defaultState = {
     {
       name: 'tags',
       label: 'Tags',
-      isSortable: false,
+      isSortable: true,
       isVisible: true
     }
   ],
