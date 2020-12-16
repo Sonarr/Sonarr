@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
@@ -87,14 +88,14 @@ namespace NzbDrone.Core.Notifications
 
         private bool HasConcreteImplementation(string methodName)
         {
-            var method = GetType().GetMethod(methodName);
+            var methods = GetType().GetMethods().Where(method => method.Name == methodName).FirstOrDefault();
 
-            if (method == null)
+            if (methods == null)
             {
                 throw new MissingMethodException(GetType().Name, Name);
             }
 
-            return !method.DeclaringType.IsAbstract;
+            return !methods.DeclaringType.IsAbstract;
         }
     }
 }
