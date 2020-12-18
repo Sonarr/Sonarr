@@ -18,14 +18,9 @@ namespace NzbDrone.Core.Notifications
         {
             Series = series;
             DeleteFiles = deleteFiles;
-            if (DeleteFiles == true)
-            {
-                DeletedFiles = "Series removed, files were not deleted";
-            }
-            else
-            {
-                DeletedFiles = "Series removed and all files were deleted";
-            }
+            DeletedFiles = DeleteFiles ?
+                "Series removed and all files were deleted" :
+                "Series removed, files were not deleted";
             Message = series.Title + " - " + DeletedFiles;
         }
     }
