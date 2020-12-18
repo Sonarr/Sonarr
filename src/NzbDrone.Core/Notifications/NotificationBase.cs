@@ -88,14 +88,37 @@ namespace NzbDrone.Core.Notifications
 
         private bool HasConcreteImplementation(string methodName)
         {
-            var methods = GetType().GetMethods().Where(method => method.Name == methodName).FirstOrDefault();
-
-            if (methods == null)
+            if (methodName != "OnDelete")
             {
-                throw new MissingMethodException(GetType().Name, Name);
-            }
+                var method = GetType().GetMethod(methodName);
 
-            return !methods.DeclaringType.IsAbstract;
+                if (method == null)
+                {
+                    throw new MissingMethodException(GetType().Name, Name);
+                }
+
+                return !method.DeclaringType.IsAbstract;
+            }
+            else
+            {
+                var methods = GetType().GetMethods().Where(method => method.Name == methodName);
+
+                if (methods == null)
+                {
+                    throw new MissingMethodException(GetType().Name, Name);
+                }
+
+                var methodsArray = methods.ToArray();
+
+                if (methodsArray.Count() != 2)
+                {
+                    return false;
+                }
+                else
+                {
+                    return !methodsArray[0].DeclaringType.IsAbstract;
+                }
+            }
         }
     }
 }
