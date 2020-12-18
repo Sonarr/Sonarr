@@ -79,55 +79,62 @@ class Notification extends Component {
         </div>
 
         {
-          supportsOnGrab && onGrab &&
+          supportsOnGrab && onGrab ?
             <Label kind={kinds.SUCCESS}>
               On Grab
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnDownload && onDownload &&
+          supportsOnDownload && onDownload ?
             <Label kind={kinds.SUCCESS}>
               On Import
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnUpgrade && onDownload && onUpgrade &&
+          supportsOnUpgrade && onDownload && onUpgrade ?
             <Label kind={kinds.SUCCESS}>
               On Upgrade
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnRename && onRename &&
+          supportsOnRename && onRename ?
             <Label kind={kinds.SUCCESS}>
               On Rename
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnHealthIssue && onHealthIssue &&
+          supportsOnHealthIssue && onHealthIssue ?
             <Label kind={kinds.SUCCESS}>
               On Health Issue
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnDelete && onDelete &&
+          supportsOnDelete && onDelete ?
             <Label kind={kinds.SUCCESS}>
               On Delete
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          !onGrab && !onDownload && !onRename && !onHealthIssue && !onDelete &&
+          !onGrab && !onDownload && !onRename && !onHealthIssue && !onDelete ?
             <Label
               kind={kinds.DISABLED}
               outline={true}
             >
               Disabled
-            </Label>
+            </Label> :
+            null
         }
 
         <EditNotificationModalConnector
