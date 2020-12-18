@@ -62,7 +62,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.SupportsOnDownload = resource.SupportsOnDownload;
             definition.SupportsOnUpgrade = resource.SupportsOnUpgrade;
             definition.SupportsOnRename = resource.SupportsOnRename;
-            definition.OnDelete = resource.SupportsOnDelete;
+            definition.SupportsOnDelete = resource.SupportsOnDelete;
             definition.SupportsOnHealthIssue = resource.SupportsOnHealthIssue;
             definition.IncludeHealthWarnings = resource.IncludeHealthWarnings;
 
