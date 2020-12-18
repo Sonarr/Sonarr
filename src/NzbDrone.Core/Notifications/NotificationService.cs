@@ -74,16 +74,6 @@ namespace NzbDrone.Core.Notifications
                                     qualityString);
         }
 
-        private string GetMessage(Series series, bool deleteFiles)
-        {
-            string deleteMessage = deleteFiles ? 
-                "Removed from Sonarr and disk" : 
-                "Removed from Sonarr but NOT disk";
-            return string.Format("{0} - {1}",
-                                    series.Title,
-                                    deleteMessage);
-        }
-
         private bool ShouldHandleSeries(ProviderDefinition definition, Series series)
         {
             if (definition.Tags.Empty())
@@ -227,10 +217,7 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(SeriesDeletedEvent message)
         {
-            var deleteMessage = new SeriesDeleteMessage();
-            deleteMessage.Message = GetMessage(message.Series, message.DeleteFiles);
-            deleteMessage.Series = message.Series;
-            deleteMessage.DeleteFiles = message.DeleteFiles;
+            var deleteMessage = new SeriesDeleteMessage(message.Series,message.DeleteFiles);
 
             foreach (var notification in _notificationFactory.OnDeleteEnabled())
             {

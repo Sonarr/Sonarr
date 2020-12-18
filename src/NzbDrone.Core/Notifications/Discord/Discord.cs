@@ -255,16 +255,13 @@ namespace NzbDrone.Core.Notifications.Discord
         public override void OnDelete(SeriesDeleteMessage deleteMessage)
         {
             var series = deleteMessage.Series;
-            string deletedFiles = deleteMessage.DeleteFiles ?
-                "Removed from Sonarr and disk" :
-                "Removed from Sonarr but NOT disk";
 
             var attachments = new List<Embed>
                               {
                                   new Embed
                                   {
                                       Title = series.Title,
-                                      Description = deletedFiles
+                                      Description = deleteMessage.DeletedFiles
                                   }
                               };
 
