@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Episode Deleted");
+            environmentVariables.Add("Sonarr_EventType", "EpisodeDeleted");
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var series = deleteMessage.Series;
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Series Deleted");
+            environmentVariables.Add("Sonarr_EventType", "SeriesDeleted");
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
