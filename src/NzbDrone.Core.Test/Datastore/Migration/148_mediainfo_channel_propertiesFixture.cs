@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 DateAdded = DateTime.UtcNow,
                 RelativePath = "SomeFile.mkv",
                 Language = 1,
+                SeasonNumber = 1,
                 MediaInfo = new
                 {
                     ContainerFormat = "Matroska",
