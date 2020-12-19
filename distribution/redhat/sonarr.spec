@@ -136,6 +136,20 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Sat Dec 19 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1033-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Format Errors from AudioChannel formatter
+- Fixed Migration 148 test
+- Fixed: Handle 3 digit audio channels
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Language parsing with space-delimited releases
+- Fixed: Don't workaround DTS if audioChannels invalid
+- Fixed: Migrate Mediainfo properties that changed names
+- Fixed: Use audioChannels_Original if it exists in MI
+- Fixed health check wiki link unit tests
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- New: Sorting Series List/Mass Editor by Language Profile and Tags
+
 * Mon Dec 14 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1026-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - All Wiki links now use the consolidated Servarr wiki
