@@ -458,13 +458,37 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                 if (audioChannelPositions.Contains("/"))
                 {
-                    return Regex.Replace(audioChannelPositions, @"^\d+\sobjects", "",
+                    var channelStringList = Regex.Replace(audioChannelPositions,
+                            @"^\d+\sobjects",
+                            "",
                             RegexOptions.Compiled | RegexOptions.IgnoreCase)
                         .Replace("Object Based / ", "")
                         .Split(new string[] {" / "}, StringSplitOptions.RemoveEmptyEntries)
                         .FirstOrDefault()
-                        ?.Split('/')
-                        .Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));
+                        ?.Split('/');
+
+                    var positions = default(decimal);
+
+                    if (channelStringList == null)
+                    {
+                        return 0;
+                    }
+
+                    foreach (var channel in channelStringList)
+                    {
+                        var channelSplit = channel.Split(new string[] { "." }, StringSplitOptions.None);
+
+                        if (channelSplit.Count() == 3)
+                        {
+                            positions += decimal.Parse(string.Format("{0}.{1}", channelSplit[1], channelSplit[2]), CultureInfo.InvariantCulture);
+                        }
+                        else
+                        {
+                            positions += decimal.Parse(channel, CultureInfo.InvariantCulture);
+                        }
+                    }
+
+                    return positions;
                 }
             }
             catch (Exception e)
