@@ -8,3 +8,4 @@ namespace NzbDrone.Core.Notifications.Webhook
         public List<WebhookEpisode> Episodes { get; set; }
     }
 }
+
