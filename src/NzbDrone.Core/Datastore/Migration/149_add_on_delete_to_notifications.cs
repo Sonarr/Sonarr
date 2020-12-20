@@ -12,3 +12,4 @@ namespace NzbDrone.Core.Datastore.Migration
         }
     }
 }
+
