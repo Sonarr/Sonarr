@@ -11,6 +11,16 @@ namespace NzbDrone.Common.Test.DiskTests
         where TSubject : class, IDiskProvider
     {
         [Test]
+        public void writealltext_should_truncate_existing()
+        {
+            var file = GetTempFilePath();
+
+            Subject.WriteAllText(file, "A pretty long string");
+            Subject.WriteAllText(file, "A short string");
+            Subject.ReadAllText(file).Should().Be("A short string");
+        }
+
+        [Test]
         [Retry(5)]
         public void directory_exist_should_be_able_to_find_existing_folder()
         {
