@@ -1,7 +1,8 @@
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import { filterBuilderTypes, filterBuilderValueTypes, sortDirections } from 'Helpers/Props';
+import sortByName from 'Utilities/Array/sortByName'
+import { filterBuilderTypes, filterBuilderValueTypes, filterTypePredicates, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
@@ -29,7 +30,26 @@ export const defaultState = {
   secondarySortDirection: sortDirections.ASCENDING,
   selectedFilterKey: 'all',
   filters,
-  filterPredicates,
+  filterPredicates: {
+    ...filterPredicates,
+
+    episodeProgress: function(item, filterValue, type) {
+      const { statistics = {} } = item;
+
+      const {
+        episodeCount = 0,
+        episodeFileCount
+      } = statistics;
+
+      const progress = episodeCount ?
+        episodeFileCount / episodeCount * 100 :
+        100;
+
+      const predicate = filterTypePredicates[type];
+
+      return predicate(progress, filterValue);
+    }
+  },
 
   columns: [
     {

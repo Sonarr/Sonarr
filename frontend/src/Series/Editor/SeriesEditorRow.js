@@ -48,11 +48,19 @@ class SeriesEditorRow extends Component {
       tags,
       useSceneNumbering,
       seasonFolder,
-      statistics = {},
+      statistics,
       columns,
       isSelected,
       onSelectedChange
     } = this.props;
+
+    const {
+      seasonCount,
+      episodeCount,
+      episodeFileCount,
+      totalEpisodeCount,
+      sizeOnDisk
+    } = statistics;
 
     return (
       <TableRow>
@@ -201,6 +209,13 @@ SeriesEditorRow.propTypes = {
 };
 
 SeriesEditorRow.defaultProps = {
+  statistics: {
+    seasonCount: 0,
+    episodeCount: 0,
+    episodeFileCount: 0,
+    totalEpisodeCount: 0
+  },
+  genres: [],
   tags: []
 };
 
