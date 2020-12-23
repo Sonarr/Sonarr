@@ -32,34 +32,16 @@ class SeriesEditorRow extends Component {
       title,
       titleSlug,
       seriesType,
-      network,
       qualityProfile,
       languageProfile,
-      nextAiring,
-      previousAiring,
-      added,
-      latestSeason,
-      year,
       path,
-      genres,
-      ratings,
-      certification,
       tags,
-      useSceneNumbering,
       seasonFolder,
-      statistics,
+      statistics = {},
       columns,
       isSelected,
       onSelectedChange
     } = this.props;
-
-    const {
-      seasonCount,
-      episodeCount,
-      episodeFileCount,
-      totalEpisodeCount,
-      sizeOnDisk
-    } = statistics;
 
     return (
       <TableRow>
@@ -181,40 +163,23 @@ class SeriesEditorRow extends Component {
 
 SeriesEditorRow.propTypes = {
   id: PropTypes.number.isRequired,
-  monitored: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
   titleSlug: PropTypes.string.isRequired,
-  seriesType: PropTypes.string.isRequired,
-  network: PropTypes.string,
-  qualityProfile: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
+  monitored: PropTypes.bool.isRequired,
   languageProfile: PropTypes.object.isRequired,
-  nextAiring: PropTypes.string,
-  previousAiring: PropTypes.string,
-  added: PropTypes.string,
-  latestSeason: PropTypes.object,
-  year: PropTypes.number,
-  path: PropTypes.string.isRequired,
-  genres: PropTypes.arrayOf(PropTypes.string).isRequired,
-  ratings: PropTypes.object.isRequired,
-  certification: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.number).isRequired,
-  useSceneNumbering: PropTypes.bool.isRequired,
+  qualityProfile: PropTypes.object.isRequired,
+  seriesType: PropTypes.string.isRequired,
   seasonFolder: PropTypes.bool.isRequired,
+  path: PropTypes.string.isRequired,
   statistics: PropTypes.object.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   isSelected: PropTypes.bool,
   onSelectedChange: PropTypes.func.isRequired
 };
 
 SeriesEditorRow.defaultProps = {
-  statistics: {
-    seasonCount: 0,
-    episodeCount: 0,
-    episodeFileCount: 0,
-    totalEpisodeCount: 0
-  },
-  genres: [],
   tags: []
 };
 
