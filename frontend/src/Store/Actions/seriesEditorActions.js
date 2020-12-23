@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import sortByName from 'Utilities/Array/sortByName'
+import sortByName from 'Utilities/Array/sortByName';
 import { filterBuilderTypes, filterBuilderValueTypes, filterTypePredicates, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
@@ -255,7 +255,6 @@ export const persistState = [
   'seriesEditor.selectedFilterKey',
   'seriesEditor.customFilters'
 ];
-
 
 //
 // Actions Types

@@ -402,7 +402,7 @@ export const defaultState = {
       label: 'Scene Numbering',
       type: filterBuilderTypes.EXACT
     }
-  ],
+  ]
 };
 
 export const persistState = [

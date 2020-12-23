@@ -10,7 +10,6 @@ import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import SeriesStatusCell from 'Series/Index/Table/SeriesStatusCell';
 import styles from './SeriesEditorRow.css';
-import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 
 class SeriesEditorRow extends Component {
 
@@ -193,7 +192,6 @@ SeriesEditorRow.propTypes = {
   nextAiring: PropTypes.string,
   previousAiring: PropTypes.string,
   added: PropTypes.string,
-  statistics: PropTypes.object.isRequired,
   latestSeason: PropTypes.object,
   year: PropTypes.number,
   path: PropTypes.string.isRequired,
@@ -202,6 +200,7 @@ SeriesEditorRow.propTypes = {
   certification: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   useSceneNumbering: PropTypes.bool.isRequired,
+  seasonFolder: PropTypes.bool.isRequired,
   statistics: PropTypes.object.isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   isSelected: PropTypes.bool,
