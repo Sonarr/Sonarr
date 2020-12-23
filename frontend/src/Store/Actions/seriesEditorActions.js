@@ -246,22 +246,7 @@ export const defaultState = {
     }
   ],
 
-  sortPredicates: {
-    ...sortPredicates,
-
-    episodeProgress: function(item) {
-      const { statistics = {} } = item;
-
-      const {
-        episodeCount = 0,
-        episodeFileCount
-      } = statistics;
-
-      const progress = episodeCount ? episodeFileCount / episodeCount * 100 : 100;
-
-      return progress + episodeCount / 1000000;
-    },
-  }
+  sortPredicates
 };
 
 export const persistState = [
