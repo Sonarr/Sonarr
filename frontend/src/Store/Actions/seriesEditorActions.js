@@ -105,8 +105,28 @@ export const defaultState = {
     },
     {
       name: 'seriesType',
-      label: 'Series Type',
-      type: filterBuilderTypes.EXACT
+      label: 'Type',
+      type: filterBuilderTypes.EXACT,
+      valueType: filterBuilderValueTypes.SERIES_TYPES
+    },
+    {
+      name: 'network',
+      label: 'Network',
+      type: filterBuilderTypes.STRING,
+      optionsSelector: function(items) {
+        const tagList = items.reduce((acc, series) => {
+          if (series.network) {
+            acc.push({
+              id: series.network,
+              name: series.network
+            });
+          }
+
+          return acc;
+        }, []);
+
+        return tagList.sort(sortByName);
+      }
     },
     {
       name: 'qualityProfileId',
@@ -119,6 +139,34 @@ export const defaultState = {
       label: 'Language Profile',
       type: filterBuilderTypes.EXACT,
       valueType: filterBuilderValueTypes.LANGUAGE_PROFILE
+    },
+    {
+      name: 'nextAiring',
+      label: 'Next Airing',
+      type: filterBuilderTypes.DATE,
+      valueType: filterBuilderValueTypes.DATE
+    },
+    {
+      name: 'previousAiring',
+      label: 'Previous Airing',
+      type: filterBuilderTypes.DATE,
+      valueType: filterBuilderValueTypes.DATE
+    },
+    {
+      name: 'added',
+      label: 'Added',
+      type: filterBuilderTypes.DATE,
+      valueType: filterBuilderValueTypes.DATE
+    },
+    {
+      name: 'seasonCount',
+      label: 'Season Count',
+      type: filterBuilderTypes.NUMBER
+    },
+    {
+      name: 'episodeProgress',
+      label: 'Episode Progress',
+      type: filterBuilderTypes.NUMBER
     },
     {
       name: 'path',
@@ -137,14 +185,63 @@ export const defaultState = {
       valueType: filterBuilderValueTypes.BYTES
     },
     {
+      name: 'genres',
+      label: 'Genres',
+      type: filterBuilderTypes.ARRAY,
+      optionsSelector: function(items) {
+        const tagList = items.reduce((acc, series) => {
+          series.genres.forEach((genre) => {
+            acc.push({
+              id: genre,
+              name: genre
+            });
+          });
+
+          return acc;
+        }, []);
+
+        return tagList.sort(sortByName);
+      }
+    },
+    {
+      name: 'ratings',
+      label: 'Rating',
+      type: filterBuilderTypes.NUMBER
+    },
+    {
+      name: 'certification',
+      label: 'Certification',
+      type: filterBuilderTypes.EXACT
+    },
+    {
       name: 'tags',
       label: 'Tags',
       type: filterBuilderTypes.ARRAY,
       valueType: filterBuilderValueTypes.TAG
+    },
+    {
+      name: 'useSceneNumbering',
+      label: 'Scene Numbering',
+      type: filterBuilderTypes.EXACT
     }
   ],
 
-  sortPredicates
+  sortPredicates: {
+    ...sortPredicates,
+
+    episodeProgress: function(item) {
+      const { statistics = {} } = item;
+
+      const {
+        episodeCount = 0,
+        episodeFileCount
+      } = statistics;
+
+      const progress = episodeCount ? episodeFileCount / episodeCount * 100 : 100;
+
+      return progress + episodeCount / 1000000;
+    },
+  }
 };
 
 export const persistState = [
@@ -153,6 +250,7 @@ export const persistState = [
   'seriesEditor.selectedFilterKey',
   'seriesEditor.customFilters'
 ];
+
 
 //
 // Actions Types

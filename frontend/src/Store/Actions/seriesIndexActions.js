@@ -352,6 +352,11 @@ export const defaultState = {
       type: filterBuilderTypes.STRING
     },
     {
+      name: 'rootFolderPath',
+      label: 'Root Folder Path',
+      type: filterBuilderTypes.EXACT
+    },
+    {
       name: 'sizeOnDisk',
       label: 'Size on Disk',
       type: filterBuilderTypes.NUMBER,

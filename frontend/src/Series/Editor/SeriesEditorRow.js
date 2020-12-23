@@ -10,6 +10,7 @@ import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import SeriesStatusCell from 'Series/Index/Table/SeriesStatusCell';
 import styles from './SeriesEditorRow.css';
+import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 
 class SeriesEditorRow extends Component {
 
@@ -27,17 +28,27 @@ class SeriesEditorRow extends Component {
   render() {
     const {
       id,
-      status,
-      titleSlug,
-      title,
       monitored,
-      languageProfile,
-      qualityProfile,
+      status,
+      title,
+      titleSlug,
       seriesType,
-      seasonFolder,
+      network,
+      qualityProfile,
+      languageProfile,
+      nextAiring,
+      previousAiring,
+      added,
+      latestSeason,
+      year,
       path,
-      statistics = {},
+      genres,
+      ratings,
+      certification,
       tags,
+      useSceneNumbering,
+      seasonFolder,
+      statistics = {},
       columns,
       isSelected,
       onSelectedChange
@@ -153,6 +164,93 @@ class SeriesEditorRow extends Component {
               );
             }
 
+            if (name === 'network') {
+              return (
+                <TableRowCell key={name}>
+                  {network}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'nextAiring') {
+              return (
+                <RelativeDateCellConnector
+                  key={name}
+                  date={nextAiring}
+                  component={TableRowCell}
+                />
+              );
+            }
+
+            if (name === 'previousAiring') {
+              return (
+                <RelativeDateCellConnector
+                  key={name}
+                  date={previousAiring}
+                  component={TableRowCell}
+                />
+              );
+            }
+
+            if (name === 'added') {
+              return (
+                <RelativeDateCellConnector
+                  key={name}
+                  date={added}
+                  component={TableRowCell}
+                />
+              );
+            }
+
+            if (name === 'latestSeason') {
+              return (
+                <TableRowCell key={name}>
+                  {latestSeason}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'year') {
+              return (
+                <TableRowCell key={name}>
+                  {year}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'genres') {
+              const joinedGenres = genres.join(', ');
+              return (
+                <TableRowCell key={name}>
+                  {joinedGenres}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'ratings') {
+              return (
+                <TableRowCell key={name}>
+                  {ratings}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'certification') {
+              return (
+                <TableRowCell key={name}>
+                  {certification}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'useSceneNumbering') {
+              return (
+                <TableRowCell key={name}>
+                  {useSceneNumbering}
+                </TableRowCell>
+              );
+            }
+
             return null;
           })
         }
@@ -163,17 +261,27 @@ class SeriesEditorRow extends Component {
 
 SeriesEditorRow.propTypes = {
   id: PropTypes.number.isRequired,
-  status: PropTypes.string.isRequired,
-  titleSlug: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
-  languageProfile: PropTypes.object.isRequired,
-  qualityProfile: PropTypes.object.isRequired,
+  status: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  titleSlug: PropTypes.string.isRequired,
   seriesType: PropTypes.string.isRequired,
-  seasonFolder: PropTypes.bool.isRequired,
-  path: PropTypes.string.isRequired,
+  network: PropTypes.string,
+  qualityProfile: PropTypes.object.isRequired,
+  languageProfile: PropTypes.object.isRequired,
+  nextAiring: PropTypes.string,
+  previousAiring: PropTypes.string,
+  added: PropTypes.string,
   statistics: PropTypes.object.isRequired,
+  latestSeason: PropTypes.object,
+  year: PropTypes.number,
+  path: PropTypes.string.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string).isRequired,
+  ratings: PropTypes.object.isRequired,
+  certification: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
+  useSceneNumbering: PropTypes.bool.isRequired,
+  statistics: PropTypes.object.isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   isSelected: PropTypes.bool,
   onSelectedChange: PropTypes.func.isRequired
