@@ -39,8 +39,8 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
             var allFiles = _diskProvider.GetFiles(PLIST_DIR, SearchOption.TopDirectoryOnly);
 
             var versionFile = allFiles.SingleOrDefault(c =>
-                c.EndsWith("SystemVersion.plist") ||
-                c.EndsWith("ServerVersion.plist")
+                c.EndsWith("/SystemVersion.plist") ||
+                c.EndsWith("/ServerVersion.plist")
             );
 
             if (string.IsNullOrWhiteSpace(versionFile))
