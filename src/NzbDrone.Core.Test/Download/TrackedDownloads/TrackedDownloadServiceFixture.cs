@@ -44,7 +44,8 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                 {
                     SeriesTitle = "TV Series",
                     SeasonNumber = 1
-                }
+                },
+                MappedSeasonNumber = 1
             };
 
             Mocker.GetMock<IParsingService>()
@@ -77,6 +78,7 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             trackedDownload.RemoteEpisode.Series.Id.Should().Be(5);
             trackedDownload.RemoteEpisode.Episodes.First().Id.Should().Be(4);
             trackedDownload.RemoteEpisode.ParsedEpisodeInfo.SeasonNumber.Should().Be(1);
+            trackedDownload.RemoteEpisode.MappedSeasonNumber.Should().Be(1);
         }
 
         [Test]
@@ -91,7 +93,8 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                     SeriesTitle = "TV Series",
                     SeasonNumber = 0,
                     EpisodeNumbers = new []{ 1 }
-                }
+                },
+                MappedSeasonNumber = 0
             };
 
             Mocker.GetMock<IHistoryService>()
@@ -139,6 +142,7 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             trackedDownload.RemoteEpisode.Series.Id.Should().Be(5);
             trackedDownload.RemoteEpisode.Episodes.First().Id.Should().Be(4);
             trackedDownload.RemoteEpisode.ParsedEpisodeInfo.SeasonNumber.Should().Be(0);
+            trackedDownload.RemoteEpisode.MappedSeasonNumber.Should().Be(0);
         }
     }
 }

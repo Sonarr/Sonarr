@@ -226,7 +226,9 @@ namespace NzbDrone.Api.Series
                                                             {
                                                                 Title = v.Title,
                                                                 SeasonNumber = v.SeasonNumber,
-                                                                SceneSeasonNumber = v.SceneSeasonNumber
+                                                                SceneSeasonNumber = v.SceneSeasonNumber,
+                                                                SceneOrigin = v.SceneOrigin,
+                                                                Comment = v.Comment
                                                             }).ToList();
         }
 
