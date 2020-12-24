@@ -154,7 +154,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
             if (show.FirstAired != null)
             {
-                series.FirstAired = DateTime.ParseExact(show.FirstAired, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo).ToUniversalTime();
+                series.FirstAired = DateTime.ParseExact(show.FirstAired, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
                 series.Year = series.FirstAired.Value.Year;
             }
 
