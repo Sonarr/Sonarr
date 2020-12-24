@@ -55,10 +55,6 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.FindByTitle(It.IsAny<string>()))
                   .Returns(_series);
-
-            Mocker.GetMock<ISceneMappingService>()
-                  .Setup(v => v.GetTvdbSeasonNumber(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
-                  .Returns<string, string, int>((s, r, i) => i);
         }
 
         private void GivenDailySeries()
@@ -328,8 +324,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             const int tvdbSeasonNumber = 5;
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(v => v.GetTvdbSeasonNumber(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
-                  .Returns<string, string, int>((s, r, i) => tvdbSeasonNumber);
+                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns<string, string>((s, r) => new SceneMapping { SceneSeasonNumber = 1, SeasonNumber = tvdbSeasonNumber });
 
             Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
 
@@ -346,8 +342,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             const int tvdbSeasonNumber = 5;
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, It.IsAny<string>()))
-                  .Returns(new SceneMapping { SeasonNumber = tvdbSeasonNumber, SceneSeasonNumber = _parsedEpisodeInfo.SeasonNumber + 100 });
+                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns<string, string>((s, r) => new SceneMapping { SceneSeasonNumber = 101, SeasonNumber = tvdbSeasonNumber });
 
             Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
 

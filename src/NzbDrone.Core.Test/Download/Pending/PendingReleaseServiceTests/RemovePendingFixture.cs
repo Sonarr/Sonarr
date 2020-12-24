@@ -43,6 +43,10 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                   .Returns(new List<Series> { new Series() });
 
             Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
+                  .Returns(new RemoteEpisode { Episodes = new List<Episode> { _episode } });
+
+            Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetEpisodes(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>(), It.IsAny<bool>(), null))
                   .Returns(new List<Episode>{ _episode });
         }
@@ -84,7 +88,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         }
 
         [Test]
-        public void should_not_remove_diffrent_season()
+        public void should_not_remove_different_season()
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1 });
@@ -99,7 +103,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         }
 
         [Test]
-        public void should_not_remove_diffrent_episodes()
+        public void should_not_remove_different_episodes()
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1 });

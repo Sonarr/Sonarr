@@ -51,10 +51,6 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
                 SeasonNumber = _episodes.First().SeasonNumber,
                 Episodes = _episodes
             };
-
-            Mocker.GetMock<ISceneMappingService>()
-                  .Setup(v => v.GetTvdbSeasonNumber(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
-                  .Returns<string, string, int>((s, r, i) => i);
         }
 
         private void GivenMatchBySeriesTitle()
@@ -122,8 +118,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             GivenMatchByTvRageId();
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(v => v.FindTvdbId(It.IsAny<string>(), It.IsAny<string>()))
-                  .Returns(10);
+                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns(new SceneMapping { TvdbId = 10 });
 
             var result = Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId);
 

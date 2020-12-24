@@ -15,3 +15,8 @@
 
   margin-left: 100px;
 }
+
+.comment {
+  color: $darkGray;
+  font-size: $smallFontSize;
+}
