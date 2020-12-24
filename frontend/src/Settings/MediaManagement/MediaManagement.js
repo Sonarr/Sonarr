@@ -99,6 +99,7 @@ class MediaManagement extends Component {
 
                         <FormInputGroup
                           type={inputTypes.CHECK}
+                          isDisabled={settings.deleteEmptyFolders.value && !settings.createEmptySeriesFolders.value}
                           name="createEmptySeriesFolders"
                           helpText="Create missing series folders during disk scan"
                           onChange={onInputChange}
@@ -115,6 +116,7 @@ class MediaManagement extends Component {
 
                         <FormInputGroup
                           type={inputTypes.CHECK}
+                          isDisabled={settings.createEmptySeriesFolders.value && !settings.deleteEmptyFolders.value}
                           name="deleteEmptyFolders"
                           helpText="Delete empty series and season folders during disk scan and when episode files are deleted"
                           onChange={onInputChange}
