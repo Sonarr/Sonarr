@@ -136,6 +136,13 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Fri Dec 25 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1035-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Small helper in UI to access Sonarr API more easily
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Series year wrong when airing January 1st.
+- Fixed: OSX version detection
+
 * Sat Dec 19 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1033-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Format Errors from AudioChannel formatter
