@@ -77,7 +77,7 @@ class ResourceApi {
   fetch(url, options) {
     return this.api.fetch(`${this.url}${url}`, options);
   }
-};
+}
 
 class ConsoleApi {
   constructor() {
