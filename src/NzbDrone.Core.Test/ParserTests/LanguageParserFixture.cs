@@ -131,6 +131,15 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("Castle.2009.S01E14.Polish.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.PL.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.PLLEK.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.PL-LEK.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.LEKPL.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.LEK-PL.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.PLDUB.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.PL-DUB.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.DUBPL.HDTV.XviD-LOL")]
+        [TestCase("Castle.2009.S01E14.DUB-PL.HDTV.XviD-LOL")]
         public void should_parse_language_polish(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
