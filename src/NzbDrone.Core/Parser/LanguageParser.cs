@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["chinese"].Success)
                 return Language.Chinese;
-            
+
             return Language.Unknown;
         }
     }
