@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["hebrew"].Success)
                 return Language.Hebrew;
-            
+
             if (match.Groups["polish"].Success)
                 return Language.Polish;
 
