@@ -7,8 +7,8 @@ namespace NzbDrone.Core.Notifications
     {
         public string Message { get; set; }
         public Series Series { get; set; }
-        public bool DeleteFiles { get; set; }
-        public string DeletedFiles { get; set; }
+        public bool DeletedFiles { get; set; }
+        public string DeletedFilesMessage { get; set; }
 
         public override string ToString()
         {
@@ -17,11 +17,11 @@ namespace NzbDrone.Core.Notifications
         public SeriesDeleteMessage (Series series, bool deleteFiles)
         {
             Series = series;
-            DeleteFiles = deleteFiles;
-            DeletedFiles = DeleteFiles ?
+            DeletedFiles = deleteFiles;
+            DeletedFilesMessage = DeletedFiles ?
                 "Series removed and all files were deleted" :
                 "Series removed, files were not deleted";
-            Message = series.Title + " - " + DeletedFiles;
+            Message = series.Title + " - " + DeletedFilesMessage;
         }
     }
 }

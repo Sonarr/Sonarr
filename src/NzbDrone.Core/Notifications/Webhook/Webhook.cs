@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             {
                 EventType = WebhookEventType.Delete,
                 Series = new WebhookSeries(deleteMessage.Series),
-                DeletedFiles = deleteMessage.DeleteFiles
+                DeletedFiles = deleteMessage.DeletedFiles
             };
         }
 

@@ -262,7 +262,7 @@ namespace NzbDrone.Core.Notifications.Discord
                                   new Embed
                                   {
                                       Title = series.Title,
-                                      Description = deleteMessage.DeletedFiles
+                                      Description = deleteMessage.DeletedFilesMessage
                                   }
                               };
 

@@ -88,15 +88,12 @@ namespace NzbDrone.Core.Notifications.Slack
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            string deletedFiles = deleteMessage.DeleteFiles ?
-                "Removed from Sonarr and disk" :
-                "Removed from Sonarr but NOT disk";
             var attachments = new List<Attachment>
                               {
                                   new Attachment
                                   {
                                       Title = deleteMessage.Series.Title,
-                                      Text = deletedFiles
+                                      Text = deleteMessage.DeletedFilesMessage
                                   }
                               };
 

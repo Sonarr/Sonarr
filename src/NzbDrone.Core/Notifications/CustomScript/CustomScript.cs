@@ -172,7 +172,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
             environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
             environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_DeleteFiles", deleteMessage.DeleteFiles.ToString());
+            environmentVariables.Add("Sonarr_Series_DeletedFiles", deleteMessage.DeletedFiles.ToString());
 
             ExecuteScript(environmentVariables);
         }

@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            if (deleteMessage.DeleteFiles)
+            if (deleteMessage.DeletedFiles)
             {
                 UpdateIfEnabled(deleteMessage.Series);
             }

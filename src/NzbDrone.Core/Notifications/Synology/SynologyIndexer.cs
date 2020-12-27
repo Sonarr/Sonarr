@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Notifications.Synology
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            if (deleteMessage.DeleteFiles)
+            if (deleteMessage.DeletedFiles)
             {
                 if (Settings.UpdateLibrary)
                 {
