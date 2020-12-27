@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             ExecuteScript(environmentVariables);
         }
 
-        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             var series = deleteMessage.Series;
             var episodeFile = deleteMessage.EpisodeFile;
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
         }
 
-        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var series = deleteMessage.Series;
             var environmentVariables = new StringDictionary();

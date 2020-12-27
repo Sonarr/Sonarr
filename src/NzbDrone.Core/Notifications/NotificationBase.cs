@@ -49,12 +49,12 @@ namespace NzbDrone.Core.Notifications
 
         }
 
-        public virtual void OnDelete(EpisodeDeleteMessage deleteMessage)
+        public virtual void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
 
         }
 
-        public virtual void OnDelete(SeriesDeleteMessage deleteMessage)
+        public virtual void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
 
         }
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnRename => HasConcreteImplementation("OnRename");
         public bool SupportsOnDownload => HasConcreteImplementation("OnDownload");
         public bool SupportsOnUpgrade => SupportsOnDownload;
-        public bool SupportsOnDelete => HasConcreteImplementation("OnDelete");
+        public bool SupportsOnDelete => HasConcreteImplementation("OnSeriesDelete") && HasConcreteImplementation("OnEpisodeFileDelete");
         public bool SupportsOnHealthIssue => HasConcreteImplementation("OnHealthIssue");
 
         protected TSettings Settings => (TSettings)Definition.Settings;
@@ -88,9 +88,7 @@ namespace NzbDrone.Core.Notifications
 
         private bool HasConcreteImplementation(string methodName)
         {
-            if (methodName != "OnDelete")
-            {
-                var method = GetType().GetMethod(methodName);
+            var method = GetType().GetMethod(methodName);
 
                 if (method == null)
                 {
@@ -98,27 +96,6 @@ namespace NzbDrone.Core.Notifications
                 }
 
                 return !method.DeclaringType.IsAbstract;
-            }
-            else
-            {
-                var methods = GetType().GetMethods().Where(method => method.Name == methodName);
-
-                if (methods == null)
-                {
-                    throw new MissingMethodException(GetType().Name, Name);
-                }
-
-                var methodsArray = methods.ToArray();
-
-                if (methodsArray.Count() != 2)
-                {
-                    return false;
-                }
-                else
-                {
-                    return !methodsArray[0].DeclaringType.IsAbstract;
-                }
-            }
         }
     }
 }

@@ -48,12 +48,12 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             UpdateIfEnabled(series);
         }
 
-        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             UpdateIfEnabled(deleteMessage.Series);
         }
 
-        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             if (deleteMessage.DeleteFiles)
             {

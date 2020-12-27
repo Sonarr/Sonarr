@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Notifications
                 {
                     if (ShouldHandleSeries(notification.Definition, deleteMessage.EpisodeFile.Series))
                     {
-                        notification.OnDelete(deleteMessage);
+                        notification.OnEpisodeFileDelete(deleteMessage);
                     }
                 }
                 catch (Exception ex)
@@ -225,7 +225,7 @@ namespace NzbDrone.Core.Notifications
                 {
                     if (ShouldHandleSeries(notification.Definition, deleteMessage.Series))
                     {
-                        notification.OnDelete(deleteMessage);
+                        notification.OnSeriesDelete(deleteMessage);
                     }
                 }
                 catch (Exception ex)

@@ -235,7 +235,7 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
-        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             var series = deleteMessage.Series;
             var episodes = deleteMessage.EpisodeFile.Episodes;
@@ -252,7 +252,8 @@ namespace NzbDrone.Core.Notifications.Discord
 
             _proxy.SendPayload(payload, Settings);
         }
-        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+
+        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var series = deleteMessage.Series;
 

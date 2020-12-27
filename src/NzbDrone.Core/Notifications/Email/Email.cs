@@ -33,14 +33,14 @@ namespace NzbDrone.Core.Notifications.Email
             _emailService.SendEmail(Settings, EPISODE_DOWNLOADED_TITLE_BRANDED, body);
         }
 
-        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             var body = $"{deleteMessage.Message} deleted.";
 
             _emailService.SendEmail(Settings, EPISODE_DELETED_TITLE_BRANDED, body);
         }
 
-        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var body = $"{deleteMessage.Message}";
 

@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override void OnDelete(EpisodeDeleteMessage deleteMessage)
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             if (Settings.UpdateLibrary)
             {
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override void OnDelete(SeriesDeleteMessage deleteMessage)
+        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             if (deleteMessage.DeleteFiles)
             {
