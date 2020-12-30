@@ -346,6 +346,9 @@ namespace NzbDrone.Core.Parser
 
                 // 170424_26 - Started appearing August 2018
                 new Regex(@"^\d{6}_\d{2}$"),
+
+                // additional Generic match for mixed-case hashes. - Started appearing Dec 2020
+                new Regex(@"^[0-9a-zA-Z]{30}", RegexOptions.Compiled),
             };
 
         private static readonly Regex[] SeasonFolderRegexes = new Regex[]
