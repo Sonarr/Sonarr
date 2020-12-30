@@ -240,7 +240,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Better.Call.Saul.S03E09.1080p.NF.WEBRip.DD5.1.x264-ViSUM", false)]
         [TestCase("The Walking Dead S09E13 1.54 GB WEB-RIP 1080p Dual-Audio 2019 MKV", false)]
         [TestCase("Series.Title.1x04.ITA.1080p.WEBMux.x264-NovaRip", false)]
-        [TestCase("The.Mandalorian.2019.S02E07.Chapter.15.The.Believer.4Kto1080p.DSNYP.Webrip.x265.10bit.EAC3.5.1.Atmos.GokiTAoE", false)]
+        [TestCase("Series.Title.2019.S02E07.Chapter.15.The.Believer.4Kto1080p.DSNYP.Webrip.x265.10bit.EAC3.5.1.Atmos.GokiTAoE", false)]
         public void should_parse_webrip1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip1080p, proper);
