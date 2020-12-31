@@ -29,7 +29,7 @@ const links = [
         to: '/add/new'
       },
       {
-        title: 'Import',
+        title: 'Library Import',
         to: '/add/import'
       },
       {
