@@ -8,6 +8,7 @@ const paths = {
     content: `${root}/Content/`,
     fonts: `${root}/Content/Fonts/`,
     images: `${root}/Content/Images/`,
+    robots: `${root}/Content/robots.txt`,
     exclude: {
       libs: `!${root}/JsLibraries/**`
     }
