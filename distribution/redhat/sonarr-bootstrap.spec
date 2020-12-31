@@ -122,6 +122,12 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Thu Dec 31 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1042-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Update path before importing to ensure it hasn't changed
+- Fixed: Parsing Polish language
+- New: Rename Import to Library Import
+
 * Sat Dec 26 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1039-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - eslint
