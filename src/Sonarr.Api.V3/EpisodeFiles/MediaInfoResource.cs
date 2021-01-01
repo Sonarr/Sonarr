@@ -56,10 +56,14 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
             if (runTime.Hours > 0)
             {
-                formattedRuntime += $"{runTime.Hours}:";
+                formattedRuntime += $"{runTime.Hours}:{runTime.Minutes:00}:";
+            }
+            else
+            {
+                formattedRuntime += $"{runTime.Minutes}:";
             }
 
-            formattedRuntime += $"{runTime.Minutes}:{runTime.Seconds}";
+            formattedRuntime += $"{runTime.Seconds:00}";
 
             return formattedRuntime;
         }

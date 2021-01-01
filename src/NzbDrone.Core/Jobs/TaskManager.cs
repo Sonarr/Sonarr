@@ -158,7 +158,10 @@ namespace NzbDrone.Core.Jobs
             var rss = _scheduledTaskRepository.GetDefinition(typeof(RssSyncCommand));
             rss.Interval = _configService.RssSyncInterval;
 
-            _scheduledTaskRepository.Update(rss);
+            var backup = _scheduledTaskRepository.GetDefinition(typeof(BackupCommand));
+            backup.Interval = _configService.BackupInterval;
+
+            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask>{ rss, backup });
         }
     }
 }

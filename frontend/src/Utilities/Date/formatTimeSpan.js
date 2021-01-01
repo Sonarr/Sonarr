@@ -7,7 +7,8 @@ function formatTimeSpan(timeSpan) {
   }
 
   const duration = moment.duration(timeSpan);
-  const days = duration.get('days');
+
+  const days = Math.floor(duration.asDays());
   const hours = padNumber(duration.get('hours'), 2);
   const minutes = padNumber(duration.get('minutes'), 2);
   const seconds = padNumber(duration.get('seconds'), 2);

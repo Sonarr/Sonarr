@@ -32,3 +32,11 @@ gulp.task('copyImages', () => {
     .pipe(gulp.dest(paths.dest.root))
     .pipe(livereload());
 });
+
+gulp.task('copyRobots', () => {
+  return gulp.src(paths.src.robots, { base: paths.src.root })
+    .pipe(cache('copyRobots'))
+    .pipe(print())
+    .pipe(gulp.dest(paths.dest.root))
+    .pipe(livereload());
+});
