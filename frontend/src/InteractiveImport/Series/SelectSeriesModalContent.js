@@ -28,7 +28,7 @@ class SelectSeriesModalContent extends Component {
   // Listeners
 
   onFilterChange = ({ value }) => {
-    this.setState({ filter: value.toLowerCase() });
+    this.setState({ filter: value });
   }
 
   //
@@ -42,6 +42,7 @@ class SelectSeriesModalContent extends Component {
     } = this.props;
 
     const filter = this.state.filter;
+    const filterLower = filter.toLowerCase();
 
     return (
       <ModalContent onModalClose={onModalClose}>
@@ -68,7 +69,7 @@ class SelectSeriesModalContent extends Component {
           >
             {
               items.map((item) => {
-                return item.title.toLowerCase().includes(filter) ?
+                return item.title.toLowerCase().includes(filterLower) ?
                   (
                     <SelectSeriesRow
                       key={item.id}
