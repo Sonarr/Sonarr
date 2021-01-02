@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { isSameCommand } from 'Utilities/Command';
@@ -9,7 +8,7 @@ import createFetchHandler from './Creators/createFetchHandler';
 import createHandleActions from './Creators/createHandleActions';
 import createRemoveItemHandler from './Creators/createRemoveItemHandler';
 import { showMessage, hideMessage } from './appActions';
-import { updateItem } from './baseActions';
+import { updateItem, removeItem } from './baseActions';
 
 //
 // Variables
@@ -37,9 +36,9 @@ export const defaultState = {
 export const FETCH_COMMANDS = 'commands/fetchCommands';
 export const EXECUTE_COMMAND = 'commands/executeCommand';
 export const CANCEL_COMMAND = 'commands/cancelCommand';
-export const ADD_COMMAND = 'commands/updateCommand';
-export const UPDATE_COMMAND = 'commands/finishCommand';
-export const FINISH_COMMAND = 'commands/addCommand';
+export const ADD_COMMAND = 'commands/addCommand';
+export const UPDATE_COMMAND = 'commands/updateCommand';
+export const FINISH_COMMAND = 'commands/finishCommand';
 export const REMOVE_COMMAND = 'commands/removeCommand';
 
 //
@@ -48,10 +47,10 @@ export const REMOVE_COMMAND = 'commands/removeCommand';
 export const fetchCommands = createThunk(FETCH_COMMANDS);
 export const executeCommand = createThunk(EXECUTE_COMMAND);
 export const cancelCommand = createThunk(CANCEL_COMMAND);
+export const addCommand = createThunk(ADD_COMMAND);
 export const updateCommand = createThunk(UPDATE_COMMAND);
 export const finishCommand = createThunk(FINISH_COMMAND);
-export const addCommand = createAction(ADD_COMMAND);
-export const removeCommand = createAction(REMOVE_COMMAND);
+export const removeCommand = createThunk(REMOVE_COMMAND);
 
 //
 // Helpers
@@ -161,6 +160,10 @@ export const actionHandlers = handleThunks({
 
   [CANCEL_COMMAND]: createRemoveItemHandler(section, '/command'),
 
+  [ADD_COMMAND]: function(getState, payload, dispatch) {
+    dispatch(updateItem({ section: 'commands', ...payload }));
+  },
+
   [UPDATE_COMMAND]: function(getState, payload, dispatch) {
     dispatch(updateItem({ section: 'commands', ...payload }));
 
@@ -183,6 +186,10 @@ export const actionHandlers = handleThunks({
     dispatch(updateItem({ section: 'commands', ...payload }));
     scheduleRemoveCommand(payload, dispatch);
     showCommandMessage(payload, dispatch);
+  },
+
+  [ADD_COMMAND]: function(getState, payload, dispatch) {
+    dispatch(removeItem({ section: 'commands', ...payload }));
   }
 
 });
@@ -190,26 +197,4 @@ export const actionHandlers = handleThunks({
 //
 // Reducers
 
-export const reducers = createHandleActions({
-
-  [ADD_COMMAND]: (state, { payload }) => {
-    const newState = Object.assign({}, state);
-    newState.items = [...state.items, payload];
-
-    return newState;
-  },
-
-  [REMOVE_COMMAND]: (state, { payload }) => {
-    const newState = Object.assign({}, state);
-    newState.items = [...state.items];
-
-    const index = _.findIndex(newState.items, { id: payload.id });
-
-    if (index > -1) {
-      newState.items.splice(index, 1);
-    }
-
-    return newState;
-  }
-
-}, defaultState, section);
+export const reducers = createHandleActions({}, defaultState, section);
