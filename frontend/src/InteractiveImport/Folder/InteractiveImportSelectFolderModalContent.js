@@ -124,7 +124,7 @@ class InteractiveImportSelectFolderModalContent extends Component {
                   name={icons.QUICK}
                 />
 
-                Quick Import
+                Move Automatically
               </Button>
             </div>
 

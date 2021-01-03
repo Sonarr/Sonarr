@@ -115,6 +115,13 @@ namespace NzbDrone.Core.Test.ParserTests
                 "Series Title",
                 Quality.HDTV720p,
                 null
+            },
+            new object[]
+            {
+                @"C:\Test\tv\Series.Title.S04E03.Episode.Name.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb\cwnOJYks5E2WP7zGuzPkdkRK3JkWw0.mkv".AsOsAgnostic(),
+                "Series Title",
+                Quality.WEBDL1080p,
+                "NTb"
             }
         };
 
