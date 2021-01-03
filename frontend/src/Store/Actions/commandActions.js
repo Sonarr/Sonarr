@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { batchActions } from 'redux-batched-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { isSameCommand } from 'Utilities/Command';
