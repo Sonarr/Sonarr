@@ -55,6 +55,10 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             Mocker.GetMock<ISceneMappingService>()
                   .Setup(s => s.FindByTvdbId(It.IsAny<int>()))
                   .Returns(new List<SceneMapping>());
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.GetSceneNames(It.IsAny<int>(), It.IsAny<List<int>>(), It.IsAny<List<int>>()))
+                  .Returns(new List<string>());
         }
 
         private void WithEpisode(int seasonNumber, int episodeNumber, int? sceneSeasonNumber, int? sceneEpisodeNumber, string airDate = null)
