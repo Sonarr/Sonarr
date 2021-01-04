@@ -33,10 +33,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
             
             if (deletedSeries.Count() == 1)
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Error, $"Series {seriesText} was removed from TheTVDB", "Health-Checks#series-removed-from-thetvdb");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, $"Series {seriesText} was removed from TheTVDB", "Health-Checks#series_removed_from_thetvdb");
             }
 
-            return new HealthCheck(GetType(), HealthCheckResult.Error, $"Series {seriesText} were removed from TheTVDB", "Health-Checks#series-removed-from-thetvdb");
+            return new HealthCheck(GetType(), HealthCheckResult.Error, $"Series {seriesText} were removed from TheTVDB", "Health-Checks#series_removed_from_thetvdb");
         }
 
         public bool ShouldCheckOnEvent(SeriesDeletedEvent deletedEvent)

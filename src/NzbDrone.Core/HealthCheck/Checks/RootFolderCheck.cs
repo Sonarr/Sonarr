@@ -37,11 +37,11 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 if (missingRootFolders.Count == 1)
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, "Missing root folder: " + missingRootFolders.First(), "#missing-root-folder");
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, "Missing root folder: " + missingRootFolders.First(), "#missing_root_folder");
                 }
 
                 var message = string.Format("Multiple root folders are missing: {0}", string.Join(" | ", missingRootFolders));
-                return new HealthCheck(GetType(), HealthCheckResult.Error, message, "#missing-root-folder");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, message, "#missing_root_folder");
             }
 
             return new HealthCheck(GetType());
