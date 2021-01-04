@@ -424,6 +424,11 @@ namespace NzbDrone.Core.IndexerSearch
             spec.UserInvokedSearch = userInvokedSearch;
             spec.InteractiveSearch = interactiveSearch;
 
+            if (!spec.SceneTitles.Contains(series.Title))
+            {
+                spec.SceneTitles.Add(series.Title);
+            }
+
             return spec;
         }
 
