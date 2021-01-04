@@ -122,6 +122,26 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Mon Jan 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1052-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed tests
+- Linting
+- Fixed: Additional handling for obfuscated releases
+- Fixed: Parsing of 4Kto1080p as 1080p
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Additional handling for obfuscated releases Closes #4198
+- Fixed: Parsing of 4Kto1080p as 1080p Closes #4199
+- Use createHandleActions for adding/removing commands so itemMap is synced properly
+- New: Removing update folder from temp folder during housekeeping
+- New: Renamed Quick Import to Move Automatically
+- Fixed UpdatePackageProviderFixture tests
+- Fixed: Don't convert series selection filter to lower case in state
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Restored robots.txt
+- Fixed: Timespan over 1 month shown incorrectly
+- Fixed: Missing leading 0 in minutes/seconds for media info duration
+- Fixed: Backup interval is updated on change
+
 * Thu Dec 31 2020 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1042-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Update path before importing to ensure it hasn't changed
