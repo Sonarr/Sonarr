@@ -29,7 +29,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             var singleEpisodeSpec = searchCriteria as SeasonSearchCriteria;
             if (singleEpisodeSpec == null) return Decision.Accept();
 
-            if (singleEpisodeSpec.SeasonNumber != remoteEpisode.MappedSeasonNumber)
+            if (singleEpisodeSpec.SeasonNumber != remoteEpisode.ParsedEpisodeInfo.SeasonNumber)
             {
                 _logger.Debug("Season number does not match searched season number, skipping.");
                 return Decision.Reject("Wrong season");
