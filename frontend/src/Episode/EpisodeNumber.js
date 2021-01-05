@@ -13,6 +13,10 @@ function getAlternateTitles(seasonNumber, sceneSeasonNumber, alternateTitles) {
       return true;
     }
 
+    if (alternateTitle.sceneSeasonNumber === undefined && alternateTitle.sceneOrigin === 'tvdb') {
+      return true;
+    }
+
     return seasonNumber === alternateTitle.seasonNumber;
   });
 }
@@ -81,6 +85,8 @@ function EpisodeNumber(props) {
             title="Scene Information"
             body={
               <SceneInfo
+                seasonNumber={seasonNumber}
+                episodeNumber={episodeNumber}
                 sceneSeasonNumber={sceneSeasonNumber}
                 sceneEpisodeNumber={sceneEpisodeNumber}
                 sceneAbsoluteEpisodeNumber={sceneAbsoluteEpisodeNumber}

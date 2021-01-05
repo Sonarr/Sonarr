@@ -38,11 +38,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
         private Decision IsSatisfiedBy(RemoteEpisode remoteEpisode, SingleEpisodeSearchCriteria singleEpisodeSpec)
         {
-            var seasonNumber = _sceneMappingService.GetTvdbSeasonNumber(remoteEpisode.ParsedEpisodeInfo.SeriesTitle,
-                                                                        remoteEpisode.ParsedEpisodeInfo.ReleaseTitle, 
-                                                                        remoteEpisode.ParsedEpisodeInfo.SeasonNumber);
-
-            if (singleEpisodeSpec.SeasonNumber != seasonNumber)
+            if (singleEpisodeSpec.SeasonNumber != remoteEpisode.ParsedEpisodeInfo.SeasonNumber)
             {
                 _logger.Debug("Season number does not match searched season number, skipping.");
                 return Decision.Reject("Wrong season");

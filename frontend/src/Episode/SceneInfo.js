@@ -7,6 +7,8 @@ import styles from './SceneInfo.css';
 
 function SceneInfo(props) {
   const {
+    seasonNumber,
+    episodeNumber,
     sceneSeasonNumber,
     sceneEpisodeNumber,
     sceneAbsoluteEpisodeNumber,
@@ -56,14 +58,33 @@ function SceneInfo(props) {
               <div>
                 {
                   alternateTitles.map((alternateTitle) => {
+                    let suffix = '';
+
+                    const altSceneSeasonNumber = sceneSeasonNumber === undefined ? seasonNumber : sceneSeasonNumber;
+                    const altSceneEpisodeNumber = sceneEpisodeNumber === undefined ? episodeNumber : sceneEpisodeNumber;
+
+                    const mappingSeasonNumber = alternateTitle.sceneOrigin === 'tvdb' ? seasonNumber : altSceneSeasonNumber;
+                    const altSeasonNumber = (alternateTitle.sceneSeasonNumber !== -1 && alternateTitle.sceneSeasonNumber !== undefined) ? alternateTitle.sceneSeasonNumber : mappingSeasonNumber;
+                    const altEpisodeNumber = alternateTitle.sceneOrigin === 'tvdb' ? episodeNumber : altSceneEpisodeNumber;
+
+                    if (altEpisodeNumber !== altSceneEpisodeNumber) {
+                      suffix = `S${padNumber(altSeasonNumber, 2)}E${padNumber(altEpisodeNumber, 2)}`;
+                    } else if (altSeasonNumber !== altSceneSeasonNumber) {
+                      suffix = `S${padNumber(altSeasonNumber, 2)}`;
+                    }
+
                     return (
                       <div
                         key={alternateTitle.title}
                       >
                         {alternateTitle.title}
                         {
-                          alternateTitle.sceneSeasonNumber !== -1 &&
-                            <span> (S{padNumber(alternateTitle.sceneSeasonNumber, 2)})</span>
+                          suffix &&
+                          <span> ({suffix})</span>
+                        }
+                        {
+                          alternateTitle.comment &&
+                          <span className={styles.comment}> {alternateTitle.comment}</span>
                         }
                       </div>
                     );
@@ -78,6 +99,8 @@ function SceneInfo(props) {
 }
 
 SceneInfo.propTypes = {
+  seasonNumber: PropTypes.number,
+  episodeNumber: PropTypes.number,
   sceneSeasonNumber: PropTypes.number,
   sceneEpisodeNumber: PropTypes.number,
   sceneAbsoluteEpisodeNumber: PropTypes.number,

@@ -111,8 +111,9 @@ function createMapStateToProps() {
       const isPopulated = isEpisodesPopulated && isEpisodeFilesPopulated;
       const alternateTitles = _.reduce(series.alternateTitles, (acc, alternateTitle) => {
         if ((alternateTitle.seasonNumber === -1 || alternateTitle.seasonNumber === undefined) &&
-            (alternateTitle.sceneSeasonNumber === -1 || alternateTitle.sceneSeasonNumber === undefined)) {
-          acc.push(alternateTitle.title);
+            (alternateTitle.sceneSeasonNumber === -1 || alternateTitle.sceneSeasonNumber === undefined) &&
+            (alternateTitle.title !== series.title)) {
+          acc.push(alternateTitle);
         }
 
         return acc;

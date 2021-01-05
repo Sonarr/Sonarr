@@ -16,8 +16,8 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public Series Series { get; set; }
         public List<string> SceneTitles { get; set; }
-        public List<SceneMapping> SceneMappings { get; set; }
         public List<Episode> Episodes { get; set; }
+        public SearchMode SearchMode { get; set; }
         public virtual bool MonitoredEpisodesOnly { get; set; }
         public virtual bool UserInvokedSearch { get; set; }
         public virtual bool InteractiveSearch { get; set; }

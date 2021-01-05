@@ -53,6 +53,10 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .Returns<int, int>((i, j) => _xemEpisodes.Where(d => d.SeasonNumber == j).ToList());
 
             Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.FindByTvdbId(It.IsAny<int>()))
+                  .Returns(new List<SceneMapping>());
+
+            Mocker.GetMock<ISceneMappingService>()
                   .Setup(s => s.GetSceneNames(It.IsAny<int>(), It.IsAny<List<int>>(), It.IsAny<List<int>>()))
                   .Returns(new List<string>());
         }
@@ -241,7 +245,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var seasonNumber = 1;
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, false, false, true, false);
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, false, true, true, false);
 
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
@@ -354,7 +358,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, 1, false, false, true, false);
+            Subject.SeasonSearch(_xemSeries.Id, 1, false, true, true, false);
 
             var criteria1 = allCriteria.OfType<DailySeasonSearchCriteria>().ToList();
             var criteria2 = allCriteria.OfType<DailyEpisodeSearchCriteria>().ToList();
@@ -373,7 +377,11 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             Subject.SeasonSearch(_xemSeries.Id, 7, false, false, true, false);
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Verify(v => v.GetSceneNames(_xemSeries.Id, It.Is<List<int>>(l => l.Contains(7)), It.Is<List<int>>(l => l.Contains(7))), Times.Once());
+                  .Verify(v => v.FindByTvdbId(_xemSeries.Id), Times.Once());
+
+            allCriteria.Should().HaveCount(1);
+            allCriteria.First().Should().BeOfType<SeasonSearchCriteria>();
+            allCriteria.First().As<SeasonSearchCriteria>().SeasonNumber.Should().Be(7);
         }
     }
 }

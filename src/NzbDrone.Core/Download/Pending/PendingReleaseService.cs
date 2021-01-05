@@ -291,32 +291,32 @@ namespace NzbDrone.Core.Download.Pending
                 // Just in case the series was removed, but wasn't cleaned up yet (housekeeper will clean it up)
                 if (series == null) return null;
 
-                List<Episode> episodes;
-
-                RemoteEpisode knownRemoteEpisode;
-                if (knownRemoteEpisodes != null && knownRemoteEpisodes.TryGetValue(release.Release.Title, out knownRemoteEpisode))
-                {
-                    episodes = knownRemoteEpisode.Episodes;
-                }
-                else
-                {
-                    if (ValidateParsedEpisodeInfo.ValidateForSeriesType(release.ParsedEpisodeInfo, series))
-                    {
-                        episodes = _parsingService.GetEpisodes(release.ParsedEpisodeInfo, series, true);
-                    }
-                    else
-                    {
-                        episodes = new List<Episode>();
-                    }
-                }
 
                 release.RemoteEpisode = new RemoteEpisode
                 {
                     Series = series,
-                    Episodes = episodes,
                     ParsedEpisodeInfo = release.ParsedEpisodeInfo,
                     Release = release.Release
                 };
+
+                RemoteEpisode knownRemoteEpisode;
+                if (knownRemoteEpisodes != null && knownRemoteEpisodes.TryGetValue(release.Release.Title, out knownRemoteEpisode))
+                {
+                    release.RemoteEpisode.MappedSeasonNumber = knownRemoteEpisode.MappedSeasonNumber;
+                    release.RemoteEpisode.Episodes = knownRemoteEpisode.Episodes;
+                }
+                else if (ValidateParsedEpisodeInfo.ValidateForSeriesType(release.ParsedEpisodeInfo, series))
+                {
+                    var remoteEpisode = _parsingService.Map(release.ParsedEpisodeInfo, series);
+
+                    release.RemoteEpisode.MappedSeasonNumber = remoteEpisode.MappedSeasonNumber;
+                    release.RemoteEpisode.Episodes = remoteEpisode.Episodes;
+                }
+                else
+                {
+                    release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumber;
+                    release.RemoteEpisode.Episodes = new List<Episode>();
+                }
 
                 result.Add(release);
             }

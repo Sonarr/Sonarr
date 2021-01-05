@@ -86,6 +86,10 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                   .Returns(new List<Series> { _series });
 
             Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
+                  .Returns(new RemoteEpisode { Episodes = new List<Episode> { _episode } });
+
+            Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetEpisodes(It.IsAny<ParsedEpisodeInfo>(), _series, true, null))
                   .Returns(new List<Episode> {_episode});
 
