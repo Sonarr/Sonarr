@@ -136,6 +136,14 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Tue Jan 05 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1058-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed tests
+- No longer need the special tvdb season number handling since it's integrated into the search.
+- Fixed: Regression in searching anime by primary title
+- New: Support in services for multiple scene naming/numbering exceptions
+- Fixed: Backups interval being used as minutes instead of days
+
 * Mon Jan 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1052-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed tests
