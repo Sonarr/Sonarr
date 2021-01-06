@@ -121,8 +121,10 @@
 
 .fileCountMessage {
   font-weight: 300;
-  font-size: 12px;
-  color: $iconButtonHoverLightColor;
+  font-size: 15px;
+  color: #e1e2e3;
+  white-space: nowrap;
+  padding: 5px;
 }
 
 .path,
