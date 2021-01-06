@@ -119,9 +119,14 @@
   margin: 5px 10px 5px 0;
 }
 
+.fileCountMessage {
+  font-weight: 300;
+  font-size: 12px;
+  color: $iconButtonHoverLightColor;
+}
+
 .path,
 .sizeOnDisk,
-.fileCountMessage,
 .qualityProfileName,
 .network,
 .links,
