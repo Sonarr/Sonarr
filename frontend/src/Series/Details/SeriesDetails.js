@@ -434,7 +434,6 @@ class SeriesDetails extends Component {
 
                   <Label
                     className={styles.detailsLabel}
-                    title={episodeFilesCountMessage}
                     size={sizes.LARGE}
                   >
                     <Icon
@@ -446,6 +445,20 @@ class SeriesDetails extends Component {
                       {
                         formatBytes(sizeOnDisk || 0)
                       }
+                    </span>
+                  </Label>
+
+                  <Label
+                    className={styles.detailsLabel}
+                    size={sizes.LARGE}
+                  >
+                    <Icon
+                      name={icons.FILE}
+                      size={17}
+                    />
+
+                    <span className={styles.fileCountMessage}>
+                      {episodeFilesCountMessage}
                     </span>
                   </Label>
 
