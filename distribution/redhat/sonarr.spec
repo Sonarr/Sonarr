@@ -136,6 +136,12 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Thu Jan 07 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1059-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- New: Allow quality size limits to be closer together
+- Better task interval fetching
+- Fixed: Only delete update folder if it exists
+
 * Tue Jan 05 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1058-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed tests
