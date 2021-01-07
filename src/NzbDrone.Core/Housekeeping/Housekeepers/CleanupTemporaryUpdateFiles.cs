@@ -19,7 +19,10 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
 
-            _diskProvider.DeleteFolder(updateSandboxFolder, true);
+            if (_diskProvider.FolderExists(updateSandboxFolder))
+            {
+                _diskProvider.DeleteFolder(updateSandboxFolder, true);
+            }
         }
     }
 }
