@@ -120,9 +120,19 @@ namespace NzbDrone.Core.Jobs
 
         private int GetBackupInterval()
         {
-            var interval = _configService.BackupInterval;
+            var intervalMinutes = _configService.BackupInterval;
 
-            return interval * 60 * 24;
+            if (intervalMinutes < 1)
+            {
+                intervalMinutes = 1;
+            }
+
+            if (intervalMinutes > 7)
+            {
+                intervalMinutes = 7;
+            }
+
+            return intervalMinutes * 60 * 24;
         }
 
         private int GetRssSyncInterval()
@@ -156,10 +166,10 @@ namespace NzbDrone.Core.Jobs
         public void HandleAsync(ConfigSavedEvent message)
         {
             var rss = _scheduledTaskRepository.GetDefinition(typeof(RssSyncCommand));
-            rss.Interval = _configService.RssSyncInterval;
+            rss.Interval = GetRssSyncInterval();
 
             var backup = _scheduledTaskRepository.GetDefinition(typeof(BackupCommand));
-            backup.Interval = _configService.BackupInterval * 60 * 24;
+            backup.Interval = GetBackupInterval();
 
             _scheduledTaskRepository.UpdateMany(new List<ScheduledTask>{ rss, backup });
         }
