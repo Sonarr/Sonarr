@@ -13,6 +13,7 @@ import styles from './QualityDefinition.css';
 
 const MIN = 0;
 const MAX = 400;
+const MIN_DISTANCE = 1;
 
 const slider = {
   min: MIN,
@@ -187,7 +188,7 @@ class QualityDefinition extends Component {
             min={slider.min}
             max={slider.max}
             step={slider.step}
-            minDistance={10}
+            minDistance={MIN_DISTANCE * 5}
             value={[sliderMinSize, sliderMaxSize]}
             withTracks={true}
             snapDragDisabled={true}
@@ -243,7 +244,7 @@ class QualityDefinition extends Component {
                   name={`${id}.min`}
                   value={minSize || MIN}
                   min={MIN}
-                  max={maxSize ? maxSize - 10 : MAX - 10}
+                  max={maxSize ? maxSize - MIN_DISTANCE : MAX - MIN_DISTANCE}
                   step={0.1}
                   isFloat={true}
                   onChange={this.onMinSizeChange}
@@ -257,7 +258,7 @@ class QualityDefinition extends Component {
                   className={styles.sizeInput}
                   name={`${id}.min`}
                   value={maxSize || MAX}
-                  min={minSize + 10}
+                  min={minSize + MIN_DISTANCE}
                   max={MAX}
                   step={0.1}
                   isFloat={true}
