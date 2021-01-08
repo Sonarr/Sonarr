@@ -159,10 +159,10 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             {
                 var metadataId = GetMetadataId(section.Id, series, section.Language, settings);
 
-                if (metadataId.HasValue)
+                if (metadataId.IsNotNullOrWhiteSpace())
                 {
                     _logger.Debug("Updating Plex host: {0}, Section: {1}, Series: {2}", settings.Host, section.Id, series);
-                    _plexServerProxy.UpdateSeries(metadataId.Value, settings);
+                    _plexServerProxy.UpdateSeries(metadataId, settings);
 
                     partiallyUpdated = true;
                 }
@@ -171,7 +171,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             return partiallyUpdated;
         }
 
-        private int? GetMetadataId(int sectionId, Series series, string language, PlexServerSettings settings)
+        private string GetMetadataId(int sectionId, Series series, string language, PlexServerSettings settings)
         {
             _logger.Debug("Getting metadata from Plex host: {0} for series: {1}", settings.Host, series);
 

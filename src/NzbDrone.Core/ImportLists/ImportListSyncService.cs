@@ -121,6 +121,8 @@ namespace NzbDrone.Core.ImportLists
                     seriesToAdd.Add(new Series
                     {
                         TvdbId = report.TvdbId,
+                        Title = report.Title,
+                        Year = report.Year,
                         Monitored = monitored,
                         RootFolderPath = importList.RootFolderPath,
                         QualityProfileId = importList.QualityProfileId,

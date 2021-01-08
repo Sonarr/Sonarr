@@ -11,6 +11,8 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
         PlexTvPinUrlResponse GetPinUrl();
         PlexTvSignInUrlResponse GetSignInUrl(string callbackUrl, int pinId, string pinCode);
         string GetAuthToken(int pinId);
+
+        HttpRequest GetWatchlist(string authToken);
     }
 
     public class PlexTvService : IPlexTvService
@@ -79,6 +81,32 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
             var authToken = _proxy.GetAuthToken(_configService.PlexClientIdentifier, pinId);
 
             return authToken;
+        }
+
+        public HttpRequest GetWatchlist(string authToken)
+        {
+            var clientIdentifier = _configService.PlexClientIdentifier;
+
+            var requestBuilder = new HttpRequestBuilder("https://metadata.provider.plex.tv/library/sections/watchlist/all")
+                                 .Accept(HttpAccept.Json)
+                                 .AddQueryParam("clientID", clientIdentifier)
+                                 .AddQueryParam("context[device][product]", BuildInfo.AppName)
+                                 .AddQueryParam("context[device][platform]", "Windows")
+                                 .AddQueryParam("context[device][platformVersion]", "7")
+                                 .AddQueryParam("context[device][version]", BuildInfo.Version.ToString())
+                                 .AddQueryParam("includeFields", "title,type,year,ratingKey")
+                                 .AddQueryParam("includeElements", "Guid")
+                                 .AddQueryParam("sort", "watchlistedAt:desc")
+                                 .AddQueryParam("type", (int)PlexMediaType.Show);
+
+            if (!string.IsNullOrWhiteSpace(authToken))
+            {
+                requestBuilder.AddQueryParam("X-Plex-Token", authToken);
+            }
+
+            var request = requestBuilder.Build();
+
+            return request;
         }
     }
 }

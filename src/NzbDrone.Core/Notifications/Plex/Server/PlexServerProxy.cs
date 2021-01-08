@@ -14,10 +14,10 @@ namespace NzbDrone.Core.Notifications.Plex.Server
     {
         List<PlexSection> GetTvSections(PlexServerSettings settings);
         void Update(int sectionId, PlexServerSettings settings);
-        void UpdateSeries(int metadataId, PlexServerSettings settings);
+        void UpdateSeries(string metadataId, PlexServerSettings settings);
         string Version(PlexServerSettings settings);
         List<PlexPreference> Preferences(PlexServerSettings settings);
-        int? GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings);
+        string GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings);
     }
 
     public class PlexServerProxy : IPlexServerProxy
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             CheckForError(response);
         }
 
-        public void UpdateSeries(int metadataId, PlexServerSettings settings)
+        public void UpdateSeries(string metadataId, PlexServerSettings settings)
         {
             var resource = $"library/metadata/{metadataId}/refresh";
             var request = BuildRequest(resource, HttpMethod.PUT, settings);
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                        .Preferences;
         }
 
-        public int? GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings)
+        public string GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings)
         {
             var guid = $"com.plexapp.agents.thetvdb://{tvdbId}?lang={language}";
             var resource = $"library/sections/{sectionId}/all?guid={System.Web.HttpUtility.UrlEncode(guid)}";

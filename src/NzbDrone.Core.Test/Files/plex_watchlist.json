@@ -1,0 +1,44 @@
+﻿{
+  "MediaContainer": {
+    "librarySectionID": "watchlist",
+    "librarySectionTitle": "Watchlist",
+    "offset": 0,
+    "totalSize": 3,
+    "identifier": "tv.plex.provider.metadata",
+    "size": 3,
+    "Metadata": [
+      {
+        "type": "show",
+        "title": "30 Rock",
+        "year": 2006,
+        "Guid": [
+          {
+            "id": "tvdb://79488"
+          }
+        ]
+      },
+      {
+        "type": "show",
+        "title": "Anthony Bourdain: No Reservations",
+        "year": 2005,
+        "Guid": [
+          {
+            "id": "imdb://tt0475900"
+          },
+          {
+            "id": "tmdb://4533"
+          },
+          {
+            "id": "tvdb://79668"
+          }
+        ]
+      },
+      {
+        "type": "show",
+        "title": "Series Title",
+        "year": 2021,
+        "Guid": []
+      }
+    ]
+  }
+}
