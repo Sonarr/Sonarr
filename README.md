@@ -35,34 +35,11 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 - Full support for specials and multi-episode releases
 - And a beautiful UI
 
-## Configuring Development Environment:
+## Contributing
 
-### Requirements
-
-- [Visual Studio 2017](https://www.visualstudio.com/vs)
-- [Git](https://git-scm.com/downloads)
-- [NodeJS](https://nodejs.org/en/download)
-- [Yarn](https://yarnpkg.com)
-
-### Setup
-
-- Make sure all the required software mentioned above are installed
-- Clone the repository recursively to get Sonarr and it's submodules
-    - You can do this by running `git clone --recursive https://github.com/Sonarr/Sonarr.git`
-- Install the required Node Packages using `yarn`
-
-### Backend Development
-
-- Run `yarn build` to build the UI
-- Open `Sonarr.sln` in Visual Studio
-- Make sure `Sonarr.Console` is set as the startup project
-- Build `Sonarr.Windows` and `Sonarr.Mono` projects
-- Build Solution
-
-### UI Development
-
-- Run `yarn watch` to build UI and rebuild automatically when changes are detected
-- Run Sonarr.Console.exe (or debug in Visual Studio)
+### Development
+This project exists thanks to all the people who contribute. [Contribute](CONTRIBUTING.md).
+<a href="https://github.com/Sonarr/Sonarr/graphs/contributors">
 
 ### Supporters
 
