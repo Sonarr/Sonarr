@@ -4,10 +4,13 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ## Getting Started
 
-- [Download](https://sonarr.tv/#download) (Linux, MacOS, Windows, Docker, etc.)
-- [Installation](https://github.com/Sonarr/Sonarr/wiki/Installation)
-- [FAQ](https://github.com/Sonarr/Sonarr/wiki/FAQ)
-- [Wiki](https://github.com/Sonarr/Sonarr/wiki)
+- [v2 Download](https://sonarr.tv/#download) (Linux, MacOS, Windows, Docker, etc.)
+- [v2 Installation](https://github.com/Sonarr/Sonarr/wiki/Installation)
+- [v2 FAQ](https://github.com/Sonarr/Sonarr/wiki/FAQ)
+- [v2 Wiki](https://github.com/Sonarr/Sonarr/wiki)
+- [v3 Download/Installation](https://sonarr.tv/#downloads-v3-windows)
+- [v3 FAQ](https://wiki.servarr.com/Sonarr_FAQ)
+- [v3 Wiki](https://wiki.servarr.com/Sonarr)
 - [API Documentation](https://github.com/Sonarr/Sonarr/wiki/API)
 
 ## Support
@@ -61,11 +64,6 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 - Run `yarn watch` to build UI and rebuild automatically when changes are detected
 - Run Sonarr.Console.exe (or debug in Visual Studio)
 
-### Licenses
-
-- [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)	
-- Copyright 2010-2020
-
 ### Supporters
 
 This project would not be possible without the support of our users and software providers. [**Become a sponsor or backer**](https://opencollective.com/sonarr) to help us out!
@@ -90,3 +88,7 @@ Thank you to [<img src="/Logo/Jetbrains/jetbrains.svg" alt="JetBrains" width="32
 * [<img src="/Logo/Jetbrains/resharper.svg" alt="ReSharper" width="32"> ReSharper](http://www.jetbrains.com/resharper/)
 * [<img src="/Logo/Jetbrains/dottrace.svg" alt="dotTrace" width="32"> dotTrace](http://www.jetbrains.com/dottrace/)
 
+### Licenses
+
+- [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)	
+- Copyright 2010-2021
