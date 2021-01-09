@@ -4,20 +4,23 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ## Getting Started
 
-- [v2 Download](https://sonarr.tv/#download) (Linux, MacOS, Windows, Docker, etc.)
-- [v2 Installation](https://github.com/Sonarr/Sonarr/wiki/Installation)
-- [v2 FAQ](https://github.com/Sonarr/Sonarr/wiki/FAQ)
-- [v2 Wiki](https://github.com/Sonarr/Sonarr/wiki)
-- [v3 Download/Installation](https://sonarr.tv/#downloads-v3-windows)
-- [v3 FAQ](https://wiki.servarr.com/Sonarr_FAQ)
-- [v3 Wiki](https://wiki.servarr.com/Sonarr)
+- [Download/Installation](https://sonarr.tv/#downloads-v3-windows)
+- [FAQ](https://wiki.servarr.com/Sonarr_FAQ)
+- [Wiki](https://wiki.servarr.com/Sonarr)
 - [API Documentation](https://github.com/Sonarr/Sonarr/wiki/API)
+- [Donate](https://sonarr.tv/donate)
 
 ## Support
+Note: GitHub Issues are for Bugs and Feature Requests Only
 
-- [Donate](https://sonarr.tv/donate)
+- [Forums](https://forums.sonarr.tv/)
 - [Discord](https://discord.gg/M6BvZn5)
+- [GitHub - Bugs and Feature Requests Only](https://github.com/Sonarr/Sonarr/issues)
+- [IRC ](http://webchat.freenode.net/?channels=#sonarr)
 - [Reddit](https://www.reddit.com/r/sonarr)
+- [Wiki](https://wiki.servarr.com/Sonarr)
+
+
 
 ## Features
 
@@ -39,11 +42,12 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ### Development
 This project exists thanks to all the people who contribute. [Contribute](CONTRIBUTING.md).
-<a href="https://github.com/Sonarr/Sonarr/graphs/contributors">
+<a href="https://github.com/Sonarr/Sonarr/graphs/contributors"><img src="https://opencollective.com/Sonarr/contributors.svg?width=890&button=false" /></a>
 
 ### Supporters
 
-This project would not be possible without the support of our users and software providers. [**Become a sponsor or backer**](https://opencollective.com/sonarr) to help us out!
+This project would not be possible without the support of our users and software providers. 
+[**Become a sponsor or backer**](https://opencollective.com/sonarr) to help us out!
 
 #### Sponsors
 
