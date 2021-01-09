@@ -30,7 +30,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 _logger.Debug("Mono version {0}", monoVersion);
                 return new HealthCheck(GetType(), HealthCheckResult.Error,
                     $"Currently installed Mono version {monoVersion} has a bug that causes issues connecting to indexers/download clients. You should upgrade to a higher version",
-                    "#currently-installed-mono-version-is-old-and-unsupported");
+                    "#currently_installed_mono_version-is_old_and_unsupported");
             }
 
             // Currently best stable Mono version (5.18 gets us .net 4.7.2 support)
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 _logger.Debug("Mono version is {0} or better: {1}", stableVersion, monoVersion);
                 return new HealthCheck(GetType(), HealthCheckResult.Notice,
                     $"Currently installed Mono version {monoVersion} is supported but upgrading to {bestVersion} is recommended.",
-                    "#currently-installed-mono-version-is-supported-but-upgrading-is-recommended");
+                    "#currently_installed_mono_version_is_supported_but_upgrading_is_recommended");
             }
             
             var oldVersion = new Version("5.4");
@@ -57,12 +57,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error,
                 $"Currently installed Mono version {monoVersion} is no longer supported. Please upgrade Mono to version {bestVersion}.",
-                "#currently-installed-mono-version-is-old-and-unsupported");
+                "#currently_installed_mono_version-is_old_and_unsupported");
             }
 
             return new HealthCheck(GetType(), HealthCheckResult.Error, 
                 $"Currently installed Mono version {monoVersion} is old and unsupported. Please upgrade Mono to version {bestVersion}.", 
-                "#currently-installed-mono-version-is-old-and-unsupported");
+                "#currently_installed_mono_version-is_old_and_unsupported");
         }
 
         public override bool CheckOnSchedule => false;

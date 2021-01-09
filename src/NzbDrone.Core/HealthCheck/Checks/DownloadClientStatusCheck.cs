@@ -36,10 +36,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (backOffProviders.Count == enabledProviders.Count)
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Error, "All download clients are unavailable due to failures", "#download-clients-are-unavailable-due-to-failures");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, "All download clients are unavailable due to failures", "#download_clients_are_unavailable_due_to_failures");
             }
 
-            return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format("Download clients unavailable due to failures: {0}", string.Join(", ", backOffProviders.Select(v => v.Provider.Definition.Name))), "#download-clients-are-unavailable-due-to-failures");
+            return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format("Download clients unavailable due to failures: {0}", string.Join(", ", backOffProviders.Select(v => v.Provider.Definition.Name))), "#download_clients_are_unavailable_due_to_failures");
         }
     }
 }
