@@ -50,20 +50,20 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 // Migration helper logic
                 if (!downloadClientIsLocalHost)
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Multi-Computer unsupported)", "Migrating-to-Completed-Download-Handling#Unsupported-download-client-on-different-computer");
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Multi-Computer unsupported)", "Migrating_to_Completed_Download_Handling#Unsupported_download_client_on_different_computer");
                 }
 
                 if (downloadClients.All(v => v.DownloadClient is Sabnzbd))
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Sabnzbd)", "Migrating-to-Completed-Download-Handling#sabnzbd-enable-completed-download-handling");
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Sabnzbd)", "Migrating_to_Completed_Download_Handling#sabnzbd_enable_completed_download_handling");
                 }
 
                 if (downloadClients.All(v => v.DownloadClient is Nzbget))
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Nzbget)", "Migrating-to-Completed-Download-Handling#nzbget-enable-completed-download-handling");
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Nzbget)", "Migrating_to_Completed_Download_Handling#nzbget_enable_completed_download_handling");
                 }
 
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible", "Migrating-to-Completed-Download-Handling");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible", "Migrating_to_Completed_Download_Handling");
             }
 
             if (!_configService.EnableCompletedDownloadHandling)

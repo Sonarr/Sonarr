@@ -41,14 +41,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 _logger.Debug("Dotnet version is {0} or better: {1}", stableVersion, dotnetVersion);
                 return new HealthCheck(GetType(), HealthCheckResult.Notice,
                     $"Currently installed .Net Framework {dotnetVersion} is supported but we recommend upgrading to at least {targetVersion}.",
-                    "#currently-installed-net-framework-is-supported-but-upgrading-is-recommended");
+                    "#currently_installed_net_framework_is_supported_but_upgrading_is_recommended");
             }
 
             if (Version.TryParse(_osInfo.Version, out var osVersion) && osVersion < new Version("10.0.14393"))
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error,
                     $"Currently installed .Net Framework {dotnetVersion} is no longer supported. However your Operating System cannot be upgraded to {targetVersion}.",
-                    "#currently-installed-net-framework-is-old-and-unsupported");
+                    "#currently_installed_net_framework_is_old_and_unsupported");
             }
 
             var oldVersion = new Version("4.6.2");
@@ -56,12 +56,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error,
                     $"Currently installed .Net Framework {dotnetVersion} is no longer supported. Please upgrade the .Net Framework to at least {targetVersion}.",
-                    "#currently-installed-net-framework-is-old-and-unsupported");
+                    "#currently_installed_net_framework_is_old_and_unsupported");
             }
 
             return new HealthCheck(GetType(), HealthCheckResult.Error,
                 $"Currently installed .Net Framework {dotnetVersion} is old and unsupported. Please upgrade the .Net Framework to at least {targetVersion}.",
-                "#currently-installed-net-framework-is-old-and-unsupported");
+                "#currently_installed_net_framework_is_old_and_unsupported");
         }
 
         public override bool CheckOnSchedule => false;
