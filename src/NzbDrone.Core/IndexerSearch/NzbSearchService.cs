@@ -233,6 +233,11 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var sceneMapping in sceneMappings)
             {
+                if ((sceneMapping.SeasonNumber ?? -1) != -1 && sceneMapping.SeasonNumber != episode.SeasonNumber)
+                {
+                    continue;
+                }
+
                 if (sceneMapping.ParseTerm == series.CleanTitle && sceneMapping.FilterRegex.IsNotNullOrWhiteSpace())
                 {
                     // Disable the implied mapping if we have an explicit mapping by the same name
