@@ -31,9 +31,6 @@ namespace NzbDrone.Core.Notifications.Email
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "SSL", Type = FieldType.Checkbox)]
-        public bool Ssl { get; set; }
-
         [FieldDefinition(3, Label = "Username", Privacy = PrivacyLevel.UserName)]
         public string Username { get; set; }
 
