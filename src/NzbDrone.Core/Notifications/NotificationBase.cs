@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Notifications
         protected const string EPISODE_DELETED_TITLE_BRANDED = "Sonarr - " + EPISODE_DELETED_TITLE;
         protected const string SERIES_DELETED_TITLE_BRANDED = "Sonarr - " + SERIES_DELETED_TITLE;
         protected const string HEALTH_ISSUE_TITLE_BRANDED = "Sonarr - " + HEALTH_ISSUE_TITLE;
-        
+
         public abstract string Name { get; }
 
         public Type ConfigContract => typeof(TSettings);
@@ -90,12 +90,12 @@ namespace NzbDrone.Core.Notifications
         {
             var method = GetType().GetMethod(methodName);
 
-                if (method == null)
-                {
-                    throw new MissingMethodException(GetType().Name, Name);
-                }
+            if (method == null)
+            {
+                throw new MissingMethodException(GetType().Name, Name);
+            }
 
-                return !method.DeclaringType.IsAbstract;
+            return !method.DeclaringType.IsAbstract;
         }
     }
 }

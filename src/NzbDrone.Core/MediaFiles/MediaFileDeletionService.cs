@@ -28,6 +28,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IMediaFileService _mediaFileService;
         private readonly ISeriesService _seriesService;
         private readonly IConfigService _configService;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public MediaFileDeletionService(IDiskProvider diskProvider,
@@ -35,6 +36,7 @@ namespace NzbDrone.Core.MediaFiles
                                         IMediaFileService mediaFileService,
                                         ISeriesService seriesService,
                                         IConfigService configService,
+                                        IEventAggregator eventAggregator,
                                         Logger logger)
         {
             _diskProvider = diskProvider;
@@ -42,6 +44,7 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileService = mediaFileService;
             _seriesService = seriesService;
             _configService = configService;
+            _eventAggregator = eventAggregator; 
             _logger = logger;
         }
 
@@ -81,6 +84,8 @@ namespace NzbDrone.Core.MediaFiles
             
             // Delete the episode file from the database to clean it up even if the file was already deleted
             _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
+
+            _eventAggregator.PublishEvent(new DeleteCompletedEvent());
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
@@ -111,6 +116,7 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _recycleBinProvider.DeleteFolder(message.Series.Path);
                 }
+                _eventAggregator.PublishEvent(new DeleteCompletedEvent());
             }
         }
 

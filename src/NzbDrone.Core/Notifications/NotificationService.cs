@@ -18,8 +18,10 @@ namespace NzbDrone.Core.Notifications
         : IHandle<EpisodeGrabbedEvent>,
           IHandle<EpisodeImportedEvent>,
           IHandle<SeriesRenamedEvent>,
+          IHandle<SeriesDeletedEvent>,
           IHandle<EpisodeFileDeletedEvent>,
           IHandle<HealthCheckFailedEvent>,
+          IHandleAsync<DeleteCompletedEvent>,
           IHandleAsync<DownloadsProcessedEvent>,
           IHandleAsync<RenameCompletedEvent>,
           IHandleAsync<HealthCheckCompleteEvent>
@@ -252,6 +254,11 @@ namespace NzbDrone.Core.Notifications
                     _logger.Warn(ex, "Unable to send OnHealthIssue notification to: " + notification.Definition.Name);
                 }
             }
+        }
+
+        public void HandleAsync(DeleteCompletedEvent message)
+        {
+            ProcessQueue();
         }
 
         public void HandleAsync(DownloadsProcessedEvent message)
