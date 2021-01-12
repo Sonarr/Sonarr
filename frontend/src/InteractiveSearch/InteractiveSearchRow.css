@@ -8,6 +8,13 @@
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   word-break: break-all;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sceneMapping {
+  flex-shrink: 0;
 }
 
 .indexer {

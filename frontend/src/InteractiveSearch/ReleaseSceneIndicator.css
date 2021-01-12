@@ -1,0 +1,66 @@
+.container {
+  margin: 2px;
+  border: 1px solid;
+  border-radius: 2px;
+  padding: 0 2px;
+  cursor: default;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.messages {
+  margin-top: 15px;
+}
+
+.descriptionList {
+  composes: descriptionList from '~Components/DescriptionList/DescriptionList.css';
+
+  margin-right: 10px;
+}
+
+.title {
+  composes: title from '~Components/DescriptionList/DescriptionListItemTitle.css';
+
+  width: 80px;
+}
+
+.description {
+  composes: title from '~Components/DescriptionList/DescriptionListItemDescription.css';
+
+  margin-left: 100px;
+}
+
+.levelMixed {
+  color: $dangerColor;
+  border-color: $dangerColor;
+}
+
+.levelUnknown {
+  color: $warningColor;
+  border-color: $warningColor;
+}
+
+.levelMapped {
+  color: $textColor;
+  border-color: $textColor;
+}
+
+.levelNormal {
+  color: $textColor;
+  border-color: $textColor;
+}
+
+.levelNone {
+  opacity: 0.2;
+  color: $textColor;
+  border-color: $textColor;
+
+  &:hover {
+    opacity: 1.0;
+  }
+}
+
+.levelNotRequested {
+  color: $dangerColor;
+  border-color: $dangerColor;
+}

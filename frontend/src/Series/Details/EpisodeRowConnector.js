@@ -11,6 +11,7 @@ function createMapStateToProps() {
     createEpisodeFileSelector(),
     (series = {}, episodeFile) => {
       return {
+        useSceneNumbering: series.useSceneNumbering,
         seriesMonitored: series.monitored,
         seriesType: series.seriesType,
         episodeFilePath: episodeFile ? episodeFile.path : null,

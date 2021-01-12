@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Tv;
 
@@ -10,10 +11,12 @@ namespace NzbDrone.Core.Parser.Model
     {
         public ReleaseInfo Release { get; set; }
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
+        public SceneMapping SceneMapping { get; set; }
         public int MappedSeasonNumber { get; set; }
 
         public Series Series { get; set; }
         public List<Episode> Episodes { get; set; }
+        public bool EpisodeRequested { get; set; }
         public bool DownloadAllowed { get; set; }
         public TorrentSeedConfiguration SeedConfiguration { get; set; }
         public int PreferredWordScore { get; set; }
