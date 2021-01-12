@@ -136,6 +136,10 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Tue Jan 12 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1061-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Dailiezearch.
+
 * Sun Jan 10 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1060-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Update wiki link hints for health checks
