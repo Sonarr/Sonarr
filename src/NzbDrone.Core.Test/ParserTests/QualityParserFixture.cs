@@ -298,6 +298,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Coalgirls]_Durarara!!_01_(1920x1080_Blu-ray_FLAC)_[8370CB8F].mkv", false)]
         [TestCase("Planet.Earth.S01E11.Ocean.Deep.1080p.HD-DVD.DD.VC1-TRB", false)]
         [TestCase("Spirited Away(2001) Bluray FHD Hi10P.mkv", false)]
+        [TestCase("V for Vendetta 2005 1080p UHD BluRay DD+7.1 x264-LoRD.mkv", false)]
+        [TestCase("Rise.Of.The.Planet.Of.The.Apes.2011.1080p.UHD.BluRay.DD5.1.HDR.x265-CtrlHD.mkv", false)]
+        [TestCase("Rise.Of.The.Planet.Of.The.Apes.2011.UHD.BluRay.DD5.1.HDR.x265-CtrlHD/ctrlhd-rotpota-1080p.mkv", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);
@@ -316,6 +319,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("House.of.Cards.US.s05e13.4K.UHD.Bluray", false)]
         [TestCase("House.of.Cards.US.s05e13.UHD.4K.Bluray", false)]
         [TestCase("[DameDesuYo] Backlog Bundle - Part 1 (BD 4K 8bit FLAC)", false)]
+        [TestCase("X-Men.Days.of.Future.Past.2014.2160p.UHD.BluRay.X265-IAMABLE.mkv", false)]
         public void should_parse_bluray2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray2160p, proper);
@@ -324,6 +328,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Yuri!!! on ICE - S01E12[JP BD 2160p Remux][ENG subs]", false)]
         [TestCase("Agents.of.S.H.I.E.L.D.S01E08.The.Well.BluRay.2160p.AVC.DTS-HD.MA.5.1.REMUX-FraMeSToR", false)]
         [TestCase("Miami.Vice.2x11.Nato.Per.La.Truffa.Bluray.Remux.AVC.2160p.AC3.ITA", false)]
+        [TestCase("[Dolby Vision] Game.of.Thrones.S07.MULTi.UHD.BLURAY.REMUX.DV-NoTag", false)]
         public void should_parse_bluray2160p_remux_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray2160pRemux, proper);
