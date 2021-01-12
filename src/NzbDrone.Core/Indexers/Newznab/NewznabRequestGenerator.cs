@@ -206,9 +206,28 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            AddTvIdPageableRequests(pageableRequests, Settings.Categories, searchCriteria,
-                string.Format("&season={0:yyyy}&ep={0:MM}/{0:dd}",
-                searchCriteria.AirDate));
+            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
+            {
+                AddTvIdPageableRequests(pageableRequests, Settings.Categories, searchCriteria,
+                    string.Format("&season={0:yyyy}&ep={0:MM}/{0:dd}",
+                    searchCriteria.AirDate));
+            }
+
+            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+            {
+                AddTitlePageableRequests(pageableRequests, Settings.Categories, searchCriteria,
+                    string.Format("&season={0:yyyy}&ep={0:MM}/{0:dd}",
+                    searchCriteria.AirDate));
+            }
+
+            pageableRequests.AddTier();
+
+            if (searchCriteria.SearchMode == SearchMode.Default)
+            {
+                AddTitlePageableRequests(pageableRequests, Settings.Categories, searchCriteria,
+                    string.Format("&season={0:yyyy}&ep={0:MM}/{0:dd}",
+                    searchCriteria.AirDate));
+            }
 
             return pageableRequests;
         }
@@ -217,9 +236,29 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            AddTvIdPageableRequests(pageableRequests, Settings.Categories, searchCriteria,
-                string.Format("&season={0}",
-                searchCriteria.Year));
+            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
+            {
+
+                AddTvIdPageableRequests(pageableRequests, Settings.Categories, searchCriteria,
+                    string.Format("&season={0}",
+                    searchCriteria.Year));
+            }
+
+            if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
+            {
+                AddTitlePageableRequests(pageableRequests, Settings.Categories, searchCriteria,
+                    string.Format("&season={0}",
+                    searchCriteria.Year));
+            }
+
+            pageableRequests.AddTier();
+
+            if (searchCriteria.SearchMode == SearchMode.Default)
+            {
+                AddTitlePageableRequests(pageableRequests, Settings.Categories, searchCriteria,
+                    string.Format("&season={0}",
+                    searchCriteria.Year));
+            }
 
             return pageableRequests;
         }
