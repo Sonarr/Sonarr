@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
         {
             var recentFeed = ReadAllText(@"Files/Indexers/BroadcastheNet/RecentFeed.json");
 
-            (Subject.Definition.Settings as BroadcastheNetSettings).BaseUrl = "http://api.broadcasthe.net/";
+            (Subject.Definition.Settings as BroadcastheNetSettings).BaseUrl = "https://api.broadcasthe.net/";
 
             recentFeed = recentFeed.Replace("http:", "https:");
 
