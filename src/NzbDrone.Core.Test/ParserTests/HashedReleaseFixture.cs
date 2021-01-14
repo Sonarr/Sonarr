@@ -41,57 +41,57 @@ namespace NzbDrone.Core.Test.ParserTests
             },
             new object[]
             {
-                @"C:\Test\Weeds.S01E10.DVDRip.XviD-SONARR\AHFMZXGHEWD660.mkv".AsOsAgnostic(),
-                "Weeds",
+                @"C:\Test\Title.S01E10.DVDRip.XviD-SONARR\AHFMZXGHEWD660.mkv".AsOsAgnostic(),
+                "Title",
                 Quality.DVD,
                 "SONARR"
             },
             new object[]
             {
-                @"C:\Test\Deadwood.S02E12.1080p.BluRay.x264-SONARR\Backup_72023S02-12.mkv".AsOsAgnostic(),
-                "Deadwood",
+                @"C:\Test\Show Title.S02E12.1080p.BluRay.x264-SONARR\Backup_72023S02-12.mkv".AsOsAgnostic(),
+                "Show Title",
                 Quality.Bluray1080p,
                 null
             },
             new object[]
             {
-                @"C:\Test\Grimm S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\123.mkv".AsOsAgnostic(),
-                "Grimm",
+                @"C:\Test\Title S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\123.mkv".AsOsAgnostic(),
+                "Title",
                 Quality.WEBDL720p,
                 "ECI"
             },
             new object[]
             {
-                @"C:\Test\Grimm S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\abc.mkv".AsOsAgnostic(),
-                "Grimm",
+                @"C:\Test\Title S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\abc.mkv".AsOsAgnostic(),
+                "Title",
                 Quality.WEBDL720p,
                 "ECI"
             },
             new object[]
             {
-                @"C:\Test\Grimm S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\b00bs.mkv".AsOsAgnostic(),
-                "Grimm",
+                @"C:\Test\Title S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\b00bs.mkv".AsOsAgnostic(),
+                "Title",
                 Quality.WEBDL720p,
                 "ECI"
             },
             new object[]
             {
-                @"C:\Test\The.Good.Wife.S02E23.720p.HDTV.x264-NZBgeek/cgajsofuejsa501.mkv".AsOsAgnostic(),
-                "The Good Wife",
+                @"C:\Test\The.Show.Title.S02E23.720p.HDTV.x264-NZBgeek/cgajsofuejsa501.mkv".AsOsAgnostic(),
+                "The Show Title",
                 Quality.HDTV720p,
                 "NZBgeek"
             },
             new object[]
             {
-                @"C:\Test\Fargo.S03E04.1080p.WEB-DL.DD5.1.H264-RARBG\170424_26.mkv".AsOsAgnostic(),
-                "Fargo",
+                @"C:\Test\Show.Title.S03E04.1080p.WEB-DL.DD5.1.H264-RARBG\170424_26.mkv".AsOsAgnostic(),
+                "Show Title",
                 Quality.WEBDL1080p,
                 "RARBG"
             },
             new object[]
             {
-                @"C:\Test\XxQVHK4GJMP3n2dLpmhW\XxQVHK4GJMP3n2dLpmhW\MKV\010E70S.yhcranA.fo.snoS.mkv".AsOsAgnostic(),
-                "Sons of Anarchy",
+                @"C:\Test\XxQVHK4GJMP3n2dLpmhW\XxQVHK4GJMP3n2dLpmhW\MKV\010E70S.nuF.fo.snoS.mkv".AsOsAgnostic(),
+                "Sons of Fun",
                 Quality.HDTV720p,
                 null
             },
