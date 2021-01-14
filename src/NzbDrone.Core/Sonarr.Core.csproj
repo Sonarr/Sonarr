@@ -8,6 +8,7 @@
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="MailKit" Version="2.10.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NLog" Version="4.6.6" />
     <PackageReference Include="OAuth" Version="1.0.3" />
