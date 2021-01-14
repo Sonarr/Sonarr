@@ -4,17 +4,23 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ## Getting Started
 
-- [Download](https://sonarr.tv/#download) (Linux, MacOS, Windows, Docker, etc.)
-- [Installation](https://github.com/Sonarr/Sonarr/wiki/Installation)
-- [FAQ](https://github.com/Sonarr/Sonarr/wiki/FAQ)
-- [Wiki](https://github.com/Sonarr/Sonarr/wiki)
-- [API Documentation](https://github.com/Sonarr/Sonarr/wiki/API)
+- [Download/Installation](https://sonarr.tv/#downloads-v3)
+- [FAQ](https://wiki.servarr.com/Sonarr_FAQ)
+- [Wiki](https://wiki.servarr.com/Sonarr)
+- [(WIP) API Documentation](https://github.com/Sonarr/Sonarr/wiki/API)
+- [Donate](https://sonarr.tv/donate)
 
 ## Support
+Note: GitHub Issues are for Bugs and Feature Requests Only
 
-- [Donate](https://sonarr.tv/donate)
+- [Forums](https://forums.sonarr.tv/)
 - [Discord](https://discord.gg/M6BvZn5)
+- [GitHub - Bugs and Feature Requests Only](https://github.com/Sonarr/Sonarr/issues)
+- [IRC ](http://webchat.freenode.net/?channels=#sonarr)
 - [Reddit](https://www.reddit.com/r/sonarr)
+- [Wiki](https://wiki.servarr.com/Sonarr)
+
+
 
 ## Features
 
@@ -32,43 +38,16 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 - Full support for specials and multi-episode releases
 - And a beautiful UI
 
-## Configuring Development Environment:
+## Contributing
 
-### Requirements
-
-- [Visual Studio 2017](https://www.visualstudio.com/vs)
-- [Git](https://git-scm.com/downloads)
-- [NodeJS](https://nodejs.org/en/download)
-- [Yarn](https://yarnpkg.com)
-
-### Setup
-
-- Make sure all the required software mentioned above are installed
-- Clone the repository recursively to get Sonarr and it's submodules
-    - You can do this by running `git clone --recursive https://github.com/Sonarr/Sonarr.git`
-- Install the required Node Packages using `yarn`
-
-### Backend Development
-
-- Run `yarn build` to build the UI
-- Open `Sonarr.sln` in Visual Studio
-- Make sure `Sonarr.Console` is set as the startup project
-- Build `Sonarr.Windows` and `Sonarr.Mono` projects
-- Build Solution
-
-### UI Development
-
-- Run `yarn watch` to build UI and rebuild automatically when changes are detected
-- Run Sonarr.Console.exe (or debug in Visual Studio)
-
-### Licenses
-
-- [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)	
-- Copyright 2010-2020
+### Development
+This project exists thanks to all the people who contribute. [Contribute](CONTRIBUTING.md).
+<a href="https://github.com/Sonarr/Sonarr/graphs/contributors"><img src="https://opencollective.com/Sonarr/contributors.svg?width=890&button=false" /></a>
 
 ### Supporters
 
-This project would not be possible without the support of our users and software providers. [**Become a sponsor or backer**](https://opencollective.com/sonarr) to help us out!
+This project would not be possible without the support of our users and software providers. 
+[**Become a sponsor or backer**](https://opencollective.com/sonarr) to help us out!
 
 #### Sponsors
 
@@ -90,3 +69,7 @@ Thank you to [<img src="/Logo/Jetbrains/jetbrains.svg" alt="JetBrains" width="32
 * [<img src="/Logo/Jetbrains/resharper.svg" alt="ReSharper" width="32"> ReSharper](http://www.jetbrains.com/resharper/)
 * [<img src="/Logo/Jetbrains/dottrace.svg" alt="dotTrace" width="32"> dotTrace](http://www.jetbrains.com/dottrace/)
 
+### Licenses
+
+- [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)	
+- Copyright 2010-2021

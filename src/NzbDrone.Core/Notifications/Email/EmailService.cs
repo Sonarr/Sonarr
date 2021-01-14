@@ -1,7 +1,8 @@
-﻿using System;
-using System.Net;
-using System.Net.Mail;
+using System;
+using System.Linq;
 using FluentValidation.Results;
+using MailKit.Net.Smtp;
+using MimeKit;
 using NLog;
 
 namespace NzbDrone.Core.Notifications.Email
@@ -23,23 +24,20 @@ namespace NzbDrone.Core.Notifications.Email
 
         public void SendEmail(EmailSettings settings, string subject, string body, bool htmlBody = false)
         {
-            var email = new MailMessage();
-            email.From = new MailAddress(settings.From);
+            var email = new MimeMessage();
+            email.From.Add(MailboxAddress.Parse(settings.From));
+
+            email.To.Add(MailboxAddress.Parse(settings.To));
             
-            email.To.Add(settings.To);
-
             email.Subject = subject;
-            email.Body = body;
-            email.IsBodyHtml = htmlBody;
-
-            NetworkCredential credentials = null;
-
-            if (!string.IsNullOrWhiteSpace(settings.Username))
-                credentials = new NetworkCredential(settings.Username, settings.Password);
-
+            email.Body = new TextPart(htmlBody ? "html" : "plain")
+            {
+                Text = body
+            };
+            
             try
             {
-                Send(email, settings.Server, settings.Port, settings.Ssl, credentials);
+                Send(email, settings);
             }
             catch(Exception ex)
             {
@@ -49,13 +47,20 @@ namespace NzbDrone.Core.Notifications.Email
             }
         }
 
-        private void Send(MailMessage email, string server, int port, bool ssl, NetworkCredential credentials)
+        private void Send(MimeMessage email, EmailSettings settings)
         {
-            var smtp = new SmtpClient(server, port);
-            smtp.EnableSsl = ssl;
-            smtp.Credentials = credentials;
+            using (var client = new SmtpClient())
+            {
+                client.Connect(settings.Server, settings.Port);
 
-            smtp.Send(email);
+                if (!string.IsNullOrWhiteSpace(settings.Username))
+                {
+                    client.Authenticate(settings.Username, settings.Password);
+                }
+
+                client.Send(email);
+                client.Disconnect(true);
+            }
         }
 
         public ValidationFailure Test(EmailSettings settings)
