@@ -59,6 +59,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex OtherSourceRegex = new Regex(@"(?<hdtv>HD[-_. ]TV)|(?<sdtv>SD[-_. ]TV)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex AnimeBlurayRegex = new Regex(@"bd(?:720|1080|2160)|(?<=[-_. (\[])bd(?=[-_. )\]])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex AnimeWebDlRegex = new Regex(@"\[WEB\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex HighDefPdtvRegex = new Regex(@"hr[-_. ]ws", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -338,6 +339,39 @@ namespace NzbDrone.Core.Parser
                 }
 
                 result.Quality = Quality.Bluray720p;
+                return result;
+            }
+
+            if (AnimeWebDlRegex.Match(normalizedName).Success)
+            {
+                result.SourceDetectionSource = QualityDetectionSource.Name;
+
+                if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
+                    resolution == Resolution.R576p || normalizedName.ContainsIgnoreCase("480p"))
+                {
+                    result.ResolutionDetectionSource = QualityDetectionSource.Name;
+                    result.Quality = Quality.WEBDL480p;
+
+                    return result;
+                }
+
+                if (resolution == Resolution.R1080p || normalizedName.ContainsIgnoreCase("1080p"))
+                {
+                    result.ResolutionDetectionSource = QualityDetectionSource.Name;
+                    result.Quality = Quality.WEBDL1080p;
+
+                    return result;
+                }
+
+                if (resolution == Resolution.R2160p || normalizedName.ContainsIgnoreCase("2160p"))
+                {
+                    result.ResolutionDetectionSource = QualityDetectionSource.Name;
+                    result.Quality = Quality.WEBDL2160p;
+
+                    return result;
+                }
+
+                result.Quality = Quality.WEBDL720p;
                 return result;
             }
 
