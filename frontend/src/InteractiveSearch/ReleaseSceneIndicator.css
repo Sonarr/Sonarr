@@ -1,11 +1,11 @@
 .container {
   margin: 2px;
+  padding: 0 2px;
   border: 1px solid;
   border-radius: 2px;
-  padding: 0 2px;
-  cursor: default;
-  font-size: 12px;
   white-space: nowrap;
+  font-size: 12px;
+  cursor: default;
 }
 
 .messages {
@@ -31,36 +31,36 @@
 }
 
 .levelMixed {
-  color: $dangerColor;
   border-color: $dangerColor;
+  color: $dangerColor;
 }
 
 .levelUnknown {
-  color: $warningColor;
   border-color: $warningColor;
+  color: $warningColor;
 }
 
 .levelMapped {
-  color: $textColor;
   border-color: $textColor;
+  color: $textColor;
 }
 
 .levelNormal {
-  color: $textColor;
   border-color: $textColor;
+  color: $textColor;
 }
 
 .levelNone {
-  opacity: 0.2;
-  color: $textColor;
   border-color: $textColor;
+  color: $textColor;
+  opacity: 0.2;
 
   &:hover {
-    opacity: 1.0;
+    opacity: 1;
   }
 }
 
 .levelNotRequested {
-  color: $dangerColor;
   border-color: $dangerColor;
+  color: $dangerColor;
 }

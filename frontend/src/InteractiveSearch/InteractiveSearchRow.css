@@ -7,10 +7,10 @@
 .title {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
-  word-break: break-all;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  word-break: break-all;
 }
 
 .sceneMapping {
