@@ -122,6 +122,20 @@ namespace NzbDrone.Core.Test.ParserTests
                 "Series Title",
                 Quality.WEBDL1080p,
                 "NTb"
+            },
+            new object[]
+            {
+                @"C:\Test\tv\Series.Title.2017.S04E07.Episode.Name.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb/s2e2fYzx5xJhuBjHn5ZXE07Ebi.mkv".AsOsAgnostic(),
+                "Series Title 2017",
+                Quality.WEBDL1080p,
+                "NTb"
+            },
+            new object[]
+            {
+                @"C:\Test\tv\Series.Title.S04E03.Episode.Name.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb\zM0vnVU1SoV4uwTihfzTHkYmJPBemgN3MqXG1fY.mkv".AsOsAgnostic(),
+                "Series Title",
+                Quality.WEBDL1080p,
+                "NTb"
             }
         };
 

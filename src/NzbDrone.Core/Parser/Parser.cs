@@ -349,6 +349,12 @@ namespace NzbDrone.Core.Parser
 
                 // additional Generic match for mixed-case hashes. - Started appearing Dec 2020
                 new Regex(@"^[0-9a-zA-Z]{30}", RegexOptions.Compiled),
+
+                // additional Generic match for mixed-case hashes. - Started appearing Jan 2021
+                new Regex(@"^[0-9a-zA-Z]{26}", RegexOptions.Compiled),
+
+                // additional Generic match for mixed-case hashes. - Started appearing Jan 2021
+                new Regex(@"^[0-9a-zA-Z]{39}", RegexOptions.Compiled),
             };
 
         private static readonly Regex[] SeasonFolderRegexes = new Regex[]
