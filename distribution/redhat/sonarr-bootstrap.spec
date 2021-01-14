@@ -122,6 +122,14 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Thu Jan 14 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1066-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- New: Parsing of '[WEB]' as WebDL
+- Update contributing.md
+- Fix name of max NumberInput in QualityDefinition.js
+- Readme updates
+- New: Replace SmtpClient with Mailkit
+
 * Wed Jan 13 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1062-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Parse standalone UHD as 2160p if no other resolution info is present
