@@ -43,14 +43,14 @@ function EditNotificationModalContent(props) {
     onUpgrade,
     onRename,
     onSeriesDelete,
-    onEpisodeDelete,
+    onEpisodeFileDelete,
     onHealthIssue,
     supportsOnGrab,
     supportsOnDownload,
     supportsOnUpgrade,
     supportsOnRename,
     supportsSeriesOnDelete,
-    supportsEpisodeOnDelete,
+    supportsEpisodeFileOnDelete,
     supportsOnHealthIssue,
     includeHealthWarnings,
     tags,
@@ -174,8 +174,8 @@ function EditNotificationModalContent(props) {
                   type={inputTypes.CHECK}
                   name="onEpisodeDelete"
                   helpText="Be notified when episodes are deleted"
-                  isDisabled={!supportsEpisodeOnDelete.value}
-                  {...onEpisodeDelete}
+                  isDisabled={!supportsEpisodeFileOnDelete.value}
+                  {...onEpisodeFileDelete}
                   onChange={onInputChange}
                 />
               </FormGroup>

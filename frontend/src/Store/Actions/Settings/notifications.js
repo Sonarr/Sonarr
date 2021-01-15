@@ -107,7 +107,7 @@ export default {
         selectedSchema.onUpgrade = selectedSchema.supportsOnUpgrade;
         selectedSchema.onRename = selectedSchema.supportsOnRename;
         selectedSchema.OnSeriesDelete = selectedSchema.supportsOnSeriesDelete;
-        selectedSchema.OnEpisodeDelete = selectedSchema.supportsOnEpisodeDelete;
+        selectedSchema.OnEpisodeFileDelete = selectedSchema.supportsOnEpisodeFileDelete;
 
         return selectedSchema;
       });
