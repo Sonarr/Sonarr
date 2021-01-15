@@ -114,7 +114,8 @@ namespace NzbDrone.Core.Test.NotificationTests
             notification.SupportsOnDownload.Should().BeTrue();
             notification.SupportsOnUpgrade.Should().BeTrue();
             notification.SupportsOnRename.Should().BeTrue();
-            notification.SupportsOnDelete.Should().BeTrue();
+            notification.SupportsOnSeriesDelete.Should().BeTrue();
+            notification.SupportsOnEpisodeFileDelete.Should().BeTrue();
             notification.SupportsOnHealthIssue.Should().BeTrue();
         }
 
@@ -128,7 +129,8 @@ namespace NzbDrone.Core.Test.NotificationTests
             notification.SupportsOnDownload.Should().BeFalse();
             notification.SupportsOnUpgrade.Should().BeFalse();
             notification.SupportsOnRename.Should().BeFalse();
-            notification.SupportsOnDelete.Should().BeFalse();
+            notification.SupportsOnSeriesDelete.Should().BeFalse();
+            notification.SupportsOnEpisodeFileDelete.Should().BeFalse();
             notification.SupportsOnHealthIssue.Should().BeFalse();
         }
     }

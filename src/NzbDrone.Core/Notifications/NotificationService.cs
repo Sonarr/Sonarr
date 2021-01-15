@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Notifications
             deleteMessage.EpisodeFile = message.EpisodeFile;
             deleteMessage.Reason = message.Reason;
 
-            foreach (var notification in _notificationFactory.OnDeleteEnabled())
+            foreach (var notification in _notificationFactory.OnEpisodeFileDeleteEnabled())
             {
                 try
                 {
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Notifications
         {
             var deleteMessage = new SeriesDeleteMessage(message.Series,message.DeleteFiles);
 
-            foreach (var notification in _notificationFactory.OnDeleteEnabled())
+            foreach (var notification in _notificationFactory.OnSeriesDeleteEnabled())
             {
                 try
                 {

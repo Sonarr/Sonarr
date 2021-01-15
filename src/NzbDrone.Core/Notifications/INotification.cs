@@ -18,7 +18,8 @@ namespace NzbDrone.Core.Notifications
         bool SupportsOnDownload { get; }
         bool SupportsOnUpgrade { get; }
         bool SupportsOnRename { get; }
-        bool SupportsOnDelete { get; }
+        bool SupportsOnSeriesDelete { get; }
+        bool SupportsOnEpisodeFileDelete { get; }
         bool SupportsOnHealthIssue { get; }
     }
 }
