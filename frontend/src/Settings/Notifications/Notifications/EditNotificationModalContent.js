@@ -49,8 +49,8 @@ function EditNotificationModalContent(props) {
     supportsOnDownload,
     supportsOnUpgrade,
     supportsOnRename,
-    supportsSeriesOnDelete,
-    supportsEpisodeFileOnDelete,
+    supportsOnSeriesDelete,
+    supportsOnEpisodeFileDelete,
     supportsOnHealthIssue,
     includeHealthWarnings,
     tags,
@@ -161,7 +161,7 @@ function EditNotificationModalContent(props) {
                   type={inputTypes.CHECK}
                   name="onSeriesDelete"
                   helpText="Be notified when series are deleted"
-                  isDisabled={!supportsSeriesOnDelete.value}
+                  isDisabled={!supportsOnSeriesDelete.value}
                   {...onSeriesDelete}
                   onChange={onInputChange}
                 />
@@ -174,7 +174,7 @@ function EditNotificationModalContent(props) {
                   type={inputTypes.CHECK}
                   name="onEpisodeDelete"
                   helpText="Be notified when episodes are deleted"
-                  isDisabled={!supportsEpisodeFileOnDelete.value}
+                  isDisabled={!supportsOnEpisodeFileDelete.value}
                   {...onEpisodeFileDelete}
                   onChange={onInputChange}
                 />
