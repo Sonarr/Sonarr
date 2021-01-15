@@ -136,6 +136,14 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Fri Jan 15 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1069-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Updated BTN url to https
+- Linting as usual
+- Fixed: Unnecessary certificate validation errors on localhost/loopback
+- New: Added Scene Info to Interactive Search results to show more about the applied scene/TheXEM mappings
+- Fixed searching the wrong season.
+
 * Thu Jan 14 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1066-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - New: Parsing of '[WEB]' as WebDL
