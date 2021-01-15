@@ -1,0 +1,66 @@
+.container {
+  margin: 2px;
+  padding: 0 2px;
+  border: 1px solid;
+  border-radius: 2px;
+  white-space: nowrap;
+  font-size: 12px;
+  cursor: default;
+}
+
+.messages {
+  margin-top: 15px;
+}
+
+.descriptionList {
+  composes: descriptionList from '~Components/DescriptionList/DescriptionList.css';
+
+  margin-right: 10px;
+}
+
+.title {
+  composes: title from '~Components/DescriptionList/DescriptionListItemTitle.css';
+
+  width: 80px;
+}
+
+.description {
+  composes: title from '~Components/DescriptionList/DescriptionListItemDescription.css';
+
+  margin-left: 100px;
+}
+
+.levelMixed {
+  border-color: $dangerColor;
+  color: $dangerColor;
+}
+
+.levelUnknown {
+  border-color: $warningColor;
+  color: $warningColor;
+}
+
+.levelMapped {
+  border-color: $textColor;
+  color: $textColor;
+}
+
+.levelNormal {
+  border-color: $textColor;
+  color: $textColor;
+}
+
+.levelNone {
+  border-color: $textColor;
+  color: $textColor;
+  opacity: 0.2;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.levelNotRequested {
+  border-color: $dangerColor;
+  color: $dangerColor;
+}

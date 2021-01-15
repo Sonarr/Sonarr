@@ -179,6 +179,7 @@ export const RESTORE = fasHistory;
 export const REORDER = fasBars;
 export const RSS = fasRss;
 export const SAVE = fasSave;
+export const SCENE_MAPPING = fasSitemap;
 export const SCHEDULED = farClock;
 export const SCORE = fasUserPlus;
 export const SEARCH = fasSearch;

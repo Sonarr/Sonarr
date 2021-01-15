@@ -233,6 +233,11 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var sceneMapping in sceneMappings)
             {
+                if ((sceneMapping.SeasonNumber ?? -1) != -1 && sceneMapping.SeasonNumber != episode.SeasonNumber)
+                {
+                    continue;
+                }
+
                 if (sceneMapping.ParseTerm == series.CleanTitle && sceneMapping.FilterRegex.IsNotNullOrWhiteSpace())
                 {
                     // Disable the implied mapping if we have an explicit mapping by the same name
@@ -242,7 +247,7 @@ namespace NzbDrone.Core.IndexerSearch
                 // By default we do a alt title search in case indexers don't have the release properly indexed.  Services can override this behavior.
                 var searchMode = sceneMapping.SearchMode ?? ((sceneMapping.SceneSeasonNumber ?? -1) != -1 ? SearchMode.SearchTitle : SearchMode.Default);
 
-                if (sceneMapping.SceneOrigin == "tvdb")
+                if (sceneMapping.SceneOrigin == "tvdb" || sceneMapping.SceneOrigin == "unknown:tvdb")
                 {
                     yield return new SceneEpisodeMapping
                     {

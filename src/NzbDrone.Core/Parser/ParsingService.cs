@@ -142,6 +142,7 @@ namespace NzbDrone.Core.Parser
             var remoteEpisode = new RemoteEpisode
             {
                 ParsedEpisodeInfo = parsedEpisodeInfo,
+                SceneMapping = sceneMapping,
                 MappedSeasonNumber = parsedEpisodeInfo.SeasonNumber
             };
 
@@ -179,6 +180,12 @@ namespace NzbDrone.Core.Parser
             if (remoteEpisode.Episodes == null)
             {
                 remoteEpisode.Episodes = new List<Episode>();
+            }
+
+            if (searchCriteria != null)
+            {
+                var requestedEpisodes = searchCriteria.Episodes.ToDictionaryIgnoreDuplicates(v => v.Id);
+                remoteEpisode.EpisodeRequested = remoteEpisode.Episodes.Any(v => requestedEpisodes.ContainsKey(v.Id));
             }
 
             return remoteEpisode;

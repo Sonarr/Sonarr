@@ -60,6 +60,7 @@ class EpisodeRow extends Component {
       sceneAbsoluteEpisodeNumber,
       airDateUtc,
       title,
+      useSceneNumbering,
       unverifiedSceneNumbering,
       isSaving,
       seriesMonitored,
@@ -110,6 +111,7 @@ class EpisodeRow extends Component {
                     seasonNumber={seasonNumber}
                     episodeNumber={episodeNumber}
                     absoluteEpisodeNumber={absoluteEpisodeNumber}
+                    useSceneNumbering={useSceneNumbering}
                     unverifiedSceneNumbering={unverifiedSceneNumbering}
                     seriesType={seriesType}
                     sceneSeasonNumber={sceneSeasonNumber}
@@ -265,6 +267,7 @@ EpisodeRow.propTypes = {
   airDateUtc: PropTypes.string,
   title: PropTypes.string.isRequired,
   isSaving: PropTypes.bool,
+  useSceneNumbering: PropTypes.bool,
   unverifiedSceneNumbering: PropTypes.bool,
   seriesMonitored: PropTypes.bool.isRequired,
   seriesType: PropTypes.string.isRequired,

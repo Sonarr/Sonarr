@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         public BroadcastheNetSettings()
         {
-            BaseUrl = "http://api.broadcasthe.net/";
+            BaseUrl = "https://api.broadcasthe.net/";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
         }
 

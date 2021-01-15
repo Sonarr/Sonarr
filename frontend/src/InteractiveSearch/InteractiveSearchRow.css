@@ -7,7 +7,14 @@
 .title {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   word-break: break-all;
+}
+
+.sceneMapping {
+  flex-shrink: 0;
 }
 
 .indexer {

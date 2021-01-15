@@ -240,13 +240,7 @@ namespace Sonarr.Api.V3.Series
 
             if (mappings == null) return;
 
-            resource.AlternateTitles = mappings.ConvertAll(v => new AlternateTitleResource {
-                Title = v.Title,
-                SeasonNumber = v.SeasonNumber,
-                SceneSeasonNumber = v.SceneSeasonNumber,
-                SceneOrigin = v.SceneOrigin,
-                Comment = v.Comment
-            });
+            resource.AlternateTitles = mappings.ConvertAll(AlternateTitleResourceMapper.ToResource);
         }
 
         private void LinkRootFolderPath(SeriesResource resource)

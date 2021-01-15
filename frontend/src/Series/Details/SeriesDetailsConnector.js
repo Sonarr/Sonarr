@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
+import filterAlternateTitles from 'Utilities/Series/filterAlternateTitles';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import { fetchEpisodes, clearEpisodes } from 'Store/Actions/episodeActions';
@@ -109,15 +110,7 @@ function createMapStateToProps() {
 
       const isFetching = isEpisodesFetching || isEpisodeFilesFetching;
       const isPopulated = isEpisodesPopulated && isEpisodeFilesPopulated;
-      const alternateTitles = _.reduce(series.alternateTitles, (acc, alternateTitle) => {
-        if ((alternateTitle.seasonNumber === -1 || alternateTitle.seasonNumber === undefined) &&
-            (alternateTitle.sceneSeasonNumber === -1 || alternateTitle.sceneSeasonNumber === undefined) &&
-            (alternateTitle.title !== series.title)) {
-          acc.push(alternateTitle);
-        }
-
-        return acc;
-      }, []);
+      const alternateTitles = filterAlternateTitles(series.alternateTitle, series.title, series.useSceneNumbering);
 
       return {
         ...series,

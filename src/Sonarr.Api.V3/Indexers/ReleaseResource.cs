@@ -7,6 +7,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
+using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Indexers
@@ -35,6 +36,9 @@ namespace Sonarr.Api.V3.Indexers
         public string SeriesTitle { get; set; }
         public int[] EpisodeNumbers { get; set; }
         public int[] AbsoluteEpisodeNumbers { get; set; }
+        public int? MappedSeasonNumber { get; set; }
+        public int[] MappedEpisodeNumbers { get; set; }
+        public int[] MappedAbsoluteEpisodeNumbers { get; set; }
         public bool Approved { get; set; }
         public bool TemporarilyRejected { get; set; }
         public bool Rejected { get; set; }
@@ -45,9 +49,11 @@ namespace Sonarr.Api.V3.Indexers
         public string CommentUrl { get; set; }
         public string DownloadUrl { get; set; }
         public string InfoUrl { get; set; }
+        public bool EpisodeRequested { get; set; }
         public bool DownloadAllowed { get; set; }
         public int ReleaseWeight { get; set; }
         public int PreferredWordScore { get; set; }
+        public AlternateTitleResource SceneMapping { get; set; }
 
         public string MagnetUrl { get; set; }
         public string InfoHash { get; set; }
@@ -102,6 +108,9 @@ namespace Sonarr.Api.V3.Indexers
                 SeriesTitle = parsedEpisodeInfo.SeriesTitle,
                 EpisodeNumbers = parsedEpisodeInfo.EpisodeNumbers,
                 AbsoluteEpisodeNumbers = parsedEpisodeInfo.AbsoluteEpisodeNumbers,
+                MappedSeasonNumber = remoteEpisode.Episodes.FirstOrDefault()?.SeasonNumber,
+                MappedEpisodeNumbers = remoteEpisode.Episodes.Select(v => v.EpisodeNumber).ToArray(),
+                MappedAbsoluteEpisodeNumbers = remoteEpisode.Episodes.Where(v => v.AbsoluteEpisodeNumber.HasValue).Select(v => v.AbsoluteEpisodeNumber.Value).ToArray(),
                 Approved = model.Approved,
                 TemporarilyRejected = model.TemporarilyRejected,
                 Rejected = model.Rejected,
@@ -112,9 +121,11 @@ namespace Sonarr.Api.V3.Indexers
                 CommentUrl = releaseInfo.CommentUrl,
                 DownloadUrl = releaseInfo.DownloadUrl,
                 InfoUrl = releaseInfo.InfoUrl,
+                EpisodeRequested = remoteEpisode.EpisodeRequested,
                 DownloadAllowed = remoteEpisode.DownloadAllowed,
                 //ReleaseWeight
                 PreferredWordScore = remoteEpisode.PreferredWordScore,
+                SceneMapping = remoteEpisode.SceneMapping.ToResource(),
 
                 MagnetUrl = torrentInfo.MagnetUrl,
                 InfoHash = torrentInfo.InfoHash,
