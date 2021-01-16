@@ -97,7 +97,11 @@ function ReleaseSceneIndicator(props) {
     if (!isMixed && !isUnknown) {
       level = styles.levelNotRequested;
     }
-    messages.push(<div>Mapped episode wasn't requested in this search.</div>);
+    if (mappedNumber) {
+      messages.push(<div>Mapped episode wasn't requested in this search.</div>);
+    } else {
+      messages.push(<div>Unknown episode or series.</div>);
+    }
   }
 
   const table = (

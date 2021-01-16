@@ -79,5 +79,18 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SpecialAbsoluteEpisodeNumbers.Should().BeEmpty();
             result.FullSeason.Should().BeFalse();
         }
+
+        [TestCase("[BeanSub][Nanatsu_no_Taizai_Fundo_no_Shinpan][01][GB][1080P][x264_AAC]", "Nanatsu no Taizai Fundo no Shinpan", "BeanSub", 1)]
+        public void should_parse_false_positive_chinese_anime_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
+        {
+            postTitle = XmlCleaner.ReplaceUnicode(postTitle);
+
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.ReleaseGroup.Should().Be(subgroup);
+            result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
+            result.SeriesTitle.Should().Be(title);
+            result.FullSeason.Should().BeFalse();
+        }
     }
 }

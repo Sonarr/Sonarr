@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
+import { icons, scrollDirections } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import Measure from 'Components/Measure';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import Scroller from 'Components/Scroller/Scroller';
 import DelayProfileDragSource from './DelayProfileDragSource';
 import DelayProfileDragPreview from './DelayProfileDragPreview';
 import DelayProfile from './DelayProfile';
@@ -71,48 +72,59 @@ class DelayProfiles extends Component {
             errorMessage="Unable to load Delay Profiles"
             {...otherProps}
           >
-            <div className={styles.delayProfilesHeader}>
-              <div className={styles.column}>Protocol</div>
-              <div className={styles.column}>Usenet Delay</div>
-              <div className={styles.column}>Torrent Delay</div>
-              <div className={styles.tags}>Tags</div>
-            </div>
-
-            <div className={styles.delayProfiles}>
-              {
-                items.map((item, index) => {
-                  return (
-                    <DelayProfileDragSource
-                      key={item.id}
-                      tagList={tagList}
-                      {...item}
-                      {...otherProps}
-                      index={index}
-                      isDragging={isDragging}
-                      isDraggingUp={isDraggingUp}
-                      isDraggingDown={isDraggingDown}
-                      onConfirmDeleteDelayProfile={onConfirmDeleteDelayProfile}
-                    />
-                  );
-                })
+            <Scroller
+              className={styles.horizontalScroll}
+              scrollDirection={
+                scrollDirections.HORIZONTAL
               }
+              autoFocus={false}
+            >
+              <div>
+                <div className={styles.delayProfilesHeader}>
+                  <div className={styles.column}>Protocol</div>
+                  <div className={styles.column}>Usenet Delay</div>
+                  <div className={styles.column}>Torrent Delay</div>
+                  <div className={styles.tags}>Tags</div>
+                </div>
 
-              <DelayProfileDragPreview
-                width={width}
-              />
-            </div>
+                <div className={styles.delayProfiles}>
+                  {
+                    items.map((item, index) => {
+                      return (
+                        <DelayProfileDragSource
+                          key={item.id}
+                          tagList={tagList}
+                          {...item}
+                          {...otherProps}
+                          index={index}
+                          isDragging={isDragging}
+                          isDraggingUp={isDraggingUp}
+                          isDraggingDown={isDraggingDown}
+                          onConfirmDeleteDelayProfile={onConfirmDeleteDelayProfile}
+                        />
+                      );
+                    })
+                  }
 
-            {
-              defaultProfile &&
-                <div>
-                  <DelayProfile
-                    tagList={tagList}
-                    isDragging={false}
-                    onConfirmDeleteDelayProfile={onConfirmDeleteDelayProfile}
-                    {...defaultProfile}
+                  <DelayProfileDragPreview
+                    width={width}
                   />
                 </div>
-            }
+
+                {
+                  defaultProfile ?
+                    <div>
+                      <DelayProfile
+                        tagList={tagList}
+                        isDragging={false}
+                        onConfirmDeleteDelayProfile={onConfirmDeleteDelayProfile}
+                        {...defaultProfile}
+                      />
+                    </div> :
+                    null
+                }
+              </div>
+            </Scroller>
 
             <div className={styles.addDelayProfile}>
               <Link

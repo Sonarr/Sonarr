@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Notifications.Email
 
         public EmailSettings()
         {
-            Port = 25;
+            Port = 587;
         }
 
         [FieldDefinition(0, Label = "Server", HelpText = "Hostname or IP of Email server")]
@@ -30,6 +30,9 @@ namespace NzbDrone.Core.Notifications.Email
 
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
+
+        [FieldDefinition(2, Label = "Require Encryption", HelpText = "Require SSL (Port 465 only) or StartTLS (any other port)", Type = FieldType.Checkbox)]
+        public bool RequireEncryption { get; set; }
 
         [FieldDefinition(3, Label = "Username", Privacy = PrivacyLevel.UserName)]
         public string Username { get; set; }

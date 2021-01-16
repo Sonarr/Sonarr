@@ -151,7 +151,7 @@ namespace NzbDrone.Core.IndexerSearch
                 }
             }
 
-            return downloadDecisions;
+            return DeDupeDecisions(downloadDecisions);
         }
 
         private List<SceneSeasonMapping> GetSceneSeasonMappings(Series series, List<Episode> episodes)
@@ -303,7 +303,7 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(decisions);
             }
 
-            return downloadDecisions;
+            return DeDupeDecisions(downloadDecisions);
         }
 
         private List<DownloadDecision> SearchDaily(Series series, Episode episode, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
@@ -362,7 +362,7 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(SearchSingle(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch));
             }
 
-            return downloadDecisions;
+            return DeDupeDecisions(downloadDecisions);
         }
 
         private List<DownloadDecision> SearchAnimeSeason(Series series, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
@@ -381,7 +381,7 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
             }
 
-            return downloadDecisions;
+            return DeDupeDecisions(downloadDecisions);
         }
 
         private List<DownloadDecision> SearchDailySeason(Series series, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
@@ -412,7 +412,7 @@ namespace NzbDrone.Core.IndexerSearch
                 }
             }
 
-            return downloadDecisions;
+            return DeDupeDecisions(downloadDecisions);
         }
 
         private TSpec Get<TSpec>(Series series, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch) where TSpec : SearchCriteriaBase, new()
@@ -519,6 +519,13 @@ namespace NzbDrone.Core.IndexerSearch
             }
 
             return _makeDownloadDecision.GetSearchDecision(reports, criteriaBase).ToList();
+        }
+
+        private List<DownloadDecision> DeDupeDecisions(List<DownloadDecision> decisions)
+        {
+            // De-dupe reports by guid so duplicate results aren't returned.
+
+            return decisions.DistinctBy(d => d.RemoteEpisode.Release.Guid).ToList();
         }
     }
 }
