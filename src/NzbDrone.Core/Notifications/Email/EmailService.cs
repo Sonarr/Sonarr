@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentValidation.Results;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
 using NLog;
 
@@ -51,7 +52,21 @@ namespace NzbDrone.Core.Notifications.Email
         {
             using (var client = new SmtpClient())
             {
-                client.Connect(settings.Server, settings.Port);
+                var serverOption = SecureSocketOptions.Auto;
+
+                if (settings.RequireEncryption)
+                {
+                    if (settings.Port == 465)
+                    {
+                        serverOption = SecureSocketOptions.SslOnConnect;
+                    }
+                    else
+                    {
+                        serverOption = SecureSocketOptions.StartTls;
+                    }
+                }
+
+                client.Connect(settings.Server, settings.Port, serverOption);
 
                 if (!string.IsNullOrWhiteSpace(settings.Username))
                 {
