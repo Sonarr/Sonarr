@@ -122,6 +122,17 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Sat Jan 16 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1073-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed accounting for zero terminator in long path limitation
+- New: Require Encryption option for email
+- Fixed: Managing display profiles on mobile
+- Fixed: Sorting in Interactive search duplicates results
+- Fixed duplicate id searches due to missing Equals on SceneSeasonMapping
+- Show separate message for unknown episode/series
+- Fixed: Regular Anime being caught in Chinese parser rules
+- Fixed Agenda Time wrapping
+
 * Fri Jan 15 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1069-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Updated BTN url to https
