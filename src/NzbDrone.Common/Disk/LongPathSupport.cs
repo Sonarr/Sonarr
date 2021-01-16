@@ -36,7 +36,7 @@ namespace NzbDrone.Common.Disk
                     }
                     catch
                     {
-                        MAX_PATH = 260;
+                        MAX_PATH = 260 - 1;
                     }
                 }
             }
