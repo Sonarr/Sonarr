@@ -93,7 +93,7 @@ namespace NzbDrone.Core.DecisionEngine
                         if (remoteEpisode.Series == null)
                         {
                             var reason = "Unknown Series";
-                            var matchingTvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle);
+                            var matchingTvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber);
 
                             if (matchingTvdbId.HasValue)
                             {
