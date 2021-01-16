@@ -1,3 +1,7 @@
+.horizontalScroll {
+  overflow-x: auto;
+}
+
 .delayProfiles {
   user-select: none;
 }
@@ -24,4 +28,11 @@
 .addButton {
   width: $dragHandleWidth;
   text-align: center;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .horizontalScroll {
+    overflow-y: hidden;
+    width: 100%;
+  }
 }
