@@ -132,6 +132,13 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
                 if (item.DeleteStatus == "MANUAL")
                 {
+                    if (item.MarkStatus == "BAD")
+                    {
+                        historyItem.Status = DownloadItemStatus.Failed;
+
+                        historyItems.Add(historyItem);
+                    }
+
                     continue;
                 }
 

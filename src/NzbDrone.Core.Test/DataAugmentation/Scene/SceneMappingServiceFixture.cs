@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         [Test]
         public void should_refresh_cache_if_cache_is_empty_when_looking_for_tvdb_id()
         {
-            Subject.FindTvdbId("title");
+            Subject.FindTvdbId("title", null, -1);
 
             Mocker.GetMock<ISceneMappingRepository>()
                   .Verify(v => v.All(), Times.Once());
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             Mocker.GetMock<ISceneMappingRepository>()
                   .Verify(v => v.All(), Times.Once());
 
-            Subject.FindTvdbId("title");
+            Subject.FindTvdbId("title", null, -1);
 
             Mocker.GetMock<ISceneMappingRepository>()
                   .Verify(v => v.All(), Times.Once());
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
 
-            var tvdbId = Subject.FindTvdbId(parseTitle);
+            var tvdbId = Subject.FindTvdbId(parseTitle, null, -1);
             var seasonNumber = Subject.GetSceneSeasonNumber(parseTitle, null);
 
             tvdbId.Should().Be(100);
@@ -328,8 +328,8 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
 
-            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva").Should().Be(101);
-            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-DMO").Should().Be(100);
+            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", -1).Should().Be(101);
+            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-DMO", -1).Should().Be(100);
         }
 
         [Test]
@@ -343,7 +343,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
 
-            Assert.Throws<InvalidSceneMappingException>(() => Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva"));
+            Assert.Throws<InvalidSceneMappingException>(() => Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", -1));
         }
 
         [Test]
@@ -357,7 +357,21 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
 
-            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva").Should().Be(100);
+            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", -1).Should().Be(100);
+        }
+
+        [Test]
+        public void should_pick_best_season()
+        {
+            var mappings = new List<SceneMapping>
+            {
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", SceneSeasonNumber = 2, SeasonNumber = 3, TvdbId = 100 },
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", SceneSeasonNumber = 3, SeasonNumber = 3, TvdbId = 101 }
+            };
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+
+            Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", 4).Should().Be(101);
         }
 
         private void AssertNoUpdate()
@@ -376,7 +390,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             foreach (var sceneMapping in _fakeMappings)
             {
                 Subject.GetSceneNames(sceneMapping.TvdbId, _fakeMappings.Select(m => m.SeasonNumber.Value).Distinct().ToList(), new List<int>()).Should().Contain(sceneMapping.SearchTerm);
-                Subject.FindTvdbId(sceneMapping.ParseTerm).Should().Be(sceneMapping.TvdbId);
+                Subject.FindTvdbId(sceneMapping.ParseTerm, null, sceneMapping.SceneSeasonNumber ?? -1).Should().Be(sceneMapping.TvdbId);
             }
         }
     }

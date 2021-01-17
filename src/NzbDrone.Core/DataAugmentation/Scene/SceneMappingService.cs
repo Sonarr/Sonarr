@@ -15,9 +15,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     public interface ISceneMappingService
     {
         List<string> GetSceneNames(int tvdbId, List<int> seasonNumbers, List<int> sceneSeasonNumbers);
-        int? FindTvdbId(string sceneTitle, string releaseTitle);
+        int? FindTvdbId(string sceneTitle, string releaseTitle, int sceneSeasonNumber);
         List<SceneMapping> FindByTvdbId(int tvdbId);
-        SceneMapping FindSceneMapping(string sceneTitle, string releaseTitle);
+        SceneMapping FindSceneMapping(string sceneTitle, string releaseTitle, int sceneSeasonNumber);
         int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle);
     }
 
@@ -65,14 +65,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return names;
         }
 
-        public int? FindTvdbId(string seriesTitle)
+        public int? FindTvdbId(string seriesTitle, string releaseTitle, int sceneSeasonNumber)
         {
-            return FindTvdbId(seriesTitle, null);
-        }
-
-        public int? FindTvdbId(string seriesTitle, string releaseTitle)
-        {
-            return FindSceneMapping(seriesTitle, releaseTitle)?.TvdbId;
+            return FindSceneMapping(seriesTitle, releaseTitle, sceneSeasonNumber)?.TvdbId;
         }
 
         public List<SceneMapping> FindByTvdbId(int tvdbId)
@@ -92,7 +87,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mappings;
         }
 
-        public SceneMapping FindSceneMapping(string seriesTitle, string releaseTitle)
+        public SceneMapping FindSceneMapping(string seriesTitle, string releaseTitle, int sceneSeasonNumber)
         {
             var mappings = FindMappings(seriesTitle, releaseTitle);
 
@@ -100,6 +95,8 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             {
                 return null;
             }
+
+            mappings = FilterSceneMappings(mappings, sceneSeasonNumber);
 
             var distinctMappings = mappings.DistinctBy(v => v.TvdbId).ToList();
 
@@ -120,7 +117,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public int? GetSceneSeasonNumber(string seriesTitle, string releaseTitle)
         {
-            return FindSceneMapping(seriesTitle, releaseTitle)?.SceneSeasonNumber;
+            return FindSceneMapping(seriesTitle, releaseTitle, -1)?.SceneSeasonNumber;
         }
 
         private void UpdateMappings()
@@ -233,6 +230,31 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
             if (filteredCandidates.Any())
             {
+                return filteredCandidates;
+            }
+
+            return normalCandidates;
+        }
+
+        private List<SceneMapping> FilterSceneMappings(List<SceneMapping> candidates, int sceneSeasonNumber)
+        {
+            var filteredCandidates = candidates.Where(v => (v.SceneSeasonNumber ?? -1) != -1 && (v.SeasonNumber ?? -1) != -1).ToList();
+            var normalCandidates = candidates.Except(filteredCandidates).ToList();
+
+            if (sceneSeasonNumber == -1)
+            {
+                return normalCandidates;
+            }
+
+            if (filteredCandidates.Any())
+            {
+                filteredCandidates = filteredCandidates.Where(v => v.SceneSeasonNumber <= sceneSeasonNumber)
+                                                       .GroupBy(v => v.Title)
+                                                       .Select(d => d.OrderByDescending(v => v.SceneSeasonNumber)
+                                                                     .ThenByDescending(v => v.SeasonNumber)
+                                                                     .First())
+                                                       .ToList();
+
                 return filteredCandidates;
             }
 

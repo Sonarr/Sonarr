@@ -324,8 +324,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             const int tvdbSeasonNumber = 5;
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>()))
-                  .Returns<string, string>((s, r) => new SceneMapping { SceneSeasonNumber = 1, SeasonNumber = tvdbSeasonNumber });
+                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                  .Returns<string, string, int>((s, r, sn) => new SceneMapping { SceneSeasonNumber = 1, SeasonNumber = tvdbSeasonNumber });
 
             Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
 
@@ -342,8 +342,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             const int tvdbSeasonNumber = 5;
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>()))
-                  .Returns<string, string>((s, r) => new SceneMapping { SceneSeasonNumber = 101, SeasonNumber = tvdbSeasonNumber });
+                  .Setup(v => v.FindSceneMapping(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                  .Returns<string, string, int>((s, r, sn) => new SceneMapping { SceneSeasonNumber = 101, SeasonNumber = tvdbSeasonNumber });
 
             Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
 
@@ -374,7 +374,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             const int tvdbSeasonNumber = -1;
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, It.IsAny<string>()))
+                  .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, It.IsAny<string>(), It.IsAny<int>()))
                   .Returns(new SceneMapping { SeasonNumber = tvdbSeasonNumber, SceneSeasonNumber = _parsedEpisodeInfo.SeasonNumber });
 
             Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
