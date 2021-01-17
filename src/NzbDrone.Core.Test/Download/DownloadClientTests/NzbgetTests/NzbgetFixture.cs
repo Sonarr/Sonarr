@@ -427,6 +427,31 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
+        public void should_report_deletestatus_manual_with_markstatus_bad_as_failed()
+        {
+            _completed.DeleteStatus = "MANUAL";
+            _completed.MarkStatus = "BAD";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.Status.Should().Be(DownloadItemStatus.Failed);
+        }
+
+        [Test]
+        public void should_ignore_deletestatus_manual_without_markstatus()
+        {
+            _completed.DeleteStatus = "MANUAL";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Subject.GetItems().Should().BeEmpty();
+        }
+
+        [Test]
         public void should_use_final_dir_when_set_instead_of_dest_dir()
         {
             _completed.FinalDir = "/remote/mount/tv2/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE";
