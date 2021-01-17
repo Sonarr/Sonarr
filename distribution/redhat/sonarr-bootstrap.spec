@@ -122,6 +122,13 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Sun Jan 17 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1076-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- New: Treat Manual Bad in history as failed
+- make HashedReleaseFixture entries generic
+- Fixed: Handle more obfuscated names
+- Fixed parsing (duplicate) releases for series with multiple season number mappings
+
 * Sat Jan 16 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1073-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed accounting for zero terminator in long path limitation
