@@ -8,7 +8,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         LocalEpisode Augment(LocalEpisode localEpisode);
     }
 
-    public class AugmentMediaInfo
+    public class AugmentMediaInfo : IAugmentMediaInfo
     {
         private readonly IConfigService _configService;
         private readonly IVideoFileInfoReader _videoFileInfoReader;
