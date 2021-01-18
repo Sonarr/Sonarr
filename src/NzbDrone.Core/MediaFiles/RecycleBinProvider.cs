@@ -93,7 +93,16 @@ namespace NzbDrone.Core.MediaFiles
                 var destinationFolder = Path.Combine(recyclingBin, subfolder);
                 var destination = Path.Combine(destinationFolder, fileInfo.Name);
 
-                _diskProvider.CreateFolder(destinationFolder);
+                try
+                {
+                    _logger.Debug("Creating folder [0]", destinationFolder);
+                    _diskProvider.CreateFolder(destinationFolder);
+                }
+                catch (IOException e)
+                {
+                    _logger.Error(e, "Unable to create the folder '{0}' in the recycling bin for the file '{1}'", destinationFolder, fileInfo.Name);
+                    throw;
+                }
 
                 var index = 1;
                 while (_diskProvider.FileExists(destination))
