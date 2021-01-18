@@ -136,6 +136,10 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Mon Jan 18 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1077-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Error handling when cannot create folder in Recycling Bin
+
 * Sun Jan 17 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1076-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - New: Treat Manual Bad in history as failed
