@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classNames';
+import classNames from 'classnames';
 import { tooltipPositions, icons, sizes } from 'Helpers/Props';
 import styles from './ReleaseSceneIndicator.css';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
