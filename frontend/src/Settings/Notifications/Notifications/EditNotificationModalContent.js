@@ -168,12 +168,12 @@ function EditNotificationModalContent(props) {
               </FormGroup>
 
               <FormGroup>
-                <FormLabel>On Episode Delete</FormLabel>
+                <FormLabel>On Episode File Delete</FormLabel>
 
                 <FormInputGroup
                   type={inputTypes.CHECK}
-                  name="onEpisodeDelete"
-                  helpText="Be notified when episodes are deleted"
+                  name="onEpisodeFileDelete"
+                  helpText="Be notified when episode files are deleted"
                   isDisabled={!supportsOnEpisodeFileDelete.value}
                   {...onEpisodeFileDelete}
                   onChange={onInputChange}
