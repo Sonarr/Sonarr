@@ -122,6 +122,13 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Thu Jan 21 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1083-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Update bug report template
+- Lock closed issues after 90 days without activity
+- New: Flood Download Client
+- Typo for linux
+
 * Mon Jan 18 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1077-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Error handling when cannot create folder in Recycling Bin
