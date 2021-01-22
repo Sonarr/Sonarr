@@ -132,6 +132,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.ClusterAnalysis
             result.Should().Equal(new List<int> { 2, 1, 4, 6, 5, 9 });
         }
 
+        [Test]
+        public void should_order_recursively_and_by_cluster_and_finally_by_value()
+        {
+            var source = new List<int> { 9, 6, 5, 4, 2, 1 };
+
+            var result = source
+                .Cluster()
+                .OrderBy(v => v >= 5)
+                .ThenByCluster(v => v, 2)
+                .ThenBy(v => v)
+                .ToList();
+
+            result.Should().Equal(new List<int> { 1, 2, 4, 5, 6, 9 });
+        }
 
     }
 
