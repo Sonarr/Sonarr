@@ -581,11 +581,15 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         private static readonly string[] ValidHdrTransferFunctions = {"PQ", "HLG"};
         private const string ValidHdrColourPrimaries = "BT.2020";
+        private const string VideoDynamicRangeHdr = "HDR";
+        private const string VideoDynamicRangeSdr = "";
 
         public static string FormatVideoDynamicRange(MediaInfoModel mediaInfo)
         {
-            // assume SDR by default
-            var videoDynamicRange = "";
+            if (mediaInfo.VideoHdrFormat.IsNotNullOrWhiteSpace())
+            {
+                return VideoDynamicRangeHdr;
+            }
 
             if (mediaInfo.VideoBitDepth >= 10 &&
                 mediaInfo.VideoColourPrimaries.IsNotNullOrWhiteSpace() &&
@@ -594,11 +598,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 if (mediaInfo.VideoColourPrimaries.EqualsIgnoreCase(ValidHdrColourPrimaries) &&
                     ValidHdrTransferFunctions.Any(mediaInfo.VideoTransferCharacteristics.Contains))
                 {
-                    videoDynamicRange = "HDR";
+                    return VideoDynamicRangeHdr;
                 }
             }
 
-            return videoDynamicRange;
+            return VideoDynamicRangeSdr;
         }
     }
 }
