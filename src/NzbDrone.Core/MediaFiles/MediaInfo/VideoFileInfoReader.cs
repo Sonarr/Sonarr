@@ -19,7 +19,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly Logger _logger;
 
         public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 3;
-        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 6;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 7;
 
         public VideoFileInfoReader(IDiskProvider diskProvider, Logger logger)
         {
@@ -166,6 +166,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         VideoMultiViewCount = videoMultiViewCount,
                         VideoColourPrimaries = mediaInfo.Get(StreamKind.Video, 0, "colour_primaries"),
                         VideoTransferCharacteristics = mediaInfo.Get(StreamKind.Video, 0, "transfer_characteristics"),
+                        VideoHdrFormat = mediaInfo.Get(StreamKind.Video, 0, "HDR_Format"),
+                        VideoHdrFormatCompatibility = mediaInfo.Get(StreamKind.Video, 0, "HDR_Format_Compatibility"),
                         Height = height,
                         Width = width,
                         AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
