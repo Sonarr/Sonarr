@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex ScenifyReplaceChars = new Regex(@"[\/]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         //TODO: Support Written numbers (One, Two, etc) and Roman Numerals (I, II, III etc)
-        private static readonly Regex MultiPartCleanupRegex = new Regex(@"(?:\(\d+\)|(Part|Pt\.?)\s?\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex MultiPartCleanupRegex = new Regex(@"(?:\:?\s?(?:\(\d+\)|(Part|Pt\.?)\s?\d+))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
 

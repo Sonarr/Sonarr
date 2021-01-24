@@ -10,6 +10,7 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Notifications
 {
@@ -17,7 +18,10 @@ namespace NzbDrone.Core.Notifications
         : IHandle<EpisodeGrabbedEvent>,
           IHandle<EpisodeImportedEvent>,
           IHandle<SeriesRenamedEvent>,
+          IHandle<SeriesDeletedEvent>,
+          IHandle<EpisodeFileDeletedEvent>,
           IHandle<HealthCheckFailedEvent>,
+          IHandleAsync<DeleteCompletedEvent>,
           IHandleAsync<DownloadsProcessedEvent>,
           IHandleAsync<RenameCompletedEvent>,
           IHandleAsync<HealthCheckCompleteEvent>
@@ -189,6 +193,50 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
+        public void Handle(EpisodeFileDeletedEvent message)
+        {
+            var deleteMessage = new EpisodeDeleteMessage();
+            deleteMessage.Message = GetMessage(message.EpisodeFile.Series, message.EpisodeFile.Episodes, message.EpisodeFile.Quality);
+            deleteMessage.Series = message.EpisodeFile.Series;
+            deleteMessage.EpisodeFile = message.EpisodeFile;
+            deleteMessage.Reason = message.Reason;
+
+            foreach (var notification in _notificationFactory.OnEpisodeFileDeleteEnabled())
+            {
+                try
+                {
+                    if (ShouldHandleSeries(notification.Definition, deleteMessage.EpisodeFile.Series))
+                    {
+                        notification.OnEpisodeFileDelete(deleteMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to send OnDelete notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(SeriesDeletedEvent message)
+        {
+            var deleteMessage = new SeriesDeleteMessage(message.Series,message.DeleteFiles);
+
+            foreach (var notification in _notificationFactory.OnSeriesDeleteEnabled())
+            {
+                try
+                {
+                    if (ShouldHandleSeries(notification.Definition, deleteMessage.Series))
+                    {
+                        notification.OnSeriesDelete(deleteMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to send OnDelete notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
         public void Handle(HealthCheckFailedEvent message)
         {
             foreach (var notification in _notificationFactory.OnHealthIssueEnabled())
@@ -206,6 +254,11 @@ namespace NzbDrone.Core.Notifications
                     _logger.Warn(ex, "Unable to send OnHealthIssue notification to: " + notification.Definition.Name);
                 }
             }
+        }
+
+        public void HandleAsync(DeleteCompletedEvent message)
+        {
+            ProcessQueue();
         }
 
         public void HandleAsync(DownloadsProcessedEvent message)

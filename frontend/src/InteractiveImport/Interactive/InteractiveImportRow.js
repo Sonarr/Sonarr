@@ -187,8 +187,17 @@ class InteractiveImportRow extends Component {
     } = this.state;
 
     const seriesTitle = series ? series.title : '';
-    const episodeNumbers = episodes.map((episode) => episode.episodeNumber)
-      .join(', ');
+    const isAnime = series ? series.seriesType === 'anime' : false;
+
+    const episodeInfo = episodes.map((episode) => {
+      return (
+        <div key={episode.id}>
+          {episode.episodeNumber}
+          {isAnime ? ` (${episode.absoluteEpisodeNumber})` : ''}
+          {` - ${episode.title}`}
+        </div>
+      );
+    });
 
     const showSeriesPlaceholder = isSelected && !series;
     const showSeasonNumberPlaceholder = isSelected && !!series && isNaN(seasonNumber) && !isReprocessing;
@@ -246,7 +255,7 @@ class InteractiveImportRow extends Component {
           onPress={this.onSelectEpisodePress}
         >
           {
-            showEpisodeNumbersPlaceholder ? <InteractiveImportRowCellPlaceholder /> : episodeNumbers
+            showEpisodeNumbersPlaceholder ? <InteractiveImportRowCellPlaceholder /> : episodeInfo
           }
         </TableRowCellButton>
 
@@ -339,6 +348,7 @@ class InteractiveImportRow extends Component {
           isOpen={isSelectEpisodeModalOpen}
           ids={[id]}
           seriesId={series && series.id}
+          isAnime={isAnime}
           seasonNumber={seasonNumber}
           relativePath={relativePath}
           onModalClose={this.onSelectEpisodeModalClose}

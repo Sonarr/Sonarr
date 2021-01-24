@@ -6,7 +6,7 @@ import styles from './FilterBuilderRowValueTag.css';
 
 function FilterBuilderRowValueTag(props) {
   return (
-    <span
+    <div
       className={styles.tag}
     >
       <TagInputTag
@@ -15,12 +15,13 @@ function FilterBuilderRowValueTag(props) {
       />
 
       {
-        !props.isLastTag &&
-          <span className={styles.or}>
+        props.isLastTag ?
+          null :
+          <div className={styles.or}>
             or
-          </span>
+          </div>
       }
-    </span>
+    </div>
   );
 }
 

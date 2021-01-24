@@ -58,11 +58,15 @@ class Notification extends Component {
       onDownload,
       onUpgrade,
       onRename,
+      onSeriesDelete,
+      onEpisodeFileDelete,
       onHealthIssue,
       supportsOnGrab,
       supportsOnDownload,
       supportsOnUpgrade,
       supportsOnRename,
+      supportsOnSeriesDelete,
+      supportsOnEpisodeFileDelete,
       supportsOnHealthIssue
     } = this.props;
 
@@ -77,48 +81,70 @@ class Notification extends Component {
         </div>
 
         {
-          supportsOnGrab && onGrab &&
+          supportsOnGrab && onGrab ?
             <Label kind={kinds.SUCCESS}>
               On Grab
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnDownload && onDownload &&
+          supportsOnDownload && onDownload ?
             <Label kind={kinds.SUCCESS}>
               On Import
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnUpgrade && onDownload && onUpgrade &&
+          supportsOnUpgrade && onDownload && onUpgrade ?
             <Label kind={kinds.SUCCESS}>
               On Upgrade
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnRename && onRename &&
+          supportsOnRename && onRename ?
             <Label kind={kinds.SUCCESS}>
               On Rename
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          supportsOnHealthIssue && onHealthIssue &&
+          supportsOnHealthIssue && onHealthIssue ?
             <Label kind={kinds.SUCCESS}>
               On Health Issue
-            </Label>
+            </Label> :
+            null
         }
 
         {
-          !onGrab && !onDownload && !onRename && !onHealthIssue &&
+          supportsOnSeriesDelete && onSeriesDelete ?
+            <Label kind={kinds.SUCCESS}>
+              On Series Delete
+            </Label> :
+            null
+        }
+
+        {
+          supportsOnEpisodeFileDelete && onEpisodeFileDelete ?
+            <Label kind={kinds.SUCCESS}>
+              On Series Delete
+            </Label> :
+            null
+        }
+
+        {
+          !onGrab && !onDownload && !onRename && !onHealthIssue && !onSeriesDelete && !onEpisodeFileDelete ?
             <Label
               kind={kinds.DISABLED}
               outline={true}
             >
               Disabled
-            </Label>
+            </Label> :
+            null
         }
 
         <EditNotificationModalConnector
@@ -149,9 +175,13 @@ Notification.propTypes = {
   onDownload: PropTypes.bool.isRequired,
   onUpgrade: PropTypes.bool.isRequired,
   onRename: PropTypes.bool.isRequired,
+  onSeriesDelete: PropTypes.bool.isRequired,
+  onEpisodeFileDelete: PropTypes.bool.isRequired,
   onHealthIssue: PropTypes.bool.isRequired,
   supportsOnGrab: PropTypes.bool.isRequired,
   supportsOnDownload: PropTypes.bool.isRequired,
+  supportsOnSeriesDelete: PropTypes.bool.isRequired,
+  supportsOnEpisodeFileDelete: PropTypes.bool.isRequired,
   supportsOnUpgrade: PropTypes.bool.isRequired,
   supportsOnRename: PropTypes.bool.isRequired,
   supportsOnHealthIssue: PropTypes.bool.isRequired,

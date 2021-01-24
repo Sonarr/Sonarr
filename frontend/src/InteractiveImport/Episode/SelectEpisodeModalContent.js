@@ -93,6 +93,7 @@ class SelectEpisodeModalContent extends Component {
       error,
       items,
       relativePath,
+      isAnime,
       sortKey,
       sortDirection,
       onSortPress,
@@ -172,8 +173,10 @@ class SelectEpisodeModalContent extends Component {
                               key={item.id}
                               id={item.id}
                               episodeNumber={item.episodeNumber}
+                              absoluteEpisodeNumber={item.absoluteEpisodeNumber}
                               title={item.title}
                               airDate={item.airDate}
+                              isAnime={isAnime}
                               isSelected={selectedState[item.id]}
                               onSelectedChange={this.onSelectedChange}
                             />
@@ -229,6 +232,7 @@ SelectEpisodeModalContent.propTypes = {
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   relativePath: PropTypes.string,
+  isAnime: PropTypes.bool.isRequired,
   sortKey: PropTypes.string,
   sortDirection: PropTypes.string,
   onSortPress: PropTypes.func.isRequired,
