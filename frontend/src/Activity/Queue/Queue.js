@@ -31,6 +31,8 @@ class Queue extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this._shouldBlockRefresh = false;
+
     this.state = {
       allSelected: false,
       allUnselected: false,
@@ -40,6 +42,18 @@ class Queue extends Component {
       isConfirmRemoveModalOpen: false,
       items: props.items
     };
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (!this._shouldBlockRefresh) {
+      return true;
+    }
+
+    if (hasDifferentItems(this.props.items, nextProps.items)) {
+      return false;
+    }
+
+    return true;
   }
 
   componentDidUpdate(prevProps) {
@@ -82,6 +96,10 @@ class Queue extends Component {
   //
   // Listeners
 
+  onQueueRowModalOpenOrClose = (isOpen) => {
+    this._shouldBlockRefresh = isOpen;
+  }
+
   onSelectAllChange = ({ value }) => {
     this.setState(selectAll(this.state.selectedState, value));
   }
@@ -97,16 +115,19 @@ class Queue extends Component {
   }
 
   onRemoveSelectedPress = () => {
+    this._shouldBlockRefresh = true;
     this.setState({ isConfirmRemoveModalOpen: true });
   }
 
   onRemoveSelectedConfirmed = (payload) => {
     this.props.onRemoveSelectedPress({ ids: this.getSelectedIds(), ...payload });
     this.setState({ isConfirmRemoveModalOpen: false });
+    this._shouldBlockRefresh = false;
   }
 
   onConfirmRemoveModalClose = () => {
     this.setState({ isConfirmRemoveModalOpen: false });
+    this._shouldBlockRefresh = false;
   }
 
   //
@@ -205,7 +226,7 @@ class Queue extends Component {
           }
 
           {
-            isPopulated && !hasError && !items.length &&
+            isAllPopulated && !hasError && !items.length &&
               <div>
                 Queue is empty
               </div>
@@ -234,6 +255,7 @@ class Queue extends Component {
                             columns={columns}
                             {...item}
                             onSelectedChange={this.onSelectedChange}
+                            onQueueRowModalOpenOrClose={this.onQueueRowModalOpenOrClose}
                           />
                         );
                       })
