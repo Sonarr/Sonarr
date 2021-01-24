@@ -29,6 +29,15 @@ namespace NzbDrone.Core.Notifications.PushBullet
             _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE_BRANDED, message.Message, Settings);
         }
 
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
+        {
+            _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
+        }
+        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
+        {
+            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
+        }
+
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
             _proxy.SendNotification(HEALTH_ISSUE_TITLE_BRANDED, healthCheck.Message, Settings);

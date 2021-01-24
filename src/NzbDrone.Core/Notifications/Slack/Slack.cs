@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Notifications.Slack.Payloads;
@@ -66,6 +67,37 @@ namespace NzbDrone.Core.Notifications.Slack
                               };
 
             var payload = CreatePayload("Renamed", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
+        {
+            var attachments = new List<Attachment>
+                              {
+                                  new Attachment
+                                  {
+                                      Title = GetTitle(deleteMessage.Series, deleteMessage.EpisodeFile.Episodes),
+                                  }
+                              };
+
+            var payload = CreatePayload("Episode Deleted", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
+        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
+        {
+            var attachments = new List<Attachment>
+                              {
+                                  new Attachment
+                                  {
+                                      Title = deleteMessage.Series.Title,
+                                      Text = deleteMessage.DeletedFilesMessage
+                                  }
+                              };
+
+            var payload = CreatePayload("Series Deleted", attachments);
 
             _proxy.SendPayload(payload, Settings);
         }
@@ -145,6 +177,22 @@ namespace NzbDrone.Core.Notifications.Slack
             }
 
             return payload;
+        }
+        private string GetTitle(Series series, List<Episode> episodes)
+        {
+            if (series.SeriesType == SeriesTypes.Daily)
+            {
+                var episode = episodes.First();
+
+                return $"{series.Title} - {episode.AirDate} - {episode.Title}";
+            }
+
+            var episodeNumbers = string.Concat(episodes.Select(e => e.EpisodeNumber)
+                                                       .Select(i => string.Format("x{0:00}", i)));
+
+            var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));
+
+            return $"{series.Title} - {episodes.First().SeasonNumber}{episodeNumbers} - {episodeTitles}";
         }
     }
 }

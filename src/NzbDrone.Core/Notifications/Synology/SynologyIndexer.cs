@@ -47,6 +47,25 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
+        {
+            if (Settings.UpdateLibrary)
+            {
+                var fullPath = Path.Combine(deleteMessage.Series.Path, deleteMessage.EpisodeFile.RelativePath);
+                _indexerProxy.DeleteFile(fullPath);
+            }
+        }
+
+        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
+        {
+            if (deleteMessage.DeletedFiles)
+            {
+                if (Settings.UpdateLibrary)
+                {
+                    _indexerProxy.DeleteFolder(deleteMessage.Series.Path);
+                }
+            }
+        }
 
         public override ValidationResult Test()
         {
