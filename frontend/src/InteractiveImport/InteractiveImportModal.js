@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { sizes } from 'Helpers/Props';
 import Modal from 'Components/Modal/Modal';
 import InteractiveImportSelectFolderModalContentConnector from './Folder/InteractiveImportSelectFolderModalContentConnector';
 import InteractiveImportModalContentConnector from './Interactive/InteractiveImportModalContentConnector';
@@ -47,6 +48,7 @@ class InteractiveImportModal extends Component {
     return (
       <Modal
         isOpen={isOpen}
+        size={sizes.EXTRA_LARGE}
         closeOnBackgroundClick={false}
         onModalClose={onModalClose}
       >
