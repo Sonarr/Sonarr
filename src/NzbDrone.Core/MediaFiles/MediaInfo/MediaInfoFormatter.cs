@@ -582,7 +582,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private static readonly string[] ValidHdrTransferFunctions = {"PQ", "HLG"};
         private const string ValidHdrColourPrimaries = "BT.2020";
         private const string VideoDynamicRangeHdr = "HDR";
-        private const string VideoDynamicRangeSdr = "";
 
         public static string FormatVideoDynamicRange(MediaInfoModel mediaInfo)
         {
@@ -602,7 +601,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 }
             }
 
-            return VideoDynamicRangeSdr;
+            return "";
         }
     }
 }
