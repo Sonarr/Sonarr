@@ -65,6 +65,21 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         }
 
         [Test]
+        public void should_use_AudioChannels_if_schema_revision_is_3_and_AudioChannelPositions_is_0()
+        {
+            var mediaInfoModel = new MediaInfoModel
+            {
+                AudioFormat = "FLAC",
+                AudioChannelsContainer = 6,
+                AudioChannelPositions = "0/0/0",
+                AudioChannelPositionsTextContainer = null,
+                SchemaRevision = 3
+            };
+
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(5.1m);
+        }
+
+        [Test]
         public void should_sum_AudioChannelPositions()
         {
             var mediaInfoModel = new MediaInfoModel
@@ -126,6 +141,21 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
             };
 
             MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(7.1m);
+        }
+
+        [Test]
+        public void should_format_6_channel_zero_as_51_if_flac()
+        {
+            var mediaInfoModel = new MediaInfoModel
+            {
+                AudioFormat = "FLAC",
+                AudioChannelsContainer = 6,
+                AudioChannelPositions = "0/0/0",
+                AudioChannelPositionsTextContainer = null,
+                SchemaRevision = 3
+            };
+
+            MediaInfoFormatter.FormatAudioChannels(mediaInfoModel).Should().Be(5.1m);
         }
 
         [Test]

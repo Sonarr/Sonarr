@@ -18,12 +18,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         {
             var audioChannels = FormatAudioChannelsFromAudioChannelPositions(mediaInfo);
 
-            if (audioChannels == null)
+            if (audioChannels == null || audioChannels == 0.0m)
             {
                 audioChannels = FormatAudioChannelsFromAudioChannelPositionsText(mediaInfo);
             }
 
-            if (audioChannels == null)
+            if (audioChannels == null || audioChannels == 0.0m)
             {
                 audioChannels = FormatAudioChannelsFromAudioChannels(mediaInfo);
             }
@@ -548,6 +548,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 audioChannelsContainer > 0)
             {
                 return audioChannelsContainer - 1 + 0.1m;
+            }
+
+            // FLAC 6 channels is likely 5.1
+            if (audioFormat.ContainsIgnoreCase("FLAC") && audioChannelsContainer == 6)
+            {
+                return 5.1m;
             }
 
             if (mediaInfo.SchemaRevision > 5)
