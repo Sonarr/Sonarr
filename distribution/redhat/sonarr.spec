@@ -136,6 +136,14 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Mon Jan 25 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1091-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Label for 'On Episode File Delete'
+- Consistent types for on delete custom script events
+- Fixed: Webhook events not sent for series deletions
+- Separate event types for series and episode deletions
+- Fixed: Queue refresh closing manual import from queue if items change
+
 * Sun Jan 24 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1085-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - New: On Delete Notifications
