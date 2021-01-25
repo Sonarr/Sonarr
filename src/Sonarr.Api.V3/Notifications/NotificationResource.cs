@@ -39,6 +39,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.OnRename = definition.OnRename;
             resource.OnSeriesDelete = definition.OnSeriesDelete;
             resource.OnEpisodeFileDelete = definition.OnEpisodeFileDelete;
+            resource.OnEpisodeFileDeleteForUpgrade = definition.OnEpisodeFileDeleteForUpgrade;
             resource.OnHealthIssue = definition.OnHealthIssue;
             resource.SupportsOnGrab = definition.SupportsOnGrab;
             resource.SupportsOnDownload = definition.SupportsOnDownload;
