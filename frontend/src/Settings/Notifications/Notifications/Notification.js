@@ -60,6 +60,7 @@ class Notification extends Component {
       onRename,
       onSeriesDelete,
       onEpisodeFileDelete,
+      onEpisodeFileDeleteForUpgrade,
       onHealthIssue,
       supportsOnGrab,
       supportsOnDownload,
@@ -67,6 +68,7 @@ class Notification extends Component {
       supportsOnRename,
       supportsOnSeriesDelete,
       supportsOnEpisodeFileDelete,
+      supportsOnEpisodeFileDeleteForUpgrade,
       supportsOnHealthIssue
     } = this.props;
 
@@ -137,6 +139,14 @@ class Notification extends Component {
         }
 
         {
+          supportsOnEpisodeFileDeleteForUpgrade && onEpisodeFileDelete && onEpisodeFileDeleteForUpgrade ?
+            <Label kind={kinds.SUCCESS}>
+              One Episode File Delete For Upgrade
+            </Label> :
+            null
+        }
+
+        {
           !onGrab && !onDownload && !onRename && !onHealthIssue && !onSeriesDelete && !onEpisodeFileDelete ?
             <Label
               kind={kinds.DISABLED}
@@ -177,11 +187,13 @@ Notification.propTypes = {
   onRename: PropTypes.bool.isRequired,
   onSeriesDelete: PropTypes.bool.isRequired,
   onEpisodeFileDelete: PropTypes.bool.isRequired,
+  onEpisodeFileDeleteForUpgrade: PropTypes.bool.isRequired,
   onHealthIssue: PropTypes.bool.isRequired,
   supportsOnGrab: PropTypes.bool.isRequired,
   supportsOnDownload: PropTypes.bool.isRequired,
   supportsOnSeriesDelete: PropTypes.bool.isRequired,
   supportsOnEpisodeFileDelete: PropTypes.bool.isRequired,
+  supportsOnEpisodeFileDeleteForUpgrade: PropTypes.bool.isRequired,
   supportsOnUpgrade: PropTypes.bool.isRequired,
   supportsOnRename: PropTypes.bool.isRequired,
   supportsOnHealthIssue: PropTypes.bool.isRequired,

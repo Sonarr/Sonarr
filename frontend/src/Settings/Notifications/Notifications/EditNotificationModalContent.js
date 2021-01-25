@@ -44,6 +44,7 @@ function EditNotificationModalContent(props) {
     onRename,
     onSeriesDelete,
     onEpisodeFileDelete,
+    onEpisodeFileDeleteForUpgrade,
     onHealthIssue,
     supportsOnGrab,
     supportsOnDownload,
@@ -51,6 +52,7 @@ function EditNotificationModalContent(props) {
     supportsOnRename,
     supportsOnSeriesDelete,
     supportsOnEpisodeFileDelete,
+    supportsOnEpisodeFileDeleteForUpgrade,
     supportsOnHealthIssue,
     includeHealthWarnings,
     tags,
@@ -179,6 +181,22 @@ function EditNotificationModalContent(props) {
                   onChange={onInputChange}
                 />
               </FormGroup>
+
+              {
+                onEpisodeFileDelete.value &&
+                <FormGroup>
+                  <FormLabel>On Episode File Delete For Upgrade</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.CHECK}
+                    name="onEpisodeFileDeleteForUpgrade"
+                    helpText="Be notified when episode files are deleted for upgrades"
+                    isDisabled={!supportsOnEpisodeFileDeleteForUpgrade.value}
+                    {...onEpisodeFileDeleteForUpgrade}
+                    onChange={onInputChange}
+                  />
+                </FormGroup>
+              }
 
               <FormGroup>
                 <FormLabel>On Health Issue</FormLabel>
