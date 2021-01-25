@@ -120,9 +120,13 @@ namespace NzbDrone.Core.Indexers.Newznab
                 {
                     capabilities.SupportedSearchParameters = null;
                 }
-                else if (xmlBasicSearch.Attribute("supportedParams") != null)
+                else
                 {
-                    capabilities.SupportedSearchParameters = xmlBasicSearch.Attribute("supportedParams").Value.Split(',');
+                    if (xmlBasicSearch.Attribute("supportedParams") != null)
+                    {
+                        capabilities.SupportedSearchParameters = xmlBasicSearch.Attribute("supportedParams").Value.Split(',');
+                    }
+                    capabilities.TextSearchEngine = xmlBasicSearch.Attribute("searchEngine")?.Value ?? capabilities.TextSearchEngine;
                 }
 
                 var xmlTvSearch = xmlSearching.Element("tv-search");
@@ -130,10 +134,14 @@ namespace NzbDrone.Core.Indexers.Newznab
                 {
                     capabilities.SupportedTvSearchParameters = null;
                 }
-                else if (xmlTvSearch.Attribute("supportedParams") != null)
+                else
                 {
-                    capabilities.SupportedTvSearchParameters = xmlTvSearch.Attribute("supportedParams").Value.Split(',');
-                    capabilities.SupportsAggregateIdSearch = true;
+                    if (xmlTvSearch.Attribute("supportedParams") != null)
+                    {
+                        capabilities.SupportedTvSearchParameters = xmlTvSearch.Attribute("supportedParams").Value.Split(',');
+                        capabilities.SupportsAggregateIdSearch = true;
+                    }
+                    capabilities.TvTextSearchEngine = xmlTvSearch.Attribute("searchEngine")?.Value ?? capabilities.TvTextSearchEngine;
                 }
             }
 

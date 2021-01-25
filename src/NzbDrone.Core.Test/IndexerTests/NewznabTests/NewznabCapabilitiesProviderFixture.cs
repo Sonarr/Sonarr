@@ -97,5 +97,28 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             ExceptionVerification.ExpectedErrors(1);
         }
+
+        [Test]
+        public void should_use_default_searchengine_if_missing()
+        {
+            GivenCapsResponse(_caps);
+
+            var caps = Subject.GetCapabilities(_settings);
+
+            caps.TextSearchEngine.Should().Be("sphinx");
+            caps.TvTextSearchEngine.Should().Be("sphinx");
+        }
+
+        [Test]
+        public void should_use_specified_searchengine()
+        {
+            GivenCapsResponse(_caps.Replace("<search ", "<search searchEngine=\"raw\" ")
+                                   .Replace("<tv-search ", "<tv-search searchEngine=\"raw2\" "));
+
+            var caps = Subject.GetCapabilities(_settings);
+
+            caps.TextSearchEngine.Should().Be("raw");
+            caps.TvTextSearchEngine.Should().Be("raw2");
+        }
     }
 }
