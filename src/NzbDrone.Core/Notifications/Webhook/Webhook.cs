@@ -80,10 +80,11 @@ namespace NzbDrone.Core.Notifications.Webhook
         {
             var payload = new WebhookEpisodeDeletePayload
             {
-                EventType = WebhookEventType.Delete,
+                EventType = WebhookEventType.EpisodeFileDelete,
                 Series = new WebhookSeries(deleteMessage.Series),
                 Episodes = deleteMessage.EpisodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x))
             };
+
             _proxy.SendWebhook(payload, Settings);
         }
 
@@ -91,10 +92,12 @@ namespace NzbDrone.Core.Notifications.Webhook
         {
             var payload = new WebhookSeriesDeletePayload
             {
-                EventType = WebhookEventType.Delete,
+                EventType = WebhookEventType.SeriesDelete,
                 Series = new WebhookSeries(deleteMessage.Series),
                 DeletedFiles = deleteMessage.DeletedFiles
             };
+
+            _proxy.SendWebhook(payload, Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
