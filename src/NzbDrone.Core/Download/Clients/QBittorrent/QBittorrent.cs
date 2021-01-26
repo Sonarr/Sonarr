@@ -318,7 +318,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 // Complain if qBittorrent is configured to remove torrents on max ratio
                 var config = Proxy.GetConfig(Settings);
-                if ((config.MaxRatioEnabled || config.MaxSeedingTimeEnabled) && config.RemoveOnMaxRatio)
+                if ((config.MaxRatioEnabled || config.MaxSeedingTimeEnabled) && (config.MaxRatioAction == QBittorrentMaxRatioAction.Remove || config.MaxRatioAction == QBittorrentMaxRatioAction.DeleteFiles))
                 {
                     return new NzbDroneValidationFailure(String.Empty, "qBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
                     {

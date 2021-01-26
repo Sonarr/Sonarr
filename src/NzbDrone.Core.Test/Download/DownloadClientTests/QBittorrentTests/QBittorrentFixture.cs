@@ -102,13 +102,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             Subject.Definition.Settings.As<QBittorrentSettings>().RecentTvPriority = (int)QBittorrentPriority.First;
         }
 
-        protected void GivenGlobalSeedLimits(float maxRatio, int maxSeedingTime = -1, bool removeOnMaxRatio = false)
+        protected void GivenGlobalSeedLimits(float maxRatio, int maxSeedingTime = -1, QBittorrentMaxRatioAction maxRatioAction = QBittorrentMaxRatioAction.Pause)
         {
             Mocker.GetMock<IQBittorrentProxy>()
                   .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
                   .Returns(new QBittorrentPreferences
                   {
-                      RemoveOnMaxRatio = removeOnMaxRatio,
+                      MaxRatioAction = maxRatioAction,
                       MaxRatio = maxRatio,
                       MaxRatioEnabled = maxRatio >= 0,
                       MaxSeedingTime = maxSeedingTime,

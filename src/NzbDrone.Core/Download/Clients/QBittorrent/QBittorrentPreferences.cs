@@ -2,6 +2,14 @@ using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
 {
+    public enum QBittorrentMaxRatioAction
+    {
+        Pause = 0,
+        Remove = 1,
+        EnableSuperSeeding = 2,
+        DeleteFiles = 3
+    }
+
     // qbittorrent settings from the list returned by /query/preferences
     public class QBittorrentPreferences
     {
@@ -21,7 +29,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         public long MaxSeedingTime { get; set; } // Get the global share time limit in minutes
 
         [JsonProperty(PropertyName = "max_ratio_act")]
-        public bool RemoveOnMaxRatio { get; set; } // Action performed when a torrent reaches the maximum share ratio. [false = pause, true = remove]
+        public QBittorrentMaxRatioAction MaxRatioAction { get; set; } // Action performed when a torrent reaches the maximum share ratio.
 
         [JsonProperty(PropertyName = "queueing_enabled")]
         public bool QueueingEnabled { get; set; } = true;
