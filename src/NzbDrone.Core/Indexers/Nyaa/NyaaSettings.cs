@@ -22,8 +22,8 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         public NyaaSettings()
         {
-            BaseUrl = "";
-            AdditionalParameters = "&cats=1_0&filter=1";
+            BaseUrl = "https://nyaa.si";
+            AdditionalParameters = "&c=1_0&f=1";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
         }
 
