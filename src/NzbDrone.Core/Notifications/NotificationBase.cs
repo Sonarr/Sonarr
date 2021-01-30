@@ -75,6 +75,7 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnUpgrade => SupportsOnDownload;
         public bool SupportsOnSeriesDelete => HasConcreteImplementation("OnSeriesDelete");
         public bool SupportsOnEpisodeFileDelete => HasConcreteImplementation("OnEpisodeFileDelete");
+        public bool SupportsOnEpisodeFileDeleteForUpgrade => SupportsOnEpisodeFileDelete;
         public bool SupportsOnHealthIssue => HasConcreteImplementation("OnHealthIssue");
 
         protected TSettings Settings => (TSettings)Definition.Settings;
