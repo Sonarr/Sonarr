@@ -1,7 +1,9 @@
+import React from 'react';
 import { createAction } from 'redux-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
-import { filterTypes, sortDirections } from 'Helpers/Props';
+import { filterTypes, icons, sortDirections } from 'Helpers/Props';
+import Icon from 'Components/Icon';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createClearReducer from './Creators/Reducers/createClearReducer';
 import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
@@ -78,6 +80,15 @@ export const defaultState = {
     {
       name: 'releaseGroup',
       label: 'Release Group',
+      isVisible: false
+    },
+    {
+      name: 'preferredWordScore',
+      columnLabel: 'Preferred Word Score',
+      label: React.createElement(Icon, {
+        name: icons.SCORE,
+        title: 'Preferred word score'
+      }),
       isVisible: false
     },
     {

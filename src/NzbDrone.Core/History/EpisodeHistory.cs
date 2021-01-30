@@ -26,9 +26,7 @@ namespace NzbDrone.Core.History
         public EpisodeHistoryEventType EventType { get; set; }
         public Dictionary<string, string> Data { get; set; }
         public Language Language { get; set; }
-
         public string DownloadId { get; set; }
-
     }
 
     public enum EpisodeHistoryEventType

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
@@ -14,7 +13,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
     public class UpgradeSpecification : IImportDecisionEngineSpecification
     {
         private readonly IConfigService _configService;
-        private readonly IPreferredWordService _preferredWordService;
         private readonly IEpisodeFilePreferredWordCalculator _episodeFilePreferredWordCalculator;
         private readonly Logger _logger;
 
@@ -24,7 +22,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                                     Logger logger)
         {
             _configService = configService;
-            _preferredWordService = preferredWordService;
             _episodeFilePreferredWordCalculator = episodeFilePreferredWordCalculator;
             _logger = logger;
         }
@@ -34,7 +31,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             var downloadPropersAndRepacks = _configService.DownloadPropersAndRepacks;
             var qualityComparer = new QualityModelComparer(localEpisode.Series.QualityProfile);
             var languageComparer = new LanguageComparer(localEpisode.Series.LanguageProfile);
-            var preferredWordScore = GetPreferredWordScore(localEpisode);
+            var preferredWordScore = localEpisode.PreferredWordScore;
 
             foreach (var episode in localEpisode.Episodes.Where(e => e.EpisodeFileId > 0))
             {
@@ -84,29 +81,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             }
 
             return Decision.Accept();
-        }
-
-        private int GetPreferredWordScore(LocalEpisode localEpisode)
-        {
-            var series = localEpisode.Series;
-            var scores = new List<int>();
-
-            if (localEpisode.FileEpisodeInfo != null)
-            {
-                scores.Add(_preferredWordService.Calculate(series, localEpisode.FileEpisodeInfo.ReleaseTitle, 0));
-            }
-
-            if (localEpisode.FolderEpisodeInfo != null)
-            {
-                scores.Add(_preferredWordService.Calculate(series, localEpisode.FolderEpisodeInfo.ReleaseTitle, 0));
-            }
-
-            if (localEpisode.DownloadClientEpisodeInfo != null)
-            {
-                scores.Add(_preferredWordService.Calculate(series, localEpisode.DownloadClientEpisodeInfo.ReleaseTitle, 0));
-            }
-
-            return scores.MaxOrDefault();
         }
     }
 }

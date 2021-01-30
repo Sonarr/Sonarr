@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
+import formatDateTime from 'Utilities/Date/formatDateTime';
+import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
 import Link from 'Components/Link/Link';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
@@ -22,6 +23,7 @@ function HistoryDetails(props) {
     const {
       indexer,
       releaseGroup,
+      preferredWordScore,
       nzbInfoUrl,
       downloadClient,
       downloadId,
@@ -57,6 +59,14 @@ function HistoryDetails(props) {
         }
 
         {
+          !!preferredWordScore &&
+            <DescriptionListItem
+              title="Preferred Word Score"
+              data={formatPreferredWordScore(preferredWordScore)}
+            />
+        }
+
+        {
           !!nzbInfoUrl &&
             <span>
               <DescriptionListItemTitle>
@@ -86,7 +96,7 @@ function HistoryDetails(props) {
         }
 
         {
-          !!indexer &&
+          !!(age || ageHours || ageMinutes) &&
             <DescriptionListItem
               title="Age (when grabbed)"
               data={formatAge(age, ageHours, ageMinutes)}
@@ -130,6 +140,7 @@ function HistoryDetails(props) {
 
   if (eventType === 'downloadFolderImported') {
     const {
+      preferredWordScore,
       droppedPath,
       importedPath
     } = data;
@@ -159,13 +170,22 @@ function HistoryDetails(props) {
               data={importedPath}
             />
         }
+
+        {
+          !!preferredWordScore &&
+            <DescriptionListItem
+              title="Preferred Word Score"
+              data={formatPreferredWordScore(preferredWordScore)}
+            />
+        }
       </DescriptionList>
     );
   }
 
   if (eventType === 'episodeFileDeleted') {
     const {
-      reason
+      reason,
+      preferredWordScore
     } = data;
 
     let reasonMessage = '';
@@ -195,6 +215,14 @@ function HistoryDetails(props) {
           title="Reason"
           data={reasonMessage}
         />
+
+        {
+          !!preferredWordScore &&
+            <DescriptionListItem
+              title="Preferred Word Score"
+              data={formatPreferredWordScore(preferredWordScore)}
+            />
+        }
       </DescriptionList>
     );
   }
