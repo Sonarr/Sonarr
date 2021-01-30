@@ -1,12 +1,12 @@
 import { createAction } from 'redux-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import { filterBuilderTypes, filterBuilderValueTypes, sortDirections } from 'Helpers/Props';
+import { sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
 import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
 import createHandleActions from './Creators/createHandleActions';
 import { set } from './baseActions';
-import { fetchSeries, filters, filterPredicates } from './seriesActions';
+import { fetchSeries, filters, filterPredicates, filterBuilderProps } from './seriesActions';
 
 //
 // Variables
@@ -27,48 +27,7 @@ export const defaultState = {
   filters,
   filterPredicates,
 
-  filterBuilderProps: [
-    {
-      name: 'monitored',
-      label: 'Monitored',
-      type: filterBuilderTypes.EXACT,
-      valueType: filterBuilderValueTypes.BOOL
-    },
-    {
-      name: 'status',
-      label: 'Status',
-      type: filterBuilderTypes.EXACT,
-      valueType: filterBuilderValueTypes.SERIES_STATUS
-    },
-    {
-      name: 'seriesType',
-      label: 'Series Type',
-      type: filterBuilderTypes.EXACT
-    },
-    {
-      name: 'qualityProfileId',
-      label: 'Quality Profile',
-      type: filterBuilderTypes.EXACT,
-      valueType: filterBuilderValueTypes.QUALITY_PROFILE
-    },
-    {
-      name: 'languageProfileId',
-      label: 'Language Profile',
-      type: filterBuilderTypes.EXACT,
-      valueType: filterBuilderValueTypes.LANGUAGE_PROFILE
-    },
-    {
-      name: 'rootFolderPath',
-      label: 'Root Folder Path',
-      type: filterBuilderTypes.EXACT
-    },
-    {
-      name: 'tags',
-      label: 'Tags',
-      type: filterBuilderTypes.ARRAY,
-      valueType: filterBuilderValueTypes.TAG
-    }
-  ]
+  filterBuilderProps
 };
 
 export const persistState = [

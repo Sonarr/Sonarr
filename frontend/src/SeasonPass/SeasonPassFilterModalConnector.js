@@ -11,7 +11,7 @@ function createMapStateToProps() {
       return {
         sectionItems,
         filterBuilderProps,
-        customFilterType: 'seasonPass'
+        customFilterType: 'series'
       };
     }
   );
