@@ -141,7 +141,7 @@ class Notification extends Component {
         {
           supportsOnEpisodeFileDeleteForUpgrade && onEpisodeFileDelete && onEpisodeFileDeleteForUpgrade ?
             <Label kind={kinds.SUCCESS}>
-              One Episode File Delete For Upgrade
+              On Episode File Delete For Upgrade
             </Label> :
             null
         }

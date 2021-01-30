@@ -183,19 +183,20 @@ function EditNotificationModalContent(props) {
               </FormGroup>
 
               {
-                onEpisodeFileDelete.value &&
-                <FormGroup>
-                  <FormLabel>On Episode File Delete For Upgrade</FormLabel>
+                onEpisodeFileDelete.value ?
+                  <FormGroup>
+                    <FormLabel>On Episode File Delete For Upgrade</FormLabel>
 
-                  <FormInputGroup
-                    type={inputTypes.CHECK}
-                    name="onEpisodeFileDeleteForUpgrade"
-                    helpText="Be notified when episode files are deleted for upgrades"
-                    isDisabled={!supportsOnEpisodeFileDeleteForUpgrade.value}
-                    {...onEpisodeFileDeleteForUpgrade}
-                    onChange={onInputChange}
-                  />
-                </FormGroup>
+                    <FormInputGroup
+                      type={inputTypes.CHECK}
+                      name="onEpisodeFileDeleteForUpgrade"
+                      helpText="Be notified when episode files are deleted for upgrades"
+                      isDisabled={!supportsOnEpisodeFileDeleteForUpgrade.value}
+                      {...onEpisodeFileDeleteForUpgrade}
+                      onChange={onInputChange}
+                    />
+                  </FormGroup> :
+                  null
               }
 
               <FormGroup>
