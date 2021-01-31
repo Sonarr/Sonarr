@@ -1,14 +1,14 @@
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import { filterBuilderTypes, filterBuilderValueTypes, sortDirections } from 'Helpers/Props';
+import { sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
 import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
 import createHandleActions from './Creators/createHandleActions';
 import { set, updateItem } from './baseActions';
-import { filters, filterPredicates, sortPredicates } from './seriesActions';
+import { filters, filterPredicates, filterBuilderProps } from './seriesActions';
 
 //
 // Variables
@@ -90,61 +90,7 @@ export const defaultState = {
     }
   ],
 
-  filterBuilderProps: [
-    {
-      name: 'monitored',
-      label: 'Monitored',
-      type: filterBuilderTypes.EXACT,
-      valueType: filterBuilderValueTypes.BOOL
-    },
-    {
-      name: 'status',
-      label: 'Status',
-      type: filterBuilderTypes.EXACT,
-      valueType: filterBuilderValueTypes.SERIES_STATUS
-    },
-    {
-      name: 'seriesType',
-      label: 'Series Type',
-      type: filterBuilderTypes.EXACT
-    },
-    {
-      name: 'qualityProfileId',
-      label: 'Quality Profile',
-      type: filterBuilderTypes.EXACT,
-      valueType: filterBuilderValueTypes.QUALITY_PROFILE
-    },
-    {
-      name: 'languageProfileId',
-      label: 'Language Profile',
-      type: filterBuilderTypes.EXACT,
-      valueType: filterBuilderValueTypes.LANGUAGE_PROFILE
-    },
-    {
-      name: 'path',
-      label: 'Path',
-      type: filterBuilderTypes.STRING
-    },
-    {
-      name: 'rootFolderPath',
-      label: 'Root Folder Path',
-      type: filterBuilderTypes.EXACT
-    },
-    {
-      name: 'sizeOnDisk',
-      label: 'Size on Disk',
-      type: filterBuilderTypes.NUMBER,
-      valueType: filterBuilderValueTypes.BYTES
-    },
-    {
-      name: 'tags',
-      label: 'Tags',
-      type: filterBuilderTypes.ARRAY,
-      valueType: filterBuilderValueTypes.TAG
-    }
-  ],
-
-  sortPredicates
+  filterBuilderProps
 };
 
 export const persistState = [

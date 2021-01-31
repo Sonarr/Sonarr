@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Notifications
         List<INotification> OnRenameEnabled();
         List<INotification> OnSeriesDeleteEnabled();
         List<INotification> OnEpisodeFileDeleteEnabled();
+        List<INotification> OnEpisodeFileDeleteForUpgradeEnabled();
         List<INotification> OnHealthIssueEnabled();
     }
 
@@ -55,6 +56,10 @@ namespace NzbDrone.Core.Notifications
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnEpisodeFileDelete).ToList();
         }
 
+        public List<INotification> OnEpisodeFileDeleteForUpgradeEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnEpisodeFileDeleteForUpgrade).ToList();
+        }
         public List<INotification> OnHealthIssueEnabled()
         {
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnHealthIssue).ToList();
@@ -70,6 +75,7 @@ namespace NzbDrone.Core.Notifications
             definition.SupportsOnRename = provider.SupportsOnRename;
             definition.SupportsOnSeriesDelete = provider.SupportsOnSeriesDelete;
             definition.SupportsOnEpisodeFileDelete = provider.SupportsOnEpisodeFileDelete;
+            definition.SupportsOnEpisodeFileDeleteForUpgrade = provider.SupportsOnEpisodeFileDeleteForUpgrade;
             definition.SupportsOnHealthIssue = provider.SupportsOnHealthIssue;
         }
     }

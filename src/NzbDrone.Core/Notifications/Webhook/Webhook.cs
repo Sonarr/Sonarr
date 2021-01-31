@@ -82,7 +82,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             {
                 EventType = WebhookEventType.EpisodeFileDelete,
                 Series = new WebhookSeries(deleteMessage.Series),
-                Episodes = deleteMessage.EpisodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x))
+                Episodes = deleteMessage.EpisodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
+                DeleteReason = deleteMessage.Reason                
             };
 
             _proxy.SendWebhook(payload, Settings);

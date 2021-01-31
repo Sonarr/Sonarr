@@ -18,10 +18,10 @@ class SeasonPassRow extends Component {
   render() {
     const {
       seriesId,
-      status,
-      titleSlug,
-      title,
       monitored,
+      status,
+      title,
+      titleSlug,
       seasons,
       isSaving,
       isSelected,
@@ -84,10 +84,10 @@ class SeasonPassRow extends Component {
 
 SeasonPassRow.propTypes = {
   seriesId: PropTypes.number.isRequired,
-  status: PropTypes.string.isRequired,
-  titleSlug: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
+  status: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  titleSlug: PropTypes.string.isRequired,
   seasons: PropTypes.arrayOf(PropTypes.object).isRequired,
   isSaving: PropTypes.bool.isRequired,
   isSelected: PropTypes.bool,

@@ -205,9 +205,12 @@ namespace NzbDrone.Core.Notifications
             {
                 try
                 {
-                    if (ShouldHandleSeries(notification.Definition, deleteMessage.EpisodeFile.Series))
+                    if (message.Reason != MediaFiles.DeleteMediaFileReason.Upgrade || ((NotificationDefinition)notification.Definition).OnEpisodeFileDeleteForUpgrade)
                     {
-                        notification.OnEpisodeFileDelete(deleteMessage);
+                        if (ShouldHandleSeries(notification.Definition, deleteMessage.EpisodeFile.Series))
+                        {
+                            notification.OnEpisodeFileDelete(deleteMessage);
+                        }
                     }
                 }
                 catch (Exception ex)
