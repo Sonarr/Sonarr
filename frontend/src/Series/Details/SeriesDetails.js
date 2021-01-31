@@ -451,7 +451,7 @@ class SeriesDetails extends Component {
                       </Label>
                     }
                     tooltip={
-                      <span className={styles.fileCountMessage}>
+                      <span>
                         {episodeFilesCountMessage}
                       </span>
                     }

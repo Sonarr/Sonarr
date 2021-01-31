@@ -120,11 +120,10 @@
 }
 
 .fileCountMessage {
+  padding: 5px;
+  white-space: nowrap;
   font-weight: 300;
   font-size: 15px;
-  color: #e1e2e3;
-  white-space: nowrap;
-  padding: 5px;
 }
 
 .path,
