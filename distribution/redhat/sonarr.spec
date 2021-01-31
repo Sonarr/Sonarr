@@ -136,6 +136,11 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Sun Jan 31 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1093-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- New: On Episode File Delete For Upgrade notification option
+- New: Unify series custom filter options
+
 * Mon Jan 25 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1091-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Label for 'On Episode File Delete'
