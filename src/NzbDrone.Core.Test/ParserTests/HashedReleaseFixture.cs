@@ -136,6 +136,13 @@ namespace NzbDrone.Core.Test.ParserTests
                 "Series Title",
                 Quality.WEBDL1080p,
                 "NTb"
+            },
+            new object[]
+            {
+                @"C:\Test\tv\Series.Title.2019.S02E02.The.Episode.of.Names.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTb/46XuzmawYQeUBwNdH2Hw2996.mkv".AsOsAgnostic(),
+                "Series Title 2019",
+                Quality.WEBDL1080p,
+                "NTb"
             }
         };
 

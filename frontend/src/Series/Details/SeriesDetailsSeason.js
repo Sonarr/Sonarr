@@ -323,7 +323,7 @@ class SeriesDetailsSeason extends Component {
 
                 <MenuContent className={styles.actionsMenuContent}>
                   <MenuItem
-                    isDisabled={isSearching || !hasMonitoredEpisodes}
+                    isDisabled={isSearching || !hasMonitoredEpisodes || !seriesMonitored}
                     onPress={onSearchPress}
                   >
                     <SpinnerIcon
@@ -389,10 +389,10 @@ class SeriesDetailsSeason extends Component {
                 <SpinnerIconButton
                   className={styles.actionButton}
                   name={icons.SEARCH}
-                  title={hasMonitoredEpisodes ? 'Search for monitored episodes in this season' : 'No monitored episodes in this season'}
+                  title={hasMonitoredEpisodes && seriesMonitored ? 'Search for monitored episodes in this season' : 'No monitored episodes in this season'}
                   size={24}
                   isSpinning={isSearching}
-                  isDisabled={isSearching || !hasMonitoredEpisodes}
+                  isDisabled={isSearching || !hasMonitoredEpisodes || !seriesMonitored}
                   onPress={onSearchPress}
                 />
 
