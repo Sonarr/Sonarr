@@ -122,6 +122,13 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Tue Feb 02 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1096-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Global scene mapping aliases disappeared from UI
+- Fixed: Validation of new qbittorrent max-ratio action config
+- Added searchEngine support in Newznab/Torznab caps
+- Fixed: FLAC audio channels in media info
+
 * Mon Feb 01 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1095-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - New: Disable season search if series is unmonitored
