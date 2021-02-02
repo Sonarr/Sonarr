@@ -15,7 +15,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
 {
     public interface IAggregationService
     {
-        LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles);
+        LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem);
     }
 
     public class AggregationService : IAggregationService
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
             _logger = logger;
         }
 
-        public LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
+        public LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             var isMediaFile = MediaFileExtensions.Extensions.Contains(Path.GetExtension(localEpisode.Path));
 
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
             {
                 try
                 {
-                    augmenter.Aggregate(localEpisode, downloadClientItem, otherFiles);
+                    augmenter.Aggregate(localEpisode, downloadClientItem);
                 }
                 catch (Exception ex)
                 {

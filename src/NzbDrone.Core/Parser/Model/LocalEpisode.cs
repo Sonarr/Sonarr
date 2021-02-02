@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Parser.Model
         public string ReleaseGroup { get; set; }
         public string SceneName { get; set; }
         public int PreferredWordScore { get; set; }
+        public bool OtherVideoFiles { get; set; }
 
         public int SeasonNumber 
         { 

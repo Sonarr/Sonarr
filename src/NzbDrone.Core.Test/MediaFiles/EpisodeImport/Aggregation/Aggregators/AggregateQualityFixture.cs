@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             GivenAugmenters(_fileExtensionAugmenter, nullMock);
 
-            var result = Subject.Aggregate(new LocalEpisode(), null, false);
+            var result = Subject.Aggregate(new LocalEpisode(), null);
 
             result.Quality.SourceDetectionSource.Should().Be(QualityDetectionSource.Extension);
             result.Quality.ResolutionDetectionSource.Should().Be(QualityDetectionSource.Extension);
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         {
             GivenAugmenters(_fileExtensionAugmenter, _nameAugmenter);
 
-            var result = Subject.Aggregate(new LocalEpisode(), null, false);
+            var result = Subject.Aggregate(new LocalEpisode(), null);
 
             result.Quality.SourceDetectionSource.Should().Be(QualityDetectionSource.Name);
             result.Quality.ResolutionDetectionSource.Should().Be(QualityDetectionSource.Name);
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         {
             GivenAugmenters(_fileExtensionAugmenter, _mediaInfoAugmenter);
 
-            var result = Subject.Aggregate(new LocalEpisode(), null, false);
+            var result = Subject.Aggregate(new LocalEpisode(), null);
 
             result.Quality.SourceDetectionSource.Should().Be(QualityDetectionSource.Extension);
             result.Quality.ResolutionDetectionSource.Should().Be(QualityDetectionSource.MediaInfo);
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         {
             GivenAugmenters(_nameAugmenter, _mediaInfoAugmenter);
 
-            var result = Subject.Aggregate(new LocalEpisode(), null, false);
+            var result = Subject.Aggregate(new LocalEpisode(), null);
 
             result.Quality.SourceDetectionSource.Should().Be(QualityDetectionSource.Name);
             result.Quality.ResolutionDetectionSource.Should().Be(QualityDetectionSource.MediaInfo);
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         {
             GivenAugmenters(_nameAugmenter, _releaseNameAugmenter);
 
-            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem(), false);
+            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem());
 
             result.Quality.SourceDetectionSource.Should().Be(QualityDetectionSource.Name);
             result.Quality.ResolutionDetectionSource.Should().Be(QualityDetectionSource.Name);
@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         {
             GivenAugmenters(_nameAugmenter, _releaseNameAugmenter);
 
-            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem(), false);
+            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem());
 
             result.Quality.Revision.Version.Should().Be(1);
             result.Quality.RevisionDetectionSource.Should().Be(QualityDetectionSource.Unknown);
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             GivenAugmenters(_nameAugmenter, _releaseNameAugmenter);
 
-            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem(), false);
+            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem());
 
             result.Quality.Revision.Version.Should().Be(2);
             result.Quality.RevisionDetectionSource.Should().Be(QualityDetectionSource.Name);
@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             GivenAugmenters(_nameAugmenter, _releaseNameAugmenter);
 
-            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem(), false);
+            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem());
 
             result.Quality.Revision.Version.Should().Be(0);
             result.Quality.RevisionDetectionSource.Should().Be(QualityDetectionSource.Name);
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             GivenAugmenters(_nameAugmenter, _releaseNameAugmenter);
 
-            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem(), false);
+            var result = Subject.Aggregate(new LocalEpisode(), new DownloadClientItem());
 
             result.Quality.Revision.Version.Should().Be(2);
             result.Quality.RevisionDetectionSource.Should().Be(QualityDetectionSource.Name);

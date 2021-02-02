@@ -5,6 +5,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
     public interface IAggregateLocalEpisode
     {
-        LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles);
+        LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem);
     }
 }

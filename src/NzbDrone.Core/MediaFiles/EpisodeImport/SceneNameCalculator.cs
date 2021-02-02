@@ -9,9 +9,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     {
         public static string GetSceneName(LocalEpisode localEpisode)
         {
+            var otherVideoFiles = localEpisode.OtherVideoFiles;
             var downloadClientInfo = localEpisode.DownloadClientEpisodeInfo;
 
-            if (downloadClientInfo != null && !downloadClientInfo.FullSeason)
+            if (!otherVideoFiles && downloadClientInfo != null && !downloadClientInfo.FullSeason)
             {
                 return Parser.Parser.RemoveFileExtension(downloadClientInfo.ReleaseTitle);
             }

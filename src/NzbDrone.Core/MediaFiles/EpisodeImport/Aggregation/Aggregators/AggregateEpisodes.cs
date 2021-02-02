@@ -16,20 +16,20 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _parsingService = parsingService;
         }
 
-        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
+        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
-            localEpisode.Episodes = GetEpisodes(localEpisode, otherFiles);
+            localEpisode.Episodes = GetEpisodes(localEpisode);
 
             return localEpisode;
         }
 
-        private ParsedEpisodeInfo GetBestEpisodeInfo(LocalEpisode localEpisode, bool otherFiles)
+        private ParsedEpisodeInfo GetBestEpisodeInfo(LocalEpisode localEpisode)
         {
             var parsedEpisodeInfo = localEpisode.FileEpisodeInfo;
             var downloadClientEpisodeInfo = localEpisode.DownloadClientEpisodeInfo;
             var folderEpisodeInfo = localEpisode.FolderEpisodeInfo;
 
-            if (!otherFiles && !SceneChecker.IsSceneTitle(Path.GetFileNameWithoutExtension(localEpisode.Path)))
+            if (!localEpisode.OtherVideoFiles && !SceneChecker.IsSceneTitle(Path.GetFileNameWithoutExtension(localEpisode.Path)))
             {
                 if (downloadClientEpisodeInfo != null &&
                     !downloadClientEpisodeInfo.FullSeason &&
@@ -59,9 +59,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             return parsedEpisodeInfo;
         }
 
-        private List<Episode> GetEpisodes(LocalEpisode localEpisode, bool otherFiles)
+        private List<Episode> GetEpisodes(LocalEpisode localEpisode)
         {
-            var bestEpisodeInfoForEpisodes = GetBestEpisodeInfo(localEpisode, otherFiles);
+            var bestEpisodeInfoForEpisodes = GetBestEpisodeInfo(localEpisode);
             var isMediaFile = MediaFileExtensions.Extensions.Contains(Path.GetExtension(localEpisode.Path));
 
             if (bestEpisodeInfoForEpisodes == null)

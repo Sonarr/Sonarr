@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 Series = _series
             };
 
-            Subject.Aggregate(localEpisode, null, false);
+            Subject.Aggregate(localEpisode, null);
 
             localEpisode.ReleaseGroup.Should().Be("Wizzy");
         }
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 Series = _series
             };
 
-            Subject.Aggregate(localEpisode, null, false);
+            Subject.Aggregate(localEpisode, null);
 
             localEpisode.ReleaseGroup.Should().Be("Wizzy");
         }
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 Series = _series
             };
 
-            Subject.Aggregate(localEpisode, null, false);
+            Subject.Aggregate(localEpisode, null);
 
             localEpisode.ReleaseGroup.Should().Be("Viva");
         }
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 Series = _series
             };
 
-            Subject.Aggregate(localEpisode, null, false);
+            Subject.Aggregate(localEpisode, null);
 
             localEpisode.ReleaseGroup.Should().Be("Drone");
         }
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 Series = _series
             };
 
-            Subject.Aggregate(localEpisode, null, false);
+            Subject.Aggregate(localEpisode, null);
 
             localEpisode.ReleaseGroup.Should().Be("Wizzy");
         }
