@@ -110,7 +110,7 @@ function createMapStateToProps() {
 
       const isFetching = isEpisodesFetching || isEpisodeFilesFetching;
       const isPopulated = isEpisodesPopulated && isEpisodeFilesPopulated;
-      const alternateTitles = filterAlternateTitles(series.alternateTitle, series.title, series.useSceneNumbering);
+      const alternateTitles = filterAlternateTitles(series.alternateTitles, series.title, series.useSceneNumbering);
 
       return {
         ...series,

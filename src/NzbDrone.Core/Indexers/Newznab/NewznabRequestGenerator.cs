@@ -121,6 +121,26 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+        private string TextSearchEngine
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.TextSearchEngine;
+            }
+        }
+
+        private string TvTextSearchEngine
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.TvTextSearchEngine;
+            }
+        }
+
         public virtual IndexerPageableRequestChain GetRecentRequests()
         {
             var pageableRequests = new IndexerPageableRequestChain();
@@ -269,7 +289,8 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             if (SupportsSearch)
             {
-                foreach (var queryTitle in searchCriteria.QueryTitles)
+                var queryTitles = (TextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.QueryTitles);
+                foreach (var queryTitle in queryTitles)
                 {
                     pageableRequests.Add(GetPagedRequests(MaxPages, Settings.AnimeCategories, "search",
                         string.Format("&q={0}+{1:00}",
@@ -373,7 +394,8 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             else if (SupportsTvSearch)
             {
-                foreach (var queryTitle in searchCriteria.QueryTitles)
+                var queryTitles = TvTextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.QueryTitles;
+                foreach (var queryTitle in queryTitles)
                 {
                     chain.Add(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
                         string.Format("&q={0}{1}",
