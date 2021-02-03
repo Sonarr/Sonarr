@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
     {
         private readonly IRTorrentProxy _proxy;
         private readonly IRTorrentDirectoryValidator _rTorrentDirectoryValidator;
+        private readonly IDownloadSeedConfigProvider _downloadSeedConfigProvider;
 
         public RTorrent(IRTorrentProxy proxy,
                         ITorrentFileInfoReader torrentFileInfoReader,
@@ -29,12 +30,14 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                         IConfigService configService,
                         IDiskProvider diskProvider,
                         IRemotePathMappingService remotePathMappingService,
+                        IDownloadSeedConfigProvider downloadSeedConfigProvider,
                         IRTorrentDirectoryValidator rTorrentDirectoryValidator,
                         Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
             _rTorrentDirectoryValidator = rTorrentDirectoryValidator;
+            _downloadSeedConfigProvider = downloadSeedConfigProvider;
         }
 
         public override void MarkItemAsImported(DownloadClientItem downloadClientItem)
@@ -53,6 +56,8 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                         Settings.TvImportedCategory, downloadClientItem.Title);
                 }
             }
+
+            // TODO: Set post-import view
         }
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
@@ -146,6 +151,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 {
                     item.Status = DownloadItemStatus.Paused;
                 }
+
+                var seedConfig = _downloadSeedConfigProvider.GetSeedConfiguration(torrent.Hash);
+                // TODO: Handle
 
                 // No stop ratio data is present, so do not delete
                 item.CanMoveFiles = item.CanBeRemoved = false;
