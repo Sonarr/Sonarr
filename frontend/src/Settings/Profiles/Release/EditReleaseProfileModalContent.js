@@ -29,6 +29,7 @@ function EditReleaseProfileModalContent(props) {
 
   const {
     id,
+    name,
     enabled,
     required,
     ignored,
@@ -46,6 +47,20 @@ function EditReleaseProfileModalContent(props) {
 
       <ModalBody>
         <Form {...otherProps}>
+
+          <FormGroup>
+            <FormLabel>Name</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.TEXT}
+              name="name"
+              {...name}
+              placeholder="Optional name"
+              canEdit={true}
+              onChange={onInputChange}
+            />
+          </FormGroup>
+
           <FormGroup>
             <FormLabel>Enable Profile</FormLabel>
 
