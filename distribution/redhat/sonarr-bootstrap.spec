@@ -122,6 +122,12 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Thu Feb 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1100-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Series Removed From TVDB wiki link
+- Detect Dolby Vision as HDR and MediaInfo Update
+- New: Add name field to release profiles
+
 * Tue Feb 02 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1096-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Global scene mapping aliases disappeared from UI
