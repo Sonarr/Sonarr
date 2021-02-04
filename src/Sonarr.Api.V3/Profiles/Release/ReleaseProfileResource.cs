@@ -7,6 +7,7 @@ namespace Sonarr.Api.V3.Profiles.Release
 {
     public class ReleaseProfileResource : RestResource
     {
+        public string Name { get; set; }
         public bool Enabled { get; set; }
         public string Required { get; set; }
         public string Ignored { get; set; }
@@ -30,7 +31,7 @@ namespace Sonarr.Api.V3.Profiles.Release
             return new ReleaseProfileResource
             {
                 Id = model.Id,
-
+                Name = model.Name,
                 Enabled = model.Enabled,
                 Required = model.Required,
                 Ignored = model.Ignored,
@@ -48,7 +49,7 @@ namespace Sonarr.Api.V3.Profiles.Release
             return new ReleaseProfile
             {
                 Id = resource.Id,
-
+                Name = resource.Name,
                 Enabled = resource.Enabled,
                 Required = resource.Required,
                 Ignored = resource.Ignored,

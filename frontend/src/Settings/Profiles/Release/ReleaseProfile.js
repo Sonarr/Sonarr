@@ -56,6 +56,7 @@ class ReleaseProfile extends Component {
   render() {
     const {
       id,
+      name,
       enabled,
       required,
       ignored,
@@ -79,6 +80,14 @@ class ReleaseProfile extends Component {
         overlayContent={true}
         onPress={this.onEditReleaseProfilePress}
       >
+        {
+          name ?
+            <div className={styles.name}>
+              {name}
+            </div> :
+            null
+        }
+
         <div>
           {
             split(required).map((item) => {
@@ -184,6 +193,7 @@ class ReleaseProfile extends Component {
 
 ReleaseProfile.propTypes = {
   id: PropTypes.number.isRequired,
+  name: PropTypes.string,
   enabled: PropTypes.bool.isRequired,
   required: PropTypes.string.isRequired,
   ignored: PropTypes.string.isRequired,
