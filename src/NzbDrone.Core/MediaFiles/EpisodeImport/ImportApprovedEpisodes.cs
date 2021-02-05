@@ -124,7 +124,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         }
                     }
 
-                    _mediaFileService.Add(episodeFile);
+                    episodeFile = _mediaFileService.Add(episodeFile);
                     importResults.Add(new ImportResult(importDecision));
 
                     if (newDownload)
