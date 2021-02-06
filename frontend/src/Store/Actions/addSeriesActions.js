@@ -37,6 +37,8 @@ export const defaultState = {
     languageProfileId: 0,
     seriesType: seriesTypes.STANDARD,
     seasonFolder: true,
+    searchForMissingEpisodes: true,
+    searchForCutoffUnmetEpisodes: true,
     tags: []
   }
 };

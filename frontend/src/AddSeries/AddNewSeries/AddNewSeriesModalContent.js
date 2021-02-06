@@ -30,9 +30,7 @@ class AddNewSeriesModalContent extends Component {
     this.state = {
       seriesType: props.initialSeriesType === seriesTypes.STANDARD ?
         props.seriesType.value :
-        props.initialSeriesType,
-      searchForMissingEpisodes: false,
-      searchForCutoffUnmetEpisodes: false
+        props.initialSeriesType
     };
   }
 
@@ -45,14 +43,6 @@ class AddNewSeriesModalContent extends Component {
   //
   // Listeners
 
-  onSearchForMissingEpisodesChange = ({ value }) => {
-    this.setState({ searchForMissingEpisodes: value });
-  }
-
-  onSearchForCutoffUnmetEpisodesChange = ({ value }) => {
-    this.setState({ searchForCutoffUnmetEpisodes: value });
-  }
-
   onQualityProfileIdChange = ({ value }) => {
     this.props.onInputChange({ name: 'qualityProfileId', value: parseInt(value) });
   }
@@ -63,14 +53,10 @@ class AddNewSeriesModalContent extends Component {
 
   onAddSeriesPress = () => {
     const {
-      searchForMissingEpisodes,
-      searchForCutoffUnmetEpisodes,
       seriesType
     } = this.state;
 
     this.props.onAddSeriesPress(
-      searchForMissingEpisodes,
-      searchForCutoffUnmetEpisodes,
       seriesType
     );
   }
@@ -91,6 +77,8 @@ class AddNewSeriesModalContent extends Component {
       languageProfileId,
       seriesType,
       seasonFolder,
+      searchForMissingEpisodes,
+      searchForCutoffUnmetEpisodes,
       folder,
       tags,
       showLanguageProfile,
@@ -100,11 +88,6 @@ class AddNewSeriesModalContent extends Component {
       onInputChange,
       ...otherProps
     } = this.props;
-
-    const {
-      searchForMissingEpisodes,
-      searchForCutoffUnmetEpisodes
-    } = this.state;
 
     return (
       <ModalContent onModalClose={onModalClose}>
@@ -271,8 +254,8 @@ class AddNewSeriesModalContent extends Component {
                 containerClassName={styles.searchInputContainer}
                 className={styles.searchInput}
                 name="searchForMissingEpisodes"
-                value={searchForMissingEpisodes}
-                onChange={this.onSearchForMissingEpisodesChange}
+                onChange={onInputChange}
+                {...searchForMissingEpisodes}
               />
             </label>
 
@@ -285,8 +268,8 @@ class AddNewSeriesModalContent extends Component {
                 containerClassName={styles.searchInputContainer}
                 className={styles.searchInput}
                 name="searchForCutoffUnmetEpisodes"
-                value={searchForCutoffUnmetEpisodes}
-                onChange={this.onSearchForCutoffUnmetEpisodesChange}
+                onChange={onInputChange}
+                {...searchForCutoffUnmetEpisodes}
               />
             </label>
           </div>
@@ -319,6 +302,8 @@ AddNewSeriesModalContent.propTypes = {
   languageProfileId: PropTypes.object,
   seriesType: PropTypes.object.isRequired,
   seasonFolder: PropTypes.object.isRequired,
+  searchForMissingEpisodes: PropTypes.object.isRequired,
+  searchForCutoffUnmetEpisodes: PropTypes.object.isRequired,
   folder: PropTypes.string.isRequired,
   tags: PropTypes.object.isRequired,
   showLanguageProfile: PropTypes.bool.isRequired,
