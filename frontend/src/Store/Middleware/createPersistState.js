@@ -29,27 +29,29 @@ function mergeColumns(path, initialState, persistedState, computedState) {
 
   const columns = [];
 
-  initialColumns.forEach((initialColumn) => {
-    const persistedColumnIndex = _.findIndex(persistedColumns, { name: initialColumn.name });
-    const column = Object.assign({}, initialColumn);
-    const persistedColumn = persistedColumnIndex > -1 ? persistedColumns[persistedColumnIndex] : undefined;
+  // Add persisted columns in the same order they're currently in
+  // as long as they haven't been removed.
 
-    if (persistedColumn) {
-      column.isVisible = persistedColumn.isVisible;
+  persistedColumns.forEach((persistedColumn) => {
+    const columnIndex = initialColumns.findIndex((i) => i.name === persistedColumn.name);
+
+    if (columnIndex >= 0) {
+      columns.push({ ...persistedColumn });
     }
-
-    // If there is a persisted column, it's index doesn't exceed the column list
-    // and it's modifiable, insert it in the proper position.
-
-    if (persistedColumn && columns.length - 1 > persistedColumnIndex && persistedColumn.isModifiable !== false) {
-      columns.splice(persistedColumnIndex, 0, column);
-    } else {
-      columns.push(column);
-    }
-
-    // Set the columns in the persisted state
-    _.set(computedState, path, columns);
   });
+
+  // Add any columns added to the app in the initial position.
+  initialColumns.forEach((initialColumn, index) => {
+    const persistedColumnIndex = persistedColumns.findIndex((i) => i.name === initialColumn.name);
+    const column = Object.assign({}, initialColumn);
+
+    if (persistedColumnIndex === -1) {
+      columns.splice(index, 0, column);
+    }
+  });
+
+  // Set the columns in the persisted state
+  _.set(computedState, path, columns);
 }
 
 function slicer(paths_) {
