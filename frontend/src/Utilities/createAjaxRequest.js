@@ -28,6 +28,15 @@ function addApiKey(ajaxOptions) {
   ajaxOptions.headers['X-Api-Key'] = window.Sonarr.apiKey;
 }
 
+function addContentType(ajaxOptions) {
+  if (
+    !ajaxOptions.contentType &&
+    ajaxOptions.dataType === 'json' &&
+    (ajaxOptions.method === 'PUT' || ajaxOptions.method === 'POST')) {
+    ajaxOptions.contentType = 'application/json';
+  }
+}
+
 export default function createAjaxRequest(originalAjaxOptions) {
   const requestXHR = new window.XMLHttpRequest();
   let aborted = false;
@@ -46,6 +55,7 @@ export default function createAjaxRequest(originalAjaxOptions) {
     moveBodyToQuery(ajaxOptions);
     addRootUrl(ajaxOptions);
     addApiKey(ajaxOptions);
+    addContentType(ajaxOptions);
   }
 
   const request = $.ajax({

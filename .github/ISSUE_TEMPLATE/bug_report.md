@@ -2,7 +2,7 @@
 name: Bug Report
 about: Support Requests will be closed immediately, if you are not 100% certain this is a bug please go to our Reddit, Discord, Forums, or IRC first. Exceptions do not mean you found a bug!
 title: ''
-labels: 'bug'
+labels: ''
 assignees: ''
 
 ---
