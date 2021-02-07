@@ -21,13 +21,7 @@
     <ProjectReference Include="..\MonoTorrent\MonoTorrent.csproj" />
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
   </ItemGroup>
-  <ItemGroup> 
-    <Reference Include="Growl.Connector">
-      <HintPath>..\Libraries\Growl.Connector.dll</HintPath>
-    </Reference>
-    <Reference Include="Growl.CoreLibrary">
-      <HintPath>..\Libraries\Growl.CoreLibrary.dll</HintPath>
-    </Reference>
+  <ItemGroup>
     <Reference Include="System.Data.SQLite">
       <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
     </Reference>
