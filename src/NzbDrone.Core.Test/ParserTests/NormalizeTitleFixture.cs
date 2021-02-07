@@ -9,10 +9,10 @@ namespace NzbDrone.Core.Test.ParserTests
     [TestFixture]
     public class NormalizeTitleFixture : CoreTest
     {
-        [TestCase("Conan", "conan")]
-        [TestCase("Castle (2009)", "castle2009")]
-        [TestCase("Parenthood.2010", "parenthood2010")]
-        [TestCase("Law_and_Order_SVU", "lawordersvu")]
+        [TestCase("Series", "series")]
+        [TestCase("Series (2009)", "series2009")]
+        [TestCase("Series.2010", "series2010")]
+        [TestCase("Series_and_Title_Sonarr", "seriestitlesonarr")]
         public void should_normalize_series_title(string parsedSeriesName, string seriesName)
         {
             var result = parsedSeriesName.CleanSeriesTitle();
@@ -98,9 +98,9 @@ namespace NzbDrone.Core.Test.ParserTests
 
         }
 
-        [TestCase("The Office", "theoffice")]
-        [TestCase("The Tonight Show With Jay Leno", "thetonightshowwithjayleno")]
-        [TestCase("The.Daily.Show", "thedailyshow")]
+        [TestCase("The Series", "theseries")]
+        [TestCase("The Series Show With Sonarr Dev", "theseriesshowwithsonarrdev")]
+        [TestCase("The.Series.Show", "theseriesshow")]
         public void should_not_remove_from_the_beginning_of_the_title(string parsedSeriesName, string seriesName)
         {
             var result = parsedSeriesName.CleanSeriesTitle();
@@ -132,12 +132,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test]
         public void should_not_clean_trailing_a()
         {
-            "Tokyo Ghoul A".CleanSeriesTitle().Should().Be("tokyoghoula");
+            "Series Title A".CleanSeriesTitle().Should().Be("seriestitlea");
         }
 
         [TestCase("3%", "3percent")]
-        [TestCase("Teen Top & 100% Outing Brothers", "teentop100percentoutingbrothers")]
-        [TestCase("Big Jay Oakerson's What's Your F@%king Deal?!", "bigjayoakersonswhatsyourfkingdeal")]
+        [TestCase("Series Top & 100% Coding Developers", "seriestop100percentcodingdevelopers")]
+        [TestCase("Series Title What's Your F@%king Deal?!", "seriestitlewhatsyourfkingdeal")]
         public void should_replace_percent_sign_with_percent_following_numbers(string input, string expected)
         {
             input.CleanSeriesTitle().Should().Be(expected);
