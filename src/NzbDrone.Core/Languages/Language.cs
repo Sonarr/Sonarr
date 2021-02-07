@@ -81,8 +81,9 @@ namespace NzbDrone.Core.Languages
         public static Language Hebrew       { get { return new Language(23, "Hebrew"); } }
         public static Language Lithuanian   { get { return new Language(24, "Lithuanian"); } }
         public static Language Czech        { get { return new Language(25, "Czech"); } }
+        public static Language Arabic       { get { return new Language(26, "Arabic"); } }
 
-        
+
         public static List<Language> All
         {
             get
@@ -114,7 +115,8 @@ namespace NzbDrone.Core.Languages
                     Hungarian,
                     Hebrew,
                     Lithuanian,
-                    Czech
+                    Czech,
+                    Arabic
                 };
             }
         }

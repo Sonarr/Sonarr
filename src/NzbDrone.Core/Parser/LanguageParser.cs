@@ -93,6 +93,9 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("hebrew"))
                 return Language.Hebrew;
 
+            if (lowerTitle.Contains("arabic"))
+                return Language.Arabic;
+
             var regexLanguage = RegexLanguage(title);
 
             if (regexLanguage != Language.Unknown)

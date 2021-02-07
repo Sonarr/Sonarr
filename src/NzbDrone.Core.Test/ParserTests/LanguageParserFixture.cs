@@ -232,6 +232,13 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Language.Id.Should().Be(Language.Czech.Id);
         }
 
+        [TestCase("Antinormal.S01.ARABIC.COMPLETE.720p.NF.WEBRip.x264-PTV")]
+        public void should_parse_language_arabic(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Language.Id.Should().Be(Language.Arabic.Id);
+        }
+
         [TestCase("Russian.Puppets.S01E07.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Russian.Puppets.S01E07E08.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Russian.Puppets.S01.1080p.WEBRip.DDP5.1.x264-Drone")]
