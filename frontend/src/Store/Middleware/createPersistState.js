@@ -33,10 +33,13 @@ function mergeColumns(path, initialState, persistedState, computedState) {
   // as long as they haven't been removed.
 
   persistedColumns.forEach((persistedColumn) => {
-    const columnIndex = initialColumns.findIndex((i) => i.name === persistedColumn.name);
+    const column = initialColumns.find((i) => i.name === persistedColumn.name);
 
-    if (columnIndex >= 0) {
-      columns.push({ ...persistedColumn });
+    if (column) {
+      columns.push({
+        ...column,
+        isVisible: persistedColumn.isVisible
+      });
     }
   });
 
