@@ -122,6 +122,17 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Sun Feb 07 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1107-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Authentication on DSM 7
+- Fixed: Settings fields being altered during save
+- New: Persist search settings in add new series
+- New: Show number of files as tooltip over size on disk
+- Update feature request template
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- New: use-credentials for maniftest requests
+- New: Add FileId to History data for import events
+
 * Thu Feb 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1100-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Series Removed From TVDB wiki link
