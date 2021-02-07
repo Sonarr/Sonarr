@@ -43,7 +43,9 @@ namespace NzbDrone.Core.Download
 
             try
             {
-                nzbData = _httpClient.Get(new HttpRequest(url)).ResponseData;
+                var request = new HttpRequest(url);
+                request.RateLimitKey = remoteEpisode?.Release?.IndexerId.ToString();
+                nzbData = _httpClient.Get(request).ResponseData;
 
                 _logger.Debug("Downloaded nzb for episode '{0}' finished ({1} bytes from {2})", remoteEpisode.Release.Title, nzbData.Length, url);
             }

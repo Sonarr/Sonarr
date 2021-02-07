@@ -88,5 +88,38 @@ namespace NzbDrone.Common.Test.TPLTests
 
             (GetRateLimitStore()["me"] - _epoch).Should().BeGreaterOrEqualTo(TimeSpan.FromMilliseconds(100));
         }
+
+        [Test]
+        public void should_extend_subkey_delay()
+        {
+            GivenExisting("me", _epoch + TimeSpan.FromMilliseconds(200));
+            GivenExisting("me-sub", _epoch + TimeSpan.FromMilliseconds(300));
+
+            Subject.WaitAndPulse("me", "sub", TimeSpan.FromMilliseconds(100));
+
+            (GetRateLimitStore()["me-sub"] - _epoch).Should().BeGreaterOrEqualTo(TimeSpan.FromMilliseconds(400));
+        }
+
+        [Test]
+        public void should_honor_basekey_delay()
+        {
+            GivenExisting("me", _epoch + TimeSpan.FromMilliseconds(200));
+            GivenExisting("me-sub", _epoch + TimeSpan.FromMilliseconds(0));
+
+            Subject.WaitAndPulse("me", "sub", TimeSpan.FromMilliseconds(100));
+
+            (GetRateLimitStore()["me-sub"] - _epoch).Should().BeGreaterOrEqualTo(TimeSpan.FromMilliseconds(200));
+        }
+
+        [Test]
+        public void should_not_extend_basekey_delay()
+        {
+            GivenExisting("me", _epoch + TimeSpan.FromMilliseconds(200));
+            GivenExisting("me-sub", _epoch + TimeSpan.FromMilliseconds(100));
+
+            Subject.WaitAndPulse("me", "sub", TimeSpan.FromMilliseconds(100));
+
+            (GetRateLimitStore()["me"] - _epoch).Should().BeCloseTo(TimeSpan.FromMilliseconds(200));
+        }
     }
 }
