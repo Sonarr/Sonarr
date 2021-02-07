@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
         {
             var authInfo = GetApiInfo(DiskStationApi.Auth, settings);
 
-            var requestBuilder = BuildRequest(settings, authInfo, "login", 2);
+            var requestBuilder = BuildRequest(settings, authInfo, "login", 3);
             requestBuilder.AddQueryParam("account", settings.Username);
             requestBuilder.AddQueryParam("passwd", settings.Password);
             requestBuilder.AddQueryParam("format", "sid");
