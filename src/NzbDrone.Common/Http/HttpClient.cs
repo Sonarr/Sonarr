@@ -111,7 +111,7 @@ namespace NzbDrone.Common.Http
 
             if (request.RateLimit != TimeSpan.Zero)
             {
-                _rateLimitService.WaitAndPulse(request.Url.Host, request.RateLimit);
+                _rateLimitService.WaitAndPulse(HttpRateLimitKeyFactory.GetRateLimitKey(request), request.RateLimit);
             }
 
             _logger.Trace(request);
