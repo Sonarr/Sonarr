@@ -14,6 +14,7 @@
   &.inverse {
     background-color: $themeDarkColor;
     box-shadow: 0 5px 10px $popoverShadowInverseColor;
+    color: $white;
   }
 }
 

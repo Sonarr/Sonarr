@@ -119,6 +119,13 @@
   margin: 5px 10px 5px 0;
 }
 
+.fileCountMessage {
+  padding: 5px;
+  white-space: nowrap;
+  font-weight: 300;
+  font-size: 15px;
+}
+
 .path,
 .sizeOnDisk,
 .qualityProfileName,

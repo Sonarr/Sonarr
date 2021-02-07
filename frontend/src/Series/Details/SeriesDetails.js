@@ -432,22 +432,32 @@ class SeriesDetails extends Component {
                     </span>
                   </Label>
 
-                  <Label
-                    className={styles.detailsLabel}
-                    title={episodeFilesCountMessage}
-                    size={sizes.LARGE}
-                  >
-                    <Icon
-                      name={icons.DRIVE}
-                      size={17}
-                    />
+                  <Tooltip
+                    anchor={
+                      <Label
+                        className={styles.detailsLabel}
+                        size={sizes.LARGE}
+                      >
+                        <Icon
+                          name={icons.DRIVE}
+                          size={17}
+                        />
 
-                    <span className={styles.sizeOnDisk}>
-                      {
-                        formatBytes(sizeOnDisk || 0)
-                      }
-                    </span>
-                  </Label>
+                        <span className={styles.sizeOnDisk}>
+                          {
+                            formatBytes(sizeOnDisk || 0)
+                          }
+                        </span>
+                      </Label>
+                    }
+                    tooltip={
+                      <span>
+                        {episodeFilesCountMessage}
+                      </span>
+                    }
+                    kind={kinds.INVERSE}
+                    position={tooltipPositions.BOTTOM}
+                  />
 
                   <Label
                     className={styles.detailsLabel}
