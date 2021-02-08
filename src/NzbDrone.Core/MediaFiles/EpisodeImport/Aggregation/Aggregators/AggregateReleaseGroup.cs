@@ -6,7 +6,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
     public class AggregateReleaseGroup : IAggregateLocalEpisode
     {
-        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
+        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             // Prefer ReleaseGroup from DownloadClient/Folder if they're not a season pack
             var releaseGroup = GetReleaseGroup(localEpisode.DownloadClientEpisodeInfo, true);

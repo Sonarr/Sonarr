@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
 import { icons } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
@@ -190,6 +191,17 @@ class HistoryRow extends Component {
                   className={styles.indexer}
                 >
                   {data.indexer}
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'preferredWordScore') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.preferredWordScore}
+                >
+                  {formatPreferredWordScore(data.preferredWordScore)}
                 </TableRowCell>
               );
             }

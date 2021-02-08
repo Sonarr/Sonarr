@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
+import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
@@ -193,8 +194,7 @@ class InteractiveSearchRow extends Component {
         </TableRowCell>
 
         <TableRowCell className={styles.preferredWordScore}>
-          {preferredWordScore > 0 && `+${preferredWordScore}`}
-          {preferredWordScore < 0 && preferredWordScore}
+          {formatPreferredWordScore(preferredWordScore)}
         </TableRowCell>
 
         <TableRowCell className={styles.rejected}>

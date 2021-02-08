@@ -21,7 +21,7 @@ using NzbDrone.Test.Common;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
 
-namespace NzbDrone.Core.Test.MediaFiles
+namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
     [TestFixture]
     public class ImportApprovedEpisodesFixture : CoreTest<ImportApprovedEpisodes>
@@ -167,112 +167,6 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IUpgradeMediaFiles>()
                   .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode, false),
                           Times.Never());
-        }
-
-        [Test]
-        public void should_use_nzb_title_as_scene_name()
-        {
-            GivenNewDownload();
-            _downloadClientItem.Title = "malcolm.in.the.middle.s02e05.dvdrip.xvid-ingot";
-
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
-
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == _downloadClientItem.Title)));
-        }
-
-        [TestCase(".mkv")]
-        [TestCase(".par2")]
-        [TestCase(".nzb")]
-        public void should_remove_extension_from_nzb_title_for_scene_name(string extension)
-        {
-            GivenNewDownload();
-            var title = "malcolm.in.the.middle.s02e05.dvdrip.xvid-ingot";
-
-            _downloadClientItem.Title = title + extension;
-
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
-
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == title)));
-        }
-
-        [Test]
-        public void should_not_use_nzb_title_as_scene_name_if_full_season()
-        {
-            GivenNewDownload();
-            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv");
-            _downloadClientItem.Title = "malcolm.in.the.middle.s02.dvdrip.xvid-ingot";
-
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
-
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == "malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot")));
-        }
-
-        [Test]
-        public void should_use_file_name_as_scenename_only_if_it_looks_like_scenename()
-        {
-            GivenNewDownload();
-            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "series.title.s02e23.dvdrip.xvid-ingot.mkv");
-
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
-
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == "series.title.s02e23.dvdrip.xvid-ingot")));
-        }
-
-        [Test]
-        public void should_not_use_file_name_as_scenename_if_it_doesnt_looks_like_scenename()
-        {
-            GivenNewDownload();
-            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "aaaaa.mkv");
-
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
-
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == null)));
-        }
-
-        [Test]
-        public void should_use_folder_name_as_scenename_only_if_it_looks_like_scenename()
-        {
-            GivenNewDownload();
-            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "aaaaa.mkv");
-            _approvedDecisions.First().LocalEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo
-                                                                        {
-                                                                            ReleaseTitle = "series.title.s02e23.dvdrip.xvid-ingot"
-                                                                        };
-
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
-
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == "series.title.s02e23.dvdrip.xvid-ingot")));
-        }
-
-        [Test]
-        public void should_not_use_folder_name_as_scenename_if_it_doesnt_looks_like_scenename()
-        {
-            GivenNewDownload();
-            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "aaaaa.mkv");
-            _approvedDecisions.First().LocalEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo
-                                                                        {
-                                                                            ReleaseTitle = "aaaaa.mkv"
-                                                                        };
-
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
-
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == null)));
-        }
-
-        [Test]
-        public void should_not_use_folder_name_as_scenename_if_it_is_for_a_full_season()
-        {
-            GivenNewDownload();
-            _approvedDecisions.First().LocalEpisode.Path = Path.Combine(_downloadClientItem.OutputPath.ToString(), "aaaaa.mkv");
-            _approvedDecisions.First().LocalEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo
-                                                                        {
-                                                                            ReleaseTitle = "series.title.s02.dvdrip.xvid-ingot.mkv",
-                                                                            FullSeason = true
-            };
-
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
-
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == null)));
         }
 
         [Test]

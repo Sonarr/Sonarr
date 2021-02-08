@@ -36,9 +36,6 @@ namespace NzbDrone.Core.Parser
 
             var lowerTitle = title.ToLower();
 
-            if (lowerTitle.Contains("english"))
-                return Language.English;
-
             if (lowerTitle.Contains("french"))
                 return Language.French;
 
@@ -93,12 +90,21 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("hebrew"))
                 return Language.Hebrew;
 
+            if (lowerTitle.Contains("arabic"))
+                return Language.Arabic;
+
+            if (lowerTitle.Contains("hindi"))
+                return Language.Hindi;
+
             var regexLanguage = RegexLanguage(title);
 
             if (regexLanguage != Language.Unknown)
             {
                 return regexLanguage;
             }
+
+            if (lowerTitle.Contains("english"))
+                return Language.English;
 
             return defaultToEnglish ? Language.English : Language.Unknown;
         }

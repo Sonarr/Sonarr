@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
 {
     public interface IAggregationService
     {
-        LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles);
+        LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem);
     }
 
     public class AggregationService : IAggregationService
@@ -37,7 +39,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
             _logger = logger;
         }
 
-        public LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
+        public LocalEpisode Augment(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             var isMediaFile = MediaFileExtensions.Extensions.Contains(Path.GetExtension(localEpisode.Path));
 
@@ -52,6 +54,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
             }
 
             localEpisode.Size = _diskProvider.GetFileSize(localEpisode.Path);
+            localEpisode.SceneName = localEpisode.SceneSource ? SceneNameCalculator.GetSceneName(localEpisode) : null;
 
             if (isMediaFile && (!localEpisode.ExistingFile || _configService.EnableMediaInfo))
             {
@@ -62,7 +65,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
             {
                 try
                 {
-                    augmenter.Aggregate(localEpisode, downloadClientItem, otherFiles);
+                    augmenter.Aggregate(localEpisode, downloadClientItem);
                 }
                 catch (Exception ex)
                 {

@@ -704,7 +704,7 @@ SeriesDetails.propTypes = {
   overview: PropTypes.string.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   seasons: PropTypes.arrayOf(PropTypes.object).isRequired,
-  alternateTitles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   isSaving: PropTypes.bool.isRequired,
   saveError: PropTypes.object,

@@ -39,11 +39,13 @@ namespace NzbDrone.Core.History
                                   IHandle<DownloadIgnoredEvent>
     {
         private readonly IHistoryRepository _historyRepository;
+        private readonly IEpisodeFilePreferredWordCalculator _episodeFilePreferredWordCalculator;
         private readonly Logger _logger;
 
-        public HistoryService(IHistoryRepository historyRepository, Logger logger)
+        public HistoryService(IHistoryRepository historyRepository, IEpisodeFilePreferredWordCalculator episodeFilePreferredWordCalculator, Logger logger)
         {
             _historyRepository = historyRepository;
+            _episodeFilePreferredWordCalculator = episodeFilePreferredWordCalculator;
             _logger = logger;
         }
 
@@ -148,7 +150,7 @@ namespace NzbDrone.Core.History
                     SeriesId = episode.SeriesId,
                     EpisodeId = episode.Id,
                     DownloadId = message.DownloadId,
-                    Language = message.Episode.ParsedEpisodeInfo.Language
+                    Language = message.Episode.ParsedEpisodeInfo.Language,
                 };
 
                 history.Data.Add("Indexer", message.Episode.Release.Indexer);
@@ -166,6 +168,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("TvdbId", message.Episode.Release.TvdbId.ToString());
                 history.Data.Add("TvRageId", message.Episode.Release.TvRageId.ToString());
                 history.Data.Add("Protocol", ((int)message.Episode.Release.DownloadProtocol).ToString());
+                history.Data.Add("PreferredWordScore", message.Episode.PreferredWordScore.ToString());
 
                 if (!message.Episode.ParsedEpisodeInfo.ReleaseHash.IsNullOrWhiteSpace())
                 {
@@ -216,6 +219,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("ImportedPath", Path.Combine(message.EpisodeInfo.Series.Path, message.ImportedEpisode.RelativePath));
                 history.Data.Add("DownloadClient", message.DownloadClientInfo?.Type);
                 history.Data.Add("DownloadClientName", message.DownloadClientInfo?.Name);
+                history.Data.Add("PreferredWordScore", message.EpisodeInfo.PreferredWordScore.ToString());
 
                 _historyRepository.Insert(history);
             }
@@ -258,6 +262,8 @@ namespace NzbDrone.Core.History
                 return;
             }
 
+            var episodeFilePreferredWordScore = _episodeFilePreferredWordCalculator.Calculate(message.EpisodeFile.Series, message.EpisodeFile);
+
             foreach (var episode in message.EpisodeFile.Episodes.Value)
             {
                 var history = new EpisodeHistory
@@ -272,6 +278,7 @@ namespace NzbDrone.Core.History
                 };
 
                 history.Data.Add("Reason", message.Reason.ToString());
+                history.Data.Add("PreferredWordScore", episodeFilePreferredWordScore.ToString());
 
                 _historyRepository.Insert(history);
             }

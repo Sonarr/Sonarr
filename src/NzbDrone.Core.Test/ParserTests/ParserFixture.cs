@@ -11,37 +11,24 @@ namespace NzbDrone.Core.Test.ParserTests
     [TestFixture]
     public class ParserFixture : CoreTest
     {
-        /*Fucked-up hall of shame,
-         * WWE.Wrestlemania.27.PPV.HDTV.XviD-KYR
-         * Unreported.World.Chinas.Lost.Sons.WS.PDTV.XviD-FTP
-         * [TestCase("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", "Big Time Rush", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 10)]
-         * [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
-         * [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "", 7, new[] { 22, 23 }, 2)]
-         * (Game of Thrones s03 e - "Game of Thrones Season 3 Episode 10"
-         * The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
-         * Superman.-.The.Man.of.Steel.1994-06.34.hybrid.DreamGirl-Novus-HD
-         * Superman.-.The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
-         * Constantine S1-E1-WEB-DL-1080p-NZBgeek
-         * rwbys01e02e031080-debt.mkv
-         */
 
-        [TestCase("Chuck - 4x05 - Title", "Chuck")]
-        [TestCase("Law & Order - 4x05 - Title", "laworder")]
+        [TestCase("Series Title - 4x05 - Title", "seriestitle")]
+        [TestCase("Series & Title - 4x05 - Title", "seriestitle")]
         [TestCase("Bad Format", "badformat")]
-        [TestCase("Mad Men - Season 1 [Bluray720p]", "madmen")]
-        [TestCase("Mad Men - Season 1 [Bluray1080p]", "madmen")]
-        [TestCase("The Daily Show With Jon Stewart -", "thedailyshowwithjonstewart")]
-        [TestCase("The Venture Bros. (2004)", "theventurebros2004")]
-        [TestCase("Castle (2011)", "castle2011")]
-        [TestCase("Adventure Time S02 720p HDTV x264 CRON", "adventuretime")]
-        [TestCase("Hawaii Five 0", "hawaiifive0")]
-        [TestCase("Match of the Day", "matchday")]
-        [TestCase("Match of the Day 2", "matchday2")]
-        [TestCase("[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "Revenge")]
-        [TestCase("www.Torrenting.com - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "Revenge")]
-        [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "Seed")]
-        [TestCase("Reno.911.S01.DVDRip.DD2.0.x264-DEEP", "Reno 911")]
-        [TestCase("www.Torrenting.org - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "Revenge")]
+        [TestCase("Mad Series - Season 1 [Bluray720p]", "madseries")]
+        [TestCase("Mad Series - Season 1 [Bluray1080p]", "madseries")]
+        [TestCase("The Daily Series -", "thedailyseries")]
+        [TestCase("The Series Bros. (2006)", "theseriesbros2006")]
+        [TestCase("Series (2011)", "series2011")]
+        [TestCase("Series Time S02 720p HDTV x264 CRON", "seriestime")]
+        [TestCase("Series Title 0", "seriestitle0")]
+        [TestCase("Series of the Day", "seriesday")]
+        [TestCase("Series of the Day 2", "seriesday2")]
+        [TestCase("[ www.Torrenting.com ] - Series.S03E14.720p.HDTV.X264-DIMENSION", "series")]
+        [TestCase("www.Torrenting.com - Series.S03E14.720p.HDTV.X264-DIMENSION", "series")]
+        [TestCase("Series S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "series")]
+        [TestCase("Series.911.S01.DVDRip.DD2.0.x264-DEEP", "series 911")]
+        [TestCase("www.Torrenting.org - Series.S03E14.720p.HDTV.X264-DIMENSION", "series")]
         public void should_parse_series_name(string postTitle, string title)
         {
             var result = Parser.Parser.ParseSeriesName(postTitle).CleanSeriesTitle();
@@ -51,25 +38,25 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test]
         public void should_remove_accents_from_title()
         {
-            const string title = "Carniv\u00E0le";
+            const string title = "Seri\u00E0es";
 
-            title.CleanSeriesTitle().Should().Be("carnivale");
+            title.CleanSeriesTitle().Should().Be("seriaes");
         }
 
-        [TestCase("Discovery TV - Gold Rush : 02 Road From Hell [S04].mp4")]
+        [TestCase("Sonar TV - Series Title : 02 Road From Code [S04].mp4")]
         public void should_clean_up_invalid_path_characters(string postTitle)
         {
             Parser.Parser.ParseTitle(postTitle);
         }
 
-        [TestCase("[scnzbefnet][509103] 2.Broke.Girls.S03E18.720p.HDTV.X264-DIMENSION", "2 Broke Girls")]
+        [TestCase("[scnzbefnet][509103] 2.Developers.Series.S03E18.720p.HDTV.X264-DIMENSION", "2 Developers Series")]
         public void should_remove_request_info_from_title(string postTitle, string title)
         {
             Parser.Parser.ParseTitle(postTitle).SeriesTitle.Should().Be(title);
         }
 
-        [TestCase("Revolution.S01E02.Chained.Heat.mkv")]
-        [TestCase("Dexter - S01E01 - Title.avi")]
+        [TestCase("Series.S01E02.Chained.Title.mkv")]
+        [TestCase("Show - S01E01 - Title.avi")]
         public void should_parse_quality_from_extension(string title)
         {
             Parser.Parser.ParseTitle(title).Quality.Quality.Should().NotBe(Quality.Unknown);
@@ -79,7 +66,7 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
 
-        [TestCase("Revolution.S01E02.Chained.Heat.mkv", "Revolution.S01E02.Chained.Heat")]
+        [TestCase("Series.S01E02.Chained.Title.mkv", "Series.S01E02.Chained.Title")]
         public void should_parse_releasetitle(string path, string releaseTitle)
         {
             var result = Parser.Parser.ParseTitle(path);

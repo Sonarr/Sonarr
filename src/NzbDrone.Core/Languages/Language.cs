@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Languages
         public static Language Dutch        { get { return new Language(7, "Dutch"); } }
         public static Language Japanese     { get { return new Language(8, "Japanese"); } }
         public static Language Icelandic    { get { return new Language(9, "Icelandic"); } }
-        public static Language Chinese     { get { return new Language(10, "Chinese"); } }
+        public static Language Chinese      { get { return new Language(10, "Chinese"); } }
         public static Language Russian      { get { return new Language(11, "Russian"); } }
         public static Language Polish       { get { return new Language(12, "Polish"); } }
         public static Language Vietnamese   { get { return new Language(13, "Vietnamese"); } }
@@ -81,8 +81,10 @@ namespace NzbDrone.Core.Languages
         public static Language Hebrew       { get { return new Language(23, "Hebrew"); } }
         public static Language Lithuanian   { get { return new Language(24, "Lithuanian"); } }
         public static Language Czech        { get { return new Language(25, "Czech"); } }
+        public static Language Arabic       { get { return new Language(26, "Arabic"); } }
+        public static Language Hindi        { get { return new Language(27, "Hindi"); } }
 
-        
+
         public static List<Language> All
         {
             get
@@ -114,18 +116,20 @@ namespace NzbDrone.Core.Languages
                     Hungarian,
                     Hebrew,
                     Lithuanian,
-                    Czech
+                    Czech,
+                    Arabic,
+                    Hindi
                 };
             }
         }
+
+        private static readonly Dictionary<int, Language> Lookup = All.ToDictionary(v => v.Id);
 
         public static Language FindById(int id)
         {
             if (id == 0) return Unknown;
 
-            Language language = All.FirstOrDefault(v => v.Id == id);
-
-            if (language == null)
+            if (!Lookup.TryGetValue(id, out var language))
             {
                 throw new ArgumentException("ID does not match a known language", nameof(id));
             }

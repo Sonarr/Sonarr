@@ -44,6 +44,7 @@ namespace NzbDrone.Common.Http
         public bool StoreResponseCookie { get; set; }
         public TimeSpan RequestTimeout { get; set; }
         public TimeSpan RateLimit { get; set; }
+        public string RateLimitKey { get; set; }
         public Stream ResponseStream { get; set; }
 
         public override string ToString()

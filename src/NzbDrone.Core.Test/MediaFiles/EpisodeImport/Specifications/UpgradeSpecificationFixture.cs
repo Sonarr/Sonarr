@@ -287,14 +287,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.DownloadPropersAndRepacks)
                   .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            Mocker.GetMock<IPreferredWordService>()
-                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<string>(), 0))
-                  .Returns(5);
-
             Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
                   .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
                   .Returns(10);
 
+            _localEpisode.PreferredWordScore = 5;
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
 
             _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
@@ -364,14 +361,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.DownloadPropersAndRepacks)
                   .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            Mocker.GetMock<IPreferredWordService>()
-                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<string>(), 0))
-                  .Returns(5);
-
             Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
                   .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
                   .Returns(1);
 
+            _localEpisode.PreferredWordScore = 5;
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
 
             _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
@@ -397,14 +391,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.DownloadPropersAndRepacks)
                   .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            Mocker.GetMock<IPreferredWordService>()
-                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<string>(), 0))
-                  .Returns(5);
-
             Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
                   .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
                   .Returns(5);
 
+            _localEpisode.PreferredWordScore = 5;
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
 
             _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)

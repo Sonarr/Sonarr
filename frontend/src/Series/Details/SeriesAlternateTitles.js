@@ -26,7 +26,7 @@ function SeriesAlternateTitles({ alternateTitles }) {
 }
 
 SeriesAlternateTitles.propTypes = {
-  alternateTitles: PropTypes.arrayOf(PropTypes.string).isRequired
+  alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default SeriesAlternateTitles;

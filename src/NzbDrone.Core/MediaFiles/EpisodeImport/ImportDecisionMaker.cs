@@ -82,7 +82,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     FolderEpisodeInfo = folderInfo,
                     Path = file,
                     SceneSource = sceneSource,
-                    ExistingFile = series.Path.IsParentPath(file)
+                    ExistingFile = series.Path.IsParentPath(file),
+                    OtherVideoFiles = nonSampleVideoFileCount > 1
                 };
 
                 decisions.AddIfNotNull(GetDecision(localEpisode, downloadClientItem, nonSampleVideoFileCount > 1));
@@ -110,7 +111,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             try
             {
-                _aggregationService.Augment(localEpisode, downloadClientItem, otherFiles);
+                _aggregationService.Augment(localEpisode, downloadClientItem);
 
                 if (localEpisode.Episodes.Empty())
                 {

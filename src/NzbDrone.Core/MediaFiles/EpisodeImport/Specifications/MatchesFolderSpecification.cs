@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
@@ -17,6 +20,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
             _parsingService = parsingService;
         }
+
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (localEpisode.ExistingFile)
@@ -49,38 +53,40 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            if (fileInfo.IsAbsoluteNumbering)
-            {
-                _logger.Debug("File uses absolute episode numbering, skipping check");
-                return Decision.Accept();
-            }
+            var folderEpisodes = _parsingService.GetEpisodes(folderInfo, localEpisode.Series, true);
+            var fileEpisodes = _parsingService.GetEpisodes(fileInfo, localEpisode.Series, true);
 
-            if (folderInfo.SeasonNumber != fileInfo.SeasonNumber)
-            {
-                return Decision.Reject("Season number {0} was unexpected considering the folder name {1}", fileInfo.SeasonNumber, folderInfo.ReleaseTitle);
-            }
-
-            if (!folderInfo.EpisodeNumbers.Any())
+            if (folderEpisodes.Empty())
             {
                 _logger.Debug("No episode numbers in folder ParsedEpisodeInfo, skipping check");
                 return Decision.Accept();
             }
 
-            var unexpected = fileInfo.EpisodeNumbers.Where(f => !folderInfo.EpisodeNumbers.Contains(f)).ToList();
+            if (folderEpisodes.First().SeasonNumber != fileEpisodes.FirstOrDefault()?.SeasonNumber)
+            {
+                return Decision.Reject("Season number {0} was unexpected considering the folder name {1}", fileInfo.SeasonNumber, folderInfo.ReleaseTitle);
+            }
+
+            var unexpected = fileEpisodes.Where(e => folderEpisodes.All(o => o.Id != e.Id)).ToList();
 
             if (unexpected.Any())
             {
-                _logger.Debug("Unexpected episode number(s) in file: {0}", string.Join(", ", unexpected));
+                _logger.Debug("Unexpected episode(s) in file: {0}", FormatEpisode(unexpected));
 
                 if (unexpected.Count == 1)
                 {
-                    return Decision.Reject("Episode number {0} was unexpected considering the {1} folder name", unexpected.First(), folderInfo.ReleaseTitle);
+                    return Decision.Reject("Episode {0} was unexpected considering the {1} folder name", FormatEpisode(unexpected), folderInfo.ReleaseTitle);
                 }
 
-                return Decision.Reject("Episode numbers {0} were unexpected considering the {1} folder name", string.Join(", ", unexpected), folderInfo.ReleaseTitle);
+                return Decision.Reject("Episodes {0} were unexpected considering the {1} folder name", FormatEpisode(unexpected), folderInfo.ReleaseTitle);
             }
 
             return Decision.Accept();
+        }
+
+        private string FormatEpisode(List<Episode> episodes)
+        {
+            return string.Join(", ", episodes.Select(e => $"{e.SeasonNumber}x{e.EpisodeNumber:00}"));
         }
     }
 }

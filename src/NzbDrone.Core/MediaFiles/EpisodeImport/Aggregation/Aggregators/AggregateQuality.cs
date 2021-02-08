@@ -20,7 +20,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _logger = logger;
         }
 
-        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem, bool otherFiles)
+        public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             var source = QualitySource.Unknown;
             var sourceConfidence = Confidence.Default;

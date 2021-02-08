@@ -32,16 +32,16 @@ namespace NzbDrone.Core.Test.ParserTests
             parsedEpisodeInfo.IsPossibleSpecialEpisode.Should().BeTrue();
         }
 
-        [TestCase("Under.the.Dome.S02.Special-Inside.Chesters.Mill.HDTV.x264-BAJSKORV")]
-        [TestCase("Under.the.Dome.S02.Special-Inside.Chesters.Mill.720p.HDTV.x264-BAJSKORV")]
-        [TestCase("Rookie.Blue.Behind.the.Badge.S05.Special.HDTV.x264-2HD")]
+        [TestCase("Title.the.Series.S02.Special-Inside.Chesters.Mill.HDTV.x264-BAJSKORV")]
+        [TestCase("Title.the.Series.S02.Special-Inside.Chesters.Mill.720p.HDTV.x264-BAJSKORV")]
+        [TestCase("Title.the.Series.S05.Special.HDTV.x264-2HD")]
         public void IsPossibleSpecialEpisode_should_be_true(string title)
         {
             Parser.Parser.ParseTitle(title).IsPossibleSpecialEpisode.Should().BeTrue();
         }
 
 
-        [TestCase("Dr.S11E00.A.Christmas.Carol.Special.720p.HDTV-FieldOfView")]
+        [TestCase("Title.the.Series.S11E00.A.Christmas.Carol.Special.720p.HDTV-FieldOfView")]
         public void IsPossibleSpecialEpisode_should_be_true_if_e00_special(string title)
         {
             Parser.Parser.ParseTitle(title).IsPossibleSpecialEpisode.Should().BeTrue();
