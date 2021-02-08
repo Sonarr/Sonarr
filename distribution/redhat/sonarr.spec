@@ -136,6 +136,22 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Mon Feb 08 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1117-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Errors loading queue after episodes in series are removed
+- Fixed: Don't automatically import if absolutely numbered file if it doesn't match expected season
+- Alternate titles prop validation
+- Update column properties when restoring persisted state
+- Fixed: Use file name when importing batch release when renaming is disabled
+- New: Show preferred word score in history
+- Generalized RateLimit logic to all indexers based on indexer id
+- New: Added Hindi language
+- Update parser tests to be generic
+- Fixed: Table column order resetting after refresh
+- New: Add logo to loading page
+- Fixed: Jackett indexer search performance
+- New: Added Arabic language
+
 * Sun Feb 07 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1107-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Authentication on DSM 7
