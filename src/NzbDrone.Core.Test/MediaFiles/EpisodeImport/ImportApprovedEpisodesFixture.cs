@@ -377,5 +377,18 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.OriginalFilePath == $"{name}\\subfolder\\{name}.mkv".AsOsAgnostic())));
         }
+
+        [Test]
+        public void should_include_scene_name_with_new_downloads()
+        {
+            var firstDecision = _approvedDecisions.First();
+            firstDecision.LocalEpisode.SceneName = "Series.Title.S01E01.dvdrip-DRONE";
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
+
+            Mocker.GetMock<IUpgradeMediaFiles>()
+                  .Verify(v => v.UpgradeEpisodeFile(It.Is<EpisodeFile>(e => e.SceneName == firstDecision.LocalEpisode.SceneName), _approvedDecisions.First().LocalEpisode, false),
+                      Times.Once());
+        }
     }
 }
