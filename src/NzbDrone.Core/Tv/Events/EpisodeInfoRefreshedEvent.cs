@@ -9,12 +9,13 @@ namespace NzbDrone.Core.Tv.Events
         public Series Series { get; set; }
         public ReadOnlyCollection<Episode> Added { get; private set; }
         public ReadOnlyCollection<Episode> Updated { get; private set; }
+        public ReadOnlyCollection<Episode> Removed { get; private set; }
 
-        public EpisodeInfoRefreshedEvent(Series series, IList<Episode> added, IList<Episode> updated)
+        public EpisodeInfoRefreshedEvent(Series series, IList<Episode> added, IList<Episode> updated, IList<Episode> removed)
         {
             Series = series;
             Added = new ReadOnlyCollection<Episode>(added);
-            Updated = new ReadOnlyCollection<Episode>(updated);
+            Removed = new ReadOnlyCollection<Episode>(removed);
         }
     }
 }

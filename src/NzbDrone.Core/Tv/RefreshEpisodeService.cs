@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Tv
             _episodeService.UpdateMany(updateList);
             _episodeService.InsertMany(newList);
 
-            _eventAggregator.PublishEvent(new EpisodeInfoRefreshedEvent(series, newList, updateList));
+            _eventAggregator.PublishEvent(new EpisodeInfoRefreshedEvent(series, newList, updateList, existingEpisodes));
 
             if (failCount != 0)
             {
