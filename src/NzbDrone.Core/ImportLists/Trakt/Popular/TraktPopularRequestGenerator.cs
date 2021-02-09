@@ -52,6 +52,18 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
                 case (int)TraktPopularListType.TopWatchedByAllTime:
                     link += "/shows/watched/all" + filtersAndLimit;
                     break;
+                case (int)TraktPopularListType.RecommendedByWeek:
+                    link += "/shows/recommended/weekly" + filtersAndLimit;
+                    break;
+                case (int)TraktPopularListType.RecommendedByMonth:
+                    link += "/shows/recommended/monthly" + filtersAndLimit;
+                    break;
+                case (int)TraktPopularListType.RecommendedByYear:
+                    link += "/shows/recommended/yearly" + filtersAndLimit;
+                    break;
+                case (int)TraktPopularListType.RecommendedByAllTime:
+                    link += "/shows/recommended/yearly" + filtersAndLimit;
+                    break;
             }
 
             var request = new ImportListRequest($"{link}", HttpAccept.Json);
