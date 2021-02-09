@@ -198,6 +198,8 @@ namespace NzbDrone.Core.Notifications
             if (message.EpisodeFile.Episodes.Value.Empty())
             {
                 _logger.Trace("Skipping notification for deleted file without an episode (episode metadata was removed)");
+
+                return;
             }
 
             var deleteMessage = new EpisodeDeleteMessage();
