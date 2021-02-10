@@ -131,6 +131,7 @@ function EditImportListModalContent(props) {
                   name="rootFolderPath"
                   helpText={'Root Folder list items will be added to'}
                   {...rootFolderPath}
+                  includeMissingValue={true}
                   onChange={onInputChange}
                 />
               </FormGroup>

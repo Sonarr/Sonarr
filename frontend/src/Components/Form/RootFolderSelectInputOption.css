@@ -27,3 +27,9 @@
   color: $darkGray;
   font-size: $smallFontSize;
 }
+
+.isMissing {
+  margin-left: 15px;
+  color: $dangerColor;
+  font-size: $smallFontSize;
+}

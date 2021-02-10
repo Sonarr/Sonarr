@@ -12,7 +12,9 @@ class EnhancedSelectInputOption extends Component {
   //
   // Listeners
 
-  onPress = () => {
+  onPress = (e) => {
+    e.preventDefault();
+
     const {
       id,
       onSelect

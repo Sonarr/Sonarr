@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nancy;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
@@ -33,6 +31,8 @@ namespace Sonarr.Api.V3.History
             Get("/since",  x => GetHistorySince());
             Get("/series",  x => GetSeriesHistory());
             Post("/failed",  x => MarkAsFailed());
+            Post(@"/failed/(?<id>[\d]{1,10})", x => MarkAsFailed((int)x.Id));
+
         }
 
         protected HistoryResource MapToResource(EpisodeHistory model, bool includeSeries, bool includeEpisode)
@@ -143,10 +143,18 @@ namespace Sonarr.Api.V3.History
             return _historyService.GetBySeries(seriesId, eventType).Select(h => MapToResource(h, includeSeries, includeEpisode)).ToList();
         }
 
+        // v4 TODO: Getting the ID from the form is atypical, consider removing.
         private object MarkAsFailed()
         {
             var id = (int)Request.Form.Id;
+
+            return MarkAsFailed(id);
+        }
+
+        private object MarkAsFailed(int id)
+        {
             _failedDownloadService.MarkAsFailed(id);
+
             return new object();
         }
     }

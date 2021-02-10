@@ -30,7 +30,7 @@ function addApiKey(ajaxOptions) {
 
 function addContentType(ajaxOptions) {
   if (
-    !ajaxOptions.contentType &&
+    ajaxOptions.contentType == null &&
     ajaxOptions.dataType === 'json' &&
     (ajaxOptions.method === 'PUT' || ajaxOptions.method === 'POST')) {
     ajaxOptions.contentType = 'application/json';

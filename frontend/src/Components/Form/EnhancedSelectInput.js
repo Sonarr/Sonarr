@@ -518,6 +518,18 @@ class EnhancedSelectInput extends Component {
                 scrollDirection={scrollDirections.NONE}
               >
                 <Scroller className={styles.optionsModalScroller}>
+                  <div className={styles.mobileCloseButtonContainer}>
+                    <Link
+                      className={styles.mobileCloseButton}
+                      onPress={this.onOptionsModalClose}
+                    >
+                      <Icon
+                        name={icons.CLOSE}
+                        size={18}
+                      />
+                    </Link>
+                  </div>
+
                   {
                     values.map((v, index) => {
                       const hasParent = v.parentKey !== undefined;

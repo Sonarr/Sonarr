@@ -10,13 +10,16 @@ const ADD_NEW_KEY = 'addNew';
 function createMapStateToProps() {
   return createSelector(
     (state) => state.rootFolders,
+    (state, { value }) => value,
+    (state, { includeMissingValue }) => includeMissingValue,
     (state, { includeNoChange }) => includeNoChange,
-    (rootFolders, includeNoChange) => {
+    (rootFolders, value, includeMissingValue, includeNoChange) => {
       const values = rootFolders.items.map((rootFolder) => {
         return {
           key: rootFolder.path,
           value: rootFolder.path,
-          freeSpace: rootFolder.freeSpace
+          freeSpace: rootFolder.freeSpace,
+          isMissing: false
         };
       });
 
@@ -24,7 +27,8 @@ function createMapStateToProps() {
         values.unshift({
           key: 'noChange',
           value: 'No Change',
-          isDisabled: true
+          isDisabled: true,
+          isMissing: false
         });
       }
 
@@ -34,6 +38,15 @@ function createMapStateToProps() {
           value: '',
           isDisabled: true,
           isHidden: true
+        });
+      }
+
+      if (includeMissingValue && !values.find((v) => v.key === value)) {
+        values.push({
+          key: value,
+          value,
+          isMissing: true,
+          isDisabled: true
         });
       }
 

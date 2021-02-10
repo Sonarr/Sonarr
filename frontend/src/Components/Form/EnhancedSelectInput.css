@@ -85,3 +85,21 @@
   display: inline-block;
   margin: 5px -5px 5px 0;
 }
+
+.mobileCloseButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  height: 40px;
+  border-bottom: 1px solid $borderColor;
+}
+
+.mobileCloseButton {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+
+  &:hover {
+    color: $modalCloseButtonHoverColor;
+  }
+}
