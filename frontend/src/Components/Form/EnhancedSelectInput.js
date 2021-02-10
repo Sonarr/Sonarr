@@ -9,7 +9,6 @@ import * as keyCodes from 'Utilities/Constants/keyCodes';
 import { icons, sizes, scrollDirections } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Portal from 'Components/Portal';
-import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Measure from 'Components/Measure';
