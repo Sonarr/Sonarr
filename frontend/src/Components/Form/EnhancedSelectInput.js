@@ -9,6 +9,7 @@ import * as keyCodes from 'Utilities/Constants/keyCodes';
 import { icons, sizes, scrollDirections } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Portal from 'Components/Portal';
+import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Measure from 'Components/Measure';
@@ -518,6 +519,18 @@ class EnhancedSelectInput extends Component {
                 scrollDirection={scrollDirections.NONE}
               >
                 <Scroller className={styles.optionsModalScroller}>
+                  <div className={styles.mobileCloseButtonContainer}>
+                    <Link
+                      className={styles.mobileCloseButton}
+                      onPress={this.onOptionsModalClose}
+                    >
+                      <Icon
+                        name={icons.CLOSE}
+                        size={18}
+                      />
+                    </Link>
+                  </div>
+
                   {
                     values.map((v, index) => {
                       const hasParent = v.parentKey !== undefined;
