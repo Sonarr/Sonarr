@@ -136,6 +136,19 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Wed Feb 10 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1126-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Appeasing the lint gods
+- Fixed: Unable to close indexer category select input on mobile
+- Fixed: Error checking if files should be deleted after import won't leave import in limbo
+- Use SVG for loading page icon
+- Fixed: Error logged when notification fails to send after episode file is deleted
+- New: Health check for import lists with missing root folders
+- Fixed: Mark as Failed errors
+- Fixed: Error logged when notification fails to send after episode file is deleted
+- Fixed: Scene name not being set during import
+- Fixed: Restoring backup from zip file on disk
+
 * Mon Feb 08 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1117-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Errors loading queue after episodes in series are removed
