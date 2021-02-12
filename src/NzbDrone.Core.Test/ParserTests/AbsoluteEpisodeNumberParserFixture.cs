@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title 2018 06 720p x265 AOZ.mp4", "Series Title 2018", 6, 0, 0)]
         [TestCase("Series Title S03 - EP14 VOSTFR [1080p] [HardSub] Yass'Kun", "Series Title S03", 14, 0, 0)]
         [TestCase("Series Title S3 -  15 VOSTFR [720p]", "Series Title S3", 15, 0, 0)]
-        [TestCase("A Series: RE S2 - Episode 4 VOSTFR (1080p)", "A Series RE S2", 4, 0, 0)]
+        [TestCase("A Series: RE S2 - Episode 4 VOSTFR (1080p)", "A Series: RE S2", 4, 0, 0)]
         [TestCase("To Another Series III - Episode 5 VOSTFR (1080p)", "To Another Series III", 5, 0, 0)]
         [TestCase("[Prout] Show;Title 0 - Episode 5 VOSTFR (BDRip 1920x1080 x264 FLAC)", "Show;Title 0", 5, 0, 0)]
         [TestCase("[BakedFish] Some Show [Anime] - 01 [720p][AAC].mp4", "Some Show [Anime]", 1, 0, 0)]
@@ -99,6 +99,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("SeriesTitle.E1135.Lasst.den.Mond.am.Himmel.stehen.GERMAN.1080p.WEBRip.x264-Group", "SeriesTitle", 1135, 0, 0)]
         [TestCase("[HorribleSubs] Series 100 - 07 [1080p].mkv", "Series 100", 7, 0, 0)]
         [TestCase("[HorribleSubs] Series 100 S2 - 07 [1080p].mkv", "Series 100 S2", 7, 0, 0)]
+        [TestCase("[abc] Adventure Series: 30 [Web][MKV][h264][720p][AAC 2.0][abc]", "Adventure Series:", 30, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {

@@ -8,7 +8,7 @@ import createSetClientSideCollectionSortReducer from './Creators/Reducers/create
 import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
 import createHandleActions from './Creators/createHandleActions';
 import { set, updateItem } from './baseActions';
-import { filters, filterPredicates, filterBuilderProps } from './seriesActions';
+import { filters, filterPredicates, filterBuilderProps, sortPredicates } from './seriesActions';
 
 //
 // Variables
@@ -27,6 +27,7 @@ export const defaultState = {
   sortDirection: sortDirections.ASCENDING,
   secondarySortKey: 'sortTitle',
   secondarySortDirection: sortDirections.ASCENDING,
+  sortPredicates,
   selectedFilterKey: 'all',
   filters,
   filterPredicates,
@@ -97,7 +98,8 @@ export const persistState = [
   'seriesEditor.sortKey',
   'seriesEditor.sortDirection',
   'seriesEditor.selectedFilterKey',
-  'seriesEditor.customFilters'
+  'seriesEditor.customFilters',
+  'seriesEditor.columns'
 ];
 
 //
