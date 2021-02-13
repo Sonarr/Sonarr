@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Notifications.Slack.Payloads;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
@@ -56,7 +57,7 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
-        public override void OnRename(Series series)
+        public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             var attachments = new List<Attachment>
                               {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
@@ -44,7 +45,7 @@ namespace NzbDrone.Core.Notifications
 
         }
 
-        public virtual void OnRename(Series series)
+        public virtual void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
 
         }

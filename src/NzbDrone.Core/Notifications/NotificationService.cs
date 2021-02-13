@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Notifications
                 {
                     if (ShouldHandleSeries(notification.Definition, message.Series))
                     {
-                        notification.OnRename(message.Series);
+                        notification.OnRename(message.Series, message.RenamedFiles);
                     }
                 }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Webhook
@@ -65,12 +66,13 @@ namespace NzbDrone.Core.Notifications.Webhook
             _proxy.SendWebhook(payload, Settings);
         }
 
-        public override void OnRename(Series series)
+        public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             var payload = new WebhookRenamePayload
             {
                 EventType = WebhookEventType.Rename,
-                Series = new WebhookSeries(series)
+                Series = new WebhookSeries(series),
+                RenamedEpisodeFiles = renamedFiles.ConvertAll(x => new WebhookRenamedEpisodeFile(x))
             };
 
             _proxy.SendWebhook(payload, Settings);
