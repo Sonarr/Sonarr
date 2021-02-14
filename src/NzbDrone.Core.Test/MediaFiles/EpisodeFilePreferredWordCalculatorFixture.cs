@@ -1,3 +1,4 @@
+using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -75,6 +76,38 @@ namespace NzbDrone.Core.Test.MediaFiles
             GivenPreferredWordScore(_episodeFile.Path, 50);
 
             Subject.Calculate(_series, _episodeFile).Should().Be(20);
+        }
+
+        [Test]
+        public void should_return_score_for_original_path_folder_name_if_highest()
+        {
+            var folderName = "folder-name";
+            var fileName = "file-name";
+
+            _episodeFile.OriginalFilePath = Path.Combine(folderName, fileName);
+
+            GivenPreferredWordScore(_episodeFile.RelativePath, 20);
+            GivenPreferredWordScore(_episodeFile.Path, 50);
+            GivenPreferredWordScore(folderName, 60);
+            GivenPreferredWordScore(fileName, 50);
+
+            Subject.Calculate(_series, _episodeFile).Should().Be(60);
+        }
+
+        [Test]
+        public void should_return_score_for_original_path_file_name_if_highest()
+        {
+            var folderName = "folder-name";
+            var fileName = "file-name";
+
+            _episodeFile.OriginalFilePath = Path.Combine(folderName, fileName);
+
+            GivenPreferredWordScore(_episodeFile.RelativePath, 20);
+            GivenPreferredWordScore(_episodeFile.Path, 50);
+            GivenPreferredWordScore(folderName, 40);
+            GivenPreferredWordScore(fileName, 50);
+
+            Subject.Calculate(_series, _episodeFile).Should().Be(50);
         }
     }
 }
