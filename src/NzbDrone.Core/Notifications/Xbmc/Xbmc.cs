@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Xbmc
@@ -36,10 +37,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(message.Series, message.OldFiles.Any());
         }
 
-        public override void OnRename(Series series)
+        public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             UpdateAndClean(series);
         }
+
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             const string header = "Sonarr - Deleted";

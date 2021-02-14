@@ -1,4 +1,6 @@
-﻿using NzbDrone.Core.ThingiProvider;
+﻿using System.Collections.Generic;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications
@@ -9,7 +11,7 @@ namespace NzbDrone.Core.Notifications
 
         void OnGrab(GrabMessage grabMessage);
         void OnDownload(DownloadMessage message);
-        void OnRename(Series series);
+        void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles);
         void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage);
         void OnSeriesDelete(SeriesDeleteMessage deleteMessage);
         void OnHealthIssue(HealthCheck.HealthCheck healthCheck);

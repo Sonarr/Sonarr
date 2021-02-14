@@ -107,13 +107,14 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        private void RenameFiles(List<EpisodeFile> episodeFiles, Series series)
+        private List<RenamedEpisodeFile> RenameFiles(List<EpisodeFile> episodeFiles, Series series)
         {
-            var renamed = new List<EpisodeFile>();
+            var renamed = new List<RenamedEpisodeFile>();
 
             foreach (var episodeFile in episodeFiles)
             {
-                var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+                var previousRelativePath = episodeFile.RelativePath;
+                var previousPath = Path.Combine(series.Path, episodeFile.RelativePath);
 
                 try
                 {
@@ -121,11 +122,17 @@ namespace NzbDrone.Core.MediaFiles
                     _episodeFileMover.MoveEpisodeFile(episodeFile, series);
 
                     _mediaFileService.Update(episodeFile);
-                    renamed.Add(episodeFile);
+
+                    renamed.Add(new RenamedEpisodeFile
+                                {
+                                    EpisodeFile = episodeFile,
+                                    PreviousRelativePath = previousRelativePath,
+                                    PreviousPath = previousPath
+                                });
 
                     _logger.Debug("Renamed episode file: {0}", episodeFile);
 
-                    _eventAggregator.PublishEvent(new EpisodeFileRenamedEvent(series, episodeFile, episodeFilePath));
+                    _eventAggregator.PublishEvent(new EpisodeFileRenamedEvent(series, episodeFile, previousPath));
                 }
                 catch (SameFilenameException ex)
                 {
@@ -133,7 +140,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Failed to rename file {0}", episodeFilePath);
+                    _logger.Error(ex, "Failed to rename file {0}", previousPath);
                 }
             }
 
@@ -141,8 +148,10 @@ namespace NzbDrone.Core.MediaFiles
             {
                 _diskProvider.RemoveEmptySubfolders(series.Path);
 
-                _eventAggregator.PublishEvent(new SeriesRenamedEvent(series));
+                _eventAggregator.PublishEvent(new SeriesRenamedEvent(series, renamed));
             }
+
+            return renamed;
         }
 
         public void Execute(RenameFilesCommand message)

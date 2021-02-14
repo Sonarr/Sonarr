@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Emby
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Notifications.Emby
             }
         }
 
-        public override void OnRename(Series series)
+        public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             if (Settings.UpdateLibrary)
             {

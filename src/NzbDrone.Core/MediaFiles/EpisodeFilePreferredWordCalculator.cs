@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web.UI;
+using Newtonsoft.Json.Serialization;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Profiles.Releases;
@@ -21,6 +25,7 @@ namespace NzbDrone.Core.MediaFiles
             _preferredWordService = preferredWordService;
             _logger = logger;
         }
+
         public int Calculate(Series series, EpisodeFile episodeFile)
         {
             var scores = new List<int>();
@@ -28,6 +33,24 @@ namespace NzbDrone.Core.MediaFiles
             if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
             {
                 scores.Add(_preferredWordService.Calculate(series, episodeFile.SceneName, 0));
+            }
+            else
+            {
+                _logger.Trace("No stored scene name for {0}", episodeFile);
+            }
+
+            // The file may not have a screen name if the file/folder name contained spaces, but the original path is still store and valuable.
+            if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
+            {
+                var segments = episodeFile.OriginalFilePath.Split(Path.DirectorySeparatorChar).ToList();
+
+                for (int i = 0; i < segments.Count; i++)
+                {
+                    var isLast = i == segments.Count - 1;
+                    var segment = isLast ? Path.GetFileNameWithoutExtension(segments[i]) : segments[i];
+
+                    scores.Add(_preferredWordService.Calculate(series, segment, 0));
+                }
             }
             else
             {

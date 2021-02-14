@@ -3,6 +3,7 @@ using System.IO;
 using FluentValidation.Results;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Synology
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override void OnRename(Series series)
+        public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             if (Settings.UpdateLibrary)
             {
