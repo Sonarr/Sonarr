@@ -1,4 +1,5 @@
 fromdos ./debian/*
+chmod ugo-x ./debian/*
 cp -r ./debian ./debian_backup
 
 BuildVersion=${dependent_build_number:-3.10.0.999}
