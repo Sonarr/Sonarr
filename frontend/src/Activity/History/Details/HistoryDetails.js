@@ -42,32 +42,35 @@ function HistoryDetails(props) {
         />
 
         {
-          !!indexer &&
+          indexer ?
             <DescriptionListItem
               title="Indexer"
               data={indexer}
-            />
+            /> :
+            null
         }
 
         {
-          !!releaseGroup &&
+          releaseGroup ?
             <DescriptionListItem
               descriptionClassName={styles.description}
               title="Release Group"
               data={releaseGroup}
-            />
+            /> :
+            null
         }
 
         {
-          !!preferredWordScore &&
+          preferredWordScore && preferredWordScore !== '0' ?
             <DescriptionListItem
               title="Preferred Word Score"
               data={formatPreferredWordScore(preferredWordScore)}
-            />
+            /> :
+            null
         }
 
         {
-          !!nzbInfoUrl &&
+          nzbInfoUrl ?
             <span>
               <DescriptionListItemTitle>
                 Info URL
@@ -76,39 +79,44 @@ function HistoryDetails(props) {
               <DescriptionListItemDescription>
                 <Link to={nzbInfoUrl}>{nzbInfoUrl}</Link>
               </DescriptionListItemDescription>
-            </span>
+            </span> :
+            null
         }
 
         {
-          !!downloadClient &&
+          downloadClient ?
             <DescriptionListItem
               title="Download Client"
               data={downloadClient}
-            />
+            /> :
+            null
         }
 
         {
-          !!downloadId &&
+          downloadId ?
             <DescriptionListItem
               title="Grab ID"
               data={downloadId}
-            />
+            /> :
+            null
         }
 
         {
-          !!(age || ageHours || ageMinutes) &&
+          age || ageHours || ageMinutes ?
             <DescriptionListItem
               title="Age (when grabbed)"
               data={formatAge(age, ageHours, ageMinutes)}
-            />
+            /> :
+            null
         }
 
         {
-          !!publishedDate &&
+          publishedDate ?
             <DescriptionListItem
               title="Published Date"
               data={formatDateTime(publishedDate, shortDateFormat, timeFormat, { includeSeconds: true })}
-            />
+            /> :
+            null
         }
       </DescriptionList>
     );
@@ -128,11 +136,12 @@ function HistoryDetails(props) {
         />
 
         {
-          !!message &&
+          message ?
             <DescriptionListItem
               title="Message"
               data={message}
-            />
+            /> :
+            null
         }
       </DescriptionList>
     );
@@ -154,29 +163,32 @@ function HistoryDetails(props) {
         />
 
         {
-          !!droppedPath &&
+          droppedPath ?
             <DescriptionListItem
               descriptionClassName={styles.description}
               title="Source"
               data={droppedPath}
-            />
+            /> :
+            null
         }
 
         {
-          !!importedPath &&
+          importedPath ?
             <DescriptionListItem
               descriptionClassName={styles.description}
               title="Imported To"
               data={importedPath}
-            />
+            /> :
+            null
         }
 
         {
-          !!preferredWordScore &&
+          preferredWordScore && preferredWordScore !== '0' ?
             <DescriptionListItem
               title="Preferred Word Score"
               data={formatPreferredWordScore(preferredWordScore)}
-            />
+            /> :
+            null
         }
       </DescriptionList>
     );
@@ -217,11 +229,12 @@ function HistoryDetails(props) {
         />
 
         {
-          !!preferredWordScore &&
+          preferredWordScore && preferredWordScore !== '0' ?
             <DescriptionListItem
               title="Preferred Word Score"
               data={formatPreferredWordScore(preferredWordScore)}
-            />
+            /> :
+            null
         }
       </DescriptionList>
     );
@@ -274,11 +287,12 @@ function HistoryDetails(props) {
         />
 
         {
-          !!message &&
+          message ?
             <DescriptionListItem
               title="Message"
               data={message}
-            />
+            /> :
+            null
         }
       </DescriptionList>
     );
