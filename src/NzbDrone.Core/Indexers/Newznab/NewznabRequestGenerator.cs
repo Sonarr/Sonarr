@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 AddTvIdPageableRequests(pageableRequests, Settings.Categories, searchCriteria,
                     string.Format("&season={0}&ep={1}",
-                        searchCriteria.SeasonNumber,
+                        NewznabifySeasonNumber(searchCriteria.SeasonNumber),
                         searchCriteria.EpisodeNumber));
             }
 
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 AddTitlePageableRequests(pageableRequests, Settings.Categories, searchCriteria,
                     string.Format("&season={0}&ep={1}",
-                        searchCriteria.SeasonNumber,
+                        NewznabifySeasonNumber(searchCriteria.SeasonNumber),
                         searchCriteria.EpisodeNumber));
             }
 
@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 AddTitlePageableRequests(pageableRequests, Settings.Categories, searchCriteria,
                     string.Format("&season={0}&ep={1}",
-                        searchCriteria.SeasonNumber,
+                        NewznabifySeasonNumber(searchCriteria.SeasonNumber),
                         searchCriteria.EpisodeNumber));
             }
 
@@ -200,14 +200,14 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 AddTvIdPageableRequests(pageableRequests, Settings.Categories, searchCriteria,
                     string.Format("&season={0}",
-                        searchCriteria.SeasonNumber));
+                        NewznabifySeasonNumber(searchCriteria.SeasonNumber)));
             }
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchTitle))
             {
                 AddTitlePageableRequests(pageableRequests, Settings.Categories, searchCriteria,
                     string.Format("&season={0}",
-                        searchCriteria.SeasonNumber));
+                        NewznabifySeasonNumber(searchCriteria.SeasonNumber)));
             }
 
             pageableRequests.AddTier();
@@ -216,7 +216,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 AddTitlePageableRequests(pageableRequests, Settings.Categories, searchCriteria,
                     string.Format("&season={0}",
-                        searchCriteria.SeasonNumber));
+                        NewznabifySeasonNumber(searchCriteria.SeasonNumber)));
             }
 
             return pageableRequests;
@@ -437,6 +437,13 @@ namespace NzbDrone.Core.Indexers.Newznab
         private static string NewsnabifyTitle(string title)
         {
             return title.Replace("+", "%20");
+        }
+
+
+        // Temporary workaround for NNTMux considering season=0 -> null. '00' should work on existing newznab indexers.
+        private static string NewznabifySeasonNumber(int seasonNumber)
+        {
+            return seasonNumber == 0 ? "00" : seasonNumber.ToString();
         }
     }
 }
