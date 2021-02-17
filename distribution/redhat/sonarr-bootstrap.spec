@@ -122,6 +122,19 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Wed Feb 17 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1130-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: History details incorrect when preferred word score was 0
+- Fixed: Searching specials with NNTMux-based usenet indexers
+- Fixed: Debian package dependencies
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Use original file path when calculating preferred word score for existing file
+- New: Include renamed file information for Webhook and Custom Scripts
+- New: Include episode file with episode file deleted events
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Parsing of release names with trailing colon in the title
+- Series editor column fixes
+
 * Wed Feb 10 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1126-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Appeasing the lint gods
