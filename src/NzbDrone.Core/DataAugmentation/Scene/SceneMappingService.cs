@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
-using System.Collections.Generic;
 using NzbDrone.Core.Tv.Events;
-using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
@@ -23,6 +23,8 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
     public class SceneMappingService : ISceneMappingService,
                                        IHandle<SeriesRefreshStartingEvent>,
+                                       IHandle<SeriesAddedEvent>,
+                                       IHandle<SeriesImportedEvent>,
                                        IExecute<UpdateSceneMappingCommand>
     {
         private readonly ISceneMappingRepository _repository;
@@ -31,6 +33,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         private readonly Logger _logger;
         private readonly ICachedDictionary<List<SceneMapping>> _getTvdbIdCache;
         private readonly ICachedDictionary<List<SceneMapping>> _findByTvdbIdCache;
+        private bool _updatedAfterStartup;
 
         public SceneMappingService(ISceneMappingRepository repository,
                                    ICacheManager cacheManager,
@@ -123,6 +126,8 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         private void UpdateMappings()
         {
             _logger.Info("Updating Scene mappings");
+
+            _updatedAfterStartup = true;
 
             foreach (var sceneMappingProvider in _sceneMappingProviders)
             {
@@ -268,7 +273,23 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public void Handle(SeriesRefreshStartingEvent message)
         {
-            if (message.ManualTrigger && _findByTvdbIdCache.IsExpired(TimeSpan.FromMinutes(1)))
+            if (message.ManualTrigger && (_findByTvdbIdCache.IsExpired(TimeSpan.FromMinutes(1)) || !_updatedAfterStartup))
+            {
+                UpdateMappings();
+            }
+        }
+                
+        public void Handle(SeriesAddedEvent message)
+        {
+            if (!_updatedAfterStartup)
+            {
+                UpdateMappings();
+            }
+        }
+
+        public void Handle(SeriesImportedEvent message)
+        {
+            if (!_updatedAfterStartup)
             {
                 UpdateMappings();
             }
