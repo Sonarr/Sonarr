@@ -136,6 +136,11 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Sun Feb 21 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1131-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Refresh scene naming exceptions on series add to help first-use scenario
+- Cleanse more /home/username scenarios
+
 * Wed Feb 17 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1130-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: History details incorrect when preferred word score was 0
