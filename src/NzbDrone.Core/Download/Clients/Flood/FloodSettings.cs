@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
             StartOnAdd = true;
         }
 
-        [FieldDefinition(0, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(0, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Flood")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(1, Label = "Host", Type = FieldType.Textbox)]

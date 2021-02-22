@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         [FieldDefinition(8, Label = "Add Paused", Type = FieldType.Checkbox)]
         public bool AddPaused { get; set; }
 
-        [FieldDefinition(9, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(9, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Deluge")]
         public bool UseSsl { get; set; }
 
         public NzbDroneValidationResult Validate()

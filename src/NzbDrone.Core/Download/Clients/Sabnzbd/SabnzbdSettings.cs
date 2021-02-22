@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         [FieldDefinition(8, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(SabnzbdPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public int OlderTvPriority { get; set; }
 
-        [FieldDefinition(9, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(9, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Sabnzbd")]
         public bool UseSsl { get; set; }
 
         public NzbDroneValidationResult Validate()

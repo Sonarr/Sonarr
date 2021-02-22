@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [FieldDefinition(2, Label = "Url Path", Type = FieldType.Textbox, HelpText = "Path to the XMLRPC endpoint, see http(s)://[host]:[port]/[urlPath]. When using ruTorrent this usually is RPC2 or (path to ruTorrent)/plugins/rpc/rpc.php")]
         public string UrlBase { get; set; }
 
-        [FieldDefinition(3, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(3, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to ruTorrent")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(4, Label = "Username", Type = FieldType.Textbox, Privacy = PrivacyLevel.UserName)]

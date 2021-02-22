@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox)]
         public string Category { get; set; }
 
-        [FieldDefinition(6, Label = "Use SSL", Type = FieldType.Checkbox, Advanced = true)]
+        [FieldDefinition(6, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Hadouken")]
         public bool UseSsl { get; set; }
 
         public NzbDroneValidationResult Validate()

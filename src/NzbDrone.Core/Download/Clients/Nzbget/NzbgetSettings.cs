@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(8, Label = "Add Paused", Type = FieldType.Checkbox, HelpText = "This option requires at least NzbGet version 16.0")]
         public bool AddPaused { get; set; }
 
-        [FieldDefinition(9, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(9, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Sabnzbd")]
         public bool UseSsl { get; set; }
 
         public NzbDroneValidationResult Validate()

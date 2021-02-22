@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         [FieldDefinition(5, Label = "Directory", Type = FieldType.Textbox, HelpText = "Optional shared folder to put downloads into, leave blank to use the default Download Station location")]
         public string TvDirectory { get; set; }
 
-        [FieldDefinition(6, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(6, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Download Station")]
         public bool UseSsl { get; set; }
 
         public DownloadStationSettings()
