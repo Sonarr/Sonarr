@@ -126,16 +126,30 @@ namespace NzbDrone.Core.Download
             if (importResults.Empty())
             {
                 trackedDownload.Warn("No files found are eligible for import in {0}", outputPath);
+
+                return;
             }
+
+            var statusMessages = new List<TrackedDownloadStatusMessage>
+                                 {
+                                    new TrackedDownloadStatusMessage("One or more episodes expected in this release were not imported or missing", new List<string>())
+                                 };
 
             if (importResults.Any(c => c.Result != ImportResultType.Imported))
             {
-                var statusMessages = importResults
-                    .Where(v => v.Result != ImportResultType.Imported && v.ImportDecision.LocalEpisode != null)
-                    .Select(v => new TrackedDownloadStatusMessage(Path.GetFileName(v.ImportDecision.LocalEpisode.Path), v.Errors))
-                    .ToArray();
+                statusMessages.AddRange(
+                    importResults
+                        .Where(v => v.Result != ImportResultType.Imported && v.ImportDecision.LocalEpisode != null)
+                        .OrderBy(v => v.ImportDecision.LocalEpisode.Path)
+                        .Select(v =>
+                            new TrackedDownloadStatusMessage(Path.GetFileName(v.ImportDecision.LocalEpisode.Path),
+                                v.Errors))
+                );
+            }
 
-                trackedDownload.Warn(statusMessages);
+            if (statusMessages.Any())
+            {
+                trackedDownload.Warn(statusMessages.ToArray());
             }
         }
 
