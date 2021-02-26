@@ -122,6 +122,10 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Fri Feb 26 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1132-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Cleanse Tracker Announce Keys from logs
+
 * Sun Feb 21 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1131-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Refresh scene naming exceptions on series add to help first-use scenario
