@@ -18,6 +18,14 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
         [EnumMember(Value = "Top Watched Shows By Year")]
         TopWatchedByYear = 5,
         [EnumMember(Value = "Top Watched Shows Of All Time")]
-        TopWatchedByAllTime = 6
+        TopWatchedByAllTime = 6,
+        [EnumMember(Value = "Recommended Shows By Week")]
+        RecommendedByWeek = 7,
+        [EnumMember(Value = "Recommended Shows By Month")]
+        RecommendedByMonth = 8,
+        [EnumMember(Value = "Recommended Shows By Year")]
+        RecommendedByYear = 9,
+        [EnumMember(Value = "Recommended Shows Of All Time")]
+        RecommendedByAllTime = 10
     }
 }
