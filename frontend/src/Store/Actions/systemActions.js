@@ -10,6 +10,7 @@ import createFetchHandler from './Creators/createFetchHandler';
 import createRemoveItemHandler from './Creators/createRemoveItemHandler';
 import createHandleActions from './Creators/createHandleActions';
 import createServerSideCollectionHandlers from './Creators/createServerSideCollectionHandlers';
+import { pingServer } from './appActions';
 import { set } from './baseActions';
 
 //
@@ -351,6 +352,7 @@ export const actionHandlers = handleThunks({
 
     promise.done(() => {
       dispatch(setAppValue({ isRestarting: true }));
+      dispatch(pingServer());
     });
   },
 
