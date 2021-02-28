@@ -27,32 +27,45 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
         {
             var link = Settings.BaseUrl.Trim();
 
-            var filtersAndLimit = $"?years={Settings.Years}&genres={Settings.Genres.ToLower()}&ratings={Settings.Rating}&limit={Settings.Limit}{Settings.TraktAdditionalParameters}";
-
             switch (Settings.TraktListType)
             {
                 case (int)TraktPopularListType.Trending:
-                    link += "/shows/trending" + filtersAndLimit;
+                    link += "/shows/trending";
                     break;
                 case (int)TraktPopularListType.Popular:
-                    link += "/shows/popular" + filtersAndLimit;
+                    link += "/shows/popular";
                     break;
                 case (int)TraktPopularListType.Anticipated:
-                    link += "/shows/anticipated" + filtersAndLimit;
+                    link += "/shows/anticipated";
                     break;
                 case (int)TraktPopularListType.TopWatchedByWeek:
-                    link += "/shows/watched/weekly" + filtersAndLimit;
+                    link += "/shows/watched/weekly";
                     break;
                 case (int)TraktPopularListType.TopWatchedByMonth:
-                    link += "/shows/watched/monthly" + filtersAndLimit;
+                    link += "/shows/watched/monthly";
                     break;
                 case (int)TraktPopularListType.TopWatchedByYear:
-                    link += "/shows/watched/yearly" + filtersAndLimit;
+                    link += "/shows/watched/yearly";
                     break;
                 case (int)TraktPopularListType.TopWatchedByAllTime:
-                    link += "/shows/watched/all" + filtersAndLimit;
+                    link += "/shows/watched/all";
+                    break;
+                case (int)TraktPopularListType.RecommendedByWeek:
+                    link += "/shows/recommended/weekly";
+                    break;
+                case (int)TraktPopularListType.RecommendedByMonth:
+                    link += "/shows/recommended/monthly";
+                    break;
+                case (int)TraktPopularListType.RecommendedByYear:
+                    link += "/shows/recommended/yearly";
+                    break;
+                case (int)TraktPopularListType.RecommendedByAllTime:
+                    link += "/shows/recommended/yearly";
                     break;
             }
+
+            var filtersAndLimit = $"?years={Settings.Years}&genres={Settings.Genres.ToLower()}&ratings={Settings.Rating}&limit={Settings.Limit}{Settings.TraktAdditionalParameters}";
+            link += filtersAndLimit;
 
             var request = new ImportListRequest($"{link}", HttpAccept.Json);
 
