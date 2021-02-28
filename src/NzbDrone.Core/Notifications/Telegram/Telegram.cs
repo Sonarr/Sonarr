@@ -18,27 +18,27 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            _proxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings);
+            _proxy.SendNotification(EPISODE_GRABBED_TITLE_BRANDED, grabMessage.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
+            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE_BRANDED, message.Message, Settings);
         }
 
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
-            _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
+            _proxy.SendNotification(EPISODE_DELETED_TITLE_BRANDED, deleteMessage.Message, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
+            _proxy.SendNotification(SERIES_DELETED_TITLE_BRANDED, deleteMessage.Message, Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
-            _proxy.SendNotification(HEALTH_ISSUE_TITLE, healthCheck.Message, Settings);
+            _proxy.SendNotification(HEALTH_ISSUE_TITLE_BRANDED, healthCheck.Message, Settings);
         }
 
         public override ValidationResult Test()
