@@ -80,6 +80,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     if (audioRuntime == 0 && videoRuntime == 0 && generalRuntime == 0)
                     {
                         // No runtime, ask mediainfo to scan the whole file
+                        _logger.Trace("No runtime value found, rescanning at 1.0 scan depth");
                         mediaInfo.Option("ParseSpeed", "1.0");
 
                         using (var stream = _diskProvider.OpenReadStream(filename))
@@ -90,6 +91,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     else if (audioChannels > 2 && audioChannelPositions.IsNullOrWhiteSpace())
                     {
                         // Some files with DTS don't have ChannelPositions unless more of the file is scanned
+                        _logger.Trace("DTS audio without expected channel information, rescanning at 0.3 scan depth");
                         mediaInfo.Option("ParseSpeed", "0.3");
 
                         using (var stream = _diskProvider.OpenReadStream(filename))

@@ -195,7 +195,10 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             if (ex != null)
             {
                 fingerPrint.Add(ex.GetType().FullName);
-                fingerPrint.Add(ex.TargetSite.ToString());
+                if (ex.TargetSite != null)
+                {
+                    fingerPrint.Add(ex.TargetSite.ToString());
+                }
                 if (ex.InnerException != null)
                 {
                     fingerPrint.Add(ex.InnerException.GetType().FullName);
