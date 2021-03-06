@@ -67,14 +67,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
 
             // If quality meets or exceeds the best allowed quality in the profile accept it immediately
-            var bestQualityInProfile = qualityProfile.LastAllowedQuality();
-            var isBestInProfile = qualityComparer.Compare(subject.ParsedEpisodeInfo.Quality.Quality, bestQualityInProfile) >= 0;
-            var isBestInProfileLanguage = languageComparer.Compare(subject.ParsedEpisodeInfo.Language, languageProfile.LastAllowedLanguage()) >= 0;
-
-            if (isBestInProfile && isBestInProfileLanguage && isPreferredProtocol)
+            if (delayProfile.BypassIfHighestQuality)
             {
-                _logger.Debug("Quality and language is highest in profile for preferred protocol, will not delay");
-                return Decision.Accept();
+                var bestQualityInProfile = qualityProfile.LastAllowedQuality();
+                var isBestInProfile = qualityComparer.Compare(subject.ParsedEpisodeInfo.Quality.Quality, bestQualityInProfile) >= 0;
+                var isBestInProfileLanguage = languageComparer.Compare(subject.ParsedEpisodeInfo.Language, languageProfile.LastAllowedLanguage()) >= 0;
+
+                if (isBestInProfile && isBestInProfileLanguage && isPreferredProtocol)
+                {
+                    _logger.Debug("Quality and language is highest in profile for preferred protocol, will not delay");
+                    return Decision.Accept();
+                }
             }
 
             var episodeIds = subject.Episodes.Select(e => e.Id);

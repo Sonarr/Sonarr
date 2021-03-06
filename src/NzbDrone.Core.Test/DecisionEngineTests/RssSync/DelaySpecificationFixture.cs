@@ -124,8 +124,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         }
 
         [Test]
-        public void should_be_true_when_quality_and_language_is_last_allowed_in_profile()
+        public void should_be_false_when_quality_and_language_is_last_allowed_in_profile_and_bypass_disabled()
         {
+            _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray720p);
+            _remoteEpisode.ParsedEpisodeInfo.Language = Language.French;
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_true_when_quality_and_language_is_last_allowed_in_profile_and_bypass_enabled()
+        {
+            _delayProfile.BypassIfHighestQuality = true;
+
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray720p);
             _remoteEpisode.ParsedEpisodeInfo.Language = Language.French;
 
