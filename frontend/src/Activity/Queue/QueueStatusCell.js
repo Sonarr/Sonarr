@@ -12,7 +12,10 @@ function getDetailedPopoverBody(statusMessages) {
       {
         statusMessages.map(({ title, messages }) => {
           return (
-            <div key={title}>
+            <div
+              key={title}
+              className={messages.length ? undefined: styles.noMessages}
+            >
               {title}
               <ul>
                 {

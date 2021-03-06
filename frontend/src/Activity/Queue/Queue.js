@@ -44,12 +44,8 @@ class Queue extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (!this._shouldBlockRefresh) {
-      return true;
-    }
-
-    if (hasDifferentItems(this.props.items, nextProps.items)) {
+  shouldComponentUpdate() {
+    if (this._shouldBlockRefresh) {
       return false;
     }
 
@@ -120,14 +116,14 @@ class Queue extends Component {
   }
 
   onRemoveSelectedConfirmed = (payload) => {
+    this._shouldBlockRefresh = false;
     this.props.onRemoveSelectedPress({ ids: this.getSelectedIds(), ...payload });
     this.setState({ isConfirmRemoveModalOpen: false });
-    this._shouldBlockRefresh = false;
   }
 
   onConfirmRemoveModalClose = () => {
-    this.setState({ isConfirmRemoveModalOpen: false });
     this._shouldBlockRefresh = false;
+    this.setState({ isConfirmRemoveModalOpen: false });
   }
 
   //
