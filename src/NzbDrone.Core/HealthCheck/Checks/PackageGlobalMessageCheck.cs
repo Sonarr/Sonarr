@@ -13,7 +13,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IDeploymentInfoProvider _deploymentInfoProvider;
 
-
         public PackageGlobalMessageCheck(IDeploymentInfoProvider deploymentInfoProvider)
         {
             _deploymentInfoProvider = deploymentInfoProvider;
@@ -28,7 +27,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             var message = _deploymentInfoProvider.PackageGlobalMessage;
             HealthCheckResult result = HealthCheckResult.Notice;
-            
+
             if (message.StartsWith("Error:"))
             {
                 message = message.Substring(6);
