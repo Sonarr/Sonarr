@@ -136,6 +136,26 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Sun Mar 07 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1139-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed failing test
+- Added mechanism for package maintainers to produce a health check error.
+- Removed bad file from commit
+- Cleanup trailing space in HttpResponse
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- New: Allow user to choose whether delay profile should apply to release of the highest enabled quality
+- Sentry logging exceptions and some trace logging
+- Debug logging for email notifications
+- Fixed: Restoring a backup with a different API didn't reload properly
+- New: Improve messaging if release is in queue because all episodes in release were not imported
+- Fixed: Removal of previous service
+- Fixed: Queue refresh closing manual import from queue if items change
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Handle 303 and 307 redirects in Http Requests
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- New: Add Recommended to the List types for Trakt
+- Update contributing.md Github docs URL
+
 * Fri Feb 26 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1132-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Cleanse Tracker Announce Keys from logs
