@@ -18,6 +18,12 @@ namespace NzbDrone.Common.Instrumentation
         {
             var exception = e.Exception;
 
+            if (exception.InnerException is ObjectDisposedException disposedException && disposedException.ObjectName == "System.Net.HttpListenerRequest")
+            {
+                // We don't care about web connections
+                return;
+            }
+
             Console.WriteLine("Task Error: {0}", exception);
             Logger.Error(exception, "Task Error");
         }

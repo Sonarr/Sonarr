@@ -69,6 +69,10 @@ namespace NzbDrone.Core.Test.UpdateTests
                   .Setup(c => c.FolderWritable(It.IsAny<string>()))
                   .Returns(true);
 
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.Is<string>(s => s.EndsWith("Sonarr.Update.exe"))))
+                  .Returns(true);
+
             _sandboxFolder = Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateSandboxFolder();
         }
 
@@ -140,12 +144,27 @@ namespace NzbDrone.Core.Test.UpdateTests
         }
 
         [Test]
-        public void should_start_update_client()
+        public void should_start_update_client_if_updater_exists()
         {
             Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IProcessProvider>()
                 .Verify(c => c.Start(It.IsAny<string>(), It.Is<string>(s => s.StartsWith("12")), null, null, null), Times.Once());
+        }
+
+        [Test]
+        public void should_return_with_warning_if_updater_doesnt_exists()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.Is<string>(s => s.EndsWith("Sonarr.Update.exe"))))
+                  .Returns(false);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            Mocker.GetMock<IProcessProvider>()
+                .Verify(c => c.Start(It.IsAny<string>(), It.IsAny<string>(), null, null, null), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

@@ -143,10 +143,18 @@ namespace NzbDrone.Core.Update
             _logger.Info("Preparing client");
             _diskTransferService.TransferFolder(_appFolderInfo.GetUpdateClientFolder(), updateSandboxFolder, TransferMode.Move);
 
-            _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
+            var updateClientExePath = _appFolderInfo.GetUpdateClientExePath();
+
+            if (!_diskProvider.FileExists(updateClientExePath))
+            {
+                _logger.Warn("Update client {0} does not exist, aborting update.", updateClientExePath);
+                return false;
+            }
+
+            _logger.Info("Starting update client {0}", updateClientExePath);
             _logger.ProgressInfo("Sonarr will restart shortly.");
 
-            _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), GetUpdaterArgs(updateSandboxFolder));
+            _processProvider.Start(updateClientExePath, GetUpdaterArgs(updateSandboxFolder));
 
             return true;
         }
