@@ -34,14 +34,14 @@ namespace NzbDrone.Core.Download.Clients.Flood
             StartOnAdd = true;
         }
 
-        [FieldDefinition(0, Label = "Use SSL", Type = FieldType.Checkbox)]
-        public bool UseSsl { get; set; }
-
-        [FieldDefinition(1, Label = "Host", Type = FieldType.Textbox)]
+        [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
         public string Host { get; set; }
 
-        [FieldDefinition(2, Label = "Port", Type = FieldType.Textbox)]
+        [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox)]
         public int Port { get; set; }
+
+        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Flood")]
+        public bool UseSsl { get; set; }
 
         [FieldDefinition(3, Label = "Url Base", Type = FieldType.Textbox, HelpText = "Optionally adds a prefix to Flood API, such as [protocol]://[host]:[port]/[urlBase]api")]
         public string UrlBase { get; set; }
