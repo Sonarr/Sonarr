@@ -136,6 +136,21 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Mon Mar 08 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.5.1143-1.develop
+- Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Fixed: Parsing of absolute episode number inside square brackets
+- Fixed: Parsing of anime batch releases using a tilde instead of a dash
+- Fixed: Parsing similar series titles with common words at end
+- Fix: Consistent SSL option for Download Clients
+- New: Simplify Connection trigger settings
+- Fixed: Set SameSite=Strict for SonarrAuth cookie
+- Fixed: Don't set cookies for static resources
+- Fixed: Cache headers for static resources
+- Just one Application Version header
+- Bumped package version for main
+- Cleanup formatting in PackageGlobalMessageCheck.cs
+- Fixed: Remove selected in queue
+
 * Sun Mar 07 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.4.1139-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed failing test
