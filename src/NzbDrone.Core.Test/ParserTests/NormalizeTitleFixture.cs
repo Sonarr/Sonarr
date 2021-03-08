@@ -36,22 +36,40 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("or")]
         [TestCase("an")]
         [TestCase("of")]
-        public void should_remove_common_words(string word)
+        public void should_remove_common_words_from_middle_of_title(string word)
         {
             var dirtyFormat = new[]
                             {
                                 "word.{0}.word",
                                 "word {0} word",
-                                "word-{0}-word",
-                                "word.word.{0}",
-                                "word-word-{0}",
-                                "word-word {0}",
+                                "word-{0}-word"
                             };
 
             foreach (var s in dirtyFormat)
             {
                 var dirty = string.Format(s, word);
                 dirty.CleanSeriesTitle().Should().Be("wordword");
+            }
+        }
+
+        [TestCase("the")]
+        [TestCase("and")]
+        [TestCase("or")]
+        [TestCase("an")]
+        [TestCase("of")]
+        public void should_not_remove_common_words_from_end_of_title(string word)
+        {
+            var dirtyFormat = new[]
+                              {
+                                  "word.word.{0}",
+                                  "word-word-{0}",
+                                  "word-word {0}"
+                              };
+
+            foreach (var s in dirtyFormat)
+            {
+                var dirty = string.Format(s, word);
+                dirty.CleanSeriesTitle().Should().Be("wordword" + word.ToLower());
             }
         }
 

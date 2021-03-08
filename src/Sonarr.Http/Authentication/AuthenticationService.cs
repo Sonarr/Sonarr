@@ -6,6 +6,7 @@ using System.Security.Principal;
 using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Authentication.Forms;
+using Nancy.Routing.Trie.Nodes;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
@@ -157,6 +158,11 @@ namespace Sonarr.Http.Authentication
             }
 
             if (context.Request.IsContentRequest())
+            {
+                return true;
+            }
+
+            if (context.Request.IsBundledJsRequest())
             {
                 return true;
             }

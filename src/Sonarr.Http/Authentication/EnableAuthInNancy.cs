@@ -4,7 +4,6 @@ using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Authentication.Forms;
 using Nancy.Bootstrapper;
-using Nancy.Cookies;
 using Nancy.Cryptography;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
@@ -120,7 +119,7 @@ namespace Sonarr.Http.Authentication
 
                 if (FormsAuthentication.DecryptAndValidateAuthenticationCookie(formsAuthCookieValue, FormsAuthConfig).IsNotNullOrWhiteSpace())
                 {
-                    var formsAuthCookie = new NancyCookie(formsAuthCookieName, formsAuthCookieValue, true, false, DateTime.UtcNow.AddDays(7))
+                    var formsAuthCookie = new SonarrNancyCookie(formsAuthCookieName, formsAuthCookieValue, true, false, DateTime.UtcNow.AddDays(7))
                     {
                         Path = GetCookiePath()
                     };

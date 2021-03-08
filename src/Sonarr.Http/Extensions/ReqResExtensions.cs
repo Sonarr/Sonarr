@@ -11,6 +11,7 @@ namespace Sonarr.Http.Extensions
     public static class ReqResExtensions
     {
         private static readonly NancyJsonSerializer NancySerializer = new NancyJsonSerializer();
+        private static readonly string Expires = DateTime.UtcNow.AddYears(1).ToString("r");
 
         public static readonly string LastModified = BuildInfo.BuildDateTime.ToString("r");
 
@@ -51,8 +52,8 @@ namespace Sonarr.Http.Extensions
 
         public static IDictionary<string, string> EnableCache(this IDictionary<string, string> headers)
         {
-            headers["Cache-Control"] = "max-age=31536000 , public";
-            headers["Expires"] = "Sat, 29 Jun 2020 00:00:00 GMT";
+            headers["Cache-Control"] = "max-age=31536000, public";
+            headers["Expires"] = Expires;
             headers["Last-Modified"] = LastModified;
             headers["Age"] = "193266";
 

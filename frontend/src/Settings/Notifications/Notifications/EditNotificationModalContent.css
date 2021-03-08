@@ -9,3 +9,12 @@
 
   margin-bottom: 30px;
 }
+
+.triggers {
+  margin-top: 3px;
+}
+
+.triggerEvents {
+  margin-top: 10px;
+  user-select: none;
+}

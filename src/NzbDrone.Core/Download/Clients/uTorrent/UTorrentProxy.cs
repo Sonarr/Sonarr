@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
         private HttpRequestBuilder BuildRequest(UTorrentSettings settings)
         {
-            var requestBuilder = new HttpRequestBuilder(false, settings.Host, settings.Port, settings.UrlBase)
+            var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase)
                 .Resource("/gui/")
                 .KeepAlive()
                 .SetHeader("Cache-Control", "no-cache")
