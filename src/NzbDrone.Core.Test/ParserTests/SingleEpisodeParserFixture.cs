@@ -142,6 +142,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("tvs-amgo-dd51-dl-7p-azhd-x264-103", "tvs-amgo-dd51-dl-7p-azhd", 1, 3)]
         [TestCase("Series Title - S01E01 [AC3 5.1 Castellano][www.descargas2020.org]", "Series Title", 1, 1)]
         [TestCase("Series Title - [02x01] - Episode 1", "Series Title", 2, 1)]
+        [TestCase("Series.Title.Of.S01E01.xyz", "Series Title Of", 1, 1)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
