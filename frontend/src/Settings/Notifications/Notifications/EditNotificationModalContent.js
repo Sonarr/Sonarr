@@ -13,6 +13,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import styles from './EditNotificationModalContent.css';
 
@@ -102,131 +103,110 @@ function EditNotificationModalContent(props) {
               </FormGroup>
 
               <FormGroup>
-                <FormLabel>On Grab</FormLabel>
+                <FormLabel>Triggers</FormLabel>
 
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="onGrab"
-                  helpText="Be notified when episodes are available for download and has been sent to a download client"
-                  isDisabled={!supportsOnGrab.value}
-                  {...onGrab}
-                  onChange={onInputChange}
-                />
-              </FormGroup>
+                <div className={styles.triggers}>
+                  <FormInputHelpText
+                    text="Select which events should trigger this conection"
+                    link="https://wiki.servarr.com/Sonarr_Settings#Connections"
+                  />
 
-              <FormGroup>
-                <FormLabel>On Import</FormLabel>
-
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="onDownload"
-                  helpText="Be notified when episodes are successfully imported"
-                  isDisabled={!supportsOnDownload.value}
-                  {...onDownload}
-                  onChange={onInputChange}
-                />
-              </FormGroup>
-
-              {
-                onDownload.value &&
-                  <FormGroup>
-                    <FormLabel>On Upgrade</FormLabel>
-
+                  <div className={styles.triggerEvents}>
                     <FormInputGroup
                       type={inputTypes.CHECK}
-                      name="onUpgrade"
-                      helpText="Be notified when episodes are upgraded to a better quality"
-                      isDisabled={!supportsOnUpgrade.value}
-                      {...onUpgrade}
+                      name="onGrab"
+                      helpText="On Grab"
+                      isDisabled={!supportsOnGrab.value}
+                      {...onGrab}
                       onChange={onInputChange}
                     />
-                  </FormGroup>
-              }
-
-              <FormGroup>
-                <FormLabel>On Rename</FormLabel>
-
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="onRename"
-                  helpText="Be notified when episodes are renamed"
-                  isDisabled={!supportsOnRename.value}
-                  {...onRename}
-                  onChange={onInputChange}
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <FormLabel>On Series Delete</FormLabel>
-
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="onSeriesDelete"
-                  helpText="Be notified when series are deleted"
-                  isDisabled={!supportsOnSeriesDelete.value}
-                  {...onSeriesDelete}
-                  onChange={onInputChange}
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <FormLabel>On Episode File Delete</FormLabel>
-
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="onEpisodeFileDelete"
-                  helpText="Be notified when episode files are deleted"
-                  isDisabled={!supportsOnEpisodeFileDelete.value}
-                  {...onEpisodeFileDelete}
-                  onChange={onInputChange}
-                />
-              </FormGroup>
-
-              {
-                onEpisodeFileDelete.value ?
-                  <FormGroup>
-                    <FormLabel>On Episode File Delete For Upgrade</FormLabel>
 
                     <FormInputGroup
                       type={inputTypes.CHECK}
-                      name="onEpisodeFileDeleteForUpgrade"
-                      helpText="Be notified when episode files are deleted for upgrades"
-                      isDisabled={!supportsOnEpisodeFileDeleteForUpgrade.value}
-                      {...onEpisodeFileDeleteForUpgrade}
+                      name="onDownload"
+                      helpText="On Download"
+                      isDisabled={!supportsOnDownload.value}
+                      {...onDownload}
                       onChange={onInputChange}
                     />
-                  </FormGroup> :
-                  null
-              }
 
-              <FormGroup>
-                <FormLabel>On Health Issue</FormLabel>
-
-                <FormInputGroup
-                  type={inputTypes.CHECK}
-                  name="onHealthIssue"
-                  helpText="Be notified on health check failures"
-                  isDisabled={!supportsOnHealthIssue.value}
-                  {...onHealthIssue}
-                  onChange={onInputChange}
-                />
-              </FormGroup>
-
-              {
-                onHealthIssue.value &&
-                  <FormGroup>
-                    <FormLabel>Include Health Warnings</FormLabel>
+                    {
+                      onDownload.value ?
+                        <FormInputGroup
+                          type={inputTypes.CHECK}
+                          name="onUpgrade"
+                          helpText="On Upgrade"
+                          isDisabled={!supportsOnUpgrade.value}
+                          {...onUpgrade}
+                          onChange={onInputChange}
+                        /> :
+                        null
+                    }
 
                     <FormInputGroup
                       type={inputTypes.CHECK}
-                      name="includeHealthWarnings"
-                      helpText="Be notified on health warnings in addition to errors"
+                      name="onRename"
+                      helpText="On Rename"
+                      isDisabled={!supportsOnRename.value}
+                      {...onRename}
+                      onChange={onInputChange}
+                    />
+
+                    <FormInputGroup
+                      type={inputTypes.CHECK}
+                      name="onSeriesDelete"
+                      helpText="On Series Delete"
+                      isDisabled={!supportsOnSeriesDelete.value}
+                      {...onSeriesDelete}
+                      onChange={onInputChange}
+                    />
+
+                    <FormInputGroup
+                      type={inputTypes.CHECK}
+                      name="onEpisodeFileDelete"
+                      helpText="On Episode File Delete"
+                      isDisabled={!supportsOnEpisodeFileDelete.value}
+                      {...onEpisodeFileDelete}
+                      onChange={onInputChange}
+                    />
+
+                    {
+                      onEpisodeFileDelete.value ?
+                        <FormInputGroup
+                          type={inputTypes.CHECK}
+                          name="onEpisodeFileDeleteForUpgrade"
+                          helpText="On Episode File Delete For Upgrade"
+                          isDisabled={!supportsOnEpisodeFileDeleteForUpgrade.value}
+                          {...onEpisodeFileDeleteForUpgrade}
+                          onChange={onInputChange}
+                        /> :
+                        null
+                    }
+
+                    <FormInputGroup
+                      type={inputTypes.CHECK}
+                      name="onHealthIssue"
+                      helpText="On Health Issue"
                       isDisabled={!supportsOnHealthIssue.value}
-                      {...includeHealthWarnings}
+                      {...onHealthIssue}
                       onChange={onInputChange}
                     />
-                  </FormGroup>
-              }
+
+                    {
+                      onHealthIssue.value ?
+                        <FormInputGroup
+                          type={inputTypes.CHECK}
+                          name="includeHealthWarnings"
+                          helpText="Include Health Warnings"
+                          isDisabled={!supportsOnHealthIssue.value}
+                          {...includeHealthWarnings}
+                          onChange={onInputChange}
+                        /> :
+                        null
+                    }
+                  </div>
+                </div>
+              </FormGroup>
 
               <FormGroup>
                 <FormLabel>Tags</FormLabel>
