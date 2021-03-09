@@ -9,6 +9,8 @@ db_get sonarr/owning_user
 USER="$RET"
 db_get sonarr/owning_group
 GROUP="$RET"
+db_get sonarr/owning_umask
+UMASK="$RET"
 db_get sonarr/config_directory
 CONFDIR="$RET"
 
@@ -92,7 +94,7 @@ fi
 chown -R $USER:$GROUP /usr/lib/sonarr
 
 # Update sonarr.service file
-sed -i "s:User=sonarr:User=$USER:g; s:Group=sonarr:Group=$GROUP:g; s:-data=/var/lib/sonarr:-data=$CONFDIR:g" /lib/systemd/system/sonarr.service
+sed -i "s:User=\w*:User=$USER:g; s:Group=\w*:Group=$GROUP:g; s:UMask=[0-9]*:UMask=$UMASK:g; s:-data=.*$:-data=$CONFDIR:g" /lib/systemd/system/sonarr.service
 
 #BEGIN BUILTIN UPDATER
 if [ "$UPDATER" = "BuiltIn" ]; then

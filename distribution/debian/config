@@ -8,7 +8,10 @@ db_input high sonarr/owning_group || true
 db_endblock
 db_go
 
+db_beginblock
+db_input low sonarr/owning_umask || true
 db_input low sonarr/config_directory || true
+db_endblock
 db_go
 
 exit 0
