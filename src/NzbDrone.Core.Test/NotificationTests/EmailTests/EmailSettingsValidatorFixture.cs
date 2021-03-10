@@ -63,6 +63,7 @@ namespace NzbDrone.Core.Test.NotificationTests.EmailTests
         [TestCase("sonarr")]
         [TestCase("sonarr@sonarr")]
         [TestCase("email.me")]
+        [Ignore("Allowed coz some email servers allow arbitrary source, we probably need to support 'Name <email>' syntax")]
         public void should_not_be_valid_if_from_is_invalid(string email)
         {
             _emailSettings.From = email;
