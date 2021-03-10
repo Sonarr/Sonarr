@@ -41,7 +41,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (size > maximumSize)
             {
-                var message = $"{size.SizeSuffix()} is too big, maximum size is {maximumSize.SizeSuffix()}";
+                var message = $"{size.SizeSuffix()} is too big, maximum size is {maximumSize.SizeSuffix()} (Settings->Indexers->Maximum Size)";
 
                 _logger.Debug(message);
                 return Decision.Reject(message);
