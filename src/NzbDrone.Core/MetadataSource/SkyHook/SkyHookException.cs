@@ -13,5 +13,10 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             : base(HttpStatusCode.ServiceUnavailable, message, args)
         {
         }
+
+        public SkyHookException(string message, Exception innerException, params object[] args)
+            : base(HttpStatusCode.ServiceUnavailable, innerException, message, args)
+        {
+        }
     }
 }
