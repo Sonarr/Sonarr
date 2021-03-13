@@ -12,6 +12,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.QBittorrent;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Download.Clients;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 {
@@ -71,14 +72,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<IQBittorrentProxy>()
-                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<QBittorrentSettings>()))
+                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<TorrentSeedConfiguration>(), It.IsAny<QBittorrentSettings>()))
                 .Throws<InvalidOperationException>();
         }
 
         protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<IQBittorrentProxy>()
-                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<QBittorrentSettings>()))
+                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<TorrentSeedConfiguration>(), It.IsAny<QBittorrentSettings>()))
                 .Callback(() =>
                 {
                     var torrent = new QBittorrentTorrent
@@ -466,7 +467,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             Assert.DoesNotThrow(() => Subject.Download(remoteEpisode));
 
             Mocker.GetMock<IQBittorrentProxy>()
-                  .Verify(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<QBittorrentSettings>()), Times.Once());
+                  .Verify(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<TorrentSeedConfiguration>(), It.IsAny<QBittorrentSettings>()), Times.Once());
         }
 
         [Test]

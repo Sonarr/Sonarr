@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return response;
         }
 
-        public void AddTorrentFromUrl(string torrentUrl, QBittorrentSettings settings)
+        public void AddTorrentFromUrl(string torrentUrl, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
         {
             var request = BuildRequest(settings).Resource("/command/download")
                                                 .Post()
@@ -125,7 +125,12 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 request.AddFormParameter("category", settings.TvCategory);
             }
 
-            if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            // Note: ForceStart is handled by separate api call
+            if ((QBittorrentState)settings.InitialState == QBittorrentState.Start)
+            {
+                request.AddFormParameter("paused", false);
+            }
+            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
             {
                 request.AddFormParameter("paused", true);
             }
@@ -139,7 +144,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
         }
 
-        public void AddTorrentFromFile(string fileName, Byte[] fileContent, QBittorrentSettings settings)
+        public void AddTorrentFromFile(string fileName, Byte[] fileContent, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
         {
             var request = BuildRequest(settings).Resource("/command/upload")
                                                 .Post()
@@ -150,9 +155,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 request.AddFormParameter("category", settings.TvCategory);
             }
 
-            if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            // Note: ForceStart is handled by separate api call
+            if ((QBittorrentState)settings.InitialState == QBittorrentState.Start)
             {
-                request.AddFormParameter("paused", "true");
+                request.AddFormParameter("paused", false);
+            }
+            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            {
+                request.AddFormParameter("paused", true);
             }
 
             var result = ProcessRequest(request, settings);

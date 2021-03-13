@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return response;
         }
 
-        public void AddTorrentFromUrl(string torrentUrl, QBittorrentSettings settings)
+        public void AddTorrentFromUrl(string torrentUrl, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
         {
             var request = BuildRequest(settings).Resource("/api/v2/torrents/add")
                                                 .Post()
@@ -130,9 +130,19 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 request.AddFormParameter("category", settings.TvCategory);
             }
 
-            if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            // Note: ForceStart is handled by separate api call
+            if ((QBittorrentState)settings.InitialState == QBittorrentState.Start)
+            {
+                request.AddFormParameter("paused", false);
+            }
+            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
             {
                 request.AddFormParameter("paused", true);
+            }
+
+            if (seedConfiguration != null)
+            {
+                AddTorrentSeedingFormParameters(request, seedConfiguration, settings);
             }
 
             var result = ProcessRequest(request, settings);
@@ -144,7 +154,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
         }
 
-        public void AddTorrentFromFile(string fileName, Byte[] fileContent, QBittorrentSettings settings)
+        public void AddTorrentFromFile(string fileName, Byte[] fileContent, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
         {
             var request = BuildRequest(settings).Resource("/api/v2/torrents/add")
                                                 .Post()
@@ -155,9 +165,19 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 request.AddFormParameter("category", settings.TvCategory);
             }
 
-            if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            // Note: ForceStart is handled by separate api call
+            if ((QBittorrentState)settings.InitialState == QBittorrentState.Start)
             {
-                request.AddFormParameter("paused", "true");
+                request.AddFormParameter("paused", false);
+            }
+            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            {
+                request.AddFormParameter("paused", true);
+            }
+
+            if (seedConfiguration != null)
+            {
+                AddTorrentSeedingFormParameters(request, seedConfiguration, settings);
             }
 
             var result = ProcessRequest(request, settings);
@@ -206,16 +226,29 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return Json.Deserialize<Dictionary<string, QBittorrentLabel>>(ProcessRequest(request, settings));
         }
 
-        public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
+        private void AddTorrentSeedingFormParameters(HttpRequestBuilder request, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
         {
             var ratioLimit = seedConfiguration.Ratio.HasValue ? seedConfiguration.Ratio : -2;
             var seedingTimeLimit = seedConfiguration.SeedTime.HasValue ? (long)seedConfiguration.SeedTime.Value.TotalMinutes : -2;
 
+            if (ratioLimit != -2)
+            {
+                request.AddFormParameter("ratioLimit", ratioLimit);
+            }
+
+            if (seedingTimeLimit != -2)
+            {
+                request.AddFormParameter("seedingTimeLimit", seedingTimeLimit);
+            }
+        }
+
+        public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
+        {
             var request = BuildRequest(settings).Resource("/api/v2/torrents/setShareLimits")
                                                 .Post()
-                                                .AddFormParameter("hashes", hash)
-                                                .AddFormParameter("ratioLimit", ratioLimit)
-                                                .AddFormParameter("seedingTimeLimit", seedingTimeLimit);
+                                                .AddFormParameter("hashes", hash);
+
+            AddTorrentSeedingFormParameters(request, seedConfiguration, settings);
 
             try
             {
