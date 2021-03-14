@@ -39,4 +39,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Download\Clients\Aria2\" />
+  </ItemGroup>
 </Project>
