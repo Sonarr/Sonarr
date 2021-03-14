@@ -50,6 +50,8 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                 return hash;
             }
 
+            _logger.Debug($"Äria2 AddFromMagnetLink '{hash}' -> '{gid}'");
+
             return hash;
         }
 
@@ -77,12 +79,17 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
             foreach(var status in statuses)
             {
+                var firstFile = status.files?.FirstOrDefault();
+
+                if (firstFile?.path?.Contains("[METADATA]") == true) //skip metadata download
+                {
+                    continue;
+                }
+
                 long completedLength = long.Parse(status.completedLength);
                 long totalLength = long.Parse(status.totalLength);
                 long uploadedLength = long.Parse(status.uploadLength);
                 long downloadSpeed = long.Parse(status.downloadSpeed);
-
-                var firstFile = status.files?.FirstOrDefault();
 
                 DownloadItemStatus sta = DownloadItemStatus.Failed;
 
@@ -115,7 +122,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                         break;
                 }
 
-                _logger.Debug($"- aria2 getstatus gid:'{status.gid}' sta:'{sta}' tot:{totalLength} comp:'{completedLength}'");
+                _logger.Debug($"- aria2 getstatus hash:'{status.infoHash}' gid:'{status.gid}' sta:'{sta}' tot:{totalLength} comp:'{completedLength}'");
 
                 yield return new DownloadClientItem()
                 {
@@ -127,13 +134,13 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                     IsEncrypted = false,
                     Message = status.errorMessage,
                     OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(status.dir)),
-                    RemainingSize = firstFile?.path?.Contains("[METADATA]") == true ? 1 : totalLength - completedLength,
+                    RemainingSize = totalLength - completedLength,
                     RemainingTime = downloadSpeed != 0 ? new TimeSpan(0,0, (int)((totalLength - completedLength) / downloadSpeed)) : (TimeSpan?)null,
                     Removed = status.status == "removed",
                     SeedRatio = totalLength > 0 ? (double)uploadedLength / totalLength : 0,
                     Status = sta,
                     Title = title,
-                    TotalSize = firstFile?.path?.Contains("[METADATA]") == true ? 1 : totalLength,
+                    TotalSize = totalLength,
                 };              
             }
         }
