@@ -45,8 +45,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             // Wait a bit for the magnet to be resolved.
             if (!WaitForTorrent(gid, hash, tries, retryDelay))
             {
-                _logger.Warn("Aria2 could not resolve magnet within {0} seconds, download may remain stuck: {1}.", tries * retryDelay / 1000, magnetLink);
-
+                _logger.Warn($"Aria2 could not add magnent within {tries * retryDelay / 1000} seconds, download may remain stuck: {magnetLink}.");
                 return hash;
             }
 
@@ -65,8 +64,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             // Wait a bit for the magnet to be resolved.
             if (!WaitForTorrent(gid, hash, tries, retryDelay))
             {
-                _logger.Warn("Aria2 could not resolve magnet within {0} seconds, download may remain stuck: {1}.", tries * retryDelay / 1000, filename);
-
+                _logger.Warn($"Aria2 could not add torrent within {tries * retryDelay / 1000} seconds, download may remain stuck: {filename}.");
                 return hash;
             }
 
