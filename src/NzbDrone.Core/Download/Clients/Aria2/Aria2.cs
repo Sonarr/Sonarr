@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using CookComputing.XmlRpc;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -85,6 +86,13 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
                 DownloadItemStatus sta = DownloadItemStatus.Failed;
 
+                string title = "";
+
+                if(true == status.bittorrent?.ContainsKey("info") && ((XmlRpcStruct)status.bittorrent["info"]).ContainsKey("name"))
+                {
+                    title = ((XmlRpcStruct)status.bittorrent["info"])["name"].ToString();
+                }
+
                 switch (status.status)
                 {
                     case "active":
@@ -124,7 +132,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                     Removed = status.status == "removed",
                     SeedRatio = totalLength > 0 ? (double)uploadedLength / totalLength : 0,
                     Status = sta,
-                    Title = status.bittorent["name"].ToString() ?? "Unknown",
+                    Title = title,
                     TotalSize = firstFile?.path?.Contains("[METADATA]") == true ? 1 : totalLength,
                 };              
             }

@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
     public class Aria2Status
     {
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public XmlRpcStruct bittorent;
+        public XmlRpcStruct bittorrent;
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public string bitfield;
         [XmlRpcMissingMapping(MappingAction.Ignore)]
