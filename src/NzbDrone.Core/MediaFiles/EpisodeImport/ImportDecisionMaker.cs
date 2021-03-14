@@ -83,8 +83,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     FolderEpisodeInfo = folderInfo,
                     Path = file,
                     SceneSource = sceneSource,
-                    ExistingFile = series.Path.IsParentPath(file),
-                    OtherVideoFiles = nonSampleVideoFileCount > 1
+                    ExistingFile = series.Path.IsParentPath(file)
                 };
 
                 _augmentMediaInfo.Augment(localEpisode);
@@ -95,6 +94,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             // If not importing from a scene source (series folder for example), then assume all files are not samples
             // to avoid using media info on every file needlessly (especially if Analyse Media Files is disabled).
             var otherFiles = sceneSource && GetNonSampleVideoFileCount(localEpisodes, series, downloadClientItemInfo, folderInfo) > 1;
+
+            // Set 'OtherVideoFiles' to true for each episode if there are other files.
+            localEpisodes.ForEach(l => l.OtherVideoFiles = otherFiles);
 
             decisions.AddRange(localEpisodes.Select(l => GetDecision(l, downloadClientItem, otherFiles)));
 
