@@ -153,12 +153,13 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             {
                 if(status.infoHash?.ToLower() == hash.ToLower())
                 {
+                    _logger.Debug($"Aria2 removing hash:'{hash}' gid:'{status.gid}'");
                     _proxy.RemoveTorrent(Settings, status.gid);
                     return;
                 }
             }
 
-            _logger.Error($"Aria2 could not find infoHash {0} for deletion.", hash);
+            _logger.Error($"Aria2 could not find infoHash {hash} for deletion.");
         }
 
         public override DownloadClientInfo GetStatus()
