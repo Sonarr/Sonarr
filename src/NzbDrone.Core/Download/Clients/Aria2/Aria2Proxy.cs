@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         [XmlRpcMethod("aria2.addTorrent")]
         string AddTorrent(string token, string base64Torrent);
 
-        [XmlRpcMethod("aria2.remove")]
+        [XmlRpcMethod("aria2.forceRemove")]
         string Remove(string token, string gid);
 
         [XmlRpcMethod("aria2.tellStatus")]
@@ -164,12 +164,12 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         public bool RemoveTorrent(Aria2Settings settings, string gid)
         {
-            _logger.Debug("> aria2.remove");
+            _logger.Debug("> aria2.forceRemove");
 
             var client = BuildClient(settings);
             var gidres = ExecuteRequest(() => client.Remove(settings.RPCToken, gid));
 
-            _logger.Debug("< aria2.remove");
+            _logger.Debug("< aria2.forceRemove");
 
             return gid == gidres;
         }
