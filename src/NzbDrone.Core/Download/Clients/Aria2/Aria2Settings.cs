@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
     {
         public Aria2SettingsValidator()
         {
-            RuleFor(c => c.RPCUrl).ValidRootUrl();
+            RuleFor(c => c.Host).ValidHost();
         }
     }
 
@@ -21,17 +21,30 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         public Aria2Settings()
         {
-            RPCUrl = "http://localhost:6800/rpc";
+            Host = "localhost";
+            Port = 6800;
+            RPCPath = "/rpc";
+            UseSSL = false;
             SecretToken = "MySecretToken";
         }
 
-        [FieldDefinition(0, Label = "Host", Type = FieldType.Url)]
-        public string RPCUrl { get; set; }
+        [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
+        public string Host { get; set; }
 
-        [FieldDefinition(1, Label = "Secret token", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
+        [FieldDefinition(1, Label = "Port", Type = FieldType.Number)]
+        public int Port { get; set; }
+
+        [FieldDefinition(2, Label = "RPC Path", Type = FieldType.Textbox)]
+        public string RPCPath { get; set; }
+
+        [FieldDefinition(3, Label = "Use SLL", Type = FieldType.Checkbox)]
+        public bool UseSSL { get; set; }
+
+        [FieldDefinition(4, Label = "Secret token", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string SecretToken { get; set; }
 
         internal string RPCToken => $"token:{SecretToken}";
+        internal string URL => $"http{(UseSSL ? "s":"")}://{Host}:{Port}{RPCPath}";
 
         public NzbDroneValidationResult Validate()
         {

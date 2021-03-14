@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                     DownloadId = status.infoHash?.ToUpper(),
                     IsEncrypted = false,
                     Message = status.errorMessage,
-                    OutputPath = new OsPath(status.dir),
+                    OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(status.dir)),
                     RemainingSize = firstFile?.path?.Contains("[METADATA]") == true ? 1 : totalLength - completedLength,
                     RemainingTime = downloadSpeed != 0 ? new TimeSpan(0,0, (int)((totalLength - completedLength) / downloadSpeed)) : (TimeSpan?)null,
                     Removed = status.status == "removed",
@@ -150,8 +150,8 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
             return new DownloadClientInfo
             {
-                IsLocalhost = Settings.RPCUrl.Contains("127.0.0.1") || Settings.RPCUrl.Contains("localhost"),
-                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.RPCUrl, new OsPath(destDir["dir"])) }
+                IsLocalhost = Settings.URL.Contains("127.0.0.1") || Settings.URL.Contains("localhost"),
+                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(destDir["dir"])) }
             };
         }
 

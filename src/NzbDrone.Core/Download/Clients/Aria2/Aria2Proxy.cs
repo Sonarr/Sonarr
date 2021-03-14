@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         private IAria2 BuildClient(Aria2Settings settings)
         {
             var client = XmlRpcProxyGen.Create<IAria2>();
-            client.Url = settings.RPCUrl;
+            client.Url = settings.URL;
             return client;
         }
 
