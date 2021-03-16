@@ -405,7 +405,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 }
 
                 localEpisode = _augmentMediaInfo.Augment(localEpisode);
-                localEpisode = _aggregationService.Augment(localEpisode, trackedDownload?.DownloadItem, false);
+                localEpisode = _aggregationService.Augment(localEpisode, trackedDownload?.DownloadItem);
 
                 // Apply the user-chosen values.
                 localEpisode.Series = series;
