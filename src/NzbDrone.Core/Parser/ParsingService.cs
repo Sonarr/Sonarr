@@ -465,6 +465,16 @@ namespace NzbDrone.Core.Parser
                             episodes.AddIfNotNull(episode);
                         }
                     }
+                    else if (parsedEpisodeInfo.SeasonNumber > 1)
+                    {
+                        episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber, absoluteEpisodeNumber);
+
+                        if (episodes.Empty())
+                        {
+                            var episode = _episodeService.FindEpisode(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
+                            episodes.AddIfNotNull(episode);
+                        }
+                    }
                     else
                     {
                         episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, absoluteEpisodeNumber);
