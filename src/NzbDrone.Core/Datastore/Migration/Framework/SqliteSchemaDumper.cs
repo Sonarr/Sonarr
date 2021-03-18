@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using FluentMigrator.Model;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Processors.SQLite;
@@ -67,6 +68,23 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
                 if (columnReader.Read() == SqliteSyntaxReader.TokenType.StringToken)
                 {
+                    if (columnReader.ValueToUpper == "PRIMARY")
+                    {
+                        columnReader.SkipTillToken(SqliteSyntaxReader.TokenType.ListStart);
+                        if (columnReader.Read() == SqliteSyntaxReader.TokenType.Identifier)
+                        {
+                            var pk = table.Columns.First(v => v.Name == columnReader.Value);
+                            pk.IsPrimaryKey = true;
+                            pk.IsNullable = true;
+                            pk.IsUnique = true;
+                            if (columnReader.Buffer.ToUpperInvariant().Contains("AUTOINCREMENT"))
+                            {
+                                pk.IsIdentity = true;
+                            }
+                            continue;
+                        }
+                    }
+
                     if (columnReader.ValueToUpper == "CONSTRAINT" ||
                         columnReader.ValueToUpper == "PRIMARY" || columnReader.ValueToUpper == "UNIQUE" ||
                         columnReader.ValueToUpper == "CHECK" || columnReader.ValueToUpper == "FOREIGN")
