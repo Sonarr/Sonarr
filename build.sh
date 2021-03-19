@@ -88,7 +88,7 @@ CleanFolder()
 
 BuildWithMSBuild()
 {
-    msBuildPath=`$vswhere -latest -requires Microsoft.Component.MSBuild -find MSBuild\\\\\*\*\\\\Bin\\\\MSBuild.exe`
+    msBuildPath=`$vswhere -latest -products \* -requires Microsoft.Component.MSBuild -find MSBuild\\\\\*\*\\\\Bin\\\\MSBuild.exe`
     msBuildPath=${msBuildPath/C:\\/\/c\/}
     msBuildPath=${msBuildPath//\\/\/}
     msBuildDir=$(dirname "$msBuildPath")
