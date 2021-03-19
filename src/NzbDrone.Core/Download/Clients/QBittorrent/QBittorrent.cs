@@ -88,7 +88,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 if (!addHasSetShareLimits && setShareLimits)
                 {
-                    Proxy.SetTorrentSeedingConfiguration(hash.ToLower(), remoteEpisode.SeedConfiguration, Settings);
+                    try
+                    {
+                        Proxy.SetTorrentSeedingConfiguration(hash.ToLower(), remoteEpisode.SeedConfiguration, Settings);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Failed to set the torrent seed criteria for {0}.", hash);
+                    }
                 }
 
                 if (moveToTop)
@@ -139,8 +146,15 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 if (!addHasSetShareLimits && setShareLimits)
                 {
-                    Proxy.SetTorrentSeedingConfiguration(hash.ToLower(), remoteEpisode.SeedConfiguration, Settings);
-                }
+                    try
+                    {
+                        Proxy.SetTorrentSeedingConfiguration(hash.ToLower(), remoteEpisode.SeedConfiguration, Settings);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Failed to set the torrent seed criteria for {0}.", hash);
+                    }
+            }
 
                 if (moveToTop)
                 {
@@ -172,14 +186,16 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         protected bool WaitForTorrent(string hash)
         {
-            var count = 5;
+            var count = 10;
 
             while (count != 0)
             {
                 try
                 {
-                    Proxy.GetTorrentProperties(hash.ToLower(), Settings);
-                    return true;
+                    if (Proxy.IsTorrentLoaded(hash.ToLower(), Settings))
+                    {
+                        return true;
+                    }
                 }
                 catch
                 {

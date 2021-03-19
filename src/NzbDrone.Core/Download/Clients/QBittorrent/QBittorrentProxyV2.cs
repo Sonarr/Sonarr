@@ -101,6 +101,24 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return response;
         }
 
+        public bool IsTorrentLoaded(string hash, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/api/v2/torrents/properties")
+                                                .AddQueryParam("hash", hash);
+            request.LogHttpError = false;
+
+            try
+            {
+                ProcessRequest(request, settings);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public QBittorrentTorrentProperties GetTorrentProperties(string hash, QBittorrentSettings settings)
         {
             var request = BuildRequest(settings).Resource("/api/v2/torrents/properties")
@@ -142,7 +160,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             if (seedConfiguration != null)
             {
-                AddTorrentSeedingFormParameters(request, seedConfiguration, settings);
+                AddTorrentSeedingFormParameters(request, seedConfiguration);
             }
 
             var result = ProcessRequest(request, settings);
@@ -177,7 +195,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             if (seedConfiguration != null)
             {
-                AddTorrentSeedingFormParameters(request, seedConfiguration, settings);
+                AddTorrentSeedingFormParameters(request, seedConfiguration);
             }
 
             var result = ProcessRequest(request, settings);
@@ -226,17 +244,17 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return Json.Deserialize<Dictionary<string, QBittorrentLabel>>(ProcessRequest(request, settings));
         }
 
-        private void AddTorrentSeedingFormParameters(HttpRequestBuilder request, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
+        private void AddTorrentSeedingFormParameters(HttpRequestBuilder request, TorrentSeedConfiguration seedConfiguration, bool always = false)
         {
             var ratioLimit = seedConfiguration.Ratio.HasValue ? seedConfiguration.Ratio : -2;
             var seedingTimeLimit = seedConfiguration.SeedTime.HasValue ? (long)seedConfiguration.SeedTime.Value.TotalMinutes : -2;
 
-            if (ratioLimit != -2)
+            if (ratioLimit != -2 || always)
             {
                 request.AddFormParameter("ratioLimit", ratioLimit);
             }
 
-            if (seedingTimeLimit != -2)
+            if (seedingTimeLimit != -2 || always)
             {
                 request.AddFormParameter("seedingTimeLimit", seedingTimeLimit);
             }
@@ -248,7 +266,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormParameter("hashes", hash);
 
-            AddTorrentSeedingFormParameters(request, seedConfiguration, settings);
+            AddTorrentSeedingFormParameters(request, seedConfiguration, true);
 
             try
             {
@@ -338,15 +356,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             var request = requestBuilder.Build();
             request.LogResponseContent = true;
+            request.SuppressHttpErrorStatusCodes = new[] { HttpStatusCode.Forbidden };
 
             HttpResponse response;
             try
             {
                 response = _httpClient.Execute(request);
-            }
-            catch (HttpException ex)
-            {
-                if (ex.Response.StatusCode == HttpStatusCode.Forbidden)
+
+                if (response.StatusCode == HttpStatusCode.Forbidden)
                 {
                     _logger.Debug("Authentication required, logging in.");
 
@@ -356,10 +373,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                     response = _httpClient.Execute(request);
                 }
-                else
-                {
-                    throw new DownloadClientException("Failed to connect to qBittorrent, check your settings.", ex);
-                }
+            }
+            catch (HttpException ex)
+            {
+                throw new DownloadClientException("Failed to connect to qBittorrent, check your settings.", ex);
             }
             catch (WebException ex)
             {
