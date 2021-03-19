@@ -183,6 +183,8 @@ namespace NzbDrone.Core.Messaging.Commands
         public void Complete(CommandModel command, string message)
         {
             Update(command, CommandStatus.Completed, message);
+
+            _commandQueue.PulseAllConsumers();
         }
 
         public void Fail(CommandModel command, string message, Exception e)
@@ -190,6 +192,8 @@ namespace NzbDrone.Core.Messaging.Commands
             command.Exception = e.ToString();
             
             Update(command, CommandStatus.Failed, message);
+
+            _commandQueue.PulseAllConsumers();
         }
 
         public void Requeue()
