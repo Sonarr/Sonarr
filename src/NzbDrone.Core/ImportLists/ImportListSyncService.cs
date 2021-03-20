@@ -101,6 +101,9 @@ namespace NzbDrone.Core.ImportLists
                 if (existingSeries != null)
                 {
                     _logger.Debug("{0} [{1}] Rejected, Series Exists in DB", report.TvdbId, report.Title);
+
+                    AddTagsToExistingSeries(importList, report);
+
                     continue;
                 }
 
@@ -153,6 +156,27 @@ namespace NzbDrone.Core.ImportLists
             else
             {
                 SyncAll();
+            }
+        }
+
+
+        private void AddTagsToExistingSeries(ImportListDefinition importList, ImportListItemInfo report)
+        {
+            _logger.Debug("{0} [{1}] Checking if necessary to add new tag/s to existing Series.", report.TvdbId, report.Title);
+
+            var series = _seriesService.FindByTvdbId(report.TvdbId);
+
+            if (series != null)
+            {
+                foreach (var tag in importList.Tags)
+                {
+                    if (!series.Tags.Contains(tag))
+                    {
+                        series.Tags.Add(tag);
+                    }
+                }
+
+                _seriesService.UpdateSeries(series);
             }
         }
     }
