@@ -257,12 +257,11 @@ namespace NzbDrone.Core.Indexers
                                  {
                                      try
                                      {
-                                         var lengthValue = v.Attribute("length")?.Value;
                                          return new RssEnclosure
                                                 {
                                                     Url = v.Attribute("url")?.Value,
                                                     Type = v.Attribute("type")?.Value,
-                                                    Length = string.IsNullOrEmpty(lengthValue) ? default(long) : XmlConvert.ToInt64(lengthValue)
+                                                    Length = v.Attribute("length")?.Value?.ParseInt64() ?? default
                                                 };
                                      }
                                      catch (Exception e)
