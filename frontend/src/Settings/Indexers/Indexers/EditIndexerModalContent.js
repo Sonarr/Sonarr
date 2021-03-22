@@ -42,6 +42,7 @@ function EditIndexerModalContent(props) {
     enableInteractiveSearch,
     supportsRss,
     supportsSearch,
+    tags,
     fields,
     priority
   } = item;
@@ -114,6 +115,18 @@ function EditIndexerModalContent(props) {
                   helpTextWarning={supportsSearch.value ? undefined : 'Search is not supported with this indexer'}
                   isDisabled={!supportsSearch.value}
                   {...enableInteractiveSearch}
+                  onChange={onInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Tags</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.TAG}
+                  name="tags"
+                  helpText="Only use this indexer for series with at least one matching tag. Leave blank to ignore tags."
+                  {...tags}
                   onChange={onInputChange}
                 />
               </FormGroup>

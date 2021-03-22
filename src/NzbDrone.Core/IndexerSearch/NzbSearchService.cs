@@ -475,6 +475,8 @@ namespace NzbDrone.Core.IndexerSearch
                 _indexerFactory.InteractiveSearchEnabled() :
                 _indexerFactory.AutomaticSearchEnabled();
 
+            indexers = FilterIndexersByTags(criteriaBase.Series.Tags, indexers).ToList();
+
             var reports = new List<ReleaseInfo>();
 
             _logger.ProgressInfo("Searching {0} indexers for {1}", indexers.Count, criteriaBase);
@@ -519,6 +521,25 @@ namespace NzbDrone.Core.IndexerSearch
             }
 
             return _makeDownloadDecision.GetSearchDecision(reports, criteriaBase).ToList();
+        }
+
+        private static IEnumerable<IIndexer> FilterIndexersByTags(HashSet<int> seriesTags, IEnumerable<IIndexer> indexers)
+        {
+            foreach (var i in indexers)
+            {
+                // If indexer has no tags, always include
+                if (i.Definition.Tags.Count == 0)
+                    yield return i;
+
+                // If indexer has tags, ensure that one matches a tag on the series
+                foreach (var t in i.Definition.Tags)
+                {
+                    if (seriesTags.Contains(t))
+                        yield return i;
+                }
+
+                // No tags matched so do not include the indexer
+            }
         }
 
         private List<DownloadDecision> DeDupeDecisions(List<DownloadDecision> decisions)

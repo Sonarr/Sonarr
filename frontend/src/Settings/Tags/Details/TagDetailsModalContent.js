@@ -21,6 +21,7 @@ function TagDetailsModalContent(props) {
     importLists,
     notifications,
     releaseProfiles,
+    indexers,
     onModalClose,
     onDeleteTagPress
   } = props;
@@ -156,6 +157,21 @@ function TagDetailsModalContent(props) {
               }
             </FieldSet>
         }
+
+        {
+          !!indexers.length &&
+            <FieldSet legend="Indexers">
+              {
+                indexers.map((item) => {
+                  return (
+                    <div key={item.id}>
+                      {item.name}
+                    </div>
+                  );
+                })
+              }
+            </FieldSet>
+        }
       </ModalBody>
 
       <ModalFooter>
@@ -189,6 +205,7 @@ TagDetailsModalContent.propTypes = {
   importLists: PropTypes.arrayOf(PropTypes.object).isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
   releaseProfiles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  indexers: PropTypes.arrayOf(PropTypes.object).isRequired,
   onModalClose: PropTypes.func.isRequired,
   onDeleteTagPress: PropTypes.func.isRequired
 };

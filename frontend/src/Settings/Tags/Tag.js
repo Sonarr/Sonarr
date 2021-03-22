@@ -56,6 +56,7 @@ class Tag extends Component {
       importListIds,
       notificationIds,
       restrictionIds,
+      indexerIds,
       seriesIds
     } = this.props;
 
@@ -69,6 +70,7 @@ class Tag extends Component {
       importListIds.length ||
       notificationIds.length ||
       restrictionIds.length ||
+      indexerIds.length ||
       seriesIds.length
     );
 
@@ -124,6 +126,14 @@ class Tag extends Component {
                   </div> :
                   null
               }
+
+              {
+                indexerIds.length ?
+                  <div>
+                    {indexerIds.length} indexer{indexerIds.length > 1 && 's'}
+                  </div> :
+                  null
+              }
             </div>
         }
 
@@ -142,6 +152,7 @@ class Tag extends Component {
           importListIds={importListIds}
           notificationIds={notificationIds}
           restrictionIds={restrictionIds}
+          indexerIds={indexerIds}
           isOpen={isDetailsModalOpen}
           onModalClose={this.onDetailsModalClose}
           onDeleteTagPress={this.onDeleteTagPress}
@@ -168,6 +179,7 @@ Tag.propTypes = {
   importListIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   notificationIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   restrictionIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  indexerIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   seriesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   onConfirmDeleteTag: PropTypes.func.isRequired
 };
@@ -177,6 +189,7 @@ Tag.defaultProps = {
   importListIds: [],
   notificationIds: [],
   restrictionIds: [],
+  indexerIds: [],
   seriesIds: []
 };
 

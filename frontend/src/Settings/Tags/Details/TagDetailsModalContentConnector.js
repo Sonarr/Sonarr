@@ -69,6 +69,14 @@ function createMatchingReleaseProfilesSelector() {
   );
 }
 
+function createMatchingIndexersSelector() {
+  return createSelector(
+    (state, { indexerIds }) => indexerIds,
+    (state) => state.settings.indexers.items,
+    findMatchingItems
+  );
+}
+
 function createMapStateToProps() {
   return createSelector(
     createMatchingSeriesSelector(),
@@ -76,13 +84,15 @@ function createMapStateToProps() {
     createMatchingImportListsSelector(),
     createMatchingNotificationsSelector(),
     createMatchingReleaseProfilesSelector(),
-    (series, delayProfiles, importLists, notifications, releaseProfiles) => {
+    createMatchingIndexersSelector(),
+    (series, delayProfiles, importLists, notifications, releaseProfiles, indexers) => {
       return {
         series,
         delayProfiles,
         importLists,
         notifications,
-        releaseProfiles
+        releaseProfiles,
+        indexers
       };
     }
   );
