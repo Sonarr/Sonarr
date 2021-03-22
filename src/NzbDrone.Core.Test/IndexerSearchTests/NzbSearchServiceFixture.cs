@@ -187,12 +187,12 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition
             {
                 Id = 1,
-                Tags = new HashSet<int> { 3 }
+                Tags = new HashSet<int> { 1, 2, 3 }
             });
             _xemSeries = Builder<Series>.CreateNew()
                 .With(v => v.UseSceneNumbering = true)
                 .With(v => v.Monitored = true)
-                .With(v => v.Tags = new HashSet<int> { 3 })
+                .With(v => v.Tags = new HashSet<int> { 3, 4, 5 })
                 .Build();
             Mocker.GetMock<ISeriesService>()
                 .Setup(v => v.GetSeries(_xemSeries.Id))
@@ -215,12 +215,12 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition
             {
                 Id = 1,
-                Tags = new HashSet<int> { 3 }
+                Tags = new HashSet<int> { 1, 2, 3 }
             });
             _xemSeries = Builder<Series>.CreateNew()
                 .With(v => v.UseSceneNumbering = true)
                 .With(v => v.Monitored = true)
-                .With(v => v.Tags = new HashSet<int> { 4 })
+                .With(v => v.Tags = new HashSet<int> { 4, 5, 6 })
                 .Build();
             Mocker.GetMock<ISeriesService>()
                 .Setup(v => v.GetSeries(_xemSeries.Id))
