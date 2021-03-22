@@ -136,6 +136,114 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
+        public void Tags_IndexerTags_SeriesNoTags_IndexerNotIncluded()
+        {
+            _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition {
+                Id = 1,
+                Tags = new HashSet<int> { 3 }
+            });
+
+            WithEpisodes();
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.EpisodeSearch(_xemEpisodes.First(), true, false);
+
+            var criteria = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void Tags_IndexerNoTags_SeriesTags_IndexerIncluded()
+        {
+            _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition
+            {
+                Id = 1
+            });
+
+            _xemSeries = Builder<Series>.CreateNew()
+                .With(v => v.UseSceneNumbering = true)
+                .With(v => v.Monitored = true)
+                .With(v => v.Tags = new HashSet<int> { 3 })
+                .Build();
+
+            Mocker.GetMock<ISeriesService>()
+                .Setup(v => v.GetSeries(_xemSeries.Id))
+                .Returns(_xemSeries);
+
+            WithEpisodes();
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.EpisodeSearch(_xemEpisodes.First(), true, false);
+
+            var criteria = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void Tags_IndexerAndSeriesTagsMatch_IndexerIncluded()
+        {
+            _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition
+            {
+                Id = 1,
+                Tags = new HashSet<int> { 1, 2, 3 }
+            });
+
+            _xemSeries = Builder<Series>.CreateNew()
+                .With(v => v.UseSceneNumbering = true)
+                .With(v => v.Monitored = true)
+                .With(v => v.Tags = new HashSet<int> { 3, 4, 5 })
+                .Build();
+
+            Mocker.GetMock<ISeriesService>()
+                .Setup(v => v.GetSeries(_xemSeries.Id))
+                .Returns(_xemSeries);
+
+            WithEpisodes();
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.EpisodeSearch(_xemEpisodes.First(), true, false);
+
+            var criteria = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void Tags_IndexerAndSeriesTagsMismatch_IndexerNotIncluded()
+        {
+            _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition
+            {
+                Id = 1,
+                Tags = new HashSet<int> { 1, 2, 3 }
+            });
+
+            _xemSeries = Builder<Series>.CreateNew()
+                .With(v => v.UseSceneNumbering = true)
+                .With(v => v.Monitored = true)
+                .With(v => v.Tags = new HashSet<int> { 4, 5, 6 })
+                .Build();
+
+            Mocker.GetMock<ISeriesService>()
+                .Setup(v => v.GetSeries(_xemSeries.Id))
+                .Returns(_xemSeries);
+
+            WithEpisodes();
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.EpisodeSearch(_xemEpisodes.First(), true, false);
+
+            var criteria = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(0);
+        }
+
+        [Test]
         public void scene_episodesearch()
         {
             WithEpisodes();

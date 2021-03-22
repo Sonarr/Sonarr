@@ -21,6 +21,7 @@ function TagDetailsModalContent(props) {
     importLists,
     notifications,
     releaseProfiles,
+    indexers,
     onModalClose,
     onDeleteTagPress
   } = props;
@@ -38,7 +39,7 @@ function TagDetailsModalContent(props) {
         }
 
         {
-          !!series.length &&
+          series.length ?
             <FieldSet legend="Series">
               {
                 series.map((item) => {
@@ -49,11 +50,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!delayProfiles.length &&
+          delayProfiles.length ?
             <FieldSet legend="Delay Profile">
               {
                 delayProfiles.map((item) => {
@@ -78,11 +80,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!notifications.length &&
+          notifications.length ?
             <FieldSet legend="Connections">
               {
                 notifications.map((item) => {
@@ -93,11 +96,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!importLists.length &&
+          importLists.length ?
             <FieldSet legend="Import Lists">
               {
                 importLists.map((item) => {
@@ -108,11 +112,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!releaseProfiles.length &&
+          releaseProfiles.length ?
             <FieldSet legend="Release Profiles">
               {
                 releaseProfiles.map((item) => {
@@ -154,7 +159,24 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
+        }
+
+        {
+          indexers.length ?
+            <FieldSet legend="Indexers">
+              {
+                indexers.map((item) => {
+                  return (
+                    <div key={item.id}>
+                      {item.name}
+                    </div>
+                  );
+                })
+              }
+            </FieldSet> :
+            null
         }
       </ModalBody>
 
@@ -189,6 +211,7 @@ TagDetailsModalContent.propTypes = {
   importLists: PropTypes.arrayOf(PropTypes.object).isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
   releaseProfiles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  indexers: PropTypes.arrayOf(PropTypes.object).isRequired,
   onModalClose: PropTypes.func.isRequired,
   onDeleteTagPress: PropTypes.func.isRequired
 };

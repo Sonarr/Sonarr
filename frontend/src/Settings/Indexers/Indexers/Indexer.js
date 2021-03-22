@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { icons, kinds } from 'Helpers/Props';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
+import TagList from 'Components/TagList';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import EditIndexerModalConnector from './EditIndexerModalConnector';
@@ -67,6 +68,8 @@ class Indexer extends Component {
       enableRss,
       enableAutomaticSearch,
       enableInteractiveSearch,
+      tags,
+      tagList,
       supportsRss,
       supportsSearch,
       priority,
@@ -132,6 +135,11 @@ class Indexer extends Component {
           }
         </div>
 
+        <TagList
+          tags={tags}
+          tagList={tagList}
+        />
+
         <EditIndexerModalConnector
           id={id}
           isOpen={this.state.isEditIndexerModalOpen}
@@ -160,6 +168,8 @@ Indexer.propTypes = {
   enableRss: PropTypes.bool.isRequired,
   enableAutomaticSearch: PropTypes.bool.isRequired,
   enableInteractiveSearch: PropTypes.bool.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.number).isRequired,
+  tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
   supportsRss: PropTypes.bool.isRequired,
   supportsSearch: PropTypes.bool.isRequired,
   showPriority: PropTypes.bool.isRequired,

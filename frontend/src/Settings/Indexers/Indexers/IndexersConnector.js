@@ -4,13 +4,20 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import sortByName from 'Utilities/Array/sortByName';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
+import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import { fetchIndexers, deleteIndexer, cloneIndexer } from 'Store/Actions/settingsActions';
 import Indexers from './Indexers';
 
 function createMapStateToProps() {
   return createSelector(
     createSortedSectionSelector('settings.indexers', sortByName),
-    (indexers) => indexers
+    createTagsSelector(),
+    (indexers, tagList) => {
+      return {
+        ...indexers,
+        tagList
+      };
+    }
   );
 }
 

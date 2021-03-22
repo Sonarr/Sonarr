@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Profiles.Delay;
@@ -33,6 +34,7 @@ namespace NzbDrone.Core.Tags
         private readonly INotificationFactory _notificationFactory;
         private readonly IReleaseProfileService _releaseProfileService;
         private readonly ISeriesService _seriesService;
+        private readonly IIndexerFactory _indexerService;
 
         public TagService(ITagRepository repo,
                           IEventAggregator eventAggregator,
@@ -40,7 +42,8 @@ namespace NzbDrone.Core.Tags
                           IImportListFactory importListFactory,
                           INotificationFactory notificationFactory,
                           IReleaseProfileService releaseProfileService,
-                          ISeriesService seriesService)
+                          ISeriesService seriesService,
+                          IIndexerFactory indexerService)
         {
             _repo = repo;
             _eventAggregator = eventAggregator;
@@ -49,6 +52,7 @@ namespace NzbDrone.Core.Tags
             _notificationFactory = notificationFactory;
             _releaseProfileService = releaseProfileService;
             _seriesService = seriesService;
+            _indexerService = indexerService;
         }
 
         public Tag GetTag(int tagId)
@@ -81,16 +85,18 @@ namespace NzbDrone.Core.Tags
             var notifications = _notificationFactory.AllForTag(tagId);
             var restrictions = _releaseProfileService.AllForTag(tagId);
             var series = _seriesService.AllForTag(tagId);
+            var indexers = _indexerService.AllForTag(tagId);
 
             return new TagDetails
-                   {
-                       Id = tagId,
-                       Label = tag.Label,
-                       DelayProfileIds = delayProfiles.Select(c => c.Id).ToList(),
-                       ImportListIds = importLists.Select(c => c.Id).ToList(),
-                       NotificationIds = notifications.Select(c => c.Id).ToList(),
-                       RestrictionIds = restrictions.Select(c => c.Id).ToList(),
-                       SeriesIds = series.Select(c => c.Id).ToList()
+            {
+                Id = tagId,
+                Label = tag.Label,
+                DelayProfileIds = delayProfiles.Select(c => c.Id).ToList(),
+                ImportListIds = importLists.Select(c => c.Id).ToList(),
+                NotificationIds = notifications.Select(c => c.Id).ToList(),
+                RestrictionIds = restrictions.Select(c => c.Id).ToList(),
+                SeriesIds = series.Select(c => c.Id).ToList(),
+                IndexerIds = indexers.Select(c => c.Id).ToList()
             };
         }
 
@@ -102,21 +108,23 @@ namespace NzbDrone.Core.Tags
             var notifications = _notificationFactory.All();
             var restrictions = _releaseProfileService.All();
             var series = _seriesService.GetAllSeries();
+            var indexers = _indexerService.All();
 
             var details = new List<TagDetails>();
 
             foreach (var tag in tags)
             {
                 details.Add(new TagDetails
-                            {
-                                Id = tag.Id,
-                                Label = tag.Label,
-                                DelayProfileIds = delayProfiles.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                                ImportListIds = importLists.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                                NotificationIds = notifications.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                                RestrictionIds = restrictions.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                                SeriesIds = series.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList()
-                            }
+                    {
+                        Id = tag.Id,
+                        Label = tag.Label,
+                        DelayProfileIds = delayProfiles.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        ImportListIds = importLists.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        NotificationIds = notifications.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        RestrictionIds = restrictions.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        SeriesIds = series.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList()
+                    }
                 );
             }
 
