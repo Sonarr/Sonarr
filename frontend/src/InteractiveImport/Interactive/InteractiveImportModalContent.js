@@ -300,7 +300,7 @@ class InteractiveImportModalContent extends Component {
             isPopulated && !!items.length && !isFetching && !isFetching &&
               <Table
                 columns={columns}
-                horizontalScroll={false}
+                horizontalScroll={true}
                 selectAll={true}
                 allSelected={allSelected}
                 allUnselected={allUnselected}
