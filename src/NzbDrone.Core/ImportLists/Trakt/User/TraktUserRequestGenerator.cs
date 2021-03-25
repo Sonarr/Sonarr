@@ -26,17 +26,18 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
             var link = Settings.BaseUrl.Trim();
+            var userName = Settings.Username.IsNotNullOrWhiteSpace() ? Settings.Username.Trim() : Settings.AuthUser.Trim();
 
             switch (Settings.TraktListType)
             {
                 case (int)TraktUserListType.UserWatchList:
-                    link += $"/users/{Settings.AuthUser.Trim()}/watchlist/shows?limit={Settings.Limit}";
+                    link += $"/users/{userName}/watchlist/shows?limit={Settings.Limit}";
                     break;
                 case (int)TraktUserListType.UserWatchedList:
-                    link += $"/users/{Settings.AuthUser.Trim()}/watched/shows?limit={Settings.Limit}";
+                    link += $"/users/{userName}/watched/shows?limit={Settings.Limit}";
                     break;
                 case (int)TraktUserListType.UserCollectionList:
-                    link += $"/users/{Settings.AuthUser.Trim()}/collection/shows?limit={Settings.Limit}";
+                    link += $"/users/{userName}/collection/shows?limit={Settings.Limit}";
                     break;
             }
 
