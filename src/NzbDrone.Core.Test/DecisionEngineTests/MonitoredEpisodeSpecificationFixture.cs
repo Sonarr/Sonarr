@@ -7,6 +7,8 @@ using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Indexers;
+using Moq;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -18,18 +20,36 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private RemoteEpisode _parseResultMulti;
         private RemoteEpisode _parseResultSingle;
+        private IndexerDefinition _fakeIndexerDefinition;
         private Series _fakeSeries;
         private Episode _firstEpisode;
         private Episode _secondEpisode;
+        private ReleaseInfo _fakeRelease;
 
         [SetUp]
         public void Setup()
         {
+            _fakeIndexerDefinition = new IndexerDefinition
+            {
+                Tags = new HashSet<int>()
+            };
+
+            Mocker
+                .GetMock<IIndexerRepository>()
+                .Setup(m => m.Get(It.IsAny<int>()))
+                .Returns(_fakeIndexerDefinition);
+
             _monitoredEpisodeSpecification = Mocker.Resolve<MonitoredEpisodeSpecification>();
 
             _fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.Monitored = true)
+                .With(c => c.Tags = new HashSet<int>())
                 .Build();
+
+            _fakeRelease = new ReleaseInfo
+            {
+                IndexerId = 1
+            };
 
             _firstEpisode = new Episode { Monitored = true };
             _secondEpisode = new Episode { Monitored = true };
@@ -41,13 +61,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultMulti = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                Episodes = doubleEpisodeList
+                Episodes = doubleEpisodeList,
+                Release = _fakeRelease
             };
 
             _parseResultSingle = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                Episodes = singleEpisodeList
+                Episodes = singleEpisodeList,
+                Release = _fakeRelease
             };
         }
 
@@ -148,6 +170,51 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                   };
 
             _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void indexer_and_series_without_tags_should_return_true()
+        {
+            _fakeIndexerDefinition.Tags = new HashSet<int>();
+            _fakeSeries.Tags = new HashSet<int>();
+
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void indexer_with_tags_series_without_tags_should_return_false()
+        {
+            _fakeIndexerDefinition.Tags = new HashSet<int> { 123 };
+            _fakeSeries.Tags = new HashSet<int>();
+
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void indexer_without_tags_series_with_tags_should_return_true()
+        {
+            _fakeIndexerDefinition.Tags = new HashSet<int>();
+            _fakeSeries.Tags = new HashSet<int> { 123 };
+
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void indexer_with_tags_series_with_matching_tags_should_return_true()
+        {
+            _fakeIndexerDefinition.Tags = new HashSet<int> { 123, 456 };
+            _fakeSeries.Tags = new HashSet<int> { 123, 789 };
+
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void indexer_with_tags_series_with_different_tags_should_return_false()
+        {
+            _fakeIndexerDefinition.Tags = new HashSet<int> { 456 };
+            _fakeSeries.Tags = new HashSet<int> { 123, 789 };
+
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeFalse();
         }
     }
 }
