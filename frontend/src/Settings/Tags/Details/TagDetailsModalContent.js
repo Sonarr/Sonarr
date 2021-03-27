@@ -39,7 +39,7 @@ function TagDetailsModalContent(props) {
         }
 
         {
-          !!series.length &&
+          series.length ?
             <FieldSet legend="Series">
               {
                 series.map((item) => {
@@ -50,11 +50,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!delayProfiles.length &&
+          delayProfiles.length ?
             <FieldSet legend="Delay Profile">
               {
                 delayProfiles.map((item) => {
@@ -79,11 +80,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!notifications.length &&
+          notifications.length ?
             <FieldSet legend="Connections">
               {
                 notifications.map((item) => {
@@ -94,11 +96,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!importLists.length &&
+          importLists.length ?
             <FieldSet legend="Import Lists">
               {
                 importLists.map((item) => {
@@ -109,11 +112,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!releaseProfiles.length &&
+          releaseProfiles.length ?
             <FieldSet legend="Release Profiles">
               {
                 releaseProfiles.map((item) => {
@@ -155,11 +159,12 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
 
         {
-          !!indexers.length &&
+          indexers.length ?
             <FieldSet legend="Indexers">
               {
                 indexers.map((item) => {
@@ -170,7 +175,8 @@ function TagDetailsModalContent(props) {
                   );
                 })
               }
-            </FieldSet>
+            </FieldSet> :
+            null
         }
       </ModalBody>
 
