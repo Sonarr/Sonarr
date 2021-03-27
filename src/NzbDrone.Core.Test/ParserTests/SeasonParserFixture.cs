@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("My.Series.S2014.720p.HDTV.x264-ME", "My Series", 2014)]
         [TestCase("Series.Saison3.VOSTFR.HDTV.XviD-NOTAG", "Series", 3)]
         [TestCase("Series.SAISON.1.VFQ.PDTV.H264-ACC-ROLLED", "Series", 1)]
+        [TestCase("Series Title - Series 1 (1970) DivX", "Series Title", 1)]
         public void should_parse_full_season_release(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
