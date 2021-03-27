@@ -66,8 +66,10 @@ fi
 # Create data directory
 if [ ! -d "$CONFDIR" ]; then
   mkdir -p "$CONFDIR"
-  chown -R $USER:$GROUP "$CONFDIR"
 fi
+
+# Set permissions on data directory (always do this instead only on creation in case user was changed via dpkg-reconfigure)
+chown -R $USER:$GROUP "$CONFDIR"
 
 #BEGIN BUILTIN UPDATER
 # Apply patch if present
