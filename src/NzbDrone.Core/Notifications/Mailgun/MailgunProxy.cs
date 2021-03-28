@@ -47,9 +47,9 @@ namespace NzbDrone.Core.Notifications.Mailgun {
             string messageSubject, string messageBody)
         {
             var loginCredentials = new NetworkCredential("api", settings.ApiKey);
-            
             var url = settings.UseEuEndpoint ? BaseUrlEu : BaseUrlUs;
             var requestBuilder = new HttpRequestBuilder(url).Resource(resource);
+            
             requestBuilder.Method = method;
             requestBuilder.NetworkCredential = loginCredentials;
             
