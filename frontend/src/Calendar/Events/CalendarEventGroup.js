@@ -74,6 +74,7 @@ class CalendarEventGroup extends Component {
       showEpisodeInformation,
       showFinaleIcon,
       timeFormat,
+      fullColorEvents,
       colorImpairedMode,
       onEventModalOpenToggle
     } = this.props;
@@ -133,7 +134,8 @@ class CalendarEventGroup extends Component {
         className={classNames(
           styles.eventGroup,
           styles[statusStyle],
-          colorImpairedMode && 'colorImpaired'
+          colorImpairedMode && 'colorImpaired',
+          fullColorEvents && 'fullColor'
         )}
       >
         <div className={styles.info}>
@@ -144,7 +146,7 @@ class CalendarEventGroup extends Component {
           {
             isMissingAbsoluteNumber &&
               <Icon
-                className={styles.statusIcon}
+                containerClassName={styles.statusIcon}
                 name={icons.WARNING}
                 title="Episode does not have an absolute episode number"
               />
@@ -153,7 +155,7 @@ class CalendarEventGroup extends Component {
           {
             anyDownloading &&
               <Icon
-                className={styles.statusIcon}
+                containerClassName={styles.statusIcon}
                 name={icons.DOWNLOADING}
                 title="An episode is downloading"
               />
@@ -162,9 +164,10 @@ class CalendarEventGroup extends Component {
           {
             firstEpisode.episodeNumber === 1 && seasonNumber > 0 &&
               <Icon
-                className={styles.statusIcon}
+                containerClassName={styles.statusIcon}
                 name={icons.INFO}
                 kind={kinds.INFO}
+                darken={fullColorEvents}
                 title={seasonNumber === 1 ? 'Series Premiere' : 'Season Premiere'}
               />
           }
@@ -175,9 +178,9 @@ class CalendarEventGroup extends Component {
             seasonNumber > 0 &&
             lastEpisode.episodeNumber === series.seasons.find((season) => season.seasonNumber === seasonNumber).statistics.totalEpisodeCount &&
               <Icon
-                className={styles.statusIcon}
+                containerClassName={styles.statusIcon}
                 name={icons.INFO}
-                kind={kinds.WARNING}
+                kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
                 title={series.status === 'ended' ? 'Series finale' : 'Season finale'}
               />
           }
@@ -237,6 +240,7 @@ CalendarEventGroup.propTypes = {
   isDownloading: PropTypes.bool.isRequired,
   showEpisodeInformation: PropTypes.bool.isRequired,
   showFinaleIcon: PropTypes.bool.isRequired,
+  fullColorEvents: PropTypes.bool.isRequired,
   timeFormat: PropTypes.string.isRequired,
   colorImpairedMode: PropTypes.bool.isRequired,
   onEventModalOpenToggle: PropTypes.func.isRequired

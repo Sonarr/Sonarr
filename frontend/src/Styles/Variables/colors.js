@@ -64,6 +64,10 @@ module.exports = {
   inputWarningBoxShadowColor: 'rgba(255, 165, 0, 0.6)',
   colorImpairedGradient: '#ffffff',
   colorImpairedGradientDark: '#f4f5f6',
+  colorImpairedDangerGradient: '#d84848',
+  colorImpairedWarningGradient: '#e59400',
+  colorImpairedPrimaryGradient: '#538cd4',
+  colorImpairedGrayGradient: '#9b9b9b  ',
 
   //
   // Buttons
@@ -177,6 +181,7 @@ module.exports = {
   calendarTodayBackgroundColor: '#ddd',
   calendarBorderColor: '#cecece',
   calendarTextDim: '#666',
+  calendarTextDimAlternate: '#eee',
 
   //
   // Table

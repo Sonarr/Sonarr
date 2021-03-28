@@ -9,6 +9,8 @@ function LegendItem(props) {
     name,
     status,
     tooltip,
+    isAgendaView,
+    fullColorEvents,
     colorImpairedMode
   } = props;
 
@@ -17,7 +19,8 @@ function LegendItem(props) {
       className={classNames(
         styles.legendItem,
         styles[status],
-        colorImpairedMode && 'colorImpaired'
+        colorImpairedMode && 'colorImpaired',
+        fullColorEvents && !isAgendaView && 'fullColor'
       )}
       title={tooltip}
     >
@@ -30,6 +33,8 @@ LegendItem.propTypes = {
   name: PropTypes.string,
   status: PropTypes.string.isRequired,
   tooltip: PropTypes.string.isRequired,
+  isAgendaView: PropTypes.bool.isRequired,
+  fullColorEvents: PropTypes.bool.isRequired,
   colorImpairedMode: PropTypes.bool.isRequired
 };
 
