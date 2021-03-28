@@ -1,68 +1,112 @@
 ﻿using CookComputing.XmlRpc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NzbDrone.Core.Download.Clients.Aria2
 {
     public class Aria2Version
     {
-        public string version;
-        public string[] enabledFeatures;
+        [XmlRpcMember("version")]
+        public string Version;
+
+        [XmlRpcMember("enabledFeatures")]
+        public string[] EnabledFeatures;
     }
 
     public class Aria2Uri
     {
-        public string status;
-        public string uri;
+        [XmlRpcMember("status")]
+        public string Status;
+
+        [XmlRpcMember("uri")]
+        public string Uri;
     }
 
     public class Aria2File
     {
-        public string index;
-        public string length;
-        public string completedLength;
-        public string path;
+        [XmlRpcMember("index")]
+        public string Index;
+
+        [XmlRpcMember("length")]
+        public string Length;
+
+        [XmlRpcMember("completedLength")]
+        public string CompletedLength;
+
+        [XmlRpcMember("path")]
+        public string Path;
+
+        [XmlRpcMember("selected")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string selected;
+        public string Selected;
+
+        [XmlRpcMember("uris")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public Aria2Uri[] uris;
+        public Aria2Uri[] Uris;
     }
 
     public class Aria2Status
     {
+        [XmlRpcMember("bittorrent")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public XmlRpcStruct bittorrent;
+        public XmlRpcStruct Bittorrent;
+
+        [XmlRpcMember("bitfield")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string bitfield;
+        public string Bitfield;
+
+        [XmlRpcMember("infoHash")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string infoHash;
+        public string InfoHash;
+
+        [XmlRpcMember("completedLength")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string completedLength;
+        public string CompletedLength;
+
+        [XmlRpcMember("connections")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string connections;
+        public string Connections;
+
+        [XmlRpcMember("dir")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string dir;
+        public string Dir;
+
+        [XmlRpcMember("downloadSpeed")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string downloadSpeed;
+        public string DownloadSpeed;
+
+        [XmlRpcMember("files")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public Aria2File[] files;
-        public string gid;
+        public Aria2File[] Files;
+
+        [XmlRpcMember("gid")]
+        public string Gid;
+
+        [XmlRpcMember("numPieces")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string numPieces;
+        public string NumPieces;
+
+        [XmlRpcMember("pieceLength")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string pieceLength;
+        public string PieceLength;
+
+        [XmlRpcMember("status")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string status;
+        public string Status;
+
+        [XmlRpcMember("totalLength")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string totalLength;
+        public string TotalLength;
+
+        [XmlRpcMember("uploadLength")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string uploadLength;
+        public string UploadLength;
+
+        [XmlRpcMember("uploadSpeed")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string uploadSpeed;
+        public string UploadSpeed;
+
+        [XmlRpcMember("errorMessage")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string errorMessage;
+        public string ErrorMessage;
     }
 }
+

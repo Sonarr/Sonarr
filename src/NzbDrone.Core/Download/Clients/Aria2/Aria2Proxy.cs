@@ -1,26 +1,20 @@
-﻿using System;
-using System.Net;
-using System.Collections.Generic;
-using NzbDrone.Common.Extensions;
+﻿using CookComputing.XmlRpc;
 using NLog;
-using Newtonsoft.Json.Linq;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.Serializer;
-using CookComputing.XmlRpc;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.Aria2
 {
     public interface IAria2Proxy
     {
         string GetVersion(Aria2Settings settings);
-
         string AddMagnet(Aria2Settings settings, string magnet);
         string AddTorrent(Aria2Settings settings, byte[] torrent);
         bool RemoveTorrent(Aria2Settings settings, string gid);
         Dictionary<string, string> GetGlobals(Aria2Settings settings);
-        Aria2Status[] GetStatuses(Aria2Settings settings);
+        Aria2Status[] GetTorrents(Aria2Settings settings);
         Aria2Status GetFromGID(Aria2Settings settings, string gid);
     }
 
@@ -63,16 +57,26 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             _logger = logger;
         }
 
+        private string GetToken(Aria2Settings settings)
+        {
+            return $"token:{settings?.SecretToken}";
+        }
+
+        private string GetURL(Aria2Settings settings)
+        {
+            return $"http{(settings.UseSsl ? "s" : "")}://{settings.Host}:{settings.Port}{settings.RpcPath}";
+        }
+
         public string GetVersion(Aria2Settings settings)
         {
             _logger.Debug("> aria2.getVersion");
 
             var client = BuildClient(settings);
-            var version = ExecuteRequest(() => client.GetVersion(settings.RPCToken));
+            var version = ExecuteRequest(() => client.GetVersion(GetToken(settings)));
 
             _logger.Debug("< aria2.getVersion");
 
-            return version.version;
+            return version.Version;
         }
 
         public Aria2Status GetFromGID(Aria2Settings settings, string gid)
@@ -80,7 +84,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             _logger.Debug("> aria2.tellStatus");
 
             var client = BuildClient(settings);
-            var found = ExecuteRequest(() => client.GetFromGid(settings.RPCToken, gid));
+            var found = ExecuteRequest(() => client.GetFromGid(GetToken(settings), gid));
 
             _logger.Debug("< aria2.tellStatus");
 
@@ -88,25 +92,25 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         }
 
 
-        public Aria2Status[] GetStatuses(Aria2Settings settings)
+        public Aria2Status[] GetTorrents(Aria2Settings settings)
         {
             _logger.Debug("> aria2.tellActive");
 
             var client = BuildClient(settings);
 
-            var actives = ExecuteRequest(() => client.GetActives(settings.RPCToken));
+            var actives = ExecuteRequest(() => client.GetActives(GetToken(settings)));
 
             _logger.Debug("< aria2.tellActive");
 
             _logger.Debug("> aria2.tellWaiting");
 
-            var waitings = ExecuteRequest(() => client.GetWaitings(settings.RPCToken, 1, 10*1024));
+            var waitings = ExecuteRequest(() => client.GetWaitings(GetToken(settings), 1, 10*1024));
 
             _logger.Debug("< aria2.tellWaiting");
 
             _logger.Debug("> aria2.tellStopped");
 
-            var stoppeds = ExecuteRequest(() => client.GetStoppeds(settings.RPCToken, 1, 10*1024));
+            var stoppeds = ExecuteRequest(() => client.GetStoppeds(GetToken(settings), 1, 10*1024));
 
             _logger.Debug("< aria2.tellStopped");
 
@@ -124,7 +128,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             _logger.Debug("> aria2.getGlobalOption");
 
             var client = BuildClient(settings);
-            var options = ExecuteRequest(() => client.GetGlobalOption(settings.RPCToken));
+            var options = ExecuteRequest(() => client.GetGlobalOption(GetToken(settings)));
 
             _logger.Debug("< aria2.getGlobalOption");
 
@@ -143,7 +147,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             _logger.Debug("> aria2.addUri");
 
             var client = BuildClient(settings);
-            var gid = ExecuteRequest(() => client.AddUri(settings.RPCToken, new[] { magnet }));
+            var gid = ExecuteRequest(() => client.AddUri(GetToken(settings), new[] { magnet }));
 
             _logger.Debug("< aria2.addUri");
 
@@ -155,7 +159,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             _logger.Debug("> aria2.addTorrent");
 
             var client = BuildClient(settings);
-            var gid = ExecuteRequest(() => client.AddTorrent(settings.RPCToken, Convert.ToBase64String(torrent)));
+            var gid = ExecuteRequest(() => client.AddTorrent(GetToken(settings), Convert.ToBase64String(torrent)));
 
             _logger.Debug("< aria2.addTorrent");
 
@@ -167,7 +171,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             _logger.Debug("> aria2.forceRemove");
 
             var client = BuildClient(settings);
-            var gidres = ExecuteRequest(() => client.Remove(settings.RPCToken, gid));
+            var gidres = ExecuteRequest(() => client.Remove(GetToken(settings), gid));
 
             _logger.Debug("< aria2.forceRemove");
 
@@ -177,7 +181,8 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         private IAria2 BuildClient(Aria2Settings settings)
         {
             var client = XmlRpcProxyGen.Create<IAria2>();
-            client.Url = settings.URL;
+            client.Url = GetURL(settings);
+
             return client;
         }
 

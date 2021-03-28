@@ -1,9 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using FluentValidation;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
-using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Download.Clients.Aria2
 {
@@ -23,8 +21,8 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         {
             Host = "localhost";
             Port = 6800;
-            RPCPath = "/rpc";
-            UseSSL = false;
+            RpcPath = "/rpc";
+            UseSsl = false;
             SecretToken = "MySecretToken";
         }
 
@@ -35,16 +33,14 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         public int Port { get; set; }
 
         [FieldDefinition(2, Label = "RPC Path", Type = FieldType.Textbox)]
-        public string RPCPath { get; set; }
+        public string RpcPath { get; set; }
 
         [FieldDefinition(3, Label = "Use SLL", Type = FieldType.Checkbox)]
-        public bool UseSSL { get; set; }
+        public bool UseSsl { get; set; }
 
         [FieldDefinition(4, Label = "Secret token", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string SecretToken { get; set; }
 
-        internal string RPCToken => $"token:{SecretToken}";
-        internal string URL => $"http{(UseSSL ? "s":"")}://{Host}:{Port}{RPCPath}";
 
         public NzbDroneValidationResult Validate()
         {
