@@ -94,6 +94,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
         {
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;
+            episodeFile.SceneName = episodeFileResource.SceneName;
+            episodeFile.ReleaseGroup = episodeFileResource.ReleaseGroup;
             _mediaFileService.Update(episodeFile);
         }
 
@@ -112,6 +114,16 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 if (resource.Quality != null)
                 {
                     episodeFile.Quality = resource.Quality;
+                }
+
+                if (resource.SceneName != null)
+                {
+                    episodeFile.SceneName = resource.SceneName;
+                }
+
+                if (resource.ReleaseGroup != null)
+                {
+                    episodeFile.ReleaseGroup = resource.ReleaseGroup;
                 }
             }
 
