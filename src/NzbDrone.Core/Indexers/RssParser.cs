@@ -261,7 +261,7 @@ namespace NzbDrone.Core.Indexers
                                                 {
                                                     Url = v.Attribute("url")?.Value,
                                                     Type = v.Attribute("type")?.Value,
-                                                    Length = v.Attribute("length")?.Value?.ParseInt64() ?? default
+                                                    Length = v.Attribute("length")?.Value?.ParseInt64() ?? 0
                                                 };
                                      }
                                      catch (Exception e)
