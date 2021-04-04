@@ -18,7 +18,7 @@ if [ -n "${dependent_build_number}" ]; then
   BuildVersion=${dependent_build_number}
 else
   echo === Attempting to ask services.sonarr.tv latest version
-  BuildVersion=$(python3 -c 'import requests; print(requests.get("http://services.sonarr.tv/v1/update/phantom-develop?version=3.0").json()["updatePackage"]["version"])')
+  BuildVersion=$(python3 -c 'import requests; print(requests.get("http://services.sonarr.tv/v1/update/main?version=3.0").json()["updatePackage"]["version"])')
   if [ -z "${BuildVersion}" ]; then
     echo === Falling back to default
     BuildVersion='3.0.4.1002'
@@ -29,7 +29,7 @@ fi
 
 
 COPR="true"
-BuildBranch=${dependent_build_branch:-develop}
+BuildBranch=${dependent_build_branch:-main}
 BootstrapVersion=`echo "$BuildVersion" | cut -d. -f1,2,3`
 BootstrapUpdater="BuiltIn"
 SpecFile="sonarr-$BuildVersion-$BuildBranch.spec"
@@ -114,9 +114,9 @@ echo === Checking bootstrap spec with rpmlint
 rpmlint $BootStrapSpecFile || true
 
 echo === Fetch tarball if not present
-if [ ! -e Sonarr.phantom-${BuildBranch}.${BuildVersion}.linux.tar.gz ]; then
+if [ ! -e Sonarr.${BuildBranch}.${BuildVersion}.linux.tar.gz ]; then
   (
-    wget https://download.sonarr.tv/v3/phantom-${BuildBranch}/${BuildVersion}/Sonarr.phantom-${BuildBranch}.${BuildVersion}.linux.tar.gz 
+    wget https://download.sonarr.tv/v3/${BuildBranch}/${BuildVersion}/Sonarr.${BuildBranch}.${BuildVersion}.linux.tar.gz 
   )
 fi
 
