@@ -7,7 +7,7 @@ Summary:        PVR for Usenet and BitTorrent users
 
 License:        GPLv3+
 URL:            https://sonarr.tv/
-Source0:        https://download.sonarr.tv/v3/phantom-%{BuildBranch}/%{BuildVersion}/Sonarr.phantom-%{BuildBranch}.%{version}.linux.tar.gz
+Source0:        https://download.sonarr.tv/v3/%{BuildBranch}/%{BuildVersion}/Sonarr.%{BuildBranch}.%{version}.linux.tar.gz
 Source3:        %{name}.systemd
 Source4:        %{name}.firewalld
 Source5:        %{name}-secure.firewalld
@@ -80,7 +80,7 @@ install -m 0755 -d %{buildroot}/opt/%{name}
   echo "ReleaseVersion=%{version}"
   echo "UpdateMethod=External"
   echo "UpdateMethodMessage=Update with: sudo yum update sonarr"
-  echo "Branch=phantom-%{BuildBranch}" 
+  echo "Branch=%{BuildBranch}" 
 ) > %{buildroot}/opt/%{name}/package_info
 
 mv * %{buildroot}/opt/%{name}
@@ -137,8 +137,6 @@ firewall-cmd --remove-service=%{name} --permanent
 
 %changelog
 * Sun Apr 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.6.1196-1.main
-
-* Sun Apr 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.6.1196-1.develop
 
 * Mon Mar 08 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.5.1143-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
