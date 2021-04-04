@@ -124,7 +124,7 @@ function EditNotificationModalContent(props) {
                     <FormInputGroup
                       type={inputTypes.CHECK}
                       name="onDownload"
-                      helpText="On Download"
+                      helpText="On Import"
                       isDisabled={!supportsOnDownload.value}
                       {...onDownload}
                       onChange={onInputChange}

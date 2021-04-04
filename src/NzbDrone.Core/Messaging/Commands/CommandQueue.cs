@@ -23,6 +23,8 @@ namespace NzbDrone.Core.Messaging.Commands
             lock (_mutex)
             {
                 _items.Add(item);
+
+                Monitor.PulseAll(_mutex);
             }
         }
 
@@ -68,6 +70,8 @@ namespace NzbDrone.Core.Messaging.Commands
                 {
                     _items.Remove(command);
                 }
+
+                Monitor.PulseAll(_mutex);
             }
         }
         public bool RemoveIfQueued(int id)
@@ -82,6 +86,8 @@ namespace NzbDrone.Core.Messaging.Commands
                 {
                     _items.Remove(command);
                     rval = true;
+
+                    Monitor.PulseAll(_mutex);
                 }
             }
 
@@ -101,18 +107,43 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public IEnumerable<CommandModel> GetConsumingEnumerable(CancellationToken cancellationToken)
         {
+            cancellationToken.Register(PulseAllConsumers);
+
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (TryGet(out var command))
+                CommandModel command = null;
+
+                lock (_mutex)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    if (!TryGet(out command))
+                    {
+                        Monitor.Wait(_mutex);
+                        continue;
+                    }
+                }
+
+                if (command != null)
                 {
                     yield return command;
                 }
-
-                Thread.Sleep(10);
             }
         }
 
-        public bool TryGet(out CommandModel item)
+        public void PulseAllConsumers()
+        {
+            // Signal all consumers to reevaluate cancellation token
+            lock (_mutex)
+            {
+                Monitor.PulseAll(_mutex);
+            }
+        }
+
+        private bool TryGet(out CommandModel item)
         {
             var rval = true;
             item = default(CommandModel);

@@ -14,6 +14,12 @@ Description: Sonarr group:
   Any media files created by Sonarr will be writeable by this group.
   It's advisable to keep the group the same between download client, Sonarr and media centers.
 
+Template: sonarr/owning_umask
+Type: string
+Default: 0002
+Description: Sonarr umask:
+  Specifies the umask of the files created by Sonarr. 0002 means the files will be created with 664 as permissions.
+
 Template: sonarr/config_directory
 Type: string
 Default: /var/lib/sonarr

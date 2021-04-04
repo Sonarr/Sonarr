@@ -7,6 +7,24 @@ import EpisodeDetailsModalContentConnector from './EpisodeDetailsModalContentCon
 class EpisodeDetailsModal extends Component {
 
   //
+  // Lifecycle
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      closeOnBackgroundClick: false
+    };
+  }
+
+  //
+  // Listeners
+
+  onTabChange = (isSearch) => {
+    this.setState({ closeOnBackgroundClick: !isSearch });
+  }
+
+  //
   // Render
 
   render() {
@@ -20,10 +38,12 @@ class EpisodeDetailsModal extends Component {
       <Modal
         isOpen={isOpen}
         size={sizes.EXTRA_LARGE}
+        closeOnBackgroundClick={this.state.closeOnBackgroundClick}
         onModalClose={onModalClose}
       >
         <EpisodeDetailsModalContentConnector
           {...otherProps}
+          onTabChange={this.onTabChange}
           onModalClose={onModalClose}
         />
       </Modal>

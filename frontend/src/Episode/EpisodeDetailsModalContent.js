@@ -37,7 +37,9 @@ class EpisodeDetailsModalContent extends Component {
   // Listeners
 
   onTabSelect = (index, lastIndex) => {
-    this.setState({ selectedTab: tabs[index] });
+    const selectedTab = tabs[index];
+    this.props.onTabChange(selectedTab === 'search');
+    this.setState({ selectedTab });
   }
 
   //
@@ -206,6 +208,7 @@ EpisodeDetailsModalContent.propTypes = {
   selectedTab: PropTypes.string.isRequired,
   startInteractiveSearch: PropTypes.bool.isRequired,
   onMonitorEpisodePress: PropTypes.func.isRequired,
+  onTabChange: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 

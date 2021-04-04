@@ -50,20 +50,20 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 // Migration helper logic
                 if (!downloadClientIsLocalHost)
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Multi-Computer unsupported)", "Migrating_to_Completed_Download_Handling#Unsupported_download_client_on_different_computer");
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Multi-Computer unsupported)", "#completed_failed_download_handling");
                 }
 
                 if (downloadClients.All(v => v.DownloadClient is Sabnzbd))
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Sabnzbd)", "Migrating_to_Completed_Download_Handling#sabnzbd_enable_completed_download_handling");
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Sabnzbd)", "#completed/failed_download_handling");
                 }
 
                 if (downloadClients.All(v => v.DownloadClient is Nzbget))
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Nzbget)", "Migrating_to_Completed_Download_Handling#nzbget_enable_completed_download_handling");
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Nzbget)", "#completed/failed_download_handling");
                 }
 
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible", "Migrating_to_Completed_Download_Handling");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible", "#completed/failed_download_handling");
             }
 
             if (!_configService.EnableCompletedDownloadHandling)

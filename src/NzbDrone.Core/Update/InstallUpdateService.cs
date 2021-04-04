@@ -293,14 +293,6 @@ namespace NzbDrone.Core.Update
 
             try
             {
-                // Don't do a prestartup update check unless BuiltIn update is enabled
-                if (_configFileProvider.UpdateAutomatically ||
-                    _configFileProvider.UpdateMechanism != UpdateMechanism.BuiltIn ||
-                    _deploymentInfoProvider.IsExternalUpdateMechanism)
-                {
-                    return;
-                }
-
                 var updateMarker = Path.Combine(_appFolderInfo.AppDataFolder, "update_required");
                 if (!_diskProvider.FileExists(updateMarker))
                 {
@@ -308,6 +300,15 @@ namespace NzbDrone.Core.Update
                 }
 
                 _logger.Debug("Post-install update check requested");
+
+                // Don't do a prestartup update check unless BuiltIn update is enabled
+                if (!_configFileProvider.UpdateAutomatically ||
+                    _configFileProvider.UpdateMechanism != UpdateMechanism.BuiltIn ||
+                    _deploymentInfoProvider.IsExternalUpdateMechanism)
+                {
+                    _logger.Debug("Built-in updater disabled, skipping post-install update check");
+                    return;
+                }
 
                 var latestAvailable = _checkUpdateService.AvailableUpdate();
                 if (latestAvailable == null)

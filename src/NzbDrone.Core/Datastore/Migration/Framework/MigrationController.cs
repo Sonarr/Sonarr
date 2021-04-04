@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
             var sw = Stopwatch.StartNew();
 
-            _announcer.Heading("Migrating " + connectionString);
+            _announcer.Heading("Checking database for required migrations " + connectionString);
 
             var assembly = Assembly.GetExecutingAssembly();
 

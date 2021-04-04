@@ -26,25 +26,11 @@ namespace NzbDrone.Core.Notifications.Email
         public void SendEmail(EmailSettings settings, string subject, string body, bool htmlBody = false)
         {
             var email = new MimeMessage();
-
-            try
-            {
-                email.From.Add(MailboxAddress.Parse(settings.From));
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "From email address '{0}' invalid", settings.From);
-            }
-
-            try
-            {
-                email.To.Add(MailboxAddress.Parse(settings.To));
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "To email address '{0}' invalid", settings.To);
-            }
-
+            email.From.Add(ParseAddress("From", settings.From));
+            email.To.AddRange(settings.To.Select(x => ParseAddress("To", x)));
+            email.Cc.AddRange(settings.Cc.Select(x => ParseAddress("CC", x)));
+            email.Bcc.AddRange(settings.Bcc.Select(x => ParseAddress("BCC", x)));
+           
             email.Subject = subject;
             email.Body = new TextPart(htmlBody ? "html" : "plain")
             {
@@ -112,6 +98,19 @@ namespace NzbDrone.Core.Notifications.Email
             }
 
             return null;
+        }
+
+        private MailboxAddress ParseAddress(string type, string address)
+        {
+            try
+            {
+                return MailboxAddress.Parse(address);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "{0} email address '{1}' invalid", type, address);
+                throw;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using NzbDrone.Core.Exceptions;
 
 namespace NzbDrone.Core.MetadataSource.SkyHook
@@ -11,6 +12,11 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
         public SkyHookException(string message, params object[] args)
             : base(HttpStatusCode.ServiceUnavailable, message, args)
+        {
+        }
+
+        public SkyHookException(string message, Exception innerException, params object[] args)
+            : base(HttpStatusCode.ServiceUnavailable, message, innerException, args)
         {
         }
     }

@@ -61,7 +61,7 @@ namespace NzbDrone.Host.Owin
 
                 if (ex.InnerException is HttpListenerException)
                 {
-                    throw new PortInUseException("Port {0} is already in use, please ensure NzbDrone is not already running.", ex, _configFileProvider.Port);
+                    throw new PortInUseException("Unable to bind to the designated IP Address/Port ({0}:{1}). Please ensure Sonarr is not already running, the bind address is correct (or is set to'*') and the port is not used", ex, _configFileProvider.BindAddress, _configFileProvider.Port);
                 }
 
                 throw ex.InnerException;
