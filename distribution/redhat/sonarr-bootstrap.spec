@@ -122,6 +122,8 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Sun Apr 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.6.1196-1.main
+
 * Sun Apr 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.6.1196-1.develop
 
 * Mon Mar 08 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.5.1143-1.develop
