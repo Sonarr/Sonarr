@@ -136,6 +136,8 @@ firewall-cmd --remove-service=%{name} --permanent
 #fi
 
 %changelog
+* Sun Apr 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.6.1196-1.develop
+
 * Mon Mar 08 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.5.1143-1.develop
 - Merge branch 'phantom-develop' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
 - Fixed: Parsing of absolute episode number inside square brackets
