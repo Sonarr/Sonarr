@@ -24,5 +24,8 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
         [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(TraktUserListType), HelpText = "Type of list you're seeking to import from")]
         public int TraktListType { get; set; }
+
+        [FieldDefinition(2, Label = "Username", HelpText = "Username for the List to import from (empty to use Auth User)")]
+        public string Username { get; set; }
     }
 }
