@@ -67,10 +67,31 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Title.S01.720p.VFQ.WEB-DL.AAC2.0.H.264-BTN")]
         [TestCase("Title.S01.720p.TRUEFRENCH.WEB-DL.AAC2.0.H.264-BTN")]
         [TestCase("Series In The Middle S01 Multi VFI VO 1080p WEB x265 HEVC AAC 5.1-Papaya")]
+        [TestCase("Series Title S01 AVC.1080p.Blu-ray HD.VOSTFR.VFF")]
+        [TestCase("Series Title S01 Bluray 4k HDR HEVC AC3 VFF")]
+        [TestCase("Series Title S01 AVC.1080p.Blu-ray Remux HD.VOSTFR.VFF")]
+        [TestCase("Series Title S01 x264.720p.Blu-ray Rip HD.VOSTFR.VFF. ONLY")]
+        [TestCase("Series Title S01 HEVC.2160p.Blu-ray 4K.VOSTFR.VFF. JATO")]
+        [TestCase("Series_Title_S01_ENG_ITA_FRA_AAC_1080p_WebDL_x264")]
+        [TestCase("Series.Title.S01.ENG-ITA-FRA.AAC.1080p.WebDL.x264")]
+        [TestCase("Series Title S01 (BDrip 1080p ENG-ITA-FRA) Multisub x264")]
+        [TestCase("Series.Title.S01.ENG-ITA-FRE.AAC.1080p.WebDL.x264")]
+        [TestCase("Series Title S01 (BDrip 1080p ENG-ITA-FRE) Multisub x264")]
         public void should_parse_language_french(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
             result.Should().Contain(Language.French);
+        }
+
+        [TestCase("Series Title S01 1080p Eng Fra [mkvonly]")]
+        [TestCase("Series Title S01 Eng Fre Multi Subs 720p [H264 mp4]")]
+        [TestCase("Series-Title-S01-[DVDRip]-H264-Fra-Ac3-2-0-Eng-5-1")]
+        public void should_parse_language_french_english(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+
+            result.Should().Contain(Language.French);
+            result.Should().Contain(Language.English);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Spanish.HDTV.XviD-LOL")]
