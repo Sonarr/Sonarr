@@ -94,14 +94,17 @@ namespace Sonarr.Api.V3.EpisodeFiles
         {
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;
+
             if (episodeFileResource.SceneName != null)
             {
                 episodeFile.SceneName = episodeFileResource.SceneName;
             }
+
             if (episodeFileResource.ReleaseGroup != null)
             {
                 episodeFile.ReleaseGroup = episodeFileResource.ReleaseGroup;
             }
+
             _mediaFileService.Update(episodeFile);
         }
 
