@@ -166,6 +166,32 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
+        public void should_not_use_folder_name_as_scenename_if_it_is_for_batch()
+        {
+            var batchName = "[HorribleSubs] Series Title (01-62) [1080p] (Batch)";
+
+            _localEpisode.DownloadClientEpisodeInfo = new ParsedEpisodeInfo
+                                                      {
+                                                          FullSeason = false,
+                                                          ReleaseTitle = batchName
+                                                      };
+
+            _localEpisode.Path = Path.Combine(@"C:\Test\Unsorted TV", batchName, "[HorribleSubs] Series Title - 14 [1080p].mkv")
+                                     .AsOsAgnostic();
+
+            _localEpisode.OtherVideoFiles = true;
+
+            _localEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo
+                                              {
+                                                  ReleaseTitle = _seasonName,
+                                                  FullSeason = false
+                                              };
+
+            SceneNameCalculator.GetSceneName(_localEpisode).Should()
+                               .BeNull();
+        }
+
+        [Test]
         public void should_not_use_folder_name_as_scenename_if_there_are_other_video_files()
         {
             _localEpisode.OtherVideoFiles = true;
