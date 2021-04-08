@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
@@ -192,13 +193,46 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
-            if (GetQueue().Any(v => v.DownloadId == downloadId))
+            var historyItem = GetHistory().SingleOrDefault(v => v.DownloadId == downloadId);
+
+            if (historyItem == null)
             {
                 _proxy.RemoveFrom("queue", downloadId, deleteData, Settings);
             }
             else
             {
                 _proxy.RemoveFrom("history", downloadId, deleteData, Settings);
+
+                // Completed items in SAB's history do not remove the files from the file system when deleted, even if instructed to.
+                // If the output path is valid delete the file(s), otherwise warn that they cannot be deleted.
+
+                if (deleteData && historyItem.Status == DownloadItemStatus.Completed)
+                {
+                    if (ValidatePath(historyItem))
+                    {
+                        var outputPath = historyItem.OutputPath;
+
+                        try
+                        {
+                            if (_diskProvider.FolderExists(outputPath.FullPath))
+                            {
+                                _diskProvider.DeleteFolder(outputPath.FullPath.ToString(), true);
+                            }
+                            else if (_diskProvider.FileExists(outputPath.FullPath))
+                            {
+                                _diskProvider.DeleteFile(outputPath.FullPath.ToString());
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.Error("Unable to delete output path: '{0}'. Delete file(s) manually", outputPath.FullPath);
+                        }
+                    }
+                    else
+                    {
+                        _logger.Warn("Invalid path '{0}'. Delete file(s) manually");
+                    }
+                }
             }
         }
 
@@ -488,6 +522,24 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
 
             return categories.Contains(category);
+        }
+
+        private bool ValidatePath(DownloadClientItem downloadClientItem)
+        {
+            var downloadItemOutputPath = downloadClientItem.OutputPath;
+
+            if (downloadItemOutputPath.IsEmpty)
+            {
+                return false;
+            }
+
+            if ((OsInfo.IsWindows && !downloadItemOutputPath.IsWindowsPath) ||
+                (OsInfo.IsNotWindows && !downloadItemOutputPath.IsUnixPath))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

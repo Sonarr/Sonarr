@@ -576,5 +576,115 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
             result.IsValid.Should().BeFalse();
         }
+
+        [Test]
+        public void should_remove_output_path_folder_when_deleting_a_completed_item_and_delete_data_is_true()
+        {
+            var path = @"C:\Test\Series.Title.S01E01".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(path))
+                  .Returns(true);
+
+            _completed.Items.First().Storage = path;
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Subject.RemoveItem(_completed.Items.First().Id, true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(path, true), Times.Once);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFile(path), Times.Never);
+        }
+
+        [Test]
+        public void should_remove_output_path_file_when_deleting_a_completed_item_and_delete_data_is_true()
+        {
+            var path = @"C:\Test\Series.Title.S01E01.mkv".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(path))
+                  .Returns(false);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FileExists(path))
+                  .Returns(true);
+
+            _completed.Items.First().Storage = path;
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Subject.RemoveItem(_completed.Items.First().Id, true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(path, true), Times.Never);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFile(path), Times.Once);
+        }
+
+        [Test]
+        public void should_not_remove_output_path_file_when_deleting_a_completed_item_and_delete_data_is_true_if_it_does_not_exist()
+        {
+            var path = @"C:\Test\Series.Title.S01E01.mkv".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(path))
+                  .Returns(false);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FileExists(path))
+                  .Returns(false);
+
+            _completed.Items.First().Storage = path;
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Subject.RemoveItem(_completed.Items.First().Id, true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(path, true), Times.Never);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFile(path), Times.Never);
+        }
+
+        [Test]
+        public void should_not_remove_output_path_file_when_deleting_a_completed_item_and_delete_data_is_false()
+        {
+            var path = @"C:\Test\Series.Title.S01E01.mkv".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(path))
+                  .Returns(false);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FileExists(path))
+                  .Returns(false);
+
+            _completed.Items.First().Storage = path;
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Subject.RemoveItem(_completed.Items.First().Id, false);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.FolderExists(path), Times.Never);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.FileExists(path), Times.Never);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(path, true), Times.Never);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFile(path), Times.Never);
+        }
     }
 }
