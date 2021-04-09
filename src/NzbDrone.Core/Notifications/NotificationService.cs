@@ -15,12 +15,12 @@ using NzbDrone.Core.Tv.Events;
 namespace NzbDrone.Core.Notifications
 {
     public class NotificationService
-        : IHandle<EpisodeGrabbedEvent>,
-          IHandle<EpisodeImportedEvent>,
-          IHandle<SeriesRenamedEvent>,
-          IHandle<SeriesDeletedEvent>,
-          IHandle<EpisodeFileDeletedEvent>,
-          IHandle<HealthCheckFailedEvent>,
+        : IHandleAsync<EpisodeGrabbedEvent>,
+          IHandleAsync<EpisodeImportedEvent>,
+          IHandleAsync<SeriesRenamedEvent>,
+          IHandleAsync<SeriesDeletedEvent>,
+          IHandleAsync<EpisodeFileDeletedEvent>,
+          IHandleAsync<HealthCheckFailedEvent>,
           IHandleAsync<DeleteCompletedEvent>,
           IHandleAsync<DownloadsProcessedEvent>,
           IHandleAsync<RenameCompletedEvent>,
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Notifications
             return false;
         }
 
-        public void Handle(EpisodeGrabbedEvent message)
+        public void HandleAsync(EpisodeGrabbedEvent message)
         {
             var grabMessage = new GrabMessage
             {
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(EpisodeImportedEvent message)
+        public void HandleAsync(EpisodeImportedEvent message)
         {
             if (!message.NewDownload)
             {
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(SeriesRenamedEvent message)
+        public void HandleAsync(SeriesRenamedEvent message)
         {
             foreach (var notification in _notificationFactory.OnRenameEnabled())
             {
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(EpisodeFileDeletedEvent message)
+        public void HandleAsync(EpisodeFileDeletedEvent message)
         {
             if (message.EpisodeFile.Episodes.Value.Empty())
             {
@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(SeriesDeletedEvent message)
+        public void HandleAsync(SeriesDeletedEvent message)
         {
             var deleteMessage = new SeriesDeleteMessage(message.Series,message.DeleteFiles);
 
@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(HealthCheckFailedEvent message)
+        public void HandleAsync(HealthCheckFailedEvent message)
         {
             foreach (var notification in _notificationFactory.OnHealthIssueEnabled())
             {
