@@ -39,6 +39,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             var qualityComparer = new QualityModelComparer(qualityProfile);
             var qualityCompare = qualityComparer.Compare(newQuality?.Quality, currentQuality.Quality);
+            var downloadPropersAndRepacks = _configService.DownloadPropersAndRepacks;
 
             if (qualityCompare > 0)
             {
@@ -52,13 +53,23 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return false;
             }
 
+            var qualityRevisionComapre = newQuality?.Revision.CompareTo(currentQuality.Revision);
+
             // Accept unless the user doesn't want to prefer propers, optionally they can
             // use preferred words to prefer propers/repacks over non-propers/repacks.
-            if (_configService.DownloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
-                newQuality?.Revision.CompareTo(currentQuality.Revision) > 0)
+            if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
+                qualityRevisionComapre > 0)
             {
                 _logger.Debug("New item has a better quality revision");
                 return true;
+            }
+
+            // Reject unless the user does not prefer propers/repacks and it's a revision downgrade.
+            if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
+                qualityRevisionComapre < 0)
+            {
+                _logger.Debug("Existing item has a better quality revision, skipping");
+                return false;
             }
 
             var languageCompare = new LanguageComparer(languageProfile).Compare(newLanguage, currentLanguage);
@@ -77,7 +88,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             
             if (!IsPreferredWordUpgradable(currentScore, newScore))
             {
-                _logger.Debug("Existing item has a better preferred word score, skipping");
+                _logger.Debug("Existing item has an equal or better preferred word score, skipping");
                 return false;
             }
 

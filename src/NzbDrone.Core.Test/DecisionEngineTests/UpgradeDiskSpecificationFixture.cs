@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.MediaFiles;
@@ -135,6 +136,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_not_be_upgradable_if_qualities_are_the_same()
         {
             _firstFile.Quality = new QualityModel(Quality.WEBDL1080p);
+            _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p);
+            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
+        }
+        
+        [Test]
+        public void should_not_be_upgradable_if_revision_downgrade_and_preferred_word_upgrade_if_propers_are_preferred()
+        {
+            Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
+                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
+                  .Returns(5);
+
+            _parseResultSingle.PreferredWordScore = 10;
+
+            _firstFile.Quality = new QualityModel(Quality.WEBDL1080p, new Revision(2));
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p);
             _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
         }
