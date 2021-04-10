@@ -103,6 +103,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[XKsub] Series Title S2 [05][HEVC-10bit 1080p AAC][CHS&CHT&JPN]", "Series Title S2", 5, 0, 0)]
         [TestCase("[Cheetah-Raws] Super Long Anime - 1000 (YTV 1280x720 x264 AAC)", "Super Long Anime", 1000, 0, 0)]
         [TestCase("[DameDesuYo] ReZero kara Hajimeru Isekai Seikatsu (Season 2) - 33 (1280x720 10bit EAC3) [42A12A76].mkv", "ReZero kara Hajimeru Isekai Seikatsu", 33, 2, 0)]
+        [TestCase("[SubsPlease] Anime Title 300-nen, With Even More Title - 01 (1080p) [8DE44442]", "Anime Title 300-nen, With Even More Title", 1, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
