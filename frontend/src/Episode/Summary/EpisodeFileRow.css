@@ -1,0 +1,20 @@
+.size {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 100px;
+}
+
+.language,
+.quality {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 100px;
+}
+
+.actions {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  display: flex;
+  justify-content: flex-end;
+  width: 55px;
+}
