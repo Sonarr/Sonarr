@@ -233,6 +233,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S02E02.This.Year.Will.Be.Different.1080p.AMZN.WEB.", false)]
         [TestCase("Series Title - S01E11 2020 1080p Viva MKV WEB", false)]
         [TestCase("[HorribleSubs] Series Title! S01 [Web][MKV][h264][1080p][AAC 2.0][Softsubs (HorribleSubs)]", false)]
+        [TestCase("[LostYears] Series Title - 01-17 (WEB 1080p x264 10-bit AAC) [Dual-Audio]", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
