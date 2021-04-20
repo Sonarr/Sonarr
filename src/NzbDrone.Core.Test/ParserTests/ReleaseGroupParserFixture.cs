@@ -101,5 +101,11 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
+
+        [TestCase("Terrible.Anime.Title.001.DBOX.480p.x264-iKaos [v3] [6AFFEF6B]")]
+        public void should_not_parse_anime_hash_as_release_group(string title)
+        {
+            Parser.Parser.ParseReleaseGroup(title).Should().BeNull();
+        }
     }
 }
