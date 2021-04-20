@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -20,6 +21,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         private NzbgetHistoryItem _failed;
         private NzbgetHistoryItem _completed;
         private Dictionary<string, string> _configItems;
+        private DownloadClientItem _downloadClientItem;
 
         [SetUp]
         public void Setup()
@@ -73,6 +75,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                     DeleteStatus = "NONE",
                     MarkStatus = "NONE"
                 };
+
+            _downloadClientItem = Builder<DownloadClientItem>
+                                  .CreateNew().With(d => d.DownloadId = "_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0")
+                                  .Build();
 
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(s => s.GetGlobalStatus(It.IsAny<NzbgetSettings>()))
@@ -156,7 +162,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                 .Setup(v => v.FolderExists(It.IsAny<string>()))
                 .Returns(true);
 
-            Subject.RemoveItem("id", true);
+            Subject.RemoveItem(_downloadClientItem, true);
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(v => v.DeleteFolder(It.IsAny<string>(), true), Times.Once());

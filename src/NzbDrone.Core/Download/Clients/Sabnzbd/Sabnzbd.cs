@@ -191,48 +191,22 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
-            var historyItem = GetHistory().SingleOrDefault(v => v.DownloadId == downloadId);
+            var queueClientItem = GetQueue().SingleOrDefault(v => v.DownloadId == item.DownloadId);
 
-            if (historyItem == null)
+            if (queueClientItem == null)
             {
-                _proxy.RemoveFrom("queue", downloadId, deleteData, Settings);
+                if (deleteData && item.Status == DownloadItemStatus.Completed)
+                {
+                    DeleteItemData(item);
+                }
+
+                _proxy.RemoveFrom("history", item.DownloadId, deleteData, Settings);
             }
             else
             {
-                _proxy.RemoveFrom("history", downloadId, deleteData, Settings);
-
-                // Completed items in SAB's history do not remove the files from the file system when deleted, even if instructed to.
-                // If the output path is valid delete the file(s), otherwise warn that they cannot be deleted.
-
-                if (deleteData && historyItem.Status == DownloadItemStatus.Completed)
-                {
-                    if (ValidatePath(historyItem))
-                    {
-                        var outputPath = historyItem.OutputPath;
-
-                        try
-                        {
-                            if (_diskProvider.FolderExists(outputPath.FullPath))
-                            {
-                                _diskProvider.DeleteFolder(outputPath.FullPath.ToString(), true);
-                            }
-                            else if (_diskProvider.FileExists(outputPath.FullPath))
-                            {
-                                _diskProvider.DeleteFile(outputPath.FullPath.ToString());
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.Error("Unable to delete output path: '{0}'. Delete file(s) manually", outputPath.FullPath);
-                        }
-                    }
-                    else
-                    {
-                        _logger.Warn("Invalid path '{0}'. Delete file(s) manually");
-                    }
-                }
+                _proxy.RemoveFrom("queue", item.DownloadId, deleteData, Settings);
             }
         }
 

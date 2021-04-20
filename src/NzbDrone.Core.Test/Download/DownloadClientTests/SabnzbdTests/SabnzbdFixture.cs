@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         private SabnzbdHistory _completed;
         private SabnzbdConfig _config;
         private SabnzbdFullStatus _fullStatus;
+        private DownloadClientItem _downloadClientItem;
 
         [SetUp]
         public void Setup()
@@ -100,6 +101,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                             new SabnzbdCategory  { Name = "tv", Dir = "vv" }
                         }
                 };
+
+            _downloadClientItem = Builder<DownloadClientItem>
+                                  .CreateNew().With(d => d.DownloadId = _completed.Items.First().Id)
+                                  .Build();
 
             Mocker.GetMock<ISabnzbdProxy>()
                   .Setup(v => v.GetVersion(It.IsAny<SabnzbdSettings>()))
@@ -591,7 +596,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             GivenQueue(null);
             GivenHistory(_completed);
 
-            Subject.RemoveItem(_completed.Items.First().Id, true);
+            Subject.RemoveItem(_downloadClientItem, true);
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.DeleteFolder(path, true), Times.Once);
@@ -618,7 +623,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             GivenQueue(null);
             GivenHistory(_completed);
 
-            Subject.RemoveItem(_completed.Items.First().Id, true);
+            Subject.RemoveItem(_downloadClientItem, true);
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.DeleteFolder(path, true), Times.Never);
@@ -645,7 +650,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             GivenQueue(null);
             GivenHistory(_completed);
 
-            Subject.RemoveItem(_completed.Items.First().Id, true);
+            Subject.RemoveItem(_downloadClientItem, true);
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.DeleteFolder(path, true), Times.Never);
@@ -672,7 +677,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             GivenQueue(null);
             GivenHistory(_completed);
 
-            Subject.RemoveItem(_completed.Items.First().Id, false);
+            Subject.RemoveItem(_downloadClientItem, false);
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.FolderExists(path), Times.Never);
