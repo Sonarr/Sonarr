@@ -306,7 +306,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         if (episodeFile.MediaInfo.RunTime != null)
                         {
                             video.Add(new XElement("duration", episodeFile.MediaInfo.RunTime.TotalMinutes));
-                            video.Add(new XElement("durationinseconds", episodeFile.MediaInfo.RunTime.TotalSeconds));
+                            video.Add(new XElement("durationinseconds", Math.Round(episodeFile.MediaInfo.RunTime.TotalSeconds)));
                         }
 
                         streamDetails.Add(video);
