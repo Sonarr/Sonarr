@@ -148,8 +148,6 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
             xws.OmitXmlDeclaration = true;
             xws.Indent = false;
 
-            var episodeGuideUrl = string.Format("http://www.thetvdb.com/api/1D62F2F90030C444/series/{0}/all/en.zip", series.TvdbId);
-
             using (var xw = XmlWriter.Create(sb, xws))
             {
                 var tvShow = new XElement("tvshow");
@@ -162,8 +160,6 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 }
 
                 tvShow.Add(new XElement("plot", series.Overview));
-                tvShow.Add(new XElement("episodeguide", new XElement("url", episodeGuideUrl)));
-                tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
                 tvShow.Add(new XElement("mpaa", series.Certification));
                 tvShow.Add(new XElement("id", series.TvdbId));
 
