@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                                                  .Build();
 
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(s => s.BuildFilePath(It.IsAny<List<Episode>>(), It.IsAny<Series>(), It.IsAny<EpisodeFile>(), It.IsAny<string>(), It.IsAny<NamingConfig>(), It.IsAny<List<string>>()))
+                  .Setup(s => s.BuildFilePath(It.IsAny<List<Episode>>(), It.IsAny<Series>(), It.IsAny<EpisodeFile>(), It.IsAny<string>(), It.IsAny<NamingConfig>(), It.IsAny<List<string>>(), It.IsAny<Dictionary<string, List<string>>>()))
                   .Returns(@"C:\Test\TV\Series\Season 01\File Name.avi".AsOsAgnostic());
 
             Mocker.GetMock<IBuildFileNames>()
