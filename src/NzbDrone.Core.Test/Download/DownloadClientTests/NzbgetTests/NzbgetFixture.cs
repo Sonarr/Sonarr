@@ -77,7 +77,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                 };
 
             _downloadClientItem = Builder<DownloadClientItem>
-                                  .CreateNew().With(d => d.DownloadId = "_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0")
+                                  .CreateNew()
+                                  .With(d => d.DownloadId = "_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0")
+                                  .With(d => d.OutputPath = new OsPath("/remote/mount/tv/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic()))
                                   .Build();
 
             Mocker.GetMock<INzbgetProxy>()

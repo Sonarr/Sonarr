@@ -36,7 +36,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             _filePath = (@"c:\blackhole\torrent\" + _title + ".torrent").AsOsAgnostic();
 
             _downloadClientItem = Builder<DownloadClientItem>
-                                  .CreateNew().With(d => d.DownloadId = "_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0")
+                                  .CreateNew()
+                                  .With(d => d.DownloadId = "_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0")
+                                  .With(d => d.OutputPath = new OsPath(Path.Combine(_completedDownloadFolder, _title)))
                                   .Build();
 
             Mocker.SetConstant<IScanWatchFolder>(Mocker.Resolve<ScanWatchFolder>());

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -103,7 +104,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 };
 
             _downloadClientItem = Builder<DownloadClientItem>
-                                  .CreateNew().With(d => d.DownloadId = _completed.Items.First().Id)
+                                  .CreateNew()
+                                  .With(d => d.Status = DownloadItemStatus.Completed)
+                                  .With(d => d.DownloadId = _completed.Items.First().Id)
                                   .Build();
 
             Mocker.GetMock<ISabnzbdProxy>()
@@ -586,6 +589,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         public void should_remove_output_path_folder_when_deleting_a_completed_item_and_delete_data_is_true()
         {
             var path = @"C:\Test\Series.Title.S01E01".AsOsAgnostic();
+            _downloadClientItem.OutputPath = new OsPath(path);
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(path))
@@ -609,6 +613,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         public void should_remove_output_path_file_when_deleting_a_completed_item_and_delete_data_is_true()
         {
             var path = @"C:\Test\Series.Title.S01E01.mkv".AsOsAgnostic();
+            _downloadClientItem.OutputPath = new OsPath(path);
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(path))
