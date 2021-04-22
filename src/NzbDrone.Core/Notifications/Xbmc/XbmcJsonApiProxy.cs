@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private string ProcessRequest(XbmcSettings settings, string method, params object[] parameters)
         {
-            var url = string.Format(@"http://{0}/jsonrpc", settings.Address);
+            var url = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, "jsonrpc");
             var requestBuilder = new JsonRpcRequestBuilder(url, method, parameters);
 
             requestBuilder.LogResponseContent = true;
