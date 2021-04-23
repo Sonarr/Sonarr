@@ -9,7 +9,7 @@ using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.SceneChecker;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Http;
@@ -96,7 +96,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;
 
-            if (episodeFileResource.SceneName != null && SceneChecker.IsSceneTitle(episodeFileResource.SceneName))
+            if (episodeFileResource.SceneName != null && IsSceneTitle(episodeFileResource.SceneName))
             {
                 episodeFile.SceneName = episodeFileResource.SceneName;
             }
@@ -126,7 +126,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                     episodeFile.Quality = resource.Quality;
                 }
 
-                if (resource.SceneName != null && SceneChecker.IsSceneTitle(resource.SceneName))
+                if (resource.SceneName != null && IsSceneTitle(resource.SceneName))
                 {
                     episodeFile.SceneName = resource.SceneName;
                 }
