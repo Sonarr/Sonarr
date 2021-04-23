@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Organizer
         private static EpisodeFile _dailyEpisodeFile;
         private static EpisodeFile _animeEpisodeFile;
         private static EpisodeFile _animeMultiEpisodeFile;
-        private static List<string> _preferredWords;
+        private static Dictionary<string, List<string>> _preferredWords;
 
         public FileNameSampleService(IBuildFileNames buildFileNames)
         {
@@ -169,9 +169,9 @@ namespace NzbDrone.Core.Organizer
                 MediaInfo = mediaInfoAnime
             };
 
-            _preferredWords = new List<string>
+            _preferredWords = new Dictionary<string, List<string>>()
             {
-                "iNTERNAL"
+                { string.Empty, new List<string>() {"iNTERNAL" } }
             };
         }
 
