@@ -68,7 +68,7 @@
     "react-slider": "1.1.4",
     "react-tabs": "3.2.2",
     "react-text-truncate": "0.16.0",
-    "react-virtualized": "9.21.1",
+    "react-virtualized": "9.22.3",
     "redux": "4.1.0",
     "redux-actions": "2.6.5",
     "redux-batched-actions": "0.5.0",
