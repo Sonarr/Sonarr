@@ -97,7 +97,7 @@
     "babel-plugin-inline-classnames": "2.0.1",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
     "copy-webpack-plugin": "8.1.1",
-    "core-js": "3.6.5",
+    "core-js": "3.11.0",
     "css-loader": "5.2.4",
     "esformatter": "0.11.3",
     "eslint": "7.25.0",
