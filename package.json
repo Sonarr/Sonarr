@@ -49,7 +49,7 @@
     "prop-types": "15.7.2",
     "qs": "6.10.1",
     "react": "17.0.2",
-    "react-addons-shallow-compare": "15.6.2",
+    "react-addons-shallow-compare": "15.6.3",
     "react-async-script": "1.2.0",
     "react-autosuggest": "10.0.2",
     "react-custom-scrollbars": "4.2.1",
