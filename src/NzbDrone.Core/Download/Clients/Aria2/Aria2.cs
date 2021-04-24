@@ -141,21 +141,30 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             }
         }
 
-        public override void RemoveItem(string hash, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
-            //Aria2 doesn't support file deletion at this point: https://github.com/aria2/aria2/issues/728
+            //Aria2 doesn't support file deletion: https://github.com/aria2/aria2/issues/728
+            var hash = item.DownloadId.ToLower();
+            var aria2Item = _proxy.GetTorrents(Settings).FirstOrDefault(t => t.InfoHash?.ToLower() == hash);
 
-            foreach(var torrent in _proxy.GetTorrents(Settings))
+            if(aria2Item == null)
             {
-                if(torrent.InfoHash?.ToLower() == hash.ToLower())
-                {
-                    _logger.Debug($"Aria2 removing hash:'{hash}' gid:'{torrent.Gid}'");
-                    _proxy.RemoveTorrent(Settings, torrent.Gid);
-                    return;
-                }
+                _logger.Error($"Aria2 could not find infoHash '{hash}' for deletion.");
+                return;
             }
 
-            _logger.Error($"Aria2 could not find infoHash {hash} for deletion.");
+            _logger.Debug($"Aria2 removing hash:'{hash}' gid:'{aria2Item.Gid}'");
+
+            if (!_proxy.RemoveTorrent(Settings, aria2Item.Gid))
+            {
+                _logger.Error($"Aria2 error while deleting {hash}.");
+                return;
+            }
+
+            if (deleteData)
+            {
+                DeleteItemData(item);
+            }
         }
 
         public override DownloadClientInfo GetStatus()
