@@ -12,10 +12,18 @@
 
 .info {
   color: $infoColor;
+
+  &:global(.darken) {
+    color: color($infoColor shade(30%));
+  }
 }
 
 .pink {
   color: $pink;
+
+  &:global(.darken) {
+    color: color($pink shade(30%));
+  }
 }
 
 .success {

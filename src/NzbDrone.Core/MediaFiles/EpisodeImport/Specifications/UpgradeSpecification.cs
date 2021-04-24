@@ -73,7 +73,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 var episodeFilePreferredWordScore = _episodeFilePreferredWordCalculator.Calculate(localEpisode.Series, episodeFile);
 
-                if (qualityCompare == 0 && preferredWordScore < episodeFilePreferredWordScore)
+                if (qualityCompare == 0 && languageCompare == 0 && preferredWordScore < episodeFilePreferredWordScore)
                 {
                     _logger.Debug("This file isn't a preferred word upgrade for all episodes. Skipping {0}", localEpisode.Path);
                     return Decision.Reject("Not a preferred word upgrade for existing episode file(s)");

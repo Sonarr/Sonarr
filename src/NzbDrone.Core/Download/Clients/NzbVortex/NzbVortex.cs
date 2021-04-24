@@ -106,12 +106,12 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
             return queueItems;
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
             // Try to find the download by numerical ID, otherwise try by AddUUID
             int id;
 
-            if (int.TryParse(downloadId, out id))
+            if (int.TryParse(item.DownloadId, out id))
             {
                 _proxy.Remove(id, deleteData, Settings);
             }
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
             else
             {
                 var queue = _proxy.GetQueue(30, Settings);
-                var queueItem = queue.FirstOrDefault(c => c.AddUUID == downloadId);
+                var queueItem = queue.FirstOrDefault(c => c.AddUUID == item.DownloadId);
 
                 if (queueItem != null)
                 {

@@ -97,15 +97,15 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             return items;
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
             if (deleteData)
             {
-                _proxy.RemoveTorrentAndData(Settings, downloadId);
+                _proxy.RemoveTorrentAndData(Settings, item.DownloadId);
             }
             else
             {
-                _proxy.RemoveTorrent(Settings, downloadId);
+                _proxy.RemoveTorrent(Settings, item.DownloadId);
             }
         }
 

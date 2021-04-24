@@ -50,7 +50,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 // Migration helper logic
                 if (!downloadClientIsLocalHost)
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Multi-Computer unsupported)", "#completed/failed_download_handling");
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Multi-Computer unsupported)", "#completed_failed_download_handling");
                 }
 
                 if (downloadClients.All(v => v.DownloadClient is Sabnzbd))

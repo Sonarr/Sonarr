@@ -143,7 +143,7 @@ namespace Sonarr.Api.V3.Queue
                     throw new BadRequestException();
                 }
 
-                downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadId, true);
+                downloadClient.RemoveItem(trackedDownload.DownloadItem, true);
             }
 
             if (blacklist)

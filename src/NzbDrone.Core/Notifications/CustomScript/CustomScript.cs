@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_EventType", "HealthIssue");
-            environmentVariables.Add("Sonarr_Health_Issue_Level", nameof(healthCheck.Type));
+            environmentVariables.Add("Sonarr_Health_Issue_Level", Enum.GetName(typeof(HealthCheckResult), healthCheck.Type));
             environmentVariables.Add("Sonarr_Health_Issue_Message", healthCheck.Message);
             environmentVariables.Add("Sonarr_Health_Issue_Type", healthCheck.Source.Name);
             environmentVariables.Add("Sonarr_Health_Issue_Wiki", healthCheck.WikiUrl.ToString() ?? string.Empty);

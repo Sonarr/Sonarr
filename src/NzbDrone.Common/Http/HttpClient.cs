@@ -85,9 +85,12 @@ namespace NzbDrone.Common.Http
                 _logger.Error("Server requested a redirect to [{0}] while in developer mode. Update the request URL to avoid this redirect.", response.Headers["Location"]);
             }
 
-            if (!request.SuppressHttpError && response.HasHttpError)
+            if (!request.SuppressHttpError && response.HasHttpError && (request.SuppressHttpErrorStatusCodes == null || !request.SuppressHttpErrorStatusCodes.Contains(response.StatusCode)))
             {
-                _logger.Warn("HTTP Error - {0}", response);
+                if (request.LogHttpError)
+                {
+                    _logger.Warn("HTTP Error - {0}", response);
+                }
 
                 if ((int)response.StatusCode == 429)
                 {

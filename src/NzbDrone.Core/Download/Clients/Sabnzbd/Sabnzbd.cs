@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
@@ -190,15 +191,22 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
-            if (GetQueue().Any(v => v.DownloadId == downloadId))
+            var queueClientItem = GetQueue().SingleOrDefault(v => v.DownloadId == item.DownloadId);
+
+            if (queueClientItem == null)
             {
-                _proxy.RemoveFrom("queue", downloadId, deleteData, Settings);
+                if (deleteData && item.Status == DownloadItemStatus.Completed)
+                {
+                    DeleteItemData(item);
+                }
+
+                _proxy.RemoveFrom("history", item.DownloadId, deleteData, Settings);
             }
             else
             {
-                _proxy.RemoveFrom("history", downloadId, deleteData, Settings);
+                _proxy.RemoveFrom("queue", item.DownloadId, deleteData, Settings);
             }
         }
 
@@ -488,6 +496,24 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
 
             return categories.Contains(category);
+        }
+
+        private bool ValidatePath(DownloadClientItem downloadClientItem)
+        {
+            var downloadItemOutputPath = downloadClientItem.OutputPath;
+
+            if (downloadItemOutputPath.IsEmpty)
+            {
+                return false;
+            }
+
+            if ((OsInfo.IsWindows && !downloadItemOutputPath.IsWindowsPath) ||
+                (OsInfo.IsNotWindows && !downloadItemOutputPath.IsUnixPath))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

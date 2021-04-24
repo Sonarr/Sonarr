@@ -77,14 +77,14 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             }
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
             if (!deleteData)
             {
                 throw new NotSupportedException("Blackhole cannot remove DownloadItem without deleting the data as well, ignoring.");
             }
 
-            DeleteItemData(downloadId);
+            DeleteItemData(item);
         }
 
         public override DownloadClientInfo GetStatus()

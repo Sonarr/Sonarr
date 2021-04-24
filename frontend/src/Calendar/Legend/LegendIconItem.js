@@ -8,6 +8,7 @@ function LegendIconItem(props) {
     name,
     icon,
     kind,
+    darken,
     tooltip
   } = props;
 
@@ -19,6 +20,7 @@ function LegendIconItem(props) {
       <Icon
         className={styles.icon}
         name={icon}
+        darken={darken}
         kind={kind}
       />
 
@@ -31,7 +33,12 @@ LegendIconItem.propTypes = {
   name: PropTypes.string.isRequired,
   icon: PropTypes.object.isRequired,
   kind: PropTypes.string.isRequired,
+  darken: PropTypes.bool.isRequired,
   tooltip: PropTypes.string.isRequired
+};
+
+LegendIconItem.defaultProps = {
+  darken: false
 };
 
 export default LegendIconItem;

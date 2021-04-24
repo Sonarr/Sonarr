@@ -154,15 +154,15 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
             if (deleteData)
             {
-                DeleteItemData(downloadId);
+                DeleteItemData(item);
             }
 
-            _dsTaskProxy.RemoveTask(ParseDownloadId(downloadId), Settings);
-            _logger.Debug("{0} removed correctly", downloadId);
+            _dsTaskProxy.RemoveTask(ParseDownloadId(item.DownloadId), Settings);
+            _logger.Debug("{0} removed correctly", item.DownloadId);
         }
 
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
