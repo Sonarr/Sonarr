@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         [FieldDefinition(2, Label = "RPC Path", Type = FieldType.Textbox)]
         public string RpcPath { get; set; }
 
-        [FieldDefinition(3, Label = "Use SLL", Type = FieldType.Checkbox)]
+        [FieldDefinition(3, Label = "Use SSL", Type = FieldType.Checkbox)]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(4, Label = "Secret token", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
