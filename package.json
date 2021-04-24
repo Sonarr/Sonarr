@@ -31,7 +31,7 @@
     "@fortawesome/react-fontawesome": "0.1.14",
     "@sentry/browser": "6.3.1",
     "@sentry/integrations": "6.3.1",
-    "classnames": "2.2.6",
+    "classnames": "2.3.1",
     "clipboard": "2.0.6",
     "connected-react-router": "6.8.0",
     "create-react-class": "15.6.3",
