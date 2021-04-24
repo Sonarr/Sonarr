@@ -21,14 +21,6 @@ console.log('Output Folder:', distFolder);
 console.log('isProduction:', isProduction);
 console.log('isProfiling:', isProfiling);
 
-const cssVarsFiles = [
-  '../src/Styles/Variables/colors',
-  '../src/Styles/Variables/dimensions',
-  '../src/Styles/Variables/fonts',
-  '../src/Styles/Variables/animations',
-  '../src/Styles/Variables/zIndexes'
-].map(require.resolve);
-
 const config = {
   mode: isProduction ? 'production' : 'development',
   devtool: 'source-map',
@@ -195,12 +187,8 @@ const config = {
           {
             loader: 'postcss-loader',
             options: {
-              ident: 'postcss',
-              config: {
-                ctx: {
-                  cssVarsFiles
-                },
-                path: 'frontend/postcss.config.js'
+              postcssOptions: {
+                config: 'frontend/postcss.config.js'
               }
             }
           }
