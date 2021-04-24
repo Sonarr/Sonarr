@@ -24,11 +24,11 @@
     "not chrome < 60"
   ],
   "dependencies": {
-    "@fortawesome/fontawesome-free": "5.15.0",
-    "@fortawesome/fontawesome-svg-core": "1.2.31",
-    "@fortawesome/free-regular-svg-icons": "5.15.0",
-    "@fortawesome/free-solid-svg-icons": "5.15.0",
-    "@fortawesome/react-fontawesome": "0.1.11",
+    "@fortawesome/fontawesome-free": "5.15.3",
+    "@fortawesome/fontawesome-svg-core": "1.2.35",
+    "@fortawesome/free-regular-svg-icons": "5.15.3",
+    "@fortawesome/free-solid-svg-icons": "5.15.3",
+    "@fortawesome/react-fontawesome": "0.1.14",
     "@sentry/browser": "5.24.2",
     "@sentry/integrations": "5.24.2",
     "classnames": "2.2.6",
