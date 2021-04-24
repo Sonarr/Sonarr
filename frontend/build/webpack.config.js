@@ -1,12 +1,10 @@
-const gulp = require('gulp');
-const webpackStream = require('webpack-stream');
-const livereload = require('gulp-livereload');
+/* eslint-disable filenames/match-exported */
 const path = require('path');
 const webpack = require('webpack');
-const errorHandler = require('./helpers/errorHandler');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackPluginHtmlTags = require('html-webpack-plugin/lib/html-tags');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const uiFolder = 'UI';
@@ -31,46 +29,9 @@ const cssVarsFiles = [
   '../src/Styles/Variables/zIndexes'
 ].map(require.resolve);
 
-// Override the way HtmlWebpackPlugin injects the scripts
-// TODO: Find a better way to get these paths without
-HtmlWebpackPlugin.prototype.injectAssetsIntoHtml = function(html, assets, assetTags) {
-  const head = assetTags.headTags.map((v) => {
-    const href = v.attributes.href
-      .replace('\\', '/')
-      .replace('%5C', '/');
-
-    v.attributes = { rel: 'stylesheet', type: 'text/css', href: `/${href}` };
-    return HtmlWebpackPluginHtmlTags.htmlTagObjectToString(v, this.options.xhtml);
-  });
-  const body = assetTags.bodyTags.map((v) => {
-    v.attributes = { src: `/${v.attributes.src}` };
-    return HtmlWebpackPluginHtmlTags.htmlTagObjectToString(v, this.options.xhtml);
-  });
-
-  return html
-    .replace('<!-- webpack bundles head -->', head.join('\r\n  '))
-    .replace('<!-- webpack bundles body -->', body.join('\r\n  '));
-};
-
-const plugins = [
-  new webpack.DefinePlugin({
-    __DEV__: !isProduction,
-    'process.env.NODE_ENV': isProduction ? JSON.stringify('production') : JSON.stringify('development')
-  }),
-
-  new MiniCssExtractPlugin({
-    filename: path.join('Content', 'styles.css')
-  }),
-
-  new HtmlWebpackPlugin({
-    template: 'frontend/src/index.html',
-    filename: 'index.html'
-  })
-];
-
 const config = {
   mode: isProduction ? 'production' : 'development',
-  devtool: '#source-map',
+  devtool: 'source-map',
 
   stats: {
     children: false
@@ -97,14 +58,17 @@ const config = {
 
   output: {
     path: distFolder,
+    publicPath: '/',
     filename: '[name].js',
     sourceMapFilename: '[file].map'
   },
 
   optimization: {
+    moduleIds: 'deterministic',
     chunkIds: 'named',
     splitChunks: {
-      chunks: 'initial'
+      chunks: 'initial',
+      name: 'vendors'
     }
   },
 
@@ -112,12 +76,66 @@ const config = {
     hints: false
   },
 
-  plugins,
+  plugins: [
+    new webpack.DefinePlugin({
+      __DEV__: !isProduction,
+      'process.env.NODE_ENV': isProduction ? JSON.stringify('production') : JSON.stringify('development')
+    }),
+
+    new MiniCssExtractPlugin({
+      filename: 'Content/styles.css'
+    }),
+
+    new HtmlWebpackPlugin({
+      template: 'frontend/src/index.html',
+      filename: 'index.html',
+      publicPath: '/'
+    }),
+
+    new CopyPlugin({
+      patterns: [
+        // HTML
+        {
+          from: 'frontend/src/*.html',
+          to: path.join(distFolder, '[name][ext]'),
+          globOptions: {
+            ignore: ['**/index.html']
+          }
+        },
+
+        // Fonts
+        {
+          from: 'frontend/src/Content/Fonts/*.*',
+          to: path.join(distFolder, 'Content/Fonts', '[name][ext]')
+        },
+
+        // Icon Images
+        {
+          from: 'frontend/src/Content/Images/Icons/*.*',
+          to: path.join(distFolder, 'Content/Images/Icons', '[name][ext]')
+        },
+
+        // Images
+        {
+          from: 'frontend/src/Content/Images/*.*',
+          to: path.join(distFolder, 'Content/Images', '[name][ext]')
+        },
+
+        // Robots
+        {
+          from: 'frontend/src/Content/robots.txt',
+          to: path.join(distFolder, 'Content', '[name][ext]')
+        }
+      ]
+    }),
+
+    new LiveReloadPlugin()
+  ],
 
   resolveLoader: {
     modules: [
       'node_modules',
-      'frontend/gulp/webpack/'
+      'frontend/build/webpack/'
     ]
   },
 
@@ -251,18 +269,5 @@ if (isProfiling) {
   ];
 }
 
-gulp.task('webpack', () => {
-  return webpackStream(config)
-    .pipe(gulp.dest('_output/UI'));
-});
-
-gulp.task('webpackWatch', () => {
-  config.watch = true;
-
-  return webpackStream(config)
-    .on('error', errorHandler)
-    .pipe(gulp.dest('_output/UI'))
-    .on('error', errorHandler)
-    .pipe(livereload())
-    .on('error', errorHandler);
-});
+module.exports = config;
+/* eslint-enable filenames/match-exported */
