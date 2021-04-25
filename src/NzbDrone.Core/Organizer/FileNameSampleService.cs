@@ -3,6 +3,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.Organizer
 {
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Organizer
         private static EpisodeFile _dailyEpisodeFile;
         private static EpisodeFile _animeEpisodeFile;
         private static EpisodeFile _animeMultiEpisodeFile;
-        private static Dictionary<string, List<string>> _preferredWords;
+        private static PreferredWordMatchResults _preferredWords;
 
         public FileNameSampleService(IBuildFileNames buildFileNames)
         {
@@ -169,9 +170,9 @@ namespace NzbDrone.Core.Organizer
                 MediaInfo = mediaInfoAnime
             };
 
-            _preferredWords = new Dictionary<string, List<string>>()
+            _preferredWords = new PreferredWordMatchResults()
             {
-                { string.Empty, new List<string>() {"iNTERNAL" } }
+                All = new List<string>() {"iNTERNAL" }
             };
         }
 

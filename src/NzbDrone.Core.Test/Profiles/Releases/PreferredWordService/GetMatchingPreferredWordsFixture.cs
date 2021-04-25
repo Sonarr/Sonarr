@@ -11,7 +11,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
 {
     [TestFixture]
-    public class GetMatchingPreferredWordsGroupByProfileFixture : CoreTest<Core.Profiles.Releases.PreferredWordService>
+    public class GetMatchingPreferredWordsFixture : CoreTest<Core.Profiles.Releases.PreferredWordService>
     {
         private Series _series = null;
         private List<ReleaseProfile> _releaseProfiles = null;
@@ -84,7 +84,8 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
                   .Setup(s => s.EnabledForTags(It.IsAny<HashSet<int>>(), It.IsAny<int>()))
                   .Returns(new List<ReleaseProfile>());
 
-            Subject.GetMatchingPreferredWordsGroupByProfile(_series, _title).Should().BeEmpty();
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().BeEmpty();
         }
 
         [Test]
@@ -93,7 +94,8 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
             _releaseProfiles.First().Preferred.RemoveAt(0);
             GivenReleaseProfile();
 
-            Subject.GetMatchingPreferredWordsGroupByProfile(_series, _title).Should().BeEmpty();
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().BeEmpty();
         }
 
         [Test]
@@ -101,7 +103,8 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
         {
             GivenReleaseProfile();
 
-            Subject.GetMatchingPreferredWordsGroupByProfile(_series, _title).Should().ContainKey("").WhichValue.Should().Equal(new[] { "x264" });
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().Equal(new[] { "x264" });
         }
 
         [Test]
@@ -112,7 +115,8 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
 
             GivenNamedReleaseProfile();
 
-            Subject.GetMatchingPreferredWordsGroupByProfile(_series, _title).Should().BeEmpty();
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().BeEmpty();
         }
 
         [Test]
@@ -120,9 +124,9 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
         {
             GivenNamedReleaseProfile();
 
-            var results = Subject.GetMatchingPreferredWordsGroupByProfile(_series, _title);
-            results.Should().ContainKey("CodecProfile").WhichValue.Should().Equal(new[] { "x264" });
-            results.Should().ContainKey("EditionProfile").WhichValue.Should().Equal(new[] { "extended" });
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.ByReleaseProfile.Should().ContainKey("CodecProfile").WhichValue.Should().Equal(new[] { "x264" });
+            matchingResults.ByReleaseProfile.Should().ContainKey("EditionProfile").WhichValue.Should().Equal(new[] { "extended" });
         }
 
         [Test]
@@ -130,8 +134,8 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
         {
             GivenNamedReleaseProfile();
 
-            var results = Subject.GetMatchingPreferredWordsGroupByProfile(_series, _title);
-            results.Should().ContainKey("").WhichValue.Should().Equal(new[] { "x264", "extended" });
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().Equal(new[] { "x264", "extended" });
         }
     }
 }

@@ -22,8 +22,8 @@ namespace NzbDrone.Core.Organizer
 {
     public interface IBuildFileNames
     {
-        string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, Dictionary<string, List<string>> profilePreferredWords = null);
-        string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, Dictionary<string, List<string>> profilePreferredWords = null);
+        string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, PreferredWordMatchResults preferredWords = null);
+        string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, PreferredWordMatchResults preferredWords = null);
         string BuildSeasonPath(Series series, int seasonNumber);
         BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Organizer
             _logger = logger;
         }
 
-        private string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, int maxPath, NamingConfig namingConfig = null, Dictionary<string, List<string>> profilePreferredWords = null)
+        private string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, int maxPath, NamingConfig namingConfig = null, PreferredWordMatchResults preferredWords = null)
         {
             if (namingConfig == null)
             {
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Organizer
                 AddEpisodeFileTokens(tokenHandlers, episodeFile);
                 AddQualityTokens(tokenHandlers, series, episodeFile);
                 AddMediaInfoTokens(tokenHandlers, episodeFile);
-                AddPreferredWords(tokenHandlers, series, episodeFile, profilePreferredWords);
+                AddPreferredWords(tokenHandlers, series, episodeFile, preferredWords);
 
                 var component = ReplaceTokens(splitPattern, tokenHandlers, namingConfig, true).Trim();
                 var maxPathSegmentLength = Math.Min(LongPathSupport.MaxFileNameLength, maxPath);
@@ -183,18 +183,18 @@ namespace NzbDrone.Core.Organizer
             return string.Join(Path.DirectorySeparatorChar.ToString(), components) + extension;
         }
 
-        public string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, Dictionary<string, List<string>> profilePreferredWords = null)
+        public string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, PreferredWordMatchResults preferredWords = null)
         {
-            return BuildFileName(episodes, series, episodeFile, extension, LongPathSupport.MaxFilePathLength, namingConfig, profilePreferredWords);
+            return BuildFileName(episodes, series, episodeFile, extension, LongPathSupport.MaxFilePathLength, namingConfig, preferredWords);
         }
 
-        public string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, Dictionary<string, List<string>> profilePreferredWords = null)
+        public string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, PreferredWordMatchResults preferredWords = null)
         {
             Ensure.That(extension, () => extension).IsNotNullOrWhiteSpace();
             
             var seasonPath = BuildSeasonPath(series, episodes.First().SeasonNumber);
             var remainingPathLength = LongPathSupport.MaxFilePathLength - seasonPath.GetByteCount() - 1;
-            var fileName = BuildFileName(episodes, series, episodeFile, extension, remainingPathLength, namingConfig, profilePreferredWords);
+            var fileName = BuildFileName(episodes, series, episodeFile, extension, remainingPathLength, namingConfig, preferredWords);
 
             return Path.Combine(seasonPath, fileName);
         }
@@ -651,22 +651,32 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{TvMazeId}"] = m => series.TvMazeId > 0 ? series.TvMazeId.ToString() : string.Empty;
         }
 
-        private void AddPreferredWords(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, EpisodeFile episodeFile, Dictionary<string, List<string>> profilePreferredWords = null)
+        private void AddPreferredWords(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, EpisodeFile episodeFile, PreferredWordMatchResults preferredWords = null)
         {
-            if (profilePreferredWords == null)
+            if (preferredWords == null)
             {
-                profilePreferredWords = _preferredWordService.GetMatchingPreferredWordsGroupByProfile(series, episodeFile.GetSceneOrFileName());
+                preferredWords = _preferredWordService.GetMatchingPreferredWords(series, episodeFile.GetSceneOrFileName());
             }
 
             tokenHandlers["{Preferred Words}"] = m => {
 
                 var profileName = "";
-                if (m.CustomFormat != null)
-                    profileName = m.CustomFormat.Trim();
 
-                if (profilePreferredWords.ContainsKey(profileName))
+                if (m.CustomFormat != null)
                 {
-                    return string.Join(" ", profilePreferredWords[profileName]);
+                    profileName = m.CustomFormat.Trim();
+                }
+
+                if (profileName.IsNullOrWhiteSpace())
+                {
+                    return string.Join(" ", preferredWords.All);
+                }
+                else
+                {
+                    if(preferredWords.ByReleaseProfile.TryGetValue(profileName, out var profilePreferredWords))
+                    { 
+                        return string.Join(" ", profilePreferredWords);
+                    }
                 }
 
                 return string.Empty;

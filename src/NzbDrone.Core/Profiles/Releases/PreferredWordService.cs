@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Profiles.Releases
     public interface IPreferredWordService
     {
         int Calculate(Series series, string title, int indexerId);
-        Dictionary<string, List<string>> GetMatchingPreferredWordsGroupByProfile(Series series, string title);
+        PreferredWordMatchResults GetMatchingPreferredWords(Series series, string title);
   }
 
     public class PreferredWordService : IPreferredWordService
@@ -53,12 +53,13 @@ namespace NzbDrone.Core.Profiles.Releases
             return score;
         }
 
-        public Dictionary<string, List<string>> GetMatchingPreferredWordsGroupByProfile(Series series, string title)
+        public PreferredWordMatchResults GetMatchingPreferredWords(Series series, string title)
         {
             var releaseProfiles = _releaseProfileService.EnabledForTags(series.Tags, 0);
             var profileWords = new Dictionary<string, List<KeyValuePair<string, int>>>();
+            var allWords = new List<KeyValuePair<string, int>>();
 
-            _logger.Trace("Calculating preferred word score for '{0}'", title);
+            _logger.Trace("Determining preferred word matches for '{0}'", title);
 
             foreach (var releaseProfile in releaseProfiles)
             {
@@ -82,9 +83,10 @@ namespace NzbDrone.Core.Profiles.Releases
 
                 if (matchingPairs.Count > 0)
                 {
-                    if (!string.IsNullOrEmpty(releaseProfile.Name))
+                    if (releaseProfile.Name.IsNotNullOrWhiteSpace())
                     {
                         var profileName = releaseProfile.Name.Trim();
+
                         if (!profileWords.ContainsKey(profileName))
                         {
                             profileWords.Add(profileName, new List<KeyValuePair<string, int>>());
@@ -93,15 +95,19 @@ namespace NzbDrone.Core.Profiles.Releases
                         profileWords[profileName].AddRange(matchingPairs);
                     }
 
-                    if (!profileWords.ContainsKey(string.Empty))
-                    {
-                        profileWords.Add(string.Empty, new List<KeyValuePair<string, int>>());
-                    }
-                    profileWords[string.Empty].AddRange(matchingPairs); // Add the "everything grouping"
+                    allWords.AddRange(matchingPairs); // Add the "everything grouping"
                 }
             }
 
-            return profileWords.ToDictionary(item => item.Key, item => item.Value.OrderByDescending(m => m.Value).Select(m => m.Key).ToList());
+            var results = new PreferredWordMatchResults()
+            {
+                All = allWords.OrderByDescending(m => m.Value).Select(m => m.Key).ToList(),
+                ByReleaseProfile = profileWords.ToDictionary(item => item.Key, item => item.Value.OrderByDescending(m => m.Value).Select(m => m.Key).ToList())
+            };
+
+            _logger.Trace("Determined preferred word matches for '{0}'. Count {1}", title, allWords.Count);
+
+            return results;
         }
   }
 }

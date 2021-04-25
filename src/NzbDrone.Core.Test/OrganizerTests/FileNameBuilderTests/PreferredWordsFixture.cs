@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         private EpisodeFile _episodeFile;
         private NamingConfig _namingConfig;
 
-        private Dictionary<string, List<string>> _preferredWords;
+        private PreferredWordMatchResults _preferredWords;
 
         [SetUp]
         public void Setup()
@@ -50,28 +51,25 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "SonarrTest" };
 
-            _preferredWords = new Dictionary<string, List<string>>()
-            {
-                {
-                    "",
-                    new List<string>()
-                    {
-                        "x265",
-                        "extended"
-                    }
+            _preferredWords = new PreferredWordMatchResults() { 
+                All = new List<string>() {
+                    "x265",
+                    "extended"
                 },
-                {
-                    "CodecProfile",
-                    new List<string>()
+                ByReleaseProfile = new Dictionary<string, List<string>>() {
                     {
-                        "x265"
-                    }
-                },
-                {
-                    "EditionProfile",
-                    new List<string>()
+                        "CodecProfile",
+                        new List<string>()
+                        {
+                            "x265"
+                        }
+                    },
                     {
-                        "extended"
+                        "EditionProfile",
+                        new List<string>()
+                        {
+                            "extended"
+                        }
                     }
                 }
             };
@@ -89,7 +87,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _namingConfig.StandardEpisodeFormat = format;
 
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile, profilePreferredWords: _preferredWords)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile, preferredWords: _preferredWords)
                    .Should().Be(expected);
         }
 
@@ -98,7 +96,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _namingConfig.StandardEpisodeFormat = format;
 
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile, profilePreferredWords: _preferredWords)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile, preferredWords: _preferredWords)
                    .Should().Be(expected);
         }
 
@@ -107,7 +105,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _namingConfig.StandardEpisodeFormat = format;
 
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile, profilePreferredWords: _preferredWords)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile, preferredWords: _preferredWords)
                    .Should().Be(expected);
         }
     }
