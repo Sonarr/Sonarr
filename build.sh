@@ -141,7 +141,7 @@ Build()
     ProgressEnd 'Build'
 }
 
-RunGulp()
+RunWebpack()
 {
     ProgressStart 'yarn install'
     yarn install
@@ -149,9 +149,9 @@ RunGulp()
 
     LintUI
 
-    ProgressStart 'Running gulp'
-    CheckExitCode yarn run build --production
-    ProgressEnd 'Running gulp'
+    ProgressStart 'Running webpack'
+    CheckExitCode yarn run build --env production
+    ProgressEnd 'Running webpack'
 }
 
 CreateMdbs()
@@ -447,7 +447,7 @@ esac
 UpdateVersionNumber
 Build
 CreateReleaseInfo
-RunGulp
+RunWebpack
 PackageMono
 PackageMacOS
 PackageMacOSApp
