@@ -5,10 +5,8 @@ using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Indexers;
-using Moq;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -20,36 +18,18 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private RemoteEpisode _parseResultMulti;
         private RemoteEpisode _parseResultSingle;
-        private IndexerDefinition _fakeIndexerDefinition;
         private Series _fakeSeries;
         private Episode _firstEpisode;
         private Episode _secondEpisode;
-        private ReleaseInfo _fakeRelease;
 
         [SetUp]
         public void Setup()
         {
-            _fakeIndexerDefinition = new IndexerDefinition
-            {
-                Tags = new HashSet<int>()
-            };
-
-            Mocker
-                .GetMock<IIndexerRepository>()
-                .Setup(m => m.Get(It.IsAny<int>()))
-                .Returns(_fakeIndexerDefinition);
-
             _monitoredEpisodeSpecification = Mocker.Resolve<MonitoredEpisodeSpecification>();
 
             _fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.Monitored = true)
-                .With(c => c.Tags = new HashSet<int>())
                 .Build();
-
-            _fakeRelease = new ReleaseInfo
-            {
-                IndexerId = 1
-            };
 
             _firstEpisode = new Episode { Monitored = true };
             _secondEpisode = new Episode { Monitored = true };
@@ -61,15 +41,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultMulti = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                Episodes = doubleEpisodeList,
-                Release = _fakeRelease
+                Episodes = doubleEpisodeList
             };
 
             _parseResultSingle = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                Episodes = singleEpisodeList,
-                Release = _fakeRelease
+                Episodes = singleEpisodeList
             };
         }
 
