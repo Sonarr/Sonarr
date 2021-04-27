@@ -28,6 +28,8 @@ function createMapStateToProps() {
         mediaInfo,
         path,
         size,
+        language,
+        languageCutoffNotMet,
         quality,
         qualityCutoffNotMet
       } = episodeFile;
@@ -40,6 +42,8 @@ function createMapStateToProps() {
         mediaInfo,
         path,
         size,
+        language,
+        languageCutoffNotMet,
         quality,
         qualityCutoffNotMet
       };

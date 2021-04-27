@@ -16,7 +16,7 @@ function createTagListSelector() {
         (selectedFilterBuilderProp.type === filterBuilderTypes.NUMBER ||
         selectedFilterBuilderProp.type === filterBuilderTypes.STRING) &&
         filterType !== filterTypes.EQUAL &&
-        filterType !== filterBuilderTypes.NOT_EQUAL ||
+        filterType !== filterTypes.NOT_EQUAL ||
         !selectedFilterBuilderProp.optionsSelector
       ) {
         return [];

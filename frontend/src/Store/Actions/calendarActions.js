@@ -44,7 +44,8 @@ export const defaultState = {
     showEpisodeInformation: true,
     showFinaleIcon: false,
     showSpecialIcon: false,
-    showCutoffUnmetIcon: false
+    showCutoffUnmetIcon: false,
+    fullColorEvents: false
   },
 
   selectedFilterKey: 'monitored',

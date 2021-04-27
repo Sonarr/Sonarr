@@ -184,9 +184,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return items;
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
-            _proxy.RemoveTorrent(downloadId.ToLower(), deleteData, Settings);
+            _proxy.RemoveTorrent(item.DownloadId.ToLower(), deleteData, Settings);
         }
 
         public override DownloadClientInfo GetStatus()

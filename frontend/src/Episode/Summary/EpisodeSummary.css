@@ -4,8 +4,12 @@
   font-weight: bold;
 }
 
-.overview,
+.overview {
+  margin-top: 20px;
+}
+
 .files {
+  overflow-x: auto;
   margin-top: 20px;
 }
 
@@ -25,9 +29,8 @@
 }
 
 .path {
-  @add-mixin truncate;
-
   flex: 1 0 1px;
+  white-space: nowrap !important;
 }
 
 .size,
@@ -44,5 +47,13 @@
   .size,
   .quality {
     flex: 0 0 80px;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .files {
+    overflow-y: hidden;
+    min-width: 100%;
+    width: 100%;
   }
 }

@@ -7,8 +7,6 @@ import { WindowScroller, Grid } from 'react-virtualized';
 import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
 import styles from './VirtualTable.css';
 
-const ROW_HEIGHT = 38;
-
 function overscanIndicesGetter(options) {
   const {
     cellCount,
@@ -47,8 +45,7 @@ class VirtualTable extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      items,
-      scrollIndex
+      items
     } = this.props;
 
     const {
@@ -58,13 +55,6 @@ class VirtualTable extends Component {
     if (this._grid && (prevState.width !== width || hasDifferentItemsOrOrder(prevProps.items, items))) {
       // recomputeGridSize also forces Grid to discard its cache of rendered cells
       this._grid.recomputeGridSize();
-    }
-
-    if (scrollIndex != null && scrollIndex !== prevProps.scrollIndex) {
-      this._grid.scrollToCell({
-        rowIndex: scrollIndex,
-        columnIndex: 0
-      });
     }
   }
 
@@ -96,6 +86,8 @@ class VirtualTable extends Component {
       header,
       headerHeight,
       rowRenderer,
+      rowHeight,
+      scrollIndex,
       ...otherProps
     } = this.props;
 
@@ -125,6 +117,11 @@ class VirtualTable extends Component {
           if (!height) {
             return null;
           }
+
+          const finalScrollTop = scrollIndex == null ?
+            scrollTop :
+            scrollIndex * rowHeight;
+
           return (
             <Measure
               whitelist={['width']}
@@ -144,11 +141,11 @@ class VirtualTable extends Component {
                     width={width}
                     height={height}
                     headerHeight={height - headerHeight}
-                    rowHeight={ROW_HEIGHT}
+                    rowHeight={rowHeight}
                     rowCount={items.length}
                     columnCount={1}
                     columnWidth={width}
-                    scrollTop={scrollTop}
+                    scrollTop={finalScrollTop}
                     onScroll={onChildScroll}
                     overscanRowCount={2}
                     cellRenderer={rowRenderer}

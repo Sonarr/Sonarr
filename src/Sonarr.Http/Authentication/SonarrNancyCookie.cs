@@ -27,7 +27,7 @@ namespace Sonarr.Http.Authentication
 
         public override string ToString()
         {
-            return base.ToString() + "; SameSite=Strict";
+            return base.ToString() + "; SameSite=Lax";
         }
     }
 }

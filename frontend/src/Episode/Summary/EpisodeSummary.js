@@ -1,17 +1,47 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import formatBytes from 'Utilities/Number/formatBytes';
-import { icons, kinds, sizes, tooltipPositions } from 'Helpers/Props';
-import Icon from 'Components/Icon';
+import { kinds, sizes } from 'Helpers/Props';
 import Label from 'Components/Label';
-import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import Popover from 'Components/Tooltip/Popover';
+import Table from 'Components/Table/Table';
+import TableBody from 'Components/Table/TableBody';
 import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileNameConnector';
-import EpisodeQuality from 'Episode/EpisodeQuality';
 import EpisodeAiringConnector from './EpisodeAiringConnector';
-import MediaInfo from './MediaInfo';
+import EpisodeFileRow from './EpisodeFileRow';
 import styles from './EpisodeSummary.css';
+
+const columns = [
+  {
+    name: 'path',
+    label: 'Path',
+    isSortable: false,
+    isVisible: true
+  },
+  {
+    name: 'size',
+    label: 'Size',
+    isSortable: false,
+    isVisible: true
+  },
+  {
+    name: 'language',
+    label: 'Language',
+    isSortable: false,
+    isVisible: true
+  },
+  {
+    name: 'quality',
+    label: 'Quality',
+    isSortable: false,
+    isVisible: true
+  },
+  {
+    name: 'actions',
+    label: '',
+    isSortable: false,
+    isVisible: true
+  }
+];
 
 class EpisodeSummary extends Component {
 
@@ -54,8 +84,11 @@ class EpisodeSummary extends Component {
       mediaInfo,
       path,
       size,
+      language,
       quality,
-      qualityCutoffNotMet
+      languageCutoffNotMet,
+      qualityCutoffNotMet,
+      onDeleteEpisodeFile
     } = this.props;
 
     const hasOverview = !!overview;
@@ -93,63 +126,23 @@ class EpisodeSummary extends Component {
         </div>
 
         {
-          path &&
-            <div className={styles.files}>
-              <div className={styles.filesHeader}>
-                <div className={styles.path}>
-                  Path
-                </div>
-
-                <div className={styles.size}>
-                  Size
-                </div>
-
-                <div className={styles.quality}>
-                  Quality
-                </div>
-
-                <div className={styles.actions} />
-              </div>
-
-              <div className={styles.fileRow}>
-                <div
-                  className={styles.path}
-                  title={path}
-                >
-                  {path}
-                </div>
-
-                <div className={styles.size}>
-                  {formatBytes(size)}
-                </div>
-
-                <div className={styles.quality}>
-                  <EpisodeQuality
-                    quality={quality}
-                    isCutoffNotMet={qualityCutoffNotMet}
-                  />
-                </div>
-
-                <div className={styles.actions}>
-                  <Popover
-                    anchor={
-                      <Icon
-                        name={icons.MEDIA_INFO}
-                      />
-                    }
-                    title="Media Info"
-                    body={<MediaInfo {...mediaInfo} />}
-                    position={tooltipPositions.LEFT}
-                  />
-
-                  <IconButton
-                    title="Delete episode from disk"
-                    name={icons.REMOVE}
-                    onPress={this.onRemoveEpisodeFilePress}
-                  />
-                </div>
-              </div>
-            </div>
+          path ?
+            <Table columns={columns}>
+              <TableBody>
+                <EpisodeFileRow
+                  path={path}
+                  size={size}
+                  language={language}
+                  languageCutoffNotMet={languageCutoffNotMet}
+                  quality={quality}
+                  qualityCutoffNotMet={qualityCutoffNotMet}
+                  mediaInfo={mediaInfo}
+                  columns={columns}
+                  onDeleteEpisodeFile={onDeleteEpisodeFile}
+                />
+              </TableBody>
+            </Table> :
+            null
         }
 
         <ConfirmModal
@@ -175,6 +168,8 @@ EpisodeSummary.propTypes = {
   mediaInfo: PropTypes.object,
   path: PropTypes.string,
   size: PropTypes.number,
+  language: PropTypes.object,
+  languageCutoffNotMet: PropTypes.bool,
   quality: PropTypes.object,
   qualityCutoffNotMet: PropTypes.bool,
   onDeleteEpisodeFile: PropTypes.func.isRequired

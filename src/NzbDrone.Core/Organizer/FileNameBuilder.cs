@@ -419,6 +419,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Series TitleYear}"] = m => TitleYear(series.Title, series.Year);
             tokenHandlers["{Series TitleTheYear}"] = m => TitleYear(TitleThe(series.Title), series.Year);
             tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleThe(series.Title).Substring(0, 1).FirstCharToUpper();
+            tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
 
         private string AddSeasonEpisodeNumberingTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes, NamingConfig namingConfig)

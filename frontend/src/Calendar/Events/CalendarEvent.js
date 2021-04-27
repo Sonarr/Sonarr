@@ -1,6 +1,6 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { icons, kinds } from 'Helpers/Props';
 import formatTime from 'Utilities/Date/formatTime';
@@ -62,6 +62,7 @@ class CalendarEvent extends Component {
       showFinaleIcon,
       showSpecialIcon,
       showCutoffUnmetIcon,
+      fullColorEvents,
       timeFormat,
       colorImpairedMode
     } = this.props;
@@ -80,12 +81,13 @@ class CalendarEvent extends Component {
     const seasonStatistics = season.statistics || {};
 
     return (
-      <div>
+      <Fragment>
         <Link
           className={classNames(
             styles.event,
             styles[statusStyle],
-            colorImpairedMode && 'colorImpaired'
+            colorImpairedMode && 'colorImpaired',
+            fullColorEvents && 'fullColor'
           )}
           component="div"
           onPress={this.onPress}
@@ -95,95 +97,107 @@ class CalendarEvent extends Component {
               {series.title}
             </div>
 
-            {
-              missingAbsoluteNumber &&
-                <Icon
-                  className={styles.statusIcon}
-                  name={icons.WARNING}
-                  title="Episode does not have an absolute episode number"
-                />
-            }
+            <div className={styles.statusContainer}>
+              {
+                missingAbsoluteNumber ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.WARNING}
+                    title="Episode does not have an absolute episode number"
+                  /> :
+                  null
+              }
 
-            {
-              !!queueItem &&
-                <span className={styles.statusIcon}>
-                  <CalendarEventQueueDetails
-                    {...queueItem}
-                  />
-                </span>
-            }
+              {
+                queueItem ?
+                  <span className={styles.statusIcon}>
+                    <CalendarEventQueueDetails
+                      {...queueItem}
+                    />
+                  </span> :
+                  null
+              }
 
-            {
-              !queueItem && grabbed &&
-                <Icon
-                  className={styles.statusIcon}
-                  name={icons.DOWNLOADING}
-                  title="Episode is downloading"
-                />
-            }
+              {
+                !queueItem && grabbed ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.DOWNLOADING}
+                    title="Episode is downloading"
+                  /> :
+                  null
+              }
 
-            {
-              showCutoffUnmetIcon &&
-              !!episodeFile &&
-              episodeFile.qualityCutoffNotMet &&
-                <Icon
-                  className={styles.statusIcon}
-                  name={icons.EPISODE_FILE}
-                  kind={kinds.WARNING}
-                  title="Quality cutoff has not been met"
-                />
-            }
+              {
+                showCutoffUnmetIcon &&
+                !!episodeFile &&
+                episodeFile.qualityCutoffNotMet ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.EPISODE_FILE}
+                    kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+                    title="Quality cutoff has not been met"
+                  /> :
+                  null
+              }
 
-            {
-              showCutoffUnmetIcon &&
-              !!episodeFile &&
-              episodeFile.languageCutoffNotMet &&
-              !episodeFile.qualityCutoffNotMet &&
-                <Icon
-                  className={styles.statusIcon}
-                  name={icons.EPISODE_FILE}
-                  kind={kinds.WARNING}
-                  title="Language cutoff has not been met"
-                />
-            }
+              {
+                showCutoffUnmetIcon &&
+                !!episodeFile &&
+                episodeFile.languageCutoffNotMet &&
+                !episodeFile.qualityCutoffNotMet ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.EPISODE_FILE}
+                    kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+                    title="Language cutoff has not been met"
+                  /> :
+                  null
+              }
 
-            {
-              episodeNumber === 1 && seasonNumber > 0 &&
-                <Icon
-                  className={styles.statusIcon}
-                  name={icons.INFO}
-                  kind={kinds.INFO}
-                  title={seasonNumber === 1 ? 'Series premiere' : 'Season premiere'}
-                />
-            }
+              {
+                episodeNumber === 1 && seasonNumber > 0 ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.INFO}
+                    kind={kinds.INFO}
+                    darken={fullColorEvents}
+                    title={seasonNumber === 1 ? 'Series premiere' : 'Season premiere'}
+                  /> :
+                  null
+              }
 
-            {
-              showFinaleIcon &&
-              episodeNumber !== 1 &&
-              seasonNumber > 0 &&
-              episodeNumber === seasonStatistics.totalEpisodeCount &&
-                <Icon
-                  className={styles.statusIcon}
-                  name={icons.INFO}
-                  kind={kinds.WARNING}
-                  title={series.status === 'ended' ? 'Series finale' : 'Season finale'}
-                />
-            }
+              {
+                showFinaleIcon &&
+                episodeNumber !== 1 &&
+                seasonNumber > 0 &&
+                episodeNumber === seasonStatistics.totalEpisodeCount ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.INFO}
+                    kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+                    title={series.status === 'ended' ? 'Series finale' : 'Season finale'}
+                  /> :
+                  null
+              }
 
-            {
-              showSpecialIcon &&
-              (episodeNumber === 0 || seasonNumber === 0) &&
-                <Icon
-                  className={styles.statusIcon}
-                  name={icons.INFO}
-                  kind={kinds.PINK}
-                  title="Special"
-                />
-            }
+              {
+                showSpecialIcon &&
+                (episodeNumber === 0 || seasonNumber === 0) ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.INFO}
+                    kind={kinds.PINK}
+                    darken={fullColorEvents}
+                    title="Special"
+                  /> :
+                  null
+              }
+            </div>
           </div>
 
           {
-            showEpisodeInformation &&
+            showEpisodeInformation ?
               <div className={styles.episodeInfo}>
                 <div className={styles.episodeTitle}>
                   {title}
@@ -193,11 +207,12 @@ class CalendarEvent extends Component {
                   {seasonNumber}x{padNumber(episodeNumber, 2)}
 
                   {
-                    series.seriesType === 'anime' && absoluteEpisodeNumber &&
-                      <span className={styles.absoluteEpisodeNumber}>({absoluteEpisodeNumber})</span>
+                    series.seriesType === 'anime' && absoluteEpisodeNumber ?
+                      <span className={styles.absoluteEpisodeNumber}>({absoluteEpisodeNumber})</span> : null
                   }
                 </div>
-              </div>
+              </div> :
+              null
           }
 
           <div className={styles.airTime}>
@@ -214,7 +229,7 @@ class CalendarEvent extends Component {
           showOpenSeriesButton={true}
           onModalClose={this.onDetailsModalClose}
         />
-      </div>
+      </Fragment>
     );
   }
 }
@@ -236,6 +251,7 @@ CalendarEvent.propTypes = {
   showFinaleIcon: PropTypes.bool.isRequired,
   showSpecialIcon: PropTypes.bool.isRequired,
   showCutoffUnmetIcon: PropTypes.bool.isRequired,
+  fullColorEvents: PropTypes.bool.isRequired,
   timeFormat: PropTypes.string.isRequired,
   colorImpairedMode: PropTypes.bool.isRequired,
   onEventModalOpenToggle: PropTypes.func.isRequired

@@ -40,7 +40,7 @@ function getStatusIconProps(status, message) {
     case 'failed':
       return {
         name: icons.FATAL,
-        kind: kinds.ERROR,
+        kind: kinds.DANGER,
         title: `${title}: ${message}`
       };
 

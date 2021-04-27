@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd-multi-backend';
+import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import { inputTypes } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
 import Form from 'Components/Form/Form';
@@ -127,7 +127,7 @@ class TableOptionsModal extends Component {
     const isDraggingDown = isDragging && dropIndex > dragIndex;
 
     return (
-      <DndProvider backend={HTML5Backend}>
+      <DndProvider options={HTML5toTouch}>
         <Modal
           isOpen={isOpen}
           onModalClose={onModalClose}

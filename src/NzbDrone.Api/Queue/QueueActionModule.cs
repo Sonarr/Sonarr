@@ -74,7 +74,7 @@ namespace NzbDrone.Api.Queue
                 throw new BadRequestException();
             }
 
-            downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadId, true);
+            downloadClient.RemoveItem(trackedDownload.DownloadItem, true);
 
             if (blacklist)
             {

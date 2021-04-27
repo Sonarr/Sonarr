@@ -6,10 +6,12 @@ import Legend from './Legend';
 function createMapStateToProps() {
   return createSelector(
     (state) => state.calendar.options,
+    (state) => state.calendar.view,
     createUISettingsSelector(),
-    (calendarOptions, uiSettings) => {
+    (calendarOptions, view, uiSettings) => {
       return {
         ...calendarOptions,
+        view,
         colorImpairedMode: uiSettings.enableColorImpairedMode
       };
     }
