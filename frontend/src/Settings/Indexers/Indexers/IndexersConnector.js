@@ -16,7 +16,7 @@ function createMapStateToProps() {
       return {
         ...indexers,
         tagList
-      }
+      };
     }
   );
 }

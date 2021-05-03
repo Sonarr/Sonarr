@@ -168,6 +168,8 @@ Indexer.propTypes = {
   enableRss: PropTypes.bool.isRequired,
   enableAutomaticSearch: PropTypes.bool.isRequired,
   enableInteractiveSearch: PropTypes.bool.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.number).isRequired,
+  tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
   supportsRss: PropTypes.bool.isRequired,
   supportsSearch: PropTypes.bool.isRequired,
   showPriority: PropTypes.bool.isRequired,
