@@ -270,7 +270,6 @@ SeriesIndexOverview.propTypes = {
 };
 
 SeriesIndexOverview.defaultProps = {
-  overview: '',
   statistics: {
     seasonCount: 0,
     episodeCount: 0,
