@@ -1,7 +1,3 @@
-using System;
-using System.Net;
-using FluentValidation.Results;
-using Growl.Connector;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;

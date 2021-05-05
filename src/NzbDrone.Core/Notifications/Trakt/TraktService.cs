@@ -254,25 +254,7 @@ namespace NzbDrone.Core.Notifications.Trakt
         private string MapAudioChannels(EpisodeFile episodeFile, string audioFormat)
         {
             var audioChannels = episodeFile.MediaInfo != null ? MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo).ToString("0.0") : string.Empty;
-
-            // Map cases where Sonarr doesn't handle MI correctly, can purge once mediainfo handling is improved
-            if (audioChannels == "8.0")
-            {
-                audioChannels = "7.1";
-            }
-            else if (audioChannels == "6.0" && audioFormat == "dts_ma")
-            {
-                audioChannels = "7.1";
-            }
-            else if (audioChannels == "6.0" && audioFormat != "dts_ma")
-            {
-                audioChannels = "5.1";
-            }
-            else if (audioChannels == "0.0")
-            {
-                audioChannels = string.Empty;
-            }
-
+                       
             return audioChannels;
         }
     }
