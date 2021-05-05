@@ -9,9 +9,4 @@ namespace NzbDrone.Core.Notifications.Trakt.Resource
         public string Imdb { get; set; }
         public int Tvdb { get; set; }
     }
-    public class TraktSeasonResource
-    {
-        public int Number { get; set; }
-        public List<TraktEpisodeResource> Episodes {get; set;}
-    }
 }
