@@ -53,7 +53,10 @@ class PageHeader extends Component {
         <div className={styles.logoContainer}>
           <Link
             className={styles.logoLink}
-            to={'/'}
+            to={{
+              pathname: '/',
+              state: { restoreScrollPosition: true }
+            }}
           >
             <img
               className={styles.logo}

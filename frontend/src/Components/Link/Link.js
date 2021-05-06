@@ -38,7 +38,7 @@ class Link extends Component {
     const linkProps = { target };
     let el = component;
 
-    if (to) {
+    if (to && typeof to === 'string') {
       if ((/\w+?:\/\//).test(to)) {
         el = 'a';
         linkProps.href = to;
@@ -51,6 +51,18 @@ class Link extends Component {
         el = RouterLink;
         linkProps.to = `${window.Sonarr.urlBase}/${to.replace(/^\//, '')}`;
         linkProps.target = target;
+      }
+    } else if (to && typeof to === 'object') {
+      el = RouterLink;
+      linkProps.target = target;
+      if (to.pathname.startsWith(`${window.Sonarr.urlBase}/`)) {
+        linkProps.to = to;
+      } else {
+        const pathname = `${window.Sonarr.urlBase}/${to.pathname.replace(/^\//, '')}`;
+        linkProps.to = {
+          ...to,
+          pathname
+        };
       }
     }
 
@@ -82,7 +94,7 @@ class Link extends Component {
 Link.propTypes = {
   className: PropTypes.string,
   component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  to: PropTypes.string,
+  to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   target: PropTypes.string,
   isDisabled: PropTypes.bool,
   noRouter: PropTypes.bool,
