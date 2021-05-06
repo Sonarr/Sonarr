@@ -8,7 +8,7 @@ function withScrollPosition(WrappedComponent, scrollPositionKey) {
       history
     } = props;
 
-    const scrollTop = history.action === 'POP' ?
+    const scrollTop = history.action === 'POP' || (history.location.state && history.location.state.restoreScrollPosition) ?
       scrollPositions[scrollPositionKey] :
       0;
 

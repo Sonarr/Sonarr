@@ -82,7 +82,8 @@ class SeriesIndexTable extends Component {
       showBanners,
       isSmallScreen,
       onSortPress,
-      scroller
+      scroller,
+      scrollTop
     } = this.props;
 
     return (
@@ -90,6 +91,7 @@ class SeriesIndexTable extends Component {
         className={styles.tableContainer}
         items={items}
         scrollIndex={this.state.scrollIndex}
+        scrollTop={scrollTop}
         scroller={scroller}
         isSmallScreen={isSmallScreen}
         rowHeight={showBanners ? 70 : 38}
@@ -117,6 +119,7 @@ SeriesIndexTable.propTypes = {
   sortDirection: PropTypes.oneOf(sortDirections.all),
   showBanners: PropTypes.bool.isRequired,
   jumpToCharacter: PropTypes.string,
+  scrollTop: PropTypes.number,
   scroller: PropTypes.instanceOf(Element).isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
   onSortPress: PropTypes.func.isRequired

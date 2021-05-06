@@ -101,7 +101,8 @@ class SeriesIndexPosters extends Component {
       columnCount: 1,
       posterWidth: 162,
       posterHeight: 238,
-      rowHeight: calculateRowHeight(238, null, props.isSmallScreen, {})
+      rowHeight: calculateRowHeight(238, null, props.isSmallScreen, {}),
+      scrollRestored: false
     };
 
     this._isInitialized = false;
@@ -115,6 +116,7 @@ class SeriesIndexPosters extends Component {
       sortKey,
       posterOptions,
       jumpToCharacter,
+      scrollTop,
       isSmallScreen
     } = this.props;
 
@@ -122,7 +124,8 @@ class SeriesIndexPosters extends Component {
       width,
       columnWidth,
       columnCount,
-      rowHeight
+      rowHeight,
+      scrollRestored
     } = this.state;
 
     if (prevProps.sortKey !== sortKey ||
@@ -138,6 +141,11 @@ class SeriesIndexPosters extends Component {
             hasDifferentItemsOrOrder(prevProps.items, items))) {
       // recomputeGridSize also forces Grid to discard its cache of rendered cells
       this._grid.recomputeGridSize();
+    }
+
+    if (this._grid && scrollTop !== 0 && !scrollRestored) {
+      this.setState({ scrollRestored: true });
+      this._grid.scrollToPosition({ scrollTop });
     }
 
     if (jumpToCharacter != null && jumpToCharacter !== prevProps.jumpToCharacter) {
@@ -315,6 +323,7 @@ SeriesIndexPosters.propTypes = {
   sortKey: PropTypes.string,
   posterOptions: PropTypes.object.isRequired,
   jumpToCharacter: PropTypes.string,
+  scrollTop: PropTypes.number.isRequired,
   scroller: PropTypes.instanceOf(Element).isRequired,
   showRelativeDates: PropTypes.bool.isRequired,
   shortDateFormat: PropTypes.string.isRequired,
