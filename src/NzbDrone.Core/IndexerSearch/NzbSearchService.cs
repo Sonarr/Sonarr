@@ -14,6 +14,7 @@ using System.Linq;
 using NzbDrone.Common.TPL;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.IndexerSearch
 {
@@ -233,9 +234,36 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var sceneMapping in sceneMappings)
             {
-                if ((sceneMapping.SeasonNumber ?? -1) != -1 && sceneMapping.SeasonNumber != episode.SeasonNumber)
+                // There are two kinds of mappings:
+                // - Mapped on Release Season Number with sceneMapping.SceneSeasonNumber specified and optionally sceneMapping.SeasonNumber. This translates via episode.SceneSeasonNumber/SeasonNumber to specific episodes.
+                // - Mapped on Episode Season Number with optionally sceneMapping.SeasonNumber. This translates from episode.SceneSeasonNumber/SeasonNumber to specific releases. (Filter by episode.SeasonNumber or globally)
+
+                var ignoreSceneNumbering = (sceneMapping.SceneOrigin == "tvdb" || sceneMapping.SceneOrigin == "unknown:tvdb");
+                var mappingSceneSeasonNumber = sceneMapping.SceneSeasonNumber.NonNegative();
+                var mappingSeasonNumber = sceneMapping.SeasonNumber.NonNegative();
+
+                // Select scene or tvdb on the episode
+                var mappedSeasonNumber = ignoreSceneNumbering ? episode.SeasonNumber : (episode.SceneSeasonNumber ?? episode.SeasonNumber);
+                var releaseSeasonNumber = sceneMapping.SceneSeasonNumber.NonNegative() ?? mappedSeasonNumber;
+
+                if (mappingSceneSeasonNumber.HasValue)
                 {
-                    continue;
+                    // Apply the alternative mapping (release to scene/tvdb)
+                    var mappedAltSeasonNumber = sceneMapping.SeasonNumber.NonNegative() ?? sceneMapping.SceneSeasonNumber.NonNegative() ?? mappedSeasonNumber;
+
+                    // Check if the mapping applies to the current season
+                    if (mappedAltSeasonNumber != mappedSeasonNumber)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    // Check if the mapping applies to the current season
+                    if (mappingSeasonNumber.HasValue && mappingSeasonNumber.Value != episode.SeasonNumber)
+                    {
+                        continue;
+                    }
                 }
 
                 if (sceneMapping.ParseTerm == series.CleanTitle && sceneMapping.FilterRegex.IsNotNullOrWhiteSpace())
@@ -245,16 +273,16 @@ namespace NzbDrone.Core.IndexerSearch
                 }
 
                 // By default we do a alt title search in case indexers don't have the release properly indexed.  Services can override this behavior.
-                var searchMode = sceneMapping.SearchMode ?? ((sceneMapping.SceneSeasonNumber ?? -1) != -1 ? SearchMode.SearchTitle : SearchMode.Default);
+                var searchMode = sceneMapping.SearchMode ?? ((mappingSceneSeasonNumber.HasValue && series.CleanTitle != sceneMapping.SearchTerm.CleanSeriesTitle()) ? SearchMode.SearchTitle : SearchMode.Default);
 
-                if (sceneMapping.SceneOrigin == "tvdb" || sceneMapping.SceneOrigin == "unknown:tvdb")
+                if (ignoreSceneNumbering)
                 {
                     yield return new SceneEpisodeMapping
                     {
                         Episode = episode,
                         SearchMode = searchMode,
                         SceneTitles = new List<string> { sceneMapping.SearchTerm },
-                        SeasonNumber = (sceneMapping.SceneSeasonNumber ?? -1) == -1 ? episode.SeasonNumber : sceneMapping.SceneSeasonNumber.Value,
+                        SeasonNumber = releaseSeasonNumber,
                         EpisodeNumber = episode.EpisodeNumber,
                         AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber
                     };
@@ -266,7 +294,7 @@ namespace NzbDrone.Core.IndexerSearch
                         Episode = episode,
                         SearchMode = searchMode,
                         SceneTitles = new List<string> { sceneMapping.SearchTerm },
-                        SeasonNumber = (sceneMapping.SceneSeasonNumber ?? -1) == -1 ? (episode.SceneSeasonNumber ?? episode.SeasonNumber) : sceneMapping.SceneSeasonNumber.Value,
+                        SeasonNumber = releaseSeasonNumber,
                         EpisodeNumber = episode.SceneEpisodeNumber ?? episode.EpisodeNumber,
                         AbsoluteEpisodeNumber = episode.SceneAbsoluteEpisodeNumber ?? episode.AbsoluteEpisodeNumber
                     };
