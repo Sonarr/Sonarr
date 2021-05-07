@@ -207,7 +207,14 @@ namespace NzbDrone.Core.Parser
         {
             if (parsedEpisodeInfo.FullSeason)
             {
-                return _episodeService.GetEpisodesBySeason(series.Id, mappedSeasonNumber);
+                if (series.UseSceneNumbering && sceneSource)
+                {
+                    return _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeasonNumber);
+                }
+                else
+                {
+                    return _episodeService.GetEpisodesBySeason(series.Id, mappedSeasonNumber);
+                }
             }
 
             if (parsedEpisodeInfo.IsDaily)
