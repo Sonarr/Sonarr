@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.DataAugmentation.Scene;
@@ -10,13 +11,16 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabRequestGenerator : IIndexerRequestGenerator
     {
+        private readonly Logger _logger;
         private readonly INewznabCapabilitiesProvider _capabilitiesProvider;
+
         public int MaxPages { get; set; }
         public int PageSize { get; set; }
         public NewznabSettings Settings { get; set; }
 
-        public NewznabRequestGenerator(INewznabCapabilitiesProvider capabilitiesProvider)
+        public NewznabRequestGenerator(INewznabCapabilitiesProvider capabilitiesProvider, Logger logger)
         {
+            _logger = logger;
             _capabilitiesProvider = capabilitiesProvider;
 
             MaxPages = 30;
@@ -161,6 +165,11 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
+            if (!SupportsTvdbSearch && !SupportsTvSearch && !SupportsTvTitleSearch)
+            {
+                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Standard series search possible.");
+            }
+
             var pageableRequests = new IndexerPageableRequestChain();
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
@@ -194,6 +203,11 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
+            if (!SupportsTvdbSearch && !SupportsTvSearch && !SupportsTvTitleSearch)
+            {
+                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Standard series search possible.");
+            }
+
             var pageableRequests = new IndexerPageableRequestChain();
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
@@ -224,6 +238,11 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
+            if (!SupportsTvdbSearch && !SupportsTvSearch && !SupportsTvTitleSearch)
+            {
+                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Daily series search possible.");
+            }
+
             var pageableRequests = new IndexerPageableRequestChain();
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
@@ -254,6 +273,11 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
         {
+            if (!SupportsTvdbSearch && !SupportsTvSearch && !SupportsTvTitleSearch)
+            {
+                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Daily series search possible.");
+            }
+
             var pageableRequests = new IndexerPageableRequestChain();
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
