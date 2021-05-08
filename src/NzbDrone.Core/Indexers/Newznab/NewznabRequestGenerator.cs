@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
@@ -18,9 +19,9 @@ namespace NzbDrone.Core.Indexers.Newznab
         public int PageSize { get; set; }
         public NewznabSettings Settings { get; set; }
 
-        public NewznabRequestGenerator(INewznabCapabilitiesProvider capabilitiesProvider, Logger logger)
+        public NewznabRequestGenerator(INewznabCapabilitiesProvider capabilitiesProvider)
         {
-            _logger = logger;
+            _logger = NzbDroneLogger.GetLogger(GetType());
             _capabilitiesProvider = capabilitiesProvider;
 
             MaxPages = 30;
