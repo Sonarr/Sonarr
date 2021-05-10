@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private string SendCommand(XbmcSettings settings, string command)
         {
-            var url = string.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", settings.Address, command);
+            var url = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, $"xbmcCmds/xbmcHttp?command={command}");
 
             if (!string.IsNullOrEmpty(settings.Username))
             {

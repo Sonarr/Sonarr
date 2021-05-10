@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> Find(int seriesId, string date);
         List<Episode> GetEpisodes(int seriesId);
         List<Episode> GetEpisodes(int seriesId, int seasonNumber);
+        List<Episode> GetEpisodesBySceneSeason(int seriesId, int sceneSeasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
         List<Episode> EpisodesWithFiles(int seriesId);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
@@ -75,6 +76,13 @@ namespace NzbDrone.Core.Tv
         {
             return Query.Where(s => s.SeriesId == seriesId)
                         .AndWhere(s => s.SeasonNumber == seasonNumber)
+                        .ToList();
+        }
+
+        public List<Episode> GetEpisodesBySceneSeason(int seriesId, int seasonNumber)
+        {
+            return Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.SceneSeasonNumber == seasonNumber)
                         .ToList();
         }
 

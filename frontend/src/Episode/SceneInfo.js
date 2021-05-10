@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
@@ -15,6 +16,38 @@ function SceneInfo(props) {
     alternateTitles,
     seriesType
   } = props;
+
+  const reducedAlternateTitles = alternateTitles.map((alternateTitle) => {
+    let suffix = '';
+
+    const altSceneSeasonNumber = sceneSeasonNumber === undefined ? seasonNumber : sceneSeasonNumber;
+    const altSceneEpisodeNumber = sceneEpisodeNumber === undefined ? episodeNumber : sceneEpisodeNumber;
+
+    const mappingSeasonNumber = alternateTitle.sceneOrigin === 'tvdb' ? seasonNumber : altSceneSeasonNumber;
+    const altSeasonNumber = (alternateTitle.sceneSeasonNumber !== -1 && alternateTitle.sceneSeasonNumber !== undefined) ? alternateTitle.sceneSeasonNumber : mappingSeasonNumber;
+    const altEpisodeNumber = alternateTitle.sceneOrigin === 'tvdb' ? episodeNumber : altSceneEpisodeNumber;
+
+    if (altEpisodeNumber !== altSceneEpisodeNumber) {
+      suffix = `S${padNumber(altSeasonNumber, 2)}E${padNumber(altEpisodeNumber, 2)}`;
+    } else if (altSeasonNumber !== altSceneSeasonNumber) {
+      suffix = `S${padNumber(altSeasonNumber, 2)}`;
+    }
+
+    return {
+      alternateTitle,
+      title: alternateTitle.title,
+      suffix,
+      comment: alternateTitle.comment
+    };
+  });
+
+  const groupedAlternateTitles = _.map(_.groupBy(reducedAlternateTitles, (item) => `${item.title} ${item.suffix}`), (group) => {
+    return {
+      title: group[0].title,
+      suffix: group[0].suffix,
+      comment: _.uniq(group.map((item) => item.comment)).join('/')
+    };
+  });
 
   return (
     <DescriptionList className={styles.descriptionList}>
@@ -53,38 +86,23 @@ function SceneInfo(props) {
           <DescriptionListItem
             titleClassName={styles.title}
             descriptionClassName={styles.description}
-            title={alternateTitles.length === 1 ? 'Title' : 'Titles'}
+            title={groupedAlternateTitles.length === 1 ? 'Title' : 'Titles'}
             data={
               <div>
                 {
-                  alternateTitles.map((alternateTitle) => {
-                    let suffix = '';
-
-                    const altSceneSeasonNumber = sceneSeasonNumber === undefined ? seasonNumber : sceneSeasonNumber;
-                    const altSceneEpisodeNumber = sceneEpisodeNumber === undefined ? episodeNumber : sceneEpisodeNumber;
-
-                    const mappingSeasonNumber = alternateTitle.sceneOrigin === 'tvdb' ? seasonNumber : altSceneSeasonNumber;
-                    const altSeasonNumber = (alternateTitle.sceneSeasonNumber !== -1 && alternateTitle.sceneSeasonNumber !== undefined) ? alternateTitle.sceneSeasonNumber : mappingSeasonNumber;
-                    const altEpisodeNumber = alternateTitle.sceneOrigin === 'tvdb' ? episodeNumber : altSceneEpisodeNumber;
-
-                    if (altEpisodeNumber !== altSceneEpisodeNumber) {
-                      suffix = `S${padNumber(altSeasonNumber, 2)}E${padNumber(altEpisodeNumber, 2)}`;
-                    } else if (altSeasonNumber !== altSceneSeasonNumber) {
-                      suffix = `S${padNumber(altSeasonNumber, 2)}`;
-                    }
-
+                  groupedAlternateTitles.map(({ title, suffix, comment }) => {
                     return (
                       <div
-                        key={alternateTitle.title}
+                        key={`${title} ${suffix}`}
                       >
-                        {alternateTitle.title}
+                        {title}
                         {
                           suffix &&
                           <span> ({suffix})</span>
                         }
                         {
-                          alternateTitle.comment &&
-                          <span className={styles.comment}> {alternateTitle.comment}</span>
+                          comment &&
+                          <span className={styles.comment}> {comment}</span>
                         }
                       </div>
                     );

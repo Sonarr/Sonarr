@@ -6,7 +6,7 @@
 }
 
 @define-mixin scrollbarTrack {
-  &&::-webkit-scrollbar-track {
+  &::-webkit-scrollbar-track {
     background-color: transparent;
   }
 }

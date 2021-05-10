@@ -207,7 +207,14 @@ namespace NzbDrone.Core.Parser
         {
             if (parsedEpisodeInfo.FullSeason)
             {
-                return _episodeService.GetEpisodesBySeason(series.Id, mappedSeasonNumber);
+                if (series.UseSceneNumbering && sceneSource)
+                {
+                    return _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeasonNumber);
+                }
+                else
+                {
+                    return _episodeService.GetEpisodesBySeason(series.Id, mappedSeasonNumber);
+                }
             }
 
             if (parsedEpisodeInfo.IsDaily)
@@ -465,13 +472,13 @@ namespace NzbDrone.Core.Parser
                             episodes.AddIfNotNull(episode);
                         }
                     }
-                    else if (parsedEpisodeInfo.SeasonNumber > 1)
+                    else if (parsedEpisodeInfo.SeasonNumber > 1 && parsedEpisodeInfo.EpisodeNumbers.Empty())
                     {
                         episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber, absoluteEpisodeNumber);
 
                         if (episodes.Empty())
-                        {
-                            var episode = _episodeService.FindEpisode(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
+                        { 
+                            var episode = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, absoluteEpisodeNumber);
                             episodes.AddIfNotNull(episode);
                         }
                     }

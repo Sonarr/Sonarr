@@ -1,23 +1,32 @@
 const reload = require('require-nocache')(module);
 
-module.exports = (ctx, configPath, options) => {
-  const config = {
-    plugins: {
-      'postcss-mixins': {
-        mixinsDir: [
-          'frontend/src/Styles/Mixins'
-        ]
-      },
-      'postcss-simple-vars': {
-        variables: () =>
-          ctx.options.cssVarsFiles.reduce((acc, vars) => {
-            return Object.assign(acc, reload(vars));
-          }, {})
-      },
-      'postcss-color-function': {},
-      'postcss-nested': {}
-    }
-  };
+const cssVarsFiles = [
+  './src/Styles/Variables/colors',
+  './src/Styles/Variables/dimensions',
+  './src/Styles/Variables/fonts',
+  './src/Styles/Variables/animations',
+  './src/Styles/Variables/zIndexes'
+].map(require.resolve);
 
-  return config;
+const mixinsFiles = [
+  'frontend/src/Styles/Mixins/cover.css',
+  'frontend/src/Styles/Mixins/linkOverlay.css',
+  'frontend/src/Styles/Mixins/scroller.css',
+  'frontend/src/Styles/Mixins/truncate.css'
+];
+
+module.exports = {
+  plugins: [
+    ['postcss-mixins', {
+      mixinsFiles
+    }],
+    ['postcss-simple-vars', {
+      variables: () =>
+        cssVarsFiles.reduce((acc, vars) => {
+          return Object.assign(acc, reload(vars));
+        }, {})
+    }],
+    'postcss-color-function',
+    'postcss-nested'
+  ]
 };

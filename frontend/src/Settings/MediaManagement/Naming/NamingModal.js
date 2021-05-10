@@ -49,7 +49,8 @@ const seriesTokens = [
   { token: '{Series TitleThe}', example: 'Series Title, The' },
   { token: '{Series TitleTheYear}', example: 'Series Title, The (2010)' },
   { token: '{Series TitleYear}', example: 'Series Title (2010)' },
-  { token: '{Series TitleFirstCharacter}', example: 'S' }
+  { token: '{Series TitleFirstCharacter}', example: 'S' },
+  { token: '{Series Year}', example: '2010' }
 ];
 
 const seriesIdTokens = [

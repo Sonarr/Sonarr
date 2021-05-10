@@ -75,7 +75,7 @@
     "function-parentheses-newline-inside": "never-multi-line",
     "function-parentheses-space-inside": "never",
     "function-url-quotes": "always",
-    "function-url-scheme-blacklist": [
+    "function-url-scheme-disallowed-list": [
       "data"
     ],
     "function-whitespace-after": "always",

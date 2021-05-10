@@ -24,9 +24,9 @@ namespace NzbDrone.Core.Download.Clients.Vuze
         {
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
-            _proxy.RemoveTorrent(downloadId, deleteData, Settings);
+            _proxy.RemoveTorrent(item.DownloadId, deleteData, Settings);
         }
 
         protected override OsPath GetOutputPath(OsPath outputPath, TransmissionTorrent torrent)

@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             }
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
             throw new NotSupportedException();
         }

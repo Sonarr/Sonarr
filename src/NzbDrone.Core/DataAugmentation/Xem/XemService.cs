@@ -204,18 +204,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         {
             var mappings = _xemProxy.GetSceneTvdbNames();
 
-            return mappings.Where(m =>
-            {
-                int id;
-
-                if (int.TryParse(m.Title, out id))
-                {
-                    _logger.Debug("Skipping all numeric name: {0} for {1}", m.Title, m.TvdbId);
-                    return false;
-                }
-
-                return true;
-            }).ToList();
+            return mappings;
         }
 
         public void Handle(SeriesUpdatedEvent message)

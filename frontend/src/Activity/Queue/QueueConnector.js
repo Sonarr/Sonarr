@@ -48,6 +48,7 @@ class QueueConnector extends Component {
     const {
       useCurrentPage,
       fetchQueue,
+      fetchQueueStatus,
       gotoQueueFirstPage
     } = this.props;
 
@@ -58,6 +59,8 @@ class QueueConnector extends Component {
     } else {
       gotoQueueFirstPage();
     }
+
+    fetchQueueStatus();
   }
 
   componentDidUpdate(prevProps) {
@@ -168,6 +171,7 @@ QueueConnector.propTypes = {
   useCurrentPage: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchQueue: PropTypes.func.isRequired,
+  fetchQueueStatus: PropTypes.func.isRequired,
   gotoQueueFirstPage: PropTypes.func.isRequired,
   gotoQueuePreviousPage: PropTypes.func.isRequired,
   gotoQueueNextPage: PropTypes.func.isRequired,

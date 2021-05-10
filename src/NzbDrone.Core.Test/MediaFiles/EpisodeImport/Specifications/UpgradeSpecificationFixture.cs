@@ -281,7 +281,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
-        public void should_return_false_if_it_is_not_a_preferred_word_upgrade()
+        public void should_return_false_if_it_is_a_preferred_word_downgrade_and_equal_language_and_quality()
         {
             Mocker.GetMock<IConfigService>()
                   .Setup(s => s.DownloadPropersAndRepacks)
@@ -300,7 +300,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                          new EpisodeFile
                                                          {
-                                                             Quality = new QualityModel(Quality.Bluray1080p)
+                                                             Quality = new QualityModel(Quality.Bluray1080p),
+                                                             Language = Language.Spanish
                                                          }))
                                                      .Build()
                                                      .ToList();
@@ -308,6 +309,68 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode.FileEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew().Build();
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_if_it_is_a_preferred_word_downgrade_and_language_downgrade_and_a_quality_upgrade()
+        {
+            Mocker.GetMock<IConfigService>()
+                  .Setup(s => s.DownloadPropersAndRepacks)
+                  .Returns(ProperDownloadTypes.DoNotPrefer);
+
+            Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
+                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
+                  .Returns(10);
+
+            _localEpisode.PreferredWordScore = 5;
+            _localEpisode.Quality = new QualityModel(Quality.Bluray2160p);
+
+            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
+                                                     .All()
+                                                     .With(e => e.EpisodeFileId = 1)
+                                                     .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
+                                                         new EpisodeFile
+                                                         {
+                                                             Quality = new QualityModel(Quality.Bluray1080p),
+                                                             Language = Language.French
+                                                         }))
+                                                     .Build()
+                                                     .ToList();
+
+            _localEpisode.FileEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew().Build();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_it_is_a_preferred_word_downgrade_but_a_language_upgrade()
+        {
+            Mocker.GetMock<IConfigService>()
+                  .Setup(s => s.DownloadPropersAndRepacks)
+                  .Returns(ProperDownloadTypes.DoNotPrefer);
+
+            Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
+                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
+                  .Returns(10);
+
+            _localEpisode.PreferredWordScore = 5;
+            _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
+
+            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
+                                                     .All()
+                                                     .With(e => e.EpisodeFileId = 1)
+                                                     .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
+                                                         new EpisodeFile
+                                                         {
+                                                             Quality = new QualityModel(Quality.Bluray1080p),
+                                                             Language = Language.English
+                                                         }))
+                                                     .Build()
+                                                     .ToList();
+
+            _localEpisode.FileEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew().Build();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]

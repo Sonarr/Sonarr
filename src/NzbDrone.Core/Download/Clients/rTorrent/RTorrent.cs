@@ -156,14 +156,14 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             return items;
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
             if (deleteData)
             {
-                DeleteItemData(downloadId);
+                DeleteItemData(item);
             }
 
-            _proxy.RemoveTorrent(downloadId, Settings);
+            _proxy.RemoveTorrent(item.DownloadId, Settings);
         }
 
         public override DownloadClientInfo GetStatus()

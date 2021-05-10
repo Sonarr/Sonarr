@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Organizer
         private readonly Logger _logger;
 
         private static readonly Regex TitleRegex = new Regex(@"(?<escaped>\{\{|\}\})|\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9+-]+(?<!-)))?(?<suffix>[- ._)\]]*)\}",
-                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
                                                                RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -419,6 +419,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Series TitleYear}"] = m => TitleYear(series.Title, series.Year);
             tokenHandlers["{Series TitleTheYear}"] = m => TitleYear(TitleThe(series.Title), series.Year);
             tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleThe(series.Title).Substring(0, 1).FirstCharToUpper();
+            tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
 
         private string AddSeasonEpisodeNumberingTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes, NamingConfig namingConfig)

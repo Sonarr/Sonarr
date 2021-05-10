@@ -57,13 +57,13 @@ namespace NzbDrone.Core.Notifications.Email
         [FieldDefinition(5, Label = "From Address")]
         public string From { get; set; }
 
-        [FieldDefinition(6, Label = "Recipient Address(es)", HelpText = "Comma seperated list of email recipients")]
+        [FieldDefinition(6, Label = "Recipient Address(es)", HelpText = "Comma separated list of email recipients")]
         public IEnumerable<string> To { get; set; }
 
-        [FieldDefinition(7, Label = "CC Address(es)", HelpText = "Comma seperated list of email cc recipients", Advanced = true)]
+        [FieldDefinition(7, Label = "CC Address(es)", HelpText = "Comma separated list of email cc recipients", Advanced = true)]
         public IEnumerable<string> Cc { get; set; }
 
-        [FieldDefinition(8, Label = "BCC Address(es)", HelpText = "Comma seperated list of email bcc recipients", Advanced = true)]
+        [FieldDefinition(8, Label = "BCC Address(es)", HelpText = "Comma separated list of email bcc recipients", Advanced = true)]
         public IEnumerable<string> Bcc { get; set; }
 
         public NzbDroneValidationResult Validate()
