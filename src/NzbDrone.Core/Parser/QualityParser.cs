@@ -46,7 +46,8 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex RealRegex = new Regex(@"\b(?<real>REAL)\b",
                                                                 RegexOptions.Compiled);
 
-        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<R360p>360p)|(?<R480p>480p|640x480|848x480)|(?<R576p>576p)|(?<R720p>720p|1280x720)|(?<R1080p>1080p|1920x1080|1440p|FHD|1080i|4kto1080p)|(?<R2160p>2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k))\b",
+        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<R360p>360p)|(?<R480p>480p|640x480|848x480)|(?<R540p>540p)|(?<R576p>576p)|(?<R720p>720p|1280x720)|(?<R1080p>1080p|1920x1080|1440p|FHD|1080i|4kto1080p)|(?<R2160p>2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k))\b",
+
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         //Handle cases where no resolution is in the release name; assume if UHD then 4k
@@ -142,7 +143,8 @@ namespace NzbDrone.Core.Parser
                         return result;
                     }
 
-                    if (resolution == Resolution.R360P || resolution == Resolution.R480P || resolution == Resolution.R576p)
+                    if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
+                        resolution == Resolution.R540p || resolution == Resolution.R576p)
                     {
                         result.Quality = Quality.Bluray480p;
                         return result;
@@ -307,7 +309,8 @@ namespace NzbDrone.Core.Parser
                 result.SourceDetectionSource = QualityDetectionSource.Name;
 
                 if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
-                    resolution == Resolution.R576p || normalizedName.ContainsIgnoreCase("480p"))
+                    resolution == Resolution.R540p || resolution == Resolution.R576p ||
+                    normalizedName.ContainsIgnoreCase("480p"))
                 {
                     result.ResolutionDetectionSource = QualityDetectionSource.Name;
                     result.Quality = Quality.DVD;
@@ -347,7 +350,8 @@ namespace NzbDrone.Core.Parser
                 result.SourceDetectionSource = QualityDetectionSource.Name;
 
                 if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
-                    resolution == Resolution.R576p || normalizedName.ContainsIgnoreCase("480p"))
+                    resolution == Resolution.R540p || resolution == Resolution.R576p ||
+                    normalizedName.ContainsIgnoreCase("480p"))
                 {
                     result.ResolutionDetectionSource = QualityDetectionSource.Name;
                     result.Quality = Quality.WEBDL480p;
@@ -435,7 +439,8 @@ namespace NzbDrone.Core.Parser
                     return result;
                 }
 
-                if (resolution == Resolution.R360P || resolution == Resolution.R480P)
+                if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
+                    resolution == Resolution.R540p || resolution == Resolution.R576p)
                 {
                     result.ResolutionDetectionSource = QualityDetectionSource.Name;
 
@@ -557,6 +562,7 @@ namespace NzbDrone.Core.Parser
             if (!match.Success & !matchimplied.Success) return Resolution.Unknown;
             if (match.Groups["R360p"].Success) return Resolution.R360P;
             if (match.Groups["R480p"].Success) return Resolution.R480P;
+            if (match.Groups["R540p"].Success) return Resolution.R540p;
             if (match.Groups["R576p"].Success) return Resolution.R576p;
             if (match.Groups["R720p"].Success) return Resolution.R720p;
             if (match.Groups["R1080p"].Success) return Resolution.R1080p;
@@ -621,6 +627,7 @@ namespace NzbDrone.Core.Parser
     {
         R360P,
         R480P,
+        R540p,
         R576p,
         R720p,
         R1080p,
