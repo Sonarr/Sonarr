@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -7,11 +7,9 @@ namespace Marr.Data.Reflection
 {
     public class SimpleReflectionStrategy : IReflectionStrategy
     {
-
-        private static readonly Dictionary<string, MemberInfo> MemberCache = new Dictionary<string, MemberInfo>();
-        private static readonly Dictionary<string, GetterDelegate> GetterCache = new Dictionary<string, GetterDelegate>();
-        private static readonly Dictionary<string, SetterDelegate> SetterCache = new Dictionary<string, SetterDelegate>();
-
+        private static readonly ConcurrentDictionary<string, MemberInfo> MemberCache = new ConcurrentDictionary<string, MemberInfo>();
+        private static readonly ConcurrentDictionary<string, GetterDelegate> GetterCache = new ConcurrentDictionary<string, GetterDelegate>();
+        private static readonly ConcurrentDictionary<string, SetterDelegate> SetterCache = new ConcurrentDictionary<string, SetterDelegate>();
 
         private static MemberInfo GetMember(Type entityType, string name)
         {
