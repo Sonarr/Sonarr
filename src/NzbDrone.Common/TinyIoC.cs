@@ -2629,9 +2629,7 @@ namespace TinyIoC
 
             public void Dispose()
             {
-                var disposable = _instance as IDisposable;
-
-                if (disposable != null)
+                if (_instance is IDisposable disposable)
                     disposable.Dispose();
             }
         }
@@ -2693,9 +2691,7 @@ namespace TinyIoC
 
             public void Dispose()
             {
-                var disposable = _instance.Target as IDisposable;
-
-                if (disposable != null)
+                if (_instance.Target is IDisposable disposable)
                     disposable.Dispose();
             }
         }
@@ -2763,9 +2759,7 @@ namespace TinyIoC
                 if (this._Current == null)
                     return;
 
-                var disposable = this._Current as IDisposable;
-
-                if (disposable != null)
+                if (this._Current is IDisposable disposable)
                     disposable.Dispose();
             }
         }

@@ -160,9 +160,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
         private void OnError(Exception ex)
         {
-            var webException = ex as WebException;
-
-            if (webException != null)
+            if (ex is WebException webException)
             {
                 var response = webException.Response as HttpWebResponse;
                 var statusCode = response?.StatusCode;
