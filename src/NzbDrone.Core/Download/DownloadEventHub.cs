@@ -27,38 +27,65 @@ namespace NzbDrone.Core.Download
         {
             var trackedDownload = message.TrackedDownload;
 
-            if (trackedDownload == null || !trackedDownload.DownloadItem.CanBeRemoved || _configService.RemoveFailedDownloads == false)
+            if (trackedDownload == null ||
+                message.TrackedDownload.DownloadItem.Removed ||
+                !trackedDownload.DownloadItem.CanBeRemoved)
             {
                 return;
             }
 
-            RemoveFromDownloadClient(trackedDownload);
+            var downloadClient = _downloadClientProvider.Get(message.TrackedDownload.DownloadClient);
+            var definition = downloadClient.Definition as DownloadClientDefinition;
+
+            if (!definition.RemoveFailedDownloads)
+            {
+                return;
+            }
+
+            RemoveFromDownloadClient(trackedDownload, downloadClient);
         }
 
         public void Handle(DownloadCompletedEvent message)
         {
-            if (_configService.RemoveCompletedDownloads &&
-                !message.TrackedDownload.DownloadItem.Removed &&
-                message.TrackedDownload.DownloadItem.CanBeRemoved &&
-                message.TrackedDownload.DownloadItem.Status != DownloadItemStatus.Downloading)
+            var trackedDownload = message.TrackedDownload;
+            var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
+            var definition = downloadClient.Definition as DownloadClientDefinition;
+
+            MarkItemAsImported(trackedDownload, downloadClient);
+
+            if (trackedDownload.DownloadItem.Removed ||
+                !trackedDownload.DownloadItem.CanBeRemoved ||
+                trackedDownload.DownloadItem.Status == DownloadItemStatus.Downloading)
             {
-                RemoveFromDownloadClient(message.TrackedDownload);
+                return;
             }
-            else
+
+            if (!definition.RemoveCompletedDownloads)
             {
-                MarkItemAsImported(message.TrackedDownload);
-            }           
+                return;
+            }
+
+            RemoveFromDownloadClient(message.TrackedDownload, downloadClient);
         }
 
         public void Handle(DownloadCanBeRemovedEvent message)
         {
-            // Already verified that it can be removed, just needs to be removed
-            RemoveFromDownloadClient(message.TrackedDownload);
+            var trackedDownload = message.TrackedDownload;
+            var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
+            var definition = downloadClient.Definition as DownloadClientDefinition;
+
+            if (trackedDownload.DownloadItem.Removed ||
+                !trackedDownload.DownloadItem.CanBeRemoved ||
+                !definition.RemoveCompletedDownloads)
+            {
+                return;
+            }
+
+            RemoveFromDownloadClient(message.TrackedDownload, downloadClient);
         }
 
-        private void RemoveFromDownloadClient(TrackedDownload trackedDownload)
+        private void RemoveFromDownloadClient(TrackedDownload trackedDownload, IDownloadClient downloadClient)
         {
-            var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
             try
             {
                 _logger.Debug("[{0}] Removing download from {1} history", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClientInfo.Name);
@@ -75,9 +102,8 @@ namespace NzbDrone.Core.Download
             }
         }
 
-        private void MarkItemAsImported(TrackedDownload trackedDownload)
+        private void MarkItemAsImported(TrackedDownload trackedDownload, IDownloadClient downloadClient)
         {
-            var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
             try
             {
                 _logger.Debug("[{0}] Marking download as imported from {1}", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClientInfo.Name);

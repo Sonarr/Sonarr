@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import classNames from 'classnames';
+import { sizes } from 'Helpers/Props';
 import styles from './FieldSet.css';
 
 class FieldSet extends Component {
@@ -9,13 +11,14 @@ class FieldSet extends Component {
 
   render() {
     const {
+      size,
       legend,
       children
     } = this.props;
 
     return (
       <fieldset className={styles.fieldSet}>
-        <legend className={styles.legend}>
+        <legend className={classNames(styles.legend, (size === sizes.SMALL) && styles.small)}>
           {legend}
         </legend>
         {children}
@@ -26,8 +29,13 @@ class FieldSet extends Component {
 }
 
 FieldSet.propTypes = {
+  size: PropTypes.oneOf(sizes.all).isRequired,
   legend: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   children: PropTypes.node
+};
+
+FieldSet.defaultProps = {
+  size: sizes.MEDIUM
 };
 
 export default FieldSet;
