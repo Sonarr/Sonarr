@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
                 // Check if torrent is finished and if it exceeds cached seedConfig
                 item.CanMoveFiles = item.CanBeRemoved =
-                    torrent.IsFinished &&
+                    torrent.IsFinished && seedConfig != null &&
                     (
                         (torrent.Ratio / 1000.0) >= seedConfig.Ratio ||
                         (DateTimeOffset.Now - DateTimeOffset.FromUnixTimeSeconds(torrent.FinishedTime)) >= seedConfig.SeedTime

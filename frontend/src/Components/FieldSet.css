@@ -16,4 +16,9 @@
   color: #3a3f51;
   font-size: 21px;
   line-height: inherit;
+
+  &.small {
+    color: #909293;
+    font-size: 18px;
+  }
 }
