@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         string AddUri(string token, string[] uri);
 
         [XmlRpcMethod("aria2.addTorrent")]
-        string AddTorrent(string token, string base64Torrent);
+        string AddTorrent(string token, byte[] torrent);
 
         [XmlRpcMethod("aria2.forceRemove")]
         string Remove(string token, string gid);
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             _logger.Debug("> aria2.addTorrent");
 
             var client = BuildClient(settings);
-            var gid = ExecuteRequest(() => client.AddTorrent(GetToken(settings), Convert.ToBase64String(torrent)));
+            var gid = ExecuteRequest(() => client.AddTorrent(GetToken(settings), torrent));
 
             _logger.Debug("< aria2.addTorrent");
 
