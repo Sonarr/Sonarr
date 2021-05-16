@@ -156,6 +156,7 @@ class QueuedTaskRow extends Component {
       status,
       duration,
       message,
+      clientUserAgent,
       longDateFormat,
       timeFormat,
       onCancelPress
@@ -191,7 +192,17 @@ class QueuedTaskRow extends Component {
           </span>
         </TableRowCell>
 
-        <TableRowCell>{commandName}</TableRowCell>
+        <TableRowCell>
+          <span className={styles.commandName}>
+            {commandName}
+          </span>
+          {
+            clientUserAgent &&
+              <span className={styles.userAgent} title="User-Agent provided by the app that called the API">
+                from: {clientUserAgent}
+              </span>
+          }
+        </TableRowCell>
 
         <TableRowCell
           className={styles.queued}
