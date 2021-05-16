@@ -279,24 +279,24 @@ namespace NzbDrone.Core.Datastore
                             .Take(pagingSpec.PageSize);
         }
 
-        protected void ModelCreated(TModel model)
+        protected void ModelCreated(TModel model, bool forcePublish = false)
         {
-            PublishModelEvent(model, ModelAction.Created);
+            PublishModelEvent(model, ModelAction.Created, forcePublish);
         }
 
-        protected void ModelUpdated(TModel model)
+        protected void ModelUpdated(TModel model, bool forcePublish = false)
         {
-            PublishModelEvent(model, ModelAction.Updated);
+            PublishModelEvent(model, ModelAction.Updated, forcePublish);
         }
 
-        protected void ModelDeleted(TModel model)
+        protected void ModelDeleted(TModel model, bool forcePublish = false)
         {
-            PublishModelEvent(model, ModelAction.Deleted);
+            PublishModelEvent(model, ModelAction.Deleted, forcePublish);
         }
 
-        private void PublishModelEvent(TModel model, ModelAction action)
+        private void PublishModelEvent(TModel model, ModelAction action, bool forcePublish)
         {
-            if (PublishModelEvents)
+            if (PublishModelEvents || forcePublish)
             {
                 _eventAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
             }

@@ -23,6 +23,11 @@ namespace Sonarr.Http
             _signalRBroadcaster = signalRBroadcaster;
         }
 
+        protected virtual TResource GetResourceByIdForBroadcast(int id)
+        {
+            return GetResourceById(id);
+        }
+
         public void Handle(ModelEvent<TModel> message)
         {
             if (!_signalRBroadcaster.IsConnected) return;
@@ -32,7 +37,7 @@ namespace Sonarr.Http
                 BroadcastResourceChange(message.Action);
             }
 
-            BroadcastResourceChange(message.Action, message.Model.Id);
+            BroadcastResourceChange(message.Action, message.ModelId);
         }
 
         protected void BroadcastResourceChange(ModelAction action, int id)
@@ -45,7 +50,7 @@ namespace Sonarr.Http
             }
             else
             {
-                var resource = GetResourceById(id);
+                var resource = GetResourceByIdForBroadcast(id);
                 BroadcastResourceChange(action, resource);
             }
         }
