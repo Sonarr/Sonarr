@@ -18,8 +18,10 @@ namespace NzbDrone.Core.Download.Clients.Flood
     public class Flood : TorrentClientBase<FloodSettings>
     {
         private readonly IFloodProxy _proxy;
+        private readonly IDownloadSeedConfigProvider _downloadSeedConfigProvider;
 
         public Flood(IFloodProxy proxy,
+                        IDownloadSeedConfigProvider downloadSeedConfigProvider,
                         ITorrentFileInfoReader torrentFileInfoReader,
                         IHttpClient httpClient,
                         IConfigService configService,
@@ -29,6 +31,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
+            _downloadSeedConfigProvider = downloadSeedConfigProvider;
         }
 
         private static IEnumerable<string> HandleTags(RemoteEpisode remoteEpisode, FloodSettings settings)
@@ -77,7 +80,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         }
 
         public override string Name => "Flood";
-        public override ProviderMessage Message => new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using Flood", ProviderMessageType.Warning);
+        public override ProviderMessage Message => new ProviderMessage("Sonarr will handle automatic removal of torrents based on the current seed criteria in Settings -> Indexers", ProviderMessageType.Info);
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
@@ -119,6 +122,8 @@ namespace NzbDrone.Core.Download.Clients.Flood
                     TotalSize = properties.SizeBytes,
                     SeedRatio = properties.Ratio,
                     Message = properties.Message,
+                    CanMoveFiles = false,
+                    CanBeRemoved = false,
                 };
 
                 if (properties.Eta > 0)
@@ -143,7 +148,28 @@ namespace NzbDrone.Core.Download.Clients.Flood
                     item.Status = DownloadItemStatus.Paused;
                 }
 
-                item.CanMoveFiles = item.CanBeRemoved = false;
+                if (item.Status == DownloadItemStatus.Completed)
+                {
+                    // Grab cached seedConfig
+                    var seedConfig = _downloadSeedConfigProvider.GetSeedConfiguration(item.DownloadId);
+
+                    if (seedConfig != null)
+                    {
+                        if (item.SeedRatio >= seedConfig.Ratio)
+                        {
+                            // Check if seed ratio reached
+                            item.CanMoveFiles = item.CanBeRemoved = true;
+                        }
+                        else if (properties.DateFinished != null && properties.DateFinished > 0)
+                        {
+                            // Check if seed time reached
+                            if ((DateTimeOffset.Now - DateTimeOffset.FromUnixTimeSeconds(properties.DateFinished)) >= seedConfig.SeedTime)
+                            {
+                                item.CanMoveFiles = item.CanBeRemoved = true;
+                            }
+                        }
+                    }
+                }
 
                 items.Add(item);
             }
