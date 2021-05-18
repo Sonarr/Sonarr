@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
                         else if (properties.DateFinished != null && properties.DateFinished > 0)
                         {
                             // Check if seed time reached
-                            if ((DateTimeOffset.Now - DateTimeOffset.FromUnixTimeSeconds(properties.DateFinished)) >= seedConfig.SeedTime)
+                            if ((DateTimeOffset.Now - DateTimeOffset.FromUnixTimeSeconds((long)properties.DateFinished)) >= seedConfig.SeedTime)
                             {
                                 item.CanMoveFiles = item.CanBeRemoved = true;
                             }
