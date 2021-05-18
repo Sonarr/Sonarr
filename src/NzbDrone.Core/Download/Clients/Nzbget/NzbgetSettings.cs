@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox)]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Sabnzbd")]
+        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to NZBGet")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(3, Label = "Url Base", Type = FieldType.Textbox, Advanced = true, HelpText = "Adds a prefix to the nzbget url, e.g. http://[host]:[port]/[urlBase]/jsonrpc")]
