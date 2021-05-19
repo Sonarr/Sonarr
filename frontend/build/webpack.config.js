@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -23,7 +23,7 @@ module.exports = (env) => {
 
   const config = {
     mode: isProduction ? 'production' : 'development',
-    devtool: 'source-map',
+    devtool: isProduction ? 'source-map' : 'eval-source-map',
 
     stats: {
       children: false
@@ -79,46 +79,47 @@ module.exports = (env) => {
       }),
 
       new HtmlWebpackPlugin({
-        template: 'frontend/src/index.html',
+        template: 'frontend/src/index.ejs',
         filename: 'index.html',
         publicPath: '/'
       }),
 
-      new CopyPlugin({
-        patterns: [
-          // HTML
-          {
-            from: 'frontend/src/*.html',
-            to: path.join(distFolder, '[name][ext]'),
-            globOptions: {
-              ignore: ['**/index.html']
-            }
-          },
+      new FileManagerPlugin({
+        events: {
+          onEnd: {
+            copy: [
+              // HTML
+              {
+                source: 'frontend/src/*.html',
+                destination: distFolder
+              },
 
-          // Fonts
-          {
-            from: 'frontend/src/Content/Fonts/*.*',
-            to: path.join(distFolder, 'Content/Fonts', '[name][ext]')
-          },
+              // Fonts
+              {
+                source: 'frontend/src/Content/Fonts/*.*',
+                destination: path.join(distFolder, 'Content/Fonts')
+              },
 
-          // Icon Images
-          {
-            from: 'frontend/src/Content/Images/Icons/*.*',
-            to: path.join(distFolder, 'Content/Images/Icons', '[name][ext]')
-          },
+              // Icon Images
+              {
+                source: 'frontend/src/Content/Images/Icons/*.*',
+                destination: path.join(distFolder, 'Content/Images/Icons')
+              },
 
-          // Images
-          {
-            from: 'frontend/src/Content/Images/*.*',
-            to: path.join(distFolder, 'Content/Images', '[name][ext]')
-          },
+              // Images
+              {
+                source: 'frontend/src/Content/Images/*.*',
+                destination: path.join(distFolder, 'Content/Images')
+              },
 
-          // Robots
-          {
-            from: 'frontend/src/Content/robots.txt',
-            to: path.join(distFolder, 'Content', '[name][ext]')
+              // Robots
+              {
+                source: 'frontend/src/Content/robots.txt',
+                destination: path.join(distFolder, 'Content/robots.txt')
+              }
+            ]
           }
-        ]
+        }
       }),
 
       new LiveReloadPlugin()
