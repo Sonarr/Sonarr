@@ -197,10 +197,11 @@ class QueuedTaskRow extends Component {
             {commandName}
           </span>
           {
-            clientUserAgent &&
+            clientUserAgent ?
               <span className={styles.userAgent} title="User-Agent provided by the app that called the API">
                 from: {clientUserAgent}
-              </span>
+              </span> :
+              null
           }
         </TableRowCell>
 
@@ -266,6 +267,7 @@ QueuedTaskRow.propTypes = {
   status: PropTypes.string.isRequired,
   duration: PropTypes.string,
   message: PropTypes.string,
+  clientUserAgent: PropTypes.string,
   showRelativeDates: PropTypes.bool.isRequired,
   shortDateFormat: PropTypes.string.isRequired,
   longDateFormat: PropTypes.string.isRequired,
