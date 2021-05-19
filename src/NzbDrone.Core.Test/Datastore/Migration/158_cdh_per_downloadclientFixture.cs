@@ -37,8 +37,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             var items = db.Query<DownloadClientDefinition158>("SELECT * FROM DownloadClients");
 
             items.Should().HaveCount(1);
-            items.First().RemoveCompletedDownloads.Should().BeTrue();
-            items.First().RemoveFailedDownloads.Should().BeFalse();
+            items.First().RemoveCompletedDownloads.Should().BeFalse();
+            items.First().RemoveFailedDownloads.Should().BeTrue();
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 c.Insert.IntoTable("Config").Row(new
                 {
                     Key = "removecompleteddownloads",
-                    Value = "False"
+                    Value = "True"
                 });
 
                 c.Insert.IntoTable("DownloadClients").Row(new
@@ -71,8 +71,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             var items = db.Query<DownloadClientDefinition158>("SELECT * FROM DownloadClients");
 
             items.Should().HaveCount(1);
-            items.First().RemoveCompletedDownloads.Should().BeFalse();
-            items.First().RemoveFailedDownloads.Should().BeFalse();
+            items.First().RemoveCompletedDownloads.Should().BeTrue();
+            items.First().RemoveFailedDownloads.Should().BeTrue();
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             items.Should().HaveCount(1);
             items.First().RemoveCompletedDownloads.Should().BeFalse();
-            items.First().RemoveFailedDownloads.Should().BeFalse();
+            items.First().RemoveFailedDownloads.Should().BeTrue();
         }
     }
 

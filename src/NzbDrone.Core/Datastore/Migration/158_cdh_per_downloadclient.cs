@@ -21,19 +21,19 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void MoveRemoveSettings(IDbConnection conn, IDbTransaction tran)
         {
-            var removeCompletedDownloads = true;
-            var removeFailedDownloads = false;
+            var removeCompletedDownloads = false;
+            var removeFailedDownloads = true;
 
             using (var removeCompletedDownloadsCmd = conn.CreateCommand(tran, "SELECT Value FROM Config WHERE Key = 'removecompleteddownloads'"))
             {
-                if ("False" == (removeCompletedDownloadsCmd.ExecuteScalar() as string))
-                    removeCompletedDownloads = false;
+                if ("true" == (removeCompletedDownloadsCmd.ExecuteScalar() as string)?.ToLower())
+                    removeCompletedDownloads = true;
             }
 
             using (var removeFailedDownloadsCmd = conn.CreateCommand(tran, "SELECT Value FROM Config WHERE Key = 'removefaileddownloads'"))
             {
-                if ("True" == (removeFailedDownloadsCmd.ExecuteScalar() as string))
-                    removeFailedDownloads = true;
+                if ("false" == (removeFailedDownloadsCmd.ExecuteScalar() as string)?.ToLower())
+                    removeFailedDownloads = false;
             }
                         
             using (var updateClientCmd = conn.CreateCommand(tran, $"UPDATE DownloadClients SET RemoveCompletedDownloads = (CASE WHEN Implementation IN (\"RTorrent\", \"Flood\") THEN 0 ELSE ? END), RemoveFailedDownloads = ?"))
