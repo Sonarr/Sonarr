@@ -3,7 +3,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(158)]
+    [Migration(159)]
     public class add_indexer_tags : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
