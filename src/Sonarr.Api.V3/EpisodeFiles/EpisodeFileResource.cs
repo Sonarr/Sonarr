@@ -18,6 +18,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
+        public string ReleaseGroup { get; set; }
         public Language Language { get; set; }
         public QualityModel Quality { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
@@ -43,6 +44,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Size = model.Size,
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
+                ReleaseGroup = model.ReleaseGroup,
                 Language = model.Language,
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName)
@@ -66,6 +68,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Size = model.Size,
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
+                ReleaseGroup = model.ReleaseGroup,
                 Language = model.Language,
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),

@@ -116,7 +116,7 @@ function EditDelayProfileModalContent(props) {
                     type={inputTypes.CHECK}
                     name="bypassIfHighestQuality"
                     {...bypassIfHighestQuality}
-                    helpText="Bypass delay when release has the highest enabled quality in the quality profile"
+                    helpText="Bypass delay when release has the highest enabled quality in the quality profile with the preferred protocol"
                     onChange={onInputChange}
                   />
                 </FormGroup>

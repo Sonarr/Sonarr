@@ -10,6 +10,7 @@
         public long RemainingSize { get; set; }
         public long DownRate { get; set; }
         public long Ratio { get; set; }
+        public long FinishedTime { get; set; }
         public bool IsFinished { get; set; }
         public bool IsOpen { get; set; }
         public bool IsActive { get; set; }

@@ -469,6 +469,32 @@ namespace NzbDrone.Core.Parser
             return result;
         }
 
+        public static string SimplifyTitle(string title)
+        {
+            if (!ValidateBeforeParsing(title)) return title;
+
+            Logger.Debug("Parsing string '{0}'", title);
+
+            if (ReversedTitleRegex.IsMatch(title))
+            {
+                var titleWithoutExtension = RemoveFileExtension(title).ToCharArray();
+                Array.Reverse(titleWithoutExtension);
+
+                title = new string(titleWithoutExtension) + title.Substring(titleWithoutExtension.Length);
+
+                Logger.Debug("Reversed name detected. Converted to '{0}'", title);
+            }
+
+            var simpleTitle = title;
+
+            simpleTitle = WebsitePrefixRegex.Replace(simpleTitle);
+            simpleTitle = WebsitePostfixRegex.Replace(simpleTitle);
+
+            simpleTitle = CleanTorrentSuffixRegex.Replace(simpleTitle);
+
+            return simpleTitle;
+        }
+
         public static ParsedEpisodeInfo ParseTitle(string title)
         {
             try

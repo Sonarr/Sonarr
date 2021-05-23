@@ -29,6 +29,8 @@ namespace NzbDrone.Core.Messaging.Commands
         public CommandTrigger Trigger { get; set; }
         public bool SuppressMessages { get; set; }
 
+        public string ClientUserAgent { get; set; }
+
         public Command()
         {
             Name = GetType().Name.Replace("Command", "");

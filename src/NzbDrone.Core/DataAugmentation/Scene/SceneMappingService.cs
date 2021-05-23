@@ -231,7 +231,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                 return normalCandidates;
             }
 
-            filteredCandidates = filteredCandidates.Where(v => Regex.IsMatch(releaseTitle, v.FilterRegex)).ToList();
+            var simpleTitle = Parser.Parser.SimplifyTitle(releaseTitle);
+
+            filteredCandidates = filteredCandidates.Where(v => Regex.IsMatch(simpleTitle, v.FilterRegex)).ToList();
 
             if (filteredCandidates.Any())
             {

@@ -17,6 +17,7 @@ function filterAlternateTitles(alternateTitles, seriesTitle, useSceneNumbering, 
       const hasAltSeasonNumber = (alternateTitle.seasonNumber !== -1 && alternateTitle.seasonNumber !== undefined);
       const hasAltSceneSeasonNumber = (alternateTitle.sceneSeasonNumber !== -1 && alternateTitle.sceneSeasonNumber !== undefined);
 
+      // Global alias that should be displayed global
       if (!hasAltSeasonNumber && !hasAltSceneSeasonNumber &&
           (alternateTitle.title !== seriesTitle) &&
           (!alternateTitle.sceneOrigin || !useSceneNumbering)) {
@@ -24,9 +25,18 @@ function filterAlternateTitles(alternateTitles, seriesTitle, useSceneNumbering, 
         return;
       }
 
-      if ((sceneSeasonNumber !== undefined && sceneSeasonNumber === alternateTitle.sceneSeasonNumber) ||
-          (seasonNumber !== undefined && seasonNumber === alternateTitle.seasonNumber) ||
-          (!hasAltSeasonNumber && !hasAltSceneSeasonNumber && alternateTitle.sceneOrigin && useSceneNumbering)) {
+      // Global alias that should be displayed per episode
+      if (!hasAltSeasonNumber && !hasAltSceneSeasonNumber && alternateTitle.sceneOrigin && useSceneNumbering) {
+        seasonTitles.push(alternateTitle);
+        return;
+      }
+
+      // Apply the alternative mapping (release to scene)
+      const mappedAltSeasonNumber = hasAltSeasonNumber ? alternateTitle.seasonNumber : alternateTitle.sceneSeasonNumber;
+      // Select scene or tvdb on the episode
+      const mappedSeasonNumber = alternateTitle.sceneOrigin === 'tvdb' ? seasonNumber : sceneSeasonNumber;
+
+      if (mappedSeasonNumber !== undefined && mappedSeasonNumber === mappedAltSeasonNumber) {
         seasonTitles.push(alternateTitle);
         return;
       }

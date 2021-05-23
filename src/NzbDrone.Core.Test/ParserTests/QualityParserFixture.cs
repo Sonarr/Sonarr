@@ -64,6 +64,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Hatsuyuki] The Series - 363 [848x480][ADE35E38]", false)]
         [TestCase("The.Series.S03.TVRip.XviD-NOGRP", false)]
         [TestCase("[HorribleSubs] The Series - 03 [360p].mkv", false)]
+        [TestCase("[SubsPlease] Series Title (540p) [AB649D32].mkv", false)]
+        [TestCase("[Erai-raws] Series Title [540p][Multiple Subtitle].mkv", false)]
         public void should_parse_sdtv_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.SDTV, proper);

@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Common.Reflection;
@@ -58,6 +61,11 @@ namespace NzbDrone.Core.Datastore.Extensions
             }
 
             return false;
+        }
+
+        public static List<TModel> QueryScalar<TModel>(this IDataMapper dataMapper, string sql)
+        {
+            return dataMapper.ExecuteReader(sql, reader => (TModel)Convert.ChangeType(reader.GetValue(0), typeof(TModel))).ToList();
         }
     }
 }

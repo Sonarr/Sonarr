@@ -21,13 +21,18 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             }
         }
 
-        public static void ShouldBeWarning(this Core.HealthCheck.HealthCheck result, string message = null)
+        public static void ShouldBeWarning(this Core.HealthCheck.HealthCheck result, string message = null, string wikiFragment = null)
         {
             result.Type.Should().Be(HealthCheckResult.Warning);
 
             if (message.IsNotNullOrWhiteSpace())
             {
                 result.Message.Should().Contain(message);
+            }
+
+            if (wikiFragment.IsNotNullOrWhiteSpace())
+            {
+                result.WikiUrl.Fragment.Should().Be(wikiFragment);
             }
         }
 

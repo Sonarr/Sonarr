@@ -56,6 +56,13 @@ namespace Sonarr.Api.V3.Episodes
             var resource = MapToResource(episode, true, true, true);
             return resource;
         }
+        
+        protected override EpisodeResource GetResourceByIdForBroadcast(int id)
+        {
+            var episode = _episodeService.GetEpisode(id);
+            var resource = MapToResource(episode, false, false, false);
+            return resource;
+        }
 
         protected EpisodeResource MapToResource(Episode episode, bool includeSeries, bool includeEpisodeFile, bool includeImages)
         {

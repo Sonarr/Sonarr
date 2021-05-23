@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -810,6 +812,32 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(releaseGroup);
+        }
+
+        [TestCase("en-US")]
+        [TestCase("fr-FR")]
+        [TestCase("az")]
+        [TestCase("tr-TR")]
+        public void should_replace_all_tokens_for_different_cultures(string culture)
+        {
+            var oldCulture = Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
+
+                _episodeFile.ReleaseGroup = null;
+
+                GivenMediaInfoModel(audioLanguages: "English/German");
+
+                _namingConfig.StandardEpisodeFormat = "{MediaInfo AudioLanguages}";
+
+                Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                       .Should().Be("[EN+DE]");
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = oldCulture;
+            }
         }
 
         [TestCase("English", "")]
