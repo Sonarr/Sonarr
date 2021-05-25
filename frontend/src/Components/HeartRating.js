@@ -6,7 +6,7 @@ import styles from './HeartRating.css';
 
 function HeartRating({ rating, iconSize }) {
   return (
-    <span>
+    <span className={styles.rating}>
       <Icon
         className={styles.heart}
         name={icons.HEART}
