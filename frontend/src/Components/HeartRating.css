@@ -2,3 +2,7 @@
   margin-right: 5px;
   color: $themeRed;
 }
+
+.rating {
+  margin-right: 15px;
+}

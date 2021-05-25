@@ -57,6 +57,11 @@ function getExpandedState(newState) {
   };
 }
 
+function getDateYear(date) {
+  const dateDate = new Date(date);
+  return dateDate.getFullYear();
+}
+
 class SeriesDetails extends Component {
 
   //
@@ -192,6 +197,8 @@ class SeriesDetails extends Component {
       seasons,
       alternateTitles,
       tags,
+      year,
+      previousAiring,
       isSaving,
       isRefreshing,
       isSearching,
@@ -229,6 +236,7 @@ class SeriesDetails extends Component {
     } = this.state;
 
     const statusDetails = getSeriesStatusDetails(status);
+    const runningYears = statusDetails.title === 'Ended' ? `${year}-${getDateYear(previousAiring)}` : `${year}-`;
 
     let episodeFilesCountMessage = 'No episode files';
 
@@ -414,6 +422,10 @@ class SeriesDetails extends Component {
                       rating={ratings.value}
                       iconSize={20}
                     />
+
+                    <span>
+                      {runningYears}
+                    </span>
                   </div>
                 </div>
 
@@ -706,6 +718,8 @@ SeriesDetails.propTypes = {
   seasons: PropTypes.arrayOf(PropTypes.object).isRequired,
   alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
+  year: PropTypes.number.isRequired,
+  previousAiring: PropTypes.string,
   isSaving: PropTypes.bool.isRequired,
   saveError: PropTypes.object,
   isRefreshing: PropTypes.bool.isRequired,
