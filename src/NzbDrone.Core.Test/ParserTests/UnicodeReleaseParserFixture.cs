@@ -24,6 +24,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("【咕咕茶字幕組】★1月新番[天使降臨到了我身邊! / Anime Series Title!][04][1080P][繁體][MP4]", "Anime Series Title!", "咕咕茶字幕組", 4)]
         [TestCase("【千夏字幕组】【天使降临到了我身边！_Anime Series Title】[第05话][1080p_HEVC][简繁外挂]", "Anime Series Title", "千夏字幕组", 5)]
         [TestCase("【DHR动研字幕组】[多田君不恋爱_Anime Series Title][13完][繁体][720P][MP4]", "Anime Series Title", "DHR动研字幕组", 13)]
+        [TestCase("【极影字幕社】剃须。然后捡到女高中生。 Anime Series Title 第05话 MP4 1080P GB", "Anime Series Title", "极影字幕社", 5)]
+        [TestCase("[星空字幕组] 剃须。然后捡到女高中生。 / Anime Series Title [05][1080p][简日内嵌]", "Anime Series Title", "星空字幕组", 5)]
         [TestCase("【动漫国字幕组】★01月新番[Anime Series Title～！][01][1080P][简体][MP4]", "Anime Series Title～！", "动漫国字幕组", 1)]
         public void should_parse_chinese_anime_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
