@@ -138,6 +138,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
         public override MetadataFileResult SeriesMetadata(Series series)
         {
             var xmlResult = string.Empty;
+
             if (Settings.SeriesMetadata)
             {
                 _logger.Debug("Generating Series Metadata for: {0}", series.Title);
