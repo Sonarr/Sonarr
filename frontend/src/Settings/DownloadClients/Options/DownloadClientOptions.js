@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { inputTypes, sizes } from 'Helpers/Props';
+import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Form from 'Components/Form/Form';
@@ -31,11 +32,16 @@ function DownloadClientOptions(props) {
       }
 
       {
-        hasSettings && !isFetching && !error &&
+        hasSettings && !isFetching && !error && advancedSettings &&
           <div>
             <FieldSet legend="Completed Download Handling">
+
               <Form>
-                <FormGroup size={sizes.MEDIUM}>
+                <FormGroup
+                  advancedSettings={advancedSettings}
+                  isAdvanced={true}
+                  size={sizes.MEDIUM}
+                >
                   <FormLabel>Enable</FormLabel>
 
                   <FormInputGroup
@@ -52,25 +58,7 @@ function DownloadClientOptions(props) {
                   isAdvanced={true}
                   size={sizes.MEDIUM}
                 >
-                  <FormLabel>Remove</FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.CHECK}
-                    name="removeCompletedDownloads"
-                    helpText="Remove imported downloads from download client history"
-                    onChange={onInputChange}
-                    {...settings.removeCompletedDownloads}
-                  />
-                </FormGroup>
-              </Form>
-            </FieldSet>
-
-            <FieldSet
-              legend="Failed Download Handling"
-            >
-              <Form>
-                <FormGroup size={sizes.MEDIUM}>
-                  <FormLabel>Redownload</FormLabel>
+                  <FormLabel>Redownload Failed</FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.CHECK}
@@ -80,23 +68,11 @@ function DownloadClientOptions(props) {
                     {...settings.autoRedownloadFailed}
                   />
                 </FormGroup>
-
-                <FormGroup
-                  advancedSettings={advancedSettings}
-                  isAdvanced={true}
-                  size={sizes.MEDIUM}
-                >
-                  <FormLabel>Remove</FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.CHECK}
-                    name="removeFailedDownloads"
-                    helpText="Remove failed downloads from download client history"
-                    onChange={onInputChange}
-                    {...settings.removeFailedDownloads}
-                  />
-                </FormGroup>
               </Form>
+
+              <Alert kind={kinds.INFO}>
+                The Remove settings were moved to the individual Download Client settings in the table above.
+              </Alert>
             </FieldSet>
           </div>
       }

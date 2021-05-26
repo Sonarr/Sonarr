@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds } from 'Helpers/Props';
+import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
@@ -9,6 +9,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
@@ -44,7 +45,10 @@ class EditDownloadClientModalContent extends Component {
       implementationName,
       name,
       enable,
+      protocol,
       priority,
+      removeCompletedDownloads,
+      removeFailedDownloads,
       fields,
       message
     } = item;
@@ -133,6 +137,37 @@ class EditDownloadClientModalContent extends Component {
                   />
                 </FormGroup>
 
+                <FieldSet
+                  size={sizes.SMALL}
+                  legend="Completed Download Handling"
+                >
+                  <FormGroup>
+                    <FormLabel>Remove Completed</FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.CHECK}
+                      name="removeCompletedDownloads"
+                      helpText="Remove imported downloads from download client history (when finished seeding for torrents)"
+                      {...removeCompletedDownloads}
+                      onChange={onInputChange}
+                    />
+                  </FormGroup>
+
+                  {
+                    protocol.value !== 'torrent' &&
+                      <FormGroup>
+                        <FormLabel>Remove Failed</FormLabel>
+
+                        <FormInputGroup
+                          type={inputTypes.CHECK}
+                          name="removeFailedDownloads"
+                          helpText="Remove failed downloads from download client history"
+                          {...removeFailedDownloads}
+                          onChange={onInputChange}
+                        />
+                      </FormGroup>
+                  }
+                </FieldSet>
               </Form>
           }
         </ModalBody>

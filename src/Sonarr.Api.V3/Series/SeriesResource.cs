@@ -149,7 +149,7 @@ namespace Sonarr.Api.V3.Series
                        AirTime = resource.AirTime,
                        Images = resource.Images,
 
-                       Seasons = resource.Seasons.ToModel(),
+                       Seasons = resource.Seasons?.ToModel() ?? new List<Season>(),
                        Year = resource.Year,
 
                        Path = resource.Path,

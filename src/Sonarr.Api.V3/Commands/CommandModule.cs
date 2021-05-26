@@ -57,6 +57,8 @@ namespace Sonarr.Api.V3.Commands
             command.SuppressMessages = !command.SendUpdatesToClient;
             command.SendUpdatesToClient = true;
 
+            command.ClientUserAgent = Request.Headers.UserAgent;
+
             var trackedCommand = _commandQueueManager.Push(command, CommandPriority.Normal, CommandTrigger.Manual);
             return trackedCommand.Id;
         }

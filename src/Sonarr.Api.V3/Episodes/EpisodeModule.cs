@@ -69,7 +69,9 @@ namespace Sonarr.Api.V3.Episodes
             var resource = Request.Body.FromJson<EpisodeResource>();
             _episodeService.SetEpisodeMonitored(id, resource.Monitored);
 
-            return ResponseWithCode(MapToResource(_episodeService.GetEpisode(id), false, false, false), HttpStatusCode.Accepted);
+            resource = MapToResource(_episodeService.GetEpisode(id), false, false, false);
+
+            return ResponseWithCode(resource, HttpStatusCode.Accepted);
         }
 
         private object SetEpisodesMonitored()
@@ -77,10 +79,18 @@ namespace Sonarr.Api.V3.Episodes
             var includeImages = Request.GetBooleanQueryParameter("includeImages", false);
             var resource = Request.Body.FromJson<EpisodesMonitoredResource>();
 
-            _episodeService.SetMonitored(resource.EpisodeIds, resource.Monitored);
+            if (resource.EpisodeIds.Count == 1)
+            {
+                _episodeService.SetEpisodeMonitored(resource.EpisodeIds.First(), resource.Monitored);
+            }
+            else
+            {
+                _episodeService.SetMonitored(resource.EpisodeIds, resource.Monitored);
+            }
 
-            return ResponseWithCode(MapToResource(_episodeService.GetEpisodes(resource.EpisodeIds), false, false, includeImages)
-                , HttpStatusCode.Accepted);
+            var resources = MapToResource(_episodeService.GetEpisodes(resource.EpisodeIds), false, false, includeImages);
+
+            return ResponseWithCode(resources, HttpStatusCode.Accepted);
         }
     }
 }

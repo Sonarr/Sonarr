@@ -101,7 +101,7 @@ onCloneLanguageProfilePress
               return (
                 <Label
                   key={item.language.id}
-                  kind={isCutoff ? kinds.INFO : kinds.default}
+                  kind={isCutoff ? kinds.INFO : kinds.DEFAULT}
                   title={isCutoff ? 'Upgrade until this language is met or exceeded' : null}
                 >
                   {item.language.name}

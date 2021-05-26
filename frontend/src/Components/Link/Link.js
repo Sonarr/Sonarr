@@ -43,6 +43,7 @@ class Link extends Component {
         el = 'a';
         linkProps.href = to;
         linkProps.target = target || '_blank';
+        linkProps.rel = 'noreferrer';
       } else if (noRouter) {
         el = 'a';
         linkProps.href = to;

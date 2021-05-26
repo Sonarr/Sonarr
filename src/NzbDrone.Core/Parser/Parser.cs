@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Parser
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - [SubGroup] Title Absolute Episode Number
-                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)[-_. ]+\(?(?:[-_. ]?#?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+)))+\)?(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[\w{8}\])?(?:$|\.mkv)",
+                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)[-_. ]+\(?(?:[-_. ]?#?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|-[a-z]+)))+\)?(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[\w{8}\])?(?:$|\.mkv)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Multi-episode Repeated (S01E05 - S01E06, 1x05 - 1x06, etc)
@@ -467,6 +467,32 @@ namespace NzbDrone.Core.Parser
             }
 
             return result;
+        }
+
+        public static string SimplifyTitle(string title)
+        {
+            if (!ValidateBeforeParsing(title)) return title;
+
+            Logger.Debug("Parsing string '{0}'", title);
+
+            if (ReversedTitleRegex.IsMatch(title))
+            {
+                var titleWithoutExtension = RemoveFileExtension(title).ToCharArray();
+                Array.Reverse(titleWithoutExtension);
+
+                title = new string(titleWithoutExtension) + title.Substring(titleWithoutExtension.Length);
+
+                Logger.Debug("Reversed name detected. Converted to '{0}'", title);
+            }
+
+            var simpleTitle = title;
+
+            simpleTitle = WebsitePrefixRegex.Replace(simpleTitle);
+            simpleTitle = WebsitePostfixRegex.Replace(simpleTitle);
+
+            simpleTitle = CleanTorrentSuffixRegex.Replace(simpleTitle);
+
+            return simpleTitle;
         }
 
         public static ParsedEpisodeInfo ParseTitle(string title)

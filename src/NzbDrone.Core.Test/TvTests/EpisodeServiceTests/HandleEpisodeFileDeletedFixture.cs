@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.Update(It.Is<Episode>(e => e.EpisodeFileId == 0)), Times.Once());
+                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.Update(It.Is<Episode>(e => e.EpisodeFileId == 0)), Times.Exactly(2));
+                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), It.IsAny<bool>()), Times.Exactly(2));
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == false)), Times.Once());
+                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), true), Times.Once());
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade));
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == true)), Times.Once());
+                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade));
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == true)), Times.Once());
+                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
         }
     }
 }

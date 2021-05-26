@@ -31,20 +31,22 @@ namespace NzbDrone.Core.Tv
 
         private void HandleScanEvents(Series series)
         {
-            if (series.AddOptions == null)
+            var addOptions = series.AddOptions;
+
+            if (addOptions == null)
             {
                 _episodeAddedService.SearchForRecentlyAdded(series.Id);
                 return;
             }
 
             _logger.Info("[{0}] was recently added, performing post-add actions", series.Title);
-            _episodeMonitoredService.SetEpisodeMonitoredStatus(series, series.AddOptions);
+            _episodeMonitoredService.SetEpisodeMonitoredStatus(series, addOptions);
 
             // If both options are enabled search for the whole series, which will only include monitored episodes.
             // This way multiple searches for the same season are skipped, though a season that can't be upgraded may be
             // searched, but the logs will be more explicit.
 
-            if (series.AddOptions.SearchForMissingEpisodes && series.AddOptions.SearchForCutoffUnmetEpisodes)
+            if (addOptions.SearchForMissingEpisodes && addOptions.SearchForCutoffUnmetEpisodes)
             {
                 _commandQueueManager.Push(new SeriesSearchCommand(series.Id));
             }

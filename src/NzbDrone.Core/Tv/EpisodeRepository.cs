@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> Find(int seriesId, string date);
         List<Episode> GetEpisodes(int seriesId);
         List<Episode> GetEpisodes(int seriesId, int seasonNumber);
+        List<Episode> GetEpisodesBySceneSeason(int seriesId, int sceneSeasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
         List<Episode> EpisodesWithFiles(int seriesId);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
@@ -29,7 +30,8 @@ namespace NzbDrone.Core.Tv
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
         void SetMonitored(IEnumerable<int> ids, bool monitored);
-        void SetFileId(int episodeId, int fileId);
+        void SetFileId(Episode episode, int fileId);
+        void ClearFileId(Episode episode, bool unmonitor);
     }
 
     public class EpisodeRepository : BasicRepository<Episode>, IEpisodeRepository
@@ -75,6 +77,13 @@ namespace NzbDrone.Core.Tv
         {
             return Query.Where(s => s.SeriesId == seriesId)
                         .AndWhere(s => s.SeasonNumber == seasonNumber)
+                        .ToList();
+        }
+
+        public List<Episode> GetEpisodesBySceneSeason(int seriesId, int seasonNumber)
+        {
+            return Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.SceneSeasonNumber == seasonNumber)
                         .ToList();
         }
 
@@ -155,6 +164,8 @@ namespace NzbDrone.Core.Tv
         {
             episode.Monitored = monitored;
             SetFields(episode, p => p.Monitored);
+
+            ModelUpdated(episode, true);
         }
 
         public void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
@@ -165,30 +176,39 @@ namespace NzbDrone.Core.Tv
             mapper.AddParameter("seasonNumber", seasonNumber);
             mapper.AddParameter("monitored", monitored);
 
-            const string sql = "UPDATE Episodes " +
-                               "SET Monitored = @monitored " +
-                               "WHERE SeriesId = @seriesId " +
-                               "AND SeasonNumber = @seasonNumber";
+            var sqlUpdate = $"UPDATE Episodes SET Monitored = @monitored WHERE SeriesId = @seriesId AND SeasonNumber = @seasonNumber AND Monitored != @monitored";
 
-            mapper.ExecuteNonQuery(sql);
+            mapper.ExecuteNonQuery(sqlUpdate);
         }
 
         public void SetMonitored(IEnumerable<int> ids, bool monitored)
         {
-            var mapper = _database.GetDataMapper();
-
+            var mapper = DataMapper;
+           
             mapper.AddParameter("monitored", monitored);
 
-            var sql = "UPDATE Episodes " +
-                      "SET Monitored = @monitored " +
-                      $"WHERE Id IN ({string.Join(", ", ids)})";
+            var sqlUpdate = $"UPDATE Episodes SET Monitored = @monitored WHERE Id IN ({string.Join(", ", ids)}) AND Monitored != @monitored";
 
-            mapper.ExecuteNonQuery(sql);
+            mapper.ExecuteNonQuery(sqlUpdate);
         }
 
-        public void SetFileId(int episodeId, int fileId)
+        public void SetFileId(Episode episode, int fileId)
         {
-            SetFields(new Episode { Id = episodeId, EpisodeFileId = fileId }, episode => episode.EpisodeFileId);
+            episode.EpisodeFileId = fileId;
+
+            SetFields(episode, ep => ep.EpisodeFileId);
+
+            ModelUpdated(episode, true);
+        }
+
+        public void ClearFileId(Episode episode, bool unmonitor)
+        {
+            episode.EpisodeFileId = 0;
+            episode.Monitored &= !unmonitor;
+
+            SetFields(episode, ep => ep.EpisodeFileId, ep => ep.Monitored);
+
+            ModelUpdated(episode, true);
         }
 
         private SortBuilder<Episode> GetMissingEpisodesQuery(PagingSpec<Episode> pagingSpec, DateTime currentTime, int startingSeasonNumber)

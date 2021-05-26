@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Tv
         Episode FindEpisode(int seriesId, string date, int? part);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
+        List<Episode> GetEpisodesBySceneSeason(int seriesId, int sceneSeasonNumber);
         List<Episode> EpisodesWithFiles(int seriesId);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
@@ -96,6 +97,11 @@ namespace NzbDrone.Core.Tv
         public List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber)
         {
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
+        }
+
+        public List<Episode> GetEpisodesBySceneSeason(int seriesId, int sceneSeasonNumber)
+        {
+            return _episodeRepository.GetEpisodesBySceneSeason(seriesId, sceneSeasonNumber);
         }
 
         public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle)
@@ -214,14 +220,7 @@ namespace NzbDrone.Core.Tv
             foreach (var episode in GetEpisodesByFileId(message.EpisodeFile.Id))
             {
                 _logger.Debug("Detaching episode {0} from file.", episode.Id);
-                episode.EpisodeFileId = 0;
-
-                if (message.Reason != DeleteMediaFileReason.Upgrade && _configService.AutoUnmonitorPreviouslyDownloadedEpisodes)
-                {
-                    episode.Monitored = false;
-                }
-
-                UpdateEpisode(episode);
+                _episodeRepository.ClearFileId(episode, message.Reason != DeleteMediaFileReason.Upgrade && _configService.AutoUnmonitorPreviouslyDownloadedEpisodes);
             }
         }
 
@@ -229,7 +228,7 @@ namespace NzbDrone.Core.Tv
         {
             foreach (var episode in message.EpisodeFile.Episodes.Value)
             {
-                _episodeRepository.SetFileId(episode.Id, message.EpisodeFile.Id);
+                _episodeRepository.SetFileId(episode, message.EpisodeFile.Id);
                 _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.RelativePath, episode);
             }
         }

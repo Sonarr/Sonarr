@@ -31,5 +31,9 @@ namespace NzbDrone.Core.Download.Clients.Flood.Types
 
         [JsonProperty(PropertyName = "tags")]
         public List<string> Tags { get; set; }
+
+        // added in Flood 4.5
+        [JsonProperty(PropertyName = "dateFinished")]
+        public long? DateFinished { get; set; }
     }
 }
