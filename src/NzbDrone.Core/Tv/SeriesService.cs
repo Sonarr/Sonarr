@@ -175,6 +175,8 @@ namespace NzbDrone.Core.Tv
         {
             var storedSeries = GetSeries(series.Id);
 
+            var episodeMonitoredChanged = false;
+
             if (updateEpisodesToMatchSeason)
             {
                 foreach (var season in series.Seasons)
@@ -184,6 +186,7 @@ namespace NzbDrone.Core.Tv
                     if (storedSeason != null && season.Monitored != storedSeason.Monitored)
                     {
                         _episodeService.SetEpisodeMonitoredBySeason(series.Id, season.SeasonNumber, season.Monitored);
+                        episodeMonitoredChanged = true;
                     }
                 }
             }
@@ -194,7 +197,7 @@ namespace NzbDrone.Core.Tv
             var updatedSeries = _seriesRepository.Update(series);
             if (publishUpdatedEvent)
             {
-                _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries));
+                _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries, episodeMonitoredChanged));
             }
 
             return updatedSeries;

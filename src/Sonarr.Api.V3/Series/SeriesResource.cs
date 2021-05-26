@@ -64,6 +64,8 @@ namespace Sonarr.Api.V3.Series
         public Ratings Ratings { get; set; }
 
         public SeriesStatisticsResource Statistics { get; set; }
+
+        public bool? EpisodesChanged { get; set; }
     }
 
     public static class SeriesResourceMapper
