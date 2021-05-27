@@ -183,7 +183,7 @@ class SeriesIndexRow extends Component {
 
                       <SeriesTitleLink
                         titleSlug={titleSlug}
-                        title={`${title}2`}
+                        title={title}
                       />
                   }
                 </VirtualTableRowCell>
