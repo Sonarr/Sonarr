@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Abc x Abc (2011) - 141 - Magician [KaiDubs] [1080p]", "Abc x Abc (2011)", 141, 0, 0)]
         [TestCase("Abc Abc 484 VOSTFR par Abc-Abc (1280*720) - version MQ", "Abc Abc", 484, 0, 0)]
         [TestCase("Abc - Abc Abc Abc - 107 VOSTFR par Fansub-Miracle Sharingan (1920x1080) - HQ_Draft", "Abc - Abc Abc Abc", 107, 0, 0)]
-        [TestCase("Abc Abc Abc Abc Episode 10 VOSTFR (1920x1080) Miracle Sharingan Fansub.MKV - Team - (À suivre)", "Abc Abc Abc Abc", 10, 0, 0)]
+        [TestCase("Abc Abc Abc Abc Episode 10 VOSTFR (1920x1080) Miracle Sharingan Fansub.MKV - Team - (ï¿½ suivre)", "Abc Abc Abc Abc", 10, 0, 0)]
         [TestCase("[Glenn] Series! 3 - 11 (1080p AAC)[C34B2B3B].mkv", "Series! 3", 11, 0, 0)]
         [TestCase("SeriesTitle.E1135.Lasst.den.Mond.am.Himmel.stehen.GERMAN.1080p.WEBRip.x264-Group", "SeriesTitle", 1135, 0, 0)]
         [TestCase("[HorribleSubs] Series 100 - 07 [1080p].mkv", "Series 100", 7, 0, 0)]
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[SubsPlease] Anime Title 300-nen, With Even More Title - 01 (1080p) [8DE44442]", "Anime Title 300-nen, With Even More Title", 1, 0, 0)]
         [TestCase("[Chihiro] Anime Title 300-nen, With Even More Title 02 [720p Hi10P AAC][031FA533]", "Anime Title 300-nen, With Even More Title", 2, 0, 0)]
         [TestCase("[BakeSubs] 86 - 01 [1080p][D40A9E55].mkv", "86", 1, 0, 0)]
-        //[TestCase("", "", 0, 0, 0)]
+        [TestCase("Anime Title the Final - 09 (2021) [SubsPlease] [WEBRip] [HD 1080p]", "Anime Title the Final", 9, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
