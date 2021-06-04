@@ -75,6 +75,7 @@ const columns = [
       name: icons.DANGER,
       kind: kinds.DANGER
     }),
+    isSortable: true,
     isVisible: true
   }
 ];
@@ -300,7 +301,7 @@ class InteractiveImportModalContent extends Component {
             isPopulated && !!items.length && !isFetching && !isFetching &&
               <Table
                 columns={columns}
-                horizontalScroll={true}
+                horizontalScroll={false}
                 selectAll={true}
                 allSelected={allSelected}
                 allUnselected={allUnselected}
