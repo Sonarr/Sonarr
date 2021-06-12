@@ -60,8 +60,7 @@ namespace NzbDrone.Common.Http
 
             if (request.AllowAutoRedirect && response.HasHttpRedirect)
             {
-                var autoRedirectChain = new List<string>();
-                autoRedirectChain.Add(request.Url.ToString());
+                var autoRedirectChain = new List<string> { request.Url.ToString() };
 
                 do
                 {
@@ -73,6 +72,14 @@ namespace NzbDrone.Common.Http
                     if (autoRedirectChain.Count > MaxRedirects)
                     {
                         throw new WebException($"Too many automatic redirections were attempted for {autoRedirectChain.Join(" -> ")}", WebExceptionStatus.ProtocolError);
+                    }
+
+                    // 302 or 303 should default to GET on redirect even if POST on original
+                    if (RequestRequiresForceGet(response.StatusCode, response.Request.Method))
+                    {
+                        request.Method = HttpMethod.Get;
+                        request.ContentData = null;
+                        request.ContentSummary = null;
                     }
 
                     response = ExecuteRequest(request, cookieContainer);
@@ -103,6 +110,16 @@ namespace NzbDrone.Common.Http
             }
 
             return response;
+        }
+
+        private static bool RequestRequiresForceGet(HttpStatusCode statusCode, HttpMethod requestMethod)
+        {
+            return statusCode switch
+            {
+                HttpStatusCode.Moved or HttpStatusCode.Found or HttpStatusCode.MultipleChoices => requestMethod == HttpMethod.Post,
+                HttpStatusCode.SeeOther => requestMethod != HttpMethod.Get && requestMethod != HttpMethod.Head,
+                _ => false,
+            };
         }
 
         private HttpResponse ExecuteRequest(HttpRequest request, CookieContainer cookieContainer)
