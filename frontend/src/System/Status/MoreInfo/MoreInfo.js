@@ -41,10 +41,10 @@ class MoreInfo extends Component {
 
           <DescriptionListItemTitle>IRC</DescriptionListItemTitle>
           <DescriptionListItemDescription>
-            <Link to="irc://irc.freenode.net/#sonarr">#sonarr on Freenode</Link>
+            <Link to="irc://irc.libera.chat/#sonarr">#sonarr on Libera</Link>
           </DescriptionListItemDescription>
           <DescriptionListItemDescription>
-            <Link to="http://webchat.freenode.net/?channels=#sonarr">Freenode webchat</Link>
+            <Link to="https://web.libera.chat/?channels=#sonarr">Libera webchat</Link>
           </DescriptionListItemDescription>
 
           <DescriptionListItemTitle>Donations</DescriptionListItemTitle>
