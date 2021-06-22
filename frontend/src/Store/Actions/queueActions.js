@@ -130,7 +130,7 @@ export const defaultState = {
       },
       {
         name: 'estimatedCompletionTime',
-        label: 'Timeleft',
+        label: 'Time Left',
         isSortable: true,
         isVisible: true
       },
