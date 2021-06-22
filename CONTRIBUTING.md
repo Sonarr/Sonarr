@@ -19,14 +19,14 @@ Setup guides, [FAQ](https://wiki.servarr.com/Sonarr_FAQ), the more information w
 1. Fork Sonarr
 2. Clone the repository into your development machine. [*info*](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github)
 3. Install the required Node Packages `yarn install`
-4. Start gulp to monitor your dev environment for any changes that need post processing using `yarn start` command.
+4. Start webpack to monitor your dev environment for any frontend changes that need post processing using `yarn start` command.
 5. Build the project in Visual Studio, Setting startup project to `Sonarr.Console` and framework to `x86`
 6. Debug the project in Visual Studio
 7. Open http://localhost:8989
 
 ### Contributing Code ###
 - If you're adding a new, already requested feature, please comment on [Github Issues](https://github.com/Sonarr/Sonarr/issues "Github Issues") so work is not duplicated (If you want to add something not already on there, please talk to us first)
-- Rebase from Sonarr's develop (currently phantom-develop) branch, don't merge
+- Rebase from Sonarr's `develop` branch, don't merge
 - Make meaningful commits, or squash them
 - Feel free to make a pull request before work is complete, this will let us see where its at and make comments/suggest improvements
 - Reach out to us on our [forums](https://forums.sonarr.tv/), [subreddit](https://www.reddit.com/r/sonarr/), [discord](https://discord.gg/Ex7FmFK), or [IRC](http://webchat.freenode.net/?channels=#sonarr) if you have any questions
