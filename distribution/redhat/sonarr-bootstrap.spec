@@ -122,6 +122,106 @@ firewall-cmd --remove-service=sonarr --permanent
 #fi
 
 %changelog
+* Mon Jun 21 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.6.1265-1.main
+- Merge branch 'Sonarr:develop' into phantom-rpm-package
+- Fixed logger parameter
+- Log when season,ep query parameters aren't supported.
+- Fixed: Scene Info displaying mappings for wrong season
+- Fixed: MediaInfo tag in renaming format for certain OS language cultures
+- Simplify release titles before applying scene naming exception regex filter
+- Fixed: TheXEM mappings not used properly when parsing season packs
+- Fixed: Parsing of some anime releases with numbers in title
+- Fixed scrolling via jump list on series index
+- Use webpack environment variables in build.sh
+- Updated react-dnd and added touch support
+- Updated react-virtualized
+- Updated create-react-class package
+- Updated redux and react-redux packages
+- Update react-autosuggest, react-focus-lock, react-lazyload react-slider and react-tabs packages
+- Updated react-addons-shallow-compare package
+- Updated react and react-dom packages
+- Updated jquery, filesize and qs packages
+- Updated clipboard, fuse.js, mobile-detect, moment and signalr packages
+- Update classnames
+- Update sentry
+- Update fontawesome
+- Update postcss packages
+- Upgrade core-js package
+- Update linter packages
+- Upgrade babel packages
+- Removed gulp and organized package.json
+- Fixed files that were using incorrect imports
+- Forward slashes are actually forward slashes
+- New: Date format in log files
+- Add missing On Delete Notifications to Mailgun notifications
+- Fixed: Parsing RSS with null values
+- New: Mailgun connection
+- Update indexer category help text
+- New: Adds SSL option to Kodi connections
+- Fixed broken tests
+- Fixed: Refresh queue count when navigating Activity: Queue
+- New: Removed EpisodeGuide tag from Kodi Metadata
+- Fixed: Parsing WEB quality from some anime releases
+- Fixed: Round durationseconds in Kodi metadata
+- Fixed: Removing completed download from SABnzbd
+- Fixed: CRC32 being parsed as release group
+- Fixed: Don't ignore number only aliases
+- Fixed: Parsing of some anime releases
+- New: File info scrolls on mobile
+- Fixed: Custom Script Health Issue Level
+- Fixed: Links to Sonarr now uses auth cookie
+- Obfuscate anime title
+- Fixed: Incorrectly grabbing revision downgrades
+- Fixed: Parsing of anime titles with numbers in the middle of their names
+- Fixed: Background click not closing episode modal when first opened
+- Set timeout for sending email
+- Revert "Handle events asynchronously for notifications"
+- Handle events asynchronously for notifications
+- Refactor Email and add more logging
+- Fixed: Importing a language upgrade with a worse preferred word score
+- Confirm scene name is not folder name for batch releases
+- New: Remove completed downloads from disk when removing from SABnzbd
+- Fixed: Parsing of some 360p multi-episode files
+- Fixed: Some connection settings being invisibly enabled on creation
+- Fix spelling of separated
+- New: Add option to import from any user's personal list
+- Merge branch 'main' of https://github.com/Sonarr/Sonarr into phantom-rpm-package
+- Switch from "phantom-develop" to "main"
+- Fixed: Exception when searching some anime
+- New: Series Year Renaming token
+- New: Calendar option for full color events
+- New: Support "Series" instead of "Season" in season packs
+- Bump package version
+- Fixed data dir ownership in case of dpkg-reconfigure
+- Fixed: Debatable typos in Naming Modal
+- Updating the bug template yet again
+- Another wiki URL update
+- Fixed: Interactive import modal horizontal scrolling on Firefox mobile
+- Added IsTorrentLoaded to tests
+- Revert vswhere command
+- Updated vswhere.exe
+- Updated nuget.exe
+- Fixed: Qbittorrent api errors when only one of two seed criteria was configured
+- Fixed: Unnecessary idle cpu usage
+- Don't ignore original wal/journal during v3 migration
+- Fixed: Database migration failure when database was manually repaired in a certain way
+- New: Improve message if Sonarr can't bind to IP/port during startup
+- New: Support for using parsed season number for some anime releases without aliases
+- Fixed post-install update check not running
+- Fixed: Setting seed criteria while torrent is still being loaded by qbittorrent
+- New: Don't close interactive search with background click
+- Fixed failing tests
+- Log Skyhook connection failures with more info.
+- Log Skyhook connection failures with more info.
+- Added comment to sonarr.service
+- Make it clearer that Maximum size is the global limit.
+- New: Multiple Recipients on Email Notifications (Also CC, BCC)
+- Fixed systemd unit search&replace issue and added umask to debconf
+- On Download -> On Import (again)
+- Update Discord link
+- Fixed: Parsing of absolute episode numbers over 1000
+- Fixed: Some health check wiki links
+
 * Sun Apr 04 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.6.1196-1.main
 
 * Mon Mar 08 2021 Eric Eisenhart <freiheit@gmail.com> - 3.0.5.1143-1.develop
