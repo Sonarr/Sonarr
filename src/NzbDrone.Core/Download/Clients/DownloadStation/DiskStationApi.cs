@@ -6,6 +6,7 @@
         Auth,
         DownloadStationInfo,
         DownloadStationTask,
+        DownloadStation2Task,
         FileStationList,
         DSMInfo,
     }

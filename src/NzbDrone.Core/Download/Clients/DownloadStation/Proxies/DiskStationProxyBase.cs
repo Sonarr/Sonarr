@@ -166,7 +166,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             {
                 if (apiInfo.NeedsAuthentication)
                 {
-                    requestBuilder.AddFormParameter("_sid", _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6)));
+                    if (_apiType == DiskStationApi.DownloadStation2Task)
+                    {
+                        requestBuilder.AddQueryParam("_sid", _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6)));
+                    }
+                    else
+                    {
+                        requestBuilder.AddFormParameter("_sid", _sessionCache.Get(GenerateSessionCacheKey(settings), () => AuthenticateClient(settings), TimeSpan.FromHours(6)));
+                    }
                 }
 
                 requestBuilder.AddFormParameter("api", apiInfo.Name);
@@ -236,7 +243,14 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
                 if (info == null)
                 {
-                    throw new DownloadClientException("Info of {0} not found on {1}:{2}", api, settings.Host, settings.Port);
+                    if (api == DiskStationApi.DownloadStation2Task)
+                    {
+                        _logger.Warn("Info of {0} not found on {1}:{2}", api, settings.Host, settings.Port);
+                    }
+                    else
+                    {
+                        throw new DownloadClientException("Info of {0} not found on {1}:{2}", api, settings.Host, settings.Port);
+                    }
                 }
             }
 
