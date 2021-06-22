@@ -151,12 +151,6 @@ class QueueRow extends Component {
               );
             }
 
-            if (name === 'size') {
-              return (
-                <TableRowCell key={name}>{formatBytes(size)}</TableRowCell>
-              );
-            }
-
             if (name === 'series.sortTitle') {
               return (
                 <TableRowCell key={name}>
@@ -284,6 +278,12 @@ class QueueRow extends Component {
                 <TableRowCell key={name}>
                   {title}
                 </TableRowCell>
+              );
+            }
+
+            if (name === 'size') {
+              return (
+                <TableRowCell key={name}>{formatBytes(size)}</TableRowCell>
               );
             }
 
