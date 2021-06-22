@@ -75,6 +75,7 @@ const columns = [
       name: icons.DANGER,
       kind: kinds.DANGER
     }),
+    isSortable: true,
     isVisible: true
   }
 ];
