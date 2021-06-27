@@ -247,6 +247,14 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Language.Id.Should().Be(Language.Hindi.Id);
         }
 
+        [TestCase("Title.the.Series.2009.S01E14.Bulgarian.HDTV.XviD-LOL")]
+        [TestCase("Title.the.Series.2009.S01E14.BGAUDIO.HDTV.XviD-LOL")]
+        public void should_parse_language_bulgarian(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Language.Id.Should().Be(Language.Bulgarian.Id);
+        }
+
         [TestCase("Title.the.Russian.Series.S01E07.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Title.the.Russian.Series.S01E07E08.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Title.the.Russian.Series.S01.1080p.WEBRip.DDP5.1.x264-Drone")]
