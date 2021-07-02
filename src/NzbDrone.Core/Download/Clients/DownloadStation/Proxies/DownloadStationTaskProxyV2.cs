@@ -10,9 +10,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 {
     public class DownloadStationTaskProxyV2 : DiskStationProxyBase, IDownloadStationTaskProxy
     {
+        private readonly IDownloadStation2SettingsLocationProxy _defaultDestinationProxy;
+
         public DownloadStationTaskProxyV2(IHttpClient httpClient, ICacheManager cacheManager, Logger logger)
             : base(DiskStationApi.DownloadStation2Task, "SYNO.DownloadStation2.Task", httpClient, cacheManager, logger)
         {
+            _defaultDestinationProxy = new DownloadStation2SettingsLocationProxy(httpClient, cacheManager, logger);
         }
 
         public bool IsApiSupported(DownloadStationSettings settings)
@@ -32,6 +35,21 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             {
                 requestBuilder.AddFormParameter("destination", $"\"{downloadDirectory}\"");
             }
+            else
+            {
+                _logger.Trace("No directory configured in settings; falling back to client default destination folder.");
+                string defaultDestination = _defaultDestinationProxy.GetDefaultDestination(settings);
+
+                if (defaultDestination.IsNotNullOrWhiteSpace())
+                {
+                    _logger.Trace($"Default destination folder found: {defaultDestination}.");
+                    requestBuilder.AddFormParameter("destination", $"\"{defaultDestination}\"");
+                }
+                else
+                {
+                    _logger.Error("Unable to get default destination folder from DownloadStation.");
+                }
+            }
 
             requestBuilder.AddFormUpload("fileData", filename, data);
 
@@ -49,6 +67,21 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             if (downloadDirectory.IsNotNullOrWhiteSpace())
             {
                 requestBuilder.AddQueryParam("destination", downloadDirectory);
+            }
+            else
+            {
+                _logger.Trace("No directory configured in settings; falling back to client default destination folder.");
+                string defaultDestination = _defaultDestinationProxy.GetDefaultDestination(settings);
+
+                if (defaultDestination.IsNotNullOrWhiteSpace())
+                {
+                    _logger.Trace($"Default destination folder found: {defaultDestination}.");
+                    requestBuilder.AddQueryParam("destination", $"\"{defaultDestination}\"");
+                }
+                else
+                {
+                    _logger.Error("Unable to get default destination folder from DownloadStation.");
+                }
             }
 
             ProcessRequest<object>(requestBuilder, $"add task from url {url}", settings);

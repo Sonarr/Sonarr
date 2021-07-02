@@ -7,6 +7,7 @@
         DownloadStationInfo,
         DownloadStationTask,
         DownloadStation2Task,
+        DownloadStation2SettingsLocation,
         FileStationList,
         DSMInfo,
     }
