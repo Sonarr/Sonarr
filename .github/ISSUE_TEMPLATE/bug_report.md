@@ -35,3 +35,4 @@ assignees: ''
 Turn on Trace logs under Settings -> General and wait for the bug to occur again.
 **Upload the full log file here (or another site (e.g. pastebin) and link it). Issues will be closed, if they do not include this!**
 <!-- Trace logs are named Sonarr.trace.txt or Sonarr.trace.#.txt and will contain "trace" in them-->
+<!-- Please see the Wiki for how to provide proper and useful trace log files https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files -->
