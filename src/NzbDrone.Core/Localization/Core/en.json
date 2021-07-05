@@ -1,6 +1,10 @@
 {
+  "Browser Reload Required": "Browser Reload Required",
+  "HiddenClickToShow": "Hidden, click to show",
+  "HideAdvanced": "Hide Advanced",
   "Language": "Language",
-  "UI Language": "UI Language",
   "Language that Sonarr will use for UI": "Language that Sonarr will use for UI",
-  "Browser Reload Required": "Browser Reload Required"
+  "ShowAdvanced": "Show Advanced",
+  "ShownClickToHide": "Shown, click to hide",
+  "UI Language": "UI Language"
 }
