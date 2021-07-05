@@ -4,18 +4,20 @@ import React from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './AdvancedSettingsButton.css';
 
 function AdvancedSettingsButton(props) {
   const {
     advancedSettings,
-    onAdvancedSettingsPress
+    onAdvancedSettingsPress,
+    showLabel
   } = props;
 
   return (
     <Link
       className={styles.button}
-      title={advancedSettings ? 'Shown, click to hide' : 'Hidden, click to show'}
+      title={advancedSettings ? translate('ShownClickToHide') : translate('HiddenClickToShow')}
       onPress={onAdvancedSettingsPress}
     >
       <Icon
@@ -42,18 +44,27 @@ function AdvancedSettingsButton(props) {
         />
       </span>
 
-      <div className={styles.labelContainer}>
-        <div className={styles.label}>
-          {advancedSettings ? 'Hide Advanced' : 'Show Advanced'}
-        </div>
-      </div>
+      {
+        showLabel ?
+          <div className={styles.labelContainer}>
+            <div className={styles.label}>
+              {advancedSettings ? translate('HideAdvanced') : translate('ShowAdvanced')}
+            </div>
+          </div> :
+          null
+      }
     </Link>
   );
 }
 
 AdvancedSettingsButton.propTypes = {
   advancedSettings: PropTypes.bool.isRequired,
-  onAdvancedSettingsPress: PropTypes.func.isRequired
+  onAdvancedSettingsPress: PropTypes.func.isRequired,
+  showLabel: PropTypes.bool.isRequired
+};
+
+AdvancedSettingsButton.defaultProps = {
+  showLabel: true
 };
 
 export default AdvancedSettingsButton;
