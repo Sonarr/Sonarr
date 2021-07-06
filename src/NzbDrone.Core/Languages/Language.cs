@@ -83,6 +83,7 @@ namespace NzbDrone.Core.Languages
         public static Language Czech        { get { return new Language(25, "Czech"); } }
         public static Language Arabic       { get { return new Language(26, "Arabic"); } }
         public static Language Hindi        { get { return new Language(27, "Hindi"); } }
+        public static Language Slovak        { get { return new Language(28, "Slovak"); } }
 
 
         public static List<Language> All
