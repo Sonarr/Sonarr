@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { removeBlacklistItem } from 'Store/Actions/blacklistActions';
+import { removeBlocklistItem } from 'Store/Actions/blocklistActions';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
-import BlacklistRow from './BlacklistRow';
+import BlocklistRow from './BlocklistRow';
 
 function createMapStateToProps() {
   return createSelector(
@@ -18,9 +18,9 @@ function createMapStateToProps() {
 function createMapDispatchToProps(dispatch, props) {
   return {
     onRemovePress() {
-      dispatch(removeBlacklistItem({ id: props.id }));
+      dispatch(removeBlocklistItem({ id: props.id }));
     }
   };
 }
 
-export default connect(createMapStateToProps, createMapDispatchToProps)(BlacklistRow);
+export default connect(createMapStateToProps, createMapDispatchToProps)(BlocklistRow);

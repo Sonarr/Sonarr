@@ -11,7 +11,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
-using NzbDrone.Api.Blacklist;
+using NzbDrone.Api.Blocklist;
 using NzbDrone.Api.Commands;
 using NzbDrone.Api.Config;
 using NzbDrone.Api.DownloadClient;
@@ -39,7 +39,7 @@ namespace NzbDrone.Integration.Test
         protected RestClient RestClient { get; private set; }
         protected RestClient RestClientv3 { get; private set; }
 
-        public ClientBase<BlacklistResource> Blacklist;
+        public ClientBase<BlocklistResource> Blocklist;
         public CommandClient Commands;
         public DownloadClientClient DownloadClients;
         public EpisodeClient Episodes;
@@ -106,7 +106,7 @@ namespace NzbDrone.Integration.Test
             RestClientv3.AddDefaultHeader("Authentication", ApiKey);
             RestClientv3.AddDefaultHeader("X-Api-Key", ApiKey);
 
-            Blacklist = new ClientBase<BlacklistResource>(RestClient, ApiKey);
+            Blocklist = new ClientBase<BlocklistResource>(RestClient, ApiKey);
             Commands = new CommandClient(RestClient, ApiKey);
             DownloadClients = new DownloadClientClient(RestClient, ApiKey);
             Episodes = new EpisodeClient(RestClient, ApiKey);

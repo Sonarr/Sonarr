@@ -14,7 +14,7 @@ import { set, updateItem } from './baseActions';
 //
 // Variables
 
-export const section = 'blacklist';
+export const section = 'blocklist';
 
 //
 // State
@@ -74,41 +74,41 @@ export const defaultState = {
 };
 
 export const persistState = [
-  'blacklist.pageSize',
-  'blacklist.sortKey',
-  'blacklist.sortDirection',
-  'blacklist.columns'
+  'blocklist.pageSize',
+  'blocklist.sortKey',
+  'blocklist.sortDirection',
+  'blocklist.columns'
 ];
 
 //
 // Action Types
 
-export const FETCH_BLACKLIST = 'blacklist/fetchBlacklist';
-export const GOTO_FIRST_BLACKLIST_PAGE = 'blacklist/gotoBlacklistFirstPage';
-export const GOTO_PREVIOUS_BLACKLIST_PAGE = 'blacklist/gotoBlacklistPreviousPage';
-export const GOTO_NEXT_BLACKLIST_PAGE = 'blacklist/gotoBlacklistNextPage';
-export const GOTO_LAST_BLACKLIST_PAGE = 'blacklist/gotoBlacklistLastPage';
-export const GOTO_BLACKLIST_PAGE = 'blacklist/gotoBlacklistPage';
-export const SET_BLACKLIST_SORT = 'blacklist/setBlacklistSort';
-export const SET_BLACKLIST_TABLE_OPTION = 'blacklist/setBlacklistTableOption';
-export const REMOVE_BLACKLIST_ITEM = 'blacklist/removeBlacklistItem';
-export const REMOVE_BLACKLIST_ITEMS = 'blacklist/removeBlacklistItems';
-export const CLEAR_BLACKLIST = 'blacklist/clearBlacklist';
+export const FETCH_BLOCKLIST = 'blocklist/fetchBlocklist';
+export const GOTO_FIRST_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistFirstPage';
+export const GOTO_PREVIOUS_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistPreviousPage';
+export const GOTO_NEXT_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistNextPage';
+export const GOTO_LAST_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistLastPage';
+export const GOTO_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistPage';
+export const SET_BLOCKLIST_SORT = 'blocklist/setBlocklistSort';
+export const SET_BLOCKLIST_TABLE_OPTION = 'blocklist/setBlocklistTableOption';
+export const REMOVE_BLOCKLIST_ITEM = 'blocklist/removeBlocklistItem';
+export const REMOVE_BLOCKLIST_ITEMS = 'blocklist/removeBlocklistItems';
+export const CLEAR_BLOCKLIST = 'blocklist/clearBlocklist';
 
 //
 // Action Creators
 
-export const fetchBlacklist = createThunk(FETCH_BLACKLIST);
-export const gotoBlacklistFirstPage = createThunk(GOTO_FIRST_BLACKLIST_PAGE);
-export const gotoBlacklistPreviousPage = createThunk(GOTO_PREVIOUS_BLACKLIST_PAGE);
-export const gotoBlacklistNextPage = createThunk(GOTO_NEXT_BLACKLIST_PAGE);
-export const gotoBlacklistLastPage = createThunk(GOTO_LAST_BLACKLIST_PAGE);
-export const gotoBlacklistPage = createThunk(GOTO_BLACKLIST_PAGE);
-export const setBlacklistSort = createThunk(SET_BLACKLIST_SORT);
-export const setBlacklistTableOption = createAction(SET_BLACKLIST_TABLE_OPTION);
-export const removeBlacklistItem = createThunk(REMOVE_BLACKLIST_ITEM);
-export const removeBlacklistItems = createThunk(REMOVE_BLACKLIST_ITEMS);
-export const clearBlacklist = createAction(CLEAR_BLACKLIST);
+export const fetchBlocklist = createThunk(FETCH_BLOCKLIST);
+export const gotoBlocklistFirstPage = createThunk(GOTO_FIRST_BLOCKLIST_PAGE);
+export const gotoBlocklistPreviousPage = createThunk(GOTO_PREVIOUS_BLOCKLIST_PAGE);
+export const gotoBlocklistNextPage = createThunk(GOTO_NEXT_BLOCKLIST_PAGE);
+export const gotoBlocklistLastPage = createThunk(GOTO_LAST_BLOCKLIST_PAGE);
+export const gotoBlocklistPage = createThunk(GOTO_BLOCKLIST_PAGE);
+export const setBlocklistSort = createThunk(SET_BLOCKLIST_SORT);
+export const setBlocklistTableOption = createAction(SET_BLOCKLIST_TABLE_OPTION);
+export const removeBlocklistItem = createThunk(REMOVE_BLOCKLIST_ITEM);
+export const removeBlocklistItems = createThunk(REMOVE_BLOCKLIST_ITEMS);
+export const clearBlocklist = createAction(CLEAR_BLOCKLIST);
 
 //
 // Action Handlers
@@ -116,21 +116,21 @@ export const clearBlacklist = createAction(CLEAR_BLACKLIST);
 export const actionHandlers = handleThunks({
   ...createServerSideCollectionHandlers(
     section,
-    '/blacklist',
-    fetchBlacklist,
+    '/blocklist',
+    fetchBlocklist,
     {
-      [serverSideCollectionHandlers.FETCH]: FETCH_BLACKLIST,
-      [serverSideCollectionHandlers.FIRST_PAGE]: GOTO_FIRST_BLACKLIST_PAGE,
-      [serverSideCollectionHandlers.PREVIOUS_PAGE]: GOTO_PREVIOUS_BLACKLIST_PAGE,
-      [serverSideCollectionHandlers.NEXT_PAGE]: GOTO_NEXT_BLACKLIST_PAGE,
-      [serverSideCollectionHandlers.LAST_PAGE]: GOTO_LAST_BLACKLIST_PAGE,
-      [serverSideCollectionHandlers.EXACT_PAGE]: GOTO_BLACKLIST_PAGE,
-      [serverSideCollectionHandlers.SORT]: SET_BLACKLIST_SORT
+      [serverSideCollectionHandlers.FETCH]: FETCH_BLOCKLIST,
+      [serverSideCollectionHandlers.FIRST_PAGE]: GOTO_FIRST_BLOCKLIST_PAGE,
+      [serverSideCollectionHandlers.PREVIOUS_PAGE]: GOTO_PREVIOUS_BLOCKLIST_PAGE,
+      [serverSideCollectionHandlers.NEXT_PAGE]: GOTO_NEXT_BLOCKLIST_PAGE,
+      [serverSideCollectionHandlers.LAST_PAGE]: GOTO_LAST_BLOCKLIST_PAGE,
+      [serverSideCollectionHandlers.EXACT_PAGE]: GOTO_BLOCKLIST_PAGE,
+      [serverSideCollectionHandlers.SORT]: SET_BLOCKLIST_SORT
     }),
 
-  [REMOVE_BLACKLIST_ITEM]: createRemoveItemHandler(section, '/blacklist'),
+  [REMOVE_BLOCKLIST_ITEM]: createRemoveItemHandler(section, '/blocklist'),
 
-  [REMOVE_BLACKLIST_ITEMS]: function(getState, payload, dispatch) {
+  [REMOVE_BLOCKLIST_ITEMS]: function(getState, payload, dispatch) {
     const {
       ids
     } = payload;
@@ -148,7 +148,7 @@ export const actionHandlers = handleThunks({
     ]));
 
     const promise = createAjaxRequest({
-      url: '/blacklist/bulk',
+      url: '/blocklist/bulk',
       method: 'DELETE',
       dataType: 'json',
       data: JSON.stringify({ ids })
@@ -156,7 +156,7 @@ export const actionHandlers = handleThunks({
 
     promise.done((data) => {
       // Don't use batchActions with thunks
-      dispatch(fetchBlacklist());
+      dispatch(fetchBlocklist());
 
       dispatch(set({ section, isRemoving: false }));
     });
@@ -182,9 +182,9 @@ export const actionHandlers = handleThunks({
 
 export const reducers = createHandleActions({
 
-  [SET_BLACKLIST_TABLE_OPTION]: createSetTableOptionReducer(section),
+  [SET_BLOCKLIST_TABLE_OPTION]: createSetTableOptionReducer(section),
 
-  [CLEAR_BLACKLIST]: createClearReducer(section, {
+  [CLEAR_BLOCKLIST]: createClearReducer(section, {
     isFetching: false,
     isPopulated: false,
     error: null,

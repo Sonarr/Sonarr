@@ -1,7 +1,7 @@
 export const APPLICATION_UPDATE = 'ApplicationUpdate';
 export const BACKUP = 'Backup';
 export const REFRESH_MONITORED_DOWNLOADS = 'RefreshMonitoredDownloads';
-export const CLEAR_BLACKLIST = 'ClearBlacklist';
+export const CLEAR_BLOCKLIST = 'ClearBlocklist';
 export const CLEAR_LOGS = 'ClearLog';
 export const CUTOFF_UNMET_EPISODE_SEARCH = 'CutoffUnmetEpisodeSearch';
 export const DELETE_LOG_FILES = 'DeleteLogFiles';

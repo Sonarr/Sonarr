@@ -18,9 +18,9 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import BlacklistRowConnector from './BlacklistRowConnector';
+import BlocklistRowConnector from './BlocklistRowConnector';
 
-class Blacklist extends Component {
+class Blocklist extends Component {
 
   //
   // Lifecycle
@@ -100,8 +100,8 @@ class Blacklist extends Component {
       columns,
       totalRecords,
       isRemoving,
-      isClearingBlacklistExecuting,
-      onClearBlacklistPress,
+      isClearingBlocklistExecuting,
+      onClearBlocklistPress,
       ...otherProps
     } = this.props;
 
@@ -115,7 +115,7 @@ class Blacklist extends Component {
     const selectedIds = this.getSelectedIds();
 
     return (
-      <PageContent title="Blacklist">
+      <PageContent title="Blocklist">
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
@@ -129,8 +129,8 @@ class Blacklist extends Component {
             <PageToolbarButton
               label="Clear"
               iconName={icons.CLEAR}
-              isSpinning={isClearingBlacklistExecuting}
-              onPress={onClearBlacklistPress}
+              isSpinning={isClearingBlocklistExecuting}
+              onPress={onClearBlocklistPress}
             />
           </PageToolbarSection>
 
@@ -155,13 +155,13 @@ class Blacklist extends Component {
 
           {
             !isFetching && !!error &&
-            <div>Unable to load blacklist</div>
+            <div>Unable to load blocklist</div>
           }
 
           {
             isPopulated && !error && !items.length &&
             <div>
-              No history blacklist
+              No history blocklist
             </div>
           }
 
@@ -180,7 +180,7 @@ class Blacklist extends Component {
                   {
                     items.map((item) => {
                       return (
-                        <BlacklistRowConnector
+                        <BlocklistRowConnector
                           key={item.id}
                           isSelected={selectedState[item.id] || false}
                           columns={columns}
@@ -206,7 +206,7 @@ class Blacklist extends Component {
           isOpen={isConfirmRemoveModalOpen}
           kind={kinds.DANGER}
           title="Remove Selected"
-          message={'Are you sure you want to remove the selected items from the blacklist?'}
+          message={'Are you sure you want to remove the selected items from the blocklist?'}
           confirmLabel="Remove Selected"
           onConfirm={this.onRemoveSelectedConfirmed}
           onCancel={this.onConfirmRemoveModalClose}
@@ -216,7 +216,7 @@ class Blacklist extends Component {
   }
 }
 
-Blacklist.propTypes = {
+Blocklist.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
@@ -224,9 +224,9 @@ Blacklist.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalRecords: PropTypes.number,
   isRemoving: PropTypes.bool.isRequired,
-  isClearingBlacklistExecuting: PropTypes.bool.isRequired,
+  isClearingBlocklistExecuting: PropTypes.bool.isRequired,
   onRemoveSelected: PropTypes.func.isRequired,
-  onClearBlacklistPress: PropTypes.func.isRequired
+  onClearBlocklistPress: PropTypes.func.isRequired
 };
 
-export default Blacklist;
+export default Blocklist;

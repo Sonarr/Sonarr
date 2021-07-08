@@ -21,7 +21,7 @@ class RemoveQueueItemModal extends Component {
 
     this.state = {
       remove: true,
-      blacklist: false
+      blocklist: false
     };
   }
 
@@ -31,7 +31,7 @@ class RemoveQueueItemModal extends Component {
   resetState = function() {
     this.setState({
       remove: true,
-      blacklist: false
+      blocklist: false
     });
   }
 
@@ -42,8 +42,8 @@ class RemoveQueueItemModal extends Component {
     this.setState({ remove: value });
   }
 
-  onBlacklistChange = ({ value }) => {
-    this.setState({ blacklist: value });
+  onBlocklistChange = ({ value }) => {
+    this.setState({ blocklist: value });
   }
 
   onRemoveConfirmed = () => {
@@ -68,7 +68,7 @@ class RemoveQueueItemModal extends Component {
       canIgnore
     } = this.props;
 
-    const { remove, blacklist } = this.state;
+    const { remove, blocklist } = this.state;
 
     return (
       <Modal
@@ -102,14 +102,14 @@ class RemoveQueueItemModal extends Component {
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>Blacklist Release</FormLabel>
+              <FormLabel>Add Release To Blocklist</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
-                name="blacklist"
-                value={blacklist}
+                name="blocklist"
+                value={blocklist}
                 helpText="Starts a search for this episode again and prevents this release from being grabbed again"
-                onChange={this.onBlacklistChange}
+                onChange={this.onBlocklistChange}
               />
             </FormGroup>
 

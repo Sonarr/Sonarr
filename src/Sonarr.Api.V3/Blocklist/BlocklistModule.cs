@@ -1,17 +1,15 @@
-﻿// Blacklist has been deprecated for blocklist.
-using NzbDrone.Core.Blocklisting;
+﻿using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Datastore;
-using Sonarr.Api.V3.Blocklist;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 
-namespace Sonarr.Api.V3.Blacklist
+namespace Sonarr.Api.V3.Blocklist
 {
-    public class BlacklistModule : SonarrRestModule<BlocklistResource>
+    public class BlocklistModule : SonarrRestModule<BlocklistResource>
     {
         private readonly BlocklistService _blocklistService;
 
-        public BlacklistModule(BlocklistService blocklistService)
+        public BlocklistModule(BlocklistService blocklistService)
         {
             _blocklistService = blocklistService;
             GetResourcePaged = Blocklist;

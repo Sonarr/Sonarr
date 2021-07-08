@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Common.Reflection;
-using NzbDrone.Core.Blacklisting;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Log>().RegisterModel("Logs");
             Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
             Mapper.Entity<SeasonStatistics>().MapResultSet();
-            Mapper.Entity<Blacklist>().RegisterModel("Blacklist");
+            Mapper.Entity<Blocklist>().RegisterModel("Blocklist");
             Mapper.Entity<MetadataFile>().RegisterModel("MetadataFiles");
             Mapper.Entity<SubtitleFile>().RegisterModel("SubtitleFiles");
             Mapper.Entity<OtherExtraFile>().RegisterModel("ExtraFiles");

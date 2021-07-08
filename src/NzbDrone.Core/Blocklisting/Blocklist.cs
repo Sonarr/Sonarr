@@ -6,9 +6,9 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Languages;
 
-namespace NzbDrone.Core.Blacklisting
+namespace NzbDrone.Core.Blocklisting
 {
-    public class Blacklist : ModelBase
+    public class Blocklist : ModelBase
     {
         public int SeriesId { get; set; }
         public Series Series { get; set; }
