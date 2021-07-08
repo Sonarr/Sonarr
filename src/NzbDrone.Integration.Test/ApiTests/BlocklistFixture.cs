@@ -5,17 +5,17 @@ using NzbDrone.Api.Series;
 namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class BlacklistFixture : IntegrationTest
+    public class BlocklistFixture : IntegrationTest
     {
         private SeriesResource _series;
 
         [Test]
-        [Ignore("Adding to blacklist not supported")]
-        public void should_be_able_to_add_to_blacklist()
+        [Ignore("Adding to blocklist not supported")]
+        public void should_be_able_to_add_to_blocklist()
         {
             _series = EnsureSeries(266189, "The Blacklist");
 
-            Blacklist.Post(new Api.Blacklist.BlacklistResource
+            Blocklist.Post(new Api.Blocklist.BlocklistResource
             {
                 SeriesId = _series.Id,
                 SourceTitle = "Blacklist.S01E01.Brought.To.You.By-BoomBoxHD"
@@ -23,10 +23,10 @@ namespace NzbDrone.Integration.Test.ApiTests
         }
 
         [Test]
-        [Ignore("Adding to blacklist not supported")]
-        public void should_be_able_to_get_all_blacklisted()
+        [Ignore("Adding to blocklist not supported")]
+        public void should_be_able_to_get_all_blocklisted()
         {
-            var result = Blacklist.GetPaged(0, 1000, "date", "desc");
+            var result = Blocklist.GetPaged(0, 1000, "date", "desc");
 
             result.Should().NotBeNull();
             result.TotalRecords.Should().Be(1);
@@ -34,12 +34,12 @@ namespace NzbDrone.Integration.Test.ApiTests
         }
 
         [Test]
-        [Ignore("Adding to blacklist not supported")]
-        public void should_be_able_to_remove_from_blacklist()
+        [Ignore("Adding to blocklist not supported")]
+        public void should_be_able_to_remove_from_blocklist()
         {
-            Blacklist.Delete(1);
+            Blocklist.Delete(1);
 
-            var result = Blacklist.GetPaged(0, 1000, "date", "desc");
+            var result = Blocklist.GetPaged(0, 1000, "date", "desc");
 
             result.Should().NotBeNull();
             result.TotalRecords.Should().Be(0);

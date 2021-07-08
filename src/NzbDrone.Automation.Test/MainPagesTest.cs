@@ -42,7 +42,7 @@ namespace NzbDrone.Automation.Test
 
             page.Find(By.LinkText("Queue")).Should().NotBeNull();
             page.Find(By.LinkText("History")).Should().NotBeNull();
-            page.Find(By.LinkText("Blacklist")).Should().NotBeNull();
+            page.Find(By.LinkText("Blocklist")).Should().NotBeNull();
         }
 
         [Test]

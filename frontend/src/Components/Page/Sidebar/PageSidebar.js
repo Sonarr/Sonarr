@@ -64,8 +64,8 @@ const links = [
         to: '/activity/history'
       },
       {
-        title: 'Blacklist',
-        to: '/activity/blacklist'
+        title: 'Blocklist',
+        to: '/activity/blocklist'
       }
     ]
   },

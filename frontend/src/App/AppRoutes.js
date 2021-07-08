@@ -13,7 +13,7 @@ import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnecto
 import CalendarPageConnector from 'Calendar/CalendarPageConnector';
 import HistoryConnector from 'Activity/History/HistoryConnector';
 import QueueConnector from 'Activity/Queue/QueueConnector';
-import BlacklistConnector from 'Activity/Blacklist/BlacklistConnector';
+import BlocklistConnector from 'Activity/Blocklist/BlocklistConnector';
 import MissingConnector from 'Wanted/Missing/MissingConnector';
 import CutoffUnmetConnector from 'Wanted/CutoffUnmet/CutoffUnmetConnector';
 import Settings from 'Settings/Settings';
@@ -118,8 +118,8 @@ function AppRoutes(props) {
       />
 
       <Route
-        path="/activity/blacklist"
-        component={BlacklistConnector}
+        path="/activity/blocklist"
+        component={BlocklistConnector}
       />
 
       {/*

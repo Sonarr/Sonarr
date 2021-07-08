@@ -1,18 +1,18 @@
 using NLog;
-using NzbDrone.Core.Blacklisting;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class BlacklistSpecification : IDecisionEngineSpecification
+    public class BlocklistSpecification : IDecisionEngineSpecification
     {
-        private readonly IBlacklistService _blacklistService;
+        private readonly IBlocklistService _blocklistService;
         private readonly Logger _logger;
 
-        public BlacklistSpecification(IBlacklistService blacklistService, Logger logger)
+        public BlocklistSpecification(IBlocklistService blocklistService, Logger logger)
         {
-            _blacklistService = blacklistService;
+            _blocklistService = blocklistService;
             _logger = logger;
         }
 
@@ -21,10 +21,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            if (_blacklistService.Blacklisted(subject.Series.Id, subject.Release))
+            if (_blocklistService.Blocklisted(subject.Series.Id, subject.Release))
             {
-                _logger.Debug("{0} is blacklisted, rejecting.", subject.Release.Title);
-                return Decision.Reject("Release is blacklisted");
+                _logger.Debug("{0} is blocklisted, rejecting.", subject.Release.Title);
+                return Decision.Reject("Release is blocklisted");
             }
 
             return Decision.Accept();

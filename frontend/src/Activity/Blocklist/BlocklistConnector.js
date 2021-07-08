@@ -5,30 +5,30 @@ import { createSelector } from 'reselect';
 import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import withCurrentPage from 'Components/withCurrentPage';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import * as blacklistActions from 'Store/Actions/blacklistActions';
+import * as blocklistActions from 'Store/Actions/blocklistActions';
 import { executeCommand } from 'Store/Actions/commandActions';
 import * as commandNames from 'Commands/commandNames';
-import Blacklist from './Blacklist';
+import Blocklist from './Blocklist';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.blacklist,
-    createCommandExecutingSelector(commandNames.CLEAR_BLACKLIST),
-    (blacklist, isClearingBlacklistExecuting) => {
+    (state) => state.blocklist,
+    createCommandExecutingSelector(commandNames.CLEAR_BLOCKLIST),
+    (blocklist, isClearingBlocklistExecuting) => {
       return {
-        isClearingBlacklistExecuting,
-        ...blacklist
+        isClearingBlocklistExecuting,
+        ...blocklist
       };
     }
   );
 }
 
 const mapDispatchToProps = {
-  ...blacklistActions,
+  ...blocklistActions,
   executeCommand
 };
 
-class BlacklistConnector extends Component {
+class BlocklistConnector extends Component {
 
   //
   // Lifecycle
@@ -36,27 +36,27 @@ class BlacklistConnector extends Component {
   componentDidMount() {
     const {
       useCurrentPage,
-      fetchBlacklist,
-      gotoBlacklistFirstPage
+      fetchBlocklist,
+      gotoBlocklistFirstPage
     } = this.props;
 
     registerPagePopulator(this.repopulate);
 
     if (useCurrentPage) {
-      fetchBlacklist();
+      fetchBlocklist();
     } else {
-      gotoBlacklistFirstPage();
+      gotoBlocklistFirstPage();
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isClearingBlacklistExecuting && !this.props.isClearingBlacklistExecuting) {
-      this.props.gotoBlacklistFirstPage();
+    if (prevProps.isClearingBlocklistExecuting && !this.props.isClearingBlocklistExecuting) {
+      this.props.gotoBlocklistFirstPage();
     }
   }
 
   componentWillUnmount() {
-    this.props.clearBlacklist();
+    this.props.clearBlocklist();
     unregisterPagePopulator(this.repopulate);
   }
 
@@ -64,56 +64,56 @@ class BlacklistConnector extends Component {
   // Control
 
   repopulate = () => {
-    this.props.fetchBlacklist();
+    this.props.fetchBlocklist();
   }
   //
   // Listeners
 
   onFirstPagePress = () => {
-    this.props.gotoBlacklistFirstPage();
+    this.props.gotoBlocklistFirstPage();
   }
 
   onPreviousPagePress = () => {
-    this.props.gotoBlacklistPreviousPage();
+    this.props.gotoBlocklistPreviousPage();
   }
 
   onNextPagePress = () => {
-    this.props.gotoBlacklistNextPage();
+    this.props.gotoBlocklistNextPage();
   }
 
   onLastPagePress = () => {
-    this.props.gotoBlacklistLastPage();
+    this.props.gotoBlocklistLastPage();
   }
 
   onPageSelect = (page) => {
-    this.props.gotoBlacklistPage({ page });
+    this.props.gotoBlocklistPage({ page });
   }
 
   onRemoveSelected = (ids) => {
-    this.props.removeBlacklistItems({ ids });
+    this.props.removeBlocklistItems({ ids });
   }
 
   onSortPress = (sortKey) => {
-    this.props.setBlacklistSort({ sortKey });
+    this.props.setBlocklistSort({ sortKey });
   }
 
   onTableOptionChange = (payload) => {
-    this.props.setBlacklistTableOption(payload);
+    this.props.setBlocklistTableOption(payload);
 
     if (payload.pageSize) {
-      this.props.gotoBlacklistFirstPage();
+      this.props.gotoBlocklistFirstPage();
     }
   }
 
-  onClearBlacklistPress = () => {
-    this.props.executeCommand({ name: commandNames.CLEAR_BLACKLIST });
+  onClearBlocklistPress = () => {
+    this.props.executeCommand({ name: commandNames.CLEAR_BLOCKLIST });
   }
 
   onTableOptionChange = (payload) => {
-    this.props.setBlacklistTableOption(payload);
+    this.props.setBlocklistTableOption(payload);
 
     if (payload.pageSize) {
-      this.props.gotoBlacklistFirstPage();
+      this.props.gotoBlocklistFirstPage();
     }
   }
 
@@ -122,7 +122,7 @@ class BlacklistConnector extends Component {
 
   render() {
     return (
-      <Blacklist
+      <Blocklist
         onFirstPagePress={this.onFirstPagePress}
         onPreviousPagePress={this.onPreviousPagePress}
         onNextPagePress={this.onNextPagePress}
@@ -131,30 +131,30 @@ class BlacklistConnector extends Component {
         onRemoveSelected={this.onRemoveSelected}
         onSortPress={this.onSortPress}
         onTableOptionChange={this.onTableOptionChange}
-        onClearBlacklistPress={this.onClearBlacklistPress}
+        onClearBlocklistPress={this.onClearBlocklistPress}
         {...this.props}
       />
     );
   }
 }
 
-BlacklistConnector.propTypes = {
+BlocklistConnector.propTypes = {
   useCurrentPage: PropTypes.bool.isRequired,
-  isClearingBlacklistExecuting: PropTypes.bool.isRequired,
+  isClearingBlocklistExecuting: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  fetchBlacklist: PropTypes.func.isRequired,
-  gotoBlacklistFirstPage: PropTypes.func.isRequired,
-  gotoBlacklistPreviousPage: PropTypes.func.isRequired,
-  gotoBlacklistNextPage: PropTypes.func.isRequired,
-  gotoBlacklistLastPage: PropTypes.func.isRequired,
-  gotoBlacklistPage: PropTypes.func.isRequired,
-  removeBlacklistItems: PropTypes.func.isRequired,
-  setBlacklistSort: PropTypes.func.isRequired,
-  setBlacklistTableOption: PropTypes.func.isRequired,
-  clearBlacklist: PropTypes.func.isRequired,
+  fetchBlocklist: PropTypes.func.isRequired,
+  gotoBlocklistFirstPage: PropTypes.func.isRequired,
+  gotoBlocklistPreviousPage: PropTypes.func.isRequired,
+  gotoBlocklistNextPage: PropTypes.func.isRequired,
+  gotoBlocklistLastPage: PropTypes.func.isRequired,
+  gotoBlocklistPage: PropTypes.func.isRequired,
+  removeBlocklistItems: PropTypes.func.isRequired,
+  setBlocklistSort: PropTypes.func.isRequired,
+  setBlocklistTableOption: PropTypes.func.isRequired,
+  clearBlocklist: PropTypes.func.isRequired,
   executeCommand: PropTypes.func.isRequired
 };
 
 export default withCurrentPage(
-  connect(createMapStateToProps, mapDispatchToProps)(BlacklistConnector)
+  connect(createMapStateToProps, mapDispatchToProps)(BlocklistConnector)
 );

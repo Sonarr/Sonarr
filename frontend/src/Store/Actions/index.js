@@ -1,6 +1,6 @@
 import * as addSeries from './addSeriesActions';
 import * as app from './appActions';
-import * as blacklist from './blacklistActions';
+import * as blocklist from './blocklistActions';
 import * as calendar from './calendarActions';
 import * as captcha from './captchaActions';
 import * as customFilters from './customFilterActions';
@@ -31,7 +31,7 @@ import * as wanted from './wantedActions';
 export default [
   addSeries,
   app,
-  blacklist,
+  blocklist,
   calendar,
   captcha,
   commands,
