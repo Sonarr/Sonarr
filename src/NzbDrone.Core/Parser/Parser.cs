@@ -693,6 +693,7 @@ namespace NzbDrone.Core.Parser
                     break;
             }
             title = WebsitePrefixRegex.Replace(title);
+            title = CleanTorrentSuffixRegex.Replace(title);
 
             var animeMatch = AnimeReleaseGroupRegex.Match(title);
 
