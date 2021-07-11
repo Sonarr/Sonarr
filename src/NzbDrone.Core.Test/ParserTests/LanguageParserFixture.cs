@@ -248,7 +248,8 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Bulgarian.HDTV.XviD-LOL")]
-        [TestCase("Title.the.Series.2009.S01E14.HDTV.XviD.BGAUDIO-LOL")]
+        [TestCase("Title.the.Series.2009.S01E14.BGAUDIO.HDTV.XviD-LOL")]
+        [TestCase("Title.the.Series.2009.S01E14.BG.ENG.AUDIO.HDTV.XviD-LOL")]
         public void should_parse_language_bulgarian(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
