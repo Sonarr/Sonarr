@@ -160,6 +160,9 @@ namespace NzbDrone.Core.Parser
             
             if (caseSensitiveMatch.Groups["polish"].Captures.Cast<Capture>().Any())
                 return Language.Polish;
+            
+            if (caseSensitiveMatch.Groups["bulgarian"].Captures.Cast<Capture>().Any())
+                return Language.Bulgarian;
 
             // Case insensitive
             var match = LanguageRegex.Match(title);
@@ -196,6 +199,9 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["chinese"].Success)
                 return Language.Chinese;
+            
+            if (match.Groups["bulgarian"].Success)
+                return Language.Bulgarian;
 
             return Language.Unknown;
         }
