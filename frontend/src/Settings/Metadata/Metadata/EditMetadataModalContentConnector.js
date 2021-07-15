@@ -9,9 +9,10 @@ import EditMetadataModalContent from './EditMetadataModalContent';
 
 function createMapStateToProps() {
   return createSelector(
+    (state) => state.settings.advancedSettings,
     (state, { id }) => id,
     (state) => state.settings.metadata,
-    (id, metadata) => {
+    (advancedSettings, id, metadata) => {
       const {
         isSaving,
         saveError,
@@ -22,6 +23,7 @@ function createMapStateToProps() {
       const settings = selectSettings(_.find(items, { id }), pendingChanges, saveError);
 
       return {
+        advancedSettings,
         id,
         isSaving,
         saveError,

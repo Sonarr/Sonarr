@@ -137,87 +137,97 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
         public override MetadataFileResult SeriesMetadata(Series series)
         {
-            if (!Settings.SeriesMetadata)
+            var xmlResult = string.Empty;
+
+            if (Settings.SeriesMetadata)
             {
-                return null;
-            }
+                _logger.Debug("Generating Series Metadata for: {0}", series.Title);
+                var sb = new StringBuilder();
+                var xws = new XmlWriterSettings();
+                xws.OmitXmlDeclaration = true;
+                xws.Indent = false;
 
-            _logger.Debug("Generating tvshow.nfo for: {0}", series.Title);
-            var sb = new StringBuilder();
-            var xws = new XmlWriterSettings();
-            xws.OmitXmlDeclaration = true;
-            xws.Indent = false;
-
-            using (var xw = XmlWriter.Create(sb, xws))
-            {
-                var tvShow = new XElement("tvshow");
-
-                tvShow.Add(new XElement("title", series.Title));
-
-                if (series.Ratings != null && series.Ratings.Votes > 0)
+                using (var xw = XmlWriter.Create(sb, xws))
                 {
-                    tvShow.Add(new XElement("rating", series.Ratings.Value));
-                }
+                    var tvShow = new XElement("tvshow");
 
-                tvShow.Add(new XElement("plot", series.Overview));
-                tvShow.Add(new XElement("mpaa", series.Certification));
-                tvShow.Add(new XElement("id", series.TvdbId));
+                    tvShow.Add(new XElement("title", series.Title));
 
-                var uniqueId = new XElement("uniqueid", series.TvdbId);
-                uniqueId.SetAttributeValue("type", "tvdb");
-                uniqueId.SetAttributeValue("default", true);
-                tvShow.Add(uniqueId);
-
-                if (series.ImdbId.IsNotNullOrWhiteSpace())
-                {
-                    var imdbId = new XElement("uniqueid", series.ImdbId);
-                    imdbId.SetAttributeValue("type", "imdb");
-                    tvShow.Add(imdbId);
-                }
-
-                foreach (var genre in series.Genres)
-                {
-                    tvShow.Add(new XElement("genre", genre));
-                }
-
-                if (series.Tags.Any())
-                {
-                    var tags = _tagService.GetTags(series.Tags);
-
-                    foreach (var tag in tags)
+                    if (series.Ratings != null && series.Ratings.Votes > 0)
                     {
-                        tvShow.Add(new XElement("tag", tag.Label));
-                    }
-                }
-
-                if (series.FirstAired.HasValue)
-                {
-                    tvShow.Add(new XElement("premiered", series.FirstAired.Value.ToString("yyyy-MM-dd")));
-                }
-
-                tvShow.Add(new XElement("studio", series.Network));
-
-                foreach (var actor in series.Actors)
-                {
-                    var xmlActor = new XElement("actor",
-                        new XElement("name", actor.Name),
-                        new XElement("role", actor.Character));
-
-                    if (actor.Images.Any())
-                    {
-                        xmlActor.Add(new XElement("thumb", actor.Images.First().Url));
+                        tvShow.Add(new XElement("rating", series.Ratings.Value));
                     }
 
-                    tvShow.Add(xmlActor);
+                    tvShow.Add(new XElement("plot", series.Overview));
+                    tvShow.Add(new XElement("mpaa", series.Certification));
+                    tvShow.Add(new XElement("id", series.TvdbId));
+
+                    var uniqueId = new XElement("uniqueid", series.TvdbId);
+                    uniqueId.SetAttributeValue("type", "tvdb");
+                    uniqueId.SetAttributeValue("default", true);
+                    tvShow.Add(uniqueId);
+
+                    if (series.ImdbId.IsNotNullOrWhiteSpace())
+                    {
+                        var imdbId = new XElement("uniqueid", series.ImdbId);
+                        imdbId.SetAttributeValue("type", "imdb");
+                        tvShow.Add(imdbId);
+                    }
+
+                    foreach (var genre in series.Genres)
+                    {
+                        tvShow.Add(new XElement("genre", genre));
+                    }
+
+                    if (series.Tags.Any())
+                    {
+                        var tags = _tagService.GetTags(series.Tags);
+
+                        foreach (var tag in tags)
+                        {
+                            tvShow.Add(new XElement("tag", tag.Label));
+                        }
+                    }
+
+                    if (series.FirstAired.HasValue)
+                    {
+                        tvShow.Add(new XElement("premiered", series.FirstAired.Value.ToString("yyyy-MM-dd")));
+                    }
+
+                    tvShow.Add(new XElement("studio", series.Network));
+
+                    foreach (var actor in series.Actors)
+                    {
+                        var xmlActor = new XElement("actor",
+                            new XElement("name", actor.Name),
+                            new XElement("role", actor.Character));
+
+                        if (actor.Images.Any())
+                        {
+                            xmlActor.Add(new XElement("thumb", actor.Images.First().Url));
+                        }
+
+                        tvShow.Add(xmlActor);
+                    }
+
+                    var doc = new XDocument(tvShow);
+                    doc.Save(xw);
+
+                    xmlResult += doc.ToString();
+                }
+            }
+
+            if (Settings.SeriesMetadataUrl)
+            {
+                if (Settings.SeriesMetadata)
+                {
+                    xmlResult += Environment.NewLine;
                 }
 
-                var doc = new XDocument(tvShow);
-                doc.Save(xw);
-
-                _logger.Debug("Saving tvshow.nfo for {0}", series.Title);
-
-                return new MetadataFileResult("tvshow.nfo", doc.ToString());
+                xmlResult += "https://www.thetvdb.com/?tab=series&id=" + series.TvdbId;
             }
+
+            return xmlResult == string.Empty ? null : new MetadataFileResult("tvshow.nfo", xmlResult);
         }
 
         public override MetadataFileResult EpisodeMetadata(Series series, EpisodeFile episodeFile)

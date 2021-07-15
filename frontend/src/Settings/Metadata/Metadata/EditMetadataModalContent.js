@@ -15,6 +15,7 @@ import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 
 function EditMetadataModalContent(props) {
   const {
+    advancedSettings,
     isSaving,
     saveError,
     item,
@@ -56,6 +57,7 @@ function EditMetadataModalContent(props) {
               return (
                 <ProviderFieldFormGroup
                   key={field.name}
+                  advancedSettings={advancedSettings}
                   provider="metadata"
                   {...field}
                   isDisabled={!enable.value}
@@ -88,6 +90,7 @@ function EditMetadataModalContent(props) {
 }
 
 EditMetadataModalContent.propTypes = {
+  advancedSettings: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   saveError: PropTypes.object,
   item: PropTypes.object.isRequired,
