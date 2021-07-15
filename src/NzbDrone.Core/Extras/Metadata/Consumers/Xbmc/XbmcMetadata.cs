@@ -218,7 +218,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 }
             }
 
-            if (Settings.SeriesMetadataURL)
+            if (Settings.SeriesMetadataUrl)
             {
                 xmlResult += "https://www.thetvdb.com/?tab=series&id=" + series.TvdbId;
                 xmlResult += Environment.NewLine;

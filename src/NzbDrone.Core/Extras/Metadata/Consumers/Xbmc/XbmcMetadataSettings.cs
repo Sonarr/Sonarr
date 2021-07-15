@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
         public XbmcMetadataSettings()
         {
             SeriesMetadata = true;
-            SeriesMetadataURL = false;
+            SeriesMetadataUrl = false;
             EpisodeMetadata = true;
             SeriesImages = true;
             SeasonImages = true;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
         public bool SeriesMetadata { get; set; }
 
         [FieldDefinition(1, Label = "Series Metadata URL", Type = FieldType.Checkbox, Section = MetadataSectionType.Metadata, HelpText = "tvshow.nfo with TheTVDB show URL (can be combined with 'Series Metadata')", Advanced = true)]
-        public bool SeriesMetadataURL { get; set; }
+        public bool SeriesMetadataUrl { get; set; }
 
         [FieldDefinition(2, Label = "Episode Metadata", Type = FieldType.Checkbox, Section = MetadataSectionType.Metadata, HelpText = "<filename>.nfo")]
         public bool EpisodeMetadata { get; set; }
