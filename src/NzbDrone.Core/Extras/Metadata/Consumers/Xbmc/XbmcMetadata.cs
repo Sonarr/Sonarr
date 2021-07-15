@@ -214,17 +214,20 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     doc.Save(xw);
 
                     xmlResult += doc.ToString();
-                    xmlResult += Environment.NewLine;
                 }
             }
 
             if (Settings.SeriesMetadataUrl)
             {
+                if (Settings.SeriesMetadata)
+                {
+                    xmlResult += Environment.NewLine;
+                }
+
                 xmlResult += "https://www.thetvdb.com/?tab=series&id=" + series.TvdbId;
-                xmlResult += Environment.NewLine;
             }
 
-            return xmlResult == string.Empty ? null : new MetadataFileResult("tvshow.nfo", xmlResult.Trim(Environment.NewLine.ToCharArray()));
+            return xmlResult == string.Empty ? null : new MetadataFileResult("tvshow.nfo", xmlResult);
         }
 
         public override MetadataFileResult EpisodeMetadata(Series series, EpisodeFile episodeFile)
