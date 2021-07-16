@@ -54,7 +54,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
 
         public TraktSettingsBase()
         {
-            BaseUrl = "https://api.trakt.tv";
+            BaseUrl = "https://trakt.tv";
             SignIn = "startOAuth";
             Rating = "0-100";
             Genres = "";
