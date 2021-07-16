@@ -148,8 +148,8 @@ namespace Marr.Data.QGen
             if (right == null) // Value is not directly passed in as a constant
             {
                 var rightMemberExp = (rightExpression as MemberExpression);
-                var parentMemberExpression = rightMemberExp.Expression as MemberExpression;
-                if (parentMemberExpression != null) // Value is passed in as a property on a parent entity
+
+                if (rightMemberExp.Expression is MemberExpression parentMemberExpression) // Value is passed in as a property on a parent entity
                 {
                     string entityName = (rightMemberExp.Expression as MemberExpression).Member.Name;
                     var container = ((rightMemberExp.Expression as MemberExpression).Expression as ConstantExpression).Value;

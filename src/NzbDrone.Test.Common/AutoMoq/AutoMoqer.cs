@@ -123,8 +123,7 @@ namespace NzbDrone.Test.Common.AutoMoq
         {
             foreach (var registeredMock in _registeredMocks)
             {
-                var mock = registeredMock.Value as Mock;
-                if (mock != null)
+                if (registeredMock.Value is Mock mock)
                     mock.VerifyAll();
             }
         }

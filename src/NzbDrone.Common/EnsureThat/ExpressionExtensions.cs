@@ -7,9 +7,8 @@ namespace NzbDrone.Common.EnsureThat
         internal static string ToPath(this MemberExpression e)
         {
             var path = "";
-            var parent = e.Expression as MemberExpression;
 
-            if (parent != null)
+            if (e.Expression is MemberExpression parent)
                 path = parent.ToPath() + ".";
 
             return path + e.Member.Name;
