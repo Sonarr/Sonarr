@@ -15,7 +15,8 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
     {
         private Series _series = null;
         private List<ReleaseProfile> _releaseProfiles = null;
-        private string _title = "Series.Title.S01E01.720p.HDTV.x264-Sonarr";
+        private List<ReleaseProfile> _namedReleaseProfiles = null;
+        private string _title = "Series.Title.S01E01.extended.720p.HDTV.x264-Sonarr";
 
         [SetUp]
         public void Setup()
@@ -35,6 +36,27 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
                                                  }
                                  });
 
+            _namedReleaseProfiles = new List<ReleaseProfile>();
+
+            _namedReleaseProfiles.Add(new ReleaseProfile
+            {
+                Name = "CodecProfile",
+                Preferred = new List<KeyValuePair<string, int>>
+                                                 {
+                                                     new KeyValuePair<string, int>("x264", 5),
+                                                     new KeyValuePair<string, int>("x265", -10)
+                                                 }
+            });
+            _namedReleaseProfiles.Add(new ReleaseProfile
+            {
+                Name = "EditionProfile",
+                Preferred = new List<KeyValuePair<string, int>>
+                                                 {
+                                                     new KeyValuePair<string, int>("extended", 5),
+                                                     new KeyValuePair<string, int>("uncut", -10)
+                                                 }
+            });
+
 
             Mocker.GetMock<ITermMatcherService>()
                   .Setup(s => s.MatchingTerm(It.IsAny<string>(), _title))
@@ -48,6 +70,13 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
                   .Returns(_releaseProfiles);
         }
 
+        private void GivenNamedReleaseProfile()
+        {
+            Mocker.GetMock<IReleaseProfileService>()
+                  .Setup(s => s.EnabledForTags(It.IsAny<HashSet<int>>(), It.IsAny<int>()))
+                  .Returns(_namedReleaseProfiles);
+        }
+
         [Test]
         public void should_return_empty_list_when_there_are_no_release_profiles()
         {
@@ -55,24 +84,58 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
                   .Setup(s => s.EnabledForTags(It.IsAny<HashSet<int>>(), It.IsAny<int>()))
                   .Returns(new List<ReleaseProfile>());
 
-            Subject.GetMatchingPreferredWords(_series, _title).Should().BeEmpty();
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().BeEmpty();
         }
 
         [Test]
-        public void should_return_empty_list_when_there_are_no_matching_preferred_words()
+        public void should_return_empty_list_when_there_are_no_matching_preferred_words_from_unnamedprofile()
         {
             _releaseProfiles.First().Preferred.RemoveAt(0);
             GivenReleaseProfile();
 
-            Subject.GetMatchingPreferredWords(_series, _title).Should().BeEmpty();
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().BeEmpty();
         }
 
         [Test]
-        public void should_return_list_of_matching_terms()
+        public void should_return_list_of_matching_terms_from_unnamedprofile()
         {
             GivenReleaseProfile();
 
-            Subject.GetMatchingPreferredWords(_series, _title).Should().Contain(new[] {"x264"});
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().Equal(new[] { "x264" });
+        }
+
+        [Test]
+        public void should_return_empty_list_when_there_are_no_matching_preferred_words_from_namedprofiles()
+        {
+            _namedReleaseProfiles.First().Preferred.RemoveAt(0);
+            _namedReleaseProfiles.Skip(1).First().Preferred.RemoveAt(0);
+
+            GivenNamedReleaseProfile();
+
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_list_of_matching_terms_from_multiple_namedprofiles()
+        {
+            GivenNamedReleaseProfile();
+
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.ByReleaseProfile.Should().ContainKey("CodecProfile").WhichValue.Should().Equal(new[] { "x264" });
+            matchingResults.ByReleaseProfile.Should().ContainKey("EditionProfile").WhichValue.Should().Equal(new[] { "extended" });
+        }
+
+        [Test]
+        public void should_return_list_of_matching_terms_from_multiple_namedprofiles_all()
+        {
+            GivenNamedReleaseProfile();
+
+            var matchingResults = Subject.GetMatchingPreferredWords(_series, _title);
+            matchingResults.All.Should().Equal(new[] { "x264", "extended" });
         }
     }
 }
