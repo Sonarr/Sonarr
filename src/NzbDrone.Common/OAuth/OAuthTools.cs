@@ -55,13 +55,13 @@ namespace NzbDrone.Common.OAuth
 #endif
 
         /// <summary>
-        /// Generates a random 16-byte lowercase alphanumeric string. 
+        /// Generates a random 16-byte lowercase alphanumeric string.
         /// </summary>
         /// <seealso href="http://oauth.net/core/1.0#nonce"/>
         /// <returns></returns>
         public static string GetNonce()
         {
-            const string chars = (Lower + Digit);
+            const string chars = Lower + Digit;
 
             var nonce = new char[16];
             lock (_randomLock)
@@ -98,7 +98,7 @@ namespace NzbDrone.Common.OAuth
 
         private static long ToUnixTime(DateTime dateTime)
         {
-            var timeSpan = (dateTime - new DateTime(1970, 1, 1));
+            var timeSpan = dateTime - new DateTime(1970, 1, 1);
             var timestamp = (long)timeSpan.TotalSeconds;
 
             return timestamp;
@@ -155,8 +155,7 @@ namespace NzbDrone.Common.OAuth
             var ret = original.OfType<char>().Where(
                 c => !Unreserved.OfType<char>().Contains(c) && c != '%').Aggregate(
                     value, (current, c) => current.Replace(
-                          c.ToString(), PercentEncode(c.ToString())
-                          ));
+                          c.ToString(), PercentEncode(c.ToString())));
 
             return ret.Replace("%%", "%25%"); // Revisit to encode actual %'s
         }
@@ -211,7 +210,7 @@ namespace NzbDrone.Common.OAuth
 
             copy.RemoveAll(exclusions);
 
-            foreach(var parameter in copy)
+            foreach (var parameter in copy)
             {
                 parameter.Value = UrlEncodeStrict(parameter.Value);
             }
@@ -225,7 +224,7 @@ namespace NzbDrone.Common.OAuth
 #if WINRT
             return CultureInfo.InvariantCulture.CompareInfo.Compare(left, right, CompareOptions.IgnoreCase) == 0;
 #else
-            return String.Compare(left, right, StringComparison.InvariantCultureIgnoreCase) == 0;
+            return string.Compare(left, right, StringComparison.InvariantCultureIgnoreCase) == 0;
 #endif
         }
 
@@ -259,7 +258,7 @@ namespace NzbDrone.Common.OAuth
         }
 
         /// <summary>
-        /// Creates a request elements concatentation value to send with a request. 
+        /// Creates a request elements concatentation value to send with a request.
         /// This is also known as the signature base.
         /// </summary>
         /// <seealso href="http://oauth.net/core/1.0#rfc.section.9.1.3"/>
@@ -276,7 +275,7 @@ namespace NzbDrone.Common.OAuth
             var requestMethod = string.Concat(method.ToUpper(), "&");
             var requestUrl = string.Concat(UrlEncodeRelaxed(ConstructRequestUrl(new Uri(url))), "&");
             var requestParameters = UrlEncodeRelaxed(NormalizeRequestParameters(parameters));
-            
+
             sb.Append(requestMethod);
             sb.Append(requestUrl);
             sb.Append(requestParameters);
@@ -293,7 +292,7 @@ namespace NzbDrone.Common.OAuth
         /// <param name="signatureBase">The signature base</param>
         /// <param name="consumerSecret">The consumer key</param>
         /// <returns></returns>
-        public static string GetSignature(OAuthSignatureMethod signatureMethod, 
+        public static string GetSignature(OAuthSignatureMethod signatureMethod,
                                           string signatureBase,
                                           string consumerSecret)
         {
@@ -311,7 +310,7 @@ namespace NzbDrone.Common.OAuth
         /// <param name="consumerSecret">The consumer key</param>
         /// <returns></returns>
         public static string GetSignature(OAuthSignatureMethod signatureMethod,
-                                          OAuthSignatureTreatment signatureTreatment, 
+                                          OAuthSignatureTreatment signatureTreatment,
                                           string signatureBase,
                                           string consumerSecret)
         {
@@ -327,7 +326,7 @@ namespace NzbDrone.Common.OAuth
         /// <param name="consumerSecret">The consumer secret</param>
         /// <param name="tokenSecret">The token secret</param>
         /// <returns></returns>
-        public static string GetSignature(OAuthSignatureMethod signatureMethod, 
+        public static string GetSignature(OAuthSignatureMethod signatureMethod,
                                           string signatureBase,
                                           string consumerSecret,
                                           string tokenSecret)
@@ -345,7 +344,7 @@ namespace NzbDrone.Common.OAuth
         /// <param name="consumerSecret">The consumer secret</param>
         /// <param name="tokenSecret">The token secret</param>
         /// <returns></returns>
-        public static string GetSignature(OAuthSignatureMethod signatureMethod, 
+        public static string GetSignature(OAuthSignatureMethod signatureMethod,
                                           OAuthSignatureTreatment signatureTreatment,
                                           string signatureBase,
                                           string consumerSecret,
@@ -353,7 +352,7 @@ namespace NzbDrone.Common.OAuth
         {
             if (IsNullOrBlank(tokenSecret))
             {
-                tokenSecret = String.Empty;
+                tokenSecret = string.Empty;
             }
 
             consumerSecret = UrlEncodeRelaxed(consumerSecret);
@@ -403,7 +402,7 @@ namespace NzbDrone.Common.OAuth
 
         private static bool IsNullOrBlank(string value)
         {
-            return String.IsNullOrEmpty(value) || (!String.IsNullOrEmpty(value) && value.Trim() == String.Empty);
+            return string.IsNullOrEmpty(value) || (!string.IsNullOrEmpty(value) && string.IsNullOrEmpty(value.Trim()));
         }
     }
 }
