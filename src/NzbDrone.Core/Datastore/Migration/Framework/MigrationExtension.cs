@@ -1,6 +1,12 @@
-﻿using System.Data;
+﻿using FluentMigrator;
 using FluentMigrator.Builders.Create;
 using FluentMigrator.Builders.Create.Table;
+using FluentMigrator.Runner;
+using FluentMigrator.Runner.BatchParser;
+using FluentMigrator.Runner.Generators.SQLite;
+using FluentMigrator.Runner.Processors.SQLite;
+using Microsoft.Extensions.DependencyInjection;
+using System.Data;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -20,11 +26,24 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return command;
         }
 
-        public static void AddParameter(this IDbCommand command, object value)
+        public static void AddParameter(this System.Data.IDbCommand command, object value)
         {
             var parameter = command.CreateParameter();
             parameter.Value = value;
             command.Parameters.Add(parameter);
+        }
+
+        public static IMigrationRunnerBuilder AddNzbDroneSQLite(this IMigrationRunnerBuilder builder)
+        {
+            builder.Services
+                .AddTransient<SQLiteBatchParser>()
+                .AddScoped<SQLiteDbFactory>()
+                .AddScoped<NzbDroneSQLiteProcessor>()
+                .AddScoped<IMigrationProcessor>(sp => sp.GetRequiredService<NzbDroneSQLiteProcessor>())
+                .AddScoped<SQLiteQuoter>()
+                .AddScoped<SQLiteGenerator>()
+                .AddScoped<IMigrationGenerator>(sp => sp.GetRequiredService<SQLiteGenerator>());
+            return builder;
         }
     }
 }

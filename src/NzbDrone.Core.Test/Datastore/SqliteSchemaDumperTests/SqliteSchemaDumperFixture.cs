@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
         [SetUp]
         public void Setup()
         {
-            Subject = new SqliteSchemaDumper(null, null);
+            Subject = new SqliteSchemaDumper(null);
         }
 
         [TestCase(@"CREATE TABLE TestTable (MyId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "TestTable", "MyId")]

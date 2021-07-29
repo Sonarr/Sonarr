@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.IO;
 using System.Linq;
-using FluentMigrator.Runner;
 using Marr.Data;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -96,9 +96,14 @@ namespace NzbDrone.Core.Test.Framework
             return testDb;
         }
 
+        protected virtual void SetupLogging()
+        {
+            Mocker.SetConstant<ILoggerProvider>(NullLoggerProvider.Instance);
+        }
         protected void SetupContainer()
         {
             WithTempAsAppPath();
+            SetupLogging();
 
             Mocker.SetConstant<IConnectionStringFactory>(Mocker.Resolve<ConnectionStringFactory>());
             Mocker.SetConstant<IMigrationController>(Mocker.Resolve<MigrationController>());

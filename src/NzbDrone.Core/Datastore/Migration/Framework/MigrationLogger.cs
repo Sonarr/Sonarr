@@ -1,58 +1,59 @@
 ﻿using System;
 using FluentMigrator.Runner;
+using FluentMigrator.Runner.Logging;
 using NLog;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
-    public class MigrationLogger : IAnnouncer
+    public class MigrationLogger : FluentMigratorLogger
     {
         private readonly Logger _logger;
 
-
-        public MigrationLogger(Logger logger)
+        public MigrationLogger(Logger logger,
+                               FluentMigratorLoggerOptions options)
+        : base(options)
         {
             _logger = logger;
         }
 
-
-        public void Heading(string message)
+        protected override void WriteHeading(string message)
         {
             _logger.Info("*** {0} ***", message);
         }
 
-        public void Say(string message)
+        protected override void WriteSay(string message)
         {
             _logger.Debug(message);
         }
 
-        public void Emphasize(string message)
+        protected override void WriteEmphasize(string message)
         {
             _logger.Warn(message);
         }
 
-        public void Sql(string sql)
+        protected override void WriteSql(string sql)
         {
             _logger.Debug(sql);
         }
 
-        public void ElapsedTime(TimeSpan timeSpan)
+        protected override void WriteEmptySql()
+        {
+            _logger.Debug(@"No SQL statement executed.");
+        }
+
+        protected override void WriteElapsedTime(TimeSpan timeSpan)
         {
             _logger.Debug("Took: {0}", timeSpan);
         }
 
-        public void Error(string message)
+        protected override void WriteError(string message)
         {
             _logger.Error(message);
         }
 
-        public void Error(Exception exception)
+        protected override void WriteError(Exception exception)
         {
             _logger.Error(exception);
-        }
-
-        public void Write(string message, bool escaped)
-        {
-            _logger.Info(message);
         }
     }
 }
