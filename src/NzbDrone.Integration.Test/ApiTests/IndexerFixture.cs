@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using NzbDrone.Api.Indexers;
+using Sonarr.Api.V3.Indexers;
 using NzbDrone.Core.ThingiProvider;
 using Sonarr.Http.ClientSchema;
 
@@ -28,7 +28,8 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             schema.Name = name;
             schema.EnableRss = false;
-            schema.EnableSearch = false;
+            schema.EnableAutomaticSearch = false;
+            schema.EnableInteractiveSearch = false;
 
             return schema;
         }
@@ -39,7 +40,8 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             schema.Name = name;
             schema.EnableRss = false;
-            schema.EnableSearch = false;
+            schema.EnableAutomaticSearch = false;
+            schema.EnableInteractiveSearch = false;
 
             return schema;
         }

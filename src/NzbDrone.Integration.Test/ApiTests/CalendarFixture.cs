@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.Episodes;
+using Sonarr.Api.V3.Episodes;
 using NzbDrone.Integration.Test.Client;
 using System;
 using System.Collections.Generic;

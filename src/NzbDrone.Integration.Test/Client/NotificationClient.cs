@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Api.Notifications;
+using Sonarr.Api.V3.Notifications;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client

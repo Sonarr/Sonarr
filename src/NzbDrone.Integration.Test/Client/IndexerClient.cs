@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Api.Indexers;
+using Sonarr.Api.V3.Indexers;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client

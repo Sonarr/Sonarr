@@ -14,7 +14,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             {
                 var newSeries = Series.Lookup(title).First();
 
-                newSeries.ProfileId = 1;
+                newSeries.QualityProfileId = 1;
                 newSeries.LanguageProfileId = 1;
                 newSeries.Path = string.Format(@"C:\Test\{0}", title).AsOsAgnostic();
 
@@ -31,13 +31,13 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             foreach (var s in series)
             {
-                s.ProfileId = 2;
+                s.QualityProfileId = 2;
             }
 
             var result = Series.Editor(series);
 
             result.Should().HaveCount(2);
-            result.TrueForAll(s => s.ProfileId == 2).Should().BeTrue();
+            result.TrueForAll(s => s.QualityProfileId == 2).Should().BeTrue();
         }
     }
 }

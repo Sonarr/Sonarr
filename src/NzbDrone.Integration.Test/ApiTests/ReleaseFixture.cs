@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.Indexers;
+using Sonarr.Api.V3.Indexers;
 using System.Linq;
 using System.Net;
 

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.Series;
+using Sonarr.Api.V3.Series;
 using System.Linq;
 using NzbDrone.Test.Common;
 
@@ -22,7 +22,7 @@ namespace NzbDrone.Integration.Test.ApiTests
         {
             var newSeries = Series.Lookup("archer").Single(c => c.TvdbId == 110381);
 
-            newSeries.ProfileId = 1;
+            newSeries.QualityProfileId = 1;
             newSeries.LanguageProfileId = 1;
             newSeries.Path = @"C:\Test\Archer".AsOsAgnostic();
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Api.DownloadClient;
+using Sonarr.Api.V3.DownloadClient;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client
