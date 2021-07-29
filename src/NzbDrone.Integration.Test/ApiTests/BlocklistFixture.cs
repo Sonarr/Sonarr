@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.Series;
+using Sonarr.Api.V3.Blocklist;
+using Sonarr.Api.V3.Series;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {
@@ -15,7 +16,7 @@ namespace NzbDrone.Integration.Test.ApiTests
         {
             _series = EnsureSeries(266189, "The Blacklist");
 
-            Blocklist.Post(new Api.Blocklist.BlocklistResource
+            Blocklist.Post(new BlocklistResource
             {
                 SeriesId = _series.Id,
                 SourceTitle = "Blacklist.S01E01.Brought.To.You.By-BoomBoxHD"

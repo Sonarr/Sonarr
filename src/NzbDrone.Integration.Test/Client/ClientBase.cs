@@ -2,7 +2,6 @@
 using System.Net;
 using FluentAssertions;
 using NLog;
-using NzbDrone.Api;
 using Sonarr.Http.REST;
 using NzbDrone.Common.Serializer;
 using RestSharp;

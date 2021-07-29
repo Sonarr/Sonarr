@@ -1,6 +1,7 @@
 ﻿using NLog;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Test.Common;
+using Sonarr.Api.V3.Indexers;
 using Sonarr.Http.ClientSchema;
 
 namespace NzbDrone.Integration.Test
@@ -25,10 +26,11 @@ namespace NzbDrone.Integration.Test
 
         protected override void InitializeTestTarget()
         {
-            Indexers.Post(new Api.Indexers.IndexerResource
+            Indexers.Post(new IndexerResource
             {
                 EnableRss = false,
-                EnableSearch = false,
+                EnableAutomaticSearch = false,
+                EnableInteractiveSearch = false,
                 ConfigContract = nameof(NewznabSettings),
                 Implementation = nameof(Newznab),
                 Name = "NewznabTest",

@@ -7,7 +7,8 @@
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Api\Sonarr.Api.csproj" />
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
+    <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
+    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
   </ItemGroup>
 </Project>

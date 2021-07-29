@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.Commands;
+using Sonarr.Api.V3.Commands;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {

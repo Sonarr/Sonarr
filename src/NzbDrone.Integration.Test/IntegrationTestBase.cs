@@ -11,17 +11,17 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
-using NzbDrone.Api.Blocklist;
-using NzbDrone.Api.Commands;
-using NzbDrone.Api.Config;
-using NzbDrone.Api.DownloadClient;
-using NzbDrone.Api.EpisodeFiles;
-using NzbDrone.Api.Episodes;
-using NzbDrone.Api.History;
-using NzbDrone.Api.Profiles;
-using NzbDrone.Api.RootFolders;
-using NzbDrone.Api.Series;
-using NzbDrone.Api.Tags;
+using Sonarr.Api.V3.Blocklist;
+using Sonarr.Api.V3.Commands;
+using Sonarr.Api.V3.Config;
+using Sonarr.Api.V3.DownloadClient;
+using Sonarr.Api.V3.EpisodeFiles;
+using Sonarr.Api.V3.Episodes;
+using Sonarr.Api.V3.History;
+using Sonarr.Api.V3.Profiles.Quality;
+using Sonarr.Api.V3.RootFolders;
+using Sonarr.Api.V3.Series;
+using Sonarr.Api.V3.Tags;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Qualities;
@@ -50,7 +50,7 @@ namespace NzbDrone.Integration.Test
         public LogsClient Logs;
         public ClientBase<NamingConfigResource> NamingConfig;
         public NotificationClient Notifications;
-        public ClientBase<ProfileResource> Profiles;
+        public ClientBase<QualityProfileResource> Profiles;
         public ReleaseClient Releases;
         public ReleasePushClient ReleasePush;
         public ClientBase<RootFolderResource> RootFolders;
@@ -117,7 +117,7 @@ namespace NzbDrone.Integration.Test
             Logs = new LogsClient(RestClient, ApiKey);
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, ApiKey, "config/naming");
             Notifications = new NotificationClient(RestClient, ApiKey);
-            Profiles = new ClientBase<ProfileResource>(RestClient, ApiKey);
+            Profiles = new ClientBase<QualityProfileResource>(RestClient, ApiKey);
             Releases = new ReleaseClient(RestClient, ApiKey);
             ReleasePush = new ReleasePushClient(RestClient, ApiKey);
             RootFolders = new ClientBase<RootFolderResource>(RestClient, ApiKey);
@@ -236,7 +236,7 @@ namespace NzbDrone.Integration.Test
             {
                 var lookup = Series.Lookup("tvdb:" + tvdbId);
                 var series = lookup.First();
-                series.ProfileId = 1;
+                series.QualityProfileId = 1;
                 series.LanguageProfileId = 1;
                 series.Path = Path.Combine(SeriesRootFolder, series.Title);
                 series.Monitored = true;
@@ -308,13 +308,13 @@ namespace NzbDrone.Integration.Test
             return result.EpisodeFile;
         }
 
-        public ProfileResource EnsureProfileCutoff(int profileId, Quality cutoff)
+        public QualityProfileResource EnsureProfileCutoff(int profileId, Quality cutoff)
         {
             var profile = Profiles.Get(profileId);
 
-            if (profile.Cutoff != cutoff)
+            if (profile.Cutoff != cutoff.Id)
             {
-                profile.Cutoff = cutoff;
+                profile.Cutoff = cutoff.Id;
                 profile = Profiles.Put(profile);
             }
 
