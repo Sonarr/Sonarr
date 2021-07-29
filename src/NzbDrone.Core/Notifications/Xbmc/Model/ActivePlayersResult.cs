@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Core.Notifications.Xbmc.Model
 {
-    public class ActivePlayersEdenResult
+    public class ActivePlayersResult
     {
         public string Id { get; set; }
         public string JsonRpc { get; set; }

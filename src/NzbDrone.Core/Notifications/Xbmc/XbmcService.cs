@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FluentValidation.Results;
-using Newtonsoft.Json.Linq;
 using NLog;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.Serializer;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
 
@@ -22,95 +20,98 @@ namespace NzbDrone.Core.Notifications.Xbmc
     public class XbmcService : IXbmcService
     {
         private readonly IXbmcJsonApiProxy _proxy;
-        private readonly IEnumerable<IApiProvider> _apiProviders;
         private readonly Logger _logger;
 
-        private readonly ICached<XbmcVersion> _xbmcVersionCache;
-
         public XbmcService(IXbmcJsonApiProxy proxy,
-                           IEnumerable<IApiProvider> apiProviders,
-                           ICacheManager cacheManager,
                            Logger logger)
         {
             _proxy = proxy;
-            _apiProviders = apiProviders;
             _logger = logger;
-
-            _xbmcVersionCache = cacheManager.GetCache<XbmcVersion>(GetType());
         }
 
         public void Notify(XbmcSettings settings, string title, string message)
         {
-            var provider = GetApiProvider(settings);
-            provider.Notify(settings, title, message);
+            _proxy.Notify(settings, title, message);
         }
 
         public void Update(XbmcSettings settings, Series series)
         {
-            var provider = GetApiProvider(settings);
-            provider.Update(settings, series);
+            if (!settings.AlwaysUpdate)
+            {
+                _logger.Debug("Determining if there are any active players on XBMC host: {0}", settings.Address);
+                var activePlayers = _proxy.GetActivePlayers(settings);
+
+                if (activePlayers.Any(a => a.Type.Equals("video")))
+                {
+                    _logger.Debug("Video is currently playing, skipping library update");
+                    return;
+                }
+            }
+
+            UpdateLibrary(settings, series);
         }
 
         public void Clean(XbmcSettings settings)
         {
-            var provider = GetApiProvider(settings);
-            provider.Clean(settings);
+            _proxy.CleanLibrary(settings);
         }
 
-        private XbmcVersion GetJsonVersion(XbmcSettings settings)
+        public string GetSeriesPath(XbmcSettings settings, Series series)
         {
-            return _xbmcVersionCache.Get(settings.Address, () =>
+            var allSeries = _proxy.GetSeries(settings);
+
+            if (!allSeries.Any())
             {
-                var response = _proxy.GetJsonVersion(settings);
-
-                _logger.Debug("Getting version from response: " + response);
-                var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
-
-                var versionObject = result.Result.Property("version");
-
-                if (versionObject.Value.Type == JTokenType.Integer)
-                {
-                    return new XbmcVersion((int)versionObject.Value);
-                }
-
-                if (versionObject.Value.Type == JTokenType.Object)
-                {
-                    return Json.Deserialize<XbmcVersion>(versionObject.Value.ToString());
-                }
-
-                throw new InvalidCastException("Unknown Version structure!: " + versionObject);
-            }, TimeSpan.FromHours(12));
-        }
-
-        private IApiProvider GetApiProvider(XbmcSettings settings)
-        {
-            var version = GetJsonVersion(settings);
-            var apiProvider = _apiProviders.SingleOrDefault(a => a.CanHandle(version));
-
-            if (apiProvider == null)
-            {
-                var message = string.Format("Invalid API Version: {0} for {1}", version, settings.Address);
-                throw new InvalidXbmcVersionException(message);
+                _logger.Debug("No TV shows returned from XBMC");
+                return null;
             }
 
-            return apiProvider;
+            var matchingSeries = allSeries.FirstOrDefault(s =>
+            {
+                var tvdbId = 0;
+                int.TryParse(s.ImdbNumber, out tvdbId);
+
+                return tvdbId == series.TvdbId || s.Label == series.Title;
+            });
+
+            if (matchingSeries != null) return matchingSeries.File;
+
+            return null;
+        }
+
+        private void UpdateLibrary(XbmcSettings settings, Series series)
+        {
+            try
+            {
+                var moviePath = GetSeriesPath(settings, series);
+
+                if (moviePath != null)
+                {
+                    moviePath = new OsPath(moviePath).Directory.FullPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    _logger.Debug("Updating series {0} (Path: {1}) on XBMC host: {2}", series, moviePath, settings.Address);
+                }
+                else
+                {
+                    _logger.Debug("Series {0} doesn't exist on XBMC host: {1}, Updating Entire Library", series, settings.Address);
+                }
+
+                var response = _proxy.UpdateLibrary(settings, moviePath);
+
+                if (!response.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _logger.Debug("Failed to update library for: {0}", settings.Address);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug(ex, ex.Message);
+            }
         }
 
         public ValidationFailure Test(XbmcSettings settings, string message)
         {
-            _xbmcVersionCache.Clear();
-
             try
             {
-                _logger.Debug("Determining version of Host: {0}", settings.Address);
-                var version = GetJsonVersion(settings);
-                _logger.Debug("Version is: {0}", version);
-
-                if (version == new XbmcVersion(0))
-                {
-                    throw new InvalidXbmcVersionException("Version received from XBMC is invalid, please correct your settings.");
-                }
-
                 Notify(settings, "Test Notification", message);
             }
             catch (Exception ex)
