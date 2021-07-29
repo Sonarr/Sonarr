@@ -11,7 +11,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
 {
     [TestFixture]
-    public class UpdateFixture : CoreTest<JsonApiProvider>
+    public class UpdateFixture : CoreTest<XbmcService>
     {
         private const int TVDB_ID = 5;
         private XbmcSettings _settings;
