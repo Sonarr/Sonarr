@@ -32,8 +32,6 @@ namespace NzbDrone.Common.OAuth
         /// <seealso cref="http://oauth.net/core/1.0#request_urls"/>
         public virtual string RequestUrl { get; set; }
 
-        #region Authorization Header
-
 #if !WINRT
         public string GetAuthorizationHeader(NameValueCollection parameters)
         {
@@ -121,10 +119,6 @@ namespace NzbDrone.Common.OAuth
             return authorization;
         }
 
-        #endregion
-
-        #region Authorization Query
-
 #if !WINRT
         public string GetAuthorizationQuery(NameValueCollection parameters)
         {
@@ -209,8 +203,6 @@ namespace NzbDrone.Common.OAuth
             return authorization;
         }
 
-        #endregion
-
         private string GetNewSignature(WebParameterCollection parameters)
         {
             var timestamp = OAuthTools.GetTimestamp();
@@ -240,8 +232,6 @@ namespace NzbDrone.Common.OAuth
 
             return signature;
         }
-
-        #region Static Helpers
 
         public static OAuthRequest ForRequestToken(string consumerKey, string consumerSecret)
         {
@@ -334,8 +324,6 @@ namespace NzbDrone.Common.OAuth
             };
             return credentials;
         }
-
-        #endregion
 
         private void ValidateRequestState()
         {
@@ -500,7 +488,7 @@ namespace NzbDrone.Common.OAuth
 
         private static bool IsNullOrBlank(string value)
         {
-            return String.IsNullOrEmpty(value) || (!String.IsNullOrEmpty(value) && value.Trim() == String.Empty);
+            return string.IsNullOrEmpty(value) || (!string.IsNullOrEmpty(value) && string.IsNullOrEmpty(value.Trim()));
         }
     }
 }

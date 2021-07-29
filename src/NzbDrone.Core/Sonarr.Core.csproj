@@ -11,7 +11,6 @@
     <PackageReference Include="MailKit" Version="2.10.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NLog" Version="4.6.6" />
-    <PackageReference Include="OAuth" Version="1.0.3" />
     <PackageReference Include="RestSharp" Version="106.15.0" />
     <PackageReference Include="TinyTwitter" Version="1.1.2" />
     <PackageReference Include="Kveer.XmlRPC" Version="1.2.0" />
