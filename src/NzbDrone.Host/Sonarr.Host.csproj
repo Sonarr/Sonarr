@@ -8,7 +8,6 @@
     <PackageReference Include="Nancy.Owin" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Api\Sonarr.Api.csproj" />
     <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
     <ProjectReference Include="..\NzbDrone.Mono\Sonarr.Mono.csproj" />
     <ProjectReference Include="..\NzbDrone.SignalR\Sonarr.SignalR.csproj" />
