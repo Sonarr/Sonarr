@@ -14,7 +14,7 @@
     <PackageReference Include="OAuth" Version="1.0.3" />
     <PackageReference Include="RestSharp" Version="106.15.0" />
     <PackageReference Include="TinyTwitter" Version="1.1.2" />
-    <PackageReference Include="xmlrpcnet" Version="3.0.0.266" />
+    <PackageReference Include="Kveer.XmlRPC" Version="1.2.0" />
     <PackageReference Include="MonoTorrent" Version="2.0.5" />
     <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.0-0" />
   </ItemGroup>
