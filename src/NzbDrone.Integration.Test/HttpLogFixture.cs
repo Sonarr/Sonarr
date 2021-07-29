@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using Sonarr.Api.V3.Series;
 
 namespace NzbDrone.Integration.Test
 {
@@ -20,7 +21,7 @@ namespace NzbDrone.Integration.Test
             var logFile = "sonarr.trace.txt";
             var logLines = Logs.GetLogFileLines(logFile);
 
-            var resultPost = Series.InvalidPost(new Api.Series.SeriesResource());
+            var resultPost = Series.InvalidPost(new SeriesResource());
 
             // Skip 2 and 1 to ignore the logs endpoint
             logLines = Logs.GetLogFileLines(logFile).Skip(logLines.Length + 2).ToArray();

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using NzbDrone.Api.Series;
+using Sonarr.Api.V3.Series;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client

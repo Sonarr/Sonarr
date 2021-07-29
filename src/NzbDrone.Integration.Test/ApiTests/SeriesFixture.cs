@@ -17,7 +17,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var series = Series.Lookup("tvdb:266189").Single();
 
-            series.ProfileId = 1;
+            series.QualityProfileId = 1;
             series.LanguageProfileId = 1;
             series.Path = Path.Combine(SeriesRootFolder, series.Title);
             series.Tags = new HashSet<int>();
@@ -48,7 +48,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var series = Series.Lookup("tvdb:266189").Single();
 
-            series.ProfileId = 1;
+            series.QualityProfileId = 1;
 
             Series.InvalidPost(series);
         }
@@ -60,7 +60,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var series = Series.Lookup("tvdb:266189").Single();
 
-            series.ProfileId = 1;
+            series.QualityProfileId = 1;
             series.LanguageProfileId = 1;
             series.Path = Path.Combine(SeriesRootFolder, series.Title);
 
@@ -68,7 +68,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             result.Should().NotBeNull();
             result.Id.Should().NotBe(0);
-            result.ProfileId.Should().Be(1);
+            result.QualityProfileId.Should().Be(1);
             result.LanguageProfileId.Should().Be(1);
             result.Path.Should().Be(Path.Combine(SeriesRootFolder, series.Title));
         }
@@ -107,16 +107,16 @@ namespace NzbDrone.Integration.Test.ApiTests
             var series = EnsureSeries(266189, "The Blacklist");
 
             var profileId = 1;
-            if (series.ProfileId == profileId)
+            if (series.QualityProfileId == profileId)
             {
                 profileId = 2;
             }
 
-            series.ProfileId = profileId;
+            series.QualityProfileId = profileId;
 
             var result = Series.Put(series);
 
-            Series.Get(series.Id).ProfileId.Should().Be(profileId);
+            Series.Get(series.Id).QualityProfileId.Should().Be(profileId);
         }
 
         [Test, Order(3)]
