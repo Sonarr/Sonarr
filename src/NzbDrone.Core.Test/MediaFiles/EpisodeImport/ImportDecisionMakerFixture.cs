@@ -25,7 +25,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
     {
         private List<string> _videoFiles;
         private LocalEpisode _localEpisode;
-        private DownloadClientItem _downloadClientItem;
         private Series _series;
         private QualityModel _quality;
 
