@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             _logger = logger;
         }
 
-        public override string Link => "https://kodi.tv";
+        public override string Link => "https://kodi.tv/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
