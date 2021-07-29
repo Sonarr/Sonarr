@@ -1,6 +1,6 @@
 using System;
 using FluentMigrator;
-using FluentMigrator.Runner;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -35,10 +35,14 @@ namespace NzbDrone.Core.Test.Framework
             return db.GetDirectDataMapper();
         }
 
+        protected override void SetupLogging()
+        {
+            Mocker.SetConstant<ILoggerProvider>(Mocker.Resolve<MigrationLoggerProvider>());
+        }
+
         [SetUp]
         public override void SetupDb()
         {
-            Mocker.SetConstant<IAnnouncer>(Mocker.Resolve<MigrationLogger>());
             SetupContainer();
         }
     }

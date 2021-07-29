@@ -1,27 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using FluentMigrator;
+using System.Text.RegularExpressions;
 using FluentMigrator.Expressions;
 using FluentMigrator.Model;
-using FluentMigrator.Runner;
-using FluentMigrator.Runner.Announcers;
 using FluentMigrator.Runner.Generators.SQLite;
+using FluentMigrator.Runner.Initialization;
+using FluentMigrator.Runner.Processors;
 using FluentMigrator.Runner.Processors.SQLite;
-using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
-    public class NzbDroneSqliteProcessor : SQLiteProcessor
+    public class NzbDroneSQLiteProcessor : SQLiteProcessor
     {
-        public NzbDroneSqliteProcessor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, FluentMigrator.Runner.Processors.IDbFactory factory)
-            : base(connection, generator, announcer, options, factory)
+        public NzbDroneSQLiteProcessor(SQLiteDbFactory factory,
+                                       SQLiteGenerator generator,
+                                       ILogger<NzbDroneSQLiteProcessor> logger,
+                                       IOptionsSnapshot<ProcessorOptions> options,
+                                       IConnectionStringAccessor connectionStringAccessor,
+                                       IServiceProvider serviceProvider,
+                                       SQLiteQuoter quoter)
+        : base(factory, generator, logger, options, connectionStringAccessor, serviceProvider, quoter)
         {
 
         }
-
-        public override bool SupportsTransactions => true;
 
         public override void Process(AlterColumnExpression expression)
         {
@@ -107,7 +111,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         protected virtual TableDefinition GetTableSchema(string tableName)
         {
-            var schemaDumper = new  SqliteSchemaDumper(this, Announcer);
+            var schemaDumper = new SqliteSchemaDumper(this);
             var schema = schemaDumper.ReadDbSchema();
 
             return schema.Single(v => v.Name == tableName);
