@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace Sonarr.Http.Extensions.Pipelines
             _logger = logger;
 
             // On Mono GZipStream/DeflateStream leaks memory if an exception is thrown, use an intermediate buffer in that case.
-            _writeGZipStream = PlatformInfo.IsMono ? WriteGZipStreamMono : (Action<Action<Stream>, Stream>)WriteGZipStream;
+            _writeGZipStream = (Action<Action<Stream>, Stream>)WriteGZipStream;
         }
 
         public void Register(IPipelines pipelines)
@@ -81,7 +81,7 @@ namespace Sonarr.Http.Extensions.Pipelines
 
         private static bool ContentLengthIsTooSmall(Response response)
         {
-            var contentLength = response.Headers.GetValueOrDefault("Content-Length");
+            var contentLength = response.Headers.TryGetValue("Content-Length", out var value) ? value : null;
 
             if (contentLength != null && long.Parse(contentLength) < 1024)
             {
@@ -93,7 +93,7 @@ namespace Sonarr.Http.Extensions.Pipelines
 
         private static bool AlreadyGzipEncoded(Response response)
         {
-            var contentEncoding = response.Headers.GetValueOrDefault("Content-Encoding");
+            var contentEncoding = response.Headers.TryGetValue("Content-Encoding", out var value) ? value : null;
 
             if (contentEncoding == "gzip")
             {

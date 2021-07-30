@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nancy;
 using NLog;
 using Sonarr.Http.Frontend.Mappers;
@@ -18,11 +19,11 @@ namespace Sonarr.Http.Frontend
             _requestMappers = requestMappers;
             _logger = logger;
 
-            Get("/{resource*}",  x => Index());
-            Get("/",  x => Index());
+            Get("/{resource*}", async (x, ct) => await Index());
+            Get("/", async (x, ct) => await Index());
         }
 
-        private Response Index()
+        private async Task<Response> Index()
         {
             var path = Request.Url.Path;
 
@@ -38,7 +39,7 @@ namespace Sonarr.Http.Frontend
 
             if (mapper != null)
             {
-                return mapper.GetResponse(path);
+                return await mapper.GetResponse(path);
             }
 
             _logger.Warn("Couldn't find handler for {0}", path);

@@ -1,17 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
-    <Platforms>x86</Platforms>
+    <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
+  <!-- 
+       The netstandard veresion here doesn't work in net framework
+       See https://github.com/xamarin/XamarinComponents/issues/282
+  -->
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.7.14" />
+    <PackageReference Include="Mono.Posix.NETStandard" Version="5.20.1-servarr1" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.5.21301.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Mono.Posix">
-      <HintPath>..\Libraries\Mono.Posix.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

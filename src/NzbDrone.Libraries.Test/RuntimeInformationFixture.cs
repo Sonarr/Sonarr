@@ -15,10 +15,12 @@ namespace NzbDrone.Libraries.Test
             var isWindows = OsInfo.IsWindows;
             var isLinux = OsInfo.IsLinux;
             var isOsx = OsInfo.IsOsx;
+            var isBsd = OsInfo.Os == Os.Bsd;
 
             RuntimeInformation.IsOSPlatform(OSPlatform.Windows).Should().Be(isWindows);
-            RuntimeInformation.IsOSPlatform(OSPlatform.Linux).Should().Be(isLinux && !isOsx);
+            RuntimeInformation.IsOSPlatform(OSPlatform.Linux).Should().Be(isLinux && !isOsx && !isBsd);
             RuntimeInformation.IsOSPlatform(OSPlatform.OSX).Should().Be(isOsx);
+            RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD).Should().Be(isBsd);
         }
     }
 }

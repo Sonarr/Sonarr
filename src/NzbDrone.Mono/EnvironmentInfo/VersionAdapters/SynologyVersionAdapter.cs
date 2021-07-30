@@ -8,10 +8,9 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
 {
     public class SynologyVersionAdapter : IOsVersionAdapter
     {
-        private readonly IDiskProvider _diskProvider;
         private const string NAME = "DSM";
         private const string FULL_NAME = "Synology DSM";
-
+        private readonly IDiskProvider _diskProvider;
 
         public SynologyVersionAdapter(IDiskProvider diskProvider)
         {
@@ -37,7 +36,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
             var minor = "0";
 
             var fileContent = _diskProvider.ReadAllText(versionFile);
-            var lines = Regex.Split(fileContent, "\r\n|\r|\n"); ;
+            var lines = Regex.Split(fileContent, "\r\n|\r|\n");
 
             foreach (var line in lines)
             {

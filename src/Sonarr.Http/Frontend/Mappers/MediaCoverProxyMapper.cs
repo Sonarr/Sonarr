@@ -1,8 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Nancy;
-using Nancy.Responses;
 using NzbDrone.Core.MediaCover;
 
 namespace Sonarr.Http.Frontend.Mappers
@@ -28,13 +27,13 @@ namespace Sonarr.Http.Frontend.Mappers
             return resourceUrl.StartsWith("/MediaCoverProxy/", StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public Response GetResponse(string resourceUrl)
+        public Task<Response> GetResponse(string resourceUrl)
         {
             var match = _regex.Match(resourceUrl);
 
             if (!match.Success)
             {
-                return new NotFoundResponse();
+                return Task.FromResult<Response>(new NotFoundResponse());
             }
 
             var hash = match.Groups["hash"].Value;
@@ -42,7 +41,7 @@ namespace Sonarr.Http.Frontend.Mappers
 
             var imageData = _mediaCoverProxy.GetImage(hash);
 
-            return new StreamResponse(() => new MemoryStream(imageData), MimeTypes.GetMimeType(filename));
+            return Task.FromResult<Response>(new ByteArrayResponse(imageData, MimeTypes.GetMimeType(filename)));
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,7 +29,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public static string AppName { get; } = "Sonarr";
 
         public static Version Version { get; }
-        public static String Branch { get; }
+        public static string Branch { get; }
         public static string Release { get; }
 
         public static DateTime BuildDateTime

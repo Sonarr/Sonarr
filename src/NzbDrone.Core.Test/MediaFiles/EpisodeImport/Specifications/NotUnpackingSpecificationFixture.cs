@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_false_if_unopacking_on_linux()
         {
-            MonoOnly();
+            PosixOnly();
 
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddDays(-5));

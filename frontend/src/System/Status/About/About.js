@@ -18,7 +18,8 @@ class About extends Component {
       version,
       packageVersion,
       packageAuthor,
-      isMonoRuntime,
+      isNetCore,
+      isDocker,
       runtimeVersion,
       appData,
       startupPath,
@@ -45,14 +46,18 @@ class About extends Component {
           }
 
           {
-            isMonoRuntime ?
+            isNetCore &&
               <DescriptionListItem
-                title="Mono Version"
-                data={runtimeVersion}
-              /> :
+                title=".Net Version"
+                data={`Yes (${runtimeVersion})`}
+              />
+          }
+
+          {
+            isDocker &&
               <DescriptionListItem
-                title=".net Version"
-                data={runtimeVersion}
+                title="Docker"
+                data={'Yes'}
               />
           }
 
@@ -92,8 +97,9 @@ About.propTypes = {
   version: PropTypes.string.isRequired,
   packageVersion: PropTypes.string,
   packageAuthor: PropTypes.string,
-  isMonoRuntime: PropTypes.bool.isRequired,
+  isNetCore: PropTypes.bool.isRequired,
   runtimeVersion: PropTypes.string.isRequired,
+  isDocker: PropTypes.bool.isRequired,
   appData: PropTypes.string.isRequired,
   startupPath: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,

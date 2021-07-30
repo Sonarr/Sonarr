@@ -30,6 +30,8 @@ using NzbDrone.Integration.Test.Client;
 using NzbDrone.SignalR;
 using NzbDrone.Test.Common.Categories;
 using RestSharp;
+using NzbDrone.Common.Processes;
+using Sonarr.Api.V3.System.Tasks;
 
 namespace NzbDrone.Integration.Test
 {
@@ -41,6 +43,7 @@ namespace NzbDrone.Integration.Test
 
         public ClientBase<BlocklistResource> Blocklist;
         public CommandClient Commands;
+        public ClientBase<TaskResource> Tasks;
         public DownloadClientClient DownloadClients;
         public EpisodeClient Episodes;
         public ClientBase<HistoryResource> History;
@@ -99,22 +102,18 @@ namespace NzbDrone.Integration.Test
 
         protected virtual void InitRestClients()
         {
-            RestClient = new RestClient(RootUrl + "api/");
+            RestClient = new RestClient(RootUrl + "api/v3/");
             RestClient.AddDefaultHeader("Authentication", ApiKey);
             RestClient.AddDefaultHeader("X-Api-Key", ApiKey);
 
-            RestClientv3 = new RestClient(RootUrl + "api/v3/");
-            RestClientv3.AddDefaultHeader("Authentication", ApiKey);
-            RestClientv3.AddDefaultHeader("X-Api-Key", ApiKey);
-
             Blocklist = new ClientBase<BlocklistResource>(RestClient, ApiKey);
             Commands = new CommandClient(RestClient, ApiKey);
+            Tasks = new ClientBase<TaskResource>(RestClient, ApiKey, "system/task");
             DownloadClients = new DownloadClientClient(RestClient, ApiKey);
             Episodes = new EpisodeClient(RestClient, ApiKey);
             History = new ClientBase<HistoryResource>(RestClient, ApiKey);
             HostConfig = new ClientBase<HostConfigResource>(RestClient, ApiKey, "config/host");
             Indexers = new IndexerClient(RestClient, ApiKey);
-            Indexersv3 = new IndexerClient(RestClientv3, ApiKey);
             Logs = new LogsClient(RestClient, ApiKey);
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, ApiKey, "config/naming");
             Notifications = new NotificationClient(RestClient, ApiKey);
@@ -137,7 +136,7 @@ namespace NzbDrone.Integration.Test
         [SetUp]
         public void IntegrationSetUp()
         {
-            TempDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "_test_" + Process.GetCurrentProcess().Id + "_" + DateTime.UtcNow.Ticks);
+            TempDirectory = Path.Combine(TestContext.CurrentContext.TestDirectory, "_test_" + ProcessProvider.GetCurrentProcessId() + "_" + DateTime.UtcNow.Ticks);
 
             // Wait for things to get quiet, otherwise the previous test might influence the current one.
             Commands.WaitAll();
@@ -285,6 +284,8 @@ namespace NzbDrone.Integration.Test
                 }
             }
 
+            Commands.WaitAll();
+
             return result;
         }
 
@@ -309,7 +310,8 @@ namespace NzbDrone.Integration.Test
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, "Fake Episode");
 
-                Commands.PostAndWait(new CommandResource { Name = "refreshseries", Body = new RefreshSeriesCommand(series.Id) });
+                Commands.PostAndWait(new RefreshSeriesCommand( series.Id ));
+
                 Commands.WaitAll();
 
                 result = Episodes.GetEpisodesInSeries(series.Id).Single(v => v.SeasonNumber == season && v.EpisodeNumber == episode);

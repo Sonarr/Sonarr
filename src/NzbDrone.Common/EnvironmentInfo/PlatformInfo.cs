@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
 namespace NzbDrone.Common.EnvironmentInfo
@@ -9,7 +7,8 @@ namespace NzbDrone.Common.EnvironmentInfo
     public enum PlatformType
     {
         DotNet = 0,
-        Mono = 1
+        Mono = 1,
+        NetCore = 2
     }
 
     public interface IPlatformInfo
@@ -19,28 +18,18 @@ namespace NzbDrone.Common.EnvironmentInfo
 
     public class PlatformInfo : IPlatformInfo
     {
-        private static readonly Regex MonoVersionRegex = new Regex(@"(?<=\W|^)(?<version>\d+\.\d+(\.\d+)?(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         private static PlatformType _platform;
         private static Version _version;
 
         static PlatformInfo()
         {
-            if (Type.GetType("Mono.Runtime") != null)
-            {
-                _platform = PlatformType.Mono;
-                _version = GetMonoVersion();
-            }
-            else
-            {
-                _platform = PlatformType.DotNet;
-                _version = GetDotNetVersion();
-            }
+            _platform = PlatformType.NetCore;
+            _version = Environment.Version;
         }
 
         public static PlatformType Platform => _platform;
-        public static bool IsMono => Platform == PlatformType.Mono;
         public static bool IsDotNet => Platform == PlatformType.DotNet;
+        public static bool IsNetCore => Platform == PlatformType.NetCore;
 
         public static string PlatformName
         {
@@ -50,8 +39,10 @@ namespace NzbDrone.Common.EnvironmentInfo
                 {
                     return ".NET";
                 }
-
-                return "Mono";
+                else
+                {
+                    return ".NET Core";
+                }
             }
         }
 
@@ -60,35 +51,6 @@ namespace NzbDrone.Common.EnvironmentInfo
         public static Version GetVersion()
         {
             return _version;
-        }
-
-        private static Version GetMonoVersion()
-        {
-            try
-            {
-                var type = Type.GetType("Mono.Runtime");
-
-                if (type != null)
-                {
-                    var displayNameMethod = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
-                    if (displayNameMethod != null)
-                    {
-                        var displayName = displayNameMethod.Invoke(null, null).ToString();
-                        var versionMatch = MonoVersionRegex.Match(displayName);
-
-                        if (versionMatch.Success)
-                        {
-                            return new Version(versionMatch.Groups["version"].Value);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Couldnt get Mono version: " + ex.ToString());
-            }
-
-            return new Version();
         }
 
         private static Version GetDotNetVersion()

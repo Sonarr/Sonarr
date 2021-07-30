@@ -302,7 +302,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         [Test]
         public void should_get_relative_path_when_there_is_no_grandparent_mono()
         {
-            MonoOnly();
+            PosixOnly();
 
             var name = "Series.Title.S01E01.720p.HDTV.x264-Sonarr";
             var outputPath = "/";

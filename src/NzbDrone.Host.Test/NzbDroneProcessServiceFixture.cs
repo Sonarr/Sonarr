@@ -50,8 +50,8 @@ namespace NzbDrone.App.Test
                   .Setup(c => c.FindProcessByName(ProcessProvider.SONARR_CONSOLE_PROCESS_NAME))
                   .Returns(new List<ProcessInfo>
                            {
-                               new ProcessInfo {Id = 10},
-                               new ProcessInfo {Id = CURRENT_PROCESS_ID}
+                               new ProcessInfo { Id = 10 },
+                               new ProcessInfo { Id = CURRENT_PROCESS_ID }
                            });
 
             Assert.Throws<TerminateApplicationException>(() => Subject.PreventStartIfAlreadyRunning());
@@ -66,9 +66,8 @@ namespace NzbDrone.App.Test
                   .Setup(c => c.FindProcessByName(ProcessProvider.SONARR_PROCESS_NAME))
                   .Returns(new List<ProcessInfo>
                            {
-                               new ProcessInfo {Id = CURRENT_PROCESS_ID},
-                               new ProcessInfo {Id = 10}
-
+                               new ProcessInfo { Id = CURRENT_PROCESS_ID },
+                               new ProcessInfo { Id = 10 }
                            });
 
             Assert.Throws<TerminateApplicationException>(() => Subject.PreventStartIfAlreadyRunning());

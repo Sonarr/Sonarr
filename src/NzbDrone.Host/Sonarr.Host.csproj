@@ -1,20 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
-    <Platforms>x86</Platforms>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="2.2.0" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.5.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="6.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="6.0.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
     <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
-    <ProjectReference Include="..\NzbDrone.Mono\Sonarr.Mono.csproj" />
     <ProjectReference Include="..\NzbDrone.SignalR\Sonarr.SignalR.csproj" />
-    <ProjectReference Include="..\NzbDrone.Windows\Sonarr.Windows.csproj" />
     <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
     <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
   </ItemGroup>
@@ -23,6 +21,5 @@
       <HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 </Project>

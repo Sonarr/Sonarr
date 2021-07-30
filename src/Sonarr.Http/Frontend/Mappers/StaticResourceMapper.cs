@@ -30,7 +30,7 @@ namespace Sonarr.Http.Frontend.Mappers
         public override bool CanHandle(string resourceUrl)
         {
             resourceUrl = resourceUrl.ToLowerInvariant();
-            
+
             if (resourceUrl.StartsWith("/content/images/icons/manifest") ||
                 resourceUrl.StartsWith("/content/images/icons/browserconfig"))
             {

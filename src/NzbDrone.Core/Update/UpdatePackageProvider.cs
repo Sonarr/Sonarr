@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using NzbDrone.Common.Cloud;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
@@ -34,6 +35,8 @@ namespace NzbDrone.Core.Update
                                          .Resource("/update/{branch}")
                                          .AddQueryParam("version", currentVersion)
                                          .AddQueryParam("os", OsInfo.Os.ToString().ToLowerInvariant())
+                                         .AddQueryParam("arch", RuntimeInformation.OSArchitecture)
+                                         .AddQueryParam("runtime", PlatformInfo.Platform.ToString().ToLowerInvariant())
                                          .AddQueryParam("runtimeVer", _platformInfo.Version)
                                          .SetSegment("branch", branch);
 
@@ -45,17 +48,22 @@ namespace NzbDrone.Core.Update
 
             var update = _httpClient.Get<UpdatePackageAvailable>(request.Build()).Resource;
 
-            if (!update.Available) return null;
+            if (!update.Available)
+            {
+                return null;
+            }
 
             return update.UpdatePackage;
         }
-        
+
         public List<UpdatePackage> GetRecentUpdates(string branch, Version currentVersion, Version previousVersion)
         {
             var request = _requestBuilder.Create()
                                          .Resource("/update/{branch}/changes")
                                          .AddQueryParam("version", currentVersion)
                                          .AddQueryParam("os", OsInfo.Os.ToString().ToLowerInvariant())
+                                         .AddQueryParam("arch", RuntimeInformation.OSArchitecture)
+                                         .AddQueryParam("runtime", PlatformInfo.Platform.ToString().ToLowerInvariant())
                                          .AddQueryParam("runtimeVer", _platformInfo.Version)
                                          .SetSegment("branch", branch);
 

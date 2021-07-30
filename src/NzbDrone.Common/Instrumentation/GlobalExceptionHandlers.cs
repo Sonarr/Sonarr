@@ -32,23 +32,16 @@ namespace NzbDrone.Common.Instrumentation
         {
             var exception = e.ExceptionObject as Exception;
 
-            if (exception == null) return;
+            if (exception == null)
+            {
+                return;
+            }
 
             if (exception is NullReferenceException &&
                 exception.ToString().Contains("Microsoft.AspNet.SignalR.Transports.TransportHeartbeat.ProcessServerCommand"))
             {
                 Logger.Warn("SignalR Heartbeat interrupted");
                 return;
-            }
-
-            if (PlatformInfo.IsMono)
-            {
-                if (exception is TypeInitializationException && exception.InnerException is DllNotFoundException ||
-                    exception is DllNotFoundException)
-                {
-                    Logger.Debug(exception, "Minor Fail: " + exception.Message);
-                    return;
-                }
             }
 
             Console.WriteLine("EPIC FAIL: {0}", exception);

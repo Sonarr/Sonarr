@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,10 +11,10 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Host;
 using NzbDrone.Host.AccessControl;
 using NzbDrone.Host.Middleware;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
@@ -73,8 +74,21 @@ namespace NzbDrone.Host
                     {
                         options.ConfigureHttpsDefaults(configureOptions =>
                         {
-                            var certificate = new X509Certificate2();
-                            certificate.Import(_configFileProvider.SslCertPath, _configFileProvider.SslCertPassword, X509KeyStorageFlags.DefaultKeySet);
+                            X509Certificate2 certificate;
+
+                            try
+                            {
+                                certificate = new X509Certificate2(sslCertPath, _configFileProvider.SslCertPassword, X509KeyStorageFlags.DefaultKeySet);
+                            }
+                            catch (CryptographicException ex)
+                            {
+                                if (ex.HResult == 0x2 || ex.HResult == 0x2006D080)
+                                {
+                                    throw new SonarrStartupException(ex, $"The SSL certificate file {sslCertPath} does not exist");
+                                }
+
+                                throw new SonarrStartupException(ex);
+                            }
 
                             configureOptions.ServerCertificate = certificate;
                         });
@@ -83,6 +97,7 @@ namespace NzbDrone.Host
                 .ConfigureKestrel(serverOptions =>
                 {
                     serverOptions.AllowSynchronousIO = true;
+                    serverOptions.Limits.MaxRequestBodySize = null;
                 })
                 .ConfigureLogging(logging =>
                 {
@@ -93,15 +108,16 @@ namespace NzbDrone.Host
                 {
                     services
                     .AddSignalR()
-                    .AddJsonProtocol(options =>
+                    .AddNewtonsoftJsonProtocol(options =>
                     {
                         options.PayloadSerializerSettings = Json.GetSerializerSettings();
                     });
                 })
                 .Configure(app =>
                 {
-                    app.UsePathBase(_configFileProvider.UrlBase);
+                    app.UseRouting();
                     app.Properties["host.AppName"] = BuildInfo.AppName;
+                    app.UsePathBase(_configFileProvider.UrlBase);
 
                     foreach (var middleWare in _middlewares.OrderBy(c => c.Order))
                     {

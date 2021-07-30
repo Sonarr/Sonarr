@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Configuration
 
         public string Branch => GetValue("Branch", "main").ToLowerInvariant();
 
-        public string LogLevel => GetValue("LogLevel", "info");
+        public string LogLevel => GetValue("LogLevel", "info").ToLowerInvariant();
         public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
 
         public string SslCertPath => GetValue("SslCertPath", "");
@@ -198,9 +198,7 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        // public string UiFolder => GetValue("UiFolder", "UI", false);GetValue("UiFolder", "UI", false);
-        public string UiFolder => "UI";
-
+        public string UiFolder => BuildInfo.IsDebug ? Path.Combine("..", "UI") : "UI";
 
         public bool UpdateAutomatically => GetValueBoolean("UpdateAutomatically", false, false);
 
@@ -234,7 +232,7 @@ namespace NzbDrone.Core.Configuration
 
                     var valueHolder = parentContainer.Descendants(key).ToList();
 
-                    if (valueHolder.Count() == 1)
+                    if (valueHolder.Count == 1)
                     {
                         return valueHolder.First().Value.Trim();
                     }

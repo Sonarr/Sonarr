@@ -3,6 +3,7 @@ using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation.Paths;
@@ -50,10 +51,11 @@ namespace NzbDrone.Core.Test.ValidationTests
         [Test]
         public void should_not_be_valid_if_set_to_bin_folder()
         {
-            MonoOnly();
+            PosixOnly();
 
+            var bin = OsInfo.IsOsx ? "/System" : "/bin";
             var series = Builder<Series>.CreateNew()
-                                        .With(s => s.Path = "/bin")
+                                        .With(s => s.Path = bin)
                                         .Build();
 
             _validator.Validate(series).IsValid.Should().BeFalse();
@@ -62,10 +64,11 @@ namespace NzbDrone.Core.Test.ValidationTests
         [Test]
         public void should_not_be_valid_if_child_of_bin_folder()
         {
-            MonoOnly();
+            PosixOnly();
 
+            var bin = OsInfo.IsOsx ? "/System" : "/bin";
             var series = Builder<Series>.CreateNew()
-                                        .With(s => s.Path = "/bin/test")
+                                        .With(s => s.Path = Path.Combine(bin, "test"))
                                         .Build();
 
             _validator.Validate(series).IsValid.Should().BeFalse();

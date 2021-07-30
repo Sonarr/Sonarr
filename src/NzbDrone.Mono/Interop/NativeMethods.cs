@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.ConstrainedExecution;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 using Mono.Unix.Native;
 
 namespace NzbDrone.Mono.Interop
@@ -12,7 +9,7 @@ namespace NzbDrone.Mono.Interop
         // #define FICLONE _IOW(0x94, 9, int)
         FICLONE = 0x40049409
     }
-    
+
     internal static class NativeMethods
     {
         [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]

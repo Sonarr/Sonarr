@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NLog.Fluent;
 using NzbDrone.Common.EnvironmentInfo;

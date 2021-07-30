@@ -16,7 +16,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
     public class AppFolderInfo : IAppFolderInfo
     {
-        private readonly Environment.SpecialFolder DATA_SPECIAL_FOLDER = Environment.SpecialFolder.CommonApplicationData;
+        private readonly Environment.SpecialFolder _dataSpecialFolder = Environment.SpecialFolder.CommonApplicationData;
 
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(AppFolderInfo));
 
@@ -24,7 +24,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         {
             if (OsInfo.IsNotWindows)
             {
-                DATA_SPECIAL_FOLDER = Environment.SpecialFolder.ApplicationData;
+                _dataSpecialFolder = Environment.SpecialFolder.ApplicationData;
             }
 
             if (startupContext.Args.ContainsKey(StartupContext.APPDATA))
@@ -34,8 +34,8 @@ namespace NzbDrone.Common.EnvironmentInfo
             }
             else
             {
-                AppDataFolder = Path.Combine(Environment.GetFolderPath(DATA_SPECIAL_FOLDER, Environment.SpecialFolderOption.None), "Sonarr");
-                LegacyAppDataFolder = Path.Combine(Environment.GetFolderPath(DATA_SPECIAL_FOLDER, Environment.SpecialFolderOption.None), "NzbDrone");
+                AppDataFolder = Path.Combine(Environment.GetFolderPath(_dataSpecialFolder, Environment.SpecialFolderOption.DoNotVerify), "Sonarr");
+                LegacyAppDataFolder = Path.Combine(Environment.GetFolderPath(_dataSpecialFolder, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
             }
 
             StartUpFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;

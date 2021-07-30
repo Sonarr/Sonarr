@@ -1,23 +1,51 @@
-﻿using Sonarr.Api.V3.Commands;
-using RestSharp;
-using NzbDrone.Core.Messaging.Commands;
-using FluentAssertions;
-using System.Threading;
-using NUnit.Framework;
+﻿using System;
 using System.Linq;
+using System.Threading;
+using FluentAssertions;
+using Newtonsoft.Json;
+using NUnit.Framework;
+using NzbDrone.Core.Messaging.Commands;
+using Sonarr.Http.REST;
+using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client
 {
-    public class CommandClient : ClientBase<CommandResource>
+    public class SimpleCommandResource : RestResource
+    {
+        public string Name { get; set; }
+        public string CommandName { get; set; }
+        public string Message { get; set; }
+        public CommandPriority Priority { get; set; }
+        public CommandStatus Status { get; set; }
+        public DateTime Queued { get; set; }
+        public DateTime? Started { get; set; }
+        public DateTime? Ended { get; set; }
+        public TimeSpan? Duration { get; set; }
+        public string Exception { get; set; }
+        public CommandTrigger Trigger { get; set; }
+
+        [JsonIgnore]
+        public Command Body { get; set; }
+        [JsonProperty("body")]
+        public Command BodyReadOnly
+        {
+            get { return Body; }
+        }
+    }
+
+    public class CommandClient : ClientBase<SimpleCommandResource>
     {
         public CommandClient(IRestClient restClient, string apiKey)
-            : base(restClient, apiKey)
+        : base(restClient, apiKey, "command")
         {
         }
 
-        public CommandResource PostAndWait(CommandResource command)
+        public SimpleCommandResource PostAndWait<T>(T command)
+            where T : Command, new()
         {
-            var result = Post(command);
+            var request = BuildRequest();
+            request.AddJsonBody(command);
+            var result = Post<SimpleCommandResource>(request);
             result.Id.Should().NotBe(0);
 
             for (var i = 0; i < 50; i++)
@@ -48,7 +76,7 @@ namespace NzbDrone.Integration.Test.Client
                 Thread.Sleep(500);
                 resources = All();
             }
-            
+
             Assert.Fail("Commands still processing");
         }
     }

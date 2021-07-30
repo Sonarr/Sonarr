@@ -1,17 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
-    <Platforms>x86</Platforms>
+    <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.8.0" />
-    <PackageReference Include="FluentValidation" Version="8.4.0" />
-    <PackageReference Include="Moq" Version="4.12.0" />
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="FluentValidation" Version="8.6.2" />
+    <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="NLog" Version="4.7.14" />
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="RestSharp" Version="106.15.0" />
-    <PackageReference Include="Unity" Version="5.11.1" />
+    <PackageReference Include="Unity" Version="5.11.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />

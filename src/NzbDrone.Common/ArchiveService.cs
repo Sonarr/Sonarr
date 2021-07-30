@@ -85,7 +85,9 @@ namespace NzbDrone.Common
                     string fullZipToPath = Path.Combine(destination, entryFileName);
                     string directoryName = Path.GetDirectoryName(fullZipToPath);
                     if (directoryName.Length > 0)
+                    {
                         Directory.CreateDirectory(directoryName);
+                    }
 
                     // Unzip file in buffered chunks. This is just as fast as unpacking to a buffer the full size
                     // of the file, but does not waste memory.

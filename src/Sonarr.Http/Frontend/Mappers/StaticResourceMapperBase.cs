@@ -1,7 +1,7 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Nancy;
-using Nancy.Responses;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -28,14 +28,15 @@ namespace Sonarr.Http.Frontend.Mappers
 
         public abstract bool CanHandle(string resourceUrl);
 
-        public virtual Response GetResponse(string resourceUrl)
+        public async virtual Task<Response> GetResponse(string resourceUrl)
         {
             var filePath = Map(resourceUrl);
 
             if (_diskProvider.FileExists(filePath, _caseSensitive))
             {
-                var response = new StreamResponse(() => GetContentStream(filePath), MimeTypes.GetMimeType(filePath));
-                return new MaterialisingResponse(response);
+                var data = await GetContent(filePath).ConfigureAwait(false);
+
+                return new ByteArrayResponse(data, MimeTypes.GetMimeType(filePath));
             }
 
             _logger.Warn("File {0} not found", filePath);
@@ -43,9 +44,17 @@ namespace Sonarr.Http.Frontend.Mappers
             return NotFoundResponse;
         }
 
-        protected virtual Stream GetContentStream(string filePath)
+        protected async virtual Task<byte[]> GetContent(string filePath)
         {
-            return File.OpenRead(filePath);
+            using (var output = new MemoryStream())
+            {
+                using (var file = File.OpenRead(filePath))
+                {
+                    await file.CopyToAsync(output).ConfigureAwait(false);
+                }
+
+                return output.ToArray();
+            }
         }
     }
 }

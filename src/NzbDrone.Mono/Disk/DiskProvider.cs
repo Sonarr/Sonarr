@@ -9,22 +9,19 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Mono.Disk
 {
     public class DiskProvider : DiskProviderBase
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProvider));
+        // Mono supports sending -1 for a uint to indicate that the owner or group should not be set
+        // `unchecked((uint)-1)` and `uint.MaxValue` are the same thing.
+        private const uint UNCHANGED_ID = uint.MaxValue;
 
         private readonly Logger _logger;
         private readonly IProcMountProvider _procMountProvider;
         private readonly ISymbolicLinkResolver _symLinkResolver;
         private readonly ICreateRefLink _createRefLink;
-
-        // Mono supports sending -1 for a uint to indicate that the owner or group should not be set
-        // `unchecked((uint)-1)` and `uint.MaxValue` are the same thing.
-        private const uint UNCHANGED_ID = uint.MaxValue;
 
         public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver, ICreateRefLink createRefLink, Logger logger)
         {
@@ -49,7 +46,7 @@ namespace NzbDrone.Mono.Disk
 
             if (mount == null)
             {
-                Logger.Debug("Unable to get free space for '{0}', unable to find suitable drive", path);
+                _logger.Debug("Unable to get free space for '{0}', unable to find suitable drive", path);
                 return null;
             }
 
@@ -63,7 +60,6 @@ namespace NzbDrone.Mono.Disk
 
         public override void SetEveryonePermissions(string filename)
         {
-            
         }
 
         public override void SetFilePermissions(string path, string mask, string group)
@@ -87,7 +83,7 @@ namespace NzbDrone.Mono.Disk
 
         protected void SetPermissions(string path, string mask, string group, FilePermissions permissions)
         {
-            Logger.Debug("Setting permissions: {0} on {1}", mask, path);
+            _logger.Debug("Setting permissions: {0} on {1}", mask, path);
 
             // Preserve non-access permissions
             if (Syscall.stat(path, out var curStat) < 0)
@@ -167,7 +163,7 @@ namespace NzbDrone.Mono.Disk
             }
             catch (Exception ex)
             {
-                Logger.Debug(ex, "Failed to copy permissions from {0} to {1}", sourcePath, targetPath);
+                _logger.Debug(ex, "Failed to copy permissions from {0} to {1}", sourcePath, targetPath);
             }
         }
 
@@ -252,7 +248,9 @@ namespace NzbDrone.Mono.Disk
                     newFile.CreateSymbolicLinkTo(fullPath);
                 }
             }
-            else if (PlatformInfo.GetVersion() > new Version(6, 0) && (!FileExists(destination) || overwrite))
+            else if (((PlatformInfo.Platform == PlatformType.Mono && PlatformInfo.GetVersion() >= new Version(6, 0)) ||
+                      PlatformInfo.Platform == PlatformType.NetCore) &&
+                     (!FileExists(destination) || overwrite))
             {
                 TransferFilePatched(source, destination, overwrite, false);
             }
@@ -297,7 +295,8 @@ namespace NzbDrone.Mono.Disk
                     throw;
                 }
             }
-            else if (PlatformInfo.GetVersion() > new Version(6, 0) && !FileExists(destination))
+            else if ((PlatformInfo.Platform == PlatformType.Mono && PlatformInfo.GetVersion() >= new Version(6, 0)) ||
+                     PlatformInfo.Platform == PlatformType.NetCore)
             {
                 TransferFilePatched(source, destination, false, true);
             }
@@ -306,7 +305,7 @@ namespace NzbDrone.Mono.Disk
                 base.MoveFileInternal(source, destination);
             }
         }
-        
+
         private void TransferFilePatched(string source, string destination, bool overwrite, bool move)
         {
             // Mono 6.x throws errors if permissions or timestamps cannot be set
@@ -315,7 +314,7 @@ namespace NzbDrone.Mono.Disk
             // Catch the exception and attempt to handle these edgecases
 
             // Mono 6.x till 6.10 doesn't properly try use rename first.
-            if (move && PlatformInfo.GetVersion() < new Version(6, 10))
+            if (move && (PlatformInfo.Platform == PlatformType.NetCore))
             {
                 if (Syscall.lstat(source, out var sourcestat) == 0 &&
                     Syscall.lstat(destination, out var deststat) != 0 &&
@@ -334,7 +333,7 @@ namespace NzbDrone.Mono.Disk
                 }
                 else
                 {
-                    base.CopyFileInternal(source, destination, overwrite);
+                    base.CopyFileInternal(source, destination);
                 }
             }
             catch (UnauthorizedAccessException)
@@ -343,30 +342,10 @@ namespace NzbDrone.Mono.Disk
                 var dstInfo = new FileInfo(destination);
                 var exists = dstInfo.Exists && srcInfo.Exists;
 
-                if (exists && dstInfo.Length == 0 && srcInfo.Length != 0)
+                if (PlatformInfo.Platform == PlatformType.NetCore && exists && dstInfo.Length == srcInfo.Length)
                 {
-                    // mono >=6.6 bug: zero length file since chmod happens at the start
-                    _logger.Debug("Mono failed to {2} file likely due to known mono bug, attempting to {2} directly. '{0}' -> '{1}'", source, destination, move ? "move" : "copy");
-
-                    try
-                    {
-                        _logger.Trace("Copying content from {0} to {1} ({2} bytes)", source, destination, srcInfo.Length);
-                        using (var srcStream = new FileStream(source, FileMode.Open, FileAccess.Read))
-                        using (var dstStream = new FileStream(destination, FileMode.Create, FileAccess.Write))
-                        {
-                            srcStream.CopyTo(dstStream);
-                        }
-                    }
-                    catch
-                    {
-                        // If it fails again then bail
-                        throw;
-                    }
-                }
-                else if (exists && dstInfo.Length == srcInfo.Length)
-                {
-                    // mono 6.0, 6.4 bug: full length file since utime and chmod happens at the end
-                    _logger.Debug("Mono failed to {2} file likely due to known mono bug, attempting to {2} directly. '{0}' -> '{1}'", source, destination, move ? "move" : "copy");
+                    // mono 6.0, mono 6.4 and netcore 3.1 bug: full length file since utime and chmod happens at the end
+                    _logger.Debug("{3} failed to {2} file likely due to known {3} bug, attempting to {2} directly. '{0}' -> '{1}'", source, destination, move ? "move" : "copy", PlatformInfo.PlatformName);
 
                     // Check at least part of the file since UnauthorizedAccess can happen due to legitimate reasons too
                     var checkLength = (int)Math.Min(64 * 1024, dstInfo.Length);
@@ -437,7 +416,10 @@ namespace NzbDrone.Mono.Disk
             {
                 var fileInfo = UnixFileSystemInfo.GetFileSystemEntry(source);
 
-                if (fileInfo.IsSymbolicLink) return false;
+                if (fileInfo.IsSymbolicLink)
+                {
+                    return false;
+                }
 
                 fileInfo.CreateLink(destination);
                 return true;
@@ -446,17 +428,17 @@ namespace NzbDrone.Mono.Disk
             {
                 if (ex.ErrorCode == Errno.EXDEV)
                 {
-                    Logger.Trace("Hardlink '{0}' to '{1}' failed due to cross-device access.", source, destination);
+                    _logger.Trace("Hardlink '{0}' to '{1}' failed due to cross-device access.", source, destination);
                 }
                 else
                 {
-                    Logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
+                    _logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
                 }
                 return false;
             }
             catch (Exception ex)
             {
-                Logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
+                _logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
                 return false;
             }
         }

@@ -87,7 +87,10 @@ namespace NzbDrone.Host.AccessControl
 
         private bool IsFirewallEnabled()
         {
-            if (OsInfo.IsNotWindows) return false;
+            if (OsInfo.IsNotWindows)
+            {
+                return false;
+            }
 
             try
             {

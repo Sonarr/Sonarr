@@ -1,6 +1,13 @@
 <Project>
   <!-- Common to all Sonarr Projects -->
   <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <RuntimeIdentifiers>win-x64;win-x86;osx-x64;linux-x64;linux-musl-x64;linux-arm;linux-arm64;linux-musl-arm64</RuntimeIdentifiers>
+
     <SonarrRootDir>$(MSBuildThisFileDirectory)..\</SonarrRootDir>
 
     <!-- Specifies the type of output -->
@@ -17,6 +24,10 @@
     <SonarrProject Condition="$(MSBuildProjectName.StartsWith('Sonarr'))">true</SonarrProject>
     <SonarrProject Condition="$(MSBuildProjectName.StartsWith('ServiceInstall'))">true</SonarrProject>
     <SonarrProject Condition="$(MSBuildProjectName.StartsWith('ServiceUninstall'))">true</SonarrProject>
+
+    <!-- A test project gets the test sdk packages automatically added -->
+    <TestProject>false</TestProject>
+    <TestProject Condition="$(MSBuildProjectName.EndsWith('.Test'))">true</TestProject>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -32,12 +43,11 @@
     <OutputPath Condition="'$(SonarrOutputType)'=='Update'">$(SonarrRootDir)_output\Sonarr.Update\</OutputPath>
 
     <!-- Paths relative to project file for better readability -->
+    <EnableBaseIntermediateOutputPathMismatchWarning>false</EnableBaseIntermediateOutputPathMismatchWarning>
     <BaseIntermediateOutputPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)', '$(BaseIntermediateOutputPath)'))</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)'))</IntermediateOutputPath>
     <OutputPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)', '$(OutputPath)'))</OutputPath>
 
-    <!-- below net4.7.1 the new portable pdb format has no line numbers, pdb to mdb probably doesn't like it either -->
-    <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   
@@ -45,17 +55,19 @@
   <PropertyGroup Condition="'$(SonarrOutputType)'=='Test'">
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <SelfContained>false</SelfContained>
   </PropertyGroup>
 
   <!-- Set the Product and Version info for our own projects -->
   <PropertyGroup Condition="'$(SonarrProject)'=='true'">
     <Product>Sonarr</Product>
     <Company>sonarr.tv</Company>
-    <Copyright>Copyright 2010-$([System.DateTime]::Now.ToString('yyyy')) sonarr.tv (GNU General Public v3)</Copyright>
+    <Copyright>Copyright 2014-$([System.DateTime]::Now.ToString('yyyy')) sonarr.tv (GNU General Public v3)</Copyright>
     
     <!-- Should be replaced by CI -->
     <AssemblyVersion>10.0.0.*</AssemblyVersion>
     <AssemblyConfiguration>$(Configuration)-dev</AssemblyConfiguration>
+    <NeutralLanguage>en</NeutralLanguage>
 
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
@@ -71,10 +83,64 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- We don't want separate framework directories till we go dotnet core -->
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-
     <!-- For now keep the NzbDrone namespace -->
     <RootNamespace Condition="'$(SonarrProject)'=='true'">$(MSBuildProjectName.Replace('Sonarr','NzbDrone'))</RootNamespace>
   </PropertyGroup>
+
+  <!-- Standard testing packages -->
+  <ItemGroup Condition="'$(TestProject)'=='true'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="NunitXml.TestLogger" Version="2.1.62" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TestProject)'=='true' and '$(TargetFramework)'=='net6.0'">
+    <PackageReference Include="coverlet.collector" Version="3.0.4-preview.27.ge7cb7c3b40" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(SonarrProject)'=='true' and '$(EnableAnalyzers)'=='false'">
+    <!-- FXCop Built into Net5 SDK now as NETAnalyzers, Enabled by default on net5 projects -->
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+  </PropertyGroup>
+
+  <!--
+       Set runtime identifier to local system type if not specified
+  -->
+  <Choose>
+    <When Condition="'$(OS)' == 'Windows_NT'">
+      <PropertyGroup>
+        <IsWindows>true</IsWindows>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
+      <PropertyGroup>
+        <IsOSX>true</IsOSX>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <IsLinux>true</IsLinux>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <PropertyGroup Condition="'$(IsWindows)' == 'true' and
+                            '$(RuntimeIdentifier)' == ''">
+    <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsLinux)' == 'true' and
+                            '$(RuntimeIdentifier)' == ''">
+    <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsOSX)' == 'true' and
+                            '$(RuntimeIdentifier)' == ''">
+    <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
+    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
 </Project>

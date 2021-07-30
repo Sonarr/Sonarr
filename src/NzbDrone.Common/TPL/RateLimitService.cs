@@ -33,7 +33,7 @@ namespace NzbDrone.Common.TPL
             var waitUntil = DateTime.UtcNow.Add(interval);
 
             if (subKey.IsNotNullOrWhiteSpace())
-            { 
+            {
                 // Expand the base key timer, but don't extend it beyond now+interval.
                 var baseUntil = _rateLimitStore.AddOrUpdate(key,
                     (s) => waitUntil,
