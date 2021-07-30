@@ -46,6 +46,14 @@ module.exports = (env) => {
       alias: {
         jquery: 'jquery/src/jquery',
         'react-middle-truncate': 'react-middle-truncate/lib/react-middle-truncate'
+      },
+      fallback: {
+        buffer: false,
+        http: false,
+        https: false,
+        url: false,
+        util: false,
+        net: false
       }
     },
 

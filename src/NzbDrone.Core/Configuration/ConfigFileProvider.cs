@@ -36,7 +36,8 @@ namespace NzbDrone.Core.Configuration
         string ConsoleLogLevel { get; }
         string Branch { get; }
         string ApiKey { get; }
-        string SslCertHash { get; }
+        string SslCertPath { get; }
+        string SslCertPassword { get; }
         string UrlBase { get; }
         string UiFolder { get; }
         string InstanceName { get; }
@@ -102,15 +103,12 @@ namespace NzbDrone.Core.Configuration
                     continue;
                 }
 
-                if (configValue.Key.Equals("SslCertHash", StringComparison.InvariantCultureIgnoreCase) && configValue.Value.ToString().IsNotNullOrWhiteSpace())
-                {
-                    SetValue(configValue.Key.FirstCharToUpper(), HiddenCharacterRegex.Replace(configValue.Value.ToString(), string.Empty));
-                    continue;
-                }
-
                 object currentValue;
                 allWithDefaults.TryGetValue(configValue.Key, out currentValue);
-                if (currentValue == null) continue;
+                if (currentValue == null)
+                {
+                    continue;
+                }
 
                 var equal = configValue.Value.ToString().Equals(currentValue.ToString());
 
@@ -186,7 +184,8 @@ namespace NzbDrone.Core.Configuration
         public string LogLevel => GetValue("LogLevel", "info");
         public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
 
-        public string SslCertHash => GetValue("SslCertHash", "");
+        public string SslCertPath => GetValue("SslCertPath", "");
+        public string SslCertPassword => GetValue("SslCertPassword", "");
 
         public string UrlBase
         {

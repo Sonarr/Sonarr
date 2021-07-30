@@ -9,6 +9,7 @@ namespace NzbDrone.Host
 {
     public class Router
     {
+        private readonly INzbDroneConsoleFactory _nzbDroneConsoleFactory;
         private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;
         private readonly IServiceProvider _serviceProvider;
         private readonly IConsoleService _consoleService;
@@ -17,7 +18,8 @@ namespace NzbDrone.Host
         private readonly IRemoteAccessAdapter _remoteAccessAdapter;
         private readonly Logger _logger;
 
-        public Router(INzbDroneServiceFactory nzbDroneServiceFactory,
+        public Router(INzbDroneConsoleFactory nzbDroneConsoleFactory,
+                      INzbDroneServiceFactory nzbDroneServiceFactory,
                       IServiceProvider serviceProvider,
                       IConsoleService consoleService,
                       IRuntimeInfo runtimeInfo,
@@ -25,6 +27,7 @@ namespace NzbDrone.Host
                       IRemoteAccessAdapter remoteAccessAdapter,
                       Logger logger)
         {
+            _nzbDroneConsoleFactory = nzbDroneConsoleFactory;
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
             _consoleService = consoleService;
@@ -48,13 +51,11 @@ namespace NzbDrone.Host
 
                         break;
                     }
-                     
+
                 case ApplicationModes.Interactive:
                     {
                         _logger.Debug(_runtimeInfo.IsWindowsTray ? "Tray selected" : "Console selected");
-
-                        _nzbDroneServiceFactory.Start();
-
+                        _nzbDroneConsoleFactory.Start();
                         break;
                     }
                 case ApplicationModes.InstallService:

@@ -6,6 +6,7 @@
   <ItemGroup>
     <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
     <PackageReference Include="FluentMigrator.Runner.SQLite" Version="3.3.2" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />

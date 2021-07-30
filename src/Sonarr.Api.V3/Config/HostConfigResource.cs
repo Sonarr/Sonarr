@@ -22,7 +22,8 @@ namespace Sonarr.Api.V3.Config
         public string ConsoleLogLevel { get; set; }
         public string Branch { get; set; }
         public string ApiKey { get; set; }
-        public string SslCertHash { get; set; }
+        public string SslCertPath { get; set; }
+        public string SslCertPassword { get; set; }
         public string UrlBase { get; set; }
         public string InstanceName { get; set; }
         public bool UpdateAutomatically { get; set; }
@@ -62,7 +63,8 @@ namespace Sonarr.Api.V3.Config
                 ConsoleLogLevel = model.ConsoleLogLevel,
                 Branch = model.Branch,
                 ApiKey = model.ApiKey,
-                SslCertHash = model.SslCertHash,
+                SslCertPath = model.SslCertPath,
+                SslCertPassword = model.SslCertPassword,
                 UrlBase = model.UrlBase,
                 InstanceName = model.InstanceName,
                 UpdateAutomatically = model.UpdateAutomatically,
