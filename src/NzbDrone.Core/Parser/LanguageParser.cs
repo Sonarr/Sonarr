@@ -17,10 +17,10 @@ namespace NzbDrone.Core.Parser
                 new RegexReplace(@".*?[_. ](S\d{2}(?:E\d{2,4})*[_. ].*)", "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase)
             };
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR)(?:\W|_))|(?<russian>\brus\b)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<polish>\b(?:PL\W?DUB|DUB\W?PL|LEK\W?PL|PL\W?LEK)\b)|(?<chinese>\[(?:CH[ST]|BIG5|GB)\]|简|繁|字幕)",
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR)(?:\W|_))|(?<russian>\brus\b)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<polish>\b(?:PL\W?DUB|DUB\W?PL|LEK\W?PL|PL\W?LEK)\b)|(?<chinese>\[(?:CH[ST]|BIG5|GB)\]|简|繁|字幕)|(?<bulgarian>\bbgaudio\b)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex CaseSensitiveLanguageRegex = new Regex(@"(?<lithuanian>\bLT\b)|(?<czech>\bCZ\b)|(?<polish>\bPL\b)",
+        private static readonly Regex CaseSensitiveLanguageRegex = new Regex(@"(?<lithuanian>\bLT\b)|(?<czech>\bCZ\b)|(?<polish>\bPL\b)|(?<bulgarian>\bBG\b)",
                                                                 RegexOptions.Compiled);
 
 
@@ -96,6 +96,9 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("hindi"))
                 return Language.Hindi;
 
+            if (lowerTitle.Contains("bulgarian"))
+                return Language.Bulgarian;
+
             var regexLanguage = RegexLanguage(title);
 
             if (regexLanguage != Language.Unknown)
@@ -158,6 +161,9 @@ namespace NzbDrone.Core.Parser
             if (caseSensitiveMatch.Groups["polish"].Captures.Cast<Capture>().Any())
                 return Language.Polish;
 
+            if (caseSensitiveMatch.Groups["bulgarian"].Captures.Cast<Capture>().Any())
+                return Language.Bulgarian;
+
             // Case insensitive
             var match = LanguageRegex.Match(title);
 
@@ -193,6 +199,9 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["chinese"].Success)
                 return Language.Chinese;
+
+            if (match.Groups["bulgarian"].Success)
+                return Language.Bulgarian;
 
             return Language.Unknown;
         }
