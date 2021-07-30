@@ -39,15 +39,6 @@ namespace Marr.Data
         private DbCommand _command;
 
         /// <summary>
-        /// Initializes a DataMapper for the given provider type and connection string.
-        /// </summary>
-        /// <param name="providerName">Ex: </param>
-        /// <param name="connectionString">The database connection string.</param>
-        public DataMapper(string providerName, string connectionString)
-            : this(DbProviderFactories.GetFactory(providerName), connectionString)
-        { }
-
-        /// <summary>
         /// A database provider agnostic initialization.
         /// </summary>
         /// <param name="connectionString">The database connection string.</param>

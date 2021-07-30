@@ -439,7 +439,7 @@ namespace NzbDrone.Common.Test.DiskTests
         [Test]
         public void CopyFolder_should_not_copy_casesensitive_folder()
         {
-            MonoOnly();
+            PosixOnly();
 
             WithRealDiskProvider();
 
@@ -540,9 +540,10 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        [Platform(Exclude = "MacOsX")]
         public void MoveFolder_should_rename_casesensitive_folder()
         {
-            MonoOnly();
+            PosixOnly();
 
             WithRealDiskProvider();
 

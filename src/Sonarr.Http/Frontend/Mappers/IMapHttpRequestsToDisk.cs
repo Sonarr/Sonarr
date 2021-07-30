@@ -1,4 +1,4 @@
-﻿
+﻿using System.Threading.Tasks;
 using Nancy;
 
 namespace Sonarr.Http.Frontend.Mappers
@@ -7,6 +7,6 @@ namespace Sonarr.Http.Frontend.Mappers
     {
         string Map(string resourceUrl);
         bool CanHandle(string resourceUrl);
-        Response GetResponse(string resourceUrl);
+        Task<Response> GetResponse(string resourceUrl);
     }
 }

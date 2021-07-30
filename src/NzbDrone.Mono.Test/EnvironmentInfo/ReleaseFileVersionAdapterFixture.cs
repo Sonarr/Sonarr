@@ -8,12 +8,14 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Mono.Test.EnvironmentInfo
 {
     [TestFixture]
-    [Platform("Mono")]
+    [Platform("Linux")]
     public class ReleaseFileVersionAdapterFixture : TestBase<ReleaseFileVersionAdapter>
     {
         [SetUp]
         public void Setup()
         {
+            NotBsd();
+
             Mocker.SetConstant<IDiskProvider>(Mocker.Resolve<DiskProvider>());
         }
 

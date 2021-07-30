@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web.UI;
-using Newtonsoft.Json.Serialization;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Profiles.Releases;

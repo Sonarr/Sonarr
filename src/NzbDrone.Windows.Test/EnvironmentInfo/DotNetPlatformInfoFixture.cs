@@ -6,7 +6,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Windows.Test.EnvironmentInfo
 {
     [TestFixture]
-    [Platform("Win")]
+    [Platform("Net")]
     public class DotNetPlatformInfoFixture : TestBase<PlatformInfo>
     {
         [Test]

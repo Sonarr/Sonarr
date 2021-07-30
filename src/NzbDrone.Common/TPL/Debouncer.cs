@@ -17,7 +17,7 @@ namespace NzbDrone.Common.TPL
             _timer.Elapsed += timer_Elapsed;
         }
 
-        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (_paused == 0)
             {

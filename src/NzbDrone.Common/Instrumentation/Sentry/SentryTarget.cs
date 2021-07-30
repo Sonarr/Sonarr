@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading;
 using NLog;
 using NLog.Common;
@@ -22,7 +21,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
         // don't report uninformative SQLite exceptions
         // busy/locked are benign https://forums.sonarr.tv/t/owin-sqlite-error-5-database-is-locked/5423/11
         // The others will be user configuration problems and silt up Sentry
-        private static readonly HashSet<SQLiteErrorCode> FilteredSQLiteErrors = new HashSet<SQLiteErrorCode> {
+        private static readonly HashSet<SQLiteErrorCode> FilteredSQLiteErrors = new HashSet<SQLiteErrorCode>
+        {
             SQLiteErrorCode.Busy,
             SQLiteErrorCode.Locked,
             SQLiteErrorCode.Perm,
@@ -36,7 +36,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
         // use string and not Type so we don't need a reference to the project
         // where these are defined
-        private static readonly HashSet<string> FilteredExceptionTypeNames = new HashSet<string> {
+        private static readonly HashSet<string> FilteredExceptionTypeNames = new HashSet<string>
+        {
             // UnauthorizedAccessExceptions will just be user configuration issues
             "UnauthorizedAccessException",
             // Filter out people stuck in boot loops
@@ -45,49 +46,51 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             "TinyIoCResolutionException"
         };
 
-        public static readonly List<string> FilteredExceptionMessages = new List<string> {
+        public static readonly List<string> FilteredExceptionMessages = new List<string>
+        {
             // Swallow the many, many exceptions flowing through from Jackett
-            "Jackett.Common.IndexerException"
+            "Jackett.Common.IndexerException",
+
+            // Fix openflixr being stupid with permissions
+            "openflixr"
         };
 
         // exception types in this list will additionally have the exception message added to the
         // sentry fingerprint.  Make sure that this message doesn't vary by exception
         // (e.g. containing a path or a url) so that the sentry grouping is sensible
-        private static readonly HashSet<string> IncludeExceptionMessageTypes = new HashSet<string> {
+        private static readonly HashSet<string> IncludeExceptionMessageTypes = new HashSet<string>
+        {
             "SQLiteException"
         };
-        
+
         private static readonly IDictionary<LogLevel, SentryLevel> LoggingLevelMap = new Dictionary<LogLevel, SentryLevel>
         {
-            {LogLevel.Debug, SentryLevel.Debug},
-            {LogLevel.Error, SentryLevel.Error},
-            {LogLevel.Fatal, SentryLevel.Fatal},
-            {LogLevel.Info, SentryLevel.Info},
-            {LogLevel.Trace, SentryLevel.Debug},
-            {LogLevel.Warn, SentryLevel.Warning},
+            { LogLevel.Debug, SentryLevel.Debug },
+            { LogLevel.Error, SentryLevel.Error },
+            { LogLevel.Fatal, SentryLevel.Fatal },
+            { LogLevel.Info, SentryLevel.Info },
+            { LogLevel.Trace, SentryLevel.Debug },
+            { LogLevel.Warn, SentryLevel.Warning },
         };
 
         private static readonly IDictionary<LogLevel, BreadcrumbLevel> BreadcrumbLevelMap = new Dictionary<LogLevel, BreadcrumbLevel>
         {
-            {LogLevel.Debug, BreadcrumbLevel.Debug},
-            {LogLevel.Error, BreadcrumbLevel.Error},
-            {LogLevel.Fatal, BreadcrumbLevel.Critical},
-            {LogLevel.Info, BreadcrumbLevel.Info},
-            {LogLevel.Trace, BreadcrumbLevel.Debug},
-            {LogLevel.Warn, BreadcrumbLevel.Warning},
+            { LogLevel.Debug, BreadcrumbLevel.Debug },
+            { LogLevel.Error, BreadcrumbLevel.Error },
+            { LogLevel.Fatal, BreadcrumbLevel.Critical },
+            { LogLevel.Info, BreadcrumbLevel.Info },
+            { LogLevel.Trace, BreadcrumbLevel.Debug },
+            { LogLevel.Warn, BreadcrumbLevel.Warning },
         };
 
         private readonly DateTime _startTime = DateTime.UtcNow;
         private readonly IDisposable _sdk;
-        private bool _disposed;
-
         private readonly SentryDebounce _debounce;
+
+        private bool _disposed;
         private bool _unauthorized;
 
         public bool FilterEvents { get; set; }
-        public Version DatabaseVersion { get; set; }
-        public int DatabaseMigration { get; set; }
-        
         public bool SentryEnabled { get; set; }
 
         public SentryTarget(string dsn)
@@ -98,7 +101,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                                       o.AttachStacktrace = true;
                                       o.MaxBreadcrumbs = 200;
                                       o.SendDefaultPii = false;
-                                      o.AttachStacktrace = true;
                                       o.Debug = false;
                                       o.DiagnosticsLevel = SentryLevel.Debug;
                                       o.Release = BuildInfo.Release;
@@ -136,11 +138,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
                 scope.SetTag("culture", Thread.CurrentThread.CurrentCulture.Name);
                 scope.SetTag("branch", BuildInfo.Branch);
-
-                if (DatabaseVersion != default(Version))
-                {
-                    scope.SetTag("sqlite_version", $"{DatabaseVersion}");
-                }
             });
         }
 
@@ -148,12 +145,20 @@ namespace NzbDrone.Common.Instrumentation.Sentry
         {
             SentrySdk.ConfigureScope(scope =>
             {
-                if (osInfo.Name != null && PlatformInfo.IsMono)
+            });
+        }
+
+        public void UpdateScope(Version databaseVersion, int migration, string updateBranch, IPlatformInfo platformInfo)
+        {
+            SentrySdk.ConfigureScope(scope =>
+            {
+                scope.Environment = updateBranch;
+                scope.SetTag("runtime_version", $"{PlatformInfo.PlatformName} {platformInfo.Version}");
+
+                if (databaseVersion != default(Version))
                 {
-                    // Sentry auto-detection of non-Windows platforms isn't that accurate on certain devices.
-                    scope.Contexts.OperatingSystem.Name = osInfo.Name.FirstCharToUpper();
-                    scope.Contexts.OperatingSystem.RawDescription = osInfo.FullName;
-                    scope.Contexts.OperatingSystem.Version = osInfo.Version.ToString();
+                    scope.SetTag("sqlite_version", $"{databaseVersion}");
+                    scope.SetTag("database_migration", $"{migration}");
                 }
             });
         }
@@ -221,7 +226,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             {
                 if (FilterEvents)
                 {
-                    if (logEvent.Exception is SQLiteException sqliteException && FilteredSQLiteErrors.Contains(sqliteException.ResultCode))
+                    var sqlEx = logEvent.Exception as SQLiteException;
+                    if (sqlEx != null && FilteredSQLiteErrors.Contains(sqlEx.ResultCode))
                     {
                         return false;
                     }
@@ -230,7 +236,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                     {
                         return false;
                     }
-                    
+
                     if (FilteredExceptionMessages.Any(x => logEvent.Exception.Message.Contains(x)))
                     {
                         return false;

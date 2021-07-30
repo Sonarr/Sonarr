@@ -14,13 +14,11 @@ namespace NzbDrone.Common.Processes
     public class PidFileProvider : IProvidePidFile
     {
         private readonly IAppFolderInfo _appFolderInfo;
-        private readonly IProcessProvider _processProvider;
         private readonly Logger _logger;
 
-        public PidFileProvider(IAppFolderInfo appFolderInfo, IProcessProvider processProvider, Logger logger)
+        public PidFileProvider(IAppFolderInfo appFolderInfo, Logger logger)
         {
             _appFolderInfo = appFolderInfo;
-            _processProvider = processProvider;
             _logger = logger;
         }
 
@@ -34,11 +32,11 @@ namespace NzbDrone.Common.Processes
             var filename = Path.Combine(_appFolderInfo.AppDataFolder, "sonarr.pid");
             try
             {
-                File.WriteAllText(filename, _processProvider.GetCurrentProcessId().ToString());
+                File.WriteAllText(filename, ProcessProvider.GetCurrentProcessId().ToString());
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to write PID file {0}", filename);
+                _logger.Error(ex, "Unable to write PID file: " + filename);
                 throw new SonarrStartupException(ex, "Unable to write PID file {0}", filename);
             }
         }

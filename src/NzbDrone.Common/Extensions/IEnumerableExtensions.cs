@@ -7,13 +7,6 @@ namespace NzbDrone.Common.Extensions
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            var knownKeys = new HashSet<TKey>();
-
-            return source.Where(element => knownKeys.Add(keySelector(element)));
-        }
-
         public static IEnumerable<TFirst> IntersectBy<TFirst, TSecond, TKey>(this IEnumerable<TFirst> first, Func<TFirst, TKey> firstKeySelector,
                                                                              IEnumerable<TSecond> second, Func<TSecond, TKey> secondKeySelector,
                                                                              IEqualityComparer<TKey> keyComparer)
@@ -117,5 +110,14 @@ namespace NzbDrone.Common.Extensions
 //
 //            return descending ? source.OrderByDescending(orderByFunc) : source.OrderBy(orderByFunc);
 //        }
+        public static string ConcatToString<TSource>(this IEnumerable<TSource> source, string separator = ", ")
+        {
+            return string.Join(separator, source.Select(x => x.ToString()));
+        }
+
+        public static string ConcatToString<TSource>(this IEnumerable<TSource> source, Func<TSource, string> predicate, string separator = ", ")
+        {
+            return string.Join(separator, source.Select(predicate));
+        }
     }
 }

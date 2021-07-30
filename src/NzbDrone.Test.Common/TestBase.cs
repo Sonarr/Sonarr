@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using FluentAssertions;
@@ -9,12 +8,14 @@ using NUnit.Framework;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Processes;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common
 {
-    public abstract class TestBase<TSubject> : TestBase where TSubject : class
+    public abstract class TestBase<TSubject> : TestBase
+        where TSubject : class
     {
 
         private TSubject _subject;
@@ -56,7 +57,7 @@ namespace NzbDrone.Test.Common
                 {
                     _mocker = new AutoMoqer();
                     _mocker.SetConstant<ICacheManager>(new CacheManager());
-                    _mocker.SetConstant<IStartupContext>(new StartupContext(new string[0]));
+                    _mocker.SetConstant<IStartupContext>(new StartupContext(Array.Empty<string>()));
                     _mocker.SetConstant(TestLogger);
                 }
 
@@ -79,7 +80,10 @@ namespace NzbDrone.Test.Common
             get
             {
                 var virtualPath = Path.Combine(TempFolder, "VirtualNzbDrone");
-                if (!Directory.Exists(virtualPath)) Directory.CreateDirectory(virtualPath);
+                if (!Directory.Exists(virtualPath))
+                {
+                    Directory.CreateDirectory(virtualPath);
+                }
 
                 return virtualPath;
             }
@@ -122,7 +126,7 @@ namespace NzbDrone.Test.Common
 
         public static string GetUID()
         {
-            return Process.GetCurrentProcess().Id + "_" + DateTime.Now.Ticks + "_" + Interlocked.Increment(ref _nextUid);
+            return ProcessProvider.GetCurrentProcessId() + "_" + DateTime.Now.Ticks + "_" + Interlocked.Increment(ref _nextUid);
         }
 
         public static void DeleteTempFolder(string folder)
@@ -160,11 +164,19 @@ namespace NzbDrone.Test.Common
             }
         }
 
-        protected void MonoOnly()
+        protected void PosixOnly()
         {
-            if (!PlatformInfo.IsMono)
+            if (OsInfo.IsWindows)
             {
-                throw new IgnoreException("mono specific test");
+                throw new IgnoreException("non windows specific test");
+            }
+        }
+
+        protected void NotBsd()
+        {
+            if (OsInfo.Os == Os.Bsd)
+            {
+                throw new IgnoreException("Ignored on BSD");
             }
         }
 
@@ -192,17 +204,20 @@ namespace NzbDrone.Test.Common
             return Path.Combine(TempFolder, Path.GetRandomFileName());
         }
 
-        protected void VerifyEventPublished<TEvent>() where TEvent : class, IEvent
+        protected void VerifyEventPublished<TEvent>()
+            where TEvent : class, IEvent
         {
             VerifyEventPublished<TEvent>(Times.Once());
         }
 
-        protected void VerifyEventPublished<TEvent>(Times times) where TEvent : class, IEvent
+        protected void VerifyEventPublished<TEvent>(Times times)
+            where TEvent : class, IEvent
         {
             Mocker.GetMock<IEventAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), times);
         }
 
-        protected void VerifyEventNotPublished<TEvent>() where TEvent : class, IEvent
+        protected void VerifyEventNotPublished<TEvent>()
+            where TEvent : class, IEvent
         {
             Mocker.GetMock<IEventAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), Times.Never());
         }

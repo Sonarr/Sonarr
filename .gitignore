@@ -117,12 +117,15 @@ src/UI/.idea/*
 *log.txt
 node_modules/
 _output*
+_artifacts
 _rawPackage/
 _dotTrace*
 _tests*
 _publish*
 _temp*
 *.Result.xml
+coverage*.xml
+coverage*.json
 setup/Output/
 *.~is
 
@@ -133,12 +136,28 @@ bin
 obj
 output/*
 
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+# Packages
+Sonarr_*/
+Sonarr_*.zip
+Sonarr_*.gz
+gecko.zip
+geckodriver.exe
 
 #OS X metadata files
 ._*
 .DS_Store
 
 _start
+_temp_*/**/*
+
+# Windows thumbnail cache files
+Thumbs.db
 
 src/.idea/
 /distribution/windows/setup/output/*

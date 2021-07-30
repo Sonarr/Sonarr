@@ -16,7 +16,7 @@
             int bitBufferCount = 0;
             int index = 0;
 
-            for (int i = 0; i < str.Length;i++ )
+            for (int i = 0; i < str.Length; i++)
             {
                 bitBuffer = (bitBuffer << 5) | ValidChars.IndexOf(str[i]);
                 bitBufferCount += 5;

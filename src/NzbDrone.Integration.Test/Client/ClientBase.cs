@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using FluentAssertions;
 using NLog;
 using Sonarr.Http.REST;
 using NzbDrone.Common.Serializer;
 using RestSharp;
-using System.Linq;
 using Sonarr.Http;
 
 namespace NzbDrone.Integration.Test.Client
@@ -60,7 +60,8 @@ namespace NzbDrone.Integration.Test.Client
             return response.Content;
         }
 
-        public T Execute<T>(IRestRequest request, HttpStatusCode statusCode) where T : class, new()
+        public T Execute<T>(IRestRequest request, HttpStatusCode statusCode)
+            where T : class, new()
         {
             var content = Execute(request, statusCode);
 
@@ -69,7 +70,9 @@ namespace NzbDrone.Integration.Test.Client
 
         private static void AssertDisableCache(IList<Parameter> headers)
         {
-            headers.Single(c => c.Name == "Cache-Control").Value.Should().Be("no-cache, no-store, must-revalidate, max-age=0");
+            // cache control header gets reordered on net core
+            ((string)headers.Single(c => c.Name == "Cache-Control").Value).Split(',').Select(x => x.Trim())
+                .Should().BeEquivalentTo("no-store, must-revalidate, no-cache, max-age=0".Split(',').Select(x => x.Trim()));
             headers.Single(c => c.Name == "Pragma").Value.Should().Be("no-cache");
             headers.Single(c => c.Name == "Expires").Value.Should().Be("0");
         }
@@ -84,9 +87,18 @@ namespace NzbDrone.Integration.Test.Client
 
         }
 
-        public List<TResource> All()
+        public List<TResource> All(Dictionary<string, object> queryParams = null)
         {
             var request = BuildRequest();
+
+            if (queryParams != null)
+            {
+                foreach (var param in queryParams)
+                {
+                    request.AddParameter(param.Key, param.Value);
+                }
+            }
+
             return Get<List<TResource>>(request);
         }
 
@@ -159,19 +171,22 @@ namespace NzbDrone.Integration.Test.Client
             return Put<object>(request, statusCode);
         }
 
-        public T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK) where T : class, new()
+        public T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK)
+            where T : class, new()
         {
             request.Method = Method.GET;
             return Execute<T>(request, statusCode);
         }
 
-        public T Post<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.Created) where T : class, new()
+        public T Post<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.Created)
+            where T : class, new()
         {
             request.Method = Method.POST;
             return Execute<T>(request, statusCode);
         }
 
-        public T Put<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.Accepted) where T : class, new()
+        public T Put<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.Accepted)
+            where T : class, new()
         {
             request.Method = Method.PUT;
             return Execute<T>(request, statusCode);

@@ -1,10 +1,17 @@
+#! /bin/bash
 PLATFORM=$1
 TYPE=$2
-WHERE="cat != ManualTest"
-TEST_DIR="."
+COVERAGE=$3
+WHERE="Category!=ManualTest"
 TEST_PATTERN="*Test.dll"
-ASSEMBLIES=""
+FILES=( "Sonarr.Api.Test.dll" "Sonarr.Automation.Test.dll" "Sonarr.Common.Test.dll" "Sonarr.Core.Test.dll" "Sonarr.Host.Test.dll" "Sonarr.Integration.Test.dll" "Sonarr.Libraries.Test.dll" "Sonarr.Mono.Test.dll" "Sonarr.Update.Test.dll" "Sonarr.Windows.Test.dll" )
+ASSMEBLIES=""
 TEST_LOG_FILE="TestLog.txt"
+
+echo "test dir: $TEST_DIR"
+if [ -z "$TEST_DIR" ]; then
+    TEST_DIR="."
+fi
 
 if [ -d "$TEST_DIR/_tests" ]; then
   TEST_DIR="$TEST_DIR/_tests"
@@ -13,42 +20,58 @@ fi
 rm -f "$TEST_LOG_FILE"
 
 # Uncomment to log test output to a file instead of the console
-# export SONARR_TESTS_LOG_OUTPUT="File"
+export SONARR_TESTS_LOG_OUTPUT="File"
 
-NUNIT="$TEST_DIR/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe"
-NUNIT_COMMAND="$NUNIT"
-NUNIT_PARAMS="--teamcity --workers=1"
+VSTEST_PARAMS="--logger:nunit;LogFilePath=TestResult.xml"
+
+if [ "$PLATFORM" = "Mac" ]; then
+
+  export DYLD_FALLBACK_LIBRARY_PATH="$TEST_DIR:$MONOPREFIX/lib:/usr/local/lib:/lib:/usr/lib"
+  echo $DYLD_FALLBACK_LIBRARY_PATH
+  mono --version
+
+  # To debug which libraries are being loaded:
+  # export DYLD_PRINT_LIBRARIES=YES
+fi
 
 if [ "$PLATFORM" = "Windows" ]; then
-  WHERE="$WHERE && cat != LINUX"
-elif [ "$PLATFORM" = "Linux" ]; then
-  WHERE="$WHERE && cat != WINDOWS"
-  NUNIT_COMMAND="mono --debug --runtime=v4.0 $NUNIT"
-elif [ "$PLATFORM" = "Mac" ]; then
-  WHERE="$WHERE && cat != WINDOWS"
-  NUNIT_COMMAND="mono --debug --runtime=v4.0 $NUNIT"
+  mkdir -p "$ProgramData/Sonarr"
+  WHERE="$WHERE&Category!=LINUX"
+elif [ "$PLATFORM" = "Linux" ] || [ "$PLATFORM" = "Mac" ] ; then
+  mkdir -p ~/.config/Sonarr
+  WHERE="$WHERE&Category!=WINDOWS"
 else
   echo "Platform must be provided as first arguement: Windows, Linux or Mac"
   exit 1
 fi
 
 if [ "$TYPE" = "Unit" ]; then
-  WHERE="$WHERE && cat != IntegrationTest && cat != AutomationTest"
+  WHERE="$WHERE&Category!=IntegrationTest&Category!=AutomationTest"
 elif [ "$TYPE" = "Integration" ] || [ "$TYPE" = "int" ] ; then
-  WHERE="$WHERE && cat == IntegrationTest"
+  WHERE="$WHERE&Category=IntegrationTest"
 elif [ "$TYPE" = "Automation" ] ; then
-  WHERE="$WHERE && cat == AutomationTest"
+  WHERE="$WHERE&Category=AutomationTest"
 else
   echo "Type must be provided as second argument: Unit, Integration or Automation"
   exit 2
 fi
 
-for i in `find $TEST_DIR -name "$TEST_PATTERN"`;
-  do ASSEMBLIES="$ASSEMBLIES $i"
+for i in "${FILES[@]}";
+  do ASSEMBLIES="$ASSEMBLIES $TEST_DIR/$i"
 done
 
-$NUNIT_COMMAND --where "$WHERE" $NUNIT_PARAMS $ASSEMBLIES;
-EXIT_CODE=$?
+DOTNET_PARAMS="$ASSEMBLIES --filter:$WHERE $VSTEST_PARAMS"
+
+if [ "$COVERAGE" = "Coverage" ]; then
+  dotnet test $DOTNET_PARAMS --settings:"src/coverlet.runsettings" --results-directory:./CoverageResults
+  EXIT_CODE=$?
+elif [ "$COVERAGE" = "Test" ] ; then
+  dotnet test $DOTNET_PARAMS
+  EXIT_CODE=$?
+else
+  echo "Run Type must be provided as third argument: Coverage or Test"
+  exit 3
+fi
 
 if [ "$EXIT_CODE" -ge 0 ]; then
   echo "Failed tests: $EXIT_CODE"

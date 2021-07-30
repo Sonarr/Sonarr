@@ -11,7 +11,7 @@ namespace Sonarr.Http.Frontend.Mappers
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IConfigFileProvider _configFileProvider;
 
-        public FaviconMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider,IConfigFileProvider configFileProvider, Logger logger)
+        public FaviconMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, IConfigFileProvider configFileProvider, Logger logger)
             : base(diskProvider, logger)
         {
             _appFolderInfo = appFolderInfo;

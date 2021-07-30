@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI.WebControls;
 using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.Indexers.Newznab

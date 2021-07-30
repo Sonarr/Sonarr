@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
-using Mono.Posix;
 using Mono.Unix;
 using NUnit.Framework;
 using NzbDrone.Mono.Disk;
@@ -14,14 +8,9 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Mono.Test.DiskProviderTests
 {
     [TestFixture]
-    [Platform("Mono")]
+    [Platform(Exclude = "Win")]
     public class SymbolicLinkResolverFixture : TestBase<SymbolicLinkResolver>
     {
-        public SymbolicLinkResolverFixture()
-        {
-            MonoOnly();
-        }
-
         [Test]
         public void should_follow_nested_symlinks()
         {

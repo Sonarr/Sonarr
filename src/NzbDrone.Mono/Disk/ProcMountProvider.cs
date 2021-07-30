@@ -16,16 +16,16 @@ namespace NzbDrone.Mono.Disk
 
     public class ProcMountProvider : IProcMountProvider
     {
-        private static string[] _fixedTypes = new [] { "ext3", "ext2", "ext4", "vfat", "fuseblk", "xfs", "jfs", "msdos", "ntfs", "minix", "hfs", "hfsplus", "qnx4", "ufs", "btrfs" };
-        private static string[] _networkDriveTypes = new [] { "cifs", "nfs", "nfs4", "nfsd", "sshfs" };
-        private static readonly Regex OctalRegex = new Regex(@"\\\d{3}", RegexOptions.Compiled);
-
         private const string PROC_MOUNTS_FILENAME = @"/proc/mounts";
         private const string PROC_FILESYSTEMS_FILENAME = @"/proc/filesystems";
 
-        private static Dictionary<string, bool> _fileSystems;
-
+        private static readonly Regex OctalRegex = new Regex(@"\\\d{3}", RegexOptions.Compiled);
         private readonly Logger _logger;
+
+        private static string[] _fixedTypes = new[] { "ext3", "ext2", "ext4", "vfat", "fuseblk", "xfs", "jfs", "msdos", "ntfs", "minix", "hfs", "hfsplus", "qnx4", "ufs", "btrfs" };
+        private static string[] _networkDriveTypes = new[] { "cifs", "nfs", "nfs4", "nfsd", "sshfs" };
+
+        private static Dictionary<string, bool> _fileSystems;
 
         public ProcMountProvider(Logger logger)
         {

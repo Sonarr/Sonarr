@@ -608,7 +608,7 @@ namespace NzbDrone.Core.Organizer
 
         private const string MediaInfoVideoDynamicRangeToken = "{MediaInfo VideoDynamicRange}";
         private const string MediaInfoVideoDynamicRangeTypeToken = "{MediaInfo VideoDynamicRangeType}";
-        private static readonly IDictionary<string, int> MinimumMediaInfoSchemaRevisions =
+        private static readonly IReadOnlyDictionary<string, int> MinimumMediaInfoSchemaRevisions =
             new Dictionary<string, int>(FileNameBuilderTokenEqualityComparer.Instance)
         {
             {MediaInfoVideoDynamicRangeToken, 5},

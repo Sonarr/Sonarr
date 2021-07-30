@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Test.Common;
 
@@ -19,7 +19,7 @@ namespace NzbDrone.Common.Test.EnsureTest
         [TestCase(@"/var/user/file with, comma.mkv")]
         public void EnsureLinuxPath(string path)
         {
-            MonoOnly();
+            PosixOnly();
             Ensure.That(path, () => path).IsValidPath();
         }
     }

@@ -1,0 +1,11 @@
+<Project>
+  <ItemGroup>
+    <RuntimeFiles Include="..\Runtimes\$(RuntimeIdentifier)\*" />
+  </ItemGroup>
+  <Target Name="CopyRuntimeFilesOnBuild" AfterTargets="AfterBuild">
+    <Copy SourceFiles="@(RuntimeFiles)" DestinationFolder="$(OutDir)" />
+  </Target>
+  <Target Name="CopyRuntimeFilesOnPublish" AfterTargets="Publish">
+    <Copy SourceFiles="@(RuntimeFiles)" DestinationFolder="$(PublishDir)" />
+  </Target>
+</Project>

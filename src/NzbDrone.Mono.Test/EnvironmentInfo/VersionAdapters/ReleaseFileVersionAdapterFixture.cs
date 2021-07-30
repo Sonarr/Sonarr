@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -15,9 +16,11 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
     {
         [Test]
         [IntegrationTest]
-        [Platform("Mono")]
+        [Platform("Linux")]
         public void should_get_version_info_from_actual_linux()
         {
+            NotBsd();
+
             Mocker.SetConstant<IDiskProvider>(Mocker.Resolve<DiskProvider>());
             var info = Subject.Read();
             info.FullName.Should().NotBeNullOrWhiteSpace();
@@ -45,7 +48,7 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
             Subject.Read().Should().BeNull();
 
             Mocker.GetMock<IDiskProvider>()
-              .Setup(c => c.GetFiles(It.IsAny<string>(), SearchOption.TopDirectoryOnly)).Returns(new string[0]);
+              .Setup(c => c.GetFiles(It.IsAny<string>(), SearchOption.TopDirectoryOnly)).Returns(Array.Empty<string>());
 
             Subject.Read().Should().BeNull();
         }

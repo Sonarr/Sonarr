@@ -1,0 +1,9 @@
+{
+  "RoslynExtensionsOptions": {
+    "enableAnalyzersSupport": true,
+    "DocumentAnalysisTimeoutMs": 60000
+  },
+  "FormattingOptions": {
+    "enableEditorConfigSupport": true
+  }
+}

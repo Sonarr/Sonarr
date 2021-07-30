@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Host.Middleware;
 using NzbDrone.SignalR;
 
 namespace NzbDrone.Host.Middleware
@@ -16,6 +15,7 @@ namespace NzbDrone.Host.Middleware
         private readonly IContainer _container;
         private readonly Logger _logger;
         private static string API_KEY;
+        private static string URL_BASE;
         public int Order => 1;
 
         public SignalRMiddleware(IContainer container,
@@ -25,6 +25,7 @@ namespace NzbDrone.Host.Middleware
             _container = container;
             _logger = logger;
             API_KEY = configFileProvider.ApiKey;
+            URL_BASE = configFileProvider.UrlBase;
         }
 
         public void Attach(IApplicationBuilder appBuilder)
@@ -56,9 +57,9 @@ namespace NzbDrone.Host.Middleware
                 }
             });
 
-            appBuilder.UseSignalR(routes =>
+            appBuilder.UseEndpoints(x =>
             {
-                routes.MapHub<MessageHub>("/signalr/messages");
+                x.MapHub<MessageHub>(URL_BASE + "/signalr/messages");
             });
 
             // This is a side effect of haing multiple IoC containers, TinyIoC and whatever

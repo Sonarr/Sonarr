@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using Mono.Unix;
+using Mono.Unix.Native;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Mono.Interop;
-using Mono.Unix.Native;
-using Mono.Unix;
 
 namespace NzbDrone.Mono.Disk
 {

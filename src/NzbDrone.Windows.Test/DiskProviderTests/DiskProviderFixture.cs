@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using NUnit.Framework;
@@ -25,15 +25,17 @@ namespace NzbDrone.Windows.Test.DiskProviderTests
 
             if (Directory.Exists(path))
             {
-                var ds = Directory.GetAccessControl(path);
+                var directory = new DirectoryInfo(path);
+                var ds = directory.GetAccessControl();
                 ds.SetAccessRule(new FileSystemAccessRule(owner, FileSystemRights.Write, accessControlType));
-                Directory.SetAccessControl(path, ds);
+                directory.SetAccessControl(ds);
             }
             else
             {
-                var fs = File.GetAccessControl(path);
+                var file = new FileInfo(path);
+                var fs = file.GetAccessControl();
                 fs.SetAccessRule(new FileSystemAccessRule(owner, FileSystemRights.Write, accessControlType));
-                File.SetAccessControl(path, fs);
+                file.SetAccessControl(fs);
             }
         }
     }

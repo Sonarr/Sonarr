@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Update
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IBackupService _backupService;
-
+        private readonly IOsInfo _osInfo;
 
         public InstallUpdateService(ICheckUpdateService checkUpdateService,
                                     IAppFolderInfo appFolderInfo,
@@ -53,6 +53,7 @@ namespace NzbDrone.Core.Update
                                     IConfigFileProvider configFileProvider,
                                     IRuntimeInfo runtimeInfo,
                                     IBackupService backupService,
+                                    IOsInfo osInfo,
                                     Logger logger)
         {
             if (configFileProvider == null)
@@ -73,6 +74,7 @@ namespace NzbDrone.Core.Update
             _configFileProvider = configFileProvider;
             _runtimeInfo = runtimeInfo;
             _backupService = backupService;
+            _osInfo = osInfo;
             _logger = logger;
         }
 
@@ -143,12 +145,18 @@ namespace NzbDrone.Core.Update
             _logger.Info("Preparing client");
             _diskTransferService.TransferFolder(_appFolderInfo.GetUpdateClientFolder(), updateSandboxFolder, TransferMode.Move);
 
-            var updateClientExePath = _appFolderInfo.GetUpdateClientExePath();
+            var updateClientExePath = _appFolderInfo.GetUpdateClientExePath(updatePackage.Runtime);
 
             if (!_diskProvider.FileExists(updateClientExePath))
             {
                 _logger.Warn("Update client {0} does not exist, aborting update.", updateClientExePath);
                 return false;
+            }
+
+            // Set executable flag on update app
+            if (OsInfo.IsOsx || (OsInfo.IsLinux && PlatformInfo.IsNetCore))
+            {
+                _diskProvider.SetFilePermissions(updateClientExePath, "755", null);
             }
 
             _logger.Info("Starting update client {0}", updateClientExePath);
@@ -228,9 +236,15 @@ namespace NzbDrone.Core.Update
                 return null;
             }
 
+            if (_osInfo.IsDocker)
+            {
+                _logger.ProgressDebug("Updating is disabled inside a docker container.  Please update the container image.");
+                return null;
+            }
+
             if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically && updateTrigger != CommandTrigger.Manual)
             {
-                _logger.ProgressDebug("Auto-update not enabled, not installing available update");
+                _logger.ProgressDebug("Auto-update not enabled, not installing available update.");
                 return null;
             }
 
