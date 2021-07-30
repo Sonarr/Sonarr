@@ -22,7 +22,8 @@ function HostSettings(props) {
     instanceName,
     enableSsl,
     sslPort,
-    sslCertHash,
+    sslCertPath,
+    sslCertPassword,
     launchBrowser
   } = settings;
 
@@ -126,19 +127,40 @@ function HostSettings(props) {
       }
 
       {
-        isWindows && enableSsl.value ?
+        enableSsl.value ?
           <FormGroup
             advancedSettings={advancedSettings}
             isAdvanced={true}
           >
-            <FormLabel>SSL Cert Hash</FormLabel>
+            <FormLabel>SSL Cert Path</FormLabel>
 
             <FormInputGroup
               type={inputTypes.TEXT}
-              name="sslCertHash"
+              name="sslCertPath"
+              helpText="Path to pfx file"
               helpTextWarning="Requires restart to take effect"
               onChange={onInputChange}
-              {...sslCertHash}
+              {...sslCertPath}
+            />
+          </FormGroup> :
+          null
+      }
+
+      {
+        enableSsl.value ?
+          <FormGroup
+            advancedSettings={advancedSettings}
+            isAdvanced={true}
+          >
+            <FormLabel>SSL Cert Password</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.PASSWORD}
+              name="sslCertPassword"
+              helpText="Password for pfx file"
+              helpTextWarning="Requires restart to take effect"
+              onChange={onInputChange}
+              {...sslCertPassword}
             />
           </FormGroup> :
           null

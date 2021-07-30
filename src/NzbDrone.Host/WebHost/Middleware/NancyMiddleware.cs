@@ -1,21 +1,21 @@
-﻿using Nancy.Bootstrapper;
+using Microsoft.AspNetCore.Builder;
+using Nancy.Bootstrapper;
 using Nancy.Owin;
-using Owin;
 
-namespace NzbDrone.Host.Owin.MiddleWare
+namespace NzbDrone.Host.Middleware
 {
-    public class NancyMiddleWare : IOwinMiddleWare
+    public class NancyMiddleware : IAspNetCoreMiddleware
     {
         private readonly INancyBootstrapper _nancyBootstrapper;
 
-        public NancyMiddleWare(INancyBootstrapper nancyBootstrapper)
+        public int Order => 2;
+
+        public NancyMiddleware(INancyBootstrapper nancyBootstrapper)
         {
             _nancyBootstrapper = nancyBootstrapper;
         }
 
-        public int Order => 2;
-
-        public void Attach(IAppBuilder appBuilder)
+        public void Attach(IApplicationBuilder appBuilder)
         {
             var options = new NancyOptions
             {
@@ -23,7 +23,7 @@ namespace NzbDrone.Host.Owin.MiddleWare
                 PerformPassThrough = context => context.Request.Path.StartsWith("/signalr")
             };
 
-            appBuilder.UseNancy(options);
+            appBuilder.UseOwin(x => x.UseNancy(options));
         }
     }
 }
