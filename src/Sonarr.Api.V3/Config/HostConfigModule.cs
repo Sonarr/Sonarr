@@ -1,8 +1,8 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using FluentValidation;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
@@ -19,7 +19,10 @@ namespace Sonarr.Api.V3.Config
         private readonly IConfigService _configService;
         private readonly IUserService _userService;
 
-        public HostConfigModule(IConfigFileProvider configFileProvider, IConfigService configService, IUserService userService)
+        public HostConfigModule(IConfigFileProvider configFileProvider,
+                                IConfigService configService,
+                                IUserService userService,
+                                FileExistsValidator fileExistsValidator)
             : base("/config/host")
         {
             _configFileProvider = configFileProvider;
@@ -44,7 +47,14 @@ namespace Sonarr.Api.V3.Config
 
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslPort).NotEqual(c => c.Port).When(c => c.EnableSsl);
-            SharedValidator.RuleFor(c => c.SslCertHash).NotEmpty().When(c => c.EnableSsl && OsInfo.IsWindows);
+
+            SharedValidator.RuleFor(c => c.SslCertPath)
+                .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty()
+                .IsValidPath()
+                .SetValidator(fileExistsValidator)
+                .Must((resource, path) => IsValidSslCertificate(resource)).WithMessage("Invalid SSL certificate file or password")
+                .When(c => c.EnableSsl);
 
             SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");
             SharedValidator.RuleFor(c => c.UpdateScriptPath).IsValidPath().When(c => c.UpdateMechanism == UpdateMechanism.Script);
@@ -52,7 +62,21 @@ namespace Sonarr.Api.V3.Config
             SharedValidator.RuleFor(c => c.BackupFolder).IsValidPath().When(c => Path.IsPathRooted(c.BackupFolder));
             SharedValidator.RuleFor(c => c.BackupInterval).InclusiveBetween(1, 7);
             SharedValidator.RuleFor(c => c.BackupRetention).InclusiveBetween(1, 90);
+        }
 
+        private bool IsValidSslCertificate(HostConfigResource resource)
+        {
+            X509Certificate2 cert;
+            try
+            {
+                cert = new X509Certificate2(resource.SslCertPath, resource.SslCertPassword, X509KeyStorageFlags.DefaultKeySet);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return cert != null;
         }
 
         private HostConfigResource GetHostConfig()

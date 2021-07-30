@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNet.SignalR.Client;
-using Microsoft.AspNet.SignalR.Client.Transports;
+using Microsoft.AspNetCore.SignalR.Client;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -60,7 +60,8 @@ namespace NzbDrone.Integration.Test
         public ClientBase<EpisodeResource> WantedCutoffUnmet;
 
         private List<SignalRMessage> _signalRReceived;
-        private Connection _signalrConnection;
+
+        private HubConnection _signalrConnection;
 
         protected IEnumerable<SignalRMessage> SignalRMessages => _signalRReceived;
 
@@ -143,19 +144,11 @@ namespace NzbDrone.Integration.Test
         }
 
         [TearDown]
-        public void IntegrationTearDown()
+        public async Task IntegrationTearDown()
         {
             if (_signalrConnection != null)
             {
-                switch (_signalrConnection.State)
-                {
-                    case ConnectionState.Connected:
-                    case ConnectionState.Connecting:
-                        {
-                            _signalrConnection.Stop();
-                            break;
-                        }
-                }
+                await _signalrConnection.StopAsync();
 
                 _signalrConnection = null;
                 _signalRReceived = new List<SignalRMessage>();
@@ -182,33 +175,48 @@ namespace NzbDrone.Integration.Test
             return path;
         }
 
-        protected void ConnectSignalR()
+        protected async Task ConnectSignalR()
         {
             _signalRReceived = new List<SignalRMessage>();
-            _signalrConnection = new Connection("http://localhost:8989/signalr");
-            _signalrConnection.Start(new LongPollingTransport()).ContinueWith(task =>
+            _signalrConnection = new HubConnectionBuilder().WithUrl("http://localhost:7878/signalr/messages").Build();
+
+            var cts = new CancellationTokenSource();
+
+            _signalrConnection.Closed += e =>
             {
-                if (task.IsFaulted)
-                {
-                    Assert.Fail("SignalrConnection failed. {0}", task.Exception.GetBaseException());
-                }
+                cts.Cancel();
+                return Task.CompletedTask;
+            };
+
+            _signalrConnection.On<SignalRMessage>("receiveMessage", (message) =>
+            {
+                _signalRReceived.Add(message);
             });
 
+            var connected = false;
             var retryCount = 0;
 
-            while (_signalrConnection.State != ConnectionState.Connected)
+            while (!connected)
             {
-                if (retryCount > 25)
+                try
                 {
-                    Assert.Fail("Couldn't establish signalr connection. State: {0}", _signalrConnection.State);
+                    Console.WriteLine("Connecting to signalR");
+
+                    await _signalrConnection.StartAsync();
+                    connected = true;
+                    break;
+                }
+                catch (Exception)
+                {
+                    if (retryCount > 25)
+                    {
+                        Assert.Fail("Couldn't establish signalR connection");
+                    }
                 }
 
                 retryCount++;
-                Console.WriteLine("Connecting to signalR" + _signalrConnection.State);
                 Thread.Sleep(200);
             }
-
-            _signalrConnection.Received += json => _signalRReceived.Add(Json.Deserialize<SignalRMessage>(json)); ;
         }
 
         public static void WaitForCompletion(Func<bool> predicate, int timeout = 10000, int interval = 500)
@@ -217,13 +225,17 @@ namespace NzbDrone.Integration.Test
             for (var i = 0; i < count; i++)
             {
                 if (predicate())
+                {
                     return;
+                }
 
                 Thread.Sleep(interval);
             }
 
             if (predicate())
+            {
                 return;
+            }
 
             Assert.Fail("Timed on wait");
         }

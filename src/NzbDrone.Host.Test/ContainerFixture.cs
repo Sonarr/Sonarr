@@ -1,20 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.SignalR;
 using NzbDrone.Host;
 using NzbDrone.Test.Common;
-using FluentAssertions;
-using System.Linq;
-using NzbDrone.Common.Composition;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Download.TrackedDownloads;
 
 namespace NzbDrone.App.Test
 {
@@ -31,6 +33,10 @@ namespace NzbDrone.App.Test
             _container = MainAppContainerBuilder.BuildContainer(args);
 
             _container.Register<IMainDatabase>(new MainDatabase(null));
+
+            // set up a dummy broadcaster to allow tests to resolve
+            var mockBroadcaster = new Mock<IBroadcastSignalRMessage>();
+            _container.Register<IBroadcastSignalRMessage>(mockBroadcaster.Object);
         }
 
         [Test]
