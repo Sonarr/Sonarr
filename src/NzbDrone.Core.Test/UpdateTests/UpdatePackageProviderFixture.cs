@@ -14,6 +14,11 @@ namespace NzbDrone.Core.Test.UpdateTests
         [SetUp]
         public void Setup()
         {
+            if (OsInfo.Os == Os.LinuxMusl || OsInfo.Os == Os.Bsd)
+            {
+                throw new IgnoreException("Ignore until we have musl releases");
+            }
+
             Mocker.GetMock<IPlatformInfo>().SetupGet(c => c.Version).Returns(new Version("9.9.9"));
         }
 

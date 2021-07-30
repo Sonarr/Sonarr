@@ -312,58 +312,58 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return (int)MediaInfo_Count_Get(_handle, (IntPtr)streamKind, (IntPtr)streamNumber);
         }
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_New();
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern void MediaInfo_Delete(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_Open(IntPtr handle, IntPtr fileName);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_Open_Buffer_Init(IntPtr handle, long fileSize, long fileOffset);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_Open_Buffer_Continue(IntPtr handle, byte[] buffer, IntPtr bufferSize);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern long MediaInfo_Open_Buffer_Continue_GoTo_Get(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_Open_Buffer_Finalize(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern void MediaInfo_Close(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_GetI(IntPtr handle, IntPtr streamKind, IntPtr streamNumber, IntPtr parameter, IntPtr infoKind);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_Get(IntPtr handle, IntPtr streamKind, IntPtr streamNumber, IntPtr parameter, IntPtr infoKind, IntPtr searchKind);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_Option(IntPtr handle, IntPtr option, IntPtr value);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfo_State_Get(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfo_Count_Get(IntPtr handle, IntPtr StreamKind, IntPtr streamNumber);
+        [DllImport("mediainfo")]
+        private static extern IntPtr MediaInfo_Count_Get(IntPtr handle, IntPtr streamKind, IntPtr streamNumber);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_New();
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern void MediaInfoA_Delete(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_Open(IntPtr handle, IntPtr fileName);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_Open_Buffer_Init(IntPtr handle, long fileSize, long fileOffset);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_Open_Buffer_Continue(IntPtr handle, byte[] buffer, IntPtr bufferSize);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern long MediaInfoA_Open_Buffer_Continue_GoTo_Get(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_Open_Buffer_Finalize(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern void MediaInfoA_Close(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_GetI(IntPtr handle, IntPtr streamKind, IntPtr streamNumber, IntPtr parameter, IntPtr infoKind);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_Get(IntPtr handle, IntPtr streamKind, IntPtr streamNumber, IntPtr parameter, IntPtr infoKind, IntPtr searchKind);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_Option(IntPtr handle, IntPtr option, IntPtr value);
-        [DllImport("MediaInfo.dll")]
+        [DllImport("mediainfo")]
         private static extern IntPtr MediaInfoA_State_Get(IntPtr handle);
-        [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoA_Count_Get(IntPtr handle, IntPtr StreamKind, IntPtr streamNumber);
+        [DllImport("mediainfo")]
+        private static extern IntPtr MediaInfoA_Count_Get(IntPtr handle, IntPtr streamKind, IntPtr streamNumber);
     }
 }

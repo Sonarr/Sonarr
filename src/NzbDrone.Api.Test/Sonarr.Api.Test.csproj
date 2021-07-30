@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
-    <Platforms>x86</Platforms>
+    <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NBuilder" Version="6.0.0" />
+    <PackageReference Include="NBuilder" Version="6.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />

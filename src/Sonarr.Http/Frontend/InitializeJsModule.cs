@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using Nancy;
 using Nancy.Responses;
+using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Analytics;
 using NzbDrone.Core.Configuration;
@@ -26,7 +27,7 @@ namespace Sonarr.Http.Frontend
             _apiKey = configFileProvider.ApiKey;
             _urlBase = configFileProvider.UrlBase;
 
-            Get("/initialize.js",  x => Index());
+            Get("/initialize.js", x => Index());
         }
 
         private Response Index()
@@ -64,6 +65,7 @@ namespace Sonarr.Http.Frontend
             builder.AppendLine($"  instanceName: '{_configFileProvider.InstanceName.ToString()}',");
             builder.AppendLine($"  branch: '{_configFileProvider.Branch.ToLower()}',");
             builder.AppendLine($"  analytics: {_analyticsService.IsEnabled.ToString().ToLowerInvariant()},");
+            builder.AppendLine($"  userHash: '{HashUtil.AnonymousToken()}',");
             builder.AppendLine($"  urlBase: '{_urlBase}',");
             builder.AppendLine($"  isProduction: {RuntimeInfo.IsProduction.ToString().ToLowerInvariant()}");
             builder.AppendLine("};");

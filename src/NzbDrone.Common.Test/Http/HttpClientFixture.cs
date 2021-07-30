@@ -250,11 +250,6 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_follow_redirects_to_https()
         {
-            if (typeof(TDispatcher) == typeof(ManagedHttpDispatcher) && PlatformInfo.IsMono)
-            {
-                Assert.Ignore("Will fail on tls1.2 via managed dispatcher, ignore.");
-            }
-
             var request = new HttpRequestBuilder($"http://{_httpBinHost}/redirect-to")
                 .AddQueryParam("url", $"https://sonarr.tv/")
                 .Build();
@@ -758,7 +753,7 @@ namespace NzbDrone.Common.Test.Http
         {
             try
             {
-                string url = $"http://{_httpBinHost}/response-headers?Set-Cookie={Uri.EscapeUriString(malformedCookie)}";
+                string url = $"http://{_httpBinHost}/response-headers?Set-Cookie={Uri.EscapeDataString(malformedCookie)}";
 
                 var requestSet = new HttpRequest(url);
                 requestSet.AllowAutoRedirect = false;

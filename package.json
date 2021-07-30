@@ -29,7 +29,7 @@
     "@fortawesome/free-regular-svg-icons": "5.15.3",
     "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@fortawesome/react-fontawesome": "0.1.14",
-    "@microsoft/signalr": "5.0.5",
+    "@microsoft/signalr": "6.0.3",
     "@sentry/browser": "6.3.1",
     "@sentry/integrations": "6.3.1",
     "classnames": "2.3.1",

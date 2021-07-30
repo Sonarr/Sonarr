@@ -27,9 +27,9 @@ namespace NzbDrone.Integration.Test
             logLines = Logs.GetLogFileLines(logFile).Skip(logLines.Length + 2).ToArray();
             Array.Resize(ref logLines, logLines.Length - 1);
 
-            logLines.Should().Contain(v => v.Contains("|Trace|Http|Req") && v.Contains("/api/series/"));
-            logLines.Should().Contain(v => v.Contains("|Trace|Http|Res") && v.Contains("/api/series/: 400.BadRequest"));
-            logLines.Should().Contain(v => v.Contains("|Debug|Api|") && v.Contains("/api/series/: 400.BadRequest"));
+            logLines.Should().Contain(v => v.Contains("|Trace|Http|Req") && v.Contains("/api/v3/series/"));
+            logLines.Should().Contain(v => v.Contains("|Trace|Http|Res") && v.Contains("/api/v3/series/: 400.BadRequest"));
+            logLines.Should().Contain(v => v.Contains("|Debug|Api|") && v.Contains("/api/v3/series/: 400.BadRequest"));
         }
     }
 }

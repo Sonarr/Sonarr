@@ -8,7 +8,7 @@ namespace NzbDrone.Core
     {
         public static string SHA256Hash(this string input)
         {
-            using (var hash = SHA256Managed.Create())
+            using (var hash = SHA256.Create())
             {
                 var enc = Encoding.UTF8;
                 return GetHash(hash.ComputeHash(enc.GetBytes(input)));
@@ -17,7 +17,7 @@ namespace NzbDrone.Core
 
         public static string SHA256Hash(this Stream input)
         {
-            using (var hash = SHA256Managed.Create())
+            using (var hash = SHA256.Create())
             {
                 return GetHash(hash.ComputeHash(input));
             }

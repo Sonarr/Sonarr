@@ -1,0 +1,4 @@
+<Project>
+  <Import Project="Targets/PublishAllRids.targets" />
+  <Import Project="Targets/CopyRuntimes.targets" />
+</Project>

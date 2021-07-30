@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 using RestSharp;
@@ -17,15 +18,17 @@ namespace NzbDrone.Test.Common
         private readonly IProcessProvider _processProvider;
         private readonly IRestClient _restClient;
         private Process _nzbDroneProcess;
-        private TextWriter _progressWriter;
 
         public string AppData { get; private set; }
         public string ApiKey { get; private set; }
+        public int Port { get; private set; }
 
         public NzbDroneRunner(Logger logger, int port = 8989)
         {
             _processProvider = new ProcessProvider(logger);
-            _restClient = new RestClient("http://localhost:8989/api");
+            _restClient = new RestClient($"http://localhost:{port}/api/v3");
+
+            Port = port;
         }
 
         public void Start()
@@ -33,19 +36,25 @@ namespace NzbDrone.Test.Common
             AppData = Path.Combine(TestContext.CurrentContext.TestDirectory, "_intg_" + TestBase.GetUID());
             Directory.CreateDirectory(AppData);
 
-            GenerateApiKey();
-            
-            var sonarrConsoleExe = OsInfo.IsWindows ? "Sonarr.Console.exe" : "Sonarr.exe";
+            GenerateConfigFile();
 
-            _progressWriter = TestContext.Progress;
-
-            if (BuildInfo.IsDebug)
+            string consoleExe;
+            if (OsInfo.IsWindows)
             {
-                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "_output", "Sonarr.Console.exe"));
+                consoleExe = "Sonarr.Console.exe";
             }
             else
             {
-                Start(Path.Combine("bin", sonarrConsoleExe));
+                consoleExe = "Sonarr";
+            }
+
+            if (BuildInfo.IsDebug)
+            {
+                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "_output", "net6.0", consoleExe));
+            }
+            else
+            {
+                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "bin", consoleExe));
             }
 
             while (true)
@@ -54,9 +63,7 @@ namespace NzbDrone.Test.Common
 
                 if (_nzbDroneProcess.HasExited)
                 {
-                    _progressWriter.WriteLine("NzbDrone has exited unexpectedly");
-                    Thread.Sleep(2000);
-                    Assert.Fail("Process has exited: ExitCode={0}", _nzbDroneProcess.ExitCode);
+                    Assert.Fail("Process has exited");
                 }
 
                 var request = new RestRequest("system/status");
@@ -67,14 +74,39 @@ namespace NzbDrone.Test.Common
 
                 if (statusCall.ResponseStatus == ResponseStatus.Completed)
                 {
-                    _progressWriter.WriteLine("NzbDrone is started. Running Tests");
+                    TestContext.Progress.WriteLine($"Sonarr {Port} is started. Running Tests");
                     return;
                 }
 
-                _progressWriter.WriteLine("Waiting for NzbDrone to start. Response Status : {0}  [{1}] {2}", statusCall.ResponseStatus, statusCall.StatusDescription, statusCall.ErrorException.Message);
+                TestContext.Progress.WriteLine("Waiting for Sonarr to start. Response Status : {0}  [{1}] {2}", statusCall.ResponseStatus, statusCall.StatusDescription, statusCall.ErrorException.Message);
 
                 Thread.Sleep(500);
             }
+        }
+
+        public void Kill()
+        {
+            try
+            {
+                if (_nzbDroneProcess != null)
+                {
+                    _nzbDroneProcess.Refresh();
+                    if (_nzbDroneProcess.HasExited)
+                    {
+                        var log = File.ReadAllLines(Path.Combine(AppData, "logs", "Sonarr.trace.txt"));
+                        var output = log.Join(Environment.NewLine);
+                        TestContext.Progress.WriteLine("Process has exited prematurely: ExitCode={0} Output:\n{1}", _nzbDroneProcess.ExitCode, output);
+                    }
+
+                    _processProvider.Kill(_nzbDroneProcess.Id);
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // May happen if the process closes while being closed
+            }
+
+            TestBase.DeleteTempFolder(AppData);
         }
 
         public void KillAll()
@@ -98,18 +130,16 @@ namespace NzbDrone.Test.Common
             TestBase.DeleteTempFolder(AppData);
         }
 
-        private void Start(string outputNzbdroneConsoleExe)
+        private void Start(string outputSonarrConsoleExe)
         {
-            _progressWriter.WriteLine("Starting instance from {0}", outputNzbdroneConsoleExe);
-
-            var args = "-nobrowser -data=\"" + AppData + "\"";
-            _nzbDroneProcess = _processProvider.Start(outputNzbdroneConsoleExe, args, null, OnOutputDataReceived, OnOutputDataReceived);
-
+            TestContext.Progress.WriteLine("Starting instance from {0} on port {1}", outputSonarrConsoleExe, Port);
+            var args = "-nobrowser -nosingleinstancecheck -data=\"" + AppData + "\"";
+            _nzbDroneProcess = _processProvider.Start(outputSonarrConsoleExe, args, null, OnOutputDataReceived, OnOutputDataReceived);
         }
 
         private void OnOutputDataReceived(string data)
         {
-            _progressWriter.WriteLine(" : " + data);
+            TestContext.Progress.WriteLine($" [{Port}] > " + data);
 
             if (data.Contains("Press enter to exit"))
             {
@@ -117,7 +147,7 @@ namespace NzbDrone.Test.Common
             }
         }
 
-        private void GenerateApiKey()
+        private void GenerateConfigFile()
         {
             var configFile = Path.Combine(AppData, "config.xml");
 
@@ -125,11 +155,12 @@ namespace NzbDrone.Test.Common
             var apiKey = Guid.NewGuid().ToString().Replace("-", "");
 
             var xDoc = new XDocument(
-                new XDeclaration("1.0", "utf-8", "yes"), 
+                new XDeclaration("1.0", "utf-8", "yes"),
                 new XElement(ConfigFileProvider.CONFIG_ELEMENT_NAME,
-                    new XElement(nameof(ConfigFileProvider.ApiKey), apiKey)
-                    )
-                );
+                             new XElement(nameof(ConfigFileProvider.ApiKey), apiKey),
+                             new XElement(nameof(ConfigFileProvider.LogLevel), "trace"),
+                             new XElement(nameof(ConfigFileProvider.AnalyticsEnabled), false),
+                             new XElement(nameof(ConfigFileProvider.Port), Port)));
 
             var data = xDoc.ToString();
 

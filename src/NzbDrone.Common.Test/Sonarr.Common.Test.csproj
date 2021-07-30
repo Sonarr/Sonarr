@@ -1,14 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
-    <Platforms>x86</Platforms>
+    <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Host\Sonarr.Host.csproj" />
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
     <ProjectReference Include="..\NzbDrone.Test.Dummy\Sonarr.Test.Dummy.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.ServiceProcess" />
   </ItemGroup>
 </Project>

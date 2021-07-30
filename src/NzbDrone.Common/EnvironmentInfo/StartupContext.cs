@@ -24,6 +24,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public const string TERMINATE = "terminateexisting";
         public const string RESTART = "restart";
         public const string REGISTER_URL = "registerurl";
+        public const string NO_SINGLE_INSTANCE_CHECK = "nosingleinstancecheck";
         public const string EXIT_IMMEDIATELY = "exitimmediately";
 
         public StartupContext(params string[] args)
