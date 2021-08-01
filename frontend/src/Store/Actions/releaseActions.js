@@ -120,6 +120,35 @@ export const defaultState = {
         default:
           return false;
       }
+    },
+
+    peers: function(item, value, type) {
+      const seeders = item.seeders || 0;
+      const leechers = item.leechers || 0;
+      const peers = seeders + leechers;
+
+      switch (type) {
+        case filterTypes.EQUAL:
+          return peers === value;
+
+        case filterTypes.GREATER_THAN:
+          return peers > value;
+
+        case filterTypes.GREATER_THAN_OR_EQUAL:
+          return peers >= value;
+
+        case filterTypes.LESS_THAN:
+          return peers < value;
+
+        case filterTypes.LESS_THAN_OR_EQUAL:
+          return peers <= value;
+
+        case filterTypes.NOT_EQUAL:
+          return peers !== value;
+
+        default:
+          return false;
+      }
     }
   },
 
