@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nancy;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -21,6 +22,7 @@ namespace Sonarr.Api.V3.Queue
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IPendingReleaseService _pendingReleaseService;
         private readonly IDownloadService _downloadService;
+        private readonly IBlocklistService _blocklistService;
 
         public QueueActionModule(IQueueService queueService,
                                  ITrackedDownloadService trackedDownloadService,
@@ -28,7 +30,8 @@ namespace Sonarr.Api.V3.Queue
                                  IIgnoredDownloadService ignoredDownloadService,
                                  IProvideDownloadClient downloadClientProvider,
                                  IPendingReleaseService pendingReleaseService,
-                                 IDownloadService downloadService)
+                                 IDownloadService downloadService,
+                                 IBlocklistService blocklistService)
         {
             _queueService = queueService;
             _trackedDownloadService = trackedDownloadService;
@@ -37,6 +40,7 @@ namespace Sonarr.Api.V3.Queue
             _downloadClientProvider = downloadClientProvider;
             _pendingReleaseService = pendingReleaseService;
             _downloadService = downloadService;
+            _blocklistService = blocklistService;
 
             Post(@"/grab/(?<id>[\d]{1,10})",  x => Grab((int)x.Id));
             Post("/grab/bulk",  x => Grab());
@@ -126,6 +130,7 @@ namespace Sonarr.Api.V3.Queue
 
             if (pendingRelease != null)
             {
+                _blocklistService.Block(pendingRelease.RemoteEpisode, "Pending release manually blocklisted");
                 _pendingReleaseService.RemovePendingQueueItems(pendingRelease.Id);
 
                 return null;

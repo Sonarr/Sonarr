@@ -279,6 +279,17 @@ class Queue extends Component {
               return !!(item && item.seriesId && item.episodeId);
             })
           )}
+          allPending={isConfirmRemoveModalOpen && (
+            selectedIds.every((id) => {
+              const item = items.find((i) => i.id === id);
+
+              if (!item) {
+                return false;
+              }
+
+              return item.status === 'delay' || item.status === 'downloadClientUnavailable';
+            })
+          )}
           onRemovePress={this.onRemoveSelectedConfirmed}
           onModalClose={this.onConfirmRemoveModalClose}
         />
