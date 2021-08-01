@@ -47,7 +47,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     {
                         if (rootFolders.Any(r => r.Path.PathEquals(folder.FullPath)))
                         {
-                            return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format("Download client {0} places downloads in the root folder {1}. You should not download to a root folder.", client.Definition.Name, folder.FullPath), "#downloads_in_root_folder");
+                            return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format("Download client {0} places downloads in the root folder {1}. You should not download to a root folder.", client.Definition.Name, folder.FullPath), "#downloads-in-root-folder");
                         }
                     }
                 }

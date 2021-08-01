@@ -108,7 +108,7 @@ function EditNotificationModalContent(props) {
                 <div className={styles.triggers}>
                   <FormInputHelpText
                     text="Select which events should trigger this conection"
-                    link="https://wiki.servarr.com/Sonarr_Settings#Connections"
+                    link="https://wiki.servarr.com/sonarr/settings#connections"
                   />
 
                   <div className={styles.triggerEvents}>

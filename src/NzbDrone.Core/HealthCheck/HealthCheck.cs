@@ -34,12 +34,12 @@ namespace NzbDrone.Core.HealthCheck
 
         private static string MakeWikiFragment(string message)
         {
-            return "#" + CleanFragmentRegex.Replace(message.ToLower(), string.Empty).Replace(' ', '_');
+            return "#" + CleanFragmentRegex.Replace(message.ToLower(), string.Empty).Replace(' ', '-');
         }
 
         private static HttpUri MakeWikiUrl(string fragment)
         {
-            return new HttpUri("https://wiki.servarr.com/Sonarr_System") + new HttpUri(fragment);
+            return new HttpUri("https://wiki.servarr.com/sonarr/system") + new HttpUri(fragment);
         }
     }
 

@@ -128,7 +128,7 @@ class FileBrowserModalContent extends Component {
                 className={styles.mappedDrivesWarning}
                 kind={kinds.WARNING}
               >
-                Mapped network drives are not available when running as a Windows Service, see the <Link className={styles.faqLink} to="https://wiki.servarr.com/Sonarr_FAQ#Why_cant_Sonarr_see_my_files_on_a_remote_server">FAQ</Link> for more information.
+                Mapped network drives are not available when running as a Windows Service, see the <Link className={styles.faqLink} to="https://wiki.servarr.com/sonarr/faq#why-cant-sonarr-see-my-files-on-a-remote-server">FAQ</Link> for more information.
               </Alert>
           }
 

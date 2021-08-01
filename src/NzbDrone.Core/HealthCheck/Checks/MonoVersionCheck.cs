@@ -49,7 +49,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 _logger.Debug("Mono version is {0} or better: {1}", stableVersion, monoVersion);
                 return new HealthCheck(GetType(), HealthCheckResult.Notice,
                     $"Currently installed Mono version {monoVersion} is supported but upgrading to {bestVersion} is recommended.",
-                    "#currently_installed_mono_version_is_supported_but_upgrading_is_recommended");
+                    "#currently-installed-mono-version-is-supported-but-upgrading-is-recommended");
             }
             
             var oldVersion = new Version("5.4");
@@ -57,12 +57,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error,
                 $"Currently installed Mono version {monoVersion} is no longer supported. Please upgrade Mono to version {bestVersion}.",
-                "#currently_installed_mono_version-is_old_and_unsupported");
+                "#currently-installed-mono-version-is-old-and-unsupported");
             }
 
             return new HealthCheck(GetType(), HealthCheckResult.Error, 
                 $"Currently installed Mono version {monoVersion} is old and unsupported. Please upgrade Mono to version {bestVersion}.", 
-                "#currently_installed_mono_version-is_old_and_unsupported");
+                "#currently-installed-mono-version-is-old-and-unsupported");
         }
 
         public override bool CheckOnSchedule => false;

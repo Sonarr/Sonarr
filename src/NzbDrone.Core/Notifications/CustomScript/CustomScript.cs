@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
         public override string Name => "Custom Script";
 
-        public override string Link => "https://wiki.servarr.com/Sonarr_Settings#Connections";
+        public override string Link => "https://wiki.servarr.com/sonarr/settings#connections";
 
         public override ProviderMessage Message => new ProviderMessage("Testing will execute the script with the EventType set to Test, ensure your script handles this correctly", ProviderMessageType.Warning);
 

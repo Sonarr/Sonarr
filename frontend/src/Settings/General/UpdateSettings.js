@@ -59,7 +59,7 @@ function UpdateSettings(props) {
           type={inputTypes.AUTO_COMPLETE}
           name="branch"
           helpText={usingExternalUpdateMechanism ? 'Branch used by external update mechanism' : 'Branch to use to update Sonarr'}
-          helpLink="https://wiki.servarr.com/Sonarr_Settings#Updates"
+          helpLink="https://wiki.servarr.com/sonarr/settings#updates"
           {...branch}
           values={branchValues}
           onChange={onInputChange}
@@ -97,7 +97,7 @@ function UpdateSettings(props) {
                 name="updateMechanism"
                 values={updateOptions}
                 helpText="Use Sonarr's built-in updater or a script"
-                helpLink="https://wiki.servarr.com/Sonarr_Settings#Updates"
+                helpLink="https://wiki.servarr.com/sonarr/settings#updates"
                 onChange={onInputChange}
                 {...updateMechanism}
               />
