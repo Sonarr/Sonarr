@@ -418,14 +418,15 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             {
                 return Settings.TvDirectory.TrimStart('/');
             }
-            else if (Settings.TvCategory.IsNotNullOrWhiteSpace())
-            {
-                var destDir = GetDefaultDir();
 
+            var destDir = GetDefaultDir();
+
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
                 return $"{destDir.TrimEnd('/')}/{Settings.TvCategory}";
             }
 
-            return null;
+            return destDir.TrimEnd('/');
         }
     }
 }
