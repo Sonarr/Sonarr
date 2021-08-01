@@ -119,7 +119,7 @@ namespace NzbDrone.Api
 
             resource.Fields = SchemaBuilder.ToSchema(definition.Settings);
 
-            resource.InfoLink = string.Format("https://wiki.servarr.com/sonarr/supported-{0}",
+            resource.InfoLink = string.Format("https://wiki.servarr.com/sonarr/supported#{0}",
                 definition.Implementation.ToLower());
         }
 
