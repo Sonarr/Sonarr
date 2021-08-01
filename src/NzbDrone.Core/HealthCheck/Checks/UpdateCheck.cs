@@ -40,7 +40,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(), HealthCheckResult.Error,
                         string.Format("Cannot install update because startup folder '{0}' is in an App Translocation folder.", startupFolder),
-                        "#cannot-install-update-because-startup-folder-is-in-an-App-Translocation-folder");
+                        "#cannot-install-update-because-startup-folder-is-in-an-app-translocation-folder");
                 }
 
                 if (!_diskProvider.FolderWritable(startupFolder))
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(), HealthCheckResult.Error,
                         string.Format("Cannot install update because UI folder '{0}' is not writable by the user '{1}'.", uiFolder, Environment.UserName),
-                        "#cannot-install-update-because-UI-folder-is-not-writable-by-the-user");
+                        "#cannot-install-update-because-ui-folder-is-not-writable-by-the-user");
                 }
             }
 
