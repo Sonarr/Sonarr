@@ -128,6 +128,11 @@ namespace NzbDrone.Core.Tv
                 {
                     season.Monitored = true;
                 }
+                // Don't monitor season 1 if only the pilot episode is monitored
+                else if (seasonNumber == firstSeason && monitoringOptions.Monitor == MonitorTypes.Pilot)
+                {
+                    season.Monitored = false;
+                }
                 // Monitor the season if it has any monitor episodes
                 else if (monitoredSeasons.Contains(seasonNumber))
                 {
