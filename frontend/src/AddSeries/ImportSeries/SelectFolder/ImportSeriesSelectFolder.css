@@ -30,3 +30,9 @@
 .importButtonIcon {
   margin-right: 8px;
 }
+
+.addErrorAlert {
+  composes: alert from '~Components/Alert.css';
+
+  margin: 20px 0;
+}

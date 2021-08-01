@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
+import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import FieldSet from 'Components/FieldSet';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -47,21 +48,27 @@ class ImportSeriesSelectFolder extends Component {
       isWindows,
       isFetching,
       isPopulated,
+      isSaving,
       error,
+      saveError,
       items
     } = this.props;
+
+    const hasRootFolders = items.length > 0;
 
     return (
       <PageContent title="Import Series">
         <PageContentBody>
           {
-            isFetching && !isPopulated &&
-              <LoadingIndicator />
+            isFetching && !isPopulated ?
+              <LoadingIndicator /> :
+              null
           }
 
           {
-            !isFetching && !!error &&
-              <div>Unable to load root folders</div>
+            !isFetching && error ?
+              <div>Unable to load root folders</div> :
+              null
           }
 
           {
@@ -87,7 +94,7 @@ class ImportSeriesSelectFolder extends Component {
                 </div>
 
                 {
-                  items.length > 0 ?
+                  hasRootFolders ?
                     <div className={styles.recentFolders}>
                       <FieldSet legend="Root Folders">
                         <RootFolders
@@ -97,34 +104,50 @@ class ImportSeriesSelectFolder extends Component {
                           items={items}
                         />
                       </FieldSet>
-
-                      <Button
-                        kind={kinds.PRIMARY}
-                        size={sizes.LARGE}
-                        onPress={this.onAddNewRootFolderPress}
-                      >
-                        <Icon
-                          className={styles.importButtonIcon}
-                          name={icons.DRIVE}
-                        />
-                        Choose another folder
-                      </Button>
                     </div> :
-
-                    <div className={styles.startImport}>
-                      <Button
-                        kind={kinds.PRIMARY}
-                        size={sizes.LARGE}
-                        onPress={this.onAddNewRootFolderPress}
-                      >
-                        <Icon
-                          className={styles.importButtonIcon}
-                          name={icons.DRIVE}
-                        />
-                        Start Import
-                      </Button>
-                    </div>
+                    null
                 }
+
+                {
+                  !isSaving && saveError ?
+                    <Alert
+                      className={styles.addErrorAlert}
+                      kind={kinds.DANGER}
+                    >
+                      Unable to add root folder
+
+                      <ul>
+                        {
+                          saveError.responseJSON.map((e, index) => {
+                            return (
+                              <li key={index}>
+                                {e.errorMessage}
+                              </li>
+                            );
+                          })
+                        }
+                      </ul>
+                    </Alert> :
+                    null
+                }
+
+                <div className={hasRootFolders ? undefined : styles.startImport}>
+                  <Button
+                    kind={kinds.PRIMARY}
+                    size={sizes.LARGE}
+                    onPress={this.onAddNewRootFolderPress}
+                  >
+                    <Icon
+                      className={styles.importButtonIcon}
+                      name={icons.DRIVE}
+                    />
+                    {
+                      hasRootFolders ?
+                        'Choose another folder' :
+                        'Start Import'
+                    }
+                  </Button>
+                </div>
 
                 <FileBrowserModal
                   isOpen={this.state.isAddNewRootFolderModalOpen}
@@ -145,7 +168,9 @@ ImportSeriesSelectFolder.propTypes = {
   isWindows: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
+  isSaving: PropTypes.bool.isRequired,
   error: PropTypes.object,
+  saveError: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   onNewRootFolderSelect: PropTypes.func.isRequired
 };
