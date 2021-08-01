@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using FluentMigrator.Builders.Create.Column;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
@@ -13,7 +12,6 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -81,6 +79,8 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex TitlePrefixRegex = new Regex(@"^(The|An|A) (.*?)((?: *\([^)]+\))*)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex YearRegex = new Regex(@"\(\d{4}\)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex ReservedDeviceNamesRegex = new Regex(@"^(?:aux|com1|com2|com3|com4|com5|com6|com7|com8|com9|con|lpt1|lpt2|lpt3|lpt4|lpt5|lpt6|lpt7|lpt8|lpt9|nul|prn)\.", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
@@ -176,6 +176,7 @@ namespace NzbDrone.Core.Organizer
                 component = FileNameCleanupRegex.Replace(component, match => match.Captures[0].Value[0].ToString());
                 component = TrimSeparatorsRegex.Replace(component, string.Empty);
                 component = component.Replace("{ellipsis}", "...");
+                component = ReplaceReservedDeviceNames(component);
 
                 components.Add(component);
             }
@@ -274,7 +275,11 @@ namespace NzbDrone.Core.Organizer
             AddIdTokens(tokenHandlers, series);
 
             var folderName = ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers, namingConfig);
-            return CleanFolderName(folderName);
+
+            folderName = CleanFolderName(folderName);
+            folderName = ReplaceReservedDeviceNames(folderName);
+
+            return folderName;
         }
 
         public string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null)
@@ -291,9 +296,12 @@ namespace NzbDrone.Core.Organizer
             AddSeasonTokens(tokenHandlers, seasonNumber);
 
             var format = seasonNumber == 0 ? namingConfig.SpecialsFolderFormat : namingConfig.SeasonFolderFormat;
-
             var folderName = ReplaceTokens(format, tokenHandlers, namingConfig);
-            return CleanFolderName(folderName);
+
+            folderName = CleanFolderName(folderName);
+            folderName = ReplaceReservedDeviceNames(folderName);
+
+            return folderName;
         }
 
         public static string CleanTitle(string title)
@@ -1047,6 +1055,12 @@ namespace NzbDrone.Core.Organizer
             var result = ReplaceTokens(pattern, tokenHandlers, namingConfig);
 
             return result.GetByteCount();
+        }
+
+        private string ReplaceReservedDeviceNames(string input)
+        {
+            // Replace reserved windows device names with an alternative
+            return ReservedDeviceNamesRegex.Replace(input, match => match.Value.Replace(".", "_"));
         }
     }
 
