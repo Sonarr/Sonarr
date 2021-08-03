@@ -27,7 +27,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             }
 
             var singleEpisodeSpec = searchCriteria as SeasonSearchCriteria;
-            if (singleEpisodeSpec == null) return Decision.Accept();
+            if (singleEpisodeSpec == null)
+            {
+                return Decision.Accept();
+            }
 
             if (singleEpisodeSpec.SeasonNumber != remoteEpisode.ParsedEpisodeInfo.SeasonNumber)
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -20,7 +20,9 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         public XemService(IEpisodeService episodeService,
                            IXemProxy xemProxy,
-                           ISeriesService seriesService, ICacheManager cacheManager, Logger logger)
+                           ISeriesService seriesService,
+                           ICacheManager cacheManager,
+                           Logger logger)
         {
             _episodeService = episodeService;
             _xemProxy = xemProxy;
@@ -112,8 +114,15 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             // Mark all episodes not on the xem as unverified.
             foreach (var episode in episodes)
             {
-                if (episode.SeasonNumber == 0) continue;
-                if (episode.SceneEpisodeNumber.HasValue) continue;
+                if (episode.SeasonNumber == 0)
+                {
+                    continue;
+                }
+
+                if (episode.SceneEpisodeNumber.HasValue)
+                {
+                    continue;
+                }
 
                 if (mappedSeasons.Contains(episode.SeasonNumber))
                 {
@@ -140,10 +149,25 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
             foreach (var episode in episodes)
             {
-                if (episode.SeasonNumber == 0) continue;
-                if (episode.SceneEpisodeNumber.HasValue) continue;
-                if (episode.SeasonNumber < lastTvdbSeason) continue;
-                if (!episode.UnverifiedSceneNumbering) continue;
+                if (episode.SeasonNumber == 0)
+                {
+                    continue;
+                }
+
+                if (episode.SceneEpisodeNumber.HasValue)
+                {
+                    continue;
+                }
+
+                if (episode.SeasonNumber < lastTvdbSeason)
+                {
+                    continue;
+                }
+
+                if (!episode.UnverifiedSceneNumbering)
+                {
+                    continue;
+                }
 
                 var seasonMappings = mappings.Where(v => v.Tvdb.Season == episode.SeasonNumber).ToList();
                 if (seasonMappings.Any(v => v.Tvdb.Episode >= episode.EpisodeNumber))
@@ -173,6 +197,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                     episode.SceneSeasonNumber = lastSceneSeason + offset;
                     episode.SceneEpisodeNumber = episode.EpisodeNumber;
+
                     // TODO: SceneAbsoluteEpisodeNumber.
                 }
             }

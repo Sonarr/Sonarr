@@ -21,7 +21,7 @@ namespace NzbDrone.Core.ImportLists
 
         public abstract string Name { get; }
 
-        public abstract ImportListType ListType {get; }
+        public abstract ImportListType ListType { get; }
 
         public ImportListBase(IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
         {
@@ -53,7 +53,10 @@ namespace NzbDrone.Core.ImportLists
 
         public virtual ProviderDefinition Definition { get; set; }
 
-        public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
+        public virtual object RequestAction(string action, IDictionary<string, string> query)
+        {
+            return null;
+        }
 
         protected TSettings Settings => (TSettings)Definition.Settings;
 
@@ -61,7 +64,7 @@ namespace NzbDrone.Core.ImportLists
 
         protected virtual IList<ImportListItemInfo> CleanupListItems(IEnumerable<ImportListItemInfo> releases)
         {
-            var result = releases.DistinctBy(r => new {r.Title, r.TvdbId}).ToList();
+            var result = releases.DistinctBy(r => new { r.Title, r.TvdbId }).ToList();
 
             result.ForEach(c =>
             {

@@ -73,7 +73,6 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
                 return _mediaFileService.GetFilesBySeries(seriesId).ConvertAll(f => f.ToResource(series, _upgradableSpecification));
             }
-
             else
             {
                 string episodeFileIdsValue = episodeFileIdsQuery.Value.ToString();
@@ -86,7 +85,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
                 return episodeFiles.GroupBy(e => e.SeriesId)
                                    .SelectMany(f => f.ToList()
-                                                     .ConvertAll( e => e.ToResource(_seriesService.GetSeries(f.Key), _upgradableSpecification)))
+                                                     .ConvertAll(e => e.ToResource(_seriesService.GetSeries(f.Key), _upgradableSpecification)))
                                    .ToList();
             }
         }

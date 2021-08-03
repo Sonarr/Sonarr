@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Test.Common;
-using FluentAssertions;
 
 namespace NzbDrone.Common.Test
 {

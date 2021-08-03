@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Net;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
-using NzbDrone.Common.Http;
-using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     {
         string GetBaseUrl(SabnzbdSettings settings, string relativePath = null);
         SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings);
-        void RemoveFrom(string source, string id,bool deleteData, SabnzbdSettings settings);
+        void RemoveFrom(string source, string id, bool deleteData, SabnzbdSettings settings);
         string GetVersion(SabnzbdSettings settings);
         SabnzbdConfig GetConfig(SabnzbdSettings settings);
         SabnzbdFullStatus GetFullStatus(SabnzbdSettings settings);
@@ -166,6 +166,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 requestBuilder.AddSuffixQueryParam("ma_username", settings.Username);
                 requestBuilder.AddSuffixQueryParam("ma_password", settings.Password);
             }
+
             requestBuilder.AddSuffixQueryParam("output", "json");
 
             return requestBuilder;
@@ -216,7 +217,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     result.Status = "false";
                     result.Error = response.Content.Replace("error: ", "");
                 }
-
                 else
                 {
                     result.Status = "true";

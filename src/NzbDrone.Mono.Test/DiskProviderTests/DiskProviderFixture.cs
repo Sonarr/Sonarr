@@ -39,6 +39,7 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
                 {
                     Syscall.chmod(_tempPath, FilePermissions.S_IRUSR | FilePermissions.S_IWUSR);
                 }
+
                 _tempPath = null;
             }
         }
@@ -69,7 +70,6 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
             {
                 mode &= ~(FilePermissions.S_IWUSR | FilePermissions.S_IWGRP | FilePermissions.S_IWOTH);
             }
-
 
             if (setgid)
             {

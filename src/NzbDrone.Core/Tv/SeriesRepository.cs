@@ -4,7 +4,6 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Messaging.Events;
 
-
 namespace NzbDrone.Core.Tv
 {
     public interface ISeriesRepository : IBasicRepository<Series>

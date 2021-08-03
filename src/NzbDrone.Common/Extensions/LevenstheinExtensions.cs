@@ -6,9 +6,20 @@ namespace NzbDrone.Common.Extensions
     {
         public static int LevenshteinDistance(this string text, string other, int costInsert = 1, int costDelete = 1, int costSubstitute = 1)
         {
-            if (text == other) return 0;
-            if (text.Length == 0) return other.Length * costInsert;
-            if (other.Length == 0) return text.Length * costDelete;
+            if (text == other)
+            {
+                return 0;
+            }
+
+            if (text.Length == 0)
+            {
+                return other.Length * costInsert;
+            }
+
+            if (other.Length == 0)
+            {
+                return text.Length * costDelete;
+            }
 
             int[] matrix = new int[other.Length + 1];
 

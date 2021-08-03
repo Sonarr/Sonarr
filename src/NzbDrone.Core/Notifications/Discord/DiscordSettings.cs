@@ -19,8 +19,8 @@ namespace NzbDrone.Core.Notifications.Discord
         public DiscordSettings()
         {
             //Set Default Fields
-            GrabFields = new [] { 0, 1, 2, 3, 5, 6, 7, 8, 9 };
-            ImportFields = new [] { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12 };
+            GrabFields = new[] { 0, 1, 2, 3, 5, 6, 7, 8, 9 };
+            ImportFields = new[] { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12 };
         }
 
         private static readonly DiscordSettingsValidator Validator = new DiscordSettingsValidator();

@@ -80,6 +80,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                             {
                                 pk.IsIdentity = true;
                             }
+
                             continue;
                         }
                     }
@@ -204,6 +205,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             foreach (var table in tables)
             {
                 table.Indexes = ReadIndexes(table.SchemaName, table.Name);
+
                 //table.ForeignKeys = ReadForeignKeys(table.SchemaName, table.Name);
             }
 
@@ -229,6 +231,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
                 tableDefinitionList.Add(table);
             }
+
             return tableDefinitionList;
         }
 
@@ -271,6 +274,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 var index = ReadIndexSchema(sql);
                 indexes.Add(index);
             }
+
             return indexes;
         }
     }

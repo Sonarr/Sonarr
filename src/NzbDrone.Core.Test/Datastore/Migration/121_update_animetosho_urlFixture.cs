@@ -26,7 +26,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     {
                         BaseUrl = baseUrl,
                         ApiPath = "/feed/nabapi"
-
                     }.ToJson(),
                     ConfigContract = impl + "Settings",
                     EnableInteractiveSearch = false

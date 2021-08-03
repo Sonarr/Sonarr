@@ -57,7 +57,6 @@ namespace NzbDrone.Core.DecisionEngine
             {
                 _logger.ProgressInfo("Processing {0} releases", reports.Count);
             }
-
             else
             {
                 _logger.ProgressInfo("No results found");
@@ -153,7 +152,6 @@ namespace NzbDrone.Core.DecisionEngine
                     {
                         _logger.Debug("Release rejected for the following reasons: {0}", string.Join(", ", decision.Rejections));
                     }
-
                     else
                     {
                         _logger.Debug("Release accepted");
@@ -174,7 +172,10 @@ namespace NzbDrone.Core.DecisionEngine
                                         .Where(c => c != null)
                                         .ToArray();
 
-                if (reasons.Any()) break;
+                if (reasons.Any())
+                {
+                    break;
+                }
             }
 
             return new DownloadDecision(remoteEpisode, reasons.ToArray());

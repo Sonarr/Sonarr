@@ -45,8 +45,8 @@ namespace Sonarr.Api.V3.Indexers
                              ICacheManager cacheManager,
                              ILanguageProfileService languageProfileService,
                              IQualityProfileService qualityProfileService,
-                             Logger logger) :
-            base(languageProfileService, qualityProfileService)
+                             Logger logger)
+            : base(languageProfileService, qualityProfileService)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
             _releaseSearchService = releaseSearchService;
@@ -115,7 +115,7 @@ namespace Sonarr.Api.V3.Indexers
                     {
                         var episode = _episodeService.GetEpisode(release.EpisodeId.Value);
 
-                        episodes = new List<Episode>{episode};
+                        episodes = new List<Episode> { episode };
                     }
 
                     remoteEpisode.Episodes = episodes;

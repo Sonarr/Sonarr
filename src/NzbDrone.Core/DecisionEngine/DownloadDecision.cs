@@ -32,7 +32,7 @@ namespace NzbDrone.Core.DecisionEngine
             RemoteEpisode = episode;
             Rejections = rejections.ToList();
         }
-        
+
         public override string ToString()
         {
             if (Approved)

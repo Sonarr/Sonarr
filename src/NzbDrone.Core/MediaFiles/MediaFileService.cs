@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
-using NzbDrone.Common;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -118,10 +118,12 @@ namespace NzbDrone.Core.MediaFiles
         {
             var seriesFilePaths = seriesFiles.Select(f => Path.Combine(series.Path, f.RelativePath)).ToList();
 
-            if (!seriesFilePaths.Any()) return files;
+            if (!seriesFilePaths.Any())
+            {
+                return files;
+            }
 
             return files.Except(seriesFilePaths, PathEqualityComparer.Instance).ToList();
         }
-
     }
 }

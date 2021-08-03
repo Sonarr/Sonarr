@@ -4,10 +4,10 @@ using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Languages;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            LanguageProfile _profile = new LazyLoaded<LanguageProfile> (new LanguageProfile
+            LanguageProfile profile = new LazyLoaded<LanguageProfile>(new LanguageProfile
             {
                 Languages = LanguageFixture.GetDefaultLanguages(Language.English, Language.Spanish),
                 Cutoff = Language.Spanish
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 },
                 Series = new Series
                 {
-                    LanguageProfile = _profile
+                    LanguageProfile = profile
                 }
             };
         }
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithGermanRelease()
         {
-            _remoteEpisode.ParsedEpisodeInfo.Language = Language.German;            
+            _remoteEpisode.ParsedEpisodeInfo.Language = Language.German;
         }
 
         [Test]
@@ -83,7 +83,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
-
         [Test]
         public void should_return_true_if_language_is_spanish()
         {
@@ -91,6 +90,5 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
-
     }
 }

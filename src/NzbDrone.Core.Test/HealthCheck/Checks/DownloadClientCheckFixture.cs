@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         public void should_return_error_when_download_client_throws()
         {
             var downloadClient = Mocker.GetMock<IDownloadClient>();
-            downloadClient.Setup(s => s.Definition).Returns(new DownloadClientDefinition{Name = "Test"});
+            downloadClient.Setup(s => s.Definition).Returns(new DownloadClientDefinition { Name = "Test" });
 
             downloadClient.Setup(s => s.GetItems())
                           .Throws<Exception>();

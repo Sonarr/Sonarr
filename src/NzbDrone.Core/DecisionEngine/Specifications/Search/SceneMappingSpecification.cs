@@ -33,10 +33,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return Decision.Accept();
             }
 
-
             var split = remoteEpisode.SceneMapping.SceneOrigin.Split(':');
 
-            var isInteractive = (searchCriteria != null && searchCriteria.InteractiveSearch);
+            var isInteractive = searchCriteria != null && searchCriteria.InteractiveSearch;
 
             if (remoteEpisode.SceneMapping.Comment.IsNotNullOrWhiteSpace())
             {

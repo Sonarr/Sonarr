@@ -23,7 +23,8 @@ namespace NzbDrone.Common.Test.Http
     [Ignore("httpbin is bugged")]
     [IntegrationTest]
     [TestFixture(typeof(ManagedHttpDispatcher))]
-    public class HttpClientFixture<TDispatcher> : TestBase<HttpClient> where TDispatcher : IHttpDispatcher
+    public class HttpClientFixture<TDispatcher> : TestBase<HttpClient>
+        where TDispatcher : IHttpDispatcher
     {
         private string[] _httpBinHosts;
         private int _httpBinSleep;
@@ -35,6 +36,7 @@ namespace NzbDrone.Common.Test.Http
         public void FixtureSetUp()
         {
             var candidates = new[] { "eu.httpbin.org", /*"httpbin.org",*/ "www.httpbin.org" };
+
             // httpbin.org is broken right now, occassionally redirecting to https if it's unavailable.
             _httpBinHosts = candidates.Where(IsTestSiteAvailable).ToArray();
 
@@ -49,7 +51,10 @@ namespace NzbDrone.Common.Test.Http
             {
                 var req = WebRequest.Create($"http://{site}/get") as HttpWebRequest;
                 var res = req.GetResponse() as HttpWebResponse;
-                if (res.StatusCode != HttpStatusCode.OK) return false;
+                if (res.StatusCode != HttpStatusCode.OK)
+                {
+                    return false;
+                }
 
                 try
                 {
@@ -61,7 +66,10 @@ namespace NzbDrone.Common.Test.Http
                     res = ex.Response as HttpWebResponse;
                 }
 
-                if (res == null || res.StatusCode != (HttpStatusCode)429) return false;
+                if (res == null || res.StatusCode != (HttpStatusCode)429)
+                {
+                    return false;
+                }
 
                 return true;
             }
@@ -688,7 +696,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_call_interceptor()
         {
-            Mocker.SetConstant<IEnumerable<IHttpRequestInterceptor>>(new [] { Mocker.GetMock<IHttpRequestInterceptor>().Object });
+            Mocker.SetConstant<IEnumerable<IHttpRequestInterceptor>>(new[] { Mocker.GetMock<IHttpRequestInterceptor>().Object });
 
             Mocker.GetMock<IHttpRequestInterceptor>()
                 .Setup(v => v.PreRequest(It.IsAny<HttpRequest>()))

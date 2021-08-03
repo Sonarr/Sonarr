@@ -34,6 +34,7 @@ namespace NzbDrone.Integration.Test.Client
                         _logger.Error(ex, "Failed to get log lines");
                         throw;
                     }
+
                     _logger.Info(ex, "Failed to get log lines, attempt {0}/{1}", attempt, attempts);
                     Thread.Sleep(10);
                     attempt++;

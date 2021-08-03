@@ -8,7 +8,8 @@ namespace NzbDrone.Core.Exceptions
     {
         public ReleaseInfo Release { get; set; }
 
-        public ReleaseDownloadException(ReleaseInfo release, string message, params object[] args) : base(message, args)
+        public ReleaseDownloadException(ReleaseInfo release, string message, params object[] args)
+            : base(message, args)
         {
             Release = release;
         }

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
-
 namespace NzbDrone.Core.MediaFiles
 {
     public interface IMediaFileRepository : IBasicRepository<EpisodeFile>
@@ -12,7 +11,6 @@ namespace NzbDrone.Core.MediaFiles
         List<EpisodeFile> GetFilesWithoutMediaInfo();
         List<EpisodeFile> GetFilesWithRelativePath(int seriesId, string relativePath);
     }
-
 
     public class MediaFileRepository : BasicRepository<EpisodeFile>, IMediaFileRepository
     {

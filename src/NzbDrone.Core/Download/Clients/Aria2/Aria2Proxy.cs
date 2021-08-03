@@ -1,9 +1,9 @@
-﻿using CookComputing.XmlRpc;
-using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using CookComputing.XmlRpc;
+using NLog;
 
 namespace NzbDrone.Core.Download.Clients.Aria2
 {
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         [XmlRpcMethod("aria2.forceRemove")]
         string Remove(string token, string gid);
-        
+
         [XmlRpcMethod("aria2.removeDownloadResult")]
         string RemoveResult(string token, string gid);
 
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         Aria2Status[] GetWaiting(string token, int offset, int num);
 
         [XmlRpcMethod("aria2.tellStopped")]
-        Aria2Status[] GetStopped(string token, int offset, int num); 
+        Aria2Status[] GetStopped(string token, int offset, int num);
     }
 
     public class Aria2Proxy : IAria2Proxy
@@ -95,7 +95,6 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             return found;
         }
 
-
         public List<Aria2Status> GetTorrents(Aria2Settings settings)
         {
             _logger.Trace("> aria2.tellActive");
@@ -108,13 +107,13 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
             _logger.Trace("> aria2.tellWaiting");
 
-            var waiting = ExecuteRequest(() => client.GetWaiting(GetToken(settings), 0, 10*1024));
+            var waiting = ExecuteRequest(() => client.GetWaiting(GetToken(settings), 0, 10 * 1024));
 
             _logger.Trace("< aria2.tellWaiting");
 
             _logger.Trace("> aria2.tellStopped");
 
-            var stopped = ExecuteRequest(() => client.GetStopped(GetToken(settings), 0, 10*1024));
+            var stopped = ExecuteRequest(() => client.GetStopped(GetToken(settings), 0, 10 * 1024));
 
             _logger.Trace("< aria2.tellStopped");
 
@@ -123,7 +122,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             items.AddRange(active);
             items.AddRange(waiting);
             items.AddRange(stopped);
-            
+
             return items;
         }
 
@@ -138,8 +137,8 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
             var ret = new Dictionary<string, string>();
 
-            foreach(DictionaryEntry option in options)
-            {                
+            foreach (DictionaryEntry option in options)
+            {
                 ret.Add(option.Key.ToString(), option.Value?.ToString());
             }
 
@@ -181,7 +180,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
             return gid == gidres;
         }
-        
+
         public bool RemoveCompletedTorrent(Aria2Settings settings, string gid)
         {
             _logger.Trace("> aria2.removeDownloadResult");

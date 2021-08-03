@@ -11,7 +11,10 @@ namespace Sonarr.Api.V3.Metadata
     {
         public override MetadataResource ToResource(MetadataDefinition definition)
         {
-            if (definition == null) return null;
+            if (definition == null)
+            {
+                return null;
+            }
 
             var resource = base.ToResource(definition);
 
@@ -22,7 +25,10 @@ namespace Sonarr.Api.V3.Metadata
 
         public override MetadataDefinition ToModel(MetadataResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             var definition = base.ToModel(resource);
 

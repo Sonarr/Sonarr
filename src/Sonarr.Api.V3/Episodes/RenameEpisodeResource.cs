@@ -18,7 +18,10 @@ namespace Sonarr.Api.V3.Episodes
     {
         public static RenameEpisodeResource ToResource(this NzbDrone.Core.MediaFiles.RenameEpisodeFilePreview model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new RenameEpisodeResource
             {

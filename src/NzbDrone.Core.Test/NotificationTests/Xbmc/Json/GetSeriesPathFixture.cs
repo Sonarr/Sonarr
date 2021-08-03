@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
             {
                 TvdbId = 1000,
                 Title = "Does not exist"
-            }; 
+            };
         }
 
         [Test]

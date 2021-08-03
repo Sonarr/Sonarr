@@ -48,7 +48,7 @@ namespace Sonarr.Api.V3.Series
 
                 if (resource.SeriesType.HasValue)
                 {
-                    series.SeriesType = resource.SeriesType.Value;                    
+                    series.SeriesType = resource.SeriesType.Value;
                 }
 
                 if (resource.SeasonFolder.HasValue)
@@ -96,8 +96,8 @@ namespace Sonarr.Api.V3.Series
             }
 
             return ResponseWithCode(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles)
-                                 .ToResource()
-                                 , HttpStatusCode.Accepted);
+                                 .ToResource(),
+                                 HttpStatusCode.Accepted);
         }
 
         private object DeleteSeries()

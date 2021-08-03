@@ -1,15 +1,16 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-using System.Linq;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using FluentAssertions;
+using NUnit.Framework;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
     public class SeriesFixture : IntegrationTest
     {
-        [Test, Order(0)]
+        [Test]
+        [Order(0)]
         public void add_series_with_tags_should_store_them()
         {
             EnsureNoSeries(266189, "The Blacklist");
@@ -29,7 +30,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             result.Tags.Should().Equal(tag.Id);
         }
 
-        [Test, Order(0)]
+        [Test]
+        [Order(0)]
         public void add_series_without_profileid_should_return_badrequest()
         {
             EnsureNoSeries(266189, "The Blacklist");
@@ -41,7 +43,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             Series.InvalidPost(series);
         }
 
-        [Test, Order(0)]
+        [Test]
+        [Order(0)]
         public void add_series_without_path_should_return_badrequest()
         {
             EnsureNoSeries(266189, "The Blacklist");
@@ -53,7 +56,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             Series.InvalidPost(series);
         }
 
-        [Test, Order(1)]
+        [Test]
+        [Order(1)]
         public void add_series()
         {
             EnsureNoSeries(266189, "The Blacklist");
@@ -73,8 +77,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             result.Path.Should().Be(Path.Combine(SeriesRootFolder, series.Title));
         }
 
-
-        [Test, Order(2)]
+        [Test]
+        [Order(2)]
         public void get_all_series()
         {
             EnsureSeries(266189, "The Blacklist");
@@ -85,7 +89,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             Series.All().Should().Contain(v => v.TvdbId == 266189);
         }
 
-        [Test, Order(2)]
+        [Test]
+        [Order(2)]
         public void get_series_by_id()
         {
             var series = EnsureSeries(266189, "The Blacklist");
@@ -101,7 +106,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             var result = Series.InvalidGet(1000000);
         }
 
-        [Test, Order(2)]
+        [Test]
+        [Order(2)]
         public void update_series_profile_id()
         {
             var series = EnsureSeries(266189, "The Blacklist");
@@ -119,7 +125,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             Series.Get(series.Id).QualityProfileId.Should().Be(profileId);
         }
 
-        [Test, Order(3)]
+        [Test]
+        [Order(3)]
         public void update_series_monitored()
         {
             var series = EnsureSeries(266189, "The Blacklist", false);
@@ -139,7 +146,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             result.Seasons.First().Monitored.Should().BeTrue();
         }
 
-        [Test, Order(3)]
+        [Test]
+        [Order(3)]
         public void update_series_tags()
         {
             var series = EnsureSeries(266189, "The Blacklist");
@@ -161,7 +169,8 @@ namespace NzbDrone.Integration.Test.ApiTests
             }
         }
 
-        [Test, Order(4)]
+        [Test]
+        [Order(4)]
         public void delete_series()
         {
             var series = EnsureSeries(266189, "The Blacklist");

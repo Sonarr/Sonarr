@@ -32,10 +32,10 @@ namespace NzbDrone.RuntimePatches.Mono
         // - throw new NotImplementedException();
         // + return base.ReadAsync(destination, cancellationToken);
         // }
-        static IEnumerable<CodeInstruction> Transpiler_ReadAsyncMemory(IEnumerable<CodeInstruction> instructions, MethodBase method)
+        private static IEnumerable<CodeInstruction> Transpiler_ReadAsyncMemory(IEnumerable<CodeInstruction> instructions, MethodBase method)
         {
             var codes = instructions.ToList();
-            
+
             var patchable = codes.Matches(OpCodes.Newobj, OpCodes.Throw);
 
             var readAsync = method.DeclaringType.BaseType.GetMethod("ReadAsync", method.GetParameterTypes());
@@ -65,18 +65,18 @@ namespace NzbDrone.RuntimePatches.Mono
         // - throw new NotImplementedException();
         // + return base.WriteAsync(source, cancellationToken);
         // }
-        static IEnumerable<CodeInstruction> Transpiler_WriteAsyncMemory(IEnumerable<CodeInstruction> instructions, MethodBase method)
+        private static IEnumerable<CodeInstruction> Transpiler_WriteAsyncMemory(IEnumerable<CodeInstruction> instructions, MethodBase method)
         {
             var codes = instructions.ToList();
 
             var patchable = codes.Matches(OpCodes.Newobj, OpCodes.Throw);
 
             var writeAsync = method.DeclaringType.BaseType.GetMethod("WriteAsync", method.GetParameterTypes());
-            
+
             if (patchable && writeAsync != null)
             {
-                codes.Clear();                
-                
+                codes.Clear();
+
                 codes.Add(new CodeInstruction(OpCodes.Ldarg_0));
                 codes.Add(new CodeInstruction(OpCodes.Ldarg_1));
                 codes.Add(new CodeInstruction(OpCodes.Ldarg_2));

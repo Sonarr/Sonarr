@@ -25,8 +25,6 @@ namespace NzbDrone.Core.Test.Profiles
             StoredModel.Cutoff.Should().Be(profile.Cutoff);
 
             StoredModel.Items.Should().Equal(profile.Items, (a, b) => a.Quality == b.Quality && a.Allowed == b.Allowed);
-
-
         }
     }
 }

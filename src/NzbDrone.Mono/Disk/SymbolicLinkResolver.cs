@@ -76,6 +76,7 @@ namespace NzbDrone.Mono.Disk
                     dirs[target++] = dirs[i];
                 }
             }
+
             components = dirs;
             lastIndex = target;
         }
@@ -114,6 +115,7 @@ namespace NzbDrone.Mono.Disk
                     {
                         realPath = string.Concat(realPath, UnixPath.DirectorySeparatorChar, string.Join(UnixPath.DirectorySeparatorChar.ToString(), dirs, i + 1, lastIndex - i - 1));
                     }
+
                     path = realPath;
                     return pathValid;
                 }

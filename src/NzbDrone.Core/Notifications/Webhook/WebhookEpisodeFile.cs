@@ -4,7 +4,9 @@ namespace NzbDrone.Core.Notifications.Webhook
 {
     public class WebhookEpisodeFile
     {
-        public WebhookEpisodeFile() { }
+        public WebhookEpisodeFile()
+        {
+        }
 
         public WebhookEpisodeFile(EpisodeFile episodeFile)
         {

@@ -5,24 +5,27 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Languages;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 {
     [TestFixture]
     public class HistorySpecificationFixture : CoreTest<HistorySpecification>
     {
+        private const int FIRST_EPISODE_ID = 1;
+        private const int SECOND_EPISODE_ID = 2;
+
         private HistorySpecification _upgradeHistory;
 
         private RemoteEpisode _parseResultMulti;
@@ -30,8 +33,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         private Tuple<QualityModel, Language> _upgradableQuality;
         private Tuple<QualityModel, Language> _notupgradableQuality;
         private Series _fakeSeries;
-        private const int FIRST_EPISODE_ID = 1;
-        private const int SECOND_EPISODE_ID = 2;
 
         [SetUp]
         public void Setup()
@@ -40,11 +41,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _upgradeHistory = Mocker.Resolve<HistorySpecification>();
 
             var singleEpisodeList = new List<Episode> { new Episode { Id = FIRST_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 3 } };
-            var doubleEpisodeList = new List<Episode> { 
-                                                            new Episode {Id = FIRST_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 3 }, 
-                                                            new Episode {Id = SECOND_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 4 }, 
-                                                            new Episode {Id = 3, SeasonNumber = 12, EpisodeNumber = 5 }
-                                                       };
+            var doubleEpisodeList = new List<Episode>
+            {
+                                                            new Episode { Id = FIRST_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 3 },
+                                                            new Episode { Id = SECOND_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 4 },
+                                                            new Episode { Id = 3, SeasonNumber = 12, EpisodeNumber = 5 }
+            };
 
             _fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.QualityProfile = new QualityProfile
@@ -75,9 +77,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                 Episodes = singleEpisodeList
             };
 
-            _upgradableQuality = new Tuple<QualityModel, Language> (new QualityModel(Quality.SDTV, new Revision(version: 1)), Language.English);
+            _upgradableQuality = new Tuple<QualityModel, Language>(new QualityModel(Quality.SDTV, new Revision(version: 1)), Language.English);
 
-            _notupgradableQuality = new Tuple<QualityModel, Language> (new QualityModel(Quality.HDTV1080p, new Revision(version: 2)), Language.English);
+            _notupgradableQuality = new Tuple<QualityModel, Language>(new QualityModel(Quality.HDTV1080p, new Revision(version: 2)), Language.English);
 
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.EnableCompletedDownloadHandling)

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using NzbDrone.Core.ImportLists.Exclusions;
-using Sonarr.Http;
 using FluentValidation;
+using NzbDrone.Core.ImportLists.Exclusions;
 using NzbDrone.Core.Validation;
+using Sonarr.Http;
 
 namespace Sonarr.Api.V3.ImportLists
 {

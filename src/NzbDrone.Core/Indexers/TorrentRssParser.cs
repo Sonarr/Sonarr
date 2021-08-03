@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -65,6 +65,7 @@ namespace NzbDrone.Core.Indexers
             {
                 result.Peers = GetPeers(item);
             }
+
             return result;
         }
 
@@ -74,7 +75,7 @@ namespace NzbDrone.Core.Indexers
             {
                 return item.FindDecendants(InfoHashElementName).FirstOrDefault().Value;
             }
-            
+
             var magnetUrl = GetMagnetUrl(item);
 
             if (magnetUrl.IsNotNullOrWhiteSpace())
@@ -135,6 +136,7 @@ namespace NzbDrone.Core.Indexers
                     return int.Parse(matchPeers.Groups["value"].Value) - int.Parse(matchLeechers.Groups["value"].Value);
                 }
             }
+
             var seeds = item.FindDecendants(SeedsElementName).SingleOrDefault();
             if (seeds != null)
             {
@@ -184,6 +186,7 @@ namespace NzbDrone.Core.Indexers
                     size = ParseSize(itemsize.Value, true);
                 }
             }
+
             return size;
         }
 

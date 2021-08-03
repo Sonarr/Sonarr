@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NzbDrone.Core.Notifications.Xbmc.Model
 {
@@ -26,23 +26,35 @@ namespace NzbDrone.Core.Notifications.Xbmc.Model
 
         public int CompareTo(XbmcVersion other)
         {
-            if(other.Major > Major)
+            if (other.Major > Major)
+            {
                 return -1;
+            }
 
-            if(other.Major < Major)
+            if (other.Major < Major)
+            {
                 return 1;
+            }
 
             if (other.Minor > Minor)
+            {
                 return -1;
+            }
 
             if (other.Minor < Minor)
+            {
                 return 1;
+            }
 
             if (other.Patch > Patch)
+            {
                 return -1;
+            }
 
             if (other.Patch < Patch)
+            {
                 return 1;
+            }
 
             return 0;
         }
@@ -92,28 +104,49 @@ namespace NzbDrone.Core.Notifications.Xbmc.Model
 
         public override int GetHashCode()
         {
-            unchecked // Overflow is fine, just wrap
+            unchecked
             {
+                // Overflow is fine, just wrap
                 int hash = 17;
-                hash = hash * 23 + Major.GetHashCode();
-                hash = hash * 23 + Minor.GetHashCode();
-                hash = hash * 23 + Patch.GetHashCode();
+                hash = (hash * 23) + Major.GetHashCode();
+                hash = (hash * 23) + Minor.GetHashCode();
+                hash = (hash * 23) + Patch.GetHashCode();
                 return hash;
             }
         }
 
         public bool Equals(XbmcVersion other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return (Equals(other.Major, Major) && Equals(other.Minor, Minor) && Equals(other.Patch, Patch));
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return Equals(other.Major, Major) && Equals(other.Minor, Minor) && Equals(other.Patch, Patch);
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(XbmcVersion)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != typeof(XbmcVersion))
+            {
+                return false;
+            }
+
             return Equals((XbmcVersion)obj);
         }
 

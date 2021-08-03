@@ -37,7 +37,6 @@ namespace NzbDrone.Core.Download.Aggregation
                 }
             }
 
-
             return remoteEpisode;
         }
     }

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         private readonly IPlexTvService _plexTvService;
         private readonly Logger _logger;
 
-        class PlexUpdateQueue
+        private class PlexUpdateQueue
         {
             public Dictionary<int, Series> Pending { get; } = new Dictionary<int, Series>();
             public bool Refreshing { get; set; }
@@ -89,8 +89,10 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                 {
                     return;
                 }
+
                 queue.Refreshing = true;
             }
+
             try
             {
                 while (true)

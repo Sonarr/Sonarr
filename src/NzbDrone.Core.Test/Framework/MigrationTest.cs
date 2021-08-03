@@ -8,7 +8,8 @@ namespace NzbDrone.Core.Test.Framework
 {
     [Category("DbMigrationTest")]
     [Category("DbTest")]
-    public abstract class MigrationTest<TMigration> : DbTest where TMigration : NzbDroneMigrationBase
+    public abstract class MigrationTest<TMigration> : DbTest
+        where TMigration : NzbDroneMigrationBase
     {
         protected long MigrationVersion
         {

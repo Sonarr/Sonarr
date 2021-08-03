@@ -33,16 +33,20 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                                         .All()
                                         .With(e => e.Monitored = true)
                                         .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-7))
+
                                         //Missing
                                         .TheFirst(1)
                                         .With(e => e.EpisodeFileId = 0)
+
                                         //Has File
                                         .TheNext(1)
                                         .With(e => e.EpisodeFileId = 1)
+
                                          //Future
                                         .TheNext(1)
                                         .With(e => e.EpisodeFileId = 0)
                                         .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(7))
+
                                         //Future/TBA
                                         .TheNext(1)
                                         .With(e => e.EpisodeFileId = 0)
@@ -62,7 +66,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                 episode.SeasonNumber = 0;
             }
 
-            _series.Seasons = new List<Season>{new Season { Monitored = false, SeasonNumber = 0 }};
+            _series.Seasons = new List<Season> { new Season { Monitored = false, SeasonNumber = 0 } };
         }
 
         [Test]
@@ -163,7 +167,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                                         .With(e => e.SeasonNumber = 2)
                                         .Build()
                                         .ToList();
-            
+
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.GetEpisodeBySeries(It.IsAny<int>()))
                   .Returns(_episodes);

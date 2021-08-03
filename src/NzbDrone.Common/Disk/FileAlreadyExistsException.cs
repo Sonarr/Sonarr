@@ -6,7 +6,8 @@ namespace NzbDrone.Common.Disk
     {
         public string Filename { get; set; }
 
-        public FileAlreadyExistsException(string message, string filename) : base(message)
+        public FileAlreadyExistsException(string message, string filename)
+            : base(message)
         {
             Filename = filename;
         }

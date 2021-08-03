@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using FluentValidation.Results;
@@ -9,7 +9,8 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Metadata
 {
-    public abstract class MetadataBase<TSettings> : IMetadata where TSettings : IProviderConfig, new()
+    public abstract class MetadataBase<TSettings> : IMetadata
+        where TSettings : IProviderConfig, new()
     {
         public abstract string Name { get; }
 
@@ -43,7 +44,10 @@ namespace NzbDrone.Core.Extras.Metadata
         public abstract List<ImageFileResult> SeasonImages(Series series, Season season);
         public abstract List<ImageFileResult> EpisodeImages(Series series, EpisodeFile episodeFile);
 
-        public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
+        public virtual object RequestAction(string action, IDictionary<string, string> query)
+        {
+            return null;
+        }
 
         protected TSettings Settings => (TSettings)Definition.Settings;
 

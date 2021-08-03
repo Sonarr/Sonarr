@@ -26,7 +26,7 @@ namespace Sonarr.Api.V3.ImportLists
             }
 
             var resource = base.ToResource(definition);
-            
+
             resource.EnableAutomaticAdd = definition.EnableAutomaticAdd;
             resource.ShouldMonitor = definition.ShouldMonitor;
             resource.RootFolderPath = definition.RootFolderPath;
@@ -35,7 +35,7 @@ namespace Sonarr.Api.V3.ImportLists
             resource.SeriesType = definition.SeriesType;
             resource.SeasonFolder = definition.SeasonFolder;
             resource.ListType = definition.ListType;
-            resource.ListOrder = (int) definition.ListType;
+            resource.ListOrder = (int)definition.ListType;
 
             return resource;
         }
@@ -48,7 +48,7 @@ namespace Sonarr.Api.V3.ImportLists
             }
 
             var definition = base.ToModel(resource);
-            
+
             definition.EnableAutomaticAdd = resource.EnableAutomaticAdd;
             definition.ShouldMonitor = resource.ShouldMonitor;
             definition.RootFolderPath = resource.RootFolderPath;

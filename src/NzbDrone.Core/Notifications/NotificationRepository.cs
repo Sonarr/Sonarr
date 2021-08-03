@@ -1,7 +1,6 @@
-﻿using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider;
-
 
 namespace NzbDrone.Core.Notifications
 {
@@ -16,6 +15,7 @@ namespace NzbDrone.Core.Notifications
             : base(database, eventAggregator)
         {
         }
+
         public void UpdateSettings(NotificationDefinition model)
         {
             SetFields(model, m => m.Settings);

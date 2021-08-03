@@ -11,16 +11,16 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
     [TestFixture]
     public class EpisodesRepositoryReadFixture : DbTest<EpisodeRepository, Episode>
     {
-        private Series series;
+        private Series _series;
 
         [SetUp]
         public void Setup()
         {
-            series = Builder<Series>.CreateNew()
+            _series = Builder<Series>.CreateNew()
                                         .With(s => s.Runtime = 30)
                                         .BuildNew();
 
-            Db.Insert(series);
+            Db.Insert(_series);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 
             var episode = Builder<Episode>.CreateListOfSize(2)
                                         .All()
-                                        .With(e => e.SeriesId = series.Id)
+                                        .With(e => e.SeriesId = _series.Id)
                                         .With(e => e.EpisodeFileId = episodeFile.Id)
                                         .BuildListOfNew();
 

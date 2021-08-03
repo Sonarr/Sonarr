@@ -19,6 +19,7 @@ namespace NzbDrone.Common.Instrumentation
                     json[i] = new JValue(CleanseLogMessage.Cleanse(text));
                 }
             }
+
             foreach (JToken token in json)
             {
                 Visit(token);

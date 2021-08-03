@@ -103,11 +103,11 @@ namespace NzbDrone.Core.Test.TvTests
         {
             var seriesFolder = "Series";
             var expectedPath = Path.Combine(_bulkCommand.DestinationRootFolder, seriesFolder);
-        
+
             Mocker.GetMock<IBuildFileNames>()
                     .Setup(s => s.GetSeriesFolder(It.IsAny<Series>(), null))
                     .Returns(seriesFolder);
-        
+
             Subject.Execute(_bulkCommand);
 
             Mocker.GetMock<IDiskTransferService>()
@@ -121,9 +121,8 @@ namespace NzbDrone.Core.Test.TvTests
                   .Setup(s => s.FolderExists(It.IsAny<string>()))
                   .Returns(false);
 
-
             Subject.Execute(_command);
-            
+
             Mocker.GetMock<IDiskTransferService>()
                   .Verify(v => v.TransferFolder(_command.SourcePath, _command.DestinationPath, TransferMode.Move), Times.Never());
 

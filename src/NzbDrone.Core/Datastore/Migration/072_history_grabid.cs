@@ -57,7 +57,6 @@ namespace NzbDrone.Core.Datastore.Migration
                 updateHistoryCmd.AddParameter(id);
 
                 updateHistoryCmd.ExecuteNonQuery();
-
             }
         }
     }

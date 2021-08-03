@@ -117,6 +117,7 @@ namespace NzbDrone.Common.Disk
                     {
                         return File.Exists(path) && path == path.GetActualCasing();
                     }
+
                 default:
                     {
                         return File.Exists(path);
@@ -367,7 +368,7 @@ namespace NzbDrone.Common.Disk
 
                 if (attributes.HasFlag(FileAttributes.ReadOnly))
                 {
-                    var newAttributes = attributes & ~(FileAttributes.ReadOnly);
+                    var newAttributes = attributes & ~FileAttributes.ReadOnly;
                     File.SetAttributes(path, newAttributes);
                 }
             }

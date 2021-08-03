@@ -1,17 +1,15 @@
-﻿using TinyIoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Nancy;
-using Nancy.Diagnostics;
 using Nancy.Bootstrapper;
 using Nancy.Configuration;
+using Nancy.Diagnostics;
+using TinyIoC;
 
 namespace Sonarr.Http
 {
-
-
     /// <summary>
     /// TinyIoC bootstrapper - registers default route resolver and registers itself as
     /// INancyModuleCatalog for resolving modules but behaviour can be overridden if required.
@@ -53,7 +51,6 @@ namespace Sonarr.Http
             return this.ApplicationContainer.Resolve<INancyEngine>();
         }
 
-                //
         // Summary:
         //     Gets the Nancy.Configuration.INancyEnvironmentConfigurator used by th.
         //
@@ -64,7 +61,6 @@ namespace Sonarr.Http
             return this.ApplicationContainer.Resolve<INancyEnvironmentConfigurator>();
         }
 
-        //
         // Summary:
         //     Get the Nancy.Configuration.INancyEnvironment instance.
         //
@@ -79,7 +75,6 @@ namespace Sonarr.Http
             return this.ApplicationContainer.Resolve<INancyEnvironment>();
         }
 
-        //
         // Summary:
         //     Registers an Nancy.Configuration.INancyEnvironment instance in the container.
         //

@@ -36,15 +36,30 @@ namespace NzbDrone.Core.Qualities
 
         public bool Equals(Quality other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return Id.Equals(other.Id);
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
 
             return Equals(obj as Quality);
         }
@@ -70,13 +85,34 @@ namespace NzbDrone.Core.Qualities
         public static Quality WEBDL480p => new Quality(8,  "WEBDL-480p", QualitySource.Web, 480);
         public static Quality HDTV1080p => new Quality(9,  "HDTV-1080p", QualitySource.Television, 1080);
         public static Quality RAWHD => new Quality(10, "Raw-HD", QualitySource.TelevisionRaw, 1080);
+
         //public static Quality HDTV480p    { get { return new Quality(11, "HDTV-480p", QualitySource.Television, 480); } }
-        public static Quality WEBRip480p  { get { return new Quality(12, "WEBRip-480p", QualitySource.WebRip, 480); } }
-        public static Quality Bluray480p  { get { return new Quality(13, "Bluray-480p", QualitySource.Bluray, 480); } }
-        public static Quality WEBRip720p  { get { return new Quality(14, "WEBRip-720p", QualitySource.WebRip, 720); } }
-        public static Quality WEBRip1080p { get { return new Quality(15, "WEBRip-1080p", QualitySource.WebRip, 1080); } }
+        public static Quality WEBRip480p
+        {
+            get { return new Quality(12, "WEBRip-480p", QualitySource.WebRip, 480); }
+        }
+
+        public static Quality Bluray480p
+        {
+            get { return new Quality(13, "Bluray-480p", QualitySource.Bluray, 480); }
+        }
+
+        public static Quality WEBRip720p
+        {
+            get { return new Quality(14, "WEBRip-720p", QualitySource.WebRip, 720); }
+        }
+
+        public static Quality WEBRip1080p
+        {
+            get { return new Quality(15, "WEBRip-1080p", QualitySource.WebRip, 1080); }
+        }
+
         public static Quality HDTV2160p => new Quality(16, "HDTV-2160p", QualitySource.Television, 2160);
-        public static Quality WEBRip2160p { get { return new Quality(17, "WEBRip-2160p", QualitySource.WebRip, 2160); } }
+        public static Quality WEBRip2160p
+        {
+            get { return new Quality(17, "WEBRip-2160p", QualitySource.WebRip, 2160); }
+        }
+
         public static Quality WEBDL2160p => new Quality(18, "WEBDL-2160p", QualitySource.Web, 2160);
         public static Quality Bluray2160p => new Quality(19, "Bluray-2160p", QualitySource.Bluray, 2160);
         public static Quality Bluray1080pRemux => new Quality(20,  "Bluray-1080p Remux", QualitySource.BlurayRaw, 1080);
@@ -145,7 +181,10 @@ namespace NzbDrone.Core.Qualities
 
         public static Quality FindById(int id)
         {
-            if (id == 0) return Unknown;
+            if (id == 0)
+            {
+                return Unknown;
+            }
 
             if (!AllLookup.TryGetValue(id, out var quality))
             {

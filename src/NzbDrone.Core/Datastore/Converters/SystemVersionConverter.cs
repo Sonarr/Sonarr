@@ -32,10 +32,10 @@ namespace NzbDrone.Core.Datastore.Converters
             {
                 return version.ToString();
             }
-            
+
             return DBNull.Value;
         }
 
-        public Type DbType => typeof(String);
+        public Type DbType => typeof(string);
     }
 }

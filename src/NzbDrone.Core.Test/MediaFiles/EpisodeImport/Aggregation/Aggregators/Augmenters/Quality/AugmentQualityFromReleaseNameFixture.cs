@@ -64,8 +64,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
                   .Setup(s => s.GetLatestGrab(It.IsAny<string>()))
                   .Returns(Builder<DownloadHistory>.CreateNew()
                                                    .With(h => h.SourceTitle = title)
-                                                   .Build()
-                  );
+                                                   .Build());
 
             var result = Subject.AugmentQuality(_localEpisode, _downloadClientItem);
 

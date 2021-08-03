@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Security
         {
             if (IPAddress.TryParse(host, out var ipAddress))
             {
-                return new []{ ipAddress };
+                return new[] { ipAddress };
             }
 
             return Dns.GetHostEntry(host).AddressList;

@@ -11,7 +11,7 @@ namespace Sonarr.Http.Extensions.Pipelines
 
         public void Register(IPipelines pipelines)
         {
-            pipelines.AfterRequest.AddItemToEndOfPipeline((Action<NancyContext>) Handle);
+            pipelines.AfterRequest.AddItemToEndOfPipeline((Action<NancyContext>)Handle);
         }
 
         private void Handle(NancyContext context)

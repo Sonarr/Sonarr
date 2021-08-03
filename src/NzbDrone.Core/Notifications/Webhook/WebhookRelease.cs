@@ -5,7 +5,9 @@ namespace NzbDrone.Core.Notifications.Webhook
 {
     public class WebhookRelease
     {
-        public WebhookRelease() { }
+        public WebhookRelease()
+        {
+        }
 
         public WebhookRelease(QualityModel quality, RemoteEpisode remoteEpisode)
         {

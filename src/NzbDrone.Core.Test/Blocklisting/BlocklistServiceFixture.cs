@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.Blocklisting
             _event = new DownloadFailedEvent
                      {
                          SeriesId = 12345,
-                         EpisodeIds = new List<int> {1},
+                         EpisodeIds = new List<int> { 1 },
                          Quality = new QualityModel(Quality.Bluray720p),
                          SourceTitle = "series.title.s01e01",
                          DownloadClient = "SabnzbdClient",

@@ -17,6 +17,5 @@ namespace NzbDrone.Core.Datastore.Migration
             Create.Index().OnTable("Series").OnColumn("TitleSlug").Unique();
             Create.Index().OnTable("Episodes").OnColumn("TvDbEpisodeId").Unique();
         }
-
     }
 }

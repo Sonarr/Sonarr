@@ -18,7 +18,6 @@ namespace NzbDrone.Core.Indexers
         public IndexerStatusService(IIndexerStatusRepository providerStatusRepository, IEventAggregator eventAggregator, IRuntimeInfo runtimeInfo, Logger logger)
             : base(providerStatusRepository, eventAggregator, runtimeInfo, logger)
         {
-
         }
 
         public ReleaseInfo GetLastRssSyncReleaseInfo(int indexerId)

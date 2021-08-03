@@ -14,7 +14,8 @@ namespace NzbDrone.Core.Notifications
         {
             return Message;
         }
-        public SeriesDeleteMessage (Series series, bool deleteFiles)
+
+        public SeriesDeleteMessage(Series series, bool deleteFiles)
         {
             Series = series;
             DeletedFiles = deleteFiles;
@@ -25,4 +26,3 @@ namespace NzbDrone.Core.Notifications
         }
     }
 }
-

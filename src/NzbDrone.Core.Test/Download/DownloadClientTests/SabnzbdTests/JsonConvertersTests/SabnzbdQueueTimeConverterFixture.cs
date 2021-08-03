@@ -15,9 +15,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests.JsonConve
         [TestCase("0:1:59", 119)]
         [TestCase("0:59:59", 3599)]
         [TestCase("1:0:0", 3600)]
-        [TestCase("1:0:0:1", 24 * 3600 + 1)]
-        [TestCase("40:12:14", 40 * 3600 + 12 * 60 + 14)]
-        [TestCase("1:16:12:14", 40 * 3600 + 12 * 60 + 14)]
+        [TestCase("1:0:0:1", (24 * 3600) + 1)]
+        [TestCase("40:12:14", (40 * 3600) + (12 * 60) + 14)]
+        [TestCase("1:16:12:14", (40 * 3600) + (12 * 60) + 14)]
         public void valid_time_formats_should_be_parsed_correctly(string time, int expectedSeconds)
         {
             var thing = string.Format(QUERY, time);

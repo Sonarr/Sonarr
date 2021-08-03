@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +24,6 @@ namespace NzbDrone.Core.Download.History
                                           IHandle<DownloadFailedEvent>,
                                           IHandle<DownloadIgnoredEvent>,
                                           IHandle<SeriesDeletedEvent>
-
     {
         private readonly IDownloadHistoryRepository _repository;
         private readonly IHistoryService _historyService;

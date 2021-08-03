@@ -6,7 +6,8 @@ using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Config
 {
-    public abstract class SonarrConfigModule<TResource> : SonarrRestModule<TResource> where TResource : RestResource, new()
+    public abstract class SonarrConfigModule<TResource> : SonarrRestModule<TResource>
+        where TResource : RestResource, new()
     {
         private readonly IConfigService _configService;
 
@@ -15,8 +16,8 @@ namespace Sonarr.Api.V3.Config
         {
         }
 
-        protected SonarrConfigModule(string resource, IConfigService configService) :
-            base("config/" + resource.Trim('/'))
+        protected SonarrConfigModule(string resource, IConfigService configService)
+            : base("config/" + resource.Trim('/'))
         {
             _configService = configService;
 

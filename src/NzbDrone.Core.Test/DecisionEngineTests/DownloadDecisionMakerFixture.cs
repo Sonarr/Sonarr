@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using FizzWare.NBuilder;
-using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.DecisionEngine.Specifications;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -57,7 +57,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _failDelayed1.SetupGet(c => c.Priority).Returns(SpecificationPriority.Disk);
 
             _reports = new List<ReleaseInfo> { new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
-            _remoteEpisode = new RemoteEpisode {
+            _remoteEpisode = new RemoteEpisode
+            {
                 Series = new Series(),
                 Episodes = new List<Episode> { new Episode() }
             };
@@ -216,9 +217,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _reports = new List<ReleaseInfo>
                 {
-                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
-                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
-                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"}
+                    new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" },
+                    new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" },
+                    new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" }
                 };
 
             Subject.GetRssDecision(_reports);
@@ -263,7 +264,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<IParsingService>()
                 .Setup(v => v.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
-                .Returns<ParsedEpisodeInfo, int, int, SearchCriteriaBase>((p,tvdbid,tvrageid,c) =>
+                .Returns<ParsedEpisodeInfo, int, int, SearchCriteriaBase>((p, tvdbid, tvrageid, c) =>
                     new RemoteEpisode
                     {
                         DownloadAllowed = true,
@@ -322,7 +323,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _reports = new List<ReleaseInfo>
                 {
-                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
+                    new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" },
                 };
 
             Subject.GetRssDecision(_reports).Should().HaveCount(1);

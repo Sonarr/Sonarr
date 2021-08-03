@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using NLog;
 using NzbDrone.Common;
@@ -11,13 +11,14 @@ namespace NzbDrone.Core.Messaging.Commands
     public class CommandExecutor : IHandle<ApplicationStartedEvent>,
                                    IHandle<ApplicationShutdownRequested>
     {
+        private const int THREAD_LIMIT = 3;
+
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly IEventAggregator _eventAggregator;
 
         private static CancellationTokenSource _cancellationTokenSource;
-        private const int THREAD_LIMIT = 3;
 
         public CommandExecutor(IServiceFactory serviceFactory,
                                IManageCommandQueue commandQueueManager,
@@ -61,7 +62,8 @@ namespace NzbDrone.Core.Messaging.Commands
             }
         }
 
-        private void ExecuteCommand<TCommand>(TCommand command, CommandModel commandModel) where TCommand : Command
+        private void ExecuteCommand<TCommand>(TCommand command, CommandModel commandModel)
+            where TCommand : Command
         {
             IExecute<TCommand> handler = null;
 

@@ -163,7 +163,7 @@ namespace Sonarr.Api.V3.Queue
             {
                 _failedDownloadService.MarkAsFailed(trackedDownload.DownloadItem.DownloadId);
             }
-            
+
             if (!removeFromClient && !blocklist)
             {
                 if (!_ignoredDownloadService.IgnoreDownload(trackedDownload))

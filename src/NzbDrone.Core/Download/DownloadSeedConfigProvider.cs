@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Download
         private readonly ISeedConfigProvider _indexerSeedConfigProvider;
         private readonly IDownloadHistoryService _downloadHistoryService;
 
-        class CachedSeedConfiguration
+        private class CachedSeedConfiguration
         {
             public int IndexerId { get; set; }
             public bool FullSeason { get; set; }
@@ -39,13 +39,19 @@ namespace NzbDrone.Core.Download
 
         public TorrentSeedConfiguration GetSeedConfiguration(string infoHash)
         {
-            if (infoHash.IsNullOrWhiteSpace()) return null;
+            if (infoHash.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
 
             infoHash = infoHash.ToUpper();
 
             var cachedConfig = _cacheDownloads.Get(infoHash, () => FetchIndexer(infoHash));
 
-            if (cachedConfig == null) return null;
+            if (cachedConfig == null)
+            {
+                return null;
+            }
 
             var seedConfig = _indexerSeedConfigProvider.GetSeedConfiguration(cachedConfig.IndexerId, cachedConfig.FullSeason);
 

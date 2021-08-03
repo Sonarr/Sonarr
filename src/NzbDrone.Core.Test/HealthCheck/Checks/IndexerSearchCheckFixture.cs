@@ -114,7 +114,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Subject.Check().ShouldBeWarning();
         }
 
-
         [Test]
         public void should_return_filter_warning_if_search_is_enabled_but_filtered()
         {

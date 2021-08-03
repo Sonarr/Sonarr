@@ -19,7 +19,9 @@ namespace NzbDrone.Core.Http
         {
             var proxySettings = GetProxySettings();
             if (proxySettings == null)
+            {
                 return null;
+            }
 
             if (ShouldProxyBeBypassed(proxySettings, request.Url))
             {

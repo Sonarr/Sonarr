@@ -85,7 +85,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 _logger.Debug("Existing item has better language, skipping");
                 return false;
             }
-            
+
             if (!IsPreferredWordUpgradable(currentScore, newScore))
             {
                 _logger.Debug("Existing item has an equal or better preferred word score, skipping");
@@ -168,8 +168,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             var isQualityUpgrade = new QualityModelComparer(qualityProfile).Compare(newQuality, currentQuality) > 0;
             var isLanguageUpgrade = new LanguageComparer(languageProfile).Compare(newLanguage, currentLanguage) > 0;
 
-            if (isQualityUpgrade && qualityProfile.UpgradeAllowed ||
-                isLanguageUpgrade && languageProfile.UpgradeAllowed)
+            if ((isQualityUpgrade && qualityProfile.UpgradeAllowed) ||
+                (isLanguageUpgrade && languageProfile.UpgradeAllowed))
             {
                 _logger.Debug("At least one profile allows upgrading");
                 return true;

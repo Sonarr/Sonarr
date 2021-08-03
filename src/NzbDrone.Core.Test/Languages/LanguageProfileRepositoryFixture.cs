@@ -1,9 +1,9 @@
-using FluentAssertions;
 using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Languages
 {
@@ -15,13 +15,12 @@ namespace NzbDrone.Core.Test.Languages
         {
             var profile = new LanguageProfile
                 {
-                    Languages = Language.All.OrderByDescending(l => l.Name).Select(l => new LanguageProfileItem {Language = l, Allowed = l == Language.English}).ToList(),
+                    Languages = Language.All.OrderByDescending(l => l.Name).Select(l => new LanguageProfileItem { Language = l, Allowed = l == Language.English }).ToList(),
                     Name = "TestProfile",
                     Cutoff = Language.English
                 };
 
             Subject.Insert(profile);
-
 
             StoredModel.Name.Should().Be(profile.Name);
             StoredModel.Cutoff.Should().Be(profile.Cutoff);

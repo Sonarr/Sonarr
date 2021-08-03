@@ -1,14 +1,14 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Hadouken;
 using NzbDrone.Core.Download.Clients.Hadouken.Models;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
             };
 
             Mocker.GetMock<ITorrentFileInfoReader>()
-                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<Byte[]>()))
+                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<byte[]>()))
                   .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951");
 
             Mocker.GetMock<IHttpClient>()
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
         [Test]
         public void should_return_status_with_outputdirs()
         {
-            var configItems = new Dictionary<String, Object>();
+            var configItems = new Dictionary<string, object>();
 
             configItems.Add("bittorrent.defaultSavePath", @"C:\Downloads\Downloading\deluge".AsOsAgnostic());
 

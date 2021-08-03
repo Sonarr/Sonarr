@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     {
                         throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
                     }
+
                     break;
             }
 
@@ -41,7 +42,6 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             {
                 throw new IndexerException(indexerResponse, "Indexer API returned an internal server error");
             }
-
 
             JsonRpcResponse<BroadcastheNetTorrents> jsonResponse = new HttpResponse<JsonRpcResponse<BroadcastheNetTorrents>>(indexerResponse.HttpResponse).Resource;
 
@@ -66,16 +66,20 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 torrentInfo.Size = torrent.Size;
                 torrentInfo.DownloadUrl = RegexProtocol.Replace(torrent.DownloadURL, protocol);
                 torrentInfo.InfoUrl = string.Format("{0}//broadcasthe.net/torrents.php?id={1}&torrentid={2}", protocol, torrent.GroupID, torrent.TorrentID);
+
                 //torrentInfo.CommentUrl =
                 if (torrent.TvdbID.HasValue)
                 {
                     torrentInfo.TvdbId = torrent.TvdbID.Value;
                 }
+
                 if (torrent.TvrageID.HasValue)
                 {
                     torrentInfo.TvRageId = torrent.TvrageID.Value;
                 }
+
                 torrentInfo.PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).ToUniversalTime().AddSeconds(torrent.Time);
+
                 //torrentInfo.MagnetUrl =
                 torrentInfo.InfoHash = torrent.InfoHash;
                 torrentInfo.Seeders = torrent.Seeders;

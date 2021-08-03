@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var db = WithMigrationTestDb(c =>
             {
-                c.Insert.IntoTable("DownloadClients").Row(new 
+                c.Insert.IntoTable("DownloadClients").Row(new
                 {
                     Enable = 1,
                     Name = "Deluge",

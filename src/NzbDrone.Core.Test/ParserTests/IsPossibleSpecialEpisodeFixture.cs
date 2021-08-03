@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var parsedEpisodeInfo = new ParsedEpisodeInfo
                                     {
-                                        EpisodeNumbers = new[]{ 7 },
+                                        EpisodeNumbers = new[] { 7 },
                                         SeasonNumber = 1,
                                         SeriesTitle = ""
                                     };
@@ -39,7 +39,6 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             Parser.Parser.ParseTitle(title).IsPossibleSpecialEpisode.Should().BeTrue();
         }
-
 
         [TestCase("Title.the.Series.S11E00.A.Christmas.Carol.Special.720p.HDTV-FieldOfView")]
         public void IsPossibleSpecialEpisode_should_be_true_if_e00_special(string title)

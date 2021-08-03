@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             if (languageTags.Any())
             {
                 suffixBuilder.Append(".");
-                suffixBuilder.Append(string.Join(".", languageTags));    
+                suffixBuilder.Append(string.Join(".", languageTags));
             }
 
             return suffixBuilder.ToString();

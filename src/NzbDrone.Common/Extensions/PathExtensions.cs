@@ -113,6 +113,7 @@ namespace NzbDrone.Common.Extensions
             {
                 parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);
             }
+
             if (childPath != "/" && !parentPath.EndsWith(":\\"))
             {
                 childPath = childPath.TrimEnd(Path.DirectorySeparatorChar);

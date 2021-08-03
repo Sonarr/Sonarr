@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                                                        Name = "Bluray",
                                                        Cutoff = 7,
                                                        Items = "[ { \"id\": 1001, \"name\": \"Why?!\", \"allowed\": true, \"items\": [{ \"quality\": 8, \"allowed\": true }, { \"quality\": 7, \"allowed\": true }] }, { \"quality\": 19, \"allowed\": true } ]"
-                });
+                                                   });
             });
 
             var profiles = db.Query<Profile122>("SELECT Items FROM Profiles LIMIT 1");

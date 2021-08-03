@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.Instrumentation
     public class DatabaseTargetFixture : DbTest<DatabaseTarget, Log>
     {
         private static string _uniqueMessage;
-        Logger _logger;
+        private Logger _logger;
 
         protected override MigrationType MigrationType => MigrationType.Log;
 
@@ -63,7 +63,6 @@ namespace NzbDrone.Core.Test.Instrumentation
             StoredModel.Message.Should().Be(message);
             VerifyLog(StoredModel, LogLevel.Info);
         }
-
 
         [Test]
         [Explicit]
@@ -125,7 +124,6 @@ namespace NzbDrone.Core.Test.Instrumentation
 
             epFile.RelativePath.Should().BeNull();
         }
-
 
         [TearDown]
         public void Teardown()

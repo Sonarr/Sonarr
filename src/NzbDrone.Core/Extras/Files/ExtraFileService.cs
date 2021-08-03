@@ -109,7 +109,6 @@ namespace NzbDrone.Core.Extras.Files
             {
                 _logger.Debug("Removing episode file from DB as part of cleanup routine, not deleting extra files from disk.");
             }
-
             else
             {
                 var series = _seriesService.GetSeries(message.EpisodeFile.SeriesId);

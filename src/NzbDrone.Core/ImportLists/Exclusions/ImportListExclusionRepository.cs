@@ -1,6 +1,6 @@
+using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
-using System.Linq;
 
 namespace NzbDrone.Core.ImportLists.Exclusions
 {

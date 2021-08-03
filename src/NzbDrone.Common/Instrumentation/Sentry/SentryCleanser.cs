@@ -36,7 +36,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             }
             catch (Exception)
             {
-
             }
 
             return sentryEvent;
@@ -50,9 +49,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 var data = b.Data?.ToDictionary(x => x.Key, y => CleanseLogMessage.Cleanse(y.Value));
                 return new Breadcrumb(message, b.Type, data, b.Category, b.Level);
             }
-            catch(Exception)
+            catch (Exception)
             {
-
             }
 
             return b;
@@ -60,7 +58,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
         private static string ShortenPath(string path)
         {
-
             if (string.IsNullOrWhiteSpace(path))
             {
                 return null;
@@ -68,7 +65,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
             // the paths in the stacktrace depend on where it was compiled,
             // not the current OS
-            var rootDirs = new [] { "\\src\\", "/src/" };
+            var rootDirs = new[] { "\\src\\", "/src/" };
             foreach (var rootDir in rootDirs)
             {
                 var index = path.IndexOf(rootDir, StringComparison.Ordinal);

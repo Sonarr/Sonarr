@@ -26,7 +26,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
             var width = localEpisode.MediaInfo.Width;
             var height = localEpisode.MediaInfo.Height;
 
-
             if (width >= 3200 || height >= 2100)
             {
                 _logger.Trace("Resolution {0}x{1} considered 2160p", width, height);

@@ -230,6 +230,7 @@ namespace NzbDrone.Core.Indexers
             {
                 return GetEnclosureLength(item);
             }
+
             if (ParseSizeInDescription && item.Element("description") != null)
             {
                 return ParseSize(item.Element("description").Value, true);
@@ -392,6 +393,7 @@ namespace NzbDrone.Core.Indexers
                         return (long)value;
                 }
             }
+
             return 0;
         }
 

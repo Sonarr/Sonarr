@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
-using Marr.Data.QGen;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Blocklisting
@@ -15,8 +15,8 @@ namespace NzbDrone.Core.Blocklisting
 
     public class BlocklistRepository : BasicRepository<Blocklist>, IBlocklistRepository
     {
-        public BlocklistRepository(IMainDatabase database, IEventAggregator eventAggregator) :
-            base(database, eventAggregator)
+        public BlocklistRepository(IMainDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

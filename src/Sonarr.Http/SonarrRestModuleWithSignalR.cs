@@ -30,7 +30,10 @@ namespace Sonarr.Http
 
         public void Handle(ModelEvent<TModel> message)
         {
-            if (!_signalRBroadcaster.IsConnected) return;
+            if (!_signalRBroadcaster.IsConnected)
+            {
+                return;
+            }
 
             if (message.Action == ModelAction.Deleted || message.Action == ModelAction.Sync)
             {
@@ -42,11 +45,14 @@ namespace Sonarr.Http
 
         protected void BroadcastResourceChange(ModelAction action, int id)
         {
-            if (!_signalRBroadcaster.IsConnected) return;
+            if (!_signalRBroadcaster.IsConnected)
+            {
+                return;
+            }
 
             if (action == ModelAction.Deleted)
             {
-                BroadcastResourceChange(action, new TResource {Id = id});
+                BroadcastResourceChange(action, new TResource { Id = id });
             }
             else
             {
@@ -57,7 +63,10 @@ namespace Sonarr.Http
 
         protected void BroadcastResourceChange(ModelAction action, TResource resource)
         {
-            if (!_signalRBroadcaster.IsConnected) return;
+            if (!_signalRBroadcaster.IsConnected)
+            {
+                return;
+            }
 
             if (GetType().Namespace.Contains("V3"))
             {
@@ -71,10 +80,13 @@ namespace Sonarr.Http
                 _signalRBroadcaster.BroadcastMessage(signalRMessage);
             }
         }
-     
+
         protected void BroadcastResourceChange(ModelAction action)
         {
-            if (!_signalRBroadcaster.IsConnected) return;
+            if (!_signalRBroadcaster.IsConnected)
+            {
+                return;
+            }
 
             if (GetType().Namespace.Contains("V3"))
             {

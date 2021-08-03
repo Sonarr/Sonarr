@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             _settings.ApiKey = _badApiKey;
 
             Assert.Throws<ProwlException>(() => Subject.Test(_settings));
-            
+
             ExceptionVerification.ExpectedWarns(1);
         }
 

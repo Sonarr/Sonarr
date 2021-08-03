@@ -19,7 +19,6 @@ namespace NzbDrone.Core.Test.Datastore.Converters
                  DbValue = DBNull.Value
              });
 
-
             result.Should().Be(NullConfig.Instance);
         }
 
@@ -31,7 +30,6 @@ namespace NzbDrone.Core.Test.Datastore.Converters
             {
                 DbValue = dbValue
             });
-
 
             result.Should().Be(NullConfig.Instance);
         }

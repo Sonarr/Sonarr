@@ -1,5 +1,4 @@
-﻿
-using FizzWare.NBuilder;
+﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
@@ -56,7 +55,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             localEpisode.ReleaseGroup.Should().Be("Wizzy");
         }
-        
+
         [Test]
         public void should_prefer_downloadclient()
         {

@@ -80,7 +80,6 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
                 _logger.Debug("Finished sending Update Request to Plex Server (took {0} ms)", watch.ElapsedMilliseconds);
             }
-
             catch (Exception ex)
             {
                 _logger.Warn(ex, "Failed to Update Plex host: " + settings.Host);

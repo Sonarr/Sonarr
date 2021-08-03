@@ -10,15 +10,15 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
     public class GetSeriesFolderFixture : CoreTest<FileNameBuilder>
     {
-        private NamingConfig namingConfig;
+        private NamingConfig _namingConfig;
 
         [SetUp]
         public void Setup()
         {
-            namingConfig = NamingConfig.Default;
+            _namingConfig = NamingConfig.Default;
 
             Mocker.GetMock<INamingConfigService>()
-                  .Setup(c => c.GetConfig()).Returns(namingConfig);
+                  .Setup(c => c.GetConfig()).Returns(_namingConfig);
         }
 
         [TestCase("30 Rock", "{Series Title}", "30 Rock")]
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [TestCase("30 Rock", ".{Series.Title}.", "30.Rock")]
         public void should_use_seriesFolderFormat_to_build_folder_name(string seriesTitle, string format, string expected)
         {
-            namingConfig.SeriesFolderFormat = format;
+            _namingConfig.SeriesFolderFormat = format;
 
             var series = new Series { Title = seriesTitle };
 

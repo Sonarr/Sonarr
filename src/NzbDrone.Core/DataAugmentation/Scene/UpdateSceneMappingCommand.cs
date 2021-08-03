@@ -4,6 +4,5 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public class UpdateSceneMappingCommand : Command
     {
-
     }
 }

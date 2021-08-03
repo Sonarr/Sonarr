@@ -35,9 +35,9 @@ namespace NzbDrone.Core.Parser.Model
                 return DateTime.UtcNow.Subtract(PublishDate).Days;
             }
 
-            //This prevents manually downloading a release from blowing up in mono
-            //TODO: Is there a better way?
-            private set { }
+            private set
+            {
+            }
         }
 
         public double AgeHours
@@ -47,9 +47,9 @@ namespace NzbDrone.Core.Parser.Model
                 return DateTime.UtcNow.Subtract(PublishDate).TotalHours;
             }
 
-            //This prevents manually downloading a release from blowing up in mono
-            //TODO: Is there a better way?
-            private set { }
+            private set
+            {
+            }
         }
 
         public double AgeMinutes
@@ -59,9 +59,9 @@ namespace NzbDrone.Core.Parser.Model
                 return DateTime.UtcNow.Subtract(PublishDate).TotalMinutes;
             }
 
-            //This prevents manually downloading a release from blowing up in mono
-            //TODO: Is there a better way?
-            private set { }
+            private set
+            {
+            }
         }
 
         public override string ToString()

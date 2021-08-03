@@ -24,7 +24,6 @@ namespace NzbDrone.Common.Test.ExtensionTests
         public void should_return_false_for_public_ip_address(string ipAddress)
         {
             IPAddress.Parse(ipAddress).IsLocalAddress().Should().BeFalse();
-
         }
     }
 }

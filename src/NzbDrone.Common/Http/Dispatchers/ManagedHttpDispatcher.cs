@@ -197,6 +197,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                     {
                         var responseStreamInfo = currentOperation.GetType().GetField("responseStream", BindingFlags.NonPublic | BindingFlags.Instance);
                         var responseStream = responseStreamInfo.GetValue(currentOperation) as Stream;
+
                         // Note that responseStream will likely be null once mono fixes it.
                         responseStream?.Dispose();
                     }

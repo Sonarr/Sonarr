@@ -146,7 +146,8 @@ namespace NzbDrone.Core.Test.ParserTests
             }
         };
 
-        [Test, TestCaseSource(nameof(HashedReleaseParserCases))]
+        [Test]
+        [TestCaseSource(nameof(HashedReleaseParserCases))]
         public void should_properly_parse_hashed_releases(string path, string title, Quality quality, string releaseGroup)
         {
             var result = Parser.Parser.ParsePath(path);

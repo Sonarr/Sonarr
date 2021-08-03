@@ -40,8 +40,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                 .Returns(series);
         }
 
-
-
         [Test]
         public void should_return_error_if_series_no_longer_on_tvdb()
         {

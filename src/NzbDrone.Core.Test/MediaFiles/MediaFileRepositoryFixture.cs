@@ -16,11 +16,10 @@ namespace NzbDrone.Core.Test.MediaFiles
             var files = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All()
                 .With(c => c.Id = 0)
-                .With(c => c.Quality =new QualityModel(Quality.Bluray720p))
+                .With(c => c.Quality = new QualityModel(Quality.Bluray720p))
                 .Random(4)
                 .With(s => s.SeriesId = 12)
                 .BuildListOfNew();
-
 
             Db.InsertMany(files);
 
@@ -28,7 +27,6 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             seriesFiles.Should().HaveCount(4);
             seriesFiles.Should().OnlyContain(c => c.SeriesId == 12);
-
         }
     }
 }

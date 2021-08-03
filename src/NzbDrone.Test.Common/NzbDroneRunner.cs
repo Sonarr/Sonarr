@@ -126,7 +126,6 @@ namespace NzbDrone.Test.Common
                 // May happen if the process closes while being closed
             }
 
-
             TestBase.DeleteTempFolder(AppData);
         }
 

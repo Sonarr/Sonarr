@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unity;
 using Moq;
-using Unity.Strategies;
+using Unity;
 using Unity.Builder;
+using Unity.Strategies;
 
 namespace NzbDrone.Test.Common.AutoMoq.Unity
 {
@@ -35,8 +35,6 @@ namespace NzbDrone.Test.Common.AutoMoq.Unity
                 autoMoqer.SetMock(type, mock);
             }
         }
-
-        #region private methods
 
         private bool AMockObjectShouldBeCreatedForThisType(Type type)
         {
@@ -77,7 +75,5 @@ namespace NzbDrone.Test.Common.AutoMoq.Unity
         {
             return new[] { typeof(object[]) };
         }
-
-        #endregion
     }
 }

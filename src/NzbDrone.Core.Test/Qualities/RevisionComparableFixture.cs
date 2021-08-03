@@ -134,10 +134,10 @@ namespace NzbDrone.Core.Test.Qualities
         [Test]
         public void operating_on_nulls()
         {
-            (null > new Revision()).Should().BeFalse();
-            (null >= new Revision()).Should().BeFalse();
-            (null < new Revision()).Should().BeTrue();
-            (null <= new Revision()).Should().BeTrue();
+            (new Revision() < null).Should().BeFalse();
+            (new Revision() <= null).Should().BeFalse();
+            (new Revision() > null).Should().BeTrue();
+            (new Revision() >= null).Should().BeTrue();
 
             (new Revision() > null).Should().BeTrue();
             (new Revision() >= null).Should().BeTrue();

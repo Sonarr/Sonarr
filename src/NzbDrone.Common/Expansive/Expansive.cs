@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Dynamic;
@@ -10,7 +10,6 @@ namespace NzbDrone.Common.Expansive
     public static class Expansive
     {
         private static PatternStyle _patternStyle;
-
 
         public static bool RequireAllExpansions { get; set; }
 
@@ -25,7 +24,6 @@ namespace NzbDrone.Common.Expansive
         {
             return source.Expand(DefaultExpansionFactory);
         }
-
 
         public static string Expand(this string source, params string[] args)
         {
@@ -50,9 +48,11 @@ namespace NzbDrone.Common.Expansive
                     {
                         tokenIndex = tokens.IndexOf(token);
                     }
+
                     output = Regex.Replace(output, _patternStyle.OutputFilter(match.Value), "{" + tokenIndex + "}");
                 }
             }
+
             var newArgs = new List<string>();
             foreach (var arg in args)
             {
@@ -63,15 +63,20 @@ namespace NzbDrone.Common.Expansive
                     foreach (Match match in tokenPattern.Matches(newArg))
                     {
                         var token = _patternStyle.TokenReplaceFilter(match.Value);
-                        if (calls.Contains(string.Format("{0}:{1}", callingToken, token))) throw new CircularReferenceException(string.Format("Circular Reference Detected for token '{0}'.", callingToken));
+                        if (calls.Contains(string.Format("{0}:{1}", callingToken, token)))
+                        {
+                            throw new CircularReferenceException(string.Format("Circular Reference Detected for token '{0}'.", callingToken));
+                        }
+
                         calls.Push(string.Format("{0}:{1}", callingToken, token));
                         callingToken = token;
                         newArg = Regex.Replace(newArg, _patternStyle.OutputFilter(match.Value), args[tokens.IndexOf(token)]);
                     }
-
                 }
+
                 newArgs.Add(newArg);
             }
+
             return string.Format(output, newArgs.ToArray());
         }
 
@@ -79,9 +84,6 @@ namespace NzbDrone.Common.Expansive
         {
             return source.ExpandInternal(expansionFactory);
         }
-
-
-
 
         public static string Expand(this string source, object model)
         {
@@ -116,7 +118,10 @@ namespace NzbDrone.Common.Expansive
 
         private static string ExpandInternal(this string source, Func<string, string> expansionFactory)
         {
-            if (expansionFactory == null) throw new ApplicationException("ExpansionFactory not defined.\nDefine a DefaultExpansionFactory or call Expand(source, Func<string, string> expansionFactory))");
+            if (expansionFactory == null)
+            {
+                throw new ApplicationException("ExpansionFactory not defined.\nDefine a DefaultExpansionFactory or call Expand(source, Func<string, string> expansionFactory))");
+            }
 
             var pattern = new Regex(_patternStyle.TokenMatchPattern, RegexOptions.IgnoreCase);
 
@@ -139,9 +144,12 @@ namespace NzbDrone.Common.Expansive
 
                     // if we have already encountered this token in this call tree, we have a circular reference
                     if (thisNode.CallTree.Contains(token))
+                    {
                         throw new CircularReferenceException(string.Format("Circular Reference Detected for token '{0}'. Call Tree: {1}->{2}",
                                                                            token,
-                                                                           string.Join("->", thisNode.CallTree.ToArray().Reverse()), token));
+                                                                           string.Join("->", thisNode.CallTree.ToArray().Reverse()),
+                                                                           token));
+                    }
 
                     // expand this match
                     var expandedValue = expansionFactory(token);
@@ -156,6 +164,7 @@ namespace NzbDrone.Common.Expansive
                     output = Regex.Replace(output, patternStyle.OutputFilter(match.Value), child);
                 }
             }
+
             return output;
         }
 
@@ -171,7 +180,11 @@ namespace NzbDrone.Common.Expansive
         {
             var result = new ExpandoObject();
             var d = result as IDictionary<string, object>; //work with the Expando as a Dictionary
-            if (o is ExpandoObject) return o; //shouldn't have to... but just in case
+            if (o is ExpandoObject)
+            {
+                return o; //shouldn't have to... but just in case
+            }
+
             if (o is NameValueCollection || o.GetType().IsSubclassOf(typeof(NameValueCollection)))
             {
                 var nv = (NameValueCollection)o;
@@ -185,8 +198,10 @@ namespace NzbDrone.Common.Expansive
                     d.Add(item.Name, item.GetValue(o, null));
                 }
             }
+
             return result;
         }
+
         /// <summary>
         /// Turns the object into a Dictionary
         /// </summary>

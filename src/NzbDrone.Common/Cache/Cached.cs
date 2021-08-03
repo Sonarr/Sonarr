@@ -7,7 +7,6 @@ using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Cache
 {
-
     public class Cached<T> : ICached<T>
     {
         private class CacheItem
@@ -144,6 +143,5 @@ namespace NzbDrone.Common.Cache
 
             return collection.Remove(new KeyValuePair<string, CacheItem>(key, value));
         }
-
     }
 }

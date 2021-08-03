@@ -44,11 +44,9 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
                     .With(c => c.RemoteEpisode = remoteEpisode)
                     .Build();
 
-
             Mocker.GetMock<IHistoryService>()
                   .Setup(s => s.Find(_trackedDownload.DownloadItem.DownloadId, EpisodeHistoryEventType.Grabbed))
                   .Returns(_grabHistory);
-
         }
 
         [Test]
@@ -91,7 +89,6 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
 
             _trackedDownload.State.Should().NotBe(TrackedDownloadState.Failed);
         }
-
 
         private void AssertDownloadFailed()
         {

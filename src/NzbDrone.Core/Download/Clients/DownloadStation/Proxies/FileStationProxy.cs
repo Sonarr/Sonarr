@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             : base(DiskStationApi.FileStationList, "SYNO.FileStation.List", httpClient, cacheManager, logger)
         {
         }
-        
+
         public SharedFolderMapping GetSharedFolderMapping(string sharedFolder, DownloadStationSettings settings)
         {
             var info = GetInfoFileOrDirectory(sharedFolder, settings);

@@ -28,11 +28,17 @@ namespace NzbDrone.Core.Instrumentation
             LogLevel minimumConsoleLogLevel;
 
             if (_configFileProvider.ConsoleLogLevel.IsNotNullOrWhiteSpace())
+            {
                 minimumConsoleLogLevel = LogLevel.FromString(_configFileProvider.ConsoleLogLevel);
+            }
             else if (minimumLogLevel > LogLevel.Info)
+            {
                 minimumConsoleLogLevel = minimumLogLevel;
+            }
             else
+            {
                 minimumConsoleLogLevel = LogLevel.Info;
+            }
 
             if (_configFileProvider.SyslogServer.IsNotNullOrWhiteSpace())
             {
@@ -72,7 +78,6 @@ namespace NzbDrone.Core.Instrumentation
                 {
                     rule.DisableLoggingForLevel(logLevel);
                 }
-
                 else
                 {
                     rule.EnableLoggingForLevel(logLevel);
@@ -85,7 +90,7 @@ namespace NzbDrone.Core.Instrumentation
             var sentryTarget = LogManager.Configuration.AllTargets.OfType<SentryTarget>().FirstOrDefault();
             if (sentryTarget != null)
             {
-                sentryTarget.SentryEnabled = RuntimeInfo.IsProduction && _configFileProvider.AnalyticsEnabled || RuntimeInfo.IsDevelopment;
+                sentryTarget.SentryEnabled = (RuntimeInfo.IsProduction && _configFileProvider.AnalyticsEnabled) || RuntimeInfo.IsDevelopment;
             }
         }
 

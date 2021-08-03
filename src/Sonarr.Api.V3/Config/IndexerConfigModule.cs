@@ -6,7 +6,6 @@ namespace Sonarr.Api.V3.Config
 {
     public class IndexerConfigModule : SonarrConfigModule<IndexerConfigResource>
     {
-
         public IndexerConfigModule(IConfigService configService)
             : base(configService)
         {

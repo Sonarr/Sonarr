@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.IO;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
-using System.IO;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 

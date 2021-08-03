@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             Mocker.SetConstant<IIndexerRepository>(repo);
 
             var existingIndexers = Builder<IndexerDefinition>.CreateNew().BuildNew();
-            existingIndexers.ConfigContract = typeof (NewznabSettings).Name;
+            existingIndexers.ConfigContract = typeof(NewznabSettings).Name;
 
             repo.Insert(existingIndexers);
 

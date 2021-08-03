@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         [Test]
         public void should_return_true_when_single_property_matches()
         {
-            var command1 = new EpisodeSearchCommand { EpisodeIds = new List<int>{ 1 } };
+            var command1 = new EpisodeSearchCommand { EpisodeIds = new List<int> { 1 } };
             var command2 = new EpisodeSearchCommand { EpisodeIds = new List<int> { 1 } };
 
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();

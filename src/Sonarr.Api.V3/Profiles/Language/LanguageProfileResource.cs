@@ -23,7 +23,10 @@ namespace Sonarr.Api.V3.Profiles.Language
     {
         public static LanguageProfileResource ToResource(this LanguageProfile model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new LanguageProfileResource
             {
@@ -37,7 +40,10 @@ namespace Sonarr.Api.V3.Profiles.Language
 
         public static LanguageProfileItemResource ToResource(this LanguageProfileItem model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new LanguageProfileItemResource
             {
@@ -48,7 +54,10 @@ namespace Sonarr.Api.V3.Profiles.Language
 
         public static LanguageProfile ToModel(this LanguageProfileResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new LanguageProfile
             {
@@ -62,7 +71,10 @@ namespace Sonarr.Api.V3.Profiles.Language
 
         public static LanguageProfileItem ToModel(this LanguageProfileItemResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new LanguageProfileItem
             {

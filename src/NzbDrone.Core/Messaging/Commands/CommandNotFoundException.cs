@@ -8,6 +8,5 @@ namespace NzbDrone.Core.Messaging.Commands
             : base("Couldn't find command " + contract)
         {
         }
-
     }
 }

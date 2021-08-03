@@ -38,7 +38,6 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
             versionName.FullName.Should().Be("macOS " + versionString);
         }
 
-
         [TestCase]
         public void should_detect_server()
         {

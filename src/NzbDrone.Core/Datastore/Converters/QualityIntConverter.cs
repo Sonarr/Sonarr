@@ -1,8 +1,8 @@
 using System;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
-using NzbDrone.Core.Qualities;
 using Newtonsoft.Json;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
@@ -27,7 +27,10 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public object ToDB(object clrValue)
         {
-            if (clrValue == DBNull.Value) return 0;
+            if (clrValue == DBNull.Value)
+            {
+                return 0;
+            }
 
             if (clrValue as Quality == null)
             {

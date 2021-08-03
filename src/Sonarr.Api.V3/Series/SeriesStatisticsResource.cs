@@ -17,20 +17,24 @@ namespace Sonarr.Api.V3.Series
         {
             get
             {
-                if (EpisodeCount == 0) return 0;
+                if (EpisodeCount == 0)
+                {
+                    return 0;
+                }
 
                 return (decimal)EpisodeFileCount / (decimal)EpisodeCount * 100;
             }
         }
-
-
     }
 
     public static class SeriesStatisticsResourceMapper
     {
         public static SeriesStatisticsResource ToResource(this SeriesStatistics model, List<SeasonResource> seasons)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new SeriesStatisticsResource
             {

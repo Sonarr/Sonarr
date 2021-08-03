@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,8 +31,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             _logger = logger;
         }
 
-        private static List<string> ValidCertification = new List<string> { "G", "NC-17", "PG", "PG-13", "R", "UR", "UNRATED", "NR", "TV-Y", "TV-Y7", "TV-Y7-FV", "TV-G", "TV-PG", "TV-14", "TV-MA" };
         private static readonly Regex SeasonImagesRegex = new Regex(@"^(season (?<season>\d+))|(?<specials>specials)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static List<string> ValidCertification = new List<string> { "G", "NC-17", "PG", "PG-13", "R", "UR", "UNRATED", "NR", "TV-Y", "TV-Y7", "TV-Y7-FV", "TV-G", "TV-PG", "TV-14", "TV-MA" };
 
         public override string Name => "Roksbox";
 
@@ -58,7 +58,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
         {
             var filename = Path.GetFileName(path);
 
-            if (filename == null) return null;
+            if (filename == null)
+            {
+                return null;
+            }
+
             var parentdir = Directory.GetParent(path);
 
             var metadata = new MetadataFile
@@ -81,7 +85,6 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                     {
                         metadata.SeasonNumber = 0;
                     }
-
                     else
                     {
                         metadata.SeasonNumber = Convert.ToInt32(seasonMatch.Groups["season"].Value);
@@ -114,7 +117,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                         metadata.Type = MetadataType.EpisodeImage;
                         return metadata;
                     }
-                }                
+                }
             }
 
             return null;
@@ -132,7 +135,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             {
                 return null;
             }
-            
+
             _logger.Debug("Generating Episode Metadata for: {0}", episodeFile.RelativePath);
 
             var xmlResult = string.Empty;
@@ -161,7 +164,6 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                     {
                         details.Add(new XElement("mpaa", series.Certification.ToUpperInvariant()));
                     }
-
                     else
                     {
                         details.Add(new XElement("mpaa", "UNRATED"));
@@ -195,7 +197,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType);
             var destination = Path.GetFileName(series.Path) + Path.GetExtension(source);
 
-            return new List<ImageFileResult>{ new ImageFileResult(destination, source) };
+            return new List<ImageFileResult> { new ImageFileResult(destination, source) };
         }
 
         public override List<ImageFileResult> SeasonImages(Series series, Season season)
@@ -243,7 +245,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                 return new List<ImageFileResult>();
             }
 
-            return new List<ImageFileResult> {new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.Url)};
+            return new List<ImageFileResult> { new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.Url) };
         }
 
         private string GetEpisodeMetadataFilename(string episodeFilePath)

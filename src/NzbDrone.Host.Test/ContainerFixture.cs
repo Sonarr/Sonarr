@@ -14,8 +14,8 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.SignalR;
 using NzbDrone.Host;
+using NzbDrone.SignalR;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.App.Test

@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
                     if (responseTransfer.Success)
                     {
-                        foreach(var task in response.Data.Task)
+                        foreach (var task in response.Data.Task)
                         {
                             var taskTransfer = responseTransfer.Data.Task.Where(t => t.Id == task.Id).First();
 

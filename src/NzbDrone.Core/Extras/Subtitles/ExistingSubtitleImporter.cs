@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Extras.Subtitles
         public ExistingSubtitleImporter(IExtraFileService<SubtitleFile> subtitleFileService,
                                         IAggregationService aggregationService,
                                         Logger logger)
-            : base (subtitleFileService)
+            : base(subtitleFileService)
         {
             _subtitleFileService = subtitleFileService;
             _aggregationService = aggregationService;

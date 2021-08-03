@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
         {
             _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
         }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
@@ -78,10 +79,10 @@ namespace NzbDrone.Core.Notifications.PushBullet
                     options = devices.Where(d => d.Nickname.IsNotNullOrWhiteSpace())
                                             .OrderBy(d => d.Nickname, StringComparer.InvariantCultureIgnoreCase)
                                             .Select(d => new
-                                            {
-                                                id = d.Id,
-                                                name = d.Nickname
-                                            })
+                                                         {
+                                                             id = d.Id,
+                                                             name = d.Nickname
+                                                         })
                 };
             }
 

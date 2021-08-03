@@ -13,12 +13,15 @@ namespace NzbDrone.Core.Datastore.Extensions
 
         public static int PagingOffset<TModel>(this PagingSpec<TModel> pagingSpec)
         {
-            return (pagingSpec.Page - 1)*pagingSpec.PageSize;
+            return (pagingSpec.Page - 1) * pagingSpec.PageSize;
         }
 
         public static Marr.Data.QGen.SortDirection ToSortDirection<TModel>(this PagingSpec<TModel> pagingSpec)
         {
-            if (pagingSpec.SortDirection == SortDirection.Descending) return Marr.Data.QGen.SortDirection.Desc;
+            if (pagingSpec.SortDirection == SortDirection.Descending)
+            {
+                return Marr.Data.QGen.SortDirection.Desc;
+            }
 
             return Marr.Data.QGen.SortDirection.Asc;
         }
@@ -41,4 +44,3 @@ namespace NzbDrone.Core.Datastore.Extensions
         }
     }
 }
-    

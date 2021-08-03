@@ -8,7 +8,6 @@ using NzbDrone.Core.Notifications.Slack.Payloads;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 
-
 namespace NzbDrone.Core.Notifications.Slack
 {
     public class Slack : NotificationBase<SlackSettings>
@@ -154,7 +153,6 @@ namespace NzbDrone.Core.Notifications.Slack
                 var payload = CreatePayload(message);
 
                 _proxy.SendPayload(payload, Settings);
-
             }
             catch (SlackExeption ex)
             {
@@ -196,6 +194,7 @@ namespace NzbDrone.Core.Notifications.Slack
 
             return payload;
         }
+
         private string GetTitle(Series series, List<Episode> episodes)
         {
             if (series.SeriesType == SeriesTypes.Daily)

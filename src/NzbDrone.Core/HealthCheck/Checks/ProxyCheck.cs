@@ -1,10 +1,10 @@
-﻿using NLog;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
+using NLog;
 using NzbDrone.Common.Cloud;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks

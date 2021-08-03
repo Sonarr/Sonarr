@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Exceptions
         {
             StatusCode = statusCode;
         }
+
         public NzbDroneClientException(HttpStatusCode statusCode, string message, Exception innerException, params object[] args)
             : base(message, innerException, args)
         {

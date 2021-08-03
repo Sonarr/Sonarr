@@ -1,17 +1,17 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Validation;
-using NLog;
-using FluentValidation.Results;
-using System.Net;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
 {
@@ -44,7 +44,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 catch (DownloadClientUnavailableException)
                 {
                     _logger.Warn("Failed to set torrent post-import label \"{0}\" for {1} in Deluge. Does the label exist?",
-                        Settings.TvImportedCategory, downloadClientItem.Title);
+                        Settings.TvImportedCategory,
+                        downloadClientItem.Title);
                 }
             }
         }
@@ -67,8 +68,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
-            if (isRecentEpisode && Settings.RecentTvPriority == (int)DelugePriority.First ||
-                !isRecentEpisode && Settings.OlderTvPriority == (int)DelugePriority.First)
+            if ((isRecentEpisode && Settings.RecentTvPriority == (int)DelugePriority.First) ||
+                (!isRecentEpisode && Settings.OlderTvPriority == (int)DelugePriority.First))
             {
                 _proxy.MoveTorrentToTopInQueue(actualHash, Settings);
             }
@@ -94,8 +95,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
-            if (isRecentEpisode && Settings.RecentTvPriority == (int)DelugePriority.First ||
-                !isRecentEpisode && Settings.OlderTvPriority == (int)DelugePriority.First)
+            if ((isRecentEpisode && Settings.RecentTvPriority == (int)DelugePriority.First) ||
+                (!isRecentEpisode && Settings.OlderTvPriority == (int)DelugePriority.First))
             {
                 _proxy.MoveTorrentToTopInQueue(actualHash, Settings);
             }
@@ -122,7 +123,10 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             foreach (var torrent in torrents)
             {
-                if (torrent.Hash == null) continue;
+                if (torrent.Hash == null)
+                {
+                    continue;
+                }
 
                 var item = new DownloadClientItem();
                 item.DownloadId = torrent.Hash.ToUpper();
@@ -216,7 +220,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            if (failures.HasErrors()) return;
+            if (failures.HasErrors())
+            {
+                return;
+            }
+
             failures.AddIfNotNull(TestCategory());
             failures.AddIfNotNull(TestGetTorrents());
         }

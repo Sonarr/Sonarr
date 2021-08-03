@@ -25,8 +25,7 @@ namespace NzbDrone.Core.Datastore.Converters
             var ordinal = context.DataRecord.GetOrdinal("ConfigContract");
             var contract = context.DataRecord.GetString(ordinal);
 
-
-            var impType = typeof (IProviderConfig).Assembly.FindTypeByName(contract);
+            var impType = typeof(IProviderConfig).Assembly.FindTypeByName(contract);
 
             if (impType == null)
             {
@@ -35,6 +34,5 @@ namespace NzbDrone.Core.Datastore.Converters
 
             return Json.Deserialize(stringValue, impType);
         }
-
     }
 }

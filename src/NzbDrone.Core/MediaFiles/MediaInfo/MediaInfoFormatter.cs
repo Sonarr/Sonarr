@@ -12,6 +12,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public static class MediaInfoFormatter
     {
+        private const string ValidHdrColourPrimaries = "BT.2020";
+        private const string VideoDynamicRangeHdr = "HDR";
+
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(MediaInfoFormatter));
 
         public static decimal FormatAudioChannels(MediaInfoModel mediaInfo)
@@ -42,13 +45,13 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             var audioCodecID = mediaInfo.AudioCodecID ?? string.Empty;
             var audioProfile = mediaInfo.AudioProfile ?? string.Empty;
             var audioCodecLibrary = mediaInfo.AudioCodecLibrary ?? string.Empty;
-            var splitAdditionalFeatures = (mediaInfo.AudioAdditionalFeatures ?? string.Empty).Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            var splitAdditionalFeatures = (mediaInfo.AudioAdditionalFeatures ?? string.Empty).Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (audioFormat.Empty())
             {
                 return string.Empty;
             }
-            
+
             if (audioFormat.ContainsIgnoreCase("Atmos"))
             {
                 return "TrueHD Atmos";
@@ -82,6 +85,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     {
                         return "DTS-X";
                     }
+
                     return "DTS-HD MA";
                 }
 
@@ -463,7 +467,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                             "",
                             RegexOptions.Compiled | RegexOptions.IgnoreCase)
                         .Replace("Object Based / ", "")
-                        .Split(new string[] {" / "}, StringSplitOptions.RemoveEmptyEntries)
+                        .Split(new string[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
                         .FirstOrDefault()
                         ?.Split('/');
 
@@ -592,7 +596,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public static string FormatVideoDynamicRangeType(MediaInfoModel mediaInfo)
         {
-            switch(mediaInfo.GetHdrFormat())
+            switch (mediaInfo.GetHdrFormat())
             {
                 case HdrFormat.DolbyVision:
                     return "DV";

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Core.Profiles.Releases;
 using Sonarr.Http.REST;
@@ -12,6 +11,7 @@ namespace Sonarr.Api.V3.Profiles.Release
     {
         public string Name { get; set; }
         public bool Enabled { get; set; }
+
         // Is List<string>, string or JArray, we accept 'string' with POST for backward compatibility
         public object Required { get; set; }
         public object Ignored { get; set; }
@@ -31,7 +31,10 @@ namespace Sonarr.Api.V3.Profiles.Release
     {
         public static ReleaseProfileResource ToResource(this ReleaseProfile model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new ReleaseProfileResource
             {
@@ -49,7 +52,10 @@ namespace Sonarr.Api.V3.Profiles.Release
 
         public static ReleaseProfile ToModel(this ReleaseProfileResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new ReleaseProfile
             {
@@ -72,7 +78,7 @@ namespace Sonarr.Api.V3.Profiles.Release
 
         public static List<string> MapRequired(this ReleaseProfileResource profile) => ParseArray(profile.Required, "required");
         public static List<string> MapIgnored(this ReleaseProfileResource profile) => ParseArray(profile.Ignored, "ignored");
-        
+
         private static List<string> ParseArray(object resource, string title)
         {
             if (resource == null)

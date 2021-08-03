@@ -3,10 +3,10 @@ using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Releases;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {

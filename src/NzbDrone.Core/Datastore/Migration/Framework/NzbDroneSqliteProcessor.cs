@@ -24,7 +24,6 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                                        SQLiteQuoter quoter)
         : base(factory, generator, logger, options, connectionStringAccessor, serviceProvider, quoter)
         {
-
         }
 
         public override void Process(AlterColumnExpression expression)

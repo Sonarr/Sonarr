@@ -10,19 +10,23 @@ namespace NzbDrone.Common.Disk
         {
         }
 
-        public DestinationAlreadyExistsException(string message) : base(message)
+        public DestinationAlreadyExistsException(string message)
+            : base(message)
         {
         }
 
-        public DestinationAlreadyExistsException(string message, int hresult) : base(message, hresult)
+        public DestinationAlreadyExistsException(string message, int hresult)
+            : base(message, hresult)
         {
         }
 
-        public DestinationAlreadyExistsException(string message, Exception innerException) : base(message, innerException)
+        public DestinationAlreadyExistsException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 
-        protected DestinationAlreadyExistsException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected DestinationAlreadyExistsException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

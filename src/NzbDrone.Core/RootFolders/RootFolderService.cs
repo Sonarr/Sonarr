@@ -1,7 +1,7 @@
-using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common;
@@ -41,7 +41,6 @@ namespace NzbDrone.Core.RootFolders
                                                                      ".grab"
                                                                  };
 
-
         public RootFolderService(IRootFolderRepository rootFolderRepository,
                                  IDiskProvider diskProvider,
                                  ISeriesRepository seriesRepository,
@@ -74,6 +73,7 @@ namespace NzbDrone.Core.RootFolders
                         GetDetails(folder, seriesPaths, true);
                     }
                 }
+
                 //We don't want an exception to prevent the root folders from loading in the UI, so they can still be deleted
                 catch (Exception ex)
                 {

@@ -48,8 +48,10 @@ namespace NzbDrone.Common.Serializer
                 {
                     builder.Append('_');
                 }
+
                 builder.Append(char.ToLower(enumText[i]));
             }
+
             enumText = builder.ToString();
 
             writer.WriteValue(enumText);

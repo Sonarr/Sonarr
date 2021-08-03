@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Instrumentation
         public SlowRunningAsyncTargetWrapper(Target wrappedTarget)
             : base(wrappedTarget)
         {
-
         }
 
         protected override void StopLazyWriterThread()

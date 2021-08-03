@@ -26,7 +26,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public AllowedValidator()
             : base("Must contain at least one allowed quality")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -52,7 +51,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public GroupItemValidator()
             : base("Groups must contain multiple qualities")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -73,7 +71,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public QualityNameValidator()
             : base("Individual qualities should not be named")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -94,7 +91,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public ItemGroupNameValidator()
             : base("Groups must have a name")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -115,7 +111,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public ItemGroupIdValidator()
             : base("Groups must have an ID")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -136,7 +131,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public UniqueIdValidator()
             : base("Groups must have a unique ID")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -157,7 +151,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public UniqueQualityIdValidator()
             : base("Qualities can only be used once")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -179,7 +172,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
                         qualityIds.Add(quality.Quality.Id);
                     }
                 }
-
                 else
                 {
                     if (qualityIds.Contains(item.Quality.Id))

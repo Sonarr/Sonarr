@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.Queue;
-using NzbDrone.Core.Test.Framework;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using NUnit.Framework;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Queue;
+using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.QueueTests
 {
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.QueueTests
                                           .All()
                                           .With(e => e.SeriesId = series.Id)
                                           .Build();
-            
+
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                    .With(r => r.Series = series)
                                                    .With(r => r.Episodes = new List<Episode>(episodes))

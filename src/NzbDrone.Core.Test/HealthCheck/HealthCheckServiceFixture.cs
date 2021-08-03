@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.HealthCheck
 {
     public class HealthCheckServiceFixture : CoreTest<HealthCheckService>
     {
-        FakeHealthCheck _healthCheck;
+        private FakeHealthCheck _healthCheck;
 
         [SetUp]
         public void SetUp()
@@ -49,7 +49,6 @@ namespace NzbDrone.Core.Test.HealthCheck
 
             _healthCheck.Executed.Should().BeTrue();
         }
-
     }
 
     public class FakeEvent : IEvent

@@ -48,7 +48,10 @@ namespace NzbDrone.Core.Datastore.Migration
             foreach (var profileClosure in profiles.DistinctBy(p => p.GrabDelay))
             {
                 var profile = profileClosure;
-                if (profile.GrabDelay == 0) continue;
+                if (profile.GrabDelay == 0)
+                {
+                    continue;
+                }
 
                 var tag = string.Format("delay-{0}", profile.GrabDelay);
                 var tagId = InsertTag(conn, tran, tag);
@@ -82,7 +85,7 @@ namespace NzbDrone.Core.Datastore.Migration
             {
                 getProfilesCmd.Transaction = tran;
                 getProfilesCmd.CommandText = @"SELECT Id, GrabDelay FROM Profiles";
-                
+
                 using (IDataReader profileReader = getProfilesCmd.ExecuteReader())
                 {
                     while (profileReader.Read())

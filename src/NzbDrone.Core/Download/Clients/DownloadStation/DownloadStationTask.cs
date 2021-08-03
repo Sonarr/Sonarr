@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using NzbDrone.Common.Serializer;
 
@@ -35,7 +35,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
     public enum DownloadStationTaskType
     {
-        BT, NZB, http, ftp, eMule, https
+        BT,
+        NZB,
+        http,
+        ftp,
+        eMule,
+        https
     }
 
     public enum DownloadStationTaskStatus

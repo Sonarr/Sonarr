@@ -22,15 +22,14 @@ using Sonarr.Http.Extensions;
 
 namespace Sonarr.Api.V3.Series
 {
-    public class SeriesModule : SonarrRestModuleWithSignalR<SeriesResource, NzbDrone.Core.Tv.Series>, 
-                                IHandle<EpisodeImportedEvent>, 
+    public class SeriesModule : SonarrRestModuleWithSignalR<SeriesResource, NzbDrone.Core.Tv.Series>,
+                                IHandle<EpisodeImportedEvent>,
                                 IHandle<EpisodeFileDeletedEvent>,
-                                IHandle<SeriesUpdatedEvent>,       
-                                IHandle<SeriesEditedEvent>,  
+                                IHandle<SeriesUpdatedEvent>,
+                                IHandle<SeriesEditedEvent>,
                                 IHandle<SeriesDeletedEvent>,
                                 IHandle<SeriesRenamedEvent>,
                                 IHandle<MediaCoversUpdatedEvent>
-
     {
         private readonly ISeriesService _seriesService;
         private readonly IAddSeriesService _addSeriesService;
@@ -56,8 +55,7 @@ namespace Sonarr.Api.V3.Series
                             SystemFolderValidator systemFolderValidator,
                             ProfileExistsValidator profileExistsValidator,
                             LanguageProfileExistsValidator languageProfileExistsValidator,
-                            SeriesFolderAsRootFolderValidator seriesFolderAsRootFolderValidator
-            )
+                            SeriesFolderAsRootFolderValidator seriesFolderAsRootFolderValidator)
             : base(signalRBroadcaster)
         {
             _seriesService = seriesService;
@@ -176,7 +174,10 @@ namespace Sonarr.Api.V3.Series
 
         private SeriesResource GetSeriesResource(NzbDrone.Core.Tv.Series series, bool includeSeasonImages)
         {
-            if (series == null) return null;
+            if (series == null)
+            {
+                return null;
+            }
 
             var resource = series.ToResource(includeSeasonImages);
             MapCoversToLocal(resource);
@@ -205,7 +206,10 @@ namespace Sonarr.Api.V3.Series
             foreach (var series in resources)
             {
                 var stats = seriesStatistics.SingleOrDefault(ss => ss.SeriesId == series.Id);
-                if (stats == null) continue;
+                if (stats == null)
+                {
+                    continue;
+                }
 
                 LinkSeriesStatistics(series, stats);
             }
@@ -238,7 +242,10 @@ namespace Sonarr.Api.V3.Series
         {
             var mappings = _sceneMappingService.FindByTvdbId(resource.TvdbId);
 
-            if (mappings == null) return;
+            if (mappings == null)
+            {
+                return;
+            }
 
             resource.AlternateTitles = mappings.ConvertAll(AlternateTitleResourceMapper.ToResource);
         }
@@ -255,7 +262,10 @@ namespace Sonarr.Api.V3.Series
 
         public void Handle(EpisodeFileDeletedEvent message)
         {
-            if (message.Reason == DeleteMediaFileReason.Upgrade) return;
+            if (message.Reason == DeleteMediaFileReason.Upgrade)
+            {
+                return;
+            }
 
             BroadcastResourceChange(ModelAction.Updated, message.EpisodeFile.SeriesId);
         }

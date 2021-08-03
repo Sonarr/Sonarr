@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.MediaFiles
     {
         private Series _series;
         private List<EpisodeFile> _episodeFiles;
-            
+
         [SetUp]
         public void Setup()
         {
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenNoEpisodeFiles();
 
-            Subject.Execute(new RenameFilesCommand(_series.Id, new List<int>{1}));
+            Subject.Execute(new RenameFilesCommand(_series.Id, new List<int> { 1 }));
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<SeriesRenamedEvent>()), Times.Never());

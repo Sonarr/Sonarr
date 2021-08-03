@@ -20,16 +20,15 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 InsertHistory(c, new Dictionary<string, string>
                 {
-                    {"indexer","test"},
-                    {"downloadClientId","123"}
+                    { "indexer", "test" },
+                    { "downloadClientId", "123" }
                 });
 
                 InsertHistory(c, new Dictionary<string, string>
                 {
-                    {"indexer","test"},
-                    {"downloadClientId","abc"}
+                    { "indexer", "test" },
+                    { "downloadClientId", "abc" }
                 });
-
             });
 
             var history = db.Query<History72>("SELECT DownloadId, Data FROM History");
@@ -40,7 +39,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             history.Should().Contain(c => c.DownloadId == "abc");
         }
 
-
         [Test]
         public void should_leave_items_with_no_grabid()
         {
@@ -48,15 +46,14 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 InsertHistory(c, new Dictionary<string, string>
                 {
-                    {"indexer","test"},
-                    {"downloadClientId","123"}
+                    { "indexer", "test" },
+                    { "downloadClientId", "123" }
                 });
 
                 InsertHistory(c, new Dictionary<string, string>
                 {
-                    {"indexer","test"}
+                    { "indexer", "test" }
                 });
-
             });
 
             var history = db.Query<History72>("SELECT DownloadId, Data FROM History");
@@ -74,9 +71,9 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 InsertHistory(c, new Dictionary<string, string>
                 {
-                    {"indexer","test"},
-                    {"group","test2"},
-                    {"downloadClientId","123"}
+                    { "indexer", "test" },
+                    { "group", "test2" },
+                    { "downloadClientId", "123" }
                 });
             });
 

@@ -56,12 +56,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 var queuedItemPreferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, queueItem.Title, subject.Release?.IndexerId ?? 0);
 
                 if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
-                    languageProfile, 
-                                                           remoteEpisode.ParsedEpisodeInfo.Quality, 
-                                                           remoteEpisode.ParsedEpisodeInfo.Language,
-                                                           queuedItemPreferredWordScore,
-                                                           subject.ParsedEpisodeInfo.Quality,
-                                                           subject.PreferredWordScore))
+                    languageProfile,
+                    remoteEpisode.ParsedEpisodeInfo.Quality,
+                    remoteEpisode.ParsedEpisodeInfo.Language,
+                    queuedItemPreferredWordScore,
+                    subject.ParsedEpisodeInfo.Quality,
+                    subject.PreferredWordScore))
                 {
                     return Decision.Reject("Release in queue already meets cutoff: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
                 }
@@ -69,8 +69,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 _logger.Debug("Checking if release is higher quality than queued release. Queued: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
 
                 if (!_upgradableSpecification.IsUpgradable(qualityProfile,
-                                                           languageProfile, 
-                                                           remoteEpisode.ParsedEpisodeInfo.Quality, 
+                                                           languageProfile,
+                                                           remoteEpisode.ParsedEpisodeInfo.Quality,
                                                            remoteEpisode.ParsedEpisodeInfo.Language,
                                                            queuedItemPreferredWordScore,
                                                            subject.ParsedEpisodeInfo.Quality,

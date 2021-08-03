@@ -13,7 +13,6 @@ namespace Sonarr.Api.V3.Profiles.Release
         private readonly IReleaseProfileService _releaseProfileService;
         private readonly IIndexerFactory _indexerFactory;
 
-
         public ReleaseProfileModule(IReleaseProfileService releaseProfileService, IIndexerFactory indexerFactory)
         {
             _releaseProfileService = releaseProfileService;

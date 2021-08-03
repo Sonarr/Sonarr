@@ -12,7 +12,9 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string ImdbId { get; set; }
         public SeriesTypes Type { get; set; }
 
-        public WebhookSeries() { }
+        public WebhookSeries()
+        {
+        }
 
         public WebhookSeries(Series series)
         {

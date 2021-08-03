@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using FluentMigrator;
@@ -53,7 +53,6 @@ namespace NzbDrone.Core.Datastore.Migration
                             {
                                 seriesTitlePattern = "{Series.Title}";
                             }
-
                             else
                             {
                                 seriesTitlePattern = "{Series Title}";
@@ -70,20 +69,21 @@ namespace NzbDrone.Core.Datastore.Migration
                             {
                                 episodeTitlePattern += "{Episode.Title}";
                             }
-
                             else
                             {
                                 episodeTitlePattern += "{Episode Title}";
                             }
                         }
 
-                        var standardEpisodeFormat = string.Format("{0}{1}{2}", seriesTitlePattern,
-                                                                             GetNumberStyle(numberStyle).Pattern,
-                                                                             episodeTitlePattern);
+                        var standardEpisodeFormat = string.Format("{0}{1}{2}",
+                            seriesTitlePattern,
+                            GetNumberStyle(numberStyle).Pattern,
+                            episodeTitlePattern);
 
-                        var dailyEpisodeFormat = string.Format("{0}{1}{2}", seriesTitlePattern,
-                                                                            dailyEpisodePattern,
-                                                                            episodeTitlePattern);
+                        var dailyEpisodeFormat = string.Format("{0}{1}{2}",
+                            seriesTitlePattern,
+                            dailyEpisodePattern,
+                            episodeTitlePattern);
 
                         if (includeQuality)
                         {
@@ -121,9 +121,8 @@ namespace NzbDrone.Core.Datastore.Migration
                                                                                         Name = "1x05",
                                                                                         Pattern = "{season}x{episode:00}",
                                                                                         EpisodeSeparator = "x"
-
                                                                                     },
-                                                                                new 
+                                                                                new
                                                                                     {
                                                                                         Id = 1,
                                                                                         Name = "01x05",

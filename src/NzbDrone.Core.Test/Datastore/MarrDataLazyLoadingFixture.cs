@@ -1,19 +1,18 @@
-﻿using FizzWare.NBuilder;
-using NUnit.Framework;
 using System.Linq;
+using FizzWare.NBuilder;
+using NUnit.Framework;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Languages;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore
 {
-
     [TestFixture]
     public class MarrDataLazyLoadingFixture : DbTest
     {
@@ -67,9 +66,9 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_lazy_load_profile_if_not_joined()
         {
             var db = Mocker.Resolve<IDatabase>();
-            var DataMapper = db.GetDataMapper();
+            var dataMapper = db.GetDataMapper();
 
-            var episodes = DataMapper.Query<Episode>()
+            var episodes = dataMapper.Query<Episode>()
                 .Join<Episode, Series>(Marr.Data.QGen.JoinType.Inner, v => v.Series, (l, r) => l.SeriesId == r.Id)
                 .ToList();
 
@@ -85,9 +84,9 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_explicit_load_episodefile_if_joined()
         {
             var db = Mocker.Resolve<IDatabase>();
-            var DataMapper = db.GetDataMapper();
+            var dataMapper = db.GetDataMapper();
 
-            var episodes = DataMapper.Query<Episode>()
+            var episodes = dataMapper.Query<Episode>()
                 .Join<Episode, EpisodeFile>(Marr.Data.QGen.JoinType.Inner, v => v.EpisodeFile, (l, r) => l.EpisodeFileId == r.Id)
                 .ToList();
 
@@ -102,9 +101,9 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_explicit_load_profile_if_joined()
         {
             var db = Mocker.Resolve<IDatabase>();
-            var DataMapper = db.GetDataMapper();
+            var dataMapper = db.GetDataMapper();
 
-            var episodes = DataMapper.Query<Episode>()
+            var episodes = dataMapper.Query<Episode>()
                 .Join<Episode, Series>(Marr.Data.QGen.JoinType.Inner, v => v.Series, (l, r) => l.SeriesId == r.Id)
                 .Join<Series, QualityProfile>(Marr.Data.QGen.JoinType.Inner, v => v.QualityProfile, (l, r) => l.QualityProfileId == r.Id)
                 .ToList();
@@ -121,9 +120,9 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_explicit_load_languageprofile_if_joined()
         {
             var db = Mocker.Resolve<IDatabase>();
-            var DataMapper = db.GetDataMapper();
+            var dataMapper = db.GetDataMapper();
 
-            var episodes = DataMapper.Query<Episode>()
+            var episodes = dataMapper.Query<Episode>()
                                      .Join<Episode, Series>(Marr.Data.QGen.JoinType.Inner, v => v.Series, (l, r) => l.SeriesId == r.Id)
                                      .Join<Series, LanguageProfile>(Marr.Data.QGen.JoinType.Inner, v => v.LanguageProfile, (l, r) => l.QualityProfileId == r.Id)
                                      .ToList();

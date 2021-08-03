@@ -67,7 +67,6 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.AudioAdditionalFeatures.Should().BeOneOf("", "LC");
             info.VideoHdrFormat.Should().BeEmpty();
             info.VideoHdrFormatCompatibility.Should().BeEmpty();
-
         }
 
         [Test]

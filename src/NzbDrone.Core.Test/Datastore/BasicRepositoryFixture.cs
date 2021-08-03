@@ -9,13 +9,11 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore
 {
-
     [TestFixture]
     public class
         BasicRepositoryFixture : DbTest<BasicRepository<ScheduledTask>, ScheduledTask>
     {
         private ScheduledTask _basicType;
-
 
         [SetUp]
         public void Setup()
@@ -44,9 +42,7 @@ namespace NzbDrone.Core.Test.Datastore
             Subject.Purge();
 
             AllStoredModels.Should().BeEmpty();
-
         }
-
 
         [Test]
         public void should_be_able_to_delete_model()
@@ -64,7 +60,7 @@ namespace NzbDrone.Core.Test.Datastore
             Subject.Insert(_basicType);
             var storeObject = Subject.Get(_basicType.Id);
 
-            storeObject.Should().BeEquivalentTo(_basicType, o=>o.IncludingAllRuntimeProperties());
+            storeObject.Should().BeEquivalentTo(_basicType, o => o.IncludingAllRuntimeProperties());
         }
 
         [Test]
@@ -86,19 +82,16 @@ namespace NzbDrone.Core.Test.Datastore
             Assert.Throws<ModelNotFoundException>(() => Subject.Get(12));
         }
 
-
         [Test]
         public void get_all_with_empty_db_should_return_empty_list()
         {
             Subject.All().Should().BeEmpty();
         }
 
-
         [Test]
         public void should_be_able_to_call_ToList_on_empty_quariable()
         {
             Subject.All().ToList().Should().BeEmpty();
-
         }
     }
 }

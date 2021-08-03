@@ -10,13 +10,11 @@ namespace NzbDrone.Common.Test
     [TestFixture]
     public class IAppDirectoryInfoTest : TestBase<AppFolderInfo>
     {
-
         [Test]
         public void StartupPath_should_not_be_empty()
         {
             Subject.StartUpFolder.Should().NotBeNullOrWhiteSpace();
             Path.IsPathRooted(Subject.StartUpFolder).Should().BeTrue("Path is not rooted");
-
         }
 
         [Test]

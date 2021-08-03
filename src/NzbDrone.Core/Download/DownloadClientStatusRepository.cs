@@ -6,7 +6,6 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadClientStatusRepository : IProviderStatusRepository<DownloadClientStatus>
     {
-
     }
 
     public class DownloadClientStatusRepository : ProviderStatusRepository<DownloadClientStatus>, IDownloadClientStatusRepository

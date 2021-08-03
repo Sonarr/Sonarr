@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Data;
-using System.Linq;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
 using FluentMigrator;
 using Newtonsoft.Json;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using System.IO;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
@@ -180,12 +180,19 @@ namespace NzbDrone.Core.Datastore.Migration
                 for (int i = 0; i < list.Count - 1; i++)
                 {
                     var grabbedEvent = list[i];
-                    if (grabbedEvent.EventType != MigrationHistoryEventType.Grabbed) continue;
-                    if (grabbedEvent.Data.GetValueOrDefault("downloadClient") == null || grabbedEvent.Data.GetValueOrDefault("downloadClientId") == null) continue;
+                    if (grabbedEvent.EventType != MigrationHistoryEventType.Grabbed)
+                    {
+                        continue;
+                    }
+
+                    if (grabbedEvent.Data.GetValueOrDefault("downloadClient") == null || grabbedEvent.Data.GetValueOrDefault("downloadClientId") == null)
+                    {
+                        continue;
+                    }
 
                     // Check if it is already associated with a failed/imported event.
                     int j;
-                    for (j = i + 1; j < list.Count;j++)
+                    for (j = i + 1; j < list.Count; j++)
                     {
                         if (list[j].EventType != MigrationHistoryEventType.DownloadFolderImported &&
                             list[j].EventType != MigrationHistoryEventType.DownloadFailed)
@@ -208,7 +215,10 @@ namespace NzbDrone.Core.Datastore.Migration
                     }
 
                     var importedEvent = list[i + 1];
-                    if (importedEvent.EventType != MigrationHistoryEventType.DownloadFolderImported) continue;
+                    if (importedEvent.EventType != MigrationHistoryEventType.DownloadFolderImported)
+                    {
+                        continue;
+                    }
 
                     var droppedPath = importedEvent.Data.GetValueOrDefault("droppedPath");
                     if (droppedPath != null && new FileInfo(droppedPath).Directory.Name == grabbedEvent.SourceTitle)
@@ -236,7 +246,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     updateHistoryCmd.ExecuteNonQuery();
                 }
             }
-            
+
             _logger.Info("Updated old History items. {0}/{1} old ImportedEvents were associated with GrabbedEvents.", historyItemsToAssociate.Count, numHistoryItemsNotAssociated);
         }
     }

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging.Events;
-using System;
 using NzbDrone.Common.Cache;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities.Commands;
 
 namespace NzbDrone.Core.Qualities
@@ -58,17 +58,17 @@ namespace NzbDrone.Core.Qualities
         {
             return GetAll().Values.Single(v => v.Id == id);
         }
-        
+
         public QualityDefinition Get(Quality quality)
         {
             return GetAll()[quality];
         }
-        
+
         private void InsertMissingDefinitions()
         {
             List<QualityDefinition> insertList = new List<QualityDefinition>();
             List<QualityDefinition> updateList = new List<QualityDefinition>();
-            
+
             var allDefinitions = Quality.DefaultQualityDefinitions.OrderBy(d => d.Weight).ToList();
             var existingDefinitions = _repo.All().ToList();
 
@@ -80,7 +80,6 @@ namespace NzbDrone.Core.Qualities
                 {
                     insertList.Add(definition);
                 }
-
                 else
                 {
                     updateList.Add(existing);
@@ -91,7 +90,7 @@ namespace NzbDrone.Core.Qualities
             _repo.InsertMany(insertList);
             _repo.UpdateMany(updateList);
             _repo.DeleteMany(existingDefinitions);
-            
+
             _cache.Clear();
         }
 

@@ -34,7 +34,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _firstEpisode = new Episode { Monitored = true };
             _secondEpisode = new Episode { Monitored = true };
 
-
             var singleEpisodeList = new List<Episode> { _firstEpisode };
             var doubleEpisodeList = new List<Episode> { _firstEpisode, _secondEpisode };
 
@@ -121,7 +120,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_false_if_episode_is_not_monitored_for_season_search()
         {
             WithFirstEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SeasonSearchCriteria { MonitoredEpisodesOnly = true}).Accepted.Should().BeFalse();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SeasonSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -135,7 +134,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_false_if_episode_is_not_monitored_and_monitoredEpisodesOnly_flag_is_true()
         {
             WithFirstEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria{ MonitoredEpisodesOnly = true}).Accepted.Should().BeFalse();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeFalse();
         }
 
         [Test]

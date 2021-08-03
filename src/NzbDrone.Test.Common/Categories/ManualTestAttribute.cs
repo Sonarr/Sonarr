@@ -7,7 +7,6 @@ namespace NzbDrone.Test.Common.Categories
         public ManualTestAttribute()
             : base("ManualTest")
         {
-
         }
     }
 }

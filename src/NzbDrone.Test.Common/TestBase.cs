@@ -17,14 +17,12 @@ namespace NzbDrone.Test.Common
     public abstract class TestBase<TSubject> : TestBase
         where TSubject : class
     {
-
         private TSubject _subject;
 
         [SetUp]
         public void CoreTestSetup()
         {
             _subject = null;
-
         }
 
         protected TSubject Subject
@@ -38,9 +36,7 @@ namespace NzbDrone.Test.Common
 
                 return _subject;
             }
-
         }
-
     }
 
     public abstract class TestBase : LoggingTest
@@ -64,7 +60,6 @@ namespace NzbDrone.Test.Common
                 return _mocker;
             }
         }
-
 
         protected int RandomNumber
         {
@@ -122,7 +117,6 @@ namespace NzbDrone.Test.Common
 
             DeleteTempFolder(_tempFolder);
         }
-
 
         public static string GetUID()
         {

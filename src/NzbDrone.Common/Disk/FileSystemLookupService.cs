@@ -125,7 +125,6 @@ namespace NzbDrone.Common.Disk
                     result.Files = GetFiles(path);
                 }
             }
-
             catch (DirectoryNotFoundException)
             {
                 return new FileSystemResult { Parent = GetParent(path) };

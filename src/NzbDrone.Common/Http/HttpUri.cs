@@ -47,6 +47,7 @@ namespace NzbDrone.Common.Http
                 {
                     builder.Append('/');
                 }
+
                 builder.Append(path.TrimStart('/'));
             }
 
@@ -78,7 +79,7 @@ namespace NzbDrone.Common.Http
             var query = match.Groups["query"];
             var fragment = match.Groups["fragment"];
 
-            if (!match.Success || scheme.Success && !host.Success && path.Success)
+            if (!match.Success || (scheme.Success && !host.Success && path.Success))
             {
                 throw new ArgumentException("Uri didn't match expected pattern: " + _uri);
             }
@@ -126,6 +127,7 @@ namespace NzbDrone.Common.Http
 
                     _queryParams = dict.AsReadOnly();
                 }
+
                 return _queryParams;
             }
         }
@@ -200,6 +202,7 @@ namespace NzbDrone.Common.Http
                 {
                     builder.Append("&");
                 }
+
                 builder.Append(Uri.EscapeDataString(pair.Key));
                 builder.Append("=");
                 builder.Append(Uri.EscapeDataString(pair.Value));
@@ -207,7 +210,6 @@ namespace NzbDrone.Common.Http
 
             return SetQuery(builder.ToString());
         }
-
 
         public override int GetHashCode()
         {
@@ -237,7 +239,10 @@ namespace NzbDrone.Common.Http
 
         public bool Equals(HttpUri other)
         {
-            if (object.ReferenceEquals(other, null)) return false;
+            if (object.ReferenceEquals(other, null))
+            {
+                return false;
+            }
 
             return _uri.Equals(other._uri);
         }

@@ -35,12 +35,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
-                if (!_upgradableSpecification.IsUpgradable(subject.Series.QualityProfile, 
-                                                           subject.Series.LanguageProfile, 
-                                                           file.Quality, 
+                if (!_upgradableSpecification.IsUpgradable(subject.Series.QualityProfile,
+                                                           subject.Series.LanguageProfile,
+                                                           file.Quality,
                                                            file.Language,
                                                            _episodeFilePreferredWordCalculator.Calculate(subject.Series, file),
-                                                           subject.ParsedEpisodeInfo.Quality, 
+                                                           subject.ParsedEpisodeInfo.Quality,
                                                            subject.ParsedEpisodeInfo.Language,
                                                            subject.PreferredWordScore))
                 {

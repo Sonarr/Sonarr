@@ -56,7 +56,7 @@ namespace NzbDrone.Core.MediaFiles
 
                     return importResults;
                 }
-                 
+
                 _logger.Warn("External directory scan request for unknown download {0}, attempting normal import. [{1}]", message.DownloadClientId, message.Path);
             }
 

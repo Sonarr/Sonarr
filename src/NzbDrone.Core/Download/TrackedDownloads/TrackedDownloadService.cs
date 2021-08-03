@@ -181,9 +181,10 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 existingItem.CanMoveFiles != downloadItem.CanMoveFiles)
             {
                 _logger.Debug("Tracking '{0}:{1}': ClientState={2}{3} SonarrStage={4} Episode='{5}' OutputPath={6}.",
-                    downloadItem.DownloadClientInfo.Name, downloadItem.Title,
-                    downloadItem.Status, downloadItem.CanBeRemoved ? "" :
-                                         downloadItem.CanMoveFiles ? " (busy)" : " (readonly)",
+                    downloadItem.DownloadClientInfo.Name,
+                    downloadItem.Title,
+                    downloadItem.Status,
+                    downloadItem.CanBeRemoved ? "" : downloadItem.CanMoveFiles ? " (busy)" : " (readonly)",
                     trackedDownload.State,
                     trackedDownload.RemoteEpisode?.ParsedEpisodeInfo,
                     downloadItem.OutputPath);
@@ -194,7 +195,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         {
             var parsedEpisodeInfo = Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
 
-            trackedDownload.RemoteEpisode = parsedEpisodeInfo == null ? null :_parsingService.Map(parsedEpisodeInfo, 0, 0);
+            trackedDownload.RemoteEpisode = parsedEpisodeInfo == null ? null : _parsingService.Map(parsedEpisodeInfo, 0, 0);
         }
 
         private static TrackedDownloadState GetStateFromHistory(DownloadHistoryEventType eventType)

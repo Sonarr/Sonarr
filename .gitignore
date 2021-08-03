@@ -84,7 +84,6 @@ TestResults
 [Tt]est[Rr]esult*
 *.Cache
 ClientBin
-[Ss]tyle[Cc]op.*
 ~$*
 *.dbmdl
 Generated_Code #added for RIA/Silverlight projects

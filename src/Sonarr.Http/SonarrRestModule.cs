@@ -5,10 +5,10 @@ using Sonarr.Http.Validation;
 
 namespace Sonarr.Http
 {
-    public abstract class SonarrRestModule<TResource> : RestModule<TResource> where TResource : RestResource, new()
+    public abstract class SonarrRestModule<TResource> : RestModule<TResource>
+        where TResource : RestResource, new()
     {
         protected string Resource { get; private set; }
-
 
         private static string BaseUrl()
         {
@@ -17,6 +17,7 @@ namespace Sonarr.Http
             {
                 return "/api/v3/";
             }
+
             return "/api/";
         }
 

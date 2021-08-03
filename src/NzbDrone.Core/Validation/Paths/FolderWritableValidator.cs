@@ -16,9 +16,12 @@ namespace NzbDrone.Core.Validation.Paths
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            if (context.PropertyValue == null) return false;
+            if (context.PropertyValue == null)
+            {
+                return false;
+            }
 
-            return (_diskProvider.FolderWritable(context.PropertyValue.ToString()));
+            return _diskProvider.FolderWritable(context.PropertyValue.ToString());
         }
     }
 }

@@ -29,10 +29,8 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                     .With(s => s.Title = "South Park")
                     .Build();
 
-
             _namingConfig = NamingConfig.Default;
             _namingConfig.RenameEpisodes = true;
-
 
             Mocker.GetMock<INamingConfigService>()
                   .Setup(c => c.GetConfig()).Returns(_namingConfig);
@@ -64,7 +62,6 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                 .Setup(v => v.Get(Moq.It.IsAny<Quality>()))
                 .Returns<Quality>(v => Quality.DefaultQualityDefinitions.First(c => c.Quality == v));
         }
-
 
         [TestCase("Hey, Baby, What's Wrong (1)", "Hey, Baby, What's Wrong (2)", "Hey, Baby, What's Wrong")]
         [TestCase("Meet the Guys and Girls of Cycle 20 Part 1", "Meet the Guys and Girls of Cycle 20 Part 2", "Meet the Guys and Girls of Cycle 20")]

@@ -95,7 +95,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                             continue;
                         }
 
-                        //hack to deal with Fate/Zero 
+                        //hack to deal with Fate/Zero
                         if (series.Key == 79151 && seasonNumber > 1)
                         {
                             continue;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -13,7 +13,6 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {
-
     [TestFixture]
     public class TorrentRssIndexerFixture : CoreTest<TestTorrentRssIndexer>
     {
@@ -220,7 +219,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.CommentUrl.Should().Be("https://animetosho.org/view/fff-ore-monogatari-vol-01-bd-720p-aac.1009077");
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
             torrentInfo.PublishDate.Should().Be(DateTime.Parse("Tue, 02 Aug 2016 13:48:04 +0000").ToUniversalTime());
-            torrentInfo.Size.Should().Be((long)Math.Round((double)1.366m * 1024L * 1024L * 1024L));
+            torrentInfo.Size.Should().Be((long)Math.Round(1.366D  * 1024L * 1024L * 1024L));
             torrentInfo.InfoHash.Should().BeNull();
             torrentInfo.MagnetUrl.Should().BeNull();
             torrentInfo.Peers.Should().NotHaveValue();

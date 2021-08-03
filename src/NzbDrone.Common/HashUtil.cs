@@ -24,6 +24,7 @@ namespace NzbDrone.Common
                     }
                 }
             }
+
             return $"{mCrc:x8}";
         }
 
