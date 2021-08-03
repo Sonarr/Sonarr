@@ -7,7 +7,8 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test.DiskTests
 {
-    public abstract class FreeSpaceFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
+    public abstract class FreeSpaceFixtureBase<TSubject> : TestBase<TSubject>
+        where TSubject : class, IDiskProvider
     {
         [Test]
         public void should_get_free_space_for_folder()

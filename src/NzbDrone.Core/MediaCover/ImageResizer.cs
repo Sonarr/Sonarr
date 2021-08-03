@@ -35,7 +35,10 @@ namespace NzbDrone.Core.MediaCover
 
         public void Resize(string source, string destination, int height)
         {
-            if (!_enabled) return;
+            if (!_enabled)
+            {
+                return;
+            }
 
             try
             {
@@ -51,6 +54,7 @@ namespace NzbDrone.Core.MediaCover
                 {
                     _diskProvider.DeleteFile(destination);
                 }
+
                 throw;
             }
         }

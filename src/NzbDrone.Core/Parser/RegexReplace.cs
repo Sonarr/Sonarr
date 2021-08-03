@@ -28,18 +28,27 @@ namespace NzbDrone.Core.Parser
         public string Replace(string input)
         {
             if (_replacementFunc != null)
+            {
                 return _regex.Replace(input, _replacementFunc);
+            }
             else
+            {
                 return _regex.Replace(input, _replacementFormat);
+            }
         }
 
         public bool TryReplace(ref string input)
         {
             var result = _regex.IsMatch(input);
             if (_replacementFunc != null)
+            {
                 input = _regex.Replace(input, _replacementFunc);
+            }
             else
+            {
                 input = _regex.Replace(input, _replacementFormat);
+            }
+
             return result;
         }
     }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLog;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Housekeeping
 {
@@ -30,7 +30,6 @@ namespace NzbDrone.Core.Housekeeping
                     _logger.Debug("Starting {0}", housekeeper.GetType().Name);
                     housekeeper.Clean();
                     _logger.Debug("Completed {0}", housekeeper.GetType().Name);
-
                 }
                 catch (Exception ex)
                 {

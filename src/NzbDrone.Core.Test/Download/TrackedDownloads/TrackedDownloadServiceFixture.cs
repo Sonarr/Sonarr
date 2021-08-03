@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.History;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Indexers;
-using System.Linq;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Test.Download.TrackedDownloads
@@ -22,13 +22,15 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
         {
             Mocker.GetMock<IHistoryService>()
                 .Setup(s => s.FindByDownloadId(It.Is<string>(sr => sr == "35238")))
-                .Returns(new List<EpisodeHistory>(){
-                 new EpisodeHistory(){
+                .Returns(new List<EpisodeHistory>()
+                {
+                 new EpisodeHistory()
+                {
                      DownloadId = "35238",
                      SourceTitle = "TV Series S01",
                      SeriesId = 5,
                      EpisodeId = 4
-                 }
+                }
                 });
         }
 
@@ -93,20 +95,22 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                 {
                     SeriesTitle = "TV Series",
                     SeasonNumber = 0,
-                    EpisodeNumbers = new []{ 1 }
+                    EpisodeNumbers = new[] { 1 }
                 },
                 MappedSeasonNumber = 0
             };
 
             Mocker.GetMock<IHistoryService>()
                 .Setup(s => s.FindByDownloadId(It.Is<string>(sr => sr == "35238")))
-                .Returns(new List<EpisodeHistory>(){
-                 new EpisodeHistory(){
+                .Returns(new List<EpisodeHistory>()
+                {
+                 new EpisodeHistory()
+                {
                      DownloadId = "35238",
                      SourceTitle = "TV Series Special",
                      SeriesId = 5,
                      EpisodeId = 4
-                 }
+                }
                 });
 
             Mocker.GetMock<IParsingService>()
@@ -172,7 +176,6 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                   .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
                   .Returns(new List<EpisodeHistory>());
 
-
             var client = new DownloadClientDefinition()
             {
                 Id = 1,
@@ -232,7 +235,6 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                   .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
                   .Returns(new List<EpisodeHistory>());
 
-
             var client = new DownloadClientDefinition()
             {
                 Id = 1,
@@ -291,7 +293,6 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             Mocker.GetMock<IHistoryService>()
                   .Setup(s => s.FindByDownloadId(It.IsAny<string>()))
                   .Returns(new List<EpisodeHistory>());
-
 
             var client = new DownloadClientDefinition()
             {

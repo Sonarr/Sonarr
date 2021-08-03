@@ -29,7 +29,10 @@ namespace NzbDrone.Core.SeriesStats
         {
             var stats = _seriesStatisticsRepository.SeriesStatistics(seriesId);
 
-            if (stats == null || stats.Count == 0) return new SeriesStatistics();
+            if (stats == null || stats.Count == 0)
+            {
+                return new SeriesStatistics();
+            }
 
             return MapSeriesStatistics(stats);
         }

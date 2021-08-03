@@ -19,7 +19,6 @@ namespace NzbDrone.Common.Test.TPLTests
             }
         }
 
-
         [Test]
         [Retry(3)]
         public void should_hold_the_call_for_debounce_duration()
@@ -33,11 +32,9 @@ namespace NzbDrone.Common.Test.TPLTests
 
             counter.Count.Should().Be(0);
 
-
             Thread.Sleep(100);
 
             counter.Count.Should().Be(1);
-
         }
 
         [Test]
@@ -53,7 +50,6 @@ namespace NzbDrone.Common.Test.TPLTests
 
             counter.Count.Should().Be(0);
 
-
             Thread.Sleep(200);
 
             debounceFunction.Execute();
@@ -63,7 +59,6 @@ namespace NzbDrone.Common.Test.TPLTests
             Thread.Sleep(200);
 
             counter.Count.Should().Be(2);
-
         }
 
         [Test]

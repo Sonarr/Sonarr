@@ -1,12 +1,12 @@
-﻿using NzbDrone.Common.Cache;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NzbDrone.Common.Cache;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.MediaCover
 {
@@ -17,6 +17,7 @@ namespace NzbDrone.Core.MediaCover
         string GetUrl(string hash);
         byte[] GetImage(string hash);
     }
+
     public class MediaCoverProxy : IMediaCoverProxy
     {
         private readonly IHttpClient _httpClient;
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.MediaCover
             var url = GetUrl(hash);
 
             var request = new HttpRequest(url);
-            
+
             return _httpClient.Get(request).ResponseData;
         }
     }

@@ -33,7 +33,10 @@ namespace Sonarr.Api.V3.History
     {
         public static HistoryResource ToResource(this EpisodeHistory model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new HistoryResource
             {
@@ -44,6 +47,7 @@ namespace Sonarr.Api.V3.History
                 SourceTitle = model.SourceTitle,
                 Language = model.Language,
                 Quality = model.Quality,
+
                 //QualityCutoffNotMet
                 Date = model.Date,
                 DownloadId = model.DownloadId,
@@ -51,6 +55,7 @@ namespace Sonarr.Api.V3.History
                 EventType = model.EventType,
 
                 Data = model.Data
+
                 //Episode
                 //Series
             };

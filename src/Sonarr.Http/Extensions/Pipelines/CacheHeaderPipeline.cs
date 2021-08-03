@@ -18,12 +18,15 @@ namespace Sonarr.Http.Extensions.Pipelines
 
         public void Register(IPipelines pipelines)
         {
-            pipelines.AfterRequest.AddItemToStartOfPipeline((Action<NancyContext>) Handle);
+            pipelines.AfterRequest.AddItemToStartOfPipeline((Action<NancyContext>)Handle);
         }
 
         private void Handle(NancyContext context)
         {
-            if (context.Request.Method == "OPTIONS") return;
+            if (context.Request.Method == "OPTIONS")
+            {
+                return;
+            }
 
             if (_cacheableSpecification.IsCacheable(context))
             {

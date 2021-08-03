@@ -10,8 +10,7 @@ namespace Sonarr.Api.V3.ImportLists
 
         public ImportListModule(ImportListFactory importListFactory,
                                 ProfileExistsValidator profileExistsValidator,
-                                LanguageProfileExistsValidator languageProfileExistsValidator
-            )
+                                LanguageProfileExistsValidator languageProfileExistsValidator)
             : base(importListFactory, "importlist", ResourceMapper)
         {
             Http.Validation.RuleBuilderExtensions.ValidId(SharedValidator.RuleFor(s => s.QualityProfileId));

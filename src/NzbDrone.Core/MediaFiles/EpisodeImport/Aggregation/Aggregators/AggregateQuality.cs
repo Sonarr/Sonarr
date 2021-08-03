@@ -40,14 +40,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 _logger.Trace("Considering Source {0} ({1}) Resolution {2} ({3}) Revision {4} from {5}", augmentedQuality.Source, augmentedQuality.SourceConfidence, augmentedQuality.Resolution, augmentedQuality.ResolutionConfidence, augmentedQuality.Revision, augmentQuality.Name);
 
                 if (source == QualitySource.Unknown ||
-                    augmentedQuality.SourceConfidence > sourceConfidence && augmentedQuality.Source != QualitySource.Unknown)
+                    (augmentedQuality.SourceConfidence > sourceConfidence && augmentedQuality.Source != QualitySource.Unknown))
                 {
                     source = augmentedQuality.Source;
                     sourceConfidence = augmentedQuality.SourceConfidence;
                 }
 
                 if (resolution == 0 ||
-                    augmentedQuality.ResolutionConfidence > resolutionConfidence && augmentedQuality.Resolution > 0)
+                    (augmentedQuality.ResolutionConfidence > resolutionConfidence && augmentedQuality.Resolution > 0))
                 {
                     resolution = augmentedQuality.Resolution;
                     resolutionConfidence = augmentedQuality.ResolutionConfidence;
@@ -62,6 +62,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                         revision = augmentedQuality.Revision;
                         revisionConfidence = augmentedQuality.RevisionConfidence;
                     }
+
                     // Update the revision and confidence if it is the same confidence and the revision is higher,
                     // this will allow the best revision to be used in the event there is a disagreement.
                     else if (augmentedQuality.RevisionConfidence == revisionConfidence &&

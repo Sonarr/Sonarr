@@ -31,10 +31,11 @@ namespace Sonarr.Api.V3.Calendar
         private object GetCalendarFeed()
         {
             var pastDays = 7;
-            var futureDays = 28;            
+            var futureDays = 28;
             var start = DateTime.Today.AddDays(-pastDays);
             var end = DateTime.Today.AddDays(futureDays);
             var unmonitored = Request.GetBooleanQueryParameter("unmonitored");
+
             // There was a typo, recognize both the correct 'premieresOnly' and mistyped 'premiersOnly' boolean for background compat.
             var premieresOnly = Request.GetBooleanQueryParameter("premieresOnly") || Request.GetBooleanQueryParameter("premiersOnly");
             var asAllDay = Request.GetBooleanQueryParameter("asAllDay");

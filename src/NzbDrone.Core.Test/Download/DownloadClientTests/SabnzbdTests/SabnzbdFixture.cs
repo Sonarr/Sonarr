@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
-using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 using NzbDrone.Core.RemotePathMappings;
-using NzbDrone.Common.Disk;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 {
@@ -171,7 +171,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         protected virtual void GivenHistory(SabnzbdHistory history)
         {
             if (history == null)
+            {
                 history = new SabnzbdHistory() { Items = new List<SabnzbdHistoryItem>() };
+            }
 
             Mocker.GetMock<ISabnzbdProxy>()
                 .Setup(s => s.GetHistory(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SabnzbdSettings>()))

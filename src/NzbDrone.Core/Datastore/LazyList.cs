@@ -8,13 +8,11 @@ namespace NzbDrone.Core.Datastore
         public LazyList()
             : this(new List<T>())
         {
-
         }
 
         public LazyList(IEnumerable<T> items)
             : base(new List<T>(items))
         {
-
         }
 
         public static implicit operator LazyList<T>(List<T> val)

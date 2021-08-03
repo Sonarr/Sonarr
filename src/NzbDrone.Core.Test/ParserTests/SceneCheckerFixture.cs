@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Test.ParserTests
             SceneChecker.IsSceneTitle(title).Should().BeTrue();
         }
 
-
         [TestCase("S08E05 - Virtual In-Stanity [WEBDL-720p]")]
         [TestCase("S08E05 - Virtual In-Stanity.With.Dots [WEBDL-720p]")]
         [TestCase("Something")]
@@ -30,7 +29,5 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             SceneChecker.IsSceneTitle(title).Should().BeFalse();
         }
-
-
     }
 }

@@ -80,5 +80,4 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             items.First()["Extension"].Should().Be(".nfo-orig");
         }
     }
-
 }

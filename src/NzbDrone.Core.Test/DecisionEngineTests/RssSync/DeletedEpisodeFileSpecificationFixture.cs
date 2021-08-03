@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.DecisionEngine;
-
-using NzbDrone.Core.Test.Framework;
-using NzbDrone.Common.Disk;
-using Moq;
-using NzbDrone.Test.Common;
-using System.IO;
 using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 {
@@ -49,7 +48,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             };
 
             var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 } };
-            var doubleEpisodeList = new List<Episode> {
+            var doubleEpisodeList = new List<Episode>
+            {
                 new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 },
                 new Episode { EpisodeFile = _secondFile, EpisodeFileId = 2 }
             };

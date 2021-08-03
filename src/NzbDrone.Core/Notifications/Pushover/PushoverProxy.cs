@@ -14,9 +14,10 @@ namespace NzbDrone.Core.Notifications.Pushover
 
     public class PushoverProxy : IPushoverProxy
     {
+        private const string URL = "https://api.pushover.net/1/messages.json";
+
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
-        private const string URL = "https://api.pushover.net/1/messages.json";
 
         public PushoverProxy(IHttpClient httpClient, Logger logger)
         {
@@ -45,7 +46,6 @@ namespace NzbDrone.Core.Notifications.Pushover
             {
                 requestBuilder.AddFormParameter("sound", settings.Sound);
             }
-
 
             var request = requestBuilder.Build();
 

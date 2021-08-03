@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Common.TPL;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using Timer = System.Timers.Timer;
-using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -42,7 +42,6 @@ namespace NzbDrone.Core.Jobs
                     _commandQueueManager.Push(task.TypeName, task.LastExecution, task.Priority, CommandTrigger.Scheduled);
                 }
             }
-
             finally
             {
                 if (!_cancellationTokenSource.IsCancellationRequested)

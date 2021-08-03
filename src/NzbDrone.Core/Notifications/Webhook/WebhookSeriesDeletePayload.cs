@@ -8,4 +8,3 @@ namespace NzbDrone.Core.Notifications.Webhook
         public bool DeletedFiles { get; set; }
     }
 }
-

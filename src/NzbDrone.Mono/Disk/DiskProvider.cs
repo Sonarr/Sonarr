@@ -55,7 +55,6 @@ namespace NzbDrone.Mono.Disk
 
         public override void InheritFolderPermissions(string filename)
         {
-
         }
 
         public override void SetEveryonePermissions(string filename)
@@ -434,6 +433,7 @@ namespace NzbDrone.Mono.Disk
                 {
                     _logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
                 }
+
                 return false;
             }
             catch (Exception ex)

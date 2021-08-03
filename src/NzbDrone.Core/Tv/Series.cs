@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Profiles.Qualities;
 
 namespace NzbDrone.Core.Tv
 {

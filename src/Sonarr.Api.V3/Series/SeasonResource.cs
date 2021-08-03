@@ -17,7 +17,10 @@ namespace Sonarr.Api.V3.Series
     {
         public static SeasonResource ToResource(this Season model, bool includeImages = false)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new SeasonResource
             {
@@ -29,7 +32,10 @@ namespace Sonarr.Api.V3.Series
 
         public static Season ToModel(this SeasonResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new Season
             {

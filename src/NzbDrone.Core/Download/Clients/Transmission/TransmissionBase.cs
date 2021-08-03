@@ -40,18 +40,27 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             foreach (var torrent in torrents)
             {
                 // If totalsize == 0 the torrent is a magnet downloading metadata
-                if (torrent.TotalSize == 0) continue;
+                if (torrent.TotalSize == 0)
+                {
+                    continue;
+                }
 
                 var outputPath = new OsPath(torrent.DownloadDir);
 
                 if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
                 {
-                    if (!new OsPath(Settings.TvDirectory).Contains(outputPath)) continue;
+                    if (!new OsPath(Settings.TvDirectory).Contains(outputPath))
+                    {
+                        continue;
+                    }
                 }
                 else if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
                     var directories = outputPath.FullPath.Split('\\', '/');
-                    if (!directories.Contains(Settings.TvCategory)) continue;
+                    if (!directories.Contains(Settings.TvCategory))
+                    {
+                        continue;
+                    }
                 }
 
                 outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
@@ -67,7 +76,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 item.TotalSize = torrent.TotalSize;
                 item.RemainingSize = torrent.LeftUntilDone;
                 item.SeedRatio = torrent.DownloadedEver <= 0 ? 0 :
-                    (double) torrent.UploadedEver / torrent.DownloadedEver;
+                    (double)torrent.UploadedEver / torrent.DownloadedEver;
 
                 if (torrent.Eta >= 0)
                 {
@@ -112,7 +121,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var isStopped = torrent.Status == TransmissionTorrentStatus.Stopped;
             var isSeeding = torrent.Status == TransmissionTorrentStatus.Seeding;
-            
+
             if (torrent.SeedRatioMode == 1)
             {
                 if (isStopped && ratio.HasValue && ratio >= torrent.SeedRatioLimit)
@@ -177,8 +186,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
-            if (isRecentEpisode && Settings.RecentTvPriority == (int)TransmissionPriority.First ||
-                !isRecentEpisode && Settings.OlderTvPriority == (int)TransmissionPriority.First)
+            if ((isRecentEpisode && Settings.RecentTvPriority == (int)TransmissionPriority.First) ||
+                (!isRecentEpisode && Settings.OlderTvPriority == (int)TransmissionPriority.First))
             {
                 _proxy.MoveTorrentToTopInQueue(hash, Settings);
             }
@@ -193,8 +202,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
-            if (isRecentEpisode && Settings.RecentTvPriority == (int)TransmissionPriority.First ||
-                !isRecentEpisode && Settings.OlderTvPriority == (int)TransmissionPriority.First)
+            if ((isRecentEpisode && Settings.RecentTvPriority == (int)TransmissionPriority.First) ||
+                (!isRecentEpisode && Settings.OlderTvPriority == (int)TransmissionPriority.First))
             {
                 _proxy.MoveTorrentToTopInQueue(hash, Settings);
             }
@@ -205,7 +214,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            if (failures.HasErrors()) return;
+            if (failures.HasErrors())
+            {
+                return;
+            }
+
             failures.AddIfNotNull(TestGetTorrents());
         }
 
@@ -221,7 +234,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 return Settings.TvDirectory;
             }
 
-            if (!Settings.TvCategory.IsNotNullOrWhiteSpace()) return null;
+            if (!Settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                return null;
+            }
 
             var config = _proxy.GetConfig(Settings);
             var destDir = config.DownloadDir;

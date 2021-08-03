@@ -1,4 +1,7 @@
-﻿using Moq;
+﻿using System;
+using System.Linq;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
@@ -6,9 +9,6 @@ using NzbDrone.Core.Indexers.BroadcastheNet;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using System;
-using System.Linq;
-using FluentAssertions;
 
 namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
 {
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             torrentInfo.TvdbId.Should().Be(71998);
             torrentInfo.TvRageId.Should().Be(4055);
             torrentInfo.MagnetUrl.Should().BeNullOrEmpty();
-            torrentInfo.Peers.Should().Be(40+9);
+            torrentInfo.Peers.Should().Be(40 + 9);
             torrentInfo.Seeders.Should().Be(40);
 
             torrentInfo.Origin.Should().Be("Scene");

@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Validation
                 {
                     failure = new NzbDroneValidationFailure(failureBase);
                 }
+
                 if (failure.IsWarning)
                 {
                     warnings.Add(failure);

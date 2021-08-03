@@ -104,6 +104,16 @@
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
   </PropertyGroup>
 
+  <!-- Set up stylecop -->
+  <ItemGroup Condition="'$(SonarrProject)'=='true' and '$(EnableAnalyzers)'!='false'">
+    <!-- StyleCop analysis -->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="$(SolutionDir)stylecop.json" />
+  </ItemGroup>
+
   <!--
        Set runtime identifier to local system type if not specified
   -->

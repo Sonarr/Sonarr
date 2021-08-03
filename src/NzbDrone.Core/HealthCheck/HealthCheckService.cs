@@ -85,7 +85,6 @@ namespace NzbDrone.Core.HealthCheck
                 {
                     _healthCheckResults.Remove(result.Source.Name);
                 }
-
                 else
                 {
                     if (_healthCheckResults.Find(result.Source.Name) == null)
@@ -99,7 +98,7 @@ namespace NzbDrone.Core.HealthCheck
 
             _eventAggregator.PublishEvent(new HealthCheckCompleteEvent());
         }
-        
+
         public void Execute(CheckHealthCommand message)
         {
             if (message.Trigger == CommandTrigger.Manual)

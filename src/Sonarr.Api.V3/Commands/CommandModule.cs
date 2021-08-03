@@ -50,7 +50,7 @@ namespace Sonarr.Api.V3.Commands
         private int StartCommand(CommandResource commandResource)
         {
             var commandType =
-                _serviceFactory.GetImplementations(typeof (Command))
+                _serviceFactory.GetImplementations(typeof(Command))
                                .Single(c => c.Name.Replace("Command", "")
                                              .Equals(commandResource.Name, StringComparison.InvariantCultureIgnoreCase));
 

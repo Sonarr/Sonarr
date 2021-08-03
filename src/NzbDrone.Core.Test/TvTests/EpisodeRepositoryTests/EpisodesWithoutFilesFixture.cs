@@ -72,7 +72,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .With(e => e.SeasonNumber = 0)
                                            .Build();
 
-
             var unairedEpisodes           = Builder<Episode>.CreateListOfSize(1)
                                            .All()
                                            .With(e => e.Id = 0)
@@ -81,7 +80,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .With(e => e.AirDateUtc = DateTime.Now.AddDays(5))
                                            .With(e => e.Monitored = true)
                                            .Build();
-
 
             Db.InsertMany(monitoredSeriesEpisodes);
             Db.InsertMany(unmonitoredSeriesEpisodes);

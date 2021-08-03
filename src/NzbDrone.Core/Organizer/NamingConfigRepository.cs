@@ -5,7 +5,6 @@ namespace NzbDrone.Core.Organizer
 {
     public interface INamingConfigRepository : IBasicRepository<NamingConfig>
     {
-
     }
 
     public class NamingConfigRepository : BasicRepository<NamingConfig>, INamingConfigRepository
@@ -14,6 +13,5 @@ namespace NzbDrone.Core.Organizer
             : base(database, eventAggregator)
         {
         }
-
     }
 }

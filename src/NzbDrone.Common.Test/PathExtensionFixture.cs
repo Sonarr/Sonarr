@@ -110,6 +110,7 @@ namespace NzbDrone.Common.Test
 
             _parent.IsParentPath(path).Should().BeTrue();
         }
+
         [TestCase(@"C:\Test\", @"C:\Test\mydir")]
         [TestCase(@"C:\Test\", @"C:\Test\mydir\")]
         [TestCase(@"C:\Test", @"C:\Test\30.Rock.S01E01.Pilot.avi")]
@@ -198,9 +199,8 @@ namespace NzbDrone.Common.Test
         public void get_actual_casing_for_none_existing_file_return_partially_fixed_result()
         {
             WindowsOnly();
-           "C:\\WINDOWS\\invalidfile.exe".GetActualCasing().Should().Be("C:\\Windows\\invalidfile.exe");
+            "C:\\WINDOWS\\invalidfile.exe".GetActualCasing().Should().Be("C:\\Windows\\invalidfile.exe");
         }
-
 
         [Test]
         public void get_actual_casing_for_none_existing_folder_return_partially_fixed_result()
@@ -217,7 +217,6 @@ namespace NzbDrone.Common.Test
             path.ToUpper().GetActualCasing().Should().Be(path);
             path.ToLower().GetActualCasing().Should().Be(path);
         }
-
 
         [Test]
         public void get_actual_casing_should_return_actual_casing_for_local_dir_in_windows()

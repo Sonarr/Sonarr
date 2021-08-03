@@ -1,9 +1,8 @@
-using NLog;
-using NzbDrone.Core.Tv;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using NzbDrone.Common.Extensions;
-using System;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Profiles.Releases
 {

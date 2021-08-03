@@ -21,7 +21,10 @@ namespace Sonarr.Api.V3.Qualities
     {
         public static QualityDefinitionResource ToResource(this QualityDefinition model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new QualityDefinitionResource
             {
@@ -36,7 +39,10 @@ namespace Sonarr.Api.V3.Qualities
 
         public static QualityDefinition ToModel(this QualityDefinitionResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new QualityDefinition
             {

@@ -44,7 +44,7 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileService = mediaFileService;
             _seriesService = seriesService;
             _configService = configService;
-            _eventAggregator = eventAggregator; 
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.MediaFiles
                     throw new NzbDroneClientException(HttpStatusCode.InternalServerError, "Unable to delete episode file");
                 }
             }
-            
+
             // Delete the episode file from the database to clean it up even if the file was already deleted
             _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
 
@@ -97,7 +97,10 @@ namespace NzbDrone.Core.MediaFiles
 
                 foreach (var s in allSeries)
                 {
-                    if (s.Id == series.Id) continue;
+                    if (s.Id == series.Id)
+                    {
+                        continue;
+                    }
 
                     if (series.Path.IsParentPath(s.Path))
                     {
@@ -116,6 +119,7 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _recycleBinProvider.DeleteFolder(message.Series.Path);
                 }
+
                 _eventAggregator.PublishEvent(new DeleteCompletedEvent());
             }
         }

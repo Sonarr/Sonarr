@@ -48,8 +48,6 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
             var text = _diskProvider.ReadAllText(versionFile);
             var match = DarwinVersionRegex.Match(text);
 
-
-
             if (match.Success)
             {
                 version = match.Groups["version"].Value;

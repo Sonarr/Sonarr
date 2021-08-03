@@ -16,7 +16,10 @@ namespace Sonarr.Api.V3.RemotePathMappings
     {
         public static RemotePathMappingResource ToResource(this RemotePathMapping model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new RemotePathMappingResource
             {
@@ -30,7 +33,10 @@ namespace Sonarr.Api.V3.RemotePathMappings
 
         public static RemotePathMapping ToModel(this RemotePathMappingResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new RemotePathMapping
             {

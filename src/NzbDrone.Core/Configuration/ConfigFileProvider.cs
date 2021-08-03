@@ -262,7 +262,6 @@ namespace NzbDrone.Core.Configuration
             {
                 parentContainer.Add(new XElement(key, valueString));
             }
-
             else
             {
                 parentContainer.Descendants(key).Single().Value = valueString;
@@ -336,7 +335,6 @@ namespace NzbDrone.Core.Configuration
                     return xDoc;
                 }
             }
-
             catch (XmlException ex)
             {
                 throw new InvalidConfigFileException($"{_configFile} is corrupt is invalid. Please delete the config file and Sonarr will recreate it.", ex);

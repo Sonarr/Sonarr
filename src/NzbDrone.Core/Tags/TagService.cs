@@ -124,8 +124,7 @@ namespace NzbDrone.Core.Tags
                         RestrictionIds = restrictions.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         SeriesIds = series.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList()
-                    }
-                );
+                    });
             }
 
             return details;

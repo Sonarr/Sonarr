@@ -14,7 +14,6 @@ namespace NzbDrone.Core.Indexers.Fanzub
         public Fanzub(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
-
         }
 
         public override IIndexerRequestGenerator GetRequestGenerator()

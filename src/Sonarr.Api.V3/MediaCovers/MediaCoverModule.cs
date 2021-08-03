@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text.RegularExpressions;
 using Nancy;
 using Nancy.Responses;
@@ -10,14 +10,15 @@ namespace Sonarr.Api.V3.MediaCovers
 {
     public class MediaCoverModule : SonarrV3Module
     {
-        private static readonly Regex RegexResizedImage = new Regex(@"-\d+\.jpg$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         private const string MEDIA_COVER_ROUTE = @"/(?<seriesId>\d+)/(?<filename>(.+)\.(jpg|png|gif))";
+
+        private static readonly Regex RegexResizedImage = new Regex(@"-\d+\.jpg$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IDiskProvider _diskProvider;
 
-        public MediaCoverModule(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider) : base("MediaCover")
+        public MediaCoverModule(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider)
+            : base("MediaCover")
         {
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
@@ -38,6 +39,7 @@ namespace Sonarr.Api.V3.MediaCovers
                 {
                     return new NotFoundResponse();
                 }
+
                 filePath = basefilePath;
             }
 

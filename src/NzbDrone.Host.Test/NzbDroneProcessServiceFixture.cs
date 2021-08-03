@@ -35,7 +35,7 @@ namespace NzbDrone.App.Test
                   .Setup(c => c.FindProcessByName(It.Is<string>(f => f.Contains("NzbDrone"))))
                   .Returns(new List<ProcessInfo>
                            {
-                               new ProcessInfo {Id = CURRENT_PROCESS_ID}
+                               new ProcessInfo { Id = CURRENT_PROCESS_ID }
                            });
 
             Subject.PreventStartIfAlreadyRunning();

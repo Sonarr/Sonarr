@@ -15,7 +15,6 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ImportExtraFiles(IDbConnection conn, IDbTransaction tran)
         {
-
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;

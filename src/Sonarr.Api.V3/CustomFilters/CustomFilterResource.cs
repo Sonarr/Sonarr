@@ -17,7 +17,10 @@ namespace Sonarr.Api.V3.CustomFilters
     {
         public static CustomFilterResource ToResource(this CustomFilter model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new CustomFilterResource
                    {
@@ -30,7 +33,10 @@ namespace Sonarr.Api.V3.CustomFilters
 
         public static CustomFilter ToModel(this CustomFilterResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new CustomFilter
                    {

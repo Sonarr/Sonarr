@@ -50,18 +50,17 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 //        { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
 //        { "+", "+", "", "", "!", "-", " -", "", "" };
 
-
-    [TestCase("CSI: Crime Scene Investigation", "CSI - Crime Scene Investigation")]
-    [TestCase("Code:Breaker", "Code-Breaker")]
-    [TestCase("Back Slash\\", "Back Slash+")]
-    [TestCase("Forward Slash/", "Forward Slash+")]
-    [TestCase("Greater Than>", "Greater Than")]
-    [TestCase("Less Than<", "Less Than")]
-    [TestCase("Question Mark?", "Question Mark!")]
-    [TestCase("Aster*sk", "Aster-sk")]
-    [TestCase("Colon: Two Periods", "Colon - Two Periods")]
-    [TestCase("Pipe|", "Pipe")]
-    [TestCase("Quotes\"", "Quotes")]
+        [TestCase("CSI: Crime Scene Investigation", "CSI - Crime Scene Investigation")]
+        [TestCase("Code:Breaker", "Code-Breaker")]
+        [TestCase("Back Slash\\", "Back Slash+")]
+        [TestCase("Forward Slash/", "Forward Slash+")]
+        [TestCase("Greater Than>", "Greater Than")]
+        [TestCase("Less Than<", "Less Than")]
+        [TestCase("Question Mark?", "Question Mark!")]
+        [TestCase("Aster*sk", "Aster-sk")]
+        [TestCase("Colon: Two Periods", "Colon - Two Periods")]
+        [TestCase("Pipe|", "Pipe")]
+        [TestCase("Quotes\"", "Quotes")]
         public void should_replace_illegal_characters(string title, string expected)
         {
             _series.Title = title;

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Marr.Data;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.MediaFiles
 {

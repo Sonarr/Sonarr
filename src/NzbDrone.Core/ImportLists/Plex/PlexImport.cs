@@ -36,7 +36,7 @@ namespace NzbDrone.Core.ImportLists.Plex
 
             // var generator = GetRequestGenerator();
 
-            return FetchItems(g =>g.GetListItems());
+            return FetchItems(g => g.GetListItems());
         }
 
         public override IParseImportListResponse GetParser()

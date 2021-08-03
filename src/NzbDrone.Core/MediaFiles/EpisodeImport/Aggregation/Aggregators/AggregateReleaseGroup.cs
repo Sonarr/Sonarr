@@ -30,7 +30,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             {
                 releaseGroup = GetReleaseGroup(localEpisode.FolderEpisodeInfo, false);
             }
-            
+
             localEpisode.ReleaseGroup = releaseGroup;
 
             return localEpisode;
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
         private string GetReleaseGroup(ParsedEpisodeInfo episodeInfo, bool skipFullSeason)
         {
-            if (episodeInfo == null || episodeInfo.FullSeason && skipFullSeason)
+            if (episodeInfo == null || (episodeInfo.FullSeason && skipFullSeason))
             {
                 return null;
             }

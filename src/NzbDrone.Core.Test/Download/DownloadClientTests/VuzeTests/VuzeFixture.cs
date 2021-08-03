@@ -341,6 +341,5 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
             items.Should().HaveCount(1);
             items.First().OutputPath.Should().Be(@"C:\Downloads\" + fileName);
         }
-
     }
 }

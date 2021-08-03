@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Analytics
             _historyService = historyService;
         }
 
-        public bool IsEnabled => _configFileProvider.AnalyticsEnabled && RuntimeInfo.IsProduction || RuntimeInfo.IsDevelopment;
+        public bool IsEnabled => (_configFileProvider.AnalyticsEnabled && RuntimeInfo.IsProduction) || RuntimeInfo.IsDevelopment;
 
         public bool InstallIsActive
         {
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Analytics
                 var lastRecord = _historyService.Paged(new PagingSpec<EpisodeHistory>() { Page = 0, PageSize = 1, SortKey = "date", SortDirection = SortDirection.Descending });
                 var monthAgo = DateTime.UtcNow.AddMonths(-1);
 
-                return lastRecord.Records.Any(v => v.Date > monthAgo); 
+                return lastRecord.Records.Any(v => v.Date > monthAgo);
             }
         }
     }

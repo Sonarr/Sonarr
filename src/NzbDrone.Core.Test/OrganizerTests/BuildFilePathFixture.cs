@@ -14,15 +14,15 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
     public class BuildFilePathFixture : CoreTest<FileNameBuilder>
     {
-        private NamingConfig namingConfig;
+        private NamingConfig _namingConfig;
 
         [SetUp]
         public void Setup()
         {
-            namingConfig = NamingConfig.Default;
+            _namingConfig = NamingConfig.Default;
 
             Mocker.GetMock<INamingConfigService>()
-                  .Setup(c => c.GetConfig()).Returns(namingConfig);
+                  .Setup(c => c.GetConfig()).Returns(_namingConfig);
         }
 
         [Test]
@@ -50,8 +50,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
                 .With(s => s.SceneName = filename)
                 .Build();
 
-            namingConfig.SeasonFolderFormat = seasonFolderFormat;
-            namingConfig.SpecialsFolderFormat = "MySpecials";
+            _namingConfig.SeasonFolderFormat = seasonFolderFormat;
+            _namingConfig.SpecialsFolderFormat = "MySpecials";
 
             Subject.BuildFilePath(fakeEpisodes, fakeSeries, fakeEpisodeFile, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
         }
@@ -79,8 +79,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
                 .With(s => s.SceneName = filename)
                 .Build();
 
-            namingConfig.SeasonFolderFormat = "{Series Title} Season {season:0}";
-            
+            _namingConfig.SeasonFolderFormat = "{Series Title} Season {season:0}";
+
             Subject.BuildFilePath(fakeEpisodes, fakeSeries, fakeEpisodeFile, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
         }
     }

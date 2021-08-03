@@ -24,6 +24,5 @@ namespace NzbDrone.Core.Test.Datastore.PagingSpecExtensionsTests
 
             pagingSpec.PagingOffset().Should().Be(expected);
         }
-
     }
 }

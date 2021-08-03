@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
-using System.Linq;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Integration.Test.ApiTests

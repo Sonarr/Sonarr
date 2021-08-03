@@ -17,14 +17,20 @@ namespace NzbDrone.Core.Profiles.Delay
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            if (context.PropertyValue == null) return true;
+            if (context.PropertyValue == null)
+            {
+                return true;
+            }
 
             dynamic instance = context.ParentContext.InstanceToValidate;
             var instanceId = (int)instance.Id;
 
             var collection = context.PropertyValue as HashSet<int>;
 
-            if (collection == null || collection.Empty()) return true;
+            if (collection == null || collection.Empty())
+            {
+                return true;
+            }
 
             return _delayProfileService.All().None(d => d.Id != instanceId && d.Tags.Intersect(collection).Any());
         }

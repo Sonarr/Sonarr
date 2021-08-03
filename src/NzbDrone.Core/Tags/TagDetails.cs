@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Tags
         {
             get
             {
-                return (SeriesIds.Any() || NotificationIds.Any() || RestrictionIds.Any() || DelayProfileIds.Any() || ImportListIds.Any() || IndexerIds.Any());
+                return SeriesIds.Any() || NotificationIds.Any() || RestrictionIds.Any() || DelayProfileIds.Any() || ImportListIds.Any() || IndexerIds.Any();
             }
         }
     }

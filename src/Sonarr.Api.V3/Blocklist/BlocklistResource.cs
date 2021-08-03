@@ -27,7 +27,10 @@ namespace Sonarr.Api.V3.Blocklist
     {
         public static BlocklistResource MapToResource(this NzbDrone.Core.Blocklisting.Blocklist model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new BlocklistResource
             {

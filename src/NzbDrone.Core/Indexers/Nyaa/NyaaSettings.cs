@@ -1,7 +1,7 @@
+using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
-using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Indexers.Nyaa
 {

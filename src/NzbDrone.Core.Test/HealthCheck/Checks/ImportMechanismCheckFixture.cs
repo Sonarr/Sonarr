@@ -34,10 +34,10 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         public void should_return_warning_when_both_completeddownloadhandling_and_dronefactory_are_not_configured()
         {
             GivenCompletedDownloadHandling(false);
-            
+
             Subject.Check().ShouldBeWarning();
         }
-        
+
         [Test]
         public void should_return_ok_when_no_issues_found()
         {

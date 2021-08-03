@@ -70,7 +70,6 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
             WithRecycleBin();
             var path = @"C:\Test\TV\30 Rock\S01E01.avi".AsOsAgnostic();
 
-
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
 
             Mocker.GetMock<IDiskProvider>().Verify(v => v.FileSetLastWriteTime(@"C:\Test\Recycle Bin\S01E01.avi".AsOsAgnostic(), It.IsAny<DateTime>()), Times.Once());

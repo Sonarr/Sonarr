@@ -1,7 +1,7 @@
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Tv.Events;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.ImportLists.Exclusions
 {

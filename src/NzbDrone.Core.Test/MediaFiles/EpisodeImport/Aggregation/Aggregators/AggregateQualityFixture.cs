@@ -12,7 +12,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
-    [TestFixture]  
+    [TestFixture]
     public class AggregateQualityFixture : CoreTest<AggregateQuality>
     {
         private Mock<IAugmentQuality> _mediaInfoAugmenter;

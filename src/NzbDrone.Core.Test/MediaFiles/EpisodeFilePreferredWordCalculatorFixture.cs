@@ -15,11 +15,11 @@ namespace NzbDrone.Core.Test.MediaFiles
     [TestFixture]
     public class EpisodeFilePreferredWordCalculatorFixture : CoreTest<EpisodeFilePreferredWordCalculator>
     {
-        private Series _series;
-        private EpisodeFile _episodeFile;
         private readonly KeyValuePair<string, int> _positiveScore = new KeyValuePair<string, int>("Positive", 10);
         private readonly KeyValuePair<string, int> _negativeScore = new KeyValuePair<string, int>("Negative", -10);
         private KeyValuePair<string, int> _neutralScore = new KeyValuePair<string, int>("Neutral", 0);
+        private Series _series;
+        private EpisodeFile _episodeFile;
 
         [SetUp]
         public void Setup()

@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.Datastore.Converters
             var context = new ConverterContext
                           {
                               DbValue = dateTime
-            };
+                          };
 
             Subject.FromDB(context).Should().Be(dateTime);
         }

@@ -1,12 +1,12 @@
-using FluentMigrator;
-using NzbDrone.Core.Datastore.Converters;
-using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.Languages;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using FluentMigrator;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Datastore.Converters;
+using NzbDrone.Core.Datastore.Migration.Framework;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
             Execute.WithConnection(InsertDefaultLanguages);
 
-            Delete.Column("Language").FromTable("Profiles");                                
+            Delete.Column("Language").FromTable("Profiles");
         }
 
         private void InsertDefaultLanguages(IDbConnection conn, IDbTransaction tran)
@@ -76,7 +76,6 @@ namespace NzbDrone.Core.Datastore.Migration
                          });
 
             return profiles;
-            
         }
 
         private List<LanguageProfile111> GetLanguageProfiles(IDbConnection conn, IDbTransaction tran)
@@ -105,7 +104,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         {
                             _logger.Debug("Language field not found in Profiles, using English as default." + e.Message);
                         }
-                        
+
                         if (profiles.None(p => p.Cutoff.Id == lang))
                         {
                             var language = Language.FindById(lang);
@@ -165,7 +164,7 @@ namespace NzbDrone.Core.Datastore.Migration
             public Language Cutoff { get; set; }
             public List<LanguageProfileItem111> Languages { get; set; }
 
-            public LanguageProfile111 ()
+            public LanguageProfile111()
             {
                 ProfileIds = new List<int>();
             }

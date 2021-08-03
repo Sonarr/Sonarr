@@ -60,6 +60,7 @@ namespace NzbDrone.Core.Update
             {
                 throw new ArgumentNullException(nameof(configFileProvider));
             }
+
             _checkUpdateService = checkUpdateService;
             _appFolderInfo = appFolderInfo;
             _commandQueueManager = commandQueueManager;
@@ -248,7 +249,6 @@ namespace NzbDrone.Core.Update
                 return null;
             }
 
-
             // Safety net, ConfigureUpdateMechanism should take care of invalid settings
             if (_configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn && _deploymentInfoProvider.IsExternalUpdateMechanism)
             {
@@ -331,7 +331,6 @@ namespace NzbDrone.Core.Update
                     _diskProvider.DeleteFile(updateMarker);
                     return;
                 }
-
 
                 _logger.Info("Installing post-install update from {0} to {1}", BuildInfo.Version, latestAvailable.Version);
                 _diskProvider.DeleteFile(updateMarker);

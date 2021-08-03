@@ -31,7 +31,6 @@ namespace NzbDrone.Core.Tv
                                     ISeriesService seriesService,
                                     IRefreshEpisodeService refreshEpisodeService,
                                     IEventAggregator eventAggregator,
-                                    
                                     IDiskScanService diskScanService,
                                     ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
                                     IConfigService configService,
@@ -73,6 +72,7 @@ namespace NzbDrone.Core.Tv
                     _logger.Debug("Series marked as deleted on tvdb for {0}", series.Title);
                     _eventAggregator.PublishEvent(new SeriesUpdatedEvent(series));
                 }
+
                 throw;
             }
 
@@ -145,7 +145,6 @@ namespace NzbDrone.Core.Tv
                     _logger.Debug("New season ({0}) for series: [{1}] {2}, setting monitored to {3}", season.SeasonNumber, series.TvdbId, series.Title, series.Monitored.ToString().ToLowerInvariant());
                     season.Monitored = series.Monitored;
                 }
-
                 else
                 {
                     season.Monitored = existingSeason.Monitored;
@@ -242,7 +241,6 @@ namespace NzbDrone.Core.Tv
 
                         RescanSeries(seriesLocal, false, trigger);
                     }
-
                     else
                     {
                         _logger.Info("Skipping refresh of series: {0}", seriesLocal.Title);

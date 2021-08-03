@@ -18,7 +18,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public ValidCutoffValidator()
             : base("Cutoff must be an allowed quality or group")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -29,9 +28,15 @@ namespace Sonarr.Api.V3.Profiles.Quality
 
             var cutoffItem = items.SingleOrDefault(i => (i.Quality == null && i.Id == cutoff) || i.Quality?.Id == cutoff);
 
-            if (cutoffItem == null) return false;
+            if (cutoffItem == null)
+            {
+                return false;
+            }
 
-            if (!cutoffItem.Allowed) return false;
+            if (!cutoffItem.Allowed)
+            {
+                return false;
+            }
 
             return true;
         }

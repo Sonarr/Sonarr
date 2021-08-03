@@ -2,7 +2,6 @@
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider;
 
-
 namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerRepository : IProviderRepository<IndexerDefinition>

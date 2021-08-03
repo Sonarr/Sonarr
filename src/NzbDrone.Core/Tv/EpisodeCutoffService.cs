@@ -2,10 +2,10 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Tv
 {
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Tv
             var languagesBelowCutoff = new List<LanguagesBelowCutoff>();
             var profiles = _qualityProfileService.All();
             var languageProfiles = _languageProfileService.All();
-            
+
             //Get all items less than the cutoff
             foreach (var profile in profiles)
             {

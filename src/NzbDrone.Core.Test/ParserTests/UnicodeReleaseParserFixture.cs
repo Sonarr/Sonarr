@@ -1,12 +1,12 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Test.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
+using NUnit.Framework;
+using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -58,6 +58,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("[YMDR][慕留人 -火影忍者新時代-][Anime Series Title-][2017][88-91][1080p][AVC][JAP][BIG5][MP4-AAC][繁中]", "Anime Series Title", "YMDR", new[] { 88, 89, 90, 91 })]
         [TestCase("[诸神字幕组][战栗杀机][ANIME SERIES TITLE][01-24完][简日双语字幕][720P][MP4]", "ANIME SERIES TITLE", "诸神字幕组", new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 })]
+
         //[TestCase("【漫貓&愛戀字幕組】[五等分的新娘/五等分的花嫁/五等分の花嫁][Anime Series Title][01_03][BIG5][720P][HEVC]", "Anime Series Title", "漫貓&愛戀字幕組", new[] { 1, 2, 3 })]
         public void should_parse_chinese_multiepisode_releases(string postTitle, string title, string subgroup, int[] absoluteEpisodeNumbers)
         {

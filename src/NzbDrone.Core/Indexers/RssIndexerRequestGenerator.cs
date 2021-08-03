@@ -12,7 +12,6 @@ namespace NzbDrone.Core.Indexers
             _baseUrl = baseUrl;
         }
 
-
         public virtual IndexerPageableRequestChain GetRecentRequests()
         {
             var pageableRequests = new IndexerPageableRequestChain();

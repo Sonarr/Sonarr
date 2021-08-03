@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace TinyTwitter
 {
@@ -50,7 +50,6 @@ namespace TinyTwitter
          * and added this banner so it's not blindly updated.
          *
          **/
-
         public void DirectMessage(string message, string screenName)
         {
             new RequestBuilder(_oauth, "POST", "https://api.twitter.com/1.1/direct_messages/new.json")

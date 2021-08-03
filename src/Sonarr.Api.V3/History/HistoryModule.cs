@@ -32,7 +32,6 @@ namespace Sonarr.Api.V3.History
             Get("/series",  x => GetSeriesHistory());
             Post("/failed",  x => MarkAsFailed());
             Post(@"/failed/(?<id>[\d]{1,10})", x => MarkAsFailed((int)x.Id));
-
         }
 
         protected HistoryResource MapToResource(EpisodeHistory model, bool includeSeries, bool includeEpisode)
@@ -79,7 +78,7 @@ namespace Sonarr.Api.V3.History
                 var episodeId = Convert.ToInt32(episodeIdFilter.Value);
                 pagingSpec.FilterExpressions.Add(h => h.EpisodeId == episodeId);
             }
-            
+
             if (downloadIdFilter != null)
             {
                 var downloadId = downloadIdFilter.Value;
@@ -93,7 +92,7 @@ namespace Sonarr.Api.V3.History
         {
             var queryDate = Request.Query.Date;
             var queryEventType = Request.Query.EventType;
-            
+
             if (!queryDate.HasValue)
             {
                 throw new BadRequestException("date is missing");

@@ -30,11 +30,17 @@ namespace NzbDrone.RuntimePatches
         {
             foreach (var methodInfo in type.GetMethods(DefaultBindingFlags))
             {
-                if (methodInfo.Name != methodName) continue;
+                if (methodInfo.Name != methodName)
+                {
+                    continue;
+                }
 
                 var parameters = methodInfo.GetParameters();
 
-                if (parameters.Length != paramTypes.Length) continue;
+                if (parameters.Length != paramTypes.Length)
+                {
+                    continue;
+                }
 
                 var parametersMatch = true;
                 for (var i = 0; i < parameters.Length; i++)
@@ -49,7 +55,10 @@ namespace NzbDrone.RuntimePatches
                     }
                 }
 
-                if (!parametersMatch) continue;
+                if (!parametersMatch)
+                {
+                    continue;
+                }
 
                 return methodInfo;
             }

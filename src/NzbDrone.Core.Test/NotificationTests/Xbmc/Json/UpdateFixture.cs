@@ -59,9 +59,9 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
                                             .With(s => s.Title = "Not 30 Rock")
                                             .Build();
 
-             Subject.Update(_settings, fakeSeries);
+            Subject.Update(_settings, fakeSeries);
 
-             Mocker.GetMock<IXbmcJsonApiProxy>()
+            Mocker.GetMock<IXbmcJsonApiProxy>()
                    .Verify(v => v.UpdateLibrary(_settings, null), Times.Once());
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Messaging.Events;
@@ -29,20 +29,33 @@ namespace NzbDrone.Core.Indexers
 
         public TorrentSeedConfiguration GetSeedConfiguration(RemoteEpisode remoteEpisode)
         {
-            if (remoteEpisode.Release.DownloadProtocol != DownloadProtocol.Torrent) return null;
-            if (remoteEpisode.Release.IndexerId == 0) return null;
+            if (remoteEpisode.Release.DownloadProtocol != DownloadProtocol.Torrent)
+            {
+                return null;
+            }
+
+            if (remoteEpisode.Release.IndexerId == 0)
+            {
+                return null;
+            }
 
             return GetSeedConfiguration(remoteEpisode.Release.IndexerId, remoteEpisode.ParsedEpisodeInfo.FullSeason);
         }
 
         public TorrentSeedConfiguration GetSeedConfiguration(int indexerId, bool fullSeason)
         {
-            if (indexerId == 0) return null;
+            if (indexerId == 0)
+            {
+                return null;
+            }
 
             var seedCriteria = _cache.Get(indexerId.ToString(), () => FetchSeedCriteria(indexerId));
 
-            if (seedCriteria == null) return null;
-            
+            if (seedCriteria == null)
+            {
+                return null;
+            }
+
             var seedConfig = new TorrentSeedConfiguration
             {
                 Ratio = seedCriteria.SeedRatio

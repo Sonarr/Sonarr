@@ -23,7 +23,10 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         {
             var other = obj as SceneEpisodeMapping;
 
-            if (object.ReferenceEquals(other, null)) return false;
+            if (object.ReferenceEquals(other, null))
+            {
+                return false;
+            }
 
             return SeasonNumber == other.SeasonNumber && EpisodeNumber == other.EpisodeNumber && SearchMode == other.SearchMode;
         }

@@ -26,7 +26,6 @@ namespace NzbDrone.Common.Test.CacheTests
             _cachedString.Get("Test", _worker.GetString);
 
             _worker.HitCount.Should().Be(1);
-
         }
 
         [Test]
@@ -38,7 +37,6 @@ namespace NzbDrone.Common.Test.CacheTests
             first.Should().Be(second);
         }
 
-
         [Test]
         public void should_be_able_to_update_key()
         {
@@ -47,7 +45,6 @@ namespace NzbDrone.Common.Test.CacheTests
 
             _cachedString.Find("Key").Should().Be("New");
         }
-
 
         [Test]
         public void should_be_able_to_remove_key()
@@ -70,7 +67,6 @@ namespace NzbDrone.Common.Test.CacheTests
         {
             int hitCount = 0;
 
-
             for (int i = 0; i < 10; i++)
             {
                 _cachedString.Get("key", () =>
@@ -84,6 +80,7 @@ namespace NzbDrone.Common.Test.CacheTests
         }
 
         [Test]
+        [Platform(Exclude = "MacOsX")]
         public void should_honor_ttl()
         {
             int hitCount = 0;
@@ -91,11 +88,13 @@ namespace NzbDrone.Common.Test.CacheTests
 
             for (int i = 0; i < 10; i++)
             {
-                _cachedString.Get("key", () =>
+                _cachedString.Get("key",
+                    () =>
                     {
                         hitCount++;
                         return null;
-                    }, TimeSpan.FromMilliseconds(300));
+                    },
+                    TimeSpan.FromMilliseconds(300));
 
                 Thread.Sleep(100);
             }

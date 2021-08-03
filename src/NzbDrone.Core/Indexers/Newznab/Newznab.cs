@@ -103,7 +103,11 @@ namespace NzbDrone.Core.Indexers.Newznab
         protected override void Test(List<ValidationFailure> failures)
         {
             base.Test(failures);
-            if (failures.HasErrors()) return;
+            if (failures.HasErrors())
+            {
+                return;
+            }
+
             failures.AddIfNotNull(TestCapabilities());
         }
 

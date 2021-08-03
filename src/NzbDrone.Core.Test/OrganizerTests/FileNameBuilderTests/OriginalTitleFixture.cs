@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
                    .Should().Be("my.series.s15e06");
         }
-        
+
         [Test]
         public void should_include_current_filename_if_not_including_multiple_naming_tokens()
         {

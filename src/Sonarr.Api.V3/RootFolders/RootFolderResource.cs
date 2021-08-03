@@ -19,7 +19,10 @@ namespace Sonarr.Api.V3.RootFolders
     {
         public static RootFolderResource ToResource(this RootFolder model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new RootFolderResource
             {
@@ -34,13 +37,17 @@ namespace Sonarr.Api.V3.RootFolders
 
         public static RootFolder ToModel(this RootFolderResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new RootFolder
             {
                 Id = resource.Id,
 
                 Path = resource.Path
+
                 //Accessible
                 //FreeSpace
                 //UnmappedFolders

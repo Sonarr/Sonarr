@@ -17,7 +17,6 @@ namespace Sonarr.Api.V3.Series
             Post("/",  x => Import());
         }
 
-
         private object Import()
         {
             var resource = Request.Body.FromJson<List<SeriesResource>>();

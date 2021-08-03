@@ -34,6 +34,7 @@ namespace NzbDrone.Common.EnvironmentInfo
                         Os = Os.Windows;
                         break;
                     }
+
                 case PlatformID.MacOSX:
                 case PlatformID.Unix:
                     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
@@ -64,8 +64,7 @@ namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(v => v.Execute(It.IsAny<HttpRequest>()))
-                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(),
-                    Encoding.UTF8.GetBytes(responseJson)));
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), Encoding.UTF8.GetBytes(responseJson)));
 
             var torrents = Subject.FetchRecent();
 

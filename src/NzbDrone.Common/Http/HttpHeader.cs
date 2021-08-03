@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using NzbDrone.Common.Extensions;
-using System.Collections;
-using System.Globalization;
 
 namespace NzbDrone.Common.Http
 {
@@ -14,12 +14,10 @@ namespace NzbDrone.Common.Http
         public HttpHeader(NameValueCollection headers)
             : base(headers)
         {
-
         }
 
         public HttpHeader()
         {
-
         }
 
         public bool ContainsKey(string key)
@@ -35,6 +33,7 @@ namespace NzbDrone.Common.Http
             {
                 return null;
             }
+
             if (values.Length > 1)
             {
                 throw new ApplicationException($"Expected {key} to occur only once, but was {values.Join("|")}.");
@@ -43,7 +42,8 @@ namespace NzbDrone.Common.Http
             return values[0];
         }
 
-        protected T? GetSingleValue<T>(string key, Func<string, T> converter) where T : struct
+        protected T? GetSingleValue<T>(string key, Func<string, T> converter)
+            where T : struct
         {
             var value = GetSingleValue(key);
             if (value == null)
@@ -53,6 +53,7 @@ namespace NzbDrone.Common.Http
 
             return converter(value);
         }
+
         protected void SetSingleValue(string key, string value)
         {
             if (value == null)
@@ -65,7 +66,8 @@ namespace NzbDrone.Common.Http
             }
         }
 
-        protected void SetSingleValue<T>(string key, T? value, Func<T, string> converter = null) where T : struct
+        protected void SetSingleValue<T>(string key, T? value, Func<T, string> converter = null)
+            where T : struct
         {
             if (!value.HasValue)
             {

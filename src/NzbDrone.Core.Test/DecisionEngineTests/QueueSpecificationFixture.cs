@@ -5,14 +5,14 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Queue;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Languages;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -34,12 +34,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.Resolve<UpgradableSpecification>();
 
             _series = Builder<Series>.CreateNew()
-                                     .With(e => e.QualityProfile = new QualityProfile 
+                                     .With(e => e.QualityProfile = new QualityProfile
                                                                 {
                                                                     UpgradeAllowed = true,
                                                                     Items = Qualities.QualityFixture.GetDefaultQualities()
                                                                 })
-                                     .With(l => l.LanguageProfile = new LanguageProfile 
+                                     .With(l => l.LanguageProfile = new LanguageProfile
                                                                 {
                                                                     Languages = Languages.LanguageFixture.GetDefaultLanguages(),
                                                                     UpgradeAllowed = true,
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                    .With(r => r.Series = _series)
                                                    .With(r => r.Episodes = new List<Episode> { _episode })
-                                                   .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD) , Language = Language.Spanish})
+                                                   .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD), Language = Language.Spanish })
                                                    .With(r => r.PreferredWordScore = 0)
                                                    .Build();
         }
@@ -359,7 +359,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                                                             Quality =
                                                                                                 new QualityModel(
                                                                                                 Quality.HDTV720p),
-                                                                                                Language = Language.English
+                                                                                            Language = Language.English
                                                                                         })
                                                        .With(r => r.Release = _releaseInfo)
                                                        .TheFirst(1)
@@ -452,7 +452,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode }, TrackedDownloadState.FailedPending);
-            
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }

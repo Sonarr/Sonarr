@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using System.Net;
 using MonoTorrent;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.ThingiProvider;
-using NzbDrone.Core.Configuration;
-using NLog;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download
 {
@@ -193,7 +193,8 @@ namespace NzbDrone.Core.Download
             {
                 _logger.Debug(
                     "{0} did not return the expected InfoHash for '{1}', Sonarr could potentially lose track of the download in progress.",
-                    Definition.Implementation, remoteEpisode.Release.DownloadUrl);
+                    Definition.Implementation,
+                    remoteEpisode.Release.DownloadUrl);
             }
 
             return actualHash;
@@ -224,7 +225,8 @@ namespace NzbDrone.Core.Download
             {
                 _logger.Debug(
                     "{0} did not return the expected InfoHash for '{1}', Sonarr could potentially lose track of the download in progress.",
-                    Definition.Implementation, remoteEpisode.Release.DownloadUrl);
+                    Definition.Implementation,
+                    remoteEpisode.Release.DownloadUrl);
             }
 
             return actualHash;

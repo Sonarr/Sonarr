@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FluentAssertions;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Others;
@@ -40,7 +40,6 @@ namespace NzbDrone.Core.Test.Extras.Others
                                            .Build()
                                            .ToList();
 
-
             _episodeFile = Builder<EpisodeFile>.CreateNew()
                                                .With(f => f.Path = Path.Combine(_series.Path, "Season 1", "Series Title - S01E01.mkv").AsOsAgnostic())
                                                .With(f => f.RelativePath = @"Season 1\Series Title - S01E01.mkv")
@@ -69,7 +68,7 @@ namespace NzbDrone.Core.Test.Extras.Others
         public void should_import_matching_file(string filePath, string expectedOutputPath)
         {
             var files = new List<string> { Path.Combine(_episodeFolder, filePath).AsOsAgnostic() };
-            
+
             var results = Subject.ImportFiles(_localEpisode, _episodeFile, files, true).ToList();
 
             results.Count().Should().Be(1);

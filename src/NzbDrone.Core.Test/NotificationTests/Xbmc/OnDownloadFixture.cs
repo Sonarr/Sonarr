@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc
     public class OnDownloadFixture : CoreTest<Notifications.Xbmc.Xbmc>
     {
         private DownloadMessage _downloadMessage;
-        
+
         [SetUp]
         public void Setup()
         {

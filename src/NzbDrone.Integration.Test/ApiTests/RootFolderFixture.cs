@@ -32,11 +32,9 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             RootFolders.All().Should().OnlyContain(c => c.Id == postResponse.Id);
 
-
             RootFolders.Delete(postResponse.Id);
 
             RootFolders.All().Should().BeEmpty();
-
 
             SignalRMessages.Should().Contain(c => c.Name == "rootfolder");
         }

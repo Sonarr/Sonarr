@@ -6,7 +6,6 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
-
     [TestFixture]
     public class LanguageParserFixture : CoreTest
     {
@@ -204,7 +203,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Language.Id.Should().Be(Language.Portuguese.Id);
         }
-        
+
         [TestCase("Title.the.Series.S01E01.FLEMISH.HDTV.x264-BRiGAND")]
         public void should_parse_language_flemish(string postTitle)
         {
@@ -253,7 +252,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_arabic(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
-            result.Language.Id.Should().Be(Language.Arabic.Id);  
+            result.Language.Id.Should().Be(Language.Arabic.Id);
         }
 
         [TestCase("The Shadow Series S01 E01-08 WebRip Dual Audio [Hindi 5.1 + English 5.1] 720p x264 AAC ESub")]

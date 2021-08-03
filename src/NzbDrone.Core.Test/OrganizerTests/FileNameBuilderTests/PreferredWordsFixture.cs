@@ -1,4 +1,6 @@
-﻿using FizzWare.NBuilder;
+using System.Collections.Generic;
+using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
@@ -7,11 +9,6 @@ using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {
@@ -34,10 +31,8 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                     .With(s => s.Title = "South Park")
                     .Build();
 
-
             _namingConfig = NamingConfig.Default;
             _namingConfig.RenameEpisodes = true;
-
 
             Mocker.GetMock<INamingConfigService>()
                   .Setup(c => c.GetConfig()).Returns(_namingConfig);
@@ -51,12 +46,15 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "SonarrTest" };
 
-            _preferredWords = new PreferredWordMatchResults() { 
-                All = new List<string>() {
+            _preferredWords = new PreferredWordMatchResults()
+            {
+                All = new List<string>()
+                {
                     "x265",
                     "extended"
                 },
-                ByReleaseProfile = new Dictionary<string, List<string>>() {
+                ByReleaseProfile = new Dictionary<string, List<string>>()
+                {
                     {
                         "CodecProfile",
                         new List<string>()

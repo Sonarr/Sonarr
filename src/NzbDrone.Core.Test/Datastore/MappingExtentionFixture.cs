@@ -12,10 +12,8 @@ namespace NzbDrone.Core.Test.Datastore
     [TestFixture]
     public class MappingExtensionFixture
     {
-
         public class EmbeddedType : IEmbeddedDocument
         {
-
         }
 
         public class TypeWithAllMappableProperties
@@ -42,9 +40,7 @@ namespace NzbDrone.Core.Test.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(List<EmbeddedType>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(EmbeddedType), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(int), new Int32Converter());
-            
         }
-
 
         [Test]
         public void test_mappable_types()

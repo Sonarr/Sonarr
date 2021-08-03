@@ -6,7 +6,6 @@ namespace NzbDrone.Integration.Test.ApiTests
     [TestFixture]
     public class NamingConfigFixture : IntegrationTest
     {
-
         [Test]
         public void should_be_able_to_get()
         {

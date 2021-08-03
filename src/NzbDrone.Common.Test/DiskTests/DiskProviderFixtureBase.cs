@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
@@ -7,7 +7,8 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test.DiskTests
 {
-    public abstract class DiskProviderFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
+    public abstract class DiskProviderFixtureBase<TSubject> : TestBase<TSubject>
+        where TSubject : class, IDiskProvider
     {
         [Test]
         [Retry(5)]
@@ -154,7 +155,7 @@ namespace NzbDrone.Common.Test.DiskTests
         public void should_return_false_for_unlocked_file()
         {
             var testFile = GetTempFilePath();
-            Subject.WriteAllText(testFile, new Guid().ToString());
+            Subject.WriteAllText(testFile, default(Guid).ToString());
 
             Subject.IsFileLocked(testFile).Should().BeFalse();
         }
@@ -163,7 +164,7 @@ namespace NzbDrone.Common.Test.DiskTests
         public void should_return_false_for_unlocked_and_readonly_file()
         {
             var testFile = GetTempFilePath();
-            Subject.WriteAllText(testFile, new Guid().ToString());
+            Subject.WriteAllText(testFile, default(Guid).ToString());
 
             File.SetAttributes(testFile, FileAttributes.ReadOnly);
 
@@ -174,7 +175,7 @@ namespace NzbDrone.Common.Test.DiskTests
         public void should_return_true_for_unlocked_file()
         {
             var testFile = GetTempFilePath();
-            Subject.WriteAllText(testFile, new Guid().ToString());
+            Subject.WriteAllText(testFile, default(Guid).ToString());
 
             using (var file = File.OpenWrite(testFile))
             {
@@ -186,7 +187,7 @@ namespace NzbDrone.Common.Test.DiskTests
         public void should_be_able_to_set_permission_from_parrent()
         {
             var testFile = GetTempFilePath();
-            Subject.WriteAllText(testFile, new Guid().ToString());
+            Subject.WriteAllText(testFile, default(Guid).ToString());
 
             Subject.InheritFolderPermissions(testFile);
         }
@@ -195,7 +196,7 @@ namespace NzbDrone.Common.Test.DiskTests
         public void should_be_set_last_file_write()
         {
             var testFile = GetTempFilePath();
-            Subject.WriteAllText(testFile, new Guid().ToString());
+            Subject.WriteAllText(testFile, default(Guid).ToString());
 
             var lastWriteTime = DateTime.SpecifyKind(new DateTime(2012, 1, 2), DateTimeKind.Utc);
 

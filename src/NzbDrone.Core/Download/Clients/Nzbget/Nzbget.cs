@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.CanMoveFiles = true;
                 queueItem.CanBeRemoved = true;
 
-                if (globalStatus.DownloadPaused || remainingSize == pausedSize && remainingSize != 0)
+                if (globalStatus.DownloadPaused || (remainingSize == pausedSize && remainingSize != 0))
                 {
                     queueItem.Status = DownloadItemStatus.Paused;
                     queueItem.RemainingSize = remainingSize;
@@ -226,7 +226,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 var name = config.GetValueOrDefault("Category" + i + ".Name");
 
-                if (name == null) yield break;
+                if (name == null)
+                {
+                    yield break;
+                }
 
                 var destDir = config.GetValueOrDefault("Category" + i + ".DestDir");
 
@@ -276,6 +279,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 {
                     return new ValidationFailure("Username", "Authentication failed");
                 }
+
                 _logger.Error(ex, "Unable to connect to NZBGet");
                 return new ValidationFailure("Host", "Unable to connect to NZBGet");
             }

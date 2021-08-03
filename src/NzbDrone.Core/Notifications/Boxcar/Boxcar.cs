@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 
@@ -45,6 +45,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
         {
             _proxy.SendNotification(APPLICATION_UPDATE_TITLE, message.Message, Settings);
         }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

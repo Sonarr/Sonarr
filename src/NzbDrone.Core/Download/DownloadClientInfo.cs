@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Download
     {
         public DownloadClientInfo()
         {
-            OutputRootFolders = new List<OsPath>(); 
+            OutputRootFolders = new List<OsPath>();
         }
 
         public bool IsLocalhost { get; set; }

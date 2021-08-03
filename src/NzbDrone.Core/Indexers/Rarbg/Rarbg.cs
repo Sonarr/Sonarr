@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
                             siteKey = ex.CaptchaRequest.SiteKey,
                             secretToken = ex.CaptchaRequest.SecretToken,
                             responseUrl = ex.CaptchaRequest.ResponseUrl.FullUri,
-                        }                    
+                        }
                     };
                 }
 

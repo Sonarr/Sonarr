@@ -40,7 +40,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
                                                            languageProfile,
-                                                           file.Quality, 
+                                                           file.Quality,
                                                            file.Language,
                                                            _episodeFilePreferredWordCalculator.Calculate(subject.Series, file),
                                                            subject.ParsedEpisodeInfo.Quality,

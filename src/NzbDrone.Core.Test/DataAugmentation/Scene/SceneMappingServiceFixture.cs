@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using FluentAssertions;
-using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Test.DataAugmentation.Scene
 {
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         [Test]
         public void should_purge_existing_mapping_and_add_new_ones()
         {
-            GivenProviders(new [] { _provider1 });
+            GivenProviders(new[] { _provider1 });
 
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
 
@@ -124,7 +124,6 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                   .Setup(s => s.All())
                   .Returns(Builder<SceneMapping>.CreateListOfSize(1).Build());
 
-
             Subject.Execute(new UpdateSceneMappingCommand());
 
             Mocker.GetMock<ISceneMappingRepository>()
@@ -174,10 +173,9 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.Is<IList<SceneMapping>>(m => !m.Any(s => s. SearchTerm.IsNullOrWhiteSpace()))), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.Is<IList<SceneMapping>>(m => !m.Any(s => s.SearchTerm.IsNullOrWhiteSpace()))), Times.Once());
             ExceptionVerification.ExpectedWarns(1);
         }
-
 
         [TestCase("Working!!", "Working!!", 1)]
         [TestCase("Working`!!", "Working`!!", 2)]
@@ -323,7 +321,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             var mappings = new List<SceneMapping>
             {
                 new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 100 },
-                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 101, FilterRegex="-Viva$" }
+                new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 101, FilterRegex = "-Viva$" }
             };
 
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);

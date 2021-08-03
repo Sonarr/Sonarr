@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test.TvTests
     public class ShouldRefreshSeriesFixture : TestBase<ShouldRefreshSeries>
     {
         private Series _series;
-        
+
         [SetUp]
         public void Setup()
         {

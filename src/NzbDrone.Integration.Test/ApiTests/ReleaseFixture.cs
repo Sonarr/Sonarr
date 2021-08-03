@@ -1,8 +1,8 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using System.Net;
+using FluentAssertions;
 using NUnit.Framework;
 using Sonarr.Api.V3.Indexers;
-using System.Linq;
-using System.Net;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {
@@ -49,6 +49,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             releaseResource.Title.Should().NotBeNullOrWhiteSpace();
             releaseResource.DownloadUrl.Should().NotBeNullOrWhiteSpace();
             releaseResource.SeriesTitle.Should().NotBeNullOrWhiteSpace();
+
             //TODO: uncomment these after moving to restsharp for rss
             //releaseResource.NzbInfoUrl.Should().NotBeNullOrWhiteSpace();
             //releaseResource.Size.Should().BeGreaterThan(0);

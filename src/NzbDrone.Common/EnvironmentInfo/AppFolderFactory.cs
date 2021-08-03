@@ -95,9 +95,20 @@ namespace NzbDrone.Common.EnvironmentInfo
                     RemovePidFile();
                 }
 
-                if (_appFolderInfo.LegacyAppDataFolder.IsNullOrWhiteSpace()) return;
-                if (_diskProvider.FileExists(_appFolderInfo.GetDatabase()) || _diskProvider.FileExists(_appFolderInfo.GetConfigPath())) return;
-                if (!_diskProvider.FolderExists(_appFolderInfo.LegacyAppDataFolder)) return;
+                if (_appFolderInfo.LegacyAppDataFolder.IsNullOrWhiteSpace())
+                {
+                    return;
+                }
+
+                if (_diskProvider.FileExists(_appFolderInfo.GetDatabase()) || _diskProvider.FileExists(_appFolderInfo.GetConfigPath()))
+                {
+                    return;
+                }
+
+                if (!_diskProvider.FolderExists(_appFolderInfo.LegacyAppDataFolder))
+                {
+                    return;
+                }
 
                 // Delete the bin folder on Windows
                 var binFolder = Path.Combine(_appFolderInfo.LegacyAppDataFolder, "bin");

@@ -40,8 +40,10 @@ namespace NzbDrone.Common.Instrumentation.Sentry
         {
             // UnauthorizedAccessExceptions will just be user configuration issues
             "UnauthorizedAccessException",
+
             // Filter out people stuck in boot loops
             "CorruptDatabaseException",
+
             // This also filters some people in boot loops
             "TinyIoCResolutionException"
         };
@@ -202,6 +204,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 {
                     fingerPrint.Add(ex.TargetSite.ToString());
                 }
+
                 if (ex.InnerException != null)
                 {
                     fingerPrint.Add(ex.InnerException.GetType().FullName);
@@ -248,7 +251,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
             return false;
         }
-
 
         protected override void Write(LogEventInfo logEvent)
         {
@@ -314,6 +316,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                 {
                     _sdk?.Dispose();
                 }
+
                 // Flag us as disposed.  This allows us to handle multiple calls to Dispose() as well as ObjectDisposedException
                 _disposed = true;
             }

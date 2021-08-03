@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Datastore.Migration
             // Insert 2060p, in case the user grouped Bluray 1080p and 2160p together.
 
             updater.SplitQualityAppend(19, 21); // Bluray2160pRemux after Bluray2160p
-            updater.SplitQualityAppend(7, 20);  // Bluray1080pRemux after Bluray1080p 
+            updater.SplitQualityAppend(7, 20);  // Bluray1080pRemux after Bluray1080p
 
             updater.Commit();
         }
@@ -90,7 +90,10 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             foreach (var profile in _profiles)
             {
-                if (profile.Items.Any(v => v.Quality == quality)) continue;
+                if (profile.Items.Any(v => v.Quality == quality))
+                {
+                    continue;
+                }
 
                 var findIndex = profile.Items.FindIndex(v =>
                 {

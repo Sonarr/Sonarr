@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Test.Datastore
                 .BeNull();
         }
 
-
         [Test]
         public void vaccume()
         {

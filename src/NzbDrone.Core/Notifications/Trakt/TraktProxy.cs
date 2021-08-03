@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Notifications.Trakt
 
             request.Headers.ContentType = "application/json";
             request.SetContent(payload.ToJson());
-             
+
             try
             {
                 _httpClient.Execute(request);
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Notifications.Trakt
             var request = new HttpRequestBuilder(URL).Resource(resource).Build();
             request.Method = method;
 
-            request.Headers.Accept = HttpAccept.Json.Value;            
+            request.Headers.Accept = HttpAccept.Json.Value;
             request.Headers.Add("trakt-api-version", "2");
             request.Headers.Add("trakt-api-key", ClientId);
 

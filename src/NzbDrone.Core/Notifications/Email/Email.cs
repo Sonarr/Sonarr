@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
@@ -15,7 +15,6 @@ namespace NzbDrone.Core.Notifications.Email
         private readonly Logger _logger;
 
         public override string Name => "Email";
-
 
         public Email(Logger logger)
         {
@@ -63,6 +62,7 @@ namespace NzbDrone.Core.Notifications.Email
 
             SendEmail(Settings, APPLICATION_UPDATE_TITLE_BRANDED, body);
         }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
@@ -93,7 +93,6 @@ namespace NzbDrone.Core.Notifications.Email
             {
                 Send(email, settings);
                 _logger.Debug("Email sent. Subject: {0}", subject);
-
             }
             catch (Exception ex)
             {
@@ -137,7 +136,6 @@ namespace NzbDrone.Core.Notifications.Email
                 }
 
                 _logger.Debug("Sending to mail server");
-
 
                 client.Send(email);
 

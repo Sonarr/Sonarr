@@ -10,7 +10,7 @@ namespace NzbDrone.Core.ProgressMessaging
 
         [ThreadStatic]
         private static bool _reentrancyLock;
-        
+
         public static CommandModel CommandModel
         {
             get { return _commandModel; }
@@ -20,7 +20,9 @@ namespace NzbDrone.Core.ProgressMessaging
         public static bool LockReentrancy()
         {
             if (_reentrancyLock)
+            {
                 return false;
+            }
 
             _reentrancyLock = true;
             return true;

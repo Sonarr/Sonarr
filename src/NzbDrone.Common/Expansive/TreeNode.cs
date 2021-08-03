@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace NzbDrone.Common.Expansive
 {
@@ -7,25 +7,29 @@ namespace NzbDrone.Common.Expansive
         private List<T> _CallTree;
         private TreeNode<T> _Parent;
 
-        public TreeNode(T Value)
+        public TreeNode(T value)
         {
-            this.Value = Value;
+            Value = value;
             Parent = null;
             Children = new TreeNodeList<T>(this);
             _CallTree = new List<T>();
         }
 
-        public TreeNode(T Value, TreeNode<T> Parent)
+        public TreeNode(T value, TreeNode<T> parent)
         {
-            this.Value = Value;
-            this.Parent = Parent;
+            Value = value;
+            Parent = parent;
             Children = new TreeNodeList<T>(this);
             _CallTree = new List<T>();
         }
 
         public TreeNode<T> Parent
         {
-            get { return _Parent; }
+            get
+            {
+                return _Parent;
+            }
+
             set
             {
                 if (value == _Parent)
@@ -58,6 +62,7 @@ namespace NzbDrone.Common.Expansive
                 {
                     node = node.Parent;
                 }
+
                 return node;
             }
         }
@@ -75,9 +80,14 @@ namespace NzbDrone.Common.Expansive
                     node = node.Parent;
                     _CallTree.Add(node.Value);
                 }
+
                 return _CallTree;
             }
-            private set { _CallTree = value; }
+
+            private set
+            {
+                _CallTree = value;
+            }
         }
 
         public T Value { get; set; }

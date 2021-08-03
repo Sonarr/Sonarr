@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             var backOffProviders = enabledProviders.Join(_providerStatusService.GetBlockedProviders(),
                                                        i => i.Definition.Id,
                                                        s => s.ProviderId,
-                                                       (i, s) => new {Provider = i, Status = s})
+                                                       (i, s) => new { Provider = i, Status = s })
                                                    .Where(p => p.Status.InitialFailure.HasValue &&
                                                                p.Status.InitialFailure.Value.Before(
                                                                    DateTime.UtcNow.AddHours(-6)))
@@ -39,11 +39,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (backOffProviders.Count == enabledProviders.Count)
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Error,
-                    "All indexers are unavailable due to failures for more than 6 hours", "#indexers-are-unavailable-due-to-failures");
+                return new HealthCheck(GetType(),
+                    HealthCheckResult.Error,
+                    "All indexers are unavailable due to failures for more than 6 hours",
+                    "#indexers-are-unavailable-due-to-failures");
             }
 
-            return new HealthCheck(GetType(), HealthCheckResult.Warning,
+            return new HealthCheck(GetType(),
+                HealthCheckResult.Warning,
                 string.Format("Indexers unavailable due to failures for more than 6 hours: {0}",
                     string.Join(", ", backOffProviders.Select(v => v.Provider.Definition.Name))),
                 "#indexers-are-unavailable-due-to-failures");

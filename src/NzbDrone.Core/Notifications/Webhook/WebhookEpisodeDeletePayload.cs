@@ -11,4 +11,3 @@ namespace NzbDrone.Core.Notifications.Webhook
         public DeleteMediaFileReason DeleteReason { get; set; }
     }
 }
-

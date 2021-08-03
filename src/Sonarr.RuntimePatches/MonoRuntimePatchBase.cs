@@ -35,7 +35,6 @@ namespace NzbDrone.RuntimePatches
             }
             catch
             {
-
             }
         }
 
@@ -46,7 +45,7 @@ namespace NzbDrone.RuntimePatches
                 return false;
             }
 
-            return MonoVersion >= MonoMinVersion && MonoVersion < MonoMaxVersion;
+            return MonoMinVersion <= MonoVersion && MonoMaxVersion > MonoVersion;
         }
 
         protected override void Log(string log)

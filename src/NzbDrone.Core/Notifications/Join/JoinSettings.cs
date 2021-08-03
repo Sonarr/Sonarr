@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Notifications.Join
 
     public class JoinSettings : IProviderConfig
     {
-
         public JoinSettings()
         {
             Priority = (int)JoinPriority.Normal;

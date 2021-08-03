@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using Sonarr.Api.V3.Series;
 using RestSharp;
+using Sonarr.Api.V3.Series;
 
 namespace NzbDrone.Integration.Test.Client
 {
@@ -31,7 +31,6 @@ namespace NzbDrone.Integration.Test.Client
             var request = BuildRequest(slug);
             return Get<SeriesResource>(request, statusCode);
         }
-
     }
 
     public class SystemInfoClient : ClientBase<SeriesResource>

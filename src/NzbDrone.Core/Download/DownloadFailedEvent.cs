@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Download
 {

@@ -2,8 +2,6 @@ using System;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
-using RestSharp;
-using NzbDrone.Core.Rest;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
@@ -17,9 +15,10 @@ namespace NzbDrone.Core.Notifications.Join
 
     public class JoinProxy : IJoinProxy
     {
+        private const string URL = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?";
+
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
-        private const string URL = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?";
 
         public JoinProxy(IHttpClient httpClient, Logger logger)
         {
@@ -104,7 +103,10 @@ namespace NzbDrone.Core.Notifications.Join
             var response = _httpClient.Execute(request);
             var res = Json.Deserialize<JoinResponseModel>(response.Content);
 
-            if (res.success) return;
+            if (res.success)
+            {
+                return;
+            }
 
             if (res.userAuthError)
             {
@@ -119,14 +121,16 @@ namespace NzbDrone.Core.Notifications.Join
                 {
                     throw new JoinInvalidDeviceException(res.errorMessage);
                 }
+
                 // Oddly enough, rather than give us an "Invalid API key", the Join API seems to assume the key is valid,
-                // but fails when doing a device lookup associated with that key.  
+                // but fails when doing a device lookup associated with that key.
                 // In our case we are using "deviceIds" rather than "deviceId" so when the singular form error shows up
                 // we know the API key was the fault.
                 else if (res.errorMessage.Equals("No device to send message to"))
                 {
                     throw new JoinAuthException("Authentication failed.");
                 }
+
                 throw new JoinException(res.errorMessage);
             }
 

@@ -11,10 +11,10 @@ namespace NzbDrone.Core.Datastore.Migration
             Create.Index().OnTable("Blacklist").OnColumn("SeriesId");
 
             Create.Index().OnTable("EpisodeFiles").OnColumn("SeriesId");
-            
+
             Create.Index().OnTable("Episodes").OnColumn("EpisodeFileId");
             Create.Index().OnTable("Episodes").OnColumn("SeriesId");
-            
+
             Create.Index().OnTable("History").OnColumn("EpisodeId");
             Create.Index().OnTable("History").OnColumn("Date");
 

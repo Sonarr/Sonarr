@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;

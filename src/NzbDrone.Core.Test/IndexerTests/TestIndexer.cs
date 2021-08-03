@@ -18,7 +18,6 @@ namespace NzbDrone.Core.Test.IndexerTests
         public TestIndexer(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
-
         }
 
         public IIndexerRequestGenerator _requestGenerator;

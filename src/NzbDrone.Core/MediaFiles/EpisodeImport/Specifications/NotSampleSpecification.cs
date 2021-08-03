@@ -35,7 +35,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 {
                     return Decision.Reject("Sample");
                 }
-
                 else if (sample == DetectSampleResult.Indeterminate)
                 {
                     return Decision.Reject("Unable to determine if file is a sample");

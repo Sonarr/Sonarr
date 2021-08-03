@@ -28,10 +28,8 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                     .With(s => s.Title = "Series Title")
                     .Build();
 
-
             _namingConfig = NamingConfig.Default;
             _namingConfig.RenameEpisodes = true;
-
 
             Mocker.GetMock<INamingConfigService>()
                   .Setup(c => c.GetConfig()).Returns(_namingConfig);
@@ -82,7 +80,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                         };
 
             _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "SonarrTest" };
-            
+
             Mocker.GetMock<IQualityDefinitionService>()
                 .Setup(v => v.Get(Moq.It.IsAny<Quality>()))
                 .Returns<Quality>(v => Quality.DefaultQualityDefinitions.First(c => c.Quality == v));
@@ -97,7 +95,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         public void should_truncate_with_extension()
         {
             _series.Title = "The Fantastic Life of Mr. Sisko";
-            
+
             _episodes[0].SeasonNumber = 2;
             _episodes[0].EpisodeNumber = 18;
             _episodes[0].Title = "This title has to be 197 characters in length, combined with the series title, quality and episode number it becomes 254ish and the extension puts it above the 255 limit and triggers the truncation";
@@ -137,7 +135,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _series.Title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit Maecenas et magna sem Morbi vitae volutpat quam, id porta arcu Orci varius natoque penatibus et magnis dis parturient montes nascetur ridiculus musu Cras vestibulum";
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}";
 
-            var result = Subject.BuildFileName(new List<Episode>{_episodes.First()}, _series, _episodeFile);
+            var result = Subject.BuildFileName(new List<Episode> { _episodes.First() }, _series, _episodeFile);
             result.Length.Should().BeLessOrEqualTo(255);
             result.Should().Be("Lorem ipsum dolor sit amet, consectetur adipiscing elit Maecenas et magna sem Morbi vitae volutpat quam, id porta arcu Orci varius natoque penatibus et magnis dis parturient montes nascetur ridiculus musu Cras vestibulum - S01E01 - Episode Ti... HDTV-720p");
         }
@@ -147,7 +145,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _series.Title = "Lor\u00E9m ipsum dolor sit amet, consectetur adipiscing elit Maecenas et magna sem Morbi vitae volutpat quam, id porta arcu Orci varius natoque penatibus et magnis dis parturient montes nascetur ridiculus musu Cras vestibulum";
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}";
-            
+
             var result = Subject.BuildFileName(new List<Episode> { _episodes.First() }, _series, _episodeFile);
             result.GetByteCount().Should().BeLessOrEqualTo(255);
 

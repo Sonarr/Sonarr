@@ -6,12 +6,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Unity;
 using Moq;
 using Moq.Language.Flow;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common.AutoMoq.Unity;
+using Unity;
 using Unity.Resolution;
 
 [assembly: InternalsVisibleTo("AutoMoq.Tests")]
@@ -35,7 +35,6 @@ namespace NzbDrone.Test.Common.AutoMoq
         {
             DefaultBehavior = defaultBehavior;
             SetupAutoMoqer(new UnityContainer());
-
         }
 
         public AutoMoqer(IUnityContainer container)
@@ -52,12 +51,14 @@ namespace NzbDrone.Test.Common.AutoMoq
             return result;
         }
 
-        public virtual Mock<T> GetMock<T>() where T : class
+        public virtual Mock<T> GetMock<T>()
+            where T : class
         {
             return GetMock<T>(DefaultBehavior);
         }
 
-        public virtual Mock<T> GetMock<T>(MockBehavior behavior) where T : class
+        public virtual Mock<T> GetMock<T>(MockBehavior behavior)
+            where T : class
         {
             ResolveType = null;
             var type = GetTheMockType<T>();
@@ -79,9 +80,14 @@ namespace NzbDrone.Test.Common.AutoMoq
         public virtual void SetMock(Type type, Mock mock)
         {
             if (_registeredMocks.ContainsKey(type) == false)
+            {
                 _registeredMocks.Add(type, mock);
+            }
+
             if (mock != null)
+            {
                 _container.RegisterInstance(type, mock.Object);
+            }
         }
 
         public virtual void SetConstant<T>(T instance)
@@ -90,32 +96,38 @@ namespace NzbDrone.Test.Common.AutoMoq
             SetMock(instance.GetType(), null);
         }
 
-        public ISetup<T> Setup<T>(Expression<Action<T>> expression) where T : class
+        public ISetup<T> Setup<T>(Expression<Action<T>> expression)
+            where T : class
         {
             return GetMock<T>().Setup(expression);
         }
 
-        public ISetup<T, TResult> Setup<T, TResult>(Expression<Func<T, TResult>> expression) where T : class
+        public ISetup<T, TResult> Setup<T, TResult>(Expression<Func<T, TResult>> expression)
+            where T : class
         {
             return GetMock<T>().Setup(expression);
         }
 
-        public void Verify<T>(Expression<Action<T>> expression) where T : class
+        public void Verify<T>(Expression<Action<T>> expression)
+            where T : class
         {
             GetMock<T>().Verify(expression);
         }
 
-        public void Verify<T>(Expression<Action<T>> expression, string failMessage) where T : class
+        public void Verify<T>(Expression<Action<T>> expression, string failMessage)
+            where T : class
         {
             GetMock<T>().Verify(expression, failMessage);
         }
 
-        public void Verify<T>(Expression<Action<T>> expression, Times times) where T : class
+        public void Verify<T>(Expression<Action<T>> expression, Times times)
+            where T : class
         {
             GetMock<T>().Verify(expression, times);
         }
 
-        public void Verify<T>(Expression<Action<T>> expression, Times times, string failMessage) where T : class
+        public void Verify<T>(Expression<Action<T>> expression, Times times, string failMessage)
+            where T : class
         {
             GetMock<T>().Verify(expression, times, failMessage);
         }
@@ -125,11 +137,11 @@ namespace NzbDrone.Test.Common.AutoMoq
             foreach (var registeredMock in _registeredMocks)
             {
                 if (registeredMock.Value is Mock mock)
+                {
                     mock.VerifyAll();
+                }
             }
         }
-
-        #region private methods
 
         private void SetupAutoMoqer(IUnityContainer container)
         {
@@ -149,12 +161,14 @@ namespace NzbDrone.Test.Common.AutoMoq
             return;
         }
 
-        private Mock<T> TheRegisteredMockForThisType<T>(Type type) where T : class
+        private Mock<T> TheRegisteredMockForThisType<T>(Type type)
+            where T : class
         {
             return (Mock<T>)_registeredMocks.First(x => x.Key == type).Value;
         }
 
-        private void CreateANewMockAndRegisterIt<T>(Type type, MockBehavior behavior) where T : class
+        private void CreateANewMockAndRegisterIt<T>(Type type, MockBehavior behavior)
+            where T : class
         {
             var mock = new Mock<T>(behavior);
             _container.RegisterInstance(mock.Object);
@@ -166,7 +180,8 @@ namespace NzbDrone.Test.Common.AutoMoq
             return _registeredMocks.ContainsKey(type) == false;
         }
 
-        private static Type GetTheMockType<T>() where T : class
+        private static Type GetTheMockType<T>()
+            where T : class
         {
             return typeof(T);
         }
@@ -187,7 +202,5 @@ namespace NzbDrone.Test.Common.AutoMoq
 
             Assembly.Load(assemblyName);
         }
-
-        #endregion
     }
 }

@@ -492,5 +492,3 @@ namespace NzbDrone.Common.OAuth
         }
     }
 }
-
-

@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Common.TPL;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
-using System.Linq;
-using NzbDrone.Common.TPL;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.IndexerSearch
 {
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.IndexerSearch
             var sceneMappings = _sceneMapping.FindByTvdbId(series.TvdbId);
 
             // Group the episode by SceneSeasonNumber/SeasonNumber, in 99% of cases this will result in 1 groupedEpisode
-            var groupedEpisodes = episodes.ToLookup(v => (v.SceneSeasonNumber ?? v.SeasonNumber) * 100000 + v.SeasonNumber);
+            var groupedEpisodes = episodes.ToLookup(v => ((v.SceneSeasonNumber ?? v.SeasonNumber) * 100000) + v.SeasonNumber);
 
             foreach (var groupedEpisode in groupedEpisodes)
             {
@@ -238,7 +238,7 @@ namespace NzbDrone.Core.IndexerSearch
                 // - Mapped on Release Season Number with sceneMapping.SceneSeasonNumber specified and optionally sceneMapping.SeasonNumber. This translates via episode.SceneSeasonNumber/SeasonNumber to specific episodes.
                 // - Mapped on Episode Season Number with optionally sceneMapping.SeasonNumber. This translates from episode.SceneSeasonNumber/SeasonNumber to specific releases. (Filter by episode.SeasonNumber or globally)
 
-                var ignoreSceneNumbering = (sceneMapping.SceneOrigin == "tvdb" || sceneMapping.SceneOrigin == "unknown:tvdb");
+                var ignoreSceneNumbering = sceneMapping.SceneOrigin == "tvdb" || sceneMapping.SceneOrigin == "unknown:tvdb";
                 var mappingSceneSeasonNumber = sceneMapping.SceneSeasonNumber.NonNegative();
                 var mappingSeasonNumber = sceneMapping.SeasonNumber.NonNegative();
 
@@ -356,11 +356,12 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> SearchSpecial(Series series, List<Episode> episodes,bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
+        private List<DownloadDecision> SearchSpecial(Series series, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
         {
             var downloadDecisions = new List<DownloadDecision>();
-            
+
             var searchSpec = Get<SpecialEpisodeSearchCriteria>(series, episodes, monitoredOnly, userInvokedSearch, interactiveSearch);
+
             // build list of queries for each episode in the form: "<series> <episode-title>"
             searchSpec.EpisodeQueryTitles = episodes.Where(e => !string.IsNullOrWhiteSpace(e.Title))
                                                     .SelectMany(e => searchSpec.CleanSceneTitles.Select(title => title + " " + SearchCriteriaBase.GetCleanSceneTitle(e.Title)))
@@ -376,7 +377,7 @@ namespace NzbDrone.Core.IndexerSearch
                 {
                     continue;
                 }
-                
+
                 downloadDecisions.AddRange(SearchSingle(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch));
             }
 
@@ -433,7 +434,8 @@ namespace NzbDrone.Core.IndexerSearch
             return DeDupeDecisions(downloadDecisions);
         }
 
-        private TSpec Get<TSpec>(Series series, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch) where TSpec : SearchCriteriaBase, new()
+        private TSpec Get<TSpec>(Series series, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
+            where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 
@@ -441,7 +443,7 @@ namespace NzbDrone.Core.IndexerSearch
             spec.SceneTitles = _sceneMapping.GetSceneNames(series.TvdbId,
                                                            episodes.Select(e => e.SeasonNumber).Distinct().ToList(),
                                                            episodes.Select(e => e.SceneSeasonNumber ?? e.SeasonNumber).Distinct().ToList());
-            
+
             spec.Episodes = episodes;
             spec.MonitoredEpisodesOnly = monitoredOnly;
             spec.UserInvokedSearch = userInvokedSearch;
@@ -455,7 +457,8 @@ namespace NzbDrone.Core.IndexerSearch
             return spec;
         }
 
-        private TSpec Get<TSpec>(Series series, SceneEpisodeMapping mapping, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch) where TSpec : SearchCriteriaBase, new()
+        private TSpec Get<TSpec>(Series series, SceneEpisodeMapping mapping, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
+            where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 
@@ -471,7 +474,8 @@ namespace NzbDrone.Core.IndexerSearch
             return spec;
         }
 
-        private TSpec Get<TSpec>(Series series, SceneSeasonMapping mapping, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch) where TSpec : SearchCriteriaBase, new()
+        private TSpec Get<TSpec>(Series series, SceneSeasonMapping mapping, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
+            where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 

@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
@@ -5,9 +8,6 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.IPTorrents;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using System;
-using System.Linq;
-using FluentAssertions;
 
 namespace NzbDrone.Core.Test.IndexerTests.IPTorrentsTests
 {

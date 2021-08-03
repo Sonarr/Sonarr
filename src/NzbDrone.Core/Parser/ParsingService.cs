@@ -104,6 +104,7 @@ namespace NzbDrone.Core.Parser
                 {
                     foundSeries = series;
                 }
+
                 foundTvdbId = tvdbId;
             }
 
@@ -504,7 +505,7 @@ namespace NzbDrone.Core.Parser
                         episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber, absoluteEpisodeNumber);
 
                         if (episodes.Empty())
-                        { 
+                        {
                             var episode = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, absoluteEpisodeNumber);
                             episodes.AddIfNotNull(episode);
                         }
@@ -597,7 +598,6 @@ namespace NzbDrone.Core.Parser
                 {
                     result.Add(episodeInfo);
                 }
-
                 else
                 {
                     _logger.Debug("Unable to find {0}", parsedEpisodeInfo);

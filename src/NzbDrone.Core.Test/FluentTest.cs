@@ -9,7 +9,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    
+
     public class FluentTest : CoreTest
     {
         [TestCase(null, "def", "def")]
@@ -87,11 +87,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MaxOrDefault_should_return_zero_when_collection_is_empty()
         {
-            
-
-
-            
-            var result = (new List<int>()).MaxOrDefault();
+            var result = new List<int>().MaxOrDefault();
 
             //Resolve
             result.Should().Be(0);
@@ -100,10 +96,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MaxOrDefault_should_return_max_when_collection_is_not_empty()
         {
-            
             var list = new List<int> { 6, 4, 5, 3, 8, 10 };
 
-            
             var result = list.MaxOrDefault();
 
             //Resolve
@@ -113,10 +107,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MaxOrDefault_should_return_zero_when_collection_is_null()
         {
-            
             List<int> list = null;
 
-            
             var result = list.MaxOrDefault();
 
             //Resolve
@@ -126,10 +118,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Truncate_should_truncate_strings_to_max_specified_number_of_bytes()
         {
-            
             var str = ReadAllText("Files/LongOverview.txt");
 
-            
             var resultString = str.Truncate(1000);
 
             //Resolve
@@ -140,10 +130,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Truncate_should_not_truncate_string_shorter_than_max_bytes()
         {
-            
             var str = "Hello World";
 
-            
             var resultString = str.Truncate(1000);
 
             //Resolve
@@ -154,11 +142,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MinOrDefault_should_return_zero_when_collection_is_empty()
         {
-            
-
-
-            
-            var result = (new List<int>()).MinOrDefault();
+            var result = new List<int>().MinOrDefault();
 
             //Resolve
             result.Should().Be(0);
@@ -167,10 +151,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MinOrDefault_should_return_min_when_collection_is_not_empty()
         {
-            
             var list = new List<int> { 6, 4, 5, 3, 8, 10 };
 
-            
             var result = list.MinOrDefault();
 
             //Resolve
@@ -180,22 +162,19 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MinOrDefault_should_return_zero_when_collection_is_null()
         {
-            
             List<int> list = null;
 
-            
             var result = list.MinOrDefault();
 
             //Resolve
             result.Should().Be(0);
         }
 
-
-        [TestCase(100,100,100)]
-        [TestCase(110,100,100)]
-        [TestCase(199,100,100)]
-        [TestCase(1000,100,1000)]
-        [TestCase(0,100,0)]
+        [TestCase(100, 100, 100)]
+        [TestCase(110, 100, 100)]
+        [TestCase(199, 100, 100)]
+        [TestCase(1000, 100, 1000)]
+        [TestCase(0, 100, 0)]
         public void round_to_level(long number, int level, int result)
         {
             number.Round(level).Should().Be(result);

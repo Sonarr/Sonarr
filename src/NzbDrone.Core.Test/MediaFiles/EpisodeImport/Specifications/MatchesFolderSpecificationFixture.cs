@@ -35,7 +35,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                                                .With(p => p.FullSeason = false)
                                                                                .Build())
                                                  .Build();
-
         }
 
         private void GivenEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, int[] episodeNumbers)
@@ -44,11 +43,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
             var episodes = episodeNumbers.Select(n =>
                 Builder<Episode>.CreateNew()
-                                .With(e => e.Id = seasonNumber * 10 + n)
+                                .With(e => e.Id = (seasonNumber * 10) + n)
                                 .With(e => e.SeasonNumber = seasonNumber)
                                 .With(e => e.EpisodeNumber = n)
-                                .Build()
-            ).ToList();
+                                .Build())
+            .ToList();
 
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetEpisodes(parsedEpisodeInfo, It.IsAny<Series>(), true, null))
@@ -89,7 +88,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode.FolderEpisodeInfo.FullSeason = true;
 
             GivenEpisodes(_localEpisode.FileEpisodeInfo, _localEpisode.FileEpisodeInfo.EpisodeNumbers);
-            GivenEpisodes(_localEpisode.FolderEpisodeInfo, new []{ 1, 2, 3, 4, 5 });
+            GivenEpisodes(_localEpisode.FolderEpisodeInfo, new[] { 1, 2, 3, 4, 5 });
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }
@@ -251,7 +250,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode.FolderEpisodeInfo.SeasonNumber = 1;
             _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new[] { 1, 2 };
 
-            GivenEpisodes(_localEpisode.FileEpisodeInfo, new []{ 1 });
+            GivenEpisodes(_localEpisode.FileEpisodeInfo, new[] { 1 });
             GivenEpisodes(_localEpisode.FolderEpisodeInfo, _localEpisode.FolderEpisodeInfo.EpisodeNumbers);
 
             _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01.720p.HDTV-Sonarr\S02E01.mkv".AsOsAgnostic();

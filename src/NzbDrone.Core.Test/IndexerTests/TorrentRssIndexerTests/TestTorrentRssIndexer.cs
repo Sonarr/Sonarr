@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NLog;
+using NLog.Config;
+using NLog.Targets;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.TorrentRss;
 using NzbDrone.Core.Parser;
-using NLog.Config;
-using NLog.Targets;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {
@@ -31,13 +31,13 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         /// </summary>
         private void SetupNLog()
         {
-            // Step 1. Create configuration object 
+            // Step 1. Create configuration object
             var config = new LoggingConfiguration();
 
             var fileTarget = new FileTarget();
             config.AddTarget("file", fileTarget);
 
-            // Step 3. Set target properties 
+            // Step 3. Set target properties
             fileTarget.FileName = "${basedir}/log.txt";
             fileTarget.Layout = GetStandardLayout();
 

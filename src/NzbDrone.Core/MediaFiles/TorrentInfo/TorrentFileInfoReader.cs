@@ -2,12 +2,12 @@
 
 namespace NzbDrone.Core.MediaFiles.TorrentInfo
 {
-    public interface ITorrentFileInfoReader 
+    public interface ITorrentFileInfoReader
     {
         string GetHashFromTorrentFile(byte[] fileContents);
     }
 
-    public class TorrentFileInfoReader: ITorrentFileInfoReader
+    public class TorrentFileInfoReader : ITorrentFileInfoReader
     {
         public string GetHashFromTorrentFile(byte[] fileContents)
         {

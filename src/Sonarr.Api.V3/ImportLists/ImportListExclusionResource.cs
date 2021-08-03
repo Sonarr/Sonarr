@@ -15,7 +15,10 @@ namespace Sonarr.Api.V3.ImportLists
     {
         public static ImportListExclusionResource ToResource(this ImportListExclusion model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new ImportListExclusionResource
             {
@@ -27,7 +30,10 @@ namespace Sonarr.Api.V3.ImportLists
 
         public static ImportListExclusion ToModel(this ImportListExclusionResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new ImportListExclusion
             {

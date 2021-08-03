@@ -25,7 +25,6 @@ namespace Sonarr.Api.V3.Episodes
             {
                 seriesId = (int)Request.Query.SeriesId;
             }
-
             else
             {
                 throw new BadRequestException("seriesId is missing");

@@ -1,13 +1,13 @@
-﻿using Moq;
+﻿using System;
+using System.Linq;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Torrentleech;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using System;
-using System.Linq;
-using FluentAssertions;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
 {
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
             torrentInfo.Size.Should().Be(0);
             torrentInfo.InfoHash.Should().Be(null);
             torrentInfo.MagnetUrl.Should().Be(null);
-            torrentInfo.Peers.Should().Be(7+1);
+            torrentInfo.Peers.Should().Be(7 + 1);
             torrentInfo.Seeders.Should().Be(1);
         }
     }

@@ -78,7 +78,7 @@ namespace Sonarr.Api.V3.System
                        PackageAuthor = _deploymentInfoProvider.PackageAuthor,
                        PackageUpdateMechanism = _deploymentInfoProvider.PackageUpdateMechanism,
                        PackageUpdateMechanismMessage = _deploymentInfoProvider.PackageUpdateMechanismMessage
-            };
+                   };
         }
 
         private object GetRoutes()

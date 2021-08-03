@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Mocker.GetMock<IIndexerFactory>()
                   .Setup(v => v.All())
                   .Returns(_indexers);
-
         }
 
         private void GivenIndexer(string baseUrl, string apiPath)

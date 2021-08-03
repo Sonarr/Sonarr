@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
 
-
 namespace NzbDrone.Core.MediaFiles
 {
     public static class MediaFileExtensions

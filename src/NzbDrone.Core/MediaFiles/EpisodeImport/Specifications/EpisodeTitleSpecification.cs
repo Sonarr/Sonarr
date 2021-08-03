@@ -61,9 +61,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             if (episodeTitleRequired == EpisodeTitleRequiredType.BulkSeasonReleases &&
                 allEpisodesOnTheSameDay &&
                 episodesInSeason.Count(e => e.AirDateUtc.HasValue &&
-                                            e.AirDateUtc.Value == firstEpisode.AirDateUtc.Value
-                                       ) < 4
-            )
+                                            e.AirDateUtc.Value == firstEpisode.AirDateUtc.Value) < 4)
             {
                 _logger.Debug("Episode title only required for bulk season releases");
                 return Decision.Accept();

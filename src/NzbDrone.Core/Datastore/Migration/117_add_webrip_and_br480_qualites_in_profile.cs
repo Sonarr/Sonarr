@@ -20,11 +20,11 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var updater = new ProfileUpdater117(conn, tran);
 
-            updater.CreateGroupAt(8, 1000, "WEB 480p", new[] {12, 8}); // Group WEBRip480p with WEBDL480p
-            updater.CreateGroupAt(2, 1001, "DVD", new[] {2, 13}); // Group Bluray480p with DVD
-            updater.CreateGroupAt(5, 1002, "WEB 720p", new[] {14, 5}); // Group WEBRip720p with WEBDL720p
-            updater.CreateGroupAt(3, 1003, "WEB 1080p", new[] {15, 3}); // Group WEBRip1080p with WEBDL1080p
-            updater.CreateGroupAt(18, 1004, "WEB 2160p", new[] {17, 18}); // Group WEBRip2160p with WEBDL2160p
+            updater.CreateGroupAt(8, 1000, "WEB 480p", new[] { 12, 8 }); // Group WEBRip480p with WEBDL480p
+            updater.CreateGroupAt(2, 1001, "DVD", new[] { 2, 13 }); // Group Bluray480p with DVD
+            updater.CreateGroupAt(5, 1002, "WEB 720p", new[] { 14, 5 }); // Group WEBRip720p with WEBDL720p
+            updater.CreateGroupAt(3, 1003, "WEB 1080p", new[] { 15, 3 }); // Group WEBRip1080p with WEBDL1080p
+            updater.CreateGroupAt(18, 1004, "WEB 2160p", new[] { 17, 18 }); // Group WEBRip2160p with WEBDL2160p
 
             updater.Commit();
         }

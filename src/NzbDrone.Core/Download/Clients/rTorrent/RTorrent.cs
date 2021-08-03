@@ -1,21 +1,21 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NLog;
-using NzbDrone.Core.Validation;
-using FluentValidation.Results;
 using NzbDrone.Core.Download.Clients.rTorrent;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.RTorrent
 {
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         private readonly IRTorrentProxy _proxy;
         private readonly IRTorrentDirectoryValidator _rTorrentDirectoryValidator;
         private readonly IDownloadSeedConfigProvider _downloadSeedConfigProvider;
-        private readonly string _imported_view = String.Concat(BuildInfo.AppName.ToLower(), "_imported");
+        private readonly string _imported_view = string.Concat(BuildInfo.AppName.ToLower(), "_imported");
 
         public RTorrent(IRTorrentProxy proxy,
                         ITorrentFileInfoReader torrentFileInfoReader,
@@ -54,8 +54,10 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 }
                 catch (Exception ex)
                 {
-                    _logger.Warn(ex, "Failed to set torrent post-import label \"{0}\" for {1} in rTorrent. Does the label exist?",
-                        Settings.TvImportedCategory, downloadClientItem.Title);
+                    _logger.Warn(ex,
+                        "Failed to set torrent post-import label \"{0}\" for {1} in rTorrent. Does the label exist?",
+                        Settings.TvImportedCategory,
+                        downloadClientItem.Title);
                 }
             }
 
@@ -66,8 +68,10 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, "Failed to set torrent post-import view \"{0}\" for {1} in rTorrent.",
-                    _imported_view, downloadClientItem.Title);
+                _logger.Warn(ex,
+                    "Failed to set torrent post-import view \"{0}\" for {1} in rTorrent.",
+                    _imported_view,
+                    downloadClientItem.Title);
             }
         }
 
@@ -123,7 +127,10 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             foreach (RTorrentTorrent torrent in torrents)
             {
                 // Don't concern ourselves with categories other than specified
-                if (Settings.TvCategory.IsNotNullOrWhiteSpace() && torrent.Category != Settings.TvCategory) continue;
+                if (Settings.TvCategory.IsNotNullOrWhiteSpace() && torrent.Category != Settings.TvCategory)
+                {
+                    continue;
+                }
 
                 if (torrent.Path.StartsWith("."))
                 {
@@ -171,8 +178,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                     torrent.IsFinished && seedConfig != null &&
                     (
                         (torrent.Ratio / 1000.0) >= seedConfig.Ratio ||
-                        (DateTimeOffset.Now - DateTimeOffset.FromUnixTimeSeconds(torrent.FinishedTime)) >= seedConfig.SeedTime
-                    );
+                        (DateTimeOffset.Now - DateTimeOffset.FromUnixTimeSeconds(torrent.FinishedTime)) >= seedConfig.SeedTime);
 
                 items.Add(item);
             }
@@ -205,7 +211,11 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            if (failures.HasErrors()) return;
+            if (failures.HasErrors())
+            {
+                return;
+            }
+
             failures.AddIfNotNull(TestGetTorrents());
             failures.AddIfNotNull(TestDirectory());
         }
@@ -224,7 +234,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to test rTorrent");
-                
+
                 return new NzbDroneValidationFailure("Host", "Unable to connect to rTorrent")
                        {
                            DetailedDescription = ex.Message

@@ -36,7 +36,6 @@ namespace NzbDrone.Update.UpdateEngine
                 try
                 {
                     StartService();
-
                 }
                 catch (InvalidOperationException e)
                 {

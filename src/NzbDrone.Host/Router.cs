@@ -58,6 +58,7 @@ namespace NzbDrone.Host
                         _nzbDroneConsoleFactory.Start();
                         break;
                     }
+
                 case ApplicationModes.InstallService:
                     {
                         _logger.Debug("Install Service selected");
@@ -75,8 +76,10 @@ namespace NzbDrone.Host
                             // Ensures that there isn't an instance of Sonarr already running that the service account cannot stop.
                             _processProvider.SpawnNewProcess("sc.exe", $"start {ServiceProvider.SERVICE_NAME}", null, true);
                         }
+
                         break;
                     }
+
                 case ApplicationModes.UninstallService:
                     {
                         _logger.Debug("Uninstall Service selected");
@@ -91,6 +94,7 @@ namespace NzbDrone.Host
 
                         break;
                     }
+
                 case ApplicationModes.RegisterUrl:
                     {
                         _logger.Debug("Regiser URL selected");
@@ -98,6 +102,7 @@ namespace NzbDrone.Host
 
                         break;
                     }
+
                 default:
                     {
                         _consoleService.PrintHelp();

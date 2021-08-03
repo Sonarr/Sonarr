@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -40,7 +40,6 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         [FieldDefinition(4, Label = "Secret token", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string SecretToken { get; set; }
-
 
         public NzbDroneValidationResult Validate()
         {

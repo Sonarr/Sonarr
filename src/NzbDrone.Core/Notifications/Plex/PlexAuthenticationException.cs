@@ -2,7 +2,8 @@
 {
     public class PlexAuthenticationException : PlexException
     {
-        public PlexAuthenticationException(string message) : base(message)
+        public PlexAuthenticationException(string message)
+            : base(message)
         {
         }
 

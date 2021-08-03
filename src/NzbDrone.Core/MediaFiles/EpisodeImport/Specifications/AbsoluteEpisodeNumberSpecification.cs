@@ -19,6 +19,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _buildFileNames = buildFileNames;
             _logger = logger;
         }
+
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (localEpisode.Series.SeriesType != SeriesTypes.Anime)

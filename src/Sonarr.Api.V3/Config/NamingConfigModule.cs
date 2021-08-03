@@ -77,7 +77,7 @@ namespace Sonarr.Api.V3.Config
 
             var nameSpec = config.ToModel();
             var sampleResource = new NamingExampleResource();
-            
+
             var singleEpisodeSampleResult = _filenameSampleService.GetStandardSample(nameSpec);
             var multiEpisodeSampleResult = _filenameSampleService.GetMultiEpisodeSample(nameSpec);
             var dailyEpisodeSampleResult = _filenameSampleService.GetDailySample(nameSpec);

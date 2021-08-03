@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {
-                            var text = string.Format("UPDATE Series SET Seasons = '{0}' WHERE Id = {1}", seasons.ToJson() , seriesId);
+                            var text = string.Format("UPDATE Series SET Seasons = '{0}' WHERE Id = {1}", seasons.ToJson(), seriesId);
 
                             updateCmd.Transaction = tran;
                             updateCmd.CommandText = text;

@@ -5,7 +5,6 @@ namespace NzbDrone.Core.Datastore
 {
     public interface IMainDatabase : IDatabase
     {
-
     }
 
     public class MainDatabase : IMainDatabase

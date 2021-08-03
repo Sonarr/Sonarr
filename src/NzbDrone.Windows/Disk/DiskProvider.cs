@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -17,14 +17,14 @@ namespace NzbDrone.Windows.Disk
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
+        private static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
         out ulong lpFreeBytesAvailable,
         out ulong lpTotalNumberOfBytes,
         out ulong lpTotalNumberOfFreeBytes);
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool CreateHardLink(string lpFileName, string lpExistingFileName, IntPtr lpSecurityAttributes);
+        private static extern bool CreateHardLink(string lpFileName, string lpExistingFileName, IntPtr lpSecurityAttributes);
 
         public override long? GetAvailableSpace(string path)
         {
@@ -33,7 +33,9 @@ namespace NzbDrone.Windows.Disk
             var root = GetPathRoot(path);
 
             if (!FolderExists(root))
+            {
                 throw new DirectoryNotFoundException(root);
+            }
 
             return DriveFreeSpaceEx(root);
         }
@@ -68,9 +70,11 @@ namespace NzbDrone.Windows.Disk
                     return;
                 }
 
-                var accessRule = new FileSystemAccessRule(sid, rights,
+                var accessRule = new FileSystemAccessRule(sid,
+                                                          rights,
                                                           InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
-                                                          PropagationFlags.InheritOnly, controlType);
+                                                          PropagationFlags.InheritOnly,
+                                                          controlType);
 
                 bool modified;
                 directorySecurity.ModifyAccessRule(AccessControlModification.Add, accessRule, out modified);
@@ -85,22 +89,18 @@ namespace NzbDrone.Windows.Disk
                 Logger.Warn(e, "Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType);
                 throw;
             }
-
         }
 
         public override void SetFilePermissions(string path, string mask, string group)
         {
-
         }
 
         public override void SetPermissions(string path, string mask, string group)
         {
-
         }
 
         public override void CopyPermissions(string sourcePath, string targetPath)
         {
-
         }
 
         public override long? GetTotalSize(string path)
@@ -110,7 +110,9 @@ namespace NzbDrone.Windows.Disk
             var root = GetPathRoot(path);
 
             if (!FolderExists(root))
+            {
                 throw new DirectoryNotFoundException(root);
+            }
 
             return DriveTotalSizeEx(root);
         }
@@ -157,7 +159,6 @@ namespace NzbDrone.Windows.Disk
             return 0;
         }
 
-        
         public override bool TryCreateHardLink(string source, string destination)
         {
             try

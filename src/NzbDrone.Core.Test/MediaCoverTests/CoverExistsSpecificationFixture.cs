@@ -20,23 +20,18 @@ namespace NzbDrone.Core.Test.MediaCoverTests
             _httpResponse = new HttpResponse(null, new HttpHeader(), "", HttpStatusCode.OK);
             Mocker.GetMock<IDiskProvider>().Setup(c => c.GetFileSize(It.IsAny<string>())).Returns(100);
             Mocker.GetMock<IHttpClient>().Setup(c => c.Head(It.IsAny<HttpRequest>())).Returns(_httpResponse);
-
         }
-
 
         private void GivenFileExistsOnDisk()
         {
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(It.IsAny<string>())).Returns(true);
         }
 
-
         private void GivenExistingFileSize(long bytes)
         {
             GivenFileExistsOnDisk();
             Mocker.GetMock<IDiskProvider>().Setup(c => c.GetFileSize(It.IsAny<string>())).Returns(bytes);
-
         }
-
 
         [Test]
         public void should_return_false_if_file_not_exists()
@@ -52,7 +47,6 @@ namespace NzbDrone.Core.Test.MediaCoverTests
 
             Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeFalse();
         }
-
 
         [Test]
         public void should_return_ture_if_file_exists_and_same_size()

@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Datastore
             connectionBuilder.JournalMode = OsInfo.IsOsx ? SQLiteJournalModeEnum.Truncate : SQLiteJournalModeEnum.Wal;
             connectionBuilder.Pooling = true;
             connectionBuilder.Version = 3;
-            
+
             if (OsInfo.IsOsx)
             {
                 connectionBuilder.Add("Full FSync", true);

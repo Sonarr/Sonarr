@@ -18,21 +18,33 @@ namespace Sonarr.Api.V3.Series
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            if (context.PropertyValue == null) return true;
+            if (context.PropertyValue == null)
+            {
+                return true;
+            }
 
             var seriesResource = context.Instance as SeriesResource;
 
-            if (seriesResource == null) return true;
+            if (seriesResource == null)
+            {
+                return true;
+            }
 
             var rootFolderPath = context.PropertyValue.ToString();
 
-            if (rootFolderPath.IsNullOrWhiteSpace()) return true;
+            if (rootFolderPath.IsNullOrWhiteSpace())
+            {
+                return true;
+            }
 
             var rootFolder = new DirectoryInfo(rootFolderPath).Name;
             var series = seriesResource.ToModel();
             var seriesFolder = _fileNameBuilder.GetSeriesFolder(series);
 
-            if (seriesFolder == rootFolder) return false;
+            if (seriesFolder == rootFolder)
+            {
+                return false;
+            }
 
             var distance = seriesFolder.LevenshteinDistance(rootFolder);
 

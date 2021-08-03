@@ -18,7 +18,6 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("DownloadClients").AddColumn("Priority").AsInt32().WithDefaultValue(1);
             Execute.WithConnection(InitPriorityForBackwardCompatibility);
-
         }
 
         private void InitPriorityForBackwardCompatibility(IDbConnection conn, IDbTransaction tran)

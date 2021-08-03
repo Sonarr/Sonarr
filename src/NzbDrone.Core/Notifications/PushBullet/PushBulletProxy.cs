@@ -162,7 +162,6 @@ namespace NzbDrone.Core.Notifications.PushBullet
             {
                 requestBuilder.AddFormParameter("device_id", integerId);
             }
-
             else
             {
                 requestBuilder.AddFormParameter("device_iden", deviceId);

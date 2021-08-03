@@ -16,11 +16,14 @@ namespace NzbDrone.Core.Validation.Paths
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            if (context.PropertyValue == null) return true;
+            if (context.PropertyValue == null)
+            {
+                return true;
+            }
 
             var tvdbId = Convert.ToInt32(context.PropertyValue.ToString());
 
-            return (!_seriesService.GetAllSeries().Exists(s => s.TvdbId == tvdbId));
+            return !_seriesService.GetAllSeries().Exists(s => s.TvdbId == tvdbId);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace NzbDrone.Common.Http
         }
 
         public JsonRpcRequestBuilder(string baseUrl, string method, IEnumerable<object> parameters)
-            : base (baseUrl)
+            : base(baseUrl)
         {
             Method = HttpMethod.POST;
             JsonMethod = method;

@@ -16,7 +16,6 @@ namespace NzbDrone.Integration.Test
         [TestCase("")]
         public void should_get_json_with_accept_header(string header)
         {
-
             var request = new RestRequest("system/status")
             {
                 RequestFormat = DataFormat.None
@@ -34,7 +33,6 @@ namespace NzbDrone.Integration.Test
         [TestCase("application/junk")]
         public void should_get_unacceptable_with_accept_header(string header)
         {
-
             var request = new RestRequest("system/status")
             {
                 RequestFormat = DataFormat.None

@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System.Data;
+using FluentMigrator;
 using FluentMigrator.Builders.Create;
 using FluentMigrator.Builders.Create.Table;
 using FluentMigrator.Runner;
@@ -6,7 +7,6 @@ using FluentMigrator.Runner.BatchParser;
 using FluentMigrator.Runner.Generators.SQLite;
 using FluentMigrator.Runner.Processors.SQLite;
 using Microsoft.Extensions.DependencyInjection;
-using System.Data;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {

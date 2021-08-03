@@ -8,6 +8,5 @@ namespace NzbDrone.Core.ThingiProvider
             : base("Couldn't find config contract " + contract)
         {
         }
-
     }
 }

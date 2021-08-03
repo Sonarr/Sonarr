@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .With(v => v.EpisodeNumber, episodeNumber)
                 .With(v => v.SceneSeasonNumber, sceneSeasonNumber)
                 .With(v => v.SceneEpisodeNumber, sceneEpisodeNumber)
-                .With(v => v.AirDate = (airDate ?? $"{2000 + seasonNumber}-{(episodeNumber % 12) + 1:00}-05"))
+                .With(v => v.AirDate = airDate ?? $"{2000 + seasonNumber}-{(episodeNumber % 12) + 1:00}-05")
                 .With(v => v.AirDateUtc = DateTime.ParseExact(v.AirDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToUniversalTime())
                 .With(v => v.Monitored = true)
                 .Build();
@@ -138,7 +138,8 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         [Test]
         public void Tags_IndexerTags_SeriesNoTags_IndexerNotIncluded()
         {
-            _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition {
+            _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition
+            {
                 Id = 1,
                 Tags = new HashSet<int> { 3 }
             });
@@ -462,7 +463,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             WithEpisode(1, 2, null, null, "2005-12-31");
             WithEpisode(1, 3, null, null, "2006-01-01");
             _xemSeries.SeriesType = SeriesTypes.Daily;
-           _xemEpisodes[0].Monitored = false;
+            _xemEpisodes[0].Monitored = false;
 
             var allCriteria = WatchForSearchCriteria();
 

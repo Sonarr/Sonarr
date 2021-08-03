@@ -375,7 +375,8 @@ namespace NzbDrone.Core.Test.ParserTests
             ParseAndVerifyQuality(title, Quality.Unknown, proper);
         }
 
-        [Test, TestCaseSource(nameof(SelfQualityParserCases))]
+        [Test]
+        [TestCaseSource(nameof(SelfQualityParserCases))]
         public void parsing_our_own_quality_enum_name(Quality quality)
         {
             var fileName = string.Format("My series S01E01 [{0}]", quality.Name);
@@ -383,7 +384,8 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Quality.Should().Be(quality);
         }
 
-        [Test, TestCaseSource(nameof(OtherSourceQualityParserCases))]
+        [Test]
+        [TestCaseSource(nameof(OtherSourceQualityParserCases))]
         public void should_parse_quality_from_other_source(string qualityString, Quality quality)
         {
             foreach (var c in new char[] { '-', '.', ' ', '_' })

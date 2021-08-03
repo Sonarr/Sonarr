@@ -329,6 +329,7 @@ namespace NzbDrone.Core.Notifications.Discord
 
             _proxy.SendPayload(payload, Settings);
         }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
@@ -346,7 +347,6 @@ namespace NzbDrone.Core.Notifications.Discord
                 var payload = CreatePayload(message);
 
                 _proxy.SendPayload(payload, Settings);
-
             }
             catch (DiscordException ex)
             {

@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentMigrator;
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Datastore.Migration
             foreach (Match match in matches)
             {
                 var tokenMatch = GetTokenMatch(match);
-                var qualityFullToken = string.Format("Quality{0}Full", tokenMatch.Separator); ;
+                var qualityFullToken = string.Format("Quality{0}Full", tokenMatch.Separator);
 
                 if (tokenMatch.Token.All(t => !char.IsLetter(t) || char.IsLower(t)))
                 {

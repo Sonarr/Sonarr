@@ -22,12 +22,18 @@ namespace NzbDrone.Core.Indexers.Torznab
             var xdoc = LoadXmlDocument(indexerResponse);
             var error = xdoc.Descendants("error").FirstOrDefault();
 
-            if (error == null) return true;
+            if (error == null)
+            {
+                return true;
+            }
 
             var code = Convert.ToInt32(error.Attribute("code").Value);
             var errorMessage = error.Attribute("description").Value;
 
-            if (code >= 100 && code <= 199) throw new ApiKeyException("Invalid API key");
+            if (code >= 100 && code <= 199)
+            {
+                throw new ApiKeyException("Invalid API key");
+            }
 
             if (!indexerResponse.Request.Url.FullUri.Contains("apikey=") && errorMessage == "Missing parameter")
             {
@@ -137,6 +143,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 
             return 0;
         }
+
         protected override string GetInfoHash(XElement item)
         {
             return TryGetTorznabAttribute(item, "infohash");

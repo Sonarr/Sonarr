@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ChangeEmailAddressType(IDbConnection conn, IDbTransaction tran)
         {
-
             using (var getEmailCmd = conn.CreateCommand())
             {
                 getEmailCmd.Transaction = tran;

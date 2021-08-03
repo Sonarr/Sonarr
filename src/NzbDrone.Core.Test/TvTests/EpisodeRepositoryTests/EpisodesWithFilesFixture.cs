@@ -4,9 +4,9 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 {
@@ -42,12 +42,11 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             Db.InsertMany(_episodes);
         }
 
-
         [Test]
         public void should_only_get_files_that_have_episode_files()
         {
             var result = Subject.EpisodesWithFiles(SERIES_ID);
-            
+
             result.Should().OnlyContain(e => e.EpisodeFileId > 0);
             result.Should().HaveCount(_episodeFiles.Count);
         }

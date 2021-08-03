@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var settings = Json.Deserialize<Dictionary<string, object>>(settingsJson);
 
                         var urlBase = settings.GetValueOrDefault("urlBase", "") as string;
-                        
+
                         if (urlBase.IsNullOrWhiteSpace())
                         {
                             settings["urlBase"] = "/transmission/";

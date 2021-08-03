@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Update.Table("Series")
-                  .Set(new {Ratings = "{}"})
+                  .Set(new { Ratings = "{}" })
                   .AllRows();
 
             Update.Table("Episodes")

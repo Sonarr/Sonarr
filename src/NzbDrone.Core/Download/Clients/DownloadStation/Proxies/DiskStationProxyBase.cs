@@ -61,7 +61,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
         protected DiskStationResponse<T> ProcessRequest<T>(HttpRequestBuilder requestBuilder,
                                                          string operation,
-                                                         DownloadStationSettings settings) where T : new()
+                                                         DownloadStationSettings settings)
+            where T : new()
         {
             return ProcessRequest<T>(requestBuilder, operation, _apiType, settings);
         }
@@ -69,7 +70,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
         private DiskStationResponse<T> ProcessRequest<T>(HttpRequestBuilder requestBuilder,
                                                          string operation,
                                                          DiskStationApi api,
-                                                         DownloadStationSettings settings) where T : new()
+                                                         DownloadStationSettings settings)
+            where T : new()
         {
             var request = requestBuilder.Build();
             HttpResponse response;

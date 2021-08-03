@@ -28,10 +28,16 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             }
 
             var singleEpisodeSpec = searchCriteria as SingleEpisodeSearchCriteria;
-            if (singleEpisodeSpec != null) return IsSatisfiedBy(remoteEpisode, singleEpisodeSpec);
+            if (singleEpisodeSpec != null)
+            {
+                return IsSatisfiedBy(remoteEpisode, singleEpisodeSpec);
+            }
 
             var animeEpisodeSpec = searchCriteria as AnimeEpisodeSearchCriteria;
-            if (animeEpisodeSpec != null) return IsSatisfiedBy(remoteEpisode, animeEpisodeSpec);
+            if (animeEpisodeSpec != null)
+            {
+                return IsSatisfiedBy(remoteEpisode, animeEpisodeSpec);
+            }
 
             return Decision.Accept();
         }

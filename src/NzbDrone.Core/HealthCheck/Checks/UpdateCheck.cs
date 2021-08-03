@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -38,21 +38,24 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 if (OsInfo.IsOsx && startupFolder.GetAncestorFolders().Contains("AppTranslocation"))
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error,
+                    return new HealthCheck(GetType(),
+                        HealthCheckResult.Error,
                         string.Format("Cannot install update because startup folder '{0}' is in an App Translocation folder.", startupFolder),
                         "#cannot-install-update-because-startup-folder-is-in-an-app-translocation-folder");
                 }
 
                 if (!_diskProvider.FolderWritable(startupFolder))
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error,
+                    return new HealthCheck(GetType(),
+                        HealthCheckResult.Error,
                         string.Format("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", startupFolder, Environment.UserName),
                         "#cannot-install-update-because-startup-folder-is-not-writable-by-the-user");
                 }
 
                 if (!_diskProvider.FolderWritable(uiFolder))
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error,
+                    return new HealthCheck(GetType(),
+                        HealthCheckResult.Error,
                         string.Format("Cannot install update because UI folder '{0}' is not writable by the user '{1}'.", uiFolder, Environment.UserName),
                         "#cannot-install-update-because-ui-folder-is-not-writable-by-the-user");
                 }

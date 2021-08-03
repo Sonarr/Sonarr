@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Notifications.Join
         {
             _proxy.SendNotification(EPISODE_DELETED_TITLE_BRANDED, deleteMessage.Message, Settings);
         }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(SERIES_DELETED_TITLE_BRANDED, deleteMessage.Message, Settings);

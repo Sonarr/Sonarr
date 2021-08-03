@@ -15,7 +15,8 @@ namespace NzbDrone.Core.Indexers.HDBits
 
         public HDBits(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, indexerStatusService, configService, parsingService, logger)
-        { }
+        {
+        }
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {

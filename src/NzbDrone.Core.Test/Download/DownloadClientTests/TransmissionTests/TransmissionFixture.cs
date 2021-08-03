@@ -284,7 +284,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             item.RemainingTime.Should().NotHaveValue();
         }
 
-
         [Test]
         public void should_not_be_removable_and_should_not_allow_move_files_if_max_ratio_reached_and_not_stopped()
         {
@@ -339,7 +338,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             item.CanBeRemoved.Should().BeFalse();
             item.CanMoveFiles.Should().BeFalse();
         }
-
 
         [Test]
         public void should_not_be_removable_and_should_not_allow_move_files_if_max_idletime_reached_and_not_paused()

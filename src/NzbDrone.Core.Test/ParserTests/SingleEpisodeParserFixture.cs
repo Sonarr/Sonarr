@@ -5,7 +5,6 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
-
     [TestFixture]
     public class SingleEpisodeParserFixture : CoreTest
     {
@@ -96,12 +95,14 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("1x03 - 274 [1080p BluRay].mkv", "", 1, 3)]
         [TestCase("1x03 - The 112th Congress [1080p BluRay].mkv", "", 1, 3)]
         [TestCase("Series.2012.S02E14.720p.HDTV.X264-DIMENSION [PublicHD].mkv", "Series 2012", 2, 14)]
+
         //[TestCase("Sex And The City S6E15 - Catch-38 [RavyDavy].avi", "Sex And The City", 6, 15)] // -38 is getting treated as abs number
         [TestCase("Series.2009.S06E03.720p.HDTV.X264-DIMENSION [PublicHD].mkv", "Series 2009", 6, 3)]
         [TestCase("20-1.2014.S02E01.720p.HDTV.x264-CROOKS", "20-1 2014", 2, 1)]
         [TestCase("Series - S01E09 - Debate 109", "Series", 1, 9)]
         [TestCase("Series - S02E02 - My Maserati Does 185", "Series", 2, 2)]
         [TestCase("6x13 - The Series Show 100th Episode Special", "", 6, 13)]
+
         //[TestCase("Series - S01E01 - Genesis 101 [HDTV-720p]", "Series", 1, 1)]
         //[TestCase("The Series S02E01 HDTV x264-KILLERS [eztv]", "The Series", 2, 1)]
         [TestCase("The Series And the Show - S41 E10478 - 2014-08-15", "The Series And the Show", 41, 10478)]
@@ -109,6 +110,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title [1x05] Episode Title", "Series Title", 1, 5)]
         [TestCase("Series Title [S01E05] Episode Title", "Series Title", 1, 5)]
         [TestCase("Series Title Season 01 Episode 05 720p", "Series Title", 1, 5)]
+
         //[TestCase("Off the Series - 101 - Developers (460p.x264.vorbis-2.0) [449].mkv", "Off the Series", 1, 1)]
         [TestCase("The Series And the Show - S42 E10713 - 2015-07-20.mp4", "The Series And the Show", 42, 10713)]
         [TestCase("Series.103.hdtv-lol[ettv].mp4", "Series", 1, 3)]
@@ -149,6 +151,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Anime Title - S2010E994 [0994] [2010-02-28] - Episode Title [x264 720p][AAC 2ch][HS][Shion+GakiDave]", "Anime Title", 2010, 994)]
         [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.201][AC3 5.1 Castellano][www.pctnew.com]", "Series Title", 2, 1)]
         [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.1901][AC3 5.1 Castellano][www.pctnew.com]", "Series Title", 19, 1)]
+
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {

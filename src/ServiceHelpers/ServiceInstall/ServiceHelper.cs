@@ -41,8 +41,8 @@ namespace ServiceInstall
                                 };
 
             var process = new Process { StartInfo = startInfo };
-            process.OutputDataReceived += (OnDataReceived);
-            process.ErrorDataReceived += (OnDataReceived);
+            process.OutputDataReceived += OnDataReceived;
+            process.ErrorDataReceived += OnDataReceived;
 
             process.Start();
 

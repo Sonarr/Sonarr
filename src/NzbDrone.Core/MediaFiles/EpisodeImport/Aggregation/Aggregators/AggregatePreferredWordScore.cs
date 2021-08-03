@@ -28,7 +28,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             {
                 scores.Add(_preferredWordService.Calculate(series, localEpisode.SceneName, 0));
             }
-            
+
             localEpisode.PreferredWordScore = scores.MaxOrDefault();
 
             return localEpisode;

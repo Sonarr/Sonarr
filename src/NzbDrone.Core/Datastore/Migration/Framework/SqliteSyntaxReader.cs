@@ -5,7 +5,6 @@ using System.Text;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
-
     public class SqliteSyntaxReader
     {
         public string Buffer { get; private set; }
@@ -174,6 +173,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 {
                     throw CreateSyntaxException("Unexpected sequence.");
                 }
+
                 Type = TokenType.StringToken;
                 Value = Buffer.Substring(start, end - start);
                 return Type;
@@ -201,6 +201,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 {
                     throw CreateSyntaxException("Expected ListEnd first");
                 }
+
                 if (Type == TokenType.ListStart)
                 {
                     SkipTillToken(TokenType.ListEnd);

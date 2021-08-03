@@ -13,7 +13,9 @@ namespace NzbDrone.Common.EnsureThat
         public static Param<string> IsNotNullOrWhiteSpace(this Param<string> param)
         {
             if (string.IsNullOrWhiteSpace(param.Value))
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrWhiteSpace);
+            }
 
             return param;
         }
@@ -22,7 +24,9 @@ namespace NzbDrone.Common.EnsureThat
         public static Param<string> IsNotNullOrEmpty(this Param<string> param)
         {
             if (string.IsNullOrEmpty(param.Value))
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrEmpty);
+            }
 
             return param;
         }
@@ -31,15 +35,21 @@ namespace NzbDrone.Common.EnsureThat
         public static Param<string> HasLengthBetween(this Param<string> param, int minLength, int maxLength)
         {
             if (string.IsNullOrEmpty(param.Value))
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrEmpty);
+            }
 
             var length = param.Value.Length;
 
             if (length < minLength)
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotInRange_ToShort.Inject(minLength, maxLength, length));
+            }
 
             if (length > maxLength)
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotInRange_ToLong.Inject(minLength, maxLength, length));
+            }
 
             return param;
         }
@@ -48,12 +58,16 @@ namespace NzbDrone.Common.EnsureThat
         public static Param<string> IsLongerThan(this Param<string> param, int minLength)
         {
             if (string.IsNullOrEmpty(param.Value))
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrEmpty);
+            }
 
             var length = param.Value.Length;
 
             if (length < minLength)
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, "The string is not long enough. Must be at least '{0}' but was '{1}' characters long.".Inject(minLength, length));
+            }
 
             return param;
         }
@@ -71,6 +85,7 @@ namespace NzbDrone.Common.EnsureThat
             {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_NoMatch.Inject(param.Value, match));
             }
+
             return param;
         }
 
@@ -78,7 +93,9 @@ namespace NzbDrone.Common.EnsureThat
         public static Param<string> IsRelativePath(this Param<string> param)
         {
             if (string.IsNullOrWhiteSpace(param.Value))
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrWhiteSpace);
+            }
 
             if (!param.Value.EndsWith("\\"))
             {
@@ -97,9 +114,14 @@ namespace NzbDrone.Common.EnsureThat
         public static Param<string> IsValidPath(this Param<string> param)
         {
             if (string.IsNullOrWhiteSpace(param.Value))
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrWhiteSpace);
+            }
 
-            if (param.Value.IsPathValid()) return param;
+            if (param.Value.IsPathValid())
+            {
+                return param;
+            }
 
             if (OsInfo.IsWindows)
             {

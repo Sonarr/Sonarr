@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.Datastore.Converters
         {
             var context = new ConverterContext
                           {
-                              DbValue = (long)2
+                              DbValue = 2L
                           };
 
             Assert.Throws<ConversionException>(() => Subject.FromDB(context));

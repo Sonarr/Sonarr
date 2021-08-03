@@ -1,9 +1,9 @@
-﻿using System.Linq;
 using System.Collections.Generic;
-using NzbDrone.Core.Indexers;
+using System.Linq;
+using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Download.Clients;
-using NLog;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Download
 {
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Download
         public DownloadClientProvider(IDownloadClientStatusService downloadClientStatusService,
                                       IDownloadClientFactory downloadClientFactory,
                                       IIndexerFactory indexerFactory,
-                                      ICacheManager cacheManager, 
+                                      ICacheManager cacheManager,
                                       Logger logger)
         {
             _logger = logger;
@@ -39,7 +39,10 @@ namespace NzbDrone.Core.Download
         {
             var availableProviders = _downloadClientFactory.GetAvailableProviders().Where(v => v.Protocol == downloadProtocol).ToList();
 
-            if (!availableProviders.Any()) return null;
+            if (!availableProviders.Any())
+            {
+                return null;
+            }
 
             if (indexerId > 0)
             {

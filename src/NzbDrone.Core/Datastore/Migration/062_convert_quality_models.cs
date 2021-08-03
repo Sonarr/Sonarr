@@ -46,7 +46,10 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         var newQualityModel = new QualityModel062 { Quality = quality.Quality, Revision = new Revision() };
                         if (quality.Proper)
+                        {
                             newQualityModel.Revision.Version = 2;
+                        }
+
                         var newQualityJson = newQualityModel.ToJson();
 
                         qualitiesToUpdate.Add(qualityJson, newQualityJson);

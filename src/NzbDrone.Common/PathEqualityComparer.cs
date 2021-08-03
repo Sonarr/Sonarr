@@ -10,7 +10,6 @@ namespace NzbDrone.Common
 
         private PathEqualityComparer()
         {
-
         }
 
         public bool Equals(string x, string y)

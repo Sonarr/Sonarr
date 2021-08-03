@@ -2,7 +2,6 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.MediaCover
 {
-
     public enum MediaCoverTypes
     {
         Unknown = 0,

@@ -47,8 +47,8 @@ namespace Sonarr.Api.V3.Qualities
             _qualityDefinitionService.UpdateMany(qualityDefinitions);
 
             return ResponseWithCode(_qualityDefinitionService.All()
-                                            .ToResource()
-                                            , HttpStatusCode.Accepted);
+                                            .ToResource(),
+                                            HttpStatusCode.Accepted);
         }
     }
 }

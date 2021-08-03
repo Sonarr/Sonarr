@@ -3,10 +3,10 @@ using System.Linq;
 using System.Net;
 using FluentAssertions;
 using NLog;
-using Sonarr.Http.REST;
 using NzbDrone.Common.Serializer;
 using RestSharp;
 using Sonarr.Http;
+using Sonarr.Http.REST;
 
 namespace NzbDrone.Integration.Test.Client
 {
@@ -84,7 +84,6 @@ namespace NzbDrone.Integration.Test.Client
         public ClientBase(IRestClient restClient, string apiKey, string resource = null)
             : base(restClient, apiKey, resource ?? new TResource().ResourceName)
         {
-
         }
 
         public List<TResource> All(Dictionary<string, object> queryParams = null)

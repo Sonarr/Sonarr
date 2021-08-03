@@ -1,8 +1,8 @@
-﻿namespace ServiceInstall
+namespace ServiceInstall
 {
     public static class Program
     {
-        static void Main()
+        private static void Main()
         {
             ServiceHelper.Run(@"/i");
         }

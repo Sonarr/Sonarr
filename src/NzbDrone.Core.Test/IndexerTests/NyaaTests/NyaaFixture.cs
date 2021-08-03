@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NyaaTests
             torrentInfo.Size.Should().Be(639211930); //609.6 MiB
             torrentInfo.MagnetUrl.Should().Be(null);
             torrentInfo.Seeders.Should().Be(4);
-            torrentInfo.Peers.Should().Be(3+4);
+            torrentInfo.Peers.Should().Be(3 + 4);
         }
     }
 }

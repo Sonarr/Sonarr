@@ -20,7 +20,10 @@ namespace Sonarr.Api.V3.Tags
     {
         public static TagDetailsResource ToResource(this TagDetails model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new TagDetailsResource
             {

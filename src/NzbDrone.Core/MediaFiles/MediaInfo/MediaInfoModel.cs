@@ -10,6 +10,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
     public class MediaInfoModel : IEmbeddedDocument
     {
         public string ContainerFormat { get; set; }
+
         // Deprecated according to MediaInfo
         public string VideoCodec { get; set; }
         public string VideoFormat { get; set; }
