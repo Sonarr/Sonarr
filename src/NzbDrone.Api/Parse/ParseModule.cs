@@ -32,7 +32,10 @@ namespace NzbDrone.Api.Parse
 
             if (parsedEpisodeInfo == null)
             {
-                return null;
+                return new ParseResource
+                {
+                    Title = title
+                };
             }
 
             var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0);
