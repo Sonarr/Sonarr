@@ -52,7 +52,6 @@ namespace Sonarr.Http.Extensions.Pipelines
                     response.Contents = responseStream => _writeGZipStream(contents, responseStream);
                 }
             }
-
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to gzip response");

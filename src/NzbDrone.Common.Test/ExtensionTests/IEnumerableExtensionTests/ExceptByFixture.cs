@@ -56,7 +56,7 @@ namespace NzbDrone.Common.Test.ExtensionTests.IEnumerableExtensionTests
             var result = first.ExceptBy(o => o.Prop1, second, o => o.Prop1, StringComparer.InvariantCultureIgnoreCase).ToList();
 
             result.Should().HaveCount(1);
-            result.First().GetType().Should().Be(typeof (Object1));
+            result.First().GetType().Should().Be(typeof(Object1));
             result.First().Prop1.Should().Be("two");
         }
     }

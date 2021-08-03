@@ -11,7 +11,6 @@ namespace NzbDrone.Core.Update
 {
     public interface IUpdaterConfigProvider
     {
-
     }
 
     public class UpdaterConfigProvider : IUpdaterConfigProvider, IHandle<ApplicationStartedEvent>

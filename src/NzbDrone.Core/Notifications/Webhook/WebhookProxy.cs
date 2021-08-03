@@ -1,6 +1,6 @@
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {
@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 {
                     request.AddBasicAuthentication(settings.Username, settings.Password);
                 }
+
                 _httpClient.Execute(request);
             }
             catch (HttpException ex)

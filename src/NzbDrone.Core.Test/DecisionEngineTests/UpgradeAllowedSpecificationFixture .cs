@@ -1,11 +1,11 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Languages;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
@@ -32,8 +32,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.DVD),
-                Language.French
-            ).Should().BeFalse();
+                Language.French)
+            .Should().BeFalse();
         }
 
         [Test]
@@ -55,8 +55,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.Bluray1080p),
-                Language.English
-            ).Should().BeFalse();
+                Language.English)
+            .Should().BeFalse();
         }
 
         [Test]
@@ -78,8 +78,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.DVD),
-                Language.French
-            ).Should().BeTrue();
+                Language.French)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -101,8 +101,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.DVD),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -124,8 +124,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.DVD),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -147,8 +147,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.French,
                 new QualityModel(Quality.DVD),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -170,8 +170,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.French,
                 new QualityModel(Quality.DVD),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -193,8 +193,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.Bluray1080p),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -216,8 +216,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.DVD),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -239,8 +239,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.DVD),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -262,8 +262,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.SDTV),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
 
         [Test]
@@ -285,8 +285,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityModel(Quality.DVD),
                 Language.English,
                 new QualityModel(Quality.SDTV),
-                Language.English
-            ).Should().BeTrue();
+                Language.English)
+            .Should().BeTrue();
         }
     }
 }

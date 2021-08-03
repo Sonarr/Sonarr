@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers.Exceptions;
@@ -30,6 +30,5 @@ namespace NzbDrone.Core.Indexers
 
             return base.PreProcess(indexerResponse);
         }
-
     }
 }

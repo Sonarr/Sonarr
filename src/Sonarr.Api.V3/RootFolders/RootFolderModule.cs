@@ -20,8 +20,7 @@ namespace Sonarr.Api.V3.RootFolders
                                 MappedNetworkDriveValidator mappedNetworkDriveValidator,
                                 StartupFolderValidator startupFolderValidator,
                                 SystemFolderValidator systemFolderValidator,
-                                FolderWritableValidator folderWritableValidator
-            )
+                                FolderWritableValidator folderWritableValidator)
             : base(signalRBroadcaster)
         {
             _rootFolderService = rootFolderService;

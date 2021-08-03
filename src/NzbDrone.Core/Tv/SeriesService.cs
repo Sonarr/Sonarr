@@ -104,11 +104,13 @@ namespace NzbDrone.Core.Tv
                 // no series matched
                 return null;
             }
+
             if (list.Count == 1)
             {
                 // return the first series if there is only one
                 return list.Single();
             }
+
             // build ordered list of series by position in the search string
             var query =
                 list.Select(series => new
@@ -117,7 +119,7 @@ namespace NzbDrone.Core.Tv
                     length = series.CleanTitle.Length,
                     series = series
                 })
-                    .Where(s => (s.position>=0))
+                    .Where(s => (s.position >= 0))
                     .ToList()
                     .OrderBy(s => s.position)
                     .ThenByDescending(s => s.length)

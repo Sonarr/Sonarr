@@ -12,8 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Execute.Sql(
                 "UPDATE Indexers SET Settings = Replace(Settings, 'kickass.so', 'kat.cr') WHERE Implementation = 'KickassTorrents';" +
                 "UPDATE Indexers SET Settings = Replace(Settings, 'kickass.to', 'kat.cr') WHERE Implementation = 'KickassTorrents';" +
-                "UPDATE Indexers SET Settings = Replace(Settings, 'http://', 'https://') WHERE Implementation = 'KickassTorrents';"
-           );
+                "UPDATE Indexers SET Settings = Replace(Settings, 'http://', 'https://') WHERE Implementation = 'KickassTorrents';");
         }
     }
 

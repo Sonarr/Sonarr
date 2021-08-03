@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
@@ -10,9 +10,9 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.Validation;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
 {
@@ -58,7 +58,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 catch (DownloadClientException)
                 {
                     _logger.Warn("Failed to set post-import torrent label \"{0}\" for {1} in qBittorrent. Does the label exist?",
-                        Settings.TvImportedCategory, downloadClientItem.Title);
+                        Settings.TvImportedCategory,
+                        downloadClientItem.Title);
                 }
             }
         }
@@ -73,14 +74,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var setShareLimits = remoteEpisode.SeedConfiguration != null && (remoteEpisode.SeedConfiguration.Ratio.HasValue || remoteEpisode.SeedConfiguration.SeedTime.HasValue);
             var addHasSetShareLimits = setShareLimits && ProxyApiVersion >= new Version(2, 8, 1);
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
-            var moveToTop = (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First || !isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First);
+            var moveToTop = (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First) || (!isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First);
             var forceStart = (QBittorrentState)Settings.InitialState == QBittorrentState.ForceStart;
 
             Proxy.AddTorrentFromUrl(magnetLink, addHasSetShareLimits && setShareLimits ? remoteEpisode.SeedConfiguration : null, Settings);
 
-            if (!addHasSetShareLimits && setShareLimits || moveToTop || forceStart)
+            if ((!addHasSetShareLimits && setShareLimits) || moveToTop || forceStart)
             {
-
                 if (!WaitForTorrent(hash))
                 {
                     return hash;
@@ -126,19 +126,18 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return hash;
         }
 
-        protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, Byte[] fileContent)
+        protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             var setShareLimits = remoteEpisode.SeedConfiguration != null && (remoteEpisode.SeedConfiguration.Ratio.HasValue || remoteEpisode.SeedConfiguration.SeedTime.HasValue);
             var addHasSetShareLimits = setShareLimits && ProxyApiVersion >= new Version(2, 8, 1);
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
-            var moveToTop = (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First || !isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First);
+            var moveToTop = (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First) || (!isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First);
             var forceStart = (QBittorrentState)Settings.InitialState == QBittorrentState.ForceStart;
 
             Proxy.AddTorrentFromFile(filename, fileContent, addHasSetShareLimits ? remoteEpisode.SeedConfiguration : null, Settings);
 
-            if (!addHasSetShareLimits && setShareLimits || moveToTop || forceStart)
+            if ((!addHasSetShareLimits && setShareLimits) || moveToTop || forceStart)
             {
-
                 if (!WaitForTorrent(hash))
                 {
                     return hash;
@@ -236,7 +235,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 // Avoid removing torrents that haven't reached the global max ratio.
                 // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
-                item.CanMoveFiles = item.CanBeRemoved = (torrent.State == "pausedUP" && HasReachedSeedLimit(torrent, config));
+                item.CanMoveFiles = item.CanBeRemoved = torrent.State == "pausedUP" && HasReachedSeedLimit(torrent, config);
 
                 switch (torrent.State)
                 {
@@ -284,6 +283,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                             item.Status = DownloadItemStatus.Warning;
                             item.Message = "qBittorrent cannot resolve magnet link with DHT disabled";
                         }
+
                         break;
 
                     case "forcedDL": // torrent is being downloaded, and was forced started
@@ -374,7 +374,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            if (failures.HasErrors()) return;
+            if (failures.HasErrors())
+            {
+                return;
+            }
+
             failures.AddIfNotNull(TestCategory());
             failures.AddIfNotNull(TestPrioritySupport());
             failures.AddIfNotNull(TestGetTorrents());
@@ -418,7 +422,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 var config = Proxy.GetConfig(Settings);
                 if ((config.MaxRatioEnabled || config.MaxSeedingTimeEnabled) && (config.MaxRatioAction == QBittorrentMaxRatioAction.Remove || config.MaxRatioAction == QBittorrentMaxRatioAction.DeleteFiles))
                 {
-                    return new NzbDroneValidationFailure(String.Empty, "qBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
+                    return new NzbDroneValidationFailure(string.Empty, "qBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
                     {
                         DetailedDescription = "Sonarr will be unable to perform Completed Download Handling as configured. You can fix this in qBittorrent ('Tools -> Options...' in the menu) by changing 'Options -> BitTorrent -> Share Ratio Limiting' from 'Remove them' to 'Pause them'."
                     };
@@ -442,7 +446,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                         DetailedDescription = "Please verify the hostname and port."
                     };
                 }
-                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+
+                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
             catch (Exception ex)
             {
@@ -533,7 +538,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to test qBittorrent");
-                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
 
             return null;
@@ -548,7 +553,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to get torrents");
-                return new NzbDroneValidationFailure(String.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 
             return null;
@@ -574,15 +579,23 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             if (torrent.RatioLimit >= 0)
             {
-                if (torrent.Ratio >= torrent.RatioLimit) return true;
+                if (torrent.Ratio >= torrent.RatioLimit)
+                {
+                    return true;
+                }
             }
             else if (torrent.RatioLimit == -2 && config.MaxRatioEnabled)
             {
-                if (torrent.Ratio >= config.MaxRatio) return true;
+                if (torrent.Ratio >= config.MaxRatio)
+                {
+                    return true;
+                }
             }
 
-            if (HasReachedSeedingTimeLimit(torrent, config)) return true;
-
+            if (HasReachedSeedingTimeLimit(torrent, config))
+            {
+                return true;
+            }
 
             return false;
         }

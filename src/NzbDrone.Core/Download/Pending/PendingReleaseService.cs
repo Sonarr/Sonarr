@@ -289,7 +289,10 @@ namespace NzbDrone.Core.Download.Pending
                 var series = seriesMap.GetValueOrDefault(release.SeriesId);
 
                 // Just in case the series was removed, but wasn't cleaned up yet (housekeeper will clean it up)
-                if (series == null) return null;
+                if (series == null)
+                {
+                    return null;
+                }
 
                 release.RemoteEpisode = new RemoteEpisode
                 {

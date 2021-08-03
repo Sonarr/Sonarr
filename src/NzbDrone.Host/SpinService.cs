@@ -65,7 +65,7 @@ namespace NzbDrone.Host
                         path = Path.GetDirectoryName(path);
                     }
                 }
-                
+
                 _processProvider.SpawnNewProcess(path, restartArgs);
             }
         }

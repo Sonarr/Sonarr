@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
         public void Setup()
         {
             _series = Builder<Series>.CreateNew()
-                                     .With(s => s.Tags = new HashSet<int>(new[] {1, 2}))
+                                     .With(s => s.Tags = new HashSet<int>(new[] { 1, 2 }))
                                      .Build();
 
             _releaseProfiles = new List<ReleaseProfile>();
@@ -57,12 +57,11 @@ namespace NzbDrone.Core.Test.Profiles.Releases.PreferredWordService
                                                  }
             });
 
-
             Mocker.GetMock<ITermMatcherService>()
                   .Setup(s => s.MatchingTerm(It.IsAny<string>(), _title))
                   .Returns<string, string>((term, title) => title.Contains(term) ? term : null);
         }
-  
+
         private void GivenReleaseProfile()
         {
             Mocker.GetMock<IReleaseProfileService>()

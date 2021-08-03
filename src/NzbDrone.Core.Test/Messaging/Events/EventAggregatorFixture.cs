@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
@@ -12,33 +12,31 @@ namespace NzbDrone.Core.Test.Messaging.Events
     [TestFixture]
     public class EventAggregatorFixture : TestBase<EventAggregator>
     {
-        private Mock<IHandle<EventA>> HandlerA1;
-        private Mock<IHandle<EventA>> HandlerA2;
+        private Mock<IHandle<EventA>> _handlerA1;
+        private Mock<IHandle<EventA>> _handlerA2;
 
-        private Mock<IHandle<EventB>> HandlerB1;
-        private Mock<IHandle<EventB>> HandlerB2;
+        private Mock<IHandle<EventB>> _handlerB1;
+        private Mock<IHandle<EventB>> _handlerB2;
 
-        private Mock<IHandleAsync<EventA>> AsyncHandlerA1;
-
+        private Mock<IHandleAsync<EventA>> _asyncHandlerA1;
 
         [SetUp]
         public void Setup()
         {
-            HandlerA1 = new Mock<IHandle<EventA>>();
-            HandlerA2 = new Mock<IHandle<EventA>>();
-            HandlerB1 = new Mock<IHandle<EventB>>();
-            HandlerB2 = new Mock<IHandle<EventB>>();
+            _handlerA1 = new Mock<IHandle<EventA>>();
+            _handlerA2 = new Mock<IHandle<EventA>>();
+            _handlerB1 = new Mock<IHandle<EventB>>();
+            _handlerB2 = new Mock<IHandle<EventB>>();
 
-            AsyncHandlerA1 = new Mock<IHandleAsync<EventA>>();
+            _asyncHandlerA1 = new Mock<IHandleAsync<EventA>>();
 
             Mocker.GetMock<IServiceFactory>()
                   .Setup(c => c.BuildAll<IHandle<EventA>>())
-                  .Returns(new List<IHandle<EventA>> { HandlerA1.Object, HandlerA2.Object });
+                  .Returns(new List<IHandle<EventA>> { _handlerA1.Object, _handlerA2.Object });
 
             Mocker.GetMock<IServiceFactory>()
                   .Setup(c => c.BuildAll<IHandle<EventB>>())
-                  .Returns(new List<IHandle<EventB>> { HandlerB1.Object, HandlerB2.Object });
-
+                  .Returns(new List<IHandle<EventB>> { _handlerB1.Object, _handlerB2.Object });
         }
 
         [Test]
@@ -48,8 +46,8 @@ namespace NzbDrone.Core.Test.Messaging.Events
 
             Subject.PublishEvent(eventA);
 
-            HandlerA1.Verify(c => c.Handle(eventA), Times.Once());
-            HandlerA2.Verify(c => c.Handle(eventA), Times.Once());
+            _handlerA1.Verify(c => c.Handle(eventA), Times.Once());
+            _handlerA2.Verify(c => c.Handle(eventA), Times.Once());
         }
 
         [Test]
@@ -57,34 +55,30 @@ namespace NzbDrone.Core.Test.Messaging.Events
         {
             var eventA = new EventA();
 
-
             Subject.PublishEvent(eventA);
 
-            HandlerA1.Verify(c => c.Handle(eventA), Times.Once());
-            HandlerA2.Verify(c => c.Handle(eventA), Times.Once());
+            _handlerA1.Verify(c => c.Handle(eventA), Times.Once());
+            _handlerA2.Verify(c => c.Handle(eventA), Times.Once());
 
-            HandlerB1.Verify(c => c.Handle(It.IsAny<EventB>()), Times.Never());
-            HandlerB2.Verify(c => c.Handle(It.IsAny<EventB>()), Times.Never());
+            _handlerB1.Verify(c => c.Handle(It.IsAny<EventB>()), Times.Never());
+            _handlerB2.Verify(c => c.Handle(It.IsAny<EventB>()), Times.Never());
         }
-
 
         [Test]
         public void broken_handler_should_not_effect_others_handler()
         {
             var eventA = new EventA();
 
-
-            HandlerA1.Setup(c => c.Handle(It.IsAny<EventA>()))
+            _handlerA1.Setup(c => c.Handle(It.IsAny<EventA>()))
                        .Throws(new NotImplementedException());
 
             Subject.PublishEvent(eventA);
 
-            HandlerA1.Verify(c => c.Handle(eventA), Times.Once());
-            HandlerA2.Verify(c => c.Handle(eventA), Times.Once());
+            _handlerA1.Verify(c => c.Handle(eventA), Times.Once());
+            _handlerA2.Verify(c => c.Handle(eventA), Times.Once());
 
             ExceptionVerification.ExpectedErrors(1);
         }
-
 
        /* [Test]
         public void should_queue_multiple_async_events()
@@ -95,12 +89,12 @@ namespace NzbDrone.Core.Test.Messaging.Events
 
             var handlers = new List<IHandleAsync<EventA>>
                 {
-                    AsyncHandlerA1.Object, 
                     AsyncHandlerA1.Object,
                     AsyncHandlerA1.Object,
                     AsyncHandlerA1.Object,
                     AsyncHandlerA1.Object,
-                    AsyncHandlerA1.Object, 
+                    AsyncHandlerA1.Object,
+                    AsyncHandlerA1.Object,
                     AsyncHandlerA1.Object,
                 };
 
@@ -131,14 +125,11 @@ namespace NzbDrone.Core.Test.Messaging.Events
         }*/
     }
 
-
     public class EventA : IEvent
     {
-
     }
 
     public class EventB : IEvent
     {
-
     }
 }

@@ -11,8 +11,8 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Validation;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -149,8 +149,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 {
                     historyItem.Status = DownloadItemStatus.Completed;
                 }
-                else // Verifying/Moving etc
+                else
                 {
+                    // Verifying/Moving etc
                     historyItem.Status = DownloadItemStatus.Downloading;
                 }
 
@@ -167,10 +168,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                         {
                             historyItem.OutputPath = parent;
                         }
+
                         parent = parent.Directory;
                     }
                 }
-
 
                 historyItems.Add(historyItem);
             }
@@ -184,7 +185,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
             {
-                if (downloadClientItem.Category == Settings.TvCategory || downloadClientItem.Category == "*" && Settings.TvCategory.IsNullOrWhiteSpace())
+                if (downloadClientItem.Category == Settings.TvCategory || (downloadClientItem.Category == "*" && Settings.TvCategory.IsNullOrWhiteSpace()))
                 {
                     yield return downloadClientItem;
                 }
@@ -332,7 +333,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 minor = Convert.ToInt32(parsed.Groups["minor"].Value);
                 patch = Convert.ToInt32(parsed.Groups["patch"].Value.Replace("x", "0"));
             }
-
             else
             {
                 if (!version.Equals("develop", StringComparison.InvariantCultureIgnoreCase))
@@ -403,10 +403,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 {
                     return new ValidationFailure("APIKey", "API Key Incorrect");
                 }
+
                 if (ex.Message.ContainsIgnoreCase("API Key Required"))
                 {
                     return new ValidationFailure("APIKey", "API Key Required");
                 }
+
                 throw;
             }
 
@@ -455,6 +457,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     };
                 }
             }
+
             if (config.Misc.enable_tv_sorting && ContainsCategory(config.Misc.tv_categories, Settings.TvCategory))
             {
                 return new NzbDroneValidationFailure("TvCategory", "Disable TV Sorting")
@@ -463,6 +466,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     DetailedDescription = "You must disable Sabnzbd TV Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
                 };
             }
+
             if (config.Misc.enable_movie_sorting && ContainsCategory(config.Misc.movie_categories, Settings.TvCategory))
             {
                 return new NzbDroneValidationFailure("TvCategory", "Disable Movie Sorting")
@@ -471,6 +475,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     DetailedDescription = "You must disable Sabnzbd Movie Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
                 };
             }
+
             if (config.Misc.enable_date_sorting && ContainsCategory(config.Misc.date_categories, Settings.TvCategory))
             {
                 return new NzbDroneValidationFailure("TvCategory", "Disable Date Sorting")

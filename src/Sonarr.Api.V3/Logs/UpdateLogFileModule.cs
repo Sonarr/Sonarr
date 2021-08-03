@@ -25,7 +25,10 @@ namespace Sonarr.Api.V3.Logs
 
         protected override IEnumerable<string> GetLogFiles()
         {
-            if (!_diskProvider.FolderExists(_appFolderInfo.GetUpdateLogFolder())) return Enumerable.Empty<string>();
+            if (!_diskProvider.FolderExists(_appFolderInfo.GetUpdateLogFolder()))
+            {
+                return Enumerable.Empty<string>();
+            }
 
             return _diskProvider.GetFiles(_appFolderInfo.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly)
                                      .Where(f => Regex.IsMatch(Path.GetFileName(f), LOGFILE_ROUTE.TrimStart('/'), RegexOptions.IgnoreCase))

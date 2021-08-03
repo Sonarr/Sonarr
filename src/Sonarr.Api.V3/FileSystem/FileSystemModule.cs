@@ -61,7 +61,8 @@ namespace Sonarr.Api.V3.FileSystem
                 return new string[0];
             }
 
-            return _diskScanService.GetVideoFiles(path).Select(f => new {
+            return _diskScanService.GetVideoFiles(path).Select(f => new
+            {
                 Path = f,
                 RelativePath = path.GetRelativePath(f),
                 Name = Path.GetFileName(f)

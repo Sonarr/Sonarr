@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Profiles.Releases;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Organizer
 {
@@ -172,7 +172,7 @@ namespace NzbDrone.Core.Organizer
 
             _preferredWords = new PreferredWordMatchResults()
             {
-                All = new List<string>() {"iNTERNAL" }
+                All = new List<string>() { "iNTERNAL" }
             };
         }
 

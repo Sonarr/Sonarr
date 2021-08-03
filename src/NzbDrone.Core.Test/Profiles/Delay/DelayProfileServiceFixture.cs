@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.Profiles.Delay
             var moving = _last;
             var result = Subject.Reorder(moving.Id, null).OrderBy(d => d.Order).ToList();
             var moved = result.First();
-            
+
             moved.Id.Should().Be(moving.Id);
             moved.Order.Should().Be(1);
         }
@@ -75,7 +75,6 @@ namespace NzbDrone.Core.Test.Profiles.Delay
                 {
                     delayProfile.Order.Should().Be(int.MaxValue);
                 }
-
                 else
                 {
                     delayProfile.Order.Should().Be(i + 1);

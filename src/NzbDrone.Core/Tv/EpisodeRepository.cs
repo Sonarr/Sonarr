@@ -5,10 +5,10 @@ using Marr.Data.QGen;
 using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Extensions;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Tv
 {
@@ -150,7 +150,6 @@ namespace NzbDrone.Core.Tv
                              .Where<Episode>(e => e.AirDateUtc >= startDate)
                              .AndWhere(e => e.AirDateUtc <= endDate);
 
-
             if (!includeUnmonitored)
             {
                 query.AndWhere(e => e.Monitored)
@@ -184,7 +183,7 @@ namespace NzbDrone.Core.Tv
         public void SetMonitored(IEnumerable<int> ids, bool monitored)
         {
             var mapper = DataMapper;
-           
+
             mapper.AddParameter("monitored", monitored);
 
             var sqlUpdate = $"UPDATE Episodes SET Monitored = @monitored WHERE Id IN ({string.Join(", ", ids)}) AND Monitored != @monitored";
@@ -231,9 +230,10 @@ namespace NzbDrone.Core.Tv
                              .AndWhere(e => e.EpisodeFileId != 0)
                              .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
                              .AndWhere(
-                                String.Format("({0} OR {1})", 
-                                BuildLanguageCutoffWhereClause(languagesBelowCutoff), 
+                                string.Format("({0} OR {1})",
+                                BuildLanguageCutoffWhereClause(languagesBelowCutoff),
                                 BuildQualityCutoffWhereClause(qualitiesBelowCutoff)))
+
                              //.AndWhere(BuildQualityCutoffWhereClause(qualitiesBelowCutoff, languagesBelowCutoff))
                              .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
                              .Skip(pagingSpec.PagingOffset())
@@ -248,19 +248,18 @@ namespace NzbDrone.Core.Tv
 
         private string BuildLanguageCutoffWhereClause(List<LanguagesBelowCutoff> languagesBelowCutoff)
         {
-            var clauses = new List<String>();
+            var clauses = new List<string>();
 
             foreach (var language in languagesBelowCutoff)
             {
                 foreach (var belowCutoff in language.LanguageIds)
                 {
-                    clauses.Add(String.Format("([t1].[LanguageProfileId] = {0} AND [t2].[Language] = {1})", language.ProfileId, belowCutoff));
+                    clauses.Add(string.Format("([t1].[LanguageProfileId] = {0} AND [t2].[Language] = {1})", language.ProfileId, belowCutoff));
                 }
             }
 
-            return String.Format("({0})", String.Join(" OR ", clauses));
+            return string.Format("({0})", string.Join(" OR ", clauses));
         }
-
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
         {
@@ -283,9 +282,15 @@ namespace NzbDrone.Core.Tv
                                 .AndWhere(s => s.AirDate == date)
                                 .ToList();
 
-            if (!episodes.Any()) return null;
+            if (!episodes.Any())
+            {
+                return null;
+            }
 
-            if (episodes.Count == 1) return episodes.First();
+            if (episodes.Count == 1)
+            {
+                return episodes.First();
+            }
 
             _logger.Debug("Multiple episodes with the same air date were found, will exclude specials");
 

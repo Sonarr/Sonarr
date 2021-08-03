@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+﻿using System.Collections.Generic;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Blocklisting;
@@ -6,7 +7,6 @@ using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {

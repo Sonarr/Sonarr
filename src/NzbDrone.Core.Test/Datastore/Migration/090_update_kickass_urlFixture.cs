@@ -15,12 +15,13 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [TestCase("http://kickass.to")]
         [TestCase("https://kickass.to")]
         [TestCase("http://kat.cr")]
+
         // [TestCase("HTTP://KICKASS.SO")] Not sure if there is an easy way to do this, not sure if worth it.
         public void should_replace_old_url(string oldUrl)
         {
             var db = WithMigrationTestDb(c =>
             {
-                c.Insert.IntoTable("Indexers").Row(new 
+                c.Insert.IntoTable("Indexers").Row(new
                 {
                     Name = "Kickass_wrong_url",
                     Implementation = "KickassTorrents",

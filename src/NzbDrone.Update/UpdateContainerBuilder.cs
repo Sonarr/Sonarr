@@ -10,7 +10,6 @@ namespace NzbDrone.Update
         private UpdateContainerBuilder(IStartupContext startupContext, List<string> assemblies)
             : base(startupContext, assemblies)
         {
-
         }
 
         public static IContainer Build(IStartupContext startupContext)

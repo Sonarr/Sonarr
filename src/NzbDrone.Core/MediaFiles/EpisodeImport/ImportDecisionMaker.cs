@@ -191,6 +191,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private int GetNonSampleVideoFileCount(List<string> videoFiles, Series series, ParsedEpisodeInfo downloadClientItemInfo, ParsedEpisodeInfo folderInfo)
         {
             var isPossibleSpecialEpisode = downloadClientItemInfo?.IsPossibleSpecialEpisode ?? false;
+
             // If we might already have a special, don't try to get it from the folder info.
             isPossibleSpecialEpisode = isPossibleSpecialEpisode || (folderInfo?.IsPossibleSpecialEpisode ?? false);
 

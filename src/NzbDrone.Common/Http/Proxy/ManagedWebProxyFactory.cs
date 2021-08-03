@@ -31,6 +31,7 @@ namespace NzbDrone.Common.Http.Proxy
 
             return proxy;
         }
+
         private IWebProxy CreateWebProxy(HttpProxySettings proxySettings)
         {
             switch (proxySettings.Type)
@@ -44,6 +45,7 @@ namespace NzbDrone.Common.Http.Proxy
                     {
                         return new WebProxy(proxySettings.Host + ":" + proxySettings.Port, proxySettings.BypassLocalAddress, proxySettings.BypassListAsArray);
                     }
+
                 case ProxyType.Socks4:
                     return new SocksWebProxy(new ProxyConfig(IPAddress.Loopback, GetNextFreePort(), GetProxyIpAddress(proxySettings.Host), proxySettings.Port, ProxyConfig.SocksVersion.Four, proxySettings.Username, proxySettings.Password), false);
                 case ProxyType.Socks5:

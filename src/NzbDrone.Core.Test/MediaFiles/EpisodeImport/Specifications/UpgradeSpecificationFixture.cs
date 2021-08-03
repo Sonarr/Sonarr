@@ -5,16 +5,16 @@ using Marr.Data;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Languages;
-using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 {
@@ -29,8 +29,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         {
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.SeriesType = SeriesTypes.Standard)
-                                     .With(e => e.QualityProfile = new QualityProfile 
-                                        { 
+                                     .With(e => e.QualityProfile = new QualityProfile
+                                        {
                                             Items = Qualities.QualityFixture.GetDefaultQualities(),
                                         })
                                      .With(l => l.LanguageProfile = new LanguageProfile

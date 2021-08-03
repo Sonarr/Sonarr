@@ -25,7 +25,9 @@ namespace NzbDrone.Core.Indexers.Newznab
             var error = xdoc.Descendants("error").FirstOrDefault();
 
             if (error == null)
+            {
                 return;
+            }
 
             var code = Convert.ToInt32(error.Attribute("code").Value);
             var errorMessage = error.Attribute("description").Value;

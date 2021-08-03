@@ -18,7 +18,10 @@ namespace Sonarr.Api.V3.Indexers
     {
         public override IndexerResource ToResource(IndexerDefinition definition)
         {
-            if (definition == null) return null;
+            if (definition == null)
+            {
+                return null;
+            }
 
             var resource = base.ToResource(definition);
 
@@ -36,7 +39,10 @@ namespace Sonarr.Api.V3.Indexers
 
         public override IndexerDefinition ToModel(IndexerResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             var definition = base.ToModel(resource);
 

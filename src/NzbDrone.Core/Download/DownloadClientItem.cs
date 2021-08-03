@@ -39,7 +39,8 @@ namespace NzbDrone.Core.Download
         public string Name { get; set; }
 
         public static DownloadClientItemClientInfo FromDownloadClient<TSettings>(
-            DownloadClientBase<TSettings> downloadClient) where TSettings : IProviderConfig, new()
+            DownloadClientBase<TSettings> downloadClient)
+            where TSettings : IProviderConfig, new()
         {
             return new DownloadClientItemClientInfo
             {

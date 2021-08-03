@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -15,9 +15,10 @@ namespace NzbDrone.Update
     {
         private readonly IInstallUpdateService _installUpdateService;
         private readonly IProcessProvider _processProvider;
-        private static IContainer _container;
 
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(UpdateApp));
+
+        private static IContainer _container;
 
         public UpdateApp(IInstallUpdateService installUpdateService, IProcessProvider processProvider)
         {
@@ -114,7 +115,6 @@ namespace NzbDrone.Update
 
                 return exeFileInfo.DirectoryName;
             }
-
             else
             {
                 Logger.Debug("Using executing application: {0}", startupContext.ExecutingApplication);

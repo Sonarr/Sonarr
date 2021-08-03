@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
         [FieldDefinition(3, Label = "Episode Images", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "Season##\\filename.jpg")]
         public bool EpisodeImages { get; set; }
-        
+
         public bool IsValid => true;
 
         public NzbDroneValidationResult Validate()

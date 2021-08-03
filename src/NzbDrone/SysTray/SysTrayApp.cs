@@ -78,7 +78,6 @@ namespace NzbDrone.SysTray
             {
                 Invoke(new MethodInvoker(() => Dispose(isDisposing)));
             }
-
             else
             {
                 base.Dispose(isDisposing);
@@ -99,7 +98,6 @@ namespace NzbDrone.SysTray
             }
             catch (Exception)
             {
-
             }
         }
 
@@ -129,7 +127,6 @@ namespace NzbDrone.SysTray
             }
             catch (Exception)
             {
-
             }
         }
     }

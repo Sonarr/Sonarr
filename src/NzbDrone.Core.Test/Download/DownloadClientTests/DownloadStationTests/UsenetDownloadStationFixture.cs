@@ -10,9 +10,9 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.DownloadStation;
 using NzbDrone.Core.Download.Clients.DownloadStation.Proxies;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Test.Common;
-using NzbDrone.Core.Organizer;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {
@@ -65,12 +65,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 {
                     Detail = new Dictionary<string, string>
                     {
-                        { "destination","shared/folder" },
+                        { "destination", "shared/folder" },
                         { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
-                        { "size_downloaded", "0"},
+                        { "size_downloaded", "0" },
                         { "speed_download", "0" }
                     }
                 }
@@ -88,12 +88,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 {
                     Detail = new Dictionary<string, string>
                     {
-                        { "destination","shared/folder" },
+                        { "destination", "shared/folder" },
                         { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
-                        { "size_downloaded", "1000"},
+                        { "size_downloaded", "1000" },
                         { "speed_download", "0" }
                     },
                 }
@@ -111,12 +111,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 {
                     Detail = new Dictionary<string, string>
                     {
-                        { "destination","shared/folder" },
+                        { "destination", "shared/folder" },
                         { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
-                        { "size_downloaded", "1000"},
+                        { "size_downloaded", "1000" },
                         { "speed_download", "0" }
                     }
                 }
@@ -134,12 +134,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 {
                     Detail = new Dictionary<string, string>
                     {
-                        { "destination","shared/folder" },
+                        { "destination", "shared/folder" },
                         { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
-                        { "size_downloaded", "100"},
+                        { "size_downloaded", "100" },
                         { "speed_download", "50" }
                     }
                 }
@@ -157,12 +157,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                 {
                     Detail = new Dictionary<string, string>
                     {
-                        { "destination","shared/folder" },
+                        { "destination", "shared/folder" },
                         { "uri", FileNameBuilder.CleanFileName(_remoteEpisode.Release.Title) + ".nzb" }
                     },
                     Transfer = new Dictionary<string, string>
                     {
-                        { "size_downloaded", "10"},
+                        { "size_downloaded", "10" },
                         { "speed_download", "0" }
                     }
                 }
@@ -236,7 +236,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[1000]));
             */
-
             Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Setup(s => s.AddTaskFromData(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DownloadStationSettings>()))
                   .Callback(PrepareClientToReturnQueuedItem);

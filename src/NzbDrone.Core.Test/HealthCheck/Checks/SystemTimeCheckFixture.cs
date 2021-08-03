@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
         private void GivenServerTime(DateTime dateTime)
         {
-            var json = new ServiceTimeResponse {DateTimeUtc = dateTime}.ToJson();
+            var json = new ServiceTimeResponse { DateTimeUtc = dateTime }.ToJson();
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Execute(It.IsAny<HttpRequest>()))

@@ -25,7 +25,6 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void FixExtraFileExtensionForTable(IDbConnection conn, IDbTransaction tran, string table)
         {
-
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;

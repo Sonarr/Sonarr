@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public PlexServerProxy(IHttpClient httpClient, IConfigService configService,Logger logger)
+        public PlexServerProxy(IHttpClient httpClient, IConfigService configService, Logger logger)
         {
             _httpClient = httpClient;
             _configService = configService;
@@ -132,7 +132,6 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                 items = Json.Deserialize<PlexSectionResponseLegacy>(response)
                             .Items;
             }
-
             else
             {
                 items = Json.Deserialize<PlexResponse<PlexSectionResponse>>(response)
@@ -217,7 +216,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             }
 
             var error = response.Contains("_children") ?
-                        Json.Deserialize<PlexError>(response) : 
+                        Json.Deserialize<PlexError>(response) :
                         Json.Deserialize<PlexResponse<PlexError>>(response).MediaContainer;
 
             if (error != null && !error.Error.IsNullOrWhiteSpace())

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 
-
 namespace NzbDrone.Core.RootFolders
 {
     public class RootFolder : ModelBase

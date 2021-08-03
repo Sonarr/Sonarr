@@ -1,7 +1,6 @@
 ﻿using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
-
 namespace NzbDrone.Core.Qualities
 {
     public interface IQualityDefinitionRepository : IBasicRepository<QualityDefinition>

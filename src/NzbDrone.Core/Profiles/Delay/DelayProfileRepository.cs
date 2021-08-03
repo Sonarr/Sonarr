@@ -5,7 +5,6 @@ namespace NzbDrone.Core.Profiles.Delay
 {
     public interface IDelayProfileRepository : IBasicRepository<DelayProfile>
     {
-        
     }
 
     public class DelayProfileRepository : BasicRepository<DelayProfile>, IDelayProfileRepository

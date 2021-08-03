@@ -128,16 +128,17 @@ namespace NzbDrone.Core.Tv
                 {
                     season.Monitored = true;
                 }
-                // Don't monitor season 1 if only the pilot episode is monitored
                 else if (seasonNumber == firstSeason && monitoringOptions.Monitor == MonitorTypes.Pilot)
                 {
+                    // Don't monitor season 1 if only the pilot episode is monitored
                     season.Monitored = false;
                 }
-                // Monitor the season if it has any monitor episodes
                 else if (monitoredSeasons.Contains(seasonNumber))
                 {
+                    // Monitor the season if it has any monitor episodes
                     season.Monitored = true;
                 }
+
                 // Don't monitor the season
                 else
                 {
@@ -220,7 +221,6 @@ namespace NzbDrone.Core.Tv
         {
             ToggleEpisodesMonitoredState(episodes.Where(predicate), true);
             ToggleEpisodesMonitoredState(episodes.Where(e => !predicate(e)), false);
-
         }
     }
 }

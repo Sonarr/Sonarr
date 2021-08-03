@@ -15,8 +15,8 @@ namespace NzbDrone.Host
 {
     public static class Bootstrap
     {
-        private static IContainer _container;
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(Bootstrap));
+        private static IContainer _container;
 
         public static void Start(StartupContext startupContext, IUserAlert userAlert, Action<IContainer> startCallback = null)
         {
@@ -44,7 +44,6 @@ namespace NzbDrone.Host
                 {
                     startCallback(_container);
                 }
-
                 else
                 {
                     SpinToExit(appMode);
@@ -151,6 +150,7 @@ namespace NzbDrone.Host
                     {
                         return true;
                     }
+
                 default:
                     {
                         return false;

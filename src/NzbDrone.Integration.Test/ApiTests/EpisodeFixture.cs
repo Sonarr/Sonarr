@@ -1,21 +1,21 @@
-﻿using System.Threading;
+using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
-using Sonarr.Api.V3.Series;
-using System.Linq;
 using NzbDrone.Test.Common;
+using Sonarr.Api.V3.Series;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
     public class EpisodeFixture : IntegrationTest
     {
-        private SeriesResource series;
+        private SeriesResource _series;
 
         [SetUp]
         public void Setup()
         {
-            series = GivenSeriesWithEpisodes();
+            _series = GivenSeriesWithEpisodes();
         }
 
         private SeriesResource GivenSeriesWithEpisodes()
@@ -36,13 +36,13 @@ namespace NzbDrone.Integration.Test.ApiTests
         [Test]
         public void should_be_able_to_get_all_episodes_in_series()
         {
-            Episodes.GetEpisodesInSeries(series.Id).Count.Should().BeGreaterThan(0);
+            Episodes.GetEpisodesInSeries(_series.Id).Count.Should().BeGreaterThan(0);
         }
 
         [Test]
         public void should_be_able_to_get_a_single_episode()
         {
-            var episodes = Episodes.GetEpisodesInSeries(series.Id);
+            var episodes = Episodes.GetEpisodesInSeries(_series.Id);
 
             Episodes.Get(episodes.First().Id).Should().NotBeNull();
         }
@@ -50,18 +50,17 @@ namespace NzbDrone.Integration.Test.ApiTests
         [Test]
         public void should_be_able_to_set_monitor_status()
         {
-            var episodes = Episodes.GetEpisodesInSeries(series.Id);
+            var episodes = Episodes.GetEpisodesInSeries(_series.Id);
             var updatedEpisode = episodes.First();
             updatedEpisode.Monitored = false;
 
             Episodes.Put(updatedEpisode).Monitored.Should().BeFalse();
         }
 
-
         [TearDown]
         public void TearDown()
         {
-            Series.Delete(series.Id);
+            Series.Delete(_series.Id);
             Thread.Sleep(2000);
         }
     }

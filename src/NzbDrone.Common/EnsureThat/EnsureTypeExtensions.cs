@@ -9,7 +9,7 @@ namespace NzbDrone.Common.EnsureThat
     {
         private static class Types
         {
-            internal static readonly Type IntType = typeof (int);
+            internal static readonly Type IntType = typeof(int);
 
             internal static readonly Type ShortType = typeof(short);
 
@@ -78,8 +78,10 @@ namespace NzbDrone.Common.EnsureThat
         public static TypeParam IsOfType(this TypeParam param, Type type)
         {
             if (!param.Type.Equals(type))
+            {
                 throw ExceptionFactory.CreateForParamValidation(param.Name,
                     ExceptionMessages.EnsureExtensions_IsNotOfType.Inject(param.Type.FullName));
+            }
 
             return param;
         }

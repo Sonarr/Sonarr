@@ -16,7 +16,8 @@ namespace NzbDrone.Common.EnsureThat
     {
         public readonly T Value;
 
-        internal Param(string name, T value) : base(name)
+        internal Param(string name, T value)
+            : base(name)
         {
             Value = value;
         }

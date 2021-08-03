@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             _parsedEpisodeInfo.Quality = new QualityModel(Quality.HDTV720p);
 
             _remoteEpisode = new RemoteEpisode();
-            _remoteEpisode.Episodes = new List<Episode>{ _episode };
+            _remoteEpisode.Episodes = new List<Episode> { _episode };
             _remoteEpisode.Series = _series;
             _remoteEpisode.ParsedEpisodeInfo = _parsedEpisodeInfo;
             _remoteEpisode.Release = _release;
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetEpisodes(It.IsAny<ParsedEpisodeInfo>(), _series, true, null))
-                  .Returns(new List<Episode> {_episode});
+                  .Returns(new List<Episode> { _episode });
 
             Mocker.GetMock<IPrioritizeDownloadDecision>()
                   .Setup(s => s.PrioritizeDecisions(It.IsAny<List<DownloadDecision>>()))
@@ -95,7 +95,6 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             var release = _release.JsonClone();
             release.Indexer = indexer;
             release.PublishDate = publishDate;
-
 
             var heldReleases = Builder<PendingRelease>.CreateListOfSize(1)
                                                    .All()

@@ -6,8 +6,15 @@
         //It's better not to use a title that might be scene than to use one that isn't scene
         public static bool IsSceneTitle(string title)
         {
-            if (!title.Contains(".")) return false;
-            if (title.Contains(" ")) return false;
+            if (!title.Contains("."))
+            {
+                return false;
+            }
+
+            if (title.Contains(" "))
+            {
+                return false;
+            }
 
             var parsedTitle = Parser.ParseTitle(title);
 

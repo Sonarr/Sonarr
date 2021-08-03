@@ -3,8 +3,8 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 {
@@ -22,14 +22,14 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 
             _fakeSeries.Seasons = new List<Season>
             {
-                new Season{ SeasonNumber = 1, Monitored = true },
-                new Season{ SeasonNumber = 2, Monitored = true }
+                new Season { SeasonNumber = 1, Monitored = true },
+                new Season { SeasonNumber = 2, Monitored = true }
             };
 
             _existingSeries.Seasons = new List<Season>
             {
-                new Season{ SeasonNumber = 1, Monitored = true },
-                new Season{ SeasonNumber = 2, Monitored = true }
+                new Season { SeasonNumber = 1, Monitored = true },
+                new Season { SeasonNumber = 2, Monitored = true }
             };
         }
 

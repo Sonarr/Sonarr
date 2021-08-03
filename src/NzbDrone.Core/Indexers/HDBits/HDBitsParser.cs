@@ -84,7 +84,6 @@ namespace NzbDrone.Core.Indexers.HDBits
                 .AddQueryParam("id", torrentId);
 
             return url.FullUri;
-
         }
     }
 }

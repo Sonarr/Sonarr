@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode = new RemoteEpisode();
             _remoteEpisode.Release = new ReleaseInfo();
             _remoteEpisode.Series = new Series();
-            
+
             _delayProfile = new DelayProfile();
 
             Mocker.GetMock<IDelayProfileService>()

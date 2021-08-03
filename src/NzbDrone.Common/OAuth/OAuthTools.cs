@@ -71,6 +71,7 @@ namespace NzbDrone.Common.OAuth
                     nonce[i] = chars[_random.Next(0, chars.Length)];
                 }
             }
+
             return new string(nonce);
         }
 
@@ -138,6 +139,7 @@ namespace NzbDrone.Common.OAuth
                     sb.Append(string.Format("%{0:X}", b));
                 }
             }
+
             return sb.ToString();
         }
 
@@ -380,6 +382,7 @@ namespace NzbDrone.Common.OAuth
 
                         break;
                     }
+
                 default:
                     throw new NotImplementedException("Only HMAC-SHA1 is currently supported.");
             }

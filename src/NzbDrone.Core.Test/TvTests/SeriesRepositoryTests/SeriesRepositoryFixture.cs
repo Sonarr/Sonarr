@@ -1,13 +1,13 @@
-﻿using FizzWare.NBuilder;
+﻿using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using System.Linq;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
 {
@@ -33,7 +33,6 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
                     Cutoff = Language.English
                 };
 
-
             Mocker.Resolve<QualityProfileRepository>().Insert(profile);
             Mocker.Resolve<LanguageProfileRepository>().Insert(langProfile);
 
@@ -43,11 +42,8 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
 
             Subject.Insert(series);
 
-
             StoredModel.QualityProfile.Should().NotBeNull();
             StoredModel.LanguageProfile.Should().NotBeNull();
-
-
         }
 
         private void GivenSeries()
@@ -72,7 +68,6 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
             found.Should().BeEmpty();
         }
 
-
         [TestCase("crowna")]
         [TestCase("acrown")]
         [TestCase("acrowna")]
@@ -95,7 +90,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
 
             var found = Subject.FindByTitleInexact(cleanTitle);
             found.Should().HaveCount(2);
-            found.Select(x => x.CleanTitle).Should().BeEquivalentTo(new [] {"crown", "crownextralong"});
+            found.Select(x => x.CleanTitle).Should().BeEquivalentTo(new[] { "crown", "crownextralong" });
         }
     }
 }

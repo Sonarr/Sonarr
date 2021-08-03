@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FluentAssertions;
 using FizzWare.NBuilder;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Subtitles;
 using NzbDrone.Core.MediaFiles;
@@ -12,8 +14,6 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using Moq;
-using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.Test.Extras.Subtitles
 {
@@ -42,7 +42,6 @@ namespace NzbDrone.Core.Test.Extras.Subtitles
                                            .With(e => e.SeasonNumber = 1)
                                            .Build()
                                            .ToList();
-
 
             _episodeFile = Builder<EpisodeFile>.CreateNew()
                                                .With(f => f.Path = Path.Combine(_series.Path, "Season 1", "Series Title - S01E01.mkv").AsOsAgnostic())
@@ -90,7 +89,7 @@ namespace NzbDrone.Core.Test.Extras.Subtitles
         public void should_import_matching_subtitle_file(string filePath, string expectedOutputPath)
         {
             var files = new List<string> { Path.Combine(_episodeFolder, filePath).AsOsAgnostic() };
-            
+
             var results = Subject.ImportFiles(_localEpisode, _episodeFile, files, true).ToList();
 
             results.Count().Should().Be(1);

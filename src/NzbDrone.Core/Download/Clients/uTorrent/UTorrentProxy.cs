@@ -107,7 +107,10 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
         public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, UTorrentSettings settings)
         {
-            if (seedConfiguration == null) return;
+            if (seedConfiguration == null)
+            {
+                return;
+            }
 
             var requestBuilder = BuildRequest(settings)
                 .AddQueryParam("action", "setprops")

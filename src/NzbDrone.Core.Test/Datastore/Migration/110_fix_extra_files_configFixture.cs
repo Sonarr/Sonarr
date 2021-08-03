@@ -31,7 +31,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-
             var itemEnabled = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
             itemEnabled.Should().Be("True");
         }

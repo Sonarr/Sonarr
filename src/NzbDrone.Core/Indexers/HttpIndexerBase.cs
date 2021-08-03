@@ -151,6 +151,7 @@ namespace NzbDrone.Core.Indexers
                                     fullyUpdated = true;
                                     break;
                                 }
+
                                 var oldestReleaseDate = page.Select(v => v.PublishDate).Min();
                                 if (oldestReleaseDate < lastReleaseInfo.PublishDate || page.Any(v => v.DownloadUrl == lastReleaseInfo.DownloadUrl))
                                 {
@@ -195,6 +196,7 @@ namespace NzbDrone.Core.Indexers
                         var gapEnd = ordered.Last().PublishDate;
                         _logger.Warn("Indexer {0} rss sync didn't cover the period between {1} and {2} UTC. Search may be required.", Definition.Name, gapStart, gapEnd);
                     }
+
                     lastReleaseInfo = ordered.First();
                     _indexerStatusService.UpdateRssSyncStatus(Definition.Id, lastReleaseInfo);
                 }
@@ -233,6 +235,7 @@ namespace NzbDrone.Core.Indexers
                 {
                     _indexerStatusService.RecordFailure(Definition.Id, TimeSpan.FromHours(1));
                 }
+
                 _logger.Warn("API Request Limit reached for {0}", this);
             }
             catch (HttpException ex)
@@ -304,7 +307,7 @@ namespace NzbDrone.Core.Indexers
             }
             catch (Exception ex)
             {
-                ex.WithData(response.HttpResponse, 128*1024);
+                ex.WithData(response.HttpResponse, 128 * 1024);
                 _logger.Trace("Unexpected Response content ({0} bytes): {1}", response.HttpResponse.ResponseData.Length, response.HttpResponse.Content);
                 throw;
             }
@@ -318,6 +321,7 @@ namespace NzbDrone.Core.Indexers
             {
                 request.HttpRequest.RateLimit = RateLimit;
             }
+
             request.HttpRequest.RateLimitKey = Definition.Id.ToString();
 
             return new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
@@ -391,5 +395,4 @@ namespace NzbDrone.Core.Indexers
             return null;
         }
     }
-
 }

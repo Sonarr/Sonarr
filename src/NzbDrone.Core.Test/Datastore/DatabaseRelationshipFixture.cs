@@ -3,11 +3,11 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.History;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Test.Datastore
 {
@@ -54,11 +54,10 @@ namespace NzbDrone.Core.Test.Datastore
             Db.Single<Episode>().EpisodeFile.Value.Should().BeNull();
         }
 
-
         [Test]
         public void embedded_document_as_json()
         {
-            var quality = new QualityModel { Quality = Quality.Bluray720p, Revision = new Revision(version: 2 )};
+            var quality = new QualityModel { Quality = Quality.Bluray720p, Revision = new Revision(version: 2) };
 
             var history = Builder<EpisodeHistory>.CreateNew()
                                                   .With(c => c.Id = 0)
@@ -80,7 +79,6 @@ namespace NzbDrone.Core.Test.Datastore
 
             history[0].Quality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2));
             history[1].Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 2));
-
 
             Db.InsertMany(history);
 

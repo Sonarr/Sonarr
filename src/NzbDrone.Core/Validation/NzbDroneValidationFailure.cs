@@ -11,13 +11,11 @@ namespace NzbDrone.Core.Validation
         public NzbDroneValidationFailure(string propertyName, string error)
             : base(propertyName, error)
         {
-
         }
 
         public NzbDroneValidationFailure(string propertyName, string error, object attemptedValue)
             : base(propertyName, error, attemptedValue)
         {
-
         }
 
         public NzbDroneValidationFailure(ValidationFailure validationFailure)

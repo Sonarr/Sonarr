@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Alter.Table("DelayProfiles").AddColumn("BypassIfHighestQuality").AsBoolean().WithDefaultValue(false);
+
             // Set to true for existing Delay Profiles to keep behavior the same.
             Execute.Sql("UPDATE DelayProfiles SET BypassIfHighestQuality = 1;");
         }

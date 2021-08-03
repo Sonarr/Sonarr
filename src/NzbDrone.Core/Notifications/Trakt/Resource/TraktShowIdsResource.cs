@@ -1,5 +1,3 @@
-using NzbDrone.Core.Tv;
-using System.Collections.Generic;
 namespace NzbDrone.Core.Notifications.Trakt.Resource
 {
     public class TraktShowIdsResource

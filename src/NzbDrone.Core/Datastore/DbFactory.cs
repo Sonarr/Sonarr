@@ -9,7 +9,6 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
-
 namespace NzbDrone.Core.Datastore
 {
     public interface IDbFactory
@@ -83,6 +82,7 @@ namespace NzbDrone.Core.Datastore
 
                         break;
                     }
+
                 case MigrationType.Log:
                     {
                         connectionString = _connectionStringFactory.LogDbConnectionString;
@@ -90,6 +90,7 @@ namespace NzbDrone.Core.Datastore
 
                         break;
                     }
+
                 default:
                     {
                         throw new ArgumentException("Invalid MigrationType");

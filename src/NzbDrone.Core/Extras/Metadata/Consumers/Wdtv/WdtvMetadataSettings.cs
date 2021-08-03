@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
 
         [FieldDefinition(3, Label = "Episode Images", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "Season##\\filename.metathumb")]
         public bool EpisodeImages { get; set; }
-        
+
         public bool IsValid => true;
 
         public NzbDroneValidationResult Validate()

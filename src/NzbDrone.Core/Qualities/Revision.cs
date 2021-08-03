@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Qualities
         private Revision()
         {
         }
-        
+
         public Revision(int version = 1, int real = 0, bool isRepack = false)
         {
             Version = version;
@@ -22,17 +22,35 @@ namespace NzbDrone.Core.Qualities
 
         public bool Equals(Revision other)
         {
-            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
 
             return other.Version.Equals(Version) && other.Real.Equals(Real);
         }
 
         public int CompareTo(Revision other)
         {
-            if (Real > other.Real) return 1;
-            if (Real < other.Real) return -1;
-            if (Version > other.Version) return 1;
-            if (Version < other.Version) return -1;
+            if (Real > other.Real)
+            {
+                return 1;
+            }
+
+            if (Real < other.Real)
+            {
+                return -1;
+            }
+
+            if (Version > other.Version)
+            {
+                return 1;
+            }
+
+            if (Version < other.Version)
+            {
+                return -1;
+            }
 
             return 0;
         }
@@ -58,8 +76,15 @@ namespace NzbDrone.Core.Qualities
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
 
             return Equals(obj as Revision);
         }
@@ -76,32 +101,60 @@ namespace NzbDrone.Core.Qualities
 
         public static bool operator >(Revision left, Revision right)
         {
-            if (ReferenceEquals(null, left)) return false;
-            if (ReferenceEquals(null, right)) return true;
+            if (ReferenceEquals(null, left))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(null, right))
+            {
+                return true;
+            }
 
             return left.CompareTo(right) > 0;
         }
 
         public static bool operator <(Revision left, Revision right)
         {
-            if (ReferenceEquals(null, left)) return true;
-            if (ReferenceEquals(null, right)) return false;
+            if (ReferenceEquals(null, left))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(null, right))
+            {
+                return false;
+            }
 
             return left.CompareTo(right) < 0;
         }
 
         public static bool operator >=(Revision left, Revision right)
         {
-            if (ReferenceEquals(null, left)) return false;
-            if (ReferenceEquals(null, right)) return true;
+            if (ReferenceEquals(null, left))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(null, right))
+            {
+                return true;
+            }
 
             return left.CompareTo(right) >= 0;
         }
 
         public static bool operator <=(Revision left, Revision right)
         {
-            if (ReferenceEquals(null, left)) return true;
-            if (ReferenceEquals(null, right)) return false;
+            if (ReferenceEquals(null, left))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(null, right))
+            {
+                return false;
+            }
 
             return left.CompareTo(right) <= 0;
         }

@@ -58,7 +58,6 @@ namespace Sonarr.Api.V3.Episodes
                 int episodeFileId = Convert.ToInt32(episodeFileIdQuery.Value);
 
                 return MapToResource(_episodeService.GetEpisodesByFileId(episodeFileId), false, false, includeImages);
-
             }
 
             throw new BadRequestException("seriesId or episodeIds must be provided");

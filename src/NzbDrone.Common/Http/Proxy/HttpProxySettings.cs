@@ -30,15 +30,17 @@ namespace NzbDrone.Common.Http.Proxy
                 if (!string.IsNullOrWhiteSpace(BypassFilter))
                 {
                     var hostlist = BypassFilter.Split(',');
-                    for(int i = 0; i < hostlist.Length; i++)
+                    for (int i = 0; i < hostlist.Length; i++)
                     {
-                        if(hostlist[i].StartsWith("*"))
+                        if (hostlist[i].StartsWith("*"))
                         {
                             hostlist[i] = ";" + hostlist[i];
                         }
                     }
+
                     return hostlist;
                 }
+
                 return new string[] { };
             }
         }

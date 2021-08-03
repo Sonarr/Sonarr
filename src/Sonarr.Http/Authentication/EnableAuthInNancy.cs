@@ -18,7 +18,7 @@ namespace Sonarr.Http.Authentication
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfigService _configService;
         private readonly IConfigFileProvider _configFileProvider;
-        private FormsAuthenticationConfiguration FormsAuthConfig;
+        private FormsAuthenticationConfiguration _formsAuthConfig;
 
         public EnableAuthInNancy(IAuthenticationService authenticationService,
                                  IConfigService configService,
@@ -38,7 +38,6 @@ namespace Sonarr.Http.Authentication
                 RegisterFormsAuth(pipelines);
                 pipelines.AfterRequest.AddItemToEndOfPipeline((Action<NancyContext>)SlidingAuthenticationForFormsAuth);
             }
-
             else if (_configFileProvider.AuthenticationMethod == AuthenticationType.Basic)
             {
                 pipelines.EnableBasicAuthentication(new BasicAuthenticationConfiguration(_authenticationService, "Sonarr"));
@@ -55,7 +54,6 @@ namespace Sonarr.Http.Authentication
 
             return null;
         }
-
 
         private Response RequiresAuthentication(NancyContext context)
         {
@@ -76,10 +74,9 @@ namespace Sonarr.Http.Authentication
 
             var cryptographyConfiguration = new CryptographyConfiguration(
                     new AesEncryptionProvider(new PassphraseKeyGenerator(_configService.RijndaelPassphrase, Encoding.ASCII.GetBytes(_configService.RijndaelSalt))),
-                    new DefaultHmacProvider(new PassphraseKeyGenerator(_configService.HmacPassphrase, Encoding.ASCII.GetBytes(_configService.HmacSalt)))
-                );
+                    new DefaultHmacProvider(new PassphraseKeyGenerator(_configService.HmacPassphrase, Encoding.ASCII.GetBytes(_configService.HmacSalt))));
 
-            FormsAuthConfig = new FormsAuthenticationConfiguration
+            _formsAuthConfig = new FormsAuthenticationConfiguration
             {
                 RedirectUrl = _configFileProvider.UrlBase + "/login",
                 UserMapper = _authenticationService,
@@ -87,7 +84,7 @@ namespace Sonarr.Http.Authentication
                 CryptographyConfiguration = cryptographyConfiguration
             };
 
-            FormsAuthentication.Enable(pipelines, FormsAuthConfig);
+            FormsAuthentication.Enable(pipelines, _formsAuthConfig);
         }
 
         private void RemoveLoginHooksForApiCalls(NancyContext context)
@@ -117,7 +114,7 @@ namespace Sonarr.Http.Authentication
             {
                 var formsAuthCookieValue = context.Request.Cookies[formsAuthCookieName];
 
-                if (FormsAuthentication.DecryptAndValidateAuthenticationCookie(formsAuthCookieValue, FormsAuthConfig).IsNotNullOrWhiteSpace())
+                if (FormsAuthentication.DecryptAndValidateAuthenticationCookie(formsAuthCookieValue, _formsAuthConfig).IsNotNullOrWhiteSpace())
                 {
                     var formsAuthCookie = new SonarrNancyCookie(formsAuthCookieName, formsAuthCookieValue, true, false, DateTime.UtcNow.AddDays(7))
                     {

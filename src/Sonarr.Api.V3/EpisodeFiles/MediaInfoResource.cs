@@ -53,7 +53,6 @@ namespace Sonarr.Api.V3.EpisodeFiles
                    };
         }
 
-
         private static string FormatRuntime(TimeSpan runTime)
         {
             var formattedRuntime = "";

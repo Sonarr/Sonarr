@@ -31,7 +31,10 @@ namespace Sonarr.Api.V3.EpisodeFiles
     {
         private static EpisodeFileResource ToResource(this EpisodeFile model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new EpisodeFileResource
             {
@@ -40,6 +43,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 SeriesId = model.SeriesId,
                 SeasonNumber = model.SeasonNumber,
                 RelativePath = model.RelativePath,
+
                 //Path
                 Size = model.Size,
                 DateAdded = model.DateAdded,
@@ -48,14 +52,17 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Language = model.Language,
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName)
+
                 //QualityCutoffNotMet
             };
-
         }
 
         public static EpisodeFileResource ToResource(this EpisodeFile model, NzbDrone.Core.Tv.Series series, IUpgradableSpecification upgradableSpecification)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new EpisodeFileResource
             {

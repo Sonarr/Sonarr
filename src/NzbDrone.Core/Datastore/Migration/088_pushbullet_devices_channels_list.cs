@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                             if (channelTagsString.IsNotNullOrWhiteSpace())
                             {
-                                var channelTags = channelTagsString.Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries);
+                                var channelTags = channelTagsString.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
 
                                 settings["channelTags"] = channelTags;
                             }

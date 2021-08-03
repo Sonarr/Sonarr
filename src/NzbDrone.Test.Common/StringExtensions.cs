@@ -14,6 +14,7 @@ namespace NzbDrone.Test.Common
                     path = path.Replace(":", "");
                     path = Path.DirectorySeparatorChar + path;
                 }
+
                 path = path.Replace("\\", Path.DirectorySeparatorChar.ToString());
             }
 

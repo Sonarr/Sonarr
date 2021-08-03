@@ -7,12 +7,12 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.MediaFiles.EpisodeImport;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -130,7 +130,6 @@ namespace NzbDrone.Core.MediaFiles
                     _mediaFileAttributeService.SetFolderLastWriteTime(seasonFolder, episodeFile.DateAdded);
                 }
             }
-
             catch (Exception ex)
             {
                 _logger.Warn(ex, "Unable to set last write time");

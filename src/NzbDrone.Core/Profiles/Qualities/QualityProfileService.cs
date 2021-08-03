@@ -70,14 +70,18 @@ namespace NzbDrone.Core.Profiles.Qualities
         {
             return _profileRepository.Exists(id);
         }
-        
+
         public void Handle(ApplicationStartedEvent message)
         {
-            if (All().Any()) return;
+            if (All().Any())
+            {
+                return;
+            }
 
             _logger.Info("Setting up default quality profiles");
 
-            AddDefaultProfile("Any", Quality.SDTV,
+            AddDefaultProfile("Any",
+                Quality.SDTV,
                 Quality.SDTV,
                 Quality.WEBRip480p,
                 Quality.WEBDL480p,
@@ -91,31 +95,36 @@ namespace NzbDrone.Core.Profiles.Qualities
                 Quality.Bluray720p,
                 Quality.Bluray1080p);
 
-            AddDefaultProfile("SD", Quality.SDTV,
+            AddDefaultProfile("SD",
+                Quality.SDTV,
                 Quality.SDTV,
                 Quality.WEBRip480p,
                 Quality.WEBDL480p,
                 Quality.DVD);
 
-            AddDefaultProfile("HD-720p", Quality.HDTV720p,
+            AddDefaultProfile("HD-720p",
+                Quality.HDTV720p,
                 Quality.HDTV720p,
                 Quality.WEBRip720p,
                 Quality.WEBDL720p,
                 Quality.Bluray720p);
 
-            AddDefaultProfile("HD-1080p", Quality.HDTV1080p,
+            AddDefaultProfile("HD-1080p",
+                Quality.HDTV1080p,
                 Quality.HDTV1080p,
                 Quality.WEBRip1080p,
                 Quality.WEBDL1080p,
                 Quality.Bluray1080p);
 
-            AddDefaultProfile("Ultra-HD", Quality.HDTV2160p,
+            AddDefaultProfile("Ultra-HD",
+                Quality.HDTV2160p,
                 Quality.HDTV2160p,
                 Quality.WEBRip2160p,
                 Quality.WEBDL2160p,
                 Quality.Bluray2160p);
 
-            AddDefaultProfile("HD - 720p/1080p", Quality.HDTV720p,
+            AddDefaultProfile("HD - 720p/1080p",
+                Quality.HDTV720p,
                 Quality.HDTV720p,
                 Quality.HDTV1080p,
                 Quality.WEBRip720p,

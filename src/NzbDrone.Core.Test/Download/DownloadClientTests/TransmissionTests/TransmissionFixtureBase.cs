@@ -110,7 +110,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             Mocker.GetMock<ITransmissionProxy>()
                   .Setup(v => v.GetConfig(It.IsAny<TransmissionSettings>()))
                   .Returns(() => Json.Deserialize<TransmissionConfig>(_transmissionConfigItems.ToJson()));
-
         }
 
         protected void GivenTvCategory()
@@ -144,7 +143,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
                   .Setup(s => s.AddTorrentFromData(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<TransmissionSettings>()))
                   .Callback(PrepareClientToReturnQueuedItem);
         }
-        
+
         protected virtual void GivenTorrents(List<TransmissionTorrent> torrents)
         {
             if (torrents == null)
@@ -159,7 +158,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
         protected void PrepareClientToReturnQueuedItem()
         {
-            GivenTorrents(new List<TransmissionTorrent> 
+            GivenTorrents(new List<TransmissionTorrent>
             {
                 _queued
             });
@@ -167,7 +166,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
         protected void PrepareClientToReturnDownloadingItem()
         {
-            GivenTorrents(new List<TransmissionTorrent> 
+            GivenTorrents(new List<TransmissionTorrent>
             {
                 _downloading
             });
@@ -175,7 +174,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
         protected void PrepareClientToReturnFailedItem()
         {
-            GivenTorrents(new List<TransmissionTorrent> 
+            GivenTorrents(new List<TransmissionTorrent>
             {
                 _failed
             });
@@ -184,7 +183,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         protected void PrepareClientToReturnCompletedItem(bool stopped = false, double ratio = 0.9, int seedingTime = 60, double? ratioLimit = null, int? idleLimit = null)
         {
             if (stopped)
+            {
                 _completed.Status = TransmissionTorrentStatus.Stopped;
+            }
+
             _completed.UploadedEver = (int)(_completed.DownloadedEver * ratio);
             _completed.SecondsSeeding = seedingTime * 60;
 
@@ -213,7 +215,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
                     _completed.SeedIdleLimit = idleLimit.Value;
                 }
             }
-
 
             GivenTorrents(new List<TransmissionTorrent>
             {

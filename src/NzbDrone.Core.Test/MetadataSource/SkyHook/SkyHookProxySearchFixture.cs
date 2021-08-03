@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase("Mr. D", "Mr. D")]
         [TestCase("Rob & Big", "Rob & Big")]
         [TestCase("M*A*S*H", "M*A*S*H")]
+
         //[TestCase("imdb:tt0436992", "Doctor Who (2005)")]
         [TestCase("tvdb:78804", "Doctor Who (2005)")]
         [TestCase("tvdbid:78804", "Doctor Who (2005)")]
@@ -64,14 +65,13 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
             {
                 TvdbId = tvdbId
             };
-            
+
             Mocker.GetMock<ISeriesService>().Setup(c => c.FindByTvdbId(tvdbId)).Returns(existingSeries);
 
             var result = Subject.SearchForNewSeries("tvdbid: " + tvdbId);
 
             result.Should().Contain(existingSeries);
             result.Should().ContainSingle(c => c.TvdbId == tvdbId);
-
         }
     }
 }

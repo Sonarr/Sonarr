@@ -38,7 +38,6 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
                                            .With(e => e.SeriesId = _series.Id)
                                            .With(e => e.Quality = new QualityModel(Quality.HDTV720p))
                                            .BuildNew();
-
         }
 
         private void GivenEpisodeWithFile()
@@ -177,6 +176,5 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
             stats.Should().HaveCount(1);
             stats.First().SizeOnDisk.Should().Be(_episodeFile.Size);
         }
-
     }
 }

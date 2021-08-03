@@ -29,6 +29,5 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             mappings.Should().NotContain(c => c.Title.IsNullOrWhiteSpace());
             mappings.Should().Contain(c => c.SeasonNumber > 0);
         }
-
     }
 }

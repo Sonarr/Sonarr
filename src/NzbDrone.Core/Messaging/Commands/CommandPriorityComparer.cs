@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.Messaging.Commands
 {
-    public class CommandPriorityComparer: IComparer<CommandStatus>
+    public class CommandPriorityComparer : IComparer<CommandStatus>
     {
         public int Compare(CommandStatus x, CommandStatus y)
         {

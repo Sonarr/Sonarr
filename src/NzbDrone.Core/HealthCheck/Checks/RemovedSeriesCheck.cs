@@ -30,7 +30,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
 
             var seriesText = deletedSeries.Select(s => $"{s.Title} (tvdbid {s.TvdbId})").Join(", ");
-            
+
             if (deletedSeries.Count() == 1)
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error, $"Series {seriesText} was removed from TheTVDB", "#series-removed-from-thetvdb");

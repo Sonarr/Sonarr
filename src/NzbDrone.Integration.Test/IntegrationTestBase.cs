@@ -11,6 +11,15 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
+using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv.Commands;
+using NzbDrone.Integration.Test.Client;
+using NzbDrone.SignalR;
+using NzbDrone.Test.Common.Categories;
+using RestSharp;
 using Sonarr.Api.V3.Blocklist;
 using Sonarr.Api.V3.Commands;
 using Sonarr.Api.V3.Config;
@@ -21,17 +30,8 @@ using Sonarr.Api.V3.History;
 using Sonarr.Api.V3.Profiles.Quality;
 using Sonarr.Api.V3.RootFolders;
 using Sonarr.Api.V3.Series;
-using Sonarr.Api.V3.Tags;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv.Commands;
-using NzbDrone.Integration.Test.Client;
-using NzbDrone.SignalR;
-using NzbDrone.Test.Common.Categories;
-using RestSharp;
-using NzbDrone.Common.Processes;
 using Sonarr.Api.V3.System.Tasks;
+using Sonarr.Api.V3.Tags;
 
 namespace NzbDrone.Integration.Test
 {
@@ -39,7 +39,6 @@ namespace NzbDrone.Integration.Test
     public abstract class IntegrationTestBase
     {
         protected RestClient RestClient { get; private set; }
-        protected RestClient RestClientv3 { get; private set; }
 
         public ClientBase<BlocklistResource> Blocklist;
         public CommandClient Commands;
@@ -310,7 +309,7 @@ namespace NzbDrone.Integration.Test
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, "Fake Episode");
 
-                Commands.PostAndWait(new RefreshSeriesCommand( series.Id ));
+                Commands.PostAndWait(new RefreshSeriesCommand(series.Id));
 
                 Commands.WaitAll();
 

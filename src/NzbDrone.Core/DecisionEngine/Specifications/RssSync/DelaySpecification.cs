@@ -2,10 +2,10 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {

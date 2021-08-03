@@ -14,7 +14,10 @@ namespace Sonarr.Api.V3.Tags
     {
         public static TagResource ToResource(this Tag model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new TagResource
             {
@@ -25,7 +28,10 @@ namespace Sonarr.Api.V3.Tags
 
         public static Tag ToModel(this TagResource resource)
         {
-            if (resource == null) return null;
+            if (resource == null)
+            {
+                return null;
+            }
 
             return new Tag
             {

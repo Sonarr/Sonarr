@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Cache;
 using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.RemotePathMappings

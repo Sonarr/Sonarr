@@ -11,7 +11,8 @@ namespace NzbDrone.Core.Test.Framework
     public interface IDirectDataMapper
     {
         List<Dictionary<string, object>> Query(string sql);
-        List<T> Query<T>(string sql) where T : new();
+        List<T> Query<T>(string sql)
+            where T : new();
         T QueryScalar<T>(string sql);
     }
 
@@ -56,7 +57,8 @@ namespace NzbDrone.Core.Test.Framework
             return dataTable.Rows.Cast<DataRow>().Select(MapToDictionary).ToList();
         }
 
-        public List<T> Query<T>(string sql) where T : new()
+        public List<T> Query<T>(string sql)
+            where T : new()
         {
             var dataTable = GetDataTable(sql);
 
@@ -94,7 +96,8 @@ namespace NzbDrone.Core.Test.Framework
             return item;
         }
 
-        protected T MapToObject<T>(DataRow dataRow) where T : new()
+        protected T MapToObject<T>(DataRow dataRow)
+            where T : new()
         {
             var item = new T();
 
@@ -116,7 +119,6 @@ namespace NzbDrone.Core.Test.Framework
                 }
 
                 object value = MapValue(dataRow, i, propertyType);
-
 
                 propertyInfo.SetValue(item, value, null);
             }

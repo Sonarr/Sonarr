@@ -76,7 +76,7 @@ namespace NzbDrone.Common.Test.DiskTests
                 .Returns(_folders);
 
             var result = Subject.LookupContents(root, false, false);
-            
+
             result.Directories.Should().HaveCount(_folders.Count - 3);
 
             result.Directories.Should().NotContain(f => f.Name == RECYCLING_BIN);

@@ -21,14 +21,14 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             Subject.Settings = new NewznabSettings()
             {
                 BaseUrl = "http://127.0.0.1:1234/",
-                Categories = new [] { 1, 2 },
-                AnimeCategories = new [] { 3, 4 },
+                Categories = new[] { 1, 2 },
+                AnimeCategories = new[] { 3, 4 },
                 ApiKey = "abcd",
             };
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId ="t40" },
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40" },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 1,
                 EpisodeNumber = 2

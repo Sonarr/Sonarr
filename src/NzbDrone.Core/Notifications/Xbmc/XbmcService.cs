@@ -74,7 +74,10 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 return tvdbId == series.TvdbId || s.Label == series.Title;
             });
 
-            if (matchingSeries != null) return matchingSeries.File;
+            if (matchingSeries != null)
+            {
+                return matchingSeries.File;
+            }
 
             return null;
         }

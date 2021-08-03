@@ -126,6 +126,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     {
                         capabilities.SupportedSearchParameters = xmlBasicSearch.Attribute("supportedParams").Value.Split(',');
                     }
+
                     capabilities.TextSearchEngine = xmlBasicSearch.Attribute("searchEngine")?.Value ?? capabilities.TextSearchEngine;
                 }
 
@@ -141,6 +142,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                         capabilities.SupportedTvSearchParameters = xmlTvSearch.Attribute("supportedParams").Value.Split(',');
                         capabilities.SupportsAggregateIdSearch = true;
                     }
+
                     capabilities.TvTextSearchEngine = xmlTvSearch.Attribute("searchEngine")?.Value ?? capabilities.TvTextSearchEngine;
                 }
             }
@@ -165,7 +167,6 @@ namespace NzbDrone.Core.Indexers.Newznab
                             Id = int.Parse(xmlSubcat.Attribute("id").Value),
                             Name = xmlSubcat.Attribute("name").Value,
                             Description = xmlSubcat.Attribute("description") != null ? xmlSubcat.Attribute("description").Value : string.Empty
-
                         });
                     }
 

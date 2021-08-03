@@ -69,10 +69,12 @@ namespace Sonarr.Api.V3.Indexers
         // Sent when queuing an unknown release
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+
 //        [JsonIgnore]
         public int? SeriesId { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+
 //        [JsonIgnore]
         public int? EpisodeId { get; set; }
     }
@@ -91,6 +93,7 @@ namespace Sonarr.Api.V3.Indexers
             {
                 Guid = releaseInfo.Guid,
                 Quality = parsedEpisodeInfo.Quality,
+
                 //QualityWeight
                 Age = releaseInfo.Age,
                 AgeHours = releaseInfo.AgeHours,
@@ -123,6 +126,7 @@ namespace Sonarr.Api.V3.Indexers
                 InfoUrl = releaseInfo.InfoUrl,
                 EpisodeRequested = remoteEpisode.EpisodeRequested,
                 DownloadAllowed = remoteEpisode.DownloadAllowed,
+
                 //ReleaseWeight
                 PreferredWordScore = remoteEpisode.PreferredWordScore,
                 SceneMapping = remoteEpisode.SceneMapping.ToResource(),
@@ -138,7 +142,6 @@ namespace Sonarr.Api.V3.Indexers
                 IsPossibleSpecialEpisode = parsedEpisodeInfo.IsPossibleSpecialEpisode,
                 Special = parsedEpisodeInfo.Special,
             };
-
         }
 
         public static ReleaseInfo ToModel(this ReleaseResource resource)

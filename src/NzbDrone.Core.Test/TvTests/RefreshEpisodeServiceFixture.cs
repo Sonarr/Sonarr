@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -7,8 +7,8 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MetadataSource.SkyHook;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.TvTests
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.TvTests
         {
             UseRealHttp();
 
-            _gameOfThrones = Mocker.Resolve<SkyHookProxy>().GetSeriesInfo(121361);//Game of thrones
+            _gameOfThrones = Mocker.Resolve<SkyHookProxy>().GetSeriesInfo(121361); //Game of thrones
 
             // Remove specials.
             _gameOfThrones.Item2.RemoveAll(v => v.SeasonNumber == 0);
@@ -64,10 +64,8 @@ namespace NzbDrone.Core.Test.TvTests
             Mocker.GetMock<IEpisodeService>().Setup(c => c.InsertMany(It.IsAny<List<Episode>>()))
                 .Callback<List<Episode>>(e => _insertedEpisodes = e);
 
-
             Mocker.GetMock<IEpisodeService>().Setup(c => c.UpdateMany(It.IsAny<List<Episode>>()))
                 .Callback<List<Episode>>(e => _updatedEpisodes = e);
-
 
             Mocker.GetMock<IEpisodeService>().Setup(c => c.DeleteMany(It.IsAny<List<Episode>>()))
                 .Callback<List<Episode>>(e => _deletedEpisodes = e);
@@ -78,7 +76,7 @@ namespace NzbDrone.Core.Test.TvTests
         {
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
                 .Returns(new List<Episode>());
-            
+
             Subject.RefreshEpisodeInfo(GetSeries(), GetEpisodes());
 
             _insertedEpisodes.Should().HaveSameCount(GetEpisodes());
@@ -280,7 +278,7 @@ namespace NzbDrone.Core.Test.TvTests
             existingEpisode.AbsoluteEpisodeNumber = expectedAbsoluteNumber;
 
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
-                .Returns(new List<Episode>{ existingEpisode });
+                .Returns(new List<Episode> { existingEpisode });
 
             Subject.RefreshEpisodeInfo(GetAnimeSeries(), new List<Episode> { episode });
 
@@ -339,7 +337,6 @@ namespace NzbDrone.Core.Test.TvTests
             Subject.RefreshEpisodeInfo(GetAnimeSeries(), episodes);
 
             _insertedEpisodes.Should().HaveCount(episodes.Count);
-
         }
 
         [Test]

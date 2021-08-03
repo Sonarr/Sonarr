@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Profiles.Qualities
                 return Items.Select(s => s.Quality).ToList();
             }
 
-            return new List<Quality>{ Quality };
+            return new List<Quality> { Quality };
         }
 
         public override string ToString()

@@ -74,6 +74,7 @@ namespace NzbDrone.Core.Messaging.Commands
                 Monitor.PulseAll(_mutex);
             }
         }
+
         public bool RemoveIfQueued(int id)
         {
             var rval = false;
@@ -154,7 +155,6 @@ namespace NzbDrone.Core.Messaging.Commands
                 {
                     rval = false;
                 }
-
                 else
                 {
                     var startedCommands = _items.Where(c => c.Status == CommandStatus.Started)

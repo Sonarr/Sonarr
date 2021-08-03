@@ -1,13 +1,12 @@
 using System;
+using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using System.Text;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
-
     [TestFixture]
     public class CrapParserFixture : CoreTest
     {
@@ -56,7 +55,9 @@ namespace NzbDrone.Core.Test.ParserTests
                 hash = BitConverter.ToString(hashData).Replace("-", "");
 
                 if (Parser.Parser.ParseTitle(hash) == null)
+                {
                     success++;
+                }
             }
 
             success.Should().Be(repetitions);
@@ -82,7 +83,9 @@ namespace NzbDrone.Core.Test.ParserTests
                 }
 
                 if (Parser.Parser.ParseTitle(hash.ToString()) == null)
+                {
                     success++;
+                }
             }
 
             success.Should().Be(repetitions);

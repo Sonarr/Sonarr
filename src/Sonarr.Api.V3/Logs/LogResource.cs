@@ -19,7 +19,10 @@ namespace Sonarr.Api.V3.Logs
     {
         public static LogResource ToResource(this Log model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new LogResource
             {

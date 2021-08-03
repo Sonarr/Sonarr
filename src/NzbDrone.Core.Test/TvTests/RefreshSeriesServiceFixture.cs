@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.TvTests
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetSeries(_series.Id))
                   .Returns(_series);
-            
+
             Mocker.GetMock<IProvideSeriesInfo>()
                   .Setup(s => s.GetSeriesInfo(It.IsAny<int>()))
                   .Callback<int>(p => { throw new SeriesNotFoundException(p); });
@@ -224,7 +224,6 @@ namespace NzbDrone.Core.Test.TvTests
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2), It.IsAny<bool>(), It.IsAny<bool>()));
-
         }
 
         [Test]

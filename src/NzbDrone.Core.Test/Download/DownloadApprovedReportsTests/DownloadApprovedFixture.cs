@@ -90,13 +90,11 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         {
             var remoteEpisode1 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(1) },
-                                                    new QualityModel(Quality.HDTV720p)
-                                                 );
+                                                    new QualityModel(Quality.HDTV720p));
 
             var remoteEpisode2 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(1), GetEpisode(2) },
-                                                    new QualityModel(Quality.HDTV720p)
-                                                 );
+                                                    new QualityModel(Quality.HDTV720p));
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode1));
@@ -123,13 +121,11 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         {
             var remoteEpisode1 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(1) },
-                                                    new QualityModel(Quality.HDTV720p)
-                                                 );
+                                                    new QualityModel(Quality.HDTV720p));
 
             var remoteEpisode2 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(2) },
-                                                    new QualityModel(Quality.HDTV720p)
-                                                 );
+                                                    new QualityModel(Quality.HDTV720p));
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode1));
@@ -143,18 +139,15 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         {
             var remoteEpisode1 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(1) },
-                                                    new QualityModel(Quality.HDTV720p)
-                                                 );
+                                                    new QualityModel(Quality.HDTV720p));
 
             var remoteEpisode2 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(2) },
-                                                    new QualityModel(Quality.HDTV720p)
-                                                 );
+                                                    new QualityModel(Quality.HDTV720p));
 
             var remoteEpisode3 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(2) },
-                                                    new QualityModel(Quality.HDTV720p)
-                                                 );
+                                                    new QualityModel(Quality.HDTV720p));
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode1));

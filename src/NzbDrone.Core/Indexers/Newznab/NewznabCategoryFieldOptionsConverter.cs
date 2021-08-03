@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             // Categories not relevant for Sonarr
             var ignoreCategories = new[] { 1000, 3000, 4000, 6000, 7000 };
+
             // And maybe relevant for specific users
             var unimportantCategories = new[] { 0, 2000 };
 

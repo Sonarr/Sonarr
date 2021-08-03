@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
@@ -26,8 +26,8 @@ namespace Sonarr.Api.V3.Indexers
                                  IIndexerFactory indexerFactory,
                                  ILanguageProfileService languageProfileService,
                                  IQualityProfileService qualityProfileService,
-                                 Logger logger) :
-            base(languageProfileService, qualityProfileService)
+                                 Logger logger)
+            : base(languageProfileService, qualityProfileService)
         {
             _downloadDecisionMaker = downloadDecisionMaker;
             _downloadDecisionProcessor = downloadDecisionProcessor;
@@ -59,10 +59,10 @@ namespace Sonarr.Api.V3.Indexers
 
             if (firstDecision?.RemoteEpisode.ParsedEpisodeInfo == null)
             {
-                throw new ValidationException(new List<ValidationFailure>{ new ValidationFailure("Title", "Unable to parse", release.Title) });
+                throw new ValidationException(new List<ValidationFailure> { new ValidationFailure("Title", "Unable to parse", release.Title) });
             }
 
-            return MapDecisions(new [] { firstDecision });
+            return MapDecisions(new[] { firstDecision });
         }
 
         private void ResolveIndexer(ReleaseInfo release)

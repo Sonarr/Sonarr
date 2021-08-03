@@ -7,11 +7,9 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
-
     [TestFixture]
     public class ParserFixture : CoreTest
     {
-
         [TestCase("Series Title - 4x05 - Title", "seriestitle")]
         [TestCase("Series & Title - 4x05 - Title", "seriestitle")]
         [TestCase("Bad Format", "badformat")]
@@ -43,7 +41,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series (2022) S03E14 720p HDTV X264-DIMENSION", "Series", 2022)]
         [TestCase("Series.2022.S03E14.720p.HDTV.X264-DIMENSION", "Series", 2022)]
         [TestCase("Series-2022-S03E14-720p-HDTV-X264-DIMENSION", "Series", 2022)]
-        [TestCase("Series_2022_S03E14_720p_HDTV_X264-DIMENSION", "Series", 2022)]        
+        [TestCase("Series_2022_S03E14_720p_HDTV_X264-DIMENSION", "Series", 2022)]
         [TestCase("1234 S03E14 720p HDTV X264-DIMENSION", "1234")]
         [TestCase("1234.S03E14.720p.HDTV.X264-DIMENSION", "1234")]
         [TestCase("1234-S03E14-720p-HDTV-X264-DIMENSION", "1234")]

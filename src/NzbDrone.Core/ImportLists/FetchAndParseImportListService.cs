@@ -1,11 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Common.TPL;
-using System;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.TPL;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.ImportLists
 {
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.ImportLists
 
             Task.WaitAll(taskList.ToArray());
 
-            result = result.DistinctBy(r => new {r.TvdbId, r.Title}).ToList();
+            result = result.DistinctBy(r => new { r.TvdbId, r.Title }).ToList();
 
             _logger.Debug("Found {0} reports", result.Count);
 
@@ -115,7 +115,6 @@ namespace NzbDrone.Core.ImportLists
             }).LogExceptions();
 
             taskList.Add(task);
-
 
             Task.WaitAll(taskList.ToArray());
 

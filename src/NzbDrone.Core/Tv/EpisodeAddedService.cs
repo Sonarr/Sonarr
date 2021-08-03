@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Tv
                     _commandQueueManager.Push(new EpisodeSearchCommand(missing.Select(e => e.Id).ToList()));
                 }
             }
-            
+
             _addedEpisodesCache.Remove(seriesId.ToString());
         }
 

@@ -14,6 +14,7 @@ namespace NzbDrone.Common.Extensions
                 {
                     ms.Write(buffer, 0, read);
                 }
+
                 return ms.ToArray();
             }
         }

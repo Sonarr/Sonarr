@@ -69,7 +69,6 @@ namespace NzbDrone.Core.Organizer
         public ValidStandardEpisodeFormatValidator()
             : base("Must contain season and episode numbers OR Original Title")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -91,7 +90,6 @@ namespace NzbDrone.Core.Organizer
         public ValidDailyEpisodeFormatValidator()
             : base("Must contain Air Date OR Season and Episode OR Original Title")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -114,7 +112,6 @@ namespace NzbDrone.Core.Organizer
         public ValidAnimeEpisodeFormatValidator()
             : base("Must contain Absolute Episode number OR Season and Episode OR Original Title")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
@@ -139,7 +136,6 @@ namespace NzbDrone.Core.Organizer
         public IllegalCharactersValidator()
             : base("Contains illegal characters: {InvalidCharacters}")
         {
-
         }
 
         protected override bool IsValid(PropertyValidatorContext context)

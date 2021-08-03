@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -27,15 +27,15 @@ namespace Sonarr.Http.Authentication
 
     public class AuthenticationService : IAuthenticationService
     {
-        private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
         private const string AnonymousUser = "Anonymous";
+        private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
         private readonly IUserService _userService;
 
         private static string API_KEY;
         private static AuthenticationType AUTH_METHOD;
 
         [ThreadStatic]
-        private static NancyContext _context; 
+        private static NancyContext _context;
 
         public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)
         {
@@ -187,14 +187,20 @@ namespace Sonarr.Http.Authentication
 
         private bool ValidUser(NancyContext context)
         {
-            if (context.CurrentUser != null) return true;
+            if (context.CurrentUser != null)
+            {
+                return true;
+            }
 
             return false;
         }
 
         private bool ValidApiKey(string apiKey)
         {
-            if (API_KEY.Equals(apiKey)) return true;
+            if (API_KEY.Equals(apiKey))
+            {
+                return true;
+            }
 
             return false;
         }

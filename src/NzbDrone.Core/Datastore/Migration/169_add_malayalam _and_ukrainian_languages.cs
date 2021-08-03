@@ -40,7 +40,6 @@ namespace NzbDrone.Core.Datastore.Migration
         public bool Allowed { get; set; }
     }
 
-
     public class LanguageProfileUpdater169
     {
         private readonly IDbConnection _connection;

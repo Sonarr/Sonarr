@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             var requestGenerator = Mocker.GetMock<IIndexerRequestGenerator>();
             Subject._requestGenerator = requestGenerator.Object;
-            
+
             var requests = Builder<IndexerRequest>.CreateListOfSize(paging ? 100 : 1)
                 .All()
                 .WithFactory(() => new IndexerRequest("http://my.feed.local/", HttpAccept.Rss))
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             WithIndexer(true, 25);
 
-            Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string>{_series.Title} });
+            Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
 
             Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Once());
         }

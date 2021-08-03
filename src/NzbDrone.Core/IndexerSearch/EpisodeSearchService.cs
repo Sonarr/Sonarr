@@ -63,7 +63,6 @@ namespace NzbDrone.Core.IndexerSearch
                             continue;
                         }
                     }
-
                     else
                     {
                         try
@@ -90,7 +89,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
             return episodeMonitored && seriesMonitored;
         }
-        
+
         public void Execute(EpisodeSearchCommand message)
         {
             foreach (var episodeId in message.EpisodeIds)
@@ -116,7 +115,6 @@ namespace NzbDrone.Core.IndexerSearch
                                                  e.AirDateUtc.Value.Before(DateTime.UtcNow))
                                           .ToList();
             }
-
             else
             {
                 var pagingSpec = new PagingSpec<Episode>

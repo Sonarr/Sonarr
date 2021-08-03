@@ -5,7 +5,6 @@ namespace NzbDrone.Core.Datastore
 {
     public interface ILogDatabase : IDatabase
     {
-
     }
 
     public class LogDatabase : ILogDatabase

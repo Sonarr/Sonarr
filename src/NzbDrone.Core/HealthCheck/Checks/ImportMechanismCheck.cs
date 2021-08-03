@@ -18,7 +18,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly IConfigService _configService;
         private readonly IProvideDownloadClient _provideDownloadClient;
 
-
         public ImportMechanismCheck(IConfigService configService, IProvideDownloadClient provideDownloadClient)
         {
             _configService = configService;

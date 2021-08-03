@@ -18,10 +18,12 @@ namespace NzbDrone.Common.Http
         HttpResponse Execute(HttpRequest request);
         void DownloadFile(string url, string fileName);
         HttpResponse Get(HttpRequest request);
-        HttpResponse<T> Get<T>(HttpRequest request) where T : new();
+        HttpResponse<T> Get<T>(HttpRequest request)
+            where T : new();
         HttpResponse Head(HttpRequest request);
         HttpResponse Post(HttpRequest request);
-        HttpResponse<T> Post<T>(HttpRequest request) where T : new();
+        HttpResponse<T> Post<T>(HttpRequest request)
+            where T : new();
     }
 
     public class HttpClient : IHttpClient
@@ -258,11 +260,13 @@ namespace NzbDrone.Common.Http
                         throw new HttpException(request, response, "Site responded with html content.");
                     }
                 }
+
                 stopWatch.Stop();
                 if (File.Exists(fileName))
                 {
                     File.Delete(fileName);
                 }
+
                 File.Move(fileNamePart, fileName);
                 _logger.Debug("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
             }
@@ -271,7 +275,7 @@ namespace NzbDrone.Common.Http
                 if (File.Exists(fileNamePart))
                 {
                     File.Delete(fileNamePart);
-                }  
+                }
             }
         }
 
@@ -281,7 +285,8 @@ namespace NzbDrone.Common.Http
             return Execute(request);
         }
 
-        public HttpResponse<T> Get<T>(HttpRequest request) where T : new()
+        public HttpResponse<T> Get<T>(HttpRequest request)
+            where T : new()
         {
             var response = Get(request);
             CheckResponseContentType(response);
@@ -300,7 +305,8 @@ namespace NzbDrone.Common.Http
             return Execute(request);
         }
 
-        public HttpResponse<T> Post<T>(HttpRequest request) where T : new()
+        public HttpResponse<T> Post<T>(HttpRequest request)
+            where T : new()
         {
             var response = Post(request);
             CheckResponseContentType(response);

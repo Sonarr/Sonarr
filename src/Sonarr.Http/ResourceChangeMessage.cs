@@ -4,7 +4,8 @@ using Sonarr.Http.REST;
 
 namespace Sonarr.Http
 {
-    public class ResourceChangeMessage<TResource> where TResource : RestResource
+    public class ResourceChangeMessage<TResource>
+        where TResource : RestResource
     {
         public TResource Resource { get; private set; }
         public ModelAction Action { get; private set; }
@@ -25,5 +26,4 @@ namespace Sonarr.Http
             Action = action;
         }
     }
-
 }

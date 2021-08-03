@@ -416,7 +416,7 @@ namespace NzbDrone.Core.Extras.Metadata
                         _diskTransferService.TransferFile(existingFullPath, fullPath, TransferMode.Move);
                         existingMetadata.RelativePath = image.RelativePath;
 
-                        return new List<MetadataFile>{ existingMetadata };
+                        return new List<MetadataFile> { existingMetadata };
                     }
                 }
 
@@ -454,6 +454,7 @@ namespace NzbDrone.Core.Extras.Metadata
                 {
                     _diskProvider.CopyFile(image.Url, fullPath);
                 }
+
                 _mediaFileAttributeService.SetFilePermissions(fullPath);
             }
             catch (HttpException ex)

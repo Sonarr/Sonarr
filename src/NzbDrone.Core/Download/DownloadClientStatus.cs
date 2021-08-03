@@ -4,6 +4,5 @@ namespace NzbDrone.Core.Download
 {
     public class DownloadClientStatus : ProviderStatusBase
     {
-
     }
 }

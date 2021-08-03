@@ -13,6 +13,5 @@ namespace NzbDrone.Integration.Test
             var text = new WebClient().DownloadString(RootUrl);
             text.Should().NotBeNullOrWhiteSpace();
         }
-
     }
 }

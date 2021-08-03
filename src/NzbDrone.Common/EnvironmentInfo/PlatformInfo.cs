@@ -2,7 +2,6 @@ using System;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
-
     public enum PlatformType
     {
         DotNet = 0,

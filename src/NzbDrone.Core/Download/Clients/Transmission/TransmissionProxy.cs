@@ -1,11 +1,11 @@
 using System;
-using System.Net;
 using System.Collections.Generic;
-using NzbDrone.Common.Extensions;
-using NLog;
+using System.Net;
 using Newtonsoft.Json.Linq;
-using NzbDrone.Common.Http;
+using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         void MoveTorrentToTopInQueue(string hashString, TransmissionSettings settings);
     }
 
-    public class TransmissionProxy: ITransmissionProxy
+    public class TransmissionProxy : ITransmissionProxy
     {
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
@@ -77,7 +77,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, TransmissionSettings settings)
         {
-            if (seedConfiguration == null) return;
+            if (seedConfiguration == null)
+            {
+                return;
+            }
 
             var arguments = new Dictionary<string, object>();
             arguments.Add("ids", new[] { hash });
@@ -155,7 +158,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         private TransmissionResponse GetTorrentStatus(IEnumerable<string> hashStrings, TransmissionSettings settings)
         {
-            var fields = new string[]{
+            var fields = new string[]
+            {
                 "id",
                 "hashString", // Unique torrent ID. Use this instead of the client id?
                 "name",

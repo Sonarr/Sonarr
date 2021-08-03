@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Test.TvTests
                   .Setup(s => s.GetSeriesFolder(_series, null))
                   .Returns(name);
         }
+
         public void GivenExistingRootFolder(string rootFolder)
         {
             Mocker.GetMock<IRootFolderService>()
@@ -46,7 +47,6 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenSeriesFolderName(_series.Title);
             _series.RootFolderPath = rootFolder;
-
 
             Subject.BuildPath(_series, false).Should().Be(Path.Combine(rootFolder, _series.Title));
         }
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.TvTests
             GivenSeriesFolderName(_series.Title);
             _series.RootFolderPath = rootFolder;
             _series.Path = Path.Combine(existingRootFolder, existingRelativePath);
-            
+
             Subject.BuildPath(_series, true).Should().Be(Path.Combine(rootFolder, existingRelativePath));
         }
 

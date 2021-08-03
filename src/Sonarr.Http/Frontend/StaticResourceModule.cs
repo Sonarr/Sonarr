@@ -13,7 +13,6 @@ namespace Sonarr.Http.Frontend
         private readonly IEnumerable<IMapHttpRequestsToDisk> _requestMappers;
         private readonly Logger _logger;
 
-
         public StaticResourceModule(IEnumerable<IMapHttpRequestsToDisk> requestMappers, Logger logger)
         {
             _requestMappers = requestMappers;

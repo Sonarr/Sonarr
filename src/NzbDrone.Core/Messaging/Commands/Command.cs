@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Messaging.Commands
             set
             {
                 _sendUpdatesToClient = value;
-            }           
+            }
         }
 
         public virtual bool UpdateScheduledTask => true;

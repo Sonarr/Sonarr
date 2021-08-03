@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Update.History
         public UpdateHistoryRepository(ILogDatabase logDatabase, IEventAggregator eventAggregator)
             : base(logDatabase, eventAggregator)
         {
-
         }
 
         public UpdateHistory LastInstalled()

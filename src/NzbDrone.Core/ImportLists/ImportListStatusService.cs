@@ -25,7 +25,6 @@ namespace NzbDrone.Core.ImportLists
             return GetProviderStatus(importListId).LastSyncListInfo;
         }
 
-
         public void UpdateListSyncStatus(int importListId, ImportListItemInfo listItemInfo)
         {
             lock (_syncRoot)

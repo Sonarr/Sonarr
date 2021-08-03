@@ -14,7 +14,7 @@ namespace NzbDrone.Common.Disk
         TransferMode TransferFile(string sourcePath, string targetPath, TransferMode mode, bool overwrite = false);
         int MirrorFolder(string sourcePath, string targetPath);
     }
-    
+
     public class DiskTransferService : IDiskTransferService
     {
         private readonly IDiskProvider _diskProvider;
@@ -40,7 +40,7 @@ namespace NzbDrone.Common.Disk
 
             return realParentPath + partialChildPath;
         }
-        
+
         public TransferMode TransferFolder(string sourcePath, string targetPath, TransferMode mode)
         {
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
@@ -101,14 +101,20 @@ namespace NzbDrone.Common.Disk
 
             foreach (var subDir in _diskProvider.GetDirectoryInfos(sourcePath))
             {
-                if (ShouldIgnore(subDir)) continue;
+                if (ShouldIgnore(subDir))
+                {
+                    continue;
+                }
 
                 result &= TransferFolder(subDir.FullName, Path.Combine(targetPath, subDir.Name), mode);
             }
 
             foreach (var sourceFile in _diskProvider.GetFileInfos(sourcePath))
             {
-                if (ShouldIgnore(sourceFile)) continue;
+                if (ShouldIgnore(sourceFile))
+                {
+                    continue;
+                }
 
                 var destFile = Path.Combine(targetPath, sourceFile.Name);
 
@@ -152,14 +158,20 @@ namespace NzbDrone.Common.Disk
 
             foreach (var subDir in targetFolders.Where(v => !sourceFolders.Any(d => d.Name == v.Name)))
             {
-                if (ShouldIgnore(subDir)) continue;
+                if (ShouldIgnore(subDir))
+                {
+                    continue;
+                }
 
                 _diskProvider.DeleteFolder(subDir.FullName, true);
             }
 
             foreach (var subDir in sourceFolders)
             {
-                if (ShouldIgnore(subDir)) continue;
+                if (ShouldIgnore(subDir))
+                {
+                    continue;
+                }
 
                 filesCopied += MirrorFolder(subDir.FullName, Path.Combine(targetPath, subDir.Name));
             }
@@ -169,14 +181,20 @@ namespace NzbDrone.Common.Disk
 
             foreach (var targetFile in targetFiles.Where(v => !sourceFiles.Any(d => d.Name == v.Name)))
             {
-                if (ShouldIgnore(targetFile)) continue;
+                if (ShouldIgnore(targetFile))
+                {
+                    continue;
+                }
 
                 _diskProvider.DeleteFile(targetFile.FullName);
             }
 
             foreach (var sourceFile in sourceFiles)
             {
-                if (ShouldIgnore(sourceFile)) continue;
+                if (ShouldIgnore(sourceFile))
+                {
+                    continue;
+                }
 
                 var targetFile = Path.Combine(targetPath, sourceFile.Name);
 
@@ -305,6 +323,7 @@ namespace NzbDrone.Common.Disk
                 {
                     return TransferMode.HardLink;
                 }
+
                 if (!mode.HasFlag(TransferMode.Copy))
                 {
                     throw new IOException("Hardlinking from '" + sourcePath + "' to '" + targetPath + "' failed.");
@@ -315,14 +334,14 @@ namespace NzbDrone.Common.Disk
             var sourceMount = _diskProvider.GetMount(sourcePath);
             var targetMount = _diskProvider.GetMount(targetPath);
 
-            var isSameMount = (sourceMount != null && targetMount != null && sourceMount.RootDirectory == targetMount.RootDirectory);
+            var isSameMount = sourceMount != null && targetMount != null && sourceMount.RootDirectory == targetMount.RootDirectory;
 
             var sourceDriveFormat = sourceMount?.DriveFormat ?? string.Empty;
             var targetDriveFormat = targetMount?.DriveFormat ?? string.Empty;
 
             var isCifs = targetDriveFormat == "cifs";
             var isBtrfs = sourceDriveFormat == "btrfs" && targetDriveFormat == "btrfs";
-           
+
             if (mode.HasFlag(TransferMode.Copy))
             {
                 if (isBtrfs)
@@ -363,7 +382,7 @@ namespace NzbDrone.Common.Disk
                     _diskProvider.DeleteFile(sourcePath);
                     return TransferMode.Move;
                 }
-               
+
                 TryMoveFileVerified(sourcePath, targetPath, originalSize);
                 return TransferMode.Move;
             }

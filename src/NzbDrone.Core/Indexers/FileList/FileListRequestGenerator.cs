@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Indexers.FileList
     public class FileListRequestGenerator : IIndexerRequestGenerator
     {
         public FileListSettings Settings { get; set; }
-        
+
         public virtual IndexerPageableRequestChain GetRecentRequests()
         {
             var pageableRequests = new IndexerPageableRequestChain();
@@ -101,7 +101,6 @@ namespace NzbDrone.Core.Indexers.FileList
             }
 
             return pageableRequests;
-
         }
 
         public IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)

@@ -6,7 +6,6 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerStatusRepository : IProviderStatusRepository<IndexerStatus>
     {
-
     }
 
     public class IndexerStatusRepository : ProviderStatusRepository<IndexerStatus>, IIndexerStatusRepository

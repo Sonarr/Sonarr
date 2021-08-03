@@ -7,7 +7,6 @@ namespace NzbDrone.Core.Profiles.Languages
         public LanguageProfileInUseException(int profileId)
             : base("Language profile [{0}] is in use.", profileId)
         {
-
         }
     }
 }

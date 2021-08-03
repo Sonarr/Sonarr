@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -57,7 +57,8 @@ namespace Sonarr.Http
             get
             {
                 // We don't support Xml Serialization atm
-                return NancyInternalConfiguration.WithOverrides(x => {
+                return NancyInternalConfiguration.WithOverrides(x =>
+                {
                     x.ResponseProcessors.Remove(typeof(ViewProcessor));
                     x.ResponseProcessors.Remove(typeof(XmlProcessor));
                 });

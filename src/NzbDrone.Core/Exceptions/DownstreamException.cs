@@ -7,7 +7,8 @@ namespace NzbDrone.Core.Exceptions
     {
         public HttpStatusCode StatusCode { get; private set; }
 
-        public DownstreamException(HttpStatusCode statusCode, string message, params object[] args) : base(message, args)
+        public DownstreamException(HttpStatusCode statusCode, string message, params object[] args)
+            : base(message, args)
         {
             StatusCode = statusCode;
         }

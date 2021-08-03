@@ -4,13 +4,13 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 {
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             Mocker.GetMock<IConfigService>()
                 .SetupGet(s => s.EnableMediaInfo)
                 .Returns(false);
-            
+
             GivenFileExists();
             GivenSuccessfulScan();
 
@@ -222,7 +222,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             Mocker.GetMock<IConfigService>()
                 .SetupGet(s => s.EnableMediaInfo)
                 .Returns(false);
-            
+
             GivenFileExists();
             GivenSuccessfulScan();
 
@@ -240,7 +240,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(v => v.RelativePath = "media.mkv")
-                .With(e => e.MediaInfo = new MediaInfoModel{SchemaRevision = 3})
+                .With(e => e.MediaInfo = new MediaInfoModel { SchemaRevision = 3 })
                 .Build();
 
             GivenFileExists();
@@ -254,13 +254,13 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             Mocker.GetMock<IMediaFileService>()
                 .Verify(v => v.Update(episodeFile), Times.Once());
         }
-        
+
         [Test]
         public void should_not_update_media_info_if_new_info_is_null()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(v => v.RelativePath = "media.mkv")
-                .With(e => e.MediaInfo = new MediaInfoModel{SchemaRevision = 3})
+                .With(e => e.MediaInfo = new MediaInfoModel { SchemaRevision = 3 })
                 .Build();
 
             GivenFileExists();
@@ -270,13 +270,13 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 
             episodeFile.MediaInfo.Should().NotBeNull();
         }
-        
+
         [Test]
         public void should_not_save_episode_file_if_new_info_is_null()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(v => v.RelativePath = "media.mkv")
-                .With(e => e.MediaInfo = new MediaInfoModel{SchemaRevision = 3})
+                .With(e => e.MediaInfo = new MediaInfoModel { SchemaRevision = 3 })
                 .Build();
 
             GivenFileExists();

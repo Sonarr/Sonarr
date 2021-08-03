@@ -26,7 +26,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             var backOffProviders = enabledProviders.Join(_providerStatusService.GetBlockedProviders(),
                                                        i => i.Definition.Id,
                                                        s => s.ProviderId,
-                                                       (i, s) => new {Provider = i, Status = s})
+                                                       (i, s) => new { Provider = i, Status = s })
                                                    .Where(p => p.Status.InitialFailure.HasValue &&
                                                                p.Status.InitialFailure.Value.After(
                                                                    DateTime.UtcNow.AddHours(-6)))

@@ -8,14 +8,14 @@ namespace Sonarr.Api.V3.Indexers
 {
     public abstract class ReleaseModuleBase : SonarrRestModule<ReleaseResource>
     {
-        private readonly LanguageProfile LANGUAGE_PROFILE;
-        private readonly QualityProfile QUALITY_PROFILE;
+        private readonly LanguageProfile _languageProfile;
+        private readonly QualityProfile _qualityProfile;
 
         public ReleaseModuleBase(ILanguageProfileService languageProfileService,
                                  IQualityProfileService qualityProfileService)
         {
-            LANGUAGE_PROFILE = languageProfileService.GetDefaultProfile(string.Empty);
-            QUALITY_PROFILE = qualityProfileService.GetDefaultProfile(string.Empty);
+            _languageProfile = languageProfileService.GetDefaultProfile(string.Empty);
+            _qualityProfile = qualityProfileService.GetDefaultProfile(string.Empty);
         }
 
         protected virtual List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
@@ -38,8 +38,8 @@ namespace Sonarr.Api.V3.Indexers
 
             release.ReleaseWeight = initialWeight;
 
-            release.QualityWeight = QUALITY_PROFILE.GetIndex(release.Quality.Quality).Index * 100;
-            release.LanguageWeight = LANGUAGE_PROFILE.Languages.FindIndex(v => v.Language == release.Language) * 100;
+            release.QualityWeight = _qualityProfile.GetIndex(release.Quality.Quality).Index * 100;
+            release.LanguageWeight = _languageProfile.Languages.FindIndex(v => v.Language == release.Language) * 100;
 
             release.QualityWeight += release.Quality.Revision.Real * 10;
             release.QualityWeight += release.Quality.Revision.Version;

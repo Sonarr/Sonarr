@@ -18,7 +18,10 @@ namespace Sonarr.Api.V3.Series
         {
             get
             {
-                if (EpisodeCount == 0) return 0;
+                if (EpisodeCount == 0)
+                {
+                    return 0;
+                }
 
                 return (decimal)EpisodeFileCount / (decimal)EpisodeCount * 100;
             }
@@ -29,7 +32,10 @@ namespace Sonarr.Api.V3.Series
     {
         public static SeasonStatisticsResource ToResource(this SeasonStatistics model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new SeasonStatisticsResource
             {

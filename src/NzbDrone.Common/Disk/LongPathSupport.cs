@@ -54,7 +54,11 @@ namespace NzbDrone.Common.Disk
         {
             get
             {
-                if (MAX_PATH == 0) DetectLongPathLimits();
+                if (MAX_PATH == 0)
+                {
+                    DetectLongPathLimits();
+                }
+
                 return MAX_PATH;
             }
         }
@@ -63,7 +67,11 @@ namespace NzbDrone.Common.Disk
         {
             get
             {
-                if (MAX_NAME == 0) DetectLongPathLimits();
+                if (MAX_NAME == 0)
+                {
+                    DetectLongPathLimits();
+                }
+
                 return MAX_NAME;
             }
         }

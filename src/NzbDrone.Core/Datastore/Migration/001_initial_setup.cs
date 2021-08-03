@@ -116,7 +116,6 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("TvdbId").AsInt32()
                   .WithColumn("SeasonNumber").AsInt32();
 
-
             Create.TableForModel("NamingConfig")
                   .WithColumn("UseSceneName").AsBoolean()
                   .WithColumn("Separator").AsString()

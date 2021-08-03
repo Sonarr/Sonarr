@@ -13,7 +13,10 @@ namespace Sonarr.Http.Validation
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            if (context.PropertyValue == null) return true;
+            if (context.PropertyValue == null)
+            {
+                return true;
+            }
 
             return context.PropertyValue is IEnumerable<T> collection && collection.Empty();
         }

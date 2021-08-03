@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             RuleFor(c => c.Port).InclusiveBetween(1, 65535);
             RuleFor(c => c.TvCategory).NotEmpty()
                                       .WithMessage("A category is recommended")
-                                      .AsWarning(); 
+                                      .AsWarning();
         }
     }
 

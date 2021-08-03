@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
@@ -7,7 +8,6 @@ using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using FluentAssertions;
 
 namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 {
@@ -18,9 +18,10 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             Mocker.GetMock<IPendingReleaseRepository>()
                               .Setup(v => v.All())
-                              .Returns(new List<PendingRelease> {
+                              .Returns(new List<PendingRelease>
+                                {
                                       new PendingRelease { Release = new ReleaseInfo { IndexerId = 1 } }
-                                  });
+                                });
         }
 
         [Test]

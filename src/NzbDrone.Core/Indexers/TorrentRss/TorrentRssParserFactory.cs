@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
     public class TorrentRssParserFactory : ITorrentRssParserFactory
     {
         protected readonly Logger _logger;
-        
+
         private readonly ICached<TorrentRssIndexerParserSettings> _settingsCache;
 
         private readonly ITorrentRssSettingsDetector _torrentRssSettingsDetector;

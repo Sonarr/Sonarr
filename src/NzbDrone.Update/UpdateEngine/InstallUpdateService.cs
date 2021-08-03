@@ -57,10 +57,14 @@ namespace NzbDrone.Update.UpdateEngine
             _logger.Info("Verifying requirements before update...");
 
             if (string.IsNullOrWhiteSpace(targetFolder))
+            {
                 throw new ArgumentException("Target folder can not be null or empty");
+            }
 
             if (!_diskProvider.FolderExists(targetFolder))
+            {
                 throw new DirectoryNotFoundException("Target folder doesn't exist " + targetFolder);
+            }
 
             if (processId < 1)
             {
@@ -74,7 +78,9 @@ namespace NzbDrone.Update.UpdateEngine
 
             _logger.Info("Verifying Update Folder");
             if (!_diskProvider.FolderExists(_appFolderInfo.GetUpdatePackageFolder()))
+            {
                 throw new DirectoryNotFoundException("Update folder doesn't exist " + _appFolderInfo.GetUpdatePackageFolder());
+            }
         }
 
         public void Start(string installationFolder, int processId)
@@ -161,7 +167,6 @@ namespace NzbDrone.Update.UpdateEngine
                     }
                 }
             }
-
         }
     }
 }

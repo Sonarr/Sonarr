@@ -2,8 +2,8 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Datastore.Migration;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {

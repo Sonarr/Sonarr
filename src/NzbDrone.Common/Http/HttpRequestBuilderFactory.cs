@@ -16,7 +16,6 @@ namespace NzbDrone.Common.Http
 
         protected HttpRequestBuilderFactory()
         {
-
         }
 
         protected void SetRootBuilder(HttpRequestBuilder rootBuilder)

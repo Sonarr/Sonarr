@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var db = WithMigrationTestDb(c =>
             {
-                c.Insert.IntoTable("Notifications").Row(new 
+                c.Insert.IntoTable("Notifications").Row(new
                 {
                     OnGrab = false,
                     OnDownload = false,
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     OnUpgrade = false,
                     Name = "PushBullet",
                     Implementation = "PushBullet",
-                    Settings = new 
+                    Settings = new
                     {
                         ApiKey = "my_api_key",
                         DeviceId = deviceId

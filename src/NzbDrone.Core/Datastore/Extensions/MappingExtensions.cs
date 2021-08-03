@@ -11,20 +11,22 @@ namespace NzbDrone.Core.Datastore.Extensions
 {
     public static class MappingExtensions
     {
-
-        public static ColumnMapBuilder<T> MapResultSet<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder) where T : ResultSet, new()
+        public static ColumnMapBuilder<T> MapResultSet<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder)
+            where T : ResultSet, new()
         {
             return mapBuilder
                 .Columns
                 .AutoMapPropertiesWhere(IsMappableProperty);
         }
 
-        public static ColumnMapBuilder<T> RegisterDefinition<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName = null) where T : ProviderDefinition, new()
+        public static ColumnMapBuilder<T> RegisterDefinition<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName = null)
+            where T : ProviderDefinition, new()
         {
             return RegisterModel(mapBuilder, tableName).Ignore(c => c.ImplementationName);
         }
-        
-        public static ColumnMapBuilder<T> RegisterModel<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName = null) where T : ModelBase, new()
+
+        public static ColumnMapBuilder<T> RegisterModel<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName = null)
+            where T : ModelBase, new()
         {
             return mapBuilder.Table.MapTable(tableName)
                              .Columns
@@ -40,15 +42,17 @@ namespace NzbDrone.Core.Datastore.Extensions
         {
             return mapBuilder.Relationships.AutoMapPropertiesWhere(m =>
                     m.MemberType == MemberTypes.Property &&
-                    typeof(ModelBase).IsAssignableFrom(((PropertyInfo) m).PropertyType));
+                    typeof(ModelBase).IsAssignableFrom(((PropertyInfo)m).PropertyType));
         }
 
         public static bool IsMappableProperty(MemberInfo memberInfo)
         {
             var propertyInfo = memberInfo as PropertyInfo;
 
-            if (propertyInfo == null) return false;
-
+            if (propertyInfo == null)
+            {
+                return false;
+            }
 
             if (!propertyInfo.IsReadable() || !propertyInfo.IsWritable())
             {

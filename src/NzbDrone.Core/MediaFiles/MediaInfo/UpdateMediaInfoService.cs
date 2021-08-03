@@ -1,12 +1,12 @@
-﻿using System.IO;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
-using System.Collections.Generic;
-using System.Linq;
-using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -78,14 +78,16 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             var updatedMediaInfo = _videoFileInfoReader.GetMediaInfo(path);
 
-            if (updatedMediaInfo == null) return false;
+            if (updatedMediaInfo == null)
+            {
+                return false;
+            }
 
             episodeFile.MediaInfo = updatedMediaInfo;
             _mediaFileService.Update(episodeFile);
             _logger.Debug("Updated MediaInfo for '{0}'", path);
 
             return true;
-
         }
     }
 }

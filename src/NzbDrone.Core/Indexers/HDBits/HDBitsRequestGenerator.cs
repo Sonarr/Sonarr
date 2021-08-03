@@ -122,6 +122,7 @@ namespace NzbDrone.Core.Indexers.HDBits
                 query.TvdbInfo.Id = searchCriteria.Series.TvdbId;
                 return true;
             }
+
             return false;
         }
 

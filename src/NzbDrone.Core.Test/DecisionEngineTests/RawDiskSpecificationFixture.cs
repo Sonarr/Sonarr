@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Parser.Model;
-
-using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -31,7 +30,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _remoteEpisode.Release.Container = container;
         }
-        
+
         [Test]
         public void should_return_true_if_no_container_specified_and_does_not_match_disc_release_pattern()
         {

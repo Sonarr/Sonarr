@@ -9,7 +9,7 @@ using HarmonyLib;
 namespace NzbDrone.RuntimePatches.Mono
 {
     // Mono 5.x - 6.x bug 19886
-    // The BoringTLS provider does not enable the trust-first option that's default on in openssl 1.1.0 and up. 
+    // The BoringTLS provider does not enable the trust-first option that's default on in openssl 1.1.0 and up.
     // This prevents it from building the short trusted chain and errors out on old (expired) chains included in the certificate.
     // This is a problem with Cross-Signed certificates that have an expired legacy root signing the new root.
     // The Flags default is 0, while X509_V_FLAG_TRUSTED_FIRST is 0x8000.
@@ -40,14 +40,14 @@ namespace NzbDrone.RuntimePatches.Mono
         // + copy.SetFlags(0x8000);
         // + return copy;
         // }
-        static IEnumerable<CodeInstruction> Transpiler_GetSslServer(IEnumerable<CodeInstruction> instructions, MethodBase method, ILGenerator generator)
+        private static IEnumerable<CodeInstruction> Transpiler_GetSslServer(IEnumerable<CodeInstruction> instructions, MethodBase method, ILGenerator generator)
         {
             var codes = instructions.ToList();
 
             var patchable = codes.Matches(OpCodes.Ldstr, OpCodes.Ldc_I4_1, OpCodes.Call, OpCodes.Ret);
 
             Instance.DebugOpcodes("Before", codes);
-           
+
             var targetType = method.DeclaringType;
             var copyMethod = targetType.GetMethod("Copy", new Type[0]);
             var disposeMethod = targetType.GetMethod("Dispose", new Type[0]);

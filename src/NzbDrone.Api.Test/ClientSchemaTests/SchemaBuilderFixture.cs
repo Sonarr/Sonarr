@@ -16,7 +16,6 @@ namespace NzbDrone.Api.Test.ClientSchemaTests
             schema.Should().HaveCount(2);
         }
 
-
         [Test]
         public void schema_should_have_proper_fields()
         {
@@ -31,7 +30,6 @@ namespace NzbDrone.Api.Test.ClientSchemaTests
             schema.Should().Contain(c => c.Order == 1 && c.Name == "lastName" && c.Label == "Last Name" && c.HelpText == "Your Last Name" && (string)c.Value == "Poop");
             schema.Should().Contain(c => c.Order == 0 && c.Name == "firstName" && c.Label == "First Name" && c.HelpText == "Your First Name" && (string)c.Value == "Bob");
         }
-
 
         [Test]
         public void schema_should_have_nested_fields()

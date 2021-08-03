@@ -40,7 +40,6 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>());
 
-
             Subject.FilterExistingFiles(files, _series).Should().BeEquivalentTo(files);
         }
 
@@ -57,7 +56,6 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
             Mocker.GetMock<IMediaFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(files.Select(f => new EpisodeFile { RelativePath = Path.GetFileName(f) }).ToList());
-
 
             Subject.FilterExistingFiles(files, _series).Should().BeEmpty();
         }
@@ -76,9 +74,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
-                    new EpisodeFile{ RelativePath = "file2.avi".AsOsAgnostic()}
+                    new EpisodeFile { RelativePath = "file2.avi".AsOsAgnostic() }
                 });
-
 
             Subject.FilterExistingFiles(files, _series).Should().HaveCount(2);
             Subject.FilterExistingFiles(files, _series).Should().NotContain("C:\\file2.avi".AsOsAgnostic());
@@ -100,9 +97,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
-                    new EpisodeFile{ RelativePath = "file2.avi".AsOsAgnostic()}
+                    new EpisodeFile { RelativePath = "file2.avi".AsOsAgnostic() }
                 });
-
 
             Subject.FilterExistingFiles(files, _series).Should().HaveCount(2);
             Subject.FilterExistingFiles(files, _series).Should().NotContain("C:\\file2.avi".AsOsAgnostic());
@@ -124,7 +120,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
-                    new EpisodeFile{ RelativePath = "file2.avi".AsOsAgnostic()}
+                    new EpisodeFile { RelativePath = "file2.avi".AsOsAgnostic() }
                 });
 
             Subject.FilterExistingFiles(files, _series).Should().HaveCount(3);

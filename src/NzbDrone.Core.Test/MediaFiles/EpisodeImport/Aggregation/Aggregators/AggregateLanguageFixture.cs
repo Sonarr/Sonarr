@@ -10,7 +10,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
-    [TestFixture]  
+    [TestFixture]
     public class AggregateLanguageFixture : CoreTest<AggregateLanguage>
     {
         private LocalEpisode _localEpisode;
@@ -64,7 +64,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _localEpisode.FileEpisodeInfo = GetParsedEpisodeInfo(Language.English, _simpleReleaseTitle);
 
             Subject.Aggregate(_localEpisode, null).Language.Should().Be(_localEpisode.DownloadClientEpisodeInfo.Language);
-
         }
 
         [Test]
@@ -84,7 +83,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _localEpisode.FileEpisodeInfo = GetParsedEpisodeInfo(Language.Swedish, "Series.Title.S01E01.The.Swedish.Job.720p.WEB-DL-RlsGrp");
 
             Subject.Aggregate(_localEpisode, null).Language.Should().Be(Language.English);
-
         }
 
         [Test]
@@ -94,7 +92,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             _localEpisode.FileEpisodeInfo = GetParsedEpisodeInfo(Language.French, "Series.Title.S01E01.The.Swedish.Job.720p.WEB-DL-RlsGrp");
 
             Subject.Aggregate(_localEpisode, null).Language.Should().Be(_localEpisode.FileEpisodeInfo.Language);
-
         }
     }
 }

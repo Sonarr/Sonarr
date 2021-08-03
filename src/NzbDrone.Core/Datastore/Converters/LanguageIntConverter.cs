@@ -27,7 +27,10 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public object ToDB(object clrValue)
         {
-            if (clrValue == DBNull.Value) return 0;
+            if (clrValue == DBNull.Value)
+            {
+                return 0;
+            }
 
             if (clrValue as Language == null)
             {

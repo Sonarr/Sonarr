@@ -15,7 +15,6 @@ namespace Sonarr.Api.V3.Profiles.Language
         }
     }
 
-
     public class LanguageValidator<T> : PropertyValidator
     {
         public LanguageValidator()

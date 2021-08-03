@@ -39,6 +39,7 @@ namespace NzbDrone.Console
                     System.Console.WriteLine("NLog Exception: " + ex.ToString());
                     throw;
                 }
+
                 Bootstrap.Start(startupArgs, new ConsoleAlerts());
             }
             catch (SonarrStartupException ex)
@@ -70,7 +71,7 @@ namespace NzbDrone.Console
                 System.Console.WriteLine("EPIC FAIL! " + ex.ToString());
                 Exit(ExitCodes.UnknownFailure, startupArgs);
             }
-            
+
             Logger.Info("Exiting main.");
 
             Exit(ExitCodes.Normal, startupArgs);
@@ -88,8 +89,6 @@ namespace NzbDrone.Console
 
                 if (exitCode == ExitCodes.NonRecoverableFailure)
                 {
-                    
-
                     if (startupArgs?.ExitImmediately == true)
                     {
                         System.Console.WriteLine("Non-recoverable failure, but set to exit immediately");
@@ -102,7 +101,10 @@ namespace NzbDrone.Console
                     {
                         System.Threading.Thread.Sleep(1000);
 
-                        if (System.Console.KeyAvailable) break;
+                        if (System.Console.KeyAvailable)
+                        {
+                            break;
+                        }
                     }
                 }
 

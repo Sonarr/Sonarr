@@ -4,6 +4,5 @@ namespace NzbDrone.Core.MediaFiles.Events
 {
     public class DeleteCompletedEvent : IEvent
     {
-
     }
 }

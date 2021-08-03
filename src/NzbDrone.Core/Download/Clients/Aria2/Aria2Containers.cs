@@ -1,4 +1,4 @@
-﻿using CookComputing.XmlRpc;
+using CookComputing.XmlRpc;
 
 namespace NzbDrone.Core.Download.Clients.Aria2
 {
@@ -109,4 +109,3 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         public string ErrorMessage;
     }
 }
-

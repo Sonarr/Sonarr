@@ -35,8 +35,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
                 if (!_upgradableSpecification.IsUpgradeAllowed(qualityProfile,
-                                                               languageProfile, 
-                                                               file.Quality, 
+                                                               languageProfile,
+                                                               file.Quality,
                                                                file.Language,
                                                                subject.ParsedEpisodeInfo.Quality,
                                                                subject.ParsedEpisodeInfo.Language))

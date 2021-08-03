@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.IndexerTests.OmgwtfnzbsTests
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
-            
+
             var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(100);

@@ -71,7 +71,6 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
             }
 
             return new OsVersionModel(name, version, fullName);
-
         }
 
         public bool Enabled => OsInfo.IsLinux;

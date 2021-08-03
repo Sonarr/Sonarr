@@ -64,7 +64,6 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             releaseInfo.Size.Should().Be(1183105773);
         }
 
-
         [Test]
         public void should_parse_recent_feed_from_newznab_animetosho()
         {

@@ -1,5 +1,4 @@
 namespace NzbDrone.Core.Notifications.Gotify
-
 {
     public enum GotifyPriority
     {

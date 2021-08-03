@@ -1,11 +1,13 @@
-﻿using NzbDrone.Core.Tv;
-using System;
+﻿using System;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {
     public class WebhookEpisode
     {
-        public WebhookEpisode() { }
+        public WebhookEpisode()
+        {
+        }
 
         public WebhookEpisode(Episode episode)
         {

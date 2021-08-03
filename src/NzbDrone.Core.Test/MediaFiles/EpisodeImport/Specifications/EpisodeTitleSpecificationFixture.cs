@@ -144,7 +144,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.EpisodeTitleRequired)
                   .Returns(EpisodeTitleRequiredType.BulkSeasonReleases);
 
-
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(Builder<Episode>.CreateListOfSize(5)
@@ -163,7 +162,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             Mocker.GetMock<IConfigService>()
                   .Setup(s => s.EpisodeTitleRequired)
                   .Returns(EpisodeTitleRequiredType.BulkSeasonReleases);
-
 
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()))

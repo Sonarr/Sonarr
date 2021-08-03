@@ -38,6 +38,5 @@ namespace Sonarr.Api.V3.Logs
                 return "logfile";
             }
         }
-
     }
 }

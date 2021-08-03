@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Blocklisting
         void Delete(int id);
         void Delete(List<int> ids);
     }
+
     public class BlocklistService : IBlocklistService,
                                     IExecute<ClearBlocklistCommand>,
                                     IHandle<DownloadFailedEvent>,
@@ -35,12 +36,15 @@ namespace NzbDrone.Core.Blocklisting
         public bool Blocklisted(int seriesId, ReleaseInfo release)
         {
             var blocklistedByTitle = _blocklistRepository.BlocklistedByTitle(seriesId, release.Title);
-            
+
             if (release.DownloadProtocol == DownloadProtocol.Torrent)
             {
                 var torrentInfo = release as TorrentInfo;
 
-                if (torrentInfo == null) return false;
+                if (torrentInfo == null)
+                {
+                    return false;
+                }
 
                 if (torrentInfo.InfoHash.IsNullOrWhiteSpace())
                 {
@@ -78,7 +82,6 @@ namespace NzbDrone.Core.Blocklisting
                                 Message = message,
                                 Language = remoteEpisode.ParsedEpisodeInfo.Language
                             };
-
 
             if (remoteEpisode.Release is TorrentInfo torrentRelease)
             {
@@ -137,7 +140,10 @@ namespace NzbDrone.Core.Blocklisting
 
         private bool HasSamePublishedDate(Blocklist item, DateTime publishedDate)
         {
-            if (!item.PublishedDate.HasValue) return true;
+            if (!item.PublishedDate.HasValue)
+            {
+                return true;
+            }
 
             return item.PublishedDate.Value.AddMinutes(-2) <= publishedDate &&
                    item.PublishedDate.Value.AddMinutes(2) >= publishedDate;
@@ -145,7 +151,10 @@ namespace NzbDrone.Core.Blocklisting
 
         private bool HasSameSize(Blocklist item, long size)
         {
-            if (!item.Size.HasValue) return true;
+            if (!item.Size.HasValue)
+            {
+                return true;
+            }
 
             var difference = Math.Abs(item.Size.Value - size);
 

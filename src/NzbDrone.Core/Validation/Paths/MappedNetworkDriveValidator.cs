@@ -22,14 +22,28 @@ namespace NzbDrone.Core.Validation.Paths
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            if (context.PropertyValue == null) return false;
-            if (OsInfo.IsNotWindows) return true;
-            if (!_runtimeInfo.IsWindowsService) return true;
+            if (context.PropertyValue == null)
+            {
+                return false;
+            }
+
+            if (OsInfo.IsNotWindows)
+            {
+                return true;
+            }
+
+            if (!_runtimeInfo.IsWindowsService)
+            {
+                return true;
+            }
 
             var path = context.PropertyValue.ToString();
 
-            if (!DriveRegex.IsMatch(path)) return true;
-            
+            if (!DriveRegex.IsMatch(path))
+            {
+                return true;
+            }
+
             var mount = _diskProvider.GetMount(path);
 
             if (mount != null && mount.DriveType == DriveType.Network)

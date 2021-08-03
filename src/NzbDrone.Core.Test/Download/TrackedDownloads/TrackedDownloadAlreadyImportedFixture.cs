@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using FizzWare.NBuilder;
-using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.Test.Download.TrackedDownloads
 {
@@ -52,8 +52,7 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                     Builder<EpisodeHistory>.CreateNew()
                                             .With(h => h.EpisodeId = episode.Id)
                                             .With(h => h.EventType = eventType)
-                                            .Build()
-                );
+                                            .Build());
             }
         }
 

@@ -64,6 +64,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
             series.Network.Should().NotBeNullOrWhiteSpace();
             series.Runtime.Should().BeGreaterThan(0);
             series.TitleSlug.Should().NotBeNullOrWhiteSpace();
+
             //series.TvRageId.Should().BeGreaterThan(0);
             series.TvdbId.Should().BeGreaterThan(0);
         }

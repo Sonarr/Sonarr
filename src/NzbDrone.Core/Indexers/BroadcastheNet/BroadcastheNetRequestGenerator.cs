@@ -1,5 +1,5 @@
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
@@ -190,7 +190,6 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
                     parameters.Category = "Episode";
                     parameters.Name = "%" + queryTitle + "%";
-                
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -206,11 +205,13 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 parameters.Tvdb = string.Format("{0}", searchCriteria.Series.TvdbId);
                 return true;
             }
+
             if (searchCriteria.Series.TvRageId != 0)
             {
                 parameters.Tvrage = string.Format("{0}", searchCriteria.Series.TvRageId);
                 return true;
             }
+
             // BTN is very neatly managed, so it's unlikely they map tvrage/tvdb wrongly.
             return false;
         }

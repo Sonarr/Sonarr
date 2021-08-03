@@ -17,13 +17,11 @@ namespace NzbDrone.Common.Http
         public HttpException(HttpRequest request, HttpResponse response)
             : this(request, response, string.Format("HTTP request failed: [{0}:{1}] [{2}] at [{3}]", (int)response.StatusCode, response.StatusCode, request.Method, request.Url))
         {
-
         }
 
         public HttpException(HttpResponse response)
             : this(response.Request, response)
         {
-
         }
 
         public override string ToString()

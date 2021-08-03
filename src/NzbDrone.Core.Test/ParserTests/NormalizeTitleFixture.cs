@@ -5,7 +5,6 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
-
     [TestFixture]
     public class NormalizeTitleFixture : CoreTest
     {
@@ -111,9 +110,8 @@ namespace NzbDrone.Core.Test.ParserTests
             foreach (var s in dirtyFormat)
             {
                 var dirty = string.Format(s, word);
-                dirty.CleanSeriesTitle().Should().Be(("word" + word.ToLower() + "word"));
+                dirty.CleanSeriesTitle().Should().Be("word" + word.ToLower() + "word");
             }
-
         }
 
         [TestCase("The Series", "theseries")]

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.ImportLists;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Languages;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.ImportLists;
 
 namespace NzbDrone.Core.Profiles.Languages
 {
@@ -98,9 +98,9 @@ namespace NzbDrone.Core.Profiles.Languages
 
             var profile = new LanguageProfile
             {
-                Name = name, 
-                Cutoff = cutoff, 
-                Languages = languages, 
+                Name = name,
+                Cutoff = cutoff,
+                Languages = languages,
             };
 
             return Add(profile);
@@ -108,7 +108,10 @@ namespace NzbDrone.Core.Profiles.Languages
 
         public void Handle(ApplicationStartedEvent message)
         {
-            if (All().Any()) return;
+            if (All().Any())
+            {
+                return;
+            }
 
             _logger.Info("Setting up default language profiles");
 

@@ -6,8 +6,8 @@ using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.ImportLists.Exclusions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.ImportLists
 {
@@ -38,7 +38,6 @@ namespace NzbDrone.Core.ImportLists
             _logger = logger;
         }
 
-
         private void SyncAll()
         {
             _logger.ProgressInfo("Starting Import List Sync");
@@ -48,7 +47,6 @@ namespace NzbDrone.Core.ImportLists
             var reports = rssReleases.ToList();
 
             ProcessReports(reports);
-
         }
 
         private void SyncList(ImportListDefinition definition)
@@ -60,7 +58,6 @@ namespace NzbDrone.Core.ImportLists
             var reports = rssReleases.ToList();
 
             ProcessReports(reports);
-
         }
 
         private void ProcessReports(List<ImportListItemInfo> reports)

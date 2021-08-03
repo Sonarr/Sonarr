@@ -16,9 +16,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         // Other paths: What is the difference between  'move_completed_path' and 'move_on_completed_path'?
         /*
-        [JsonProperty(PropertyName = "move_completed_path")] 
+        [JsonProperty(PropertyName = "move_completed_path")]
         public String DownloadPathMoveCompleted { get; set; }
-        [JsonProperty(PropertyName = "move_on_completed_path")] 
+        [JsonProperty(PropertyName = "move_on_completed_path")]
         public String DownloadPathMoveOnCompleted { get; set; }
         */
 

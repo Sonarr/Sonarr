@@ -41,7 +41,6 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                     .With(c => c.RemoteEpisode = remoteEpisode)
                     .Build();
 
-
             Mocker.GetMock<IDownloadClient>()
               .SetupGet(c => c.Definition)
               .Returns(new DownloadClientDefinition { Id = 1, Name = "testClient" });
@@ -61,7 +60,6 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetSeries("Drone.S01E01.HDTV"))
                   .Returns(remoteEpisode.Series);
-
         }
 
         private RemoteEpisode BuildRemoteEpisode()
@@ -144,7 +142,7 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
         [Test]
         public void should_not_process_if_output_path_is_empty()
         {
-            _trackedDownload.DownloadItem.OutputPath = new OsPath();
+            _trackedDownload.DownloadItem.OutputPath = default(OsPath);
 
             Subject.Check(_trackedDownload);
 
@@ -160,7 +158,7 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<ImportMode>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
-                               new ImportResult(new ImportDecision(new LocalEpisode {Path = @"C:\TestPath\Droned.S01E01.mkv"}))
+                               new ImportResult(new ImportDecision(new LocalEpisode { Path = @"C:\TestPath\Droned.S01E01.mkv" }))
                            });
 
             Mocker.GetMock<IHistoryService>()

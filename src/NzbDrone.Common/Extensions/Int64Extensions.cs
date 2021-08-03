@@ -11,8 +11,15 @@ namespace NzbDrone.Common.Extensions
         {
             const int bytesInKb = 1024;
 
-            if (bytes < 0) return "-" + SizeSuffix(-bytes);
-            if (bytes == 0) return "0 B";
+            if (bytes < 0)
+            {
+                return "-" + SizeSuffix(-bytes);
+            }
+
+            if (bytes == 0)
+            {
+                return "0 B";
+            }
 
             var mag = (int)Math.Log(bytes, bytesInKb);
             var adjustedSize = bytes / (decimal)Math.Pow(bytesInKb, mag);

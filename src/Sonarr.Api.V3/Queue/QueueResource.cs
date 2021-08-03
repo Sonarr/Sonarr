@@ -41,7 +41,10 @@ namespace Sonarr.Api.V3.Queue
     {
         public static QueueResource ToResource(this NzbDrone.Core.Queue.Queue model, bool includeSeries, bool includeEpisode)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new QueueResource
             {

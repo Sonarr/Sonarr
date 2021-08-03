@@ -10,7 +10,6 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Delete.Table("History");
 
-
             Create.TableForModel("History")
                   .WithColumn("EpisodeId").AsInt32()
                   .WithColumn("SeriesId").AsInt32()
