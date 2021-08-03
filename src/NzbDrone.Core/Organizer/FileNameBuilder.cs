@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Organizer
 
         private static readonly Regex YearRegex = new Regex(@"\(\d{4}\)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex ReservedDeviceNamesRegex = new Regex(@"^(?:aux|com1|com2|com3|com4|com5|com6|com7|com8|com9|con|lpt1|lpt2|lpt3|lpt4|lpt5|lpt6|lpt7|lpt8|lpt9|nul|prn)\.", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ReservedDeviceNamesRegex = new Regex(@"^(?:aux|com[1-9]|con|lpt[1-9]|nul|prn)\.", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,

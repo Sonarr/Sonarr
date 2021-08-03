@@ -50,37 +50,40 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                             .Build();
 
             _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "SonarrTest" };
-            
+
             Mocker.GetMock<IQualityDefinitionService>()
                 .Setup(v => v.Get(Moq.It.IsAny<Quality>()))
                 .Returns<Quality>(v => Quality.DefaultQualityDefinitions.First(c => c.Quality == v));
         }
 
-        [Test]
-        public void should_replace_reserved_device_name_in_series_folder()
+        [TestCase("Con Game", "Con_Game")]
+        [TestCase("Com1 Sat", "Com1_Sat")]
+        public void should_replace_reserved_device_name_in_series_folder(string title, string expected)
         {
-            _series.Title = "Con Man";
+            _series.Title = title;
             _namingConfig.SeriesFolderFormat = "{Series.Title}";
 
-            Subject.GetSeriesFolder(_series).Should().Be("Con_Man");
+            Subject.GetSeriesFolder(_series).Should().Be($"{expected}");
         }
 
-        [Test]
-        public void should_replace_reserved_device_name_in_season_folder()
+        [TestCase("Con Game", "Con_Game")]
+        [TestCase("Com1 Sat", "Com1_Sat")]
+        public void should_replace_reserved_device_name_in_season_folder(string title, string expected)
         {
-            _series.Title = "Con Man";
+            _series.Title = title;
             _namingConfig.SeasonFolderFormat = "{Series.Title} - Season {Season:00}";
 
-            Subject.GetSeasonFolder(_series, 1).Should().Be("Con_Man - Season 01");
+            Subject.GetSeasonFolder(_series, 1).Should().Be($"{expected} - Season 01");
         }
 
-        [Test]
-        public void should_replace_reserved_device_name_in_file_name()
+        [TestCase("Con Game", "Con_Game")]
+        [TestCase("Com1 Sat", "Com1_Sat")]
+        public void should_replace_reserved_device_name_in_file_name(string title, string expected)
         {
-            _series.Title = "Con Man";
+            _series.Title = title;
             _namingConfig.StandardEpisodeFormat = "{Series.Title} - S{Season:00}E{Episode:00}";
 
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile).Should().Be("Con_Man - S15E06");
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile).Should().Be($"{expected} - S15E06");
         }
     }
 }
