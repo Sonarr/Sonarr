@@ -11,3 +11,10 @@
   border-color: $usenetColor;
   background-color: $usenetColor;
 }
+
+.directConnect {
+  composes: label from '~Components/Label.css';
+
+  border-color: $usenetColor;
+  background-color: $usenetColor;
+}

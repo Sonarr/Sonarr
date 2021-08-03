@@ -24,6 +24,7 @@ class AddDownloadClientModalContent extends Component {
       schemaError,
       usenetDownloadClients,
       torrentDownloadClients,
+      directConnectDownloadClients,
       onDownloadClientSelect,
       onModalClose
     } = this.props;
@@ -53,6 +54,23 @@ class AddDownloadClientModalContent extends Component {
                   <div>Sonarr supports many popular torrent and usenet download clients.</div>
                   <div>For more information on the individual download clients, click the more info buttons.</div>
                 </Alert>
+
+                <FieldSet legend="DirectConnect">
+                  <div className={styles.downloadClients}>
+                    {
+                      directConnectDownloadClients.map((downloadClient) => {
+                        return (
+                          <AddDownloadClientItem
+                            key={downloadClient.implementation}
+                            implementation={downloadClient.implementation}
+                            {...downloadClient}
+                            onDownloadClientSelect={onDownloadClientSelect}
+                          />
+                        );
+                      })
+                    }
+                  </div>
+                </FieldSet>
 
                 <FieldSet legend="Usenet">
                   <div className={styles.downloadClients}>
@@ -108,6 +126,7 @@ AddDownloadClientModalContent.propTypes = {
   schemaError: PropTypes.object,
   usenetDownloadClients: PropTypes.arrayOf(PropTypes.object).isRequired,
   torrentDownloadClients: PropTypes.arrayOf(PropTypes.object).isRequired,
+  directConnectDownloadClients: PropTypes.arrayOf(PropTypes.object).isRequired,
   onDownloadClientSelect: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

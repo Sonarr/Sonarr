@@ -24,6 +24,7 @@ class AddIndexerModalContent extends Component {
       schemaError,
       usenetIndexers,
       torrentIndexers,
+      directConnectIndexers,
       onIndexerSelect,
       onModalClose
     } = this.props;
@@ -53,6 +54,23 @@ class AddIndexerModalContent extends Component {
                   <div>Sonarr supports any indexer that uses the Newznab standard, as well as other indexers listed below.</div>
                   <div>For more information on the individual indexers, clink on the info buttons.</div>
                 </Alert>
+
+                <FieldSet legend="DirectConnect">
+                  <div className={styles.indexers}>
+                    {
+                      directConnectIndexers.map((indexer) => {
+                        return (
+                          <AddIndexerItem
+                            key={indexer.implementation}
+                            implementation={indexer.implementation}
+                            {...indexer}
+                            onIndexerSelect={onIndexerSelect}
+                          />
+                        );
+                      })
+                    }
+                  </div>
+                </FieldSet>
 
                 <FieldSet legend="Usenet">
                   <div className={styles.indexers}>
@@ -108,6 +126,7 @@ AddIndexerModalContent.propTypes = {
   schemaError: PropTypes.object,
   usenetIndexers: PropTypes.arrayOf(PropTypes.object).isRequired,
   torrentIndexers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  directConnectIndexers: PropTypes.arrayOf(PropTypes.object).isRequired,
   onIndexerSelect: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

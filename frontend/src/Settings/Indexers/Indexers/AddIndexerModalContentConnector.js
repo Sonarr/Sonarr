@@ -19,13 +19,15 @@ function createMapStateToProps() {
 
       const usenetIndexers = _.filter(schema, { protocol: 'usenet' });
       const torrentIndexers = _.filter(schema, { protocol: 'torrent' });
+      const directConnectIndexers = _.filter(schema, { protocol: 'directConnect' });
 
       return {
         isSchemaFetching,
         isSchemaPopulated,
         schemaError,
         usenetIndexers,
-        torrentIndexers
+        torrentIndexers,
+        directConnectIndexers
       };
     }
   );

@@ -4,6 +4,7 @@
     {
         Unknown = 0,
         Usenet = 1,
-        Torrent = 2
+        Torrent = 2,
+        DirectConnect = 3
     }
 }

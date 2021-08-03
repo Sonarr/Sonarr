@@ -3,7 +3,8 @@ import FilterBuilderRowValue from './FilterBuilderRowValue';
 
 const protocols = [
   { id: 'torrent', name: 'Torrent' },
-  { id: 'usenet', name: 'Usenet' }
+  { id: 'usenet', name: 'Usenet' },
+  { id: 'directConnect', name: 'DirectConnect' }
 ];
 
 function ProtocolFilterBuilderRowValue(props) {
