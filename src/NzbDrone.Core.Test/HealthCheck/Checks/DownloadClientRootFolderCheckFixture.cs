@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             GivenRootFolder(_downloadRootPath);
 
-            Subject.Check().ShouldBeWarning(wikiFragment: "downloads_in_root_folder");
+            Subject.Check().ShouldBeWarning();
         }
 
         [Test]
