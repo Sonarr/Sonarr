@@ -119,8 +119,7 @@ namespace NzbDrone.Api
 
             resource.Fields = SchemaBuilder.ToSchema(definition.Settings);
 
-            resource.InfoLink = string.Format("https://wiki.servarr.com/sonarr/supported#{0}",
-                definition.Implementation.ToLower());
+            resource.InfoLink = $"https://wiki.servarr.com/sonarr/supported#{definition.Implementation.ToLower()}";
         }
 
         protected virtual void MapToModel(TProviderDefinition definition, TProviderResource resource)
