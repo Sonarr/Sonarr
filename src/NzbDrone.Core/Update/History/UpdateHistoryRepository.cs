@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Update.History
 
         public UpdateHistory LastInstalled()
         {
-            var history = Query.Where(v => v.EventType == UpdateHistoryEventType.Installed)
+            var history = Query(v => v.EventType == UpdateHistoryEventType.Installed)
                                .OrderByDescending(v => v.Date)
                                .Take(1)
                                .FirstOrDefault();
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Update.History
 
         public UpdateHistory PreviouslyInstalled()
         {
-            var history = Query.Where(v => v.EventType == UpdateHistoryEventType.Installed)
+            var history = Query(v => v.EventType == UpdateHistoryEventType.Installed)
                                .OrderByDescending(v => v.Date)
                                .Skip(1)
                                .Take(1)
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Update.History
 
         public List<UpdateHistory> InstalledSince(DateTime dateTime)
         {
-            var history = Query.Where(v => v.EventType == UpdateHistoryEventType.Installed && v.Date >= dateTime)
+            var history = Query(v => v.EventType == UpdateHistoryEventType.Installed && v.Date >= dateTime)
                                .OrderBy(v => v.Date)
                                .ToList();
 

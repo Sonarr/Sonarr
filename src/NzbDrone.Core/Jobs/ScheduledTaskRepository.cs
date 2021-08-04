@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Jobs
 
         public ScheduledTask GetDefinition(Type type)
         {
-            return Query.Where(c => c.TypeName == type.FullName).Single();
+            return Query(c => c.TypeName == type.FullName).Single();
         }
 
         public void SetLastExecutionTime(int id, DateTime executionTime)

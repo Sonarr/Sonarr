@@ -1,7 +1,7 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Marr.Data;
 using NUnit.Framework;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Qualities;

@@ -1,41 +1,24 @@
 ﻿using System;
-using Marr.Data.Converters;
-using Marr.Data.Mapping;
+using System.Data;
+using Dapper;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
-    public class SystemVersionConverter : IConverter
+    public class SystemVersionConverter : SqlMapper.TypeHandler<Version>
     {
-        public object FromDB(ConverterContext context)
+        public override Version Parse(object value)
         {
-            if (context.DbValue is string version)
+            if (value is string version)
             {
-                return Version.Parse(version);
+                return Version.Parse((string)value);
             }
 
             return null;
         }
 
-        public object FromDB(ColumnMap map, object dbValue)
+        public override void SetValue(IDbDataParameter parameter, Version value)
         {
-            if (dbValue is string version)
-            {
-                return Version.Parse(version);
-            }
-
-            return null;
+            parameter.Value = value.ToString();
         }
-
-        public object ToDB(object clrValue)
-        {
-            if (clrValue is Version version)
-            {
-                return version.ToString();
-            }
-
-            return DBNull.Value;
-        }
-
-        public Type DbType => typeof(string);
     }
 }

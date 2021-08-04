@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Messaging.Events;
@@ -15,29 +16,26 @@ namespace NzbDrone.Core.Tv
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByPath(string path);
-        List<string> AllSeriesPaths();
+        Dictionary<int, string> AllSeriesPaths();
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
     {
-        protected IMainDatabase _database;
-
         public SeriesRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-            _database = database;
         }
 
         public bool SeriesPathExists(string path)
         {
-            return Query.Where(c => c.Path == path).Any();
+            return Query(c => c.Path == path).Any();
         }
 
         public Series FindByTitle(string cleanTitle)
         {
             cleanTitle = cleanTitle.ToLowerInvariant();
 
-            var series = Query.Where(s => s.CleanTitle == cleanTitle)
+            var series = Query(s => s.CleanTitle == cleanTitle)
                                         .ToList();
 
             return ReturnSingleSeriesOrThrow(series);
@@ -47,42 +45,41 @@ namespace NzbDrone.Core.Tv
         {
             cleanTitle = cleanTitle.ToLowerInvariant();
 
-            var series = Query.Where(s => s.CleanTitle == cleanTitle)
-                                        .AndWhere(s => s.Year == year)
-                                        .ToList();
+            var series = Query(s => s.CleanTitle == cleanTitle && s.Year == year).ToList();
 
             return ReturnSingleSeriesOrThrow(series);
         }
 
         public List<Series> FindByTitleInexact(string cleanTitle)
         {
-            var mapper = _database.GetDataMapper();
-            mapper.AddParameter("CleanTitle", cleanTitle);
+            var builder = Builder().Where($"instr(@cleanTitle, Series.[CleanTitle])", new { cleanTitle = cleanTitle });
 
-            return mapper.Query<Series>().Where($"instr(@CleanTitle, [t0].[CleanTitle])");
+            return Query(builder).ToList();
         }
 
         public Series FindByTvdbId(int tvdbId)
         {
-            return Query.Where(s => s.TvdbId == tvdbId).SingleOrDefault();
+            return Query(s => s.TvdbId == tvdbId).SingleOrDefault();
         }
 
         public Series FindByTvRageId(int tvRageId)
         {
-            return Query.Where(s => s.TvRageId == tvRageId).SingleOrDefault();
+            return Query(s => s.TvRageId == tvRageId).SingleOrDefault();
         }
 
         public Series FindByPath(string path)
         {
-            return Query.Where(s => s.Path == path)
+            return Query(s => s.Path == path)
                         .FirstOrDefault();
         }
 
-        public List<string> AllSeriesPaths()
+        public Dictionary<int, string> AllSeriesPaths()
         {
-            var mapper = _database.GetDataMapper();
-
-            return mapper.Query<string>("SELECT Path from Series");
+            using (var conn = _database.OpenConnection())
+            {
+                var strSql = "SELECT Id AS [Key], Path AS [Value] FROM Series";
+                return conn.Query<KeyValuePair<int, string>>(strSql).ToDictionary(x => x.Key, x => x.Value);
+            }
         }
 
         private Series ReturnSingleSeriesOrThrow(List<Series> series)

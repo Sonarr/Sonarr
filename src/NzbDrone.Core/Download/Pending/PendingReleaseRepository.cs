@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
@@ -25,12 +25,12 @@ namespace NzbDrone.Core.Download.Pending
 
         public List<PendingRelease> AllBySeriesId(int seriesId)
         {
-            return Query.Where(p => p.SeriesId == seriesId);
+            return Query(p => p.SeriesId == seriesId);
         }
 
         public List<PendingRelease> WithoutFallback()
         {
-            return Query.Where(p => p.Reason != PendingReleaseReason.Fallback);
+            return Query(p => p.Reason != PendingReleaseReason.Fallback);
         }
     }
 }

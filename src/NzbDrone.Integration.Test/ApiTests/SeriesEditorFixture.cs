@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
+using Sonarr.Api.V3.Series;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {
@@ -31,12 +32,13 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             var series = Series.All();
 
-            foreach (var s in series)
+            var seriesEditor = new SeriesEditorResource
             {
-                s.QualityProfileId = 2;
-            }
+                QualityProfileId = 2,
+                SeriesIds = series.Select(s => s.Id).ToList()
+            };
 
-            var result = Series.Editor(series);
+            var result = Series.Editor(seriesEditor);
 
             result.Should().HaveCount(2);
             result.TrueForAll(s => s.QualityProfileId == 2).Should().BeTrue();

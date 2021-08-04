@@ -1,62 +1,36 @@
 using System;
-using Marr.Data.Converters;
-using Marr.Data.Mapping;
-using Newtonsoft.Json;
+using System.Data;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Dapper;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
-    public class QualityIntConverter : JsonConverter, IConverter
+    public class QualityIntConverter : JsonConverter<Quality>
     {
-        public object FromDB(ConverterContext context)
+        public override Quality Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (context.DbValue == DBNull.Value)
-            {
-                return Quality.Unknown;
-            }
-
-            var val = Convert.ToInt32(context.DbValue);
-
-            return (Quality)val;
+            var item = reader.GetInt32();
+            return (Quality)item;
         }
 
-        public object FromDB(ColumnMap map, object dbValue)
+        public override void Write(Utf8JsonWriter writer, Quality value, JsonSerializerOptions options)
         {
-            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
+            writer.WriteNumberValue((int)value);
+        }
+    }
+
+    public class DapperQualityIntConverter : SqlMapper.TypeHandler<Quality>
+    {
+        public override void SetValue(IDbDataParameter parameter, Quality value)
+        {
+            parameter.Value = value == null ? 0 : (int)value;
         }
 
-        public object ToDB(object clrValue)
+        public override Quality Parse(object value)
         {
-            if (clrValue == DBNull.Value)
-            {
-                return 0;
-            }
-
-            if (clrValue as Quality == null)
-            {
-                throw new InvalidOperationException("Attempted to save a quality that isn't really a quality");
-            }
-
-            var quality = clrValue as Quality;
-            return (int)quality;
-        }
-
-        public Type DbType => typeof(int);
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Quality);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var item = reader.Value;
-            return (Quality)Convert.ToInt32(item);
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            writer.WriteValue(ToDB(value));
+            return (Quality)Convert.ToInt32(value);
         }
     }
 }

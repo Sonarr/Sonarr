@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Datastore;
+using Dapper;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
@@ -13,14 +14,15 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            var mapper = _database.GetDataMapper();
-
-            mapper.ExecuteNonQuery(@"DELETE FROM Episodes
+            using (var mapper = _database.OpenConnection())
+            {
+                mapper.Execute(@"DELETE FROM Episodes
                                      WHERE Id IN (
                                      SELECT Episodes.Id FROM Episodes
                                      LEFT OUTER JOIN Series
                                      ON Episodes.SeriesId = Series.Id
                                      WHERE Series.Id IS NULL)");
+            }
         }
     }
 }

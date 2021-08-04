@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Tags
 
         public Tag GetByLabel(string label)
         {
-            var model = Query.Where(c => c.Label == label).SingleOrDefault();
+            var model = Query(c => c.Label == label).SingleOrDefault();
 
             if (model == null)
             {
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Tags
 
         public Tag FindByLabel(string label)
         {
-            return Query.Where(c => c.Label == label).SingleOrDefault();
+            return Query(c => c.Label == label).SingleOrDefault();
         }
     }
 }

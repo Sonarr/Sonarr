@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Marr.Data;
 using NLog;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Extensions;
@@ -375,7 +374,7 @@ namespace NzbDrone.Core.Download.Pending
                 return;
             }
 
-            var profile = remoteEpisode.Series.QualityProfile.Value;
+            var profile = remoteEpisode.Series.QualityProfile;
 
             foreach (var existingReport in existingReports)
             {

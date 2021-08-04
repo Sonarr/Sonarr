@@ -1,7 +1,10 @@
 using System;
+using System.Text.Json.Serialization;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Messaging.Commands
 {
+    [JsonConverter(typeof(PolymorphicWriteOnlyJsonConverter<Command>))]
     public abstract class Command
     {
         private bool _sendUpdatesToClient;

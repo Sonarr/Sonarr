@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
@@ -31,65 +30,68 @@ namespace NzbDrone.Core.History
 
         public EpisodeHistory MostRecentForEpisode(int episodeId)
         {
-            return Query.Where(h => h.EpisodeId == episodeId)
+            return Query(h => h.EpisodeId == episodeId)
                         .OrderByDescending(h => h.Date)
                         .FirstOrDefault();
         }
 
         public List<EpisodeHistory> FindByEpisodeId(int episodeId)
         {
-            return Query.Where(h => h.EpisodeId == episodeId)
+            return Query(h => h.EpisodeId == episodeId)
                         .OrderByDescending(h => h.Date)
                         .ToList();
         }
 
         public EpisodeHistory MostRecentForDownloadId(string downloadId)
         {
-            return Query.Where(h => h.DownloadId == downloadId)
+            return Query(h => h.DownloadId == downloadId)
              .OrderByDescending(h => h.Date)
              .FirstOrDefault();
         }
 
         public List<EpisodeHistory> FindByDownloadId(string downloadId)
         {
-            return Query.Where(h => h.DownloadId == downloadId);
+            return Query(h => h.DownloadId == downloadId);
         }
 
         public List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType)
         {
-            var query = Query.Join<EpisodeHistory, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
-                             .Join<EpisodeHistory, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
-                             .Where(h => h.SeriesId == seriesId);
+            var builder = Builder().Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
+                                   .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id)
+                                   .Where<EpisodeHistory>(h => h.SeriesId == seriesId);
 
             if (eventType.HasValue)
             {
-                query.AndWhere(h => h.EventType == eventType);
+                builder.Where<EpisodeHistory>(h => h.EventType == eventType);
             }
 
-            return query.OrderByDescending(h => h.Date).ToList();
+            return Query(builder).OrderByDescending(h => h.Date).ToList();
         }
 
         public List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType)
         {
-            SortBuilder<EpisodeHistory> query = Query
-                        .Join<EpisodeHistory, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
-                        .Join<EpisodeHistory, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
-                        .Where(h => h.SeriesId == seriesId)
-                        .AndWhere(h => h.Episode.SeasonNumber == seasonNumber);
+            var builder = Builder()
+                .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id)
+                .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
+                .Where<EpisodeHistory>(h => h.SeriesId == seriesId && h.Episode.SeasonNumber == seasonNumber);
 
             if (eventType.HasValue)
             {
-                query.AndWhere(h => h.EventType == eventType);
+                builder.Where<EpisodeHistory>(h => h.EventType == eventType);
             }
 
-            query.OrderByDescending(h => h.Date);
-
-            return query;
+            return _database.QueryJoined<EpisodeHistory, Episode>(
+                builder,
+                (history, episode) =>
+                {
+                    history.Episode = episode;
+                    return history;
+                }).OrderByDescending(h => h.Date).ToList();
         }
 
         public List<EpisodeHistory> FindDownloadHistory(int idSeriesId, QualityModel quality)
         {
-            return Query.Where(h =>
+            return Query(h =>
                  h.SeriesId == idSeriesId &&
                  h.Quality == quality &&
                  (h.EventType == EpisodeHistoryEventType.Grabbed ||
@@ -103,26 +105,28 @@ namespace NzbDrone.Core.History
             Delete(c => c.SeriesId == seriesId);
         }
 
-        protected override SortBuilder<EpisodeHistory> GetPagedQuery(QueryBuilder<EpisodeHistory> query, PagingSpec<EpisodeHistory> pagingSpec)
-        {
-            var baseQuery = query.Join<EpisodeHistory, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
-                                 .Join<EpisodeHistory, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id);
+        protected override SqlBuilder PagedBuilder() => new SqlBuilder()
+            .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
+            .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id);
 
-            return base.GetPagedQuery(baseQuery, pagingSpec);
-        }
+        protected override IEnumerable<EpisodeHistory> PagedQuery(SqlBuilder builder) =>
+            _database.QueryJoined<EpisodeHistory, Series, Episode>(builder, (history, series, episode) =>
+            {
+                history.Series = series;
+                history.Episode = episode;
+                return history;
+            });
 
         public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)
         {
-            var query = Query.Where(h => h.Date >= date);
+            var builder = Builder().Where<EpisodeHistory>(x => x.Date >= date);
 
             if (eventType.HasValue)
             {
-                query.AndWhere(h => h.EventType == eventType);
+                builder.Where<EpisodeHistory>(h => h.EventType == eventType);
             }
 
-            query.OrderBy(h => h.Date);
-
-            return query;
+            return Query(builder).OrderBy(h => h.Date).ToList();
         }
     }
 }

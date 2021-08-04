@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -49,6 +49,8 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
         private void GivenSeries()
         {
             var series = Builder<Series>.CreateListOfSize(2)
+                .All()
+                .With(a => a.Id = 0)
                 .TheFirst(1)
                 .With(x => x.CleanTitle = "crown")
                 .TheNext(1)

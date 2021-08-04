@@ -1,22 +1,20 @@
-﻿using Marr.Data.Converters;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Converters;
-using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
-    public class StringListConverter : EmbeddedDocumentConverter
+    public class StringListConverter<T> : EmbeddedDocumentConverter<List<string>>
     {
-        public override object FromDB(ConverterContext context)
+        public override List<string> Parse(object value)
         {
-            if (context.DbValue == DBNull.Value)
+            if (value == DBNull.Value)
             {
-                return DBNull.Value;
+                return null;
             }
 
-            var stringValue = (string)context.DbValue;
+            var stringValue = (string)value;
 
             if (string.IsNullOrWhiteSpace(stringValue))
             {
@@ -28,8 +26,8 @@ namespace NzbDrone.Core.Datastore.Converters
             {
                 return stringValue.Split(',').ToList();
             }
-            
-            return JsonConvert.DeserializeObject(stringValue, context.ColumnMap.FieldType, SerializerSetting);
+
+            return JsonSerializer.Deserialize<List<string>>((string)value, SerializerSettings);
         }
     }
 }

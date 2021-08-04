@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Profiles.Languages
@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Profiles.Languages
 
         public bool Exists(int id)
         {
-            return DataMapper.Query<LanguageProfile>().Where(p => p.Id == id).GetRowCount() == 1;
+            return Query(p => p.Id == id).Count == 1;
         }
     }
 }

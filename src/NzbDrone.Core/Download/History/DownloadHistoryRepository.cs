@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
@@ -19,8 +20,7 @@ namespace NzbDrone.Core.Download.History
 
         public List<DownloadHistory> FindByDownloadId(string downloadId)
         {
-            return Query.Where(h => h.DownloadId == downloadId)
-                        .OrderByDescending(h => h.Date);
+            return Query(h => h.DownloadId == downloadId).OrderByDescending(h => h.Date).ToList();
         }
 
         public void DeleteBySeriesId(int seriesId)

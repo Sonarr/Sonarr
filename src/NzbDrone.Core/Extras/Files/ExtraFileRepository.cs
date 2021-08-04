@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -42,22 +42,22 @@ namespace NzbDrone.Core.Extras.Files
 
         public List<TExtraFile> GetFilesBySeries(int seriesId)
         {
-            return Query.Where(c => c.SeriesId == seriesId);
+            return Query(c => c.SeriesId == seriesId);
         }
 
         public List<TExtraFile> GetFilesBySeason(int seriesId, int seasonNumber)
         {
-            return Query.Where(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber);
+            return Query(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber);
         }
 
         public List<TExtraFile> GetFilesByEpisodeFile(int episodeFileId)
         {
-            return Query.Where(c => c.EpisodeFileId == episodeFileId);
+            return Query(c => c.EpisodeFileId == episodeFileId);
         }
 
         public TExtraFile FindByPath(int seriesId, string path)
         {
-            return Query.Where(c => c.SeriesId == seriesId && c.RelativePath == path).SingleOrDefault();
+            return Query(c => c.SeriesId == seriesId && c.RelativePath == path).SingleOrDefault();
         }
     }
 }
