@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Tv
         Series FindByPath(string path);
         void DeleteSeries(int seriesId, bool deleteFiles, bool addImportListExclusion);
         List<Series> GetAllSeries();
-        List<string> GetAllSeriesPaths();
+        Dictionary<int, string> GetAllSeriesPaths();
         List<Series> AllForTag(int tagId);
         Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true);
         List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder);
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.All().ToList();
         }
 
-        public List<string> GetAllSeriesPaths()
+        public Dictionary<int, string> GetAllSeriesPaths()
         {
             return _seriesRepository.AllSeriesPaths();
         }

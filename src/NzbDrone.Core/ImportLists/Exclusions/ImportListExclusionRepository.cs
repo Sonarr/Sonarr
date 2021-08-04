@@ -18,7 +18,7 @@ namespace NzbDrone.Core.ImportLists.Exclusions
 
         public ImportListExclusion FindByTvdbId(int tvdbId)
         {
-            return Query.Where<ImportListExclusion>(m => m.TvdbId == tvdbId).SingleOrDefault();
+            return Query(m => m.TvdbId == tvdbId).SingleOrDefault();
         }
     }
 }

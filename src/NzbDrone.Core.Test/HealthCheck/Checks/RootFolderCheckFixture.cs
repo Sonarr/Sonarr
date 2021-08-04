@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetAllSeriesPaths())
-                  .Returns(series.Select(s => s.Path).ToList());
+                  .Returns(series.ToDictionary(s => s.Id, s => s.Path));
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetParentFolder(series.First().Path))
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetAllSeriesPaths())
-                  .Returns(new List<string>());
+                  .Returns(new Dictionary<int, string>());
 
             Subject.Check().ShouldBeOk();
         }

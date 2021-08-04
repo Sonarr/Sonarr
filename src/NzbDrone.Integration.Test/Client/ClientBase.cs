@@ -108,6 +108,7 @@ namespace NzbDrone.Integration.Test.Client
             request.AddParameter("pageSize", pageSize);
             request.AddParameter("sortKey", sortKey);
             request.AddParameter("sortDir", sortDir);
+            request.AddParameter("includeSeries", true);
 
             if (filterKey != null && filterValue != null)
             {

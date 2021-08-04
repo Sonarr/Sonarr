@@ -122,7 +122,7 @@ namespace NzbDrone.Core.RootFolders
             _rootFolderRepository.Delete(id);
         }
 
-        private List<UnmappedFolder> GetUnmappedFolders(string path, List<string> seriesPaths)
+        private List<UnmappedFolder> GetUnmappedFolders(string path, Dictionary<int, string> seriesPaths)
         {
             _logger.Debug("Generating list of unmapped folders");
 
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.RootFolders
             }
 
             var possibleSeriesFolders = _diskProvider.GetDirectories(path).ToList();
-            var unmappedFolders = possibleSeriesFolders.Except(seriesPaths, PathEqualityComparer.Instance).ToList();
+            var unmappedFolders = possibleSeriesFolders.Except(seriesPaths.Select(s => s.Value), PathEqualityComparer.Instance).ToList();
 
             foreach (string unmappedFolder in unmappedFolders)
             {
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.RootFolders
             return possibleRootFolder.Path;
         }
 
-        private void GetDetails(RootFolder rootFolder, List<string> seriesPaths, bool timeout)
+        private void GetDetails(RootFolder rootFolder, Dictionary<int, string> seriesPaths, bool timeout)
         {
             Task.Run(() =>
             {

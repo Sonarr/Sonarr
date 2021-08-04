@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Results;
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(8)]
-        public SeedCriteriaSettings SeedCriteria { get; } = new SeedCriteriaSettings();
+        public SeedCriteriaSettings SeedCriteria { get; set; } = new SeedCriteriaSettings();
 
         public override NzbDroneValidationResult Validate()
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
         public TModel FindByProviderId(int providerId)
         {
-            return Query.Where(c => c.ProviderId == providerId).SingleOrDefault();
+            return Query(c => c.ProviderId == providerId).SingleOrDefault();
         }
     }
 }

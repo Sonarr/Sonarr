@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Marr.Data.QGen;
+using Dapper;
 using NLog;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
@@ -36,66 +35,71 @@ namespace NzbDrone.Core.Tv
 
     public class EpisodeRepository : BasicRepository<Episode>, IEpisodeRepository
     {
-        private readonly IMainDatabase _database;
         private readonly Logger _logger;
 
         public EpisodeRepository(IMainDatabase database, IEventAggregator eventAggregator, Logger logger)
             : base(database, eventAggregator)
         {
-            _database = database;
             _logger = logger;
         }
 
+        protected override IEnumerable<Episode> PagedQuery(SqlBuilder builder) =>
+            _database.QueryJoined<Episode, Series>(builder, (episode, series) =>
+            {
+                episode.Series = series;
+                return episode;
+            });
+
         public Episode Find(int seriesId, int season, int episodeNumber)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                               .AndWhere(s => s.SeasonNumber == season)
-                               .AndWhere(s => s.EpisodeNumber == episodeNumber)
+            return Query(s => s.SeriesId == seriesId && s.SeasonNumber == season && s.EpisodeNumber == episodeNumber)
                                .SingleOrDefault();
         }
 
         public Episode Find(int seriesId, int absoluteEpisodeNumber)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                        .AndWhere(s => s.AbsoluteEpisodeNumber == absoluteEpisodeNumber)
+            return Query(s => s.SeriesId == seriesId && s.AbsoluteEpisodeNumber == absoluteEpisodeNumber)
                         .SingleOrDefault();
         }
 
         public List<Episode> Find(int seriesId, string date)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                        .AndWhere(s => s.AirDate == date)
-                        .ToList();
+            return Query(s => s.SeriesId == seriesId && s.AirDate == date).ToList();
         }
 
         public List<Episode> GetEpisodes(int seriesId)
         {
-            return Query.Where(s => s.SeriesId == seriesId).ToList();
+            return Query(s => s.SeriesId == seriesId).ToList();
         }
 
         public List<Episode> GetEpisodes(int seriesId, int seasonNumber)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                        .AndWhere(s => s.SeasonNumber == seasonNumber)
-                        .ToList();
+            return Query(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber).ToList();
         }
 
         public List<Episode> GetEpisodesBySceneSeason(int seriesId, int seasonNumber)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                        .AndWhere(s => s.SceneSeasonNumber == seasonNumber)
-                        .ToList();
+            return Query(s => s.SeriesId == seriesId && s.SceneSeasonNumber == seasonNumber).ToList();
         }
 
         public List<Episode> GetEpisodeByFileId(int fileId)
         {
-            return Query.Where(e => e.EpisodeFileId == fileId).ToList();
+            return Query(e => e.EpisodeFileId == fileId).ToList();
         }
 
         public List<Episode> EpisodesWithFiles(int seriesId)
         {
-            return Query.Join<Episode, EpisodeFile>(JoinType.Inner, e => e.EpisodeFile, (e, ef) => e.EpisodeFileId == ef.Id)
-                        .Where(e => e.SeriesId == seriesId);
+            var builder = Builder()
+                .Join<Episode, EpisodeFile>((e, ef) => e.EpisodeFileId == ef.Id)
+                .Where<Episode>(e => e.SeriesId == seriesId);
+
+            return _database.QueryJoined<Episode, EpisodeFile>(
+                builder,
+                (episode, episodeFile) =>
+                {
+                    episode.EpisodeFile = episodeFile;
+                    return episode;
+                }).ToList();
         }
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
@@ -108,8 +112,8 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
 
-            pagingSpec.TotalRecords = GetMissingEpisodesQuery(pagingSpec, currentTime, startingSeasonNumber).GetRowCount();
-            pagingSpec.Records = GetMissingEpisodesQuery(pagingSpec, currentTime, startingSeasonNumber).ToList();
+            pagingSpec.Records = GetPagedRecords(EpisodesWithoutFilesBuilder(currentTime, startingSeasonNumber), pagingSpec, PagedQuery);
+            pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWithoutFilesBuilder(currentTime, startingSeasonNumber).SelectCountDistinct<Episode>(x => x.Id), pagingSpec);
 
             return pagingSpec;
         }
@@ -123,40 +127,36 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
 
-            pagingSpec.TotalRecords = EpisodesWhereCutoffUnmetQuery(pagingSpec, qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber).GetRowCount();
-            pagingSpec.Records = EpisodesWhereCutoffUnmetQuery(pagingSpec, qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber).ToList();
+            pagingSpec.Records = GetPagedRecords(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber), pagingSpec, PagedQuery);
+
+            var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM {TableMapping.Mapper.TableNameMapping(typeof(Episode))} /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/)";
+            pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber).Select(typeof(Episode)), pagingSpec, countTemplate);
 
             return pagingSpec;
         }
 
         public List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                        .AndWhere(s => s.SceneSeasonNumber == seasonNumber)
-                        .AndWhere(s => s.SceneEpisodeNumber == episodeNumber)
-                        .ToList();
+            return Query(s => s.SeriesId == seriesId && s.SceneSeasonNumber == seasonNumber && s.SceneEpisodeNumber == episodeNumber).ToList();
         }
 
         public List<Episode> FindEpisodesBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                        .AndWhere(s => s.SceneAbsoluteEpisodeNumber == sceneAbsoluteEpisodeNumber)
-                        .ToList();
+            return Query(s => s.SeriesId == seriesId && s.SceneAbsoluteEpisodeNumber == sceneAbsoluteEpisodeNumber).ToList();
         }
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored)
         {
-            var query = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                             .Where<Episode>(e => e.AirDateUtc >= startDate)
-                             .AndWhere(e => e.AirDateUtc <= endDate);
+            var builder = Builder().Where<Episode>(rg => rg.AirDateUtc >= startDate && rg.AirDateUtc <= endDate);
 
             if (!includeUnmonitored)
             {
-                query.AndWhere(e => e.Monitored)
-                     .AndWhere(e => e.Series.Monitored);
+                builder = builder.Where<Episode>(e => e.Monitored == true)
+                    .Join<Episode, Series>((l, r) => l.SeriesId == r.Id)
+                    .Where<Series>(e => e.Monitored == true);
             }
 
-            return query.ToList();
+            return Query(builder);
         }
 
         public void SetMonitoredFlat(Episode episode, bool monitored)
@@ -169,26 +169,17 @@ namespace NzbDrone.Core.Tv
 
         public void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
         {
-            var mapper = _database.GetDataMapper();
-
-            mapper.AddParameter("seriesId", seriesId);
-            mapper.AddParameter("seasonNumber", seasonNumber);
-            mapper.AddParameter("monitored", monitored);
-
-            var sqlUpdate = $"UPDATE Episodes SET Monitored = @monitored WHERE SeriesId = @seriesId AND SeasonNumber = @seasonNumber AND Monitored != @monitored";
-
-            mapper.ExecuteNonQuery(sqlUpdate);
+            using (var conn = _database.OpenConnection())
+            {
+                conn.Execute("UPDATE Episodes SET Monitored = @monitored WHERE SeriesId = @seriesId AND SeasonNumber = @seasonNumber AND Monitored != @monitored",
+                    new { seriesId = seriesId, seasonNumber = seasonNumber, monitored = monitored });
+            }
         }
 
         public void SetMonitored(IEnumerable<int> ids, bool monitored)
         {
-            var mapper = DataMapper;
-
-            mapper.AddParameter("monitored", monitored);
-
-            var sqlUpdate = $"UPDATE Episodes SET Monitored = @monitored WHERE Id IN ({string.Join(", ", ids)}) AND Monitored != @monitored";
-
-            mapper.ExecuteNonQuery(sqlUpdate);
+            var episodes = ids.Select(x => new Episode { Id = x, Monitored = monitored }).ToList();
+            SetFields(episodes, p => p.Monitored);
         }
 
         public void SetFileId(Episode episode, int fileId)
@@ -210,56 +201,28 @@ namespace NzbDrone.Core.Tv
             ModelUpdated(episode, true);
         }
 
-        private SortBuilder<Episode> GetMissingEpisodesQuery(PagingSpec<Episode> pagingSpec, DateTime currentTime, int startingSeasonNumber)
-        {
-            return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                            .Where(pagingSpec.FilterExpressions.FirstOrDefault())
-                            .AndWhere(e => e.EpisodeFileId == 0)
-                            .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
-                            .AndWhere(BuildAirDateUtcCutoffWhereClause(currentTime))
-                            .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
-                            .Skip(pagingSpec.PagingOffset())
-                            .Take(pagingSpec.PageSize);
-        }
-
-        private SortBuilder<Episode> EpisodesWhereCutoffUnmetQuery(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, List<LanguagesBelowCutoff> languagesBelowCutoff, int startingSeasonNumber)
-        {
-            return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                             .Join<Episode, EpisodeFile>(JoinType.Left, e => e.EpisodeFile, (e, f) => e.EpisodeFileId == f.Id)
-                             .Where(pagingSpec.FilterExpressions.FirstOrDefault())
-                             .AndWhere(e => e.EpisodeFileId != 0)
-                             .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
-                             .AndWhere(
-                                string.Format("({0} OR {1})",
-                                BuildLanguageCutoffWhereClause(languagesBelowCutoff),
-                                BuildQualityCutoffWhereClause(qualitiesBelowCutoff)))
-
-                             //.AndWhere(BuildQualityCutoffWhereClause(qualitiesBelowCutoff, languagesBelowCutoff))
-                             .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
-                             .Skip(pagingSpec.PagingOffset())
-                             .Take(pagingSpec.PageSize);
-        }
+        private SqlBuilder EpisodesWithoutFilesBuilder(DateTime currentTime, int startingSeasonNumber) => Builder()
+            .Join<Episode, Series>((l, r) => l.SeriesId == r.Id)
+            .Where<Episode>(f => f.EpisodeFileId == 0)
+            .Where<Episode>(f => f.SeasonNumber >= startingSeasonNumber)
+            .Where(BuildAirDateUtcCutoffWhereClause(currentTime));
 
         private string BuildAirDateUtcCutoffWhereClause(DateTime currentTime)
         {
-            return string.Format("WHERE datetime(strftime('%s', [t0].[AirDateUtc]) + [t1].[RunTime] * 60,  'unixepoch') <= '{0}'",
+            return string.Format("datetime(strftime('%s', \"Episodes\".\"AirDateUtc\") + \"Series\".\"RunTime\" * 60,  'unixepoch') <= '{0}'",
                                  currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
-        private string BuildLanguageCutoffWhereClause(List<LanguagesBelowCutoff> languagesBelowCutoff)
-        {
-            var clauses = new List<string>();
-
-            foreach (var language in languagesBelowCutoff)
-            {
-                foreach (var belowCutoff in language.LanguageIds)
-                {
-                    clauses.Add(string.Format("([t1].[LanguageProfileId] = {0} AND [t2].[Language] = {1})", language.ProfileId, belowCutoff));
-                }
-            }
-
-            return string.Format("({0})", string.Join(" OR ", clauses));
-        }
+        private SqlBuilder EpisodesWhereCutoffUnmetBuilder(List<QualitiesBelowCutoff> qualitiesBelowCutoff, List<LanguagesBelowCutoff> languagesBelowCutoff, int startingSeasonNumber) => Builder()
+            .Join<Episode, Series>((e, s) => e.SeriesId == s.Id)
+            .LeftJoin<Episode, EpisodeFile>((e, ef) => e.EpisodeFileId == ef.Id)
+            .Where<Episode>(e => e.EpisodeFileId != 0)
+            .Where<Episode>(e => e.SeasonNumber >= startingSeasonNumber)
+            .Where(
+                string.Format("({0} OR {1})",
+                    BuildQualityCutoffWhereClause(qualitiesBelowCutoff),
+                    BuildLanguageCutoffWhereClause(languagesBelowCutoff)))
+            .GroupBy<Episode>(e => e.Id);
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
         {
@@ -269,7 +232,22 @@ namespace NzbDrone.Core.Tv
             {
                 foreach (var belowCutoff in profile.QualityIds)
                 {
-                    clauses.Add(string.Format("([t1].[QualityProfileId] = {0} AND [t2].[Quality] LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
+                    clauses.Add(string.Format("(Series.[QualityProfileId] = {0} AND EpisodeFiles.Quality LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
+                }
+            }
+
+            return string.Format("({0})", string.Join(" OR ", clauses));
+        }
+
+        private string BuildLanguageCutoffWhereClause(List<LanguagesBelowCutoff> languagesBelowCutoff)
+        {
+            var clauses = new List<string>();
+
+            foreach (var profile in languagesBelowCutoff)
+            {
+                foreach (var belowCutoff in profile.LanguageIds)
+                {
+                    clauses.Add(string.Format("(Series.[LanguageProfileId] = {0} AND EpisodeFiles.Language = {1})", profile.ProfileId, belowCutoff));
                 }
             }
 
@@ -278,9 +256,7 @@ namespace NzbDrone.Core.Tv
 
         private Episode FindOneByAirDate(int seriesId, string date)
         {
-            var episodes = Query.Where(s => s.SeriesId == seriesId)
-                                .AndWhere(s => s.AirDate == date)
-                                .ToList();
+            var episodes = Query(s => s.SeriesId == seriesId && s.AirDate == date).ToList();
 
             if (!episodes.Any())
             {

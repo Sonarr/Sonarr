@@ -1,32 +1,19 @@
 ﻿using System;
-using Marr.Data.Converters;
-using Marr.Data.Mapping;
+using System.Data;
+using Dapper;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
-    public class UtcConverter : IConverter
+    public class DapperUtcConverter : SqlMapper.TypeHandler<DateTime>
     {
-        public object FromDB(ConverterContext context)
+        public override void SetValue(IDbDataParameter parameter, DateTime value)
         {
-            return context.DbValue;
+            parameter.Value = value.ToUniversalTime();
         }
 
-        public object FromDB(ColumnMap map, object dbValue)
+        public override DateTime Parse(object value)
         {
-            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
+            return DateTime.SpecifyKind((DateTime)value, DateTimeKind.Utc);
         }
-
-        public object ToDB(object clrValue)
-        {
-            if (clrValue == DBNull.Value)
-            {
-                return clrValue;
-            }
-
-            var dateTime = (DateTime)clrValue;
-            return dateTime.ToUniversalTime();
-        }
-
-        public Type DbType => typeof(DateTime);
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Moq;
 using NzbDrone.Core.Datastore;
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Test.Framework
         void Delete<T>(T childModel)
             where T : ModelBase, new();
         IDirectDataMapper GetDirectDataMapper();
+        IDbConnection OpenConnection();
     }
 
     public class TestDatabase : ITestDatabase
@@ -73,6 +75,11 @@ namespace NzbDrone.Core.Test.Framework
         public IDirectDataMapper GetDirectDataMapper()
         {
             return new DirectDataMapper(_dbConnection);
+        }
+
+        public IDbConnection OpenConnection()
+        {
+            return _dbConnection.OpenConnection();
         }
     }
 }

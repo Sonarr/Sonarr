@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Datastore;
+using Dapper;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
@@ -20,38 +21,41 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         private void DeleteOrphanedBySeries()
         {
-            var mapper = _database.GetDataMapper();
-
-            mapper.ExecuteNonQuery(@"DELETE FROM MetadataFiles
+            using (var mapper = _database.OpenConnection())
+            {
+                mapper.Execute(@"DELETE FROM MetadataFiles
                                      WHERE Id IN (
                                      SELECT MetadataFiles.Id FROM MetadataFiles
                                      LEFT OUTER JOIN Series
                                      ON MetadataFiles.SeriesId = Series.Id
                                      WHERE Series.Id IS NULL)");
+            }
         }
 
         private void DeleteOrphanedByEpisodeFile()
         {
-            var mapper = _database.GetDataMapper();
-
-            mapper.ExecuteNonQuery(@"DELETE FROM MetadataFiles
+            using (var mapper = _database.OpenConnection())
+            {
+                mapper.Execute(@"DELETE FROM MetadataFiles
                                      WHERE Id IN (
                                      SELECT MetadataFiles.Id FROM MetadataFiles
                                      LEFT OUTER JOIN EpisodeFiles
                                      ON MetadataFiles.EpisodeFileId = EpisodeFiles.Id
                                      WHERE MetadataFiles.EpisodeFileId > 0
                                      AND EpisodeFiles.Id IS NULL)");
+            }
         }
 
         private void DeleteWhereEpisodeFileIsZero()
         {
-            var mapper = _database.GetDataMapper();
-
-            mapper.ExecuteNonQuery(@"DELETE FROM MetadataFiles
+            using (var mapper = _database.OpenConnection())
+            {
+                mapper.Execute(@"DELETE FROM MetadataFiles
                                      WHERE Id IN (
                                      SELECT Id FROM MetadataFiles
                                      WHERE Type IN (2, 5)
                                      AND EpisodeFileId = 0)");
+            }
         }
     }
 }

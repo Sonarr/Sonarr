@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
-using Marr.Data;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
@@ -50,7 +49,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                                    },
                        };
 
-            _series.QualityProfile = new LazyLoaded<QualityProfile>(_profile);
+            _series.QualityProfile = _profile;
 
             _release = Builder<ReleaseInfo>.CreateNew().Build();
 

@@ -1,6 +1,7 @@
-﻿using FizzWare.NBuilder;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -28,6 +29,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(h => h.Quality = new QualityModel())
+                .With(h => h.Language = Language.English)
                 .BuildNew();
 
             Db.Insert(episodeFile);

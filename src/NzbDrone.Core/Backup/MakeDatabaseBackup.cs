@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using System.IO;
-using System.Linq;
-using System.Text;
 using NLog;
 using NzbDrone.Core.Datastore;
 
@@ -26,7 +21,12 @@ namespace NzbDrone.Core.Backup
 
         public void BackupDatabase(IDatabase database, string targetDirectory)
         {
-            var sourceConnectionString = database.GetDataMapper().ConnectionString;
+            var sourceConnectionString = "";
+            using (var db = database.OpenConnection())
+            {
+                sourceConnectionString = db.ConnectionString;
+            }
+
             var backupConnectionStringBuilder = new SQLiteConnectionStringBuilder(sourceConnectionString);
 
             backupConnectionStringBuilder.DataSource = Path.Combine(targetDirectory, Path.GetFileName(backupConnectionStringBuilder.DataSource));

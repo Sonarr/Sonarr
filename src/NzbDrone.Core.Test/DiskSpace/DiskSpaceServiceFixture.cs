@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,8 +50,8 @@ namespace NzbDrone.Core.Test.DiskSpace
         private void GivenSeries(params string[] seriesPaths)
         {
             Mocker.GetMock<ISeriesService>()
-                  .Setup(v => v.GetAllSeriesPaths())
-                  .Returns(seriesPaths.ToList());
+                .Setup(v => v.GetAllSeriesPaths())
+                .Returns(new Dictionary<int, string>(seriesPaths.Select((value, i) => new KeyValuePair<int, string>(i, value))));
         }
 
         private void GivenExistingFolder(string folder)
