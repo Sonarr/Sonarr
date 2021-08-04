@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Dapper;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
@@ -14,14 +15,14 @@ namespace NzbDrone.Core.Test.Datastore
         public void SingleOrDefault_should_return_null_on_empty_db()
         {
             Mocker.Resolve<IDatabase>()
-                .GetDataMapper().Query<Series>()
-                .SingleOrDefault(c => c.CleanTitle == "SomeTitle")
+                .OpenConnection().Query<Series>("SELECT * FROM Series")
+                .SingleOrDefault()
                 .Should()
                 .BeNull();
         }
 
         [Test]
-        public void vaccume()
+        public void vacuum()
         {
             Mocker.Resolve<IDatabase>().Vacuum();
         }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
-using Marr.Data;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -66,8 +67,7 @@ namespace NzbDrone.Core.Test.Framework
 
         protected virtual ITestDatabase WithTestDb(MigrationContext migrationContext)
         {
-            var factory = Mocker.Resolve<DbFactory>();
-            var database = factory.Create(migrationContext);
+            var database = CreateDatabase(migrationContext);
             Mocker.SetConstant(database);
 
             switch (MigrationType)
@@ -99,6 +99,48 @@ namespace NzbDrone.Core.Test.Framework
             return testDb;
         }
 
+        private IDatabase CreateDatabase(MigrationContext migrationContext)
+        {
+            var factory = Mocker.Resolve<DbFactory>();
+
+            // If a special migration test or log migration then create new
+            if (migrationContext.BeforeMigration != null)
+            {
+                return factory.Create(migrationContext);
+            }
+
+            // Otherwise try to use a cached migrated db
+            var cachedDb = GetCachedDatabase(migrationContext.MigrationType);
+            var testDb = GetTestDb(migrationContext.MigrationType);
+            if (File.Exists(cachedDb))
+            {
+                TestLogger.Info($"Using cached initial database {cachedDb}");
+                File.Copy(cachedDb, testDb);
+                return factory.Create(migrationContext);
+            }
+            else
+            {
+                var db = factory.Create(migrationContext);
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                SQLiteConnection.ClearAllPools();
+
+                TestLogger.Info("Caching database");
+                File.Copy(testDb, cachedDb);
+                return db;
+            }
+        }
+
+        private string GetCachedDatabase(MigrationType type)
+        {
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, $"cached_{type}.db");
+        }
+
+        private string GetTestDb(MigrationType type)
+        {
+            return type == MigrationType.Main ? TestFolderInfo.GetDatabase() : TestFolderInfo.GetLogDatabase();
+        }
+
         protected virtual void SetupLogging()
         {
             Mocker.SetConstant<ILoggerProvider>(NullLoggerProvider.Instance);
@@ -112,7 +154,7 @@ namespace NzbDrone.Core.Test.Framework
             Mocker.SetConstant<IConnectionStringFactory>(Mocker.Resolve<ConnectionStringFactory>());
             Mocker.SetConstant<IMigrationController>(Mocker.Resolve<MigrationController>());
 
-            MapRepository.Instance.EnableTraceLogging = true;
+            SqlBuilderExtensions.LogSql = true;
         }
 
         [SetUp]

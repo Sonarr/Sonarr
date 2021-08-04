@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Datastore;
+using Dapper;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
@@ -19,26 +20,28 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         private void CleanupOrphanedBySeries()
         {
-            var mapper = _database.GetDataMapper();
-
-            mapper.ExecuteNonQuery(@"DELETE FROM History
+            using (var mapper = _database.OpenConnection())
+            {
+                mapper.Execute(@"DELETE FROM History
                                      WHERE Id IN (
                                      SELECT History.Id FROM History
                                      LEFT OUTER JOIN Series
                                      ON History.SeriesId = Series.Id
                                      WHERE Series.Id IS NULL)");
+            }
         }
 
         private void CleanupOrphanedByEpisode()
         {
-            var mapper = _database.GetDataMapper();
-
-            mapper.ExecuteNonQuery(@"DELETE FROM History
+            using (var mapper = _database.OpenConnection())
+            {
+                mapper.Execute(@"DELETE FROM History
                                      WHERE Id IN (
                                      SELECT History.Id FROM History
                                      LEFT OUTER JOIN Episodes
                                      ON History.EpisodeId = Episodes.Id
                                      WHERE Episodes.Id IS NULL)");
+            }
         }
     }
 }

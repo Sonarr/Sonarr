@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using FizzWare.NBuilder;
-using Marr.Data;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Pending;

@@ -1,7 +1,6 @@
-﻿using System.Linq;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.MediaFiles;
@@ -41,7 +40,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _remoteEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
                                                       .All()
-                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(_episodeFile))
+                                                      .With(e => e.EpisodeFile = _episodeFile)
                                                       .Build()
                                                       .ToList();
         }

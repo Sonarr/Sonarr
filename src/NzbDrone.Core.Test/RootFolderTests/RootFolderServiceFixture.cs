@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         {
             Mocker.GetMock<ISeriesRepository>()
                   .Setup(s => s.AllSeriesPaths())
-                  .Returns(new List<string>());
+                  .Returns(new Dictionary<int, string>());
 
             var root = new RootFolder { Path = path.AsOsAgnostic() };
 
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
 
             Mocker.GetMock<ISeriesRepository>()
                   .Setup(s => s.AllSeriesPaths())
-                  .Returns(new List<string>());
+                  .Returns(new Dictionary<int, string>());
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetDirectories(rootFolder.Path))

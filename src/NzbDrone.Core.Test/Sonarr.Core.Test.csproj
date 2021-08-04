@@ -3,6 +3,7 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="NBuilder" Version="6.1.0" />
     <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.0-0" />
   </ItemGroup>

@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Housekeeping.Housekeepers;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -17,9 +18,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_delete_orphaned_blocklist_items()
         {
             var blocklist = Builder<Blocklist>.CreateNew()
-                                              .With(h => h.EpisodeIds = new List<int>())
-                                              .With(h => h.Quality = new QualityModel())
-                                              .BuildNew();
+                .With(h => h.Language = Language.English)
+                .With(h => h.EpisodeIds = new List<int>())
+                .With(h => h.Quality = new QualityModel())
+                .BuildNew();
 
             Db.Insert(blocklist);
             Subject.Clean();
@@ -34,10 +36,11 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             Db.Insert(series);
 
             var blocklist = Builder<Blocklist>.CreateNew()
-                                              .With(h => h.EpisodeIds = new List<int>())
-                                              .With(h => h.Quality = new QualityModel())
-                                              .With(b => b.SeriesId = series.Id)
-                                              .BuildNew();
+                .With(h => h.Language = Language.English)
+                .With(h => h.EpisodeIds = new List<int>())
+                .With(h => h.Quality = new QualityModel())
+                .With(b => b.SeriesId = series.Id)
+                .BuildNew();
 
             Db.Insert(blocklist);
 

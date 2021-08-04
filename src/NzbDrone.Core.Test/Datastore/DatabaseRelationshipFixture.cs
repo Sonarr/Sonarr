@@ -18,9 +18,10 @@ namespace NzbDrone.Core.Test.Datastore
         public void one_to_one()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
-                                                  .With(c => c.Quality = new QualityModel())
-                                                  .With(c => c.Language = Language.English)
-                                                  .BuildNew();
+                .With(c => c.Language = Language.English)
+                .With(c => c.Quality = new QualityModel())
+                .With(c => c.Language = Language.English)
+                .BuildNew();
 
             Db.Insert(episodeFile);
 
@@ -60,9 +61,10 @@ namespace NzbDrone.Core.Test.Datastore
             var quality = new QualityModel { Quality = Quality.Bluray720p, Revision = new Revision(version: 2) };
 
             var history = Builder<EpisodeHistory>.CreateNew()
-                                                  .With(c => c.Id = 0)
-                                                  .With(c => c.Quality = quality)
-                                                  .Build();
+                .With(c => c.Language = Language.English)
+                .With(c => c.Id = 0)
+                .With(c => c.Quality = quality)
+                .Build();
 
             Db.Insert(history);
 
@@ -74,8 +76,10 @@ namespace NzbDrone.Core.Test.Datastore
         public void embedded_list_of_document_with_json()
         {
             var history = Builder<EpisodeHistory>.CreateListOfSize(2)
-                                                  .All().With(c => c.Id = 0)
-                                                  .Build().ToList();
+                .All()
+                .With(c => c.Id = 0)
+                .With(c => c.Language = Language.English)
+                .Build().ToList();
 
             history[0].Quality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2));
             history[1].Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 2));

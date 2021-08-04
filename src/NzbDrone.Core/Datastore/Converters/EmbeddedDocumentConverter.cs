@@ -1,73 +1,53 @@
-using System;
-using Marr.Data.Converters;
-using Marr.Data.Mapping;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
+using System.Data;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Dapper;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
-    public class EmbeddedDocumentConverter : IConverter
+    public class EmbeddedDocumentConverter<T> : SqlMapper.TypeHandler<T>
     {
-        protected readonly JsonSerializerSettings _serializerSetting;
+        protected readonly JsonSerializerOptions SerializerSettings;
 
-        public EmbeddedDocumentConverter(params JsonConverter[] converters)
+        public EmbeddedDocumentConverter()
         {
-            _serializerSetting = new JsonSerializerSettings
+            var serializerSettings = new JsonSerializerOptions
             {
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.Indented,
-                DefaultValueHandling = DefaultValueHandling.Include,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                AllowTrailingCommas = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNameCaseInsensitive = true,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
             };
 
-            _serializerSetting.Converters.Add(new StringEnumConverter { NamingStrategy = new CamelCaseNamingStrategy() });
-            _serializerSetting.Converters.Add(new VersionConverter());
+            serializerSettings.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, true));
+            serializerSettings.Converters.Add(new STJTimeSpanConverter());
+            serializerSettings.Converters.Add(new STJUtcConverter());
 
+            SerializerSettings = serializerSettings;
+        }
+
+        public EmbeddedDocumentConverter(params JsonConverter[] converters)
+            : this()
+        {
             foreach (var converter in converters)
             {
-                _serializerSetting.Converters.Add(converter);
+                SerializerSettings.Converters.Add(converter);
             }
         }
 
-        public virtual object FromDB(ConverterContext context)
+        public override void SetValue(IDbDataParameter parameter, T value)
         {
-            if (context.DbValue == DBNull.Value)
-            {
-                return DBNull.Value;
-            }
-
-            var stringValue = (string)context.DbValue;
-
-            if (string.IsNullOrWhiteSpace(stringValue))
-            {
-                return null;
-            }
-
-            return JsonConvert.DeserializeObject(stringValue, context.ColumnMap.FieldType, _serializerSetting);
+            // Cast to object to get all properties written out
+            // https://github.com/dotnet/corefx/issues/38650
+            parameter.Value = JsonSerializer.Serialize((object)value, SerializerSettings);
         }
 
-        public object FromDB(ColumnMap map, object dbValue)
+        public override T Parse(object value)
         {
-            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
+            return JsonSerializer.Deserialize<T>((string)value, SerializerSettings);
         }
-
-        public object ToDB(object clrValue)
-        {
-            if (clrValue == null)
-            {
-                return null;
-            }
-
-            if (clrValue == DBNull.Value)
-            {
-                return DBNull.Value;
-            }
-
-            return JsonConvert.SerializeObject(clrValue, _serializerSetting);
-        }
-
-        public Type DbType => typeof(string);
     }
 }

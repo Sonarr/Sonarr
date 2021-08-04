@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,8 +43,8 @@ namespace NzbDrone.Core.DiskSpace
         private IEnumerable<string> GetSeriesRootPaths()
         {
             return _seriesService.GetAllSeriesPaths()
-                .Where(s => _diskProvider.FolderExists(s))
-                .Select(s => _diskProvider.GetPathRoot(s))
+                .Where(s => _diskProvider.FolderExists(s.Value))
+                .Select(s => _diskProvider.GetPathRoot(s.Value))
                 .Distinct();
         }
 

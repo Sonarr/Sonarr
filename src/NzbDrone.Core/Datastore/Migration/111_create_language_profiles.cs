@@ -29,19 +29,20 @@ namespace NzbDrone.Core.Datastore.Migration
         private void InsertDefaultLanguages(IDbConnection conn, IDbTransaction tran)
         {
             var profiles = GetLanguageProfiles(conn, tran);
-            var languageConverter = new EmbeddedDocumentConverter(new LanguageIntConverter());
+            var languageConverter = new EmbeddedDocumentConverter<List<LanguageProfileItem111>>(new LanguageIntConverter());
 
             foreach (var profile in profiles.OrderBy(p => p.Id))
             {
                 using (IDbCommand insertNewLanguageProfileCmd = conn.CreateCommand())
                 {
-                    var itemsJson = languageConverter.ToDB(profile.Languages);
                     insertNewLanguageProfileCmd.Transaction = tran;
                     insertNewLanguageProfileCmd.CommandText = "INSERT INTO LanguageProfiles (Id, Name, Cutoff, Languages) VALUES (?, ?, ?, ?)";
                     insertNewLanguageProfileCmd.AddParameter(profile.Id);
                     insertNewLanguageProfileCmd.AddParameter(profile.Name);
                     insertNewLanguageProfileCmd.AddParameter(profile.Cutoff.Id);
-                    insertNewLanguageProfileCmd.AddParameter(itemsJson);
+                    var param = insertNewLanguageProfileCmd.CreateParameter();
+                    languageConverter.SetValue(param, profile.Languages);
+                    insertNewLanguageProfileCmd.Parameters.Add(param);
 
                     insertNewLanguageProfileCmd.ExecuteNonQuery();
                 }

@@ -54,7 +54,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             var updatedEpisode = episodes.First();
             updatedEpisode.Monitored = false;
 
-            Episodes.Put(updatedEpisode).Monitored.Should().BeFalse();
+            Episodes.SetMonitored(updatedEpisode).Monitored.Should().BeFalse();
         }
 
         [TearDown]

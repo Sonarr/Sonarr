@@ -19,7 +19,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public List<SceneMapping> FindByTvdbid(int tvdbId)
         {
-            return Query.Where(x => x.TvdbId == tvdbId);
+            return Query(x => x.TvdbId == tvdbId);
         }
 
         public void Clear(string type)

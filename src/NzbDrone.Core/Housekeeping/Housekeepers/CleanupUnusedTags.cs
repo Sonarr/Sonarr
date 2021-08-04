@@ -1,8 +1,7 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using Marr.Data;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Serializer;
+using Dapper;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
@@ -18,24 +17,25 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            var mapper = _database.GetDataMapper();
+            using (var mapper = _database.OpenConnection())
+            {
+                var usedTags = new[] { "Series", "Notifications", "DelayProfiles", "ReleaseProfiles", "ImportLists", "Indexers" }
+                    .SelectMany(v => GetUsedTags(v, mapper))
+                    .Distinct()
+                    .ToArray();
 
-            var usedTags = new[] { "Series", "Notifications", "DelayProfiles", "ReleaseProfiles", "ImportLists", "Indexers" }
-                .SelectMany(v => GetUsedTags(v, mapper))
-                .Distinct()
-                .ToList();
+                var usedTagsList = string.Join(",", usedTags.Select(d => d.ToString()).ToArray());
 
-            var usedTagsList = usedTags.Select(d => d.ToString()).Join(",");
-
-            mapper.ExecuteNonQuery($"DELETE FROM Tags WHERE NOT Id IN ({usedTagsList})");
+                mapper.Execute($"DELETE FROM Tags WHERE NOT Id IN ({usedTagsList})");
+            }
         }
 
-        private int[] GetUsedTags(string table, IDataMapper mapper)
+        private int[] GetUsedTags(string table, IDbConnection mapper)
         {
-            return mapper.ExecuteReader($"SELECT DISTINCT Tags FROM {table} WHERE NOT Tags = '[]' AND NOT Tags IS NULL", reader => reader.GetString(0))
-                         .SelectMany(Json.Deserialize<List<int>>)
-                         .Distinct()
-                         .ToArray();
+            return mapper.Query<List<int>>($"SELECT DISTINCT Tags FROM {table} WHERE NOT Tags = '[]' AND NOT Tags IS NULL")
+                .SelectMany(x => x)
+                .Distinct()
+                .ToArray();
         }
     }
 }

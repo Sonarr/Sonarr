@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Marr.Data;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
@@ -83,12 +82,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             _remoteEpisode.Episodes.First().EpisodeFileId = 1;
 
-            _remoteEpisode.Episodes.First().EpisodeFile = new LazyLoaded<EpisodeFile>(new EpisodeFile
-                                                                                 {
-                                                                                     Quality = quality,
-                                                                                     Language = language,
-                                                                                     SceneName = "Series.Title.S01E01.720p.HDTV.x264-Sonarr"
-                                                                                 });
+            _remoteEpisode.Episodes.First().EpisodeFile = new EpisodeFile
+            {
+                Quality = quality,
+                Language = language,
+                SceneName = "Series.Title.S01E01.720p.HDTV.x264-Sonarr"
+            };
         }
 
         private void GivenUpgradeForExistingFile()

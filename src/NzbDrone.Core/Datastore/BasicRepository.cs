@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
-using Marr.Data;
-using Marr.Data.QGen;
-using NzbDrone.Common.Extensions;
+using System.Reflection;
+using System.Text;
+using Dapper;
 using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Datastore
@@ -19,58 +18,79 @@ namespace NzbDrone.Core.Datastore
         int Count();
         TModel Find(int id);
         TModel Get(int id);
-        IEnumerable<TModel> Get(IEnumerable<int> ids);
-        TModel SingleOrDefault();
         TModel Insert(TModel model);
         TModel Update(TModel model);
         TModel Upsert(TModel model);
-        void Delete(int id);
+        void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties);
         void Delete(TModel model);
+        void Delete(int id);
+        IEnumerable<TModel> Get(IEnumerable<int> ids);
         void InsertMany(IList<TModel> model);
         void UpdateMany(IList<TModel> model);
+        void SetFields(IList<TModel> models, params Expression<Func<TModel, object>>[] properties);
         void DeleteMany(List<TModel> model);
+        void DeleteMany(IEnumerable<int> ids);
         void Purge(bool vacuum = false);
         bool HasItems();
-        void DeleteMany(IEnumerable<int> ids);
-        void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties);
         TModel Single();
+        TModel SingleOrDefault();
         PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec);
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel>
         where TModel : ModelBase, new()
     {
-        private readonly IDatabase _database;
         private readonly IEventAggregator _eventAggregator;
+        private readonly PropertyInfo _keyProperty;
+        private readonly List<PropertyInfo> _properties;
+        private readonly string _updateSql;
+        private readonly string _insertSql;
 
-        protected IDataMapper DataMapper => _database.GetDataMapper();
+        protected readonly IDatabase _database;
+        protected readonly string _table;
 
         public BasicRepository(IDatabase database, IEventAggregator eventAggregator)
         {
             _database = database;
             _eventAggregator = eventAggregator;
+
+            var type = typeof(TModel);
+
+            _table = TableMapping.Mapper.TableNameMapping(type);
+            _keyProperty = type.GetProperty(nameof(ModelBase.Id));
+
+            var excluded = TableMapping.Mapper.ExcludeProperties(type).Select(x => x.Name).ToList();
+            excluded.Add(_keyProperty.Name);
+            _properties = type.GetProperties().Where(x => x.IsMappableProperty() && !excluded.Contains(x.Name)).ToList();
+
+            _insertSql = GetInsertSql();
+            _updateSql = GetUpdateSql(_properties);
         }
 
-        protected QueryBuilder<TModel> Query => DataMapper.Query<TModel>();
+        protected virtual SqlBuilder Builder() => new SqlBuilder();
 
-        protected void Delete(Expression<Func<TModel, bool>> filter)
-        {
-            DataMapper.Delete(filter);
-        }
+        protected virtual List<TModel> Query(SqlBuilder builder) => _database.Query<TModel>(builder).ToList();
 
-        public IEnumerable<TModel> All()
-        {
-            return DataMapper.Query<TModel>().ToList();
-        }
+        protected virtual List<TModel> QueryDistinct(SqlBuilder builder) => _database.QueryDistinct<TModel>(builder).ToList();
+
+        protected List<TModel> Query(Expression<Func<TModel, bool>> where) => Query(Builder().Where(where));
 
         public int Count()
         {
-            return DataMapper.Query<TModel>().GetRowCount();
+            using (var conn = _database.OpenConnection())
+            {
+                return conn.ExecuteScalar<int>($"SELECT COUNT(*) FROM {_table}");
+            }
+        }
+
+        public virtual IEnumerable<TModel> All()
+        {
+            return Query(Builder());
         }
 
         public TModel Find(int id)
         {
-            var model = Query.Where(c => c.Id == id).SingleOrDefault();
+            var model = Query(x => x.Id == id).FirstOrDefault();
 
             return model;
         }
@@ -89,13 +109,16 @@ namespace NzbDrone.Core.Datastore
 
         public IEnumerable<TModel> Get(IEnumerable<int> ids)
         {
-            var idList = ids.ToList();
-            var query = string.Format("Id IN ({0})", string.Join(",", idList));
-            var result = Query.Where(query).ToList();
-
-            if (result.Count != idList.Count())
+            if (!ids.Any())
             {
-                throw new ApplicationException($"Expected query to return {idList.Count} rows but returned {result.Count}");
+                return new List<TModel>();
+            }
+
+            var result = Query(x => ids.Contains(x.Id));
+
+            if (result.Count != ids.Count())
+            {
+                throw new ApplicationException($"Expected query to return {ids.Count()} rows but returned {result.Count}");
             }
 
             return result;
@@ -118,11 +141,72 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Can't insert model with existing ID " + model.Id);
             }
 
-            DataMapper.Insert(model);
+            using (var conn = _database.OpenConnection())
+            {
+                model = Insert(conn, null, model);
+            }
 
             ModelCreated(model);
 
             return model;
+        }
+
+        private string GetInsertSql()
+        {
+            var sbColumnList = new StringBuilder(null);
+            for (var i = 0; i < _properties.Count; i++)
+            {
+                var property = _properties[i];
+                sbColumnList.AppendFormat("\"{0}\"", property.Name);
+                if (i < _properties.Count - 1)
+                {
+                    sbColumnList.Append(", ");
+                }
+            }
+
+            var sbParameterList = new StringBuilder(null);
+            for (var i = 0; i < _properties.Count; i++)
+            {
+                var property = _properties[i];
+                sbParameterList.AppendFormat("@{0}", property.Name);
+                if (i < _properties.Count - 1)
+                {
+                    sbParameterList.Append(", ");
+                }
+            }
+
+            return $"INSERT INTO {_table} ({sbColumnList.ToString()}) VALUES ({sbParameterList.ToString()}); SELECT last_insert_rowid() id";
+        }
+
+        private TModel Insert(IDbConnection connection, IDbTransaction transaction, TModel model)
+        {
+            SqlBuilderExtensions.LogQuery(_insertSql, model);
+            var multi = connection.QueryMultiple(_insertSql, model, transaction);
+            var id = (int)multi.Read().First().id;
+            _keyProperty.SetValue(model, id);
+
+            return model;
+        }
+
+        public void InsertMany(IList<TModel> models)
+        {
+            if (models.Any(x => x.Id != 0))
+            {
+                throw new InvalidOperationException("Can't insert model with existing ID != 0");
+            }
+
+            using (var conn = _database.OpenConnection())
+            {
+                using (IDbTransaction tran = conn.BeginTransaction(IsolationLevel.ReadCommitted))
+                {
+                    foreach (var model in models)
+                    {
+                        Insert(conn, tran, model);
+                    }
+
+                    tran.Commit();
+                }
+            }
         }
 
         public TModel Update(TModel model)
@@ -132,11 +216,42 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Can't update model with ID 0");
             }
 
-            DataMapper.Update(model, c => c.Id == model.Id);
+            using (var conn = _database.OpenConnection())
+            {
+                UpdateFields(conn, null, model, _properties);
+            }
 
             ModelUpdated(model);
 
             return model;
+        }
+
+        public void UpdateMany(IList<TModel> models)
+        {
+            if (models.Any(x => x.Id == 0))
+            {
+                throw new InvalidOperationException("Can't update model with ID 0");
+            }
+
+            using (var conn = _database.OpenConnection())
+            {
+                UpdateFields(conn, null, models, _properties);
+            }
+        }
+
+        protected void Delete(Expression<Func<TModel, bool>> where)
+        {
+            Delete(Builder().Where<TModel>(where));
+        }
+
+        protected void Delete(SqlBuilder builder)
+        {
+            var sql = builder.AddDeleteTemplate(typeof(TModel)).LogQuery();
+
+            using (var conn = _database.OpenConnection())
+            {
+                conn.Execute(sql.RawSql, sql.Parameters);
+            }
         }
 
         public void Delete(TModel model)
@@ -144,40 +259,16 @@ namespace NzbDrone.Core.Datastore
             Delete(model.Id);
         }
 
-        public void InsertMany(IList<TModel> models)
+        public void Delete(int id)
         {
-            using (var unitOfWork = new UnitOfWork(() => DataMapper))
-            {
-                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
-
-                foreach (var model in models)
-                {
-                    unitOfWork.DB.Insert(model);
-                }
-
-                unitOfWork.Commit();
-            }
+            Delete(x => x.Id == id);
         }
 
-        public void UpdateMany(IList<TModel> models)
+        public void DeleteMany(IEnumerable<int> ids)
         {
-            using (var unitOfWork = new UnitOfWork(() => DataMapper))
+            if (ids.Any())
             {
-                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
-
-                foreach (var model in models)
-                {
-                    var localModel = model;
-
-                    if (model.Id == 0)
-                    {
-                        throw new InvalidOperationException("Can't update model with ID 0");
-                    }
-
-                    unitOfWork.DB.Update(model, c => c.Id == localModel.Id);
-                }
-
-                unitOfWork.Commit();
+                Delete(x => ids.Contains(x.Id));
             }
         }
 
@@ -198,31 +289,13 @@ namespace NzbDrone.Core.Datastore
             return model;
         }
 
-        public void Delete(int id)
-        {
-            DataMapper.Delete<TModel>(c => c.Id == id);
-        }
-
-        public void DeleteMany(IEnumerable<int> ids)
-        {
-            using (var unitOfWork = new UnitOfWork(() => DataMapper))
-            {
-                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
-
-                foreach (var id in ids)
-                {
-                    var localId = id;
-
-                    unitOfWork.DB.Delete<TModel>(c => c.Id == localId);
-                }
-
-                unitOfWork.Commit();
-            }
-        }
-
         public void Purge(bool vacuum = false)
         {
-            DataMapper.Delete<TModel>(c => c.Id > -1);
+            using (var conn = _database.OpenConnection())
+            {
+                conn.Execute($"DELETE FROM [{_table}]");
+            }
+
             if (vacuum)
             {
                 Vacuum();
@@ -243,43 +316,135 @@ namespace NzbDrone.Core.Datastore
         {
             if (model.Id == 0)
             {
-                throw new InvalidOperationException("Attempted to updated model without ID");
+                throw new InvalidOperationException("Attempted to update model without ID");
             }
 
-            DataMapper.Update<TModel>()
-                .Where(c => c.Id == model.Id)
-                .ColumnsIncluding(properties)
-                .Entity(model)
-                .Execute();
+            var propertiesToUpdate = properties.Select(x => x.GetMemberName()).ToList();
+
+            using (var conn = _database.OpenConnection())
+            {
+                UpdateFields(conn, null, model, propertiesToUpdate);
+            }
 
             ModelUpdated(model);
         }
 
+        public void SetFields(IList<TModel> models, params Expression<Func<TModel, object>>[] properties)
+        {
+            if (models.Any(x => x.Id == 0))
+            {
+                throw new InvalidOperationException("Attempted to update model without ID");
+            }
+
+            var propertiesToUpdate = properties.Select(x => x.GetMemberName()).ToList();
+
+            using (var conn = _database.OpenConnection())
+            {
+                UpdateFields(conn, null, models, propertiesToUpdate);
+            }
+
+            foreach (var model in models)
+            {
+                ModelUpdated(model);
+            }
+        }
+
+        private string GetUpdateSql(List<PropertyInfo> propertiesToUpdate)
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("UPDATE {0} SET ", _table);
+
+            for (var i = 0; i < propertiesToUpdate.Count; i++)
+            {
+                var property = propertiesToUpdate[i];
+                sb.AppendFormat("\"{0}\" = @{1}", property.Name, property.Name);
+                if (i < propertiesToUpdate.Count - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+
+            sb.Append($" WHERE \"{_keyProperty.Name}\" = @{_keyProperty.Name}");
+
+            return sb.ToString();
+        }
+
+        private void UpdateFields(IDbConnection connection, IDbTransaction transaction, TModel model, List<PropertyInfo> propertiesToUpdate)
+        {
+            var sql = propertiesToUpdate == _properties ? _updateSql : GetUpdateSql(propertiesToUpdate);
+
+            SqlBuilderExtensions.LogQuery(sql, model);
+
+            connection.Execute(sql, model, transaction: transaction);
+        }
+
+        private void UpdateFields(IDbConnection connection, IDbTransaction transaction, IList<TModel> models, List<PropertyInfo> propertiesToUpdate)
+        {
+            var sql = propertiesToUpdate == _properties ? _updateSql : GetUpdateSql(propertiesToUpdate);
+
+            foreach (var model in models)
+            {
+                SqlBuilderExtensions.LogQuery(sql, model);
+            }
+
+            connection.Execute(sql, models, transaction: transaction);
+        }
+
+        protected virtual SqlBuilder PagedBuilder() => Builder();
+        protected virtual IEnumerable<TModel> PagedQuery(SqlBuilder sql) => Query(sql);
+
         public virtual PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec)
         {
-            pagingSpec.Records = GetPagedQuery(Query, pagingSpec).ToList();
-            pagingSpec.TotalRecords = GetPagedQuery(Query, pagingSpec).GetRowCount();
+            pagingSpec.Records = GetPagedRecords(PagedBuilder(), pagingSpec, PagedQuery);
+            pagingSpec.TotalRecords = GetPagedRecordCount(PagedBuilder().SelectCount(), pagingSpec);
 
             return pagingSpec;
         }
 
-        protected virtual SortBuilder<TModel> GetPagedQuery(QueryBuilder<TModel> query, PagingSpec<TModel> pagingSpec)
+        private void AddFilters(SqlBuilder builder, PagingSpec<TModel> pagingSpec)
         {
-            var filterExpressions = pagingSpec.FilterExpressions;
-            var sortQuery = query.Where(filterExpressions.FirstOrDefault());
+            var filters = pagingSpec.FilterExpressions;
 
-            if (filterExpressions.Count > 1)
+            foreach (var filter in filters)
             {
-                // Start at the second item for the AndWhere clauses
-                for (var i = 1; i < filterExpressions.Count; i++)
-                {
-                    sortQuery.AndWhere(filterExpressions[i]);
-                }
+                builder.Where<TModel>(filter);
+            }
+        }
+
+        protected List<TModel> GetPagedRecords(SqlBuilder builder, PagingSpec<TModel> pagingSpec, Func<SqlBuilder, IEnumerable<TModel>> queryFunc)
+        {
+            AddFilters(builder, pagingSpec);
+
+            if (pagingSpec.SortKey == null)
+            {
+                pagingSpec.SortKey = $"{_table}.{_keyProperty.Name}";
             }
 
-            return sortQuery.OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
-                            .Skip(pagingSpec.PagingOffset())
-                            .Take(pagingSpec.PageSize);
+            var sortDirection = pagingSpec.SortDirection == SortDirection.Descending ? "DESC" : "ASC";
+            var pagingOffset = (pagingSpec.Page - 1) * pagingSpec.PageSize;
+            builder.OrderBy($"{pagingSpec.SortKey} {sortDirection} LIMIT {pagingSpec.PageSize} OFFSET {pagingOffset}");
+
+            return queryFunc(builder).ToList();
+        }
+
+        protected int GetPagedRecordCount(SqlBuilder builder, PagingSpec<TModel> pagingSpec, string template = null)
+        {
+            AddFilters(builder, pagingSpec);
+
+            SqlBuilder.Template sql;
+            if (template != null)
+            {
+                sql = builder.AddTemplate(template).LogQuery();
+            }
+            else
+            {
+                sql = builder.AddPageCountTemplate(typeof(TModel));
+            }
+
+            using (var conn = _database.OpenConnection())
+            {
+                return conn.ExecuteScalar<int>(sql.RawSql, sql.Parameters);
+            }
         }
 
         protected void ModelCreated(TModel model, bool forcePublish = false)

@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Housekeeping.Housekeepers;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -17,8 +18,9 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_delete_orphaned_episode_files()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
-                                                  .With(h => h.Quality = new QualityModel())
-                                                  .BuildNew();
+                .With(h => h.Language = Language.English)
+                .With(h => h.Quality = new QualityModel())
+                .BuildNew();
 
             Db.Insert(episodeFile);
             Subject.Clean();
@@ -29,15 +31,16 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_not_delete_unorphaned_episode_files()
         {
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                                                   .All()
-                                                   .With(h => h.Quality = new QualityModel())
-                                                   .BuildListOfNew();
+                .All()
+                .With(h => h.Language = Language.English)
+                .With(h => h.Quality = new QualityModel())
+                .BuildListOfNew();
 
             Db.InsertMany(episodeFiles);
 
             var episode = Builder<Episode>.CreateNew()
-                                          .With(e => e.EpisodeFileId = episodeFiles.First().Id)
-                                          .BuildNew();
+                .With(e => e.EpisodeFileId = episodeFiles.First().Id)
+                .BuildNew();
 
             Db.Insert(episode);
 

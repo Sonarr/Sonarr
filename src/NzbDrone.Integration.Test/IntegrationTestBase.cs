@@ -315,7 +315,7 @@ namespace NzbDrone.Integration.Test
 
                 result = Episodes.GetEpisodesInSeries(series.Id).Single(v => v.SeasonNumber == season && v.EpisodeNumber == episode);
 
-                result.EpisodeFile.Should().NotBeNull();
+                result.EpisodeFileId.Should().NotBe(0);
             }
 
             return result.EpisodeFile;

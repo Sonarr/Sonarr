@@ -1,4 +1,5 @@
 ﻿using System;
+using Dapper;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Datastore;
@@ -23,12 +24,13 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                 _logger.Debug("Not running scheduled task last execution cleanup during debug");
             }
 
-            var mapper = _database.GetDataMapper();
-            mapper.AddParameter("time", DateTime.UtcNow);
-
-            mapper.ExecuteNonQuery(@"UPDATE ScheduledTasks
-                                     SET LastExecution = @time
-                                     WHERE LastExecution > @time");
+            using (var mapper = _database.OpenConnection())
+            {
+                mapper.Execute(@"UPDATE ScheduledTasks
+                                 SET LastExecution = @time
+                                 WHERE LastExecution > @time",
+                               new { time = DateTime.UtcNow });
+            }
         }
     }
 }

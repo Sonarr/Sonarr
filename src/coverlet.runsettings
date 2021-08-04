@@ -5,7 +5,7 @@
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
           <Format>opencover</Format>
-          <Exclude>[Sonarr.*.Test]*,[Sonarr.Test.*]*,[Sonarr.Api*]*,[Marr.Data]*,[MonoTorrent]*</Exclude>
+          <Exclude>[Sonarr.*.Test]*,[Sonarr.Test.*]*,[Sonarr.Api*]*</Exclude>
         </Configuration>
       </DataCollector>
     </DataCollectors>

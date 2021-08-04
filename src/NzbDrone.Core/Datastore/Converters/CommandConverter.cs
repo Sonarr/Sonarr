@@ -1,42 +1,47 @@
-﻿using System;
-using Marr.Data.Converters;
+﻿using System.Data;
+using System.Text.Json;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Reflection;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
-    public class CommandConverter : EmbeddedDocumentConverter
+    public class CommandConverter : EmbeddedDocumentConverter<Command>
     {
-        public override object FromDB(ConverterContext context)
+        public override Command Parse(object value)
         {
-            if (context.DbValue == DBNull.Value)
-            {
-                return null;
-            }
-
-            var stringValue = (string)context.DbValue;
+            var stringValue = (string)value;
 
             if (stringValue.IsNullOrWhiteSpace())
             {
                 return null;
             }
 
-            var ordinal = context.DataRecord.GetOrdinal("Name");
-            var contract = context.DataRecord.GetString(ordinal);
+            string contract;
+            using (JsonDocument body = JsonDocument.Parse(stringValue))
+            {
+                contract = body.RootElement.GetProperty("name").GetString();
+            }
+
             var impType = typeof(Command).Assembly.FindTypeByName(contract + "Command");
 
             if (impType == null)
             {
-                var result = Json.Deserialize<UnknownCommand>(stringValue);
+                var result = JsonSerializer.Deserialize<UnknownCommand>(stringValue, SerializerSettings);
 
                 result.ContractName = contract;
 
                 return result;
             }
 
-            return Json.Deserialize(stringValue, impType);
+            return (Command)JsonSerializer.Deserialize(stringValue, impType, SerializerSettings);
+        }
+
+        public override void SetValue(IDbDataParameter parameter, Command value)
+        {
+            // Cast to object to get all properties written out
+            // https://github.com/dotnet/corefx/issues/38650
+            parameter.Value = value == null ? null : JsonSerializer.Serialize((object)value, SerializerSettings);
         }
     }
 }

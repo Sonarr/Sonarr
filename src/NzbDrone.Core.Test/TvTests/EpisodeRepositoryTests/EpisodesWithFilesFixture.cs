@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -23,6 +24,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             _episodeFiles = Builder<EpisodeFile>.CreateListOfSize(5)
                                                 .All()
                                                 .With(c => c.Quality = new QualityModel())
+                                                .With(c => c.Language = Language.English)
                                                 .BuildListOfNew();
 
             Db.InsertMany(_episodeFiles);
@@ -57,6 +59,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                                   .With(f => f.RelativePath = "another path")
                                                   .With(c => c.Quality = new QualityModel())
+                                                  .With(c => c.Language = Language.English)
                                                   .BuildNew();
 
             Db.Insert(episodeFile);

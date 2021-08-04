@@ -3,30 +3,27 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="MailKit" Version="2.10.1" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
     <PackageReference Include="FluentMigrator.Runner.SQLite" Version="3.3.2" />
-    <PackageReference Include="System.Memory" Version="4.5.4" />
-    <PackageReference Include="FluentValidation" Version="8.4.0" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-    <PackageReference Include="MailKit" Version="2.10.1" />
+    <PackageReference Include="FluentValidation" Version="8.6.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NLog" Version="4.7.14" />
     <PackageReference Include="TinyTwitter" Version="1.1.2" />
     <PackageReference Include="Kveer.XmlRPC" Version="1.2.0" />
     <PackageReference Include="MonoTorrent" Version="2.0.5" />
     <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.0-0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj" />
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\Logo\64.png">
       <Link>Resources\Logo\64.png</Link>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Download\Clients\Aria2\" />
   </ItemGroup>
 </Project>

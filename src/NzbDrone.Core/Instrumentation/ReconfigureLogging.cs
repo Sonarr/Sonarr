@@ -6,9 +6,11 @@ using NLog.Targets.Syslog;
 using NLog.Targets.Syslog.Settings;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Instrumentation.Sentry;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Instrumentation
@@ -55,6 +57,10 @@ namespace NzbDrone.Core.Instrumentation
             SetMinimumLogLevel(rules, "appFileInfo", minimumLogLevel <= LogLevel.Info ? LogLevel.Info : LogLevel.Off);
             SetMinimumLogLevel(rules, "appFileDebug", minimumLogLevel <= LogLevel.Debug ? LogLevel.Debug : LogLevel.Off);
             SetMinimumLogLevel(rules, "appFileTrace", minimumLogLevel <= LogLevel.Trace ? LogLevel.Trace : LogLevel.Off);
+            SetLogRotation();
+
+            //Log Sql
+            SqlBuilderExtensions.LogSql = _configFileProvider.LogSql;
 
             //Sentry
             ReconfigureSentry();
@@ -85,12 +91,21 @@ namespace NzbDrone.Core.Instrumentation
             }
         }
 
+        private void SetLogRotation()
+        {
+            foreach (var target in LogManager.Configuration.AllTargets.OfType<NzbDroneFileTarget>())
+            {
+                target.MaxArchiveFiles = _configFileProvider.LogRotate;
+            }
+        }
+
         private void ReconfigureSentry()
         {
             var sentryTarget = LogManager.Configuration.AllTargets.OfType<SentryTarget>().FirstOrDefault();
             if (sentryTarget != null)
             {
                 sentryTarget.SentryEnabled = (RuntimeInfo.IsProduction && _configFileProvider.AnalyticsEnabled) || RuntimeInfo.IsDevelopment;
+                sentryTarget.FilterEvents = _configFileProvider.FilterSentryEvents;
             }
         }
 
