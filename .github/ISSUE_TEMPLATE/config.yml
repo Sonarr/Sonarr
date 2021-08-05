@@ -10,5 +10,5 @@ contact_links:
     url: https://forums.sonarr.tv/
     about: Discuss and search through support topics.
   - name: Support via IRC
-    url: http://webchat.freenode.net/?channels=#sonarr
+    url: https://web.libera.chat/?channels=#sonarr
     about: Chat with users and devs on support and setup related topics.
