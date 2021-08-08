@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.CustomFilters;
@@ -10,7 +11,7 @@ namespace Sonarr.Api.V3.CustomFilters
     {
         public string Type { get; set; }
         public string Label { get; set; }
-        public List<dynamic> Filters { get; set; }
+        public List<ExpandoObject> Filters { get; set; }
     }
 
     public static class CustomFilterResourceMapper
@@ -23,12 +24,12 @@ namespace Sonarr.Api.V3.CustomFilters
             }
 
             return new CustomFilterResource
-                   {
-                       Id = model.Id,
-                       Type = model.Type,
-                       Label = model.Label,
-                       Filters = Json.Deserialize<List<dynamic>>(model.Filters)
-                   };
+            {
+                Id = model.Id,
+                Type = model.Type,
+                Label = model.Label,
+                Filters = STJson.Deserialize<List<ExpandoObject>>(model.Filters)
+            };
         }
 
         public static CustomFilter ToModel(this CustomFilterResource resource)
@@ -39,12 +40,12 @@ namespace Sonarr.Api.V3.CustomFilters
             }
 
             return new CustomFilter
-                   {
-                       Id = resource.Id,
-                       Type = resource.Type,
-                       Label = resource.Label,
-                       Filters = Json.ToJson(resource.Filters)
-                   };
+            {
+                Id = resource.Id,
+                Type = resource.Type,
+                Label = resource.Label,
+                Filters = STJson.ToJson(resource.Filters)
+            };
         }
 
         public static List<CustomFilterResource> ToResource(this IEnumerable<CustomFilter> filters)

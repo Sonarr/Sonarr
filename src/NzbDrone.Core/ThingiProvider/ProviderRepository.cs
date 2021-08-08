@@ -11,8 +11,7 @@ using NzbDrone.Core.Messaging.Events;
 namespace NzbDrone.Core.ThingiProvider
 {
     public class ProviderRepository<TProviderDefinition> : BasicRepository<TProviderDefinition>, IProviderRepository<TProviderDefinition>
-        where TProviderDefinition : ProviderDefinition,
-            new()
+        where TProviderDefinition : ProviderDefinition, new()
     {
         protected readonly JsonSerializerOptions _serializerSettings;
 
