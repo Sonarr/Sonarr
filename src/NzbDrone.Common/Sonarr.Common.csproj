@@ -12,9 +12,6 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LogentriesNLog\LogentriesNLog.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data.SQLite">
       <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
