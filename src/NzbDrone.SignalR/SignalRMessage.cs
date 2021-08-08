@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using NzbDrone.Core.Datastore.Events;
 
 namespace NzbDrone.SignalR
@@ -8,7 +7,7 @@ namespace NzbDrone.SignalR
         public object Body { get; set; }
         public string Name { get; set; }
 
-        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public ModelAction Action { get; set; }
     }
 }

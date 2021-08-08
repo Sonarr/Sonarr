@@ -28,10 +28,8 @@ namespace Sonarr.Http.Extensions
 
         public static object FromJson(this Stream body, Type type)
         {
-            var reader = new StreamReader(body, true);
             body.Position = 0;
-            var value = reader.ReadToEnd();
-            return Json.Deserialize(value, type);
+            return STJson.Deserialize(body, type);
         }
 
         public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, NancyContext context, HttpStatusCode statusCode = HttpStatusCode.OK)

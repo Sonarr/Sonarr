@@ -108,9 +108,9 @@ namespace NzbDrone.Host
                 {
                     services
                     .AddSignalR()
-                    .AddNewtonsoftJsonProtocol(options =>
+                    .AddJsonProtocol(options =>
                     {
-                        options.PayloadSerializerSettings = Json.GetSerializerSettings();
+                        options.PayloadSerializerOptions = STJson.GetSerializerSettings();
                     });
                 })
                 .Configure(app =>
