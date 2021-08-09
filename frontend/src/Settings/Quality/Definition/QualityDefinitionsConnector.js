@@ -38,8 +38,6 @@ class QualityDefinitionsConnector extends Component {
   // Lifecycle
 
   componentDidMount() {
-    this.props.dispatchFetchQualityDefinitions();
-
     const {
       dispatchFetchQualityDefinitions,
       dispatchSaveQualityDefinitions,
