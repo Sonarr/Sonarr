@@ -16,6 +16,7 @@ namespace Sonarr.Api.V3.Config
         public bool ShowRelativeDates { get; set; }
 
         public bool EnableColorImpairedMode { get; set; }
+        public int UILanguage {get; set; }
     }
 
     public static class UiConfigResourceMapper
@@ -33,6 +34,7 @@ namespace Sonarr.Api.V3.Config
                 ShowRelativeDates = model.ShowRelativeDates,
 
                 EnableColorImpairedMode = model.EnableColorImpairedMode,
+                UILanguage = model.UILanguage
             };
         }
     }
