@@ -50,8 +50,8 @@ class AddDownloadClientModalContent extends Component {
               <div>
 
                 <Alert kind={kinds.INFO}>
-                  <div>Sonarr supports any downloadClient that uses the Newznab standard, as well as other downloadClients listed below.</div>
-                  <div>For more information on the individual downloadClients, clink on the info buttons.</div>
+                  <div>Sonarr supports many popular torrent and usenet download clients.</div>
+                  <div>For more information on the individual download clients, click the more info buttons.</div>
                 </Alert>
 
                 <FieldSet legend="Usenet">
