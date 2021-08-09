@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.Configuration.Events;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Events;
@@ -302,6 +303,13 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueBoolean("EnableColorImpairedMode", false); }
 
             set { SetValue("EnableColorImpairedMode", value); }
+        }
+
+        public int UILanguage
+        {
+            get { return GetValueInt("UILanguage", (int)Language.English); }
+
+            set { SetValue("UILanguage", value); }
         }
 
         public bool CleanupMetadataImages

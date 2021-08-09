@@ -12,6 +12,7 @@ import { inputTypes } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import themes from 'Styles/Themes';
 import titleCase from 'Utilities/String/titleCase';
+import translate from 'Utilities/String/translate';
 
 export const firstDayOfWeekOptions = [
   { key: 0, value: 'Sunday' },
@@ -57,6 +58,7 @@ class UISettings extends Component {
       hasSettings,
       onInputChange,
       onSavePress,
+      languages,
       ...otherProps
     } = this.props;
 
@@ -72,17 +74,19 @@ class UISettings extends Component {
 
         <PageContentBody>
           {
-            isFetching &&
-              <LoadingIndicator />
+            isFetching ?
+              <LoadingIndicator /> :
+              null
           }
 
           {
-            !isFetching && error &&
-              <div>Unable to load UI settings</div>
+            !isFetching && error ?
+              <div>Unable to load UI settings</div> :
+              null
           }
 
           {
-            hasSettings && !isFetching && !error &&
+            hasSettings && !isFetching && !error ?
               <Form
                 id="uiSettings"
                 {...otherProps}
@@ -191,7 +195,23 @@ class UISettings extends Component {
                     />
                   </FormGroup>
                 </FieldSet>
-              </Form>
+
+                <FieldSet legend={translate('Language')}>
+                  <FormGroup>
+                    <FormLabel>{translate('UI Language')}</FormLabel>
+                    <FormInputGroup
+                      type={inputTypes.SELECT}
+                      name="uiLanguage"
+                      values={languages}
+                      helpText={translate('Language that Sonarr will use for UI')}
+                      helpTextWarning={translate('Browser Reload Required')}
+                      onChange={onInputChange}
+                      {...settings.uiLanguage}
+                    />
+                  </FormGroup>
+                </FieldSet>
+              </Form> :
+              null
           }
         </PageContentBody>
       </PageContent>
@@ -205,6 +225,7 @@ UISettings.propTypes = {
   error: PropTypes.object,
   settings: PropTypes.object.isRequired,
   hasSettings: PropTypes.bool.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   onSavePress: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired
 };

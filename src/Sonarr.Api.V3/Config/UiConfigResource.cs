@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Configuration;
 using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Config
@@ -17,6 +17,7 @@ namespace Sonarr.Api.V3.Config
 
         public bool EnableColorImpairedMode { get; set; }
         public string Theme { get; set; }
+        public int UILanguage { get; set; }
     }
 
     public static class UiConfigResourceMapper
@@ -34,7 +35,8 @@ namespace Sonarr.Api.V3.Config
                 ShowRelativeDates = model.ShowRelativeDates,
 
                 EnableColorImpairedMode = model.EnableColorImpairedMode,
-                Theme = config.Theme
+                Theme = config.Theme,
+                UILanguage = model.UILanguage
             };
         }
     }

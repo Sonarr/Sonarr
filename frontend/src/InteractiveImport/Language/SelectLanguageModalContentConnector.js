@@ -5,25 +5,14 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { reprocessInteractiveImportItems, updateInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
 import { fetchLanguageProfileSchema } from 'Store/Actions/settingsActions';
+import createLanguagesSelector from 'Store/Selectors/createLanguagesSelector';
 import SelectLanguageModalContent from './SelectLanguageModalContent';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.settings.languageProfiles,
-    (languageProfiles) => {
-      const {
-        isSchemaFetching: isFetching,
-        isSchemaPopulated: isPopulated,
-        schemaError: error,
-        schema
-      } = languageProfiles;
-
-      return {
-        isFetching,
-        isPopulated,
-        error,
-        items: schema.languages ? [...schema.languages].reverse() : []
-      };
+    createLanguagesSelector(),
+    (languages) => {
+      return languages;
     }
   );
 }

@@ -30,4 +30,9 @@
       <Link>Resources\Logo\64.png</Link>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Localization\Core\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
