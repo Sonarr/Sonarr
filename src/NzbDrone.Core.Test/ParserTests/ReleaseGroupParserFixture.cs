@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-ES.5.1.x264",null)]
         [TestCase("SomeShow.S20E13.1080p.Blu-Ray.DTS-ES.5.1.x264",null)]
         [TestCase("SomeShow.S20E13.1080p.Blu-Ray.DTS-ES.5.1.x264-ROUGH [PublicHD]", "ROUGH")]
+        [TestCase("SomeShow S01E168 1080p WEB-DL AAC 2.0 x264-Erai-raws", "Erai-raws")]
         //[TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
         {
