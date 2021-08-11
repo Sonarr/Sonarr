@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex RealRegex = new Regex(@"\b(?<real>REAL)\b",
                                                                 RegexOptions.Compiled);
 
-        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<R360p>360p)|(?<R480p>480p|640x480|848x480)|(?<R540p>540p)|(?<R576p>576p)|(?<R720p>720p|1280x720|960p)|(?<R1080p>1080p|1920x1080|1440p|FHD|1080i|4kto1080p)|(?<R2160p>2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k))\b",
+        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<R360p>360p)|(?<R480p>480p|640x480|848x480)|(?<R540p>540p)|(?<R576p>576p)|(?<R720p>720p|1280x720|960p)|(?<R1080p>1080p|1920x1080|1440p|FHD|1080i|4kto1080p)|(?<R2160p>2160p|3840x2160|4k[-_. ](?:UHD|HEVC|BD|H265)|(?:UHD|HEVC|BD|H265)[-_. ]4k))\b",
 
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -458,14 +458,14 @@ namespace NzbDrone.Core.Parser
             if (codecRegex.Groups["x264"].Success)
             {
                 result.Quality = Quality.SDTV;
-                
+
                 return result;
             }
 
             if (normalizedName.Contains("848x480"))
             {
                 result.ResolutionDetectionSource = QualityDetectionSource.Name;
-                
+
                 if (normalizedName.Contains("dvd"))
                 {
                     result.SourceDetectionSource = QualityDetectionSource.Name;
@@ -487,7 +487,7 @@ namespace NzbDrone.Core.Parser
             if (normalizedName.ContainsIgnoreCase("1280x720"))
             {
                 result.ResolutionDetectionSource = QualityDetectionSource.Name;
-                
+
                 if (normalizedName.ContainsIgnoreCase("bluray"))
                 {
                     result.SourceDetectionSource = QualityDetectionSource.Name;
@@ -504,7 +504,7 @@ namespace NzbDrone.Core.Parser
             if (normalizedName.ContainsIgnoreCase("1920x1080"))
             {
                 result.ResolutionDetectionSource = QualityDetectionSource.Name;
-                
+
                 if (normalizedName.ContainsIgnoreCase("bluray"))
                 {
                     result.SourceDetectionSource = QualityDetectionSource.Name;

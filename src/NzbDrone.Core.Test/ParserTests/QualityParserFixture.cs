@@ -265,6 +265,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("House.of.Sonarr.AK.s05e13.4K.UHD.WEB.DL", false)]
         [TestCase("House.of.Sonarr.AK.s05e13.UHD.4K.WEB.DL", false)]
         [TestCase("[HorribleSubs] Series Title! S01 [Web][MKV][h264][2160p][AAC 2.0][Softsubs (HorribleSubs)]", false)]
+        [TestCase("Series Title S02 2013 WEB-DL 4k H265 AAC 2Audio-HDSWEB", false)]
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
@@ -404,7 +405,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_full_quality_from_name(string title)
         {
             var result = QualityParser.ParseQuality(title);
-                
+
             result.SourceDetectionSource.Should().Be(QualityDetectionSource.Name);
             result.ResolutionDetectionSource.Should().Be(QualityDetectionSource.Name);
         }
