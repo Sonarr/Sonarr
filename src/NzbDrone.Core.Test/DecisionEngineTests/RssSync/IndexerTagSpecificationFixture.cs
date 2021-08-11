@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -33,8 +34,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             };
 
             Mocker
-                .GetMock<IIndexerRepository>()
+                .GetMock<IIndexerFactory>()
                 .Setup(m => m.Get(It.IsAny<int>()))
+                .Throws(new ModelNotFoundException(typeof(IndexerDefinition), -1));
+
+            Mocker
+                .GetMock<IIndexerFactory>()
+                .Setup(m => m.Get(1))
                 .Returns(_fakeIndexerDefinition);
 
             _specification = Mocker.Resolve<IndexerTagSpecification>();
@@ -105,6 +111,26 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _fakeSeries.Tags = new HashSet<int> { 123, 789 };
 
             _specification.IsSatisfiedBy(_parseResultMulti, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void release_without_indexerid_should_return_true()
+        {
+            _fakeIndexerDefinition.Tags = new HashSet<int> { 456 };
+            _fakeSeries.Tags = new HashSet<int> { 123, 789 };
+            _fakeRelease.IndexerId = 0;
+
+            _specification.IsSatisfiedBy(_parseResultMulti, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void release_with_invalid_indexerid_should_return_true()
+        {
+            _fakeIndexerDefinition.Tags = new HashSet<int> { 456 };
+            _fakeSeries.Tags = new HashSet<int> { 123, 789 };
+            _fakeRelease.IndexerId = 2;
+
+            _specification.IsSatisfiedBy(_parseResultMulti, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = true }).Accepted.Should().BeTrue();
         }
     }
 }
