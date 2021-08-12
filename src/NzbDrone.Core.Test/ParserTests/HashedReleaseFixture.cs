@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.ParserTests
                 @"C:\Test\Show Title.S02E12.1080p.BluRay.x264-SONARR\Backup_72023S02-12.mkv".AsOsAgnostic(),
                 "Show Title",
                 Quality.Bluray1080p,
-                null
+                "SONARR"
             },
             new object[]
             {
