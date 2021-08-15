@@ -1,4 +1,8 @@
-﻿using CookComputing.XmlRpc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using CookComputing.XmlRpc;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -9,10 +13,6 @@ using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace NzbDrone.Core.Download.Clients.Aria2
 {
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                         Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
-            _proxy = proxy; ;
+            _proxy = proxy;
         }
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                 return hash;
             }
 
-            _logger.Debug($"Äria2 AddFromMagnetLink '{hash}' -> '{gid}'");
+            _logger.Debug($"Aria2 AddFromMagnetLink '{hash}' -> '{gid}'");
 
             return hash;
         }
@@ -201,7 +201,10 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         {
             failures.AddIfNotNull(TestConnection());
 
-            if (failures.HasErrors()) return;
+            if (failures.HasErrors())
+            {
+                return;
+            }
         }
 
         private ValidationFailure TestConnection()
