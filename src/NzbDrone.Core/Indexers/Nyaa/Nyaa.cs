@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         public override IParseIndexerResponse GetParser()
         {
-            return new TorrentRssParser() { UseGuidInfoUrl = true, ParseSizeInDescription = true, ParseSeedersInDescription = true };
+            return new TorrentRssParser() { UseGuidInfoUrl = true, SizeElementName = "size", InfoHashElementName = "infoHash", PeersElementName = "leechers", CalculatePeersAsSum = true, SeedsElementName = "seeders" };
         }
     }
 }
