@@ -508,7 +508,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             var reports = new List<ReleaseInfo>();
 
-            _logger.ProgressInfo("Searching {0} indexers for {1}", indexers.Count, criteriaBase);
+            _logger.ProgressInfo("Searching indexers for {0}. {1} active indexers", criteriaBase, indexers.Count);
 
             var taskList = new List<Task>();
             var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
