@@ -220,7 +220,12 @@ namespace NzbDrone.Core.Tv
             foreach (var episode in GetEpisodesByFileId(message.EpisodeFile.Id))
             {
                 _logger.Debug("Detaching episode {0} from file.", episode.Id);
-                _episodeRepository.ClearFileId(episode, message.Reason != DeleteMediaFileReason.Upgrade && _configService.AutoUnmonitorPreviouslyDownloadedEpisodes);
+
+                var unmonitorForReason = message.Reason != DeleteMediaFileReason.Upgrade ||
+                                         message.Reason != DeleteMediaFileReason.ManualOverride;
+
+
+                _episodeRepository.ClearFileId(episode, unmonitorForReason && _configService.AutoUnmonitorPreviouslyDownloadedEpisodes);
             }
         }
 
