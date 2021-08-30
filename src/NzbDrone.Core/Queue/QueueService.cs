@@ -82,14 +82,7 @@ namespace NzbDrone.Core.Queue
                 OutputPath = trackedDownload.DownloadItem.OutputPath.ToString()
             };
 
-            if (episode != null)
-            {
-                queue.Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id));
-            }
-            else
-            {
-                queue.Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}", trackedDownload.DownloadItem.DownloadId));
-            }
+            queue.Id = HashConverter.GetHashInt31($"trackedDownload-{trackedDownload.DownloadClient}-{trackedDownload.DownloadItem.DownloadId}-ep{episode?.Id ?? 0}");
 
             if (queue.Timeleft.HasValue)
             {
