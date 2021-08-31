@@ -119,5 +119,20 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
         }
+
+        [Test]
+        public void should_leave_monitored_to_true_if_autoUnmonitor_is_true_and_is_for_manual_override()
+        {
+            GivenSingleEpisodeFile();
+
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
+                  .Returns(true);
+
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.ManualOverride));
+
+            Mocker.GetMock<IEpisodeRepository>()
+                  .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
+        }
     }
 }

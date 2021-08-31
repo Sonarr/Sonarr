@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Tv
             {
                 _logger.Debug("Detaching episode {0} from file.", episode.Id);
 
-                var unmonitorForReason = message.Reason != DeleteMediaFileReason.Upgrade ||
+                var unmonitorForReason = message.Reason != DeleteMediaFileReason.Upgrade &&
                                          message.Reason != DeleteMediaFileReason.ManualOverride;
 
 
