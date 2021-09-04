@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
@@ -230,6 +231,33 @@ namespace NzbDrone.Common.Extensions
             }
 
             return null;
+        }
+
+        public static string GetLongestCommonPath(this List<string> paths)
+        {
+            var firstPath = paths.First();
+            var length = firstPath.Length;
+
+            for (int i = 1; i < paths.Count; i++)
+            {
+                var path = paths[i];
+
+                length = Math.Min(length, path.Length);
+
+                for (int characterIndex = 0; characterIndex < length; characterIndex++)
+                {
+                    if (path[characterIndex] != firstPath[characterIndex])
+                    {
+                        length = characterIndex;
+                        break;
+                    }
+                }
+            }
+
+            var substring = firstPath.Substring(0, length);
+            var lastSeparatorIndex = substring.LastIndexOfAny(new[] { '/', '\\' });
+
+            return substring.Substring(0, lastSeparatorIndex);
         }
 
         public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)

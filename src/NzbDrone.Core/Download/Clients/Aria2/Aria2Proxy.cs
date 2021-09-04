@@ -13,8 +13,9 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         string AddMagnet(Aria2Settings settings, string magnet);
         string AddTorrent(Aria2Settings settings, byte[] torrent);
         bool RemoveTorrent(Aria2Settings settings, string gid);
+        bool RemoveCompletedTorrent(Aria2Settings settings, string gid);
         Dictionary<string, string> GetGlobals(Aria2Settings settings);
-        Aria2Status[] GetTorrents(Aria2Settings settings);
+        List<Aria2Status> GetTorrents(Aria2Settings settings);
         Aria2Status GetFromGID(Aria2Settings settings, string gid);
     }
 
@@ -31,6 +32,9 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         [XmlRpcMethod("aria2.forceRemove")]
         string Remove(string token, string gid);
+        
+        [XmlRpcMethod("aria2.removeDownloadResult")]
+        string RemoveResult(string token, string gid);
 
         [XmlRpcMethod("aria2.tellStatus")]
         Aria2Status GetFromGid(string token, string gid);
@@ -39,13 +43,13 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         XmlRpcStruct GetGlobalOption(string token);
 
         [XmlRpcMethod("aria2.tellActive")]
-        Aria2Status[] GetActives(string token);
+        Aria2Status[] GetActive(string token);
 
         [XmlRpcMethod("aria2.tellWaiting")]
-        Aria2Status[] GetWaitings(string token, int offset, int num);
+        Aria2Status[] GetWaiting(string token, int offset, int num);
 
         [XmlRpcMethod("aria2.tellStopped")]
-        Aria2Status[] GetStoppeds(string token, int offset, int num); 
+        Aria2Status[] GetStopped(string token, int offset, int num); 
     }
 
     public class Aria2Proxy : IAria2Proxy
@@ -69,68 +73,68 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         public string GetVersion(Aria2Settings settings)
         {
-            _logger.Debug("> aria2.getVersion");
+            _logger.Trace("> aria2.getVersion");
 
             var client = BuildClient(settings);
             var version = ExecuteRequest(() => client.GetVersion(GetToken(settings)));
 
-            _logger.Debug("< aria2.getVersion");
+            _logger.Trace("< aria2.getVersion");
 
             return version.Version;
         }
 
         public Aria2Status GetFromGID(Aria2Settings settings, string gid)
         {
-            _logger.Debug("> aria2.tellStatus");
+            _logger.Trace("> aria2.tellStatus");
 
             var client = BuildClient(settings);
             var found = ExecuteRequest(() => client.GetFromGid(GetToken(settings), gid));
 
-            _logger.Debug("< aria2.tellStatus");
+            _logger.Trace("< aria2.tellStatus");
 
             return found;
         }
 
 
-        public Aria2Status[] GetTorrents(Aria2Settings settings)
+        public List<Aria2Status> GetTorrents(Aria2Settings settings)
         {
-            _logger.Debug("> aria2.tellActive");
+            _logger.Trace("> aria2.tellActive");
 
             var client = BuildClient(settings);
 
-            var actives = ExecuteRequest(() => client.GetActives(GetToken(settings)));
+            var active = ExecuteRequest(() => client.GetActive(GetToken(settings)));
 
-            _logger.Debug("< aria2.tellActive");
+            _logger.Trace("< aria2.tellActive");
 
-            _logger.Debug("> aria2.tellWaiting");
+            _logger.Trace("> aria2.tellWaiting");
 
-            var waitings = ExecuteRequest(() => client.GetWaitings(GetToken(settings), 1, 10*1024));
+            var waiting = ExecuteRequest(() => client.GetWaiting(GetToken(settings), 0, 10*1024));
 
-            _logger.Debug("< aria2.tellWaiting");
+            _logger.Trace("< aria2.tellWaiting");
 
-            _logger.Debug("> aria2.tellStopped");
+            _logger.Trace("> aria2.tellStopped");
 
-            var stoppeds = ExecuteRequest(() => client.GetStoppeds(GetToken(settings), 1, 10*1024));
+            var stopped = ExecuteRequest(() => client.GetStopped(GetToken(settings), 0, 10*1024));
 
-            _logger.Debug("< aria2.tellStopped");
+            _logger.Trace("< aria2.tellStopped");
 
-            var ret = new List<Aria2Status>();
+            var items = new List<Aria2Status>();
 
-            ret.AddRange(actives);
-            ret.AddRange(waitings);
-            ret.AddRange(stoppeds);
+            items.AddRange(active);
+            items.AddRange(waiting);
+            items.AddRange(stopped);
             
-            return ret.ToArray();
+            return items;
         }
 
         public Dictionary<string, string> GetGlobals(Aria2Settings settings)
         {
-            _logger.Debug("> aria2.getGlobalOption");
+            _logger.Trace("> aria2.getGlobalOption");
 
             var client = BuildClient(settings);
             var options = ExecuteRequest(() => client.GetGlobalOption(GetToken(settings)));
 
-            _logger.Debug("< aria2.getGlobalOption");
+            _logger.Trace("< aria2.getGlobalOption");
 
             var ret = new Dictionary<string, string>();
 
@@ -144,38 +148,50 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         public string AddMagnet(Aria2Settings settings, string magnet)
         {
-            _logger.Debug("> aria2.addUri");
+            _logger.Trace("> aria2.addUri");
 
             var client = BuildClient(settings);
             var gid = ExecuteRequest(() => client.AddUri(GetToken(settings), new[] { magnet }));
 
-            _logger.Debug("< aria2.addUri");
+            _logger.Trace("< aria2.addUri");
 
             return gid;
         }
 
         public string AddTorrent(Aria2Settings settings, byte[] torrent)
         {
-            _logger.Debug("> aria2.addTorrent");
+            _logger.Trace("> aria2.addTorrent");
 
             var client = BuildClient(settings);
             var gid = ExecuteRequest(() => client.AddTorrent(GetToken(settings), torrent));
 
-            _logger.Debug("< aria2.addTorrent");
+            _logger.Trace("< aria2.addTorrent");
 
             return gid;
         }
 
         public bool RemoveTorrent(Aria2Settings settings, string gid)
         {
-            _logger.Debug("> aria2.forceRemove");
+            _logger.Trace("> aria2.forceRemove");
 
             var client = BuildClient(settings);
             var gidres = ExecuteRequest(() => client.Remove(GetToken(settings), gid));
 
-            _logger.Debug("< aria2.forceRemove");
+            _logger.Trace("< aria2.forceRemove");
 
             return gid == gidres;
+        }
+        
+        public bool RemoveCompletedTorrent(Aria2Settings settings, string gid)
+        {
+            _logger.Trace("> aria2.removeDownloadResult");
+
+            var client = BuildClient(settings);
+            var result = ExecuteRequest(() => client.RemoveResult(GetToken(settings), gid));
+
+            _logger.Trace("< aria2.removeDownloadResult");
+
+            return result == "OK";
         }
 
         private IAria2 BuildClient(Aria2Settings settings)
