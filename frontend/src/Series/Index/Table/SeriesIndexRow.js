@@ -290,7 +290,7 @@ class SeriesIndexRow extends Component {
                     progress={progress}
                     kind={getProgressBarKind(status, monitored, progress)}
                     showText={true}
-                    text={`${episodeFileCount} / ${episodeCount} (Total: ${totalEpisodeCount})`}
+                    text={`${episodeFileCount} / ${episodeCount} (${totalEpisodeCount})`}
                     title={`${episodeFileCount} / ${episodeCount} (Total: ${totalEpisodeCount})`}
                     width={125}
                   />
@@ -322,7 +322,7 @@ class SeriesIndexRow extends Component {
                     progress={progress}
                     kind={getProgressBarKind(status, monitored, progress)}
                     showText={true}
-                    text={`${seasonStatistics.episodeFileCount} / ${seasonStatistics.episodeCount} (Total: ${seasonStatistics.totalEpisodeCount})`}
+                    text={`${seasonStatistics.episodeFileCount} / ${seasonStatistics.episodeCount} (${seasonStatistics.totalEpisodeCount})`}
                     title={`${seasonStatistics.episodeFileCount} / ${seasonStatistics.episodeCount} (Total: ${seasonStatistics.totalEpisodeCount})`}
                     width={125}
                   />
