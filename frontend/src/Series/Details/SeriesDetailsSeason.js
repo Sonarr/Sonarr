@@ -265,7 +265,7 @@ class SeriesDetailsSeason extends Component {
                   kind={getEpisodeCountKind(monitored, episodeFileCount, episodeCount)}
                   size={sizes.LARGE}
                 >
-                  <span>{episodeFileCount} / {episodeCount}</span>
+                  <span>{episodeFileCount} / {episodeCount} ({totalEpisodeCount})</span>
                 </Label>
               }
               title="Season Information"
