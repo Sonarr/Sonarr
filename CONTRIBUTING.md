@@ -3,7 +3,7 @@
 We're always looking for people to help make Sonarr even better, there are a number of ways to contribute.
 
 ## Documentation ##
-Setup guides, [FAQ](https://wiki.servarr.com/Sonarr_FAQ), the more information we have on the [wiki](https://wiki.servarr.com/Sonarr) the better.
+Setup guides, [FAQ](https://wiki.servarr.com/sonarr/faq), the more information we have on the [wiki](https://wiki.servarr.com/sonarr) the better.
 
 ## Development ##
 
@@ -17,7 +17,7 @@ Setup guides, [FAQ](https://wiki.servarr.com/Sonarr_FAQ), the more information w
 ### Getting started ###
 
 1. Fork Sonarr
-2. Clone the repository into your development machine. [*info*](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github)
+2. Clone the repository into your development machine. [*info*](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
 3. Install the required Node Packages `yarn install`
 4. Start webpack to monitor your dev environment for any frontend changes that need post processing using `yarn start` command.
 5. Build the project in Visual Studio, Setting startup project to `Sonarr.Console` and framework to `x86`
@@ -29,14 +29,14 @@ Setup guides, [FAQ](https://wiki.servarr.com/Sonarr_FAQ), the more information w
 - Rebase from Sonarr's `develop` branch, don't merge
 - Make meaningful commits, or squash them
 - Feel free to make a pull request before work is complete, this will let us see where its at and make comments/suggest improvements
-- Reach out to us on our [forums](https://forums.sonarr.tv/), [subreddit](https://www.reddit.com/r/sonarr/), [discord](https://discord.gg/Ex7FmFK), or [IRC](http://webchat.freenode.net/?channels=#sonarr) if you have any questions
+- Reach out to us on our [forums](https://forums.sonarr.tv/), [subreddit](https://www.reddit.com/r/sonarr/), [discord](https://discord.gg/Ex7FmFK), or [IRC](https://web.libera.chat/?channels=#sonarr) if you have any questions
 - Add tests (unit/integration)
 - Commit with *nix line endings for consistency (We checkout Windows and commit *nix)
 - One feature/bug fix per pull request to keep things clean and easy to understand
 - Use 4 spaces instead of tabs, this should be the default for VS 2019 and WebStorm
 
 ### Pull Requesting ###
-- Only make pull requests to develop (currently phantom-develop), never master, if you make a PR to master we'll comment on it and close it
+- Only make pull requests to develop (currently `develop`), never `main`, if you make a PR to master we'll comment on it and close it
 - You're probably going to get some comments or questions from us, they will be to ensure consistency and maintainability
 - We'll try to respond to pull requests as soon as possible, if its been a day or two, please reach out to us, we may have missed it
 - Each PR should come from its own [feature branch](http://martinfowler.com/bliki/FeatureBranch.html) not develop in your fork, it should have a meaningful branch name (what is being added/fixed)
