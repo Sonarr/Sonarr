@@ -19,7 +19,7 @@ namespace NzbDrone.RuntimePatches.Mono
         private static BoringTLSVerifyFlagsPatch Instance;
 
         public override Version MonoMinVersion => new Version(5, 0);
-        public override Version MonoMaxVersion => new Version(6, 10);
+        public override Version MonoMaxVersion => new Version(7, 0);
 
         protected override void Patch()
         {
