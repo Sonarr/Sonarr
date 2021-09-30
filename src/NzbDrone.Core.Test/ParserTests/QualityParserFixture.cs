@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Series S01E07 - Motor zmen (CZ)[TvRip][HEVC][720p]", false)]
         [TestCase("The.Series.S05E06.720p.HDTV.x264-FHD", false)]
         [TestCase("Series.Title.1x01.ITA.720p.x264-RlsGrp [01/54] - \"series.title.1x01.ita.720p.x264-rlsgrp.nfo\"", false)]
-        [TestCase("[TMS-Remux].Kamen.Rider.X.21.720p.[76EA1C53].mkv", false)]
+        [TestCase("[TMS-Remux].Series.Title.X.21.720p.[76EA1C53].mkv", false)]
         public void should_parse_hdtv720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV720p, proper);
