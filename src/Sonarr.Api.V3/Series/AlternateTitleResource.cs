@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.DataAugmentation.Scene;
+﻿using NzbDrone.Common.Extensions;
+using NzbDrone.Core.DataAugmentation.Scene;
 
 namespace Sonarr.Api.V3.Series
 {
@@ -20,13 +21,20 @@ namespace Sonarr.Api.V3.Series
                 return null;
             }
 
+            var comment = sceneMapping.Comment;
+
+            if (comment.IsNullOrWhiteSpace() && sceneMapping.FilterRegex.IsNotNullOrWhiteSpace())
+            {
+                comment = "Limited matching";
+            }
+
             return new AlternateTitleResource
             {
                 Title = sceneMapping.Title,
                 SeasonNumber = sceneMapping.SeasonNumber,
                 SceneSeasonNumber = sceneMapping.SceneSeasonNumber,
                 SceneOrigin = sceneMapping.SceneOrigin,
-                Comment = sceneMapping.Comment
+                Comment = comment
             };
         }
     }
