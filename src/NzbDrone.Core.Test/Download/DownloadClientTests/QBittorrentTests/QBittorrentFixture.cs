@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             GivenTorrents(new List<QBittorrentTorrent> { torrent });
 
             var item = Subject.GetItems().Single();
-            VerifyFailed(item);
+            VerifyWarning(item);
         }
 
         [Test]
