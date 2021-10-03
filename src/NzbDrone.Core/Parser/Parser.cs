@@ -37,6 +37,10 @@ namespace NzbDrone.Core.Parser
 //                new Regex(@"^(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.)+)+(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
 //                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Daily episode with year in series title and air time after date (Plex DVR format)
+                new Regex(@"^^(?<title>.+?\((?<titleyear>\d{4})\))[-_. ]+(?<airyear>19[4-9]\d|20\d\d)(?<sep>[-_]?)(?<airmonth>0\d|1[0-2])\k<sep>(?<airday>[0-2]\d|3[01])[-_. ]\d{2}[-_. ]\d{2}[-_. ]\d{2}",
+                RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Daily episodes without title (2018-10-12, 20181012) (Strict pattern to avoid false matches)
                 new Regex(@"^(?<airyear>19[6-9]\d|20\d\d)(?<sep>[-_]?)(?<airmonth>0\d|1[0-2])\k<sep>(?<airday>[0-2]\d|3[01])(?!\d)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -904,11 +908,11 @@ namespace NzbDrone.Core.Parser
 
             else
             {
-                //Try to Parse as a daily show
+                // Try to Parse as a daily show
                 var airmonth = Convert.ToInt32(matchCollection[0].Groups["airmonth"].Value);
                 var airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
 
-                //Swap day and month if month is bigger than 12 (scene fail)
+                // Swap day and month if month is bigger than 12 (scene fail)
                 if (airmonth > 12)
                 {
                     var tempDay = airday;
@@ -927,8 +931,14 @@ namespace NzbDrone.Core.Parser
                     throw new InvalidDateException("Invalid date found: {0}-{1}-{2}", airYear, airmonth, airday);
                 }
 
-                //Check if episode is in the future (most likely a parse error)
-                if (airDate > DateTime.Now.AddDays(1).Date || airDate < new DateTime(1970, 1, 1))
+                // Check if episode is in the future (most likely a parse error)
+                if (airDate > DateTime.Now.AddDays(1).Date)
+                {
+                    throw new InvalidDateException("Invalid date found: {0}", airDate);
+                }
+
+                // If the parsed air date is before 1970 and the title year wasn't matched (not a match for the Plex DVR format) throw an error
+                if (airDate < new DateTime(1970, 1, 1) && matchCollection[0].Groups["titleyear"].Value.IsNullOrWhiteSpace())
                 {
                     throw new InvalidDateException("Invalid date found: {0}", airDate);
                 }
