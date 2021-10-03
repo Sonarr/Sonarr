@@ -27,8 +27,16 @@ namespace NzbDrone.Core.Datastore.Migration
                     while (reader.Read())
                     {
                         var id = reader.GetInt32(0);
-                        var required = reader.GetString(1).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                        var ignored = reader.GetString(2).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        var requiredObj = reader.GetValue(1);
+                        var ignoredObj = reader.GetValue(2);
+
+                        var required = requiredObj == DBNull.Value
+                            ? Enumerable.Empty<string>()
+                            : requiredObj.ToString().Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+
+                        var ignored = ignoredObj == DBNull.Value
+                            ? Enumerable.Empty<string>()
+                            : requiredObj.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
                         using (var updateCmd = conn.CreateCommand())
                         {
