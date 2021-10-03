@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_true_when_title_contains_one_required_term()
         {
-            GivenRestictions(new List<string> { "WEBRip" }, null);
+            GivenRestictions(new List<string> { "WEBRip" }, new List<string>());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_false_when_title_does_not_contain_any_required_terms()
         {
-            GivenRestictions(new List<string> { "doesnt", "exist" }, null);
+            GivenRestictions(new List<string> { "doesnt", "exist" }, new List<string>());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_true_when_title_does_not_contain_any_ignored_terms()
         {
-            GivenRestictions(null, new List<string> { "ignored" });
+            GivenRestictions(new List<string>(), new List<string> { "ignored" });
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_false_when_title_contains_one_anded_ignored_terms()
         {
-            GivenRestictions(null, new List<string> { "edited" });
+            GivenRestictions(new List<string>(), new List<string> { "edited" });
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase("X264,NOTTHERE")]
         public void should_ignore_case_when_matching_required(string required)
         {
-            GivenRestictions(required.Split(',').ToList(), null);
+            GivenRestictions(required.Split(',').ToList(), new List<string>());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase("X264,NOTTHERE")]
         public void should_ignore_case_when_matching_ignored(string ignored)
         {
-            GivenRestictions(null, ignored.Split(',').ToList());
+            GivenRestictions(new List<string>(), ignored.Split(',').ToList());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase(@"/\.WEB/", true)]
         public void should_match_perl_regex(string pattern, bool expected)
         {
-            GivenRestictions(pattern.Split(',').ToList(), null);
+            GivenRestictions(pattern.Split(',').ToList(), new List<string>());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().Be(expected);
         }
