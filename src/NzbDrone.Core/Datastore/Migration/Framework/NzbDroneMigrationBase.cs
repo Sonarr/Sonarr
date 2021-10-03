@@ -54,15 +54,18 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             switch (Context.MigrationType)
             {
                 case MigrationType.Main:
-                    _logger.Info("Starting migration to " + Version);
+                    LogMigrationMessage(MigrationType.Main);
                     MainDbUpgrade();
                     return;
                 case MigrationType.Log:
-                    _logger.Info("Starting migration to " + Version);
+                    LogMigrationMessage(MigrationType.Log);
                     LogDbUpgrade();
                     return;
                 default:
+                    LogMigrationMessage(MigrationType.Log);
                     LogDbUpgrade();
+
+                    LogMigrationMessage(MigrationType.Main);
                     MainDbUpgrade();
                     return;
             }
@@ -71,6 +74,11 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         public override void Down()
         {
             throw new NotImplementedException();
+        }
+
+        private void LogMigrationMessage(MigrationType type)
+        {
+            _logger.Info("Starting migration of {0} DB to {1}", type.ToString(), Version);
         }
     }
 }
