@@ -240,8 +240,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 switch (torrent.State)
                 {
-                    case "error": // some error occurred, applies to paused torrents
-                        item.Status = DownloadItemStatus.Failed;
+                    case "error": // some error occurred, applies to paused torrents, warning so failed download handling isn't triggered
+                        item.Status = DownloadItemStatus.Warning;
                         item.Message = "qBittorrent is reporting an error";
                         break;
 
