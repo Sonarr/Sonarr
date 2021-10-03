@@ -32,12 +32,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             var title = subject.Release.Title;
             var releaseProfiles = _releaseProfileService.EnabledForTags(subject.Series.Tags, subject.Release.IndexerId);
 
-            var required = releaseProfiles.Where(r => r.Required.IsNotNullOrWhiteSpace());
-            var ignored = releaseProfiles.Where(r => r.Ignored.IsNotNullOrWhiteSpace());
+            var required = releaseProfiles.Where(r => r.Required.Any());
+            var ignored = releaseProfiles.Where(r => r.Ignored.Any());
 
             foreach (var r in required)
             {
-                var requiredTerms = r.Required.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var requiredTerms = r.Required;
 
                 var foundTerms = ContainsAny(requiredTerms, title);
                 if (foundTerms.Empty())
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             foreach (var r in ignored)
             {
-                var ignoredTerms = r.Ignored.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var ignoredTerms = r.Ignored;
 
                 var foundTerms = ContainsAny(ignoredTerms, title);
                 if (foundTerms.Any())

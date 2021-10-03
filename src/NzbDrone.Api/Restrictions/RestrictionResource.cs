@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Profiles.Releases;
@@ -27,8 +28,8 @@ namespace NzbDrone.Api.Restrictions
             {
                 Id = model.Id,
 
-                Required = model.Required,
-                Ignored = model.Ignored,
+                Required = string.Join(",", model.Required),
+                Ignored = string.Join(",", model.Ignored),
                 Tags = new HashSet<int>(model.Tags)
             };
         }
@@ -41,8 +42,8 @@ namespace NzbDrone.Api.Restrictions
             {
                 Id = resource.Id,
 
-                Required = resource.Required,
-                Ignored = resource.Ignored,
+                Required = resource.Required.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                Ignored = resource.Ignored.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 Tags = new HashSet<int>(resource.Tags)
             };
         }

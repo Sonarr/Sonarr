@@ -46,13 +46,13 @@ class TextTagInputConnector extends Component {
     // to oddities with restrictions (as an example).
 
     const newValue = [...valueArray];
-    const newTags = split(tag.name);
+    const newTags = tag.name.startsWith('/') ? [tag.name] : split(tag.name);
 
     newTags.forEach((newTag) => {
       newValue.push(newTag.trim());
     });
 
-    onChange({ name, value: newValue.join(',') });
+    onChange({ name, value: newValue });
   }
 
   onTagDelete = ({ index }) => {

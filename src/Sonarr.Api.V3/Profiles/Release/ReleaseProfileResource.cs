@@ -9,8 +9,8 @@ namespace Sonarr.Api.V3.Profiles.Release
     {
         public string Name { get; set; }
         public bool Enabled { get; set; }
-        public string Required { get; set; }
-        public string Ignored { get; set; }
+        public List<string> Required { get; set; }
+        public List<string> Ignored { get; set; }
         public List<KeyValuePair<string, int>> Preferred { get; set; }
         public bool IncludePreferredWhenRenaming { get; set; }
         public int IndexerId { get; set; }

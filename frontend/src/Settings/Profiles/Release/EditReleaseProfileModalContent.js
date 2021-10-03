@@ -13,7 +13,7 @@ import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import styles from './EditReleaseProfileModalContent.css';
 
-const tagInputDelimiters = ['Tab', 'Enter', ','];
+const tagInputDelimiters = ['Tab', 'Enter'];
 
 function EditReleaseProfileModalContent(props) {
   const {

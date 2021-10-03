@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Profiles.Releases;
@@ -28,7 +27,7 @@ namespace Sonarr.Api.V3.Profiles.Release
 
             SharedValidator.RuleFor(d => d).Custom((restriction, context) =>
             {
-                if (restriction.Ignored.IsNullOrWhiteSpace() && restriction.Required.IsNullOrWhiteSpace() && restriction.Preferred.Empty())
+                if (restriction.Ignored.Empty() && restriction.Required.Empty() && restriction.Preferred.Empty())
                 {
                     context.AddFailure("'Must contain', 'Must not contain' or 'Preferred' is required");
                 }

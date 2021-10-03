@@ -90,7 +90,7 @@ class ReleaseProfile extends Component {
 
         <div>
           {
-            split(required).map((item) => {
+            required.map((item) => {
               if (!item) {
                 return null;
               }
@@ -126,7 +126,7 @@ class ReleaseProfile extends Component {
 
         <div>
           {
-            split(ignored).map((item) => {
+            ignored.map((item) => {
               if (!item) {
                 return null;
               }
@@ -195,8 +195,8 @@ ReleaseProfile.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string,
   enabled: PropTypes.bool.isRequired,
-  required: PropTypes.string.isRequired,
-  ignored: PropTypes.string.isRequired,
+  required: PropTypes.arrayOf(PropTypes.string).isRequired,
+  ignored: PropTypes.arrayOf(PropTypes.string).isRequired,
   preferred: PropTypes.arrayOf(PropTypes.object).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   indexerId: PropTypes.number.isRequired,
