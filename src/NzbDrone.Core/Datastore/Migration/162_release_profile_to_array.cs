@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         var ignored = ignoredObj == DBNull.Value
                             ? Enumerable.Empty<string>()
-                            : requiredObj.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            : ignoredObj.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
                         using (var updateCmd = conn.CreateCommand())
                         {
