@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import split from 'Utilities/String/split';
 import { kinds } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
 import Button from 'Components/Link/Button';
