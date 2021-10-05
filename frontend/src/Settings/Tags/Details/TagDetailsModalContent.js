@@ -128,7 +128,7 @@ function TagDetailsModalContent(props) {
                     >
                       <div>
                         {
-                          split(item.required).map((r) => {
+                          item.required.map((r) => {
                             return (
                               <Label
                                 key={r}
@@ -143,7 +143,7 @@ function TagDetailsModalContent(props) {
 
                       <div>
                         {
-                          split(item.ignored).map((i) => {
+                          item.ignored.map((i) => {
                             return (
                               <Label
                                 key={i}
