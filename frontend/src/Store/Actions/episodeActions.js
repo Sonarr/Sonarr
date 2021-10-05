@@ -80,6 +80,11 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'releaseGroup',
+      label: 'Release Group',
+      isVisible: false
+    },
+    {
       name: 'status',
       label: 'Status',
       isVisible: true

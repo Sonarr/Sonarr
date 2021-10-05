@@ -68,6 +68,7 @@ class EpisodeRow extends Component {
       episodeFilePath,
       episodeFileRelativePath,
       episodeFileSize,
+      releaseGroup,
       alternateTitles,
       columns
     } = this.props;
@@ -220,6 +221,17 @@ class EpisodeRow extends Component {
               );
             }
 
+            if (name === 'releaseGroup') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.releaseGroup}
+                >
+                  {releaseGroup}
+                </TableRowCell>
+              );
+            }
+
             if (name === 'status') {
               return (
                 <TableRowCell
@@ -274,6 +286,7 @@ EpisodeRow.propTypes = {
   episodeFilePath: PropTypes.string,
   episodeFileRelativePath: PropTypes.string,
   episodeFileSize: PropTypes.number,
+  releaseGroup: PropTypes.string,
   mediaInfo: PropTypes.object,
   alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
