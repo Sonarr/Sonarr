@@ -143,6 +143,23 @@ function TagDetailsModalContent(props) {
 
                       <div>
                         {
+                          item.preferred.map((i) => {
+                            const isPreferred = i.value >= 0;
+
+                            return (
+                              <Label
+                                key={i.key}
+                                kind={isPreferred ? kinds.DEFAULT : kinds.WARNING}
+                              >
+                                {i.key} {isPreferred && '+'}{i.value}
+                              </Label>
+                            );
+                          })
+                        }
+                      </div>
+
+                      <div>
+                        {
                           item.ignored.map((i) => {
                             return (
                               <Label
