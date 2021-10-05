@@ -67,7 +67,7 @@ class TextTagInputConnector extends Component {
 
     onChange({
       name,
-      value: newValue.join(',')
+      value: newValue
     });
   }
 
