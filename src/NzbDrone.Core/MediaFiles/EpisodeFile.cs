@@ -41,12 +41,12 @@ namespace NzbDrone.Core.MediaFiles
 
             if (RelativePath.IsNotNullOrWhiteSpace())
             {
-                return System.IO.Path.GetFileName(RelativePath);
+                return System.IO.Path.GetFileNameWithoutExtension(RelativePath);
             }
 
             if (Path.IsNotNullOrWhiteSpace())
             {
-                return System.IO.Path.GetFileName(Path);
+                return System.IO.Path.GetFileNameWithoutExtension(Path);
             }
 
             return string.Empty;
