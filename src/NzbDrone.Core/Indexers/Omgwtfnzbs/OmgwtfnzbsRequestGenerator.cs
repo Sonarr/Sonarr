@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            foreach (var queryTitle in searchCriteria.QueryTitles)
+            foreach (var queryTitle in searchCriteria.CleanSceneTitles)
             {
                 pageableRequests.Add(GetPagedRequests(string.Format("{0}+S{1:00}E{2:00}",
                     queryTitle,
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            foreach (var queryTitle in searchCriteria.QueryTitles)
+            foreach (var queryTitle in searchCriteria.CleanSceneTitles)
             {
                 pageableRequests.Add(GetPagedRequests(string.Format("{0}+S{1:00}",
                     queryTitle,
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            foreach (var queryTitle in searchCriteria.QueryTitles)
+            foreach (var queryTitle in searchCriteria.CleanSceneTitles)
             {
                 pageableRequests.Add(GetPagedRequests(string.Format("{0}+{1:yyyy MM dd}",
                     queryTitle,
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            foreach (var queryTitle in searchCriteria.QueryTitles)
+            foreach (var queryTitle in searchCriteria.CleanSceneTitles)
             {
                 pageableRequests.Add(GetPagedRequests(string.Format("{0}+{1}",
                     queryTitle,

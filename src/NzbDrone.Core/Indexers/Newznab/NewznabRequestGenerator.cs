@@ -314,7 +314,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             if (SupportsSearch)
             {
-                var queryTitles = (TextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.QueryTitles);
+                var queryTitles = (TextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.CleanSceneTitles);
                 foreach (var queryTitle in queryTitles)
                 {
                     pageableRequests.Add(GetPagedRequests(MaxPages, Settings.AnimeCategories, "search",
@@ -419,7 +419,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             else if (SupportsTvSearch)
             {
-                var queryTitles = TvTextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.QueryTitles;
+                var queryTitles = TvTextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.CleanSceneTitles;
                 foreach (var queryTitle in queryTitles)
                 {
                     chain.Add(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",

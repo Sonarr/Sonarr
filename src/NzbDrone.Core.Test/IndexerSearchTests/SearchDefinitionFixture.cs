@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         public void should_replace_some_special_characters(string input, string expected)
         {
             Subject.SceneTitles = new List<string> { input };
-            Subject.QueryTitles.First().Should().Be(expected);
+            Subject.CleanSceneTitles.First().Should().Be(expected);
         }
     }
 }

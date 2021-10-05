@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            var searchTitles = searchCriteria.QueryTitles.SelectMany(v => GetTitleSearchStrings(v, searchCriteria.AbsoluteEpisodeNumber)).ToList();
+            var searchTitles = searchCriteria.CleanSceneTitles.SelectMany(v => GetTitleSearchStrings(v, searchCriteria.AbsoluteEpisodeNumber)).ToList();
 
             pageableRequests.Add(GetPagedRequests(string.Join("|", searchTitles)));
 

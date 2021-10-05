@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 var episodeQueryTitle = searchCriteria.Episodes.Where(e => !string.IsNullOrWhiteSpace(e.Title))
-                                               .Select(e => SearchCriteriaBase.GetQueryTitle(e.Title))
+                                               .Select(e => SearchCriteriaBase.GetCleanSceneTitle(e.Title))
                                                .ToArray();
 
                 foreach (var queryTitle in episodeQueryTitle)
