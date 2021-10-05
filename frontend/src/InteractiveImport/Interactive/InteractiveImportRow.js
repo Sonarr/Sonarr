@@ -16,6 +16,7 @@ import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
 import SelectSeasonModal from 'InteractiveImport/Season/SelectSeasonModal';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
+import SelectReleaseGroupModal from 'InteractiveImport/ReleaseGroup/SelectReleaseGroupModal';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
 import InteractiveImportRowCellPlaceholder from './InteractiveImportRowCellPlaceholder';
 import styles from './InteractiveImportRow.css';
@@ -32,6 +33,7 @@ class InteractiveImportRow extends Component {
       isSelectSeriesModalOpen: false,
       isSelectSeasonModalOpen: false,
       isSelectEpisodeModalOpen: false,
+      isSelectReleaseGroupModalOpen: false,
       isSelectQualityModalOpen: false,
       isSelectLanguageModalOpen: false
     };
@@ -125,6 +127,10 @@ class InteractiveImportRow extends Component {
     this.setState({ isSelectEpisodeModalOpen: true });
   }
 
+  onSelectReleaseGroupPress = () => {
+    this.setState({ isSelectReleaseGroupModalOpen: true });
+  }
+
   onSelectQualityPress = () => {
     this.setState({ isSelectQualityModalOpen: true });
   }
@@ -145,6 +151,11 @@ class InteractiveImportRow extends Component {
 
   onSelectEpisodeModalClose = (changed) => {
     this.setState({ isSelectEpisodeModalOpen: false });
+    this.selectRowAfterChange(changed);
+  }
+
+  onSelectReleaseGroupModalClose = (changed) => {
+    this.setState({ isSelectReleaseGroupModalOpen: false });
     this.selectRowAfterChange(changed);
   }
 
@@ -171,6 +182,7 @@ class InteractiveImportRow extends Component {
       episodes,
       quality,
       language,
+      releaseGroup,
       size,
       rejections,
       isReprocessing,
@@ -182,6 +194,7 @@ class InteractiveImportRow extends Component {
       isSelectSeriesModalOpen,
       isSelectSeasonModalOpen,
       isSelectEpisodeModalOpen,
+      isSelectReleaseGroupModalOpen,
       isSelectQualityModalOpen,
       isSelectLanguageModalOpen
     } = this.state;
@@ -202,6 +215,7 @@ class InteractiveImportRow extends Component {
     const showSeriesPlaceholder = isSelected && !series;
     const showSeasonNumberPlaceholder = isSelected && !!series && isNaN(seasonNumber) && !isReprocessing;
     const showEpisodeNumbersPlaceholder = isSelected && Number.isInteger(seasonNumber) && !episodes.length;
+    const showReleaseGroupPlaceholder = isSelected && !releaseGroup;
     const showQualityPlaceholder = isSelected && !quality;
     const showLanguagePlaceholder = isSelected && !language;
 
@@ -246,7 +260,6 @@ class InteractiveImportRow extends Component {
 
               /> : null
           }
-
         </TableRowCellButton>
 
         <TableRowCellButton
@@ -256,6 +269,17 @@ class InteractiveImportRow extends Component {
         >
           {
             showEpisodeNumbersPlaceholder ? <InteractiveImportRowCellPlaceholder /> : episodeInfo
+          }
+        </TableRowCellButton>
+
+        <TableRowCellButton
+          title="Click to change release group"
+          onPress={this.onSelectReleaseGroupPress}
+        >
+          {
+            showReleaseGroupPlaceholder ?
+              <InteractiveImportRowCellPlaceholder /> :
+              releaseGroup
           }
         </TableRowCellButton>
 
@@ -354,6 +378,13 @@ class InteractiveImportRow extends Component {
           onModalClose={this.onSelectEpisodeModalClose}
         />
 
+        <SelectReleaseGroupModal
+          isOpen={isSelectReleaseGroupModalOpen}
+          ids={[id]}
+          releaseGroup={releaseGroup ?? ''}
+          onModalClose={this.onSelectReleaseGroupModalClose}
+        />
+
         <SelectQualityModal
           isOpen={isSelectQualityModalOpen}
           ids={[id]}
@@ -382,6 +413,7 @@ InteractiveImportRow.propTypes = {
   series: PropTypes.object,
   seasonNumber: PropTypes.number,
   episodes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  releaseGroup: PropTypes.string,
   quality: PropTypes.object,
   language: PropTypes.object,
   size: PropTypes.number.isRequired,

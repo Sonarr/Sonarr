@@ -110,6 +110,7 @@ class InteractiveImportModalContentConnector extends Component {
           series,
           seasonNumber,
           episodes,
+          releaseGroup,
           quality,
           language
         } = item;
@@ -144,6 +145,7 @@ class InteractiveImportModalContentConnector extends Component {
           folderName: item.folderName,
           seriesId: series.id,
           episodeIds: episodes.map((e) => e.id),
+          releaseGroup,
           quality,
           language,
           downloadId: this.props.downloadId

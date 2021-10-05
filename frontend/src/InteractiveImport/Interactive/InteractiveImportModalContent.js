@@ -25,6 +25,7 @@ import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal'
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
 import SelectSeasonModal from 'InteractiveImport/Season/SelectSeasonModal';
+import SelectReleaseGroupModal from 'InteractiveImport/ReleaseGroup/SelectReleaseGroupModal';
 import InteractiveImportRow from './InteractiveImportRow';
 import styles from './InteractiveImportModalContent.css';
 
@@ -49,6 +50,11 @@ const columns = [
   {
     name: 'episodes',
     label: 'Episode(s)',
+    isVisible: true
+  },
+  {
+    name: 'releaseGroup',
+    label: 'Release Group',
     isVisible: true
   },
   {
@@ -94,8 +100,9 @@ const SELECT = 'select';
 const SERIES = 'series';
 const SEASON = 'season';
 const EPISODE = 'episode';
-const LANGUAGE = 'language';
+const RELEASE_GROUP = 'releaseGroup';
 const QUALITY = 'quality';
+const LANGUAGE = 'language';
 
 class InteractiveImportModalContent extends Component {
 
@@ -231,8 +238,9 @@ class InteractiveImportModalContent extends Component {
       { key: SELECT, value: 'Select...', disabled: true },
       { key: SEASON, value: 'Select Season' },
       { key: EPISODE, value: 'Select Episode(s)' },
-      { key: LANGUAGE, value: 'Select Language' },
-      { key: QUALITY, value: 'Select Quality' }
+      { key: QUALITY, value: 'Select Quality' },
+      { key: RELEASE_GROUP, value: 'Select Release Group' },
+      { key: LANGUAGE, value: 'Select Language' }
     ];
 
     if (allowSeriesChange) {
@@ -397,6 +405,13 @@ class InteractiveImportModalContent extends Component {
           ids={orderedSelectedIds}
           seriesId={selectedItem && selectedItem.series && selectedItem.series.id}
           seasonNumber={selectedItem && selectedItem.seasonNumber}
+          onModalClose={this.onSelectModalClose}
+        />
+
+        <SelectReleaseGroupModal
+          isOpen={selectModalOpen === RELEASE_GROUP}
+          ids={selectedIds}
+          releaseGroup=""
           onModalClose={this.onSelectModalClose}
         />
 

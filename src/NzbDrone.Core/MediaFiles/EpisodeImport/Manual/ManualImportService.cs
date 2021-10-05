@@ -23,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
     public interface IManualImportService
     {
         List<ManualImportItem> GetMediaFiles(string path, string downloadId, int? seriesId, bool filterExistingFiles);
-        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, QualityModel quality, Language language);
+        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, string releaseGroup, QualityModel quality, Language language);
     }
 
     public class ManualImportService : IExecute<ManualImportCommand>, IManualImportService
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return ProcessFolder(path, path, downloadId, seriesId, filterExistingFiles);
         }
 
-        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, QualityModel quality, Language language)
+        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, string releaseGroup, QualityModel quality, Language language)
         {
             var rootFolder = Path.GetDirectoryName(path);
             var series = _seriesService.GetSeries(seriesId);
@@ -115,6 +115,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                        SceneSource = SceneSource(series, rootFolder),
                                        ExistingFile = series.Path.IsParentPath(path),
                                        Size = _diskProvider.GetFileSize(path),
+                                       ReleaseGroup = releaseGroup.IsNullOrWhiteSpace() ? Parser.Parser.ParseReleaseGroup(path) : releaseGroup,
                                        Language = language == Language.Unknown ? LanguageParser.ParseLanguage(path) : language,
                                        Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality
                                    };
@@ -141,6 +142,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                        SceneSource = SceneSource(series, rootFolder),
                                        ExistingFile = series.Path.IsParentPath(path),
                                        Size = _diskProvider.GetFileSize(path),
+                                       ReleaseGroup = releaseGroup.IsNullOrWhiteSpace() ? Parser.Parser.ParseReleaseGroup(path) : releaseGroup,
                                        Language = language == Language.Unknown ? LanguageParser.ParseLanguage(path) : language,
                                        Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality
                                    };
@@ -250,7 +252,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 {
                     var localEpisode = new LocalEpisode();
                     localEpisode.Path = file;
+                    localEpisode.ReleaseGroup = Parser.Parser.ParseReleaseGroup(file);
                     localEpisode.Quality = QualityParser.ParseQuality(file);
+                    localEpisode.ReleaseGroup = Parser.Parser.ParseReleaseGroup(file);
                     localEpisode.Language = LanguageParser.ParseLanguage(file);
                     localEpisode.Size = _diskProvider.GetFileSize(file);
 
@@ -350,6 +354,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 }
             }
 
+            item.ReleaseGroup = decision.LocalEpisode.ReleaseGroup;
             item.Quality = decision.LocalEpisode.Quality;
             item.Language = decision.LocalEpisode.Language;
             item.Size = _diskProvider.GetFileSize(decision.LocalEpisode.Path);
@@ -382,6 +387,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     Episodes = episodes,
                     FileEpisodeInfo = fileEpisodeInfo,
                     Path = file.Path,
+                    ReleaseGroup = file.ReleaseGroup,
                     Quality = file.Quality,
                     Language = file.Language,
                     Series = series,
@@ -405,6 +411,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 // Apply the user-chosen values.
                 localEpisode.Series = series;
                 localEpisode.Episodes = episodes;
+                localEpisode.ReleaseGroup = file.ReleaseGroup;
                 localEpisode.Quality = file.Quality;
                 localEpisode.Language = file.Language;
 

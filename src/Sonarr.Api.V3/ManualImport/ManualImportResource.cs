@@ -21,6 +21,7 @@ namespace Sonarr.Api.V3.ManualImport
         public SeriesResource Series { get; set; }
         public int? SeasonNumber { get; set; }
         public List<EpisodeResource> Episodes { get; set; }
+        public string ReleaseGroup { get; set; }
         public QualityModel Quality { get; set; }
         public Language Language { get; set; }
         public int QualityWeight { get; set; }
@@ -45,6 +46,7 @@ namespace Sonarr.Api.V3.ManualImport
                 Series = model.Series.ToResource(),
                 SeasonNumber = model.SeasonNumber,
                 Episodes = model.Episodes.ToResource(),
+                ReleaseGroup = model.ReleaseGroup,
                 Quality = model.Quality,
                 Language = model.Language,
                 //QualityWeight

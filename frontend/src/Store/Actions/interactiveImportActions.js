@@ -175,6 +175,7 @@ export const actionHandlers = handleThunks({
         episodeIds: (item.episodes || []).map((e) => e.id),
         quality: item.quality,
         language: item.language,
+        releaseGroup: item.releaseGroup,
         downloadId: item.downloadId
       };
     });

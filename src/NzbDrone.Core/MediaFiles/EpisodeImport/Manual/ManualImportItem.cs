@@ -18,6 +18,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         public List<Episode> Episodes { get; set; }
         public QualityModel Quality { get; set; }
         public Language Language { get; set; }
+        public string ReleaseGroup { get; set; }
         public string DownloadId { get; set; }
         public IEnumerable<Rejection> Rejections { get; set; }
     }
