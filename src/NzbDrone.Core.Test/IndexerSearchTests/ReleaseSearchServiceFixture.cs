@@ -16,7 +16,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.IndexerSearchTests
 {
-    public class NzbSearchServiceFixture : CoreTest<NzbSearchService>
+    public class ReleaseSearchServiceFixture : CoreTest<ReleaseSearchService>
     {
         private Mock<IIndexer> _mockIndexer;
         private Series _xemSeries;

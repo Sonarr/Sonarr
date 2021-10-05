@@ -18,21 +18,21 @@ namespace NzbDrone.Core.IndexerSearch
                                         IExecute<MissingEpisodeSearchCommand>,
                                         IExecute<CutoffUnmetEpisodeSearchCommand>
     {
-        private readonly ISearchForNzb _nzbSearchService;
+        private readonly ISearchForReleases _releaseSearchService;
         private readonly IProcessDownloadDecisions _processDownloadDecisions;
         private readonly IEpisodeService _episodeService;
         private readonly IEpisodeCutoffService _episodeCutoffService;
         private readonly IQueueService _queueService;
         private readonly Logger _logger;
 
-        public EpisodeSearchService(ISearchForNzb nzbSearchService,
+        public EpisodeSearchService(ISearchForReleases releaseSearchService,
                                     IProcessDownloadDecisions processDownloadDecisions,
                                     IEpisodeService episodeService,
                                     IEpisodeCutoffService episodeCutoffService,
                                     IQueueService queueService,
                                     Logger logger)
         {
-            _nzbSearchService = nzbSearchService;
+            _releaseSearchService = releaseSearchService;
             _processDownloadDecisions = processDownloadDecisions;
             _episodeService = episodeService;
             _episodeCutoffService = episodeCutoffService;
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         try
                         {
-                            decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, season.ToList(), monitoredOnly, userInvokedSearch, false);
+                            decisions = _releaseSearchService.SeasonSearch(series.Key, season.Key, season.ToList(), monitoredOnly, userInvokedSearch, false);
                         }
                         catch (Exception ex)
                         {
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         try
                         {
-                            decisions = _nzbSearchService.EpisodeSearch(season.First(), userInvokedSearch, false);
+                            decisions = _releaseSearchService.EpisodeSearch(season.First(), userInvokedSearch, false);
                         }
                         catch (Exception ex)
                         {
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
             foreach (var episodeId in message.EpisodeIds)
             {
-                var decisions = _nzbSearchService.EpisodeSearch(episodeId, message.Trigger == CommandTrigger.Manual, false);
+                var decisions = _releaseSearchService.EpisodeSearch(episodeId, message.Trigger == CommandTrigger.Manual, false);
                 var processed = _processDownloadDecisions.ProcessDecisions(decisions);
 
                 _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", processed.Grabbed.Count);

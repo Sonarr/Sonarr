@@ -23,7 +23,7 @@ namespace Sonarr.Api.V3.Indexers
     public class ReleaseModule : ReleaseModuleBase
     {
         private readonly IFetchAndParseRss _rssFetcherAndParser;
-        private readonly ISearchForNzb _nzbSearchService;
+        private readonly ISearchForReleases _releaseSearchService;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IPrioritizeDownloadDecision _prioritizeDownloadDecision;
         private readonly IDownloadService _downloadService;
@@ -35,7 +35,7 @@ namespace Sonarr.Api.V3.Indexers
         private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
 
         public ReleaseModule(IFetchAndParseRss rssFetcherAndParser,
-                             ISearchForNzb nzbSearchService,
+                             ISearchForReleases releaseSearchService,
                              IMakeDownloadDecision downloadDecisionMaker,
                              IPrioritizeDownloadDecision prioritizeDownloadDecision,
                              IDownloadService downloadService,
@@ -49,7 +49,7 @@ namespace Sonarr.Api.V3.Indexers
             base(languageProfileService, qualityProfileService)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
-            _nzbSearchService = nzbSearchService;
+            _releaseSearchService = releaseSearchService;
             _downloadDecisionMaker = downloadDecisionMaker;
             _prioritizeDownloadDecision = prioritizeDownloadDecision;
             _downloadService = downloadService;
@@ -156,7 +156,7 @@ namespace Sonarr.Api.V3.Indexers
         {
             try
             {
-                var decisions = _nzbSearchService.EpisodeSearch(episodeId, true, true);
+                var decisions = _releaseSearchService.EpisodeSearch(episodeId, true, true);
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);
@@ -176,7 +176,7 @@ namespace Sonarr.Api.V3.Indexers
         {
             try
             {
-                var decisions = _nzbSearchService.SeasonSearch(seriesId, seasonNumber, false, false, true, true);
+                var decisions = _releaseSearchService.SeasonSearch(seriesId, seasonNumber, false, false, true, true);
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);

@@ -18,7 +18,7 @@ namespace NzbDrone.Api.Indexers
     public class ReleaseModule : ReleaseModuleBase
     {
         private readonly IFetchAndParseRss _rssFetcherAndParser;
-        private readonly ISearchForNzb _nzbSearchService;
+        private readonly ISearchForReleases _releaseSearchService;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IPrioritizeDownloadDecision _prioritizeDownloadDecision;
         private readonly IDownloadService _downloadService;
@@ -27,7 +27,7 @@ namespace NzbDrone.Api.Indexers
         private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
 
         public ReleaseModule(IFetchAndParseRss rssFetcherAndParser,
-                             ISearchForNzb nzbSearchService,
+                             ISearchForReleases releaseSearchService,
                              IMakeDownloadDecision downloadDecisionMaker,
                              IPrioritizeDownloadDecision prioritizeDownloadDecision,
                              IDownloadService downloadService,
@@ -35,7 +35,7 @@ namespace NzbDrone.Api.Indexers
                              Logger logger)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
-            _nzbSearchService = nzbSearchService;
+            _releaseSearchService = releaseSearchService;
             _downloadDecisionMaker = downloadDecisionMaker;
             _prioritizeDownloadDecision = prioritizeDownloadDecision;
             _downloadService = downloadService;
@@ -88,7 +88,7 @@ namespace NzbDrone.Api.Indexers
         {
             try
             {
-                var decisions = _nzbSearchService.EpisodeSearch(episodeId, true, true);
+                var decisions = _releaseSearchService.EpisodeSearch(episodeId, true, true);
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);

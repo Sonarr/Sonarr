@@ -10,17 +10,17 @@ namespace NzbDrone.Core.IndexerSearch
     public class SeriesSearchService : IExecute<SeriesSearchCommand>
     {
         private readonly ISeriesService _seriesService;
-        private readonly ISearchForNzb _nzbSearchService;
+        private readonly ISearchForReleases _releaseSearchService;
         private readonly IProcessDownloadDecisions _processDownloadDecisions;
         private readonly Logger _logger;
 
         public SeriesSearchService(ISeriesService seriesService,
-                                   ISearchForNzb nzbSearchService,
+                                   ISearchForReleases releaseSearchService,
                                    IProcessDownloadDecisions processDownloadDecisions,
                                    Logger logger)
         {
             _seriesService = seriesService;
-            _nzbSearchService = nzbSearchService;
+            _releaseSearchService = releaseSearchService;
             _processDownloadDecisions = processDownloadDecisions;
             _logger = logger;
         }
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.IndexerSearch
                     continue;
                 }
 
-                var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, true, message.Trigger == CommandTrigger.Manual, false);
+                var decisions = _releaseSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, true, message.Trigger == CommandTrigger.Manual, false);
                 downloadedCount += _processDownloadDecisions.ProcessDecisions(decisions).Grabbed.Count;
             }
 

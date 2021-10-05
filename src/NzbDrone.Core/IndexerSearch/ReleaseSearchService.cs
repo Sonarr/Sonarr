@@ -18,7 +18,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.IndexerSearch
 {
-    public interface ISearchForNzb
+    public interface ISearchForReleases
     {
         List<DownloadDecision> EpisodeSearch(int episodeId, bool userInvokedSearch, bool interactiveSearch);
         List<DownloadDecision> EpisodeSearch(Episode episode, bool userInvokedSearch, bool interactiveSearch);
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.IndexerSearch
         List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch);
     }
 
-    public class NzbSearchService : ISearchForNzb
+    public class ReleaseSearchService : ISearchForReleases
     {
         private readonly IIndexerFactory _indexerFactory;
         private readonly ISceneMappingService _sceneMapping;
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly IMakeDownloadDecision _makeDownloadDecision;
         private readonly Logger _logger;
 
-        public NzbSearchService(IIndexerFactory indexerFactory,
+        public ReleaseSearchService(IIndexerFactory indexerFactory,
                                 ISceneMappingService sceneMapping,
                                 ISeriesService seriesService,
                                 IEpisodeService episodeService,
@@ -373,7 +373,7 @@ namespace NzbDrone.Core.IndexerSearch
             var searchSpec = Get<SpecialEpisodeSearchCriteria>(series, episodes, monitoredOnly, userInvokedSearch, interactiveSearch);
             // build list of queries for each episode in the form: "<series> <episode-title>"
             searchSpec.EpisodeQueryTitles = episodes.Where(e => !string.IsNullOrWhiteSpace(e.Title))
-                                                    .SelectMany(e => searchSpec.QueryTitles.Select(title => title + " " + SearchCriteriaBase.GetQueryTitle(e.Title)))
+                                                    .SelectMany(e => searchSpec.CleanSceneTitles.Select(title => title + " " + SearchCriteriaBase.GetCleanSceneTitle(e.Title)))
                                                     .ToArray();
 
             downloadDecisions.AddRange(Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec));
