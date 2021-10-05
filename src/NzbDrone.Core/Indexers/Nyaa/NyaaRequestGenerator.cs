@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            foreach (var queryTitle in searchCriteria.CleanSceneTitles)
+            foreach (var queryTitle in searchCriteria.SceneTitles)
             {
                 var searchTitle = PrepareQuery(queryTitle);
 
