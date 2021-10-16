@@ -160,9 +160,9 @@ namespace NzbDrone.Core.Notifications.Trakt
         private string MapResolution(int resolution, string scanType)
         {
             var traktResolution = string.Empty;
-            var interlacedTypes = new string[] { "Interlaced", "MBAFF", "PAFF" };
+            //var interlacedTypes = new string[] { "Interlaced", "MBAFF", "PAFF" };
 
-            var scanIdentifier = scanType.IsNotNullOrWhiteSpace() && interlacedTypes.Contains(scanType) ? "i" : "p";
+            var scanIdentifier = scanType.IsNotNullOrWhiteSpace() && TraktInterlacedTypes.interlacedTypes.Contains(scanType) ? "i" : "p";
 
             switch (resolution)
             {
