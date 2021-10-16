@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Notifications.Trakt
         HttpRequest GetOAuthRequest(string callbackUrl);
         TraktAuthRefreshResource RefreshAuthToken(string refreshToken);
         void AddToCollection(TraktCollectShowsResource payload, string accessToken);
+        void RemoveFromCollection(TraktCollectShowsResource payload, string accessToken);
         HttpRequest BuildTraktRequest(string resource, HttpMethod method, string accessToken);
     }
 
@@ -39,6 +40,25 @@ namespace NzbDrone.Core.Notifications.Trakt
             request.Headers.ContentType = "application/json";
             request.SetContent(payload.ToJson());
              
+            try
+            {
+                _httpClient.Execute(request);
+            }
+            catch (HttpException ex)
+            {
+                _logger.Error(ex, "Unable to post payload {0}", payload);
+                throw new TraktException("Unable to post payload", ex);
+            }
+        }
+
+        public void RemoveFromCollection(TraktCollectShowsResource payload, string accessToken)
+        {
+            var request = BuildTraktRequest("sync/collection/remove", HttpMethod.POST, accessToken);
+
+            request.Headers.ContentType = "application/json";
+            var temp = payload.ToJson();
+            request.SetContent(payload.ToJson());
+
             try
             {
                 _httpClient.Execute(request);

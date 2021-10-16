@@ -22,6 +22,8 @@ namespace NzbDrone.Core.Notifications.Trakt
         HttpRequest GetOAuthRequest(string callbackUrl);
         TraktAuthRefreshResource RefreshAuthToken(string refreshToken);
         void AddEpisodeToCollection(TraktSettings settings, Series series, EpisodeFile episodeFile);
+        void RemoveEpisodeFromCollection(TraktSettings settings, Series series, EpisodeFile episodeFile);
+        void RemoveSeriesFromCollection(TraktSettings settings, Series series);
         string GetUserName(string accessToken);
         ValidationFailure Test(TraktSettings settings);
     }
@@ -129,6 +131,66 @@ namespace NzbDrone.Core.Notifications.Trakt
             }); ;
 
             _proxy.AddToCollection(payload, settings.AccessToken);
+        }
+
+        public void RemoveEpisodeFromCollection(TraktSettings settings, Series series, EpisodeFile episodeFile)
+        {
+            var payload = new TraktCollectShowsResource
+            {
+                Shows = new List<TraktCollectShow>()
+            };
+
+            var payloadEpisodes = new List<TraktEpisodeResource>();
+
+            foreach (var episode in episodeFile.Episodes.Value)
+            {
+                payloadEpisodes.Add(new TraktEpisodeResource
+                {
+                    Number = episode.EpisodeNumber
+                });
+            }
+
+            var payloadSeasons = new List<TraktSeasonResource>();
+            payloadSeasons.Add(new TraktSeasonResource
+            {
+                Number = episodeFile.SeasonNumber,
+                Episodes = payloadEpisodes
+            });
+
+            payload.Shows.Add(new TraktCollectShow
+            {
+                Title = series.Title,
+                Year = series.Year,
+                Ids = new TraktShowIdsResource
+                {
+                    Tvdb = series.TvdbId,
+                    Imdb = series.ImdbId ?? "",
+                },
+                Seasons = payloadSeasons,
+            }); ;
+
+            _proxy.RemoveFromCollection(payload, settings.AccessToken);
+        }
+
+        public void RemoveSeriesFromCollection(TraktSettings settings, Series series)
+        {
+            var payload = new TraktCollectShowsResource
+            {
+                Shows = new List<TraktCollectShow>()
+            };
+
+            payload.Shows.Add(new TraktCollectShow
+            {
+                Title = series.Title,
+                Year = series.Year,
+                Ids = new TraktShowIdsResource
+                {
+                    Tvdb = series.TvdbId,
+                    Imdb = series.ImdbId ?? "",
+                },
+            }); ;
+
+            _proxy.RemoveFromCollection(payload, settings.AccessToken);
         }
 
         private string MapMediaType(QualitySource source)
