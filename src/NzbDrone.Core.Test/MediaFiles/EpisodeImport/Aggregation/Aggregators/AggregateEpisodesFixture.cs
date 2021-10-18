@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
+using FluentAssertions.Equivalency;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
@@ -27,6 +28,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                              {
                                  new Mock<IAggregateLocalEpisode>()
                              };
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.GetEpisodes(It.IsAny<ParsedEpisodeInfo>(), _series, It.IsAny<bool>(), null))
+                  .Returns(Builder<Episode>.CreateListOfSize(1).BuildList());
 
             Mocker.SetConstant(augmenters.Select(c => c.Object));
         }
@@ -139,6 +144,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                                    Path = @"C:\Test\TV\Series\Specials\S00E01.mkv".AsOsAgnostic(),
                                    Series = _series
                                };
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.GetEpisodes(fileEpisodeInfo, _series, It.IsAny<bool>(), null))
+                  .Returns(new List<Episode>());
 
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.ParseSpecialEpisodeTitle(fileEpisodeInfo, It.IsAny<string>(), _series))

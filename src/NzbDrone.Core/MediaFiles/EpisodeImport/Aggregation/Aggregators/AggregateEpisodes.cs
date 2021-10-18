@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -45,18 +46,20 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 }
             }
 
-            if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
+            if (parsedEpisodeInfo == null)
             {
-                var title = Path.GetFileNameWithoutExtension(localEpisode.Path);
-                var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, title, localEpisode.Series);
-
-                if (specialEpisodeInfo != null)
-                {
-                    parsedEpisodeInfo = specialEpisodeInfo;
-                }
+                parsedEpisodeInfo = GetSpecialEpisodeInfo(localEpisode, parsedEpisodeInfo);
             }
 
             return parsedEpisodeInfo;
+        }
+
+        private ParsedEpisodeInfo GetSpecialEpisodeInfo(LocalEpisode localEpisode, ParsedEpisodeInfo parsedEpisodeInfo)
+        {
+            var title = Path.GetFileNameWithoutExtension(localEpisode.Path);
+            var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, title, localEpisode.Series);
+
+            return specialEpisodeInfo;
         }
 
         private List<Episode> GetEpisodes(LocalEpisode localEpisode)
@@ -71,7 +74,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             if (ValidateParsedEpisodeInfo.ValidateForSeriesType(bestEpisodeInfoForEpisodes, localEpisode.Series, isMediaFile))
             {
-                return _parsingService.GetEpisodes(bestEpisodeInfoForEpisodes, localEpisode.Series, localEpisode.SceneSource);
+                var episodes = _parsingService.GetEpisodes(bestEpisodeInfoForEpisodes, localEpisode.Series, localEpisode.SceneSource);
+
+                if (episodes.Empty() && bestEpisodeInfoForEpisodes.IsPossibleSpecialEpisode)
+                {
+                    var parsedEpisodeInfo = GetSpecialEpisodeInfo(localEpisode, bestEpisodeInfoForEpisodes);
+
+                    episodes = _parsingService.GetEpisodes(parsedEpisodeInfo, localEpisode.Series, localEpisode.SceneSource);
+                }
+
+                return episodes;
             }
 
             return new List<Episode>();
