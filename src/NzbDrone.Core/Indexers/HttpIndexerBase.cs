@@ -282,6 +282,7 @@ namespace NzbDrone.Core.Indexers
         {
             if (release.DownloadUrl.IsNullOrWhiteSpace())
             {
+                _logger.Trace("Invalid Release: '{0}' from indexer: {1}. No Download URL provided.", release.Title, release.Indexer);
                 return false;
             }
 
