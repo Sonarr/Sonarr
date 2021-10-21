@@ -99,6 +99,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Host.Test", "NzbDron
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.RuntimePatches", "Sonarr.RuntimePatches\Sonarr.RuntimePatches.csproj", "{F3F63718-63C6-432F-BDDC-C960AD95EC82}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tribler.Api", "Tribler.Api\Tribler.Api.csproj", "{551C4C9D-BA03-4C52-BA5A-FF2C367ECC42}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8} = {F2BE0FDF-6E47-4827-A420-DD4EF82407F8}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

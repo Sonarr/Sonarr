@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj" />
     <ProjectReference Include="..\MonoTorrent\MonoTorrent.csproj" />
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
+    <ProjectReference Include="..\Tribler.Api\Tribler.Api.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Data.SQLite">
