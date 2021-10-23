@@ -87,6 +87,13 @@ export const defaultState = {
         isModifiable: false
       },
       {
+        name: 'time',
+        label: 'Time',
+        isSortable: true,
+        isVisible: true,
+        isModifiable: false
+      },
+      {
         name: 'logger',
         label: 'Component',
         isSortable: false,
@@ -96,13 +103,6 @@ export const defaultState = {
       {
         name: 'message',
         label: 'Message',
-        isVisible: true,
-        isModifiable: false
-      },
-      {
-        name: 'time',
-        label: 'Time',
-        isSortable: true,
         isVisible: true,
         isModifiable: false
       },
