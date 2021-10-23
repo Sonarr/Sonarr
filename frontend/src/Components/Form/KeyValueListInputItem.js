@@ -63,7 +63,7 @@ class KeyValueListInputItem extends Component {
 
     return (
       <div className={styles.itemContainer}>
-        <div className={styles.inputWrapper}>
+        <div className={styles.keyInputWrapper}>
           <TextInput
             className={styles.keyInput}
             name="key"
@@ -75,7 +75,7 @@ class KeyValueListInputItem extends Component {
           />
         </div>
 
-        <div className={styles.inputWrapper}>
+        <div className={styles.valueInputWrapper}>
           <TextInput
             className={styles.valueInput}
             name="value"

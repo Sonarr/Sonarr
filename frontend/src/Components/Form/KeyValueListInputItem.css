@@ -8,8 +8,13 @@
   }
 }
 
-.inputWrapper {
+.keyInputWrapper {
+  flex: 6 0 0;
+}
+
+.valueInputWrapper {
   flex: 1 0 0;
+  min-width: 40px;
 }
 
 .buttonWrapper {
