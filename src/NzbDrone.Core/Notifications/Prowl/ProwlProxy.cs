@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 {
     public interface IProwlProxy
     {
-        void SendNotification(string title, string message, string apiKey, ProwlPriority priority = ProwlPriority.Normal, string url = null);
+        void SendNotification(string title, string message, ProwlSettings settings);
         ValidationFailure Test(ProwlSettings settings);
     }
 
@@ -25,19 +25,18 @@ namespace NzbDrone.Core.Notifications.Prowl
             _logger = logger;
         }
 
-        public void SendNotification(string title, string message, string apiKey, ProwlPriority priority = ProwlPriority.Normal, string url = null)
+        public void SendNotification(string title, string message, ProwlSettings settings)
         {
             try
             {
                 var requestBuilder = new HttpRequestBuilder(PUSH_URL);
 
                 var request = requestBuilder.Post()
-                    .AddFormParameter("apikey", apiKey)
+                    .AddFormParameter("apikey", settings.ApiKey)
                     .AddFormParameter("application", BuildInfo.AppName)
                     .AddFormParameter("event", title)
                     .AddFormParameter("description", message)
-                    .AddFormParameter("priority", priority)
-                    .AddFormParameter("url", url)
+                    .AddFormParameter("priority", settings.Priority)
                     .Build();
 
                 _httpClient.Post(request);
@@ -46,7 +45,7 @@ namespace NzbDrone.Core.Notifications.Prowl
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    _logger.Error(ex, "Apikey is invalid: {0}", apiKey);
+                    _logger.Error(ex, "Apikey is invalid: {0}", settings.ApiKey);
                     throw new ProwlException("Apikey is invalid", ex);
                 }
 
@@ -65,7 +64,7 @@ namespace NzbDrone.Core.Notifications.Prowl
                 const string title = "Test Notification";
                 const string body = "This is a test message from Sonarr";
 
-                SendNotification(title, body, settings.ApiKey);
+                SendNotification(title, body, settings);
             }
             catch (Exception ex)
             {
