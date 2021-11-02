@@ -18,27 +18,27 @@ namespace NzbDrone.Core.Notifications.Prowl
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            _prowlProxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings.ApiKey, (ProwlPriority)Settings.Priority);
+            _prowlProxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            _prowlProxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings.ApiKey, (ProwlPriority)Settings.Priority);
+            _prowlProxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
         }
 
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
-            _prowlProxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings.ApiKey, (ProwlPriority)Settings.Priority);
+            _prowlProxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            _prowlProxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings.ApiKey, (ProwlPriority)Settings.Priority);
+            _prowlProxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck message)
         {
-            _prowlProxy.SendNotification(HEALTH_ISSUE_TITLE, message.Message, Settings.ApiKey, (ProwlPriority)Settings.Priority);
+            _prowlProxy.SendNotification(HEALTH_ISSUE_TITLE, message.Message, Settings);
         }
 
         public override ValidationResult Test()
