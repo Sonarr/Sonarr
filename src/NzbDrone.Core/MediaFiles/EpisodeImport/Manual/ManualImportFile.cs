@@ -12,6 +12,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         public string FolderName { get; set; }
         public int SeriesId { get; set; }
         public List<int> EpisodeIds { get; set; }
+        public int? EpisodeFileId { get; set; }
         public QualityModel Quality { get; set; }
         public Language Language { get; set; }
         public string ReleaseGroup { get; set; }

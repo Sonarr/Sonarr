@@ -1,13 +1,41 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { sortDirections } from 'Helpers/Props';
 import { fetchInteractiveImportItems, setInteractiveImportSort, clearInteractiveImport, setInteractiveImportMode } from 'Store/Actions/interactiveImportActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import { executeCommand } from 'Store/Actions/commandActions';
+import { updateEpisodeFiles, deleteEpisodeFiles } from 'Store/Actions/episodeFileActions';
 import * as commandNames from 'Commands/commandNames';
 import InteractiveImportModalContent from './InteractiveImportModalContent';
+
+function isSameEpisodeFile(file, originalFile) {
+  const {
+    series,
+    seasonNumber,
+    episodes
+  } = file;
+
+  if (!originalFile) {
+    return false;
+  }
+
+  if (!originalFile.series || series.id !== originalFile.series.id) {
+    return false;
+  }
+
+  if (seasonNumber !== originalFile.seasonNumber) {
+    return false;
+  }
+
+  const episodeIds = episodes.map((e) => e.id);
+  const originalEpisodeIds = originalFile.episodes ? originalFile.episodes.map((e) => e.id) : [];
+
+  return episodeIds.every((episodeId) => {
+    return originalEpisodeIds.indexOf(episodeId) >= 0;
+  });
+}
 
 function createMapStateToProps() {
   return createSelector(
@@ -23,6 +51,8 @@ const mapDispatchToProps = {
   dispatchSetInteractiveImportSort: setInteractiveImportSort,
   dispatchSetInteractiveImportMode: setInteractiveImportMode,
   dispatchClearInteractiveImport: clearInteractiveImport,
+  dispatchUpdateEpisodeFiles: updateEpisodeFiles,
+  dispatchDeleteEpisodeFiles: deleteEpisodeFiles,
   dispatchExecuteCommand: executeCommand
 };
 
@@ -44,16 +74,34 @@ class InteractiveImportModalContentConnector extends Component {
     const {
       downloadId,
       seriesId,
-      folder
+      seasonNumber,
+      folder,
+      initialSortKey,
+      initialSortDirection,
+      dispatchSetInteractiveImportSort,
+      dispatchFetchInteractiveImportItems
     } = this.props;
 
     const {
       filterExistingFiles
     } = this.state;
 
-    this.props.dispatchFetchInteractiveImportItems({
+    if (initialSortKey) {
+      const sortProps = {
+        sortKey: initialSortKey
+      };
+
+      if (initialSortDirection) {
+        sortProps.sortDirection = initialSortDirection;
+      }
+
+      dispatchSetInteractiveImportSort(sortProps);
+    }
+
+    dispatchFetchInteractiveImportItems({
       downloadId,
       seriesId,
+      seasonNumber,
       folder,
       filterExistingFiles
     });
@@ -99,10 +147,23 @@ class InteractiveImportModalContentConnector extends Component {
     this.props.dispatchSetInteractiveImportMode({ importMode });
   }
 
+  onDeleteSelectedPress = (selected) => {
+    // TODO: Delete selected (if they have episode IDs)
+  }
+
   onImportSelectedPress = (selected, importMode) => {
+    const {
+      items,
+      originalItems,
+      dispatchUpdateEpisodeFiles,
+      dispatchExecuteCommand,
+      onModalClose
+    } = this.props;
+
+    const existingFiles = [];
     const files = [];
 
-    _.forEach(this.props.items, (item) => {
+    items.forEach((item) => {
       const isSelected = selected.indexOf(item.id) > -1;
 
       if (isSelected) {
@@ -112,32 +173,48 @@ class InteractiveImportModalContentConnector extends Component {
           episodes,
           releaseGroup,
           quality,
-          language
+          language,
+          episodeFileId
         } = item;
 
         if (!series) {
           this.setState({ interactiveImportErrorMessage: 'Series must be chosen for each selected file' });
-          return false;
+          return;
         }
 
         if (isNaN(seasonNumber)) {
           this.setState({ interactiveImportErrorMessage: 'Season must be chosen for each selected file' });
-          return false;
+          return;
         }
 
         if (!episodes || !episodes.length) {
           this.setState({ interactiveImportErrorMessage: 'One or more episodes must be chosen for each selected file' });
-          return false;
+          return;
         }
 
         if (!quality) {
           this.setState({ interactiveImportErrorMessage: 'Quality must be chosen for each selected file' });
-          return false;
+          return;
         }
 
         if (!language) {
           this.setState({ interactiveImportErrorMessage: 'Language must be chosen for each selected file' });
-          return false;
+          return;
+        }
+
+        if (episodeFileId) {
+          const originalItem = originalItems.find((i) => i.id === item.id);
+
+          if (isSameEpisodeFile(item, originalItem)) {
+            existingFiles.push({
+              id: episodeFileId,
+              releaseGroup,
+              quality,
+              language
+            });
+
+            return;
+          }
         }
 
         files.push({
@@ -148,22 +225,35 @@ class InteractiveImportModalContentConnector extends Component {
           releaseGroup,
           quality,
           language,
-          downloadId: this.props.downloadId
+          downloadId: this.props.downloadId,
+          episodeFileId
         });
       }
     });
 
-    if (!files.length) {
-      return;
+    let shouldClose = false;
+
+    if (existingFiles.length) {
+      dispatchUpdateEpisodeFiles({
+        files: existingFiles
+      });
+
+      shouldClose = true;
     }
 
-    this.props.dispatchExecuteCommand({
-      name: commandNames.INTERACTIVE_IMPORT,
-      files,
-      importMode
-    });
+    if (files.length) {
+      dispatchExecuteCommand({
+        name: commandNames.INTERACTIVE_IMPORT,
+        files,
+        importMode
+      });
 
-    this.props.onModalClose();
+      shouldClose = true;
+    }
+
+    if (shouldClose) {
+      onModalClose();
+    }
   }
 
   //
@@ -183,6 +273,7 @@ class InteractiveImportModalContentConnector extends Component {
         onSortPress={this.onSortPress}
         onFilterExistingFilesChange={this.onFilterExistingFilesChange}
         onImportModeChange={this.onImportModeChange}
+        onDeleteSelectedPress={this.onDeleteSelectedPress}
         onImportSelectedPress={this.onImportSelectedPress}
       />
     );
@@ -192,13 +283,19 @@ class InteractiveImportModalContentConnector extends Component {
 InteractiveImportModalContentConnector.propTypes = {
   downloadId: PropTypes.string,
   seriesId: PropTypes.number,
+  seasonNumber: PropTypes.number,
   folder: PropTypes.string,
   filterExistingFiles: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  initialSortKey: PropTypes.string,
+  initialSortDirection: PropTypes.oneOf(sortDirections.all),
+  originalItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   dispatchFetchInteractiveImportItems: PropTypes.func.isRequired,
   dispatchSetInteractiveImportSort: PropTypes.func.isRequired,
   dispatchSetInteractiveImportMode: PropTypes.func.isRequired,
   dispatchClearInteractiveImport: PropTypes.func.isRequired,
+  dispatchUpdateEpisodeFiles: PropTypes.func.isRequired,
+  dispatchDeleteEpisodeFiles: PropTypes.func.isRequired,
   dispatchExecuteCommand: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

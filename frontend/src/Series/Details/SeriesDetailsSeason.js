@@ -5,7 +5,7 @@ import isAfter from 'Utilities/Date/isAfter';
 import isBefore from 'Utilities/Date/isBefore';
 import formatBytes from 'Utilities/Number/formatBytes';
 import getToggledRange from 'Utilities/Table/getToggledRange';
-import { align, icons, kinds, sizes, tooltipPositions } from 'Helpers/Props';
+import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import Label from 'Components/Label';
@@ -20,7 +20,7 @@ import MenuItem from 'Components/Menu/MenuItem';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import Popover from 'Components/Tooltip/Popover';
-import EpisodeFileEditorModal from 'EpisodeFile/Editor/EpisodeFileEditorModal';
+import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModalConnector from 'Series/Search/SeasonInteractiveSearchModalConnector';
@@ -204,6 +204,7 @@ class SeriesDetailsSeason extends Component {
   render() {
     const {
       seriesId,
+      path,
       monitored,
       seasonNumber,
       items,
@@ -234,6 +235,8 @@ class SeriesDetailsSeason extends Component {
       isInteractiveSearchModalOpen
     } = this.state;
 
+    const title = seasonNumber === 0 ? 'Specials' : `Season ${seasonNumber}`;
+
     return (
       <div
         className={styles.season}
@@ -248,15 +251,9 @@ class SeriesDetailsSeason extends Component {
               onPress={onMonitorSeasonPress}
             />
 
-            {
-              seasonNumber === 0 ?
-                <span className={styles.seasonNumber}>
-                  Specials
-                </span> :
-                <span className={styles.seasonNumber}>
-                  Season {seasonNumber}
-                </span>
-            }
+            <span className={styles.seasonNumber}>
+              {title}
+            </span>
 
             <Popover
               className={styles.episodeCountTooltip}
@@ -486,10 +483,19 @@ class SeriesDetailsSeason extends Component {
           onModalClose={this.onOrganizeModalClose}
         />
 
-        <EpisodeFileEditorModal
+        <InteractiveImportModal
           isOpen={isManageEpisodesOpen}
           seriesId={seriesId}
           seasonNumber={seasonNumber}
+          title={title}
+          folder={path}
+          initialSortKey="relativePath"
+          initialSortDirection={sortDirections.DESCENDING}
+          showSeries={false}
+          allowSeriesChange={false}
+          autoSelectRow={false}
+          showDelete={true}
+          showImportMode={false}
           onModalClose={this.onManageEpisodesModalClose}
         />
 
@@ -513,6 +519,7 @@ class SeriesDetailsSeason extends Component {
 
 SeriesDetailsSeason.propTypes = {
   seriesId: PropTypes.number.isRequired,
+  path: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
   seasonNumber: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,

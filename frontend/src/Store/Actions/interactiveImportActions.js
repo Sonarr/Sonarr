@@ -29,6 +29,7 @@ export const defaultState = {
   isPopulated: false,
   error: null,
   items: [],
+  originalItems: [],
   sortKey: 'quality',
   sortDirection: sortDirections.DESCENDING,
   recentFolders: [],
@@ -127,7 +128,8 @@ export const actionHandlers = handleThunks({
           section,
           isFetching: false,
           isPopulated: true,
-          error: null
+          error: null,
+          originalItems: data
         })
       ]));
     });

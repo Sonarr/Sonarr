@@ -192,7 +192,7 @@ OrganizePreviewModalContent.propTypes = {
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  seasonNumber: PropTypes.string.isRequired,
+  seasonNumber: PropTypes.number,
   path: PropTypes.string.isRequired,
   renameEpisodes: PropTypes.bool,
   episodeFormat: PropTypes.string,

@@ -26,6 +26,12 @@
   justify-content: flex-end;
 }
 
+.deleteButton {
+  composes: button from '~Components/Link/Button.css';
+
+  margin-right: 10px;
+}
+
 .importMode,
 .bulkSelect {
   composes: select from '~Components/Form/SelectInput.css';

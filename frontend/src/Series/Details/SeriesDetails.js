@@ -5,7 +5,7 @@ import TextTruncate from 'react-text-truncate';
 import formatBytes from 'Utilities/Number/formatBytes';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
-import { align, icons, kinds, sizes, tooltipPositions } from 'Helpers/Props';
+import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'Helpers/Props';
 import fonts from 'Styles/Variables/fonts';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
@@ -22,7 +22,6 @@ import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
-import EpisodeFileEditorModal from 'EpisodeFile/Editor/EpisodeFileEditorModal';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
 import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileNameConnector';
@@ -76,7 +75,6 @@ class SeriesDetails extends Component {
       isEditSeriesModalOpen: false,
       isDeleteSeriesModalOpen: false,
       isSeriesHistoryModalOpen: false,
-      isInteractiveImportModalOpen: false,
       isMonitorOptionsModalOpen: false,
       allExpanded: false,
       allCollapsed: false,
@@ -102,14 +100,6 @@ class SeriesDetails extends Component {
 
   onManageEpisodesModalClose = () => {
     this.setState({ isManageEpisodesOpen: false });
-  }
-
-  onInteractiveImportPress = () => {
-    this.setState({ isInteractiveImportModalOpen: true });
-  }
-
-  onInteractiveImportModalClose = () => {
-    this.setState({ isInteractiveImportModalOpen: false });
   }
 
   onEditSeriesPress = () => {
@@ -227,7 +217,6 @@ class SeriesDetails extends Component {
       isEditSeriesModalOpen,
       isDeleteSeriesModalOpen,
       isSeriesHistoryModalOpen,
-      isInteractiveImportModalOpen,
       isMonitorOptionsModalOpen,
       allExpanded,
       allCollapsed,
@@ -297,12 +286,6 @@ class SeriesDetails extends Component {
               iconName={icons.HISTORY}
               isDisabled={!hasEpisodes}
               onPress={this.onSeriesHistoryPress}
-            />
-
-            <PageToolbarButton
-              label="Manual File Import"
-              iconName={icons.INTERACTIVE}
-              onPress={this.onInteractiveImportPress}
             />
 
             <PageToolbarSeparator />
@@ -652,9 +635,18 @@ class SeriesDetails extends Component {
             onModalClose={this.onOrganizeModalClose}
           />
 
-          <EpisodeFileEditorModal
+          <InteractiveImportModal
             isOpen={isManageEpisodesOpen}
             seriesId={id}
+            title={title}
+            folder={path}
+            initialSortKey="relativePath"
+            initialSortDirection={sortDirections.DESCENDING}
+            showSeries={false}
+            allowSeriesChange={false}
+            autoSelectRow={false}
+            showDelete={true}
+            showImportMode={false}
             onModalClose={this.onManageEpisodesModalClose}
           />
 
@@ -675,16 +667,6 @@ class SeriesDetails extends Component {
             isOpen={isDeleteSeriesModalOpen}
             seriesId={id}
             onModalClose={this.onDeleteSeriesModalClose}
-          />
-
-          <InteractiveImportModal
-            isOpen={isInteractiveImportModalOpen}
-            seriesId={id}
-            folder={path}
-            allowSeriesChange={false}
-            showFilterExistingFiles={true}
-            showImportMode={false}
-            onModalClose={this.onInteractiveImportModalClose}
           />
 
           <MonitoringOptionsModal
