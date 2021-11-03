@@ -21,10 +21,7 @@
     <ProjectReference Include="..\MonoTorrent\MonoTorrent.csproj" />
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
-    </Reference>
+  <ItemGroup> 
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
@@ -32,10 +29,10 @@
     <EmbeddedResource Include="..\..\Logo\64.png">
       <Link>Resources\Logo\64.png</Link>
     </EmbeddedResource>
-    <None Include="..\Libraries\Sqlite\sqlite3.dll">
+    <None Include="..\Libraries\MediaInfo\$(Platform)\MediaInfo.dll" Condition="$(RuntimeIdentifier.StartsWith('win')) or '$(RuntimeIdentifier)'==''">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Libraries\MediaInfo\MediaInfo.dll">
+    <None Include="..\Libraries\MediaInfo\$(Platform)\libmediainfo.0.dylib" Condition="$(RuntimeIdentifier.StartsWith('osx'))">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
