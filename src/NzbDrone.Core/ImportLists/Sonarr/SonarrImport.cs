@@ -81,7 +81,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                     options = profiles.OrderBy(d => d.Name, StringComparer.InvariantCultureIgnoreCase)
                                             .Select(d => new
                                             {
-                                                id = d.Id,
+                                                value = d.Id,
                                                 name = d.Name
                                             })
                 };
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                     options = tags.OrderBy(d => d.Label, StringComparer.InvariantCultureIgnoreCase)
                         .Select(d => new
                         {
-                            id = d.Id,
+                            value = d.Id,
                             name = d.Label
                         })
                 };
