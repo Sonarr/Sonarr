@@ -58,7 +58,9 @@ namespace NzbDrone.Core.History
 
         public List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType)
         {
-            var query = Query.Where(h => h.SeriesId == seriesId);
+            var query = Query.Join<EpisodeHistory, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
+                             .Join<EpisodeHistory, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
+                             .Where(h => h.SeriesId == seriesId);
 
             if (eventType.HasValue)
             {
@@ -70,9 +72,11 @@ namespace NzbDrone.Core.History
 
         public List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType)
         {
-            var query = Query.Join<EpisodeHistory, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
-                             .Where(h => h.SeriesId == seriesId)
-                             .AndWhere(h => h.Episode.SeasonNumber == seasonNumber);
+            SortBuilder<EpisodeHistory> query = Query
+                        .Join<EpisodeHistory, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
+                        .Join<EpisodeHistory, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
+                        .Where(h => h.SeriesId == seriesId)
+                        .AndWhere(h => h.Episode.SeasonNumber == seasonNumber);
 
             if (eventType.HasValue)
             {
