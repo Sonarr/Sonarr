@@ -27,7 +27,7 @@ namespace Sonarr.Api.V3.Profiles.Release
 
             SharedValidator.RuleFor(d => d).Custom((restriction, context) =>
             {
-                if (restriction.Ignored.Empty() && restriction.Required.Empty() && restriction.Preferred.Empty())
+                if (restriction.MapIgnored().Empty() && restriction.MapRequired().Empty() && restriction.Preferred.Empty())
                 {
                     context.AddFailure("'Must contain', 'Must not contain' or 'Preferred' is required");
                 }
