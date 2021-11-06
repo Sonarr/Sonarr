@@ -1,7 +1,6 @@
 using System;
 using System.Data.SQLite;
 using NLog;
-using NzbDrone.Common.Composition;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptions;
@@ -38,17 +37,6 @@ namespace NzbDrone.Core.Datastore
             Environment.SetEnvironmentVariable("No_SQLiteXmlConfigFile", "true");
             Environment.SetEnvironmentVariable("No_PreLoadSQLite", "true");
             Environment.SetEnvironmentVariable("No_SQLiteFunctions", "true");
-        }
-
-        public static void RegisterDatabase(IContainer container)
-        {
-            var mainDb = new MainDatabase(container.Resolve<IDbFactory>().Create());
-
-            container.Register<IMainDatabase>(mainDb);
-
-            var logDb = new LogDatabase(container.Resolve<IDbFactory>().Create(MigrationType.Log));
-
-            container.Register<ILogDatabase>(logDb);
         }
 
         public DbFactory(IMigrationController migrationController,

@@ -128,7 +128,7 @@ class HistoryRow extends Component {
               );
             }
 
-            if (name === 'episodeTitle') {
+            if (name === 'episodes.title') {
               return (
                 <TableRowCell key={name}>
                   <EpisodeTitleLink

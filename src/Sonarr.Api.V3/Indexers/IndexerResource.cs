@@ -2,7 +2,7 @@ using NzbDrone.Core.Indexers;
 
 namespace Sonarr.Api.V3.Indexers
 {
-    public class IndexerResource : ProviderResource
+    public class IndexerResource : ProviderResource<IndexerResource>
     {
         public bool EnableRss { get; set; }
         public bool EnableAutomaticSearch { get; set; }

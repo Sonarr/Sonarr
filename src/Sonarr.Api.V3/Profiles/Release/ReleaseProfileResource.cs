@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 using NzbDrone.Core.Profiles.Releases;
 using Sonarr.Http.REST;
 
@@ -91,9 +91,17 @@ namespace Sonarr.Api.V3.Profiles.Release
                 return list;
             }
 
-            if (resource is JArray jarray)
+            if (resource is JsonElement array)
             {
-                return jarray.ToObject<List<string>>();
+                if (array.ValueKind == JsonValueKind.String)
+                {
+                    return array.GetString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                }
+
+                if (array.ValueKind == JsonValueKind.Array)
+                {
+                    return JsonSerializer.Deserialize<List<string>>(array);
+                }
             }
 
             if (resource is string str)

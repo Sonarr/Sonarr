@@ -78,11 +78,9 @@ export const actionHandlers = handleThunks({
     } = payload;
 
     const promise = createAjaxRequest({
-      url: '/history/failed',
+      url: `/history/failed/${historyId}`,
       method: 'POST',
-      data: {
-        id: historyId
-      }
+      dataType: 'json'
     }).request;
 
     promise.done(() => {

@@ -6,11 +6,11 @@ using NzbDrone.Common.Extensions;
 
 namespace Sonarr.Http.Frontend.Mappers
 {
-    public class LogFileMapper : StaticResourceMapperBase
+    public class UpdateLogFileMapper : StaticResourceMapperBase
     {
         private readonly IAppFolderInfo _appFolderInfo;
 
-        public LogFileMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
+        public UpdateLogFileMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
             : base(diskProvider, logger)
         {
             _appFolderInfo = appFolderInfo;
@@ -21,12 +21,12 @@ namespace Sonarr.Http.Frontend.Mappers
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = Path.GetFileName(path);
 
-            return Path.Combine(_appFolderInfo.GetLogFolder(), path);
+            return Path.Combine(_appFolderInfo.GetUpdateLogFolder(), path);
         }
 
         public override bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/logfile/") && resourceUrl.EndsWith(".txt");
+            return resourceUrl.StartsWith("/updatelogfile/") && resourceUrl.EndsWith(".txt");
         }
     }
 }

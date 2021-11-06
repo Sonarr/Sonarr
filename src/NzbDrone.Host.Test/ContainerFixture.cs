@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using DryIoc;
+using DryIoc.Microsoft.DependencyInjection;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Common.Composition;
+using NzbDrone.Common.Composition.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Datastore;
+using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
@@ -17,44 +21,50 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Host;
 using NzbDrone.SignalR;
 using NzbDrone.Test.Common;
+using IServiceProvider = System.IServiceProvider;
 
 namespace NzbDrone.App.Test
 {
     [TestFixture]
     public class ContainerFixture : TestBase
     {
-        private IContainer _container;
+        private IServiceProvider _container;
 
         [SetUp]
         public void SetUp()
         {
             var args = new StartupContext("first", "second");
 
-            _container = MainAppContainerBuilder.BuildContainer(args);
-
-            _container.Register<IMainDatabase>(new MainDatabase(null));
-
             // set up a dummy broadcaster to allow tests to resolve
             var mockBroadcaster = new Mock<IBroadcastSignalRMessage>();
-            _container.Register<IBroadcastSignalRMessage>(mockBroadcaster.Object);
+
+            var container = new Container(rules => rules.WithNzbDroneRules())
+                .AutoAddServices(Bootstrap.ASSEMBLIES)
+                .AddNzbDroneLogger()
+                .AddDummyDatabase()
+                .AddStartupContext(args);
+
+            container.RegisterInstance<IBroadcastSignalRMessage>(mockBroadcaster.Object);
+
+            _container = container.GetServiceProvider();
         }
 
         [Test]
         public void should_be_able_to_resolve_indexers()
         {
-            _container.Resolve<IEnumerable<IIndexer>>().Should().NotBeEmpty();
+            _container.GetRequiredService<IEnumerable<IIndexer>>().Should().NotBeEmpty();
         }
 
         [Test]
         public void should_be_able_to_resolve_downloadclients()
         {
-            _container.Resolve<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
+            _container.GetRequiredService<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
         }
 
         [Test]
         public void container_should_inject_itself()
         {
-            var factory = _container.Resolve<IServiceFactory>();
+            var factory = _container.GetRequiredService<IServiceFactory>();
 
             factory.Build<IIndexerFactory>().Should().NotBeNull();
         }
@@ -64,7 +74,7 @@ namespace NzbDrone.App.Test
         {
             var genericExecutor = typeof(IExecute<>).MakeGenericType(typeof(RssSyncCommand));
 
-            var executor = _container.Resolve(genericExecutor);
+            var executor = _container.GetRequiredService(genericExecutor);
 
             executor.Should().NotBeNull();
             executor.Should().BeAssignableTo<IExecute<RssSyncCommand>>();
@@ -73,17 +83,17 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_return_same_instance_via_resolve_and_resolveall()
         {
-            var first = (DownloadMonitoringService)_container.Resolve<IHandle<TrackedDownloadsRemovedEvent>>();
-            var second = _container.ResolveAll<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var first = (DownloadMonitoringService)_container.GetRequiredService<IHandle<TrackedDownloadsRemovedEvent>>();
+            var second = _container.GetServices<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
 
             first.Should().BeSameAs(second);
         }
 
         [Test]
-        public void should_return_same_instance_of_singletons_by_same_interface()
+        public void should_return_same_instance_of_singletons_by_different_same_interface()
         {
-            var first = _container.ResolveAll<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
-            var second = _container.ResolveAll<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var first = _container.GetServices<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var second = _container.GetServices<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
 
             first.Should().BeSameAs(second);
         }
@@ -91,8 +101,8 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_return_same_instance_of_singletons_by_different_interfaces()
         {
-            var first = _container.ResolveAll<IHandle<TrackedDownloadsRemovedEvent>>().OfType<DownloadMonitoringService>().Single();
-            var second = (DownloadMonitoringService)_container.Resolve<IExecute<RefreshMonitoredDownloadsCommand>>();
+            var first = _container.GetServices<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var second = (DownloadMonitoringService)_container.GetRequiredService<IExecute<RefreshMonitoredDownloadsCommand>>();
 
             first.Should().BeSameAs(second);
         }

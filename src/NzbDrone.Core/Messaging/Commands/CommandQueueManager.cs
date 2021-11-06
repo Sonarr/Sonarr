@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Exceptions;
@@ -36,17 +37,18 @@ namespace NzbDrone.Core.Messaging.Commands
     public class CommandQueueManager : IManageCommandQueue, IHandle<ApplicationStartedEvent>
     {
         private readonly ICommandRepository _repo;
-        private readonly IServiceFactory _serviceFactory;
+        private readonly KnownTypes _knownTypes;
         private readonly Logger _logger;
 
         private readonly CommandQueue _commandQueue;
 
         public CommandQueueManager(ICommandRepository repo,
                                    IServiceFactory serviceFactory,
+                                   KnownTypes knownTypes,
                                    Logger logger)
         {
             _repo = repo;
-            _serviceFactory = serviceFactory;
+            _knownTypes = knownTypes;
             _logger = logger;
 
             _commandQueue = new CommandQueue();
@@ -232,9 +234,8 @@ namespace NzbDrone.Core.Messaging.Commands
         private dynamic GetCommand(string commandName)
         {
             commandName = commandName.Split('.').Last();
-
-            var commandType = _serviceFactory.GetImplementations(typeof(Command))
-                                             .Single(c => c.Name.Equals(commandName, StringComparison.InvariantCultureIgnoreCase));
+            var commands = _knownTypes.GetImplementations(typeof(Command));
+            var commandType = commands.Single(c => c.Name.Equals(commandName, StringComparison.InvariantCultureIgnoreCase));
 
             return Json.Deserialize("{}", commandType);
         }

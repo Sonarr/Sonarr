@@ -125,6 +125,7 @@ export const actionHandlers = handleThunks({
     const promise = createAjaxRequest({
       url: '/series',
       method: 'POST',
+      dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(newSeries)
     }).request;

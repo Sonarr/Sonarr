@@ -3,7 +3,7 @@ using NzbDrone.Core.Tv;
 
 namespace Sonarr.Api.V3.ImportLists
 {
-    public class ImportListResource : ProviderResource
+    public class ImportListResource : ProviderResource<ImportListResource>
     {
         public bool EnableAutomaticAdd { get; set; }
         public MonitorTypes ShouldMonitor { get; set; }

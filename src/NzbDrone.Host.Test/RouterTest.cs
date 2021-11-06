@@ -1,4 +1,3 @@
-using System.ServiceProcess;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -10,7 +9,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.App.Test
 {
     [TestFixture]
-    public class RouterTest : TestBase<Router>
+    public class RouterTest : TestBase<UtilityModeRouter>
     {
         [SetUp]
         public void Setup()
@@ -47,33 +46,6 @@ namespace NzbDrone.App.Test
             Subject.Route(ApplicationModes.UninstallService);
 
             serviceProviderMock.Verify(c => c.Uninstall(ServiceProvider.SERVICE_NAME), Times.Once());
-        }
-
-        [Test]
-        public void Route_should_call_console_service_when_application_mode_is_console()
-        {
-            Mocker.GetMock<IRuntimeInfo>().SetupGet(c => c.IsUserInteractive).Returns(true);
-
-            Subject.Route(ApplicationModes.Interactive);
-
-            Mocker.GetMock<INzbDroneConsoleFactory>().Verify(c => c.Start(), Times.Once());
-        }
-
-        [Test]
-        public void Route_should_call_service_start_when_run_in_service_mode()
-        {
-            var envMock = Mocker.GetMock<IRuntimeInfo>();
-            var serviceProvider = Mocker.GetMock<IServiceProvider>();
-
-            envMock.SetupGet(c => c.IsUserInteractive).Returns(false);
-
-            serviceProvider.Setup(c => c.Run(It.IsAny<ServiceBase>()));
-            serviceProvider.Setup(c => c.ServiceExist(It.IsAny<string>())).Returns(true);
-            serviceProvider.Setup(c => c.GetStatus(It.IsAny<string>())).Returns(ServiceControllerStatus.StartPending);
-
-            Subject.Route(ApplicationModes.Service);
-
-            serviceProvider.Verify(c => c.Run(It.IsAny<ServiceBase>()), Times.Once());
         }
 
         [Test]

@@ -1,8 +1,5 @@
 ﻿using System;
-using Nancy;
-using Nancy.Responses;
-using Sonarr.Http.ErrorManagement;
-using Sonarr.Http.Extensions;
+using System.Net;
 
 namespace Sonarr.Http.Exceptions
 {
@@ -17,11 +14,6 @@ namespace Sonarr.Http.Exceptions
         {
             StatusCode = statusCode;
             Content = content;
-        }
-
-        public JsonResponse<ErrorModel> ToErrorResponse(NancyContext context)
-        {
-            return new ErrorModel(this).AsResponse(context, StatusCode);
         }
 
         private static string GetMessage(HttpStatusCode statusCode, object content)

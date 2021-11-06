@@ -75,13 +75,13 @@ export const defaultState = {
         isVisible: true
       },
       {
-        name: 'episode.title',
+        name: 'episodes.title',
         label: 'Episode Title',
         isSortable: true,
         isVisible: true
       },
       {
-        name: 'episode.airDateUtc',
+        name: 'episodes.airDateUtc',
         label: 'Episode Air Date',
         isSortable: true,
         isVisible: false
@@ -406,6 +406,7 @@ export const actionHandlers = handleThunks({
       url: `/queue/bulk?removeFromClient=${remove}&blocklist=${blocklist}`,
       method: 'DELETE',
       dataType: 'json',
+      contentType: 'application/json',
       data: JSON.stringify({ ids })
     }).request;
 

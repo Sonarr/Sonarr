@@ -86,7 +86,7 @@ function MissingRow(props) {
             );
           }
 
-          if (name === 'episodeTitle') {
+          if (name === 'episodes.title') {
             return (
               <TableRowCell key={name}>
                 <EpisodeTitleLink
@@ -100,7 +100,7 @@ function MissingRow(props) {
             );
           }
 
-          if (name === 'airDateUtc') {
+          if (name === 'episodes.airDateUtc') {
             return (
               <RelativeDateCellConnector
                 key={name}
