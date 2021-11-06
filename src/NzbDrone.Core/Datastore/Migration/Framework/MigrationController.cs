@@ -7,6 +7,7 @@ using FluentMigrator.Runner.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog;
+using NLog.Extensions.Logging;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             _logger.Info("*** Migrating {0} ***", connectionString);
 
             var serviceProvider = new ServiceCollection()
-                .AddLogging(lb => lb.AddProvider(_migrationLoggerProvider))
+                .AddLogging(b => b.AddNLog())
                 .AddFluentMigratorCore()
                 .ConfigureRunner(
                     builder => builder

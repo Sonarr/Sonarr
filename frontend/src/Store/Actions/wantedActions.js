@@ -21,7 +21,7 @@ export const defaultState = {
     isFetching: false,
     isPopulated: false,
     pageSize: 20,
-    sortKey: 'airDateUtc',
+    sortKey: 'episodes.airDateUtc',
     sortDirection: sortDirections.DESCENDING,
     error: null,
     items: [],
@@ -39,12 +39,12 @@ export const defaultState = {
         isVisible: true
       },
       {
-        name: 'episodeTitle',
+        name: 'episodes.title',
         label: 'Episode Title',
         isVisible: true
       },
       {
-        name: 'airDateUtc',
+        name: 'episodes.airDateUtc',
         label: 'Air Date',
         isSortable: true,
         isVisible: true
@@ -94,7 +94,7 @@ export const defaultState = {
     isFetching: false,
     isPopulated: false,
     pageSize: 20,
-    sortKey: 'airDateUtc',
+    sortKey: 'episodes.airDateUtc',
     sortDirection: sortDirections.DESCENDING,
     items: [],
 
@@ -111,12 +111,12 @@ export const defaultState = {
         isVisible: true
       },
       {
-        name: 'episodeTitle',
+        name: 'episodes.episodeTitle',
         label: 'Episode Title',
         isVisible: true
       },
       {
-        name: 'airDateUtc',
+        name: 'episodes.airDateUtc',
         label: 'Air Date',
         isSortable: true,
         isVisible: true

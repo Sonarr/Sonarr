@@ -85,7 +85,6 @@ class SecuritySettings extends Component {
             name="authenticationMethod"
             values={authenticationMethodOptions}
             helpText="Require Username and Password to access Sonarr"
-            helpTextWarning="Requires restart to take effect"
             onChange={onInputChange}
             {...authenticationMethod}
           />
@@ -99,7 +98,6 @@ class SecuritySettings extends Component {
             <FormInputGroup
               type={inputTypes.TEXT}
               name="username"
-              helpTextWarning="Requires restart to take effect"
               onChange={onInputChange}
               {...username}
             />
@@ -114,7 +112,6 @@ class SecuritySettings extends Component {
             <FormInputGroup
               type={inputTypes.PASSWORD}
               name="password"
-              helpTextWarning="Requires restart to take effect"
               onChange={onInputChange}
               {...password}
             />

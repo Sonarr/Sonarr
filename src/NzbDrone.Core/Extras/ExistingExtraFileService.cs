@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Extras
 
         public ExistingExtraFileService(IDiskProvider diskProvider,
                                         IDiskScanService diskScanService,
-                                        List<IImportExistingExtraFiles> existingExtraFileImporters,
+                                        IEnumerable<IImportExistingExtraFiles> existingExtraFileImporters,
                                         Logger logger)
         {
             _diskProvider = diskProvider;

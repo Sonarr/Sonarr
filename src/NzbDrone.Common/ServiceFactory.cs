@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Composition;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace NzbDrone.Common
 {
@@ -17,9 +17,9 @@ namespace NzbDrone.Common
 
     public class ServiceFactory : IServiceFactory
     {
-        private readonly IContainer _container;
+        private readonly System.IServiceProvider _container;
 
-        public ServiceFactory(IContainer container)
+        public ServiceFactory(System.IServiceProvider container)
         {
             _container = container;
         }
@@ -27,23 +27,23 @@ namespace NzbDrone.Common
         public T Build<T>()
             where T : class
         {
-            return _container.Resolve<T>();
+            return _container.GetRequiredService<T>();
         }
 
         public IEnumerable<T> BuildAll<T>()
             where T : class
         {
-            return _container.ResolveAll<T>().GroupBy(c => c.GetType().FullName).Select(g => g.First());
+            return _container.GetServices<T>().GroupBy(c => c.GetType().FullName).Select(g => g.First());
         }
 
         public object Build(Type contract)
         {
-            return _container.Resolve(contract);
+            return _container.GetRequiredService(contract);
         }
 
         public IEnumerable<Type> GetImplementations(Type contract)
         {
-            return _container.GetImplementations(contract);
+            return _container.GetServices(contract).Select(x => x.GetType());
         }
     }
 }

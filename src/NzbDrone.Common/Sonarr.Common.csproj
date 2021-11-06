@@ -4,10 +4,13 @@
     <DefineConstants Condition="'$(RuntimeIdentifier)' == 'linux-musl-x64' or '$(RuntimeIdentifier)' == 'linux-musl-arm64'">ISMUSL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="DryIoc.dll" Version="4.8.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NLog" Version="4.7.14" />
     <PackageReference Include="NLog.Targets.Syslog" Version="6.0.3" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
     <PackageReference Include="Sentry" Version="2.1.8" />
     <PackageReference Include="SharpZipLib" Version="1.3.3" />
     <PackageReference Include="System.Text.Json" Version="6.0.4" />

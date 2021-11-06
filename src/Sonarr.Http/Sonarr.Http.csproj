@@ -4,9 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.6.2" />
-    <PackageReference Include="Nancy" Version="2.0.0" />
-    <PackageReference Include="Nancy.Authentication.Basic" Version="2.0.0" />
-    <PackageReference Include="Nancy.Authentication.Forms" Version="2.0.0" />
+    <PackageReference Include="ImpromptuInterface" Version="7.0.1" />
     <PackageReference Include="NLog" Version="4.7.14" />
   </ItemGroup>
   <ItemGroup>

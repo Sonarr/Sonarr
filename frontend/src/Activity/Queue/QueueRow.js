@@ -188,7 +188,7 @@ class QueueRow extends Component {
               );
             }
 
-            if (name === 'episode.title') {
+            if (name === 'episodes.title') {
               return (
                 <TableRowCell key={name}>
                   {
@@ -206,7 +206,7 @@ class QueueRow extends Component {
               );
             }
 
-            if (name === 'episode.airDateUtc') {
+            if (name === 'episodes.airDateUtc') {
               if (episode) {
                 return (
                   <RelativeDateCellConnector

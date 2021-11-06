@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Notifications
 
     public class NotificationFactory : ProviderFactory<INotification, NotificationDefinition>, INotificationFactory
     {
-        public NotificationFactory(INotificationRepository providerRepository, IEnumerable<INotification> providers, IContainer container, IEventAggregator eventAggregator, Logger logger)
+        public NotificationFactory(INotificationRepository providerRepository, IEnumerable<INotification> providers, IServiceProvider container, IEventAggregator eventAggregator, Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +17,7 @@ namespace NzbDrone.Api.Test.v3.ReleaseProfiles
         [Test]
         public void should_deserialize_releaseprofile_v3_ignored_null()
         {
-            var resource = Json.Deserialize<ReleaseProfileResource>("{ \"ignored\": null, \"required\": null }");
+            var resource = STJson.Deserialize<ReleaseProfileResource>("{ \"ignored\": null, \"required\": null }");
 
             var model = resource.ToModel();
 
@@ -28,7 +28,7 @@ namespace NzbDrone.Api.Test.v3.ReleaseProfiles
         [Test]
         public void should_deserialize_releaseprofile_v3_ignored_string()
         {
-            var resource = Json.Deserialize<ReleaseProfileResource>("{ \"ignored\": \"testa,testb\", \"required\": \"testc,testd\" }");
+            var resource = STJson.Deserialize<ReleaseProfileResource>("{ \"ignored\": \"testa,testb\", \"required\": \"testc,testd\" }");
 
             var model = resource.ToModel();
 
@@ -39,7 +39,7 @@ namespace NzbDrone.Api.Test.v3.ReleaseProfiles
         [Test]
         public void should_deserialize_releaseprofile_v3_ignored_string_array()
         {
-            var resource = Json.Deserialize<ReleaseProfileResource>("{ \"ignored\": [ \"testa\", \"testb\" ], \"required\": [ \"testc\", \"testd\" ] }");
+            var resource = STJson.Deserialize<ReleaseProfileResource>("{ \"ignored\": [ \"testa\", \"testb\" ], \"required\": [ \"testc\", \"testd\" ] }");
 
             var model = resource.ToModel();
 
@@ -50,7 +50,7 @@ namespace NzbDrone.Api.Test.v3.ReleaseProfiles
         [Test]
         public void should_throw_with_bad_releaseprofile_v3_ignored_type()
         {
-            var resource = Json.Deserialize<ReleaseProfileResource>("{ \"ignored\": {} }");
+            var resource = STJson.Deserialize<ReleaseProfileResource>("{ \"ignored\": {} }");
 
             Assert.Throws<BadRequestException>(() => resource.ToModel());
         }
