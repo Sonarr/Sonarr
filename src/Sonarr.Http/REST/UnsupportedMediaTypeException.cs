@@ -1,4 +1,4 @@
-using Nancy;
+using System.Net;
 using Sonarr.Http.Exceptions;
 
 namespace Sonarr.Http.REST

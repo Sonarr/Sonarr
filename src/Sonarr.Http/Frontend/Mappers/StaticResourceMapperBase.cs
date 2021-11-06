@@ -1,7 +1,7 @@
 using System;
 using System.IO;
-using System.Threading.Tasks;
-using Nancy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -13,14 +13,14 @@ namespace Sonarr.Http.Frontend.Mappers
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
         private readonly StringComparison _caseSensitive;
-
-        private static readonly NotFoundResponse NotFoundResponse = new NotFoundResponse();
+        private readonly IContentTypeProvider _mimeTypeProvider;
 
         protected StaticResourceMapperBase(IDiskProvider diskProvider, Logger logger)
         {
             _diskProvider = diskProvider;
             _logger = logger;
 
+            _mimeTypeProvider = new FileExtensionContentTypeProvider();
             _caseSensitive = RuntimeInfo.IsProduction ? DiskProviderBase.PathStringComparison : StringComparison.OrdinalIgnoreCase;
         }
 
@@ -28,33 +28,28 @@ namespace Sonarr.Http.Frontend.Mappers
 
         public abstract bool CanHandle(string resourceUrl);
 
-        public async virtual Task<Response> GetResponse(string resourceUrl)
+        public IActionResult GetResponse(string resourceUrl)
         {
             var filePath = Map(resourceUrl);
 
             if (_diskProvider.FileExists(filePath, _caseSensitive))
             {
-                var data = await GetContent(filePath).ConfigureAwait(false);
+                if (!_mimeTypeProvider.TryGetContentType(filePath, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
 
-                return new ByteArrayResponse(data, MimeTypes.GetMimeType(filePath));
+                return new FileStreamResult(GetContentStream(filePath), contentType);
             }
 
             _logger.Warn("File {0} not found", filePath);
 
-            return NotFoundResponse;
+            return null;
         }
 
-        protected async virtual Task<byte[]> GetContent(string filePath)
+        protected virtual Stream GetContentStream(string filePath)
         {
-            using (var output = new MemoryStream())
-            {
-                using (var file = File.OpenRead(filePath))
-                {
-                    await file.CopyToAsync(output).ConfigureAwait(false);
-                }
-
-                return output.ToArray();
-            }
+            return File.OpenRead(filePath);
         }
     }
 }

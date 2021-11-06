@@ -176,7 +176,7 @@ namespace NzbDrone.Integration.Test
         protected async Task ConnectSignalR()
         {
             _signalRReceived = new List<SignalRMessage>();
-            _signalrConnection = new HubConnectionBuilder().WithUrl("http://localhost:7878/signalr/messages").Build();
+            _signalrConnection = new HubConnectionBuilder().WithUrl("http://localhost:8989/signalr/messages").Build();
 
             var cts = new CancellationTokenSource();
 

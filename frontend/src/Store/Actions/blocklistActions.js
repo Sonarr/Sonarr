@@ -151,6 +151,7 @@ export const actionHandlers = handleThunks({
       url: '/blocklist/bulk',
       method: 'DELETE',
       dataType: 'json',
+      contentType: 'application/json',
       data: JSON.stringify({ ids })
     }).request;
 

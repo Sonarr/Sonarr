@@ -278,6 +278,7 @@ export const actionHandlers = handleThunks({
     const promise = createAjaxRequest({
       url: '/release',
       method: 'POST',
+      dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(payload)
     }).request;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Lifecycle;
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.ThingiProvider
         where TProvider : IProvider
     {
         private readonly IProviderRepository<TProviderDefinition> _providerRepository;
-        private readonly IContainer _container;
+        private readonly IServiceProvider _container;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.ThingiProvider
 
         protected ProviderFactory(IProviderRepository<TProviderDefinition> providerRepository,
                                   IEnumerable<TProvider> providers,
-                                  IContainer container,
+                                  IServiceProvider container,
                                   IEventAggregator eventAggregator,
                                   Logger logger)
         {
@@ -129,7 +130,7 @@ namespace NzbDrone.Core.ThingiProvider
         public TProvider GetInstance(TProviderDefinition definition)
         {
             var type = GetImplementation(definition);
-            var instance = (TProvider)_container.Resolve(type);
+            var instance = (TProvider)_container.GetRequiredService(type);
             instance.Definition = definition;
             SetProviderCharacteristics(instance, definition);
             return instance;

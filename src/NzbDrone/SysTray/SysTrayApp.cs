@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Extensions.Hosting;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
@@ -8,12 +11,7 @@ using NzbDrone.Host;
 
 namespace NzbDrone.SysTray
 {
-    public interface ISystemTrayApp
-    {
-        void Start();
-    }
-
-    public class SystemTrayApp : Form, ISystemTrayApp
+    public class SystemTrayApp : Form, IHostedService
     {
         private readonly IBrowserService _browserService;
         private readonly IRuntimeInfo _runtimeInfo;
@@ -34,8 +32,12 @@ namespace NzbDrone.SysTray
             Application.ThreadException += OnThreadException;
             Application.ApplicationExit += OnApplicationExit;
 
+            Application.SetHighDpiMode(HighDpiMode.PerMonitor);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             _trayMenu.Items.Add(new ToolStripMenuItem("Launch Browser", null, LaunchBrowser));
-            _trayMenu.Items.Add(new ToolStripMenuItem("-"));
+            _trayMenu.Items.Add(new ToolStripSeparator());
             _trayMenu.Items.Add(new ToolStripMenuItem("Exit", null, OnExit));
 
             _trayIcon.Text = string.Format("Sonarr - {0}", BuildInfo.Version);
@@ -46,6 +48,20 @@ namespace NzbDrone.SysTray
             _trayIcon.DoubleClick += LaunchBrowser;
 
             Application.Run(this);
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            var thread = new Thread(Start);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         protected override void OnClosing(CancelEventArgs e)

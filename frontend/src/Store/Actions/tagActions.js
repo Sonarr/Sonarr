@@ -53,7 +53,8 @@ export const actionHandlers = handleThunks({
     const promise = createAjaxRequest({
       url: '/tag',
       method: 'POST',
-      data: JSON.stringify(payload.tag)
+      data: JSON.stringify(payload.tag),
+      dataType: 'json'
     }).request;
 
     promise.done((data) => {
