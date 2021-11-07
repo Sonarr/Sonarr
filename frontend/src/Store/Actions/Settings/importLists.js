@@ -89,7 +89,6 @@ export default {
   actionHandlers: {
     [FETCH_IMPORT_LISTS]: createFetchHandler(section, '/importlist'),
     [FETCH_IMPORT_LIST_SCHEMA]: createFetchSchemaHandler(section, '/importlist/schema'),
-
     [SAVE_IMPORT_LIST]: createSaveProviderHandler(section, '/importlist'),
     [CANCEL_SAVE_IMPORT_LIST]: createCancelSaveProviderHandler(section),
     [DELETE_IMPORT_LIST]: createRemoveItemHandler(section, '/importlist'),

@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         [FieldDefinition(1, Label = "Port", Type = FieldType.Number)]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "RPC Path", Type = FieldType.Textbox)]
+        [FieldDefinition(2, Label = "XML RPC Path", Type = FieldType.Textbox)]
         public string RpcPath { get; set; }
 
         [FieldDefinition(3, Label = "Use SSL", Type = FieldType.Checkbox)]

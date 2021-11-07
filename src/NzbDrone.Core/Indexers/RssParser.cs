@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Indexers
 
             if (dateString.IsNullOrWhiteSpace())
             {
-                throw new UnsupportedFeedException("Rss feed must have a pubDate element with a valid publish date.");
+                throw new UnsupportedFeedException("Each item in the RSS feed must have a pubDate element with a valid publish date.");
             }
 
             return XElementExtensions.ParseDate(dateString);
