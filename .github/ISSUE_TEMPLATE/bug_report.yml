@@ -64,7 +64,7 @@ body:
   attributes:
     label: Trace Logs?
     description: |
-      Trace Logs (https://wiki.servarr.com/radarr/troubleshooting#logging-and-log-files) 
+      Trace Logs (https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files) 
       ***Generally speaking, all bug reports must have trace logs provided.***
   validations:
     required: true
