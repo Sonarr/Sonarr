@@ -5,7 +5,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="NBuilder" Version="6.1.0" />
-    <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.0-0" />
+    <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.5-18" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
