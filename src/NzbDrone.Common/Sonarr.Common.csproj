@@ -14,7 +14,7 @@
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="System.Text.Json" Version="6.0.2" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.0-0" />
+    <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.5-18" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.5.21301.5" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
