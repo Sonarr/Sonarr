@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
                                  .AddQueryParam("X-Plex-Version", BuildInfo.Version.ToString())
                                  .AddQueryParam("strong", true);
 
-            requestBuilder.Method = HttpMethod.POST;
+            requestBuilder.Method = HttpMethod.Post;
 
             var request = requestBuilder.Build();
 

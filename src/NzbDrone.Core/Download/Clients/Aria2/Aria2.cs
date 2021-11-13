@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using CookComputing.XmlRpc;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -90,12 +89,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                 var downloadSpeed = long.Parse(torrent.DownloadSpeed);
 
                 var status = DownloadItemStatus.Failed;
-                var title = "";
-
-                if (torrent.Bittorrent?.ContainsKey("info") == true && ((XmlRpcStruct)torrent.Bittorrent["info"]).ContainsKey("name"))
-                {
-                    title = ((XmlRpcStruct)torrent.Bittorrent["info"])["name"].ToString();
-                }
+                var title = torrent.Bittorrent?.Name ?? "";
 
                 switch (torrent.Status)
                 {

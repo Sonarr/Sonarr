@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 .Accept(HttpAccept.Json);
 
             requestBuilder.LogResponseContent = true;
-            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
+            requestBuilder.NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password);
 
             return requestBuilder;
         }

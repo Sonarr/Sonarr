@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Specialized;
+using System;
 using System.IO;
 using System.Net;
-using System.Web;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.OAuth;
 
 namespace NzbDrone.Core.Notifications.Twitter
 {
@@ -21,31 +17,18 @@ namespace NzbDrone.Core.Notifications.Twitter
 
     public class TwitterService : ITwitterService
     {
-        private readonly IHttpClient _httpClient;
+        private readonly ITwitterProxy _twitterProxy;
         private readonly Logger _logger;
 
-        public TwitterService(IHttpClient httpClient, Logger logger)
+        public TwitterService(ITwitterProxy twitterProxy, Logger logger)
         {
-            _httpClient = httpClient;
+            _twitterProxy = twitterProxy;
             _logger = logger;
-        }
-
-        private NameValueCollection OAuthQuery(OAuthRequest oAuthRequest)
-        {
-            var auth = oAuthRequest.GetAuthorizationHeader();
-            var request = new Common.Http.HttpRequest(oAuthRequest.RequestUrl);
-            request.Headers.Add("Authorization", auth);
-            var response = _httpClient.Get(request);
-
-            return HttpUtility.ParseQueryString(response.Content);
         }
 
         public OAuthToken GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier)
         {
-            // Creating a new instance with a helper method
-            var oAuthRequest = OAuthRequest.ForAccessToken(consumerKey, consumerSecret, oauthToken, "", oauthVerifier);
-            oAuthRequest.RequestUrl = "https://api.twitter.com/oauth/access_token";
-            var qscoll = OAuthQuery(oAuthRequest);
+            var qscoll = _twitterProxy.GetOAuthToken(consumerKey, consumerSecret, oauthToken, oauthVerifier);
 
             return new OAuthToken
             {
@@ -56,31 +39,16 @@ namespace NzbDrone.Core.Notifications.Twitter
 
         public string GetOAuthRedirect(string consumerKey, string consumerSecret, string callbackUrl)
         {
-            // Creating a new instance with a helper method
-            var oAuthRequest = OAuthRequest.ForRequestToken(consumerKey, consumerSecret, callbackUrl);
-            oAuthRequest.RequestUrl = "https://api.twitter.com/oauth/request_token";
-            var qscoll = OAuthQuery(oAuthRequest);
-
-            return string.Format("https://api.twitter.com/oauth/authorize?oauth_token={0}", qscoll["oauth_token"]);
+            return _twitterProxy.GetOAuthRedirect(consumerKey, consumerSecret, callbackUrl);
         }
 
         public void SendNotification(string message, TwitterSettings settings)
         {
             try
             {
-                var oAuth = new TinyTwitter.OAuthInfo
-                {
-                    ConsumerKey = settings.ConsumerKey,
-                    ConsumerSecret = settings.ConsumerSecret,
-                    AccessToken = settings.AccessToken,
-                    AccessSecret = settings.AccessTokenSecret
-                };
-
-                var twitter = new TinyTwitter.TinyTwitter(oAuth);
-
                 if (settings.DirectMessage)
                 {
-                    twitter.DirectMessage(message, settings.Mention);
+                    _twitterProxy.DirectMessage(message, settings);
                 }
                 else
                 {
@@ -89,7 +57,7 @@ namespace NzbDrone.Core.Notifications.Twitter
                         message += string.Format(" @{0}", settings.Mention);
                     }
 
-                    twitter.UpdateStatus(message);
+                    _twitterProxy.UpdateStatus(message, settings);
                 }
             }
             catch (WebException ex)

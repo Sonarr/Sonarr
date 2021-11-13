@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
@@ -143,15 +144,19 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
             return authResponse.Data.SId;
         }
 
-        protected HttpRequestBuilder BuildRequest(DownloadStationSettings settings, string methodName, int apiVersion, HttpMethod httpVerb = HttpMethod.GET)
+        protected HttpRequestBuilder BuildRequest(DownloadStationSettings settings, string methodName, int apiVersion, HttpMethod httpVerb = null)
         {
+            httpVerb ??= HttpMethod.Get;
+
             var info = GetApiInfo(_apiType, settings);
 
             return BuildRequest(settings, info, methodName, apiVersion, httpVerb);
         }
 
-        private HttpRequestBuilder BuildRequest(DownloadStationSettings settings, DiskStationApiInfo apiInfo, string methodName, int apiVersion, HttpMethod httpVerb = HttpMethod.GET)
+        private HttpRequestBuilder BuildRequest(DownloadStationSettings settings, DiskStationApiInfo apiInfo, string methodName, int apiVersion, HttpMethod httpVerb = null)
         {
+            httpVerb ??= HttpMethod.Get;
+
             var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port).Resource($"webapi/{apiInfo.Path}");
             requestBuilder.Method = httpVerb;
             requestBuilder.LogResponseContent = true;
@@ -164,7 +169,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 throw new ArgumentOutOfRangeException(nameof(apiVersion));
             }
 
-            if (httpVerb == HttpMethod.POST)
+            if (httpVerb == HttpMethod.Post)
             {
                 if (apiInfo.NeedsAuthentication)
                 {

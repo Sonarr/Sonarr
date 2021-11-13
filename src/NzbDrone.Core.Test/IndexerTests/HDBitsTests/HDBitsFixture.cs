@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using FluentAssertions;
 using Moq;
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
             var responseJson = ReadAllText(fileName);
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.POST)))
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Post)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), responseJson));
 
             var torrents = Subject.FetchRecent();

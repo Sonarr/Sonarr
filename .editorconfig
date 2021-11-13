@@ -262,7 +262,6 @@ dotnet_diagnostic.CA5394.severity = suggestion
 dotnet_diagnostic.CA5397.severity = suggestion
 
 dotnet_diagnostic.SYSLIB0006.severity = none
-dotnet_diagnostic.SYSLIB0014.severity = none
 
 [*.{js,html,js,hbs,less,css}]
 charset = utf-8

@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
 
         public void AddTaskFromData(byte[] data, string filename, string downloadDirectory, DownloadStationSettings settings)
         {
-            var requestBuilder = BuildRequest(settings, "create", 2, HttpMethod.POST);
+            var requestBuilder = BuildRequest(settings, "create", 2, HttpMethod.Post);
 
             requestBuilder.AddFormParameter("type", "\"file\"");
             requestBuilder.AddFormParameter("file", "[\"fileData\"]");

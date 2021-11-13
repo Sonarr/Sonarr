@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             if (!settings.Username.IsNullOrWhiteSpace())
             {
-                request.AddBasicAuthentication(settings.Username, settings.Password);
+                request.Credentials = new BasicNetworkCredential(settings.Username, settings.Password);
             }
 
             var response = _httpClient.Execute(request);

@@ -1,4 +1,5 @@
-﻿using System.Net;
+using System.Net;
+using System.Net.Http;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Notifications.SendGrid
         {
             try
             {
-                var request = BuildRequest(settings, "mail/send", HttpMethod.POST);
+                var request = BuildRequest(settings, "mail/send", HttpMethod.Post);
 
                 var payload = new SendGridPayload
                 {

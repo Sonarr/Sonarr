@@ -294,7 +294,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase)
             {
                 LogResponseContent = true,
-                NetworkCredential = new NetworkCredential(settings.Username, settings.Password)
+                NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password)
             };
             return requestBuilder;
         }
