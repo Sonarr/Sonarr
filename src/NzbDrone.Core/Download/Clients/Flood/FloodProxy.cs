@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
@@ -108,7 +109,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         {
             var verifyRequest = BuildRequest(settings).Resource("/auth/verify").Build();
 
-            verifyRequest.Method = HttpMethod.GET;
+            verifyRequest.Method = HttpMethod.Get;
 
             HandleRequest(verifyRequest, settings);
         }
@@ -181,7 +182,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         {
             var getTorrentsRequest = BuildRequest(settings).Resource("/torrents").Build();
 
-            getTorrentsRequest.Method = HttpMethod.GET;
+            getTorrentsRequest.Method = HttpMethod.Get;
 
             return Json.Deserialize<TorrentListSummary>(HandleRequest(getTorrentsRequest, settings).Content).Torrents;
         }
@@ -190,7 +191,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         {
             var contentsRequest = BuildRequest(settings).Resource($"/torrents/{hash}/contents").Build();
 
-            contentsRequest.Method = HttpMethod.GET;
+            contentsRequest.Method = HttpMethod.Get;
 
             return Json.Deserialize<List<TorrentContent>>(HandleRequest(contentsRequest, settings).Content).ConvertAll(content => content.Path);
         }
@@ -199,7 +200,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         {
             var tagsRequest = BuildRequest(settings).Resource("/torrents/tags").Build();
 
-            tagsRequest.Method = HttpMethod.PATCH;
+            tagsRequest.Method = HttpMethod.Patch;
 
             var body = new Dictionary<string, object>
             {
@@ -215,7 +216,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         {
             var contentsRequest = BuildRequest(settings).Resource($"/client/settings").Build();
 
-            contentsRequest.Method = HttpMethod.GET;
+            contentsRequest.Method = HttpMethod.Get;
 
             return Json.Deserialize<FloodClientSettings>(HandleRequest(contentsRequest, settings).Content);
         }

@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 .Accept(HttpAccept.Json);
 
             requestBuilder.LogResponseContent = true;
-            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
+            requestBuilder.NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password);
             requestBuilder.AllowAutoRedirect = false;
 
             return requestBuilder;

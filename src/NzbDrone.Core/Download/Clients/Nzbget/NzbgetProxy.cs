@@ -229,7 +229,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             var requestBuilder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
             requestBuilder.LogResponseContent = true;
-            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
+            requestBuilder.NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password);
 
             var httpRequest = requestBuilder.Build();
 

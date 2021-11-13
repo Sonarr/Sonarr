@@ -7,17 +7,21 @@ using MailKit.Security;
 using MimeKit;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http.Dispatchers;
+using NzbDrone.Core.Security;
 
 namespace NzbDrone.Core.Notifications.Email
 {
     public class Email : NotificationBase<EmailSettings>
     {
+        private readonly ICertificateValidationService _certificateValidationService;
         private readonly Logger _logger;
 
         public override string Name => "Email";
 
-        public Email(Logger logger)
+        public Email(ICertificateValidationService certificateValidationService, Logger logger)
         {
+            _certificateValidationService = certificateValidationService;
             _logger = logger;
         }
 
@@ -123,6 +127,8 @@ namespace NzbDrone.Core.Notifications.Email
                         serverOption = SecureSocketOptions.StartTls;
                     }
                 }
+
+                client.ServerCertificateValidationCallback = _certificateValidationService.ShouldByPassValidationError;
 
                 _logger.Debug("Connecting to mail server");
 

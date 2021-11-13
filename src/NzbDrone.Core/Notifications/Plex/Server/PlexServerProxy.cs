@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
         public List<PlexSection> GetTvSections(PlexServerSettings settings)
         {
-            var request = BuildRequest("library/sections", HttpMethod.GET, settings);
+            var request = BuildRequest("library/sections", HttpMethod.Get, settings);
             var response = ProcessRequest(request);
 
             CheckForError(response);
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         public void Update(int sectionId, PlexServerSettings settings)
         {
             var resource = $"library/sections/{sectionId}/refresh";
-            var request = BuildRequest(resource, HttpMethod.GET, settings);
+            var request = BuildRequest(resource, HttpMethod.Get, settings);
             var response = ProcessRequest(request);
 
             CheckForError(response);
@@ -74,7 +75,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         public void UpdateSeries(string metadataId, PlexServerSettings settings)
         {
             var resource = $"library/metadata/{metadataId}/refresh";
-            var request = BuildRequest(resource, HttpMethod.PUT, settings);
+            var request = BuildRequest(resource, HttpMethod.Put, settings);
             var response = ProcessRequest(request);
 
             CheckForError(response);
@@ -82,7 +83,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
         public string Version(PlexServerSettings settings)
         {
-            var request = BuildRequest("identity", HttpMethod.GET, settings);
+            var request = BuildRequest("identity", HttpMethod.Get, settings);
             var response = ProcessRequest(request);
 
             CheckForError(response);
@@ -100,7 +101,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
         public List<PlexPreference> Preferences(PlexServerSettings settings)
         {
-            var request = BuildRequest(":/prefs", HttpMethod.GET, settings);
+            var request = BuildRequest(":/prefs", HttpMethod.Get, settings);
             var response = ProcessRequest(request);
 
             CheckForError(response);
@@ -120,7 +121,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         {
             var guid = $"com.plexapp.agents.thetvdb://{tvdbId}?lang={language}";
             var resource = $"library/sections/{sectionId}/all?guid={System.Web.HttpUtility.UrlEncode(guid)}";
-            var request = BuildRequest(resource, HttpMethod.GET, settings);
+            var request = BuildRequest(resource, HttpMethod.Get, settings);
             var response = ProcessRequest(request);
 
             CheckForError(response);

@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
             var requestBuilder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
             requestBuilder.LogResponseContent = true;
-            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
+            requestBuilder.NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password);
             requestBuilder.Headers.Add("Accept-Encoding", "gzip,deflate");
 
             var httpRequest = requestBuilder.Build();

@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using Newtonsoft.Json;
 using NzbDrone.Common.Serializer;
 
@@ -17,14 +18,14 @@ namespace NzbDrone.Common.Http
         public JsonRpcRequestBuilder(string baseUrl)
             : base(baseUrl)
         {
-            Method = HttpMethod.POST;
+            Method = HttpMethod.Post;
             JsonParameters = new List<object>();
         }
 
         public JsonRpcRequestBuilder(string baseUrl, string method, IEnumerable<object> parameters)
             : base(baseUrl)
         {
-            Method = HttpMethod.POST;
+            Method = HttpMethod.Post;
             JsonMethod = method;
             JsonParameters = parameters.ToList();
         }
