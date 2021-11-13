@@ -1,4 +1,5 @@
-﻿using NzbDrone.Common.Extensions;
+﻿using System;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http.Proxy
 {
@@ -41,7 +42,7 @@ namespace NzbDrone.Common.Http.Proxy
                     return hostlist;
                 }
 
-                return new string[] { };
+                return Array.Empty<string>();
             }
         }
 
