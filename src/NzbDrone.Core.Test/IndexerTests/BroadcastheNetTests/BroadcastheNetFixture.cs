@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
+using System.Net.Http;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             var recentFeed = ReadAllText(@"Files/Indexers/BroadcastheNet/RecentFeed.json");
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.POST)))
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Post)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
             var releases = Subject.FetchRecent();
@@ -144,7 +145,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             recentFeed = recentFeed.Replace("http:", "https:");
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.POST)))
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Post)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
             var releases = Subject.FetchRecent();

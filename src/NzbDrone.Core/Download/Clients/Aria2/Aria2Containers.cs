@@ -1,111 +1,161 @@
-using CookComputing.XmlRpc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using System.Xml.XPath;
+using NzbDrone.Core.Download.Extensions;
 
 namespace NzbDrone.Core.Download.Clients.Aria2
 {
-    public class Aria2Version
+    public class Aria2Fault
     {
-        [XmlRpcMember("version")]
-        public string Version;
+        public Aria2Fault(XElement element)
+        {
+            foreach (var e in element.XPathSelectElements("./value/struct/member"))
+            {
+                var name = e.ElementAsString("name");
+                if (name == "faultCode")
+                {
+                    FaultCode = e.Element("value").ElementAsInt("int");
+                }
+                else if (name == "faultString")
+                {
+                    FaultString = e.Element("value").GetStringValue();
+                }
+            }
+        }
 
-        [XmlRpcMember("enabledFeatures")]
-        public string[] EnabledFeatures;
+        public int FaultCode { get; set; }
+        public string FaultString { get; set; }
     }
 
-    public class Aria2Uri
+    public class Aria2Version
     {
-        [XmlRpcMember("status")]
-        public string Status;
+        public Aria2Version(XElement element)
+        {
+            foreach (var e in element.XPathSelectElements("./struct/member"))
+            {
+                if (e.ElementAsString("name") == "version")
+                {
+                    Version = e.Element("value").GetStringValue();
+                }
+            }
+        }
 
-        [XmlRpcMember("uri")]
-        public string Uri;
+        public string Version { get; set; }
     }
 
     public class Aria2File
     {
-        [XmlRpcMember("index")]
-        public string Index;
+        public Aria2File(XElement element)
+        {
+            foreach (var e in element.XPathSelectElements("./struct/member"))
+            {
+                var name = e.ElementAsString("name");
 
-        [XmlRpcMember("length")]
-        public string Length;
+                if (name == "path")
+                {
+                    Path = e.Element("value").GetStringValue();
+                }
+            }
+        }
 
-        [XmlRpcMember("completedLength")]
-        public string CompletedLength;
+        public string Path { get; set; }
+    }
 
-        [XmlRpcMember("path")]
-        public string Path;
+    public class Aria2Dict
+    {
+        public Aria2Dict(XElement element)
+        {
+            Dict = new Dictionary<string, string>();
 
-        [XmlRpcMember("selected")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string Selected;
+            foreach (var e in element.XPathSelectElements("./struct/member"))
+            {
+                Dict.Add(e.ElementAsString("name"), e.Element("value").GetStringValue());
+            }
+        }
 
-        [XmlRpcMember("uris")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public Aria2Uri[] Uris;
+        public Dictionary<string, string> Dict { get; set; }
+    }
+
+    public class Aria2Bittorrent
+    {
+        public Aria2Bittorrent(XElement element)
+        {
+            foreach (var e in element.Descendants("member"))
+            {
+                if (e.ElementAsString("name") == "name")
+                {
+                    Name = e.Element("value").GetStringValue();
+                }
+            }
+        }
+
+        public string Name;
     }
 
     public class Aria2Status
     {
-        [XmlRpcMember("bittorrent")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public XmlRpcStruct Bittorrent;
+        public Aria2Status(XElement element)
+        {
+            foreach (var e in element.XPathSelectElements("./struct/member"))
+            {
+                var name = e.ElementAsString("name");
 
-        [XmlRpcMember("bitfield")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string Bitfield;
+                if (name == "bittorrent")
+                {
+                    Bittorrent = new Aria2Bittorrent(e.Element("value"));
+                }
+                else if (name == "infoHash")
+                {
+                    InfoHash = e.Element("value").GetStringValue();
+                }
+                else if (name == "completedLength")
+                {
+                    CompletedLength = e.Element("value").GetStringValue();
+                }
+                else if (name == "downloadSpeed")
+                {
+                    DownloadSpeed = e.Element("value").GetStringValue();
+                }
+                else if (name == "files")
+                {
+                    Files = e.XPathSelectElement("./value/array/data")
+                        .Elements()
+                        .Select(x => new Aria2File(x))
+                        .ToArray();
+                }
+                else if (name == "gid")
+                {
+                    Gid = e.Element("value").GetStringValue();
+                }
+                else if (name == "status")
+                {
+                    Status = e.Element("value").GetStringValue();
+                }
+                else if (name == "totalLength")
+                {
+                    TotalLength = e.Element("value").GetStringValue();
+                }
+                else if (name == "uploadLength")
+                {
+                    UploadLength = e.Element("value").GetStringValue();
+                }
+                else if (name == "errorMessage")
+                {
+                    ErrorMessage = e.Element("value").GetStringValue();
+                }
+            }
+        }
 
-        [XmlRpcMember("infoHash")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string InfoHash;
-
-        [XmlRpcMember("completedLength")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string CompletedLength;
-
-        [XmlRpcMember("connections")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string Connections;
-
-        [XmlRpcMember("dir")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string Dir;
-
-        [XmlRpcMember("downloadSpeed")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string DownloadSpeed;
-
-        [XmlRpcMember("files")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public Aria2File[] Files;
-
-        [XmlRpcMember("gid")]
-        public string Gid;
-
-        [XmlRpcMember("numPieces")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string NumPieces;
-
-        [XmlRpcMember("pieceLength")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string PieceLength;
-
-        [XmlRpcMember("status")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string Status;
-
-        [XmlRpcMember("totalLength")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string TotalLength;
-
-        [XmlRpcMember("uploadLength")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string UploadLength;
-
-        [XmlRpcMember("uploadSpeed")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string UploadSpeed;
-
-        [XmlRpcMember("errorMessage")]
-        [XmlRpcMissingMapping(MappingAction.Ignore)]
-        public string ErrorMessage;
+        public Aria2Bittorrent Bittorrent { get; set; }
+        public string InfoHash { get; set; }
+        public string CompletedLength { get; set; }
+        public string DownloadSpeed { get; set; }
+        public Aria2File[] Files { get; set; }
+        public string Gid { get; set; }
+        public string Status { get; set; }
+        public string TotalLength { get; set; }
+        public string UploadLength { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

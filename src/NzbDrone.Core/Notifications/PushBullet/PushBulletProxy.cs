@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -100,8 +101,8 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
                 var request = requestBuilder.Build();
 
-                request.Method = HttpMethod.GET;
-                request.AddBasicAuthentication(settings.ApiKey, string.Empty);
+                request.Method = HttpMethod.Get;
+                request.Credentials = new BasicNetworkCredential(settings.ApiKey, string.Empty);
 
                 var response = _httpClient.Execute(request);
 
@@ -197,7 +198,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
                 var request = requestBuilder.Build();
 
-                request.AddBasicAuthentication(settings.ApiKey, string.Empty);
+                request.Credentials = new BasicNetworkCredential(settings.ApiKey, string.Empty);
 
                 _httpClient.Execute(request);
             }

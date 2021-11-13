@@ -1,3 +1,4 @@
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Notifications.Discord
                     .Accept(HttpAccept.Json)
                     .Build();
 
-                request.Method = HttpMethod.POST;
+                request.Method = HttpMethod.Post;
                 request.Headers.ContentType = "application/json";
                 request.SetContent(payload.ToJson());
 

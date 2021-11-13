@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
+using System.Net.Http;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Test.IndexerTests.RarbgTests
             var recentFeed = ReadAllText(@"Files/Indexers/Rarbg/RecentFeed_v2.json");
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
             var releases = Subject.FetchRecent();
@@ -64,7 +65,7 @@ namespace NzbDrone.Core.Test.IndexerTests.RarbgTests
         public void should_parse_error_20_as_empty_results()
         {
             Mocker.GetMock<IHttpClient>()
-                   .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                   .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
                    .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "{ error_code: 20, error: \"some message\" }"));
 
             var releases = Subject.FetchRecent();
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Test.IndexerTests.RarbgTests
         public void should_warn_on_unknown_error()
         {
             Mocker.GetMock<IHttpClient>()
-                   .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                   .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
                    .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "{ error_code: 25, error: \"some message\" }"));
 
             var releases = Subject.FetchRecent();

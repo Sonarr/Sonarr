@@ -1,7 +1,7 @@
 using System.Net;
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Http;
-using HttpMethod = NzbDrone.Common.Http.HttpMethod;
 
 namespace NzbDrone.Core.Notifications.Mailgun
 {
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Notifications.Mailgun
         {
             try
             {
-                var request = BuildRequest(settings, $"{settings.SenderDomain}/messages", HttpMethod.POST, title, message).Build();
+                var request = BuildRequest(settings, $"{settings.SenderDomain}/messages", HttpMethod.Post, title, message).Build();
                 _httpClient.Execute(request);
             }
             catch (HttpException ex)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Indexers.FileList
             var baseUrl = string.Format("{0}/api.php?action={1}&category={2}{3}", Settings.BaseUrl.TrimEnd('/'), searchType, categoriesQuery, parameters);
 
             var request = new IndexerRequest(baseUrl, HttpAccept.Json);
-            request.HttpRequest.AddBasicAuthentication(Settings.Username.Trim(), Settings.Passkey.Trim());
+            request.HttpRequest.Credentials = new BasicNetworkCredential(Settings.Username.Trim(), Settings.Passkey.Trim());
 
             yield return request;
         }

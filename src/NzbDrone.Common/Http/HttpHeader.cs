@@ -1,18 +1,38 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http
 {
+    public static class WebHeaderCollectionExtensions
+    {
+        public static NameValueCollection ToNameValueCollection(this HttpHeaders headers)
+        {
+            var result = new NameValueCollection();
+            foreach (var header in headers)
+            {
+                result.Add(header.Key, header.Value.ConcatToString(";"));
+            }
+
+            return result;
+        }
+    }
+
     public class HttpHeader : NameValueCollection, IEnumerable<KeyValuePair<string, string>>, IEnumerable
     {
         public HttpHeader(NameValueCollection headers)
             : base(headers)
+        {
+        }
+
+        public HttpHeader(HttpHeaders headers)
+            : base(headers.ToNameValueCollection())
         {
         }
 

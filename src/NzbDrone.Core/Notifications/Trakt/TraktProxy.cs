@@ -1,3 +1,4 @@
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Trakt
 
         public void AddToCollection(TraktCollectShowsResource payload, string accessToken)
         {
-            var request = BuildTraktRequest("sync/collection", HttpMethod.POST, accessToken);
+            var request = BuildTraktRequest("sync/collection", HttpMethod.Post, accessToken);
 
             request.Headers.ContentType = "application/json";
             request.SetContent(payload.ToJson());
@@ -53,7 +54,7 @@ namespace NzbDrone.Core.Notifications.Trakt
 
         public void RemoveFromCollection(TraktCollectShowsResource payload, string accessToken)
         {
-            var request = BuildTraktRequest("sync/collection/remove", HttpMethod.POST, accessToken);
+            var request = BuildTraktRequest("sync/collection/remove", HttpMethod.Post, accessToken);
 
             request.Headers.ContentType = "application/json";
             var temp = payload.ToJson();
@@ -72,7 +73,7 @@ namespace NzbDrone.Core.Notifications.Trakt
 
         public string GetUserName(string accessToken)
         {
-            var request = BuildTraktRequest("users/settings", HttpMethod.GET, accessToken);
+            var request = BuildTraktRequest("users/settings", HttpMethod.Get, accessToken);
 
             try
             {

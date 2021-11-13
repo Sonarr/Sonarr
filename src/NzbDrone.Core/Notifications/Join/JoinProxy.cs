@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Join
 
         public void SendNotification(string title, string message, JoinSettings settings)
         {
-            var method = HttpMethod.GET;
+            var method = HttpMethod.Get;
 
             try
             {

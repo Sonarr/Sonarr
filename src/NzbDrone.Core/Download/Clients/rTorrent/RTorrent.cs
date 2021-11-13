@@ -132,6 +132,12 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                     continue;
                 }
 
+                // Ignore torrents with an empty path
+                if (torrent.Path.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
                 if (torrent.Path.StartsWith("."))
                 {
                     throw new DownloadClientException("Download paths must be absolute. Please specify variable \"directory\" in rTorrent.");
