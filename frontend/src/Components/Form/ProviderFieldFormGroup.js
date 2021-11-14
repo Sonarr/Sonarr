@@ -65,6 +65,7 @@ function ProviderFieldFormGroup(props) {
     label,
     helpText,
     helpLink,
+    placeholder,
     value,
     type,
     advanced,
@@ -97,6 +98,7 @@ function ProviderFieldFormGroup(props) {
         label={label}
         helpText={helpText}
         helpLink={helpLink}
+        placeholder={placeholder}
         value={value}
         values={getSelectValues(selectOptions)}
         errors={errors}
@@ -122,6 +124,7 @@ ProviderFieldFormGroup.propTypes = {
   label: PropTypes.string.isRequired,
   helpText: PropTypes.string,
   helpLink: PropTypes.string,
+  placeholder: PropTypes.string,
   value: PropTypes.any,
   type: PropTypes.string.isRequired,
   advanced: PropTypes.bool.isRequired,

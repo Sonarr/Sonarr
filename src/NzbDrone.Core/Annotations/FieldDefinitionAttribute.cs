@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Annotations
         public string Section { get; set; }
         public HiddenType Hidden { get; set; }
         public PrivacyLevel Privacy { get; set; }
+        public string Placeholder { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
