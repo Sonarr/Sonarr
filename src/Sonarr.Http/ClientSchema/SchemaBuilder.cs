@@ -119,7 +119,8 @@ namespace Sonarr.Http.ClientSchema
                         Advanced = fieldAttribute.Advanced,
                         Type = fieldAttribute.Type.ToString().FirstCharToLower(),
                         Section = fieldAttribute.Section,
-                        Privacy = fieldAttribute.Privacy
+                        Privacy = fieldAttribute.Privacy,
+                        Placeholder = fieldAttribute.Placeholder
                     };
 
                     if (fieldAttribute.Type == FieldType.Select || fieldAttribute.Type == FieldType.TagSelect)
