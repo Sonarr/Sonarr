@@ -130,7 +130,11 @@ namespace Sonarr.Api.V3.Queue
 
             if (pendingRelease != null)
             {
-                _blocklistService.Block(pendingRelease.RemoteEpisode, "Pending release manually blocklisted");
+                if (blocklist)
+                {
+                    _blocklistService.Block(pendingRelease.RemoteEpisode, "Pending release manually blocklisted");
+                }
+
                 _pendingReleaseService.RemovePendingQueueItems(pendingRelease.Id);
 
                 return null;
