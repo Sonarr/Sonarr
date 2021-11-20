@@ -5,7 +5,7 @@
   text-align: center;
 
   &:hover {
-    color: $themeDarkColor;
+    color: var(--themeDarkColor);
   }
 }
 

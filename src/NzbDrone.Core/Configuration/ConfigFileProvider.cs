@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,6 +50,7 @@ namespace NzbDrone.Core.Configuration
         string SyslogServer { get; }
         int SyslogPort { get; }
         string SyslogLevel { get; }
+        string Theme { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -186,6 +187,8 @@ namespace NzbDrone.Core.Configuration
 
         public string LogLevel => GetValue("LogLevel", "info").ToLowerInvariant();
         public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
+
+        public string Theme => GetValue("Theme", "light", persist: false);
         public bool LogSql => GetValueBoolean("LogSql", false, persist: false);
         public int LogRotate => GetValueInt("LogRotate", 50, persist: false);
         public bool FilterSentryEvents => GetValueBoolean("FilterSentryEvents", true, persist: false);

@@ -39,7 +39,7 @@
 .dropdownArrowContainerDisabled {
   composes: dropdownArrowContainer;
 
-  color: $disabledInputColor;
+  color: var(--disabledInputColor);
 }
 
 .optionsContainer {
@@ -50,9 +50,9 @@
 .options {
   composes: scroller from '~Components/Scroller/Scroller.css';
 
-  border: 1px solid $inputBorderColor;
+  border: 1px solid var(--inputBorderColor);
   border-radius: 4px;
-  background-color: $white;
+  background-color: var(--inputBackgroundColor);
 }
 
 .optionsModal {
@@ -76,9 +76,9 @@
 .optionsModalScroller {
   composes: scroller from '~Components/Scroller/Scroller.css';
 
-  border: 1px solid $inputBorderColor;
+  border: 1px solid var(--inputBorderColor);
   border-radius: 4px;
-  background-color: $white;
+  background-color: var(--inputBackgroundColor);
 }
 
 .loading {
@@ -90,7 +90,7 @@
   display: flex;
   justify-content: flex-end;
   height: 40px;
-  border-bottom: 1px solid $borderColor;
+  border-bottom: 1px solid var(--borderColor);
 }
 
 .mobileCloseButton {
@@ -100,6 +100,6 @@
   line-height: 40px;
 
   &:hover {
-    color: $modalCloseButtonHoverColor;
+    color: var(--modalCloseButtonHoverColor);
   }
 }

@@ -27,10 +27,10 @@
 }
 
 .selectedTab {
-  border-color: $borderColor;
+  border-color: var(--borderColor);
   border-radius: 0 0 5px 5px;
   background-color: rgba(239, 239, 239, 0.4);
-  color: $black;
+  color: var(--black);
 }
 
 .tabContent {

@@ -9,5 +9,5 @@
 
 .path {
   margin-left: 5px;
-  color: $dangerColor;
+  color: var(--dangerColor);
 }

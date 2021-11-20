@@ -5,19 +5,19 @@
   padding: 10px 20px;
   min-width: 150px;
   max-width: 250px;
-  background-color: $toolbarMenuItemBackgroundColor;
-  color: $menuItemColor;
+  background-color: var(--toolbarMenuItemBackgroundColor);
+  color: var(--menuItemColor);
   line-height: 20px;
 
   &:hover,
   &:focus {
-    background-color: $toolbarMenuItemHoverBackgroundColor;
-    color: $menuItemHoverColor;
+    background-color: var(--toolbarMenuItemHoverBackgroundColor);
+    color: var(--menuItemHoverColor);
     text-decoration: none;
   }
 }
 
 .isDisabled {
-  color: $disabledColor;
+  color: var(--disabledColor);
   pointer-events: none;
 }

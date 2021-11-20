@@ -6,6 +6,6 @@
 }
 
 .isDisabled {
-  color: $disabledColor;
+  color: var(--disabledColor);
   cursor: not-allowed;
 }

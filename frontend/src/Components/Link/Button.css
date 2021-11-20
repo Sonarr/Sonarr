@@ -19,62 +19,62 @@
 }
 
 .danger {
-  border-color: $dangerBorderColor;
-  background-color: $dangerBackgroundColor;
-  color: $white;
+  border-color: var(--dangerBorderColor);
+  background-color: var(--dangerBackgroundColor);
+  color: var(--white);
 
   &:hover {
-    border-color: $dangerHoverBorderColor;
-    background-color: $dangerHoverBackgroundColor;
-    color: $white;
+    border-color: var(--dangerHoverBorderColor);
+    background-color: var(--dangerHoverBackgroundColor);
+    color: var(--white);
   }
 }
 
 .default {
-  border-color: $defaultBorderColor;
-  background-color: $defaultBackgroundColor;
-  color: $defaultColor;
+  border-color: var(--defaultBorderColor);
+  background-color: var(--defaultBackgroundColor);
+  color: var(--defaultColor);
 
   &:hover {
-    border-color: $defaultHoverBorderColor;
-    background-color: $defaultHoverBackgroundColor;
-    color: $defaultColor;
+    border-color: var(--defaultHoverBorderColor);
+    background-color: var(--defaultHoverBackgroundColor);
+    color: var(--defaultColor);
   }
 }
 
 .primary {
-  border-color: $primaryBorderColor;
-  background-color: $primaryBackgroundColor;
-  color: $white;
+  border-color: var(--primaryBorderColor);
+  background-color: var(--primaryBackgroundColor);
+  color: var(--white);
 
   &:hover {
-    border-color: $primaryHoverBorderColor;
-    background-color: $primaryHoverBackgroundColor;
-    color: $white;
+    border-color: var(--primaryHoverBorderColor);
+    background-color: var(--primaryHoverBackgroundColor);
+    color: var(--white);
   }
 }
 
 .success {
-  border-color: $successBorderColor;
-  background-color: $successBackgroundColor;
-  color: $white;
+  border-color: var(--successBorderColor);
+  background-color: var(--successBackgroundColor);
+  color: var(--white);
 
   &:hover {
-    border-color: $successHoverBorderColor;
-    background-color: $successHoverBackgroundColor;
-    color: $white;
+    border-color: var(--successHoverBorderColor);
+    background-color: var(--successHoverBackgroundColor);
+    color: var(--white);
   }
 }
 
 .warning {
-  border-color: $warningBorderColor;
-  background-color: $warningBackgroundColor;
-  color: $white;
+  border-color: var(--warningBorderColor);
+  background-color: var(--warningBackgroundColor);
+  color: var(--white);
 
   &:hover {
-    border-color: $warningHoverBorderColor;
-    background-color: $warningHoverBackgroundColor;
-    color: $white;
+    border-color: var(--warningHoverBorderColor);
+    background-color: var(--warningHoverBackgroundColor);
+    color: var(--white);
   }
 }
 

@@ -12,7 +12,7 @@
 .year {
   margin-right: 5px;
   margin-left: 5px;
-  color: $disabledColor;
+  color: var(--disabledColor);
 }
 
 .existing {

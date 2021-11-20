@@ -4,8 +4,8 @@
   flex: 0 0 auto;
   padding: 0 20px;
   height: $toolbarHeight;
-  background-color: $toolbarBackgroundColor;
-  color: $toolbarColor;
+  background-color: var(--toolbarBackgroundColor);
+  color: var(--toolbarColor);
   line-height: 60px;
 }
 

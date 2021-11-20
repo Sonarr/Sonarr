@@ -13,7 +13,7 @@
 }
 
 .faqLink {
-  color: $alertWarningColor;
+  color: var(--alertWarningColor);
   font-weight: bold;
 }
 

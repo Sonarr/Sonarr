@@ -21,7 +21,7 @@
 .alternateTitle {
   composes: title;
 
-  color: $disabledColor;
+  color: var(--disabledColor);
   font-size: $smallFontSize;
 }
 

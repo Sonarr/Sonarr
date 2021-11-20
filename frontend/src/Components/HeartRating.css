@@ -1,6 +1,6 @@
 .heart {
   margin-right: 5px;
-  color: $themeRed;
+  color: var(--themeRed);
 }
 
 .rating {

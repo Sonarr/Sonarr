@@ -1,5 +1,7 @@
 .page {
   composes: page from '~./Page.css';
+
+  background-color: var(--pageBackground);
 }
 
 .logoFull {

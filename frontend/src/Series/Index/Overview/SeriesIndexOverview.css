@@ -17,10 +17,10 @@ $hoverScale: 1.05;
   composes: link from '~Components/Link/Link.css';
 
   display: block;
-  color: $defaultColor;
+  color: var(--defaultColor);
 
   &:hover {
-    color: $defaultColor;
+    color: var(--defaultColor);
     text-decoration: none;
   }
 }
@@ -34,8 +34,8 @@ $hoverScale: 1.05;
   height: 0;
   border-width: 0 25px 25px 0;
   border-style: solid;
-  border-color: transparent $dangerColor transparent transparent;
-  color: $white;
+  border-color: transparent var(--dangerColor) transparent transparent;
+  color: var(--white);
 }
 
 .info {

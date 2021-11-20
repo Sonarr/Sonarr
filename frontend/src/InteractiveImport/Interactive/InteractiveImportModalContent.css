@@ -41,7 +41,7 @@
 }
 
 .errorMessage {
-  color: $dangerColor;
+  color: var(--dangerColor);
 }
 
 @media only screen and (max-width: $breakpointSmall) {

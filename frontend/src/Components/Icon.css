@@ -1,5 +1,5 @@
 .danger {
-  color: $dangerColor;
+  color: var(--dangerColor);
 }
 
 .default {
@@ -7,33 +7,33 @@
 }
 
 .disabled {
-  color: $disabledColor;
+  color: var(--disabledColor);
 }
 
 .info {
-  color: $infoColor;
+  color: var(--infoColor);
 
   &:global(.darken) {
-    color: color($infoColor shade(30%));
+    color: color(var(--infoColor) shade(30%));
   }
 }
 
 .pink {
-  color: $pink;
+  color: var(--pink);
 
   &:global(.darken) {
-    color: color($pink shade(30%));
+    color: color(var(--pink) shade(30%));
   }
 }
 
 .success {
-  color: $successColor;
+  color: var(--successColor);
 }
 
 .warning {
-  color: $warningColor;
+  color: var(--warningColor);
 }
 
 .purple {
-  color: $purple;
+  color: var(--purple);
 }

@@ -1,6 +1,6 @@
 .cell {
   padding: 8px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--borderColor);
   line-height: 1.52857143;
 }
 

@@ -4,7 +4,7 @@
   padding: 5px;
 
   &:hover {
-    background-color: $tableRowHoverBackgroundColor;
+    background-color: var(--tableRowHoverBackgroundColor);
   }
 }
 

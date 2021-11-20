@@ -4,7 +4,7 @@
   flex-direction: column;
   flex-grow: 1;
   width: 100%;
-  background-color: $modalBackgroundColor;
+  background-color: var(--modalBackgroundColor);
 }
 
 .closeButton {
@@ -18,6 +18,6 @@
   line-height: 60px;
 
   &:hover {
-    color: $modalCloseButtonHoverColor;
+    color: var(--modalCloseButtonHoverColor);
   }
 }

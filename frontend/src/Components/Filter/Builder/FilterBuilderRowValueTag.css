@@ -17,6 +17,6 @@
 
 .or {
   margin: 0 3px;
-  color: $themeDarkColor;
+  color: var(--themeDarkColor);
   line-height: 31px;
 }

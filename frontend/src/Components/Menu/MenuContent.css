@@ -2,7 +2,7 @@
   z-index: $popperZIndex;
   display: flex;
   flex-direction: column;
-  background-color: $toolbarMenuItemBackgroundColor;
+  background-color: var(--toolbarMenuItemBackgroundColor);
   line-height: 20px;
 }
 

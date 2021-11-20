@@ -40,7 +40,7 @@
 }
 
 .pendingChangesIcon {
-  color: $warningColor;
+  color: var(--warningColor);
   font-size: 20px;
   line-height: 35px;
 }

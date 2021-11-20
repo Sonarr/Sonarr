@@ -7,25 +7,25 @@
 }
 
 .danger {
-  border-color: $alertDangerBorderColor;
-  background-color: $alertDangerBackgroundColor;
-  color: $alertDangerColor;
+  border-color: var(--alertDangerBorderColor);
+  background-color: var(--alertDangerBackgroundColor);
+  color: var(--alertDangerColor);
 }
 
 .info {
-  border-color: $alertInfoBorderColor;
-  background-color: $alertInfoBackgroundColor;
-  color: $alertInfoColor;
+  border-color: var(--alertInfoBorderColor);
+  background-color: var(--alertInfoBackgroundColor);
+  color: var(--alertInfoColor);
 }
 
 .success {
-  border-color: $alertSuccessBorderColor;
-  background-color: $alertSuccessBackgroundColor;
-  color: $alertSuccessColor;
+  border-color: var(--alertSuccessBorderColor);
+  background-color: var(--alertSuccessBackgroundColor);
+  color: var(--alertSuccessColor);
 }
 
 .warning {
-  border-color: $alertWarningBorderColor;
-  background-color: $alertWarningBackgroundColor;
-  color: $alertWarningColor;
+  border-color: var(--alertWarningBorderColor);
+  background-color: var(--alertWarningBackgroundColor);
+  color: var(--alertWarningColor);
 }

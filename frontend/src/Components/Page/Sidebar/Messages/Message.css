@@ -1,6 +1,6 @@
 .message {
   display: flex;
-  border-left: 3px solid $infoColor;
+  border-left: 3px solid var(--infoColor);
 }
 
 .iconContainer,
@@ -9,7 +9,7 @@
   justify-content: center;
   flex-direction: column;
   padding: 2px 0;
-  color: $sidebarColor;
+  color: var(--sidebarColor);
 }
 
 .iconContainer {
@@ -26,17 +26,17 @@
 /* Types */
 
 .error {
-  border-left-color: $dangerColor;
+  border-left-color: var(--dangerColor);
 }
 
 .info {
-  border-left-color: $infoColor;
+  border-left-color: var(--infoColor);
 }
 
 .success {
-  border-left-color: $successColor;
+  border-left-color: var(--successColor);
 }
 
 .warning {
-  border-left-color: $warningColor;
+  border-left-color: var(--warningColor);
 }

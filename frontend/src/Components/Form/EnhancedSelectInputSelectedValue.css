@@ -3,5 +3,5 @@
 }
 
 .isDisabled {
-  color: $disabledInputColor;
+  color: var(--disabledInputColor);
 }

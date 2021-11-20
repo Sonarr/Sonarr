@@ -6,8 +6,8 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #f5f5f5;
-  color: #3a3f51;
+  background-color: var(--logEventsBackgroundColor);
+  color: var(--textColor);
   white-space: pre;
   word-wrap: break-word;
   word-break: break-all;

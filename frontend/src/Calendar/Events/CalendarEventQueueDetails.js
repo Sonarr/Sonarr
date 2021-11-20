@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import colors from 'Styles/Variables/colors';
-import CircularProgressBar from 'Components/CircularProgressBar';
 import QueueDetails from 'Activity/Queue/QueueDetails';
+import CircularProgressBar from 'Components/CircularProgressBar';
 
 function CalendarEventQueueDetails(props) {
   const {
@@ -34,7 +33,7 @@ function CalendarEventQueueDetails(props) {
             progress={progress}
             size={20}
             strokeWidth={2}
-            strokeColor={colors.purple}
+            strokeColor={'#7a43b6'}
           />
         </div>
       }

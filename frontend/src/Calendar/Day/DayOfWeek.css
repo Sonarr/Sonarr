@@ -1,6 +1,6 @@
 .dayOfWeek {
   flex: 1 0 14.28%;
-  background-color: #e4eaec;
+  background-color: var(--calendarBackgroudColor);
   text-align: center;
 }
 
@@ -9,5 +9,5 @@
 }
 
 .isToday {
-  background-color: $calendarTodayBackgroundColor;
+  background-color: var(--calendarTodayBackgroundColor);
 }

@@ -3,7 +3,7 @@
   margin: 2px;
   border: 1px solid;
   border-radius: 2px;
-  color: $white;
+  color: var(--white);
   text-align: center;
   white-space: nowrap;
   line-height: 1;
@@ -13,78 +13,78 @@
 /** Kinds **/
 
 .danger {
-  border-color: $dangerColor;
-  background-color: $dangerColor;
+  border-color: var(--dangerColor);
+  background-color: var(--dangerColor);
 
   &.outline {
-    color: $dangerColor;
+    color: var(--dangerColor);
   }
 }
 
 .default {
-  border-color: $themeLightColor;
-  background-color: $themeLightColor;
+  border-color: var(--themeLightColor);
+  background-color: var(--themeLightColor);
 
   &.outline {
-    color: $themeLightColor;
+    color: var(--themeLightColor);
   }
 }
 
 .disabled {
-  border-color: $disabledColor;
-  background-color: $disabledColor;
+  border-color: var(--disabledColor);
+  background-color: var(--disabledColor);
 
   &.outline {
-    color: $disabledColor;
+    color: var(--white);
   }
 }
 
 .info {
-  border-color: $infoColor;
-  background-color: $infoColor;
-  color: $themeLightColor;
+  border-color: var(--infoColor);
+  background-color: var(--infoColor);
+  color: var(--infoTextColor);
 
   &.outline {
-    color: $infoColor;
+    color: var(--infoColor);
   }
 }
 
 .inverse {
-  border-color: $lightGray;
-  background-color: $lightGray;
-  color: $defaultColor;
+  border-color: var(--inverseLabelColor);
+  background-color: var(--inverseLabelColor);
+  color: var(--inverseLabelTextColor);
 
   &.outline {
-    background-color: $defaultColor !important;
-    color: $lightGray;
+    background-color: var(--inverseLabelTextColor) !important;
+    color: var(--inverseLabelColor);
   }
 }
 
 .primary {
-  border-color: $primaryColor;
-  background-color: $primaryColor;
+  border-color: var(--primaryColor);
+  background-color: var(--primaryColor);
 
   &.outline {
-    color: $primaryColor;
+    color: var(--primaryColor);
   }
 }
 
 .success {
-  border-color: $successColor;
-  background-color: $successColor;
+  border-color: var(--successColor);
+  background-color: var(--successColor);
   color: #eee;
 
   &.outline {
-    color: $successColor;
+    color: var(--successColor);
   }
 }
 
 .warning {
-  border-color: $warningColor;
-  background-color: $warningColor;
+  border-color: var(--warningColor);
+  background-color: var(--warningColor);
 
   &.outline {
-    color: $warningColor;
+    color: var(--warningColor);
   }
 }
 
@@ -109,5 +109,5 @@
 /** Outline **/
 
 .outline {
-  background-color: $white;
+  background-color: var(--disabledLabelColor);
 }

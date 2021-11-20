@@ -10,12 +10,12 @@
   }
 
   &:hover {
-    color: $toobarButtonHoverColor;
+    color: var(--toobarButtonHoverColor);
   }
 }
 
 .isDisabled {
-  color: $disabledColor;
+  color: var(--disabledColor);
 
   pointer-events: none;
 }

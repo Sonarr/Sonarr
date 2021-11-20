@@ -7,11 +7,11 @@
 }
 
 .hasError {
-  color: $dangerColor;
+  color: var(--dangerColor);
 }
 
 .isAdvanced {
-  color: $advancedFormLabelColor;
+  color: var(--advancedFormLabelColor);
 }
 
 @media only screen and (max-width: $breakpointLarge) {

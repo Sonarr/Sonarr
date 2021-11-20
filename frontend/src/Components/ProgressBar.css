@@ -3,7 +3,7 @@
   overflow: hidden;
   width: 100%;
   border-radius: 4px;
-  background-color: #f5f5f5;
+  background-color: var(--progressBarBackgroundColor);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -14,13 +14,13 @@
   width: 0;
   height: 100%;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-  color: $white;
+  color: var(--white);
   transition: width 0.6s ease;
 }
 
 .frontTextContainer {
   z-index: 1;
-  color: $white;
+  color: var(--white);
 }
 
 .backTextContainer,
@@ -42,35 +42,35 @@
 }
 
 .primary {
-  background-color: $primaryColor;
+  background-color: var(--primaryColor);
 }
 
 .danger {
-  background-color: $dangerColor;
+  background-color: var(--dangerColor);
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, color($dangerColor shade(5%)), color($dangerColor shade(5%)) 5px, color($dangerColor shade(15%)) 5px, color($dangerColor shade(15%)) 10px);
+    background: repeating-linear-gradient(90deg, color(#f05050 shade(5%)), color(#f05050 shade(5%)) 5px, color(#f05050 shade(15%)) 5px, color(#f05050 shade(15%)) 10px);
   }
 }
 
 .success {
-  background-color: $successColor;
+  background-color: var(--successColor);
 }
 
 .purple {
-  background-color: $purple;
+  background-color: var(--purple);
 }
 
 .warning {
-  background-color: $warningColor;
+  background-color: var(--warningColor);
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(45deg, $warningColor, $warningColor 5px, color($warningColor tint(15%)) 5px, color($warningColor tint(15%)) 10px);
+    background: repeating-linear-gradient(45deg, #ffa500, #ffa500 5px, color(#ffa500 tint(15%)) 5px, color(#ffa500 tint(15%)) 10px);
   }
 }
 
 .info {
-  background-color: $infoColor;
+  background-color: var(--infoColor);
 }
 
 .small {

@@ -10,6 +10,8 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
+import themes from 'Styles/Themes';
+import titleCase from 'Utilities/String/titleCase';
 
 export const firstDayOfWeekOptions = [
   { key: 0, value: 'Sunday' },
@@ -57,6 +59,9 @@ class UISettings extends Component {
       onSavePress,
       ...otherProps
     } = this.props;
+
+    const themeOptions = Object.keys(themes)
+      .map((theme) => ({ key: theme, value: titleCase(theme) }));
 
     return (
       <PageContent title="UI Settings">
@@ -163,6 +168,18 @@ class UISettings extends Component {
                 <FieldSet
                   legend="Style"
                 >
+                  <FormGroup>
+                    <FormLabel>Theme</FormLabel>
+                    <FormInputGroup
+                      type={inputTypes.SELECT}
+                      name="theme"
+                      helpText="Change Application UI Theme, Inspired by Theme.Park"
+                      values={themeOptions}
+                      onChange={onInputChange}
+                      {...settings.theme}
+                    />
+                  </FormGroup>
+
                   <FormGroup>
                     <FormLabel>Enable Color-Impaired Mode</FormLabel>
                     <FormInputGroup

@@ -1,21 +1,21 @@
 .item {
   border-left: 3px solid transparent;
-  color: $sidebarColor;
+  color: var(--sidebarColor);
   transition: border-left 0.3s ease-in-out;
 }
 
 .isActiveItem {
-  border-left: 3px solid $themeAlternateBlue;
+  border-left: 3px solid var(--themeAlternateBlue);
 }
 
 .link {
   display: block;
   padding: 12px 24px;
-  color: $sidebarColor;
+  color: var(--sidebarColor);
 
   &:hover,
   &:focus {
-    color: $themeBlue;
+    color: var(--themeBlue);
     text-decoration: none;
   }
 }
@@ -27,11 +27,11 @@
 }
 
 .isActiveLink {
-  color: $themeAlternateBlue;
+  color: var(--themeAlternateBlue);
 }
 
 .isActiveParentLink {
-  background-color: $sidebarActiveBackgroundColor;
+  background-color: var(--sidebarActiveBackgroundColor);
 }
 
 .iconContainer {

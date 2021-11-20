@@ -2,7 +2,7 @@
   composes: link from '~Components/Link/Link.css';
 
   border-bottom: 1px solid #e5e5e5;
-  color: #3a3f51;
+  color: var(--textColor);
   font-size: 21px;
 
   &:hover {
@@ -14,5 +14,5 @@
 .summary {
   margin-top: 10px;
   margin-bottom: 30px;
-  color: $dimColor;
+  color: var(--helpTextColor);
 }

@@ -10,7 +10,7 @@
 .restriction {
   margin-bottom: 5px;
   padding-bottom: 5px;
-  border-bottom: 1px solid $borderColor;
+  border-bottom: 1px solid var(--borderColor);
 
   &:last-child {
     margin: 0;
