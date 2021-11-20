@@ -3,7 +3,7 @@
 }
 
 .readOnly {
-  background-color: #eee;
+  background-color: var(--inputReadOnlyBackgroundColor);
 }
 
 .hasError {

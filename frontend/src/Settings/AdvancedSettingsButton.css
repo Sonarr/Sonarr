@@ -19,13 +19,13 @@
 }
 
 .indicatorBackground {
-  color: $themeDarkColor;
+  color: var(--themeDarkColor);
 }
 
 .enabled {
-  color: $successColor;
+  color: var(--successColor);
 }
 
 .disabled {
-  color: $dangerColor;
+  color: var(--dangerColor);
 }

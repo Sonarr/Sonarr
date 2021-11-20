@@ -2,7 +2,7 @@
   display: flex;
   margin-bottom: 5px;
   padding: 5px 0;
-  border-bottom: 1px solid $borderColor;
+  border-bottom: 1px solid var(--borderColor);
 
   &:last-of-type {
     margin-bottom: 0;

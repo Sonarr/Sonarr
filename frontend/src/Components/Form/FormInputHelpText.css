@@ -1,14 +1,14 @@
 .helpText {
   margin-top: 5px;
-  color: $helpTextColor;
+  color: var(--helpTextColor);
   line-height: 20px;
 }
 
 .isError {
-  color: $dangerColor;
+  color: var(--dangerColor);
 
   .link {
-    color: $dangerColor;
+    color: var(--dangerColor);
 
     &:hover {
       color: #e01313;
@@ -17,10 +17,10 @@
 }
 
 .isWarning {
-  color: $warningColor;
+  color: var(--warningColor);
 
   .link {
-    color: $warningColor;
+    color: var(--warningColor);
 
     &:hover {
       color: #e36c00;

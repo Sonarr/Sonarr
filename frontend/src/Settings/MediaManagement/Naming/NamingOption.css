@@ -3,7 +3,7 @@
   align-items: stretch;
   flex-wrap: wrap;
   margin: 3px;
-  border: 1px solid $borderColor;
+  border: 1px solid var(--borderColor);
 
   &:hover {
     .token {
@@ -27,7 +27,7 @@
 .token {
   flex: 0 0 50%;
   padding: 6px 16px;
-  background-color: #eee;
+  background-color: var(--popoverTitleBackgroundColor);
   font-family: $monoSpaceFontFamily;
 }
 
@@ -37,7 +37,7 @@
   justify-content: space-between;
   flex: 0 0 50%;
   padding: 6px 16px;
-  background-color: #ddd;
+  background-color: var(--popoverBodyBackgroundColor);
 
   .footNote {
     padding: 2px;

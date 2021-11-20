@@ -21,32 +21,32 @@
 .continuing {
   composes: legendItemColor;
 
-  background-color: $primaryColor;
+  background-color: var(--primaryColor);
 }
 
 .ended {
   composes: legendItemColor;
 
-  background-color: $successColor;
+  background-color: var(--successColor);
 }
 
 .missingMonitored {
   composes: legendItemColor;
 
-  background-color: $dangerColor;
+  background-color: var(--dangerColor);
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, color($dangerColor shade(5%)), color($dangerColor shade(5%)) 5px, color($dangerColor shade(15%)) 5px, color($dangerColor shade(15%)) 10px);
+    background: repeating-linear-gradient(90deg, color(#f05050 shade(5%)), color(#f05050 shade(5%)) 5px, color(#f05050 shade(15%)) 5px, color(#f05050 shade(15%)) 10px);
   }
 }
 
 .missingUnmonitored {
   composes: legendItemColor;
 
-  background-color: $warningColor;
+  background-color: var(--warningColor);
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(45deg, $warningColor, $warningColor 5px, color($warningColor tint(15%)) 5px, color($warningColor tint(15%)) 10px);
+    background: repeating-linear-gradient(45deg, #ffa500, #ffa500 5px, color(#ffa500 tint(15%)) 5px, color(#ffa500 tint(15%)) 10px);
   }
 }
 

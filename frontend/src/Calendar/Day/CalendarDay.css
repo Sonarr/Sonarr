@@ -2,8 +2,8 @@
   flex: 1 0 14.28%;
   overflow: hidden;
   min-height: 70px;
-  border-bottom: 1px solid $calendarBorderColor;
-  border-left: 1px solid $calendarBorderColor;
+  border-bottom: 1px solid var(--calendarBorderColor);
+  border-left: 1px solid var(--calendarBorderColor);
 }
 
 .isSingleDay {
@@ -12,14 +12,14 @@
 
 .dayOfMonth {
   padding-right: 5px;
-  border-bottom: 1px solid $calendarBorderColor;
+  border-bottom: 1px solid var(--calendarBorderColor);
   text-align: right;
 }
 
 .isToday {
-  background-color: $calendarTodayBackgroundColor;
+  background-color: var(--calendarTodayBackgroundColor);
 }
 
 .isDifferentMonth {
-  color: $disabledColor;
+  color: var(--disabledColor);
 }

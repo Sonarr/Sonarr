@@ -15,10 +15,10 @@
 }
 
 .to {
-  color: $linkColor;
+  color: var(--linkColor);
 
   &:hover {
-    color: $linkHoverColor;
+    color: var(--linkHoverColor);
     text-decoration: underline;
   }
 }

@@ -26,7 +26,7 @@
 
 .ripple {
   position: absolute;
-  border: 2px solid #3a3f51;
+  border: 2px solid var(--themeDarkColor);
   border-radius: 100%;
   animation: rippleContainer 1.25s 0s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
   animation-fill-mode: both;

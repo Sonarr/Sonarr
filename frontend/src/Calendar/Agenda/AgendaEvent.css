@@ -2,11 +2,11 @@
   display: flex;
   overflow-x: hidden;
   padding: 5px;
-  border-bottom: 1px solid $borderColor;
+  border-bottom: 1px solid var(--borderColor);
   font-size: $defaultFontSize;
 
   &:hover {
-    background-color: $tableRowHoverBackgroundColor;
+    background-color: var(--tableRowHoverBackgroundColor);
   }
 }
 

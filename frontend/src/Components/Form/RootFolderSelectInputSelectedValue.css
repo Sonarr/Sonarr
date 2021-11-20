@@ -20,13 +20,13 @@
 .seriesFolder {
   @add-mixin truncate;
   flex: 0 1 auto;
-  color: $disabledColor;
+  color: var(--disabledColor);
 }
 
 .freeSpace {
   flex: 0 0 auto;
   margin-left: 15px;
-  color: $gray;
+  color: var(--gray);
   text-align: right;
   font-size: $smallFontSize;
 }

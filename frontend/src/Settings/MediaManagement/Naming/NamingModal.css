@@ -19,7 +19,7 @@
 
 .footNote {
   display: flex;
-  color: $helpTextColor;
+  color: var(--helpTextColor);
 
   .icon {
     margin-top: 3px;
@@ -29,7 +29,7 @@
 
   code {
     padding: 0 1px;
-    border: 1px solid $borderColor;
+    border: 1px solid var(--borderColor);
     background-color: #f7f7f7;
   }
 }

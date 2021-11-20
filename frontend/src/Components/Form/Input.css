@@ -2,26 +2,27 @@
   padding: 6px 16px;
   width: 100%;
   height: 35px;
-  border: 1px solid $inputBorderColor;
+  border: 1px solid var(--inputBorderColor);
   border-radius: 4px;
-  background-color: $white;
-  box-shadow: inset 0 1px 1px $inputBoxShadowColor;
+  background-color: var(--inputBackgroundColor);
+  box-shadow: inset 0 1px 1px var(--inputBoxShadowColor);
+  color: var(--textColor);
 
   &:focus {
     outline: 0;
-    border-color: $inputFocusBorderColor;
-    box-shadow: inset 0 1px 1px $inputBoxShadowColor, 0 0 8px $inputFocusBoxShadowColor;
+    border-color: var(--inputFocusBorderColor);
+    box-shadow: inset 0 1px 1px var(--inputBoxShadowColor), 0 0 8px var(--inputFocusBoxShadowColor);
   }
 }
 
 .hasError {
-  border-color: $inputErrorBorderColor;
-  box-shadow: inset 0 1px 1px $inputBoxShadowColor, 0 0 8px $inputErrorBoxShadowColor;
+  border-color: var(--inputErrorBorderColor);
+  box-shadow: inset 0 1px 1px var(--inputBoxShadowColor), 0 0 8px var(--inputErrorBoxShadowColor);
 }
 
 .hasWarning {
-  border-color: $inputWarningBorderColor;
-  box-shadow: inset 0 1px 1px $inputBoxShadowColor, 0 0 8px $inputWarningBoxShadowColor;
+  border-color: var(--inputWarningBorderColor);
+  box-shadow: inset 0 1px 1px var(--inputBoxShadowColor), 0 0 8px var(--inputWarningBoxShadowColor);
 }
 
 .hasButton {

@@ -27,7 +27,7 @@
 
 .path {
   margin-right: 20px;
-  color: $dimColor;
+  color: var(--dimColor);
   word-break: break-word;
 }
 

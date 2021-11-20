@@ -4,7 +4,7 @@
 
 .year {
   margin-left: 5px;
-  color: $disabledColor;
+  color: var(--disabledColor);
 }
 
 .poster {

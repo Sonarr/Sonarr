@@ -31,28 +31,28 @@
 }
 
 .levelMixed {
-  border-color: $dangerColor;
-  color: $dangerColor;
+  border-color: var(--dangerColor);
+  color: var(--dangerColor);
 }
 
 .levelUnknown {
-  border-color: $warningColor;
-  color: $warningColor;
+  border-color: var(--warningColor);
+  color: var(--warningColor);
 }
 
 .levelMapped {
-  border-color: $textColor;
-  color: $textColor;
+  border-color: var(--textColor);
+  color: var(--textColor);
 }
 
 .levelNormal {
-  border-color: $textColor;
-  color: $textColor;
+  border-color: var(--textColor);
+  color: var(--textColor);
 }
 
 .levelNone {
-  border-color: $textColor;
-  color: $textColor;
+  border-color: var(--textColor);
+  color: var(--textColor);
   opacity: 0.2;
 
   &:hover {
@@ -61,6 +61,6 @@
 }
 
 .levelNotRequested {
-  border-color: $dangerColor;
-  color: $dangerColor;
+  border-color: var(--dangerColor);
+  color: var(--dangerColor);
 }

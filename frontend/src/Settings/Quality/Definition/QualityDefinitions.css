@@ -25,7 +25,7 @@
 
 .sizeLimitHelpText {
   max-width: 500px;
-  color: $helpTextColor;
+  color: var(--helpTextColor);
 }
 
 @media only screen and (max-width: $breakpointSmall) {

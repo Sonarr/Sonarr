@@ -2,10 +2,10 @@
   width: 100%;
   border: 1px solid #aaa;
   border-radius: 4px;
-  background: #fafafa;
+  background: var(--inputBackgroundColor);
 
   &.editGroups {
-    background: #fcfcfc;
+    background: var(--inputBackgroundColor);
   }
 }
 

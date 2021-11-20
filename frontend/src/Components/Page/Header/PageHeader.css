@@ -4,8 +4,8 @@
   align-items: center;
   flex: 0 0 auto;
   height: $headerHeight;
-  background-color: $themeAlternateBlue;
-  color: $white;
+  background-color: var(--pageHeaderBackgroundColor);
+  color: var(--white);
 }
 
 .logoContainer {
@@ -41,7 +41,7 @@
   composes: link from '~Components/Link/Link.css';
 
   width: 30px;
-  color: $themeRed;
+  color: var(--themeRed);
   text-align: center;
   line-height: 60px;
 

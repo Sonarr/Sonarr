@@ -3,5 +3,5 @@
   margin: -8px 0;
   width: 100%;
   height: 25px;
-  border: 2px dashed $dangerColor;
+  border: 2px dashed var(--dangerColor);
 }

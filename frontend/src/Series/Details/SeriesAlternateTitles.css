@@ -3,6 +3,6 @@
 }
 
 .comment {
-  color: $darkGray;
+  color: var(--darkGray);
   font-size: $smallFontSize;
 }

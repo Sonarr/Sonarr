@@ -15,7 +15,7 @@
 
 html,
 body {
-  color: #515253;
+  color: var(--textColor);
   font-family: 'Roboto', 'open sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 

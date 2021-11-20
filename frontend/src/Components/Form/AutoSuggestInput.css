@@ -27,10 +27,10 @@
     overflow-y: auto;
     max-height: 200px;
     width: 100%;
-    border: 1px solid $inputBorderColor;
+    border: 1px solid var(--inputBorderColor);
     border-radius: 4px;
-    background-color: $white;
-    box-shadow: inset 0 1px 1px $inputBoxShadowColor;
+    background-color: var(--inputBackgroundColor);
+    box-shadow: inset 0 1px 1px var(--inputBoxShadowColor);
   }
 }
 
@@ -46,5 +46,5 @@
 }
 
 .suggestionHighlighted {
-  background-color: $menuItemHoverBackgroundColor;
+  background-color: var(--menuItemHoverBackgroundColor);
 }

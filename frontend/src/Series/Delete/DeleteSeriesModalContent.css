@@ -8,5 +8,5 @@
 
 .deleteFilesMessage {
   margin-top: 20px;
-  color: $dangerColor;
+  color: var(--dangerColor);
 }

@@ -46,11 +46,11 @@
 }
 
 .records {
-  color: $disabledColor;
+  color: var(--disabledColor);
 }
 
 .disabledPageButton {
-  color: $disabledColor;
+  color: var(--disabledColor);
 }
 
 .pageSelect {

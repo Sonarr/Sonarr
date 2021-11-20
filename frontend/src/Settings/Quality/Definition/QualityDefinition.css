@@ -4,7 +4,7 @@
   margin: 5px 0;
   padding-top: 5px;
   height: 45px;
-  border-top: 1px solid $borderColor;
+  border-top: 1px solid var(--borderColor);
 }
 
 .quality,
@@ -28,7 +28,7 @@
   top: 9px;
   margin: 0 5px;
   height: 3px;
-  background-color: $sliderAccentColor;
+  background-color: var(--sliderAccentColor);
   box-shadow: 0 0 0 #000;
 
   &:nth-child(odd) {
@@ -41,9 +41,9 @@
   z-index: 0 !important;
   width: 18px;
   height: 18px;
-  border: 3px solid $sliderAccentColor;
+  border: 3px solid var(--sliderAccentColor);
   border-radius: 50%;
-  background-color: $white;
+  background-color: var(--white);
   text-align: center;
   cursor: pointer;
 }

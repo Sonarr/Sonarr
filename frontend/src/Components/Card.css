@@ -3,9 +3,9 @@
   margin: 10px;
   padding: 10px;
   border-radius: 3px;
-  background-color: $white;
-  box-shadow: 0 0 10px 1px $cardShadowColor;
-  color: $defaultColor;
+  background-color: var(--cardBackgroundColor);
+  box-shadow: 0 0 10px 1px var(--cardShadowColor);
+  color: var(--defaultColor);
 }
 
 .underlay {

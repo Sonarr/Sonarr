@@ -1,7 +1,6 @@
 const reload = require('require-nocache')(module);
 
 const cssVarsFiles = [
-  './src/Styles/Variables/colors',
   './src/Styles/Variables/dimensions',
   './src/Styles/Variables/fonts',
   './src/Styles/Variables/animations',

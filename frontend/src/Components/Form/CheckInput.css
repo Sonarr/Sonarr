@@ -32,21 +32,21 @@
   height: 20px;
   border: 1px solid #ccc;
   border-radius: 2px;
-  background-color: $white;
-  color: $white;
+  background-color: var(--white);
+  color: var(--white);
   text-align: center;
   line-height: 20px;
 }
 
 .checkbox:focus + .input {
   outline: 0;
-  border-color: $inputFocusBorderColor;
-  box-shadow: inset 0 1px 1px $inputBoxShadowColor, 0 0 8px $inputFocusBoxShadowColor;
+  border-color: var(--inputFocusBorderColor);
+  box-shadow: inset 0 1px 1px var(--inputBoxShadowColor), 0 0 8px var(--inputFocusBoxShadowColor);
 }
 
 .dangerIsChecked {
-  border-color: $dangerColor;
-  background-color: $dangerColor;
+  border-color: var(--dangerColor);
+  background-color: var(--dangerColor);
 
   &.isDisabled {
     opacity: 0.7;
@@ -54,8 +54,8 @@
 }
 
 .primaryIsChecked {
-  border-color: $primaryColor;
-  background-color: $primaryColor;
+  border-color: var(--primaryColor);
+  background-color: var(--primaryColor);
 
   &.isDisabled {
     opacity: 0.7;
@@ -63,8 +63,8 @@
 }
 
 .successIsChecked {
-  border-color: $successColor;
-  background-color: $successColor;
+  border-color: var(--successColor);
+  background-color: var(--successColor);
 
   &.isDisabled {
     opacity: 0.7;
@@ -72,8 +72,8 @@
 }
 
 .warningIsChecked {
-  border-color: $warningColor;
-  background-color: $warningColor;
+  border-color: var(--warningColor);
+  background-color: var(--warningColor);
 
   &.isDisabled {
     opacity: 0.7;
@@ -82,15 +82,15 @@
 
 .isNotChecked {
   &.isDisabled {
-    border-color: $disabledCheckInputColor;
-    background-color: $disabledCheckInputColor;
+    border-color: var(--disabledCheckInputColor);
+    background-color: var(--disabledCheckInputColor);
     opacity: 0.7;
   }
 }
 
 .isIndeterminate {
-  border-color: $gray;
-  background-color: $gray;
+  border-color: var(--gray);
+  background-color: var(--gray);
 }
 
 .helpText {

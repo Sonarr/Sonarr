@@ -6,16 +6,16 @@
   text-align: center;
 
   &:hover {
-    color: $toobarButtonHoverColor;
+    color: var(--toobarButtonHoverColor);
   }
 
   &.isDisabled {
-    color: $disabledColor;
+    color: var(--disabledColor);
   }
 }
 
 .isDisabled {
-  color: $disabledColor;
+  color: var(--disabledColor);
 }
 
 .labelContainer {
@@ -27,7 +27,7 @@
 
 .label {
   padding: 0 3px;
-  color: $toolbarLabelColor;
+  color: var(--toolbarLabelColor);
   font-size: $extraSmallFontSize;
   line-height: calc($extraSmallFontSize + 1px);
 }

@@ -17,15 +17,15 @@
 }
 
 .warn {
-  color: $warningColor;
+  color: var(--warningColor);
 }
 
 .error {
-  color: $dangerColor;
+  color: var(--dangerColor);
 }
 
 .fatal {
-  color: $purple;
+  color: var(--purple);
 }
 
 .actions {
