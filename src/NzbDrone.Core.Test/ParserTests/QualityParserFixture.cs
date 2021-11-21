@@ -25,6 +25,8 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { Quality.Bluray720p },
             new object[] { Quality.Bluray1080p },
             new object[] { Quality.Bluray2160p },
+            new object[] { Quality.Bluray1080pRemux },
+            new object[] { Quality.Bluray2160pRemux },
         };
 
         public static object[] OtherSourceQualityParserCases =
@@ -41,6 +43,8 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "720p BluRay", Quality.Bluray720p },
             new object[] { "1080p BluRay", Quality.Bluray1080p },
             new object[] { "2160p BluRay", Quality.Bluray2160p },
+            new object[] { "1080p Remux", Quality.Bluray1080pRemux },
+            new object[] { "2160p Remux", Quality.Bluray2160pRemux },
         };
 
         [TestCase("S07E23 .avi ", false)]
