@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
                     .AddFormParameter("notification[title]", title)
                     .AddFormParameter("notification[long_message]", message)
                     .AddFormParameter("notification[source_name]", BuildInfo.AppName)
-                    .AddFormParameter("notification[icon_url]", "https://raw.githubusercontent.com/Sonarr/Sonarr/phantom-develop/Logo/64.png")
+                    .AddFormParameter("notification[icon_url]", "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/64.png")
                     .Build();
 
                 _httpClient.Post(request);
