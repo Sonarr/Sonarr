@@ -12,6 +12,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.RootFolders;
@@ -36,8 +37,10 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly IConfigService _configService;
         private readonly ISeriesService _seriesService;
+        private readonly IMediaFileService _mediaFileService;
         private readonly IMediaFileTableCleanupService _mediaFileTableCleanupService;
         private readonly IRootFolderService _rootFolderService;
+        private readonly IUpdateMediaInfo _updateMediaInfoService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -46,8 +49,10 @@ namespace NzbDrone.Core.MediaFiles
                                IImportApprovedEpisodes importApprovedEpisodes,
                                IConfigService configService,
                                ISeriesService seriesService,
+                               IMediaFileService mediaFileService,
                                IMediaFileTableCleanupService mediaFileTableCleanupService,
                                IRootFolderService rootFolderService,
+                               IUpdateMediaInfo updateMediaInfoService,
                                IEventAggregator eventAggregator,
                                Logger logger)
         {
@@ -56,8 +61,10 @@ namespace NzbDrone.Core.MediaFiles
             _importApprovedEpisodes = importApprovedEpisodes;
             _configService = configService;
             _seriesService = seriesService;
+            _mediaFileService = mediaFileService;
             _mediaFileTableCleanupService = mediaFileTableCleanupService;
             _rootFolderService = rootFolderService;
+            _updateMediaInfoService = updateMediaInfoService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -124,11 +131,43 @@ namespace NzbDrone.Core.MediaFiles
 
             CleanMediaFiles(series, mediaFileList);
 
+            var seriesFiles = _mediaFileService.GetFilesBySeries(series.Id);
+            var unmappedFiles = MediaFileService.FilterExistingFiles(mediaFileList, seriesFiles, series);
+
             var decisionsStopwatch = Stopwatch.StartNew();
-            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
+            var decisions = _importDecisionMaker.GetImportDecisions(unmappedFiles, series, false);
             decisionsStopwatch.Stop();
             _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
             _importApprovedEpisodes.Import(decisions, false);
+
+            // Update existing files that have a different file size
+
+            var fileInfoStopwatch = Stopwatch.StartNew();
+            var filesToUpdate = new List<EpisodeFile>();
+
+            foreach (var file in seriesFiles)
+            {
+                var path = Path.Combine(series.Path, file.RelativePath);
+                var fileSize = _diskProvider.GetFileSize(path);
+
+                if (file.Size == fileSize) continue;
+
+                file.Size = fileSize;
+
+                if (!_updateMediaInfoService.Update(file, series))
+                {
+                    filesToUpdate.Add(file);
+                }
+            }
+
+            // Update any files that had a file size change, but didn't get media info updated.
+            if (filesToUpdate.Any())
+            {
+                _mediaFileService.Update(filesToUpdate);
+            }
+
+            fileInfoStopwatch.Stop();
+            _logger.Trace("Reprocessing existing files complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
 
             RemoveEmptySeriesFolder(series.Path);
             CompletedScanning(series);

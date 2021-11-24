@@ -15,6 +15,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     public interface IMakeImportDecision
     {
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series);
+        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, bool filterExistingFiles);
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource);
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource, bool filterExistingFiles);
         ImportDecision GetDecision(LocalEpisode localEpisode, DownloadClientItem downloadClientItem);
@@ -46,7 +47,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series)
         {
-            return GetImportDecisions(videoFiles, series, null, null, false);
+            return GetImportDecisions(videoFiles, series, false);
+        }
+
+        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, bool filterExistingFiles)
+        {
+            return GetImportDecisions(videoFiles, series, null, null, false, filterExistingFiles);
         }
 
         public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource)
