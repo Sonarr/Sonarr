@@ -603,10 +603,12 @@ namespace NzbDrone.Core.Organizer
         }
 
         private const string MediaInfoVideoDynamicRangeToken = "{MediaInfo VideoDynamicRange}";
+        private const string MediaInfoVideoDynamicRangeTypeToken = "{MediaInfo VideoDynamicRangeType}";
         private static readonly IDictionary<string, int> MinimumMediaInfoSchemaRevisions =
             new Dictionary<string, int>(FileNameBuilderTokenEqualityComparer.Instance)
         {
-            {MediaInfoVideoDynamicRangeToken, 5}
+            {MediaInfoVideoDynamicRangeToken, 5},
+            {MediaInfoVideoDynamicRangeTypeToken, 5}
         };
 
         private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)
@@ -650,6 +652,8 @@ namespace NzbDrone.Core.Organizer
 
             tokenHandlers[MediaInfoVideoDynamicRangeToken] =
                 m => MediaInfoFormatter.FormatVideoDynamicRange(episodeFile.MediaInfo);
+            tokenHandlers[MediaInfoVideoDynamicRangeTypeToken] =
+                m => MediaInfoFormatter.FormatVideoDynamicRangeType(episodeFile.MediaInfo);
         }
 
         private void AddIdTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)

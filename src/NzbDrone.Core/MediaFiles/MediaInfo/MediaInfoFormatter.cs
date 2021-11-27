@@ -585,26 +585,29 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return tokens.Last();
         }
 
-        private static readonly string[] ValidHdrTransferFunctions = {"PQ", "HLG"};
-        private const string ValidHdrColourPrimaries = "BT.2020";
-        private const string VideoDynamicRangeHdr = "HDR";
-
         public static string FormatVideoDynamicRange(MediaInfoModel mediaInfo)
         {
-            if (mediaInfo.VideoHdrFormat.IsNotNullOrWhiteSpace())
-            {
-                return VideoDynamicRangeHdr;
-            }
+            return mediaInfo.GetHdrFormat() == HdrFormat.None ? "" : "HDR";
+        }
 
-            if (mediaInfo.VideoBitDepth >= 10 &&
-                mediaInfo.VideoColourPrimaries.IsNotNullOrWhiteSpace() &&
-                mediaInfo.VideoTransferCharacteristics.IsNotNullOrWhiteSpace())
+        public static string FormatVideoDynamicRangeType(MediaInfoModel mediaInfo)
+        {
+            switch(mediaInfo.GetHdrFormat())
             {
-                if (mediaInfo.VideoColourPrimaries.EqualsIgnoreCase(ValidHdrColourPrimaries) &&
-                    ValidHdrTransferFunctions.Any(mediaInfo.VideoTransferCharacteristics.Contains))
-                {
-                    return VideoDynamicRangeHdr;
-                }
+                case HdrFormat.DolbyVision:
+                    return "DolbyVision";
+                case HdrFormat.DolbyVisionHdr10:
+                    return "DolbyVision/HDR10";
+                case HdrFormat.Hdr10:
+                    return "HDR10";
+                case HdrFormat.Hdr10Plus:
+                    return "HDR10+";
+                case HdrFormat.Hlg10:
+                    return "HLG";
+                case HdrFormat.Pq10:
+                    return "PQ";
+                case HdrFormat.UnknownHdr:
+                    return "HDR";
             }
 
             return "";
