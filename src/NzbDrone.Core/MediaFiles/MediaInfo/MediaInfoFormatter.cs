@@ -595,13 +595,13 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             switch(mediaInfo.GetHdrFormat())
             {
                 case HdrFormat.DolbyVision:
-                    return "DolbyVision";
+                    return "DV";
                 case HdrFormat.DolbyVisionHdr10:
-                    return "DolbyVision/HDR10";
+                    return "DV HDR10";
                 case HdrFormat.Hdr10:
                     return "HDR10";
                 case HdrFormat.Hdr10Plus:
-                    return "HDR10+";
+                    return "HDR10Plus";
                 case HdrFormat.Hlg10:
                     return "HLG";
                 case HdrFormat.Pq10:
