@@ -16,8 +16,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S07E22E23.720p.HDTV.X264-DIMENSION", "Series Title", 7, new[] { 22, 23 })]
         [TestCase("Series Title - S07E22 - S07E23 - And Lots of Security.. [HDTV-720p].mkv", "Series Title", 7, new[] { 22, 23 })]
         [TestCase("S03E01.S03E02.720p.HDTV.X264-DIMENSION", "", 3, new[] { 1, 2 })]
-        [TestCase("Series Title - S07E22 - 7x23 - And Lots of Development.. [HDTV-720p].mkv", "Series Title", 7, new[] { 22, 23 })]
-        [TestCase("S07E22 - 7x23 - And Lots of Development.. [HDTV-720p].mkv", "", 7, new[] { 22, 23 })]
         [TestCase("2x04x05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
         [TestCase("S02E04E05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
         [TestCase("S02E03-04-05.720p.BluRay-FUTV", "", 2, new[] { 3, 4, 5 })]
