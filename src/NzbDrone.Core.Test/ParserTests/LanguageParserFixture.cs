@@ -53,6 +53,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Title.the.Series.2009.S01E14.German.HDTV.XviD-LOL")]
         [TestCase("Title.the.Series.S04E15.Brotherly.Love.GERMAN.DUBBED.WS.WEBRiP.XviD.REPACK-TVP")]
         [TestCase("The Series Title - S02E16 - Kampfhaehne - mkv - by Videomann")]
+        [TestCase("Series.Title.S01E03.Ger.Dub.AAC.1080p.WebDL.x264-TKP21")]
         public void should_parse_language_german(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
