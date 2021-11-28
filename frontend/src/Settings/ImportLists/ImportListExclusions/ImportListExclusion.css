@@ -8,11 +8,13 @@
 }
 
 .title {
-  flex: 0 0 300px;
+  @add-mixin truncate;
+
+  flex: 0 1 600px;
 }
 
 .tvdbId {
-  flex: 0 0 400px;
+  flex: 0 0 70px;
 }
 
 .actions {

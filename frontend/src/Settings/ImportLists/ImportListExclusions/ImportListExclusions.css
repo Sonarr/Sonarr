@@ -4,12 +4,12 @@
   font-weight: bold;
 }
 
-.host {
-  flex: 0 0 300px;
+.title {
+  flex: 0 1 600px;
 }
 
-.path {
-  flex: 0 0 400px;
+.tvdbId {
+  flex: 0 0 70px;
 }
 
 .addImportListExclusion {

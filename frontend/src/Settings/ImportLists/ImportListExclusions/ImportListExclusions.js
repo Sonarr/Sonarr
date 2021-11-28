@@ -50,8 +50,8 @@ class ImportListExclusions extends Component {
           {...otherProps}
         >
           <div className={styles.importListExclusionsHeader}>
-            <div className={styles.host}>Title</div>
-            <div className={styles.path}>TVDB ID</div>
+            <div className={styles.title}>Title</div>
+            <div className={styles.tvdbId}>TVDB ID</div>
           </div>
 
           <div>
