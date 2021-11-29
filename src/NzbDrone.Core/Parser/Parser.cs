@@ -169,7 +169,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Multi-season pack
-                new Regex(@"^(?<title>.+?)[-_. ]+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))-S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))",
+                new Regex(@"^(?<title>.+?)[-_. ]+(?:S|Season[_. ]|Saison[_. ]|Series[_. ])(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:-|[-_. ]{3})(?:S|Season[_. ]|Saison[_. ]|Series[_. ])?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Partial season pack
@@ -259,7 +259,7 @@ namespace NzbDrone.Core.Parser
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Season only releases
-                new Regex(@"^(?<title>.+?)[-_. ]+?(?:S|Season|Saison|Series)[-_. ]?(?<season>\d{1,2}(?![-_. ]?\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
+                new Regex(@"^(?<title>.+?)[-_. ]+?(?:S|Season|Saison|Series)[-_. ]?(?<season>\d{1,2}(?![-_. ]?\d+))(?:[-_. ]|$)+(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //4 digit season only releases

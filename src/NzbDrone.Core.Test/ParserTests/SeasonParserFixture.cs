@@ -81,7 +81,10 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("The Series S01-05 WS BDRip X264-REWARD-No Rars", "The Series", 1)]
-        [TestCase("Seinfault.S01-S09.1080p.AMZN.WEB-DL.DDP2.0.H.264-NTb", "Seinfault", 1)]
+        [TestCase("Series.Title.S01-S09.1080p.AMZN.WEB-DL.DDP2.0.H.264-NTb", "Series Title", 1)]
+        [TestCase("Series Title S01 - S07 BluRay 1080p x264 REPACK -SacReD", "Series Title", 1)]
+        [TestCase("Series Title Season 01-07 BluRay 1080p x264 REPACK -SacReD", "Series Title", 1)]
+        [TestCase("Series Title Season 01 - Season 07 BluRay 1080p x264 REPACK -SacReD", "Series Title", 1)]
         public void should_parse_multi_season_release(string postTitle, string title, int firstSeason)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
