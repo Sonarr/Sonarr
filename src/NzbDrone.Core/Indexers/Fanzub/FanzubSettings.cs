@@ -25,6 +25,9 @@ namespace NzbDrone.Core.Indexers.Fanzub
         [FieldDefinition(0, Label = "Rss URL", HelpText = "Enter to URL to an Fanzub compatible RSS feed")]
         public string BaseUrl { get; set; }
 
+        [FieldDefinition(1, Label = "Anime Standard Format Search", Type = FieldType.Checkbox, HelpText = "Also search for anime using the standard numbering")]
+        public bool AnimeStandardFormatSearch { get; set; }
+
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
