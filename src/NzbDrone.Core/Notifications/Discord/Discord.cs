@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 Author = new DiscordAuthor
                 {
                     Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
-                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/phantom-develop/Logo/256.png"
+                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
                 },
                 Url = $"http://thetvdb.com/?tab=series&id={series.TvdbId}",
                 Description = "Episode Grabbed",
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 Author = new DiscordAuthor
                 {
                     Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
-                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/phantom-develop/Logo/256.png"
+                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
                 },
                 Url = $"http://thetvdb.com/?tab=series&id={series.TvdbId}",
                 Description = isUpgrade ? "Episode Upgraded" : "Episode Imported",
@@ -281,7 +281,7 @@ namespace NzbDrone.Core.Notifications.Discord
                                       Author = new DiscordAuthor
                                       {
                                           Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
-                                          IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/phantom-develop/Logo/256.png"
+                                          IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
                                       },
                                       Title = healthCheck.Source.Name,
                                       Description = healthCheck.Message,

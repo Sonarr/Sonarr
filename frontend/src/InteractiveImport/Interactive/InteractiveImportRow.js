@@ -41,23 +41,35 @@ class InteractiveImportRow extends Component {
 
   componentDidMount() {
     const {
+      allowSeriesChange,
       id,
       series,
       seasonNumber,
       episodes,
       quality,
-      language
+      language,
+      episodeFileId,
+      columns
     } = this.props;
 
     if (
+      allowSeriesChange &&
       series &&
       seasonNumber != null &&
       episodes.length &&
       quality &&
       language
     ) {
-      this.props.onSelectedChange({ id, value: true });
+      this.props.onSelectedChange({
+        id,
+        hasEpisodeFileId: !!episodeFileId,
+        value: true
+      });
     }
+
+    this.setState({
+      isSeriesColumnVisible: columns.find((c) => c.name === 'series').isVisible
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -104,16 +116,33 @@ class InteractiveImportRow extends Component {
   selectRowAfterChange = (value) => {
     const {
       id,
+      episodeFileId,
       isSelected
     } = this.props;
 
     if (!isSelected && value === true) {
-      this.props.onSelectedChange({ id, value });
+      this.props.onSelectedChange({
+        id,
+        hasEpisodeFileId: !!episodeFileId,
+        value
+      });
     }
   }
 
   //
   // Listeners
+
+  onSelectedChange = (result) => {
+    const {
+      episodeFileId,
+      onSelectedChange
+    } = this.props;
+
+    onSelectedChange({
+      ...result,
+      hasEpisodeFileId: !!episodeFileId
+    });
+  }
 
   onSelectSeriesPress = () => {
     this.setState({ isSelectSeriesModalOpen: true });
@@ -186,8 +215,7 @@ class InteractiveImportRow extends Component {
       size,
       rejections,
       isReprocessing,
-      isSelected,
-      onSelectedChange
+      isSelected
     } = this.props;
 
     const {
@@ -224,7 +252,7 @@ class InteractiveImportRow extends Component {
         <TableSelectCell
           id={id}
           isSelected={isSelected}
-          onSelectedChange={onSelectedChange}
+          onSelectedChange={this.onSelectedChange}
         />
 
         <TableRowCell
@@ -234,15 +262,19 @@ class InteractiveImportRow extends Component {
           {relativePath}
         </TableRowCell>
 
-        <TableRowCellButton
-          isDisabled={!allowSeriesChange}
-          title={allowSeriesChange ? 'Click to change series' : undefined}
-          onPress={this.onSelectSeriesPress}
-        >
-          {
-            showSeriesPlaceholder ? <InteractiveImportRowCellPlaceholder /> : seriesTitle
-          }
-        </TableRowCellButton>
+        {
+          this.state.isSeriesColumnVisible ?
+            <TableRowCellButton
+              isDisabled={!allowSeriesChange}
+              title={allowSeriesChange ? 'Click to change series' : undefined}
+              onPress={this.onSelectSeriesPress}
+            >
+              {
+                showSeriesPlaceholder ? <InteractiveImportRowCellPlaceholder /> : seriesTitle
+              }
+            </TableRowCellButton> :
+            null
+        }
 
         <TableRowCellButton
           isDisabled={!series}
@@ -418,6 +450,8 @@ InteractiveImportRow.propTypes = {
   language: PropTypes.object,
   size: PropTypes.number.isRequired,
   rejections: PropTypes.arrayOf(PropTypes.object).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  episodeFileId: PropTypes.number,
   isReprocessing: PropTypes.bool,
   isSelected: PropTypes.bool,
   onSelectedChange: PropTypes.func.isRequired,

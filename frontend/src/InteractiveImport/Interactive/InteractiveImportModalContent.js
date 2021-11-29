@@ -112,13 +112,21 @@ class InteractiveImportModalContent extends Component {
   constructor(props, context) {
     super(props, context);
 
+    const instanceColumns = _.cloneDeep(columns);
+
+    if (!props.showSeries) {
+      instanceColumns.find((c) => c.name === 'series').isVisible = false;
+    }
+
     this.state = {
       allSelected: false,
       allUnselected: false,
       lastToggled: null,
       selectedState: {},
       invalidRowsSelected: [],
-      selectModalOpen: null
+      withoutEpisodeFileIdRowsSelected: [],
+      selectModalOpen: null,
+      columns: instanceColumns
     };
   }
 
@@ -136,9 +144,14 @@ class InteractiveImportModalContent extends Component {
     this.setState(selectAll(this.state.selectedState, value));
   }
 
-  onSelectedChange = ({ id, value, shiftKey = false }) => {
+  onSelectedChange = ({ id, value, hasEpisodeFileId, shiftKey = false }) => {
     this.setState((state) => {
-      return toggleSelected(state, this.props.items, id, value, shiftKey);
+      return {
+        ...toggleSelected(state, this.props.items, id, value, shiftKey),
+        withoutEpisodeFileIdRowsSelected: hasEpisodeFileId || !value ?
+          _.without(state.withoutEpisodeFileIdRowsSelected, id) :
+          [...state.withoutEpisodeFileIdRowsSelected, id]
+      };
     });
   }
 
@@ -154,6 +167,16 @@ class InteractiveImportModalContent extends Component {
         invalidRowsSelected: [...state.invalidRowsSelected, id]
       };
     });
+  }
+
+  onDeleteSelectedPress = () => {
+    const {
+      onDeleteSelectedPress
+    } = this.props;
+
+    const selected = this.getSelectedIds();
+
+    onDeleteSelectedPress(selected);
   }
 
   onImportSelectedPress = () => {
@@ -193,7 +216,9 @@ class InteractiveImportModalContent extends Component {
     const {
       downloadId,
       allowSeriesChange,
+      autoSelectRow,
       showFilterExistingFiles,
+      showDelete,
       showImportMode,
       filterExistingFiles,
       title,
@@ -215,6 +240,7 @@ class InteractiveImportModalContent extends Component {
       allUnselected,
       selectedState,
       invalidRowsSelected,
+      withoutEpisodeFileIdRowsSelected,
       selectModalOpen
     } = this.state;
 
@@ -308,7 +334,7 @@ class InteractiveImportModalContent extends Component {
           {
             isPopulated && !!items.length && !isFetching && !isFetching &&
               <Table
-                columns={columns}
+                columns={this.state.columns}
                 horizontalScroll={true}
                 selectAll={true}
                 allSelected={allSelected}
@@ -327,6 +353,8 @@ class InteractiveImportModalContent extends Component {
                           isSelected={selectedState[item.id]}
                           {...item}
                           allowSeriesChange={allowSeriesChange}
+                          autoSelectRow={autoSelectRow}
+                          columns={this.state.columns}
                           onSelectedChange={this.onSelectedChange}
                           onValidRowChange={this.onValidRowChange}
                         />
@@ -345,6 +373,19 @@ class InteractiveImportModalContent extends Component {
 
         <ModalFooter className={styles.footer}>
           <div className={styles.leftButtons}>
+            {
+              showDelete ?
+                <Button
+                  className={styles.deleteButton}
+                  kind={kinds.DANGER}
+                  isDisabled={!selectedIds.length || !!withoutEpisodeFileIdRowsSelected.length}
+                  onPress={onModalClose}
+                >
+                  Delete
+                </Button> :
+                null
+            }
+
             {
               !downloadId && showImportMode ?
                 <SelectInput
@@ -437,7 +478,10 @@ class InteractiveImportModalContent extends Component {
 
 InteractiveImportModalContent.propTypes = {
   downloadId: PropTypes.string,
+  showSeries: PropTypes.bool.isRequired,
   allowSeriesChange: PropTypes.bool.isRequired,
+  autoSelectRow: PropTypes.bool.isRequired,
+  showDelete: PropTypes.bool.isRequired,
   showImportMode: PropTypes.bool.isRequired,
   showFilterExistingFiles: PropTypes.bool.isRequired,
   filterExistingFiles: PropTypes.bool.isRequired,
@@ -454,13 +498,17 @@ InteractiveImportModalContent.propTypes = {
   onSortPress: PropTypes.func.isRequired,
   onFilterExistingFilesChange: PropTypes.func.isRequired,
   onImportModeChange: PropTypes.func.isRequired,
+  onDeleteSelectedPress: PropTypes.func.isRequired,
   onImportSelectedPress: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 
 InteractiveImportModalContent.defaultProps = {
+  showSeries: true,
   allowSeriesChange: true,
+  autoSelectRow: true,
   showFilterExistingFiles: false,
+  showDelete: false,
   showImportMode: true,
   importMode: 'move'
 };

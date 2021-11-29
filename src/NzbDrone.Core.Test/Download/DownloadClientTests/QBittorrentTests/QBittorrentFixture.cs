@@ -286,6 +286,27 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
+        public void missingFiles_item_should_have_required_properties()
+        {
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 0.7,
+                Eta = 8640000,
+                State = "missingFiles",
+                Label = "",
+                SavePath = ""
+            };
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            VerifyWarning(item);
+            item.RemainingTime.Should().NotHaveValue();
+        }
+
+        [Test]
         public void single_file_torrent_outputpath_should_have_sanitised_name()
         {
             var torrent = new QBittorrentTorrent

@@ -25,6 +25,8 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { Quality.Bluray720p },
             new object[] { Quality.Bluray1080p },
             new object[] { Quality.Bluray2160p },
+            new object[] { Quality.Bluray1080pRemux },
+            new object[] { Quality.Bluray2160pRemux },
         };
 
         public static object[] OtherSourceQualityParserCases =
@@ -41,6 +43,8 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "720p BluRay", Quality.Bluray720p },
             new object[] { "1080p BluRay", Quality.Bluray1080p },
             new object[] { "2160p BluRay", Quality.Bluray2160p },
+            new object[] { "1080p Remux", Quality.Bluray1080pRemux },
+            new object[] { "2160p Remux", Quality.Bluray2160pRemux },
         };
 
         [TestCase("S07E23 .avi ", false)]
@@ -198,6 +202,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.S03E05.Griebnitzsee.German.720p.MaxdomeHD.AVC-TVS", false)]
         [TestCase("[HorribleSubs] Series Title! S01 [Web][MKV][h264][720p][AAC 2.0][Softsubs (HorribleSubs)]", false)]
         [TestCase("[HorribleSubs] Series Title! S01 [Web][MKV][h264][AAC 2.0][Softsubs (HorribleSubs)]", false)]
+        [TestCase("Series.Title.S04E13.960p.WEB-DL.AAC2.0.H.264-squalor", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);

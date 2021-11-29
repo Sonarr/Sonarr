@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Nancy;
 using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
@@ -44,7 +43,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
             UpdateResource = SetQuality;
             DeleteResource = DeleteEpisodeFile;
 
-            Put("/editor",  episodeFiles => SetQuality());
+            Put("/editor",  episodeFiles => SetPropertiesEditor());
+            Put("/bulk",  episodeFiles => SetPropertiesBulk());
             Delete("/bulk",  episodeFiles => DeleteEpisodeFiles());
         }
 
@@ -109,7 +109,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
             _mediaFileService.Update(episodeFile);
         }
 
-        private object SetQuality()
+        // Deprecated: Use SetPropertiesBulk instead
+        private object SetPropertiesEditor()
         {
             var resource = Request.Body.FromJson<EpisodeFileListResource>();
             var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
@@ -141,8 +142,44 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
             var series = _seriesService.GetSeries(episodeFiles.First().SeriesId);
 
-            return ResponseWithCode(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification))
-                               , HttpStatusCode.Accepted);
+            return ResponseWithCode(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification)), HttpStatusCode.Accepted);
+        }
+
+        private object SetPropertiesBulk()
+        {
+            var resource = Request.Body.FromJson<List<EpisodeFileResource>>();
+            var episodeFiles = _mediaFileService.GetFiles(resource.Select(r => r.Id));
+
+            foreach (var episodeFile in episodeFiles)
+            {
+                var resourceEpisodeFile = resource.Single(r => r.Id == episodeFile.Id);
+
+                if (resourceEpisodeFile.Language != null)
+                {
+                    episodeFile.Language = resourceEpisodeFile.Language;
+                }
+
+                if (resourceEpisodeFile.Quality != null)
+                {
+                    episodeFile.Quality = resourceEpisodeFile.Quality;
+                }
+
+                if (resourceEpisodeFile.SceneName != null && SceneChecker.IsSceneTitle(resourceEpisodeFile.SceneName))
+                {
+                    episodeFile.SceneName = resourceEpisodeFile.SceneName;
+                }
+
+                if (resourceEpisodeFile.ReleaseGroup != null)
+                {
+                    episodeFile.ReleaseGroup = resourceEpisodeFile.ReleaseGroup;
+                }
+            }
+
+            _mediaFileService.Update(episodeFiles);
+
+            var series = _seriesService.GetSeries(episodeFiles.First().SeriesId);
+
+            return ResponseWithCode(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification)), HttpStatusCode.Accepted);
         }
 
         private void DeleteEpisodeFile(int id)

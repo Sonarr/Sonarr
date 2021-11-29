@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Nancy;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
@@ -30,6 +29,12 @@ namespace Sonarr.Api.V3.ManualImport
             var downloadId = (string)Request.Query.downloadId;
             var filterExistingFiles = Request.GetBooleanQueryParameter("filterExistingFiles", true);
             var seriesId = Request.GetNullableIntegerQueryParameter("seriesId", null);
+            var seasonNumber = Request.GetNullableIntegerQueryParameter("seasonNumber", null);
+
+            if (seriesId.HasValue)
+            {
+                return _manualImportService.GetMediaFiles(seriesId.Value, seasonNumber).ToResource().Select(AddQualityWeight).ToList();
+            }
 
             return _manualImportService.GetMediaFiles(folder, downloadId, seriesId, filterExistingFiles).ToResource().Select(AddQualityWeight).ToList();
         }

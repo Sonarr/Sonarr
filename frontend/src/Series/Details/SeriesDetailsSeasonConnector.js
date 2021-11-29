@@ -34,6 +34,7 @@ function createMapStateToProps() {
         columns: episodes.columns,
         isSearching,
         seriesMonitored: series.monitored,
+        path: series.path,
         isSmallScreen: dimensions.isSmallScreen
       };
     }

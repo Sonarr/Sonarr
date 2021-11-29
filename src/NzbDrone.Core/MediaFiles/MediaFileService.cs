@@ -88,11 +88,9 @@ namespace NzbDrone.Core.MediaFiles
 
         public List<string> FilterExistingFiles(List<string> files, Series series)
         {
-            var seriesFiles = GetFilesBySeries(series.Id).Select(f => Path.Combine(series.Path, f.RelativePath)).ToList();
+            var seriesFiles = GetFilesBySeries(series.Id);
 
-            if (!seriesFiles.Any()) return files;
-
-            return files.Except(seriesFiles, PathEqualityComparer.Instance).ToList();
+            return FilterExistingFiles(files, seriesFiles, series);
         }
 
         public EpisodeFile Get(int id)
@@ -115,5 +113,15 @@ namespace NzbDrone.Core.MediaFiles
             var files = GetFilesBySeries(message.Series.Id);
             _mediaFileRepository.DeleteMany(files);
         }
+
+        public static List<string> FilterExistingFiles(List<string> files, List<EpisodeFile> seriesFiles, Series series)
+        {
+            var seriesFilePaths = seriesFiles.Select(f => Path.Combine(series.Path, f.RelativePath)).ToList();
+
+            if (!seriesFilePaths.Any()) return files;
+
+            return files.Except(seriesFilePaths, PathEqualityComparer.Instance).ToList();
+        }
+
     }
 }
