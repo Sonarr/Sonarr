@@ -37,7 +37,9 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
             {
                 SceneTitles = new List<string>() { "Monkey+Island" },
-                AbsoluteEpisodeNumber = 100
+                AbsoluteEpisodeNumber = 100,
+                SeasonNumber = 5,
+                EpisodeNumber = 4
             };
 
             _capabilities = new NewznabCapabilities();
@@ -121,6 +123,31 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var pages = results.GetAllTiers().First().Take(500).ToList();
 
             pages.Count.Should().BeLessThan(500);
+        }
+
+        [Test]
+        public void should_use_only_absolute_numbering_for_anime_search()
+        {
+            var results = Subject.GetSearchRequests(_animeSearchCriteria);
+
+            results.GetAllTiers().Should().HaveCount(1);
+
+            var page = results.GetAllTiers().First().First();
+
+            page.Url.FullUri.Should().Contain("q=Monkey%20Island+100");
+        }
+
+        [Test]
+        public void should_also_use_standard_numbering_for_anime_search()
+        {
+            Subject.Settings.AnimeStandardFormatSearch = true;
+            var results = Subject.GetSearchRequests(_animeSearchCriteria);
+
+            results.GetTier(0).Should().HaveCount(2);
+            var pages = results.GetTier(0).Take(2).Select(t => t.First()).ToList();
+
+            pages[0].Url.FullUri.Should().Contain("q=Monkey%20Island+100");
+            pages[1].Url.FullUri.Should().Contain("q=Monkey%20Island+s05e04");
         }
 
         [Test]

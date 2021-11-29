@@ -349,19 +349,9 @@ namespace NzbDrone.Core.IndexerSearch
 
             searchSpec.IsSeasonSearch = isSeasonSearch;
 
-            if (episode.SceneAbsoluteEpisodeNumber.HasValue)
-            {
-                searchSpec.AbsoluteEpisodeNumber = episode.SceneAbsoluteEpisodeNumber.Value;
-            }
-            else if (episode.AbsoluteEpisodeNumber.HasValue)
-            {
-                searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber.Value;
-            }
-            else
-            {
-                _logger.Error($"Can not search for {series.Title} - S{episode.SeasonNumber:00}E{episode.EpisodeNumber:00} it does not have an absolute episode number");
-                throw new SearchFailedException("Absolute episode number is missing");
-            }
+            searchSpec.SeasonNumber = episode.SceneSeasonNumber ?? episode.SeasonNumber;
+            searchSpec.EpisodeNumber = episode.SceneEpisodeNumber ?? episode.EpisodeNumber;
+            searchSpec.AbsoluteEpisodeNumber = episode.SceneAbsoluteEpisodeNumber ?? episode.AbsoluteEpisodeNumber ?? 0;
 
             return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
