@@ -31,6 +31,7 @@ import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeriesAlternateTitles from './SeriesAlternateTitles';
 import SeriesDetailsSeasonConnector from './SeriesDetailsSeasonConnector';
+import SeriesGenres from './SeriesGenres';
 import SeriesTagsConnector from './SeriesTagsConnector';
 import SeriesDetailsLinks from './SeriesDetailsLinks';
 import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
@@ -186,6 +187,7 @@ class SeriesDetails extends Component {
       images,
       seasons,
       alternateTitles,
+      genres,
       tags,
       year,
       previousAiring,
@@ -405,6 +407,8 @@ class SeriesDetails extends Component {
                       rating={ratings.value}
                       iconSize={20}
                     />
+
+                    <SeriesGenres genres={genres} />
 
                     <span>
                       {runningYears}
@@ -699,6 +703,7 @@ SeriesDetails.propTypes = {
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   seasons: PropTypes.arrayOf(PropTypes.object).isRequired,
   alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   year: PropTypes.number.isRequired,
   previousAiring: PropTypes.string,
