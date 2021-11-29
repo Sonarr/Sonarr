@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Notifications.Plex.HomeTheater
             try
             {
                 var command = string.Format("ExecBuiltIn(Notification({0}, {1}))", header, message);
-                SendCommand(settings.Host, settings.Port, command, settings.Username, settings.Password);
+                SendCommand(settings.Address, command, settings.Username, settings.Password);
             }
             catch(Exception ex)
             {
@@ -35,16 +35,16 @@ namespace NzbDrone.Core.Notifications.Plex.HomeTheater
             }
         }
 
-        private string SendCommand(string host, int port, string command, string username, string password)
+        private string SendCommand(string url, string command, string username, string password)
         {
-            var url = string.Format("http://{0}:{1}/xbmcCmds/xbmcHttp?command={2}", host, port, command);
+            var full_url = $"{url}/xbmcCmds/xbmcHttp?command={command}";
 
             if (!string.IsNullOrEmpty(username))
             {
-                return _httpProvider.DownloadString(url, username, password);
+                return _httpProvider.DownloadString(full_url, username, password);
             }
 
-            return _httpProvider.DownloadString(url);
+            return _httpProvider.DownloadString(full_url);
         }
 
         public ValidationFailure Test(PlexClientSettings settings)
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Notifications.Plex.HomeTheater
             {
                 _logger.Debug("Sending Test Notifcation to Plex Client: {0}", settings.Host);
                 var command = string.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
-                var result = SendCommand(settings.Host, settings.Port, command, settings.Username, settings.Password);
+                var result = SendCommand(settings.Address, command, settings.Username, settings.Password);
 
                 if (string.IsNullOrWhiteSpace(result) ||
                     result.IndexOf("error", StringComparison.InvariantCultureIgnoreCase) > -1)

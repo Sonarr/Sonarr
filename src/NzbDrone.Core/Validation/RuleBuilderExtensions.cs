@@ -38,6 +38,10 @@ namespace NzbDrone.Core.Validation
         {
             return ruleBuilder.SetValidator(new RegularExpressionValidator(@"^(?!\/?https?://[-_a-z0-9.]+)", RegexOptions.IgnoreCase)).WithMessage($"Must be a valid URL path (ie: '{example}')");
         }
+        public static IRuleBuilderOptions<T, string> ActuallyValidUrlBase<T>(this IRuleBuilder<T, string> ruleBuilder, string example = "sonarr/base")
+        {
+            return ruleBuilder.SetValidator(new RegularExpressionValidator(@"([-_a-z0-9.]+(/[-_a-z0-9.]+)*)?", RegexOptions.IgnoreCase)).WithMessage($"Must be a valid URL path (ie: '{example}')");
+        }
 
         public static IRuleBuilderOptions<T, int> ValidPort<T>(this IRuleBuilder<T, int> ruleBuilder)
         {
