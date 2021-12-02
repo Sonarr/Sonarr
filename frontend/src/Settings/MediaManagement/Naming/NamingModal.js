@@ -44,11 +44,11 @@ const fileNameTokens = [
 
 const seriesTokens = [
   { token: '{Series Title}', example: 'Series Title!' },
-  { token: '{Series CleanTitle}', example: 'Series Title' },
-  { token: '{Series CleanTitleYear}', example: 'Series Title 2010' },
-  { token: '{Series TitleThe}', example: 'Series Title, The' },
-  { token: '{Series TitleTheYear}', example: 'Series Title, The (2010)' },
-  { token: '{Series TitleYear}', example: 'Series Title (2010)' },
+  { token: '{Series CleanTitle}', example: 'Series Title!' },
+  { token: '{Series CleanTitleYear}', example: 'Series Title! 2010' },
+  { token: '{Series TitleThe}', example: 'Series Title!, The' },
+  { token: '{Series TitleTheYear}', example: 'Series Title!, The (2010)' },
+  { token: '{Series TitleYear}', example: 'Series Title! (2010)' },
   { token: '{Series TitleFirstCharacter}', example: 'S' },
   { token: '{Series Year}', example: '2010' }
 ];
