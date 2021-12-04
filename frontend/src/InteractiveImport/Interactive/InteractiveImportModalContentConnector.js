@@ -40,8 +40,14 @@ function isSameEpisodeFile(file, originalFile) {
 function createMapStateToProps() {
   return createSelector(
     createClientSideCollectionSelector('interactiveImport'),
-    (interactiveImport) => {
-      return interactiveImport;
+    (state) => state.episodeFiles.isDeleting,
+    (state) => state.episodeFiles.deleteError,
+    (interactiveImport, isDeleting, deleteError) => {
+      return {
+        ...interactiveImport,
+        isDeleting,
+        deleteError
+      };
     }
   );
 }
@@ -148,7 +154,20 @@ class InteractiveImportModalContentConnector extends Component {
   }
 
   onDeleteSelectedPress = (selected) => {
-    // TODO: Delete selected (if they have episode IDs)
+    const {
+      items,
+      dispatchDeleteEpisodeFiles
+    } = this.props;
+
+    const episodeFileIds = items.reduce((acc, item) => {
+      if (selected.indexOf(item.id) > -1 && item.episodeFileId) {
+        acc.push(item.episodeFileId);
+      }
+
+      return acc;
+    }, []);
+
+    dispatchDeleteEpisodeFiles({ episodeFileIds });
   }
 
   onImportSelectedPress = (selected, importMode) => {

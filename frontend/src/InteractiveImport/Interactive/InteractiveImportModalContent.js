@@ -7,6 +7,7 @@ import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import { align, icons, kinds, scrollDirections } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
+import SpinnerButton from 'Components/Link/SpinnerButton';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import SelectInput from 'Components/Form/SelectInput';
@@ -14,6 +15,7 @@ import Menu from 'Components/Menu/Menu';
 import MenuButton from 'Components/Menu/MenuButton';
 import MenuContent from 'Components/Menu/MenuContent';
 import SelectedMenuItem from 'Components/Menu/SelectedMenuItem';
+import ConfirmModal from 'Components/Modal/ConfirmModal';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -126,8 +128,21 @@ class InteractiveImportModalContent extends Component {
       invalidRowsSelected: [],
       withoutEpisodeFileIdRowsSelected: [],
       selectModalOpen: null,
-      columns: instanceColumns
+      columns: instanceColumns,
+      isConfirmDeleteModalOpen: false
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      isDeleting,
+      deleteError,
+      onModalClose
+    } = this.props;
+
+    if (!isDeleting && prevProps.isDeleting && !deleteError) {
+      onModalClose();
+    }
   }
 
   //
@@ -170,13 +185,16 @@ class InteractiveImportModalContent extends Component {
   }
 
   onDeleteSelectedPress = () => {
-    const {
-      onDeleteSelectedPress
-    } = this.props;
+    this.setState({ isConfirmDeleteModalOpen: true });
+  }
 
-    const selected = this.getSelectedIds();
+  onConfirmDelete = () => {
+    this.setState({ isConfirmDeleteModalOpen: false });
+    this.props.onDeleteSelectedPress(this.getSelectedIds());
+  }
 
-    onDeleteSelectedPress(selected);
+  onConfirmDeleteModalClose = () => {
+    this.setState({ isConfirmDeleteModalOpen: false });
   }
 
   onImportSelectedPress = () => {
@@ -231,6 +249,7 @@ class InteractiveImportModalContent extends Component {
       sortDirection,
       importMode,
       interactiveImportErrorMessage,
+      isDeleting,
       onSortPress,
       onModalClose
     } = this.props;
@@ -241,7 +260,8 @@ class InteractiveImportModalContent extends Component {
       selectedState,
       invalidRowsSelected,
       withoutEpisodeFileIdRowsSelected,
-      selectModalOpen
+      selectModalOpen,
+      isConfirmDeleteModalOpen
     } = this.state;
 
     const selectedIds = this.getSelectedIds();
@@ -375,14 +395,15 @@ class InteractiveImportModalContent extends Component {
           <div className={styles.leftButtons}>
             {
               showDelete ?
-                <Button
+                <SpinnerButton
                   className={styles.deleteButton}
                   kind={kinds.DANGER}
+                  isSpinning={isDeleting}
                   isDisabled={!selectedIds.length || !!withoutEpisodeFileIdRowsSelected.length}
-                  onPress={onModalClose}
+                  onPress={this.onDeleteSelectedPress}
                 >
                   Delete
-                </Button> :
+                </SpinnerButton> :
                 null
             }
 
@@ -471,6 +492,16 @@ class InteractiveImportModalContent extends Component {
           real={false}
           onModalClose={this.onSelectModalClose}
         />
+
+        <ConfirmModal
+          isOpen={isConfirmDeleteModalOpen}
+          kind={kinds.DANGER}
+          title="Delete Selected Episode Files"
+          message={'Are you sure you want to delete the selected episode files?'}
+          confirmLabel="Delete"
+          onConfirm={this.onConfirmDelete}
+          onCancel={this.onConfirmDeleteModalClose}
+        />
       </ModalContent>
     );
   }
@@ -495,6 +526,8 @@ InteractiveImportModalContent.propTypes = {
   sortKey: PropTypes.string,
   sortDirection: PropTypes.string,
   interactiveImportErrorMessage: PropTypes.string,
+  isDeleting: PropTypes.bool.isRequired,
+  deleteError: PropTypes.object,
   onSortPress: PropTypes.func.isRequired,
   onFilterExistingFilesChange: PropTypes.func.isRequired,
   onImportModeChange: PropTypes.func.isRequired,
