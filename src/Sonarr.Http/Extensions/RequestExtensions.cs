@@ -18,6 +18,11 @@ namespace Sonarr.Http.Extensions
             return request.Path.StartsWith("/feed/", StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public static bool IsPingRequest(this Request request)
+        {
+            return request.Path.StartsWith("/ping", StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool IsSignalRRequest(this Request request)
         {
             return request.Path.StartsWith("/signalr/", StringComparison.InvariantCultureIgnoreCase);
