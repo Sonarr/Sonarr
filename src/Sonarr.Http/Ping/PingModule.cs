@@ -27,8 +27,7 @@ namespace NzbDrone.Http
             {
                 return new PingResource
                        {
-                           Status = "Error",
-                           Message = e.Message
+                           Status = "Error"
                        }.AsResponse(Context, HttpStatusCode.InternalServerError);
             }
 
