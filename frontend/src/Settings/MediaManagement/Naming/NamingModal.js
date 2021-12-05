@@ -43,12 +43,12 @@ const fileNameTokens = [
 ];
 
 const seriesTokens = [
-  { token: '{Series Title}', example: 'Series Title!' },
-  { token: '{Series CleanTitle}', example: 'Series Title' },
-  { token: '{Series CleanTitleYear}', example: 'Series Title 2010' },
-  { token: '{Series TitleThe}', example: 'Series Title, The' },
-  { token: '{Series TitleTheYear}', example: 'Series Title, The (2010)' },
-  { token: '{Series TitleYear}', example: 'Series Title (2010)' },
+  { token: '{Series Title}', example: 'Series Title\'s' },
+  { token: '{Series CleanTitle}', example: 'Series Titles' },
+  { token: '{Series CleanTitleYear}', example: 'Series Titles! 2010' },
+  { token: '{Series TitleThe}', example: 'Series Title\'s, The' },
+  { token: '{Series TitleTheYear}', example: 'Series Title\'s, The (2010)' },
+  { token: '{Series TitleYear}', example: 'Series Title\'s (2010)' },
   { token: '{Series TitleFirstCharacter}', example: 'S' },
   { token: '{Series Year}', example: '2010' }
 ];
@@ -81,13 +81,13 @@ const absoluteTokens = [
 ];
 
 const episodeTitleTokens = [
-  { token: '{Episode Title}', example: 'Episode Title' },
-  { token: '{Episode CleanTitle}', example: 'Episode Title' }
+  { token: '{Episode Title}', example: 'Episode\'s Title' },
+  { token: '{Episode CleanTitle}', example: 'Episodes Title' }
 ];
 
 const qualityTokens = [
-  { token: '{Quality Full}', example: 'HDTV 720p Proper' },
-  { token: '{Quality Title}', example: 'HDTV 720p' }
+  { token: '{Quality Full}', example: 'HDTV-720p Proper' },
+  { token: '{Quality Title}', example: 'HDTV-720p' }
 ];
 
 const mediaInfoTokens = [
