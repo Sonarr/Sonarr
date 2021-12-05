@@ -44,7 +44,8 @@ module.exports = (env) => {
         'node_modules'
       ],
       alias: {
-        jquery: 'jquery/src/jquery'
+        jquery: 'jquery/src/jquery',
+        'react-middle-truncate': 'react-middle-truncate/lib/react-middle-truncate'
       }
     },
 

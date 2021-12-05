@@ -2,7 +2,16 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+  max-width: 100%;
   height: 31px;
+}
+
+.link {
+  max-width: 100%;
+}
+
+.linkWithEdit {
+  max-width: calc(100% - 9px - 4px - 2px);
 }
 
 .editContainer {
@@ -15,5 +24,11 @@
 .editButton {
   composes: button from '~Components/Link/IconButton.css';
 
-  width: auto;
+  width: 9px;
+}
+
+.label {
+  composes: label from '~Components/Label.css';
+
+  max-width: 100%;
 }

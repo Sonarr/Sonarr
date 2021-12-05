@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import MiddleTruncate from 'react-middle-truncate';
 import { kinds } from 'Helpers/Props';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
@@ -96,10 +97,15 @@ class ReleaseProfile extends Component {
 
               return (
                 <Label
+                  className={styles.label}
                   key={item}
                   kind={kinds.SUCCESS}
                 >
-                  {item}
+                  <MiddleTruncate
+                    text={item}
+                    start={10}
+                    end={10}
+                  />
                 </Label>
               );
             })
@@ -113,10 +119,15 @@ class ReleaseProfile extends Component {
 
               return (
                 <Label
+                  className={styles.label}
                   key={item.key}
                   kind={isPreferred ? kinds.DEFAULT : kinds.WARNING}
                 >
-                  {item.key} {isPreferred && '+'}{item.value}
+                  <MiddleTruncate
+                    text={`${item.key} ${isPreferred ? '+' : ''}${item.value}`}
+                    start={10}
+                    end={14}
+                  />
                 </Label>
               );
             })
@@ -132,10 +143,15 @@ class ReleaseProfile extends Component {
 
               return (
                 <Label
+                  className={styles.label}
                   key={item}
                   kind={kinds.DANGER}
                 >
-                  {item}
+                  <MiddleTruncate
+                    text={item}
+                    start={10}
+                    end={10}
+                  />
                 </Label>
               );
             })

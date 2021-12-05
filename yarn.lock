@@ -2108,7 +2108,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@2.3.1:
+classnames@2.3.1, classnames@^2.2.6:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
   integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
@@ -4052,6 +4052,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
+isnumeric@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/isnumeric/-/isnumeric-0.2.0.tgz#a2347ba360de19e33d0ffd590fddf7755cbf2e64"
+  integrity sha1-ojR7o2DeGeM9D/1ZD933dVy/LmQ=
+
 isobject@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-2.1.0.tgz#f065561096a3f1da2ef46272f815c840d87e0c89"
@@ -4781,7 +4786,7 @@ normalize-selector@^0.2.0:
   resolved "https://registry.yarnpkg.com/normalize-selector/-/normalize-selector-0.2.0.tgz#d0b145eb691189c63a78d201dc4fdb1293ef0c03"
   integrity sha1-0LFF62kRicY6eNIB3E/bEpPvDAM=
 
-normalize.css@8.0.1:
+normalize.css@8.0.1, normalize.css@^8.0.0:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/normalize.css/-/normalize.css-8.0.1.tgz#9b98a208738b9cc2634caacbc42d131c97487bf3"
   integrity sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==
@@ -5621,6 +5626,16 @@ react-measure@1.4.7:
     get-node-dimensions "^1.2.0"
     prop-types "^15.5.4"
     resize-observer-polyfill "^1.4.1"
+
+react-middle-truncate@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-middle-truncate/-/react-middle-truncate-1.0.3.tgz#42d198ad9738bc2d8f7b8e77e11e02107b856fe1"
+  integrity sha512-rBYJjSYgAvNayDk+yZz8QhQqbGLjsSZV2CuGJ4g18o6BUGlMgZ4fIOGKuIEIZj17zCXzSw7mCGAcZ4lw0y8Lgw==
+  dependencies:
+    classnames "^2.2.6"
+    lodash "^4.17.15"
+    normalize.css "^8.0.0"
+    units-css "^0.4.0"
 
 react-popper@1.3.3:
   version "1.3.3"
@@ -6974,6 +6989,14 @@ unist-util-stringify-position@^2.0.0:
   dependencies:
     "@types/unist" "^2.0.2"
 
+units-css@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/units-css/-/units-css-0.4.0.tgz#d6228653a51983d7c16ff28f8b9dc3b1ffed3a07"
+  integrity sha1-1iKGU6UZg9fBb/KPi53Dsf/tOgc=
+  dependencies:
+    isnumeric "^0.2.0"
+    viewport-dimensions "^0.2.0"
+
 universalify@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-2.0.0.tgz#75a4984efedc4b08975c5aeb73f530d02df25717"
@@ -7088,6 +7111,11 @@ vfile@^4.0.0:
     is-buffer "^2.0.0"
     unist-util-stringify-position "^2.0.0"
     vfile-message "^2.0.0"
+
+viewport-dimensions@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/viewport-dimensions/-/viewport-dimensions-0.2.0.tgz#de740747db5387fd1725f5175e91bac76afdf36c"
+  integrity sha1-3nQHR9tTh/0XJfUXXpG6x2r982w=
 
 walker@~1.0.5:
   version "1.0.7"

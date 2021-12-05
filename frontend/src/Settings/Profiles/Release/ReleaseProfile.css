@@ -17,3 +17,9 @@
   font-weight: 300;
   font-size: 24px;
 }
+
+.label {
+  composes: label from '~Components/Label.css';
+
+  max-width: 100%;
+}
