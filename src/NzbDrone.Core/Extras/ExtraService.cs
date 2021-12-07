@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,13 +32,12 @@ namespace NzbDrone.Core.Extras
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
         private readonly List<IManageExtraFiles> _extraFileManagers;
-        private readonly Logger _logger;
 
         public ExtraService(IMediaFileService mediaFileService,
                             IEpisodeService episodeService,
                             IDiskProvider diskProvider,
                             IConfigService configService,
-                            List<IManageExtraFiles> extraFileManagers,
+                            IEnumerable<IManageExtraFiles> extraFileManagers,
                             Logger logger)
         {
             _mediaFileService = mediaFileService;
@@ -46,7 +45,6 @@ namespace NzbDrone.Core.Extras
             _diskProvider = diskProvider;
             _configService = configService;
             _extraFileManagers = extraFileManagers.OrderBy(e => e.Order).ToList();
-            _logger = logger;
         }
 
         public void ImportEpisode(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly)
@@ -63,62 +61,40 @@ namespace NzbDrone.Core.Extras
                 return;
             }
 
+            var wantedExtensions = _configService.ExtraFileExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                                     .Select(e => e.Trim(' ', '.').Insert(0, "."))
+                                                                     .ToList();
+
             var sourcePath = localEpisode.Path;
             var sourceFolder = _diskProvider.GetParentFolder(sourcePath);
             var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
-            var files = _diskProvider.GetFiles(sourceFolder, SearchOption.TopDirectoryOnly);
+            var files = _diskProvider.GetFiles(sourceFolder, SearchOption.AllDirectories);
 
-            var wantedExtensions = _configService.ExtraFileExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                                                                     .Select(e => e.Trim(' ', '.'))
-                                                                     .ToList();
+            var managedFiles = _extraFileManagers.Select((i) => new List<string>()).ToArray();
 
-            var matchingFilenames = files.Where(f => Path.GetFileNameWithoutExtension(f).StartsWith(sourceFileName, StringComparison.InvariantCultureIgnoreCase)).ToList();
-            var filteredFilenames = new List<string>();
-            var hasNfo = false;
-
-            foreach (var matchingFilename in matchingFilenames)
+            foreach (var file in files)
             {
-                // Filter out duplicate NFO files
-
-                if (matchingFilename.EndsWith(".nfo", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (hasNfo)
-                    {
-                        continue;
-                    }
-
-                    hasNfo = true;
-                }
-
-                filteredFilenames.Add(matchingFilename);
-            }
-
-            foreach (var matchingFilename in filteredFilenames)
-            {
-                var matchingExtension = wantedExtensions.FirstOrDefault(e => matchingFilename.EndsWith(e));
+                var extension = Path.GetExtension(file);
+                var matchingExtension = wantedExtensions.FirstOrDefault(e => e.Equals(extension));
 
                 if (matchingExtension == null)
                 {
                     continue;
                 }
 
-                try
+                for (int i = 0; i < _extraFileManagers.Count; i++)
                 {
-                    foreach (var extraFileManager in _extraFileManagers)
+                    if (_extraFileManagers[i].HandleFileImport(localEpisode, episodeFile, file, extension, isReadOnly))
                     {
-                        var extension = Path.GetExtension(matchingFilename);
-                        var extraFile = extraFileManager.Import(localEpisode.Series, episodeFile, matchingFilename, extension, isReadOnly);
-
-                        if (extraFile != null)
-                        {
-                            break;
-                        }
+                        managedFiles[i].Add(file);
+                        break;
                     }
                 }
-                catch (Exception ex)
-                {
-                    _logger.Warn(ex, "Failed to import extra file: {0}", matchingFilename);
-                }
+            }
+
+            for (int i = 0; i < _extraFileManagers.Count; i++)
+            {
+                _extraFileManagers[i].ImportFiles(localEpisode, episodeFile, managedFiles[i], isReadOnly);
             }
         }
 

@@ -7,6 +7,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Files
@@ -19,7 +20,8 @@ namespace NzbDrone.Core.Extras.Files
         IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, EpisodeFile episodeFile);
         IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder);
         IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);
-        ExtraFile Import(Series series, EpisodeFile episodeFile, string path, string extension, bool readOnly);
+        bool HandleFileImport(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly);
+        IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly);
     }
 
     public abstract class ExtraFileManager<TExtraFile> : IManageExtraFiles
@@ -48,7 +50,8 @@ namespace NzbDrone.Core.Extras.Files
         public abstract IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, EpisodeFile episodeFile);
         public abstract IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder);
         public abstract IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);
-        public abstract ExtraFile Import(Series series, EpisodeFile episodeFile, string path, string extension, bool readOnly);
+        public abstract bool HandleFileImport(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly);
+        public abstract IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly);
 
         protected TExtraFile ImportFile(Series series, EpisodeFile episodeFile, string path, bool readOnly, string extension, string fileNameSuffix = null)
         {

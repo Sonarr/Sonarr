@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,13 +10,17 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Extras.Files;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Subtitles
 {
     public class SubtitleService : ExtraFileManager<SubtitleFile>
     {
+        private readonly IDiskProvider _diskProvider;
+        private readonly IDetectSample _detectSample;
         private readonly ISubtitleFileService _subtitleFileService;
         private readonly IMediaFileAttributeService _mediaFileAttributeService;
         private readonly Logger _logger;
@@ -23,11 +28,14 @@ namespace NzbDrone.Core.Extras.Subtitles
         public SubtitleService(IConfigService configService,
                                IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
+                               IDetectSample detectSample,
                                ISubtitleFileService subtitleFileService,
                                IMediaFileAttributeService mediaFileAttributeService,
                                Logger logger)
             : base(configService, diskProvider, diskTransferService, logger)
         {
+            _diskProvider = diskProvider;
+            _detectSample = detectSample;
             _subtitleFileService = subtitleFileService;
             _mediaFileAttributeService = mediaFileAttributeService;
             _logger = logger;
@@ -71,11 +79,6 @@ namespace NzbDrone.Core.Extras.Subtitles
                     var groupCount = group.Count();
                     var copy = 1;
 
-                    if (groupCount > 1)
-                    {
-                        _logger.Warn("Multiple subtitle files found with the same language and extension for {0}", Path.Combine(series.Path, episodeFile.RelativePath));
-                    }
-
                     foreach (var subtitleFile in group)
                     {
                         var suffix = GetSuffix(subtitleFile.Language, copy, groupCount > 1);
@@ -91,23 +94,130 @@ namespace NzbDrone.Core.Extras.Subtitles
             return movedFiles;
         }
 
-        public override ExtraFile Import(Series series, EpisodeFile episodeFile, string path, string extension, bool readOnly)
+        public override bool HandleFileImport(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly)
         {
-            if (SubtitleFileExtensions.Extensions.Contains(Path.GetExtension(path)))
+            return SubtitleFileExtensions.Extensions.Contains(extension.ToLowerInvariant());
+        }
+
+        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
+        {
+            var importedFiles = new List<SubtitleFile>();
+
+            var filteredFiles = files.Where(f => HandleFileImport(localEpisode, episodeFile, f, Path.GetExtension(f), isReadOnly)).ToList();
+
+            var sourcePath = localEpisode.Path;
+            var sourceFolder = _diskProvider.GetParentFolder(sourcePath);
+            var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
+
+            var matchingFiles = new List<string>();
+
+            foreach (var file in filteredFiles)
             {
-                var language = LanguageParser.ParseSubtitleLanguage(path);
-                var suffix = GetSuffix(language, 1, false);
-                var subtitleFile = ImportFile(series, episodeFile, path, readOnly, extension, suffix);
-                subtitleFile.Language = language;
+                try
+                {
+                    // Filename match
+                    if (Path.GetFileNameWithoutExtension(file).StartsWith(sourceFileName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        matchingFiles.Add(file);
+                        continue;
+                    }
 
-                _mediaFileAttributeService.SetFilePermissions(path);
-                _subtitleFileService.Upsert(subtitleFile);
+                    // Season and episode match
+                    var fileEpisodeInfo = Parser.Parser.ParsePath(file) ?? new ParsedEpisodeInfo();
 
+                    if (fileEpisodeInfo.EpisodeNumbers.Length == 0)
+                    {
+                        continue;
+                    }
 
-                return subtitleFile;
+                    if (fileEpisodeInfo.SeasonNumber == localEpisode.FileEpisodeInfo.SeasonNumber &&
+                        fileEpisodeInfo.EpisodeNumbers.SequenceEqual(localEpisode.FileEpisodeInfo.EpisodeNumbers))
+                    {
+                        matchingFiles.Add(file);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Failed to import subtitle file: {0}", file);
+                }
             }
 
-            return null;
+            // Use any sub if only episode in folder
+            if (matchingFiles.Count == 0 && filteredFiles.Count > 0)
+            {
+
+                var videoFiles = _diskProvider.GetFiles(sourceFolder, SearchOption.AllDirectories)
+                                              .Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file)))
+                                              .ToList();
+                
+                if (videoFiles.Count() > 2)
+                {
+                    return importedFiles;
+                }
+
+                // Filter out samples
+                videoFiles = videoFiles.Where(file =>
+                {
+                    var sample = _detectSample.IsSample(localEpisode.Series, file, false);
+
+                    if (sample == DetectSampleResult.Sample)
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }).ToList();
+
+                if (videoFiles.Count == 1)
+                {
+                    matchingFiles.AddRange(filteredFiles);
+
+                    _logger.Warn("Imported any available subtitle file for episode: {0}", localEpisode);
+                }
+            }
+            
+            var subtitleFiles = new List<Tuple<string, Language, string>>();
+
+            foreach (string file in matchingFiles)
+            {
+                var language = LanguageParser.ParseSubtitleLanguage(file);
+                var extension = Path.GetExtension(file);
+                subtitleFiles.Add(new Tuple<string, Language, string>(file, language, extension));
+            }
+
+            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.Item2 + s.Item3).ToList();
+
+            foreach (var group in groupedSubtitleFiles)
+            {
+                var groupCount = group.Count();
+                var copy = 1;
+
+                foreach (var file in group)
+                {
+                    try
+                    {
+                        var path = file.Item1;
+                        var language = file.Item2;
+                        var extension = file.Item3;
+                        var suffix = GetSuffix(language, copy, groupCount > 1);
+                        var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
+                        subtitleFile.Language = language;
+
+                        _mediaFileAttributeService.SetFilePermissions(path);
+                        _subtitleFileService.Upsert(subtitleFile);
+
+                        importedFiles.Add(subtitleFile);
+
+                        copy++;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Failed to import subtitle file: {0}", file.Item1);
+                    }
+                }
+            }
+
+            return importedFiles;
         }
 
         private string GetSuffix(Language language, int copy, bool multipleCopies = false)
