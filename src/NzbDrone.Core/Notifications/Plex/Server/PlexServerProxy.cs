@@ -195,7 +195,12 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             }
             catch (WebException ex)
             {
-                throw new PlexException("Unable to connect to Plex Media Server", ex);
+                if (ex.Status == WebExceptionStatus.TrustFailure)
+                {
+                    throw new PlexException("Unable to connect to Plex Media Server, certificate validation failed.", ex);
+                }
+
+                throw new PlexException($"Unable to connect to Plex Media Server, {ex.Message}", ex);
             }
 
             return response.Content;
