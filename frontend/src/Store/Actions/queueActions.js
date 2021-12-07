@@ -25,7 +25,7 @@ const paged = `${section}.paged`;
 
 export const defaultState = {
   options: {
-    includeUnknownSeriesItems: false
+    includeUnknownSeriesItems: true
   },
 
   status: {
