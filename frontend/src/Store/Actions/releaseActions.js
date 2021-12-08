@@ -200,6 +200,12 @@ export const defaultState = {
       name: 'rejectionCount',
       label: 'Rejection Count',
       type: filterBuilderTypes.NUMBER
+    },
+    {
+      name: 'fullSeason',
+      label: 'Season Pack',
+      type: filterBuilderTypes.EXACT,
+      valueType: filterBuilderValueTypes.BOOL
     }
   ],
 
