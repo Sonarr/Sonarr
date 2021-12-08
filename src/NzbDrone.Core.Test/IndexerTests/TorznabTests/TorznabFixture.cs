@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -9,6 +10,7 @@ using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.Torznab;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
 {
@@ -30,7 +32,11 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
                         }
                 };
 
-            _caps = new NewznabCapabilities();
+            _caps = new NewznabCapabilities
+            {
+                Categories = Builder<NewznabCategory>.CreateListOfSize(1).All().With(t => t.Id = 1).Build().ToList()
+            };
+
             Mocker.GetMock<INewznabCapabilitiesProvider>()
                 .Setup(v => v.GetCapabilities(It.IsAny<NewznabSettings>()))
                 .Returns(_caps);
@@ -135,6 +141,51 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             _caps.DefaultPageSize = 25;
 
             Subject.PageSize.Should().Be(25);
+        }
+
+        [TestCase("http://localhost:9117/", "/api")]
+        public void url_and_api_not_jackett_all(string baseUrl, string apiPath)
+        {
+            var setting = new TorznabSettings()
+            {
+                BaseUrl = baseUrl,
+                ApiPath = apiPath
+            };
+
+            setting.Validate().IsValid.Should().BeTrue();
+        }
+
+        [TestCase("http://localhost:9117/torznab/all/api")]
+        [TestCase("http://localhost:9117/api/v2.0/indexers/all/results/torznab")]
+        public void jackett_all_url_should_not_validate(string baseUrl)
+        {
+            var recentFeed = ReadAllText(@"Files/Indexers/Torznab/torznab_tpb.xml");
+            (Subject.Definition.Settings as TorznabSettings).BaseUrl = baseUrl;
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+            result.IsValid.Should().BeTrue();
+            result.HasWarnings.Should().BeTrue();
+        }
+
+        [TestCase("/torznab/all/api")]
+        [TestCase("/api/v2.0/indexers/all/results/torznab")]
+        public void jackett_all_api_should_not_validate(string apiPath)
+        {
+            var recentFeed = ReadAllText(@"Files/Indexers/Torznab/torznab_tpb.xml");
+
+            Mocker.GetMock<IHttpClient>()
+                  .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            (Subject.Definition.Settings as TorznabSettings).ApiPath = apiPath;
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+            result.IsValid.Should().BeTrue();
+            result.HasWarnings.Should().BeTrue();
         }
     }
 }

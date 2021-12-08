@@ -18,6 +18,7 @@ function getInternalLink(source) {
     case 'IndexerRssCheck':
     case 'IndexerSearchCheck':
     case 'IndexerStatusCheck':
+    case 'IndexerJackettAllCheck':
     case 'IndexerLongTermStatusCheck':
       return (
         <IconButton
