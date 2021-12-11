@@ -4,6 +4,7 @@ using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -14,7 +15,6 @@ using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -35,16 +35,15 @@ namespace NzbDrone.App.Test
         {
             var args = new StartupContext("first", "second");
 
-            // set up a dummy broadcaster to allow tests to resolve
-            var mockBroadcaster = new Mock<IBroadcastSignalRMessage>();
-
             var container = new Container(rules => rules.WithNzbDroneRules())
                 .AutoAddServices(Bootstrap.ASSEMBLIES)
                 .AddNzbDroneLogger()
                 .AddDummyDatabase()
                 .AddStartupContext(args);
 
-            container.RegisterInstance<IBroadcastSignalRMessage>(mockBroadcaster.Object);
+            // dummy lifetime and broadcaster so tests resolve
+            container.RegisterInstance<IHostLifetime>(new Mock<IHostLifetime>().Object);
+            container.RegisterInstance<IBroadcastSignalRMessage>(new Mock<IBroadcastSignalRMessage>().Object);
 
             _container = container.GetServiceProvider();
         }
