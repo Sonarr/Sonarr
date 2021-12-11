@@ -4,9 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Extensions.Hosting;
-using NLog;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Host;
 
 namespace NzbDrone.SysTray
@@ -14,28 +13,19 @@ namespace NzbDrone.SysTray
     public class SystemTrayApp : Form, IHostedService
     {
         private readonly IBrowserService _browserService;
-        private readonly IRuntimeInfo _runtimeInfo;
-        private readonly IProcessProvider _processProvider;
+        private readonly ILifecycleService _lifecycle;
 
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenuStrip _trayMenu = new ContextMenuStrip();
 
-        public SystemTrayApp(IBrowserService browserService, IRuntimeInfo runtimeInfo, IProcessProvider processProvider)
+        public SystemTrayApp(IBrowserService browserService, ILifecycleService lifecycle)
         {
             _browserService = browserService;
-            _runtimeInfo = runtimeInfo;
-            _processProvider = processProvider;
+            _lifecycle = lifecycle;
         }
 
         public void Start()
         {
-            Application.ThreadException += OnThreadException;
-            Application.ApplicationExit += OnApplicationExit;
-
-            Application.SetHighDpiMode(HighDpiMode.PerMonitor);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
             _trayMenu.Items.Add(new ToolStripMenuItem("Launch Browser", null, LaunchBrowser));
             _trayMenu.Items.Add(new ToolStripSeparator());
             _trayMenu.Items.Add(new ToolStripMenuItem("Exit", null, OnExit));
@@ -69,12 +59,6 @@ namespace NzbDrone.SysTray
             DisposeTrayIcon();
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            Console.WriteLine("Closing");
-            base.OnClosed(e);
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             Visible = false;
@@ -102,8 +86,7 @@ namespace NzbDrone.SysTray
 
         private void OnExit(object sender, EventArgs e)
         {
-            LogManager.Configuration = null;
-            Environment.Exit(0);
+            _lifecycle.Shutdown();
         }
 
         private void LaunchBrowser(object sender, EventArgs e)
@@ -117,33 +100,17 @@ namespace NzbDrone.SysTray
             }
         }
 
-        private void OnApplicationExit(object sender, EventArgs e)
-        {
-            if (_runtimeInfo.RestartPending)
-            {
-                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--restart --nobrowser");
-            }
-
-            DisposeTrayIcon();
-        }
-
-        private void OnThreadException(object sender, EventArgs e)
-        {
-            DisposeTrayIcon();
-        }
-
         private void DisposeTrayIcon()
         {
-            try
+            if (_trayIcon == null)
             {
-                _trayIcon.Visible = false;
-                _trayIcon.Icon = null;
-                _trayIcon.Visible = false;
-                _trayIcon.Dispose();
+                return;
             }
-            catch (Exception)
-            {
-            }
+
+            _trayIcon.Visible = false;
+            _trayIcon.Icon = null;
+            _trayIcon.Visible = false;
+            _trayIcon.Dispose();
         }
     }
 }

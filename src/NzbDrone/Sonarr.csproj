@@ -5,7 +5,6 @@
     <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>..\NzbDrone.Host\Sonarr.ico</ApplicationIcon>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <ItemGroup>
@@ -13,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Host\Sonarr.Host.csproj" />
+    <ProjectReference Include="..\NzbDrone.Windows\Sonarr.Windows.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

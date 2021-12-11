@@ -176,7 +176,18 @@ namespace NzbDrone.Host
                 return ApplicationModes.UninstallService;
             }
 
-            if (OsInfo.IsWindows && WindowsServiceHelpers.IsWindowsService())
+            // IsWindowsService can throw sometimes, so wrap it
+            var isWindowsService = false;
+            try
+            {
+                isWindowsService = WindowsServiceHelpers.IsWindowsService();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Failed to get service status");
+            }
+
+            if (OsInfo.IsWindows && isWindowsService)
             {
                 return ApplicationModes.Service;
             }

@@ -4,7 +4,6 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
 
     <ApplicationIcon>..\NzbDrone.Host\Sonarr.ico</ApplicationIcon>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition="!$(RuntimeIdentifier.StartsWith('win'))">
     <AssemblyName>Sonarr</AssemblyName>
