@@ -3,6 +3,8 @@ using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Composition.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
@@ -25,12 +27,15 @@ namespace NzbDrone.Common.Test
                 .AddNzbDroneLogger()
                 .AutoAddServices(Bootstrap.ASSEMBLIES)
                 .AddDummyDatabase()
-                .AddStartupContext(new StartupContext("first", "second"))
-                .GetServiceProvider();
+                .AddStartupContext(new StartupContext("first", "second"));
 
-            container.GetRequiredService<IAppFolderFactory>().Register();
+            container.RegisterInstance<IHostLifetime>(new Mock<IHostLifetime>().Object);
 
-            Mocker.SetConstant<System.IServiceProvider>(container);
+            var serviceProvider = container.GetServiceProvider();
+
+            serviceProvider.GetRequiredService<IAppFolderFactory>().Register();
+
+            Mocker.SetConstant<System.IServiceProvider>(serviceProvider);
 
             var handlers = Subject.BuildAll<IHandle<ApplicationStartedEvent>>()
                                   .Select(c => c.GetType().FullName);
