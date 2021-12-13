@@ -42,6 +42,7 @@ Note: GitHub Issues are for Bugs and Feature Requests Only
 
 ### Development
 This project exists thanks to all the people who contribute. [Contribute](CONTRIBUTING.md).
+
 <a href="https://github.com/Sonarr/Sonarr/graphs/contributors"><img src="https://opencollective.com/Sonarr/contributors.svg?width=890&button=false" /></a>
 
 ### Supporters
@@ -49,17 +50,17 @@ This project exists thanks to all the people who contribute. [Contribute](CONTRI
 This project would not be possible without the support of our users and software providers. 
 [**Become a sponsor or backer**](https://opencollective.com/sonarr) to help us out!
 
+#### Mega Sponsors
+
+[![Sponsors](https://opencollective.com/sonarr/tiers/mega-sponsor.svg?width=890)](https://opencollective.com/sonarr/contribute/mega-sponsor-21443/checkout)
+
 #### Sponsors
 
-[![Sponsors](https://opencollective.com/sonarr/tiers/sponsor.svg)](https://opencollective.com/sonarr/contribute/sponsor-21443/checkout)
-
-#### Flexible Sponsors
-
-[![Flexible Sponsors](https://opencollective.com/sonarr/tiers/flexible-sponsor.svg?avatarHeight=54)](https://opencollective.com/sonarr/contribute/flexible-sponsor-21457/checkout)
+[![Flexible Sponsors](https://opencollective.com/sonarr/sponsors.svg?width=890)](https://opencollective.com/sonarr/contribute/sponsor-21457/checkout)
 
 #### Backers
 
-[![Backers](https://opencollective.com/sonarr/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/sonarr/contribute/backer-21442/checkout)
+[![Backers](https://opencollective.com/sonarr/backers.svg?width=890)](https://opencollective.com/sonarr/contribute/backer-21442/checkout)
 
 #### JetBrains
 
