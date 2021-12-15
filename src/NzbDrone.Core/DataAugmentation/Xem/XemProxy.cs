@@ -18,7 +18,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
     public class XemProxy : IXemProxy
     {
-        private const string ROOT_URL = "http://thexem.info/map/";
+        private const string ROOT_URL = "https://thexem.info/map/";
 
         private readonly Logger _logger;
         private readonly IHttpClient _httpClient;
