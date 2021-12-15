@@ -148,7 +148,7 @@ namespace NzbDrone.Common.Test.Http
             var request = new HttpRequest($"https://expired.badssl.com");
 
             Assert.Throws<HttpRequestException>(() => Subject.Execute(request));
-            ExceptionVerification.ExpectedErrors(2);
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]

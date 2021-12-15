@@ -27,21 +27,18 @@ namespace NzbDrone.Common.Http.Dispatchers
         private readonly ICertificateValidationService _certificateValidationService;
         private readonly IUserAgentBuilder _userAgentBuilder;
         private readonly ICached<System.Net.Http.HttpClient> _httpClientCache;
-        private readonly Logger _logger;
         private readonly ICached<CredentialCache> _credentialCache;
 
         public ManagedHttpDispatcher(IHttpProxySettingsProvider proxySettingsProvider,
-                                     ICreateManagedWebProxy createManagedWebProxy,
-                                     ICertificateValidationService certificateValidationService,
-                                     IUserAgentBuilder userAgentBuilder,
-                                     ICacheManager cacheManager,
-                                     Logger logger)
+            ICreateManagedWebProxy createManagedWebProxy,
+            ICertificateValidationService certificateValidationService,
+            IUserAgentBuilder userAgentBuilder,
+            ICacheManager cacheManager)
         {
             _proxySettingsProvider = proxySettingsProvider;
             _createManagedWebProxy = createManagedWebProxy;
             _certificateValidationService = certificateValidationService;
             _userAgentBuilder = userAgentBuilder;
-            _logger = logger;
 
             _httpClientCache = cacheManager.GetCache<System.Net.Http.HttpClient>(typeof(ManagedHttpDispatcher));
             _credentialCache = cacheManager.GetCache<CredentialCache>(typeof(ManagedHttpDispatcher), "credentialcache");
@@ -102,49 +99,32 @@ namespace NzbDrone.Common.Http.Dispatchers
 
             var httpClient = GetClient(request.Url);
 
-            HttpResponseMessage responseMessage;
-
-            try
+            using var responseMessage = httpClient.Send(requestMessage, HttpCompletionOption.ResponseHeadersRead, cts.Token);
             {
-                responseMessage = httpClient.Send(requestMessage, cts.Token);
-            }
-            catch (HttpRequestException e)
-            {
-                _logger.Error(e, "HttpClient error");
-                throw;
-            }
+                byte[] data = null;
 
-            byte[] data = null;
-
-            using (var responseStream = responseMessage.Content.ReadAsStream())
-            {
-                if (responseStream != null && responseStream != Stream.Null)
+                try
                 {
-                    try
+                    if (request.ResponseStream != null && responseMessage.StatusCode == HttpStatusCode.OK)
                     {
-                        if (request.ResponseStream != null && responseMessage.StatusCode == HttpStatusCode.OK)
-                        {
-                            // A target ResponseStream was specified, write to that instead.
-                            // But only on the OK status code, since we don't want to write failures and redirects.
-                            responseStream.CopyTo(request.ResponseStream);
-                        }
-                        else
-                        {
-                            data = responseStream.ToBytes();
-                        }
+                        responseMessage.Content.CopyTo(request.ResponseStream, null, cts.Token);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        throw new WebException("Failed to read complete http response", ex, WebExceptionStatus.ReceiveFailure, null);
+                        data = responseMessage.Content.ReadAsByteArrayAsync(cts.Token).GetAwaiter().GetResult();
                     }
                 }
+                catch (Exception ex)
+                {
+                    throw new WebException("Failed to read complete http response", ex, WebExceptionStatus.ReceiveFailure, null);
+                }
+
+                var headers = responseMessage.Headers.ToNameValueCollection();
+
+                headers.Add(responseMessage.Content.Headers.ToNameValueCollection());
+
+                return new HttpResponse(request, new HttpHeader(headers), data, responseMessage.StatusCode);
             }
-
-            var headers = responseMessage.Headers.ToNameValueCollection();
-
-            headers.Add(responseMessage.Content.Headers.ToNameValueCollection());
-
-            return new HttpResponse(request, new HttpHeader(headers), data, responseMessage.StatusCode);
         }
 
         protected virtual System.Net.Http.HttpClient GetClient(HttpUri uri)
