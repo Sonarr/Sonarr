@@ -26,12 +26,15 @@ function HistoryDetails(props) {
       preferredWordScore,
       nzbInfoUrl,
       downloadClient,
+      downloadClientName,
       downloadId,
       age,
       ageHours,
       ageMinutes,
       publishedDate
     } = data;
+
+    const downloadClientNameInfo = downloadClientName ?? downloadClient;
 
     return (
       <DescriptionList>
@@ -84,10 +87,10 @@ function HistoryDetails(props) {
         }
 
         {
-          downloadClient ?
+          downloadClientNameInfo ?
             <DescriptionListItem
               title="Download Client"
-              data={downloadClient}
+              data={downloadClientNameInfo}
             /> :
             null
         }
