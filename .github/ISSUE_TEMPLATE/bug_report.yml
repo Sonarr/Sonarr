@@ -66,6 +66,7 @@ body:
     description: |
       Trace Logs (https://wiki.servarr.com/sonarr/troubleshooting#logging-and-log-files) 
       ***Generally speaking, all bug reports must have trace logs provided.***
+      *** Info Logs are not trace logs. If the logs do not say trace and are not from a file like `*.trace.*.txt` they are not trace logs.***
   validations:
     required: true
 - type: textarea
