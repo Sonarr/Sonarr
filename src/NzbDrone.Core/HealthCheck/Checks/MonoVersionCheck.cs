@@ -30,7 +30,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 _logger.Debug("Mono version {0}", monoVersion);
                 return new HealthCheck(GetType(), HealthCheckResult.Error,
                     $"Currently installed Mono version {monoVersion} has a bug that causes issues connecting to indexers/download clients. You should upgrade to a higher version",
-                    "#currently_installed_mono_version-is_old_and_unsupported");
+                    "#currently-installed-mono-version-is-old-and-unsupported");
             }
 
             // Currently best stable Mono version (5.18 gets us .net 4.7.2 support)
