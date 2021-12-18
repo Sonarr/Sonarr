@@ -262,6 +262,9 @@ namespace NzbDrone.Core.Parser
                         case Resolution.R1080p:
                             result.Quality = Quality.Bluray1080p;
                             return result;
+                        case Resolution.R2160p:
+                            result.Quality = Quality.Bluray2160p;
+                            return result;
                         default:
                             result.Quality = Quality.Bluray480p;
                             return result;

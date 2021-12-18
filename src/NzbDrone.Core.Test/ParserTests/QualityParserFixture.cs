@@ -314,7 +314,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Away(2001) Bluray FHD Hi10P.mkv", false)]
         [TestCase("S for Series 2005 1080p UHD BluRay DD+7.1 x264-LoRD.mkv", false)]
         [TestCase("Series.Title.2011.1080p.UHD.BluRay.DD5.1.HDR.x265-CtrlHD.mkv", false)]
-        [TestCase("Series.Title.2011.UHD.BluRay.DD5.1.HDR.x265-CtrlHD/ctrlhd-rotpota-1080p.mkv", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);
@@ -334,6 +333,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.US.s05e13.UHD.4K.Bluray", false)]
         [TestCase("[DameDesuYo] Series Bundle - Part 1 (BD 4K 8bit FLAC)", false)]
         [TestCase("Series.Title.2014.2160p.UHD.BluRay.X265-IAMABLE.mkv", false)]
+        [TestCase("Series.Title.2014.2160p.UHD.BluRay.X265-IAMABLE.mkv", false)]
+        [TestCase("Series.Title.S05EO1.Episode.Title.2160p.BDRip.AAC.7.1.HDR10.x265.10bit-Markll", false)]
         public void should_parse_bluray2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray2160p, proper);
