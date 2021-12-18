@@ -15,9 +15,7 @@ namespace Sonarr.Http.Validation
         {
             if (context.PropertyValue == null) return true;
 
-            var collection = context.PropertyValue as IEnumerable<T>;
-
-            return collection != null && collection.Empty();
+            return context.PropertyValue is IEnumerable<T> collection && collection.Empty();
         }
     }
 }
