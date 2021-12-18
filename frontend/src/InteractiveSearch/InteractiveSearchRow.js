@@ -35,12 +35,12 @@ function getDownloadTooltip(isGrabbing, isGrabbed, grabError) {
   if (isGrabbing) {
     return '';
   } else if (isGrabbed) {
-    return 'Added to downloaded queue';
+    return 'Added to download queue';
   } else if (grabError) {
     return grabError;
   }
 
-  return 'Add to downloaded queue';
+  return 'Add to download queue';
 }
 
 class InteractiveSearchRow extends Component {
