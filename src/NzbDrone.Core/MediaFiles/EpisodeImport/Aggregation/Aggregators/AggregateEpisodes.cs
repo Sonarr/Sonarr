@@ -78,9 +78,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
                 if (episodes.Empty() && bestEpisodeInfoForEpisodes.IsPossibleSpecialEpisode)
                 {
-                    var parsedEpisodeInfo = GetSpecialEpisodeInfo(localEpisode, bestEpisodeInfoForEpisodes);
+                    var parsedSpecialEpisodeInfo = GetSpecialEpisodeInfo(localEpisode, bestEpisodeInfoForEpisodes);
 
-                    episodes = _parsingService.GetEpisodes(parsedEpisodeInfo, localEpisode.Series, localEpisode.SceneSource);
+                    if (parsedSpecialEpisodeInfo != null)
+                    {
+                        episodes = _parsingService.GetEpisodes(parsedSpecialEpisodeInfo, localEpisode.Series, localEpisode.SceneSource);
+                    }
                 }
 
                 return episodes;
