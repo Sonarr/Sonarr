@@ -210,6 +210,20 @@ export const defaultState = {
       return Number.MAX_VALUE;
     },
 
+    previousAiring: function(item, direction) {
+      const previousAiring = item.previousAiring;
+
+      if (previousAiring) {
+        return moment(previousAiring).unix();
+      }
+
+      if (direction === sortDirections.DESCENDING) {
+        return -Number.MAX_VALUE;
+      }
+
+      return Number.MAX_VALUE;
+    },
+
     episodeProgress: function(item) {
       const { statistics = {} } = item;
 
