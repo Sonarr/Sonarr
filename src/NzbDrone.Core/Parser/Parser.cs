@@ -761,29 +761,6 @@ namespace NzbDrone.Core.Parser
             return title;
         }
 
-        public static string ToUrlSlug(string value)
-        {
-            //First to lower case
-            value = value.ToLowerInvariant();
-
-            //Remove all accents
-            value = value.RemoveAccent();
-
-            //Replace spaces
-            value = Regex.Replace(value, @"\s", "-", RegexOptions.Compiled);
-
-            //Remove invalid chars
-            value = Regex.Replace(value, @"[^a-z0-9\s-_]", "", RegexOptions.Compiled);
-
-            //Trim dashes from end
-            value = value.Trim('-', '_');
-
-            //Replace double occurences of - or _
-            value = Regex.Replace(value, @"([-_]){2,}", "$1", RegexOptions.Compiled);
-
-            return value;
-        }
-
         private static SeriesTitleInfo GetSeriesTitleInfo(string title)
         {
             var seriesTitleInfo = new SeriesTitleInfo();
