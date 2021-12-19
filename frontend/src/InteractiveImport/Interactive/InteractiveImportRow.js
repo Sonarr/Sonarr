@@ -234,7 +234,13 @@ class InteractiveImportRow extends Component {
       return (
         <div key={episode.id}>
           {episode.episodeNumber}
-          {isAnime ? ` (${episode.absoluteEpisodeNumber})` : ''}
+
+          {
+            isAnime && episode.absoluteEpisodeNumber != null ?
+              ` (${episode.absoluteEpisodeNumber})` :
+              ''
+          }
+
           {` - ${episode.title}`}
         </div>
       );
