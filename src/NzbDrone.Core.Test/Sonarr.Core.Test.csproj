@@ -15,6 +15,9 @@
       <Link>Files\1024.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <None Update="Files\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
