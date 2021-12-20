@@ -142,4 +142,3 @@ _start
 
 src/.idea/
 /distribution/windows/setup/output/*
-/CppProperties.json
