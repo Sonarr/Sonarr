@@ -166,7 +166,7 @@ namespace NzbDrone.Common.Extensions
             return source.Contains(value, StringComparer.InvariantCultureIgnoreCase);
         }
                 
-        public static string ToUrlSlug(string value)
+        public static string ToUrlSlug(this string value)
         {
             //First to lower case
             value = value.ToLowerInvariant();
