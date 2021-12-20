@@ -12,11 +12,8 @@ sourceFolder='./src'
 slnFile=$sourceFolder/Sonarr.sln
 updateSubFolder=Sonarr.Update
 
-sqlitePackageDir="$HOME/.nuget/packages/system.data.sqlite.core.servarr/1.0.115.5-18"
-
 nuget='tools/nuget/nuget.exe';
 vswhere='tools/vswhere/vswhere.exe';
-macho='tools/macho/MachOConverter.exe';
 
 . ./version.sh
 
@@ -138,9 +135,6 @@ Build()
 
     CleanFolder $outputFolder false
 
-    echo "Removing Sonarr.Update/sqlite3.dll"
-    rm $outputFolder/Sonarr.Update/sqlite3.dll
-
     echo "Removing Mono.Posix.dll"
     rm $outputFolder/Mono.Posix.dll
 
@@ -240,7 +234,6 @@ PackageMono()
 
     echo "Removing native windows binaries Sqlite, MediaInfo"
     rm -f $outputFolderLinux/sqlite3.*
-    rm -f $outputFolderLinux/Sonarr.Update/sqlite3.*
     rm -f $outputFolderLinux/MediaInfo.*
 
     PatchMono $outputFolderLinux
@@ -285,22 +278,17 @@ PackageMacOS()
     chmod +x $outputFolderMacOS/Sonarr
 
     echo "Adding Sonarr.Update Launcher"
-    CheckExitCode cp ./distribution/osx/Launcher/dist/Launcher $outputFolderMacOS/Sonarr.Update/
-    CheckExitCode mv $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe.bak
-    CheckExitCode mv $outputFolderMacOS/Sonarr.Update/Launcher $outputFolderMacOS/Sonarr.Update/Sonarr.Update
-    CheckExitCode mv $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe.bak $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe
+    cp ./distribution/osx/Launcher/dist/Launcher $outputFolderMacOS/Sonarr.Update/
+    mv $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe.bak
+    mv $outputFolderMacOS/Sonarr.Update/Launcher $outputFolderMacOS/Sonarr.Update/Sonarr.Update
+    mv $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe.bak $outputFolderMacOS/Sonarr.Update/Sonarr.Update.exe
     chmod +x $outputFolderMacOS/Sonarr.Update/Sonarr.Update
 
-    echo "Adding sqlite dylib"
-    CheckExitCode cp "$sqlitePackageDir/runtimes/osx-x64/native/net46"/*.config $outputFolderMacOS/
-    if [ $runtime = "dotnet" ] ; then
-        CheckExitCode $macho merge $outputFolderMacOS "$sqlitePackageDir/runtimes/osx-x64/native/net46"/*.dylib "$sqlitePackageDir/runtimes/osx-arm64/native/net46"/*.dylib
-    else
-        CheckExitCode mono $macho merge $outputFolderMacOS "$sqlitePackageDir/runtimes/osx-x64/native/net46"/*.dylib "$sqlitePackageDir/runtimes/osx-arm64/native/net46"/*.dylib
-    fi
+    echo "Adding sqlite dylibs"
+    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOS
 
     echo "Adding MediaInfo dylib"
-    CheckExitCode cp $sourceFolder/Libraries/MediaInfo/x64/*.dylib $outputFolderMacOS/
+    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderMacOS
 
     ProgressEnd 'Creating MacOS Package'
 }
@@ -309,37 +297,29 @@ PackageMacOSApp()
 {
     ProgressStart 'Creating macOS App Package'
 
-    outputFolderMacOSAppBase=$outputFolderMacOSApp/Sonarr.app/Contents/MacOS
-    outputFolderMacOSAppBin=$outputFolderMacOSAppBase/bin
-
     rm -rf $outputFolderMacOSApp
     mkdir $outputFolderMacOSApp
     cp -r ./distribution/osx/Sonarr.app $outputFolderMacOSApp
-    mkdir -p $outputFolderMacOSAppBase
+    mkdir -p $outputFolderMacOSApp/Sonarr.app/Contents/MacOS
 
     echo "Adding Sonarr Launcher"
-    CheckExitCode cp ./distribution/osx/Launcher/dist/Launcher $outputFolderMacOSAppBase/
-    CheckExitCode mv $outputFolderMacOSAppBase/Launcher $outputFolderMacOSAppBase/Sonarr
-    chmod +x $outputFolderMacOSAppBase/Sonarr
+    cp ./distribution/osx/Launcher/dist/Launcher $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/
+    mv $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Launcher $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr
+    chmod +x $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/Sonarr
 
     echo "Copying Binaries"
-    mkdir -p $outputFolderMacOSAppBin
-    CheckExitCode cp -r $outputFolderLinux/* $outputFolderMacOSAppBin
+    mkdir -p $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin
+    cp -r $outputFolderLinux/* $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin/
 
-    echo "Adding sqlite dylib"
-    if [ $runtime = "dotnet" ] ; then
-        CheckExitCode $macho merge $outputFolderMacOSAppBin "$sqlitePackageDir/runtimes/osx-x64/native/net46" "$sqlitePackageDir/runtimes/osx-arm64/native/net46"
-    else
-        CheckExitCode mono $macho merge $outputFolderMacOSAppBin "$sqlitePackageDir/runtimes/osx-x64/native/net46" "$sqlitePackageDir/runtimes/osx-arm64/native/net46"
-    fi
-
+    echo "Adding sqlite dylibs"
+    cp $sourceFolder/Libraries/Sqlite/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin/
 
     echo "Adding MediaInfo dylib"
-    CheckExitCode cp $sourceFolder/Libraries/MediaInfo/x64/*.dylib $outputFolderMacOSAppBin/
+    cp $sourceFolder/Libraries/MediaInfo/*.dylib $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin/
 
     echo "Removing Update Folder"
-    rm -r $outputFolderMacOSAppBin/Sonarr.Update
-    echo "# Do Not Edit\nPackageVersion=${BUILD_NUMBER}\nPackageAuthor=[Team Sonarr](https://sonarr.tv)\nReleaseVersion=${BUILD_NUMBER}\nUpdateMethod=$PackageUpdater\nBranch=${Branch:-master}" > $outputFolderMacOSAppBase/package_info
+    rm -r $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/bin/Sonarr.Update
+    echo "# Do Not Edit\nPackageVersion=${BUILD_NUMBER}\nPackageAuthor=[Team Sonarr](https://sonarr.tv)\nReleaseVersion=${BUILD_NUMBER}\nUpdateMethod=$PackageUpdater\nBranch=${Branch:-master}" > $outputFolderMacOSApp/Sonarr.app/Contents/MacOS/package_info
 
     ProgressEnd 'Creating macOS App Package'
 }

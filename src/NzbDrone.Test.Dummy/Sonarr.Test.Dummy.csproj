@@ -4,8 +4,4 @@
     <TargetFramework>net462</TargetFramework>
     <Platforms>x86</Platforms>
   </PropertyGroup>
-  <ItemGroup>
-    <!-- Workaround to ensure sqlite3.dll is copied -->
-    <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
-  </ItemGroup>
 </Project>

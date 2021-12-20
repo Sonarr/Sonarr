@@ -21,7 +21,10 @@
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj" />
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
   </ItemGroup>
-  <ItemGroup> 
+  <ItemGroup>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
@@ -29,10 +32,10 @@
     <EmbeddedResource Include="..\..\Logo\64.png">
       <Link>Resources\Logo\64.png</Link>
     </EmbeddedResource>
-    <None Include="..\Libraries\MediaInfo\$(Platform)\MediaInfo.dll" Condition="$(RuntimeIdentifier.StartsWith('win')) or '$(RuntimeIdentifier)'==''">
+    <None Include="..\Libraries\Sqlite\sqlite3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Libraries\MediaInfo\$(Platform)\libmediainfo.0.dylib" Condition="$(RuntimeIdentifier.StartsWith('osx'))">
+    <None Include="..\Libraries\MediaInfo\MediaInfo.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

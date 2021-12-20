@@ -2,9 +2,6 @@
   <!-- Common to all Sonarr Projects -->
   <PropertyGroup>
     <SonarrRootDir>$(MSBuildThisFileDirectory)..\</SonarrRootDir>
-    
-    <!-- Whether we want TargetFramework switching in Visual Studio -->
-    <TargetMultiple>false</TargetMultiple>
 
     <!-- Specifies the type of output -->
     <SonarrOutputType>Library</SonarrOutputType>
@@ -22,34 +19,17 @@
     <SonarrProject Condition="$(MSBuildProjectName.StartsWith('ServiceUninstall'))">true</SonarrProject>
   </PropertyGroup>
 
-  <!-- Pick default RuntimeIdentifier for our compilation environment -->
-  <PropertyGroup Condition=" '$(TargetMultiple)'!='true' ">
-      <RuntimeIdentifiers></RuntimeIdentifiers>
-      <RuntimeIdentifier>win-x86</RuntimeIdentifier>
-      <TargetFrameworks></TargetFrameworks>
-      <TargetFramework>net462</TargetFramework>
-  </PropertyGroup>
-
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)'==''">Release</Configuration>
-
-    <TargetFrameworkPath>$(TargetFramework)\</TargetFrameworkPath>
-    <TargetFrameworkPath Condition="'$(Platform)'!='x64'">$(TargetFrameworkPath)$(Platform)\</TargetFrameworkPath>
-    <TargetFrameworkPath>$(TargetFrameworkPath)$(Configuration)\</TargetFrameworkPath>
-
     <!-- Centralize intermediate and default outputs -->
     <BaseIntermediateOutputPath>$(SonarrRootDir)_temp\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>$(SonarrRootDir)_temp\obj\$(MSBuildProjectName)\$(TargetFrameworkPath)</IntermediateOutputPath>
-    <OutputPath>$(SonarrRootDir)_temp\bin\$(TargetFrameworkPath)$(MSBuildProjectName)\</OutputPath>
+    <IntermediateOutputPath>$(SonarrRootDir)_temp\obj\$(MSBuildProjectName)\$(Configuration)\</IntermediateOutputPath>
+    <OutputPath>$(SonarrRootDir)_temp\bin\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
 
-    <!-- Flatten the 'real' output paths for backward compat -->
-    <OutputTargetFrameworkPath>$(TargetFrameworkPath)</OutputTargetFrameworkPath>
-    <OutputTargetFrameworkPath Condition=" '$(TargetMultiple)'!='true' "></OutputTargetFrameworkPath>
- 
     <!-- Output to _output and _tests respectively -->
-    <OutputPath Condition="'$(SonarrProject)'=='true'">$(SonarrRootDir)_output\$(OutputTargetFrameworkPath)</OutputPath>
-    <OutputPath Condition="'$(SonarrOutputType)'=='Test'">$(SonarrRootDir)_tests\$(OutputTargetFrameworkPath)</OutputPath>
-    <OutputPath Condition="'$(SonarrOutputType)'=='Update'">$(OutputPath)Sonarr.Update\</OutputPath>
+    <OutputPath Condition="'$(SonarrProject)'=='true'">$(SonarrRootDir)_output\</OutputPath>
+    <OutputPath Condition="'$(SonarrOutputType)'=='Test'">$(SonarrRootDir)_tests\</OutputPath>
+    <OutputPath Condition="'$(SonarrOutputType)'=='Update'">$(SonarrRootDir)_output\Sonarr.Update\</OutputPath>
 
     <!-- Paths relative to project file for better readability -->
     <BaseIntermediateOutputPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)', '$(BaseIntermediateOutputPath)'))</BaseIntermediateOutputPath>
@@ -93,7 +73,6 @@
   <PropertyGroup>
     <!-- We don't want separate framework directories till we go dotnet core -->
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 
     <!-- For now keep the NzbDrone namespace -->
     <RootNamespace Condition="'$(SonarrProject)'=='true'">$(MSBuildProjectName.Replace('Sonarr','NzbDrone'))</RootNamespace>
