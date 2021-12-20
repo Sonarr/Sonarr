@@ -26,9 +26,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
         {
             var link = Settings.BaseUrl.Trim();
 
-            var listName = Settings.Listname.Trim();
-
-            link += $"/users/{Settings.Username.Trim()}/lists/{listName}/items/shows?limit={Settings.Limit}";
+            link += $"/users/{Settings.Username.Trim()}/lists/{Settings.Listname.ToUrlSlug()}/items/shows?limit={Settings.Limit}";
 
             var request = new ImportListRequest($"{link}", HttpAccept.Json);
 
