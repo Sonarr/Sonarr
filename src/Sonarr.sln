@@ -53,7 +53,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Common", "NzbDrone.C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1E6B3CBE-1578-41C1-9BF9-78D818740BE9}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet.config = NuGet.config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 	EndProjectSection
 EndProject

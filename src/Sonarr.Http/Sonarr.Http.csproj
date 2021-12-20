@@ -16,5 +16,8 @@
     <ProjectReference Include="..\NzbDrone.SignalR\Sonarr.SignalR.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
