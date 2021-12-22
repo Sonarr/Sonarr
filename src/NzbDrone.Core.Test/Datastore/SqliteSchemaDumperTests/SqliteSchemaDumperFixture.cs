@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
             result.Name.Should().Be(tableName);
             result.Columns.Count.Should().Be(1);
             result.Columns.First().Name.Should().Be(columnName);
+            result.Columns.First().IsIdentity.Should().BeTrue();
         }
 
         [TestCase(@"CREATE INDEX TestIndex ON TestTable (MyId)", "TestIndex", "TestTable", "MyId")]
