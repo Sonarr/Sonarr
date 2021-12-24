@@ -61,6 +61,9 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         [TestCase(@"tracker"":""https://xxx.yyy/tracker.php/9pr04sg601233210imaveql2tyu8xyui/announce""}")]
         [TestCase(@"tracker"":""https://xxx.yyy/announce/9pr04sg601233210imaveql2tyu8xyui""}")]
         [TestCase(@"tracker"":""https://xxx.yyy/announce.php?passkey=9pr04sg601233210imaveql2tyu8xyui""}")]
+        // Webhooks - Notifiarr
+        [TestCase(@"https://xxx.yyy/api/v1/notification/sonarr/9pr04sg6-0123-3210-imav-eql2tyu8xyui")]
+
         public void should_clean_message(string message)
         {
             var cleansedMessage = CleanseLogMessage.Cleanse(message);
