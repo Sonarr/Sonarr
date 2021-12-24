@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class EmbeddedDocumentConverter : IConverter
     {
-        private readonly JsonSerializerSettings SerializerSetting;
+        protected readonly JsonSerializerSettings SerializerSetting;
 
         public EmbeddedDocumentConverter(params JsonConverter[] converters)
         {
