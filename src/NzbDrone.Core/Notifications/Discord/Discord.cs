@@ -295,6 +295,40 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
+        {
+            var attachments = new List<Embed>
+                              {
+                                  new Embed
+                                  {
+                                      Author = new DiscordAuthor
+                                      {
+                                          Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
+                                          IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
+                                      },
+                                      Title = APPLICATION_UPDATE_TITLE,
+                                      Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                                      Color = (int)DiscordColors.Standard,
+                                      Fields = new List<DiscordField>()
+                                      {
+                                          new DiscordField()
+                                          {
+                                              Name = "Previous Version",
+                                              Value = updateMessage.PreviousVersion.ToString()
+                                          },
+                                          new DiscordField()
+                                          {
+                                              Name = "New Version",
+                                              Value = updateMessage.NewVersion.ToString()
+                                          }
+                                      },
+                                  }
+                              };
+
+            var payload = CreatePayload(null, attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

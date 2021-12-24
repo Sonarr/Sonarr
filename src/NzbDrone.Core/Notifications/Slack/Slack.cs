@@ -120,6 +120,23 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
+        {
+            var attachments = new List<Attachment>
+                              {
+                                  new Attachment
+                                  {
+                                      Title = Environment.MachineName,
+                                      Text = updateMessage.Message,
+                                      Color = "good"
+                                  }
+                              };
+
+            var payload = CreatePayload("Application Updated", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

@@ -56,10 +56,10 @@ namespace NzbDrone.Core.Notifications.Webhook
             if (message.OldFiles.Any())
             {
                 payload.DeletedFiles = message.OldFiles.ConvertAll(x => new WebhookEpisodeFile(x)
-                                                                        {
-                                                                            Path = Path.Combine(message.Series.Path,
+                {
+                    Path = Path.Combine(message.Series.Path,
                                                                                 x.RelativePath)
-                                                                        }
+                }
                 );
             }
 
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 Series = new WebhookSeries(deleteMessage.Series),
                 Episodes = deleteMessage.EpisodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = deleteMessage.EpisodeFile,
-                DeleteReason = deleteMessage.Reason                
+                DeleteReason = deleteMessage.Reason
             };
 
             _proxy.SendWebhook(payload, Settings);
@@ -107,13 +107,26 @@ namespace NzbDrone.Core.Notifications.Webhook
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
             var payload = new WebhookHealthPayload
-                          {
-                              EventType = WebhookEventType.Health,
-                              Level = healthCheck.Type,
-                              Message = healthCheck.Message,
-                              Type = healthCheck.Source.Name,
-                              WikiUrl = healthCheck.WikiUrl?.ToString()
-                          };
+            {
+                EventType = WebhookEventType.Health,
+                Level = healthCheck.Type,
+                Message = healthCheck.Message,
+                Type = healthCheck.Source.Name,
+                WikiUrl = healthCheck.WikiUrl?.ToString()
+            };
+
+            _proxy.SendWebhook(payload, Settings);
+        }
+
+        public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
+        {
+            var payload = new WebhookApplicationUpdatePayload
+            {
+                EventType = WebhookEventType.ApplicationUpdate,
+                Message = updateMessage.Message,
+                PreviousVersion = updateMessage.PreviousVersion.ToString(),
+                NewVersion = updateMessage.NewVersion.ToString()
+            };
 
             _proxy.SendWebhook(payload, Settings);
         }
@@ -134,16 +147,16 @@ namespace NzbDrone.Core.Notifications.Webhook
             try
             {
                 var payload = new WebhookGrabPayload
+                {
+                    EventType = WebhookEventType.Test,
+                    Series = new WebhookSeries()
                     {
-                        EventType = WebhookEventType.Test,
-                        Series = new WebhookSeries()
-                        {
-                            Id = 1,
-                            Title = "Test Title",
-                            Path = "C:\\testpath",
-                            TvdbId = 1234
-                        },
-                        Episodes = new List<WebhookEpisode>() {
+                        Id = 1,
+                        Title = "Test Title",
+                        Path = "C:\\testpath",
+                        TvdbId = 1234
+                    },
+                    Episodes = new List<WebhookEpisode>() {
                             new WebhookEpisode()
                             {
                                 Id = 123,
@@ -152,7 +165,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                                 Title = "Test title"
                             }
                         }
-                    };
+                };
 
                 _proxy.SendWebhook(payload, Settings);
             }

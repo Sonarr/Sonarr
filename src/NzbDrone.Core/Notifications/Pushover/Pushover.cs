@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Notifications.Pushover
     public class Pushover : NotificationBase<PushoverSettings>
     {
         private readonly IPushoverProxy _proxy;
-        
+
         public Pushover(IPushoverProxy proxy)
         {
             _proxy = proxy;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Notifications.Pushover
         {
             _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
         }
-        
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
@@ -39,6 +39,11 @@ namespace NzbDrone.Core.Notifications.Pushover
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
             _proxy.SendNotification(HEALTH_ISSUE_TITLE, healthCheck.Message, Settings);
+        }
+
+        public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
+        {
+            _proxy.SendNotification(APPLICATION_UPDATE_TITLE, updateMessage.Message, Settings);
         }
 
         public override ValidationResult Test()

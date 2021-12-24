@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { kinds } from 'Helpers/Props';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import { kinds } from 'Helpers/Props';
 import EditNotificationModalConnector from './EditNotificationModalConnector';
 import styles from './Notification.css';
 
@@ -39,7 +39,7 @@ class Notification extends Component {
     });
   }
 
-  onDeleteNotificationModalClose= () => {
+  onDeleteNotificationModalClose = () => {
     this.setState({ isDeleteNotificationModalOpen: false });
   }
 
@@ -62,6 +62,7 @@ class Notification extends Component {
       onEpisodeFileDelete,
       onEpisodeFileDeleteForUpgrade,
       onHealthIssue,
+      onApplicationUpdate,
       supportsOnGrab,
       supportsOnDownload,
       supportsOnUpgrade,
@@ -69,7 +70,8 @@ class Notification extends Component {
       supportsOnSeriesDelete,
       supportsOnEpisodeFileDelete,
       supportsOnEpisodeFileDeleteForUpgrade,
-      supportsOnHealthIssue
+      supportsOnHealthIssue,
+      supportsOnApplicationUpdate
     } = this.props;
 
     return (
@@ -123,6 +125,14 @@ class Notification extends Component {
         }
 
         {
+          supportsOnApplicationUpdate && onApplicationUpdate ?
+            <Label kind={kinds.SUCCESS}>
+              On Application Update
+            </Label> :
+            null
+        }
+
+        {
           supportsOnSeriesDelete && onSeriesDelete ?
             <Label kind={kinds.SUCCESS}>
               On Series Delete
@@ -147,7 +157,7 @@ class Notification extends Component {
         }
 
         {
-          !onGrab && !onDownload && !onRename && !onHealthIssue && !onSeriesDelete && !onEpisodeFileDelete ?
+          !onGrab && !onDownload && !onRename && !onHealthIssue && !onApplicationUpdate && !onSeriesDelete && !onEpisodeFileDelete ?
             <Label
               kind={kinds.DISABLED}
               outline={true}
@@ -189,6 +199,7 @@ Notification.propTypes = {
   onEpisodeFileDelete: PropTypes.bool.isRequired,
   onEpisodeFileDeleteForUpgrade: PropTypes.bool.isRequired,
   onHealthIssue: PropTypes.bool.isRequired,
+  onApplicationUpdate: PropTypes.bool.isRequired,
   supportsOnGrab: PropTypes.bool.isRequired,
   supportsOnDownload: PropTypes.bool.isRequired,
   supportsOnSeriesDelete: PropTypes.bool.isRequired,
@@ -197,6 +208,7 @@ Notification.propTypes = {
   supportsOnUpgrade: PropTypes.bool.isRequired,
   supportsOnRename: PropTypes.bool.isRequired,
   supportsOnHealthIssue: PropTypes.bool.isRequired,
+  supportsOnApplicationUpdate: PropTypes.bool.isRequired,
   onConfirmDeleteNotification: PropTypes.func.isRequired
 };
 

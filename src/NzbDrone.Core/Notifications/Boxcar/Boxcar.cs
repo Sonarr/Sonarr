@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
 
         public override void OnDownload(DownloadMessage message)
         {
-            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE , message.Message, Settings);
+            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
         }
 
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
@@ -41,6 +41,10 @@ namespace NzbDrone.Core.Notifications.Boxcar
             _proxy.SendNotification(HEALTH_ISSUE_TITLE, message.Message, Settings);
         }
 
+        public override void OnApplicationUpdate(ApplicationUpdateMessage message)
+        {
+            _proxy.SendNotification(APPLICATION_UPDATE_TITLE, message.Message, Settings);
+        }
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

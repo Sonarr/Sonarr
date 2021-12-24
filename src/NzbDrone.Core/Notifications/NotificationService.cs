@@ -11,6 +11,7 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Core.Update.History.Events;
 
 namespace NzbDrone.Core.Notifications
 {
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Notifications
           IHandle<SeriesDeletedEvent>,
           IHandle<EpisodeFileDeletedEvent>,
           IHandle<HealthCheckFailedEvent>,
+          IHandle<UpdateInstalledEvent>,
           IHandleAsync<DeleteCompletedEvent>,
           IHandleAsync<DownloadsProcessedEvent>,
           IHandleAsync<RenameCompletedEvent>,
@@ -193,6 +195,26 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
+        public void Handle(UpdateInstalledEvent message)
+        {
+            var updateMessage = new ApplicationUpdateMessage();
+            updateMessage.Message = $"Sonarr updated from {message.PreviousVerison.ToString()} to {message.NewVersion.ToString()}";
+            updateMessage.PreviousVersion = message.PreviousVerison;
+            updateMessage.NewVersion = message.NewVersion;
+
+            foreach (var notification in _notificationFactory.OnApplicationUpdateEnabled())
+            {
+                try
+                {
+                    notification.OnApplicationUpdate(updateMessage);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Unable to send OnApplicationUpdate notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
         public void Handle(EpisodeFileDeletedEvent message)
         {
             if (message.EpisodeFile.Episodes.Value.Empty())
@@ -229,7 +251,7 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(SeriesDeletedEvent message)
         {
-            var deleteMessage = new SeriesDeleteMessage(message.Series,message.DeleteFiles);
+            var deleteMessage = new SeriesDeleteMessage(message.Series, message.DeleteFiles);
 
             foreach (var notification in _notificationFactory.OnSeriesDeleteEnabled())
             {

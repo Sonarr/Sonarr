@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Notifications
         void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage);
         void OnSeriesDelete(SeriesDeleteMessage deleteMessage);
         void OnHealthIssue(HealthCheck.HealthCheck healthCheck);
+        void OnApplicationUpdate(ApplicationUpdateMessage updateMessage);
         void ProcessQueue();
         bool SupportsOnGrab { get; }
         bool SupportsOnDownload { get; }
@@ -24,5 +25,6 @@ namespace NzbDrone.Core.Notifications
         bool SupportsOnEpisodeFileDelete { get; }
         bool SupportsOnEpisodeFileDeleteForUpgrade { get; }
         bool SupportsOnHealthIssue { get; }
+        bool SupportsOnApplicationUpdate { get; }
     }
 }

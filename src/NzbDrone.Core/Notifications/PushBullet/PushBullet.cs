@@ -43,6 +43,11 @@ namespace NzbDrone.Core.Notifications.PushBullet
             _proxy.SendNotification(HEALTH_ISSUE_TITLE_BRANDED, healthCheck.Message, Settings);
         }
 
+        public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
+        {
+            _proxy.SendNotification(APPLICATION_UPDATE_TITLE_BRANDED, updateMessage.Message, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
@@ -60,23 +65,23 @@ namespace NzbDrone.Core.Notifications.PushBullet
                 if (Settings.ApiKey.IsNullOrWhiteSpace())
                 {
                     return new
-                           {
-                               devices = new List<object>()
-                           };
+                    {
+                        devices = new List<object>()
+                    };
                 }
 
                 Settings.Validate().Filter("ApiKey").ThrowOnError();
                 var devices = _proxy.GetDevices(Settings);
 
                 return new
-                       {
-                           options = devices.Where(d => d.Nickname.IsNotNullOrWhiteSpace())
+                {
+                    options = devices.Where(d => d.Nickname.IsNotNullOrWhiteSpace())
                                             .OrderBy(d => d.Nickname, StringComparer.InvariantCultureIgnoreCase)
                                             .Select(d => new
-                                                         {
-                                                             id = d.Id,
-                                                             name = d.Nickname
-                                                         })
+                                            {
+                                                id = d.Id,
+                                                name = d.Nickname
+                                            })
                 };
             }
 
