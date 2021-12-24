@@ -11,7 +11,7 @@ testPackageFolderLinux='./_tests_linux'
 sourceFolder='./src'
 slnFile=$sourceFolder/Sonarr.sln
 updateSubFolder=Sonarr.Update
- 
+
 sqlitePackageDir="$HOME/.nuget/packages/system.data.sqlite.core.servarr/1.0.115.5-18"
 
 nuget='tools/nuget/nuget.exe';
@@ -293,7 +293,11 @@ PackageMacOS()
 
     echo "Adding sqlite dylib"
     CheckExitCode cp "$sqlitePackageDir/runtimes/osx-x64/native/net46"/*.config $outputFolderMacOS/
-    CheckExitCode $macho merge $outputFolderMacOS "$sqlitePackageDir/runtimes/osx-x64/native/net46"/*.dylib "$sqlitePackageDir/runtimes/osx-arm64/native/net46"/*.dylib
+    if [ $runtime = "dotnet" ] ; then
+        CheckExitCode $macho merge $outputFolderMacOS "$sqlitePackageDir/runtimes/osx-x64/native/net46"/*.dylib "$sqlitePackageDir/runtimes/osx-arm64/native/net46"/*.dylib
+    else
+        CheckExitCode mono $macho merge $outputFolderMacOS "$sqlitePackageDir/runtimes/osx-x64/native/net46"/*.dylib "$sqlitePackageDir/runtimes/osx-arm64/native/net46"/*.dylib
+    fi
 
     echo "Adding MediaInfo dylib"
     CheckExitCode cp $sourceFolder/Libraries/MediaInfo/x64/*.dylib $outputFolderMacOS/
@@ -323,7 +327,12 @@ PackageMacOSApp()
     CheckExitCode cp -r $outputFolderLinux/* $outputFolderMacOSAppBin
 
     echo "Adding sqlite dylib"
-    CheckExitCode $macho merge $outputFolderMacOSAppBin "$sqlitePackageDir/runtimes/osx-x64/native/net46" "$sqlitePackageDir/runtimes/osx-arm64/native/net46"
+    if [ $runtime = "dotnet" ] ; then
+        CheckExitCode $macho merge $outputFolderMacOSAppBin "$sqlitePackageDir/runtimes/osx-x64/native/net46" "$sqlitePackageDir/runtimes/osx-arm64/native/net46"
+    else
+        CheckExitCode mono $macho merge $outputFolderMacOSAppBin "$sqlitePackageDir/runtimes/osx-x64/native/net46" "$sqlitePackageDir/runtimes/osx-arm64/native/net46"
+    fi
+
 
     echo "Adding MediaInfo dylib"
     CheckExitCode cp $sourceFolder/Libraries/MediaInfo/x64/*.dylib $outputFolderMacOSAppBin/
