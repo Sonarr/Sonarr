@@ -293,7 +293,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     localEpisode.Path = file;
                     localEpisode.ReleaseGroup = Parser.Parser.ParseReleaseGroup(file);
                     localEpisode.Quality = QualityParser.ParseQuality(file);
-                    localEpisode.ReleaseGroup = Parser.Parser.ParseReleaseGroup(file);
                     localEpisode.Language = LanguageParser.ParseLanguage(file);
                     localEpisode.Size = _diskProvider.GetFileSize(file);
 
