@@ -234,6 +234,11 @@ namespace NzbDrone.Core.Parser
                 return GetAnimeEpisodes(series, parsedEpisodeInfo, mappedSeasonNumber, sceneSource, searchCriteria);
             }
 
+            if (parsedEpisodeInfo.IsPossibleSceneSeasonSpecial)
+            {
+                parsedEpisodeInfo = ParseSpecialEpisodeTitle(parsedEpisodeInfo, parsedEpisodeInfo.ReleaseTitle, series) ?? parsedEpisodeInfo;
+            }
+
             return GetStandardEpisodes(series, parsedEpisodeInfo, mappedSeasonNumber, sceneSource, searchCriteria);
         }
 

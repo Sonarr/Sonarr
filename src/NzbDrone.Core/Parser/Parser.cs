@@ -348,10 +348,10 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex[] SpecialEpisodeTitleRegex = new Regex[]
             {
-                new Regex(@"\.S\d+E00\.(?<episodetitle>.+?)(?:\.(?:720p|1080p|HDTV|WEB|WEBRip|WEB-DL)\.|$)",
+                new Regex(@"\.S\d+E00\.(?<episodetitle>.+?)(?:\.(?:720p|1080p|2160p|HDTV|WEB|WEBRip|WEB-DL)\.|$)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                new Regex(@"\.S\d+\.Special\.(?<episodetitle>.+?)(?:\.(?:720p|1080p|HDTV|WEB|WEBRip|WEB-DL)\.|$)",
+                new Regex(@"\.S\d+\.Special\.(?<episodetitle>.+?)(?:\.(?:720p|1080p|2160p|HDTV|WEB|WEBRip|WEB-DL)\.|$)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
