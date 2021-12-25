@@ -7,12 +7,16 @@ artifactsFolder="_artifacts";
 
 ProgressStart()
 {
+    echo "##teamcity[blockOpened name='$1']"
+    echo "##teamcity[progressStart '$1']"
     echo "Start '$1'"
 }
 
 ProgressEnd()
 {
     echo "Finish '$1'"
+    echo "##teamcity[progressFinish '$1']"
+    echo "##teamcity[blockClosed name='$1']"
 }
 
 UpdateVersionNumber()
@@ -21,7 +25,7 @@ UpdateVersionNumber()
         echo "Updating Version Info"
         sed -i'' -e "s/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$SONARRVERSION<\/AssemblyVersion>/g" src/Directory.Build.props
         sed -i'' -e "s/<AssemblyConfiguration>[\$()A-Za-z-]\+<\/AssemblyConfiguration>/<AssemblyConfiguration>${BUILD_SOURCEBRANCHNAME}<\/AssemblyConfiguration>/g" src/Directory.Build.props
-        sed -i'' -e "s/<string>10.0.0.0<\/string>/<string>$SONARRVERSION<\/string>/g" distribution/osx/Sonarr.app/Contents/Info.plist
+        sed -i'' -e "s/<string>10.0.0.0<\/string>/<string>$SONARRVERSION<\/string>/g" distribution/macOS/Sonarr.app/Contents/Info.plist
     fi
 }
 
@@ -137,7 +141,7 @@ PackageMacOS()
 {
     local framework="$1"
     local runtime="$2"
-    
+
     ProgressStart "Creating $runtime Package for $framework"
 
     local folder=$artifactsFolder/$runtime/$framework/Sonarr
@@ -158,21 +162,21 @@ PackageMacOS()
         cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
     fi
 
-    ProgressEnd 'Creating MacOS Package'
+    ProgressEnd "Creating $runtime Package for $framework"
 }
 
 PackageMacOSApp()
 {
     local framework="$1"
     local runtime="$2"
-    
+
     ProgressStart "Creating $runtime App Package for $framework"
 
     local folder=$artifactsFolder/$runtime-app/$framework
 
     rm -rf $folder
     mkdir -p $folder
-    cp -r distribution/osx/Sonarr.app $folder
+    cp -r distribution/macOS/Sonarr.app $folder
     mkdir -p $folder/Sonarr.app/Contents/MacOS
 
     echo "Copying Binaries"
@@ -181,18 +185,18 @@ PackageMacOSApp()
     echo "Removing Update Folder"
     rm -r $folder/Sonarr.app/Contents/MacOS/Sonarr.Update
 
-    ProgressEnd 'Creating macOS App Package'
+    ProgressEnd "Creating $runtime App Package for $framework"
 }
 
 PackageWindows()
 {
     local framework="$1"
     local runtime="$2"
-    
+
     ProgressStart "Creating Windows Package for $framework"
 
     local folder=$artifactsFolder/$runtime/$framework/Sonarr
-    
+
     PackageFiles "$folder" "$framework" "$runtime"
     cp -r $outputFolder/$framework-windows/$runtime/publish/* $folder
 
@@ -204,7 +208,7 @@ PackageWindows()
     echo "Adding Sonarr.Windows to UpdatePackage"
     cp $folder/Sonarr.Windows.* $folder/Sonarr.Update
 
-    ProgressEnd 'Creating Windows Package'
+    ProgressEnd "Creating Windows Package for $framework"
 }
 
 Package()
@@ -234,11 +238,54 @@ PackageTests()
     local framework="$1"
     local runtime="$2"
 
+    ProgressStart "Creating $runtime Test Package for $framework"
+
     cp test.sh "$testPackageFolder/$framework/$runtime/publish"
 
     rm -f $testPackageFolder/$framework/$runtime/*.log.config
 
-    ProgressEnd 'Creating Test Package'
+    ProgressEnd "Creating $runtime Test Package for $framework"
+}
+
+UploadTestArtifacts()
+{
+    local framework="$1"
+
+    ProgressStart 'Publishing Test Artifacts'
+
+    # Tests
+    for dir in $testPackageFolder/$framework/*
+    do
+        local runtime=$(basename "$dir")
+        echo "##teamcity[publishArtifacts '$testPackageFolder/$framework/$runtime/publish/** => tests.$runtime.zip']"
+    done
+
+    ProgressEnd 'Publishing Test Artifacts'
+}
+
+UploadArtifacts()
+{
+    local framework="$1"
+
+    ProgressStart 'Publishing Artifacts'
+
+    # Releases
+    for dir in $artifactsFolder/*
+    do
+        local runtime=$(basename "$dir")
+        local extension="tar.gz"
+
+        if [[ "$runtime" =~ win-|-app ]]; then
+            extension="zip"
+        fi
+
+        echo "##teamcity[publishArtifacts '$artifactsFolder/$runtime/$framework/** => Sonarr.$BRANCH.$BUILD_NUMBER.$runtime.$extension']"
+    done
+
+    # Debian Package
+    echo "##teamcity[publishArtifacts 'distribution/** => distribution.zip']"
+
+    ProgressEnd 'Publishing Artifacts'
 }
 
 # Use mono or .net depending on OS
@@ -336,6 +383,8 @@ then
     else
         PackageTests "$FRAMEWORK" "$RID"
     fi
+
+    UploadTestArtifacts "net6.0"
 fi
 
 if [ "$FRONTEND" = "YES" ];
@@ -350,7 +399,7 @@ then
     then
         YarnInstall
     fi
-    
+
     LintUI
 fi
 
@@ -376,4 +425,6 @@ then
     else
         Package "$FRAMEWORK" "$RID"
     fi
+
+    UploadArtifacts "net6.0"
 fi
