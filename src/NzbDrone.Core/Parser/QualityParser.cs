@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Parser
                                                                 (?<webdl>WEB[-_. ]DL|WEBDL|AmazonHD|iTunesHD|MaxdomeHD|NetflixU?HD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DDP?5[. ]1)|[. ](?-i:WEB)$|\d+0p(?:[-. ]AMZN)?[-. ]WEB[-. ]|WEB-DLMux|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ]|NF[. ]WEB[. ])|
                                                                 (?<webrip>WebRip|Web-Rip|WEBMux)|
                                                                 (?<hdtv>HDTV)|
-                                                                (?<bdrip>BDRip)|
+                                                                (?<bdrip>BDRip|BDLight)|
                                                                 (?<brrip>BRRip)|
                                                                 (?<dvd>DVD|DVDRip|NTSC|PAL|xvidvd)|
                                                                 (?<dsr>WS[-_. ]DSR|DSR)|

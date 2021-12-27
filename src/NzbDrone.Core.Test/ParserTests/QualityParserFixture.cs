@@ -314,6 +314,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Away(2001) Bluray FHD Hi10P.mkv", false)]
         [TestCase("S for Series 2005 1080p UHD BluRay DD+7.1 x264-LoRD.mkv", false)]
         [TestCase("Series.Title.2011.1080p.UHD.BluRay.DD5.1.HDR.x265-CtrlHD.mkv", false)]
+        [TestCase("Fall.Of.The.Release.Groups.S02E13.1080p.BDLight.x265-AVCDVD", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);
