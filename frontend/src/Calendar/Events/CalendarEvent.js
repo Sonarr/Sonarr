@@ -55,6 +55,7 @@ class CalendarEvent extends Component {
       absoluteEpisodeNumber,
       airDateUtc,
       monitored,
+      unverifiedSceneNumbering,
       hasFile,
       grabbed,
       queueItem,
@@ -98,6 +99,16 @@ class CalendarEvent extends Component {
             </div>
 
             <div className={styles.statusContainer}>
+              {
+                unverifiedSceneNumbering ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.WARNING}
+                    title="Scene number hasn\'t been verified yet."
+                  /> :
+                  null
+              }
+
               {
                 missingAbsoluteNumber ?
                   <Icon
@@ -246,6 +257,7 @@ CalendarEvent.propTypes = {
   monitored: PropTypes.bool.isRequired,
   hasFile: PropTypes.bool.isRequired,
   grabbed: PropTypes.bool,
+  unverifiedSceneNumbering: PropTypes.bool,
   queueItem: PropTypes.object,
   showEpisodeInformation: PropTypes.bool.isRequired,
   showFinaleIcon: PropTypes.bool.isRequired,
