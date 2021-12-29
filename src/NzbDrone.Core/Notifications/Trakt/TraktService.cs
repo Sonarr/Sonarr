@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Notifications.Trakt
                     Audio = audio,
                 });
             }
-            
+
             var payloadSeasons = new List<TraktSeasonResource>();
             payloadSeasons.Add(new TraktSeasonResource
             {
@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Notifications.Trakt
                     Imdb = series.ImdbId ?? "",
                 },
                 Seasons = payloadSeasons,
-            }); ;
+            });
 
             _proxy.AddToCollection(payload, settings.AccessToken);
         }
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Notifications.Trakt
                     Imdb = series.ImdbId ?? "",
                 },
                 Seasons = payloadSeasons,
-            }); ;
+            });
 
             _proxy.RemoveFromCollection(payload, settings.AccessToken);
         }
@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Notifications.Trakt
                     Tvdb = series.TvdbId,
                     Imdb = series.ImdbId ?? "",
                 },
-            }); ;
+            });
 
             _proxy.RemoveFromCollection(payload, settings.AccessToken);
         }
@@ -316,7 +316,7 @@ namespace NzbDrone.Core.Notifications.Trakt
         private string MapAudioChannels(EpisodeFile episodeFile, string audioFormat)
         {
             var audioChannels = episodeFile.MediaInfo != null ? MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo).ToString("0.0") : string.Empty;
-                       
+
             return audioChannels;
         }
     }
