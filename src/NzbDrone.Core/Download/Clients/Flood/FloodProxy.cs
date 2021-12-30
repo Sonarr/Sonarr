@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         Dictionary<string, Torrent> GetTorrents(FloodSettings settings);
         List<string> GetTorrentContentPaths(string hash, FloodSettings settings);
         void SetTorrentsTags(string hash, IEnumerable<string> tags, FloodSettings settings);
+        FloodClientSettings GetClientSettings(FloodSettings settings);
     }
 
     public class FloodProxy : IFloodProxy
@@ -208,6 +209,15 @@ namespace NzbDrone.Core.Download.Clients.Flood
             tagsRequest.SetContent(body.ToJson());
 
             HandleRequest(tagsRequest, settings);
+        }
+
+        public FloodClientSettings GetClientSettings(FloodSettings settings)
+        {
+            var contentsRequest = BuildRequest(settings).Resource($"/client/settings").Build();
+
+            contentsRequest.Method = HttpMethod.GET;
+
+            return Json.Deserialize<FloodClientSettings>(HandleRequest(contentsRequest, settings).Content);
         }
     }
 }
