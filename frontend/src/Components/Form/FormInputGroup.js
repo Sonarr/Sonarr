@@ -6,6 +6,7 @@ import AutoCompleteInput from './AutoCompleteInput';
 import CaptchaInputConnector from './CaptchaInputConnector';
 import CheckInput from './CheckInput';
 import DeviceInputConnector from './DeviceInputConnector';
+import DownloadClientSelectInputConnector from './DownloadClientSelectInputConnector';
 import KeyValueListInput from './KeyValueListInput';
 import MonitorEpisodesSelectInput from './MonitorEpisodesSelectInput';
 import NumberInput from './NumberInput';
@@ -67,6 +68,9 @@ function getComponent(type) {
 
     case inputTypes.INDEXER_SELECT:
       return IndexerSelectInputConnector;
+
+    case inputTypes.DOWNLOAD_CLIENT_SELECT:
+      return DownloadClientSelectInputConnector;
 
     case inputTypes.ROOT_FOLDER_SELECT:
       return RootFolderSelectInputConnector;
