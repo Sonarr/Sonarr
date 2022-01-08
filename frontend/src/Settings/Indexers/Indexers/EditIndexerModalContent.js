@@ -143,7 +143,7 @@ function EditIndexerModalContent(props) {
                 <FormInputGroup
                   type={inputTypes.NUMBER}
                   name="priority"
-                  helpText="Indexer Priority from 1 (Highest) to 50 (Lowest). Default: 25."
+                  helpText="Indexer Priority from 1 (Highest) to 50 (Lowest). Default: 25. Used when grabbing releases as a tiebreaker for otherwise equal releases, Sonarr will still use all enabled indexers for RSS Sync and Searching."
                   min={1}
                   max={50}
                   {...priority}
