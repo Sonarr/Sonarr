@@ -265,7 +265,7 @@ class Missing extends Component {
                         Are you sure you want to search for all {totalRecords} missing episodes?
                       </div>
                       <div>
-                        This cannot be cancelled once started without restarting Sonarr.
+                        This cannot be cancelled once started without disabling all of your indexers.
                       </div>
                     </div>
                   }
