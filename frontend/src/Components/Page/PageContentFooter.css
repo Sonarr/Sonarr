@@ -19,7 +19,7 @@
   }
 }
 
-@media only screen and (max-width: $breakpointLarge) {
+@media only screen and (max-width: $breakpointExtraLarge) {
   .contentFooter {
     flex-wrap: wrap;
   }
