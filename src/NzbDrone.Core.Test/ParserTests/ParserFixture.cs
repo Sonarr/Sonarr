@@ -35,6 +35,31 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().Be(title.CleanSeriesTitle());
         }
 
+        [TestCase("Series S03E14 720p HDTV X264-DIMENSION", "Series")]
+        [TestCase("Series.S03E14.720p.HDTV.X264-DIMENSION", "Series")]
+        [TestCase("Series-S03E14-720p-HDTV-X264-DIMENSION", "Series")]
+        [TestCase("Series_S03E14_720p_HDTV_X264-DIMENSION", "Series")]
+        [TestCase("Series 2022 S03E14 720p HDTV X264-DIMENSION", "Series", 2022)]
+        [TestCase("Series (2022) S03E14 720p HDTV X264-DIMENSION", "Series", 2022)]
+        [TestCase("Series.2022.S03E14.720p.HDTV.X264-DIMENSION", "Series", 2022)]
+        [TestCase("Series-2022-S03E14-720p-HDTV-X264-DIMENSION", "Series", 2022)]
+        [TestCase("Series_2022_S03E14_720p_HDTV_X264-DIMENSION", "Series", 2022)]        
+        [TestCase("1234 S03E14 720p HDTV X264-DIMENSION", "1234")]
+        [TestCase("1234.S03E14.720p.HDTV.X264-DIMENSION", "1234")]
+        [TestCase("1234-S03E14-720p-HDTV-X264-DIMENSION", "1234")]
+        [TestCase("1234_S03E14_720p_HDTV_X264-DIMENSION", "1234")]
+        [TestCase("1234 2022 S03E14 720p HDTV X264-DIMENSION", "1234", 2022)]
+        [TestCase("1234 (2022) S03E14 720p HDTV X264-DIMENSION", "1234", 2022)]
+        [TestCase("1234.2022.S03E14.720p.HDTV.X264-DIMENSION", "1234", 2022)]
+        [TestCase("1234-2022-S03E14-720p-HDTV-X264-DIMENSION", "1234", 2022)]
+        [TestCase("1234_2022_S03E14_720p_HDTV_X264-DIMENSION", "1234", 2022)]
+        public void should_parse_series_title_info(string postTitle, string titleWithoutYear, int year = 0)
+        {
+            var seriesTitleInfo = Parser.Parser.ParseTitle(postTitle).SeriesTitleInfo;
+            seriesTitleInfo.TitleWithoutYear.Should().Be(titleWithoutYear);
+            seriesTitleInfo.Year.Should().Be(year);
+        }
+
         [Test]
         public void should_remove_accents_from_title()
         {
