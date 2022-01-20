@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
                 .Returns("myhash");
 
             Mocker.GetMock<IDiskScanService>().Setup(c => c.FilterPaths(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()))
-                  .Returns<string, IEnumerable<string>>((b, s) => s.ToList());
+                  .Returns<string, IEnumerable<string>, bool>((b, s, c) => s.ToList());
         }
 
         protected void GivenFailedDownload()

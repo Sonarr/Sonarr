@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Returns(_videoFiles);
 
             Mocker.GetMock<IDiskScanService>().Setup(c => c.FilterPaths(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()))
-                  .Returns<string, IEnumerable<string>>((b, s) => s.ToList());
+                  .Returns<string, IEnumerable<string>, bool>((b, s, c) => s.ToList());
 
             Mocker.GetMock<IDiskProvider>().Setup(c => c.GetDirectories(It.IsAny<string>()))
                   .Returns(_subFolders);
