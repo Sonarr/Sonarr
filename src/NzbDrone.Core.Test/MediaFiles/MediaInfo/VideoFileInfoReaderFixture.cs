@@ -1,8 +1,13 @@
+using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using FFMpegCore;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.Categories;
@@ -40,33 +45,26 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 
             var info = Subject.GetMediaInfo(path);
 
-            info.VideoCodec.Should().BeNull();
-            info.VideoFormat.Should().Be("AVC");
+            info.VideoFormat.Should().Be("h264");
             info.VideoCodecID.Should().Be("avc1");
-            info.VideoProfile.Should().Be("Baseline@L2.1");
-            info.VideoCodecLibrary.Should().Be("");
-            info.AudioFormat.Should().Be("AAC");
-            info.AudioCodecID.Should().BeOneOf("40", "mp4a-40-2");
-            info.AudioProfile.Should().BeOneOf("", "LC");
-            info.AudioCodecLibrary.Should().Be("");
-            info.AudioBitrate.Should().Be(128000);
-            info.AudioChannelsContainer.Should().Be(2);
-            info.AudioChannelsStream.Should().Be(0);
-            info.AudioChannelPositionsTextContainer.Should().Be("Front: L R");
-            info.AudioChannelPositionsTextStream.Should().Be("");
-            info.AudioLanguages.Should().Be("English");
+            info.VideoProfile.Should().Be("Constrained Baseline");
+            info.AudioFormat.Should().Be("aac");
+            info.AudioCodecID.Should().Be("mp4a");
+            info.AudioProfile.Should().Be("LC");
+            info.AudioBitrate.Should().Be(125488);
+            info.AudioChannels.Should().Be(2);
+            info.AudioChannelPositions.Should().Be("stereo");
+            info.AudioLanguages.Should().BeEquivalentTo("eng");
             info.Height.Should().Be(320);
             info.RunTime.Seconds.Should().Be(10);
             info.ScanType.Should().Be("Progressive");
-            info.Subtitles.Should().Be("");
-            info.VideoBitrate.Should().Be(193329);
+            info.Subtitles.Should().BeEmpty();
+            info.VideoBitrate.Should().Be(193328);
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
-            info.VideoColourPrimaries.Should().Be("BT.601 NTSC");
-            info.VideoTransferCharacteristics.Should().Be("BT.709");
-            info.AudioAdditionalFeatures.Should().BeOneOf("", "LC");
-            info.VideoHdrFormat.Should().BeEmpty();
-            info.VideoHdrFormatCompatibility.Should().BeEmpty();
+            info.VideoBitDepth.Should().Be(8);
+            info.VideoColourPrimaries.Should().Be("smpte170m");
+            info.VideoTransferCharacteristics.Should().Be("bt709");
         }
 
         [Test]
@@ -83,45 +81,62 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 
             var info = Subject.GetMediaInfo(path);
 
-            info.VideoCodec.Should().BeNull();
-            info.VideoFormat.Should().Be("AVC");
+            info.VideoFormat.Should().Be("h264");
             info.VideoCodecID.Should().Be("avc1");
-            info.VideoProfile.Should().Be("Baseline@L2.1");
-            info.VideoCodecLibrary.Should().Be("");
-            info.AudioFormat.Should().Be("AAC");
-            info.AudioCodecID.Should().BeOneOf("40", "mp4a-40-2");
-            info.AudioProfile.Should().BeOneOf("", "LC");
-            info.AudioCodecLibrary.Should().Be("");
-            info.AudioBitrate.Should().Be(128000);
-            info.AudioChannelsContainer.Should().Be(2);
-            info.AudioChannelsStream.Should().Be(0);
-            info.AudioChannelPositionsTextContainer.Should().Be("Front: L R");
-            info.AudioChannelPositionsTextStream.Should().Be("");
-            info.AudioLanguages.Should().Be("English");
+            info.VideoProfile.Should().Be("Constrained Baseline");
+            info.AudioFormat.Should().Be("aac");
+            info.AudioCodecID.Should().Be("mp4a");
+            info.AudioProfile.Should().Be("LC");
+            info.AudioBitrate.Should().Be(125488);
+            info.AudioChannels.Should().Be(2);
+            info.AudioChannelPositions.Should().Be("stereo");
+            info.AudioLanguages.Should().BeEquivalentTo("eng");
             info.Height.Should().Be(320);
             info.RunTime.Seconds.Should().Be(10);
             info.ScanType.Should().Be("Progressive");
-            info.Subtitles.Should().Be("");
-            info.VideoBitrate.Should().Be(193329);
+            info.Subtitles.Should().BeEmpty();
+            info.VideoBitrate.Should().Be(193328);
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
-            info.VideoColourPrimaries.Should().Be("BT.601 NTSC");
-            info.VideoTransferCharacteristics.Should().Be("BT.709");
-            info.AudioAdditionalFeatures.Should().BeOneOf("", "LC");
-            info.VideoHdrFormat.Should().BeEmpty();
-            info.VideoHdrFormatCompatibility.Should().BeEmpty();
+            info.VideoColourPrimaries.Should().Be("smpte170m");
+            info.VideoTransferCharacteristics.Should().Be("bt709");
         }
 
-        [Test]
-        public void should_dispose_file_after_scanning_mediainfo()
+        [TestCase(8, "", "", "", null, HdrFormat.None)]
+        [TestCase(10, "", "", "", null, HdrFormat.None)]
+        [TestCase(10, "bt709", "bt709", "", null, HdrFormat.None)]
+        [TestCase(8, "bt2020", "smpte2084", "", null, HdrFormat.None)]
+        [TestCase(10, "bt2020", "bt2020-10", "", null, HdrFormat.Hlg10)]
+        [TestCase(10, "bt2020", "arib-std-b67", "", null, HdrFormat.Hlg10)]
+        [TestCase(10, "bt2020", "smpte2084", "", null, HdrFormat.Pq10)]
+        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.SideData", null, HdrFormat.Pq10)]
+        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.MasteringDisplayMetadata", null, HdrFormat.Hdr10)]
+        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.ContentLightLevelMetadata", null, HdrFormat.Hdr10)]
+        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.HdrDynamicMetadataSpmte2094", null, HdrFormat.Hdr10Plus)]
+        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData", null, HdrFormat.DolbyVision)]
+        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData", 1, HdrFormat.DolbyVisionHdr10)]
+        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData", 2, HdrFormat.DolbyVisionSdr)]
+        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData", 4, HdrFormat.DolbyVisionHlg)]
+        public void should_detect_hdr_correctly(int bitDepth, string colourPrimaries, string transferFunction, string sideDataTypes, int? doviConfigId, HdrFormat expected)
         {
-            var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "Files", "Media", "H264_sample.mp4");
+            var assembly = Assembly.GetAssembly(typeof(FFProbe));
+            var types = sideDataTypes.Split(",").Select(x => x.Trim()).ToList();
+            var sideData = types.Where(x => x.IsNotNullOrWhiteSpace()).Select(x => assembly.CreateInstance(x)).Cast<SideData>().ToList();
 
-            var info = Subject.GetMediaInfo(path);
+            if (doviConfigId.HasValue)
+            {
+                sideData.ForEach(x =>
+                {
+                    if (x.GetType().Name == "DoviConfigurationRecordSideData")
+                    {
+                        ((DoviConfigurationRecordSideData)x).DvBlSignalCompatibilityId = doviConfigId.Value;
+                    }
+                });
+            }
 
-            var stream = new FileStream(path, FileMode.Open, FileAccess.Write);
+            var result = VideoFileInfoReader.GetHdrFormat(bitDepth, colourPrimaries, transferFunction, sideData);
 
-            stream.Close();
+            result.Should().Be(expected);
         }
     }
 }

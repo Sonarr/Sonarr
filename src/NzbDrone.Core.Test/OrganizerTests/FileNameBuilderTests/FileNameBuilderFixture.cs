@@ -17,6 +17,7 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {
+    [Platform(Exclude = "Win")]
     [TestFixture]
 
     public class FileNameBuilderFixture : CoreTest<FileNameBuilder>
@@ -539,37 +540,44 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
             {
-                VideoCodec = "AVC",
-                AudioFormat = "DTS",
-                AudioChannelsContainer = 6,
-                AudioLanguages = "English/Spanish",
-                Subtitles = "English/Spanish/Italian",
-                SchemaRevision = 3
+                VideoFormat = "h264",
+                AudioFormat = "dts",
+                AudioLanguages = new List<string> { "eng", "spa" },
+                Subtitles = new List<string> { "eng", "spa", "ita" }
             };
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("South.Park.S15E06.City.Sushi.X264.DTS[EN+ES].[EN+ES+IT]");
+                   .Should().Be("South.Park.S15E06.City.Sushi.H264.DTS[EN+ES].[EN+ES+IT]");
         }
 
-        [TestCase("Norwegian Bokmal", "NB")]
-        [TestCase("Swedis", "SV")]
-        [TestCase("Chinese", "ZH")]
+        [TestCase("nob", "NB")]
+        [TestCase("swe", "SV")]
+        [TestCase("zho", "ZH")]
+        [TestCase("chi", "ZH")]
+        [TestCase("fre", "FR")]
+        [TestCase("rum", "RO")]
+        [TestCase("per", "FA")]
+        [TestCase("ger", "DE")]
+        [TestCase("cze", "CS")]
+        [TestCase("ice", "IS")]
+        [TestCase("dut", "NL")]
+        [TestCase("nor", "NO")]
         public void should_format_languagecodes_properly(string language, string code)
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
 
             _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
             {
-                VideoCodec = "AVC",
-                AudioFormat = "DTS",
-                AudioChannelsContainer = 6,
-                AudioLanguages = "English",
-                Subtitles = language,
+                VideoFormat = "h264",
+                AudioFormat = "dts",
+                AudioChannels = 6,
+                AudioLanguages = new List<string> { "eng" },
+                Subtitles = new List<string> { language },
                 SchemaRevision = 3
             };
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be($"South.Park.S15E06.City.Sushi.X264.DTS.[{code}]");
+                   .Should().Be($"South.Park.S15E06.City.Sushi.H264.DTS.[{code}]");
         }
 
         [Test]
@@ -579,18 +587,17 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
             {
-                VideoCodec = "AVC",
-                AudioFormat = "DTS",
-                AudioChannelsContainer = 6,
-                AudioLanguages = "English",
-                Subtitles = "English/Spanish/Italian",
-                SchemaRevision = 3
+                VideoFormat = "h264",
+                AudioFormat = "dts",
+                AudioLanguages = new List<string> { "eng" },
+                Subtitles = new List<string> { "eng", "spa", "ita" }
             };
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("South.Park.S15E06.City.Sushi.X264.DTS.[EN+ES+IT]");
+                   .Should().Be("South.Park.S15E06.City.Sushi.H264.DTS.[EN+ES+IT]");
         }
 
+        [Ignore("not currently supported")]
         [Test]
         public void should_remove_duplicate_non_word_characters()
         {
@@ -810,7 +817,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
                 _episodeFile.ReleaseGroup = null;
 
-                GivenMediaInfoModel(audioLanguages: "English/German");
+                GivenMediaInfoModel(audioLanguages: "eng/deu");
 
                 _namingConfig.StandardEpisodeFormat = "{MediaInfo AudioLanguages}";
 
@@ -823,8 +830,8 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             }
         }
 
-        [TestCase("English", "")]
-        [TestCase("English/German", "[EN+DE]")]
+        [TestCase("eng", "")]
+        [TestCase("eng/deu", "[EN+DE]")]
         public void should_format_audio_languages(string audioLanguages, string expected)
         {
             _episodeFile.ReleaseGroup = null;
@@ -837,8 +844,8 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be(expected);
         }
 
-        [TestCase("English", "[EN]")]
-        [TestCase("English/German", "[EN+DE]")]
+        [TestCase("eng", "[EN]")]
+        [TestCase("eng/deu", "[EN+DE]")]
         public void should_format_audio_languages_all(string audioLanguages, string expected)
         {
             _episodeFile.ReleaseGroup = null;
@@ -851,15 +858,15 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be(expected);
         }
 
-        [TestCase("English/German", "", "[EN+DE]")]
-        [TestCase("English/Dutch/German", "", "[EN+NL+DE]")]
-        [TestCase("English/German", ":DE", "[DE]")]
-        [TestCase("English/Dutch/German", ":EN+NL", "[EN+NL]")]
-        [TestCase("English/Dutch/German", ":NL+EN", "[NL+EN]")]
-        [TestCase("English/Dutch/German", ":-NL", "[EN+DE]")]
-        [TestCase("English/Dutch/German", ":DE+", "[DE+-]")]
-        [TestCase("English/Dutch/German", ":DE+NO.", "[DE].")]
-        [TestCase("English/Dutch/German", ":-EN-", "[NL+DE]-")]
+        [TestCase("eng/deu", "", "[EN+DE]")]
+        [TestCase("eng/nld/deu", "", "[EN+NL+DE]")]
+        [TestCase("eng/deu", ":DE", "[DE]")]
+        [TestCase("eng/nld/deu", ":EN+NL", "[EN+NL]")]
+        [TestCase("eng/nld/deu", ":NL+EN", "[NL+EN]")]
+        [TestCase("eng/nld/deu", ":-NL", "[EN+DE]")]
+        [TestCase("eng/nld/deu", ":DE+", "[DE+-]")]
+        [TestCase("eng/nld/deu", ":DE+NO.", "[DE].")]
+        [TestCase("eng/nld/deu", ":-EN-", "[NL+DE]-")]
         public void should_format_subtitle_languages_all(string subtitleLanguages, string format, string expected)
         {
             _episodeFile.ReleaseGroup = null;
@@ -872,19 +879,15 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be(expected + "End");
         }
 
-        [TestCase(8, "BT.601 NTSC", "BT.709", "South.Park.S15E06.City.Sushi")]
-        [TestCase(10, "BT.2020", "PQ", "South.Park.S15E06.City.Sushi.HDR")]
-        [TestCase(10, "BT.2020", "HLG", "South.Park.S15E06.City.Sushi.HDR")]
-        [TestCase(0, null, null, "South.Park.S15E06.City.Sushi")]
-        public void should_include_hdr_for_mediainfo_videodynamicrange_with_valid_properties(int bitDepth,
-            string colourPrimaries,
-            string transferCharacteristics,
-            string expectedName)
+        [TestCase(HdrFormat.None, "South.Park.S15E06.City.Sushi")]
+        [TestCase(HdrFormat.Hlg10, "South.Park.S15E06.City.Sushi.HDR")]
+        [TestCase(HdrFormat.Hdr10, "South.Park.S15E06.City.Sushi.HDR")]
+        public void should_include_hdr_for_mediainfo_videodynamicrange_with_valid_properties(HdrFormat hdrFormat, string expectedName)
         {
             _namingConfig.StandardEpisodeFormat =
                 "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MediaInfo VideoDynamicRange}";
 
-            GivenMediaInfoModel(videoBitDepth: bitDepth, videoColourPrimaries: colourPrimaries, videoTransferCharacteristics: transferCharacteristics);
+            GivenMediaInfoModel(hdrFormat: hdrFormat);
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                 .Should().Be(expectedName);
@@ -968,14 +971,15 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                 .Setup(u => u.Update(_episodeFile, _series))
                 .Callback((EpisodeFile e, Series s) => e.MediaInfo = new MediaInfoModel
                 {
-                    VideoCodec = "AVC",
+                    VideoFormat = "AVC",
                     AudioFormat = "DTS",
-                    AudioChannelsContainer = 6,
-                    AudioLanguages = "English",
-                    Subtitles = "English/Spanish/Italian",
+                    AudioChannels = 6,
+                    AudioLanguages = new List<string> { "eng" },
+                    Subtitles = new List<string> { "eng", "esp", "ita" },
                     VideoBitDepth = 10,
-                    VideoColourPrimaries = "BT.2020",
+                    VideoColourPrimaries = "bt2020",
                     VideoTransferCharacteristics = "PQ",
+                    VideoHdrFormat = HdrFormat.Pq10,
                     SchemaRevision = 5
                 });
 
@@ -984,26 +988,24 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             result.Should().EndWith("HDR");
         }
 
-        private void GivenMediaInfoModel(string videoCodec = "AVC",
-            string audioCodec = "DTS",
+        private void GivenMediaInfoModel(string videoCodec = "h264",
+            string audioCodec = "dts",
             int audioChannels = 6,
             int videoBitDepth = 8,
-            string videoColourPrimaries = "",
-            string videoTransferCharacteristics = "",
-            string audioLanguages = "English",
-            string subtitles = "English/Spanish/Italian",
+            HdrFormat hdrFormat = HdrFormat.None,
+            string audioLanguages = "eng",
+            string subtitles = "eng/spa/ita",
             int schemaRevision = 5)
         {
             _episodeFile.MediaInfo = new MediaInfoModel
             {
-                VideoCodec = videoCodec,
+                VideoFormat = videoCodec,
                 AudioFormat = audioCodec,
-                AudioChannelsContainer = audioChannels,
-                AudioLanguages = audioLanguages,
-                Subtitles = subtitles,
+                AudioChannels = audioChannels,
+                AudioLanguages = audioLanguages.Split("/").ToList(),
+                Subtitles = subtitles.Split("/").ToList(),
                 VideoBitDepth = videoBitDepth,
-                VideoColourPrimaries = videoColourPrimaries,
-                VideoTransferCharacteristics = videoTransferCharacteristics,
+                VideoHdrFormat = hdrFormat,
                 SchemaRevision = schemaRevision
             };
         }

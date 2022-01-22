@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -85,6 +86,31 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex YearRegex = new Regex(@"\(\d{4}\)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex ReservedDeviceNamesRegex = new Regex(@"^(?:aux|com[1-9]|con|lpt[1-9]|nul|prn)\.", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        // generated from https://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt
+        public static readonly ImmutableDictionary<string, string> Iso639BTMap = new Dictionary<string, string>
+        {
+            { "alb", "sqi" },
+            { "arm", "hye" },
+            { "baq", "eus" },
+            { "bur", "mya" },
+            { "chi", "zho" },
+            { "cze", "ces" },
+            { "dut", "nld" },
+            { "fre", "fra" },
+            { "geo", "kat" },
+            { "ger", "deu" },
+            { "gre", "ell" },
+            { "ice", "isl" },
+            { "mac", "mkd" },
+            { "mao", "mri" },
+            { "may", "msa" },
+            { "per", "fas" },
+            { "rum", "ron" },
+            { "slo", "slk" },
+            { "tib", "bod" },
+            { "wel", "cym" }
+        }.ToImmutableDictionary();
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
@@ -616,7 +642,7 @@ namespace NzbDrone.Core.Organizer
             new Dictionary<string, int>(FileNameBuilderTokenEqualityComparer.Instance)
         {
             { MediaInfoVideoDynamicRangeToken, 5 },
-            { MediaInfoVideoDynamicRangeTypeToken, 5 }
+            { MediaInfoVideoDynamicRangeTypeToken, 8 }
         };
 
         private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)
@@ -630,13 +656,13 @@ namespace NzbDrone.Core.Organizer
 
             var sceneName = episodeFile.GetSceneOrFileName();
 
-            var videoCodec =  MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, sceneName);
-            var audioCodec =  MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, sceneName);
+            var videoCodec = MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, sceneName);
+            var audioCodec = MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, sceneName);
             var audioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo);
-            var audioLanguages = episodeFile.MediaInfo.AudioLanguages ?? string.Empty;
-            var subtitles = episodeFile.MediaInfo.Subtitles ?? string.Empty;
+            var audioLanguages = episodeFile.MediaInfo.AudioLanguages ?? new List<string>();
+            var subtitles = episodeFile.MediaInfo.Subtitles ?? new List<string>();
 
-            var videoBitDepth = episodeFile.MediaInfo.VideoBitDepth > 0 ? episodeFile.MediaInfo.VideoBitDepth.ToString() : string.Empty;
+            var videoBitDepth = episodeFile.MediaInfo.VideoBitDepth > 0 ? episodeFile.MediaInfo.VideoBitDepth.ToString() : 8.ToString();
             var audioChannelsFormatted = audioChannels > 0 ?
                                 audioChannels.ToString("F1", CultureInfo.InvariantCulture) :
                                 string.Empty;
@@ -701,42 +727,29 @@ namespace NzbDrone.Core.Organizer
             };
         }
 
-        private string GetLanguagesToken(string mediaInfoLanguages, string filter, bool skipEnglishOnly, bool quoted)
+        private string GetLanguagesToken(List<string> mediaInfoLanguages, string filter, bool skipEnglishOnly, bool quoted)
         {
-            List<string> tokens = new List<string>();
-            foreach (var item in mediaInfoLanguages.Split('/'))
+            var tokens = new List<string>();
+            foreach (var item in mediaInfoLanguages)
             {
-                if (!string.IsNullOrWhiteSpace(item))
+                if (!string.IsNullOrWhiteSpace(item) && item != "und")
                 {
                     tokens.Add(item.Trim());
                 }
             }
 
-            var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
             for (int i = 0; i < tokens.Count; i++)
             {
-                if (tokens[i] == "Swedis")
-                {
-                    // Probably typo in mediainfo (should be 'Swedish')
-                    tokens[i] = "SV";
-                    continue;
-                }
-
-                if (tokens[i] == "Chinese" && OsInfo.IsNotWindows)
-                {
-                    // Mono only has 'Chinese (Simplified)' & 'Chinese (Traditional)'
-                    tokens[i] = "ZH";
-                    continue;
-                }
-
                 try
                 {
-                    var cultureInfo = cultures.FirstOrDefault(p => p.EnglishName.RemoveAccent() == tokens[i]);
-
-                    if (cultureInfo != null)
+                    var token = tokens[i].ToLowerInvariant();
+                    if (Iso639BTMap.TryGetValue(token, out var mapped))
                     {
-                        tokens[i] = cultureInfo.TwoLetterISOLanguageName.ToUpper();
+                        token = mapped;
                     }
+
+                    var cultureInfo = new CultureInfo(token);
+                    tokens[i] = cultureInfo.TwoLetterISOLanguageName.ToUpper();
                 }
                 catch
                 {
