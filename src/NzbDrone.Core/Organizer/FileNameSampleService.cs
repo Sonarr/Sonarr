@@ -101,28 +101,29 @@ namespace NzbDrone.Core.Organizer
 
             var mediaInfo = new MediaInfoModel()
             {
-                VideoCodec = "AVC",
+                VideoFormat = "AVC",
                 VideoBitDepth = 10,
-                VideoColourPrimaries = "BT.2020",
+                VideoMultiViewCount = 2,
+                VideoColourPrimaries = "bt2020",
                 VideoTransferCharacteristics = "HLG",
                 AudioFormat = "DTS",
-                AudioChannelsContainer = 6,
-                AudioChannelPositions = "3/2/0.1",
-                AudioLanguages = "English",
-                Subtitles = "English/German"
+                AudioChannels = 6,
+                AudioChannelPositions = "5.1",
+                AudioLanguages = new List<string> { "ger" },
+                Subtitles = new List<string> { "eng", "ger" }
             };
 
             var mediaInfoAnime = new MediaInfoModel()
             {
-                VideoCodec = "AVC",
+                VideoFormat = "AVC",
                 VideoBitDepth = 10,
                 VideoColourPrimaries = "BT.2020",
                 VideoTransferCharacteristics = "HLG",
                 AudioFormat = "DTS",
-                AudioChannelsContainer = 6,
-                AudioChannelPositions = "3/2/0.1",
-                AudioLanguages = "Japanese",
-                Subtitles = "Japanese/English"
+                AudioChannels = 6,
+                AudioChannelPositions = "5.1",
+                AudioLanguages = new List<string> { "jpn" },
+                Subtitles = new List<string> { "jpn", "eng" }
             };
 
             _singleEpisodeFile = new EpisodeFile

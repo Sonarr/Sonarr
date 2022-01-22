@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public enum HdrFormat
@@ -15,6 +9,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         Hdr10Plus,
         Hlg10,
         DolbyVision,
-        DolbyVisionHdr10
+        DolbyVisionHdr10,
+        DolbyVisionSdr,
+        DolbyVisionHlg
     }
 }
