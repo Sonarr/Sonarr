@@ -75,10 +75,6 @@ namespace NzbDrone.Common.Composition
                 {
                     mappedName = "libsqlite3.so.0";
                 }
-                else if (libraryName == "mediainfo")
-                {
-                    mappedName = "libmediainfo.so.0";
-                }
             }
 
             return NativeLibrary.Load(mappedName, assembly, dllImportSearchPath);
