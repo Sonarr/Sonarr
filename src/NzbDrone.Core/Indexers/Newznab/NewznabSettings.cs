@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         [FieldDefinition(6, Label = "Additional Parameters", HelpText = "Additional Newznab parameters", Advanced = true)]
         public string AdditionalParameters { get; set; }
 
-        // Field 6 is used by TorznabSettings MinimumSeeders
+        // Field 7 is used by TorznabSettings MinimumSeeders
         // If you need to add another field here, update TorznabSettings as well and this comment
 
         public virtual NzbDroneValidationResult Validate()
