@@ -44,6 +44,11 @@ namespace NzbDrone.Core.Notifications.Twitter
             _twitterService.SendNotification($"Health Issue: {healthCheck.Message}", Settings);
         }
 
+        public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
+        {
+            _twitterService.SendNotification($"Application Updated: {updateMessage.Message}", Settings);
+        }
+
         public override object RequestAction(string action, IDictionary<string, string> query)
         {
             if (action == "startOAuth")

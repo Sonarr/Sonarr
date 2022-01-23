@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         Rename,
         SeriesDelete,
         EpisodeFileDelete,
-        Health
+        Health,
+        ApplicationUpdate
     }
 }

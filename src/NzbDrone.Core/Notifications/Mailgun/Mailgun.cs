@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Notifications.Mailgun
     {
         private readonly IMailgunProxy _proxy;
         private readonly Logger _logger;
-        
+
         public MailGun(IMailgunProxy proxy, Logger logger)
         {
             _proxy = proxy;
@@ -48,6 +48,10 @@ namespace NzbDrone.Core.Notifications.Mailgun
             _proxy.SendNotification(HEALTH_ISSUE_TITLE, healthCheckMessage.Message, Settings);
         }
 
+        public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
+        {
+            _proxy.SendNotification(APPLICATION_UPDATE_TITLE, updateMessage.Message, Settings);
+        }
 
         public override ValidationResult Test()
         {
@@ -66,7 +70,7 @@ namespace NzbDrone.Core.Notifications.Mailgun
                 _logger.Error(ex, "Unable to send test message though Mailgun.");
                 failures.Add(new ValidationFailure("", "Unable to send test message though Mailgun."));
             }
-            
+
             return new ValidationResult(failures);
         }
     }

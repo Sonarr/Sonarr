@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { saveNotification, setNotificationFieldValue, setNotificationValue, testNotification } from 'Store/Actions/settingsActions';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
-import { setNotificationValue, setNotificationFieldValue, saveNotification, testNotification } from 'Store/Actions/settingsActions';
 import EditNotificationModalContent from './EditNotificationModalContent';
 
 function createMapStateToProps() {

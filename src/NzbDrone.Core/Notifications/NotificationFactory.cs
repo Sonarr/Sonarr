@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Notifications
         List<INotification> OnEpisodeFileDeleteEnabled();
         List<INotification> OnEpisodeFileDeleteForUpgradeEnabled();
         List<INotification> OnHealthIssueEnabled();
+        List<INotification> OnApplicationUpdateEnabled();
     }
 
     public class NotificationFactory : ProviderFactory<INotification, NotificationDefinition>, INotificationFactory
@@ -65,6 +66,11 @@ namespace NzbDrone.Core.Notifications
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnHealthIssue).ToList();
         }
 
+        public List<INotification> OnApplicationUpdateEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnApplicationUpdate).ToList();
+        }
+
         public override void SetProviderCharacteristics(INotification provider, NotificationDefinition definition)
         {
             base.SetProviderCharacteristics(provider, definition);
@@ -77,6 +83,7 @@ namespace NzbDrone.Core.Notifications
             definition.SupportsOnEpisodeFileDelete = provider.SupportsOnEpisodeFileDelete;
             definition.SupportsOnEpisodeFileDeleteForUpgrade = provider.SupportsOnEpisodeFileDeleteForUpgrade;
             definition.SupportsOnHealthIssue = provider.SupportsOnHealthIssue;
+            definition.SupportsOnApplicationUpdate = provider.SupportsOnApplicationUpdate;
         }
     }
 }

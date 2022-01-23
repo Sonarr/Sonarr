@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { inputTypes, kinds } from 'Helpers/Props';
 import Alert from 'Components/Alert';
+import Form from 'Components/Form/Form';
+import FormGroup from 'Components/Form/FormGroup';
+import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
+import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
-import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
-import FormInputGroup from 'Components/Form/FormInputGroup';
-import FormInputHelpText from 'Components/Form/FormInputHelpText';
-import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes, kinds } from 'Helpers/Props';
+import NotificationEventItems from './NotificationEventItems';
 import styles from './EditNotificationModalContent.css';
 
 function EditNotificationModalContent(props) {
@@ -39,23 +39,6 @@ function EditNotificationModalContent(props) {
     id,
     implementationName,
     name,
-    onGrab,
-    onDownload,
-    onUpgrade,
-    onRename,
-    onSeriesDelete,
-    onEpisodeFileDelete,
-    onEpisodeFileDeleteForUpgrade,
-    onHealthIssue,
-    supportsOnGrab,
-    supportsOnDownload,
-    supportsOnUpgrade,
-    supportsOnRename,
-    supportsOnSeriesDelete,
-    supportsOnEpisodeFileDelete,
-    supportsOnEpisodeFileDeleteForUpgrade,
-    supportsOnHealthIssue,
-    includeHealthWarnings,
     tags,
     fields,
     message
@@ -75,7 +58,9 @@ function EditNotificationModalContent(props) {
 
         {
           !isFetching && !!error &&
-            <div>Unable to add a new notification, please try again.</div>
+            <div>
+              Unable to add a new notification, please try again.
+            </div>
         }
 
         {
@@ -102,111 +87,10 @@ function EditNotificationModalContent(props) {
                 />
               </FormGroup>
 
-              <FormGroup>
-                <FormLabel>Triggers</FormLabel>
-
-                <div className={styles.triggers}>
-                  <FormInputHelpText
-                    text="Select which events should trigger this conection"
-                    link="https://wiki.servarr.com/sonarr/settings#connections"
-                  />
-
-                  <div className={styles.triggerEvents}>
-                    <FormInputGroup
-                      type={inputTypes.CHECK}
-                      name="onGrab"
-                      helpText="On Grab"
-                      isDisabled={!supportsOnGrab.value}
-                      {...onGrab}
-                      onChange={onInputChange}
-                    />
-
-                    <FormInputGroup
-                      type={inputTypes.CHECK}
-                      name="onDownload"
-                      helpText="On Import"
-                      isDisabled={!supportsOnDownload.value}
-                      {...onDownload}
-                      onChange={onInputChange}
-                    />
-
-                    {
-                      onDownload.value ?
-                        <FormInputGroup
-                          type={inputTypes.CHECK}
-                          name="onUpgrade"
-                          helpText="On Upgrade"
-                          isDisabled={!supportsOnUpgrade.value}
-                          {...onUpgrade}
-                          onChange={onInputChange}
-                        /> :
-                        null
-                    }
-
-                    <FormInputGroup
-                      type={inputTypes.CHECK}
-                      name="onRename"
-                      helpText="On Rename"
-                      isDisabled={!supportsOnRename.value}
-                      {...onRename}
-                      onChange={onInputChange}
-                    />
-
-                    <FormInputGroup
-                      type={inputTypes.CHECK}
-                      name="onSeriesDelete"
-                      helpText="On Series Delete"
-                      isDisabled={!supportsOnSeriesDelete.value}
-                      {...onSeriesDelete}
-                      onChange={onInputChange}
-                    />
-
-                    <FormInputGroup
-                      type={inputTypes.CHECK}
-                      name="onEpisodeFileDelete"
-                      helpText="On Episode File Delete"
-                      isDisabled={!supportsOnEpisodeFileDelete.value}
-                      {...onEpisodeFileDelete}
-                      onChange={onInputChange}
-                    />
-
-                    {
-                      onEpisodeFileDelete.value ?
-                        <FormInputGroup
-                          type={inputTypes.CHECK}
-                          name="onEpisodeFileDeleteForUpgrade"
-                          helpText="On Episode File Delete For Upgrade"
-                          isDisabled={!supportsOnEpisodeFileDeleteForUpgrade.value}
-                          {...onEpisodeFileDeleteForUpgrade}
-                          onChange={onInputChange}
-                        /> :
-                        null
-                    }
-
-                    <FormInputGroup
-                      type={inputTypes.CHECK}
-                      name="onHealthIssue"
-                      helpText="On Health Issue"
-                      isDisabled={!supportsOnHealthIssue.value}
-                      {...onHealthIssue}
-                      onChange={onInputChange}
-                    />
-
-                    {
-                      onHealthIssue.value ?
-                        <FormInputGroup
-                          type={inputTypes.CHECK}
-                          name="includeHealthWarnings"
-                          helpText="Include Health Warnings"
-                          isDisabled={!supportsOnHealthIssue.value}
-                          {...includeHealthWarnings}
-                          onChange={onInputChange}
-                        /> :
-                        null
-                    }
-                  </div>
-                </div>
-              </FormGroup>
+              <NotificationEventItems
+                item={item}
+                onInputChange={onInputChange}
+              />
 
               <FormGroup>
                 <FormLabel>Tags</FormLabel>
