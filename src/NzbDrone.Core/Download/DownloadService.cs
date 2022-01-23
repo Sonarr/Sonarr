@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Download
             Ensure.That(remoteEpisode.Episodes, () => remoteEpisode.Episodes).HasItems();
 
             var downloadTitle = remoteEpisode.Release.Title;
-            var downloadClient = _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol);
+            var downloadClient = _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId);
 
             if (downloadClient == null)
             {
