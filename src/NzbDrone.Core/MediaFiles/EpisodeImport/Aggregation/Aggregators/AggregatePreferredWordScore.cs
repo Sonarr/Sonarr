@@ -19,7 +19,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             var series = localEpisode.Series;
             var scores = new List<int>();
 
-            if (localEpisode.FileEpisodeInfo != null)
+            if (localEpisode.FileEpisodeInfo?.ReleaseTitle != null)
             {
                 scores.Add(_preferredWordService.Calculate(series, localEpisode.FileEpisodeInfo.ReleaseTitle, 0));
             }

@@ -144,20 +144,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             {
                 var downloadClientItem = GetTrackedDownload(downloadId)?.DownloadItem;
 
-                var localEpisode = new LocalEpisode
-                                   {
-                                       Series = series,
-                                       Episodes = _episodeService.GetEpisodes(episodeIds),
-                                       FileEpisodeInfo = Parser.Parser.ParsePath(path),
-                                       DownloadClientEpisodeInfo = downloadClientItem == null ? null : Parser.Parser.ParseTitle(downloadClientItem.Title),
-                                       Path = path,
-                                       SceneSource = SceneSource(series, rootFolder),
-                                       ExistingFile = series.Path.IsParentPath(path),
-                                       Size = _diskProvider.GetFileSize(path),
-                                       ReleaseGroup = releaseGroup.IsNullOrWhiteSpace() ? Parser.Parser.ParseReleaseGroup(path) : releaseGroup,
-                                       Language = language == Language.Unknown ? LanguageParser.ParseLanguage(path) : language,
-                                       Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality
-                                   };
+                var localEpisode = new LocalEpisode();
+                localEpisode.Series = series;
+                localEpisode.Episodes = _episodeService.GetEpisodes(episodeIds);
+                localEpisode.FileEpisodeInfo = Parser.Parser.ParsePath(path);
+                localEpisode.DownloadClientEpisodeInfo = downloadClientItem == null ? null : Parser.Parser.ParseTitle(downloadClientItem.Title);
+                localEpisode.Path = path;
+                localEpisode.SceneSource = SceneSource(series, rootFolder);
+                localEpisode.ExistingFile = series.Path.IsParentPath(path);
+                localEpisode.Size = _diskProvider.GetFileSize(path);
+                localEpisode.ReleaseGroup = releaseGroup.IsNullOrWhiteSpace() ? Parser.Parser.ParseReleaseGroup(path) : releaseGroup;
+                localEpisode.Language = language == Language.Unknown ? LanguageParser.ParseLanguage(path) : language;
+                localEpisode.Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality;
 
                 return MapItem(_importDecisionMaker.GetDecision(localEpisode, downloadClientItem), rootFolder, downloadId, null);
             }
@@ -466,6 +464,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     localEpisode.SceneSource = !existingFile;
                 }
 
+                // Augment episode file so imported files have all additional information an automatic import would
                 localEpisode = _aggregationService.Augment(localEpisode, trackedDownload?.DownloadItem);
 
                 // Apply the user-chosen values.
@@ -521,7 +520,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 var allEpisodesImported = groupedTrackedDownload.Select(c => c.ImportResult)
                                                                     .Where(c => c.Result == ImportResultType.Imported)
                                                                    .SelectMany(c => c.ImportDecision.LocalEpisode.Episodes).Count() >= 
-                                                                                Math.Max(1, trackedDownload.RemoteEpisode.Episodes.Count);
+                                                                                Math.Max(1, trackedDownload.RemoteEpisode?.Episodes?.Count ?? 1);
 
                 if (allEpisodesImported)
                 {
