@@ -5,6 +5,7 @@ using System.Linq;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.Flood.Models;
@@ -233,10 +234,17 @@ namespace NzbDrone.Core.Download.Clients.Flood
 
         public override DownloadClientInfo GetStatus()
         {
+            var destDir = _proxy.GetClientSettings(Settings).DirectoryDefault;
+
+            if (Settings.Destination.IsNotNullOrWhiteSpace())
+            {
+                destDir = Settings.Destination;
+            }
+
             return new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "::1" || Settings.Host == "localhost",
-                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(Settings.Destination)) }
+                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(destDir)) }
             };
         }
 
