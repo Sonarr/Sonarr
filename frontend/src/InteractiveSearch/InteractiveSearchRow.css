@@ -34,7 +34,7 @@
   width: 100px;
 }
 
-.preferredWordScore {
+.customFormatScore {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 55px;

@@ -8,6 +8,7 @@ import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellCo
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
+import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
@@ -89,6 +90,7 @@ class QueueRow extends Component {
       episode,
       language,
       quality,
+      customFormats,
       protocol,
       indexer,
       outputPath,
@@ -247,6 +249,16 @@ class QueueRow extends Component {
               );
             }
 
+            if (name === 'customFormats') {
+              return (
+                <TableRowCell key={name}>
+                  <EpisodeFormats
+                    formats={customFormats}
+                  />
+                </TableRowCell>
+              );
+            }
+
             if (name === 'protocol') {
               return (
                 <TableRowCell key={name}>
@@ -400,6 +412,7 @@ QueueRow.propTypes = {
   episode: PropTypes.object,
   language: PropTypes.object.isRequired,
   quality: PropTypes.object.isRequired,
+  customFormats: PropTypes.arrayOf(PropTypes.object),
   protocol: PropTypes.string.isRequired,
   indexer: PropTypes.string,
   outputPath: PropTypes.string,

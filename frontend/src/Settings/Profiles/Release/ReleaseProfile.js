@@ -60,7 +60,6 @@ class ReleaseProfile extends Component {
       enabled,
       required,
       ignored,
-      preferred,
       tags,
       indexerId,
       tagList,
@@ -105,28 +104,6 @@ class ReleaseProfile extends Component {
                     text={item}
                     start={10}
                     end={10}
-                  />
-                </Label>
-              );
-            })
-          }
-        </div>
-
-        <div>
-          {
-            preferred.map((item) => {
-              const isPreferred = item.value >= 0;
-
-              return (
-                <Label
-                  className={styles.label}
-                  key={item.key}
-                  kind={isPreferred ? kinds.DEFAULT : kinds.WARNING}
-                >
-                  <MiddleTruncate
-                    text={`${item.key} ${isPreferred ? '+' : ''}${item.value}`}
-                    start={10}
-                    end={14}
                   />
                 </Label>
               );
@@ -212,7 +189,6 @@ ReleaseProfile.propTypes = {
   enabled: PropTypes.bool.isRequired,
   required: PropTypes.arrayOf(PropTypes.string).isRequired,
   ignored: PropTypes.arrayOf(PropTypes.string).isRequired,
-  preferred: PropTypes.arrayOf(PropTypes.object).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   indexerId: PropTypes.number.isRequired,
   tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -224,7 +200,6 @@ ReleaseProfile.defaultProps = {
   enabled: true,
   required: [],
   ignored: [],
-  preferred: [],
   indexerId: 0
 };
 

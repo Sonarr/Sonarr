@@ -3,7 +3,8 @@
   flex-wrap: wrap;
 }
 
-.formGroupWrapper {
+.formGroupWrapper,
+.formatItemLarge {
   flex: 0 0 calc($formGroupSmallWidth - 100px);
 }
 
@@ -11,8 +12,20 @@
   margin-right: auto;
 }
 
-@media only screen and (max-width: $breakpointLarge) {
+.formatItemSmall {
+  display: none;
+}
+
+@media only screen and (max-width: calc($breakpointLarge + 100px)) {
   .formGroupsContainer {
     display: block;
+  }
+
+  .formatItemSmall {
+    display: block;
+  }
+
+  .formatItemLarge {
+    display: none;
   }
 }

@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
+using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.EpisodeFiles
@@ -21,6 +23,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public string ReleaseGroup { get; set; }
         public Language Language { get; set; }
         public QualityModel Quality { get; set; }
+        public List<CustomFormatResource> CustomFormats { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }

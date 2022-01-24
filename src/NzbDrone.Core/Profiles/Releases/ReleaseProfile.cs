@@ -9,8 +9,6 @@ namespace NzbDrone.Core.Profiles.Releases
         public bool Enabled { get; set; }
         public List<string> Required { get; set; }
         public List<string> Ignored { get; set; }
-        public List<KeyValuePair<string, int>> Preferred { get; set; }
-        public bool IncludePreferredWhenRenaming { get; set; }
         public int IndexerId { get; set; }
         public HashSet<int> Tags { get; set; }
 
@@ -19,8 +17,6 @@ namespace NzbDrone.Core.Profiles.Releases
             Enabled = true;
             Required = new List<string>();
             Ignored = new List<string>();
-            Preferred = new List<KeyValuePair<string, int>>();
-            IncludePreferredWhenRenaming = true;
             Tags = new HashSet<int>();
             IndexerId = 0;
         }

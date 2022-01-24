@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -8,6 +9,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import { icons } from 'Helpers/Props';
 import SeasonNumber from 'Season/SeasonNumber';
 import SeriesHistoryRowConnector from './SeriesHistoryRowConnector';
 
@@ -44,6 +46,15 @@ const columns = [
   {
     name: 'details',
     label: 'Details',
+    isVisible: true
+  },
+  {
+    name: 'customFormatScore',
+    label: React.createElement(Icon, {
+      name: icons.SCORE,
+      title: 'Custom format score'
+    }),
+    isSortable: true,
     isVisible: true
   },
   {

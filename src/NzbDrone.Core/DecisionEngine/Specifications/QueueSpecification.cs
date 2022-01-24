@@ -1,5 +1,6 @@
 using System.Linq;
 using NLog;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -12,17 +13,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     {
         private readonly IQueueService _queueService;
         private readonly UpgradableSpecification _upgradableSpecification;
-        private readonly IPreferredWordService _preferredWordServiceCalculator;
+        private readonly ICustomFormatCalculationService _formatService;
         private readonly Logger _logger;
 
         public QueueSpecification(IQueueService queueService,
                                   UpgradableSpecification upgradableSpecification,
-                                  IPreferredWordService preferredWordServiceCalculator,
+                                  ICustomFormatCalculationService formatService,
                                   Logger logger)
         {
             _queueService = queueService;
             _upgradableSpecification = upgradableSpecification;
-            _preferredWordServiceCalculator = preferredWordServiceCalculator;
+            _formatService = formatService;
             _logger = logger;
         }
 
@@ -52,16 +53,16 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     continue;
                 }
 
+                var queuedItemCustomFormats = _formatService.ParseCustomFormat(remoteEpisode.ParsedEpisodeInfo);
+
                 _logger.Debug("Checking if existing release in queue meets cutoff. Queued: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
-                var queuedItemPreferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, queueItem.Title, subject.Release?.IndexerId ?? 0);
 
                 if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
                     languageProfile,
                     remoteEpisode.ParsedEpisodeInfo.Quality,
                     remoteEpisode.ParsedEpisodeInfo.Language,
-                    queuedItemPreferredWordScore,
-                    subject.ParsedEpisodeInfo.Quality,
-                    subject.PreferredWordScore))
+                    queuedItemCustomFormats,
+                    subject.ParsedEpisodeInfo.Quality))
                 {
                     return Decision.Reject("Release in queue already meets cutoff: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
                 }
@@ -72,10 +73,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                                                            languageProfile,
                                                            remoteEpisode.ParsedEpisodeInfo.Quality,
                                                            remoteEpisode.ParsedEpisodeInfo.Language,
-                                                           queuedItemPreferredWordScore,
+                                                           remoteEpisode.CustomFormats,
                                                            subject.ParsedEpisodeInfo.Quality,
                                                            subject.ParsedEpisodeInfo.Language,
-                                                           subject.PreferredWordScore))
+                                                           subject.CustomFormats))
                 {
                     return Decision.Reject("Release in queue is of equal or higher preference: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
                 }

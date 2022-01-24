@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("Indexer", message.Episode.Release.Indexer);
             history.Data.Add("DownloadClient", message.DownloadClient);
             history.Data.Add("DownloadClientName", message.DownloadClientName);
-            history.Data.Add("PreferredWordScore", message.Episode.PreferredWordScore.ToString());
+            history.Data.Add("CustomFormatScore", message.Episode.CustomFormatScore.ToString());
 
             _repository.Insert(history);
         }

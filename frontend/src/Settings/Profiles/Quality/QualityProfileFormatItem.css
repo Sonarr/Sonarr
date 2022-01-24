@@ -1,0 +1,45 @@
+.qualityProfileFormatItemContainer {
+  display: flex;
+  padding: $qualityProfileItemDragSourcePadding 0;
+  width: 100%;
+}
+
+.qualityProfileFormatItem {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: var(--inputBackgroundColor);
+}
+
+.formatNameContainer {
+  display: flex;
+  flex-grow: 1;
+  margin-bottom: 0;
+  margin-left: 14px;
+  width: 100%;
+  font-weight: normal;
+  line-height: $qualityProfileItemHeight;
+  cursor: text;
+}
+
+.formatName {
+  display: flex;
+  flex-grow: 1;
+}
+
+.scoreContainer {
+  display: flex;
+  flex-grow: 0;
+}
+
+.scoreInput {
+  composes: input from '~Components/Form/Input.css';
+
+  width: 100px;
+  height: 30px;
+  border: unset;
+  border-radius: unset;
+  background-color: unset;
+}

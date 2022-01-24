@@ -11,7 +11,6 @@ const newReleaseProfile = {
   enabled: true,
   required: [],
   ignored: [],
-  preferred: [],
   includePreferredWhenRenaming: false,
   tags: [],
   indexerId: 0

@@ -2,6 +2,7 @@ using System;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -13,20 +14,20 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
     {
         private readonly IHistoryService _historyService;
         private readonly UpgradableSpecification _upgradableSpecification;
+        private readonly ICustomFormatCalculationService _formatService;
         private readonly IConfigService _configService;
-        private readonly IPreferredWordService _preferredWordServiceCalculator;
         private readonly Logger _logger;
 
         public HistorySpecification(IHistoryService historyService,
-                                           UpgradableSpecification upgradableSpecification,
-                                           IConfigService configService,
-                                           IPreferredWordService preferredWordServiceCalculator,
-                                           Logger logger)
+                                    UpgradableSpecification upgradableSpecification,
+                                    ICustomFormatCalculationService formatService,
+                                    IConfigService configService,
+                                    Logger logger)
         {
             _historyService = historyService;
             _upgradableSpecification = upgradableSpecification;
+            _formatService = formatService;
             _configService = configService;
-            _preferredWordServiceCalculator = preferredWordServiceCalculator;
             _logger = logger;
         }
 
@@ -58,28 +59,27 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                         continue;
                     }
 
+                    var customFormats = _formatService.ParseCustomFormat(mostRecent);
+
                     // The series will be the same as the one in history since it's the same episode.
                     // Instead of fetching the series from the DB reuse the known series.
-                    var preferredWordScore = _preferredWordServiceCalculator.Calculate(subject.Series, mostRecent.SourceTitle, subject.Release?.IndexerId ?? 0);
-
                     var cutoffUnmet = _upgradableSpecification.CutoffNotMet(
                         subject.Series.QualityProfile,
                         subject.Series.LanguageProfile,
                         mostRecent.Quality,
                         mostRecent.Language,
-                        preferredWordScore,
-                        subject.ParsedEpisodeInfo.Quality,
-                        subject.PreferredWordScore);
+                        customFormats,
+                        subject.ParsedEpisodeInfo.Quality);
 
                     var upgradeable = _upgradableSpecification.IsUpgradable(
                         subject.Series.QualityProfile,
                         subject.Series.LanguageProfile,
                         mostRecent.Quality,
                         mostRecent.Language,
-                        preferredWordScore,
+                        customFormats,
                         subject.ParsedEpisodeInfo.Quality,
                         subject.ParsedEpisodeInfo.Language,
-                        subject.PreferredWordScore);
+                        subject.CustomFormats);
 
                     if (!cutoffUnmet)
                     {

@@ -1,367 +1,385 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Serializer;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Test.CustomFormats;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Languages;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    public class CutoffSpecificationFixture : CoreTest<UpgradableSpecification>
+    public class CutoffSpecificationFixture : CoreTest<CutoffSpecification>
     {
-        private static readonly int NoPreferredWordScore = 0;
+        private CustomFormat _customFormat;
+        private RemoteEpisode _remoteMovie;
+
+        [SetUp]
+        public void Setup()
+        {
+            Mocker.SetConstant<IUpgradableSpecification>(Mocker.Resolve<UpgradableSpecification>());
+
+            _remoteMovie = new RemoteEpisode()
+            {
+                Series = Builder<Series>.CreateNew().Build(),
+                Episodes = new List<Episode> { Builder<Episode>.CreateNew().Build() },
+                ParsedEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew().With(x => x.Quality = null).Build()
+            };
+
+            GivenOldCustomFormats(new List<CustomFormat>());
+        }
+
+        private void GivenProfile(QualityProfile profile)
+        {
+            CustomFormatsFixture.GivenCustomFormats();
+            profile.FormatItems = CustomFormatsFixture.GetSampleFormatItems();
+            profile.MinFormatScore = 0;
+            _remoteMovie.Series.QualityProfile = profile;
+
+            Console.WriteLine(profile.ToJson());
+        }
+
+        private void GivenLanguageProfile(LanguageProfile profile)
+        {
+            _remoteMovie.Series.LanguageProfile = profile;
+
+            Console.WriteLine(profile.ToJson());
+        }
+
+        private void GivenFileQuality(QualityModel quality, Language language)
+        {
+            _remoteMovie.Episodes.First().EpisodeFile = Builder<EpisodeFile>.CreateNew().With(x => x.Quality = quality).With(x => x.Language = language).Build();
+        }
+
+        private void GivenNewQuality(QualityModel quality)
+        {
+            _remoteMovie.ParsedEpisodeInfo.Quality = quality;
+        }
+
+        private void GivenOldCustomFormats(List<CustomFormat> formats)
+        {
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                .Setup(x => x.ParseCustomFormat(It.IsAny<EpisodeFile>()))
+                .Returns(formats);
+        }
+
+        private void GivenNewCustomFormats(List<CustomFormat> formats)
+        {
+            _remoteMovie.CustomFormats = formats;
+        }
+
+        private void GivenCustomFormatHigher()
+        {
+            _customFormat = new CustomFormat("My Format", new ResolutionSpecification { Value = (int)Resolution.R1080p }) { Id = 1 };
+
+            CustomFormatsFixture.GivenCustomFormats(_customFormat);
+        }
 
         [Test]
         public void should_return_true_if_current_episode_is_less_than_cutoff()
         {
-            Subject.CutoffNotMet(
-                new QualityProfile
-                {
-                    Cutoff = Quality.Bluray1080p.Id,
-                    Items = Qualities.QualityFixture.GetDefaultQualities(),
-                    UpgradeAllowed = true
-                },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
-                new QualityModel(Quality.DVD, new Revision(version: 2)),
-                Language.English,
-                NoPreferredWordScore).Should().BeTrue();
+            GivenProfile(new QualityProfile
+            {
+                Cutoff = Quality.Bluray1080p.Id,
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
+            });
+
+            GivenLanguageProfile(new LanguageProfile
+            {
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English),
+                Cutoff = Language.English,
+                UpgradeAllowed = true
+            });
+
+            GivenFileQuality(new QualityModel(Quality.DVD, new Revision(version: 2)), Language.English);
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_false_if_current_episode_is_equal_to_cutoff()
         {
-            Subject.CutoffNotMet(
-                new QualityProfile
-                {
-                    Cutoff = Quality.HDTV720p.Id,
-                    Items = Qualities.QualityFixture.GetDefaultQualities(),
-                    UpgradeAllowed = true
-                },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
-                Language.English,
-                NoPreferredWordScore).Should().BeFalse();
+            GivenProfile(new QualityProfile
+            {
+                Cutoff = Quality.HDTV720p.Id,
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
+            });
+
+            GivenLanguageProfile(new LanguageProfile
+            {
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English),
+                Cutoff = Language.English,
+                UpgradeAllowed = true
+            });
+
+            GivenFileQuality(new QualityModel(Quality.HDTV720p, new Revision(version: 2)), Language.English);
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_if_current_episode_is_greater_than_cutoff()
         {
-            Subject.CutoffNotMet(
-                new QualityProfile
-                {
-                    Cutoff = Quality.HDTV720p.Id,
-                    Items = Qualities.QualityFixture.GetDefaultQualities(),
-                    UpgradeAllowed = true
-                },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
-                Language.English,
-                NoPreferredWordScore).Should().BeFalse();
+            GivenProfile(new QualityProfile
+            {
+                Cutoff = Quality.HDTV720p.Id,
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
+            });
+
+            GivenLanguageProfile(new LanguageProfile
+            {
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English),
+                Cutoff = Language.English,
+                UpgradeAllowed = true
+            });
+
+            GivenFileQuality(new QualityModel(Quality.Bluray1080p, new Revision(version: 2)), Language.English);
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_when_new_episode_is_proper_but_existing_is_not()
         {
-            Subject.CutoffNotMet(
-                new QualityProfile
-                {
-                    Cutoff = Quality.HDTV720p.Id,
-                    Items = Qualities.QualityFixture.GetDefaultQualities(),
-                    UpgradeAllowed = true
-                },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
-                new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
-                Language.English,
-                NoPreferredWordScore,
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
-                NoPreferredWordScore).Should().BeTrue();
+            GivenProfile(new QualityProfile
+            {
+                Cutoff = Quality.HDTV720p.Id,
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
+            });
+
+            GivenLanguageProfile(new LanguageProfile
+            {
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English),
+                Cutoff = Language.English,
+                UpgradeAllowed = true
+            });
+
+            GivenFileQuality(new QualityModel(Quality.HDTV720p, new Revision(version: 1)), Language.English);
+            GivenNewQuality(new QualityModel(Quality.HDTV720p, new Revision(version: 2)));
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_false_if_cutoff_is_met_and_quality_is_higher()
         {
-            Subject.CutoffNotMet(
-                new QualityProfile
-                {
-                    Cutoff = Quality.HDTV720p.Id,
-                    Items = Qualities.QualityFixture.GetDefaultQualities(),
-                    UpgradeAllowed = true
-                },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
-                Language.English,
-                NoPreferredWordScore,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
-                NoPreferredWordScore).Should().BeFalse();
+            GivenProfile(new QualityProfile
+            {
+                Cutoff = Quality.HDTV720p.Id,
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
+            });
+
+            GivenLanguageProfile(new LanguageProfile
+            {
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English),
+                Cutoff = Language.English,
+                UpgradeAllowed = true
+            });
+
+            GivenFileQuality(new QualityModel(Quality.HDTV720p, new Revision(version: 2)), Language.English);
+            GivenNewQuality(new QualityModel(Quality.Bluray1080p, new Revision(version: 2)));
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_if_quality_cutoff_is_met_and_quality_is_higher_but_language_is_not_met()
         {
-            QualityProfile profile = new QualityProfile
+            GivenProfile(new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 UpgradeAllowed = true
-            };
+            });
 
-            LanguageProfile langProfile = new LanguageProfile
+            GivenLanguageProfile(new LanguageProfile
             {
-                Cutoff = Language.Spanish,
                 Languages = LanguageFixture.GetDefaultLanguages(),
+                Cutoff = Language.Spanish,
                 UpgradeAllowed = true
-            };
+            });
 
-            Subject.CutoffNotMet(profile,
-                langProfile,
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
-                Language.English,
-                NoPreferredWordScore,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
-                NoPreferredWordScore).Should().BeTrue();
+            GivenFileQuality(new QualityModel(Quality.HDTV720p, new Revision(version: 2)), Language.English);
+            GivenNewQuality(new QualityModel(Quality.Bluray1080p, new Revision(version: 2)));
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
-        public void should_return_false_if_cutoff_is_met_and_quality_is_higher_and_language_is_met()
+        public void should_return_false_if_quality_cutoff_is_met_and_quality_is_higher_but_language_is_met()
         {
-            QualityProfile profile = new QualityProfile
+            GivenProfile(new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 UpgradeAllowed = true
-            };
+            });
 
-            LanguageProfile langProfile = new LanguageProfile
+            GivenLanguageProfile(new LanguageProfile
             {
-                Cutoff = Language.Spanish,
                 Languages = LanguageFixture.GetDefaultLanguages(),
+                Cutoff = Language.Spanish,
                 UpgradeAllowed = true
-            };
+            });
 
-            Subject.CutoffNotMet(
-                profile,
-                langProfile,
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
-                Language.Spanish,
-                NoPreferredWordScore,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
-                NoPreferredWordScore).Should().BeFalse();
+            GivenFileQuality(new QualityModel(Quality.HDTV720p, new Revision(version: 2)), Language.Spanish);
+            GivenNewQuality(new QualityModel(Quality.Bluray1080p, new Revision(version: 2)));
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_if_cutoff_is_met_and_quality_is_higher_and_language_is_higher()
         {
-            QualityProfile profile = new QualityProfile
+            GivenProfile(new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 UpgradeAllowed = true
-            };
+            });
 
-            LanguageProfile langProfile = new LanguageProfile
+            GivenLanguageProfile(new LanguageProfile
             {
-                Cutoff = Language.Spanish,
                 Languages = LanguageFixture.GetDefaultLanguages(),
+                Cutoff = Language.Spanish,
                 UpgradeAllowed = true
-            };
+            });
 
-            Subject.CutoffNotMet(
-                profile,
-                langProfile,
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
-                Language.French,
-                NoPreferredWordScore,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
-                NoPreferredWordScore).Should().BeFalse();
+            GivenFileQuality(new QualityModel(Quality.HDTV720p, new Revision(version: 2)), Language.French);
+            GivenNewQuality(new QualityModel(Quality.Bluray1080p, new Revision(version: 2)));
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_if_cutoff_is_not_met_and_new_quality_is_higher_and_language_is_higher()
         {
-            QualityProfile profile = new QualityProfile
+            GivenProfile(new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 UpgradeAllowed = true
-            };
+            });
 
-            LanguageProfile langProfile = new LanguageProfile
+            GivenLanguageProfile(new LanguageProfile
             {
-                Cutoff = Language.Spanish,
                 Languages = LanguageFixture.GetDefaultLanguages(),
+                Cutoff = Language.Spanish,
                 UpgradeAllowed = true
-            };
+            });
 
-            Subject.CutoffNotMet(
-                profile,
-                langProfile,
-                new QualityModel(Quality.SDTV, new Revision(version: 2)),
-                Language.French,
-                NoPreferredWordScore,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
-                NoPreferredWordScore).Should().BeTrue();
+            GivenFileQuality(new QualityModel(Quality.SDTV, new Revision(version: 2)), Language.French);
+            GivenNewQuality(new QualityModel(Quality.Bluray1080p, new Revision(version: 2)));
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_if_cutoff_is_not_met_and_language_is_higher()
         {
-            QualityProfile profile = new QualityProfile
+            GivenProfile(new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 UpgradeAllowed = true
-            };
+            });
 
-            LanguageProfile langProfile = new LanguageProfile
+            GivenLanguageProfile(new LanguageProfile
             {
-                Cutoff = Language.Spanish,
                 Languages = LanguageFixture.GetDefaultLanguages(),
+                Cutoff = Language.Spanish,
                 UpgradeAllowed = true
-            };
+            });
 
-            Subject.CutoffNotMet(
-                profile,
-                langProfile,
-                new QualityModel(Quality.SDTV, new Revision(version: 2)),
-                Language.French,
-                NoPreferredWordScore).Should().BeTrue();
+            GivenFileQuality(new QualityModel(Quality.SDTV, new Revision(version: 2)), Language.French);
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
-        public void should_return_true_if_cutoffs_are_met_and_score_is_higher()
+        public void should_return_false_if_custom_formats_is_met_and_quality_and_format_higher()
         {
-            QualityProfile profile = new QualityProfile
+            GivenProfile(new QualityProfile
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
+                MinFormatScore = 0,
+                FormatItems = CustomFormatsFixture.GetSampleFormatItems("My Format"),
                 UpgradeAllowed = true
-            };
+            });
 
-            LanguageProfile langProfile = new LanguageProfile
+            GivenLanguageProfile(new LanguageProfile
             {
-                Cutoff = Language.Spanish,
-                Languages = LanguageFixture.GetDefaultLanguages(),
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English),
+                Cutoff = Language.English,
                 UpgradeAllowed = true
-            };
+            });
 
-            Subject.CutoffNotMet(
-                profile,
-                langProfile,
-                new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
-                Language.Spanish,
-                NoPreferredWordScore,
-                new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
-                10).Should().BeTrue();
+            GivenFileQuality(new QualityModel(Quality.HDTV720p), Language.English);
+            GivenNewQuality(new QualityModel(Quality.Bluray1080p));
+
+            GivenCustomFormatHigher();
+
+            GivenOldCustomFormats(new List<CustomFormat>());
+            GivenNewCustomFormats(new List<CustomFormat> { _customFormat });
+
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_if_cutoffs_are_met_but_is_a_revision_upgrade()
         {
-            QualityProfile profile = new QualityProfile
+            GivenProfile(new QualityProfile
             {
                 Cutoff = Quality.HDTV1080p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 UpgradeAllowed = true
-            };
+            });
 
-            LanguageProfile langProfile = new LanguageProfile
+            GivenLanguageProfile(new LanguageProfile
             {
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                 Cutoff = Language.English,
-                Languages = LanguageFixture.GetDefaultLanguages(),
                 UpgradeAllowed = true
-            };
+            });
 
-            Subject.CutoffNotMet(
-                profile,
-                langProfile,
-                new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)),
-                Language.English,
-                NoPreferredWordScore,
-                new QualityModel(Quality.WEBDL1080p, new Revision(version: 2)),
-                NoPreferredWordScore).Should().BeTrue();
+            GivenFileQuality(new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language.English);
+            GivenNewQuality(new QualityModel(Quality.WEBDL1080p, new Revision(version: 2)));
+
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
-        public void should_return_false_if_language_profile_does_not_allow_upgrades_but_cutoff_is_set_to_highest_language_and_quality_cutoff_is_met()
+        public void should_return_false_if_quality_profile_does_not_allow_upgrades_but_cutoff_is_set_to_highest_quality()
         {
-            QualityProfile profile = new QualityProfile
+            GivenProfile(new QualityProfile
             {
-                Cutoff = Quality.WEBDL1080p.Id,
-                Items = Qualities.QualityFixture.GetDefaultQualities(),
-                UpgradeAllowed = true
-            };
-
-            LanguageProfile langProfile = new LanguageProfile
-            {
-                Cutoff = Language.Arabic,
-                Languages = LanguageFixture.GetDefaultLanguages(Language.Spanish, Language.English, Language.Arabic),
-                UpgradeAllowed = false
-            };
-
-            Subject.CutoffNotMet(
-                profile,
-                langProfile,
-                new QualityModel(Quality.WEBDL1080p),
-                Language.English,
-                NoPreferredWordScore,
-                new QualityModel(Quality.Bluray1080p),
-                NoPreferredWordScore).Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_false_if_quality_profile_does_not_allow_upgrades_but_cutoff_is_set_to_highest_quality_and_language_cutoff_is_met()
-        {
-            QualityProfile profile = new QualityProfile
-            {
-                Cutoff = Quality.WEBDL1080p.Id,
+                Cutoff = Quality.RAWHD.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 UpgradeAllowed = false
-            };
+            });
 
-            LanguageProfile langProfile = new LanguageProfile
+            GivenLanguageProfile(new LanguageProfile
             {
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                 Cutoff = Language.English,
-                Languages = LanguageFixture.GetDefaultLanguages(Language.Spanish, Language.English, Language.Arabic),
                 UpgradeAllowed = true
-            };
+            });
 
-            Subject.CutoffNotMet(
-                profile,
-                langProfile,
-                new QualityModel(Quality.WEBDL1080p),
-                Language.English,
-                NoPreferredWordScore,
-                new QualityModel(Quality.Bluray1080p),
-                NoPreferredWordScore).Should().BeFalse();
+            GivenFileQuality(new QualityModel(Quality.WEBDL1080p), Language.English);
+            GivenNewQuality(new QualityModel(Quality.Bluray1080p));
+
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
     }
 }

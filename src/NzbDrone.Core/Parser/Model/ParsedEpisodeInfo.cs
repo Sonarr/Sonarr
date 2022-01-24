@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Qualities;
@@ -27,6 +29,9 @@ namespace NzbDrone.Core.Parser.Model
         public int SeasonPart { get; set; }
         public string ReleaseTokens { get; set; }
         public int? DailyPart { get; set; }
+
+        [JsonIgnore]
+        public Dictionary<string, object> ExtraInfo { get; set; } = new Dictionary<string, object>();
 
         public ParsedEpisodeInfo()
         {

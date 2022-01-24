@@ -2,12 +2,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
+import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
+import Tooltip from 'Components/Tooltip/Tooltip';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
@@ -115,7 +117,8 @@ class InteractiveSearchRow extends Component {
       leechers,
       quality,
       language,
-      preferredWordScore,
+      customFormatScore,
+      customFormats,
       sceneMapping,
       seasonNumber,
       episodeNumbers,
@@ -193,8 +196,26 @@ class InteractiveSearchRow extends Component {
           <EpisodeQuality quality={quality} />
         </TableRowCell>
 
-        <TableRowCell className={styles.preferredWordScore}>
-          {formatPreferredWordScore(preferredWordScore)}
+        <TableRowCell className={styles.customFormatScore}>
+          <Tooltip
+            anchor={
+              formatPreferredWordScore(customFormatScore)
+            }
+            tooltip={
+              <div>
+                {
+                  customFormats.map((format) => {
+                    return (
+                      <Label key={format.id}>
+                        {format.name}
+                      </Label>
+                    );
+                  })
+                }
+              </div>
+            }
+            position={tooltipPositions.BOTTOM}
+          />
         </TableRowCell>
 
         <TableRowCell className={styles.rejected}>
@@ -266,7 +287,8 @@ InteractiveSearchRow.propTypes = {
   leechers: PropTypes.number,
   quality: PropTypes.object.isRequired,
   language: PropTypes.object.isRequired,
-  preferredWordScore: PropTypes.number.isRequired,
+  customFormats: PropTypes.arrayOf(PropTypes.object),
+  customFormatScore: PropTypes.number.isRequired,
   sceneMapping: PropTypes.object,
   seasonNumber: PropTypes.number,
   episodeNumbers: PropTypes.arrayOf(PropTypes.number),

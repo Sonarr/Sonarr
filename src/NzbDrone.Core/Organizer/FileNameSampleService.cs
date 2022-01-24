@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Organizer
         private static EpisodeFile _dailyEpisodeFile;
         private static EpisodeFile _animeEpisodeFile;
         private static EpisodeFile _animeMultiEpisodeFile;
-        private static PreferredWordMatchResults _preferredWords;
+        private static List<CustomFormat> _customFormats;
 
         public FileNameSampleService(IBuildFileNames buildFileNames)
         {
@@ -126,6 +126,20 @@ namespace NzbDrone.Core.Organizer
                 Subtitles = new List<string> { "jpn", "eng" }
             };
 
+            _customFormats = new List<CustomFormat>
+            {
+                new CustomFormat
+                {
+                    Name = "Surround Sound",
+                    IncludeCustomFormatWhenRenaming = true
+                },
+                new CustomFormat
+                {
+                    Name = "x264",
+                    IncludeCustomFormatWhenRenaming = true
+                }
+            };
+
             _singleEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
@@ -170,18 +184,13 @@ namespace NzbDrone.Core.Organizer
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfoAnime
             };
-
-            _preferredWords = new PreferredWordMatchResults()
-            {
-                All = new List<string>() { "iNTERNAL" }
-            };
         }
 
         public SampleResult GetStandardSample(NamingConfig nameSpec)
         {
             var result = new SampleResult
             {
-                FileName = BuildSample(_singleEpisode, _standardSeries, _singleEpisodeFile, nameSpec),
+                FileName = BuildSample(_singleEpisode, _standardSeries, _singleEpisodeFile, nameSpec, _customFormats),
                 Series = _standardSeries,
                 Episodes = _singleEpisode,
                 EpisodeFile = _singleEpisodeFile
@@ -194,7 +203,7 @@ namespace NzbDrone.Core.Organizer
         {
             var result = new SampleResult
             {
-                FileName = BuildSample(_multiEpisodes, _standardSeries, _multiEpisodeFile, nameSpec),
+                FileName = BuildSample(_multiEpisodes, _standardSeries, _multiEpisodeFile, nameSpec, _customFormats),
                 Series = _standardSeries,
                 Episodes = _multiEpisodes,
                 EpisodeFile = _multiEpisodeFile
@@ -207,7 +216,7 @@ namespace NzbDrone.Core.Organizer
         {
             var result = new SampleResult
             {
-                FileName = BuildSample(_singleEpisode, _dailySeries, _dailyEpisodeFile, nameSpec),
+                FileName = BuildSample(_singleEpisode, _dailySeries, _dailyEpisodeFile, nameSpec, _customFormats),
                 Series = _dailySeries,
                 Episodes = _singleEpisode,
                 EpisodeFile = _dailyEpisodeFile
@@ -220,7 +229,7 @@ namespace NzbDrone.Core.Organizer
         {
             var result = new SampleResult
             {
-                FileName = BuildSample(_singleEpisode, _animeSeries, _animeEpisodeFile, nameSpec),
+                FileName = BuildSample(_singleEpisode, _animeSeries, _animeEpisodeFile, nameSpec, _customFormats),
                 Series = _animeSeries,
                 Episodes = _singleEpisode,
                 EpisodeFile = _animeEpisodeFile
@@ -233,7 +242,7 @@ namespace NzbDrone.Core.Organizer
         {
             var result = new SampleResult
             {
-                FileName = BuildSample(_multiEpisodes, _animeSeries, _animeMultiEpisodeFile, nameSpec),
+                FileName = BuildSample(_multiEpisodes, _animeSeries, _animeMultiEpisodeFile, nameSpec, _customFormats),
                 Series = _animeSeries,
                 Episodes = _multiEpisodes,
                 EpisodeFile = _animeMultiEpisodeFile
@@ -257,11 +266,11 @@ namespace NzbDrone.Core.Organizer
             return _buildFileNames.GetSeasonFolder(_standardSeries, 0, nameSpec);
         }
 
-        private string BuildSample(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig nameSpec)
+        private string BuildSample(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig nameSpec, List<CustomFormat> customFormats)
         {
             try
             {
-                return _buildFileNames.BuildFileName(episodes, series, episodeFile, "", nameSpec, _preferredWords);
+                return _buildFileNames.BuildFileName(episodes, series, episodeFile, "", nameSpec, customFormats);
             }
             catch (NamingFormatException)
             {

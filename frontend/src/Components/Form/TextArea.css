@@ -1,0 +1,19 @@
+.input {
+  composes: input from '~Components/Form/Input.css';
+
+  flex-grow: 1;
+  min-height: 200px;
+  resize: vertical;
+}
+
+.readOnly {
+  background-color: #eee;
+}
+
+.hasError {
+  composes: hasError from '~Components/Form/Input.css';
+}
+
+.hasWarning {
+  composes: hasWarning from '~Components/Form/Input.css';
+}

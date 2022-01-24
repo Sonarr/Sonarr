@@ -6,6 +6,7 @@ using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Qualities;
+using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
@@ -20,6 +21,7 @@ namespace Sonarr.Api.V3.Queue
         public EpisodeResource Episode { get; set; }
         public Language Language { get; set; }
         public QualityModel Quality { get; set; }
+        public List<CustomFormatResource> CustomFormats { get; set; }
         public decimal Size { get; set; }
         public string Title { get; set; }
         public decimal Sizeleft { get; set; }
@@ -55,6 +57,7 @@ namespace Sonarr.Api.V3.Queue
                 Episode = includeEpisode && model.Episode != null ? model.Episode.ToResource() : null,
                 Language = model.Language,
                 Quality = model.Quality,
+                CustomFormats = model.RemoteEpisode?.CustomFormats?.ToResource(),
                 Size = model.Size,
                 Title = model.Title,
                 Sizeleft = model.Sizeleft,

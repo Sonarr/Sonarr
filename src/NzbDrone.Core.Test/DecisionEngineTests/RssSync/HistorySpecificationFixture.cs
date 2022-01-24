@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.History;
@@ -14,6 +15,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Test.CustomFormats;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Languages;
 using NzbDrone.Core.Tv;
@@ -40,6 +42,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             Mocker.Resolve<UpgradableSpecification>();
             _upgradeHistory = Mocker.Resolve<HistorySpecification>();
 
+            CustomFormatsFixture.GivenCustomFormats();
+
             var singleEpisodeList = new List<Episode> { new Episode { Id = FIRST_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 3 } };
             var doubleEpisodeList = new List<Episode>
             {
@@ -53,6 +57,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                 {
                     UpgradeAllowed = true,
                     Cutoff = Quality.Bluray1080p.Id,
+                    FormatItems = CustomFormatsFixture.GetSampleFormatItems("None"),
+                    MinFormatScore = 0,
                     Items = Qualities.QualityFixture.GetDefaultQualities()
                 })
                 .With(l => l.LanguageProfile = new LanguageProfile
@@ -67,14 +73,16 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             {
                 Series = _fakeSeries,
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)), Language = Language.English },
-                Episodes = doubleEpisodeList
+                Episodes = doubleEpisodeList,
+                CustomFormats = new List<CustomFormat>()
             };
 
             _parseResultSingle = new RemoteEpisode
             {
                 Series = _fakeSeries,
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)), Language = Language.English },
-                Episodes = singleEpisodeList
+                Episodes = singleEpisodeList,
+                CustomFormats = new List<CustomFormat>()
             };
 
             _upgradableQuality = new Tuple<QualityModel, Language>(new QualityModel(Quality.SDTV, new Revision(version: 1)), Language.English);
@@ -84,6 +92,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.EnableCompletedDownloadHandling)
                   .Returns(true);
+
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(x => x.ParseCustomFormat(It.IsAny<EpisodeHistory>()))
+                  .Returns(new List<CustomFormat>());
         }
 
         private void GivenMostRecentForEpisode(int episodeId, string downloadId, Tuple<QualityModel, Language> quality, DateTime date, EpisodeHistoryEventType eventType)

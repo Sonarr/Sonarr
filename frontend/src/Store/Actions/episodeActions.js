@@ -100,6 +100,11 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'customFormats',
+      label: 'Formats',
+      isVisible: false
+    },
+    {
       name: 'status',
       label: 'Status',
       isVisible: true

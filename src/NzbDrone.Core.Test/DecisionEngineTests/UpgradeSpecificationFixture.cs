@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
@@ -36,8 +38,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             new object[] { Quality.WEBDL720p, 1, Language.Spanish, Quality.HDTV720p, 2, Language.French, Quality.WEBDL720p, Language.Spanish, false }
         };
 
-        private static readonly int NoPreferredWordScore = 0;
-
         private void GivenAutoDownloadPropers(ProperDownloadTypes type)
         {
             Mocker.GetMock<IConfigService>()
@@ -69,10 +69,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                        langProfile,
                        new QualityModel(current, new Revision(version: currentVersion)),
                        Language.English,
-                       NoPreferredWordScore,
+                       new List<CustomFormat>(),
                        new QualityModel(newQuality, new Revision(version: newVersion)),
                        Language.English,
-                       NoPreferredWordScore)
+                       new List<CustomFormat>())
                     .Should().Be(expected);
         }
 
@@ -101,10 +101,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                        langProfile,
                        new QualityModel(current, new Revision(version: currentVersion)),
                        currentLanguage,
-                       NoPreferredWordScore,
+                       new List<CustomFormat>(),
                        new QualityModel(newQuality, new Revision(version: newVersion)),
                        newLanguage,
-                       NoPreferredWordScore)
+                       new List<CustomFormat>())
                     .Should().Be(expected);
         }
 
@@ -129,10 +129,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                        langProfile,
                        new QualityModel(Quality.DVD, new Revision(version: 1)),
                        Language.English,
-                       NoPreferredWordScore,
+                       new List<CustomFormat>(),
                        new QualityModel(Quality.DVD, new Revision(version: 2)),
                        Language.English,
-                       NoPreferredWordScore)
+                       new List<CustomFormat>())
                     .Should().BeTrue();
         }
 
@@ -157,10 +157,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                        langProfile,
                        new QualityModel(Quality.DVD, new Revision(version: 1)),
                        Language.English,
-                       NoPreferredWordScore,
+                       new List<CustomFormat>(),
                        new QualityModel(Quality.DVD, new Revision(version: 2)),
                        Language.English,
-                       NoPreferredWordScore)
+                       new List<CustomFormat>())
                    .Should().BeFalse();
         }
 
@@ -183,10 +183,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                        langProfile,
                        new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
                        Language.English,
-                       NoPreferredWordScore,
+                       new List<CustomFormat>(),
                        new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
                        Language.English,
-                       NoPreferredWordScore)
+                       new List<CustomFormat>())
                    .Should().BeFalse();
         }
     }

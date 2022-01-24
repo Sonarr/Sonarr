@@ -48,6 +48,17 @@ function Settings() {
 
         <Link
           className={styles.link}
+          to="/settings/customformats"
+        >
+          Custom Formats
+        </Link>
+
+        <div className={styles.summary}>
+          Custom Formats and Settings
+        </div>
+
+        <Link
+          className={styles.link}
           to="/settings/indexers"
         >
           Indexers

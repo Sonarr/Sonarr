@@ -1,0 +1,5 @@
+.input {
+  composes: input from '~Components/Form/TextArea.css';
+
+  font-family: $monoSpaceFontFamily;
+}

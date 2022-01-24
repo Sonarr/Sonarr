@@ -62,6 +62,12 @@ export const defaultState = {
       isVisible: true
     },
     {
+      name: 'customFormats',
+      label: 'Formats',
+      isSortable: false,
+      isVisible: true
+    },
+    {
       name: 'date',
       label: 'Date',
       isSortable: true,
@@ -88,11 +94,11 @@ export const defaultState = {
       isVisible: false
     },
     {
-      name: 'preferredWordScore',
-      columnLabel: 'Preferred Word Score',
+      name: 'customFormatScore',
+      columnLabel: 'Custom Format Score',
       label: React.createElement(Icon, {
         name: icons.SCORE,
-        title: 'Preferred word score'
+        title: 'Custom format score'
       }),
       isVisible: false
     },
