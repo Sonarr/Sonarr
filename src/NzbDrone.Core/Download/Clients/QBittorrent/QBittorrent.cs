@@ -367,9 +367,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace() && version >= Version.Parse("2.0"))
             {
-                var label = Proxy.GetLabels(Settings)[Settings.TvCategory];
-
-                if (label.SavePath.IsNotNullOrWhiteSpace())
+                if (Proxy.GetLabels(Settings).TryGetValue(Settings.TvCategory, out var label) && label.SavePath.IsNotNullOrWhiteSpace())
                 {
                     var labelDir = new OsPath(label.SavePath);
 
@@ -474,9 +472,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 _logger.Error(ex, "Unable to test qBittorrent");
 
                 return new NzbDroneValidationFailure("Host", "Unable to connect to qBittorrent")
-                       {
-                           DetailedDescription = ex.Message
-                       };
+                {
+                    DetailedDescription = ex.Message
+                };
             }
 
             return null;
