@@ -15,14 +15,11 @@ namespace Sonarr.Api.V3.Profiles.Release
         // Is List<string>, string or JArray, we accept 'string' with POST for backward compatibility
         public object Required { get; set; }
         public object Ignored { get; set; }
-        public List<KeyValuePair<string, int>> Preferred { get; set; }
-        public bool IncludePreferredWhenRenaming { get; set; }
         public int IndexerId { get; set; }
         public HashSet<int> Tags { get; set; }
 
         public ReleaseProfileResource()
         {
-            Preferred = new List<KeyValuePair<string, int>>();
             Tags = new HashSet<int>();
         }
     }
@@ -43,8 +40,6 @@ namespace Sonarr.Api.V3.Profiles.Release
                 Enabled = model.Enabled,
                 Required = model.Required ?? new List<string>(),
                 Ignored = model.Ignored ?? new List<string>(),
-                Preferred = model.Preferred,
-                IncludePreferredWhenRenaming = model.IncludePreferredWhenRenaming,
                 IndexerId = model.IndexerId,
                 Tags = new HashSet<int>(model.Tags)
             };
@@ -64,8 +59,6 @@ namespace Sonarr.Api.V3.Profiles.Release
                 Enabled = resource.Enabled,
                 Required = resource.MapRequired(),
                 Ignored = resource.MapIgnored(),
-                Preferred = resource.Preferred,
-                IncludePreferredWhenRenaming = resource.IncludePreferredWhenRenaming,
                 IndexerId = resource.IndexerId,
                 Tags = new HashSet<int>(resource.Tags)
             };

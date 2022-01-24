@@ -13,6 +13,7 @@ import SeasonPassConnector from 'SeasonPass/SeasonPassConnector';
 import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnector';
 import SeriesEditorConnector from 'Series/Editor/SeriesEditorConnector';
 import SeriesIndexConnector from 'Series/Index/SeriesIndexConnector';
+import CustomFormatSettingsConnector from 'Settings/CustomFormats/CustomFormatSettingsConnector';
 import DownloadClientSettingsConnector from 'Settings/DownloadClients/DownloadClientSettingsConnector';
 import GeneralSettingsConnector from 'Settings/General/GeneralSettingsConnector';
 import ImportListSettingsConnector from 'Settings/ImportLists/ImportListSettingsConnector';
@@ -159,6 +160,11 @@ function AppRoutes(props) {
       <Route
         path="/settings/quality"
         component={QualityConnector}
+      />
+
+      <Route
+        path="/settings/customformats"
+        component={CustomFormatSettingsConnector}
       />
 
       <Route

@@ -18,6 +18,7 @@ function createMapStateToProps() {
         episodeFileRelativePath: episodeFile ? episodeFile.relativePath : null,
         episodeFileSize: episodeFile ? episodeFile.size : null,
         releaseGroup: episodeFile ? episodeFile.releaseGroup : null,
+        customFormats: episodeFile ? episodeFile.customFormats : [],
         alternateTitles: series.alternateTitles
       };
     }

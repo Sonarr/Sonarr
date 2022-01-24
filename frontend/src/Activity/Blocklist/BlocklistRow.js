@@ -5,6 +5,7 @@ import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellCo
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
+import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds } from 'Helpers/Props';
@@ -46,6 +47,7 @@ class BlocklistRow extends Component {
       sourceTitle,
       language,
       quality,
+      customFormats,
       date,
       protocol,
       indexer,
@@ -120,6 +122,16 @@ class BlocklistRow extends Component {
               );
             }
 
+            if (name === 'customFormats') {
+              return (
+                <TableRowCell key={name}>
+                  <EpisodeFormats
+                    formats={customFormats}
+                  />
+                </TableRowCell>
+              );
+            }
+
             if (name === 'date') {
               return (
                 <RelativeDateCellConnector
@@ -185,6 +197,7 @@ BlocklistRow.propTypes = {
   sourceTitle: PropTypes.string.isRequired,
   language: PropTypes.object.isRequired,
   quality: PropTypes.object.isRequired,
+  customFormats: PropTypes.arrayOf(PropTypes.object).isRequired,
   date: PropTypes.string.isRequired,
   protocol: PropTypes.string.isRequired,
   indexer: PropTypes.string,

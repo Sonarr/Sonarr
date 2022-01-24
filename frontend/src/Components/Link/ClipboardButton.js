@@ -17,6 +17,7 @@ class ClipboardButton extends Component {
 
     this._id = getUniqueElememtId();
     this._successTimeout = null;
+    this._testResultTimeout = null;
 
     this.state = {
       showSuccess: false,
@@ -26,7 +27,8 @@ class ClipboardButton extends Component {
 
   componentDidMount() {
     this._clipboard = new Clipboard(`#${this._id}`, {
-      text: () => this.props.value
+      text: () => this.props.value,
+      container: document.getElementById(this._id)
     });
 
     this._clipboard.on('success', this.onSuccess);
@@ -46,6 +48,10 @@ class ClipboardButton extends Component {
   componentWillUnmount() {
     if (this._clipboard) {
       this._clipboard.destroy();
+    }
+
+    if (this._testResultTimeout) {
+      clearTimeout(this._testResultTimeout);
     }
   }
 
@@ -80,6 +86,7 @@ class ClipboardButton extends Component {
   render() {
     const {
       value,
+      className,
       ...otherProps
     } = this.props;
 
@@ -95,7 +102,7 @@ class ClipboardButton extends Component {
     return (
       <FormInputButton
         id={this._id}
-        className={styles.button}
+        className={className}
         {...otherProps}
       >
         <span className={showStateIcon ? styles.showStateIcon : undefined}>
@@ -121,7 +128,12 @@ class ClipboardButton extends Component {
 }
 
 ClipboardButton.propTypes = {
+  className: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired
+};
+
+ClipboardButton.defaultProps = {
+  className: styles.button
 };
 
 export default ClipboardButton;

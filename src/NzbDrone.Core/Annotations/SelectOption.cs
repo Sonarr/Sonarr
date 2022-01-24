@@ -1,4 +1,4 @@
-﻿namespace Sonarr.Http.ClientSchema
+namespace NzbDrone.Core.Annotations
 {
     public class SelectOption
     {

@@ -30,7 +30,7 @@ namespace NzbDrone.Core.DecisionEngine
             {
                 CompareQuality,
                 CompareLanguage,
-                ComparePreferredWordScore,
+                CompareCustomFormatScore,
                 CompareProtocol,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
@@ -85,9 +85,9 @@ namespace NzbDrone.Core.DecisionEngine
             return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Series.LanguageProfile.Value.Languages.FindIndex(l => l.Language == remoteEpisode.ParsedEpisodeInfo.Language));
         }
 
-        private int ComparePreferredWordScore(DownloadDecision x, DownloadDecision y)
+        private int CompareCustomFormatScore(DownloadDecision x, DownloadDecision y)
         {
-            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.PreferredWordScore);
+            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteMovie => remoteMovie.CustomFormatScore);
         }
 
         private int CompareProtocol(DownloadDecision x, DownloadDecision y)

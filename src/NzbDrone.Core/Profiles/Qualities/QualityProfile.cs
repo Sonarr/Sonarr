@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 
@@ -7,9 +8,17 @@ namespace NzbDrone.Core.Profiles.Qualities
 {
     public class QualityProfile : ModelBase
     {
+        public QualityProfile()
+        {
+            FormatItems = new List<ProfileFormatItem>();
+        }
+
         public string Name { get; set; }
         public bool UpgradeAllowed { get; set; }
         public int Cutoff { get; set; }
+        public int MinFormatScore { get; set; }
+        public int CutoffFormatScore { get; set; }
+        public List<ProfileFormatItem> FormatItems { get; set; }
         public List<QualityProfileQualityItem> Items { get; set; }
 
         public Quality FirststAllowedQuality()
@@ -76,6 +85,11 @@ namespace NzbDrone.Core.Profiles.Qualities
             }
 
             return new QualityIndex();
+        }
+
+        public int CalculateCustomFormatScore(List<CustomFormat> formats)
+        {
+            return FormatItems.Where(x => formats.Contains(x.Format)).Sum(x => x.Score);
         }
     }
 }

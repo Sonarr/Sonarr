@@ -4,6 +4,7 @@ import MonitorToggleButton from 'Components/MonitorToggleButton';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
+import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeNumber from 'Episode/EpisodeNumber';
 import EpisodeSearchCellConnector from 'Episode/EpisodeSearchCellConnector';
 import EpisodeStatusConnector from 'Episode/EpisodeStatusConnector';
@@ -68,6 +69,7 @@ class EpisodeRow extends Component {
       episodeFileRelativePath,
       episodeFileSize,
       releaseGroup,
+      customFormats,
       alternateTitles,
       columns
     } = this.props;
@@ -165,6 +167,16 @@ class EpisodeRow extends Component {
                   key={name}
                   date={airDateUtc}
                 />
+              );
+            }
+
+            if (name === 'customFormats') {
+              return (
+                <TableRowCell key={name}>
+                  <EpisodeFormats
+                    formats={customFormats}
+                  />
+                </TableRowCell>
               );
             }
 
@@ -328,6 +340,7 @@ EpisodeRow.propTypes = {
   episodeFileRelativePath: PropTypes.string,
   episodeFileSize: PropTypes.number,
   releaseGroup: PropTypes.string,
+  customFormats: PropTypes.arrayOf(PropTypes.object),
   mediaInfo: PropTypes.object,
   alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -335,7 +348,8 @@ EpisodeRow.propTypes = {
 };
 
 EpisodeRow.defaultProps = {
-  alternateTitles: []
+  alternateTitles: [],
+  customFormats: []
 };
 
 export default EpisodeRow;

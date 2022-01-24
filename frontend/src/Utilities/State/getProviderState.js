@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import getSectionState from 'Utilities/State/getSectionState';
 
-function getProviderState(payload, getState, section) {
+function getProviderState(payload, getState, section, keyValueOnly=true) {
   const {
     id,
     ...otherPayload
@@ -23,10 +23,17 @@ function getProviderState(payload, getState, section) {
         field.value;
 
       // Only send the name and value to the server
-      result.push({
-        name,
-        value
-      });
+      if (keyValueOnly) {
+        result.push({
+          name,
+          value
+        });
+      } else {
+        result.push({
+          ...field,
+          value
+        });
+      }
 
       return result;
     }, []);

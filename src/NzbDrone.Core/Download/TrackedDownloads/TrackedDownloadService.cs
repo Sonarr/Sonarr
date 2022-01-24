@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Download.History;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Events;
@@ -30,18 +31,21 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         private readonly IHistoryService _historyService;
         private readonly IEventAggregator _eventAggregator;
         private readonly IDownloadHistoryService _downloadHistoryService;
+        private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly Logger _logger;
         private readonly ICached<TrackedDownload> _cache;
 
         public TrackedDownloadService(IParsingService parsingService,
                                       ICacheManager cacheManager,
                                       IHistoryService historyService,
+                                      ICustomFormatCalculationService formatCalculator,
                                       IEventAggregator eventAggregator,
                                       IDownloadHistoryService downloadHistoryService,
                                       Logger logger)
         {
             _parsingService = parsingService;
             _historyService = historyService;
+            _formatCalculator = formatCalculator;
             _eventAggregator = eventAggregator;
             _downloadHistoryService = downloadHistoryService;
             _cache = cacheManager.GetCache<TrackedDownload>(GetType());
@@ -138,6 +142,12 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                             trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, firstHistoryItem.SeriesId, historyItems.Where(v => v.EventType == EpisodeHistoryEventType.Grabbed).Select(h => h.EpisodeId).Distinct());
                         }
                     }
+                }
+
+                // Calculate custom formats
+                if (trackedDownload.RemoteEpisode != null)
+                {
+                    trackedDownload.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(parsedEpisodeInfo);
                 }
 
                 // Track it so it can be displayed in the queue even though we can't determine which series it is for

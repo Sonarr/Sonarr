@@ -1,5 +1,6 @@
 using System.Linq;
 using NLog;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
@@ -10,13 +11,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     public class UpgradeDiskSpecification : IDecisionEngineSpecification
     {
         private readonly UpgradableSpecification _upgradableSpecification;
-        private readonly IEpisodeFilePreferredWordCalculator _episodeFilePreferredWordCalculator;
+        private readonly ICustomFormatCalculationService _formatService;
         private readonly Logger _logger;
 
-        public UpgradeDiskSpecification(UpgradableSpecification upgradableSpecification, IEpisodeFilePreferredWordCalculator episodeFilePreferredWordCalculator, Logger logger)
+        public UpgradeDiskSpecification(UpgradableSpecification upgradableSpecification,
+                                        ICustomFormatCalculationService formatService,
+                                        Logger logger)
         {
             _upgradableSpecification = upgradableSpecification;
-            _episodeFilePreferredWordCalculator = episodeFilePreferredWordCalculator;
+            _formatService = formatService;
             _logger = logger;
         }
 
@@ -33,16 +36,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     continue;
                 }
 
+                var customFormats = _formatService.ParseCustomFormat(file);
+
                 _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
                 if (!_upgradableSpecification.IsUpgradable(subject.Series.QualityProfile,
                                                            subject.Series.LanguageProfile,
                                                            file.Quality,
                                                            file.Language,
-                                                           _episodeFilePreferredWordCalculator.Calculate(subject.Series, file),
+                                                           customFormats,
                                                            subject.ParsedEpisodeInfo.Quality,
                                                            subject.ParsedEpisodeInfo.Language,
-                                                           subject.PreferredWordScore))
+                                                           subject.CustomFormats))
                 {
                     return Decision.Reject("Existing file on disk is of equal or higher preference: {0} - {1}", file.Quality, file.Language);
                 }

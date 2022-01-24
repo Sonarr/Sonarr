@@ -29,7 +29,6 @@ namespace NzbDrone.Core.Parser.Model
         public bool SceneSource { get; set; }
         public string ReleaseGroup { get; set; }
         public string SceneName { get; set; }
-        public int PreferredWordScore { get; set; }
         public bool OtherVideoFiles { get; set; }
 
         public int SeasonNumber

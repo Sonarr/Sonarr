@@ -3,17 +3,20 @@ import React, { Component } from 'react';
 import HistoryDetailsConnector from 'Activity/History/Details/HistoryDetailsConnector';
 import HistoryEventTypeCell from 'Activity/History/HistoryEventTypeCell';
 import Icon from 'Components/Icon';
+import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
+import Tooltip from 'Components/Tooltip/Tooltip';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
 import EpisodeNumber from 'Episode/EpisodeNumber';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
+import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
 import styles from './SeriesHistoryRow.css';
 
 function getTitle(eventType) {
@@ -68,6 +71,7 @@ class SeriesHistoryRow extends Component {
       languageCutoffNotMet,
       quality,
       qualityCutoffNotMet,
+      customFormats,
       date,
       data,
       fullSeries,
@@ -142,6 +146,28 @@ class SeriesHistoryRow extends Component {
           />
         </TableRowCell>
 
+        <TableRowCell className={styles.customFormatScore}>
+          <Tooltip
+            anchor={
+              formatPreferredWordScore(data.customFormatScore)
+            }
+            tooltip={
+              <div>
+                {
+                  customFormats.map((format) => {
+                    return (
+                      <Label key={format.id}>
+                        {format.name}
+                      </Label>
+                    );
+                  })
+                }
+              </div>
+            }
+            position={tooltipPositions.BOTTOM}
+          />
+        </TableRowCell>
+
         <TableRowCell className={styles.actions}>
           {
             eventType === 'grabbed' &&
@@ -175,6 +201,7 @@ SeriesHistoryRow.propTypes = {
   languageCutoffNotMet: PropTypes.bool.isRequired,
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,
+  customFormats: PropTypes.arrayOf(PropTypes.object),
   date: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
   fullSeries: PropTypes.bool.isRequired,

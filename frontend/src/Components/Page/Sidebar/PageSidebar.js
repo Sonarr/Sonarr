@@ -104,6 +104,10 @@ const links = [
         to: '/settings/quality'
       },
       {
+        title: 'Custom Formats',
+        to: '/settings/customformats'
+      },
+      {
         title: 'Indexers',
         to: '/settings/indexers'
       },

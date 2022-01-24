@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import { icons } from 'Helpers/Props';
 import EpisodeHistoryRow from './EpisodeHistoryRow';
 
 const columns = [
@@ -33,6 +35,15 @@ const columns = [
   {
     name: 'details',
     label: 'Details',
+    isVisible: true
+  },
+  {
+    name: 'customFormatScore',
+    label: React.createElement(Icon, {
+      name: icons.SCORE,
+      title: 'Custom format score'
+    }),
+    isSortable: true,
     isVisible: true
   },
   {

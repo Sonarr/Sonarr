@@ -7,6 +7,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
+using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
 
@@ -52,7 +53,8 @@ namespace Sonarr.Api.V3.Indexers
         public bool EpisodeRequested { get; set; }
         public bool DownloadAllowed { get; set; }
         public int ReleaseWeight { get; set; }
-        public int PreferredWordScore { get; set; }
+        public List<CustomFormatResource> CustomFormats { get; set; }
+        public int CustomFormatScore { get; set; }
         public AlternateTitleResource SceneMapping { get; set; }
 
         public string MagnetUrl { get; set; }
@@ -124,7 +126,8 @@ namespace Sonarr.Api.V3.Indexers
                 DownloadAllowed = remoteEpisode.DownloadAllowed,
 
                 //ReleaseWeight
-                PreferredWordScore = remoteEpisode.PreferredWordScore,
+                CustomFormatScore = remoteEpisode.CustomFormatScore,
+                CustomFormats = remoteEpisode.CustomFormats?.ToResource(),
                 SceneMapping = remoteEpisode.SceneMapping.ToResource(),
 
                 MagnetUrl = torrentInfo.MagnetUrl,

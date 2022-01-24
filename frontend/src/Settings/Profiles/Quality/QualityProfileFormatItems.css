@@ -1,0 +1,31 @@
+.formats {
+  margin-top: 10px;
+  /* TODO: This should consider the number of languages in the list */
+  user-select: none;
+}
+
+.headerContainer {
+  display: flex;
+  font-weight: bold;
+  line-height: 35px;
+}
+
+.headerTitle {
+  display: flex;
+  flex-grow: 1;
+}
+
+.headerScore {
+  display: flex;
+  flex-grow: 0;
+  padding-left: 16px;
+  width: 100px;
+}
+
+.addCustomFormatMessage {
+  max-width: $formGroupExtraSmallWidth;
+  color: var(--helpTextColor);
+  text-align: center;
+  font-weight: 300;
+  font-size: 20px;
+}

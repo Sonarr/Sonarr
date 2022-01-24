@@ -1,18 +1,22 @@
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Test.CustomFormats;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -283,15 +287,24 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_false_if_it_is_a_preferred_word_downgrade_and_equal_language_and_quality()
         {
+            var lowFormat = new List<CustomFormat> { new CustomFormat("Bad Format", new ResolutionSpecification { Value = (int)Resolution.R1080p }) { Id = 2 } };
+
+            CustomFormatsFixture.GivenCustomFormats(lowFormat.First());
+
+            _series.QualityProfile.Value.FormatItems = CustomFormatsFixture.GetSampleFormatItems();
+
             Mocker.GetMock<IConfigService>()
                   .Setup(s => s.DownloadPropersAndRepacks)
                   .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
-                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
-                  .Returns(10);
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<EpisodeFile>()))
+                  .Returns(new List<CustomFormat>());
 
-            _localEpisode.PreferredWordScore = 5;
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Returns(lowFormat);
+
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
 
             _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
@@ -318,11 +331,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.DownloadPropersAndRepacks)
                   .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
-                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
-                  .Returns(10);
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<EpisodeFile>()))
+                  .Returns(new List<CustomFormat>());
 
-            _localEpisode.PreferredWordScore = 5;
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Returns(new List<CustomFormat>());
+
             _localEpisode.Quality = new QualityModel(Quality.Bluray2160p);
 
             _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
@@ -349,11 +365,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.DownloadPropersAndRepacks)
                   .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
-                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
-                  .Returns(10);
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<EpisodeFile>()))
+                  .Returns(new List<CustomFormat>());
 
-            _localEpisode.PreferredWordScore = 5;
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Returns(new List<CustomFormat>());
+
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
 
             _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
@@ -424,11 +443,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.DownloadPropersAndRepacks)
                   .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
-                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
-                  .Returns(1);
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<EpisodeFile>()))
+                  .Returns(new List<CustomFormat>());
 
-            _localEpisode.PreferredWordScore = 5;
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Returns(new List<CustomFormat>());
+
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
 
             _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
@@ -454,11 +476,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.DownloadPropersAndRepacks)
                   .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            Mocker.GetMock<IEpisodeFilePreferredWordCalculator>()
-                  .Setup(s => s.Calculate(It.IsAny<Series>(), It.IsAny<EpisodeFile>()))
-                  .Returns(5);
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<EpisodeFile>()))
+                  .Returns(new List<CustomFormat>());
 
-            _localEpisode.PreferredWordScore = 5;
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Returns(new List<CustomFormat>());
+
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
 
             _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)

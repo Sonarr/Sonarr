@@ -24,19 +24,14 @@ namespace Sonarr.Api.V3.Profiles.Release
 
             SharedValidator.RuleFor(d => d).Custom((restriction, context) =>
             {
-                if (restriction.MapIgnored().Empty() && restriction.MapRequired().Empty() && restriction.Preferred.Empty())
+                if (restriction.MapIgnored().Empty() && restriction.MapRequired().Empty())
                 {
-                    context.AddFailure("'Must contain', 'Must not contain' or 'Preferred' is required");
+                    context.AddFailure("'Must contain' or 'Must not contain' is required");
                 }
 
                 if (restriction.Enabled && restriction.IndexerId != 0 && !_indexerFactory.Exists(restriction.IndexerId))
                 {
                     context.AddFailure(nameof(ReleaseProfile.IndexerId), "Indexer does not exist");
-                }
-
-                if (restriction.Preferred.Any(p => p.Key.IsNullOrWhiteSpace()))
-                {
-                    context.AddFailure("Preferred", "Term cannot be empty or consist of only spaces");
                 }
             });
         }

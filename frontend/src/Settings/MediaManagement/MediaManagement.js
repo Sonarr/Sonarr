@@ -261,11 +261,11 @@ class MediaManagement extends Component {
                       name="downloadPropersAndRepacks"
                       helpTexts={[
                         'Whether or not to automatically upgrade to Propers/Repacks',
-                        'Use \'Do not Prefer\' to sort by preferred word score over propers/repacks'
+                        'Use \'Do not Prefer\' to sort by custom format score over propers/repacks'
                       ]}
                       helpTextWarning={
                         settings.downloadPropersAndRepacks.value === 'doNotPrefer' ?
-                          'Use preferred words for automatic upgrades to propers/repacks' :
+                          'Use custom formats for automatic upgrades to propers/repacks' :
                           undefined
                       }
                       values={downloadPropersAndRepacksOptions}

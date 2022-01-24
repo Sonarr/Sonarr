@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download.Aggregation;
@@ -24,18 +25,21 @@ namespace NzbDrone.Core.DecisionEngine
     {
         private readonly IEnumerable<IDecisionEngineSpecification> _specifications;
         private readonly IParsingService _parsingService;
+        private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly IRemoteEpisodeAggregationService _aggregationService;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly Logger _logger;
 
         public DownloadDecisionMaker(IEnumerable<IDecisionEngineSpecification> specifications,
                                      IParsingService parsingService,
+                                     ICustomFormatCalculationService formatService,
                                      IRemoteEpisodeAggregationService aggregationService,
                                      ISceneMappingService sceneMappingService,
                                      Logger logger)
         {
             _specifications = specifications;
             _parsingService = parsingService;
+            _formatCalculator = formatService;
             _aggregationService = aggregationService;
             _sceneMappingService = sceneMappingService;
             _logger = logger;
@@ -89,6 +93,9 @@ namespace NzbDrone.Core.DecisionEngine
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, searchCriteria);
                         remoteEpisode.Release = report;
 
+                        remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(parsedEpisodeInfo);
+                        remoteEpisode.CustomFormatScore = remoteEpisode?.Series?.QualityProfile?.Value.CalculateCustomFormatScore(remoteEpisode.CustomFormats) ?? 0;
+
                         if (remoteEpisode.Series == null)
                         {
                             var reason = "Unknown Series";
@@ -129,7 +136,7 @@ namespace NzbDrone.Core.DecisionEngine
                             var remoteEpisode = new RemoteEpisode
                             {
                                 Release = report,
-                                ParsedEpisodeInfo = parsedEpisodeInfo
+                                ParsedEpisodeInfo = parsedEpisodeInfo,
                             };
 
                             decision = new DownloadDecision(remoteEpisode, new Rejection("Unable to parse release"));

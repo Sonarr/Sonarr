@@ -61,14 +61,46 @@ function createQualitiesSelector() {
   );
 }
 
+function createFormatsSelector() {
+  return createSelector(
+    createProviderSettingsSelector('qualityProfiles'),
+    (customFormat) => {
+      const items = customFormat.item.formatItems;
+      if (!items || !items.value) {
+        return [];
+      }
+
+      return _.reduceRight(items.value, (result, { id, name, format, score }) => {
+        if (id) {
+          result.push({
+            key: id,
+            value: name,
+            score
+          });
+        } else {
+          result.push({
+            key: format,
+            value: name,
+            score
+          });
+        }
+
+        return result;
+      }, []);
+    }
+  );
+}
+
 function createMapStateToProps() {
   return createSelector(
     createProviderSettingsSelector('qualityProfiles'),
     createQualitiesSelector(),
+    createFormatsSelector(),
     createProfileInUseSelector('qualityProfileId'),
-    (qualityProfile, qualities, isInUse) => {
+    (qualityProfile, qualities, customFormats, isInUse) => {
       return {
         qualities,
+        customFormats,
         ...qualityProfile,
         isInUse
       };
@@ -176,6 +208,19 @@ class EditQualityProfileModalContentConnector extends Component {
     });
 
     this.ensureCutoff(qualityProfile);
+  };
+
+  onQualityProfileFormatItemScoreChange = (id, score) => {
+    const qualityProfile = _.cloneDeep(this.props.item);
+    const formatItems = qualityProfile.formatItems.value;
+    const item = _.find(qualityProfile.formatItems.value, (i) => i.format === id);
+
+    item.score = score;
+
+    this.props.setQualityProfileValue({
+      name: 'formatItems',
+      value: formatItems
+    });
   };
 
   onItemGroupAllowedChange = (id, allowed) => {
@@ -420,6 +465,7 @@ class EditQualityProfileModalContentConnector extends Component {
         onItemGroupNameChange={this.onItemGroupNameChange}
         onQualityProfileItemDragMove={this.onQualityProfileItemDragMove}
         onQualityProfileItemDragEnd={this.onQualityProfileItemDragEnd}
+        onQualityProfileFormatItemScoreChange={this.onQualityProfileFormatItemScoreChange}
         onToggleEditGroupsMode={this.onToggleEditGroupsMode}
       />
     );
