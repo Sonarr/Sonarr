@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -10,12 +10,12 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("Notifications").AddColumn("OnRename").AsBoolean().Nullable();
 
-            Execute.Sql("UPDATE Notifications SET OnRename = OnDownload WHERE Implementation IN ('PlexServer', 'Xbmc', 'MediaBrowser')");
-            Execute.Sql("UPDATE Notifications SET OnRename = 0 WHERE Implementation NOT IN ('PlexServer', 'Xbmc', 'MediaBrowser')");
+            Execute.Sql("UPDATE \"Notifications\" SET \"OnRename\" = \"OnDownload\" WHERE \"Implementation\" IN ('PlexServer', 'Xbmc', 'MediaBrowser')");
+            Execute.Sql("UPDATE \"Notifications\" SET \"OnRename\" = false WHERE \"Implementation\" NOT IN ('PlexServer', 'Xbmc', 'MediaBrowser')");
 
             Alter.Table("Notifications").AlterColumn("OnRename").AsBoolean().NotNullable();
 
-            Execute.Sql("UPDATE Notifications SET OnGrab = 0 WHERE Implementation = 'PlexServer'");
+            Update.Table("Notifications").Set(new { OnGrab = false }).Where(new { Implementation = "PlexServer" });
         }
     }
 }

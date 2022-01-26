@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<NotificationDefinition173>("SELECT * FROM Notifications");
+            var items = db.Query<NotificationDefinition173>("SELECT * FROM \"Notifications\"");
 
             items.Should().HaveCount(1);
             items.First().Implementation.Should().Be("Email");

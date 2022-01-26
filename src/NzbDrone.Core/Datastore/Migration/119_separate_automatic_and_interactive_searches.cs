@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Rename.Column("EnableSearch").OnTable("Indexers").To("EnableAutomaticSearch");
             Alter.Table("Indexers").AddColumn("EnableInteractiveSearch").AsBoolean().Nullable();
 
-            Execute.Sql("UPDATE Indexers SET EnableInteractiveSearch = EnableAutomaticSearch");
+            Execute.Sql("UPDATE \"Indexers\" SET \"EnableInteractiveSearch\" = \"EnableAutomaticSearch\"");
 
             Alter.Table("Indexers").AlterColumn("EnableInteractiveSearch").AsBoolean().NotNullable();
         }

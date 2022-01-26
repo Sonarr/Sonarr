@@ -8,7 +8,10 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Alter.Table("ImportListExclusions").AlterColumn("TvdbId").AsInt32();
+            IfDatabase("sqlite").Alter.Table("ImportListExclusions").AlterColumn("TvdbId").AsInt32();
+
+            // PG cannot autocast varchar to integer
+            IfDatabase("postgresql").Execute.Sql("ALTER TABLE \"ImportListExclusions\" ALTER COLUMN \"TvdbId\" TYPE INTEGER USING \"TvdbId\"::integer");
         }
     }
 }

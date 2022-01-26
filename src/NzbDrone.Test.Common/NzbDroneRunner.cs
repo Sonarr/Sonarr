@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -8,7 +9,9 @@ using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Datastore;
 using RestSharp;
 
 namespace NzbDrone.Test.Common
@@ -21,13 +24,15 @@ namespace NzbDrone.Test.Common
 
         public string AppData { get; private set; }
         public string ApiKey { get; private set; }
+        public PostgresOptions PostgresOptions { get; private set; }
         public int Port { get; private set; }
 
-        public NzbDroneRunner(Logger logger, int port = 8989)
+        public NzbDroneRunner(Logger logger, PostgresOptions postgresOptions, int port = 8989)
         {
             _processProvider = new ProcessProvider(logger);
             _restClient = new RestClient($"http://localhost:{port}/api/v3");
 
+            PostgresOptions = postgresOptions;
             Port = port;
         }
 
@@ -131,9 +136,23 @@ namespace NzbDrone.Test.Common
 
         private void Start(string outputSonarrConsoleExe)
         {
+            StringDictionary envVars = new ();
+            if (PostgresOptions?.Host != null)
+            {
+                envVars.Add("Sonarr__Postgres__Host", PostgresOptions.Host);
+                envVars.Add("Sonarr__Postgres__Port", PostgresOptions.Port.ToString());
+                envVars.Add("Sonarr__Postgres__User", PostgresOptions.User);
+                envVars.Add("Sonarr__Postgres__Password", PostgresOptions.Password);
+                envVars.Add("Sonarr__Postgres__MainDb", PostgresOptions.MainDb);
+                envVars.Add("Sonarr__Postgres__LogDb", PostgresOptions.LogDb);
+
+                TestContext.Progress.WriteLine("Using env vars:\n{0}", envVars.ToJson());
+            }
+
             TestContext.Progress.WriteLine("Starting instance from {0} on port {1}", outputSonarrConsoleExe, Port);
+
             var args = "-nobrowser -nosingleinstancecheck -data=\"" + AppData + "\"";
-            _nzbDroneProcess = _processProvider.Start(outputSonarrConsoleExe, args, null, OnOutputDataReceived, OnOutputDataReceived);
+            _nzbDroneProcess = _processProvider.Start(outputSonarrConsoleExe, args, envVars, OnOutputDataReceived, OnOutputDataReceived);
         }
 
         private void OnOutputDataReceived(string data)

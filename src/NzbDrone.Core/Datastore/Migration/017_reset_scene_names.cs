@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             // we were storing new file name as scene name.
-            Execute.Sql(@"UPDATE EpisodeFiles SET SceneName = NULL where SceneName != NULL");
+            Execute.Sql("UPDATE \"EpisodeFiles\" SET \"SceneName\" = NULL where \"SceneName\" != NULL");
         }
     }
 }

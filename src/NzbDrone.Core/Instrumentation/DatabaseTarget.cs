@@ -1,9 +1,11 @@
+using System;
 using System.Data;
 using System.Data.SQLite;
 using NLog;
 using NLog.Common;
 using NLog.Config;
 using NLog.Targets;
+using Npgsql;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
@@ -13,7 +15,7 @@ namespace NzbDrone.Core.Instrumentation
 {
     public class DatabaseTarget : TargetWithLayout, IHandle<ApplicationShutdownRequested>
     {
-        private const string INSERT_COMMAND = "INSERT INTO [Logs]([Message],[Time],[Logger],[Exception],[ExceptionType],[Level]) " +
+        private const string INSERT_COMMAND = "INSERT INTO \"Logs\" (\"Message\",\"Time\",\"Logger\",\"Exception\",\"ExceptionType\",\"Level\") " +
                                       "VALUES(@Message,@Time,@Logger,@Exception,@ExceptionType,@Level)";
 
         private readonly IConnectionStringFactory _connectionStringFactory;
@@ -83,29 +85,63 @@ namespace NzbDrone.Core.Instrumentation
 
                 log.Level = logEvent.Level.Name;
 
-                using (var connection =
-                    SQLiteFactory.Instance.CreateConnection())
-                {
-                    connection.ConnectionString = _connectionStringFactory.LogDbConnectionString;
-                    connection.Open();
-                    using (var sqlCommand = connection.CreateCommand())
-                    {
-                        sqlCommand.CommandText = INSERT_COMMAND;
-                        sqlCommand.Parameters.Add(new SQLiteParameter("Message", DbType.String) { Value = log.Message });
-                        sqlCommand.Parameters.Add(new SQLiteParameter("Time", DbType.DateTime) { Value = log.Time.ToUniversalTime() });
-                        sqlCommand.Parameters.Add(new SQLiteParameter("Logger", DbType.String) { Value = log.Logger });
-                        sqlCommand.Parameters.Add(new SQLiteParameter("Exception", DbType.String) { Value = log.Exception });
-                        sqlCommand.Parameters.Add(new SQLiteParameter("ExceptionType", DbType.String) { Value = log.ExceptionType });
-                        sqlCommand.Parameters.Add(new SQLiteParameter("Level", DbType.String) { Value = log.Level });
+                var connectionInfo = _connectionStringFactory.LogDbConnection;
 
-                        sqlCommand.ExecuteNonQuery();
-                    }
+                if (connectionInfo.DatabaseType == DatabaseType.SQLite)
+                {
+                    WriteSqliteLog(log, connectionInfo.ConnectionString);
+                }
+                else
+                {
+                    WritePostgresLog(log, connectionInfo.ConnectionString);
                 }
             }
             catch (SQLiteException ex)
             {
                 InternalLogger.Error("Unable to save log event to database: {0}", ex);
                 throw;
+            }
+        }
+
+        private void WritePostgresLog(Log log, string connectionString)
+        {
+            using (var connection =
+                new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = INSERT_COMMAND;
+                    sqlCommand.Parameters.Add(new NpgsqlParameter("Message", DbType.String) { Value = log.Message });
+                    sqlCommand.Parameters.Add(new NpgsqlParameter("Time", DbType.DateTime) { Value = log.Time.ToUniversalTime() });
+                    sqlCommand.Parameters.Add(new NpgsqlParameter("Logger", DbType.String) { Value = log.Logger });
+                    sqlCommand.Parameters.Add(new NpgsqlParameter("Exception", DbType.String) { Value = log.Exception == null ? DBNull.Value : log.Exception });
+                    sqlCommand.Parameters.Add(new NpgsqlParameter("ExceptionType", DbType.String) { Value = log.ExceptionType == null ? DBNull.Value : log.ExceptionType });
+                    sqlCommand.Parameters.Add(new NpgsqlParameter("Level", DbType.String) { Value = log.Level });
+
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void WriteSqliteLog(Log log, string connectionString)
+        {
+            using (var connection =
+                SQLiteFactory.Instance.CreateConnection())
+            {
+                connection.ConnectionString = connectionString;
+                connection.Open();
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = INSERT_COMMAND;
+                    sqlCommand.Parameters.Add(new SQLiteParameter("Message", DbType.String) { Value = log.Message });
+                    sqlCommand.Parameters.Add(new SQLiteParameter("Time", DbType.DateTime) { Value = log.Time.ToUniversalTime() });
+                    sqlCommand.Parameters.Add(new SQLiteParameter("Logger", DbType.String) { Value = log.Logger });
+                    sqlCommand.Parameters.Add(new SQLiteParameter("Exception", DbType.String) { Value = log.Exception });
+                    sqlCommand.Parameters.Add(new SQLiteParameter("ExceptionType", DbType.String) { Value = log.ExceptionType });
+                    sqlCommand.Parameters.Add(new SQLiteParameter("Level", DbType.String) { Value = log.Level });
+                    sqlCommand.ExecuteNonQuery();
+                }
             }
         }
 

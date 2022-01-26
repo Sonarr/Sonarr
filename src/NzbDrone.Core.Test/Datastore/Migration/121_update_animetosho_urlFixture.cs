@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<IndexerDefinition121>("SELECT * FROM Indexers");
+            var items = db.Query<IndexerDefinition121>("SELECT * FROM \"Indexers\"");
 
             items.Should().HaveCount(1);
             items.First().Settings.ToObject<NewznabSettings121>().BaseUrl.Should().Be(baseUrl.Replace("animetosho", "feed.animetosho"));

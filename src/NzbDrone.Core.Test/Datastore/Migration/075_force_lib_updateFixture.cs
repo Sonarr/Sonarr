@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration;
@@ -14,8 +14,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var db = WithMigrationTestDb();
 
-            db.Query("SELECT * FROM ScheduledTasks").Should().BeEmpty();
-            db.Query("SELECT * FROM Series").Should().BeEmpty();
+            db.Query("SELECT * FROM \"ScheduledTasks\"").Should().BeEmpty();
+            db.Query("SELECT * FROM \"Series\"").Should().BeEmpty();
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var jobs = db.Query<ScheduledTasks75>("SELECT TypeName, LastExecution FROM ScheduledTasks");
+            var jobs = db.Query<ScheduledTasks75>("SELECT \"TypeName\", \"LastExecution\" FROM \"ScheduledTasks\"");
 
             jobs.Single(c => c.TypeName == "NzbDrone.Core.Tv.Commands.RefreshSeriesCommand")
                 .LastExecution.Year.Should()
@@ -57,49 +57,49 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 c.Insert.IntoTable("Profiles").Row(new
                 {
                     Name = "Profile1",
-                    CutOff = 0,
+                    Cutoff = 0,
                     Items = "[]",
                     Language = 1
                 });
 
                 c.Insert.IntoTable("Series").Row(new
                 {
-                    Tvdbid = 1,
+                    TvdbId = 1,
                     TvRageId =1,
                     Title ="Title1",
                     CleanTitle ="CleanTitle1",
-                    Status =1,
-                    Images ="",
-                    Path ="c:\\test",
-                    Monitored =1,
-                    SeasonFolder =1,
-                    Runtime= 0,
-                    SeriesType=0,
-                    UseSceneNumbering =0,
+                    Status = 1,
+                    Images = "",
+                    Path = "c:\\test",
+                    Monitored = true,
+                    SeasonFolder = true,
+                    Runtime = 0,
+                    SeriesType = 0,
+                    UseSceneNumbering = false,
                     LastInfoSync = "2000-01-01 00:00:00",
                     ProfileId = 1
                 });
 
                 c.Insert.IntoTable("Series").Row(new
                 {
-                    Tvdbid = 2,
+                    TvdbId = 2,
                     TvRageId = 2,
                     Title = "Title2",
                     CleanTitle = "CleanTitle2",
                     Status = 1,
                     Images = "",
                     Path = "c:\\test2",
-                    Monitored = 1,
-                    SeasonFolder = 1,
+                    Monitored = true,
+                    SeasonFolder = true,
                     Runtime = 0,
                     SeriesType = 0,
-                    UseSceneNumbering = 0,
+                    UseSceneNumbering = false,
                     LastInfoSync = "2000-01-01 00:00:00",
                     ProfileId = 1
                 });
             });
 
-            var series = db.Query<Series69>("SELECT LastInfoSync FROM Series");
+            var series = db.Query<Series69>("SELECT \"LastInfoSync\" FROM \"Series\"");
 
             series.Should().OnlyContain(c => c.LastInfoSync.Value.Year == 2014);
         }

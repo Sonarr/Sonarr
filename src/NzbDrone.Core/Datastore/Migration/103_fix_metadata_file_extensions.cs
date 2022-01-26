@@ -1,5 +1,7 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -15,10 +17,12 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void SetMetadataFileExtension(IDbConnection conn, IDbTransaction tran)
         {
+            var updatedMetadataFiles = new List<object>();
+
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Id, Extension FROM MetadataFiles";
+                cmd.CommandText = "SELECT \"Id\", \"Extension\" FROM \"MetadataFiles\"";
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -28,18 +32,17 @@ namespace NzbDrone.Core.Datastore.Migration
                         var extension = reader.GetString(1);
                         extension = extension.Substring(extension.LastIndexOf(".", StringComparison.InvariantCultureIgnoreCase));
 
-                        using (var updateCmd = conn.CreateCommand())
+                        updatedMetadataFiles.Add(new
                         {
-                            updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE MetadataFiles SET Extension = ? WHERE Id = ?";
-                            updateCmd.AddParameter(extension);
-                            updateCmd.AddParameter(id);
-
-                            updateCmd.ExecuteNonQuery();
-                        }
+                            Id = id,
+                            Extension = extension
+                        });
                     }
                 }
             }
+
+            var updateSql = $"UPDATE \"MetadataFiles\" SET \"Extension\" = @Extension WHERE \"Id\" = @Id";
+            conn.Execute(updateSql, updatedMetadataFiles, transaction: tran);
         }
     }
 }

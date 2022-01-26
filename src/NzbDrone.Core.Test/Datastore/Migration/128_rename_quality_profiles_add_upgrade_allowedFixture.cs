@@ -16,11 +16,11 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             var dbBefore = WithTestDb(new MigrationContext(MigrationType, 110));
 
             // Ensure 111 isn't applied
-            dbBefore.GetDirectDataMapper().Query("INSERT INTO VersionInfo (Version, AppliedOn, Description) VALUES (111, '2018-12-24T18:21:07', 'remove_bitmetv')");
+            dbBefore.GetDirectDataMapper().Query("INSERT INTO \"VersionInfo\" (\"Version\", \"AppliedOn\", \"Description\") VALUES (111, '2018-12-24T18:21:07', 'remove_bitmetv')");
 
             var dbAfter = WithMigrationTestDb();
 
-            var result = dbAfter.QueryScalar<int>("SELECT COUNT(*) FROM VersionInfo WHERE Description = 'remove_bitmetv'");
+            var result = dbAfter.QueryScalar<int>("SELECT COUNT(*) FROM \"VersionInfo\" WHERE \"Description\" = 'remove_bitmetv'");
 
             result.Should().Be(0);
         }

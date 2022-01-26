@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getEmailCmd = conn.CreateCommand())
             {
                 getEmailCmd.Transaction = tran;
-                getEmailCmd.CommandText = "SELECT Id, Required, Ignored FROM ReleaseProfiles";
+                getEmailCmd.CommandText = "SELECT \"Id\", \"Required\", \"Ignored\" FROM \"ReleaseProfiles\"";
 
                 using (var reader = getEmailCmd.ExecuteReader())
                 {
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE ReleaseProfiles SET Required = ?, Ignored = ? WHERE Id = ?";
+                            updateCmd.CommandText = "UPDATE \"ReleaseProfiles\" SET \"Required\" = ?, \"Ignored\" = ? WHERE \"Id\" = ?";
                             updateCmd.AddParameter(required.ToJson());
                             updateCmd.AddParameter(ignored.ToJson());
                             updateCmd.AddParameter(id);

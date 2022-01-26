@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using FluentMigrator.Runner;
+using FluentMigrator.Runner.Generators;
 using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,11 +35,16 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             _logger.Info("*** Migrating {0} ***", connectionString);
 
-            var serviceProvider = new ServiceCollection()
+            ServiceProvider serviceProvider;
+
+            var db = connectionString.Contains(".db") ? "sqlite" : "postgres";
+
+            serviceProvider = new ServiceCollection()
                 .AddLogging(b => b.AddNLog())
                 .AddFluentMigratorCore()
                 .ConfigureRunner(
                     builder => builder
+                    .AddPostgres()
                     .AddNzbDroneSQLite()
                     .WithGlobalConnectionString(connectionString)
                     .WithMigrationsIn(Assembly.GetExecutingAssembly()))
@@ -47,6 +53,14 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 {
                     opt.PreviewOnly = false;
                     opt.Timeout = TimeSpan.FromSeconds(60);
+                })
+                .Configure<SelectingProcessorAccessorOptions>(cfg =>
+                {
+                    cfg.ProcessorId = db;
+                })
+                .Configure<SelectingGeneratorAccessorOptions>(cfg =>
+                {
+                    cfg.GeneratorId = db;
                 })
                 .BuildServiceProvider();
 

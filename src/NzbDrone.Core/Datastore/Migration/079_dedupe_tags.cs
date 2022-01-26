@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Dapper;
 using FluentMigrator;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var tagCmd = conn.CreateCommand())
             {
                 tagCmd.Transaction = tran;
-                tagCmd.CommandText = @"SELECT Id, Label FROM Tags";
+                tagCmd.CommandText = "SELECT \"Id\", \"Label\" FROM \"Tags\"";
 
                 using (var tagReader = tagCmd.ExecuteReader())
                 {
@@ -72,7 +73,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var tagCmd = conn.CreateCommand())
             {
                 tagCmd.Transaction = tran;
-                tagCmd.CommandText = string.Format("SELECT Id, Tags FROM {0}", table);
+                tagCmd.CommandText = string.Format("SELECT \"Id\", \"Tags\" FROM \"{0}\"", table);
 
                 using (var tagReader = tagCmd.ExecuteReader())
                 {
@@ -109,29 +110,28 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
 
-            foreach (var model in toUpdate.DistinctBy(m => m.Id))
+            var updatedTags = toUpdate.DistinctBy(m => m.Id).Select(t => new
             {
-                using (var updateCmd = conn.CreateCommand())
-                {
-                    updateCmd.Transaction = tran;
-                    updateCmd.CommandText = string.Format(@"UPDATE {0} SET Tags = ? WHERE Id = ?", table);
-                    updateCmd.AddParameter(model.Tags.ToJson());
-                    updateCmd.AddParameter(model.Id);
+                Tags = t.Tags.ToJson(),
+                Id = t.Id
+            });
 
-                    updateCmd.ExecuteNonQuery();
-                }
-            }
+            var updateTagsSql = $"UPDATE \"{table}\" SET \"Tags\" = @Tags WHERE \"Id\" = @Id";
+            conn.Execute(updateTagsSql, updatedTags, transaction: tran);
         }
 
         private void DeleteTags(IDbConnection conn, IDbTransaction tran, List<TagReplacement079> replacements)
         {
             var idsToRemove = replacements.Select(r => r.OldId).Distinct();
 
-            using (var removeCmd = conn.CreateCommand())
+            if (idsToRemove.Any())
             {
-                removeCmd.Transaction = tran;
-                removeCmd.CommandText = string.Format("DELETE FROM Tags WHERE Id IN ({0})", string.Join(",", idsToRemove));
-                removeCmd.ExecuteNonQuery();
+                using (var removeCmd = conn.CreateCommand())
+                {
+                    removeCmd.Transaction = tran;
+                    removeCmd.CommandText = $"DELETE FROM \"Tags\" WHERE \"Id\" IN ({string.Join(", ", idsToRemove)})";
+                    removeCmd.ExecuteNonQuery();
+                }
             }
         }
 

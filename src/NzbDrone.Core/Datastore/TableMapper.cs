@@ -49,17 +49,17 @@ namespace NzbDrone.Core.Datastore
 
         public string SelectTemplate(Type x)
         {
-            return $"SELECT /**select**/ FROM {TableMap[x]} /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/ /**orderby**/";
+            return $"SELECT /**select**/ FROM \"{TableMap[x]}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/ /**orderby**/";
         }
 
         public string DeleteTemplate(Type x)
         {
-            return $"DELETE FROM {TableMap[x]} /**where**/";
+            return $"DELETE FROM \"{TableMap[x]}\" /**where**/";
         }
 
         public string PageCountTemplate(Type x)
         {
-            return $"SELECT /**select**/ FROM {TableMap[x]} /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/";
+            return $"SELECT /**select**/ FROM \"{TableMap[x]}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/";
         }
 
         public bool IsValidSortKey(string sortKey)
@@ -89,6 +89,35 @@ namespace NzbDrone.Core.Datastore
             }
 
             return true;
+        }
+
+        public string GetSortKey(string sortKey)
+        {
+            string table = null;
+
+            if (sortKey.Contains('.'))
+            {
+                var split = sortKey.Split('.');
+                if (split.Length != 2)
+                {
+                    return sortKey;
+                }
+
+                table = split[0];
+                sortKey = split[1];
+            }
+
+            if (table != null && !TableMap.Values.Contains(table, StringComparer.OrdinalIgnoreCase))
+            {
+                return sortKey;
+            }
+
+            if (!_allowedOrderBy.Contains(sortKey))
+            {
+                return sortKey;
+            }
+
+            return _allowedOrderBy.First(x => x.Equals(sortKey, StringComparison.OrdinalIgnoreCase));
         }
     }
 
@@ -154,7 +183,7 @@ namespace NzbDrone.Core.Datastore
                             (db, parent) =>
                             {
                                 var id = childIdSelector(parent);
-                                return db.Query<TChild>(new SqlBuilder().Where<TChild>(x => x.Id == id)).SingleOrDefault();
+                                return db.Query<TChild>(new SqlBuilder(db.DatabaseType).Where<TChild>(x => x.Id == id)).SingleOrDefault();
                             },
                             parent => childIdSelector(parent) > 0);
         }
