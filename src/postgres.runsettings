@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+    <RunConfiguration>
+        <EnvironmentVariables>
+            <Sonarr__Postgres__Host>192.168.100.5</Sonarr__Postgres__Host>
+			<Sonarr__Postgres__Port>5432</Sonarr__Postgres__Port>
+			<Sonarr__Postgres__User>abc</Sonarr__Postgres__User>
+			<Sonarr__Postgres__Password>abc</Sonarr__Postgres__Password>
+        </EnvironmentVariables>
+    </RunConfiguration>
+</RunSettings>

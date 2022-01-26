@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getSeriesCmd = conn.CreateCommand())
             {
                 getSeriesCmd.Transaction = tran;
-                getSeriesCmd.CommandText = @"SELECT Id, Title FROM Series";
+                getSeriesCmd.CommandText = "SELECT \"Id\", \"Title\" FROM \"Series\"";
                 using (var seriesReader = getSeriesCmd.ExecuteReader())
                 {
                     while (seriesReader.Read())
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE Series SET SortTitle = ? WHERE Id = ?";
+                            updateCmd.CommandText = "UPDATE \"Series\" SET \"SortTitle\" = ? WHERE \"Id\" = ?";
                             updateCmd.AddParameter(sortTitle);
                             updateCmd.AddParameter(id);
 

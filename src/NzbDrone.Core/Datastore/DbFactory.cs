@@ -1,6 +1,10 @@
 using System;
+using System.Data.Common;
 using System.Data.SQLite;
+using System.Net.Sockets;
+using System.Threading;
 using NLog;
+using Npgsql;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptions;
@@ -57,22 +61,22 @@ namespace NzbDrone.Core.Datastore
 
         public IDatabase Create(MigrationContext migrationContext)
         {
-            string connectionString;
+            DatabaseConnectionInfo connectionInfo;
 
             switch (migrationContext.MigrationType)
             {
                 case MigrationType.Main:
                     {
-                        connectionString = _connectionStringFactory.MainDbConnectionString;
-                        CreateMain(connectionString, migrationContext);
+                        connectionInfo = _connectionStringFactory.MainDbConnection;
+                        CreateMain(connectionInfo.ConnectionString, migrationContext);
 
                         break;
                     }
 
                 case MigrationType.Log:
                     {
-                        connectionString = _connectionStringFactory.LogDbConnectionString;
-                        CreateLog(connectionString, migrationContext);
+                        connectionInfo = _connectionStringFactory.LogDbConnection;
+                        CreateLog(connectionInfo.ConnectionString, migrationContext);
 
                         break;
                     }
@@ -85,10 +89,19 @@ namespace NzbDrone.Core.Datastore
 
             var db = new Database(migrationContext.MigrationType.ToString(), () =>
             {
-                var conn = SQLiteFactory.Instance.CreateConnection();
-                conn.ConnectionString = connectionString;
-                conn.Open();
+                DbConnection conn;
 
+                if (connectionInfo.DatabaseType == DatabaseType.SQLite)
+                {
+                    conn = SQLiteFactory.Instance.CreateConnection();
+                    conn.ConnectionString = connectionInfo.ConnectionString;
+                }
+                else
+                {
+                    conn = new NpgsqlConnection(connectionInfo.ConnectionString);
+                }
+
+                conn.Open();
                 return conn;
             });
 
@@ -112,6 +125,39 @@ namespace NzbDrone.Core.Datastore
                 }
 
                 throw new CorruptDatabaseException("Database file: {0} is corrupt, restore from backup if available. See: https://wiki.servarr.com/sonarr/faq#i-am-getting-an-error-database-disk-image-is-malformed", e, fileName);
+            }
+            catch (NpgsqlException e)
+            {
+                if (e.InnerException is SocketException)
+                {
+                    var retryCount = 3;
+
+                    while (true)
+                    {
+                        Logger.Error(e, "Failure to connect to Postgres DB, {0} retries remaining", retryCount);
+
+                        Thread.Sleep(5000);
+
+                        try
+                        {
+                            _migrationController.Migrate(connectionString, migrationContext);
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                            if (--retryCount > 0)
+                            {
+                                continue;
+                            }
+
+                            throw new SonarrStartupException(ex, "Error creating main database");
+                        }
+                    }
+                }
+                else
+                {
+                    throw new SonarrStartupException(e, "Error creating main database");
+                }
             }
             catch (Exception e)
             {

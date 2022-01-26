@@ -11,9 +11,9 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.Datastore
 {
     [TestFixture]
-    public class WhereBuilderFixture : CoreTest
+    public class WhereBuilderSqliteFixture : CoreTest
     {
-        private WhereBuilder _subject;
+        private WhereBuilderSqlite _subject;
 
         [OneTimeSetUp]
         public void MapTables()
@@ -22,9 +22,9 @@ namespace NzbDrone.Core.Test.Datastore
             Mocker.Resolve<DbFactory>();
         }
 
-        private WhereBuilder Where(Expression<Func<Series, bool>> filter)
+        private WhereBuilderSqlite Where(Expression<Func<Series, bool>> filter)
         {
-            return new WhereBuilder(filter, true, 0);
+            return new WhereBuilderSqlite(filter, true, 0);
         }
 
         [Test]
@@ -49,16 +49,16 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void where_equal_property()
         {
-            var movie = new Series { Id = 10 };
-            _subject = Where(x => x.Id == movie.Id);
+            var author = new Series { Id = 10 };
+            _subject = Where(x => x.Id == author.Id);
 
             _subject.Parameters.ParameterNames.Should().HaveCount(1);
             _subject.ToString().Should().Be($"(\"Series\".\"Id\" = @Clause1_P1)");
-            _subject.Parameters.Get<int>("Clause1_P1").Should().Be(movie.Id);
+            _subject.Parameters.Get<int>("Clause1_P1").Should().Be(author.Id);
         }
 
         [Test]
-        public void where_equal_joined_property()
+        public void where_equal_lazy_property()
         {
             _subject = Where(x => x.QualityProfile.Value.Id == 1);
 
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void where_throws_without_concrete_condition_if_requiresConcreteCondition()
         {
             Expression<Func<Series, Series, bool>> filter = (x, y) => x.Id == y.Id;
-            _subject = new WhereBuilder(filter, true, 0);
+            _subject = new WhereBuilderSqlite(filter, true, 0);
             Assert.Throws<InvalidOperationException>(() => _subject.ToString());
         }
 
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void where_allows_abstract_condition_if_not_requiresConcreteCondition()
         {
             Expression<Func<Series, Series, bool>> filter = (x, y) => x.Id == y.Id;
-            _subject = new WhereBuilder(filter, false, 0);
+            _subject = new WhereBuilderSqlite(filter, false, 0);
             _subject.ToString().Should().Be($"(\"Series\".\"Id\" = \"Series\".\"Id\")");
         }
 
@@ -94,8 +94,8 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void where_string_is_null_value()
         {
-            string cleanTitle = null;
-            _subject = Where(x => x.CleanTitle == cleanTitle);
+            string imdb = null;
+            _subject = Where(x => x.CleanTitle == imdb);
 
             _subject.ToString().Should().Be($"(\"Series\".\"CleanTitle\" IS NULL)");
         }
@@ -103,8 +103,8 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void where_equal_null_property()
         {
-            var movie = new Series { CleanTitle = null };
-            _subject = Where(x => x.CleanTitle == movie.CleanTitle);
+            var author = new Series { CleanTitle = null };
+            _subject = Where(x => x.CleanTitle == author.CleanTitle);
 
             _subject.ToString().Should().Be($"(\"Series\".\"CleanTitle\" IS NULL)");
         }
@@ -170,19 +170,9 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void where_in_string_list()
-        {
-            var list = new List<string> { "first", "second", "third" };
-
-            _subject = Where(x => list.Contains(x.CleanTitle));
-
-            _subject.ToString().Should().Be($"(\"Series\".\"CleanTitle\" IN @Clause1_P1)");
-        }
-
-        [Test]
         public void enum_as_int()
         {
-            _subject = Where(x => x.Status == SeriesStatusType.Upcoming);
+            _subject = Where(x => x.Status == SeriesStatusType.Continuing);
 
             _subject.ToString().Should().Be($"(\"Series\".\"Status\" = @Clause1_P1)");
         }
@@ -190,7 +180,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void enum_in_list()
         {
-            var allowed = new List<SeriesStatusType> { SeriesStatusType.Upcoming, SeriesStatusType.Continuing };
+            var allowed = new List<SeriesStatusType> { SeriesStatusType.Continuing, SeriesStatusType.Ended };
             _subject = Where(x => allowed.Contains(x.Status));
 
             _subject.ToString().Should().Be($"(\"Series\".\"Status\" IN @Clause1_P1)");
@@ -199,7 +189,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void enum_in_array()
         {
-            var allowed = new SeriesStatusType[] { SeriesStatusType.Upcoming, SeriesStatusType.Continuing };
+            var allowed = new SeriesStatusType[] { SeriesStatusType.Continuing, SeriesStatusType.Ended };
             _subject = Where(x => allowed.Contains(x.Status));
 
             _subject.ToString().Should().Be($"(\"Series\".\"Status\" IN @Clause1_P1)");

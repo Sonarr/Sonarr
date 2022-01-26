@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<IndexerDefinition90>("SELECT * FROM Indexers");
+            var items = db.Query<IndexerDefinition90>("SELECT * FROM \"Indexers\"");
 
             items.Should().HaveCount(1);
             items.First().Settings.ToObject<BroadcastheNetSettings106>().BaseUrl.Should().Contain("api.broadcasthe.net");
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<IndexerDefinition90>("SELECT * FROM Indexers");
+            var items = db.Query<IndexerDefinition90>("SELECT * FROM \"Indexers\"");
 
             items.Should().HaveCount(1);
             items.First().Settings.ToObject<BroadcastheNetSettings106>().BaseUrl.Should().Be("http://api.btnapps.net");

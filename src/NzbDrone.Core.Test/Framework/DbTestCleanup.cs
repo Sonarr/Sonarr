@@ -1,5 +1,7 @@
 using System.IO;
 using NUnit.Framework;
+using NzbDrone.Core.Datastore.Migration.Framework;
+using NzbDrone.Test.Common.Datastore;
 
 namespace NzbDrone.Core.Test
 {
@@ -10,13 +12,13 @@ namespace NzbDrone.Core.Test
         [OneTimeTearDown]
         public void ClearCachedDatabase()
         {
-            var mainCache = Path.Combine(TestContext.CurrentContext.TestDirectory, $"cached_Main.db");
+            var mainCache = SqliteDatabase.GetCachedDb(MigrationType.Main);
             if (File.Exists(mainCache))
             {
                 File.Delete(mainCache);
             }
 
-            var logCache = Path.Combine(TestContext.CurrentContext.TestDirectory, $"cached_Log.db");
+            var logCache = SqliteDatabase.GetCachedDb(MigrationType.Log);
             if (File.Exists(logCache))
             {
                 File.Delete(logCache);

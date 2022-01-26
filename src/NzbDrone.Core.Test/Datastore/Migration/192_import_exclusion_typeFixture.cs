@@ -23,9 +23,9 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             });
 
             // Should be able to insert as int after migration
-            db.Execute("INSERT INTO ImportListExclusions (TvdbId, Title) VALUES (2, 'Some Other Series')");
+            db.Execute("INSERT INTO \"ImportListExclusions\" (\"TvdbId\", \"Title\") VALUES (2, 'Some Other Series')");
 
-            var exclusions = db.Query<ImportListExclusions192>("SELECT * FROM ImportListExclusions");
+            var exclusions = db.Query<ImportListExclusions192>("SELECT * FROM \"ImportListExclusions\"");
 
             exclusions.Should().HaveCount(2);
             exclusions.First().TvdbId.Should().Be(1);

@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var db = WithMigrationTestDb();
 
-            var itemEnabled = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var itemEnabled = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             itemEnabled.Should().BeNull();
         }
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var itemEnabled = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var itemEnabled = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             itemEnabled.Should().Be("True");
         }
 
@@ -51,10 +51,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var itemEnabled = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var itemEnabled = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             itemEnabled.Should().Be("False");
 
-            var itemExtensions = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'extrafileextensions'");
+            var itemExtensions = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'extrafileextensions'");
             itemExtensions.Should().Be("srt");
         }
 
@@ -76,10 +76,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var itemEnabled = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var itemEnabled = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             itemEnabled.Should().Be("True");
 
-            var itemExtensions = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'extrafileextensions'");
+            var itemExtensions = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'extrafileextensions'");
             itemExtensions.Should().Be("");
         }
 
@@ -95,10 +95,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var itemEnabled = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var itemEnabled = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             itemEnabled.Should().Be("False");
 
-            var itemExtensions = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'extrafileextensions'");
+            var itemExtensions = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'extrafileextensions'");
             itemExtensions.Should().BeNull();
         }
 
@@ -120,10 +120,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var itemEnabled = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var itemEnabled = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             itemEnabled.Should().Be("False");
 
-            var itemExtensions = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'extrafileextensions'");
+            var itemExtensions = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'extrafileextensions'");
             itemExtensions.Should().Be("sub");
         }
     }

@@ -21,23 +21,23 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         private void CleanupOrphanedBySeries()
         {
             using var mapper = _database.OpenConnection();
-            mapper.Execute(@"DELETE FROM History
-                             WHERE Id IN (
-                             SELECT History.Id FROM History
-                             LEFT OUTER JOIN Series
-                             ON History.SeriesId = Series.Id
-                             WHERE Series.Id IS NULL)");
+            mapper.Execute(@"DELETE FROM ""History""
+                                     WHERE ""Id"" IN (
+                                     SELECT ""History"".""Id"" FROM ""History""
+                                     LEFT OUTER JOIN ""Series""
+                                     ON ""History"".""SeriesId"" = ""Series"".""Id""
+                                     WHERE ""Series"".""Id"" IS NULL)");
         }
 
         private void CleanupOrphanedByEpisode()
         {
             using var mapper = _database.OpenConnection();
-            mapper.Execute(@"DELETE FROM History
-                             WHERE Id IN (
-                             SELECT History.Id FROM History
-                             LEFT OUTER JOIN Episodes
-                             ON History.EpisodeId = Episodes.Id
-                             WHERE Episodes.Id IS NULL)");
+            mapper.Execute(@"DELETE FROM ""History""
+                                     WHERE ""Id"" IN (
+                                     SELECT ""History"".""Id"" FROM ""History""
+                                     LEFT OUTER JOIN ""Episodes""
+                                     ON ""History"".""EpisodeId"" = ""Episodes"".""Id""
+                                     WHERE ""Episodes"".""Id"" IS NULL)");
         }
     }
 }

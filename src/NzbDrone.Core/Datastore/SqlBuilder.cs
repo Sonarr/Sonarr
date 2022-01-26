@@ -8,8 +8,16 @@ namespace NzbDrone.Core.Datastore
     public class SqlBuilder
     {
         private readonly Dictionary<string, Clauses> _data = new Dictionary<string, Clauses>();
+        private readonly DatabaseType _databaseType;
+
+        public SqlBuilder(DatabaseType databaseType)
+        {
+            _databaseType = databaseType;
+        }
 
         public int Sequence { get; private set; }
+
+        public DatabaseType DatabaseType => _databaseType;
 
         public Template AddTemplate(string sql, dynamic parameters = null) =>
             new Template(this, sql, parameters);

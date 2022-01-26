@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 .AsBoolean()
                 .Nullable();
 
-            Execute.Sql("UPDATE NamingConfig SET RenameEpisodes =~ UseSceneName");
+            Execute.Sql("UPDATE \"NamingConfig\" SET \"RenameEpisodes\" = NOT \"UseSceneName\"");
         }
     }
 }

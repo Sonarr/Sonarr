@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -8,15 +8,15 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE [EpisodeFiles] " +
-                        "SET ReleaseGroup = NULL , SceneName = NULL " +
+            Execute.Sql("UPDATE \"EpisodeFiles\" " +
+                        "SET \"ReleaseGroup\" = NULL , \"SceneName\" = NULL " +
                         "WHERE " +
-                        "   ReleaseGroup IS NULL " +
-                        "   OR SceneName IS NULL " +
-                        "   OR ReleaseGroup =='DRONE' " +
-                        "   OR LENGTH(SceneName) <10 " +
-                        "   OR LENGTH(ReleaseGroup) > 20 " +
-                        "   OR SceneName NOT LIKE '%.%'");
+                        "   \"ReleaseGroup\" IS NULL " +
+                        "   OR \"SceneName\" IS NULL " +
+                        "   OR \"ReleaseGroup\" = 'DRONE' " +
+                        "   OR LENGTH(\"SceneName\") <10 " +
+                        "   OR LENGTH(\"ReleaseGroup\") > 20 " +
+                        "   OR \"SceneName\" NOT LIKE '%.%'");
         }
     }
 }

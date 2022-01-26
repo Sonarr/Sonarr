@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Delete.Column("IncludePreferredWhenRenaming").FromTable("ReleaseProfiles");
 
             // Remove Profiles that will no longer validate
-            Execute.Sql("DELETE FROM ReleaseProfiles WHERE Required == '[]' AND Ignored == '[]'");
+            Delete.FromTable("ReleaseProfiles").Row(new { Required = "[]", Ignored = "[]" });
 
             // TODO: Kill any references to Preferred in History and Files
             // Data.PreferredWordScore
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getProfiles = conn.CreateCommand())
             {
                 getProfiles.Transaction = tran;
-                getProfiles.CommandText = @"SELECT Id FROM QualityProfiles";
+                getProfiles.CommandText = "SELECT \"Id\" FROM \"QualityProfiles\"";
 
                 using (var definitionsReader = getProfiles.ExecuteReader())
                 {
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Preferred, Name, IncludePreferredWhenRenaming, Enabled, Id FROM ReleaseProfiles WHERE Preferred IS NOT NULL";
+                cmd.CommandText = "SELECT \"Preferred\", \"Name\", \"IncludePreferredWhenRenaming\", \"Enabled\", \"Id\" FROM \"ReleaseProfiles\" WHERE \"Preferred\" IS NOT NULL";
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Datastore.Migration
             }
 
             // Insert Custom Formats
-            var updateSql = "INSERT INTO CustomFormats (Name, IncludeCustomFormatWhenRenaming, Specifications) VALUES (@Name, @IncludeCustomFormatWhenRenaming, @Specifications)";
+            var updateSql = "INSERT INTO \"CustomFormats\" (\"Name\", \"IncludeCustomFormatWhenRenaming\", \"Specifications\") VALUES (@Name, @IncludeCustomFormatWhenRenaming, @Specifications)";
             conn.Execute(updateSql, updatedCollections, transaction: tran);
 
             // Pull List of Custom Formats with new Ids
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getProfiles = conn.CreateCommand())
             {
                 getProfiles.Transaction = tran;
-                getProfiles.CommandText = @"SELECT Id, Name FROM CustomFormats";
+                getProfiles.CommandText = "SELECT \"Id\", \"Name\" FROM \"CustomFormats\"";
 
                 using (var definitionsReader = getProfiles.ExecuteReader())
                 {
@@ -176,16 +176,19 @@ namespace NzbDrone.Core.Datastore.Migration
             }
 
             // Push profile updates to DB
-            var updateProfilesSql = "UPDATE QualityProfiles SET FormatItems = @FormatItems WHERE Id = @Id";
+            var updateProfilesSql = "UPDATE \"QualityProfiles\" SET \"FormatItems\" = @FormatItems WHERE \"Id\" = @Id";
             conn.Execute(updateProfilesSql, qualityProfiles, transaction: tran);
         }
 
         private void MigrateNamingConfigs(IDbConnection conn, IDbTransaction tran)
         {
+            var updatedNamingConfigs = new List<object>();
+
             using (var namingConfigCmd = conn.CreateCommand())
             {
                 namingConfigCmd.Transaction = tran;
-                namingConfigCmd.CommandText = @"SELECT * FROM NamingConfig LIMIT 1";
+                namingConfigCmd.CommandText = "SELECT * FROM \"NamingConfig\" LIMIT 1";
+
                 using (var namingConfigReader = namingConfigCmd.ExecuteReader())
                 {
                     var standardEpisodeFormatIndex = namingConfigReader.GetOrdinal("StandardEpisodeFormat");
@@ -198,23 +201,21 @@ namespace NzbDrone.Core.Datastore.Migration
                         var dailyEpisodeFormat = NameReplace(namingConfigReader.GetString(dailyEpisodeFormatIndex));
                         var animeEpisodeFormat = NameReplace(namingConfigReader.GetString(animeEpisodeFormatIndex));
 
-                        using (var updateCmd = conn.CreateCommand())
+                        updatedNamingConfigs.Add(new
                         {
-                            var text = string.Format("UPDATE NamingConfig " +
-                                                     "SET StandardEpisodeFormat = '{0}', " +
-                                                     "DailyEpisodeFormat = '{1}', " +
-                                                     "AnimeEpisodeFormat = '{2}'",
-                                                     standardEpisodeFormat,
-                                                     dailyEpisodeFormat,
-                                                     animeEpisodeFormat);
-
-                            updateCmd.Transaction = tran;
-                            updateCmd.CommandText = text;
-                            updateCmd.ExecuteNonQuery();
-                        }
+                            StandardEpisodeFormat = standardEpisodeFormat,
+                            DailyEpisodeFormat = dailyEpisodeFormat,
+                            AnimeEpisodeFormat = animeEpisodeFormat
+                        });
                     }
                 }
             }
+
+            var updateNamingSql = "UPDATE \"NamingConfig\" " +
+                                    "SET \"StandardEpisodeFormat\" = @StandardEpisodeFormat, " +
+                                    "\"DailyEpisodeFormat\" = @DailyEpisodeFormat, " +
+                                    "\"AnimeEpisodeFormat\" = @AnimeEpisodeFormat";
+            conn.Execute(updateNamingSql, updatedNamingConfigs, transaction: tran);
         }
 
         private string NameReplace(string oldTokenString)

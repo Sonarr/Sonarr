@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
             var stats = Subject.SeriesStatistics();
 
             stats.Should().HaveCount(1);
-            stats.First().NextAiring.Should().Be(_episode.AirDateUtc);
+            stats.First().NextAiring.Should().BeCloseTo(_episode.AirDateUtc.Value, TimeSpan.FromMilliseconds(1000));
             stats.First().PreviousAiring.Should().NotHaveValue();
         }
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
 
             stats.Should().HaveCount(1);
             stats.First().NextAiring.Should().NotHaveValue();
-            stats.First().PreviousAiring.Should().Be(_episode.AirDateUtc);
+            stats.First().PreviousAiring.Should().BeCloseTo(_episode.AirDateUtc.Value, TimeSpan.FromMilliseconds(1000));
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
 
             stats.Should().HaveCount(1);
             stats.First().NextAiring.Should().NotHaveValue();
-            stats.First().PreviousAiring.Should().Be(_episode.AirDateUtc);
+            stats.First().PreviousAiring.Should().BeCloseTo(_episode.AirDateUtc.Value, TimeSpan.FromMilliseconds(1000));
         }
 
         [Test]

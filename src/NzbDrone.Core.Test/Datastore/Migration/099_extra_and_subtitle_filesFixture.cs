@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration;
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<MetadataFile99>("SELECT * FROM MetadataFiles");
+            var items = db.Query<MetadataFile99>("SELECT * FROM \"MetadataFiles\"");
 
             items.Should().HaveCount(2);
             items.First().Extension.Should().Be(".jpg");

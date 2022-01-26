@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Execute.WithConnection(SetConfigValue);
-            Execute.Sql("DELETE FROM Config WHERE Key = 'autodownloadpropers'");
+            Execute.Sql("DELETE FROM \"Config\" WHERE \"Key\" = 'autodownloadpropers'");
         }
 
         private void SetConfigValue(IDbConnection conn, IDbTransaction tran)
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Value FROM Config WHERE Key = 'autodownloadpropers'";
+                cmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'autodownloadpropers'";
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "INSERT INTO Config (key, value) VALUES ('downloadpropersandrepacks', ?)";
+                            updateCmd.CommandText = "INSERT INTO \"Config\" (\"key\", \"value\") VALUES ('downloadpropersandrepacks', ?)";
                             updateCmd.AddParameter(newValue);
 
                             updateCmd.ExecuteNonQuery();

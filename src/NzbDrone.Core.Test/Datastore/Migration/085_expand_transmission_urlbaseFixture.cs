@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Deluge",
                     Implementation = "Deluge",
                     Settings = new DelugeSettings85
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition81>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition81>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(1);
             items.First().Settings.ToObject<DelugeSettings85>().UrlBase.Should().Be("/my/");
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Trans",
                     Implementation = "Transmission",
                     Settings = new TransmissionSettings81
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition81>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition81>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(1);
             items.First().Settings.ToObject<TransmissionSettings81>().UrlBase.Should().Be("/transmission/");
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Trans",
                     Implementation = "Transmission",
                     Settings = new TransmissionSettings81
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition81>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition81>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(1);
             items.First().Settings.ToObject<TransmissionSettings81>().UrlBase.Should().Be("/my/url/transmission/");

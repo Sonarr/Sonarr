@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public void OrphanStarted()
         {
-            var sql = @"UPDATE Commands SET Status = @Orphaned, EndedAt = @Ended WHERE Status = @Started";
+            var sql = @"UPDATE ""Commands"" SET ""Status"" = @Orphaned, ""EndedAt"" = @Ended WHERE ""Status"" = @Started";
             var args = new
                 {
                     Orphaned = (int)CommandStatus.Orphaned,

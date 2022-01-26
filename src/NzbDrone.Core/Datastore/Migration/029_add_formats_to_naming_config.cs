@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var namingConfigCmd = conn.CreateCommand())
             {
                 namingConfigCmd.Transaction = tran;
-                namingConfigCmd.CommandText = @"SELECT * FROM NamingConfig LIMIT 1";
+                namingConfigCmd.CommandText = "SELECT * FROM \"NamingConfig\" LIMIT 1";
                 using (var namingConfigReader = namingConfigCmd.ExecuteReader())
                 {
                     var separatorIndex = namingConfigReader.GetOrdinal("Separator");
@@ -98,9 +98,9 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         using (var updateCmd = conn.CreateCommand())
                         {
-                            var text = string.Format("UPDATE NamingConfig " +
-                                                     "SET StandardEpisodeFormat = '{0}', " +
-                                                     "DailyEpisodeFormat = '{1}'",
+                            var text = string.Format("UPDATE \"NamingConfig\" " +
+                                                     "SET \"StandardEpisodeFormat\" = '{0}', " +
+                                                     "\"DailyEpisodeFormat\" = '{1}'",
                                                      standardEpisodeFormat,
                                                      dailyEpisodeFormat);
 

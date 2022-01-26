@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<Notification86>("SELECT * FROM Notifications");
+            var items = db.Query<Notification86>("SELECT * FROM \"Notifications\"");
 
             items.Should().HaveCount(1);
         }
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<Notification86>("SELECT * FROM Notifications");
+            var items = db.Query<Notification86>("SELECT * FROM \"Notifications\"");
 
             items.Should().HaveCount(1);
         }
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<Notification86>("SELECT * FROM Notifications");
+            var items = db.Query<Notification86>("SELECT * FROM \"Notifications\"");
 
             items.Should().HaveCount(1);
             items.First().Settings.ToObject<PushBulletSettings86>().DeviceIds.First().Should().Be(deviceId);

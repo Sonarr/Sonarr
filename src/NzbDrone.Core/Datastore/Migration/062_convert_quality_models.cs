@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var qualityModelCmd = conn.CreateCommand())
             {
                 qualityModelCmd.Transaction = tran;
-                qualityModelCmd.CommandText = @"SELECT Distinct Quality FROM " + tableName;
+                qualityModelCmd.CommandText = $"SELECT Distinct \"Quality\" FROM \"{tableName}\"";
 
                 using (var qualityModelReader = qualityModelCmd.ExecuteReader())
                 {
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 using (var updateCmd = conn.CreateCommand())
                 {
                     updateCmd.Transaction = tran;
-                    updateCmd.CommandText = "UPDATE " + tableName + " SET Quality = ? WHERE Quality = ?";
+                    updateCmd.CommandText = "UPDATE \"" + tableName + "\" SET \"Quality\" = ? WHERE \"Quality\" = ?";
                     updateCmd.AddParameter(quality.Value);
                     updateCmd.AddParameter(quality.Key);
 

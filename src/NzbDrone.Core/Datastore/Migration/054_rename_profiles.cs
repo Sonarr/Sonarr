@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -13,11 +13,11 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("Profiles").AddColumn("Language").AsInt32().Nullable();
             Alter.Table("Profiles").AddColumn("GrabDelay").AsInt32().Nullable();
             Alter.Table("Profiles").AddColumn("GrabDelayMode").AsInt32().Nullable();
-            Execute.Sql("UPDATE Profiles SET Language = 1, GrabDelay = 0, GrabDelayMode = 0");
+            Update.Table("Profiles").Set(new { Language = 1, GrabDelay = 0, GrabDelayMode = 0 }).AllRows();
 
             // Rename QualityProfileId in Series
             Alter.Table("Series").AddColumn("ProfileId").AsInt32().Nullable();
-            Execute.Sql("UPDATE Series SET ProfileId = QualityProfileId");
+            Execute.Sql("UPDATE \"Series\" SET \"ProfileId\" = \"QualityProfileId\"");
 
             // Add HeldReleases
             Create.TableForModel("PendingReleases")

@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using FluentMigrator;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -15,27 +15,29 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ImportExtraFiles(IDbConnection conn, IDbTransaction tran)
         {
+            var extraFileExtensions = string.Empty;
+
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Value from Config WHERE Key = 'extrafileextensions'";
+                cmd.CommandText = "SELECT \"Value\" from \"Config\" WHERE \"Key\" = 'extrafileextensions'";
 
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        var value = reader.GetString(0);
-
-                        if (value.IsNotNullOrWhiteSpace())
-                        {
-                            using (var insertCmd = conn.CreateCommand())
-                            {
-                                insertCmd.Transaction = tran;
-                                insertCmd.CommandText = "INSERT INTO Config (Key, Value) VALUES('importextrafiles', 'True')";
-                                insertCmd.ExecuteNonQuery();
-                            }
-                        }
+                        extraFileExtensions = reader.GetString(0);
                     }
+                }
+            }
+
+            if (extraFileExtensions.IsNotNullOrWhiteSpace())
+            {
+                using (var insertCmd = conn.CreateCommand())
+                {
+                    insertCmd.Transaction = tran;
+                    insertCmd.CommandText = "INSERT INTO \"Config\" (\"Key\", \"Value\") VALUES('importextrafiles', 'True')";
+                    insertCmd.ExecuteNonQuery();
                 }
             }
         }

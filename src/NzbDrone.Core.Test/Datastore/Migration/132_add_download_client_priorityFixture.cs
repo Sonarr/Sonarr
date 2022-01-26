@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Deluge",
                     Implementation = "Deluge",
                     Settings = new DelugeSettings85
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(1);
             items.First().Priority.Should().Be(1);
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Deluge",
                     Implementation = "Deluge",
                     Settings = new DelugeSettings85
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     ConfigContract = "DelugeSettings"
                 }).Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Deluge2",
                     Implementation = "Deluge",
                     Settings = new DelugeSettings85
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     ConfigContract = "DelugeSettings"
                 }).Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "sab",
                     Implementation = "Sabnzbd",
                     Settings = new SabnzbdSettings81
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(3);
             items[0].Priority.Should().Be(1);
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 0,
+                    Enable = false,
                     Name = "Deluge",
                     Implementation = "Deluge",
                     Settings = new DelugeSettings85
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     ConfigContract = "DelugeSettings"
                 }).Row(new
                 {
-                    Enable = 0,
+                    Enable = false,
                     Name = "Deluge2",
                     Implementation = "Deluge",
                     Settings = new DelugeSettings85
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     ConfigContract = "DelugeSettings"
                 }).Row(new
                 {
-                    Enable = 0,
+                    Enable = false,
                     Name = "sab",
                     Implementation = "Sabnzbd",
                     Settings = new SabnzbdSettings81
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(3);
             items[0].Priority.Should().Be(1);

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json;
 using NzbDrone.Common.Serializer;
@@ -68,20 +69,16 @@ namespace NzbDrone.Core.Datastore.Migration
 
         public void Commit()
         {
-            foreach (var profile in _changedProfiles)
+            var profilesToUpdate = _changedProfiles.Select(p => new
             {
-                using (var updateProfileCmd = _connection.CreateCommand())
-                {
-                    updateProfileCmd.Transaction = _transaction;
-                    updateProfileCmd.CommandText = "UPDATE Profiles SET Name = ?, Cutoff = ?, Items = ? WHERE Id = ?";
-                    updateProfileCmd.AddParameter(profile.Name);
-                    updateProfileCmd.AddParameter(profile.Cutoff);
-                    updateProfileCmd.AddParameter(profile.Items.ToJson());
-                    updateProfileCmd.AddParameter(profile.Id);
+                Id = p.Id,
+                Name = p.Name,
+                Cutoff = p.Cutoff,
+                Items = p.Items.ToJson()
+            });
 
-                    updateProfileCmd.ExecuteNonQuery();
-                }
-            }
+            var updateSql = $"UPDATE \"Profiles\" SET \"Name\" = @Name, \"Cutoff\" = @Cutoff, \"Items\" = @Items WHERE \"Id\" = @Id";
+            _connection.Execute(updateSql, profilesToUpdate, transaction: _transaction);
 
             _changedProfiles.Clear();
         }
@@ -117,7 +114,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getProfilesCmd = _connection.CreateCommand())
             {
                 getProfilesCmd.Transaction = _transaction;
-                getProfilesCmd.CommandText = @"SELECT Id, Name, Cutoff, Items FROM Profiles";
+                getProfilesCmd.CommandText = "SELECT \"Id\", \"Name\", \"Cutoff\", \"Items\" FROM \"Profiles\"";
 
                 using (var profileReader = getProfilesCmd.ExecuteReader())
                 {

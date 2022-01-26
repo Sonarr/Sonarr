@@ -15,12 +15,12 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         public void Clean()
         {
             using var mapper = _database.OpenConnection();
-            mapper.Execute(@"DELETE FROM Episodes
-                             WHERE Id IN (
-                             SELECT Episodes.Id FROM Episodes
-                             LEFT OUTER JOIN Series
-                             ON Episodes.SeriesId = Series.Id
-                             WHERE Series.Id IS NULL)");
+            mapper.Execute(@"DELETE FROM ""Episodes""
+                                     WHERE ""Id"" IN (
+                                     SELECT ""Episodes"".""Id"" FROM ""Episodes""
+                                     LEFT OUTER JOIN ""Series""
+                                     ON ""Episodes"".""SeriesId"" = ""Series"".""Id""
+                                     WHERE ""Series"".""Id"" IS NULL)");
         }
     }
 }

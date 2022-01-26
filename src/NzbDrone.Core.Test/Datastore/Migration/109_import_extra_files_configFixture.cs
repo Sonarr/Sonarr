@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var db = WithMigrationTestDb();
 
-            var items = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var items = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             items.Should().BeNull();
         }
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var items = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             items.Should().BeNull();
         }
 
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.QueryScalar<string>("SELECT Value FROM Config WHERE Key = 'importextrafiles'");
+            var items = db.QueryScalar<string>("SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'");
             items.Should().Be("True");
         }
     }

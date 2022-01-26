@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var qualityProfileCmd = conn.CreateCommand())
             {
                 qualityProfileCmd.Transaction = tran;
-                qualityProfileCmd.CommandText = @"SELECT Id, Allowed FROM QualityProfiles";
+                qualityProfileCmd.CommandText = "SELECT \"Id\", \"Allowed\" FROM \"QualityProfiles\"";
                 using (var qualityProfileReader = qualityProfileCmd.ExecuteReader())
                 {
                     while (qualityProfileReader.Read())
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE QualityProfiles SET Items = ? WHERE Id = ?";
+                            updateCmd.CommandText = "UPDATE \"QualityProfiles\" SET \"Items\" = ? WHERE \"Id\" = ?";
                             var param = updateCmd.CreateParameter();
                             qualityProfileItemConverter.SetValue(param, items);
                             updateCmd.Parameters.Add(param);
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var qualityModelCmd = conn.CreateCommand())
             {
                 qualityModelCmd.Transaction = tran;
-                qualityModelCmd.CommandText = @"SELECT Distinct Quality FROM " + tableName;
+                qualityModelCmd.CommandText = $"SELECT Distinct \"Quality\" FROM \"{tableName}\"";
                 using (var qualityModelReader = qualityModelCmd.ExecuteReader())
                 {
                     while (qualityModelReader.Read())
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE " + tableName + " SET Quality = ? WHERE Quality = ?";
+                            updateCmd.CommandText = "UPDATE \"" + tableName + "\" SET \"Quality\" = ? WHERE \"Quality\" = ?";
                             var param = updateCmd.CreateParameter();
                             qualityModelConverter.SetValue(param, qualityNew);
                             updateCmd.Parameters.Add(param);

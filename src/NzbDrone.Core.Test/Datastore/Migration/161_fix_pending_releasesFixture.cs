@@ -74,13 +74,13 @@ namespace NzbDrone.Core.Test.Datastore.Migration
   ""isPossibleSceneSeasonSpecial"": false
 }",
                     Release = "{}",
-                    Reason = PendingReleaseReason.Delay
+                    Reason = (int)PendingReleaseReason.Delay
                 });
             });
 
-            var json = db.Query<string>("SELECT ParsedEpisodeInfo FROM PendingReleases").First();
+            var json = db.Query<string>("SELECT \"ParsedEpisodeInfo\" FROM \"PendingReleases\"").First();
 
-            var pending = db.Query<ParsedEpisodeInfo162>("SELECT ParsedEpisodeInfo FROM PendingReleases").First();
+            var pending = db.Query<ParsedEpisodeInfo162>("SELECT \"ParsedEpisodeInfo\" FROM \"PendingReleases\"").First();
             pending.Quality.Quality.Should().Be(Quality.HDTV720p.Id);
             pending.Language.Should().Be(Language.English.Id);
         }

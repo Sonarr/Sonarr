@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -15,6 +16,17 @@ namespace NzbDrone.Core.Test.Datastore
     [TestFixture]
     public class DatabaseRelationshipFixture : DbTest
     {
+        [SetUp]
+        public void Setup()
+        {
+            AssertionOptions.AssertEquivalencyUsing(options =>
+            {
+                options.Using<DateTime>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation.ToUniversalTime(), TimeSpan.FromMilliseconds(20))).WhenTypeIs<DateTime>();
+                options.Using<DateTime?>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation.Value.ToUniversalTime(), TimeSpan.FromMilliseconds(20))).WhenTypeIs<DateTime?>();
+                return options;
+            });
+        }
+
         [Test]
         public void one_to_one()
         {

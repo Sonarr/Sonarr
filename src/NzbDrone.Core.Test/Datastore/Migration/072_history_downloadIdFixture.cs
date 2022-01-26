@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var history = db.Query<History72>("SELECT DownloadId, Data FROM History");
+            var history = db.Query<History72>("SELECT \"DownloadId\", \"Data\" FROM \"History\"");
 
             history.Should().HaveCount(2);
             history.Should().NotContain(c => c.Data.ContainsKey("downloadClientId"));
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var history = db.Query<History72>("SELECT DownloadId, Data FROM History");
+            var history = db.Query<History72>("SELECT \"DownloadId\", \"Data\" FROM \"History\"");
 
             history.Should().HaveCount(2);
             history.Should().NotContain(c => c.Data.ContainsKey("downloadClientId"));
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var history = db.Query<History72>("SELECT DownloadId, Data FROM History").Single();
+            var history = db.Query<History72>("SELECT \"DownloadId\", \"Data\" FROM \"History\"").Single();
 
             history.Data.Should().NotContainKey("downloadClientId");
             history.Data.Should().Contain(new KeyValuePair<string, string>("indexer", "test"));

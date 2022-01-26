@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getSeriesCmd = conn.CreateCommand())
             {
                 getSeriesCmd.Transaction = tran;
-                getSeriesCmd.CommandText = @"SELECT Id, Path FROM Series";
+                getSeriesCmd.CommandText = "SELECT \"Id\", \"Path\" FROM \"Series\"";
                 using (var seriesReader = getSeriesCmd.ExecuteReader())
                 {
                     while (seriesReader.Read())
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE EpisodeFiles SET RelativePath = REPLACE(Path, ?, '') WHERE SeriesId = ?";
+                            updateCmd.CommandText = "UPDATE \"EpisodeFiles\" SET \"RelativePath\" = REPLACE(\"Path\", ?, '') WHERE \"SeriesId\" = ?";
                             updateCmd.AddParameter(seriesPath);
                             updateCmd.AddParameter(seriesId);
 
