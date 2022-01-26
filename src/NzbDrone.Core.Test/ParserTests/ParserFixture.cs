@@ -68,6 +68,14 @@ namespace NzbDrone.Core.Test.ParserTests
             title.CleanSeriesTitle().Should().Be("seriaes");
         }
 
+        [Test]
+        public void should_replace_umlauts_in_title()
+        {
+            const string title = "Tote Mädchen lügen nicht";
+
+            title.CleanSeriesTitle().Should().Be("totemaedchenluegennicht");
+        }
+
         [TestCase("Sonar TV - Series Title : 02 Road From Code [S04].mp4")]
         public void should_clean_up_invalid_path_characters(string postTitle)
         {

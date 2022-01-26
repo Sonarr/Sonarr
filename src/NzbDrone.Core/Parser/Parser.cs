@@ -674,8 +674,10 @@ namespace NzbDrone.Core.Parser
 
             // Replace `%` with `percent` to deal with the 3% case
             title = PercentRegex.Replace(title, "percent");
+            title = NormalizeRegex.Replace(title).ToLower();
+            title = ReplaceGermanUmlauts(title);
 
-            return NormalizeRegex.Replace(title).ToLower().RemoveAccent();
+            return title.RemoveAccent();
         }
 
         public static string NormalizeEpisodeTitle(string title)
@@ -707,6 +709,19 @@ namespace NzbDrone.Core.Parser
             title = DuplicateSpacesRegex.Replace(title, " ");
 
             return title.Trim().ToLower();
+        }
+
+        public static string ReplaceGermanUmlauts(string title)
+        {
+            title = title.Replace("ä", "ae");
+            title = title.Replace("ö", "oe");
+            title = title.Replace("ü", "ue");
+            title = title.Replace("Ä", "Ae");
+            title = title.Replace("Ö", "Oe");
+            title = title.Replace("Ü", "Ue");
+            title = title.Replace("ß", "ss");
+            
+            return title;
         }
 
         public static string ParseReleaseGroup(string title)
