@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -12,8 +12,8 @@ namespace NzbDrone.Core.Datastore.Migration
                  .AddColumn("EnableRss").AsBoolean().Nullable()
                  .AddColumn("EnableSearch").AsBoolean().Nullable();
 
-            Execute.Sql("UPDATE Indexers SET EnableRss = Enable, EnableSearch = Enable");
-            Execute.Sql("UPDATE Indexers SET EnableSearch = 0 WHERE Implementation = 'Wombles'");
+            Execute.Sql("UPDATE \"Indexers\" SET \"EnableRss\" = \"Enable\", \"EnableSearch\" = \"Enable\"");
+            Update.Table("Indexers").Set(new { EnableSearch = false }).Where(new { Implementation = "Wombles" });
         }
     }
 }

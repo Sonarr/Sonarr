@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Sab",
                     Implementation = "Sabnzbd",
                     Settings = new
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT Settings FROM DownloadClients");
+            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT \"Settings\" FROM \"DownloadClients\"");
 
             downloadClients.Should().HaveCount(1);
             downloadClients.First().Settings.ToObject<SabnzbdSettings81>().TvCategory.Should().Be("abc");
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Trans",
                     Implementation = "Transmission",
                     Settings = new
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT Settings FROM DownloadClients");
+            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT \"Settings\" FROM \"DownloadClients\"");
 
             downloadClients.Should().HaveCount(1);
             downloadClients.First().Settings.ToObject<TransmissionSettings81>().TvCategory.Should().Be(".abc");
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
-                    Enable = 1,
+                    Enable = true,
                     Name = "Trans",
                     Implementation = "Transmission",
                     Settings = new
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT Settings FROM DownloadClients");
+            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT \"Settings\" FROM \"DownloadClients\"");
 
             downloadClients.Should().HaveCount(1);
             downloadClients.First().Settings.ToObject<TransmissionSettings81>().TvCategory.Should().Be("");

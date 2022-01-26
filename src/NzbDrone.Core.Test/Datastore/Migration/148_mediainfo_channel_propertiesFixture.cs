@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 AddEpisodeFile(c, 1);
             });
 
-            var items = db.Query<EpisodeFile148>("SELECT MediaInfo FROM EpisodeFiles");
+            var items = db.Query<EpisodeFile148>("SELECT \"MediaInfo\" FROM \"EpisodeFiles\"");
 
             items.Should().HaveCount(1);
 

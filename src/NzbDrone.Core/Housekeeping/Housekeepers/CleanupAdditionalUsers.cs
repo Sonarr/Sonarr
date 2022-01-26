@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
@@ -15,10 +15,10 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         public void Clean()
         {
             using var mapper = _database.OpenConnection();
-            mapper.Execute(@"DELETE FROM Users
-                             WHERE ID NOT IN (
-                             SELECT ID FROM Users
-                             LIMIT 1)");
+            mapper.Execute(@"DELETE FROM ""Users""
+                                 WHERE ""Id"" NOT IN (
+                                 SELECT ""Id"" FROM ""Users""
+                                 LIMIT 1)");
         }
     }
 }

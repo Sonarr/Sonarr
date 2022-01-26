@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("DELETE FROM Indexers WHERE Implementation = 'Wombles';");
+            Delete.FromTable("Indexers").Row(new { Implementation = "Wombles" });
         }
     }
 }

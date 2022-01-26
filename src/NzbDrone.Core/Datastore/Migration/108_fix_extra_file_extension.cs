@@ -1,5 +1,7 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -12,7 +14,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             // Delete extraneous files without extensions that Sonarr found previously,
             // these will be blocked from importing as well.
-            Execute.Sql("DELETE FROM ExtraFiles WHERE TRIM(Extension) = ''");
+            Execute.Sql("DELETE FROM \"ExtraFiles\" WHERE TRIM(\"Extension\") = ''");
 
             Execute.WithConnection(FixExtraFileExtension);
         }
@@ -25,10 +27,12 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void FixExtraFileExtensionForTable(IDbConnection conn, IDbTransaction tran, string table)
         {
+            var updatedFiles = new List<object>();
+
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = $"SELECT Id, RelativePath FROM {table}";
+                cmd.CommandText = $"SELECT \"Id\", \"RelativePath\" FROM \"{table}\"";
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -38,18 +42,17 @@ namespace NzbDrone.Core.Datastore.Migration
                         var relativePath = reader.GetString(1);
                         var extension = relativePath.Substring(relativePath.LastIndexOf(".", StringComparison.InvariantCultureIgnoreCase));
 
-                        using (var updateCmd = conn.CreateCommand())
+                        updatedFiles.Add(new
                         {
-                            updateCmd.Transaction = tran;
-                            updateCmd.CommandText = $"UPDATE {table} SET Extension = ? WHERE Id = ?";
-                            updateCmd.AddParameter(extension);
-                            updateCmd.AddParameter(id);
-
-                            updateCmd.ExecuteNonQuery();
-                        }
+                            Extension = extension,
+                            Id = id
+                        });
                     }
                 }
             }
+
+            var updateSql = $"UPDATE \"{table}\" SET \"Extension\" = @Extension WHERE \"Id\" = @Id";
+            conn.Execute(updateSql, updatedFiles, transaction: tran);
         }
     }
 }

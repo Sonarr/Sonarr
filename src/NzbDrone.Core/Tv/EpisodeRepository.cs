@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Tv
 
             pagingSpec.Records = GetPagedRecords(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber), pagingSpec, PagedQuery);
 
-            var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM {TableMapping.Mapper.TableNameMapping(typeof(Episode))} /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/)";
+            var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM \"{TableMapping.Mapper.TableNameMapping(typeof(Episode))}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/) AS \"Inner\"";
             pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber).Select(typeof(Episode)), pagingSpec, countTemplate);
 
             return pagingSpec;
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Tv
         {
             using (var conn = _database.OpenConnection())
             {
-                conn.Execute("UPDATE Episodes SET Monitored = @monitored WHERE SeriesId = @seriesId AND SeasonNumber = @seasonNumber AND Monitored != @monitored",
+                conn.Execute("UPDATE \"Episodes\" SET \"Monitored\" = @monitored WHERE \"SeriesId\" = @seriesId AND \"SeasonNumber\" = @seasonNumber AND \"Monitored\" != @monitored",
                     new { seriesId = seriesId, seasonNumber = seasonNumber, monitored = monitored });
             }
         }
@@ -215,7 +215,13 @@ namespace NzbDrone.Core.Tv
 
         private string BuildAirDateUtcCutoffWhereClause(DateTime currentTime)
         {
-            return string.Format("datetime(strftime('%s', \"Episodes\".\"AirDateUtc\") + \"Series\".\"RunTime\" * 60,  'unixepoch') <= '{0}'",
+            if (_database.DatabaseType == DatabaseType.PostgreSQL)
+            {
+                return string.Format("\"Episodes\".\"AirDateUtc\" + make_interval(mins => \"Series\".\"Runtime\") <= '{0}'",
+                                     currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
+
+            return string.Format("datetime(strftime('%s', \"Episodes\".\"AirDateUtc\") + \"Series\".\"Runtime\" * 60,  'unixepoch') <= '{0}'",
                                  currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
@@ -227,7 +233,8 @@ namespace NzbDrone.Core.Tv
             .Where(
                 string.Format("({0})",
                     BuildQualityCutoffWhereClause(qualitiesBelowCutoff)))
-            .GroupBy<Episode>(e => e.Id);
+            .GroupBy<Episode>(e => e.Id)
+            .GroupBy<Series>(s => s.Id);
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
         {
@@ -237,7 +244,7 @@ namespace NzbDrone.Core.Tv
             {
                 foreach (var belowCutoff in profile.QualityIds)
                 {
-                    clauses.Add(string.Format("(Series.[QualityProfileId] = {0} AND EpisodeFiles.Quality LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
+                    clauses.Add(string.Format("(\"Series\".\"QualityProfileId\" = {0} AND \"EpisodeFiles\".\"Quality\" LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
                 }
             }
 

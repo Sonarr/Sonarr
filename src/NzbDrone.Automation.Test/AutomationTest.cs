@@ -43,7 +43,7 @@ namespace NzbDrone.Automation.Test
 
             driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
 
-            _runner = new NzbDroneRunner(LogManager.GetCurrentClassLogger());
+            _runner = new NzbDroneRunner(LogManager.GetCurrentClassLogger(), null);
             _runner.KillAll();
             _runner.Start(true);
 

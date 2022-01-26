@@ -25,12 +25,19 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
             var usedTagsList = string.Join(",", usedTags.Select(d => d.ToString()).ToArray());
 
-            mapper.Execute($"DELETE FROM Tags WHERE NOT Id IN ({usedTagsList})");
+            if (_database.DatabaseType == DatabaseType.PostgreSQL)
+            {
+                mapper.Execute($"DELETE FROM \"Tags\" WHERE NOT \"Id\" = ANY (\'{{{usedTagsList}}}\'::int[])");
+            }
+            else
+            {
+                mapper.Execute($"DELETE FROM \"Tags\" WHERE NOT \"Id\" IN ({usedTagsList})");
+            }
         }
 
         private int[] GetUsedTags(string table, IDbConnection mapper)
         {
-            return mapper.Query<List<int>>($"SELECT DISTINCT Tags FROM {table} WHERE NOT Tags = '[]' AND NOT Tags IS NULL")
+            return mapper.Query<List<int>>($"SELECT DISTINCT \"Tags\" FROM \"{table}\" WHERE NOT \"Tags\" = '[]' AND NOT \"Tags\" IS NULL")
                 .SelectMany(x => x)
                 .Distinct()
                 .ToArray();

@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE Indexers SET ConfigContract = 'FanzubSettings' WHERE Implementation = 'Fanzub' AND ConfigContract = 'NullConfig'");
+            Update.Table("Indexers").Set(new { ConfigContract = "FanzubSettings" }).Where(new { Implementation = "Fanzub", ConfigContract = "NullConfig" });
         }
     }
 }

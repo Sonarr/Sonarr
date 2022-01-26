@@ -5,12 +5,14 @@ using DryIoc.Microsoft.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -43,6 +45,7 @@ namespace NzbDrone.App.Test
             // dummy lifetime and broadcaster so tests resolve
             container.RegisterInstance<IHostLifetime>(new Mock<IHostLifetime>().Object);
             container.RegisterInstance<IBroadcastSignalRMessage>(new Mock<IBroadcastSignalRMessage>().Object);
+            container.RegisterInstance<IOptions<PostgresOptions>>(new Mock<IOptions<PostgresOptions>>().Object);
 
             _container = container.GetServiceProvider();
         }

@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("QualityDefinitions").AlterColumn("MinSize").AsDouble().Nullable();
             Alter.Table("QualityDefinitions").AlterColumn("MaxSize").AsDouble().Nullable();
 
-            Execute.Sql("UPDATE QualityDefinitions SET MaxSize = NULL WHERE Quality = 10 OR MaxSize = 0");
+            Execute.Sql("UPDATE \"QualityDefinitions\" SET \"MaxSize\" = NULL WHERE \"Quality\" = 10 OR \"MaxSize\" = 0");
         }
     }
 

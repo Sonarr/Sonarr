@@ -23,12 +23,15 @@ namespace NzbDrone.Core.Test.Framework
             where T : ModelBase, new();
         IDirectDataMapper GetDirectDataMapper();
         IDbConnection OpenConnection();
+        DatabaseType DatabaseType { get; }
     }
 
     public class TestDatabase : ITestDatabase
     {
         private readonly IDatabase _dbConnection;
         private readonly IEventAggregator _eventAggregator;
+
+        public DatabaseType DatabaseType => _dbConnection.DatabaseType;
 
         public TestDatabase(IDatabase dbConnection)
         {

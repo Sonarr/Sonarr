@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var metadataFiles = db.Query<MetadataFile184>("SELECT * FROM MetadataFiles");
+            var metadataFiles = db.Query<MetadataFile184>("SELECT * FROM \"MetadataFiles\"");
 
             metadataFiles.Should().HaveCount(1);
             metadataFiles.First().RelativePath.Should().NotContain("metadata");

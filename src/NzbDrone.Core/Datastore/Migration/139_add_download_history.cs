@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Create.Index().OnTable("DownloadHistory").OnColumn("SeriesId");
             Create.Index().OnTable("DownloadHistory").OnColumn("DownloadId");
 
-            Execute.WithConnection(InitialImportedDownloadHistory);
+            IfDatabase("sqlite").Execute.WithConnection(InitialImportedDownloadHistory);
         }
 
         private static readonly Dictionary<int, int> EventTypeMap = new Dictionary<int, int>()

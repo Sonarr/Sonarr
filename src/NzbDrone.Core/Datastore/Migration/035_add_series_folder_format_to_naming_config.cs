@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("NamingConfig").AddColumn("SeriesFolderFormat").AsString().Nullable();
 
-            Execute.Sql("UPDATE NamingConfig SET SeriesFolderFormat = '{Series Title}'");
+            Update.Table("NamingConfig").Set(new { SeriesFolderFormat = "{Series Title}" }).AllRows();
         }
     }
 }
