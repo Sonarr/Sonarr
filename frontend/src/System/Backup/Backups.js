@@ -23,6 +23,11 @@ const columns = [
     isVisible: true
   },
   {
+    name: 'size',
+    label: 'Size',
+    isVisible: true
+  },
+  {
     name: 'time',
     label: 'Time',
     isVisible: true
@@ -34,7 +39,6 @@ const columns = [
 ];
 
 class Backups extends Component {
-
   //
   // Lifecycle
 
@@ -51,11 +55,11 @@ class Backups extends Component {
 
   onRestorePress = () => {
     this.setState({ isRestoreModalOpen: true });
-  }
+  };
 
   onRestoreModalClose = () => {
     this.setState({ isRestoreModalOpen: false });
-  }
+  };
 
   //
   // Render
@@ -94,53 +98,34 @@ class Backups extends Component {
         </PageToolbar>
 
         <PageContentBody>
-          {
-            isFetching && !isPopulated &&
-              <LoadingIndicator />
-          }
+          {isFetching && !isPopulated && <LoadingIndicator />}
 
-          {
-            !isFetching && !!error &&
-              <div>Unable to load backups</div>
-          }
+          {!isFetching && !!error && <div>Unable to load backups</div>}
 
-          {
-            noBackups &&
-              <div>No backups are available</div>
-          }
+          {noBackups && <div>No backups are available</div>}
 
-          {
-            hasBackups &&
-              <Table
-                columns={columns}
-              >
-                <TableBody>
-                  {
-                    items.map((item) => {
-                      const {
-                        id,
-                        type,
-                        name,
-                        path,
-                        time
-                      } = item;
+          {hasBackups && (
+            <Table columns={columns}>
+              <TableBody>
+                {items.map((item) => {
+                  const { id, type, name, path, size, time } = item;
 
-                      return (
-                        <BackupRow
-                          key={id}
-                          id={id}
-                          type={type}
-                          name={name}
-                          path={path}
-                          time={time}
-                          onDeleteBackupPress={onDeleteBackupPress}
-                        />
-                      );
-                    })
-                  }
-                </TableBody>
-              </Table>
-          }
+                  return (
+                    <BackupRow
+                      key={id}
+                      id={id}
+                      type={type}
+                      name={name}
+                      path={path}
+                      size={size}
+                      time={time}
+                      onDeleteBackupPress={onDeleteBackupPress}
+                    />
+                  );
+                })}
+              </TableBody>
+            </Table>
+          )}
         </PageContentBody>
 
         <RestoreBackupModalConnector
@@ -150,7 +135,6 @@ class Backups extends Component {
       </PageContent>
     );
   }
-
 }
 
 Backups.propTypes = {
