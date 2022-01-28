@@ -31,7 +31,10 @@ namespace NzbDrone.Common.Disk
                 {
                     try
                     {
-                        Path.GetDirectoryName($@"C:\{new string('a', 300)}\ab");
+                        // Windows paths can be up to 32,767 characters long, but each component of the path must be less than 255.
+                        // If the OS does not have Long Path enabled, then the following will throw an exception
+                        // ref: https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation
+                        Path.GetDirectoryName($@"C:\{new string('a', 254)}\{new string('a', 254)}");
                         MAX_PATH = 4096;
                     }
                     catch
