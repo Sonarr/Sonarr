@@ -53,7 +53,7 @@ namespace NzbDrone.Core.SeriesStats
 
         private string GetSelectClause(bool series)
         {
-            return @"SELECT Episodes.*, SUM(EpisodeFiles.Size) as SizeOnDisk FROM
+            return @"SELECT Episodes.*, SUM(EpisodeFiles.Size) as SizeOnDisk, GROUP_CONCAT(EpisodeFiles.ReleaseGroup, '|') AS ReleaseGroupsString FROM
                      (SELECT
                      Episodes.SeriesId,
                      Episodes.SeasonNumber,

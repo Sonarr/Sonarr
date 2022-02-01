@@ -114,6 +114,7 @@ class SeriesIndexRow extends Component {
       episodeCount,
       episodeFileCount,
       totalEpisodeCount,
+      releaseGroups,
       sizeOnDisk
     } = statistics;
 
@@ -413,6 +414,21 @@ class SeriesIndexRow extends Component {
               );
             }
 
+            if (name === 'releaseGroups') {
+              const joinedReleaseGroups = releaseGroups.sort((a, b) => a.localeCompare(b)).join(', ');
+
+              return (
+                <VirtualTableRowCell
+                  key={name}
+                  className={styles[name]}
+                >
+                  <span title={joinedReleaseGroups}>
+                    {joinedReleaseGroups}
+                  </span>
+                </VirtualTableRowCell>
+              );
+            }
+
             if (name === 'tags') {
               return (
                 <VirtualTableRowCell
@@ -534,7 +550,8 @@ SeriesIndexRow.defaultProps = {
     seasonCount: 0,
     episodeCount: 0,
     episodeFileCount: 0,
-    totalEpisodeCount: 0
+    totalEpisodeCount: 0,
+    releaseGroups: []
   },
   genres: [],
   tags: []

@@ -121,6 +121,7 @@ namespace Sonarr.Api.V3.Series
                        Certification = model.Certification,
                        Genres = model.Genres,
                        Tags = model.Tags,
+                       //ReleaseGroups
                        Added = model.Added,
                        AddOptions = model.AddOptions,
                        Ratings = model.Ratings

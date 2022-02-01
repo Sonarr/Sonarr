@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.SeriesStats
@@ -14,6 +17,7 @@ namespace NzbDrone.Core.SeriesStats
         public int AvailableEpisodeCount { get; set; }
         public int TotalEpisodeCount { get; set; }
         public long SizeOnDisk { get; set; }
+        public string ReleaseGroupsString { get; set; }
 
         public DateTime? NextAiring
         {
@@ -52,6 +56,21 @@ namespace NzbDrone.Core.SeriesStats
                 }
 
                 return previousAiring;
+            }
+        }
+
+        public List<string> ReleaseGroups
+        {
+            get
+            {
+                List<string> releaseGroups = null;
+
+                if (ReleaseGroupsString.IsNotNullOrWhiteSpace())
+                {
+                    releaseGroups = ReleaseGroupsString.Split('|').Distinct().ToList();
+                }
+
+                return releaseGroups;
             }
         }
     }
