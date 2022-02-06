@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [FieldDefinition(10, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(RTorrentPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public int OlderTvPriority { get; set; }
 
-        [FieldDefinition(11, Label = "Add Stopped", Type = FieldType.Checkbox, HelpText = "Enabling will prevent magnets from downloading before downloading")]
+        [FieldDefinition(11, Label = "Add Stopped", Type = FieldType.Checkbox, HelpText = "Enabling will add torrents and magnets to ruTorrent in a stopped state. This may break magnet files.")]
         public bool AddStopped { get; set; }
 
         public NzbDroneValidationResult Validate()
