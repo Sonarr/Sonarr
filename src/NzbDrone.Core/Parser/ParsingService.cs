@@ -209,12 +209,16 @@ namespace NzbDrone.Core.Parser
             {
                 if (series.UseSceneNumbering && sceneSource)
                 {
-                    return _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeasonNumber);
+                    var episodes = _episodeService.GetEpisodesBySceneSeason(series.Id, mappedSeasonNumber);
+
+                    // If episodes were found by the scene season number return them, otherwise fallback to look-up by season number
+                    if (episodes.Any())
+                    {
+                        return episodes;
+                    }
                 }
-                else
-                {
-                    return _episodeService.GetEpisodesBySeason(series.Id, mappedSeasonNumber);
-                }
+
+                return _episodeService.GetEpisodesBySeason(series.Id, mappedSeasonNumber);
             }
 
             if (parsedEpisodeInfo.IsDaily)
