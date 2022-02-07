@@ -415,7 +415,8 @@ class SeriesIndexRow extends Component {
             }
 
             if (name === 'releaseGroups') {
-              const joinedReleaseGroups = releaseGroups.sort((a, b) => a.localeCompare(b)).join(', ');
+              const joinedReleaseGroups = releaseGroups.join(', ');
+              const truncatedReleaseGroups = releaseGroups.slice(0, 4).join(', ');
 
               return (
                 <VirtualTableRowCell
@@ -423,7 +424,7 @@ class SeriesIndexRow extends Component {
                   className={styles[name]}
                 >
                   <span title={joinedReleaseGroups}>
-                    {joinedReleaseGroups}
+                    {truncatedReleaseGroups}
                   </span>
                 </VirtualTableRowCell>
               );

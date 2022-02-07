@@ -276,27 +276,7 @@ export const filterBuilderProps = [
   {
     name: 'releaseGroups',
     label: 'Release Groups',
-    type: filterBuilderTypes.ARRAY,
-    optionsSelector: function(items) {
-      const releaseGroupsList = items.reduce((acc, series) => {
-        const { statistics = {} } = series;
-
-        const {
-          releaseGroups = []
-        } = statistics;
-
-        releaseGroups.forEach((releaseGroup) => {
-          acc.push({
-            id: releaseGroup,
-            name: releaseGroup
-          });
-        });
-
-        return acc;
-      }, []);
-
-      return releaseGroupsList.sort(sortByName);
-    }
+    type: filterBuilderTypes.ARRAY
   },
   {
     name: 'ratings',

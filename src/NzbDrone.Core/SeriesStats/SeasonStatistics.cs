@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Datastore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.SeriesStats
 {
@@ -63,14 +63,19 @@ namespace NzbDrone.Core.SeriesStats
         {
             get
             {
-                List<string> releaseGroups = null;
+                var releasegroups = new List<string>();
 
                 if (ReleaseGroupsString.IsNotNullOrWhiteSpace())
                 {
-                    releaseGroups = ReleaseGroupsString.Split('|').Distinct().ToList();
+                    releasegroups = ReleaseGroupsString
+                        .Split('|')
+                        .Distinct()
+                        .Where(rg => rg.IsNotNullOrWhiteSpace())
+                        .OrderBy(rg => rg)
+                        .ToList();
                 }
 
-                return releaseGroups;
+                return releasegroups;
             }
         }
     }
