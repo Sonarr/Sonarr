@@ -13,6 +13,7 @@ import RestoreBackupModalConnector from './RestoreBackupModalConnector';
 import styles from './BackupRow.css';
 
 class BackupRow extends Component {
+
   //
   // Lifecycle
 
@@ -45,7 +46,10 @@ class BackupRow extends Component {
   }
 
   onConfirmDeletePress = () => {
-    const { id, onDeleteBackupPress } = this.props;
+    const {
+      id,
+      onDeleteBackupPress
+    } = this.props;
 
     this.setState({ isConfirmDeleteModalOpen: false }, () => {
       onDeleteBackupPress(id);
@@ -56,9 +60,19 @@ class BackupRow extends Component {
   // Render
 
   render() {
-    const { id, type, name, path, size, time } = this.props;
+    const {
+      id,
+      type,
+      name,
+      path,
+      size,
+      time
+    } = this.props;
 
-    const { isRestoreModalOpen, isConfirmDeleteModalOpen } = this.state;
+    const {
+      isRestoreModalOpen,
+      isConfirmDeleteModalOpen
+    } = this.state;
 
     let iconClassName = icons.SCHEDULED;
     let iconTooltip = 'Scheduled';
@@ -74,21 +88,36 @@ class BackupRow extends Component {
     return (
       <TableRow key={id}>
         <TableRowCell className={styles.type}>
-          {<Icon name={iconClassName} title={iconTooltip} />}
+          {
+            <Icon
+              name={iconClassName}
+              title={iconTooltip}
+            />
+          }
         </TableRowCell>
 
         <TableRowCell>
-          <Link to={`${window.Sonarr.urlBase}${path}`} noRouter={true}>
+          <Link
+            to={`${window.Sonarr.urlBase}${path}`}
+            noRouter={true}
+          >
             {name}
           </Link>
         </TableRowCell>
 
-        <TableRowCell>{formatBytes(size)}</TableRowCell>
+        <TableRowCell>
+          {formatBytes(size)}
+        </TableRowCell>
 
-        <RelativeDateCellConnector date={time} />
+        <RelativeDateCellConnector
+          date={time}
+        />
 
         <TableRowCell className={styles.actions}>
-          <IconButton name={icons.RESTORE} onPress={this.onRestorePress} />
+          <IconButton
+            name={icons.RESTORE}
+            onPress={this.onRestorePress}
+          />
 
           <IconButton
             title="Delete backup"
