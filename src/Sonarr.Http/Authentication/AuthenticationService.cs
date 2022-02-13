@@ -144,12 +144,7 @@ namespace Sonarr.Http.Authentication
 
             if (context.Request.IsFeedRequest())
             {
-                if (ValidUser(context) || ValidApiKey(apiKey))
-                {
-                    return true;
-                }
-
-                return false;
+                return ValidApiKey(apiKey);
             }
 
             if (context.Request.IsLoginRequest())
