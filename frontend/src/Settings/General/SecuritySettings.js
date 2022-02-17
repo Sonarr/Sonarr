@@ -160,7 +160,7 @@ class SecuritySettings extends Component {
             type={inputTypes.SELECT}
             name="certificateValidation"
             values={certificateValidationOptions}
-            helpText="Change how strict HTTPS certification validation is.  Do not change unless you understand the risks."
+            helpText="Change how strict HTTPS certification validation is. Do not change unless you understand the risks."
             onChange={onInputChange}
             {...certificateValidation}
           />
