@@ -98,7 +98,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public bool QualityCutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
-            var cutoffCompare = new QualityModelComparer(profile).Compare(currentQuality.Quality.Id, profile.Cutoff);
+            var cutoff = profile.UpgradeAllowed ? profile.Cutoff : profile.FirststAllowedQuality().Id;
+            var cutoffCompare = new QualityModelComparer(profile).Compare(currentQuality.Quality.Id, cutoff);
 
             if (cutoffCompare < 0)
             {
@@ -115,7 +116,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public bool LanguageCutoffNotMet(LanguageProfile languageProfile, Language currentLanguage)
         {
-            var languageCompare = new LanguageComparer(languageProfile).Compare(currentLanguage, languageProfile.Cutoff);
+            var cutoff = languageProfile.UpgradeAllowed
+                ? languageProfile.Cutoff
+                : languageProfile.FirstAllowedLanguage();
+
+            var languageCompare = new LanguageComparer(languageProfile).Compare(currentLanguage, cutoff);
 
             return languageCompare < 0;
         }
