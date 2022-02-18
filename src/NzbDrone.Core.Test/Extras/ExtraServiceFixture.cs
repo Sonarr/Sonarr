@@ -60,14 +60,14 @@ namespace NzbDrone.Core.Test.Extras
 
             _subtitleService = new Mock<IManageExtraFiles>();
             _subtitleService.SetupGet(s => s.Order).Returns(0);
-            _subtitleService.Setup(s => s.HandleFileImport(It.IsAny<LocalEpisode>(), It.IsAny<EpisodeFile>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+            _subtitleService.Setup(s => s.CanImportFile(It.IsAny<LocalEpisode>(), It.IsAny<EpisodeFile>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(false);
-            _subtitleService.Setup(s => s.HandleFileImport(It.IsAny<LocalEpisode>(), It.IsAny<EpisodeFile>(), It.IsAny<string>(), ".srt", It.IsAny<bool>()))
+            _subtitleService.Setup(s => s.CanImportFile(It.IsAny<LocalEpisode>(), It.IsAny<EpisodeFile>(), It.IsAny<string>(), ".srt", It.IsAny<bool>()))
                 .Returns(true);
 
             _otherExtraService = new Mock<IManageExtraFiles>();
             _otherExtraService.SetupGet(s => s.Order).Returns(1);
-            _otherExtraService.Setup(s => s.HandleFileImport(It.IsAny<LocalEpisode>(), It.IsAny<EpisodeFile>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+            _otherExtraService.Setup(s => s.CanImportFile(It.IsAny<LocalEpisode>(), It.IsAny<EpisodeFile>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(true);
 
             Mocker.SetConstant<IEnumerable<IManageExtraFiles>>(new[] {
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.Extras
             WithExistingFolder(_series.Path);
             WithExistingFile(_episodeFile.Path);
             WithExistingFile(_localEpisode.Path);
-            
+
             Mocker.GetMock<IConfigService>().Setup(v => v.ImportExtraFiles).Returns(true);
             Mocker.GetMock<IConfigService>().Setup(v => v.ExtraFileExtensions).Returns("nfo,srt");
         }
@@ -92,8 +92,11 @@ namespace NzbDrone.Core.Test.Extras
         private void WithExistingFolder(string path, bool exists = true)
         {
             var dir = Path.GetDirectoryName(path);
+
             if (exists && dir.IsNotNullOrWhiteSpace())
+            {
                 WithExistingFolder(dir);
+            }
 
             Mocker.GetMock<IDiskProvider>().Setup(v => v.FolderExists(path)).Returns(exists);
         }
@@ -101,8 +104,11 @@ namespace NzbDrone.Core.Test.Extras
         private void WithExistingFile(string path, bool exists = true, int size = 1000)
         {
             var dir = Path.GetDirectoryName(path);
+
             if (exists && dir.IsNotNullOrWhiteSpace())
+            {
                 WithExistingFolder(dir);
+            }
 
             Mocker.GetMock<IDiskProvider>().Setup(v => v.FileExists(path)).Returns(exists);
             Mocker.GetMock<IDiskProvider>().Setup(v => v.GetFileSize(path)).Returns(size);
@@ -135,8 +141,8 @@ namespace NzbDrone.Core.Test.Extras
 
             Subject.ImportEpisode(_localEpisode, _episodeFile, true);
 
-            _subtitleService.Verify(v => v.HandleFileImport(_localEpisode, _episodeFile, It.IsAny<string>(), It.IsAny<string>(), true), Times.Never());
-            _otherExtraService.Verify(v => v.HandleFileImport(_localEpisode, _episodeFile, It.IsAny<string>(), It.IsAny<string>(), true), Times.Never());
+            _subtitleService.Verify(v => v.CanImportFile(_localEpisode, _episodeFile, It.IsAny<string>(), It.IsAny<string>(), true), Times.Never());
+            _otherExtraService.Verify(v => v.CanImportFile(_localEpisode, _episodeFile, It.IsAny<string>(), It.IsAny<string>(), true), Times.Never());
         }
 
         [Test]
@@ -157,8 +163,8 @@ namespace NzbDrone.Core.Test.Extras
 
             Subject.ImportEpisode(_localEpisode, _episodeFile, true);
 
-            _subtitleService.Verify(v => v.HandleFileImport(_localEpisode, _episodeFile, It.IsAny<string>(), It.IsAny<string>(), true), Times.Never());
-            _otherExtraService.Verify(v => v.HandleFileImport(_localEpisode, _episodeFile, It.IsAny<string>(), It.IsAny<string>(), true), Times.Never());
+            _subtitleService.Verify(v => v.CanImportFile(_localEpisode, _episodeFile, It.IsAny<string>(), It.IsAny<string>(), true), Times.Never());
+            _otherExtraService.Verify(v => v.CanImportFile(_localEpisode, _episodeFile, It.IsAny<string>(), It.IsAny<string>(), true), Times.Never());
         }
 
         [Test]

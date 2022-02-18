@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Extras
         public void ImportEpisode(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly)
         {
             ImportExtraFiles(localEpisode, episodeFile, isReadOnly);
-            
+
             CreateAfterEpisodeImport(localEpisode.Series, episodeFile);
         }
 
@@ -65,11 +65,8 @@ namespace NzbDrone.Core.Extras
                                                                      .Select(e => e.Trim(' ', '.').Insert(0, "."))
                                                                      .ToList();
 
-            var sourcePath = localEpisode.Path;
-            var sourceFolder = _diskProvider.GetParentFolder(sourcePath);
-            var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
+            var sourceFolder = _diskProvider.GetParentFolder(localEpisode.Path);
             var files = _diskProvider.GetFiles(sourceFolder, SearchOption.AllDirectories);
-
             var managedFiles = _extraFileManagers.Select((i) => new List<string>()).ToArray();
 
             foreach (var file in files)
@@ -84,7 +81,7 @@ namespace NzbDrone.Core.Extras
 
                 for (int i = 0; i < _extraFileManagers.Count; i++)
                 {
-                    if (_extraFileManagers[i].HandleFileImport(localEpisode, episodeFile, file, extension, isReadOnly))
+                    if (_extraFileManagers[i].CanImportFile(localEpisode, episodeFile, file, extension, isReadOnly))
                     {
                         managedFiles[i].Add(file);
                         break;

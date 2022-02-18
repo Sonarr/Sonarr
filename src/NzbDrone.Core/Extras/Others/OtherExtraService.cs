@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Extras.Others
             return movedFiles;
         }
 
-        public override bool HandleFileImport(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly)
+        public override bool CanImportFile(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly)
         {
             return true;
         }
@@ -84,15 +84,11 @@ namespace NzbDrone.Core.Extras.Others
         public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
         {
             var importedFiles = new List<ExtraFile>();
-
-            var filteredFiles = files.Where(f => HandleFileImport(localEpisode, episodeFile, f, Path.GetExtension(f), isReadOnly)).ToList();
-
+            var filteredFiles = files.Where(f => CanImportFile(localEpisode, episodeFile, f, Path.GetExtension(f), isReadOnly)).ToList();
             var sourcePath = localEpisode.Path;
             var sourceFolder = _diskProvider.GetParentFolder(sourcePath);
             var sourceFileName = Path.GetFileNameWithoutExtension(sourcePath);
-
             var matchingFiles = new List<string>();
-
             var hasNfo = false;
 
             foreach (var file in filteredFiles)

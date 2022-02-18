@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Extras.Metadata
             return movedFiles;
         }
 
-        public override bool HandleFileImport(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly)
+        public override bool CanImportFile(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly)
         {
             return false;
         }

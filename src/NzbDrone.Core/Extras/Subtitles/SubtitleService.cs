@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             return movedFiles;
         }
 
-        public override bool HandleFileImport(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly)
+        public override bool CanImportFile(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly)
         {
             return SubtitleFileExtensions.Extensions.Contains(extension.ToLowerInvariant());
         }
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Extras.Subtitles
         {
             var importedFiles = new List<SubtitleFile>();
 
-            var filteredFiles = files.Where(f => HandleFileImport(localEpisode, episodeFile, f, Path.GetExtension(f), isReadOnly)).ToList();
+            var filteredFiles = files.Where(f => CanImportFile(localEpisode, episodeFile, f, Path.GetExtension(f), isReadOnly)).ToList();
 
             var sourcePath = localEpisode.Path;
             var sourceFolder = _diskProvider.GetParentFolder(sourcePath);
@@ -145,11 +145,10 @@ namespace NzbDrone.Core.Extras.Subtitles
             // Use any sub if only episode in folder
             if (matchingFiles.Count == 0 && filteredFiles.Count > 0)
             {
-
                 var videoFiles = _diskProvider.GetFiles(sourceFolder, SearchOption.AllDirectories)
                                               .Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file)))
                                               .ToList();
-                
+
                 if (videoFiles.Count() > 2)
                 {
                     return importedFiles;
@@ -175,7 +174,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                     _logger.Warn("Imported any available subtitle file for episode: {0}", localEpisode);
                 }
             }
-            
+
             var subtitleFiles = new List<Tuple<string, Language, string>>();
 
             foreach (string file in matchingFiles)
