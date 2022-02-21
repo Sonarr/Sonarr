@@ -23,6 +23,11 @@ const columns = [
     isVisible: true
   },
   {
+    name: 'size',
+    label: 'Size',
+    isVisible: true
+  },
+  {
     name: 'time',
     label: 'Time',
     isVisible: true
@@ -122,6 +127,7 @@ class Backups extends Component {
                         type,
                         name,
                         path,
+                        size,
                         time
                       } = item;
 
@@ -132,6 +138,7 @@ class Backups extends Component {
                           type={type}
                           name={name}
                           path={path}
+                          size={size}
                           time={time}
                           onDeleteBackupPress={onDeleteBackupPress}
                         />

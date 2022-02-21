@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import formatBytes from 'Utilities/Number/formatBytes';
 import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
@@ -64,6 +65,7 @@ class BackupRow extends Component {
       type,
       name,
       path,
+      size,
       time
     } = this.props;
 
@@ -101,6 +103,10 @@ class BackupRow extends Component {
           >
             {name}
           </Link>
+        </TableRowCell>
+
+        <TableRowCell>
+          {formatBytes(size)}
         </TableRowCell>
 
         <RelativeDateCellConnector
@@ -146,6 +152,7 @@ BackupRow.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
+  size: PropTypes.number.isRequired,
   time: PropTypes.string.isRequired,
   onDeleteBackupPress: PropTypes.func.isRequired
 };

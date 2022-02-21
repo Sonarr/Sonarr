@@ -44,6 +44,7 @@ namespace Sonarr.Api.V3.System.Backup
                                            Name = b.Name,
                                            Path = $"/backup/{b.Type.ToString().ToLower()}/{b.Name}",
                                            Type = b.Type,
+                                           Size = b.Size,
                                            Time = b.Time
                                        })
                                        .OrderByDescending(b => b.Time)
