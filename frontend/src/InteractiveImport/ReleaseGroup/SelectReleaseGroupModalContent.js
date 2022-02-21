@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds } from 'Helpers/Props';
+import { inputTypes, kinds, scrollDirections } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -10,6 +10,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import styles from './SelectReleaseGroupModalContent.css';
 
 class SelectReleaseGroupModalContent extends Component {
 
@@ -57,7 +58,10 @@ class SelectReleaseGroupModalContent extends Component {
           Manual Import - Set Release Group
         </ModalHeader>
 
-        <ModalBody>
+        <ModalBody
+          className={styles.modalBody}
+          scrollDirection={scrollDirections.NONE}
+        >
           <Form>
             <FormGroup>
               <FormLabel>Release Group</FormLabel>
@@ -66,6 +70,7 @@ class SelectReleaseGroupModalContent extends Component {
                 type={inputTypes.TEXT}
                 name="releaseGroup"
                 value={releaseGroup}
+                autoFocus={true}
                 onChange={this.onReleaseGroupChange}
               />
             </FormGroup>
