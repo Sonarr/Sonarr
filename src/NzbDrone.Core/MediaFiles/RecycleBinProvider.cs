@@ -95,7 +95,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 try
                 {
-                    _logger.Debug("Creating folder [0]", destinationFolder);
+                    _logger.Debug("Creating folder {0}", destinationFolder);
                     _diskProvider.CreateFolder(destinationFolder);
                 }
                 catch (IOException e)
