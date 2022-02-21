@@ -143,20 +143,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormParameter("urls", torrentUrl);
 
-            if (settings.TvCategory.IsNotNullOrWhiteSpace())
-            {
-                request.AddFormParameter("category", settings.TvCategory);
-            }
-
-            // Note: ForceStart is handled by separate api call
-            if ((QBittorrentState)settings.InitialState == QBittorrentState.Start)
-            {
-                request.AddFormParameter("paused", false);
-            }
-            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
-            {
-                request.AddFormParameter("paused", true);
-            }
+            AddTorrentDownloadFormParameters(request, settings);
 
             if (seedConfiguration != null)
             {
@@ -178,20 +165,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                 .Post()
                                                 .AddFormUpload("torrents", fileName, fileContent);
 
-            if (settings.TvCategory.IsNotNullOrWhiteSpace())
-            {
-                request.AddFormParameter("category", settings.TvCategory);
-            }
-
-            // Note: ForceStart is handled by separate api call
-            if ((QBittorrentState)settings.InitialState == QBittorrentState.Start)
-            {
-                request.AddFormParameter("paused", false);
-            }
-            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
-            {
-                request.AddFormParameter("paused", true);
-            }
+            AddTorrentDownloadFormParameters(request, settings);
 
             if (seedConfiguration != null)
             {
@@ -257,6 +231,34 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             if (seedingTimeLimit != -2 || always)
             {
                 request.AddFormParameter("seedingTimeLimit", seedingTimeLimit);
+            }
+        }
+
+        private void AddTorrentDownloadFormParameters(HttpRequestBuilder request, QBittorrentSettings settings)
+        {
+            if (settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                request.AddFormParameter("category", settings.TvCategory);
+            }
+
+            // Note: ForceStart is handled by separate api call
+            if ((QBittorrentState)settings.InitialState == QBittorrentState.Start)
+            {
+                request.AddFormParameter("paused", false);
+            }
+            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            {
+                request.AddFormParameter("paused", true);
+            }
+
+            if (settings.SequentialOrder)
+            {
+                request.AddFormParameter("sequentialDownload", true);
+            }
+
+            if (settings.FirstAndLast)
+            {
+                request.AddFormParameter("firstLastPiecePrio", true);
             }
         }
 
