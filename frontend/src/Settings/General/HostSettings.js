@@ -36,7 +36,7 @@ function HostSettings(props) {
         <FormInputGroup
           type={inputTypes.TEXT}
           name="bindAddress"
-          helpText="Valid IP4 address or '*' for all interfaces"
+          helpText="Valid IPv4 address or '*' for all interfaces"
           helpTextWarning="Requires restart to take effect"
           onChange={onInputChange}
           {...bindAddress}
