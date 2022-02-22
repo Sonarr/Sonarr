@@ -158,6 +158,8 @@ namespace NzbDrone.Core.Jobs
                     currentDefinition.LastExecution = DateTime.UtcNow;
                 }
 
+                currentDefinition.Priority = defaultTask.Priority;
+
                 _cache.Set(currentDefinition.TypeName, currentDefinition);
                 _scheduledTaskRepository.Upsert(currentDefinition);
             }

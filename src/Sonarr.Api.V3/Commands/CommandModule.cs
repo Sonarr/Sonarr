@@ -21,6 +21,8 @@ namespace Sonarr.Api.V3.Commands
         private readonly Debouncer _debouncer;
         private readonly Dictionary<int, CommandResource> _pendingUpdates;
 
+        private readonly CommandPriorityComparer _commandPriorityComparer = new CommandPriorityComparer();
+
         public CommandModule(IManageCommandQueue commandQueueManager,
                              IBroadcastSignalRMessage signalRBroadcaster,
                              IServiceFactory serviceFactory)
@@ -65,7 +67,10 @@ namespace Sonarr.Api.V3.Commands
 
         private List<CommandResource> GetStartedCommands()
         {
-            return _commandQueueManager.All().ToResource();
+            return _commandQueueManager.All()
+                .OrderBy(c => c.Status, _commandPriorityComparer)
+                .ThenByDescending(c => c.Priority)
+                .ToResource();
         }
 
         private void CancelCommand(int id)
