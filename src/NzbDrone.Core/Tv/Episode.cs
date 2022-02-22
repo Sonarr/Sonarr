@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Tv
         public const string AIR_DATE_FORMAT = "yyyy-MM-dd";
 
         public int SeriesId { get; set; }
+        public int TvdbId { get; set; }
         public int EpisodeFileId { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }

@@ -223,6 +223,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
         private static Episode MapEpisode(EpisodeResource oracleEpisode)
         {
             var episode = new Episode();
+            episode.TvdbId = oracleEpisode.TvdbId;
             episode.Overview = oracleEpisode.Overview;
             episode.SeasonNumber = oracleEpisode.SeasonNumber;
             episode.EpisodeNumber = oracleEpisode.EpisodeNumber;
