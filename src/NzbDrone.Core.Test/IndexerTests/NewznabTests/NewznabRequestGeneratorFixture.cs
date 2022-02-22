@@ -339,5 +339,39 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             pageTier2.Url.Query.Should().NotContain("rid=10");
             pageTier2.Url.Query.Should().Contain("q=");
         }
+
+        [Test]
+        public void should_encode_raw_title()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q" };
+            _capabilities.TextSearchEngine = "raw";
+            _singleEpisodeSearchCriteria.SceneTitles[0] = "Edith & Little";
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+            results.Tiers.Should().Be(1);
+
+            var pageTier = results.GetTier(0).First().First();
+
+            pageTier.Url.Query.Should().Contain("q=Edith%20%26%20Little");
+            pageTier.Url.Query.Should().NotContain(" & ");
+            pageTier.Url.Query.Should().Contain("%26");
+        }
+
+        [Test]
+        public void should_use_clean_title_and_encode()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q" };
+            _capabilities.TextSearchEngine = "sphinx";
+            _singleEpisodeSearchCriteria.SceneTitles[0] = "Edith & Little";
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+            results.Tiers.Should().Be(1);
+
+            var pageTier = results.GetTier(0).First().First();
+
+
+            pageTier.Url.Query.Should().Contain("q=Edith%20and%20Little");
+            pageTier.Url.Query.Should().Contain("and");
+            pageTier.Url.Query.Should().NotContain(" & ");
+            pageTier.Url.Query.Should().NotContain("%26");
+        }
     }
 }
