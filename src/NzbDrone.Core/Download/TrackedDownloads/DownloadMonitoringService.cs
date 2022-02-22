@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         private void QueueRefresh()
         {
-            _manageCommandQueue.Push(new RefreshMonitoredDownloadsCommand());
+            _manageCommandQueue.Push(new RefreshMonitoredDownloadsCommand(), CommandPriority.High);
         }
 
         private void Refresh()
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
                 _trackedDownloadService.UpdateTrackable(trackedDownloads);
                 _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownloads));
-                _manageCommandQueue.Push(new ProcessMonitoredDownloadsCommand());
+                _manageCommandQueue.Push(new ProcessMonitoredDownloadsCommand(), CommandPriority.High);
             }
             finally
             {

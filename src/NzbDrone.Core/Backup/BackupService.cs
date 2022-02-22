@@ -107,6 +107,7 @@ namespace NzbDrone.Core.Backup
                                                                         {
                                                                             Name = Path.GetFileName(b),
                                                                             Type = backupType,
+                                                                            Size = _diskProvider.GetFileSize(b),
                                                                             Time = _diskProvider.FileGetLastWrite(b)
                                                                         }));
                 }

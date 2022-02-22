@@ -271,10 +271,14 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         details.Add(new XElement("displayepisode", episode.AiredBeforeEpisodeNumber ?? -1));
                     }
                     
-                    var uniqueId = new XElement("uniqueid", episode.Id);
-                    uniqueId.SetAttributeValue("type", "sonarr");
-                    uniqueId.SetAttributeValue("default", true);
-                    details.Add(uniqueId);
+                    var tvdbId = new XElement("uniqueid", episode.TvdbId);
+                    tvdbId.SetAttributeValue("type", "tvdb");
+                    tvdbId.SetAttributeValue("default", true);
+                    details.Add(tvdbId);
+
+                    var sonarrId = new XElement("uniqueid", episode.Id);
+                    sonarrId.SetAttributeValue("type", "sonarr");
+                    details.Add(sonarrId);
 
                     if (image == null)
                     {

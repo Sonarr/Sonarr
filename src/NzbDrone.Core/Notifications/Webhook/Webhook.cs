@@ -31,7 +31,8 @@ namespace NzbDrone.Core.Notifications.Webhook
                 Series = new WebhookSeries(message.Series),
                 Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
                 Release = new WebhookRelease(quality, remoteEpisode),
-                DownloadClient = message.DownloadClient,
+                DownloadClient = message.DownloadClientName,
+                DownloadClientType = message.DownloadClientType,
                 DownloadId = message.DownloadId
             };
 
@@ -49,7 +50,8 @@ namespace NzbDrone.Core.Notifications.Webhook
                 Episodes = episodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = new WebhookEpisodeFile(episodeFile),
                 IsUpgrade = message.OldFiles.Any(),
-                DownloadClient = message.DownloadClient,
+                DownloadClient = message.DownloadClientInfo.Name,
+                DownloadClientType = message.DownloadClientInfo.Type,
                 DownloadId = message.DownloadId
             };
 

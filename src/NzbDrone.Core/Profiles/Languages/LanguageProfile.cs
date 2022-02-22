@@ -12,6 +12,11 @@ namespace NzbDrone.Core.Profiles.Languages
         public bool UpgradeAllowed { get; set;  }
         public Language Cutoff { get; set;  }
 
+        public Language FirstAllowedLanguage()
+        {
+            return Languages.First(q => q.Allowed).Language;
+        }
+
         public Language LastAllowedLanguage()
         {
             return Languages.Last(q => q.Allowed).Language;

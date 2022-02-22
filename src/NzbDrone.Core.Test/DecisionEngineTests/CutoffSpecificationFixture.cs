@@ -22,12 +22,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityProfile 
                 { 
                     Cutoff = Quality.Bluray1080p.Id, 
-                    Items = Qualities.QualityFixture.GetDefaultQualities()
+                    Items = Qualities.QualityFixture.GetDefaultQualities(),
+                    UpgradeAllowed = true
                 },
                 new LanguageProfile
                 {
                     Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English
+                    Cutoff = Language.English,
+                    UpgradeAllowed = true
                 },
                 new QualityModel(Quality.DVD, new Revision(version: 2)),
                 Language.English,
@@ -41,12 +43,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityProfile
                 {
                     Cutoff = Quality.HDTV720p.Id, 
-                    Items = Qualities.QualityFixture.GetDefaultQualities()
+                    Items = Qualities.QualityFixture.GetDefaultQualities(),
+                    UpgradeAllowed = true
                 },
                 new LanguageProfile
                 {
                     Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English
+                    Cutoff = Language.English,
+                    UpgradeAllowed = true
                 },
                 new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
                 Language.English,
@@ -60,12 +64,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityProfile 
                 { 
                     Cutoff = Quality.HDTV720p.Id, 
-                    Items = Qualities.QualityFixture.GetDefaultQualities()
+                    Items = Qualities.QualityFixture.GetDefaultQualities(),
+                    UpgradeAllowed = true
                 },
                 new LanguageProfile
                 {
                     Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English
+                    Cutoff = Language.English,
+                    UpgradeAllowed = true
                 },
                 new QualityModel(Quality.Bluray1080p, new Revision(version: 2)),
                 Language.English,
@@ -79,12 +85,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityProfile 
                 { 
                     Cutoff = Quality.HDTV720p.Id, 
-                    Items = Qualities.QualityFixture.GetDefaultQualities()
+                    Items = Qualities.QualityFixture.GetDefaultQualities(),
+                    UpgradeAllowed = true
                 },
                 new LanguageProfile
                 {
                     Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English
+                    Cutoff = Language.English,
+                    UpgradeAllowed = true
                 },
                 new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
                 Language.English,
@@ -100,12 +108,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new QualityProfile 
                 {
                     Cutoff = Quality.HDTV720p.Id, 
-                    Items = Qualities.QualityFixture.GetDefaultQualities()
+                    Items = Qualities.QualityFixture.GetDefaultQualities(),
+                    UpgradeAllowed = true
                 },
                 new LanguageProfile
                 {
                     Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English
+                    Cutoff = Language.English,
+                    UpgradeAllowed = true
                 },
                 new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
                 Language.English,
@@ -121,13 +131,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 {
                     Cutoff = Quality.HDTV720p.Id,
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
+                    UpgradeAllowed = true
                 };
 
             LanguageProfile _langProfile = new LanguageProfile
                 {
                     Cutoff = Language.Spanish,
-                    Languages = LanguageFixture.GetDefaultLanguages()
-                };
+                    Languages = LanguageFixture.GetDefaultLanguages(),
+                    UpgradeAllowed = true
+            };
             
             Subject.CutoffNotMet(_profile,
                 _langProfile,
@@ -145,12 +157,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
             };
 
             LanguageProfile _langProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = LanguageFixture.GetDefaultLanguages()
+                Languages = LanguageFixture.GetDefaultLanguages(),
+                UpgradeAllowed = true
             };
 
             Subject.CutoffNotMet(
@@ -170,12 +184,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
             };
 
             LanguageProfile _langProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = LanguageFixture.GetDefaultLanguages()
+                Languages = LanguageFixture.GetDefaultLanguages(),
+                UpgradeAllowed = true
             };
 
             Subject.CutoffNotMet(
@@ -195,12 +211,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
             };
 
             LanguageProfile _langProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = LanguageFixture.GetDefaultLanguages()
+                Languages = LanguageFixture.GetDefaultLanguages(),
+                UpgradeAllowed = true
             };
 
             Subject.CutoffNotMet(
@@ -220,12 +238,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             {
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true
             };
 
             LanguageProfile _langProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = LanguageFixture.GetDefaultLanguages()
+                Languages = LanguageFixture.GetDefaultLanguages(),
+                UpgradeAllowed = true
             };
 
             Subject.CutoffNotMet(
@@ -243,13 +263,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                {
                                    Cutoff = Quality.HDTV720p.Id,
                                    Items = Qualities.QualityFixture.GetDefaultQualities(),
-                               };
+                                   UpgradeAllowed = true
+            };
 
             LanguageProfile _langProfile = new LanguageProfile
                                            {
                                                Cutoff = Language.Spanish,
-                                               Languages = LanguageFixture.GetDefaultLanguages()
-                                           };
+                                               Languages = LanguageFixture.GetDefaultLanguages(),
+                                               UpgradeAllowed = true
+            };
 
             Subject.CutoffNotMet(
                 _profile,
@@ -268,13 +290,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                       {
                                           Cutoff = Quality.HDTV1080p.Id,
                                           Items = Qualities.QualityFixture.GetDefaultQualities(),
-                                      };
+                                          UpgradeAllowed = true
+            };
 
             LanguageProfile _langProfile = new LanguageProfile
                                            {
                                                Cutoff = Language.English,
-                                               Languages = LanguageFixture.GetDefaultLanguages()
-                                           };
+                                               Languages = LanguageFixture.GetDefaultLanguages(),
+                                               UpgradeAllowed = true
+            };
 
             Subject.CutoffNotMet(
                 _profile,
@@ -284,6 +308,60 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 NoPreferredWordScore,
                 new QualityModel(Quality.WEBDL1080p, new Revision(version: 2)),
                 NoPreferredWordScore).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_if_language_profile_does_not_allow_upgrades_but_cutoff_is_set_to_highest_language_and_quality_cutoff_is_met()
+        {
+            QualityProfile _profile = new QualityProfile
+                                      {
+                                          Cutoff = Quality.WEBDL1080p.Id,
+                                          Items = Qualities.QualityFixture.GetDefaultQualities(),
+                                          UpgradeAllowed = true
+                                      };
+
+            LanguageProfile _langProfile = new LanguageProfile
+                                           {
+                                               Cutoff = Language.Arabic,
+                                               Languages = LanguageFixture.GetDefaultLanguages(Language.Spanish, Language.English, Language.Arabic),
+                                               UpgradeAllowed = false
+                                           };
+
+            Subject.CutoffNotMet(
+                _profile,
+                _langProfile,
+                new QualityModel(Quality.WEBDL1080p),
+                Language.English,
+                NoPreferredWordScore,
+                new QualityModel(Quality.Bluray1080p),
+                NoPreferredWordScore).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_quality_profile_does_not_allow_upgrades_but_cutoff_is_set_to_highest_quality_and_language_cutoff_is_met()
+        {
+            QualityProfile _profile = new QualityProfile
+                                      {
+                                          Cutoff = Quality.WEBDL1080p.Id,
+                                          Items = Qualities.QualityFixture.GetDefaultQualities(),
+                                          UpgradeAllowed = false
+                                      };
+
+            LanguageProfile _langProfile = new LanguageProfile
+                                           {
+                                               Cutoff = Language.English,
+                                               Languages = LanguageFixture.GetDefaultLanguages(Language.Spanish, Language.English, Language.Arabic),
+                                               UpgradeAllowed = true
+            };
+
+            Subject.CutoffNotMet(
+                _profile,
+                _langProfile,
+                new QualityModel(Quality.WEBDL1080p),
+                Language.English,
+                NoPreferredWordScore,
+                new QualityModel(Quality.Bluray1080p),
+                NoPreferredWordScore).Should().BeFalse();
         }
     }
 }
