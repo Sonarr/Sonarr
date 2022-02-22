@@ -62,7 +62,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Release_Quality", remoteEpisode.ParsedEpisodeInfo.Quality.Quality.Name);
             environmentVariables.Add("Sonarr_Release_QualityVersion", remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version.ToString());
             environmentVariables.Add("Sonarr_Release_ReleaseGroup", releaseGroup ?? string.Empty);
-            environmentVariables.Add("Sonarr_Download_Client", message.DownloadClient ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientName ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientType ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
 
             ExecuteScript(environmentVariables);
@@ -100,7 +101,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_EpisodeFile_SceneName", episodeFile.SceneName ?? string.Empty);
             environmentVariables.Add("Sonarr_EpisodeFile_SourcePath", sourcePath);
             environmentVariables.Add("Sonarr_EpisodeFile_SourceFolder", Path.GetDirectoryName(sourcePath));
-            environmentVariables.Add("Sonarr_Download_Client", message.DownloadClient ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientInfo?.Name ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientInfo?.Type ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
 
             if (message.OldFiles.Any())

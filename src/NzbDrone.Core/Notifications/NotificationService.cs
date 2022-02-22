@@ -119,7 +119,8 @@ namespace NzbDrone.Core.Notifications
                 Series = message.Episode.Series,
                 Quality = message.Episode.ParsedEpisodeInfo.Quality,
                 Episode = message.Episode,
-                DownloadClient = message.DownloadClient,
+                DownloadClientType = message.DownloadClient,
+                DownloadClientName = message.DownloadClientName,
                 DownloadId = message.DownloadId
             };
 
@@ -152,7 +153,7 @@ namespace NzbDrone.Core.Notifications
                 EpisodeFile = message.ImportedEpisode,
                 OldFiles = message.OldFiles,
                 SourcePath = message.EpisodeInfo.Path,
-                DownloadClient = message.DownloadClientInfo?.Name,
+                DownloadClientInfo = message.DownloadClientInfo,
                 DownloadId = message.DownloadId
             };
 

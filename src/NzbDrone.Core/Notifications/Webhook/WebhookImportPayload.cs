@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public WebhookEpisodeFile EpisodeFile { get; set; }
         public bool IsUpgrade { get; set; }
         public string DownloadClient { get; set; }
+        public string DownloadClientType { get; set; }
         public string DownloadId { get; set; }
         public List<WebhookEpisodeFile> DeletedFiles { get; set; }
     }
