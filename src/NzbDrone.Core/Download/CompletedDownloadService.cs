@@ -93,9 +93,13 @@ namespace NzbDrone.Core.Download
 
                 if (series == null)
                 {
-                    trackedDownload.Warn("Series title mismatch, automatic import is not possible.");
+                    trackedDownload.Warn("Series title mismatch; automatic import is not possible.");
                     return;
                 }
+
+                trackedDownload.Warn("Found matching series via grab history, but release title doesn't match series title. Automatic import is not possible.");
+
+                return;
             }
 
             trackedDownload.State = TrackedDownloadState.ImportPending;
