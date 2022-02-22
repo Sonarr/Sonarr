@@ -416,7 +416,9 @@ class SeriesIndexRow extends Component {
 
             if (name === 'releaseGroups') {
               const joinedReleaseGroups = releaseGroups.join(', ');
-              const truncatedReleaseGroups = releaseGroups.slice(0, 4).join(', ');
+              const truncatedReleaseGroups = releaseGroups.length > 3 ?
+                `${releaseGroups.slice(0, 3).join(', ')}...` :
+                joinedReleaseGroups;
 
               return (
                 <VirtualTableRowCell
