@@ -32,10 +32,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
                 { 403, "2-step authentication code required" },
                 { 404, "Failed to authenticate 2-step authentication code" },
                 { 406, "Enforce to authenticate with 2-factor authentication code" },
-                { 407, "Blocked IP source." },
-                { 408, "Expired password cannot change." },
-                { 409, "Expired password." },
-                { 410, "Password must be changed." }
+                { 407, "Blocked IP source" },
+                { 408, "Expired password cannot change" },
+                { 409, "Expired password" },
+                { 410, "Password must be changed" }
             };
 
             DownloadStationTaskMessages = new Dictionary<int, string>
