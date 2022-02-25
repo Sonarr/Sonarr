@@ -32,7 +32,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
             {
-                scores.Add(_preferredWordService.Calculate(series, episodeFile.SceneName, 0));
+                AddScoreIfApplicable(series, episodeFile.SceneName, scores);
             }
             else
             {
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.MediaFiles
                     var isLast = i == segments.Count - 1;
                     var segment = isLast ? Path.GetFileNameWithoutExtension(segments[i]) : segments[i];
 
-                    scores.Add(_preferredWordService.Calculate(series, segment, 0));
+                    AddScoreIfApplicable(series, segment, scores);
                 }
             }
             else
@@ -60,17 +60,34 @@ namespace NzbDrone.Core.MediaFiles
             // Calculate using RelativePath or Path, but not both
             if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
             {
-                scores.Add(_preferredWordService.Calculate(series, episodeFile.RelativePath, 0));
+                AddScoreIfApplicable(series, episodeFile.RelativePath, scores);
             }
             else if (episodeFile.Path.IsNotNullOrWhiteSpace())
             {
-                scores.Add(_preferredWordService.Calculate(series, episodeFile.Path, 0));
+                AddScoreIfApplicable(series, episodeFile.Path, scores);
             }
 
             // Return the highest score, this will allow media info in file names to be used to improve preferred word scoring.
             // TODO: A full map of preferred words should be de-duped and used to create an aggregated score using the scene name and the file name.
 
             return scores.MaxOrDefault();
+        }
+
+        private void AddScoreIfApplicable(Series series, string title, List<int> scores)
+        {
+            var score = 0;
+            _logger.Trace("Calculating preferred word score for '{0}'", title);
+
+            var matchingPairs = _preferredWordService.GetMatchingPreferredWordsAndScores(series, title, 0);
+
+            // Only add the score if there are matching terms, uncalculated 
+            if (matchingPairs.Any())
+            {
+                score = matchingPairs.Sum(p => p.Value);
+                scores.Add(score);
+            }
+
+            _logger.Trace("Calculated preferred word score for '{0}': {1} ({2} match(es))", title, score, matchingPairs.Count);
         }
     }
 }
