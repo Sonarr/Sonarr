@@ -167,6 +167,11 @@ namespace Sonarr.Http.Authentication
                 return true;
             }
             
+            if (context.Request.IsFavIconRequest())
+            {
+                return true;
+            }
+            
             if (context.Request.IsPingRequest())
             {
                 return true;
