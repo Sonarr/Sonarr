@@ -362,7 +362,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (rawVersion.Equals("develop", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return new NzbDroneValidationFailure("Version", "Sabnzbd develop version, assuming version 2.0.0 or higher.")
+                    return new NzbDroneValidationFailure("Version", "Sabnzbd develop version, assuming version 3.0.0 or higher.")
                     {
                         IsWarning = true,
                         DetailedDescription = "Sonarr may not be able to support new features added to SABnzbd when running develop versions."
