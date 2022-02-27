@@ -79,7 +79,7 @@ class CalendarEvent extends Component {
     const statusStyle = getStatusStyle(hasFile, isDownloading, startTime, endTime, isMonitored);
     const missingAbsoluteNumber = series.seriesType === 'anime' && seasonNumber > 0 && !absoluteEpisodeNumber;
     const season = series.seasons.find((s) => s.seasonNumber === seasonNumber);
-    const seasonStatistics = season.statistics || {};
+    const seasonStatistics = season?.statistics || {};
 
     return (
       <Fragment>
@@ -100,21 +100,21 @@ class CalendarEvent extends Component {
 
             <div className={styles.statusContainer}>
               {
-                unverifiedSceneNumbering ?
-                  <Icon
-                    className={styles.statusIcon}
-                    name={icons.WARNING}
-                    title="Scene number hasn\'t been verified yet."
-                  /> :
-                  null
-              }
-
-              {
                 missingAbsoluteNumber ?
                   <Icon
                     className={styles.statusIcon}
                     name={icons.WARNING}
                     title="Episode does not have an absolute episode number"
+                  /> :
+                  null
+              }
+
+              {
+                unverifiedSceneNumbering && !missingAbsoluteNumber ?
+                  <Icon
+                    className={styles.statusIcon}
+                    name={icons.WARNING}
+                    title="Scene number hasn't been verified yet"
                   /> :
                   null
               }
@@ -255,9 +255,9 @@ CalendarEvent.propTypes = {
   absoluteEpisodeNumber: PropTypes.number,
   airDateUtc: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
+  unverifiedSceneNumbering: PropTypes.bool,
   hasFile: PropTypes.bool.isRequired,
   grabbed: PropTypes.bool,
-  unverifiedSceneNumbering: PropTypes.bool,
   queueItem: PropTypes.object,
   showEpisodeInformation: PropTypes.bool.isRequired,
   showFinaleIcon: PropTypes.bool.isRequired,

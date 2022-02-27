@@ -50,6 +50,7 @@ class AgendaEvent extends Component {
       absoluteEpisodeNumber,
       airDateUtc,
       monitored,
+      unverifiedSceneNumbering,
       hasFile,
       grabbed,
       queueItem,
@@ -70,7 +71,7 @@ class AgendaEvent extends Component {
     const statusStyle = getStatusStyle(hasFile, downloading, startTime, endTime, isMonitored);
     const missingAbsoluteNumber = series.seriesType === 'anime' && seasonNumber > 0 && !absoluteEpisodeNumber;
     const season = series.seasons.find((s) => s.seasonNumber === seasonNumber);
-    const seasonStatistics = season.statistics || {};
+    const seasonStatistics = season?.statistics || {};
 
     return (
       <div>
@@ -129,6 +130,16 @@ class AgendaEvent extends Component {
                   name={icons.WARNING}
                   title="Episode does not have an absolute episode number"
                 />
+            }
+
+            {
+              unverifiedSceneNumbering && !missingAbsoluteNumber ?
+                <Icon
+                  className={styles.statusIcon}
+                  name={icons.WARNING}
+                  title="Scene number hasn't been verified yet"
+                /> :
+                null
             }
 
             {
@@ -237,6 +248,7 @@ AgendaEvent.propTypes = {
   absoluteEpisodeNumber: PropTypes.number,
   airDateUtc: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
+  unverifiedSceneNumbering: PropTypes.bool,
   hasFile: PropTypes.bool.isRequired,
   grabbed: PropTypes.bool,
   queueItem: PropTypes.object,
