@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Parser
                                                                 RegexOptions.Compiled);
 
 
-        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static Language ParseLanguage(string title, bool defaultToEnglish = true)
         {
@@ -124,12 +124,12 @@ namespace NzbDrone.Core.Parser
                 if (languageMatch.Success)
                 {
                     var isoCode = languageMatch.Groups["iso_code"].Value;
-                    var isoLanguage = IsoLanguages.Find(isoCode);
+                    var isoLanguage = IsoLanguages.Find(isoCode.ToLower());
 
                     return isoLanguage?.Language ?? Language.Unknown;
                 }
 
-                foreach (Language language in Enum.GetValues(typeof(Language)))
+                foreach (Language language in Language.All)
                 {
                     if (simpleFilename.EndsWith(language.ToString(), StringComparison.OrdinalIgnoreCase))
                     {

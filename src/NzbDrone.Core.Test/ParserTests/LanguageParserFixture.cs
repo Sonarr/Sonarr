@@ -35,6 +35,22 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().Be(Language.Unknown);
         }
 
+        [TestCase("Series Title - S01E01 - Pilot.en.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.EN.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.eng.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.ENG.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.English.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.english.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.en.cc.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.en.sdh.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.en.forced.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.en.sdh.forced.sub")]
+        public void should_parse_subtitle_language_english(string fileName)
+        {
+            var result = LanguageParser.ParseSubtitleLanguage(fileName);
+            result.Should().Be(Language.English);
+        }
+
         [TestCase("Title.the.Series.2009.S01E14.French.HDTV.XviD-LOL")]
         [TestCase("Title.the.Series.The.1x13.Tueurs.De.Flics.FR.DVDRip.XviD")]
         public void should_parse_language_french(string postTitle)

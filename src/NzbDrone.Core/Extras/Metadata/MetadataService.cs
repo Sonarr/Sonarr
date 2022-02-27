@@ -12,6 +12,7 @@ using NzbDrone.Core.Extras.Files;
 using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.Extras.Others;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Metadata
@@ -202,9 +203,14 @@ namespace NzbDrone.Core.Extras.Metadata
             return movedFiles;
         }
 
-        public override ExtraFile Import(Series series, EpisodeFile episodeFile, string path, string extension, bool readOnly)
+        public override bool CanImportFile(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly)
         {
-            return null;
+            return false;
+        }
+
+        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
+        {
+            return Enumerable.Empty<ExtraFile>();
         }
 
         private List<MetadataFile> GetMetadataFilesForConsumer(IMetadata consumer, List<MetadataFile> seriesMetadata)
