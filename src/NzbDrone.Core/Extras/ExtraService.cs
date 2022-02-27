@@ -62,7 +62,8 @@ namespace NzbDrone.Core.Extras
             }
 
             var wantedExtensions = _configService.ExtraFileExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                                                                     .Select(e => e.Trim(' ', '.').Insert(0, "."))
+                                                                     .Select(e => e.Trim(' ', '.')
+                                                                     .Insert(0, "."))
                                                                      .ToList();
 
             var sourceFolder = _diskProvider.GetParentFolder(localEpisode.Path);
