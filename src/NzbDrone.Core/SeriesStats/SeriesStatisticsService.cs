@@ -43,7 +43,8 @@ namespace NzbDrone.Core.SeriesStats
                                        EpisodeFileCount = seasonStatistics.Sum(s => s.EpisodeFileCount),
                                        EpisodeCount = seasonStatistics.Sum(s => s.EpisodeCount),
                                        TotalEpisodeCount = seasonStatistics.Sum(s => s.TotalEpisodeCount),
-                                       SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk)
+                                       SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk),
+                                       ReleaseGroups = seasonStatistics.SelectMany(s => s.ReleaseGroups).Distinct().ToList()
                                    };
 
             var nextAiring = seasonStatistics.Where(s => s.NextAiring != null)

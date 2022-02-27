@@ -131,6 +131,18 @@ export const filterPredicates = {
     return predicate(item.ratings.value * 10, filterValue);
   },
 
+  releaseGroups: function(item, filterValue, type) {
+    const { statistics = {} } = item;
+
+    const {
+      releaseGroups = []
+    } = statistics;
+
+    const predicate = filterTypePredicates[type];
+
+    return predicate(releaseGroups, filterValue);
+  },
+
   seasonCount: function(item, filterValue, type) {
     const predicate = filterTypePredicates[type];
     const seasonCount = item.statistics ? item.statistics.seasonCount : 0;
@@ -260,6 +272,11 @@ export const filterBuilderProps = [
 
       return tagList.sort(sortByName);
     }
+  },
+  {
+    name: 'releaseGroups',
+    label: 'Release Groups',
+    type: filterBuilderTypes.ARRAY
   },
   {
     name: 'ratings',

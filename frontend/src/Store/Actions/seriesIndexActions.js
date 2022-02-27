@@ -168,6 +168,12 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'releaseGroups',
+      label: 'Release Groups',
+      isSortable: false,
+      isVisible: false
+    },
+    {
       name: 'tags',
       label: 'Tags',
       isSortable: true,

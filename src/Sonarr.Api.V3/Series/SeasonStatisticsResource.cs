@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.SeriesStats;
 
 namespace Sonarr.Api.V3.Series
@@ -11,6 +12,7 @@ namespace Sonarr.Api.V3.Series
         public int EpisodeCount { get; set; }
         public int TotalEpisodeCount { get; set; }
         public long SizeOnDisk { get; set; }
+        public List<string> ReleaseGroups { get; set; }
 
         public decimal PercentOfEpisodes
         {
@@ -36,7 +38,8 @@ namespace Sonarr.Api.V3.Series
                 EpisodeFileCount = model.EpisodeFileCount,
                 EpisodeCount = model.EpisodeCount,
                 TotalEpisodeCount = model.TotalEpisodeCount,
-                SizeOnDisk = model.SizeOnDisk
+                SizeOnDisk = model.SizeOnDisk,
+                ReleaseGroups = model.ReleaseGroups
             };
         }
     }
