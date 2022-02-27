@@ -340,7 +340,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     return null;
                 }
 
-                major = 2;
+                major = 3;
                 minor = 0;
                 patch = 0;
             }
