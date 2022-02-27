@@ -37,6 +37,13 @@
   width: 100px;
 }
 
+.audioLanguages,
+.subtitles {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 165px;
+}
+
 .releaseGroup {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 

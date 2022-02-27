@@ -75,6 +75,16 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'audioLanguages',
+      label: 'Audio Languages',
+      isVisible: false
+    },
+    {
+      name: 'subtitleLanguages',
+      label: 'Subtitle Languages',
+      isVisible: false
+    },
+    {
       name: 'size',
       label: 'Size',
       isVisible: false
