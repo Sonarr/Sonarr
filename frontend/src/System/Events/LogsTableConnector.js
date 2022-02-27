@@ -96,7 +96,14 @@ class LogsTableConnector extends Component {
   }
 
   onClearLogsPress = () => {
-    this.props.executeCommand({ name: commandNames.CLEAR_LOGS });
+    this.props.executeCommand({
+      name: commandNames.CLEAR_LOGS,
+      commandFinished: this.onCommandFinished
+    });
+  }
+
+  onCommandFinished = () => {
+    this.props.gotoLogsFirstPage();
   }
 
   //
