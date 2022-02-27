@@ -13,6 +13,7 @@ namespace Sonarr.Api.V3.Episodes
     public class EpisodeResource : RestResource
     {
         public int SeriesId { get; set; }
+        public int TvdbId { get; set; }
         public int EpisodeFileId { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
@@ -52,6 +53,7 @@ namespace Sonarr.Api.V3.Episodes
                 Id = model.Id,
 
                 SeriesId = model.SeriesId,
+                TvdbId = model.TvdbId,
                 EpisodeFileId = model.EpisodeFileId,
                 SeasonNumber = model.SeasonNumber,
                 EpisodeNumber = model.EpisodeNumber,
