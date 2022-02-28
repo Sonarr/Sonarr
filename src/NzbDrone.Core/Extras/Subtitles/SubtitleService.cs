@@ -68,11 +68,18 @@ namespace NzbDrone.Core.Extras.Subtitles
             var subtitleFiles = _subtitleFileService.GetFilesBySeries(series.Id);
 
             var movedFiles = new List<SubtitleFile>();
+            
+            string GetSubtitleFileIdentifier(SubtitleFile subtitleFile)
+            {
+                var languageTags = LanguageParser.ParseLanguageTags(subtitleFile.RelativePath);
+                return subtitleFile.Language + subtitleFile.Extension +
+                       languageTags.Aggregate(string.Empty, (tags, tag) => tags + tag);
+            }
 
             foreach (var episodeFile in episodeFiles)
             {
                 var groupedExtraFilesForEpisodeFile = subtitleFiles.Where(m => m.EpisodeFileId == episodeFile.Id)
-                                                            .GroupBy(s => s.Language + s.Extension).ToList();
+                                                            .GroupBy(GetSubtitleFileIdentifier).ToList();
 
                 foreach (var group in groupedExtraFilesForEpisodeFile)
                 {
