@@ -132,17 +132,14 @@ namespace NzbDrone.Core.Parser
                 {
                     var isoCode = languageMatch.Groups["iso_code"].Value;
                     var isoLanguage = IsoLanguages.Find(isoCode.ToLower());
-                    var language = isoLanguage?.Language ?? Language.Unknown;
-                    language.Tags = GetLanguageTags(simpleFilename);
 
-                    return language;
+                    return isoLanguage?.Language ?? Language.Unknown;
                 }
 
                 foreach (Language language in Language.All)
                 {
                     if (simpleFilename.EndsWith(language.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        language.Tags = GetLanguageTags(simpleFilename);
                         return language;
                     }
                 }
@@ -155,6 +152,22 @@ namespace NzbDrone.Core.Parser
             }
 
             return Language.Unknown;
+        }
+        
+        public static IEnumerable<string> ParseLanguageTags(string fileName)
+        {
+            try
+            {
+                var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
+                var tagMatches = SubtitleLanguageRegex.Matches(simpleFilename);
+                return from Match tagMatch in tagMatches select tagMatch.Groups["tags"].Value.ToLower();
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex, "Failed parsing language tags from subtitle file: {0}", fileName);
+            }
+
+            return new string[] {};
         }
 
         private static Language RegexLanguage(string title)
@@ -220,12 +233,6 @@ namespace NzbDrone.Core.Parser
                 return Language.Spanish;
 
             return Language.Unknown;
-        }
-
-        private static IEnumerable<string> GetLanguageTags(string fileName)
-        {
-            var tagMatches = SubtitleLanguageRegex.Matches(fileName);
-            return from Match tagMatch in tagMatches select tagMatch.Groups["tags"].Value.ToLower();
         }
     }
 }

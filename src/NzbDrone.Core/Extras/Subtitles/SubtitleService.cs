@@ -81,7 +81,8 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     foreach (var subtitleFile in group)
                     {
-                        var suffix = GetSuffix(subtitleFile.Language, copy, groupCount > 1);
+                        var languageTags = LanguageParser.ParseLanguageTags(subtitleFile.RelativePath);
+                        var suffix = GetSuffix(subtitleFile.Language, copy, languageTags, groupCount > 1);
                         movedFiles.AddIfNotNull(MoveFile(series, episodeFile, subtitleFile, suffix));
 
                         copy++;
@@ -198,7 +199,8 @@ namespace NzbDrone.Core.Extras.Subtitles
                         var path = file.Item1;
                         var language = file.Item2;
                         var extension = file.Item3;
-                        var suffix = GetSuffix(language, copy, groupCount > 1);
+                        var languageTags = LanguageParser.ParseLanguageTags(file.Item1);
+                        var suffix = GetSuffix(language, copy, languageTags, groupCount > 1);
                         var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
                         subtitleFile.Language = language;
 
@@ -219,7 +221,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             return importedFiles;
         }
 
-        private string GetSuffix(Language language, int copy, bool multipleCopies = false)
+        private string GetSuffix(Language language, int copy, IEnumerable<string> languageTags, bool multipleCopies = false)
         {
             var suffixBuilder = new StringBuilder();
 
@@ -235,9 +237,9 @@ namespace NzbDrone.Core.Extras.Subtitles
                 suffixBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
             }
 
-            if (language.Tags.Any())
+            if (languageTags.Any())
             {
-                foreach (var tag in language.Tags)
+                foreach (var tag in languageTags)
                 {
                     suffixBuilder.Append(".");
                     suffixBuilder.Append(tag);
