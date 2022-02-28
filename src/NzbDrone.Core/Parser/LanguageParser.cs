@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Languages;
 
@@ -160,7 +161,8 @@ namespace NzbDrone.Core.Parser
             {
                 var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
                 var tagMatches = SubtitleLanguageRegex.Matches(simpleFilename);
-                return from Match tagMatch in tagMatches select tagMatch.Groups["tags"].Value.ToLower();
+                var languageTags = from Match tagMatch in tagMatches select tagMatch.Groups["tags"].Value.ToLower();
+                return languageTags.Where(tag => !tag.Empty());
             }
             catch (Exception ex)
             {
