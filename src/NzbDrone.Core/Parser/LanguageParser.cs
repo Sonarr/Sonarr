@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -131,14 +132,17 @@ namespace NzbDrone.Core.Parser
                 {
                     var isoCode = languageMatch.Groups["iso_code"].Value;
                     var isoLanguage = IsoLanguages.Find(isoCode.ToLower());
+                    var language = isoLanguage?.Language ?? Language.Unknown;
+                    language.Tags = GetLanguageTags(simpleFilename);
 
-                    return isoLanguage?.Language ?? Language.Unknown;
+                    return language;
                 }
 
                 foreach (Language language in Language.All)
                 {
                     if (simpleFilename.EndsWith(language.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
+                        language.Tags = GetLanguageTags(simpleFilename);
                         return language;
                     }
                 }
@@ -216,6 +220,12 @@ namespace NzbDrone.Core.Parser
                 return Language.Spanish;
 
             return Language.Unknown;
+        }
+
+        private static IEnumerable<string> GetLanguageTags(string fileName)
+        {
+            var tagMatches = SubtitleLanguageRegex.Matches(fileName);
+            return from Match tagMatch in tagMatches select tagMatch.Groups["tags"].Value.ToLower();
         }
     }
 }
