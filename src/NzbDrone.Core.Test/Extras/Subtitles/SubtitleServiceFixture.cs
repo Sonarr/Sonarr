@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.Extras.Subtitles
             {
                 "Series Title - S01E01.1.en.srt",
                 "Series Title - S01E01.2.en.srt",
-                "Series Title - S01E01.3.en.srt",
+                "Series Title - S01E01.en.forced.srt",
                 "Series Title - S01E01.fr.srt",
             };
 

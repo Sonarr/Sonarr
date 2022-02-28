@@ -176,16 +176,18 @@ namespace NzbDrone.Core.Extras.Subtitles
                 }
             }
 
-            var subtitleFiles = new List<Tuple<string, Language, string>>();
+            var subtitleFiles = new List<Tuple<string, Language, string, IEnumerable<string>>>();
 
             foreach (string file in matchingFiles)
             {
                 var language = LanguageParser.ParseSubtitleLanguage(file);
                 var extension = Path.GetExtension(file);
-                subtitleFiles.Add(new Tuple<string, Language, string>(file, language, extension));
+                var languageTags = LanguageParser.ParseLanguageTags(file);
+
+                subtitleFiles.Add(new Tuple<string, Language, string, IEnumerable<string>>(file, language, extension, languageTags));
             }
 
-            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.Item2 + s.Item3).ToList();
+            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.Item2 + s.Item3 + s.Item4.Aggregate(" ", (tags, tag) => tags + tag)).ToList();
 
             foreach (var group in groupedSubtitleFiles)
             {
@@ -199,7 +201,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                         var path = file.Item1;
                         var language = file.Item2;
                         var extension = file.Item3;
-                        var languageTags = LanguageParser.ParseLanguageTags(file.Item1);
+                        var languageTags = file.Item4;
                         var suffix = GetSuffix(language, copy, languageTags, groupCount > 1);
                         var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
                         subtitleFile.Language = language;
