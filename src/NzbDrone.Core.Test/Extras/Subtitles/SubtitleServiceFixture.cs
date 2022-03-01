@@ -126,6 +126,35 @@ namespace NzbDrone.Core.Test.Extras.Subtitles
                 results[i].RelativePath.AsOsAgnostic().PathEquals(Path.Combine("Season 1", expectedOutputs[i]).AsOsAgnostic()).Should().Be(true);
             }
         }
+        
+        [Test]
+        public void should_import_multiple_subtitle_files_per_language_with_tags()
+        {
+            var files = new List<string>
+            {
+                Path.Combine(_episodeFolder, "Series.Title.S01E01.en.forced.cc.srt").AsOsAgnostic(),
+                Path.Combine(_episodeFolder, "Series.Title.S01E01.english.forced.cc.srt").AsOsAgnostic(),
+                Path.Combine(_episodeFolder, "Series.Title.S01E01.en.forced.sdh.srt").AsOsAgnostic(),
+                Path.Combine(_episodeFolder, "Series.Title.S01E01.en.forced.default.srt").AsOsAgnostic(),
+            };
+
+            var expectedOutputs = new string[]
+            {
+                "Series Title - S01E01.1.en.forced.cc.srt",
+                "Series Title - S01E01.2.en.forced.cc.srt",
+                "Series Title - S01E01.en.forced.sdh.srt",
+                "Series Title - S01E01.en.forced.default.srt"
+            };
+
+            var results = Subject.ImportFiles(_localEpisode, _episodeFile, files, true).ToList();
+
+            results.Count().Should().Be(expectedOutputs.Length);
+
+            for (int i = 0; i < expectedOutputs.Length; i++)
+            {
+                results[i].RelativePath.AsOsAgnostic().PathEquals(Path.Combine("Season 1", expectedOutputs[i]).AsOsAgnostic()).Should().Be(true);
+            }
+        }
 
         [Test]
         [TestCase("sub.srt", "Series Title - S01E01.srt")]
