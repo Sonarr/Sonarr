@@ -9,7 +9,6 @@ namespace NzbDrone.Core.Languages
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<string> Tags { get; set; }
 
         public Language()
         {
