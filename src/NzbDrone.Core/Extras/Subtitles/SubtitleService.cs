@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                 subtitleFiles.Add(new Tuple<string, Language, string, IEnumerable<string>>(file, language, extension, languageTags));
             }
 
-            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.Item2 + s.Item3 + s.Item4.Aggregate(" ", (tags, tag) => tags + tag)).ToList();
+            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.Item2 + s.Item3 + s.Item4.Aggregate(string.Empty, (tags, tag) => tags + tag)).ToList();
 
             foreach (var group in groupedSubtitleFiles)
             {
