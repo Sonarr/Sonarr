@@ -80,7 +80,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var matchingPairs = _preferredWordService.GetMatchingPreferredWordsAndScores(series, title, 0);
 
-            // Only add the score if there are matching terms, uncalculated 
+            // Only add the score if there are matching terms 
             if (matchingPairs.Any())
             {
                 score = matchingPairs.Sum(p => p.Value);
