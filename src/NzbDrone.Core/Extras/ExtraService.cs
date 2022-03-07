@@ -61,13 +61,17 @@ namespace NzbDrone.Core.Extras
                 return;
             }
 
+            var folderSearchOption = localEpisode.FolderEpisodeInfo == null
+                ? SearchOption.TopDirectoryOnly
+                : SearchOption.AllDirectories;
+
             var wantedExtensions = _configService.ExtraFileExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                                                                      .Select(e => e.Trim(' ', '.')
                                                                      .Insert(0, "."))
                                                                      .ToList();
 
             var sourceFolder = _diskProvider.GetParentFolder(localEpisode.Path);
-            var files = _diskProvider.GetFiles(sourceFolder, SearchOption.AllDirectories);
+            var files = _diskProvider.GetFiles(sourceFolder, folderSearchOption);
             var managedFiles = _extraFileManagers.Select((i) => new List<string>()).ToArray();
 
             foreach (var file in files)

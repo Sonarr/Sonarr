@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.Extras
                 WithExistingFile(file);
             }
 
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(_episodeFolder, SearchOption.AllDirectories))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(_episodeFolder, It.IsAny<SearchOption>()))
                   .Returns(files.ToArray());
         }
 
@@ -201,6 +201,46 @@ namespace NzbDrone.Core.Test.Extras
 
             _subtitleService.Verify(v => v.ImportFiles(_localEpisode, _episodeFile, new List<string> { nfofile }, true), Times.Never());
             _otherExtraService.Verify(v => v.ImportFiles(_localEpisode, _episodeFile, new List<string> { nfofile }, true), Times.Once());
+        }
+
+        [Test]
+        public void should_search_subtitles_when_importing_from_job_folder()
+        {
+            _localEpisode.FolderEpisodeInfo = new ParsedEpisodeInfo();
+
+            var subtitleFile = Path.Combine(_episodeFolder, "Series.Title.S01E01.en.srt").AsOsAgnostic();
+
+            var files = new List<string> {
+                                             _localEpisode.Path,
+                                             subtitleFile
+                                         };
+
+            WithExistingFiles(files);
+
+            Subject.ImportEpisode(_localEpisode, _episodeFile, true);
+
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.GetFiles(_episodeFolder, SearchOption.AllDirectories), Times.Once);
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.GetFiles(_episodeFolder, SearchOption.TopDirectoryOnly), Times.Never);
+        }
+
+        [Test]
+        public void should_not_search_subtitles_when_not_importing_from_job_folder()
+        {
+            _localEpisode.FolderEpisodeInfo = null;
+
+            var subtitleFile = Path.Combine(_episodeFolder, "Series.Title.S01E01.en.srt").AsOsAgnostic();
+
+            var files = new List<string> {
+                                             _localEpisode.Path,
+                                             subtitleFile
+                                         };
+
+            WithExistingFiles(files);
+
+            Subject.ImportEpisode(_localEpisode, _episodeFile, true);
+
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.GetFiles(_episodeFolder, SearchOption.AllDirectories), Times.Never);
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.GetFiles(_episodeFolder, SearchOption.TopDirectoryOnly), Times.Once);
         }
     }
 }
