@@ -31,7 +31,7 @@ class MoreInfo extends Component {
 
           <DescriptionListItemTitle>Twitter</DescriptionListItemTitle>
           <DescriptionListItemDescription>
-            <Link to="https://sonarr.tv/">@sonarrtv</Link>
+            <Link to="https://twitter.com/sonarrtv">@sonarrtv</Link>
           </DescriptionListItemDescription>
 
           <DescriptionListItemTitle>Discord</DescriptionListItemTitle>
