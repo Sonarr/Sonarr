@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Manager, Popper, Reference } from 'react-popper';
 import classNames from 'classnames';
-import { isMobile as isMobileUtil } from 'Utilities/mobile';
+import { isMobile as isMobileUtil } from 'Utilities/browser';
 import { kinds, tooltipPositions } from 'Helpers/Props';
 import Portal from 'Components/Portal';
 import dimensions from 'Styles/Variables/dimensions';

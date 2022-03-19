@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { isMobile as isMobileUtil } from 'Utilities/mobile';
+import { isMobile, isFirefox } from 'Utilities/browser';
 import { isLocked } from 'Utilities/scrollLock';
 import { scrollDirections } from 'Helpers/Props';
 import OverlayScroller from 'Components/Scroller/OverlayScroller';
@@ -15,7 +15,8 @@ class PageContentBody extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this._isMobile = isMobileUtil();
+    this._isMobile = isMobile();
+    this._isSmallScreenFirefox = isFirefox && window.innerWidth < 768;
   }
 
   //
@@ -41,7 +42,9 @@ class PageContentBody extends Component {
       ...otherProps
     } = this.props;
 
-    const ScrollerComponent = this._isMobile ? Scroller : OverlayScroller;
+    const ScrollerComponent = this._isMobile || this._isSmallScreenFirefox ?
+      Scroller :
+      OverlayScroller;
 
     return (
       <ScrollerComponent

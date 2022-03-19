@@ -10,3 +10,7 @@ export function isMobile() {
 export function isIOS() {
   return mobileDetect.is('iOS');
 }
+
+export function isFirefox() {
+  return window.navigator.userAgent.toLowerCase().indexOf('firefox/') >= 0;
+}
