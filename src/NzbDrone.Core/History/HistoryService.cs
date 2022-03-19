@@ -169,6 +169,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("TvRageId", message.Episode.Release.TvRageId.ToString());
                 history.Data.Add("Protocol", ((int)message.Episode.Release.DownloadProtocol).ToString());
                 history.Data.Add("PreferredWordScore", message.Episode.PreferredWordScore.ToString());
+                history.Data.Add("SeriesMatchType", message.Episode.SeriesMatchType.ToString());
 
                 if (!message.Episode.ParsedEpisodeInfo.ReleaseHash.IsNullOrWhiteSpace())
                 {

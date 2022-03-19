@@ -291,16 +291,15 @@ namespace NzbDrone.Core.Download.Pending
                 // Just in case the series was removed, but wasn't cleaned up yet (housekeeper will clean it up)
                 if (series == null) return null;
 
-
                 release.RemoteEpisode = new RemoteEpisode
                 {
                     Series = series,
+                    SeriesMatchType = release.AdditionalInfo?.SeriesMatchType ?? SeriesMatchType.Unknown,
                     ParsedEpisodeInfo = release.ParsedEpisodeInfo,
                     Release = release.Release
                 };
 
-                RemoteEpisode knownRemoteEpisode;
-                if (knownRemoteEpisodes != null && knownRemoteEpisodes.TryGetValue(release.Release.Title, out knownRemoteEpisode))
+                if (knownRemoteEpisodes != null && knownRemoteEpisodes.TryGetValue(release.Release.Title, out var knownRemoteEpisode))
                 {
                     release.RemoteEpisode.MappedSeasonNumber = knownRemoteEpisode.MappedSeasonNumber;
                     release.RemoteEpisode.Episodes = knownRemoteEpisode.Episodes;
@@ -333,7 +332,11 @@ namespace NzbDrone.Core.Download.Pending
                 Release = decision.RemoteEpisode.Release,
                 Title = decision.RemoteEpisode.Release.Title,
                 Added = DateTime.UtcNow,
-                Reason = reason
+                Reason = reason,
+                AdditionalInfo = new PendingReleaseAdditionalInfo
+                {
+                    SeriesMatchType = decision.RemoteEpisode.SeriesMatchType
+                }
             });
 
             _eventAggregator.PublishEvent(new PendingReleasesUpdatedEvent());

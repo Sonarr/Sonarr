@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Parser.Model
         public bool DownloadAllowed { get; set; }
         public TorrentSeedConfiguration SeedConfiguration { get; set; }
         public int PreferredWordScore { get; set; }
+        public SeriesMatchType SeriesMatchType { get; set; }
 
         public RemoteEpisode()
         {

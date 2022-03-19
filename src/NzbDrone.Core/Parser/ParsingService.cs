@@ -164,7 +164,13 @@ namespace NzbDrone.Core.Parser
 
             if (series == null)
             {
-                series = GetSeries(parsedEpisodeInfo, tvdbId, tvRageId, sceneMapping, searchCriteria);
+                var seriesMatch = FindSeries(parsedEpisodeInfo, tvdbId, tvRageId, sceneMapping, searchCriteria);
+
+                if (seriesMatch != null)
+                {
+                    series = seriesMatch.Series;
+                    remoteEpisode.SeriesMatchType = seriesMatch.MatchType;
+                }
             }
 
             if (series != null)
@@ -328,7 +334,7 @@ namespace NzbDrone.Core.Parser
             return null;
         }
 
-        private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvdbId, int tvRageId, SceneMapping sceneMapping, SearchCriteriaBase searchCriteria)
+        private FindSeriesResult FindSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvdbId, int tvRageId, SceneMapping sceneMapping, SearchCriteriaBase searchCriteria)
         {
             Series series = null;
 
@@ -336,7 +342,7 @@ namespace NzbDrone.Core.Parser
             {
                 if (searchCriteria != null && searchCriteria.Series.TvdbId == sceneMapping.TvdbId)
                 {
-                    return searchCriteria.Series;
+                    return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Alias);
                 }
 
                 series = _seriesService.FindByTvdbId(sceneMapping.TvdbId);
@@ -347,14 +353,14 @@ namespace NzbDrone.Core.Parser
                     return null;
                 }
 
-                return series;
+                return new FindSeriesResult(series, SeriesMatchType.Alias);
             }
 
             if (searchCriteria != null)
             {
                 if (searchCriteria.Series.CleanTitle == parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle())
                 {
-                    return searchCriteria.Series;
+                    return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Title);
                 }
 
                 if (tvdbId > 0 && tvdbId == searchCriteria.Series.TvdbId)
@@ -366,7 +372,7 @@ namespace NzbDrone.Core.Parser
                            .WriteSentryWarn("TvdbIdMatch", tvdbId.ToString(), parsedEpisodeInfo.SeriesTitle)
                            .Write();
 
-                    return searchCriteria.Series;
+                    return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Id);
                 }
 
                 if (tvRageId > 0 && tvRageId == searchCriteria.Series.TvRageId)
@@ -378,20 +384,28 @@ namespace NzbDrone.Core.Parser
                            .WriteSentryWarn("TvRageIdMatch", tvRageId.ToString(), parsedEpisodeInfo.SeriesTitle)
                            .Write();
 
-                    return searchCriteria.Series;
+                    return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Id);
                 }
             }
 
+            var matchType = SeriesMatchType.Unknown;
             series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+
+            if (series != null)
+            {
+                matchType = SeriesMatchType.Title;
+            }
 
             if (series == null && parsedEpisodeInfo.SeriesTitleInfo.AllTitles != null)
             {
                 series = GetSeriesByAllTitles(parsedEpisodeInfo);
+                matchType = SeriesMatchType.Title;
             }
 
             if (series == null && parsedEpisodeInfo.SeriesTitleInfo.Year > 0)
             {
                 series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, parsedEpisodeInfo.SeriesTitleInfo.Year);
+                matchType = SeriesMatchType.Title;
             }
 
             if (series == null && tvdbId > 0)
@@ -406,6 +420,8 @@ namespace NzbDrone.Core.Parser
                            .Property("ParsedEpisodeInfo", parsedEpisodeInfo)
                            .WriteSentryWarn("TvdbIdMatch", tvdbId.ToString(), parsedEpisodeInfo.SeriesTitle)
                            .Write();
+
+                    matchType = SeriesMatchType.Id;
                 }
             }
 
@@ -421,6 +437,8 @@ namespace NzbDrone.Core.Parser
                            .Property("ParsedEpisodeInfo", parsedEpisodeInfo)
                            .WriteSentryWarn("TvRageIdMatch", tvRageId.ToString(), parsedEpisodeInfo.SeriesTitle)
                            .Write();
+
+                    matchType = SeriesMatchType.Id;
                 }
             }
 
@@ -430,7 +448,7 @@ namespace NzbDrone.Core.Parser
                 return null;
             }
 
-            return series;
+            return new FindSeriesResult(series, matchType);
         }
 
         private Episode GetDailyEpisode(Series series, string airDate, int? part, SearchCriteriaBase searchCriteria)

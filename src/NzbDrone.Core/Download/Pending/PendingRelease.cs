@@ -12,8 +12,14 @@ namespace NzbDrone.Core.Download.Pending
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
         public ReleaseInfo Release { get; set; }
         public PendingReleaseReason Reason { get; set; }
+        public PendingReleaseAdditionalInfo AdditionalInfo { get; set; }
 
         //Not persisted
         public RemoteEpisode RemoteEpisode { get; set; }
+    }
+
+    public class PendingReleaseAdditionalInfo
+    {
+        public SeriesMatchType SeriesMatchType { get; set; }
     }
 }

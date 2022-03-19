@@ -13,6 +13,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
@@ -97,9 +98,13 @@ namespace NzbDrone.Core.Download
                     return;
                 }
 
-                trackedDownload.Warn("Found matching series via grab history, but release title doesn't match series title. Automatic import is not possible.");
+                Enum.TryParse(historyItem.Data.GetValueOrDefault(EpisodeHistory.SERIES_MATCH_TYPE, SeriesMatchType.Unknown.ToString()), out SeriesMatchType seriesMatchType);
 
-                return;
+                if (seriesMatchType == SeriesMatchType.Id)
+                {
+                    trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible.");
+                    return;
+                }
             }
 
             trackedDownload.State = TrackedDownloadState.ImportPending;
