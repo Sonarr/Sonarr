@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var pages = results.GetTier(0).Take(2).Select(t => t.First()).ToList();
 
             pages[0].Url.FullUri.Should().Contain("q=Monkey%20Island+100");
-            pages[1].Url.FullUri.Should().Contain("q=Monkey%20Island+s05e04");
+            pages[1].Url.FullUri.Should().Contain("q=Monkey%20Island&season=5&ep=4");
         }
 
         [Test]
