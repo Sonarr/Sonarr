@@ -83,6 +83,11 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'sourceTitle',
+      label: 'Source Title',
+      isVisible: false
+    },
+    {
       name: 'preferredWordScore',
       columnLabel: 'Preferred Word Score',
       label: React.createElement(Icon, {
