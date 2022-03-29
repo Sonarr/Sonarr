@@ -22,11 +22,5 @@ namespace NzbDrone.Api.Metadata
 
             definition.Enable = resource.Enable;
         }
-
-        protected override void Validate(MetadataDefinition definition, bool includeWarnings)
-        {
-            if (!definition.Enable) return;
-            base.Validate(definition, includeWarnings);
-        }
     }
 }

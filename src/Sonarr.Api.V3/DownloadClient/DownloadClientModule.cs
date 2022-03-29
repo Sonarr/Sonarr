@@ -10,11 +10,5 @@ namespace Sonarr.Api.V3.DownloadClient
             : base(downloadClientFactory, "downloadclient", ResourceMapper)
         {
         }
-
-        protected override void Validate(DownloadClientDefinition definition, bool includeWarnings)
-        {
-            if (!definition.Enable) return;
-            base.Validate(definition, includeWarnings);
-        }
     }
 }

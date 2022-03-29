@@ -70,7 +70,7 @@ namespace Sonarr.Api.V3
 
         private int CreateProvider(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, false);
+            var providerDefinition = GetDefinition(providerResource, true, false, false);
 
             if (providerDefinition.Enable)
             {
@@ -84,7 +84,7 @@ namespace Sonarr.Api.V3
 
         private void UpdateProvider(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, false);
+            var providerDefinition = GetDefinition(providerResource, true, false, false);
             var forceSave = Request.GetBooleanQueryParameter("forceSave");
 
             // Only test existing definitions if it is enabled and forceSave isn't set.
@@ -96,11 +96,11 @@ namespace Sonarr.Api.V3
             _providerFactory.Update(providerDefinition);
         }
 
-        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool includeWarnings = false, bool validate = true)
+        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool validate, bool includeWarnings, bool forceValidate)
         {
             var definition = _resourceMapper.ToModel(providerResource);
 
-            if (validate)
+            if (validate && (definition.Enable || forceValidate))
             {
                 Validate(definition, includeWarnings);
             }
@@ -139,7 +139,7 @@ namespace Sonarr.Api.V3
 
         private object Test(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, true);
+            var providerDefinition = GetDefinition(providerResource, true, true, true);
 
             Test(providerDefinition, true);
 
@@ -155,13 +155,16 @@ namespace Sonarr.Api.V3
 
             foreach (var definition in providerDefinitions)
             {
-                var validationResult = _providerFactory.Test(definition);
+                var validationFailures = new List<ValidationFailure>();
+
+                validationFailures.AddRange(definition.Settings.Validate().Errors);
+                validationFailures.AddRange(_providerFactory.Test(definition).Errors);
 
                 result.Add(new ProviderTestAllResult
                            {
                                Id = definition.Id,
-                               ValidationFailures = validationResult.Errors.ToList()
-                           });
+                               ValidationFailures = validationFailures
+                });
             }
 
             return ResponseWithCode(result, result.Any(c => !c.IsValid) ? HttpStatusCode.BadRequest : HttpStatusCode.OK);
@@ -169,7 +172,7 @@ namespace Sonarr.Api.V3
 
         private object RequestAction(string action, TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, true, false);
+            var providerDefinition = GetDefinition(providerResource, false, false, false);
 
             var query = ((IDictionary<string, object>)Request.Query.ToDictionary()).ToDictionary(k => k.Key, k => k.Value.ToString());
 
@@ -179,7 +182,7 @@ namespace Sonarr.Api.V3
             return resp;
         }
 
-        protected virtual void Validate(TProviderDefinition definition, bool includeWarnings)
+        private void Validate(TProviderDefinition definition, bool includeWarnings)
         {
             var validationResult = definition.Settings.Validate();
 

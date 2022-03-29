@@ -30,11 +30,5 @@ namespace NzbDrone.Api.DownloadClient
             definition.RemoveCompletedDownloads = resource.RemoveCompletedDownloads;
             definition.RemoveFailedDownloads = resource.RemoveFailedDownloads;
         }
-
-        protected override void Validate(DownloadClientDefinition definition, bool includeWarnings)
-        {
-            if (!definition.Enable) return;
-            base.Validate(definition, includeWarnings);
-        }
     }
 }

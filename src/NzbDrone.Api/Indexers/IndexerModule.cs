@@ -30,11 +30,5 @@ namespace NzbDrone.Api.Indexers
             definition.EnableInteractiveSearch = resource.EnableSearch;
             definition.Priority = resource.Priority;
         }
-
-        protected override void Validate(IndexerDefinition definition, bool includeWarnings)
-        {
-            if (!definition.Enable) return;
-            base.Validate(definition, includeWarnings);
-        }
     }
 }

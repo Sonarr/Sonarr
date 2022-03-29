@@ -38,11 +38,5 @@ namespace NzbDrone.Api.Notifications
             definition.SupportsOnRename = resource.SupportsOnRename;
             definition.Tags = resource.Tags;
         }
-
-        protected override void Validate(NotificationDefinition definition, bool includeWarnings)
-        {
-            if (!definition.OnGrab && !definition.OnDownload) return;
-            base.Validate(definition, includeWarnings);
-        }
     }
 }

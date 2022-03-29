@@ -21,14 +21,5 @@ namespace Sonarr.Api.V3.ImportLists
             SharedValidator.RuleFor(c => c.QualityProfileId).SetValidator(profileExistsValidator);
             SharedValidator.RuleFor(c => c.LanguageProfileId).SetValidator(languageProfileExistsValidator);
         }
-
-        protected override void Validate(ImportListDefinition definition, bool includeWarnings)
-        {
-            if (!definition.Enable)
-            {
-                return;
-            }
-            base.Validate(definition, includeWarnings);
-        }
     }
 }

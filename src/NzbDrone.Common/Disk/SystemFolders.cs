@@ -24,7 +24,8 @@ namespace NzbDrone.Common.Disk
                        "/boot",
                        "/lib",
                        "/sbin",
-                       "/proc"
+                       "/proc",
+                       "/usr/bin"
                    };
         }
     }

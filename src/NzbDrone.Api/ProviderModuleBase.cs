@@ -74,7 +74,7 @@ namespace NzbDrone.Api
 
         private int CreateProvider(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, false);
+            var providerDefinition = GetDefinition(providerResource, true, false, false);
 
             if (providerDefinition.Enable)
             {
@@ -88,18 +88,18 @@ namespace NzbDrone.Api
 
         private void UpdateProvider(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, false);
+            var providerDefinition = GetDefinition(providerResource, true, false, false);
 
             _providerFactory.Update(providerDefinition);
         }
 
-        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool includeWarnings = false, bool validate = true)
+        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool validate, bool includeWarnings, bool forceValidate)
         {
             var definition = new TProviderDefinition();
 
             MapToModel(definition, providerResource);
 
-            if (validate)
+            if (validate && (definition.Enable || forceValidate))
             {
                 Validate(definition, includeWarnings);
             }
@@ -170,19 +170,16 @@ namespace NzbDrone.Api
 
         private object Test(TProviderResource providerResource)
         {
-            // Don't validate when getting the definition so we can validate afterwards (avoids validation being skipped because the provider is disabled)
-            var providerDefinition = GetDefinition(providerResource, true, false);
+            var providerDefinition = GetDefinition(providerResource, true, true, true);
 
-            Validate(providerDefinition, true);
             Test(providerDefinition, true);
 
             return "{}";
         }
 
-
         private object RequestAction(string action, TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, true, false);
+            var providerDefinition = GetDefinition(providerResource, false, false, false);
 
             var query = ((IDictionary<string, object>)Request.Query.ToDictionary()).ToDictionary(k => k.Key, k => k.Value.ToString());
 
@@ -192,7 +189,7 @@ namespace NzbDrone.Api
             return resp;
         }
 
-        protected virtual void Validate(TProviderDefinition definition, bool includeWarnings)
+        private void Validate(TProviderDefinition definition, bool includeWarnings)
         {
             var validationResult = definition.Settings.Validate();
 
