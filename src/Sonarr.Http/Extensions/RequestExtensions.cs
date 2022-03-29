@@ -10,22 +10,22 @@ namespace Sonarr.Http.Extensions
     {
         public static bool IsApiRequest(this Request request)
         {
-            return request.Path.StartsWith("/api/", StringComparison.InvariantCultureIgnoreCase);
+            return request.Path.CleanRequestPath().StartsWith("/api/", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsFeedRequest(this Request request)
         {
-            return request.Path.StartsWith("/feed/", StringComparison.InvariantCultureIgnoreCase);
+            return request.Path.CleanRequestPath().StartsWith("/feed/", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsPingRequest(this Request request)
         {
-            return request.Path.StartsWith("/ping", StringComparison.InvariantCultureIgnoreCase);
+            return request.Path.CleanRequestPath().StartsWith("/ping", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsSignalRRequest(this Request request)
         {
-            return request.Path.StartsWith("/signalr/", StringComparison.InvariantCultureIgnoreCase);
+            return request.Path.CleanRequestPath().StartsWith("/signalr/", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsLocalRequest(this Request request)
@@ -37,28 +37,28 @@ namespace Sonarr.Http.Extensions
 
         public static bool IsLoginRequest(this Request request)
         {
-            return request.Path.Equals("/login", StringComparison.InvariantCultureIgnoreCase);
+            return request.Path.CleanRequestPath().Equals("/login", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsContentRequest(this Request request)
         {
-            return request.Path.StartsWith("/Content/", StringComparison.InvariantCultureIgnoreCase);
+            return request.Path.CleanRequestPath().StartsWith("/Content/", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsBundledJsRequest(this Request request)
         {
-            return !request.Path.EqualsIgnoreCase("/initialize.js") && request.Path.EndsWith(".js", StringComparison.InvariantCultureIgnoreCase);
+            return !request.Path.CleanRequestPath().EqualsIgnoreCase("/initialize.js") && request.Path.EndsWith(".js", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsFavIconRequest(this Request request)
         {
-            return request.Path.EqualsIgnoreCase("/favicon.ico");
+            return request.Path.CleanRequestPath().EqualsIgnoreCase("/favicon.ico");
         }
 
         public static bool IsSharedContentRequest(this Request request)
         {
-            return request.Path.StartsWith("/MediaCover/", StringComparison.InvariantCultureIgnoreCase) ||
-                   request.Path.StartsWith("/Content/Images/", StringComparison.InvariantCultureIgnoreCase);
+            return request.Path.CleanRequestPath().StartsWith("/MediaCover/", StringComparison.InvariantCultureIgnoreCase) ||
+                   request.Path.CleanRequestPath().StartsWith("/Content/Images/", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool GetBooleanQueryParameter(this Request request, string parameter, bool defaultValue = false)
@@ -138,6 +138,14 @@ namespace Sonarr.Http.Extensions
             }
 
             return remoteAddress;
+        }
+
+        private static string CleanRequestPath(this string path)
+        {
+            // When running under mono the path is not stripped of extraneous leading slashes which can break our IXRequest
+            // path detection, this will remove all leading slashes and replace them with a single slash.
+
+            return $"/{path.TrimStart('/')}";
         }
     }
 }
