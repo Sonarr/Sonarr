@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Organizer
 
             if (!namingConfig.RenameEpisodes)
             {
-                return GetOriginalTitle(episodeFile) + extension;
+                return GetOriginalTitle(episodeFile, false) + extension;
             }
 
             if (namingConfig.StandardEpisodeFormat.IsNullOrWhiteSpace() && series.SeriesType == SeriesTypes.Standard)
@@ -148,6 +148,8 @@ namespace NzbDrone.Core.Organizer
             {
                 var splitPattern = splitPatterns[i];
                 var tokenHandlers = new Dictionary<string, Func<TokenMatch, string>>(FileNameBuilderTokenEqualityComparer.Instance);
+                var multipleTokens = TitleRegex.Matches(splitPattern).Count > 1;
+
                 splitPattern = AddSeasonEpisodeNumberingTokens(splitPattern, tokenHandlers, episodes, namingConfig);
                 splitPattern = AddAbsoluteNumberingTokens(splitPattern, tokenHandlers, series, episodes, namingConfig);
 
@@ -157,7 +159,7 @@ namespace NzbDrone.Core.Organizer
                 AddIdTokens(tokenHandlers, series);
                 AddEpisodeTokens(tokenHandlers, episodes);
                 AddEpisodeTitlePlaceholderTokens(tokenHandlers);
-                AddEpisodeFileTokens(tokenHandlers, episodeFile);
+                AddEpisodeFileTokens(tokenHandlers, episodeFile, multipleTokens);
                 AddQualityTokens(tokenHandlers, series, episodeFile);
                 AddMediaInfoTokens(tokenHandlers, episodeFile);
                 AddPreferredWords(tokenHandlers, series, episodeFile, preferredWords);
@@ -583,10 +585,10 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Episode CleanTitle}"] = m => GetEpisodeTitle(GetEpisodeTitles(episodes).Select(CleanTitle).ToList(), "and", maxLength);
         }
 
-        private void AddEpisodeFileTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)
+        private void AddEpisodeFileTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile, bool multipleTokens)
         {
-            tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile);
-            tokenHandlers["{Original Filename}"] = m => GetOriginalFileName(episodeFile);
+            tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile, multipleTokens);
+            tokenHandlers["{Original Filename}"] = m => GetOriginalFileName(episodeFile, multipleTokens);
             tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup ?? m.DefaultValue("Sonarr");
         }
 
@@ -1030,18 +1032,23 @@ namespace NzbDrone.Core.Organizer
             return string.Empty;
         }
 
-        private string GetOriginalTitle(EpisodeFile episodeFile)
+        private string GetOriginalTitle(EpisodeFile episodeFile, bool multipleTokens)
         {
             if (episodeFile.SceneName.IsNullOrWhiteSpace())
             {
-                return GetOriginalFileName(episodeFile);
+                return GetOriginalFileName(episodeFile, multipleTokens);
             }
 
             return episodeFile.SceneName;
         }
 
-        private string GetOriginalFileName(EpisodeFile episodeFile)
+        private string GetOriginalFileName(EpisodeFile episodeFile, bool multipleTokens)
         {
+            if (multipleTokens)
+            {
+                return string.Empty;
+            }
+
             if (episodeFile.RelativePath.IsNullOrWhiteSpace())
             {
                 return Path.GetFileNameWithoutExtension(episodeFile.Path);
