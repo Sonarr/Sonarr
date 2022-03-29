@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import { sortDirections } from 'Helpers/Props';
 import { fetchInteractiveImportItems, setInteractiveImportSort, clearInteractiveImport, setInteractiveImportMode } from 'Store/Actions/interactiveImportActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
@@ -29,12 +30,7 @@ function isSameEpisodeFile(file, originalFile) {
     return false;
   }
 
-  const episodeIds = episodes.map((e) => e.id);
-  const originalEpisodeIds = originalFile.episodes ? originalFile.episodes.map((e) => e.id) : [];
-
-  return episodeIds.every((episodeId) => {
-    return originalEpisodeIds.indexOf(episodeId) >= 0;
-  });
+  return !hasDifferentItems(originalFile.episodes, episodes);
 }
 
 function createMapStateToProps() {
