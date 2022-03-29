@@ -23,14 +23,7 @@ namespace Sonarr.Api.V3.Wanted
 
         private PagingResource<EpisodeResource> GetMissingEpisodes(PagingResource<EpisodeResource> pagingResource)
         {
-            var pagingSpec = new PagingSpec<Episode>
-            {
-                Page = pagingResource.Page,
-                PageSize = pagingResource.PageSize,
-                SortKey = pagingResource.SortKey,
-                SortDirection = pagingResource.SortDirection
-            };
-
+            var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>("airDateUtc", SortDirection.Descending);
             var includeSeries = Request.GetBooleanQueryParameter("includeSeries");
             var includeImages = Request.GetBooleanQueryParameter("includeImages");
             var monitoredFilter = pagingResource.Filters.FirstOrDefault(f => f.Key == "monitored");
