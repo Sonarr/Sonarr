@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
 
         public int Code { get; set; }
 
-        public bool SessionError => Code == 105 || Code == 106 || Code == 107;
+        public bool SessionError => Code == 105 || Code == 106 || Code == 107 || Code == 119;
 
         public string GetMessage(DiskStationApi api)
         {
