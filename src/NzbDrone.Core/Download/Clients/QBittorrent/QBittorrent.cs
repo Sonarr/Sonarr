@@ -308,7 +308,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     else if (item.Status == DownloadItemStatus.Completed)
                     {
                         item.Status = DownloadItemStatus.Warning;
-                        item.Message = "Unable to Import. Path matches client base download directory, perhaps 'Keep top-level folder' is disabled for this torrent or 'Torrent Content Layout' is NOT set to Original or Create Subfolder?";
+                        item.Message = "Unable to Import. Path matches client base download directory, it's possible 'Keep top-level folder' is disabled for this torrent or 'Torrent Content Layout' is NOT set to 'Original' or 'Create Subfolder'?";
                     }
                 }
 
