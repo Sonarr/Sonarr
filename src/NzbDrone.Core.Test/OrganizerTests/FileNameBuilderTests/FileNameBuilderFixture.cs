@@ -755,19 +755,6 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         [Test]
-        public void should_be_able_to_use_original_filename()
-        {
-            _series.Title = "30 Rock";
-            _namingConfig.StandardEpisodeFormat = "{Series Title} - {Original Filename}";
-
-            _episodeFile.SceneName = "30.Rock.S01E01.xvid-LOL";
-            _episodeFile.RelativePath = "30 Rock - S01E01 - Test";
-
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("30 Rock - 30 Rock - S01E01 - Test");
-        }
-
-        [Test]
         public void should_be_able_to_use_original_filename_only()
         {
             _series.Title = "30 Rock";
