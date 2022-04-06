@@ -1,0 +1,66 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:nyaa="https://nyaa.si/xmlns/nyaa" version="2.0">
+  <channel>
+    <title>Nyaa - Home - Torrent File RSS</title>
+    <description>RSS Feed for Home</description>
+    <link>https://nyaa.si/</link>
+    <atom:link href="https://nyaa.si/?page=rss" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>[Foxy-Subs] Mahouka Koukou no Yuutousei - 08 [720p] [3194D881].mkv</title>
+      <link>https://nyaa.si/download/1424896.torrent</link>
+      <guid isPermaLink="true">https://nyaa.si/view/1424896</guid>
+      <pubDate>Tue, 24 Aug 2021 22:18:46 -0000</pubDate>
+      <nyaa:seeders>4</nyaa:seeders>
+      <nyaa:leechers>3</nyaa:leechers>
+      <nyaa:downloads>2</nyaa:downloads>
+      <nyaa:infoHash>e8ca5e20eca876339f41c3d9e95ea66c1d7caaee</nyaa:infoHash>
+      <nyaa:categoryId>1_3</nyaa:categoryId>
+      <nyaa:category>Anime - Non-English-translated</nyaa:category>
+      <nyaa:size>609.6 MiB</nyaa:size>
+      <nyaa:comments>0</nyaa:comments>
+      <nyaa:trusted>No</nyaa:trusted>
+      <nyaa:remake>No</nyaa:remake>
+      <description>
+        <![CDATA[ <a href="https://nyaa.si/view/1424896">#1424896 | [Foxy-Subs] Mahouka Koukou no Yuutousei - 08 [720p] [3194D881].mkv</a> | 609.6 MiB | Anime - Non-English-translated | E8CA5E20ECA876339F41C3D9E95EA66C1D7CAAEE ]]>
+      </description>
+    </item>
+    <item>
+      <title>Macross Zero (BDRip 1920x1080p x265 HEVC TrueHD, FLAC 5.1+2.0)[sxales]</title>
+      <link>https://nyaa.si/download/1424895.torrent</link>
+      <guid isPermaLink="true">https://nyaa.si/view/1424895</guid>
+      <pubDate>Tue, 24 Aug 2021 22:03:11 -0000</pubDate>
+      <nyaa:seeders>23</nyaa:seeders>
+      <nyaa:leechers>32</nyaa:leechers>
+      <nyaa:downloads>17</nyaa:downloads>
+      <nyaa:infoHash>26f37f26d5b3475b41a98dc575fabfa6f8d32a76</nyaa:infoHash>
+      <nyaa:categoryId>1_2</nyaa:categoryId>
+      <nyaa:category>Anime - English-translated</nyaa:category>
+      <nyaa:size>5.7 GiB</nyaa:size>
+      <nyaa:comments>2</nyaa:comments>
+      <nyaa:trusted>No</nyaa:trusted>
+      <nyaa:remake>No</nyaa:remake>
+      <description>
+        <![CDATA[ <a href="https://nyaa.si/view/1424895">#1424895 | Macross Zero (BDRip 1920x1080p x265 HEVC TrueHD, FLAC 5.1+2.0)[sxales]</a> | 5.7 GiB | Anime - English-translated | 26F37F26D5B3475B41A98DC575FABFA6F8D32A76 ]]>
+      </description>
+    </item>
+    <item>
+      <title>Fumetsu no Anata e - 19 [WEBDL 1080p] Ukr DVO</title>
+      <link>https://nyaa.si/download/1424887.torrent</link>
+      <guid isPermaLink="true">https://nyaa.si/view/1424887</guid>
+      <pubDate>Tue, 24 Aug 2021 21:23:06 -0000</pubDate>
+      <nyaa:seeders>5</nyaa:seeders>
+      <nyaa:leechers>4</nyaa:leechers>
+      <nyaa:downloads>4</nyaa:downloads>
+      <nyaa:infoHash>3e4300e24b39983802162877755aab4380bd137a</nyaa:infoHash>
+      <nyaa:categoryId>1_3</nyaa:categoryId>
+      <nyaa:category>Anime - Non-English-translated</nyaa:category>
+      <nyaa:size>1.4 GiB</nyaa:size>
+      <nyaa:comments>0</nyaa:comments>
+      <nyaa:trusted>No</nyaa:trusted>
+      <nyaa:remake>No</nyaa:remake>
+      <description>
+        <![CDATA[ <a href="https://nyaa.si/view/1424887">#1424887 | Fumetsu no Anata e - 19 [WEBDL 1080p] Ukr DVO</a> | 1.4 GiB | Anime - Non-English-translated | 3E4300E24B39983802162877755AAB4380BD137A ]]>
+      </description>
+    </item>
+  </channel>
+</rss>
