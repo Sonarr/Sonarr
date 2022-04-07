@@ -470,8 +470,8 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         private static string NewsnabifyTitle(string title)
         {
-            var newtitle = title.Replace("+", " ");
-            return Uri.EscapeDataString(newtitle);
+            title = title.Replace("+", " ");
+            return Uri.EscapeDataString(title);
         }
 
 

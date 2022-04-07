@@ -343,9 +343,10 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         [Test]
         public void should_encode_raw_title()
         {
-            _capabilities.SupportedTvSearchParameters = new[] { "q" };
-            _capabilities.TextSearchEngine = "raw";
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "season", "ep" };
+            _capabilities.TvTextSearchEngine = "raw";
             _singleEpisodeSearchCriteria.SceneTitles[0] = "Edith & Little";
+
             var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
             results.Tiers.Should().Be(1);
 
@@ -359,14 +360,14 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         [Test]
         public void should_use_clean_title_and_encode()
         {
-            _capabilities.SupportedTvSearchParameters = new[] { "q" };
-            _capabilities.TextSearchEngine = "sphinx";
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "season", "ep" };
+            _capabilities.TvTextSearchEngine = "sphinx";
             _singleEpisodeSearchCriteria.SceneTitles[0] = "Edith & Little";
+
             var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
             results.Tiers.Should().Be(1);
 
             var pageTier = results.GetTier(0).First().First();
-
 
             pageTier.Url.Query.Should().Contain("q=Edith%20and%20Little");
             pageTier.Url.Query.Should().Contain("and");
