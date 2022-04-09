@@ -17,9 +17,7 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {
-    [Platform(Exclude = "Win")]
     [TestFixture]
-
     public class FileNameBuilderFixture : CoreTest<FileNameBuilder>
     {
         private Series _series;
@@ -989,13 +987,13 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         private void GivenMediaInfoModel(string videoCodec = "h264",
-            string audioCodec = "dts",
-            int audioChannels = 6,
-            int videoBitDepth = 8,
-            HdrFormat hdrFormat = HdrFormat.None,
-            string audioLanguages = "eng",
-            string subtitles = "eng/spa/ita",
-            int schemaRevision = 5)
+                                         string audioCodec = "dts",
+                                         int audioChannels = 6,
+                                         int videoBitDepth = 8,
+                                         HdrFormat hdrFormat = HdrFormat.None,
+                                         string audioLanguages = "eng",
+                                         string subtitles = "eng/spa/ita",
+                                         int schemaRevision = 5)
         {
             _episodeFile.MediaInfo = new MediaInfoModel
             {
