@@ -45,6 +45,7 @@ class SelectReleaseGroupModalContent extends Component {
 
   render() {
     const {
+      modalTitle,
       onModalClose
     } = this.props;
 
@@ -55,7 +56,7 @@ class SelectReleaseGroupModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Manual Import - Set Release Group
+          {modalTitle} - Set Release Group
         </ModalHeader>
 
         <ModalBody
@@ -96,6 +97,7 @@ class SelectReleaseGroupModalContent extends Component {
 
 SelectReleaseGroupModalContent.propTypes = {
   releaseGroup: PropTypes.string.isRequired,
+  modalTitle: PropTypes.string.isRequired,
   onReleaseGroupSelect: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

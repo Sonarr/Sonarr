@@ -15,6 +15,7 @@ class SelectSeasonModalContent extends Component {
   render() {
     const {
       items,
+      modalTitle,
       onSeasonSelect,
       onModalClose
     } = this.props;
@@ -22,7 +23,7 @@ class SelectSeasonModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Manual Import - Select Season
+          {modalTitle} - Select Season
         </ModalHeader>
 
         <ModalBody>
@@ -51,6 +52,7 @@ class SelectSeasonModalContent extends Component {
 
 SelectSeasonModalContent.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  modalTitle: PropTypes.string.isRequired,
   onSeasonSelect: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

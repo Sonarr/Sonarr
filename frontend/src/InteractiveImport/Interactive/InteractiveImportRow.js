@@ -215,7 +215,8 @@ class InteractiveImportRow extends Component {
       size,
       rejections,
       isReprocessing,
-      isSelected
+      isSelected,
+      modalTitle
     } = this.props;
 
     const {
@@ -396,6 +397,7 @@ class InteractiveImportRow extends Component {
         <SelectSeriesModal
           isOpen={isSelectSeriesModalOpen}
           ids={[id]}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectSeriesModalClose}
         />
 
@@ -403,6 +405,7 @@ class InteractiveImportRow extends Component {
           isOpen={isSelectSeasonModalOpen}
           ids={[id]}
           seriesId={series && series.id}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectSeasonModalClose}
         />
 
@@ -413,6 +416,7 @@ class InteractiveImportRow extends Component {
           isAnime={isAnime}
           seasonNumber={seasonNumber}
           relativePath={relativePath}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectEpisodeModalClose}
         />
 
@@ -420,6 +424,7 @@ class InteractiveImportRow extends Component {
           isOpen={isSelectReleaseGroupModalOpen}
           ids={[id]}
           releaseGroup={releaseGroup ?? ''}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectReleaseGroupModalClose}
         />
 
@@ -429,6 +434,7 @@ class InteractiveImportRow extends Component {
           qualityId={quality ? quality.quality.id : 0}
           proper={quality ? quality.revision.version > 1 : false}
           real={quality ? quality.revision.real > 0 : false}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectQualityModalClose}
         />
 
@@ -436,6 +442,7 @@ class InteractiveImportRow extends Component {
           isOpen={isSelectLanguageModalOpen}
           ids={[id]}
           languageId={language ? language.id : 0}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectLanguageModalClose}
         />
       </TableRow>
@@ -460,6 +467,7 @@ InteractiveImportRow.propTypes = {
   episodeFileId: PropTypes.number,
   isReprocessing: PropTypes.bool,
   isSelected: PropTypes.bool,
+  modalTitle: PropTypes.string.isRequired,
   onSelectedChange: PropTypes.func.isRequired,
   onValidRowChange: PropTypes.func.isRequired
 };

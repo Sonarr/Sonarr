@@ -37,6 +37,7 @@ class SelectSeriesModalContent extends Component {
   render() {
     const {
       items,
+      modalTitle,
       onSeriesSelect,
       onModalClose
     } = this.props;
@@ -47,7 +48,7 @@ class SelectSeriesModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Manual Import - Select Series
+          {modalTitle} - Select Series
         </ModalHeader>
 
         <ModalBody
@@ -96,6 +97,7 @@ class SelectSeriesModalContent extends Component {
 
 SelectSeriesModalContent.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  modalTitle: PropTypes.string.isRequired,
   onSeriesSelect: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

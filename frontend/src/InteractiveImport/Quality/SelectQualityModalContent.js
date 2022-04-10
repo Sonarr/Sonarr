@@ -61,6 +61,7 @@ class SelectQualityModalContent extends Component {
       isPopulated,
       error,
       items,
+      modalTitle,
       onModalClose
     } = this.props;
 
@@ -80,7 +81,7 @@ class SelectQualityModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Manual Import - Select Quality
+          {modalTitle} - Select Quality
         </ModalHeader>
 
         <ModalBody>
@@ -159,6 +160,7 @@ SelectQualityModalContent.propTypes = {
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  modalTitle: PropTypes.string.isRequired,
   onQualitySelect: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

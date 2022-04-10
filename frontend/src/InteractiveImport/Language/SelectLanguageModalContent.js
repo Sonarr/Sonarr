@@ -19,6 +19,7 @@ function SelectLanguageModalContent(props) {
     isPopulated,
     error,
     items,
+    modalTitle,
     onModalClose,
     onLanguageSelect
   } = props;
@@ -33,7 +34,7 @@ function SelectLanguageModalContent(props) {
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        Manual Import - Select Language
+        {modalTitle} - Select Language
       </ModalHeader>
 
       <ModalBody>
@@ -80,6 +81,7 @@ SelectLanguageModalContent.propTypes = {
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  modalTitle: PropTypes.string.isRequired,
   onLanguageSelect: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

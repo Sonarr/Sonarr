@@ -250,6 +250,7 @@ class InteractiveImportModalContent extends Component {
       importMode,
       interactiveImportErrorMessage,
       isDeleting,
+      modalTitle,
       onSortPress,
       onModalClose
     } = this.props;
@@ -299,7 +300,7 @@ class InteractiveImportModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Manual Import - {title || folder}
+          {modalTitle} - {title || folder}
         </ModalHeader>
 
         <ModalBody scrollDirection={scrollDirections.BOTH}>
@@ -375,6 +376,7 @@ class InteractiveImportModalContent extends Component {
                           allowSeriesChange={allowSeriesChange}
                           autoSelectRow={autoSelectRow}
                           columns={this.state.columns}
+                          modalTitle={modalTitle}
                           onSelectedChange={this.onSelectedChange}
                           onValidRowChange={this.onValidRowChange}
                         />
@@ -452,6 +454,7 @@ class InteractiveImportModalContent extends Component {
         <SelectSeriesModal
           isOpen={selectModalOpen === SERIES}
           ids={selectedIds}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectModalClose}
         />
 
@@ -459,6 +462,7 @@ class InteractiveImportModalContent extends Component {
           isOpen={selectModalOpen === SEASON}
           ids={selectedIds}
           seriesId={selectedItem && selectedItem.series && selectedItem.series.id}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectModalClose}
         />
 
@@ -467,6 +471,7 @@ class InteractiveImportModalContent extends Component {
           ids={orderedSelectedIds}
           seriesId={selectedItem && selectedItem.series && selectedItem.series.id}
           seasonNumber={selectedItem && selectedItem.seasonNumber}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectModalClose}
         />
 
@@ -474,6 +479,7 @@ class InteractiveImportModalContent extends Component {
           isOpen={selectModalOpen === RELEASE_GROUP}
           ids={selectedIds}
           releaseGroup=""
+          modalTitle={modalTitle}
           onModalClose={this.onSelectModalClose}
         />
 
@@ -481,6 +487,7 @@ class InteractiveImportModalContent extends Component {
           isOpen={selectModalOpen === LANGUAGE}
           ids={selectedIds}
           languageId={0}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectModalClose}
         />
 
@@ -490,6 +497,7 @@ class InteractiveImportModalContent extends Component {
           qualityId={0}
           proper={false}
           real={false}
+          modalTitle={modalTitle}
           onModalClose={this.onSelectModalClose}
         />
 
@@ -528,6 +536,7 @@ InteractiveImportModalContent.propTypes = {
   interactiveImportErrorMessage: PropTypes.string,
   isDeleting: PropTypes.bool.isRequired,
   deleteError: PropTypes.object,
+  modalTitle: PropTypes.string.isRequired,
   onSortPress: PropTypes.func.isRequired,
   onFilterExistingFilesChange: PropTypes.func.isRequired,
   onImportModeChange: PropTypes.func.isRequired,

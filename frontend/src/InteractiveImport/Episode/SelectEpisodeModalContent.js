@@ -96,6 +96,7 @@ class SelectEpisodeModalContent extends Component {
       isAnime,
       sortKey,
       sortDirection,
+      modalTitle,
       onSortPress,
       onModalClose
     } = this.props;
@@ -121,7 +122,7 @@ class SelectEpisodeModalContent extends Component {
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
           <div className={styles.header}>
-            Manual Import - Select Episode(s)
+            {modalTitle} - Select Episode(s)
           </div>
 
         </ModalHeader>
@@ -235,6 +236,7 @@ SelectEpisodeModalContent.propTypes = {
   isAnime: PropTypes.bool.isRequired,
   sortKey: PropTypes.string,
   sortDirection: PropTypes.string,
+  modalTitle: PropTypes.string,
   onSortPress: PropTypes.func.isRequired,
   onEpisodesSelect: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired

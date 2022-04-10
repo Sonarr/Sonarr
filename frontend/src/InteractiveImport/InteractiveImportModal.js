@@ -75,7 +75,12 @@ InteractiveImportModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   folder: PropTypes.string,
   downloadId: PropTypes.string,
+  modalTitle: PropTypes.string.isRequired,
   onModalClose: PropTypes.func.isRequired
+};
+
+InteractiveImportModal.defaultProps = {
+  modalTitle: 'Manual Import'
 };
 
 export default InteractiveImportModal;

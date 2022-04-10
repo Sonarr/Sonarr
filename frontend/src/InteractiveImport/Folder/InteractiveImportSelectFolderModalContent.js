@@ -67,6 +67,7 @@ class InteractiveImportSelectFolderModalContent extends Component {
     const {
       recentFolders,
       onRemoveRecentFolderPress,
+      modalTitle,
       onModalClose
     } = this.props;
 
@@ -75,7 +76,7 @@ class InteractiveImportSelectFolderModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Manual Import - Select Folder
+          {modalTitle} - Select Folder
         </ModalHeader>
 
         <ModalBody>
@@ -159,6 +160,7 @@ class InteractiveImportSelectFolderModalContent extends Component {
 
 InteractiveImportSelectFolderModalContent.propTypes = {
   recentFolders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  modalTitle: PropTypes.string.isRequired,
   onQuickImportPress: PropTypes.func.isRequired,
   onInteractiveImportPress: PropTypes.func.isRequired,
   onRemoveRecentFolderPress: PropTypes.func.isRequired,
