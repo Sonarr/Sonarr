@@ -279,7 +279,6 @@ class SeriesDetails extends Component {
             <PageToolbarButton
               label="Manage Episodes"
               iconName={icons.EPISODE_FILE}
-              isDisabled={!hasEpisodeFiles}
               onPress={this.onManageEpisodesPress}
             />
 
