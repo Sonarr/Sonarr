@@ -160,6 +160,7 @@ class DateFilterBuilderRowValue extends Component {
       <TextInput
         name={NAME}
         value={filterValue}
+        type="date"
         placeholder="yyyy-mm-dd"
         onChange={this.onValueChange}
       />
