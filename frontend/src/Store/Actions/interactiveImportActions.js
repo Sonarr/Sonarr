@@ -3,6 +3,7 @@ import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import updateSectionState from 'Utilities/State/updateSectionState';
+import naturalExpansion from 'Utilities/String/naturalExpansion';
 import { createThunk, handleThunks } from 'Store/thunks';
 import { sortDirections } from 'Helpers/Props';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
@@ -38,7 +39,7 @@ export const defaultState = {
     relativePath: function(item, direction) {
       const relativePath = item.relativePath;
 
-      return relativePath.toLowerCase();
+      return naturalExpansion(relativePath.toLowerCase());
     },
 
     series: function(item, direction) {
