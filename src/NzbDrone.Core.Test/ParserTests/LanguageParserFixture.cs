@@ -58,7 +58,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Title.S01.720p.VFF.WEB-DL.AAC2.0.H.264-BTN")]
         [TestCase("Title.S01.720p.VFQ.WEB-DL.AAC2.0.H.264-BTN")]
         [TestCase("Title.S01.720p.TRUEFRENCH.WEB-DL.AAC2.0.H.264-BTN")]
-        [TestCase("Title.S01.720p.VOSTFR.WEB-DL.AAC2.0.H.264-BTN")]
         public void should_parse_language_french(string postTitle)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
