@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Download
 
             var outputPath = trackedDownload.ImportItem.OutputPath.FullPath;
             var importResults = _downloadedEpisodesImportService.ProcessPath(outputPath, ImportMode.Auto,
-                trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
+                trackedDownload.RemoteEpisode.Series, trackedDownload.ImportItem);
 
             if (VerifyImport(trackedDownload, importResults))
             {
