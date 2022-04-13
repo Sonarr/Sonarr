@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Extras.Files
     {
         List<TExtraFile> GetFilesBySeries(int seriesId);
         List<TExtraFile> GetFilesByEpisodeFile(int episodeFileId);
-        TExtraFile FindByPath(string path);
+        TExtraFile FindByPath(int seriesId, string path);
         void Upsert(TExtraFile extraFile);
         void Upsert(List<TExtraFile> extraFiles);
         void Delete(int id);
@@ -59,9 +59,9 @@ namespace NzbDrone.Core.Extras.Files
             return _repository.GetFilesByEpisodeFile(episodeFileId);
         }
 
-        public TExtraFile FindByPath(string path)
+        public TExtraFile FindByPath(int seriesId, string path)
         {
-            return _repository.FindByPath(path);
+            return _repository.FindByPath(seriesId, path);
         }
 
         public void Upsert(TExtraFile extraFile)

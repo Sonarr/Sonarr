@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -45,8 +41,8 @@ namespace NzbDrone.Core.Extras.Others
             }
 
             var relativePath = series.Path.GetRelativePath(path);
+            var otherExtraFile = _otherExtraFileService.FindByPath(series.Id, relativePath);
 
-            var otherExtraFile = _otherExtraFileService.FindByPath(relativePath);
             if (otherExtraFile != null)
             {
                 var newPath = path + "-orig";
@@ -70,8 +66,8 @@ namespace NzbDrone.Core.Extras.Others
             }
 
             var relativePath = series.Path.GetRelativePath(path);
+            var otherExtraFile = _otherExtraFileService.FindByPath(series.Id, relativePath);
 
-            var otherExtraFile = _otherExtraFileService.FindByPath(relativePath);
             if (otherExtraFile != null)
             {
                 var subfolder = Path.GetDirectoryName(relativePath);

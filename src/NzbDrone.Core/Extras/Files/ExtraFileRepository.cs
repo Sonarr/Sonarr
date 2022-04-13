@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Extras.Files
         List<TExtraFile> GetFilesBySeries(int seriesId);
         List<TExtraFile> GetFilesBySeason(int seriesId, int seasonNumber);
         List<TExtraFile> GetFilesByEpisodeFile(int episodeFileId);
-        TExtraFile FindByPath(string path);
+        TExtraFile FindByPath(int seriesId, string path);
     }
 
     public class ExtraFileRepository<TExtraFile> : BasicRepository<TExtraFile>, IExtraFileRepository<TExtraFile>
@@ -54,9 +54,9 @@ namespace NzbDrone.Core.Extras.Files
             return Query.Where(c => c.EpisodeFileId == episodeFileId);
         }
 
-        public TExtraFile FindByPath(string path)
+        public TExtraFile FindByPath(int seriesId, string path)
         {
-            return Query.Where(c => c.RelativePath == path).SingleOrDefault();
+            return Query.Where(c => c.SeriesId == seriesId && c.RelativePath == path).SingleOrDefault();
         }
     }
 }
