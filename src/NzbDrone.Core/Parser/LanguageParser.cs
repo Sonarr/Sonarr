@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -155,21 +156,21 @@ namespace NzbDrone.Core.Parser
             return Language.Unknown;
         }
         
-        public static IEnumerable<string> ParseLanguageTags(string fileName)
+        public static Collection<string> ParseLanguageTags(string fileName)
         {
             try
             {
                 var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
                 var match = SubtitleLanguageRegex.Match(simpleFilename);
                 var languageTags = from Capture tag in match.Groups["tags"].Captures select tag.Value.ToLower();
-                return languageTags.Where(tag => !tag.Empty());
+                return new Collection<string>(languageTags.Where(tag => !tag.Empty()).ToList());
             }
             catch (Exception ex)
             {
                 Logger.Debug(ex, "Failed parsing language tags from subtitle file: {0}", fileName);
             }
 
-            return new string[] {};
+            return new Collection<string>();
         }
 
         private static Language RegexLanguage(string title)
