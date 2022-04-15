@@ -251,8 +251,12 @@ namespace NzbDrone.Core.Extras.Subtitles
                 suffixBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
             }
 
-            suffixBuilder.Append(".");
-            suffixBuilder.Append(languageTags);
+            if (!string.IsNullOrEmpty(languageTags))
+            {
+                suffixBuilder.Append(".");
+                suffixBuilder.Append(languageTags);    
+            }
+
             return suffixBuilder.ToString();
         }
     }
