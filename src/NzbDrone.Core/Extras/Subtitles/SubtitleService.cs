@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                 }
             }
 
-            var subtitleFiles = new List<Tuple<string, Language, string, IEnumerable<string>>>();
+            var subtitleFiles = new List<SubtitleFile>();
 
             foreach (string file in matchingFiles)
             {
@@ -191,10 +191,16 @@ namespace NzbDrone.Core.Extras.Subtitles
                 var extension = Path.GetExtension(file);
                 var languageTags = LanguageParser.ParseLanguageTags(file);
 
-                subtitleFiles.Add(new Tuple<string, Language, string, IEnumerable<string>>(file, language, extension, languageTags));
+                subtitleFiles.Add(new SubtitleFile
+                {
+                    Language = language,
+                    Extension = extension,
+                    Tags = languageTags,
+                    FullPath = file
+                });
             }
 
-            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.Item2 + s.Item3 + s.Item4.Aggregate(string.Empty, (tags, tag) => tags + tag)).ToList();
+            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.AggregateString.Aggregate(string.Empty, (tags, tag) => tags + tag)).ToList();
 
             foreach (var group in groupedSubtitleFiles)
             {
@@ -205,10 +211,10 @@ namespace NzbDrone.Core.Extras.Subtitles
                 {
                     try
                     {
-                        var path = file.Item1;
-                        var language = file.Item2;
-                        var extension = file.Item3;
-                        var languageTags = file.Item4;
+                        var path = file.FullPath;
+                        var language = file.Language;
+                        var extension = file.Extension;
+                        var languageTags = file.Tags;
                         var suffix = GetSuffix(language, copy, languageTags, groupCount > 1);
                         var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
                         subtitleFile.Language = language;
@@ -222,7 +228,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to import subtitle file: {0}", file.Item1);
+                        _logger.Warn(ex, "Failed to import subtitle file: {0}", file.FullPath);
                     }
                 }
             }
