@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Test.Extras.Subtitles
             var files = new List<string>
             {
                 Path.Combine(_episodeFolder, "Series.Title.S01E01.en.forced.cc.srt").AsOsAgnostic(),
-                Path.Combine(_episodeFolder, "Series.Title.S01E01.english.forced.cc.srt").AsOsAgnostic(),
+                Path.Combine(_episodeFolder, "Series.Title.S01E01.other.en.forced.cc.srt").AsOsAgnostic(),
                 Path.Combine(_episodeFolder, "Series.Title.S01E01.en.forced.sdh.srt").AsOsAgnostic(),
                 Path.Combine(_episodeFolder, "Series.Title.S01E01.en.forced.default.srt").AsOsAgnostic(),
             };
