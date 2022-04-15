@@ -13,5 +13,7 @@ namespace NzbDrone.Core.Extras.Subtitles
         public string AggregateString => Language + Extension + TagsString;
 
         public string TagsString => string.Join(".", Tags);
+        
+        public string FullPath { get; set; }
     }
 }
