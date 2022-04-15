@@ -88,8 +88,8 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     foreach (var subtitleFile in group)
                     {
-                        var languageTags = LanguageParser.ParseLanguageTags(subtitleFile.RelativePath);
-                        var suffix = GetSuffix(subtitleFile.Language, copy, languageTags, groupCount > 1);
+                        subtitleFile.Tags = LanguageParser.ParseLanguageTags(subtitleFile.RelativePath);
+                        var suffix = GetSuffix(subtitleFile.Language, copy, subtitleFile.TagsString, groupCount > 1);
                         movedFiles.AddIfNotNull(MoveFile(series, episodeFile, subtitleFile, suffix));
 
                         copy++;
@@ -214,8 +214,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                         var path = file.FullPath;
                         var language = file.Language;
                         var extension = file.Extension;
-                        var languageTags = file.Tags;
-                        var suffix = GetSuffix(language, copy, languageTags, groupCount > 1);
+                        var suffix = GetSuffix(language, copy, file.TagsString, groupCount > 1);
                         var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
                         subtitleFile.Language = language;
 
@@ -236,7 +235,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             return importedFiles;
         }
 
-        private string GetSuffix(Language language, int copy, IEnumerable<string> languageTags, bool multipleCopies = false)
+        private string GetSuffix(Language language, int copy, string languageTags, bool multipleCopies = false)
         {
             var suffixBuilder = new StringBuilder();
 
@@ -252,15 +251,8 @@ namespace NzbDrone.Core.Extras.Subtitles
                 suffixBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
             }
 
-            if (languageTags.Any())
-            {
-                foreach (var tag in languageTags)
-                {
-                    suffixBuilder.Append(".");
-                    suffixBuilder.Append(tag);
-                }
-            }
-
+            suffixBuilder.Append(".");
+            suffixBuilder.Append(languageTags);
             return suffixBuilder.ToString();
         }
     }
