@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.Extras.Subtitles
             var files = new List<string>
             {
                 Path.Combine(_episodeFolder, "Series.Title.S01E01.en.srt").AsOsAgnostic(),
-                Path.Combine(_episodeFolder, "Series.Title.S01E01.english.srt").AsOsAgnostic(),
+                Path.Combine(_episodeFolder, "Series.Title.S01E01.eng.srt").AsOsAgnostic(),
                 Path.Combine(_episodeFolder, "Subs", "Series_Title_S01E01_en_forced.srt").AsOsAgnostic(),
                 Path.Combine(_episodeFolder, "Subs", "Series.Title.S01E01", "2_fr.srt").AsOsAgnostic()
             };
