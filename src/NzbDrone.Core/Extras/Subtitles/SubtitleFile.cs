@@ -17,8 +17,6 @@ namespace NzbDrone.Core.Extras.Subtitles
             LanguageTags = string.Join(".", newTags);
         }
 
-        public IEnumerable<string> TagsEnumerable => LanguageTags.Split('.');
-        
         public string FullPath { get; set; }
     }
 }
