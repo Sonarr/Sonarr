@@ -161,9 +161,10 @@ namespace NzbDrone.Core.Parser
             {
                 var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
                 var match = SubtitleLanguageRegex.Match(simpleFilename);
-                var languageTags = from Capture tag in match.Groups["tags"].Captures select tag.Value.ToLower();
-                var filteredTags = languageTags.Where(tag => !tag.Empty());
-                return filteredTags;
+                var languageTags = from Capture tag in match.Groups["tags"].Captures
+                    where !tag.Value.Empty()
+                    select tag.Value.ToLower();
+                return languageTags;
             }
             catch (Exception ex)
             {
