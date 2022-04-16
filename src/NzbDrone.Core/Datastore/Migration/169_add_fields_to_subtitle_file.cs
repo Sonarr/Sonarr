@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Alter.Table("SubtitleFiles").AddColumn("Tags").AsString().Nullable();
+            Alter.Table("SubtitleFiles").AddColumn("LanguageTags").AsString().Nullable();
             Alter.Table("SubtitleFiles").AddColumn("FullPath").AsString();
         }
     }
