@@ -72,8 +72,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             string GetSubtitleFileIdentifier(SubtitleFile subtitleFile)
             {
                 var languageTags = LanguageParser.ParseLanguageTags(subtitleFile.RelativePath);
-                return subtitleFile.Language + subtitleFile.Extension +
-                       languageTags.Aggregate(string.Empty, (tags, tag) => tags + tag);
+                return subtitleFile.AggregateString.Aggregate(string.Empty, (tags, tag) => tags + tag);
             }
 
             foreach (var episodeFile in episodeFiles)
