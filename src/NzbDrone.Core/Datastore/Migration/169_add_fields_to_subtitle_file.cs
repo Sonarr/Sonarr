@@ -1,0 +1,15 @@
+using FluentMigrator;
+using NzbDrone.Core.Datastore.Migration.Framework;
+
+namespace NzbDrone.Core.Datastore.Migration
+{
+    [Migration(169)]
+    public class add_fields_to_subtitle_file : NzbDroneMigrationBase
+    {
+        protected override void MainDbUpgrade()
+        {
+            Alter.Table("SubtitleFiles").AddColumn("Tags").AsString().Nullable();
+            Alter.Table("SubtitleFiles").AddColumn("FullPath").AsString();
+        }
+    }
+}

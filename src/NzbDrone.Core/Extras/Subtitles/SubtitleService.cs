@@ -68,17 +68,11 @@ namespace NzbDrone.Core.Extras.Subtitles
             var subtitleFiles = _subtitleFileService.GetFilesBySeries(series.Id);
 
             var movedFiles = new List<SubtitleFile>();
-            
-            string GetSubtitleFileIdentifier(SubtitleFile subtitleFile)
-            {
-                var languageTags = LanguageParser.ParseLanguageTags(subtitleFile.RelativePath);
-                return subtitleFile.AggregateString.Aggregate(string.Empty, (tags, tag) => tags + tag);
-            }
 
             foreach (var episodeFile in episodeFiles)
             {
                 var groupedExtraFilesForEpisodeFile = subtitleFiles.Where(m => m.EpisodeFileId == episodeFile.Id)
-                                                            .GroupBy(GetSubtitleFileIdentifier).ToList();
+                                                            .GroupBy(s => s.AggregateString).ToList();
 
                 foreach (var group in groupedExtraFilesForEpisodeFile)
                 {
@@ -87,8 +81,7 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     foreach (var subtitleFile in group)
                     {
-                        subtitleFile.Tags = LanguageParser.ParseLanguageTags(subtitleFile.RelativePath);
-                        var suffix = GetSuffix(subtitleFile.Language, copy, subtitleFile.TagsString, groupCount > 1);
+                        var suffix = GetSuffix(subtitleFile.Language, copy, subtitleFile.Tags, groupCount > 1);
                         movedFiles.AddIfNotNull(MoveFile(series, episodeFile, subtitleFile, suffix));
 
                         copy++;
@@ -189,17 +182,17 @@ namespace NzbDrone.Core.Extras.Subtitles
                 var language = LanguageParser.ParseSubtitleLanguage(file);
                 var extension = Path.GetExtension(file);
                 var languageTags = LanguageParser.ParseLanguageTags(file);
-
-                subtitleFiles.Add(new SubtitleFile
+                var subFile = new SubtitleFile
                 {
                     Language = language,
                     Extension = extension,
-                    Tags = languageTags,
                     FullPath = file
-                });
+                };
+                subFile.SetTags(languageTags);
+                subtitleFiles.Add(subFile);
             }
 
-            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.AggregateString.Aggregate(string.Empty, (tags, tag) => tags + tag)).ToList();
+            var groupedSubtitleFiles = subtitleFiles.GroupBy(s => s.AggregateString).ToList();
 
             foreach (var group in groupedSubtitleFiles)
             {
@@ -213,9 +206,11 @@ namespace NzbDrone.Core.Extras.Subtitles
                         var path = file.FullPath;
                         var language = file.Language;
                         var extension = file.Extension;
-                        var suffix = GetSuffix(language, copy, file.TagsString, groupCount > 1);
+                        var suffix = GetSuffix(language, copy, file.Tags, groupCount > 1);
                         var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
                         subtitleFile.Language = language;
+                        subtitleFile.Tags = file.Tags;
+                        subtitleFile.FullPath = file.FullPath;
 
                         _mediaFileAttributeService.SetFilePermissions(path);
                         _subtitleFileService.Upsert(subtitleFile);

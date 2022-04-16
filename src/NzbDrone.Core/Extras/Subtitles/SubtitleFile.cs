@@ -8,11 +8,16 @@ namespace NzbDrone.Core.Extras.Subtitles
     {
         public Language Language { get; set; }
 
-        public IEnumerable<string> Tags { get; set; }
+        public string AggregateString => Language + Extension + Tags;
 
-        public string AggregateString => Language + Extension + TagsString;
+        public string Tags { get; set; }
 
-        public string TagsString => string.Join(".", Tags);
+        public void SetTags(IEnumerable<string> newTags)
+        {
+            Tags = string.Join(".", newTags);
+        }
+
+        public IEnumerable<string> TagsEnumerable => Tags.Split('.');
         
         public string FullPath { get; set; }
     }
