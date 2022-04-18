@@ -27,7 +27,7 @@ function ConnectionLostModal(props) {
 
         <ModalBody>
           <div>
-            Sonarr has lost it's connection to the backend and will need to be reloaded to restore functionality.
+            Sonarr has lost its connection to the backend and will need to be reloaded to restore functionality.
           </div>
 
           <div className={styles.automatic}>
