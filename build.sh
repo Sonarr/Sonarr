@@ -428,5 +428,5 @@ then
         Package "$FRAMEWORK" "$RID"
     fi
 
-    UploadArtifacts "net6.0"
+    # UploadArtifacts "net6.0"
 fi
