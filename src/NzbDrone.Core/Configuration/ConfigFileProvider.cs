@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Configuration
         public string Branch => GetValue("Branch", "main").ToLowerInvariant();
 
         public string PostgresHost => GetValue("PostgresHost", string.Empty, persist: false);
-        public int PostgresPort => GetValueInt("PostgresPort", 5436, persist: false);
+        public int PostgresPort => GetValueInt("PostgresPort", 5432, persist: false);
         public string PostgresUser => GetValue("PostgresUser", string.Empty, persist: false);
         public string PostgresPassword => GetValue("PostgresPassword", string.Empty, persist: false);
         public string PostgresMainDb => GetValue("PostgresMainDb", "sonarr-main", persist: false);
