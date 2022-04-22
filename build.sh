@@ -23,9 +23,9 @@ UpdateVersionNumber()
 {
     if [ "$SONARRVERSION" != "" ]; then
         echo "Updating Version Info"
-        sed -i'' -e "s/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$SONARRVERSION<\/AssemblyVersion>/g" src/Directory.Build.props
-        sed -i'' -e "s/<AssemblyConfiguration>[\$()A-Za-z-]\+<\/AssemblyConfiguration>/<AssemblyConfiguration>${BUILD_SOURCEBRANCHNAME}<\/AssemblyConfiguration>/g" src/Directory.Build.props
-        sed -i'' -e "s/<string>10.0.0.0<\/string>/<string>$SONARRVERSION<\/string>/g" distribution/macOS/Sonarr.app/Contents/Info.plist
+        sed -i'' -e 's/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$SONARRVERSION<\/AssemblyVersion>/g' src/Directory.Build.props
+        sed -i'' -e 's/<AssemblyConfiguration>[\$()A-Za-z-]\+<\/AssemblyConfiguration>/<AssemblyConfiguration>${BUILD_SOURCEBRANCHNAME}<\/AssemblyConfiguration>/g' src/Directory.Build.props
+        sed -i'' -e 's/<string>10.0.0.0<\/string>/<string>$SONARRVERSION<\/string>/g' distribution/macOS/Sonarr.app/Contents/Info.plist
     fi
 }
 
