@@ -51,20 +51,39 @@ namespace NzbDrone.Core.SeriesStats
         {
             var parameters = new DynamicParameters();
             parameters.Add("currentDate", currentDate, null);
-            return new SqlBuilder(_database.DatabaseType)
-            .Select(@"""Episodes"".""SeriesId"" AS SeriesId,
-                        ""Episodes"".""SeasonNumber"",
-                        SUM(COALESCE(""EpisodeFiles"".""Size"", 0)) AS SizeOnDisk,
-                        string_agg(""EpisodeFiles"".""ReleaseGroup"", '|') AS ReleaseGroupsString,
-                        COUNT(*) AS TotalEpisodeCount,
-                        SUM(CASE WHEN ""AirDateUtc"" <= current_date OR ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS AvailableEpisodeCount,
-                        SUM(CASE WHEN (""Monitored"" = true AND ""AirDateUtc"" <= current_date) OR ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
-                        SUM(CASE WHEN ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
-                        MIN(CASE WHEN ""AirDateUtc"" < current_date OR ""EpisodeFileId"" > 0 OR ""Monitored"" = true THEN NULL ELSE ""AirDateUtc"" END) AS NextAiringString,
-                        MAX(CASE WHEN ""AirDateUtc"" >= current_date OR ""EpisodeFileId"" = 0 AND ""Monitored"" = true THEN NULL ELSE ""AirDateUtc"" END) AS PreviousAiringString", parameters)
+            var builder =  new SqlBuilder(_database.DatabaseType)
             .LeftJoin<Episode, EpisodeFile>((t, f) => t.EpisodeFileId == f.Id)
             .GroupBy<Episode>(x => x.SeriesId)
             .GroupBy<Episode>(x => x.SeasonNumber);
+
+            if (_database.DatabaseType == DatabaseType.PostgreSQL)
+            {
+               return builder.Select(
+                    @"""Episodes"".""SeriesId"" AS SeriesId,
+                    ""Episodes"".""SeasonNumber"",
+                    SUM(COALESCE(""EpisodeFiles"".""Size"", 0)) AS SizeOnDisk,
+                    string_agg(""EpisodeFiles"".""ReleaseGroup"", '|') AS ReleaseGroupsString,
+                    COUNT(*) AS TotalEpisodeCount,
+                    SUM(CASE WHEN ""AirDateUtc"" <= @currentDate OR ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS AvailableEpisodeCount,
+                    SUM(CASE WHEN (""Monitored"" = true AND ""AirDateUtc"" <= @currentDate) OR ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
+                    SUM(CASE WHEN ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
+                    MIN(CASE WHEN ""AirDateUtc"" < @currentDate OR ""EpisodeFileId"" > 0 OR ""Monitored"" = true THEN NULL ELSE ""AirDateUtc"" END) AS NextAiringString,
+                    MAX(CASE WHEN ""AirDateUtc"" >= @currentDate OR ""EpisodeFileId"" = 0 AND ""Monitored"" = true THEN NULL ELSE ""AirDateUtc"" END) AS PreviousAiringString", parameters);
+            }
+            else
+            {
+                return builder.Select(
+                    @"""Episodes"".""SeriesId"" AS SeriesId,
+                    ""Episodes"".""SeasonNumber"",
+                    SUM(COALESCE(""EpisodeFiles"".""Size"", 0)) AS SizeOnDisk,
+                    GROUP_CONCAT(""EpisodeFiles"".""ReleaseGroup"", '|') AS ReleaseGroupsString,
+                    COUNT(*) AS TotalEpisodeCount,
+                    SUM(CASE WHEN ""AirDateUtc"" <= @currentDate OR ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS AvailableEpisodeCount,
+                    SUM(CASE WHEN (""Monitored"" = true AND ""AirDateUtc"" <= @currentDate) OR ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
+                    SUM(CASE WHEN ""EpisodeFileId"" > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
+                    MIN(CASE WHEN ""AirDateUtc"" < @currentDate OR ""EpisodeFileId"" > 0 OR ""Monitored"" = true THEN NULL ELSE ""AirDateUtc"" END) AS NextAiringString,
+                    MAX(CASE WHEN ""AirDateUtc"" >= @currentDate OR ""EpisodeFileId"" = 0 AND ""Monitored"" = true THEN NULL ELSE ""AirDateUtc"" END) AS PreviousAiringString", parameters);
+            }
         }
     }
 }
