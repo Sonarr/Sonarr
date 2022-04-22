@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE Indexers SET Settings = Replace(Settings, 'api.btnapps.net', 'api.broadcasthe.net') WHERE Implementation = 'BroadcastheNet';");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Indexers SET Settings = Replace(Settings, 'api.btnapps.net', 'api.broadcasthe.net') WHERE Implementation = 'BroadcastheNet';");
         }
     }
 

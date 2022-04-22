@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Create.Column("SortTitle").OnTable("Series").AsString().Nullable();
 
-            Execute.WithConnection(SetSortTitles);
+            IfDatabase("sqlite").Execute.WithConnection(SetSortTitles);
         }
 
         private void SetSortTitles(IDbConnection conn, IDbTransaction tran)

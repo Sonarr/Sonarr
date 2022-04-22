@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             //we were storing new file name as scene name.
-            Execute.Sql(@"UPDATE EpisodeFiles SET SceneName = NULL where SceneName != NULL");
+            IfDatabase("sqlite").Execute.Sql(@"UPDATE EpisodeFiles SET SceneName = NULL where SceneName != NULL");
         }
     }
 }

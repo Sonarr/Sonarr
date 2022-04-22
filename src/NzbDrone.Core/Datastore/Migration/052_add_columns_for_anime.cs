@@ -10,11 +10,11 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             //Support XEM names
             Alter.Table("SceneMappings").AddColumn("Type").AsString().Nullable();
-            Execute.Sql("DELETE FROM SceneMappings");
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM SceneMappings");
 
             //Add AnimeEpisodeFormat (set to Stardard Episode format for now)
             Alter.Table("NamingConfig").AddColumn("AnimeEpisodeFormat").AsString().Nullable();
-            Execute.Sql("UPDATE NamingConfig SET AnimeEpisodeFormat = StandardEpisodeFormat");
+            IfDatabase("sqlite").Execute.Sql("UPDATE NamingConfig SET AnimeEpisodeFormat = StandardEpisodeFormat");
         }
     }
 }

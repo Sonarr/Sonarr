@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(ImportExtraFiles);
+            IfDatabase("sqlite").Execute.WithConnection(ImportExtraFiles);
         }
 
         private void ImportExtraFiles(IDbConnection conn, IDbTransaction tran)

@@ -23,12 +23,12 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             using (var mapper = _database.OpenConnection())
             {
-                mapper.Execute(@"DELETE FROM MetadataFiles
-                                     WHERE Id IN (
-                                     SELECT MetadataFiles.Id FROM MetadataFiles
-                                     LEFT OUTER JOIN Series
-                                     ON MetadataFiles.SeriesId = Series.Id
-                                     WHERE Series.Id IS NULL)");
+                mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                     SELECT ""MetadataFiles"".""Id"" FROM ""MetadataFiles""
+                                     LEFT OUTER JOIN ""Series""
+                                     ON ""MetadataFiles"".""SeriesId"" = ""Series"".""Id""
+                                     WHERE ""Series"".""Id"" IS NULL)");
             }
         }
 
@@ -36,13 +36,13 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             using (var mapper = _database.OpenConnection())
             {
-                mapper.Execute(@"DELETE FROM MetadataFiles
-                                     WHERE Id IN (
-                                     SELECT MetadataFiles.Id FROM MetadataFiles
-                                     LEFT OUTER JOIN EpisodeFiles
-                                     ON MetadataFiles.EpisodeFileId = EpisodeFiles.Id
-                                     WHERE MetadataFiles.EpisodeFileId > 0
-                                     AND EpisodeFiles.Id IS NULL)");
+                mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                     SELECT ""MetadataFiles"".""Id"" FROM ""MetadataFiles""
+                                     LEFT OUTER JOIN ""EpisodeFiles""
+                                     ON ""MetadataFiles"".""EpisodeFileId"" = ""EpisodeFiles"".""Id""
+                                     WHERE ""MetadataFiles"".""EpisodeFileId"" > 0
+                                     AND ""EpisodeFiles"".""Id"" IS NULL)");
             }
         }
 
@@ -50,11 +50,11 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             using (var mapper = _database.OpenConnection())
             {
-                mapper.Execute(@"DELETE FROM MetadataFiles
-                                     WHERE Id IN (
-                                     SELECT Id FROM MetadataFiles
-                                     WHERE Type IN (2, 5)
-                                     AND EpisodeFileId = 0)");
+                mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                     SELECT ""Id"" FROM ""MetadataFiles""
+                                     WHERE ""Type"" IN (2, 5)
+                                     AND ""EpisodeFileId"" = 0)");
             }
         }
     }

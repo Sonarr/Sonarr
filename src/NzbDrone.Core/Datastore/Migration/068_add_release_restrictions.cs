@@ -15,8 +15,8 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("Ignored").AsString().Nullable()
                   .WithColumn("Tags").AsString().NotNullable();
 
-            Execute.WithConnection(ConvertRestrictions);
-            Execute.Sql("DELETE FROM Config WHERE [Key] = 'releaserestrictions'");
+            IfDatabase("sqlite").Execute.WithConnection(ConvertRestrictions);
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM Config WHERE [Key] = 'releaserestrictions'");
         }
 
         private void ConvertRestrictions(IDbConnection conn, IDbTransaction tran)

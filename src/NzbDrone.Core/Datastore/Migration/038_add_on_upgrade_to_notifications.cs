@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("Notifications").AddColumn("OnUpgrade").AsBoolean().Nullable();
 
-            Execute.Sql("UPDATE Notifications SET OnUpgrade = OnDownload");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Notifications SET OnUpgrade = OnDownload");
         }
     }
 }

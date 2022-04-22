@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 .Nullable()
                 .Indexed();
 
-            Execute.WithConnection(MoveToColumn);
+            IfDatabase("sqlite").Execute.WithConnection(MoveToColumn);
         }
 
         private void MoveToColumn(IDbConnection conn, IDbTransaction tran)

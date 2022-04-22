@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(MigrateToFfprobe);
+            IfDatabase("sqlite").Execute.WithConnection(MigrateToFfprobe);
         }
 
         private void MigrateToFfprobe(IDbConnection conn, IDbTransaction tran)

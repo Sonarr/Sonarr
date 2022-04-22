@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE Indexers SET Settings = replace(Settings, '//dognzb.cr', '//api.dognzb.cr')" +
+            IfDatabase("sqlite").Execute.Sql("UPDATE Indexers SET Settings = replace(Settings, '//dognzb.cr', '//api.dognzb.cr')" +
                         "WHERE Implementation = 'Newznab'" +
                         "AND Settings LIKE '%//dognzb.cr%'");
         }

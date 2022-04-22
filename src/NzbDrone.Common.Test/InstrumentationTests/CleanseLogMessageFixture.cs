@@ -60,6 +60,7 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         [TestCase(@"OutputPath=/home/mySecret/Downloads")]
         [TestCase("Hardlinking episode file: /home/mySecret/Downloads to /media/abc.mkv")]
         [TestCase("Hardlink '/home/mySecret/Downloads/abs.mkv' to '/media/abc.mkv' failed.")]
+        [TestCase(@"[Info] MigrationController: *** Migrating Database=sonarr-main;Host=postgres14;Username=mySecret;Password=mySecret;Port=5432;Enlist=False ***")]
 
         // Announce URLs (passkeys) Magnet & Tracker
         [TestCase(@"magnet_uri"":""magnet:?xt=urn:btih:9pr04sgkillroyimaveql2tyu8xyui&dn=&tr=https%3a%2f%2fxxx.yyy%2f9pr04sg601233210imaveql2tyu8xyui%2fannounce""}")]

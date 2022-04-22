@@ -12,8 +12,8 @@ namespace NzbDrone.Core.Datastore.Migration
                  .AddColumn("EnableRss").AsBoolean().Nullable()
                  .AddColumn("EnableSearch").AsBoolean().Nullable();
 
-            Execute.Sql("UPDATE Indexers SET EnableRss = Enable, EnableSearch = Enable");
-            Execute.Sql("UPDATE Indexers SET EnableSearch = 0 WHERE Implementation = 'Wombles'");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Indexers SET EnableRss = Enable, EnableSearch = Enable");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Indexers SET EnableSearch = 0 WHERE Implementation = 'Wombles'");
         }
     }
 }

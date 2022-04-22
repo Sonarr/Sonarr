@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Data.SQLite;
+using System.Reflection;
+using Npgsql;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -14,10 +17,17 @@ namespace NzbDrone.Core.Datastore
 
     public class ConnectionStringFactory : IConnectionStringFactory
     {
-        public ConnectionStringFactory(IAppFolderInfo appFolderInfo)
+        private readonly IConfigFileProvider _configFileProvider;
+
+        public ConnectionStringFactory(IAppFolderInfo appFolderInfo, IConfigFileProvider configFileProvider)
         {
-            MainDbConnectionString = GetConnectionString(appFolderInfo.GetDatabase());
-            LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase());
+            _configFileProvider = configFileProvider;
+
+            MainDbConnectionString = _configFileProvider.PostgresHost.IsNotNullOrWhiteSpace() ? GetPostgresConnectionString(_configFileProvider.PostgresMainDb) :
+                GetConnectionString(appFolderInfo.GetDatabase());
+
+            LogDbConnectionString = _configFileProvider.PostgresHost.IsNotNullOrWhiteSpace() ? GetPostgresConnectionString(_configFileProvider.PostgresLogDb) :
+                GetConnectionString(appFolderInfo.GetLogDatabase());
         }
 
         public string MainDbConnectionString { get; private set; }
@@ -45,6 +55,21 @@ namespace NzbDrone.Core.Datastore
             {
                 connectionBuilder.Add("Full FSync", true);
             }
+
+            return connectionBuilder.ConnectionString;
+        }
+
+        private string GetPostgresConnectionString(string dbName)
+        {
+            var connectionBuilder = new NpgsqlConnectionStringBuilder();
+
+            connectionBuilder.Database = dbName;
+            connectionBuilder.Host = _configFileProvider.PostgresHost;
+            connectionBuilder.Username = _configFileProvider.PostgresUser;
+            connectionBuilder.Password = _configFileProvider.PostgresPassword;
+            connectionBuilder.Port = _configFileProvider.PostgresPort;
+            connectionBuilder.Enlist = false;
+            connectionBuilder.ApplicationName = "Sonarr v" + Assembly.GetExecutingAssembly().GetName().Version;
 
             return connectionBuilder.ConnectionString;
         }

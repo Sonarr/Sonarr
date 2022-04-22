@@ -10,9 +10,9 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Alter.Table("NamingConfig").AddColumn("SeasonFolderFormat").AsString().Nullable();
-            Execute.WithConnection(ConvertConfig);
-            Execute.Sql("DELETE FROM Config WHERE [Key] = 'seasonfolderformat'");
-            Execute.Sql("DELETE FROM Config WHERE [Key] = 'useseasonfolder'");
+            IfDatabase("sqlite").Execute.WithConnection(ConvertConfig);
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM Config WHERE [Key] = 'seasonfolderformat'");
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM Config WHERE [Key] = 'useseasonfolder'");
         }
 
         private void ConvertConfig(IDbConnection conn, IDbTransaction tran)

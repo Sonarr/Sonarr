@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(RemoveDuplicates);
+            IfDatabase("sqlite").Execute.WithConnection(RemoveDuplicates);
         }
 
         private void RemoveDuplicates(IDbConnection conn, IDbTransaction tran)

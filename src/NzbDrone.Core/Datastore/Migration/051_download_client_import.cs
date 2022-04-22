@@ -16,11 +16,11 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(EnableCompletedDownloadHandlingForNewUsers);
+            IfDatabase("sqlite").Execute.WithConnection(EnableCompletedDownloadHandlingForNewUsers);
 
-            Execute.WithConnection(ConvertFolderSettings);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertFolderSettings);
 
-            Execute.WithConnection(AssociateImportedHistoryItems);
+            IfDatabase("sqlite").Execute.WithConnection(AssociateImportedHistoryItems);
         }
 
         private void EnableCompletedDownloadHandlingForNewUsers(IDbConnection conn, IDbTransaction tran)

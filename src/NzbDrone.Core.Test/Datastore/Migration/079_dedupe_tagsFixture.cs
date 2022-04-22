@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var tags = db.Query<Tag69>("SELECT * FROM Tags");
+            var tags = db.Query<Tag69>("SELECT * FROM \"Tags\"");
             tags.Should().HaveCount(1);
         }
 
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var tags = db.Query<Tag69>("SELECT * FROM Tags");
+            var tags = db.Query<Tag69>("SELECT * FROM \"Tags\"");
             tags.Should().HaveCount(1);
         }
 
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var tags = db.Query<Tag69>("SELECT * FROM Tags");
+            var tags = db.Query<Tag69>("SELECT * FROM \"Tags\"");
             tags.Should().HaveCount(1);
         }
 
@@ -169,7 +169,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var series = db.Query<Series69>("SELECT Tags FROM Series WHERE Id = 1").Single();
+            var series = db.Query<Series69>("SELECT \"Tags\" FROM \"Series\" WHERE \"Id\" = 1").Single();
             series.Tags.First().Should().Be(1);
         }
 
@@ -235,7 +235,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var series = db.Query<Series69>("SELECT Tags FROM Series WHERE Id = 2").Single();
+            var series = db.Query<Series69>("SELECT \"Tags\" FROM \"Series\" WHERE \"Id\" = 2").Single();
             series.Tags.Should().BeEmpty();
         }
     }

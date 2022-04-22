@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Tv
 
             pagingSpec.Records = GetPagedRecords(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber), pagingSpec, PagedQuery);
 
-            var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM {TableMapping.Mapper.TableNameMapping(typeof(Episode))} /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/)";
+            var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM \"{TableMapping.Mapper.TableNameMapping(typeof(Episode))}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/) AS Data";
             pagingSpec.TotalRecords = GetPagedRecordCount(EpisodesWhereCutoffUnmetBuilder(qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber).Select(typeof(Episode)), pagingSpec, countTemplate);
 
             return pagingSpec;
@@ -209,8 +209,15 @@ namespace NzbDrone.Core.Tv
 
         private string BuildAirDateUtcCutoffWhereClause(DateTime currentTime)
         {
-            return string.Format("datetime(strftime('%s', \"Episodes\".\"AirDateUtc\") + \"Series\".\"RunTime\" * 60,  'unixepoch') <= '{0}'",
-                                 currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+             if (_database.DatabaseType == DatabaseType.PostgreSQL)
+             {
+                return string.Format("\"Episodes\".\"AirDateUtc\" + make_interval(mins => \"Series\".\"Runtime\") <= '{0}'", currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+             }
+             else
+             {
+                return string.Format("datetime(to_timestamp(\"Episodes\".\"AirDateUtc\") + \"Series\".\"RunTime\" * 60,  'unixepoch') <= '{0}'",
+                    currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+             }
         }
 
         private SqlBuilder EpisodesWhereCutoffUnmetBuilder(List<QualitiesBelowCutoff> qualitiesBelowCutoff, List<LanguagesBelowCutoff> languagesBelowCutoff, int startingSeasonNumber) => Builder()
@@ -222,7 +229,8 @@ namespace NzbDrone.Core.Tv
                 string.Format("({0} OR {1})",
                     BuildQualityCutoffWhereClause(qualitiesBelowCutoff),
                     BuildLanguageCutoffWhereClause(languagesBelowCutoff)))
-            .GroupBy<Episode>(e => e.Id);
+            .GroupBy<Episode>(e => e.Id)
+            .GroupBy<Series>(s => s.Id);
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
         {
@@ -232,7 +240,7 @@ namespace NzbDrone.Core.Tv
             {
                 foreach (var belowCutoff in profile.QualityIds)
                 {
-                    clauses.Add(string.Format("(Series.[QualityProfileId] = {0} AND EpisodeFiles.Quality LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
+                    clauses.Add(string.Format("(\"Series\".\"QualityProfileId\" = {0} AND \"EpisodeFiles\".\"Quality\" LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
                 }
             }
 
@@ -247,7 +255,7 @@ namespace NzbDrone.Core.Tv
             {
                 foreach (var belowCutoff in profile.LanguageIds)
                 {
-                    clauses.Add(string.Format("(Series.[LanguageProfileId] = {0} AND EpisodeFiles.Language = {1})", profile.ProfileId, belowCutoff));
+                    clauses.Add(string.Format("(\"Series\".\"LanguageProfileId\" = {0} AND \"EpisodeFiles\".\"Language\" = {1})", profile.ProfileId, belowCutoff));
                 }
             }
 

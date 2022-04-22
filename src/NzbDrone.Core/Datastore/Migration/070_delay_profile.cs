@@ -25,8 +25,8 @@ namespace NzbDrone.Core.Datastore.Migration
 
             Insert.IntoTable("DelayProfiles").Row(new
                                                   {
-                                                      EnableUsenet = 1,
-                                                      EnableTorrent = 1,
+                                                      EnableUsenet = true,
+                                                      EnableTorrent = true,
                                                       PreferredProtocol = 1,
                                                       UsenetDelay = 0,
                                                       TorrentDelay = 0,
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Datastore.Migration
                                                       Tags = "[]"
                                                   });
 
-            Execute.WithConnection(ConvertProfile);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertProfile);
 
             Delete.Column("GrabDelay").FromTable("Profiles");
             Delete.Column("GrabDelayMode").FromTable("Profiles");

@@ -10,8 +10,8 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Rename.Table("Profiles").To("QualityProfiles");
 
-            Alter.Table("QualityProfiles").AddColumn("UpgradeAllowed").AsInt32().Nullable();
-            Alter.Table("LanguageProfiles").AddColumn("UpgradeAllowed").AsInt32().Nullable();
+            Alter.Table("QualityProfiles").AddColumn("UpgradeAllowed").AsBoolean();
+            Alter.Table("LanguageProfiles").AddColumn("UpgradeAllowed").AsBoolean();
 
             // Set upgrade allowed for existing profiles (default will be false for new profiles)
             Update.Table("QualityProfiles").Set(new { UpgradeAllowed = true }).AllRows();

@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             // Reverts part of migration 140, note that the v1 of migration140 also removed chowngroup
-            Execute.WithConnection(ConvertFileChmodToFolderChmod);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertFileChmodToFolderChmod);
         }
 
         private void ConvertFileChmodToFolderChmod(IDbConnection conn, IDbTransaction tran)

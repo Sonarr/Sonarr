@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Datastore.Migration
             //TODO: Add unique contraint for series ID and Relative Path
             //TODO: Warn if multiple series share the same path
 
-            Execute.WithConnection(UpdateRelativePaths);
+            IfDatabase("sqlite").Execute.WithConnection(UpdateRelativePaths);
         }
 
         private void UpdateRelativePaths(IDbConnection conn, IDbTransaction tran)

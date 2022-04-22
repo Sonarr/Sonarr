@@ -9,8 +9,8 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(SetConfigValue);
-            Execute.Sql("DELETE FROM Config WHERE Key = 'autodownloadpropers'");
+            IfDatabase("sqlite").Execute.WithConnection(SetConfigValue);
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM Config WHERE Key = 'autodownloadpropers'");
         }
 
         private void SetConfigValue(IDbConnection conn, IDbTransaction tran)

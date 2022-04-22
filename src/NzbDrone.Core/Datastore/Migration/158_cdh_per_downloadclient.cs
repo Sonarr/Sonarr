@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Datastore.Migration
                  .AddColumn("RemoveCompletedDownloads").AsBoolean().NotNullable().WithDefaultValue(true)
                  .AddColumn("RemoveFailedDownloads").AsBoolean().NotNullable().WithDefaultValue(true);
 
-            Execute.WithConnection(MoveRemoveSettings);
+            IfDatabase("sqlite").Execute.WithConnection(MoveRemoveSettings);
         }
 
         private void MoveRemoveSettings(IDbConnection conn, IDbTransaction tran)

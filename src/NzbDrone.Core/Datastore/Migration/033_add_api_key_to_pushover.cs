@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(UpdatePushoverSettings);
+            IfDatabase("sqlite").Execute.WithConnection(UpdatePushoverSettings);
         }
 
         private void UpdatePushoverSettings(IDbConnection conn, IDbTransaction tran)

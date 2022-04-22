@@ -18,14 +18,28 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             var mapper = _database.OpenConnection();
 
-            mapper.Execute(@"DELETE FROM PendingReleases
-                            WHERE Added < @TwoWeeksAgo
-                            AND REASON IN @Reasons",
+            if (_database.DatabaseType == DatabaseType.PostgreSQL)
+            {
+                mapper.Execute(@"DELETE FROM ""PendingReleases""
+                            WHERE ""Added"" < @TwoWeeksAgo
+                            AND ""Reason"" = ANY (@Reasons)",
                           new
                           {
                               TwoWeeksAgo = DateTime.UtcNow.AddDays(-14),
                               Reasons = new[] { (int)PendingReleaseReason.DownloadClientUnavailable, (int)PendingReleaseReason.Fallback }
                           });
+            }
+            else
+            {
+                mapper.Execute(@"DELETE FROM ""PendingReleases""
+                            WHERE ""Added"" < @TwoWeeksAgo
+                            AND ""REASON"" IN @Reasons",
+                          new
+                          {
+                              TwoWeeksAgo = DateTime.UtcNow.AddDays(-14),
+                              Reasons = new[] { (int)PendingReleaseReason.DownloadClientUnavailable, (int)PendingReleaseReason.Fallback }
+                          });
+            }
         }
     }
 }

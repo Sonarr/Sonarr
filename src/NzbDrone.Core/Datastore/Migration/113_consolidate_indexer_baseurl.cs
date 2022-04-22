@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(RenameUrlToBaseUrl);
+            IfDatabase("sqlite").Execute.WithConnection(RenameUrlToBaseUrl);
         }
 
         private void RenameUrlToBaseUrl(IDbConnection conn, IDbTransaction tran)

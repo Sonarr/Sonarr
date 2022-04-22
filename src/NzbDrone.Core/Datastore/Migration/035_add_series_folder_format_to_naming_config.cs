@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("NamingConfig").AddColumn("SeriesFolderFormat").AsString().Nullable();
 
-            Execute.Sql("UPDATE NamingConfig SET SeriesFolderFormat = '{Series Title}'");
+            IfDatabase("sqlite").Execute.Sql("UPDATE NamingConfig SET SeriesFolderFormat = '{Series Title}'");
         }
     }
 }

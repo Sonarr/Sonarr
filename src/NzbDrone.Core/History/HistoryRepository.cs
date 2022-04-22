@@ -105,7 +105,7 @@ namespace NzbDrone.Core.History
             Delete(c => c.SeriesId == seriesId);
         }
 
-        protected override SqlBuilder PagedBuilder() => new SqlBuilder()
+        protected override SqlBuilder PagedBuilder() => new SqlBuilder(_database.DatabaseType)
             .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
             .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id);
 

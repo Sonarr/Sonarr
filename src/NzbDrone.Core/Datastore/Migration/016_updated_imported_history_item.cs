@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql(@"UPDATE HISTORY SET Data = replace( Data, '""Path""', '""ImportedPath""' ) WHERE EventType=3");
+            IfDatabase("sqlite").Execute.Sql(@"UPDATE HISTORY SET Data = replace( Data, '""Path""', '""ImportedPath""' ) WHERE EventType=3");
         }
     }
 }

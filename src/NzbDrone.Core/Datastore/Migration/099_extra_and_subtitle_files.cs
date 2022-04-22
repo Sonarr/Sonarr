@@ -34,10 +34,10 @@ namespace NzbDrone.Core.Datastore.Migration
                  .AddColumn("Extension").AsString().Nullable();
 
             // Remove Metadata files that don't have an extension
-            Execute.Sql("DELETE FROM MetadataFiles WHERE RelativePath NOT LIKE '%.%'");
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM MetadataFiles WHERE RelativePath NOT LIKE '%.%'");
 
             // Set Extension using the extension from RelativePath
-            Execute.WithConnection(SetMetadataFileExtension);
+            IfDatabase("sqlite").Execute.WithConnection(SetMetadataFileExtension);
 
             Alter.Table("MetadataFiles").AlterColumn("Extension").AsString().NotNullable();
         }

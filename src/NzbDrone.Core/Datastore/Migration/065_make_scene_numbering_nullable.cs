@@ -8,9 +8,9 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE Episodes SET AbsoluteEpisodeNumber = NULL WHERE AbsoluteEpisodeNumber = 0");
-            Execute.Sql("UPDATE Episodes SET SceneAbsoluteEpisodeNumber = NULL WHERE SceneAbsoluteEpisodeNumber = 0");
-            Execute.Sql("UPDATE Episodes SET SceneSeasonNumber = NULL, SceneEpisodeNumber = NULL WHERE SceneSeasonNumber = 0 AND SceneEpisodeNumber = 0");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Episodes SET AbsoluteEpisodeNumber = NULL WHERE AbsoluteEpisodeNumber = 0");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Episodes SET SceneAbsoluteEpisodeNumber = NULL WHERE SceneAbsoluteEpisodeNumber = 0");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Episodes SET SceneSeasonNumber = NULL, SceneEpisodeNumber = NULL WHERE SceneSeasonNumber = 0 AND SceneEpisodeNumber = 0");
         }
     }
 }

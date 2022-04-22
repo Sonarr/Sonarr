@@ -20,12 +20,12 @@ namespace NzbDrone.Core.Datastore
 
         public static SqlBuilder Select(this SqlBuilder builder, params Type[] types)
         {
-            return builder.Select(types.Select(x => TableMapping.Mapper.TableNameMapping(x) + ".*").Join(", "));
+            return builder.Select(types.Select(x => $"\"{TableMapping.Mapper.TableNameMapping(x)}\".*").Join(", "));
         }
 
         public static SqlBuilder SelectDistinct(this SqlBuilder builder, params Type[] types)
         {
-            return builder.Select("DISTINCT " + types.Select(x => TableMapping.Mapper.TableNameMapping(x) + ".*").Join(", "));
+            return builder.Select("DISTINCT " + types.Select(x => $"\"{TableMapping.Mapper.TableNameMapping(x)}\".*").Join(", "));
         }
 
         public static SqlBuilder SelectCount(this SqlBuilder builder)
@@ -42,41 +42,48 @@ namespace NzbDrone.Core.Datastore
 
         public static SqlBuilder Where<TModel>(this SqlBuilder builder, Expression<Func<TModel, bool>> filter)
         {
-            var wb = new WhereBuilder(filter, true, builder.Sequence);
+            var wb = GetWhereBuilder(builder.DatabaseType, filter, true, builder.Sequence);
+
+            return builder.Where(wb.ToString(), wb.Parameters);
+        }
+
+        public static SqlBuilder WherePostgres<TModel>(this SqlBuilder builder, Expression<Func<TModel, bool>> filter)
+        {
+            var wb = new WhereBuilderPostgres(filter, true, builder.Sequence);
 
             return builder.Where(wb.ToString(), wb.Parameters);
         }
 
         public static SqlBuilder OrWhere<TModel>(this SqlBuilder builder, Expression<Func<TModel, bool>> filter)
         {
-            var wb = new WhereBuilder(filter, true, builder.Sequence);
+            var wb = GetWhereBuilder(builder.DatabaseType, filter, true, builder.Sequence);
 
             return builder.OrWhere(wb.ToString(), wb.Parameters);
         }
 
         public static SqlBuilder Join<TLeft, TRight>(this SqlBuilder builder, Expression<Func<TLeft, TRight, bool>> filter)
         {
-            var wb = new WhereBuilder(filter, false, builder.Sequence);
+            var wb = GetWhereBuilder(builder.DatabaseType, filter, false, builder.Sequence);
 
             var rightTable = TableMapping.Mapper.TableNameMapping(typeof(TRight));
 
-            return builder.Join($"{rightTable} ON {wb.ToString()}");
+            return builder.Join($"\"{rightTable}\" ON {wb.ToString()}");
         }
 
         public static SqlBuilder LeftJoin<TLeft, TRight>(this SqlBuilder builder, Expression<Func<TLeft, TRight, bool>> filter)
         {
-            var wb = new WhereBuilder(filter, false, builder.Sequence);
+            var wb = GetWhereBuilder(builder.DatabaseType, filter, false, builder.Sequence);
 
             var rightTable = TableMapping.Mapper.TableNameMapping(typeof(TRight));
 
-            return builder.LeftJoin($"{rightTable} ON {wb.ToString()}");
+            return builder.LeftJoin($"\"{rightTable}\" ON {wb.ToString()}");
         }
 
         public static SqlBuilder GroupBy<TModel>(this SqlBuilder builder, Expression<Func<TModel, object>> property)
         {
             var table = TableMapping.Mapper.TableNameMapping(typeof(TModel));
             var propName = property.GetMemberName().Name;
-            return builder.GroupBy($"{table}.{propName}");
+            return builder.GroupBy($"\"{table}\".\"{propName}\"");
         }
 
         public static SqlBuilder.Template AddSelectTemplate(this SqlBuilder builder, Type type)
@@ -136,6 +143,18 @@ namespace NzbDrone.Core.Datastore
             sb.AppendLine();
 
             return sb.ToString();
+        }
+
+        private static WhereBuilder GetWhereBuilder(DatabaseType databaseType, Expression filter, bool requireConcrete, int seq)
+        {
+            if (databaseType == DatabaseType.PostgreSQL)
+            {
+                return new WhereBuilderPostgres(filter, requireConcrete, seq);
+            }
+            else
+            {
+                return new WhereBuilderSqlite(filter, requireConcrete, seq);
+            }
         }
 
         private static Dictionary<string, object> ToDictionary(this DynamicParameters dynamicParams)

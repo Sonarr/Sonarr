@@ -188,9 +188,12 @@ namespace NzbDrone.Core.Backup
 
         private void BackupDatabase()
         {
-            _logger.ProgressDebug("Backing up database");
+            if (_maindDb.DatabaseType == DatabaseType.SQLite)
+            {
+                _logger.ProgressDebug("Backing up database");
 
-            _makeDatabaseBackup.BackupDatabase(_maindDb, _backupTempFolder);
+                _makeDatabaseBackup.BackupDatabase(_maindDb, _backupTempFolder);
+            }
         }
 
         private void BackupConfigFile()

@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void LogDbUpgrade()
         {
-            Execute.WithConnection(CleanupUpdateHistory);
+            IfDatabase("sqlite").Execute.WithConnection(CleanupUpdateHistory);
         }
 
         private void CleanupUpdateHistory(IDbConnection conn, IDbTransaction tran)

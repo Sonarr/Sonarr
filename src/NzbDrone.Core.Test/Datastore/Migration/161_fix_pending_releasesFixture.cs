@@ -75,9 +75,9 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var json = db.Query<string>("SELECT ParsedEpisodeInfo FROM PendingReleases").First();
+            var json = db.Query<string>("SELECT \"ParsedEpisodeInfo\" FROM \"PendingReleases\"").First();
 
-            var pending = db.Query<ParsedEpisodeInfo>("SELECT ParsedEpisodeInfo FROM PendingReleases").First();
+            var pending = db.Query<ParsedEpisodeInfo>("SELECT \"ParsedEpisodeInfo\" FROM \"PendingReleases\"").First();
             pending.Quality.Quality.Should().Be(Quality.HDTV720p);
             pending.Language.Should().Be(Language.English);
         }

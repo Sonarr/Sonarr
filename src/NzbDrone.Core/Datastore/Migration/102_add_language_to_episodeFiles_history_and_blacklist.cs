@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("Blacklist")
                  .AddColumn("Language").AsInt32().NotNullable().WithDefaultValue(0);
 
-            Execute.WithConnection(UpdateLanguage);
+            IfDatabase("sqlite").Execute.WithConnection(UpdateLanguage);
         }
 
         private void UpdateLanguage(IDbConnection conn, IDbTransaction tran)

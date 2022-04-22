@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(SetMetadataFileExtension);
+            IfDatabase("sqlite").Execute.WithConnection(SetMetadataFileExtension);
         }
 
         private void SetMetadataFileExtension(IDbConnection conn, IDbTransaction tran)

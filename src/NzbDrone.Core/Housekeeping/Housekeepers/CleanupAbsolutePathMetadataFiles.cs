@@ -16,14 +16,14 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             using (var mapper = _database.OpenConnection())
             {
-                mapper.Execute(@"DELETE FROM MetadataFiles
-                                     WHERE Id IN (
-                                         SELECT Id FROM MetadataFiles
-                                         WHERE RelativePath
+                mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                         SELECT ""Id"" FROM ""MetadataFiles""
+                                         WHERE ""RelativePath""
                                          LIKE '_:\%'
-                                         OR RelativePath
+                                         OR ""RelativePath""
                                          LIKE '\%'
-                                         OR RelativePath
+                                         OR ""RelativePath""
                                          LIKE '/%'
                                      )");
             }

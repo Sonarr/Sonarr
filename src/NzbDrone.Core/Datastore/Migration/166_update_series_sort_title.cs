@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(UpdateSortTitles);
+            IfDatabase("sqlite").Execute.WithConnection(UpdateSortTitles);
         }
 
         private void UpdateSortTitles(IDbConnection conn, IDbTransaction tran)

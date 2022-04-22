@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE MetadataFiles SET Type = 4 WHERE Consumer = 'XbmcMetadata' AND SeasonNumber IS NOT NULL");
+            IfDatabase("sqlite").Execute.Sql("UPDATE MetadataFiles SET Type = 4 WHERE Consumer = 'XbmcMetadata' AND SeasonNumber IS NOT NULL");
         }
     }
 }

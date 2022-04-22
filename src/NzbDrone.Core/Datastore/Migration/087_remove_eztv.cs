@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("DELETE FROM Indexers WHERE Implementation = 'Eztv'");
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM Indexers WHERE Implementation = 'Eztv'");
         }
     }
 }

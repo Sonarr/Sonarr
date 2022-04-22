@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("Episodes").AddColumn("AirDateUtc").AsDateTime().Nullable();
 
-            Execute.Sql("UPDATE Episodes SET AirDateUtc = AirDate");
+            IfDatabase("sqlite").Execute.Sql("UPDATE \"Episodes\" SET \"AirDateUtc\" = 'AirDate");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(ChangeRequiredIgnoredTypes);
+            IfDatabase("sqlite").Execute.WithConnection(ChangeRequiredIgnoredTypes);
         }
 
         private void ChangeRequiredIgnoredTypes(IDbConnection conn, IDbTransaction tran)

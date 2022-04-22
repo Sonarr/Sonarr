@@ -14,8 +14,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var db = WithMigrationTestDb();
 
-            db.Query("SELECT * FROM ScheduledTasks").Should().BeEmpty();
-            db.Query("SELECT * FROM Series").Should().BeEmpty();
+            db.Query("SELECT * FROM \"ScheduledTasks\"").Should().BeEmpty();
+            db.Query("SELECT * FROM \"Series\"").Should().BeEmpty();
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var jobs = db.Query<ScheduledTasks75>("SELECT TypeName, LastExecution FROM ScheduledTasks");
+            var jobs = db.Query<ScheduledTasks75>("SELECT \"TypeName\", \"LastExecution\" FROM \"ScheduledTasks\"");
 
             jobs.Single(c => c.TypeName == "NzbDrone.Core.Tv.Commands.RefreshSeriesCommand")
                 .LastExecution.Year.Should()
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var series = db.Query<Series69>("SELECT LastInfoSync FROM Series");
+            var series = db.Query<Series69>("SELECT \"LastInfoSync\" FROM \"Series\"");
 
             series.Should().OnlyContain(c => c.LastInfoSync.Value.Year == 2014);
         }

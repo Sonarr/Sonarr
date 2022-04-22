@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(ChangeEmailAddressType);
+            IfDatabase("sqlite").Execute.WithConnection(ChangeEmailAddressType);
         }
 
         private void ChangeEmailAddressType(IDbConnection conn, IDbTransaction tran)

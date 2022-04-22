@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 .AsBoolean()
                 .Nullable();
 
-            Execute.Sql("UPDATE NamingConfig SET RenameEpisodes =~ UseSceneName");
+            IfDatabase("sqlite").Execute.Sql("UPDATE NamingConfig SET RenameEpisodes =~ UseSceneName");
         }
     }
 }

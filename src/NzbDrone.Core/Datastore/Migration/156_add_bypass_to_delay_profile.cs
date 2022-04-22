@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("DelayProfiles").AddColumn("BypassIfHighestQuality").AsBoolean().WithDefaultValue(false);
 
             // Set to true for existing Delay Profiles to keep behavior the same.
-            Execute.Sql("UPDATE DelayProfiles SET BypassIfHighestQuality = 1;");
+            IfDatabase("sqlite").Execute.Sql("UPDATE DelayProfiles SET BypassIfHighestQuality = 1;");
         }
     }
 }

@@ -26,9 +26,9 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
             using (var mapper = _database.OpenConnection())
             {
-                mapper.Execute(@"UPDATE ScheduledTasks
-                                 SET LastExecution = @time
-                                 WHERE LastExecution > @time",
+                mapper.Execute(@"UPDATE ""ScheduledTasks""
+                                 SET ""LastExecution"" = @time
+                                 WHERE ""LastExecution"" > @time",
                                new { time = DateTime.UtcNow });
             }
         }

@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Delete.FromTable("Notifications").Row(new { Implementation = "PlexClient" });
 
             // Switch Quality and Language to int in pending releases
-            Execute.WithConnection(FixPendingReleases);
+            IfDatabase("sqlite").Execute.WithConnection(FixPendingReleases);
         }
 
         private void FixPendingReleases(IDbConnection conn, IDbTransaction tran)

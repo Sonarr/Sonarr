@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(ConvertToThingyProvder);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertToThingyProvder);
         }
 
         private void ConvertToThingyProvder(IDbConnection conn, IDbTransaction tran)

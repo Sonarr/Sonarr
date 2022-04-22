@@ -8,8 +8,8 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE EpisodeFiles SET MediaInfo = Replace(MediaInfo, '\"audioChannels\"', '\"audioChannelsContainer\"');");
-            Execute.Sql("UPDATE EpisodeFiles SET MediaInfo = Replace(MediaInfo, '\"audioChannelPositionsText\"', '\"audioChannelPositionsTextContainer\"');");
+            IfDatabase("sqlite").Execute.Sql("UPDATE EpisodeFiles SET MediaInfo = Replace(MediaInfo, '\"audioChannels\"', '\"audioChannelsContainer\"');");
+            IfDatabase("sqlite").Execute.Sql("UPDATE EpisodeFiles SET MediaInfo = Replace(MediaInfo, '\"audioChannelPositionsText\"', '\"audioChannelPositionsTextContainer\"');");
         }
     }
 }

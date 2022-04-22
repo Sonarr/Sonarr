@@ -11,11 +11,11 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("Episodes").AddColumn("Monitored").AsBoolean().Nullable();
             Alter.Table("Seasons").AddColumn("Monitored").AsBoolean().Nullable();
 
-            Execute.Sql("UPDATE Episodes SET Monitored = 1 WHERE Ignored = 0");
-            Execute.Sql("UPDATE Episodes SET Monitored = 0 WHERE Ignored = 1");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Episodes SET Monitored = 1 WHERE Ignored = 0");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Episodes SET Monitored = 0 WHERE Ignored = 1");
 
-            Execute.Sql("UPDATE Seasons SET Monitored = 1 WHERE Ignored = 0");
-            Execute.Sql("UPDATE Seasons SET Monitored = 0 WHERE Ignored = 1");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Seasons SET Monitored = 1 WHERE Ignored = 0");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Seasons SET Monitored = 0 WHERE Ignored = 1");
         }
     }
 }

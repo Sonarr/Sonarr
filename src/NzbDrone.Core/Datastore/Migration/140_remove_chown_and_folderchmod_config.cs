@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("DELETE FROM config WHERE Key IN ('folderchmod', 'chownuser')");
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM config WHERE Key IN ('folderchmod', 'chownuser')");
 
             // Note: v1 version of migration removed 'chowngroup'
         }

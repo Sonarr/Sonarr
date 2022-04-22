@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Alter.Table("NamingConfig").AddColumn("SpecialsFolderFormat").AsString().Nullable();
-            Execute.WithConnection(ConvertConfig);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertConfig);
         }
 
         private void ConvertConfig(IDbConnection conn, IDbTransaction tran)

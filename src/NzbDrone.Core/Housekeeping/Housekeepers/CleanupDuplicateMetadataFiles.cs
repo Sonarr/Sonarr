@@ -23,12 +23,12 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             using (var mapper = _database.OpenConnection())
             {
-                mapper.Execute(@"DELETE FROM MetadataFiles
-                                     WHERE Id IN (
-                                         SELECT Id FROM MetadataFiles
-                                         WHERE Type = 1
-                                         GROUP BY SeriesId, Consumer
-                                         HAVING COUNT(SeriesId) > 1
+                mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                         SELECT MIN(""Id"") FROM ""MetadataFiles""
+                                         WHERE ""Type"" = 1
+                                         GROUP BY ""SeriesId"", ""Consumer""
+                                         HAVING COUNT(""SeriesId"") > 1
                                      )");
             }
         }
@@ -37,12 +37,12 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             using (var mapper = _database.OpenConnection())
             {
-                mapper.Execute(@"DELETE FROM MetadataFiles
-                                     WHERE Id IN (
-                                         SELECT Id FROM MetadataFiles
-                                         WHERE Type = 2
-                                         GROUP BY EpisodeFileId, Consumer
-                                         HAVING COUNT(EpisodeFileId) > 1
+                mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                         SELECT MIN(""Id"") FROM ""MetadataFiles""
+                                         WHERE ""Type"" = 2
+                                         GROUP BY ""EpisodeFileId"", ""Consumer""
+                                         HAVING COUNT(""EpisodeFileId"") > 1
                                      )");
             }
         }
@@ -51,12 +51,12 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             using (var mapper = _database.OpenConnection())
             {
-                mapper.Execute(@"DELETE FROM MetadataFiles
-                                     WHERE Id IN (
-                                         SELECT Id FROM MetadataFiles
-                                         WHERE Type = 5
-                                         GROUP BY EpisodeFileId, Consumer
-                                         HAVING COUNT(EpisodeFileId) > 1
+                mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                         SELECT MIN(""Id"") FROM ""MetadataFiles""
+                                         WHERE ""Type"" = 5
+                                         GROUP BY ""EpisodeFileId"", ""Consumer""
+                                         HAVING COUNT(""EpisodeFileId"") > 1
                                      )");
             }
         }

@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var profiles = db.Query<Profile117>("SELECT Items FROM Profiles LIMIT 1");
+            var profiles = db.Query<Profile117>("SELECT \"Items\" FROM \"Profiles\" LIMIT 1");
 
             var items = profiles.First().Items;
             items.Should().HaveCount(6);
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var profiles = db.Query<Profile117>("SELECT Items FROM Profiles LIMIT 1");
+            var profiles = db.Query<Profile117>("SELECT \"Items\" FROM \"Profiles\" LIMIT 1");
 
             var items = profiles.First().Items;
             items.Should().HaveCount(6);
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var profiles = db.Query<Profile117>("SELECT Items FROM Profiles LIMIT 1");
+            var profiles = db.Query<Profile117>("SELECT \"Items\" FROM \"Profiles\" LIMIT 1");
 
             var items = profiles.First().Items;
             items.Should().HaveCount(6);
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var profiles = db.Query<Profile117>("SELECT Items FROM Profiles LIMIT 1");
+            var profiles = db.Query<Profile117>("SELECT \"Items\" FROM \"Profiles\" LIMIT 1");
             var items = profiles.First().Items;
 
             items[1].Items.First().Quality.Should().Be((int)Quality.WEBRip480p);

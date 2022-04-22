@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     .WithColumn("MinSize").AsInt32()
                     .WithColumn("MaxSize").AsInt32();
 
-            Execute.WithConnection(ConvertQualities);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertQualities);
 
             Delete.Table("QualitySizes");
         }

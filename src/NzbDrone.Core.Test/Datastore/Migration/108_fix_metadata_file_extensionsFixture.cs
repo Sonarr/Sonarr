@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query("Select * from ExtraFiles");
+            var items = db.Query("Select * FROM \"ExtraFiles\"");
 
             items.Should().BeEmpty();
         }
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query("Select * from SubtitleFiles");
+            var items = db.Query("Select * FROM \"SubtitleFiles\"");
 
             items.Should().HaveCount(1);
             items.First()["Extension"].Should().Be(".srt");
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query("Select * from ExtraFiles");
+            var items = db.Query("Select * FROM \"ExtraFiles\"");
 
             items.Should().HaveCount(1);
             items.First()["Extension"].Should().Be(".nfo-orig");

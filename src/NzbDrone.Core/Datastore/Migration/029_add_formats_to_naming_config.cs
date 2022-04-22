@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("NamingConfig").AddColumn("StandardEpisodeFormat").AsString().Nullable();
             Alter.Table("NamingConfig").AddColumn("DailyEpisodeFormat").AsString().Nullable();
 
-            Execute.WithConnection(ConvertConfig);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertConfig);
         }
 
         private void ConvertConfig(IDbConnection conn, IDbTransaction tran)

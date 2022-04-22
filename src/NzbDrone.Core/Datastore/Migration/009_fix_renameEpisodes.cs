@@ -10,8 +10,8 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Delete.Column("SeasonFolderFormat").FromTable("NamingConfig");
 
-            Execute.Sql("UPDATE NamingConfig SET RenameEpisodes = 1 WHERE RenameEpisodes = -1");
-            Execute.Sql("UPDATE NamingConfig SET RenameEpisodes = 0 WHERE RenameEpisodes = -2");
+            IfDatabase("sqlite").Execute.Sql("UPDATE NamingConfig SET RenameEpisodes = 1 WHERE RenameEpisodes = -1");
+            IfDatabase("sqlite").Execute.Sql("UPDATE NamingConfig SET RenameEpisodes = 0 WHERE RenameEpisodes = -2");
         }
     }
 }

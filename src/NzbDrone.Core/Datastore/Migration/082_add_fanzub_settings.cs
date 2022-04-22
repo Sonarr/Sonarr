@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE Indexers SET ConfigContract = 'FanzubSettings' WHERE Implementation = 'Fanzub' AND ConfigContract = 'NullConfig'");
+            IfDatabase("sqlite").Execute.Sql("UPDATE Indexers SET ConfigContract = 'FanzubSettings' WHERE Implementation = 'Fanzub' AND ConfigContract = 'NullConfig'");
         }
     }
 }

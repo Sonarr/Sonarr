@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("Series").AddColumn("Year").AsInt32().Nullable();
             Alter.Table("Series").AddColumn("Seasons").AsString().Nullable();
 
-            Execute.WithConnection(ConvertSeasons);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertSeasons);
         }
 
         private void ConvertSeasons(IDbConnection conn, IDbTransaction tran)

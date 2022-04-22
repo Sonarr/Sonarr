@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE DownloadClients SET Implementation = 'TorrentDownloadStation' WHERE Implementation = 'DownloadStation';");
+            IfDatabase("sqlite").Execute.Sql("UPDATE DownloadClients SET Implementation = 'TorrentDownloadStation' WHERE Implementation = 'DownloadStation';");
         }
     }
 }

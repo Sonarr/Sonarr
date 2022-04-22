@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(ConvertQualityTitle);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertQualityTitle);
         }
 
         private static readonly Regex QualityTitleRegex = new Regex(@"\{(?<prefix>[- ._\[(]*)(?<token>(?:quality)(?:(?<separator>[- ._]+)(?:title))?)(?<suffix>[- ._)\]]*)\}",

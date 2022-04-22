@@ -12,9 +12,9 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             // Delete extraneous files without extensions that Sonarr found previously,
             // these will be blocked from importing as well.
-            Execute.Sql("DELETE FROM ExtraFiles WHERE TRIM(Extension) = ''");
+            IfDatabase("sqlite").Execute.Sql("DELETE FROM ExtraFiles WHERE TRIM(Extension) = ''");
 
-            Execute.WithConnection(FixExtraFileExtension);
+            IfDatabase("sqlite").Execute.WithConnection(FixExtraFileExtension);
         }
 
         private void FixExtraFileExtension(IDbConnection conn, IDbTransaction tran)

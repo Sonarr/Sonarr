@@ -55,7 +55,8 @@ Build()
 {
     ProgressStart 'Build'
 
-    rm -rf $outputFolder
+    rm -rf $outputFolder/$FRAMEWORK
+    rm -rf $outputFolder/Sonarr.Update
     rm -rf $testPackageFolder
 
     slnFile=src/Sonarr.sln
@@ -88,6 +89,7 @@ YarnInstall()
 
 RunWebpack()
 {
+    rm -rf $outputFolder/UI
     ProgressStart 'Running webpack'
     yarn run build --env production
     ProgressEnd 'Running webpack'
@@ -217,7 +219,7 @@ Package()
     local runtime="$2"
     local SPLIT
 
-    IFS='-' read -ra SPLIT <<< "$runtime"
+    IFS='-|.' read -ra SPLIT <<< "$runtime"
 
     case "${SPLIT[0]}" in
         linux|freebsd*)

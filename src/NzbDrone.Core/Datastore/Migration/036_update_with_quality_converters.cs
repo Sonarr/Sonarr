@@ -20,8 +20,8 @@ namespace NzbDrone.Core.Datastore.Migration
                 Alter.Table("QualityProfiles").AddColumn("Items").AsString().Nullable();
             }
 
-            Execute.WithConnection(ConvertQualityProfiles);
-            Execute.WithConnection(ConvertQualityModels);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertQualityProfiles);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertQualityModels);
         }
 
         private void ConvertQualityProfiles(IDbConnection conn, IDbTransaction tran)

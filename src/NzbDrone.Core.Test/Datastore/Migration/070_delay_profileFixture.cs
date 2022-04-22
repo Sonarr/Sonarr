@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var allProfiles = db.Query<DelayProfile70>("SELECT * FROM DelayProfiles");
+            var allProfiles = db.Query<DelayProfile70>("SELECT * FROM \"DelayProfiles\"");
 
             allProfiles.Should().HaveCount(3);
             allProfiles.Should().OnlyContain(c => c.PreferredProtocol == 1);
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var tags = db.Query<Tag69>("SELECT * FROM Tags");
+            var tags = db.Query<Tag69>("SELECT * FROM \"Tags\"");
 
             tags.Should().HaveCount(1);
             tags.First().Label.Should().Be("delay-60");
@@ -92,8 +92,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                                                  });
             });
 
-            var tag = db.Query<Tag69>("SELECT Id, Label FROM Tags").Single();
-            var series = db.Query<Series69>("SELECT Tags FROM Series");
+            var tag = db.Query<Tag69>("SELECT \"Id\", \"Label\" FROM \"Tags\"").Single();
+            var series = db.Query<Series69>("SELECT \"Tags\" FROM \"Series\"");
 
             series.Should().HaveCount(1);
             series.First().Tags.Should().BeEquivalentTo(tag.Id);

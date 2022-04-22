@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Alter.Table("DownloadClients").AddColumn("Priority").AsInt32().WithDefaultValue(1);
-            Execute.WithConnection(InitPriorityForBackwardCompatibility);
+            IfDatabase("sqlite").Execute.WithConnection(InitPriorityForBackwardCompatibility);
         }
 
         private void InitPriorityForBackwardCompatibility(IDbConnection conn, IDbTransaction tran)

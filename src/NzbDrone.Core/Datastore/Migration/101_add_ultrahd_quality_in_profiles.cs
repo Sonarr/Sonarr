@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(ConvertProfile);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertProfile);
         }
 
         private void ConvertProfile(IDbConnection conn, IDbTransaction tran)

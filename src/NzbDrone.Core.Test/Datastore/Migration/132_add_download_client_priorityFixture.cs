@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(1);
             items.First().Priority.Should().Be(1);
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(3);
             items[0].Priority.Should().Be(1);
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM DownloadClients");
+            var items = db.Query<DownloadClientDefinition132>("SELECT * FROM \"DownloadClients\"");
 
             items.Should().HaveCount(3);
             items[0].Priority.Should().Be(1);

@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(ConvertQualityModels);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertQualityModels);
         }
 
         private void ConvertQualityModels(IDbConnection conn, IDbTransaction tran)

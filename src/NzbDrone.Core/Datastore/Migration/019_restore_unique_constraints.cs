@@ -9,9 +9,9 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             // During an earlier version of drone, the indexes weren't recreated during alter table.
-            Execute.Sql("DROP INDEX IF EXISTS \"IX_Series_TvdbId\"");
-            Execute.Sql("DROP INDEX IF EXISTS \"IX_Series_TitleSlug\"");
-            Execute.Sql("DROP INDEX IF EXISTS \"IX_Episodes_TvDbEpisodeId\"");
+            IfDatabase("sqlite").Execute.Sql("DROP INDEX IF EXISTS \"IX_Series_TvdbId\"");
+            IfDatabase("sqlite").Execute.Sql("DROP INDEX IF EXISTS \"IX_Series_TitleSlug\"");
+            IfDatabase("sqlite").Execute.Sql("DROP INDEX IF EXISTS \"IX_Episodes_TvDbEpisodeId\"");
 
             Create.Index().OnTable("Series").OnColumn("TvdbId").Unique();
             Create.Index().OnTable("Series").OnColumn("TitleSlug").Unique();

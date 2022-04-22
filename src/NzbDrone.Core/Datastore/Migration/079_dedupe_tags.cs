@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.WithConnection(CleanupTags);
+            IfDatabase("sqlite").Execute.WithConnection(CleanupTags);
 
             Alter.Table("Tags").AlterColumn("Label").AsString().Unique();
         }

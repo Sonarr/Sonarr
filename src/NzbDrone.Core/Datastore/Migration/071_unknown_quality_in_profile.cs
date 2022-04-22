@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Delete.Column("Weight").FromTable("QualityDefinitions");
 
-            Execute.WithConnection(ConvertProfile);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertProfile);
         }
 
         private void ConvertProfile(IDbConnection conn, IDbTransaction tran)
