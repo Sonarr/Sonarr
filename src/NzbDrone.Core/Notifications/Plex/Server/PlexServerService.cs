@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
@@ -101,7 +102,17 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             {
                 foreach (var location in section.Locations)
                 {
-                    if (location.Path.PathEquals(rootFolderPath))
+                    var rootFolder = new OsPath(rootFolderPath);
+                    var mappedPath = rootFolder;
+
+                    if (settings.MapTo.IsNotNullOrWhiteSpace())
+                    {
+                        mappedPath = new OsPath(settings.MapTo) + (rootFolder - new OsPath(settings.MapFrom));
+
+                        _logger.Trace("Mapping Path from {0} to {1} for partial scan", rootFolder, mappedPath);
+                    }
+
+                    if (location.Path.PathEquals(mappedPath.FullPath))
                     {
                         _logger.Debug("Updating matching section location, {0}", location.Path);
                         UpdateSectionPath(seriesRelativePath, section, location, settings);
