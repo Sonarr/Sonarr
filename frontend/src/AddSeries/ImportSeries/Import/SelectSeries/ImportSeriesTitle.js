@@ -20,24 +20,27 @@ function ImportSeriesTitle(props) {
 
       {
         !title.contains(year) &&
-        year > 0 &&
+        year > 0 ?
           <span className={styles.year}>
             ({year})
-          </span>
+          </span> :
+          null
       }
 
       {
-        !!network &&
-          <Label>{network}</Label>
+        network ?
+          <Label>{network}</Label> :
+          null
       }
 
       {
-        isExistingSeries &&
+        isExistingSeries ?
           <Label
             kind={kinds.WARNING}
           >
             Existing
-          </Label>
+          </Label> :
+          null
       }
     </div>
   );

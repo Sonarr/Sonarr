@@ -103,6 +103,7 @@ class VirtualTable extends Component {
       scroller,
       header,
       headerHeight,
+      rowHeight,
       rowRenderer,
       ...otherProps
     } = this.props;
@@ -153,7 +154,7 @@ class VirtualTable extends Component {
                     width={width}
                     height={height}
                     headerHeight={height - headerHeight}
-                    rowHeight={ROW_HEIGHT}
+                    rowHeight={rowHeight}
                     rowCount={items.length}
                     columnCount={1}
                     columnWidth={width}
@@ -194,7 +195,8 @@ VirtualTable.propTypes = {
 
 VirtualTable.defaultProps = {
   className: styles.tableContainer,
-  headerHeight: 38
+  headerHeight: 38,
+  rowHeight: ROW_HEIGHT
 };
 
 export default VirtualTable;
