@@ -32,7 +32,8 @@ function MediaInfo(props) {
     audioCodec,
     audioLanguages,
     subtitles,
-    videoCodec
+    videoCodec,
+    videoDynamicRangeType
   } = props;
 
   if (type === mediaInfoTypes.AUDIO) {
@@ -72,6 +73,14 @@ function MediaInfo(props) {
     );
   }
 
+  if (type === mediaInfoTypes.VIDEO_DYNAMIC_RANGE_TYPE) {
+    return (
+      <span>
+        {videoDynamicRangeType}
+      </span>
+    );
+  }
+
   return null;
 }
 
@@ -81,7 +90,8 @@ MediaInfo.propTypes = {
   audioCodec: PropTypes.string,
   audioLanguages: PropTypes.string,
   subtitles: PropTypes.string,
-  videoCodec: PropTypes.string
+  videoCodec: PropTypes.string,
+  videoDynamicRangeType: PropTypes.string
 };
 
 export default MediaInfo;

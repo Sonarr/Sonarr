@@ -75,6 +75,11 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'videoDynamicRangeType',
+      label: 'Video Dynamic Range',
+      isVisible: false
+    },
+    {
       name: 'audioLanguages',
       label: 'Audio Languages',
       isVisible: false

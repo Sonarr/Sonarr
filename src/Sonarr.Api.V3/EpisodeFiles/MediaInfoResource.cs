@@ -16,6 +16,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public int VideoBitrate { get; set; }
         public string VideoCodec { get; set; }
         public decimal VideoFps { get; set; }
+        public string VideoDynamicRange { get; set; }
+        public string VideoDynamicRangeType { get; set; }
         public string Resolution { get; set; }
         public string RunTime { get; set; }
         public string ScanType { get; set; }
@@ -42,6 +44,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
                        VideoBitrate = model.VideoBitrate,
                        VideoCodec = MediaInfoFormatter.FormatVideoCodec(model, sceneName),
                        VideoFps = model.VideoFps,
+                       VideoDynamicRange = MediaInfoFormatter.FormatVideoDynamicRange(model),
+                       VideoDynamicRangeType = MediaInfoFormatter.FormatVideoDynamicRangeType(model),
                        Resolution = $"{model.Width}x{model.Height}",
                        RunTime = FormatRuntime(model.RunTime),
                        ScanType = model.ScanType,
