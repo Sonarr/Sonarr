@@ -175,7 +175,7 @@ function InteractiveSearch(props) {
                 items.map((item) => {
                   return (
                     <InteractiveSearchRow
-                      key={item.guid}
+                      key={`${item.indexerId}-${item.guid}`}
                       {...item}
                       searchPayload={searchPayload}
                       longDateFormat={longDateFormat}
