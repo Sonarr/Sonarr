@@ -65,6 +65,8 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Spanish.HDTV.XviD-LOL")]
+        [TestCase("Series Title - Temporada 1 [HDTV 720p][Cap.101][AC3 5.1 Castellano][www.pctnew.ORG]")]
+        [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.206][AC3 5.1 Español Castellano]")]
         public void should_parse_language_spanish(string postTitle)
         {
             var result = LanguageParser.ParseLanguage(postTitle);

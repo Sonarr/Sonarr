@@ -212,6 +212,9 @@ namespace NzbDrone.Core.Parser
             if (match.Groups["ukrainian"].Success)
                 return Language.Ukrainian;
 
+            if (match.Groups["spanish"].Success)
+                return Language.Spanish;
+
             return Language.Unknown;
         }
     }
