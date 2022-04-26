@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ical.Net;
+using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
-using Ical.Net.General;
-using Ical.Net.Interfaces.Serialization;
 using Ical.Net.Serialization;
-using Ical.Net.Serialization.iCalendar.Factory;
 using Nancy;
 using Nancy.Responses;
 using NzbDrone.Common.Extensions;
@@ -86,7 +84,7 @@ namespace Sonarr.Api.V3.Calendar
                     continue;
                 }
 
-                var occurrence = calendar.Create<Event>();
+                var occurrence = calendar.Create<CalendarEvent>();
                 occurrence.Uid = "NzbDrone_episode_" + episode.Id;
                 occurrence.Status = episode.HasFile ? EventStatus.Confirmed : EventStatus.Tentative;
                 occurrence.Description = episode.Overview;
