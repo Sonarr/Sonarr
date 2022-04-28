@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Sonarr Secure</short>
+  <description>PVR for Usenet and BitTorrent users - TLS Web Interface</description>
+  <port protocol="tcp" port="9898"/>
+</service>

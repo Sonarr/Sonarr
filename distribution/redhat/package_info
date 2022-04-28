@@ -1,0 +1,5 @@
+PackageAuthor=[sonarr-phantom](https://copr.fedorainfracloud.org/coprs/ffreiheit/sonarr-v3-test/)
+UpdateMethod=External
+UpdateMethodMessage=flag [sonarr-phantom](https://copr.fedorainfracloud.org/coprs/ffreiheit/sonarr-v3-test/) Use yum/dnf to update.
+Branch=phantom-develop
+

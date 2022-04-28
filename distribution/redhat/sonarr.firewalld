@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Sonarr</short>
+  <description>PVR for Usenet and BitTorrent users - Web Interface</description>
+  <port protocol="tcp" port="8989"/>
+</service>
