@@ -20,38 +20,50 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private RemoteEpisode parseResultMulti;
         private RemoteEpisode parseResultSingle;
         private Series series;
+        private List<Episode> episodes;
         private QualityDefinition qualityType;
 
         [SetUp]
         public void Setup()
         {
             series = Builder<Series>.CreateNew()
-                .Build();
+                                    .With(s => s.Seasons = Builder<Season>.CreateListOfSize(2).Build().ToList())
+                                    .Build();
+
+            episodes = Builder<Episode>.CreateListOfSize(10)
+                .All()
+                .With(s => s.SeasonNumber = 1)
+                .BuildList();
 
             parseResultMultiSet = new RemoteEpisode
                                     {
                                         Series = series,
                                         Release = new ReleaseInfo(),
                                         ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
-                                        Episodes = new List<Episode> { new Episode(), new Episode(), new Episode(), new Episode(), new Episode(), new Episode() }
-                                    };
+                                        Episodes = Builder<Episode>.CreateListOfSize(6).All().With(s => s.SeasonNumber = 1).BuildList()
+            };
 
             parseResultMulti = new RemoteEpisode
                                     {
                                         Series = series,
                                         Release = new ReleaseInfo(),
                                         ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
-                                        Episodes = new List<Episode> { new Episode(), new Episode() }
-                                    };
+                                        Episodes = Builder<Episode>.CreateListOfSize(2).All().With(s => s.SeasonNumber = 1).BuildList()
+            };
 
             parseResultSingle = new RemoteEpisode
                                     {
                                         Series = series,
                                         Release = new ReleaseInfo(),
                                         ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
-                                        Episodes = new List<Episode> { new Episode() { Id = 2 } }
+                                        Episodes = new List<Episode> { 
+                                            Builder<Episode>.CreateNew()
+                                                .With(s => s.SeasonNumber = 1)
+                                                .With(s => s.EpisodeNumber = 1)
+                                                .Build()
+                                        }
 
-                                    };
+            };
 
             Mocker.GetMock<IQualityDefinitionService>()
                 .Setup(v => v.Get(It.IsAny<Quality>()))
@@ -67,18 +79,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<IEpisodeService>().Setup(
                 s => s.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(new List<Episode>() {
-                    new Episode(), new Episode(), new Episode(), new Episode(), new Episode(),
-                    new Episode(), new Episode(), new Episode(), new Episode() { Id = 2 }, new Episode() });
-        }
-
-        private void GivenLastEpisode()
-        {
-            Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(new List<Episode>() {
-                    new Episode(), new Episode(), new Episode(), new Episode(), new Episode(),
-                    new Episode(), new Episode(), new Episode(), new Episode(), new Episode() { Id = 2 } });
+                .Returns(episodes);
         }
 
         [TestCase(30, 50, false)]
@@ -92,6 +93,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             series.Runtime = runtime;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = sizeInMegaBytes.Megabytes();
+            parseResultSingle.Episodes.First().Id = 5;
 
             Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(expectedResult);
         }
@@ -100,13 +102,26 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase(30, 1000, false)]
         [TestCase(60, 1000, true)]
         [TestCase(60, 2000, false)]
-        public void single_episode_first_or_last(int runtime, int sizeInMegaBytes, bool expectedResult)
+        public void should_return_expected_result_for_first_episode_of_season(int runtime, int sizeInMegaBytes, bool expectedResult)
         {
-            GivenLastEpisode();
-
             series.Runtime = runtime;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = sizeInMegaBytes.Megabytes();
+            parseResultSingle.Episodes.First().Id = episodes.First().Id;
+
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(expectedResult);
+        }
+
+        [TestCase(30, 500, true)]
+        [TestCase(30, 1000, false)]
+        [TestCase(60, 1000, true)]
+        [TestCase(60, 2000, false)]
+        public void should_return_expected_result_for_last_episode_of_season(int runtime, int sizeInMegaBytes, bool expectedResult)
+        {
+            series.Runtime = runtime;
+            parseResultSingle.Series = series;
+            parseResultSingle.Release.Size = sizeInMegaBytes.Megabytes();
+            parseResultSingle.Episodes.First().Id = episodes.Last().Id;
 
             Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(expectedResult);
         }
@@ -144,8 +159,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_size_is_zero()
         {
-            GivenLastEpisode();
-
             series.Runtime = 30;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = 0;
@@ -158,8 +171,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_unlimited_30_minute()
         {
-            GivenLastEpisode();
-
             series.Runtime = 30;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = 18457280000;
@@ -171,8 +182,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_unlimited_60_minute()
         {
-            GivenLastEpisode();
-
             series.Runtime = 60;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = 36857280000;
@@ -184,8 +193,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_treat_daily_series_as_single_episode()
         {
-            GivenLastEpisode();
-
             series.Runtime = 60;
             parseResultSingle.Series = series;
             parseResultSingle.Series.SeriesType = SeriesTypes.Daily;
@@ -215,6 +222,95 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle.ParsedEpisodeInfo.Special = true;
 
             Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_if_series_runtime_is_zero_and_single_episode_is_not_from_first_season()
+        {
+            series.Runtime = 0;
+            parseResultSingle.Series = series;
+            parseResultSingle.Episodes.First().Id = 5;
+            parseResultSingle.Release.Size = 200.Megabytes();
+            parseResultSingle.Episodes.First().SeasonNumber = 2;
+
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(false);
+        }
+
+        [Test]
+        public void should_return_false_if_series_runtime_is_zero_and_single_episode_aired_more_than_24_hours_after_first_aired_episode()
+        {
+            series.Runtime = 0;
+
+            parseResultSingle.Series = series;
+            parseResultSingle.Release.Size = 200.Megabytes();
+            parseResultSingle.Episodes.First().Id = 5;
+            parseResultSingle.Episodes.First().SeasonNumber = 1;
+            parseResultSingle.Episodes.First().EpisodeNumber = 2;
+            parseResultSingle.Episodes.First().AirDateUtc = episodes.First().AirDateUtc.Value.AddDays(7);
+
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(false);
+        }
+
+        [Test]
+        public void should_return_true_if_series_runtime_is_zero_and_single_episode_aired_less_than_24_hours_after_first_aired_episode()
+        {
+            series.Runtime = 0;
+
+            parseResultSingle.Series = series;
+            parseResultSingle.Release.Size = 200.Megabytes();
+            parseResultSingle.Episodes.First().Id = 5;
+            parseResultSingle.Episodes.First().SeasonNumber = 1;
+            parseResultSingle.Episodes.First().EpisodeNumber = 2;
+            parseResultSingle.Episodes.First().AirDateUtc = episodes.First().AirDateUtc.Value.AddHours(1);
+
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(true);
+        }
+
+        [Test]
+        public void should_return_false_if_series_runtime_is_zero_and_multi_episode_is_not_from_first_season()
+        {
+            series.Runtime = 0;
+            parseResultMulti.Series = series;
+            parseResultMulti.Release.Size = 200.Megabytes();
+            parseResultMulti.Episodes.ForEach(e => e.SeasonNumber = 2);
+
+            Subject.IsSatisfiedBy(parseResultMulti, null).Accepted.Should().Be(false);
+        }
+
+        [Test]
+        public void should_return_false_if_series_runtime_is_zero_and_multi_episode_aired_more_than_24_hours_after_first_aired_episode()
+        {
+            var airDateUtc = episodes.First().AirDateUtc.Value.AddDays(7);
+
+            series.Runtime = 0;
+
+            parseResultMulti.Series = series;
+            parseResultMulti.Release.Size = 200.Megabytes();
+            parseResultMulti.Episodes.ForEach(e =>
+            {
+                e.SeasonNumber = 1;
+                e.AirDateUtc = airDateUtc;
+            });
+
+            Subject.IsSatisfiedBy(parseResultMulti, null).Accepted.Should().Be(false);
+        }
+
+        [Test]
+        public void should_return_true_if_series_runtime_is_zero_and_multi_episode_aired_less_than_24_hours_after_first_aired_episode()
+        {
+            var airDateUtc = episodes.First().AirDateUtc.Value.AddHours(1);
+            
+            series.Runtime = 0;
+
+            parseResultMulti.Series = series;
+            parseResultMulti.Release.Size = 200.Megabytes();
+            parseResultMulti.Episodes.ForEach(e =>
+            {
+                e.SeasonNumber = 1;
+                e.AirDateUtc = airDateUtc;
+            });
+
+            Subject.IsSatisfiedBy(parseResultMulti, null).Accepted.Should().Be(true);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -43,18 +44,47 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Accept();
             }
 
+            var runtime = subject.Series.Runtime;
+
+            if (runtime == 0)
+            {
+                var firstSeasonNumber = subject.Series.Seasons.Where(s => s.SeasonNumber > 0).Min(s => s.SeasonNumber);
+                var pilotEpisode = _episodeService.GetEpisodesBySeason(subject.Series.Id, firstSeasonNumber).First();
+
+                if (subject.Episodes.First().SeasonNumber == pilotEpisode.SeasonNumber)
+                {
+                    // If the first episode has an air date use it, otherwise use the release's publish date because like runtime it may not have updated yet.
+                    var gracePeriodEnd = (pilotEpisode.AirDateUtc ?? subject.Release.PublishDate).AddHours(24);
+
+                    // If episodes don't have an air date that is okay, otherwise make sure it's within 24 hours of the first episode airing.
+                    if (subject.Episodes.All(e => !e.AirDateUtc.HasValue || e.AirDateUtc.Value.Before(gracePeriodEnd)))
+                    {
+                        _logger.Debug("Series runtime is 0, but all episodes in release aired within 24 hours of first episode in season, defaulting runtime to 45 minutes");
+                        runtime = 45;
+                    }
+                }
+
+                // Reject if the run time is still 0
+                if (runtime == 0)
+                {
+                    _logger.Debug("Series runtime is 0, unable to validate size until it is available, rejecting");
+                    return Decision.Reject("Series runtime is 0, unable to validate size until it is available");
+                }
+            }
+
             var qualityDefinition = _qualityDefinitionService.Get(quality);
+
             if (qualityDefinition.MinSize.HasValue)
             {
                 var minSize = qualityDefinition.MinSize.Value.Megabytes();
 
-                //Multiply maxSize by Series.Runtime
-                minSize = minSize * subject.Series.Runtime * subject.Episodes.Count;
+                // Multiply maxSize by Series.Runtime
+                minSize = minSize * runtime * subject.Episodes.Count;
 
-                //If the parsed size is smaller than minSize we don't want it
+                // If the parsed size is smaller than minSize we don't want it
                 if (subject.Release.Size < minSize)
                 {
-                    var runtimeMessage = subject.Episodes.Count == 1 ? $"{subject.Series.Runtime}min" : $"{subject.Episodes.Count}x {subject.Series.Runtime}min";
+                    var runtimeMessage = subject.Episodes.Count == 1 ? $"{runtime}min" : $"{subject.Episodes.Count}x {runtime}min";
 
                     _logger.Debug("Item: {0}, Size: {1} is smaller than minimum allowed size ({2} bytes for {3}), rejecting.", subject, subject.Release.Size, minSize, runtimeMessage);
                     return Decision.Reject("{0} is smaller than minimum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), minSize.SizeSuffix(), runtimeMessage);
@@ -64,46 +94,31 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 _logger.Debug("Max size is unlimited, skipping size check");
             }
-            else if (subject.Series.Runtime == 0)
-            {
-                _logger.Debug("Series runtime is 0, unable to validate size until it is available, rejecting");
-                return Decision.Reject("Series runtime is 0, unable to validate size until it is available");
-            }
             else
             {
                 var maxSize = qualityDefinition.MaxSize.Value.Megabytes();
 
-                //Multiply maxSize by Series.Runtime
-                maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;
+                // Multiply maxSize by Series.Runtime
+                maxSize = maxSize * runtime * subject.Episodes.Count;
 
                 if (subject.Episodes.Count == 1 && subject.Series.SeriesType == SeriesTypes.Standard)
                 {
-                    Episode episode = subject.Episodes.First();
-                    List<Episode> seasonEpisodes;
+                    var firstEpisode = subject.Episodes.First();
+                    var seasonEpisodes = GetSeasonEpisodes(subject, searchCriteria);
 
-                    var seasonSearchCriteria = searchCriteria as SeasonSearchCriteria;
-                    if (seasonSearchCriteria != null && !seasonSearchCriteria.Series.UseSceneNumbering && seasonSearchCriteria.Episodes.Any(v => v.Id == episode.Id))
-                    {
-                        seasonEpisodes = seasonSearchCriteria.Episodes;
-                    }
-                    else
-                    {
-                        seasonEpisodes = _episodeService.GetEpisodesBySeason(episode.SeriesId, episode.SeasonNumber);
-                    }
-
-                    //Ensure that this is either the first episode
-                    //or is the last episode in a season that has 10 or more episodes
-                    if (seasonEpisodes.First().Id == episode.Id || (seasonEpisodes.Count() >= 10 && seasonEpisodes.Last().Id == episode.Id))
+                    // Ensure that this is either the first episode
+                    // or is the last episode in a season that has 10 or more episodes
+                    if (seasonEpisodes.First().Id == firstEpisode.Id || (seasonEpisodes.Count() >= 10 && seasonEpisodes.Last().Id == firstEpisode.Id))
                     {
                         _logger.Debug("Possible double episode, doubling allowed size.");
                         maxSize = maxSize * 2;
                     }
                 }
 
-                //If the parsed size is greater than maxSize we don't want it
+                // If the parsed size is greater than maxSize we don't want it
                 if (subject.Release.Size > maxSize)
                 {
-                    var runtimeMessage = subject.Episodes.Count == 1 ? $"{subject.Series.Runtime}min" : $"{subject.Episodes.Count}x {subject.Series.Runtime}min";
+                    var runtimeMessage = subject.Episodes.Count == 1 ? $"{runtime}min" : $"{subject.Episodes.Count}x {runtime}min";
 
                     _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2} for {3}), rejecting", subject, subject.Release.Size, maxSize, runtimeMessage);
                     return Decision.Reject("{0} is larger than maximum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), maxSize.SizeSuffix(), runtimeMessage);
@@ -112,6 +127,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             _logger.Debug("Item: {0}, meets size constraints", subject);
             return Decision.Accept();
+        }
+
+        private List<Episode> GetSeasonEpisodes(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        {
+            var firstEpisode = subject.Episodes.First();
+
+            if (searchCriteria is SeasonSearchCriteria seasonSearchCriteria && !seasonSearchCriteria.Series.UseSceneNumbering && seasonSearchCriteria.Episodes.Any(v => v.Id == firstEpisode.Id))
+            {
+                return seasonSearchCriteria.Episodes;
+            }
+
+            return _episodeService.GetEpisodesBySeason(firstEpisode.SeriesId, firstEpisode.SeasonNumber);
         }
     }
 }
