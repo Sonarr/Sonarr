@@ -99,5 +99,11 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             Parser.Parser.ParseTitle(fileName).Should().BeNull();
         }
+
+        [TestCase("Specials/Series - Episode Title (part 1)")]
+        public void should_not_parse_special_with_part_number(string fileName)
+        {
+            Parser.Parser.ParseTitle(fileName).Should().BeNull();
+        }
     }
 }
