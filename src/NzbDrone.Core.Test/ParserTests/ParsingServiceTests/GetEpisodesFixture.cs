@@ -518,5 +518,46 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Mocker.GetMock<IEpisodeService>()
                 .Verify(v => v.GetEpisodesBySceneSeason(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
+
+        [Test]
+        public void should_use_season_zero_when_looking_up_is_partial_special_episode_found_by_title()
+        {
+            _series.UseSceneNumbering = false;
+            _parsedEpisodeInfo.SeasonNumber = 1;
+            _parsedEpisodeInfo.EpisodeNumbers = new int[] { 0 };
+            _parsedEpisodeInfo.ReleaseTitle = "Series.Title.S01E00.My.Special.Episode.1080p.AMZN.WEB-DL.DDP5.1.H264-TEPES";
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(s => s.FindEpisodeByTitle(_series.TvdbId, 0, _parsedEpisodeInfo.ReleaseTitle))
+                  .Returns(
+                      Builder<Episode>.CreateNew()
+                                      .With(e => e.SeasonNumber = 0)
+                                      .With(e => e.EpisodeNumber = 1)
+                                      .Build()
+                  );
+
+            Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisode(_series.TvdbId, 0, 1), Times.Once());
+        }
+
+        [Test]
+        public void should_use_original_parse_result_when_special_episode_lookup_by_title_fails()
+        {
+            _series.UseSceneNumbering = false;
+            _parsedEpisodeInfo.SeasonNumber = 1;
+            _parsedEpisodeInfo.EpisodeNumbers = new int[] { 0 };
+            _parsedEpisodeInfo.ReleaseTitle = "Series.Title.S01E00.My.Special.Episode.1080p.AMZN.WEB-DL.DDP5.1.H264-TEPES";
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(s => s.FindEpisodeByTitle(_series.TvdbId, 0, _parsedEpisodeInfo.ReleaseTitle))
+                  .Returns((Episode)null);
+
+            Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisode(_series.TvdbId, _parsedEpisodeInfo.SeasonNumber, _parsedEpisodeInfo.EpisodeNumbers.First()), Times.Once());
+        }
     }
 }
