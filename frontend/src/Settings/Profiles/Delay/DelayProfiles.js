@@ -81,7 +81,7 @@ class DelayProfiles extends Component {
             >
               <div>
                 <div className={styles.delayProfilesHeader}>
-                  <div className={styles.column}>Protocol</div>
+                  <div className={styles.column}>Preferred Protocol</div>
                   <div className={styles.column}>Usenet Delay</div>
                   <div className={styles.column}>Torrent Delay</div>
                   <div className={styles.tags}>Tags</div>
