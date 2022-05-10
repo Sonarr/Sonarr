@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Organizer
                 AddIdTokens(tokenHandlers, series);
                 AddEpisodeTokens(tokenHandlers, episodes);
                 AddEpisodeTitlePlaceholderTokens(tokenHandlers);
-                AddEpisodeFileTokens(tokenHandlers, episodeFile, !patternHasEpisodeIdentifier);
+                AddEpisodeFileTokens(tokenHandlers, episodeFile, !patternHasEpisodeIdentifier || episodeFile.Id == 0);
                 AddQualityTokens(tokenHandlers, series, episodeFile);
                 AddMediaInfoTokens(tokenHandlers, episodeFile);
                 AddPreferredWords(tokenHandlers, series, episodeFile, preferredWords);
