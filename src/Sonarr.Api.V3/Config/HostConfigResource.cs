@@ -24,6 +24,7 @@ namespace Sonarr.Api.V3.Config
         public string ApiKey { get; set; }
         public string SslCertHash { get; set; }
         public string UrlBase { get; set; }
+        public string InstanceName { get; set; }
         public bool UpdateAutomatically { get; set; }
         public UpdateMechanism UpdateMechanism { get; set; }
         public string UpdateScriptPath { get; set; }
@@ -63,6 +64,7 @@ namespace Sonarr.Api.V3.Config
                 ApiKey = model.ApiKey,
                 SslCertHash = model.SslCertHash,
                 UrlBase = model.UrlBase,
+                InstanceName = model.InstanceName,
                 UpdateAutomatically = model.UpdateAutomatically,
                 UpdateMechanism = model.UpdateMechanism,
                 UpdateScriptPath = model.UpdateScriptPath,
