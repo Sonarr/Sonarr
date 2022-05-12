@@ -19,6 +19,7 @@ function HostSettings(props) {
     bindAddress,
     port,
     urlBase,
+    instanceName,
     enableSsl,
     sslPort,
     sslCertHash,
@@ -68,6 +69,22 @@ function HostSettings(props) {
           helpTextWarning="Requires restart to take effect"
           onChange={onInputChange}
           {...urlBase}
+        />
+      </FormGroup>
+
+      <FormGroup
+        advancedSettings={advancedSettings}
+        isAdvanced={true}
+      >
+        <FormLabel>Instance Name</FormLabel>
+
+        <FormInputGroup
+          type={inputTypes.TEXT}
+          name="instanceName"
+          helpText="Instance name in tab and for Syslog app name"
+          helpTextWarning="Requires restart to take effect"
+          onChange={onInputChange}
+          {...instanceName}
         />
       </FormGroup>
 
