@@ -36,7 +36,8 @@ namespace NzbDrone.Core.Instrumentation
 
             if (_configFileProvider.SyslogServer.IsNotNullOrWhiteSpace())
             {
-                SetSyslogParameters(_configFileProvider.SyslogServer, _configFileProvider.SyslogPort, minimumLogLevel);
+                var syslogLevel = LogLevel.FromString(_configFileProvider.SyslogLevel);
+                SetSyslogParameters(_configFileProvider.SyslogServer, _configFileProvider.SyslogPort, syslogLevel);
             }
 
             var rules = LogManager.Configuration.LoggingRules;
@@ -98,7 +99,7 @@ namespace NzbDrone.Core.Instrumentation
             syslogTarget.MessageSend.Udp.Server = syslogServer;
             syslogTarget.MessageSend.Udp.ReconnectInterval = 500;
             syslogTarget.MessageCreation.Rfc = RfcNumber.Rfc5424;
-            syslogTarget.MessageCreation.Rfc5424.AppName = BuildInfo.AppName;
+            syslogTarget.MessageCreation.Rfc5424.AppName = _configFileProvider.InstanceName;
 
             var loggingRule = new LoggingRule("*", minimumLogLevel, syslogTarget);
 
