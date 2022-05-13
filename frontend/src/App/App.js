@@ -8,7 +8,7 @@ import AppRoutes from './AppRoutes';
 
 function App({ store, history }) {
   return (
-    <DocumentTitle title="Sonarr">
+    <DocumentTitle title={window.Sonarr.instanceName}>
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <PageConnector>

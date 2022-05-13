@@ -61,6 +61,7 @@ namespace Sonarr.Http.Frontend
             builder.AppendLine($"  apiKey: '{_apiKey}',");
             builder.AppendLine($"  release: '{BuildInfo.Release}',");
             builder.AppendLine($"  version: '{BuildInfo.Version.ToString()}',");
+            builder.AppendLine($"  instanceName: '{_configFileProvider.InstanceName.ToString()}',");
             builder.AppendLine($"  branch: '{_configFileProvider.Branch.ToLower()}',");
             builder.AppendLine($"  analytics: {_analyticsService.IsEnabled.ToString().ToLowerInvariant()},");
             builder.AppendLine($"  urlBase: '{_urlBase}',");
