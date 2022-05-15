@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Tv
         private readonly ISeriesService _seriesService;
 
         public SeriesTitleSlugValidator(ISeriesService seriesService)
-            : base("Title slug '{slug}' is in use by series '{seriesTitle}'")
+            : base("Title slug '{slug}' is in use by series '{seriesTitle}'. Check the FAQ for more information")
         {
             _seriesService = seriesService;
         }
