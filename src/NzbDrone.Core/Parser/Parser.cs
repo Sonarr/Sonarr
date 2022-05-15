@@ -351,6 +351,10 @@ namespace NzbDrone.Core.Parser
                 //Season only releases for poorly named anime
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ])?(?<title>.+?)[-_. ]+?[\[(](?:S|Season|Saison|Series)[-_. ]?(?<season>\d{1,2}(?![-_. ]?\d+))(?:[-_. )\]]|$)+(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Episodes without a title, Single episode numbers (S1E1, 1x1)
+                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_ ]?[ex])(?<episode>\d{1}(?!\d+))))",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
 
