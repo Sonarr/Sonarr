@@ -134,7 +134,7 @@ function EditReleaseProfileModalContent(props) {
                 'The release must have this score or higher',
                 'Leave blank if a minimum is not desired'
               ]}
-			  placeholder="Optional minimum score"
+              placeholder="Optional minimum score"
               {...minimumScore}
               onChange={onInputChange}
             />
