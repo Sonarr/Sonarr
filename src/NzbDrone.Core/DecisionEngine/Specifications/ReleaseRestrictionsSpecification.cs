@@ -34,6 +34,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             var required = releaseProfiles.Where(r => r.Required.Any());
             var ignored = releaseProfiles.Where(r => r.Ignored.Any());
+            var minimumScore = releaseProfiles.Where(r => r.MinimumScore.HasValue);
 
             foreach (var r in required)
             {
@@ -58,6 +59,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     var terms = string.Join(", ", foundTerms);
                     _logger.Debug("[{0}] contains these ignored terms: {1}", title, terms);
                     return Decision.Reject("Contains these ignored terms: {0}", terms);
+                }
+            }
+
+            foreach (var r in minimumScore)
+            {
+                if (subject.PreferredWordScore < r.MinimumScore)
+                {
+                    _logger.Debug("[{0}] has score {0} which is below the minimum of {1} imposed by profile {2}", title, subject.PreferredWordScore, r.MinimumScore, r.Name);
+                    return Decision.Reject("Score of {0} is below the minimum of {1}", subject.PreferredWordScore, r.MinimumScore);
                 }
             }
 

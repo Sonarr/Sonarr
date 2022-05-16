@@ -34,6 +34,7 @@ function EditReleaseProfileModalContent(props) {
     required,
     ignored,
     preferred,
+    minimumScore,
     includePreferredWhenRenaming,
     tags,
     indexerId
@@ -119,6 +120,22 @@ function EditReleaseProfileModalContent(props) {
               {...preferred}
               keyPlaceholder="Term"
               valuePlaceholder="Score"
+              onChange={onInputChange}
+            />
+          </FormGroup>
+		  
+          <FormGroup>
+            <FormLabel>Minimum Score</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.NUMBER}
+              name="minimumScore"
+              helpTexts={[
+                'The release must have this score or higher',
+                'Leave blank if a minimum is not desired'
+              ]}
+			  placeholder="Optional minimum score"
+              {...minimumScore}
               onChange={onInputChange}
             />
           </FormGroup>

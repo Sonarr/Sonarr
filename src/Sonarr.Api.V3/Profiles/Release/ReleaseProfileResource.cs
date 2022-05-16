@@ -16,6 +16,7 @@ namespace Sonarr.Api.V3.Profiles.Release
         public object Required { get; set; }
         public object Ignored { get; set; }
         public List<KeyValuePair<string, int>> Preferred { get; set; }
+        public int? MinimumScore { get; set; }
         public bool IncludePreferredWhenRenaming { get; set; }
         public int IndexerId { get; set; }
         public HashSet<int> Tags { get; set; }
@@ -40,6 +41,7 @@ namespace Sonarr.Api.V3.Profiles.Release
                 Enabled = model.Enabled,
                 Required = model.Required ?? new List<string>(),
                 Ignored = model.Ignored ?? new List<string>(),
+                MinimumScore = model.MinimumScore,
                 Preferred = model.Preferred,
                 IncludePreferredWhenRenaming = model.IncludePreferredWhenRenaming,
                 IndexerId = model.IndexerId,
@@ -59,6 +61,7 @@ namespace Sonarr.Api.V3.Profiles.Release
                 Required = resource.MapRequired(),
                 Ignored = resource.MapIgnored(),
                 Preferred = resource.Preferred,
+                MinimumScore = resource.MinimumScore,
                 IncludePreferredWhenRenaming = resource.IncludePreferredWhenRenaming,
                 IndexerId = resource.IndexerId,
                 Tags = new HashSet<int>(resource.Tags)

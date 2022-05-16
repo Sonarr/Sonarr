@@ -12,6 +12,7 @@ const newReleaseProfile = {
   required: [],
   ignored: [],
   preferred: [],
+  minimumScore: null,
   includePreferredWhenRenaming: false,
   tags: [],
   indexerId: 0
