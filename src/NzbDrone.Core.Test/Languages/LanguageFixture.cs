@@ -30,11 +30,12 @@ namespace NzbDrone.Core.Test.Languages
                 new object[] {15, Language.Norwegian},
                 new object[] {16, Language.Finnish},
                 new object[] {17, Language.Turkish},
-                new object[] {18, Language.Portuguese},
+                new object[] {18, Language.Portuguese},        
                 new object[] {19, Language.Flemish},
                 new object[] {20, Language.Greek},
                 new object[] {21, Language.Korean},
-                new object[] {22, Language.Hungarian}
+                new object[] {22, Language.Hungarian},
+                new object[] {23, Language.Brazilian_Portuguese}
             };
 
         public static object[] ToIntCases =
@@ -60,7 +61,8 @@ namespace NzbDrone.Core.Test.Languages
                 new object[] {Language.Flemish, 19},
                 new object[] {Language.Greek, 20},
                 new object[] {Language.Korean, 21},
-                new object[] {Language.Hungarian, 22}
+                new object[] {Language.Hungarian, 22},
+                new object[] {Language.Brazilian_Portuguese, 23}
             };
 
         [Test, TestCaseSource("FromIntCases")]

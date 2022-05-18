@@ -84,6 +84,9 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("portuguese"))
                 return Language.Portuguese;
 
+            if (lowerTitle.Contains("brazilian"))
+                return Language.Brazilian_Portuguese;
+
             if (lowerTitle.Contains("hungarian"))
                 return Language.Hungarian;
 
