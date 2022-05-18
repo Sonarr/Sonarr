@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Languages
         public static Language Bulgarian    { get { return new Language(28, "Bulgarian"); } }
         public static Language Malayalam    { get { return new Language(29, "Malayalam"); } }
         public static Language Ukrainian    { get { return new Language(30, "Ukrainian"); } }
-        public static Language Brazilian_Portuguese    { get { return new Language(31, "Brazilian Portuguese"); } }
+        public static Language PortugueseBR { get { return new Language(31, "Portuguese (Brazil)"); } }
 
 
         public static List<Language> All
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Languages
                     Finnish,
                     Turkish,
                     Portuguese,
-                    Brazilian_Portuguese,
+                    PortugueseBR,
                     Flemish,
                     Greek,
                     Korean,

@@ -213,10 +213,11 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Brazilian.HDTV.XviD-LOL")]
+        [TestCase("Title.the.Series.2009.S01E14.Dublado.HDTV.XviD-LOL")]
         public void should_parse_language_brazilian_portuguese(string postTitle)
         {
             var result = LanguageParser.ParseLanguage(postTitle);
-            result.Id.Should().Be(Language.Brazilian_Portuguese.Id);
+            result.Id.Should().Be(Language.PortugueseBR.Id);
         }
 
         [TestCase("Title.the.Series.S01E01.FLEMISH.HDTV.x264-BRiGAND")]
