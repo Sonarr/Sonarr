@@ -1,12 +1,12 @@
 import { createAction } from 'redux-actions';
-import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
-import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
-import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
-import createHandleActions from './Creators/createHandleActions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { set } from './baseActions';
-import { fetchSeries, filters, filterPredicates, filterBuilderProps } from './seriesActions';
+import createHandleActions from './Creators/createHandleActions';
+import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
+import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
+import { fetchSeries, filterBuilderProps, filterPredicates, filters } from './seriesActions';
 
 //
 // Variables

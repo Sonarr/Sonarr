@@ -1,7 +1,7 @@
 import { batchActions } from 'redux-batched-actions';
-import createAjaxRequest from 'Utilities/createAjaxRequest';
-import { createThunk } from 'Store/thunks';
 import { set, update } from 'Store/Actions/baseActions';
+import { createThunk } from 'Store/thunks';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 
 //
 // Variables

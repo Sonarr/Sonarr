@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { icons, kinds, sizes } from 'Helpers/Props';
-import Button from 'Components/Link/Button';
 import Icon from 'Components/Icon';
+import Button from 'Components/Link/Button';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import styles from './EpisodeSearch.css';
 
 function EpisodeSearch(props) {

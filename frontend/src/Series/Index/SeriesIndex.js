@@ -1,28 +1,28 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
-import { align, icons, sortDirections } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageJumpBar from 'Components/Page/PageJumpBar';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import { align, icons, sortDirections } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
-import SeriesIndexTableConnector from './Table/SeriesIndexTableConnector';
-import SeriesIndexTableOptionsConnector from './Table/SeriesIndexTableOptionsConnector';
-import SeriesIndexPosterOptionsModal from './Posters/Options/SeriesIndexPosterOptionsModal';
-import SeriesIndexPostersConnector from './Posters/SeriesIndexPostersConnector';
-import SeriesIndexOverviewOptionsModal from './Overview/Options/SeriesIndexOverviewOptionsModal';
-import SeriesIndexOverviewsConnector from './Overview/SeriesIndexOverviewsConnector';
+import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
 import SeriesIndexSortMenu from './Menus/SeriesIndexSortMenu';
 import SeriesIndexViewMenu from './Menus/SeriesIndexViewMenu';
+import SeriesIndexOverviewOptionsModal from './Overview/Options/SeriesIndexOverviewOptionsModal';
+import SeriesIndexOverviewsConnector from './Overview/SeriesIndexOverviewsConnector';
+import SeriesIndexPosterOptionsModal from './Posters/Options/SeriesIndexPosterOptionsModal';
+import SeriesIndexPostersConnector from './Posters/SeriesIndexPostersConnector';
 import SeriesIndexFooterConnector from './SeriesIndexFooterConnector';
+import SeriesIndexTableConnector from './Table/SeriesIndexTableConnector';
+import SeriesIndexTableOptionsConnector from './Table/SeriesIndexTableOptionsConnector';
 import styles from './SeriesIndex.css';
 
 function getViewComponent(view) {
@@ -82,7 +82,7 @@ class SeriesIndex extends Component {
 
   setScrollerRef = (ref) => {
     this.setState({ scroller: ref });
-  }
+  };
 
   setJumpBarItems() {
     const {
@@ -133,23 +133,23 @@ class SeriesIndex extends Component {
 
   onPosterOptionsPress = () => {
     this.setState({ isPosterOptionsModalOpen: true });
-  }
+  };
 
   onPosterOptionsModalClose = () => {
     this.setState({ isPosterOptionsModalOpen: false });
-  }
+  };
 
   onOverviewOptionsPress = () => {
     this.setState({ isOverviewOptionsModalOpen: true });
-  }
+  };
 
   onOverviewOptionsModalClose = () => {
     this.setState({ isOverviewOptionsModalOpen: false });
-  }
+  };
 
   onJumpBarItemPress = (jumpToCharacter) => {
     this.setState({ jumpToCharacter });
-  }
+  };
 
   //
   // Render

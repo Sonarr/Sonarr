@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import SpinnerButton from 'Components/Link/SpinnerButton';
+import { icons, kinds } from 'Helpers/Props';
 import styles from './SpinnerErrorButton.css';
 
 function getTestResult(error) {
@@ -90,7 +90,7 @@ class SpinnerErrorButton extends Component {
       hasWarning: false,
       hasError: false
     });
-  }
+  };
 
   //
   // Render

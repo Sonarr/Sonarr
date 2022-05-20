@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import AddRootFolder from './AddRootFolder';
 import { addRootFolder } from 'Store/Actions/rootFolderActions';
+import AddRootFolder from './AddRootFolder';
 
 function createMapDispatchToProps(dispatch) {
   return {

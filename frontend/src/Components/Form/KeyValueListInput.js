@@ -1,6 +1,6 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import KeyValueListInputItem from './KeyValueListInputItem';
 import styles from './KeyValueListInput.css';
 
@@ -39,7 +39,7 @@ class KeyValueListInput extends Component {
       name,
       value: newValue
     });
-  }
+  };
 
   onRemoveItem = (index) => {
     const {
@@ -55,13 +55,13 @@ class KeyValueListInput extends Component {
       name,
       value: newValue
     });
-  }
+  };
 
   onFocus = () => {
     this.setState({
       isFocused: true
     });
-  }
+  };
 
   onBlur = () => {
     this.setState({
@@ -88,7 +88,7 @@ class KeyValueListInput extends Component {
         value: newValue
       });
     }
-  }
+  };
 
   //
   // Render

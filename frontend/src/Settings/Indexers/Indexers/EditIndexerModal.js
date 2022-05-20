@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { sizes } from 'Helpers/Props';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import EditIndexerModalContentConnector from './EditIndexerModalContentConnector';
 
 function EditIndexerModal({ isOpen, onModalClose, ...otherProps }) {

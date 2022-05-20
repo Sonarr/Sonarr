@@ -1,14 +1,14 @@
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
-import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
-import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
-import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
-import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
-import createHandleActions from './Creators/createHandleActions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { set, updateItem } from './baseActions';
-import { filters, filterPredicates, filterBuilderProps, sortPredicates } from './seriesActions';
+import createHandleActions from './Creators/createHandleActions';
+import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
+import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
+import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
+import { filterBuilderProps, filterPredicates, filters, sortPredicates } from './seriesActions';
 
 //
 // Variables

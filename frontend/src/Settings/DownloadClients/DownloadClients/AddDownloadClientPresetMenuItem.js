@@ -17,7 +17,7 @@ class AddDownloadClientPresetMenuItem extends Component {
       name,
       implementation
     });
-  }
+  };
 
   //
   // Render

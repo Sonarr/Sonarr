@@ -1,18 +1,18 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, inputTypes, kinds, sizes } from 'Helpers/Props';
+import Form from 'Components/Form/Form';
+import FormGroup from 'Components/Form/FormGroup';
+import FormInputButton from 'Components/Form/FormInputButton';
+import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import ClipboardButton from 'Components/Link/ClipboardButton';
-import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
-import FormInputGroup from 'Components/Form/FormInputGroup';
-import FormInputButton from 'Components/Form/FormInputButton';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { icons, inputTypes, kinds, sizes } from 'Helpers/Props';
 
 function getUrls(state) {
   const {
@@ -89,11 +89,11 @@ class CalendarLinkModalContent extends Component {
       [name]: value,
       ...urls
     });
-  }
+  };
 
   onLinkFocus = (event) => {
     event.target.select();
-  }
+  };
 
   //
   // Render

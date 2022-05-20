@@ -38,7 +38,7 @@ class TableSelectCell extends Component {
     } = this.props;
 
     onSelectedChange({ id, value, shiftKey });
-  }
+  };
 
   //
   // Render

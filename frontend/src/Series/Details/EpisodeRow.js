@@ -1,18 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import formatBytes from 'Utilities/Number/formatBytes';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
-import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
-import EpisodeSearchCellConnector from 'Episode/EpisodeSearchCellConnector';
+import TableRow from 'Components/Table/TableRow';
 import EpisodeNumber from 'Episode/EpisodeNumber';
-import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
+import EpisodeSearchCellConnector from 'Episode/EpisodeSearchCellConnector';
 import EpisodeStatusConnector from 'Episode/EpisodeStatusConnector';
+import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import EpisodeFileLanguageConnector from 'EpisodeFile/EpisodeFileLanguageConnector';
 import MediaInfoConnector from 'EpisodeFile/MediaInfoConnector';
 import * as mediaInfoTypes from 'EpisodeFile/mediaInfoTypes';
-
+import formatBytes from 'Utilities/Number/formatBytes';
 import styles from './EpisodeRow.css';
 
 class EpisodeRow extends Component {
@@ -33,15 +32,15 @@ class EpisodeRow extends Component {
 
   onManualSearchPress = () => {
     this.setState({ isDetailsModalOpen: true });
-  }
+  };
 
   onDetailsModalClose = () => {
     this.setState({ isDetailsModalOpen: false });
-  }
+  };
 
   onMonitorEpisodePress = (monitored, options) => {
     this.props.onMonitorEpisodePress(this.props.id, monitored, options);
-  }
+  };
 
   //
   // Render

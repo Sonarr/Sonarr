@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { kinds, sizes, tooltipPositions } from 'Helpers/Props';
-import Tooltip from 'Components/Tooltip/Tooltip';
 import Label from 'Components/Label';
+import Tooltip from 'Components/Tooltip/Tooltip';
+import { kinds, sizes, tooltipPositions } from 'Helpers/Props';
 import styles from './SeriesGenres.css';
 
 function SeriesGenres({ genres }) {

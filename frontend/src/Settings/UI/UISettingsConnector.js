@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
-import { setUISettingsValue, saveUISettings, fetchUISettings } from 'Store/Actions/settingsActions';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
+import { fetchUISettings, saveUISettings, setUISettingsValue } from 'Store/Actions/settingsActions';
+import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import UISettings from './UISettings';
 
 const SECTION = 'ui';
@@ -47,11 +47,11 @@ class UISettingsConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setUISettingsValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveUISettings();
-  }
+  };
 
   //
   // Render

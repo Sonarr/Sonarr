@@ -1,13 +1,13 @@
 import { createAction } from 'redux-actions';
-import { createThunk } from 'Store/thunks';
-import selectProviderSchema from 'Utilities/State/selectProviderSchema';
-import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
-import createSetProviderFieldValueReducer from 'Store/Actions/Creators/Reducers/createSetProviderFieldValueReducer';
 import createFetchHandler from 'Store/Actions/Creators/createFetchHandler';
 import createFetchSchemaHandler from 'Store/Actions/Creators/createFetchSchemaHandler';
+import createRemoveItemHandler from 'Store/Actions/Creators/createRemoveItemHandler';
 import createSaveProviderHandler, { createCancelSaveProviderHandler } from 'Store/Actions/Creators/createSaveProviderHandler';
 import createTestProviderHandler, { createCancelTestProviderHandler } from 'Store/Actions/Creators/createTestProviderHandler';
-import createRemoveItemHandler from 'Store/Actions/Creators/createRemoveItemHandler';
+import createSetProviderFieldValueReducer from 'Store/Actions/Creators/Reducers/createSetProviderFieldValueReducer';
+import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
+import { createThunk } from 'Store/thunks';
+import selectProviderSchema from 'Utilities/State/selectProviderSchema';
 
 //
 // Variables

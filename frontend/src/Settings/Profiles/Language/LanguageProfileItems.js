@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
-import LanguageProfileItemDragSource from './LanguageProfileItemDragSource';
+import FormLabel from 'Components/Form/FormLabel';
 import LanguageProfileItemDragPreview from './LanguageProfileItemDragPreview';
+import LanguageProfileItemDragSource from './LanguageProfileItemDragSource';
 import styles from './LanguageProfileItems.css';
 
 class LanguageProfileItems extends Component {

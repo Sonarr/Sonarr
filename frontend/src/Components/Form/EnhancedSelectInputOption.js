@@ -1,9 +1,9 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
+import { icons } from 'Helpers/Props';
 import CheckInput from './CheckInput';
 import styles from './EnhancedSelectInputOption.css';
 
@@ -21,11 +21,11 @@ class EnhancedSelectInputOption extends Component {
     } = this.props;
 
     onSelect(id);
-  }
+  };
 
   onCheckPress = () => {
     // CheckInput requires a handler. Swallow the change event because onPress will already handle it via event propagation.
-  }
+  };
 
   //
   // Render
@@ -59,7 +59,7 @@ class EnhancedSelectInputOption extends Component {
 
         {
           depth !== 0 &&
-          <div style={{ width: `${depth * 20}px` }} />
+            <div style={{ width: `${depth * 20}px` }} />
         }
 
         {

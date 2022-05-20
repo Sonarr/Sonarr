@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import VirtualTableRowCell from 'Components/Table/Cells/TableRowCell';
+import { icons } from 'Helpers/Props';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import styles from './SeriesStatusCell.css';
 

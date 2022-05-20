@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { setSeasonPassFilter } from 'Store/Actions/seasonPassActions';
 import FilterModal from 'Components/Filter/FilterModal';
+import { setSeasonPassFilter } from 'Store/Actions/seasonPassActions';
 
 function createMapStateToProps() {
   return createSelector(

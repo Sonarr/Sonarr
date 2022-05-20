@@ -127,7 +127,7 @@ class ImportSeriesTable extends Component {
         />
       </VirtualTableRow>
     );
-  }
+  };
 
   //
   // Render

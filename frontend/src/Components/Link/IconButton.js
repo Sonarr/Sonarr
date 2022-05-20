@@ -1,6 +1,6 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
 import Icon from 'Components/Icon';
 import Link from './Link';
 import styles from './IconButton.css';

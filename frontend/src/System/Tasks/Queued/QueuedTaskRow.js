@@ -1,16 +1,16 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import titleCase from 'Utilities/String/titleCase';
-import formatDate from 'Utilities/Date/formatDate';
-import formatDateTime from 'Utilities/Date/formatDateTime';
-import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
-import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableRow from 'Components/Table/TableRow';
+import { icons, kinds } from 'Helpers/Props';
+import formatDate from 'Utilities/Date/formatDate';
+import formatDateTime from 'Utilities/Date/formatDateTime';
+import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
+import titleCase from 'Utilities/String/titleCase';
 import styles from './QueuedTaskRow.css';
 
 function getStatusIconProps(status, message) {
@@ -135,13 +135,13 @@ class QueuedTaskRow extends Component {
     this.setState({
       isCancelConfirmModalOpen: true
     });
-  }
+  };
 
   onAbortCancel = () => {
     this.setState({
       isCancelConfirmModalOpen: false
     });
-  }
+  };
 
   //
   // Render

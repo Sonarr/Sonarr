@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import * as commandNames from 'Commands/commandNames';
 import withCurrentPage from 'Components/withCurrentPage';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { executeCommand } from 'Store/Actions/commandActions';
 import * as systemActions from 'Store/Actions/systemActions';
-import * as commandNames from 'Commands/commandNames';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import LogsTable from './LogsTable';
 
 function createMapStateToProps() {
@@ -57,31 +57,31 @@ class LogsTableConnector extends Component {
 
   onFirstPagePress = () => {
     this.props.gotoLogsFirstPage();
-  }
+  };
 
   onPreviousPagePress = () => {
     this.props.gotoLogsPreviousPage();
-  }
+  };
 
   onNextPagePress = () => {
     this.props.gotoLogsNextPage();
-  }
+  };
 
   onLastPagePress = () => {
     this.props.gotoLogsLastPage();
-  }
+  };
 
   onPageSelect = (page) => {
     this.props.gotoLogsPage({ page });
-  }
+  };
 
   onSortPress = (sortKey) => {
     this.props.setLogsSort({ sortKey });
-  }
+  };
 
   onFilterSelect = (selectedFilterKey) => {
     this.props.setLogsFilter({ selectedFilterKey });
-  }
+  };
 
   onTableOptionChange = (payload) => {
     this.props.setLogsTableOption(payload);
@@ -89,22 +89,22 @@ class LogsTableConnector extends Component {
     if (payload.pageSize) {
       this.props.gotoLogsFirstPage();
     }
-  }
+  };
 
   onRefreshPress = () => {
     this.props.gotoLogsFirstPage();
-  }
+  };
 
   onClearLogsPress = () => {
     this.props.executeCommand({
       name: commandNames.CLEAR_LOGS,
       commandFinished: this.onCommandFinished
     });
-  }
+  };
 
   onCommandFinished = () => {
     this.props.gotoLogsFirstPage();
-  }
+  };
 
   //
   // Render

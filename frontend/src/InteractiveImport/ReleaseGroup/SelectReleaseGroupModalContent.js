@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds, scrollDirections } from 'Helpers/Props';
-import Button from 'Components/Link/Button';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
+import FormLabel from 'Components/Form/FormLabel';
+import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes, kinds, scrollDirections } from 'Helpers/Props';
 import styles from './SelectReleaseGroupModalContent.css';
 
 class SelectReleaseGroupModalContent extends Component {
@@ -34,11 +34,11 @@ class SelectReleaseGroupModalContent extends Component {
 
   onReleaseGroupChange = ({ value }) => {
     this.setState({ releaseGroup: value });
-  }
+  };
 
   onReleaseGroupSelect = () => {
     this.props.onReleaseGroupSelect(this.state);
-  }
+  };
 
   //
   // Render

@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { sizes } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
+import { sizes } from 'Helpers/Props';
 import AddDownloadClientPresetMenuItem from './AddDownloadClientPresetMenuItem';
 import styles from './AddDownloadClientItem.css';
 
@@ -19,7 +19,7 @@ class AddDownloadClientItem extends Component {
     } = this.props;
 
     this.props.onDownloadClientSelect({ implementation });
-  }
+  };
 
   //
   // Render

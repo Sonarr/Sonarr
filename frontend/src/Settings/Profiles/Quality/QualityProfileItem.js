@@ -1,10 +1,10 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { icons } from 'Helpers/Props';
+import CheckInput from 'Components/Form/CheckInput';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
-import CheckInput from 'Components/Form/CheckInput';
+import { icons } from 'Helpers/Props';
 import styles from './QualityProfileItem.css';
 
 class QualityProfileItem extends Component {
@@ -19,7 +19,7 @@ class QualityProfileItem extends Component {
     } = this.props;
 
     onQualityProfileItemAllowedChange(qualityId, value);
-  }
+  };
 
   onCreateGroupPress = () => {
     const {
@@ -28,7 +28,7 @@ class QualityProfileItem extends Component {
     } = this.props;
 
     onCreateGroupPress(qualityId);
-  }
+  };
 
   //
   // Render

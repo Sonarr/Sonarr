@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { DragLayer } from 'react-dnd';
-import dimensions from 'Styles/Variables/dimensions.js';
-import { TABLE_COLUMN } from 'Helpers/dragTypes';
 import DragPreviewLayer from 'Components/DragPreviewLayer';
+import { TABLE_COLUMN } from 'Helpers/dragTypes';
+import dimensions from 'Styles/Variables/dimensions.js';
 import TableOptionsColumn from './TableOptionsColumn';
 import styles from './TableOptionsColumnDragPreview.css';
 

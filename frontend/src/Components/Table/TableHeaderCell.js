@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, sortDirections } from 'Helpers/Props';
-import Link from 'Components/Link/Link';
 import Icon from 'Components/Icon';
+import Link from 'Components/Link/Link';
+import { icons, sortDirections } from 'Helpers/Props';
 import styles from './TableHeaderCell.css';
 
 class TableHeaderCell extends Component {
@@ -21,7 +21,7 @@ class TableHeaderCell extends Component {
     } else {
       this.props.onSortPress(name);
     }
-  }
+  };
 
   //
   // Render

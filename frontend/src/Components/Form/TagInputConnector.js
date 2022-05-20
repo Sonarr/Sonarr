@@ -101,7 +101,7 @@ class TagInputConnector extends Component {
     newValue.push(tag.id);
 
     this.props.onChange({ name, value: newValue });
-  }
+  };
 
   onTagDelete = ({ index }) => {
     const {
@@ -116,7 +116,7 @@ class TagInputConnector extends Component {
       name,
       value: newValue
     });
-  }
+  };
 
   onTagCreated = (tag) => {
     const {
@@ -128,7 +128,7 @@ class TagInputConnector extends Component {
     newValue.push(tag.id);
 
     this.props.onChange({ name, value: newValue });
-  }
+  };
 
   //
   // Render

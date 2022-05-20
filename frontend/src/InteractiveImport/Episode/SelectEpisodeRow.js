@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import TableRowButton from 'Components/Table/TableRowButton';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
+import TableRowButton from 'Components/Table/TableRowButton';
 
 class SelectEpisodeRow extends Component {
 
@@ -16,7 +16,7 @@ class SelectEpisodeRow extends Component {
     } = this.props;
 
     this.props.onSelectedChange({ id, value: !isSelected });
-  }
+  };
 
   //
   // Render

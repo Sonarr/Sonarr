@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import { deleteSeries } from 'Store/Actions/seriesActions';
+import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import DeleteSeriesModalContent from './DeleteSeriesModalContent';
 
 function createMapStateToProps() {
@@ -32,7 +32,7 @@ class DeleteSeriesModalContentConnector extends Component {
     });
 
     this.props.onModalClose(true);
-  }
+  };
 
   //
   // Render

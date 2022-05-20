@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { kinds } from 'Helpers/Props';
+import Form from 'Components/Form/Form';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import { kinds } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
-import Form from 'Components/Form/Form';
-import ConfirmModal from 'Components/Modal/ConfirmModal';
 import AnalyticSettings from './AnalyticSettings';
 import BackupSettings from './BackupSettings';
 import HostSettings from './HostSettings';
@@ -82,11 +82,11 @@ class GeneralSettings extends Component {
   onConfirmRestart = () => {
     this.setState({ isRestartRequiredModalOpen: false });
     this.props.onConfirmRestart();
-  }
+  };
 
   onCloseRestartRequiredModalOpen = () => {
     this.setState({ isRestartRequiredModalOpen: false });
-  }
+  };
 
   //
   // Render

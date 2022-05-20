@@ -1,12 +1,12 @@
 import { createAction } from 'redux-actions';
+import createFetchHandler from 'Store/Actions/Creators/createFetchHandler';
+import createFetchSchemaHandler from 'Store/Actions/Creators/createFetchSchemaHandler';
+import createRemoveItemHandler from 'Store/Actions/Creators/createRemoveItemHandler';
+import createSaveProviderHandler from 'Store/Actions/Creators/createSaveProviderHandler';
+import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
 import { createThunk } from 'Store/thunks';
 import getSectionState from 'Utilities/State/getSectionState';
 import updateSectionState from 'Utilities/State/updateSectionState';
-import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
-import createFetchHandler from 'Store/Actions/Creators/createFetchHandler';
-import createFetchSchemaHandler from 'Store/Actions/Creators/createFetchSchemaHandler';
-import createSaveProviderHandler from 'Store/Actions/Creators/createSaveProviderHandler';
-import createRemoveItemHandler from 'Store/Actions/Creators/createRemoveItemHandler';
 
 //
 // Variables

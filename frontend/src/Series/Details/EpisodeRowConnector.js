@@ -1,8 +1,8 @@
 /* eslint max-params: 0 */
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import createEpisodeFileSelector from 'Store/Selectors/createEpisodeFileSelector';
+import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import EpisodeRow from './EpisodeRow';
 
 function createMapStateToProps() {

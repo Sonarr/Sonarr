@@ -51,11 +51,11 @@ class EpisodeSearchConnector extends Component {
     });
 
     this.props.onModalClose();
-  }
+  };
 
   onInteractiveSearchPress = () => {
     this.setState({ isInteractiveSearchOpen: true });
-  }
+  };
 
   //
   // Render

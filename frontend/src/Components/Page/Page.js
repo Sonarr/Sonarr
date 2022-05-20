@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import locationShape from 'Helpers/Props/Shapes/locationShape';
-import SignalRConnector from 'Components/SignalRConnector';
+import AppUpdatedModalConnector from 'App/AppUpdatedModalConnector';
 import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModalConnector from 'App/ConnectionLostModalConnector';
-import AppUpdatedModalConnector from 'App/AppUpdatedModalConnector';
+import SignalRConnector from 'Components/SignalRConnector';
+import locationShape from 'Helpers/Props/Shapes/locationShape';
 import PageHeader from './Header/PageHeader';
 import PageSidebar from './Sidebar/PageSidebar';
 import styles from './Page.css';
@@ -54,15 +54,15 @@ class Page extends Component {
       width: window.innerWidth,
       height: window.innerHeight
     });
-  }
+  };
 
   onUpdatedModalClose = () => {
     this.setState({ isUpdatedModalOpen: false });
-  }
+  };
 
   onConnectionLostModalClose = () => {
     this.setState({ isConnectionLostModalOpen: false });
-  }
+  };
 
   //
   // Render

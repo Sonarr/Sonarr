@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, scrollDirections } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import Measure from 'Components/Measure';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import Scroller from 'Components/Scroller/Scroller';
-import DelayProfileDragSource from './DelayProfileDragSource';
-import DelayProfileDragPreview from './DelayProfileDragPreview';
+import { icons, scrollDirections } from 'Helpers/Props';
 import DelayProfile from './DelayProfile';
+import DelayProfileDragPreview from './DelayProfileDragPreview';
+import DelayProfileDragSource from './DelayProfileDragSource';
 import EditDelayProfileModalConnector from './EditDelayProfileModalConnector';
 import styles from './DelayProfiles.css';
 
@@ -32,15 +32,15 @@ class DelayProfiles extends Component {
 
   onAddDelayProfilePress = () => {
     this.setState({ isAddDelayProfileModalOpen: true });
-  }
+  };
 
   onModalClose = () => {
     this.setState({ isAddDelayProfileModalOpen: false });
-  }
+  };
 
   onMeasure = ({ width }) => {
     this.setState({ width });
-  }
+  };
 
   //
   // Render

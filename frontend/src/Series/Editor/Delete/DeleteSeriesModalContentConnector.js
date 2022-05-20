@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import { bulkDeleteSeries } from 'Store/Actions/seriesEditorActions';
+import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import DeleteSeriesModalContent from './DeleteSeriesModalContent';
 
 function createMapStateToProps() {

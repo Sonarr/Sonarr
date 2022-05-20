@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
-import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
-import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
+import TableRow from 'Components/Table/TableRow';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
 import EpisodeQuality from 'Episode/EpisodeQuality';
+import { icons, kinds } from 'Helpers/Props';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import BlocklistDetailsModal from './BlocklistDetailsModal';
 import styles from './BlocklistRow.css';
@@ -30,11 +30,11 @@ class BlocklistRow extends Component {
 
   onDetailsPress = () => {
     this.setState({ isDetailsModalOpen: true });
-  }
+  };
 
   onDetailsModalClose = () => {
     this.setState({ isDetailsModalOpen: false });
-  }
+  };
 
   //
   // Render

@@ -1,14 +1,14 @@
+import classNames from 'classnames';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import classNames from 'classnames';
+import QueueStatusConnector from 'Activity/Queue/Status/QueueStatusConnector';
+import OverlayScroller from 'Components/Scroller/OverlayScroller';
+import Scroller from 'Components/Scroller/Scroller';
 import { icons } from 'Helpers/Props';
 import locationShape from 'Helpers/Props/Shapes/locationShape';
 import dimensions from 'Styles/Variables/dimensions';
-import OverlayScroller from 'Components/Scroller/OverlayScroller';
-import Scroller from 'Components/Scroller/Scroller';
-import QueueStatusConnector from 'Activity/Queue/Status/QueueStatusConnector';
 import HealthStatusConnector from 'System/Status/Health/HealthStatusConnector';
 import MessagesConnector from './Messages/MessagesConnector';
 import PageSidebarItem from './PageSidebarItem';
@@ -293,7 +293,7 @@ class PageSidebar extends Component {
 
   _setSidebarRef = (ref) => {
     this._sidebarRef = ref;
-  }
+  };
 
   _setSidebarTransform(isSidebarVisible, transition, callback) {
     this.setState({
@@ -322,11 +322,11 @@ class PageSidebar extends Component {
       event.stopPropagation();
       this.props.onSidebarVisibleChange(false);
     }
-  }
+  };
 
   onWindowScroll = () => {
     this.setState(getPositioning());
-  }
+  };
 
   onTouchStart = (event) => {
     const touches = event.touches;
@@ -346,7 +346,7 @@ class PageSidebar extends Component {
 
     this._touchStartX = touchStartX;
     this._touchStartY = touchStartY;
-  }
+  };
 
   onTouchMove = (event) => {
     const touches = event.touches;
@@ -383,7 +383,7 @@ class PageSidebar extends Component {
       transition: 'none',
       transform
     });
-  }
+  };
 
   onTouchEnd = (event) => {
     const touches = event.changedTouches;
@@ -403,16 +403,16 @@ class PageSidebar extends Component {
 
     this._touchStartX = null;
     this._touchStartY = null;
-  }
+  };
 
   onTouchCancel = (event) => {
     this._touchStartX = null;
     this._touchStartY = null;
-  }
+  };
 
   onItemPress = () => {
     this.props.onSidebarVisibleChange(false);
-  }
+  };
 
   //
   // Render

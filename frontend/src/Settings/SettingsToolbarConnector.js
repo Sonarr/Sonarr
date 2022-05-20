@@ -66,14 +66,14 @@ class SettingsToolbarConnector extends Component {
     }
 
     return true;
-  }
+  };
 
   //
   // Listeners
 
   onAdvancedSettingsPress = () => {
     this.props.toggleAdvancedSettings();
-  }
+  };
 
   onConfirmNavigation = () => {
     const {
@@ -98,7 +98,7 @@ class SettingsToolbarConnector extends Component {
         history.goBack();
       }
     });
-  }
+  };
 
   onCancelNavigation = () => {
     this.setState({
@@ -106,7 +106,7 @@ class SettingsToolbarConnector extends Component {
       nextLocationAction: null,
       confirmed: false
     });
-  }
+  };
 
   //
   // Render

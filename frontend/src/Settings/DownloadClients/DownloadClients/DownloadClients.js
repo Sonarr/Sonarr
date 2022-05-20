@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
-import FieldSet from 'Components/FieldSet';
 import Card from 'Components/Card';
+import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import DownloadClient from './DownloadClient';
+import { icons } from 'Helpers/Props';
 import AddDownloadClientModal from './AddDownloadClientModal';
+import DownloadClient from './DownloadClient';
 import EditDownloadClientModalConnector from './EditDownloadClientModalConnector';
 import styles from './DownloadClients.css';
 
@@ -29,18 +29,18 @@ class DownloadClients extends Component {
 
   onAddDownloadClientPress = () => {
     this.setState({ isAddDownloadClientModalOpen: true });
-  }
+  };
 
   onAddDownloadClientModalClose = ({ downloadClientSelected = false } = {}) => {
     this.setState({
       isAddDownloadClientModalOpen: false,
       isEditDownloadClientModalOpen: downloadClientSelected
     });
-  }
+  };
 
   onEditDownloadClientModalClose = () => {
     this.setState({ isEditDownloadClientModalOpen: false });
-  }
+  };
 
   //
   // Render

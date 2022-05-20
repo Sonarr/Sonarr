@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchSeriesHistory, clearSeriesHistory, seriesHistoryMarkAsFailed } from 'Store/Actions/seriesHistoryActions';
+import { clearSeriesHistory, fetchSeriesHistory, seriesHistoryMarkAsFailed } from 'Store/Actions/seriesHistoryActions';
 import SeriesHistoryModalContent from './SeriesHistoryModalContent';
 
 function createMapStateToProps() {
@@ -55,7 +55,7 @@ class SeriesHistoryModalContentConnector extends Component {
       seriesId,
       seasonNumber
     });
-  }
+  };
 
   //
   // Render

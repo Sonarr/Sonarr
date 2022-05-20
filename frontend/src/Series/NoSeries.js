@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { kinds } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
+import { kinds } from 'Helpers/Props';
 import styles from './NoSeries.css';
 
 function NoSeries(props) {

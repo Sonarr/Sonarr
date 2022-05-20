@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { setAddSeriesDefault, addSeries } from 'Store/Actions/addSeriesActions';
+import { addSeries, setAddSeriesDefault } from 'Store/Actions/addSeriesActions';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import selectSettings from 'Store/Selectors/selectSettings';
@@ -53,7 +53,7 @@ class AddNewSeriesModalContentConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setAddSeriesDefault({ [name]: value });
-  }
+  };
 
   onAddSeriesPress = (seriesType) => {
     const {
@@ -80,7 +80,7 @@ class AddNewSeriesModalContentConnector extends Component {
       searchForCutoffUnmetEpisodes: searchForCutoffUnmetEpisodes.value,
       tags: tags.value
     });
-  }
+  };
 
   //
   // Render

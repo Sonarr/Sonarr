@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
-import TableRowButton from 'Components/Table/TableRowButton';
-import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
+import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableRowButton from 'Components/Table/TableRowButton';
+import { icons } from 'Helpers/Props';
 import styles from './RecentFolderRow.css';
 
 class RecentFolderRow extends Component {
@@ -14,7 +14,7 @@ class RecentFolderRow extends Component {
 
   onPress = () => {
     this.props.onPress(this.props.folder);
-  }
+  };
 
   onRemovePress = (event) => {
     event.stopPropagation();
@@ -25,7 +25,7 @@ class RecentFolderRow extends Component {
     } = this.props;
 
     onRemoveRecentFolderPress(folder);
-  }
+  };
 
   //
   // Render

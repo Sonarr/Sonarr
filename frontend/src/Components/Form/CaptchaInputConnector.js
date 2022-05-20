@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { refreshCaptcha, getCaptchaCookie, resetCaptcha } from 'Store/Actions/captchaActions';
+import { getCaptchaCookie, refreshCaptcha, resetCaptcha } from 'Store/Actions/captchaActions';
 import CaptchaInput from './CaptchaInput';
 
 function createMapStateToProps() {
@@ -39,7 +39,7 @@ class CaptchaInputConnector extends Component {
 
   componentWillUnmount = () => {
     this.props.resetCaptcha();
-  }
+  };
 
   //
   // Listeners
@@ -51,7 +51,7 @@ class CaptchaInputConnector extends Component {
     } = this.props;
 
     this.props.refreshCaptcha({ provider, providerData });
-  }
+  };
 
   onCaptchaChange = (captchaResponse) => {
     // If the captcha has expired `captchaResponse` will be null.
@@ -68,7 +68,7 @@ class CaptchaInputConnector extends Component {
     } = this.props;
 
     this.props.getCaptchaCookie({ provider, providerData, captchaResponse });
-  }
+  };
 
   //
   // Render

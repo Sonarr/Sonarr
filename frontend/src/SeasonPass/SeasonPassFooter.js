@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { kinds } from 'Helpers/Props';
-import SpinnerButton from 'Components/Link/SpinnerButton';
 import MonitorEpisodesSelectInput from 'Components/Form/MonitorEpisodesSelectInput';
 import SelectInput from 'Components/Form/SelectInput';
+import SpinnerButton from 'Components/Link/SpinnerButton';
 import PageContentFooter from 'Components/Page/PageContentFooter';
+import { kinds } from 'Helpers/Props';
 import styles from './SeasonPassFooter.css';
 
 const NO_CHANGE = 'noChange';
@@ -42,7 +42,7 @@ class SeasonPassFooter extends Component {
 
   onInputChange = ({ name, value }) => {
     this.setState({ [name]: value });
-  }
+  };
 
   onUpdateSelectedPress = () => {
     const {
@@ -61,7 +61,7 @@ class SeasonPassFooter extends Component {
     }
 
     this.props.onUpdateSelectedPress(changes);
-  }
+  };
 
   //
   // Render

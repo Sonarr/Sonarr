@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
-import { icons } from 'Helpers/Props';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
-import ImportListsConnector from './ImportLists/ImportListsConnector';
 import ImportListsExclusionsConnector from './ImportListExclusions/ImportListExclusionsConnector';
+import ImportListsConnector from './ImportLists/ImportListsConnector';
 
 class ImportListSettings extends Component {
 
@@ -27,17 +27,17 @@ class ImportListSettings extends Component {
 
   setListOptionsRef = (ref) => {
     this._listOptions = ref;
-  }
+  };
 
   onHasPendingChange = (hasPendingChanges) => {
     this.setState({
       hasPendingChanges
     });
-  }
+  };
 
   onSavePress = () => {
     this._listOptions.getWrappedInstance().save();
-  }
+  };
 
   //
   // Render

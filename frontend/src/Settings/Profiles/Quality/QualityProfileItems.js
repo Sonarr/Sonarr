@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds, sizes } from 'Helpers/Props';
+import FormGroup from 'Components/Form/FormGroup';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
+import FormLabel from 'Components/Form/FormLabel';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
-import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
-import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import Measure from 'Components/Measure';
-import QualityProfileItemDragSource from './QualityProfileItemDragSource';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import QualityProfileItemDragPreview from './QualityProfileItemDragPreview';
+import QualityProfileItemDragSource from './QualityProfileItemDragSource';
 import styles from './QualityProfileItems.css';
 
 class QualityProfileItems extends Component {
@@ -36,11 +36,11 @@ class QualityProfileItems extends Component {
     } else {
       this.setState({ qualitiesHeight: height });
     }
-  }
+  };
 
   onToggleEditGroupsMode = () => {
     this.props.onToggleEditGroupsMode();
-  }
+  };
 
   //
   // Render

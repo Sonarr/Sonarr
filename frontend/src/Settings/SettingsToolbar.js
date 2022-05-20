@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import keyboardShortcuts, { shortcuts } from 'Components/keyboardShortcuts';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PendingChangesModal from './PendingChangesModal';
+import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import { icons } from 'Helpers/Props';
 import AdvancedSettingsButton from './AdvancedSettingsButton';
+import PendingChangesModal from './PendingChangesModal';
 
 class SettingsToolbar extends Component {
 
@@ -31,7 +31,7 @@ class SettingsToolbar extends Component {
     if (hasPendingChanges) {
       onSavePress();
     }
-  }
+  };
 
   //
   // Render

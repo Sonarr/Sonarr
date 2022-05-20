@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import Table from 'Components/Table/Table';
-import TableBody from 'Components/Table/TableBody';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import Table from 'Components/Table/Table';
+import TableBody from 'Components/Table/TableBody';
+import { icons } from 'Helpers/Props';
 import BackupRow from './BackupRow';
 import RestoreBackupModalConnector from './RestoreBackupModalConnector';
 
@@ -56,11 +56,11 @@ class Backups extends Component {
 
   onRestorePress = () => {
     this.setState({ isRestoreModalOpen: true });
-  }
+  };
 
   onRestoreModalClose = () => {
     this.setState({ isRestoreModalOpen: false });
-  }
+  };
 
   //
   // Render

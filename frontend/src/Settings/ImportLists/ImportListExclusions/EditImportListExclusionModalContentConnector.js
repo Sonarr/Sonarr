@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { saveImportListExclusion, setImportListExclusionValue } from 'Store/Actions/settingsActions';
 import selectSettings from 'Store/Selectors/selectSettings';
-import { setImportListExclusionValue, saveImportListExclusion } from 'Store/Actions/settingsActions';
 import EditImportListExclusionModalContent from './EditImportListExclusionModalContent';
 
 const newImportListExclusion = {
@@ -85,11 +85,11 @@ class EditImportListExclusionModalContentConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setImportListExclusionValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveImportListExclusion({ id: this.props.id });
-  }
+  };
 
   //
   // Render

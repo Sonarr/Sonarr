@@ -1,15 +1,15 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import CheckInput from 'Components/Form/CheckInput';
+import FormInputGroup from 'Components/Form/FormInputGroup';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import CheckInput from 'Components/Form/CheckInput';
-import FormInputGroup from 'Components/Form/FormInputGroup';
 import PageContentFooter from 'Components/Page/PageContentFooter';
 import Popover from 'Components/Tooltip/Popover';
+import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import styles from './ImportSeriesFooter.css';
 
 const MIXED = 'mixed';
@@ -104,7 +104,7 @@ class ImportSeriesFooter extends Component {
   onInputChange = ({ name, value }) => {
     this.setState({ [name]: value });
     this.props.onInputChange({ name, value });
-  }
+  };
 
   //
   // Render

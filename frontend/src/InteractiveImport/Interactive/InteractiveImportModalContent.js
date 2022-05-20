@@ -1,33 +1,33 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import getErrorMessage from 'Utilities/Object/getErrorMessage';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
-import selectAll from 'Utilities/Table/selectAll';
-import toggleSelected from 'Utilities/Table/toggleSelected';
-import { align, icons, kinds, scrollDirections } from 'Helpers/Props';
+import SelectInput from 'Components/Form/SelectInput';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
-import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import SelectInput from 'Components/Form/SelectInput';
 import Menu from 'Components/Menu/Menu';
 import MenuButton from 'Components/Menu/MenuButton';
 import MenuContent from 'Components/Menu/MenuContent';
 import SelectedMenuItem from 'Components/Menu/SelectedMenuItem';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import { align, icons, kinds, scrollDirections } from 'Helpers/Props';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
-import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
-import SelectSeasonModal from 'InteractiveImport/Season/SelectSeasonModal';
 import SelectReleaseGroupModal from 'InteractiveImport/ReleaseGroup/SelectReleaseGroupModal';
+import SelectSeasonModal from 'InteractiveImport/Season/SelectSeasonModal';
+import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
+import getErrorMessage from 'Utilities/Object/getErrorMessage';
+import getSelectedIds from 'Utilities/Table/getSelectedIds';
+import selectAll from 'Utilities/Table/selectAll';
+import toggleSelected from 'Utilities/Table/toggleSelected';
 import InteractiveImportRow from './InteractiveImportRow';
 import styles from './InteractiveImportModalContent.css';
 
@@ -151,14 +151,14 @@ class InteractiveImportModalContent extends Component {
 
   getSelectedIds = () => {
     return getSelectedIds(this.state.selectedState);
-  }
+  };
 
   //
   // Listeners
 
   onSelectAllChange = ({ value }) => {
     this.setState(selectAll(this.state.selectedState, value));
-  }
+  };
 
   onSelectedChange = ({ id, value, hasEpisodeFileId, shiftKey = false }) => {
     this.setState((state) => {
@@ -169,7 +169,7 @@ class InteractiveImportModalContent extends Component {
           [...state.withoutEpisodeFileIdRowsSelected, id]
       };
     });
-  }
+  };
 
   onValidRowChange = (id, isValid) => {
     this.setState((state) => {
@@ -183,20 +183,20 @@ class InteractiveImportModalContent extends Component {
         invalidRowsSelected: [...state.invalidRowsSelected, id]
       };
     });
-  }
+  };
 
   onDeleteSelectedPress = () => {
     this.setState({ isConfirmDeleteModalOpen: true });
-  }
+  };
 
   onConfirmDelete = () => {
     this.setState({ isConfirmDeleteModalOpen: false });
     this.props.onDeleteSelectedPress(this.getSelectedIds());
-  }
+  };
 
   onConfirmDeleteModalClose = () => {
     this.setState({ isConfirmDeleteModalOpen: false });
-  }
+  };
 
   onImportSelectedPress = () => {
     const {
@@ -210,23 +210,23 @@ class InteractiveImportModalContent extends Component {
     const finalImportMode = downloadId || !showImportMode ? 'auto' : importMode;
 
     onImportSelectedPress(selected, finalImportMode);
-  }
+  };
 
   onFilterExistingFilesChange = (value) => {
     this.props.onFilterExistingFilesChange(value !== filterExistingFilesOptions.ALL);
-  }
+  };
 
   onImportModeChange = ({ value }) => {
     this.props.onImportModeChange(value);
-  }
+  };
 
   onSelectModalSelect = ({ value }) => {
     this.setState({ selectModalOpen: value });
-  }
+  };
 
   onSelectModalClose = () => {
     this.setState({ selectModalOpen: null });
-  }
+  };
 
   //
   // Render

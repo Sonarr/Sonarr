@@ -1,9 +1,9 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
-import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
+import { icons } from 'Helpers/Props';
 import styles from './FormInputHelpText.css';
 
 function FormInputHelpText(props) {

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { fetchLanguageProfileSchema, saveLanguageProfile, setLanguageProfileValue } from 'Store/Actions/settingsActions';
 import createProfileInUseSelector from 'Store/Selectors/createProfileInUseSelector';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
-import { fetchLanguageProfileSchema, setLanguageProfileValue, saveLanguageProfile } from 'Store/Actions/settingsActions';
 import EditLanguageProfileModalContent from './EditLanguageProfileModalContent';
 
 function createLanguagesSelector() {
@@ -83,18 +83,18 @@ class EditLanguageProfileModalContentConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setLanguageProfileValue({ name, value });
-  }
+  };
 
   onCutoffChange = ({ name, value }) => {
     const id = parseInt(value);
     const item = _.find(this.props.item.languages.value, (i) => i.language.id === id);
 
     this.props.setLanguageProfileValue({ name, value: item.language });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveLanguageProfile({ id: this.props.id });
-  }
+  };
 
   onLanguageProfileItemAllowedChange = (id, allowed) => {
     const languageProfile = _.cloneDeep(this.props.item);
@@ -115,7 +115,7 @@ class EditLanguageProfileModalContentConnector extends Component {
 
       this.props.setLanguageProfileValue({ name: 'cutoff', value: firstAllowed ? firstAllowed.language : null });
     }
-  }
+  };
 
   onLanguageProfileItemDragMove = (dragIndex, dropIndex) => {
     if (this.state.dragIndex !== dragIndex || this.state.dropIndex !== dropIndex) {
@@ -124,7 +124,7 @@ class EditLanguageProfileModalContentConnector extends Component {
         dropIndex
       });
     }
-  }
+  };
 
   onLanguageProfileItemDragEnd = ({ id }, didDrop) => {
     const {
@@ -148,7 +148,7 @@ class EditLanguageProfileModalContentConnector extends Component {
       dragIndex: null,
       dropIndex: null
     });
-  }
+  };
 
   //
   // Render

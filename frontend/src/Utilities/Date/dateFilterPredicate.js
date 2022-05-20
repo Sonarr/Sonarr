@@ -1,7 +1,7 @@
 import moment from 'moment';
+import * as filterTypes from 'Helpers/Props/filterTypes';
 import isAfter from 'Utilities/Date/isAfter';
 import isBefore from 'Utilities/Date/isBefore';
-import * as filterTypes from 'Helpers/Props/filterTypes';
 
 export default function(itemValue, filterValue, type) {
   if (!itemValue) {

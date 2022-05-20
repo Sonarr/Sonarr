@@ -17,7 +17,7 @@ class AddImportListPresetMenuItem extends Component {
       name,
       implementation
     });
-  }
+  };
 
   //
   // Render

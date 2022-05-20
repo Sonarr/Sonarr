@@ -1,11 +1,11 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
-import { icons } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import VirtualTableHeader from 'Components/Table/VirtualTableHeader';
 import VirtualTableHeaderCell from 'Components/Table/VirtualTableHeaderCell';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import { icons } from 'Helpers/Props';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeriesIndexTableOptionsConnector from './SeriesIndexTableOptionsConnector';
 import styles from './SeriesIndexHeader.css';

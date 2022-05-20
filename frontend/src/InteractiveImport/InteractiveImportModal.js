@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { sizes } from 'Helpers/Props';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import InteractiveImportSelectFolderModalContentConnector from './Folder/InteractiveImportSelectFolderModalContentConnector';
 import InteractiveImportModalContentConnector from './Interactive/InteractiveImportModalContentConnector';
 
@@ -29,7 +29,7 @@ class InteractiveImportModal extends Component {
 
   onFolderSelect = (folder) => {
     this.setState({ folder });
-  }
+  };
 
   //
   // Render

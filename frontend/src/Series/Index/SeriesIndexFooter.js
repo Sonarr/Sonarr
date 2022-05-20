@@ -1,10 +1,10 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
-import formatBytes from 'Utilities/Number/formatBytes';
 import { ColorImpairedConsumer } from 'App/ColorImpairedContext';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
+import formatBytes from 'Utilities/Number/formatBytes';
 import styles from './SeriesIndexFooter.css';
 
 class SeriesIndexFooter extends PureComponent {

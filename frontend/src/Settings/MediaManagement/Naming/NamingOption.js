@@ -1,9 +1,9 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { sizes, icons } from 'Helpers/Props';
-import Link from 'Components/Link/Link';
 import Icon from 'Components/Icon';
+import Link from 'Components/Link/Link';
+import { icons, sizes } from 'Helpers/Props';
 import styles from './NamingOption.css';
 
 class NamingOption extends Component {
@@ -31,7 +31,7 @@ class NamingOption extends Component {
     }
 
     onPress({ isFullFilename, tokenValue });
-  }
+  };
 
   //
   // Render
@@ -65,7 +65,7 @@ class NamingOption extends Component {
 
           {
             footNote !== 0 &&
-            <Icon className={styles.footNote} name={icons.FOOTNOTE} />
+              <Icon className={styles.footNote} name={icons.FOOTNOTE} />
           }
         </div>
       </Link>

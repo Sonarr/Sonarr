@@ -1,12 +1,12 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Label from 'Components/Label';
+import { kinds, sizes } from 'Helpers/Props';
 import formatTime from 'Utilities/Date/formatTime';
 import isInNextWeek from 'Utilities/Date/isInNextWeek';
 import isToday from 'Utilities/Date/isToday';
 import isTomorrow from 'Utilities/Date/isTomorrow';
-import { kinds, sizes } from 'Helpers/Props';
-import Label from 'Components/Label';
 
 function EpisodeAiring(props) {
   const {

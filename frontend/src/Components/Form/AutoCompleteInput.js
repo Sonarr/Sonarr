@@ -1,6 +1,6 @@
+import jdu from 'jdu';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import jdu from 'jdu';
 import AutoSuggestInput from './AutoSuggestInput';
 
 class AutoCompleteInput extends Component {
@@ -35,11 +35,11 @@ class AutoCompleteInput extends Component {
       name: this.props.name,
       value: newValue
     });
-  }
+  };
 
   onInputBlur = () => {
     this.setState({ suggestions: [] });
-  }
+  };
 
   onSuggestionsFetchRequested = ({ value }) => {
     const { values } = this.props;
@@ -50,11 +50,11 @@ class AutoCompleteInput extends Component {
     });
 
     this.setState({ suggestions: filteredValues });
-  }
+  };
 
   onSuggestionsClearRequested = () => {
     this.setState({ suggestions: [] });
-  }
+  };
 
   //
   // Render

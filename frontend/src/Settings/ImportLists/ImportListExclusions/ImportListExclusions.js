@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import ImportListExclusion from './ImportListExclusion';
+import { icons } from 'Helpers/Props';
 import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
+import ImportListExclusion from './ImportListExclusion';
 import styles from './ImportListExclusions.css';
 
 class ImportListExclusions extends Component {
@@ -27,11 +27,11 @@ class ImportListExclusions extends Component {
 
   onAddImportListExclusionPress = () => {
     this.setState({ isAddImportListExclusionModalOpen: true });
-  }
+  };
 
   onModalClose = () => {
     this.setState({ isAddImportListExclusionModalOpen: false });
-  }
+  };
 
   //
   // Render

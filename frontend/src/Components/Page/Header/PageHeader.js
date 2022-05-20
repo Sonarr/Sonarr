@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import keyboardShortcuts, { shortcuts } from 'Components/keyboardShortcuts';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
-import SeriesSearchInputConnector from './SeriesSearchInputConnector';
-import PageHeaderActionsMenuConnector from './PageHeaderActionsMenuConnector';
+import { icons } from 'Helpers/Props';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
+import PageHeaderActionsMenuConnector from './PageHeaderActionsMenuConnector';
+import SeriesSearchInputConnector from './SeriesSearchInputConnector';
 import styles from './PageHeader.css';
 
 class PageHeader extends Component {
@@ -31,14 +31,14 @@ class PageHeader extends Component {
 
   onOpenKeyboardShortcutsModal = () => {
     this.setState({ isKeyboardShortcutsModalOpen: true });
-  }
+  };
 
   //
   // Listeners
 
   onKeyboardShortcutsModalClose = () => {
     this.setState({ isKeyboardShortcutsModalOpen: false });
-  }
+  };
 
   //
   // Render

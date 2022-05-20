@@ -1,17 +1,17 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds, sizes } from 'Helpers/Props';
-import Label from 'Components/Label';
-import Button from 'Components/Link/Button';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
-import ModalBody from 'Components/Modal/ModalBody';
-import ModalFooter from 'Components/Modal/ModalFooter';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
+import Label from 'Components/Label';
+import Button from 'Components/Link/Button';
+import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
+import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import styles from './TagsModalContent.css';
 
 class TagsModalContent extends Component {
@@ -33,7 +33,7 @@ class TagsModalContent extends Component {
 
   onInputChange = ({ name, value }) => {
     this.setState({ [name]: value });
-  }
+  };
 
   onApplyTagsPress = () => {
     const {
@@ -42,7 +42,7 @@ class TagsModalContent extends Component {
     } = this.state;
 
     this.props.onApplyTagsPress(tags, applyTags);
-  }
+  };
 
   //
   // Render

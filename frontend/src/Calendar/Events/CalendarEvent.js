@@ -1,15 +1,15 @@
+import classNames from 'classnames';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
-import classNames from 'classnames';
-import { icons, kinds } from 'Helpers/Props';
-import formatTime from 'Utilities/Date/formatTime';
-import padNumber from 'Utilities/Number/padNumber';
 import getStatusStyle from 'Calendar/getStatusStyle';
-import episodeEntities from 'Episode/episodeEntities';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import EpisodeDetailsModal from 'Episode/EpisodeDetailsModal';
+import episodeEntities from 'Episode/episodeEntities';
+import { icons, kinds } from 'Helpers/Props';
+import formatTime from 'Utilities/Date/formatTime';
+import padNumber from 'Utilities/Number/padNumber';
 import CalendarEventQueueDetails from './CalendarEventQueueDetails';
 import styles from './CalendarEvent.css';
 
@@ -33,13 +33,13 @@ class CalendarEvent extends Component {
     this.setState({ isDetailsModalOpen: true }, () => {
       this.props.onEventModalOpenToggle(true);
     });
-  }
+  };
 
   onDetailsModalClose = () => {
     this.setState({ isDetailsModalOpen: false }, () => {
       this.props.onEventModalOpenToggle(false);
     });
-  }
+  };
 
   //
   // Render

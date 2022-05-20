@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import sortByName from 'Utilities/Array/sortByName';
+import { cloneLanguageProfile, deleteLanguageProfile, fetchLanguageProfiles } from 'Store/Actions/settingsActions';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import { fetchLanguageProfiles, deleteLanguageProfile, cloneLanguageProfile } from 'Store/Actions/settingsActions';
+import sortByName from 'Utilities/Array/sortByName';
 import LanguageProfiles from './LanguageProfiles';
 
 function createMapStateToProps() {
@@ -40,11 +40,11 @@ class LanguageProfilesConnector extends Component {
 
   onConfirmDeleteLanguageProfile = (id) => {
     this.props.dispatchDeleteLanguageProfile({ id });
-  }
+  };
 
   onCloneLanguageProfilePress = (id) => {
     this.props.dispatchCloneLanguageProfile({ id });
-  }
+  };
 
   //
   // Render

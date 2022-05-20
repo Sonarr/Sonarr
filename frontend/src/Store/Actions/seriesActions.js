@@ -1,17 +1,17 @@
 import _ from 'lodash';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
-import createAjaxRequest from 'Utilities/createAjaxRequest';
-import sortByName from 'Utilities/Array/sortByName';
-import dateFilterPredicate from 'Utilities/Date/dateFilterPredicate';
 import { filterBuilderTypes, filterBuilderValueTypes, filterTypePredicates, filterTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
-import createSetSettingValueReducer from './Creators/Reducers/createSetSettingValueReducer';
+import sortByName from 'Utilities/Array/sortByName';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
+import dateFilterPredicate from 'Utilities/Date/dateFilterPredicate';
+import { set, updateItem } from './baseActions';
 import createFetchHandler from './Creators/createFetchHandler';
-import createSaveProviderHandler from './Creators/createSaveProviderHandler';
-import createRemoveItemHandler from './Creators/createRemoveItemHandler';
 import createHandleActions from './Creators/createHandleActions';
-import { updateItem, set } from './baseActions';
+import createRemoveItemHandler from './Creators/createRemoveItemHandler';
+import createSaveProviderHandler from './Creators/createSaveProviderHandler';
+import createSetSettingValueReducer from './Creators/Reducers/createSetSettingValueReducer';
 import { fetchEpisodes } from './episodeActions';
 
 //

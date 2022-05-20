@@ -1,7 +1,7 @@
+import classNames from 'classnames';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
 import * as calendarViews from 'Calendar/calendarViews';
 import CalendarEventConnector from 'Calendar/Events/CalendarEventConnector';
 import CalendarEventGroupConnector from 'Calendar/Events/CalendarEventGroupConnector';

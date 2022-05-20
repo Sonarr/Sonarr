@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import * as commandNames from 'Commands/commandNames';
 import { executeCommand } from 'Store/Actions/commandActions';
-import ResetQualityDefinitionsModalContent from './ResetQualityDefinitionsModalContent';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
+import ResetQualityDefinitionsModalContent from './ResetQualityDefinitionsModalContent';
 
 function createMapStateToProps() {
   return createSelector(
@@ -30,7 +30,7 @@ class ResetQualityDefinitionsModalContentConnector extends Component {
   onResetQualityDefinitions = (resetTitles) => {
     this.props.executeCommand({ name: commandNames.RESET_QUALITY_DEFINITIONS, resetTitles });
     this.props.onModalClose(true);
-  }
+  };
 
   //
   // Render

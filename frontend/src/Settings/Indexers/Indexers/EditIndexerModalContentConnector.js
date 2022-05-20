@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { saveIndexer, setIndexerFieldValue, setIndexerValue, testIndexer } from 'Store/Actions/settingsActions';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
-import { setIndexerValue, setIndexerFieldValue, saveIndexer, testIndexer } from 'Store/Actions/settingsActions';
 import EditIndexerModalContent from './EditIndexerModalContent';
 
 function createMapStateToProps() {
@@ -42,19 +42,19 @@ class EditIndexerModalContentConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setIndexerValue({ name, value });
-  }
+  };
 
   onFieldChange = ({ name, value }) => {
     this.props.setIndexerFieldValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveIndexer({ id: this.props.id });
-  }
+  };
 
   onTestPress = () => {
     this.props.testIndexer({ id: this.props.id });
-  }
+  };
 
   //
   // Render

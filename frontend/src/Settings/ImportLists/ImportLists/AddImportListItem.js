@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { sizes } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
+import { sizes } from 'Helpers/Props';
 import AddImportListPresetMenuItem from './AddImportListPresetMenuItem';
 import styles from './AddImportListItem.css';
 
@@ -19,7 +19,7 @@ class AddImportListItem extends Component {
     } = this.props;
 
     this.props.onImportListSelect({ implementation });
-  }
+  };
 
   //
   // Render

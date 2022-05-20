@@ -98,11 +98,11 @@ function SceneInfo(props) {
                         {title}
                         {
                           suffix &&
-                          <span> ({suffix})</span>
+                            <span> ({suffix})</span>
                         }
                         {
                           comment &&
-                          <span className={styles.comment}> {comment}</span>
+                            <span className={styles.comment}> {comment}</span>
                         }
                       </div>
                     );

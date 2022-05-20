@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds, sizes } from 'Helpers/Props';
-import Button from 'Components/Link/Button';
-import Icon from 'Components/Icon';
 import FileBrowserModal from 'Components/FileBrowser/FileBrowserModal';
+import Icon from 'Components/Icon';
+import Button from 'Components/Link/Button';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import styles from './AddRootFolder.css';
 
 class AddRootFolder extends Component {
@@ -24,15 +24,15 @@ class AddRootFolder extends Component {
 
   onAddNewRootFolderPress = () => {
     this.setState({ isAddNewRootFolderModalOpen: true });
-  }
+  };
 
   onNewRootFolderSelect = ({ value }) => {
     this.props.onNewRootFolderSelect(value);
-  }
+  };
 
   onAddRootFolderModalClose = () => {
     this.setState({ isAddNewRootFolderModalOpen: false });
-  }
+  };
 
   //
   // Render

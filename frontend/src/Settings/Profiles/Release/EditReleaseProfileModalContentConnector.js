@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { saveReleaseProfile, setReleaseProfileValue } from 'Store/Actions/settingsActions';
 import selectSettings from 'Store/Selectors/selectSettings';
-import { setReleaseProfileValue, saveReleaseProfile } from 'Store/Actions/settingsActions';
 import EditReleaseProfileModalContent from './EditReleaseProfileModalContent';
 
 const newReleaseProfile = {
@@ -79,11 +79,11 @@ class EditReleaseProfileModalContentConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setReleaseProfileValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveReleaseProfile({ id: this.props.id });
-  }
+  };
 
   //
   // Render

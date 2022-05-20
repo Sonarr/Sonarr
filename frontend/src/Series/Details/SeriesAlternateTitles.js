@@ -15,7 +15,7 @@ function SeriesAlternateTitles({ alternateTitles }) {
               {alternateTitle.title}
               {
                 alternateTitle.comment &&
-                <span className={styles.comment}> {alternateTitle.comment}</span>
+                  <span className={styles.comment}> {alternateTitle.comment}</span>
               }
             </li>
           );

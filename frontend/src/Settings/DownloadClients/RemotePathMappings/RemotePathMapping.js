@@ -1,10 +1,10 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import { icons, kinds } from 'Helpers/Props';
 import EditRemotePathMappingModalConnector from './EditRemotePathMappingModalConnector';
 import styles from './RemotePathMapping.css';
 
@@ -27,26 +27,26 @@ class RemotePathMapping extends Component {
 
   onEditRemotePathMappingPress = () => {
     this.setState({ isEditRemotePathMappingModalOpen: true });
-  }
+  };
 
   onEditRemotePathMappingModalClose = () => {
     this.setState({ isEditRemotePathMappingModalOpen: false });
-  }
+  };
 
   onDeleteRemotePathMappingPress = () => {
     this.setState({
       isEditRemotePathMappingModalOpen: false,
       isDeleteRemotePathMappingModalOpen: true
     });
-  }
+  };
 
   onDeleteRemotePathMappingModalClose = () => {
     this.setState({ isDeleteRemotePathMappingModalOpen: false });
-  }
+  };
 
   onConfirmDeleteRemotePathMapping = () => {
     this.props.onConfirmDeleteRemotePathMapping(this.props.id);
-  }
+  };
 
   //
   // Render

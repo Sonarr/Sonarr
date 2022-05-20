@@ -1,15 +1,14 @@
 import _ from 'lodash';
 import { handleActions } from 'redux-actions';
-import getSectionState from 'Utilities/State/getSectionState';
-import updateSectionState from 'Utilities/State/updateSectionState';
 import {
+  CLEAR_PENDING_CHANGES,
+  REMOVE_ITEM,
   SET,
   UPDATE,
   UPDATE_ITEM,
-  UPDATE_SERVER_SIDE_COLLECTION,
-  CLEAR_PENDING_CHANGES,
-  REMOVE_ITEM
-} from 'Store/Actions/baseActions';
+  UPDATE_SERVER_SIDE_COLLECTION } from 'Store/Actions/baseActions';
+import getSectionState from 'Utilities/State/getSectionState';
+import updateSectionState from 'Utilities/State/updateSectionState';
 
 const omittedProperties = [
   'section',

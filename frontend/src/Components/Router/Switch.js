@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Switch as RouterSwitch } from 'react-router-dom';
-import getPathWithUrlBase from 'Utilities/getPathWithUrlBase';
 import { map } from 'Helpers/elementChildren';
+import getPathWithUrlBase from 'Utilities/getPathWithUrlBase';
 
 class Switch extends Component {
 

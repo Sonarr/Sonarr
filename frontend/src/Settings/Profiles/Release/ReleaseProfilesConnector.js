@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchReleaseProfiles, deleteReleaseProfile, fetchIndexers } from 'Store/Actions/settingsActions';
+import { deleteReleaseProfile, fetchIndexers, fetchReleaseProfiles } from 'Store/Actions/settingsActions';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import ReleaseProfiles from './ReleaseProfiles';
 
@@ -45,7 +45,7 @@ class ReleaseProfilesConnector extends Component {
 
   onConfirmDeleteReleaseProfile = (id) => {
     this.props.deleteReleaseProfile({ id });
-  }
+  };
 
   //
   // Render

@@ -1,19 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { kinds, scrollDirections } from 'Helpers/Props';
 import Alert from 'Components/Alert';
+import PathInput from 'Components/Form/PathInput';
 import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
 import Scroller from 'Components/Scroller/Scroller';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import PathInput from 'Components/Form/PathInput';
+import { kinds, scrollDirections } from 'Helpers/Props';
 import FileBrowserRow from './FileBrowserRow';
 import styles from './FileBrowserModalContent.css';
 
@@ -69,18 +69,18 @@ class FileBrowserModalContent extends Component {
     } else {
       this._scrollerNode = null;
     }
-  }
+  };
 
   //
   // Listeners
 
   onPathInputChange = ({ value }) => {
     this.setState({ currentPath: value });
-  }
+  };
 
   onRowPress = (path) => {
     this.props.onFetchPaths(path);
-  }
+  };
 
   onOkPress = () => {
     this.props.onChange({
@@ -90,7 +90,7 @@ class FileBrowserModalContent extends Component {
 
     this.props.onClearPaths();
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

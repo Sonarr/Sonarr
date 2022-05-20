@@ -1,15 +1,15 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { forEach } from 'Helpers/elementChildren';
-import { align, icons } from 'Helpers/Props';
-import dimensions from 'Styles/Variables/dimensions';
-import SpinnerIcon from 'Components/SpinnerIcon';
 import Measure from 'Components/Measure';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
 import MenuItem from 'Components/Menu/MenuItem';
 import ToolbarMenuButton from 'Components/Menu/ToolbarMenuButton';
+import SpinnerIcon from 'Components/SpinnerIcon';
+import { forEach } from 'Helpers/elementChildren';
+import { align, icons } from 'Helpers/Props';
+import dimensions from 'Styles/Variables/dimensions';
 import styles from './PageToolbarSection.css';
 
 const BUTTON_WIDTH = parseInt(dimensions.toolbarButtonWidth);
@@ -108,7 +108,7 @@ class PageToolbarSection extends Component {
       isMeasured: true,
       width
     });
-  }
+  };
 
   //
   // Render

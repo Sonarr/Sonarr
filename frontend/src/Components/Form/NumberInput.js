@@ -59,11 +59,11 @@ class NumberInput extends Component {
       value: parseValue(this.props, value)
     });
 
-  }
+  };
 
   onFocus = () => {
     this.setState({ isFocused: true });
-  }
+  };
 
   onBlur = () => {
     const {
@@ -88,7 +88,7 @@ class NumberInput extends Component {
       name,
       value: parsedValue
     });
-  }
+  };
 
   //
   // Render

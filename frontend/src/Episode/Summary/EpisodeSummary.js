@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { kinds, sizes } from 'Helpers/Props';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import { kinds, sizes } from 'Helpers/Props';
 import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileNameConnector';
 import EpisodeAiringConnector from './EpisodeAiringConnector';
 import EpisodeFileRow from './EpisodeFileRow';
@@ -61,16 +61,16 @@ class EpisodeSummary extends Component {
 
   onRemoveEpisodeFilePress = () => {
     this.setState({ isRemoveEpisodeFileModalOpen: true });
-  }
+  };
 
   onConfirmRemoveEpisodeFile = () => {
     this.props.onDeleteEpisodeFile();
     this.setState({ isRemoveEpisodeFileModalOpen: false });
-  }
+  };
 
   onRemoveEpisodeFileModalClose = () => {
     this.setState({ isRemoveEpisodeFileModalOpen: false });
-  }
+  };
 
   //
   // Render

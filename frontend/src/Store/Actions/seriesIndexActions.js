@@ -1,11 +1,11 @@
 import moment from 'moment';
 import { createAction } from 'redux-actions';
 import { sortDirections } from 'Helpers/Props';
-import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
-import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
-import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
 import createHandleActions from './Creators/createHandleActions';
-import { filters, filterPredicates, filterBuilderProps, sortPredicates } from './seriesActions';
+import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
+import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
+import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
+import { filterBuilderProps, filterPredicates, filters, sortPredicates } from './seriesActions';
 
 //
 // Variables

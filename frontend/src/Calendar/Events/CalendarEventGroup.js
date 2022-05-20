@@ -1,14 +1,14 @@
+import classNames from 'classnames';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import formatTime from 'Utilities/Date/formatTime';
-import padNumber from 'Utilities/Number/padNumber';
-import { icons, kinds } from 'Helpers/Props';
+import CalendarEventConnector from 'Calendar/Events/CalendarEventConnector';
+import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
-import getStatusStyle from 'Calendar/getStatusStyle';
-import CalendarEventConnector from 'Calendar/Events/CalendarEventConnector';
+import { icons, kinds } from 'Helpers/Props';
+import formatTime from 'Utilities/Date/formatTime';
+import padNumber from 'Utilities/Number/padNumber';
 import styles from './CalendarEventGroup.css';
 
 function getEventsInfo(events) {
@@ -61,7 +61,7 @@ class CalendarEventGroup extends Component {
 
   onExpandPress = () => {
     this.setState({ isExpanded: !this.state.isExpanded });
-  }
+  };
 
   //
   // Render

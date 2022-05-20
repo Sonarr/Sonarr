@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { gotoCalendarPreviousRange, gotoCalendarNextRange } from 'Store/Actions/calendarActions';
+import { gotoCalendarNextRange, gotoCalendarPreviousRange } from 'Store/Actions/calendarActions';
 import CalendarDays from './CalendarDays';
 
 function createMapStateToProps() {

@@ -1,8 +1,8 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
+import { icons, kinds } from 'Helpers/Props';
 
 function QueueDetails(props) {
   const {

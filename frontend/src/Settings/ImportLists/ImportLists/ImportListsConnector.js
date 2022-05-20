@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchImportLists, deleteImportList } from 'Store/Actions/settingsActions';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
+import { deleteImportList, fetchImportLists } from 'Store/Actions/settingsActions';
 import ImportLists from './ImportLists';
 
 function createMapStateToProps() {
@@ -38,7 +38,7 @@ class ListsConnector extends Component {
 
   onConfirmDeleteImportList = (id) => {
     this.props.deleteImportList({ id });
-  }
+  };
 
   //
   // Render

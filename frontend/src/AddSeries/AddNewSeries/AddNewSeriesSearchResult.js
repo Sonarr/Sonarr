@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds, sizes } from 'Helpers/Props';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import SeriesPoster from 'Series/SeriesPoster';
 import AddNewSeriesModal from './AddNewSeriesModal';
 import styles from './AddNewSeriesSearchResult.css';
@@ -33,15 +33,15 @@ class AddNewSeriesSearchResult extends Component {
 
   onPress = () => {
     this.setState({ isNewAddSeriesModalOpen: true });
-  }
+  };
 
   onAddSeriesModalClose = () => {
     this.setState({ isNewAddSeriesModalOpen: false });
-  }
+  };
 
   onTVDBLinkPress = (event) => {
     event.stopPropagation();
-  }
+  };
 
   //
   // Render

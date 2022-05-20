@@ -1,10 +1,10 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import { icons, kinds } from 'Helpers/Props';
 import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
 import styles from './ImportListExclusion.css';
 
@@ -27,26 +27,26 @@ class ImportListExclusion extends Component {
 
   onEditImportListExclusionPress = () => {
     this.setState({ isEditImportListExclusionModalOpen: true });
-  }
+  };
 
   onEditImportListExclusionModalClose = () => {
     this.setState({ isEditImportListExclusionModalOpen: false });
-  }
+  };
 
   onDeleteImportListExclusionPress = () => {
     this.setState({
       isEditImportListExclusionModalOpen: false,
       isDeleteImportListExclusionModalOpen: true
     });
-  }
+  };
 
   onDeleteImportListExclusionModalClose = () => {
     this.setState({ isDeleteImportListExclusionModalOpen: false });
-  }
+  };
 
   onConfirmDeleteImportListExclusion = () => {
     this.props.onConfirmDeleteImportListExclusion(this.props.id);
-  }
+  };
 
   //
   // Render

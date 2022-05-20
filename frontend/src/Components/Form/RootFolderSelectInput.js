@@ -49,17 +49,17 @@ class RootFolderSelectInput extends Component {
     } else {
       this.props.onChange({ name, value });
     }
-  }
+  };
 
   onNewRootFolderSelect = ({ value }) => {
     this.setState({ newRootFolderPath: value }, () => {
       this.props.onNewRootFolderSelect(value);
     });
-  }
+  };
 
   onAddRootFolderModalClose = () => {
     this.setState({ isAddNewRootFolderModalOpen: false });
-  }
+  };
 
   //
   // Render

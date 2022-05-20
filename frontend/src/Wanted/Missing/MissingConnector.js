@@ -2,15 +2,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
+import * as commandNames from 'Commands/commandNames';
+import withCurrentPage from 'Components/withCurrentPage';
+import { executeCommand } from 'Store/Actions/commandActions';
+import { clearQueueDetails, fetchQueueDetails } from 'Store/Actions/queueActions';
+import * as wantedActions from 'Store/Actions/wantedActions';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
-import withCurrentPage from 'Components/withCurrentPage';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import * as wantedActions from 'Store/Actions/wantedActions';
-import { executeCommand } from 'Store/Actions/commandActions';
-import { fetchQueueDetails, clearQueueDetails } from 'Store/Actions/queueActions';
-import * as commandNames from 'Commands/commandNames';
+import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import Missing from './Missing';
 
 function createMapStateToProps() {
@@ -73,38 +73,38 @@ class MissingConnector extends Component {
 
   repopulate = () => {
     this.props.fetchMissing();
-  }
+  };
 
   //
   // Listeners
 
   onFirstPagePress = () => {
     this.props.gotoMissingFirstPage();
-  }
+  };
 
   onPreviousPagePress = () => {
     this.props.gotoMissingPreviousPage();
-  }
+  };
 
   onNextPagePress = () => {
     this.props.gotoMissingNextPage();
-  }
+  };
 
   onLastPagePress = () => {
     this.props.gotoMissingLastPage();
-  }
+  };
 
   onPageSelect = (page) => {
     this.props.gotoMissingPage({ page });
-  }
+  };
 
   onSortPress = (sortKey) => {
     this.props.setMissingSort({ sortKey });
-  }
+  };
 
   onFilterSelect = (selectedFilterKey) => {
     this.props.setMissingFilter({ selectedFilterKey });
-  }
+  };
 
   onTableOptionChange = (payload) => {
     this.props.setMissingTableOption(payload);
@@ -112,21 +112,21 @@ class MissingConnector extends Component {
     if (payload.pageSize) {
       this.props.gotoMissingFirstPage();
     }
-  }
+  };
 
   onSearchSelectedPress = (selected) => {
     this.props.executeCommand({
       name: commandNames.EPISODE_SEARCH,
       episodeIds: selected
     });
-  }
+  };
 
   onSearchAllMissingPress = (monitored) => {
     this.props.executeCommand({
       name: commandNames.MISSING_EPISODE_SEARCH,
       monitored
     });
-  }
+  };
 
   //
   // Render

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { DragLayer } from 'react-dnd';
-import dimensions from 'Styles/Variables/dimensions.js';
-import { DELAY_PROFILE } from 'Helpers/dragTypes';
 import DragPreviewLayer from 'Components/DragPreviewLayer';
+import { DELAY_PROFILE } from 'Helpers/dragTypes';
+import dimensions from 'Styles/Variables/dimensions.js';
 import DelayProfile from './DelayProfile';
 import styles from './DelayProfileDragPreview.css';
 

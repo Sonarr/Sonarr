@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import * as commandNames from 'Commands/commandNames';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import Quality from './Quality';
 
 function createMapStateToProps() {

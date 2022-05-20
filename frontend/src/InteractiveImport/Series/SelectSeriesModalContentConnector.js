@@ -60,7 +60,7 @@ class SelectSeriesModalContentConnector extends Component {
     dispatchReprocessInteractiveImportItems({ ids });
 
     onModalClose(true);
-  }
+  };
 
   //
   // Render

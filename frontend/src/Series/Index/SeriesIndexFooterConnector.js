@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createDeepEqualSelector from 'Store/Selectors/createDeepEqualSelector';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
+import createDeepEqualSelector from 'Store/Selectors/createDeepEqualSelector';
 import SeriesIndexFooter from './SeriesIndexFooter';
 
 function createUnoptimizedSelector() {

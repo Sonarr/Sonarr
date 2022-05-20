@@ -1,8 +1,8 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
-import classNames from 'classnames';
+import { findDOMNode } from 'react-dom';
 import { QUALITY_PROFILE_ITEM } from 'Helpers/dragTypes';
 import LanguageProfileItem from './LanguageProfileItem';
 import styles from './LanguageProfileItemDragSource.css';

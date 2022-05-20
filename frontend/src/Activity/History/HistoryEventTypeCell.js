@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import { icons, kinds } from 'Helpers/Props';
 import styles from './HistoryEventTypeCell.css';
 
 function getIconName(eventType) {

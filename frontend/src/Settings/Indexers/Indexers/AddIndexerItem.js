@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { sizes } from 'Helpers/Props';
 import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
+import { sizes } from 'Helpers/Props';
 import AddIndexerPresetMenuItem from './AddIndexerPresetMenuItem';
 import styles from './AddIndexerItem.css';
 
@@ -19,7 +19,7 @@ class AddIndexerItem extends Component {
     } = this.props;
 
     this.props.onIndexerSelect({ implementation });
-  }
+  };
 
   //
   // Render

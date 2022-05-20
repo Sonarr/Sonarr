@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
-import { sizes } from 'Helpers/Props';
 import ProgressBar from 'Components/ProgressBar';
+import { sizes } from 'Helpers/Props';
+import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
 import styles from './SeriesIndexProgressBar.css';
 
 function SeriesIndexProgressBar(props) {

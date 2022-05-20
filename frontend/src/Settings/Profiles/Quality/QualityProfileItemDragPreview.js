@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { DragLayer } from 'react-dnd';
-import dimensions from 'Styles/Variables/dimensions.js';
-import { QUALITY_PROFILE_ITEM } from 'Helpers/dragTypes';
 import DragPreviewLayer from 'Components/DragPreviewLayer';
+import { QUALITY_PROFILE_ITEM } from 'Helpers/dragTypes';
+import dimensions from 'Styles/Variables/dimensions.js';
 import QualityProfileItem from './QualityProfileItem';
 import styles from './QualityProfileItemDragPreview.css';
 

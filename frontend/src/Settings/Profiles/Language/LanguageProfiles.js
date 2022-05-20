@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
-import FieldSet from 'Components/FieldSet';
 import Card from 'Components/Card';
+import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import LanguageProfile from './LanguageProfile';
+import { icons } from 'Helpers/Props';
 import EditLanguageProfileModalConnector from './EditLanguageProfileModalConnector';
+import LanguageProfile from './LanguageProfile';
 import styles from './LanguageProfiles.css';
 
 class LanguageProfiles extends Component {
@@ -28,15 +28,15 @@ class LanguageProfiles extends Component {
   onCloneLanguageProfilePress = (id) => {
     this.props.onCloneLanguageProfilePress(id);
     this.setState({ isLanguageProfileModalOpen: true });
-  }
+  };
 
   onEditLanguageProfilePress = () => {
     this.setState({ isLanguageProfileModalOpen: true });
-  }
+  };
 
   onModalClose = () => {
     this.setState({ isLanguageProfileModalOpen: false });
-  }
+  };
 
   //
   // Render

@@ -25,14 +25,14 @@ class FilterModal extends Component {
     this.setState({
       filterBuilder: true
     });
-  }
+  };
 
   onEditCustomFilter = (id) => {
     this.setState({
       filterBuilder: true,
       id
     });
-  }
+  };
 
   onCancelPress = () => {
     if (this.state.filterBuilder) {
@@ -43,7 +43,7 @@ class FilterModal extends Component {
     } else {
       this.onModalClose();
     }
-  }
+  };
 
   onModalClose = () => {
     this.setState({
@@ -52,7 +52,7 @@ class FilterModal extends Component {
     }, () => {
       this.props.onModalClose();
     });
-  }
+  };
 
   //
   // Render

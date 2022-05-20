@@ -1,9 +1,9 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import classNames from 'classnames';
-import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
+import { icons } from 'Helpers/Props';
 import FormInputButton from './FormInputButton';
 import TextInput from './TextInput';
 import styles from './CaptchaInput.css';

@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import TextTruncate from 'react-text-truncate';
-import { icons } from 'Helpers/Props';
-import dimensions from 'Styles/Variables/dimensions';
-import fonts from 'Styles/Variables/fonts';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
-import SeriesPoster from 'Series/SeriesPoster';
-import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
+import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
+import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
+import SeriesPoster from 'Series/SeriesPoster';
+import dimensions from 'Styles/Variables/dimensions';
+import fonts from 'Styles/Variables/fonts';
 import SeriesIndexOverviewInfo from './SeriesIndexOverviewInfo';
 import styles from './SeriesIndexOverview.css';
 
@@ -48,22 +48,22 @@ class SeriesIndexOverview extends Component {
 
   onEditSeriesPress = () => {
     this.setState({ isEditSeriesModalOpen: true });
-  }
+  };
 
   onEditSeriesModalClose = () => {
     this.setState({ isEditSeriesModalOpen: false });
-  }
+  };
 
   onDeleteSeriesPress = () => {
     this.setState({
       isEditSeriesModalOpen: false,
       isDeleteSeriesModalOpen: true
     });
-  }
+  };
 
   onDeleteSeriesModalClose = () => {
     this.setState({ isDeleteSeriesModalOpen: false });
-  }
+  };
 
   //
   // Render
@@ -127,10 +127,10 @@ class SeriesIndexOverview extends Component {
             <div className={styles.posterContainer}>
               {
                 status === 'ended' &&
-                <div
-                  className={styles.ended}
-                  title="Ended"
-                />
+                  <div
+                    className={styles.ended}
+                    title="Ended"
+                  />
               }
 
               <Link

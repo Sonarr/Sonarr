@@ -1,8 +1,8 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import padNumber from 'Utilities/Number/padNumber';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
+import padNumber from 'Utilities/Number/padNumber';
 import styles from './SeasonPassSeason.css';
 
 class SeasonPassSeason extends Component {
@@ -17,7 +17,7 @@ class SeasonPassSeason extends Component {
     } = this.props;
 
     this.props.onSeasonMonitoredPress(seasonNumber, !monitored);
-  }
+  };
 
   //
   // Render

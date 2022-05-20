@@ -65,7 +65,7 @@ class StartTime extends Component {
   onTimeout = () => {
     this.setState({ uptime: getUptime(this.props.startTime) });
     this._timeoutId = setTimeout(this.onTimeout, 1000);
-  }
+  };
 
   //
   // Render

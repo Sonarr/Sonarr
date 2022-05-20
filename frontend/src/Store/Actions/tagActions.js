@@ -1,9 +1,9 @@
-import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { createThunk, handleThunks } from 'Store/thunks';
-import createFetchHandler from './Creators/createFetchHandler';
-import createRemoveItemHandler from './Creators/createRemoveItemHandler';
-import createHandleActions from './Creators/createHandleActions';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
 import { update } from './baseActions';
+import createFetchHandler from './Creators/createFetchHandler';
+import createHandleActions from './Creators/createHandleActions';
+import createRemoveItemHandler from './Creators/createRemoveItemHandler';
 
 //
 // Variables

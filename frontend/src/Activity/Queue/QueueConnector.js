@@ -2,15 +2,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
+import * as commandNames from 'Commands/commandNames';
+import withCurrentPage from 'Components/withCurrentPage';
+import { executeCommand } from 'Store/Actions/commandActions';
+import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
+import * as queueActions from 'Store/Actions/queueActions';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
-import withCurrentPage from 'Components/withCurrentPage';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import { executeCommand } from 'Store/Actions/commandActions';
-import * as queueActions from 'Store/Actions/queueActions';
-import { fetchEpisodes, clearEpisodes } from 'Store/Actions/episodeActions';
-import * as commandNames from 'Commands/commandNames';
+import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import Queue from './Queue';
 
 function createMapStateToProps() {
@@ -93,34 +93,34 @@ class QueueConnector extends Component {
 
   repopulate = () => {
     this.props.fetchQueue();
-  }
+  };
 
   //
   // Listeners
 
   onFirstPagePress = () => {
     this.props.gotoQueueFirstPage();
-  }
+  };
 
   onPreviousPagePress = () => {
     this.props.gotoQueuePreviousPage();
-  }
+  };
 
   onNextPagePress = () => {
     this.props.gotoQueueNextPage();
-  }
+  };
 
   onLastPagePress = () => {
     this.props.gotoQueueLastPage();
-  }
+  };
 
   onPageSelect = (page) => {
     this.props.gotoQueuePage({ page });
-  }
+  };
 
   onSortPress = (sortKey) => {
     this.props.setQueueSort({ sortKey });
-  }
+  };
 
   onTableOptionChange = (payload) => {
     this.props.setQueueTableOption(payload);
@@ -128,21 +128,21 @@ class QueueConnector extends Component {
     if (payload.pageSize) {
       this.props.gotoQueueFirstPage();
     }
-  }
+  };
 
   onRefreshPress = () => {
     this.props.executeCommand({
       name: commandNames.REFRESH_MONITORED_DOWNLOADS
     });
-  }
+  };
 
   onGrabSelectedPress = (ids) => {
     this.props.grabQueueItems({ ids });
-  }
+  };
 
   onRemoveSelectedPress = (payload) => {
     this.props.removeQueueItems(payload);
-  }
+  };
 
   //
   // Render

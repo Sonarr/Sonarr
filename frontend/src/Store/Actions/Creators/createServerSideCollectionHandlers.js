@@ -1,9 +1,9 @@
-import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
 import pages from 'Utilities/pages';
+import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
 import createFetchServerSideCollectionHandler from './createFetchServerSideCollectionHandler';
+import createSetServerSideCollectionFilterHandler from './createSetServerSideCollectionFilterHandler';
 import createSetServerSideCollectionPageHandler from './createSetServerSideCollectionPageHandler';
 import createSetServerSideCollectionSortHandler from './createSetServerSideCollectionSortHandler';
-import createSetServerSideCollectionFilterHandler from './createSetServerSideCollectionFilterHandler';
 
 function createServerSideCollectionHandlers(section, url, fetchThunk, handlers, fetchDataAugmenter) {
   const actionHandlers = {};

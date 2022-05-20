@@ -1,6 +1,6 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
 import formatBytes from 'Utilities/Number/formatBytes';
 import EnhancedSelectInputOption from './EnhancedSelectInputOption';
 import styles from './RootFolderSelectInputOption.css';

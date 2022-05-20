@@ -14,7 +14,7 @@ class FilterMenuItem extends Component {
     } = this.props;
 
     onPress(filterKey);
-  }
+  };
 
   //
   // Render

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
-import { cancelTestIndexer, cancelSaveIndexer } from 'Store/Actions/settingsActions';
+import { cancelSaveIndexer, cancelTestIndexer } from 'Store/Actions/settingsActions';
 import EditIndexerModal from './EditIndexerModal';
 
 function createMapDispatchToProps(dispatch, props) {
@@ -33,7 +33,7 @@ class EditIndexerModalConnector extends Component {
     this.props.dispatchCancelTestIndexer();
     this.props.dispatchCancelSaveIndexer();
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

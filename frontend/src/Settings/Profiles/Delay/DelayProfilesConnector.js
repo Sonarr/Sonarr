@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchDelayProfiles, deleteDelayProfile, reorderDelayProfile } from 'Store/Actions/settingsActions';
+import { deleteDelayProfile, fetchDelayProfiles, reorderDelayProfile } from 'Store/Actions/settingsActions';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import DelayProfiles from './DelayProfiles';
 
@@ -54,7 +54,7 @@ class DelayProfilesConnector extends Component {
 
   onConfirmDeleteDelayProfile = (id) => {
     this.props.deleteDelayProfile({ id });
-  }
+  };
 
   onDelayProfileDragMove = (dragIndex, dropIndex) => {
     if (this.state.dragIndex !== dragIndex || this.state.dropIndex !== dropIndex) {
@@ -63,7 +63,7 @@ class DelayProfilesConnector extends Component {
         dropIndex
       });
     }
-  }
+  };
 
   onDelayProfileDragEnd = ({ id }, didDrop) => {
     const {
@@ -78,7 +78,7 @@ class DelayProfilesConnector extends Component {
       dragIndex: null,
       dropIndex: null
     });
-  }
+  };
 
   //
   // Render

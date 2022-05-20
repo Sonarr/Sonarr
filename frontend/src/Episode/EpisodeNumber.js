@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import padNumber from 'Utilities/Number/padNumber';
-import filterAlternateTitles from 'Utilities/Series/filterAlternateTitles';
-import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
+import { icons, kinds, tooltipPositions } from 'Helpers/Props';
+import padNumber from 'Utilities/Number/padNumber';
+import filterAlternateTitles from 'Utilities/Series/filterAlternateTitles';
 import SceneInfo from './SceneInfo';
 import styles from './EpisodeNumber.css';
 

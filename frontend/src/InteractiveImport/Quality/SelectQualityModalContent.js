@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds } from 'Helpers/Props';
-import Button from 'Components/Link/Button';
-import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
+import FormLabel from 'Components/Form/FormLabel';
+import Button from 'Components/Link/Button';
+import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes, kinds } from 'Helpers/Props';
 
 class SelectQualityModalContent extends Component {
 
@@ -38,19 +38,19 @@ class SelectQualityModalContent extends Component {
 
   onQualityChange = ({ value }) => {
     this.setState({ qualityId: parseInt(value) });
-  }
+  };
 
   onProperChange = ({ value }) => {
     this.setState({ proper: value });
-  }
+  };
 
   onRealChange = ({ value }) => {
     this.setState({ real: value });
-  }
+  };
 
   onQualitySelect = () => {
     this.props.onQualitySelect(this.state);
-  }
+  };
 
   //
   // Render
