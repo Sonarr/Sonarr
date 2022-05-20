@@ -46,7 +46,7 @@ class AddNotificationModalContentConnector extends Component {
   onNotificationSelect = ({ implementation, name }) => {
     this.props.selectNotificationSchema({ implementation, presetName: name });
     this.props.onModalClose({ notificationSelected: true });
-  }
+  };
 
   //
   // Render

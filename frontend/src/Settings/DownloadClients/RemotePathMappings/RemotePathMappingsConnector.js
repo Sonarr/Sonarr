@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchRemotePathMappings, deleteRemotePathMapping } from 'Store/Actions/settingsActions';
+import { deleteRemotePathMapping, fetchRemotePathMappings } from 'Store/Actions/settingsActions';
 import RemotePathMappings from './RemotePathMappings';
 
 function createMapStateToProps() {
@@ -35,7 +35,7 @@ class RemotePathMappingsConnector extends Component {
 
   onConfirmDeleteRemotePathMapping = (id) => {
     this.props.dispatchDeleteRemotePathMapping({ id });
-  }
+  };
 
   //
   // Render

@@ -1,5 +1,5 @@
-import getSectionState from 'Utilities/State/getSectionState';
 import { sortDirections } from 'Helpers/Props';
+import getSectionState from 'Utilities/State/getSectionState';
 import { set } from '../baseActions';
 
 function createSetServerSideCollectionSortHandler(section, fetchHandler) {

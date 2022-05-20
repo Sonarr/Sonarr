@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { kinds } from 'Helpers/Props';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
+import { kinds } from 'Helpers/Props';
 import EditMetadataModalConnector from './EditMetadataModalConnector';
 import styles from './Metadata.css';
 
@@ -24,11 +24,11 @@ class Metadata extends Component {
 
   onEditMetadataPress = () => {
     this.setState({ isEditMetadataModalOpen: true });
-  }
+  };
 
   onEditMetadataModalClose = () => {
     this.setState({ isEditMetadataModalOpen: false });
-  }
+  };
 
   //
   // Render

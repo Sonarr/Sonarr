@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import formatBytes from 'Utilities/Number/formatBytes';
-import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
 import EpisodeQuality from 'Episode/EpisodeQuality';
+import { icons, kinds, tooltipPositions } from 'Helpers/Props';
+import formatBytes from 'Utilities/Number/formatBytes';
 import MediaInfo from './MediaInfo';
 import styles from './EpisodeFileRow.css';
 
@@ -31,17 +31,17 @@ class EpisodeFileRow extends Component {
 
   onRemoveEpisodeFilePress = () => {
     this.setState({ isRemoveEpisodeFileModalOpen: true });
-  }
+  };
 
   onConfirmRemoveEpisodeFile = () => {
     this.props.onDeleteEpisodeFile();
 
     this.setState({ isRemoveEpisodeFileModalOpen: false });
-  }
+  };
 
   onRemoveEpisodeFileModalClose = () => {
     this.setState({ isRemoveEpisodeFileModalOpen: false });
-  }
+  };
 
   //
   // Render

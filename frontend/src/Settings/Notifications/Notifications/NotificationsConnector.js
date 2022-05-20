@@ -33,7 +33,7 @@ class NotificationsConnector extends Component {
 
   onConfirmDeleteNotification = (id) => {
     this.props.deleteNotification({ id });
-  }
+  };
 
   //
   // Render

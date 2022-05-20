@@ -1,23 +1,23 @@
+import classNames from 'classnames';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Manager, Popper, Reference } from 'react-popper';
-import classNames from 'classnames';
-import getUniqueElememtId from 'Utilities/getUniqueElementId';
-import { isMobile as isMobileUtil } from 'Utilities/browser';
-import * as keyCodes from 'Utilities/Constants/keyCodes';
-import { icons, sizes, scrollDirections } from 'Helpers/Props';
 import Icon from 'Components/Icon';
-import Portal from 'Components/Portal';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Measure from 'Components/Measure';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
+import Portal from 'Components/Portal';
 import Scroller from 'Components/Scroller/Scroller';
-import TextInput from './TextInput';
-import HintedSelectInputSelectedValue from './HintedSelectInputSelectedValue';
+import { icons, scrollDirections, sizes } from 'Helpers/Props';
+import { isMobile as isMobileUtil } from 'Utilities/browser';
+import * as keyCodes from 'Utilities/Constants/keyCodes';
+import getUniqueElememtId from 'Utilities/getUniqueElementId';
 import HintedSelectInputOption from './HintedSelectInputOption';
+import HintedSelectInputSelectedValue from './HintedSelectInputSelectedValue';
+import TextInput from './TextInput';
 import styles from './EnhancedSelectInput.css';
 
 function isArrowKey(keyCode) {
@@ -149,7 +149,7 @@ class EnhancedSelectInput extends Component {
     }
 
     return data;
-  }
+  };
 
   onWindowClick = (event) => {
     const button = document.getElementById(this._buttonId);
@@ -168,14 +168,14 @@ class EnhancedSelectInput extends Component {
       this.setState({ isOpen: false });
       this._removeListener();
     }
-  }
+  };
 
   onFocus = () => {
     if (this.state.isOpen) {
       this._removeListener();
       this.setState({ isOpen: false });
     }
-  }
+  };
 
   onBlur = () => {
     if (!this.props.isEditable) {
@@ -186,7 +186,7 @@ class EnhancedSelectInput extends Component {
         this.setState({ selectedIndex: origIndex });
       }
     }
-  }
+  };
 
   onKeyDown = (event) => {
     const {
@@ -253,7 +253,7 @@ class EnhancedSelectInput extends Component {
     if (!_.isEmpty(newState)) {
       this.setState(newState);
     }
-  }
+  };
 
   onPress = () => {
     if (this.state.isOpen) {
@@ -267,7 +267,7 @@ class EnhancedSelectInput extends Component {
     }
 
     this.setState({ isOpen: !this.state.isOpen });
-  }
+  };
 
   onSelect = (value) => {
     if (Array.isArray(this.props.value)) {
@@ -291,15 +291,15 @@ class EnhancedSelectInput extends Component {
         value
       });
     }
-  }
+  };
 
   onMeasure = ({ width }) => {
     this.setState({ width });
-  }
+  };
 
   onOptionsModalClose = () => {
     this.setState({ isOpen: false });
-  }
+  };
 
   //
   // Render

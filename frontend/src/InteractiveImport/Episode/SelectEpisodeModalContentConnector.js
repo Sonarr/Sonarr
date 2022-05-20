@@ -3,12 +3,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import {
-  updateInteractiveImportItem,
-  fetchInteractiveImportEpisodes,
-  setInteractiveImportEpisodesSort,
   clearInteractiveImportEpisodes,
-  reprocessInteractiveImportItems
-} from 'Store/Actions/interactiveImportActions';
+  fetchInteractiveImportEpisodes,
+  reprocessInteractiveImportItems,
+  setInteractiveImportEpisodesSort,
+  updateInteractiveImportItem } from 'Store/Actions/interactiveImportActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import SelectEpisodeModalContent from './SelectEpisodeModalContent';
 
@@ -54,7 +53,7 @@ class SelectEpisodeModalContentConnector extends Component {
 
   onSortPress = (sortKey, sortDirection) => {
     this.props.dispatchSetInteractiveImportEpisodesSort({ sortKey, sortDirection });
-  }
+  };
 
   onEpisodesSelect = (episodeIds) => {
     const {
@@ -91,7 +90,7 @@ class SelectEpisodeModalContentConnector extends Component {
     dispatchReprocessInteractiveImportItems({ ids });
 
     onModalClose(true);
-  }
+  };
 
   //
   // Render

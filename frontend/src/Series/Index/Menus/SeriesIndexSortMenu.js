@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { align, sortDirections } from 'Helpers/Props';
-import SortMenu from 'Components/Menu/SortMenu';
 import MenuContent from 'Components/Menu/MenuContent';
+import SortMenu from 'Components/Menu/SortMenu';
 import SortMenuItem from 'Components/Menu/SortMenuItem';
+import { align, sortDirections } from 'Helpers/Props';
 
 function SeriesIndexSortMenu(props) {
   const {

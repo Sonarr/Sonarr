@@ -16,7 +16,7 @@ class OrganizePreviewModalConnector extends Component {
   onModalClose = () => {
     this.props.clearOrganizePreview();
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

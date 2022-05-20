@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { saveMetadata, setMetadataFieldValue, setMetadataValue } from 'Store/Actions/settingsActions';
 import selectSettings from 'Store/Selectors/selectSettings';
-import { setMetadataValue, setMetadataFieldValue, saveMetadata } from 'Store/Actions/settingsActions';
 import EditMetadataModalContent from './EditMetadataModalContent';
 
 function createMapStateToProps() {
@@ -56,15 +56,15 @@ class EditMetadataModalContentConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setMetadataValue({ name, value });
-  }
+  };
 
   onFieldChange = ({ name, value }) => {
     this.props.setMetadataFieldValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveMetadata({ id: this.props.id });
-  }
+  };
 
   //
   // Render

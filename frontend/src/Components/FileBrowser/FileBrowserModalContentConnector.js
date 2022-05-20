@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchPaths, clearPaths } from 'Store/Actions/pathActions';
+import { clearPaths, fetchPaths } from 'Store/Actions/pathActions';
 import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import FileBrowserModalContent from './FileBrowserModalContent';
 
@@ -78,16 +78,16 @@ class FileBrowserModalContentConnector extends Component {
       allowFoldersWithoutTrailingSlashes: true,
       includeFiles
     });
-  }
+  };
 
   onClearPaths = () => {
     // this.props.dispatchClearPaths();
-  }
+  };
 
   onModalClose = () => {
     this.props.dispatchClearPaths();
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

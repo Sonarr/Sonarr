@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { sizes } from 'Helpers/Props';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import EditQualityProfileModalContentConnector from './EditQualityProfileModalContentConnector';
 
 class EditQualityProfileModal extends Component {
@@ -24,7 +24,7 @@ class EditQualityProfileModal extends Component {
     if (this.state.height === 'auto' || height > this.state.height) {
       this.setState({ height });
     }
-  }
+  };
 
   //
   // Render

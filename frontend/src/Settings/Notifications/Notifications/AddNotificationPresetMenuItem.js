@@ -17,7 +17,7 @@ class AddNotificationPresetMenuItem extends Component {
       name,
       implementation
     });
-  }
+  };
 
   //
   // Render

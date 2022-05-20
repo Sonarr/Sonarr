@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
-import { executeCommand } from 'Store/Actions/commandActions';
 import * as commandNames from 'Commands/commandNames';
+import { executeCommand } from 'Store/Actions/commandActions';
+import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import OrganizeSeriesModalContent from './OrganizeSeriesModalContent';
 
 function createMapStateToProps() {
@@ -43,7 +43,7 @@ class OrganizeSeriesModalContentConnector extends Component {
     });
 
     this.props.onModalClose(true);
-  }
+  };
 
   //
   // Render

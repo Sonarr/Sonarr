@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Grid, WindowScroller } from 'react-virtualized';
-import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
-import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
-import dimensions from 'Styles/Variables/dimensions';
 import Measure from 'Components/Measure';
 import SeriesIndexItemConnector from 'Series/Index/SeriesIndexItemConnector';
+import dimensions from 'Styles/Variables/dimensions';
+import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
+import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
 import SeriesIndexOverview from './SeriesIndexOverview';
 import styles from './SeriesIndexOverviews.css';
 
@@ -123,7 +123,7 @@ class SeriesIndexOverviews extends Component {
 
   setGridRef = (ref) => {
     this._grid = ref;
-  }
+  };
 
   calculateGrid = (width = this.state.width, isSmallScreen) => {
     const {
@@ -141,7 +141,7 @@ class SeriesIndexOverviews extends Component {
       posterHeight,
       rowHeight
     });
-  }
+  };
 
   cellRenderer = ({ key, rowIndex, style }) => {
     const {
@@ -193,14 +193,14 @@ class SeriesIndexOverviews extends Component {
         />
       </div>
     );
-  }
+  };
 
   //
   // Listeners
 
   onMeasure = ({ width }) => {
     this.calculateGrid(width, this.props.isSmallScreen);
-  }
+  };
 
   //
   // Render

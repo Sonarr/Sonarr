@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { icons, kinds } from 'Helpers/Props';
-import LegendItem from './LegendItem';
 import LegendIconItem from './LegendIconItem';
+import LegendItem from './LegendItem';
 import styles from './Legend.css';
 
 function Legend(props) {

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
-import { cancelTestNotification, cancelSaveNotification } from 'Store/Actions/settingsActions';
+import { cancelSaveNotification, cancelTestNotification } from 'Store/Actions/settingsActions';
 import EditNotificationModal from './EditNotificationModal';
 
 function createMapDispatchToProps(dispatch, props) {
@@ -33,7 +33,7 @@ class EditNotificationModalConnector extends Component {
     this.props.dispatchCancelTestNotification();
     this.props.dispatchCancelSaveNotification();
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

@@ -1,16 +1,16 @@
+import classNames from 'classnames';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import formatTime from 'Utilities/Date/formatTime';
-import padNumber from 'Utilities/Number/padNumber';
-import { icons, kinds } from 'Helpers/Props';
+import CalendarEventQueueDetails from 'Calendar/Events/CalendarEventQueueDetails';
 import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
-import episodeEntities from 'Episode/episodeEntities';
 import EpisodeDetailsModal from 'Episode/EpisodeDetailsModal';
-import CalendarEventQueueDetails from 'Calendar/Events/CalendarEventQueueDetails';
+import episodeEntities from 'Episode/episodeEntities';
+import { icons, kinds } from 'Helpers/Props';
+import formatTime from 'Utilities/Date/formatTime';
+import padNumber from 'Utilities/Number/padNumber';
 import styles from './AgendaEvent.css';
 
 class AgendaEvent extends Component {
@@ -30,11 +30,11 @@ class AgendaEvent extends Component {
 
   onPress = () => {
     this.setState({ isDetailsModalOpen: true });
-  }
+  };
 
   onDetailsModalClose = () => {
     this.setState({ isDetailsModalOpen: false });
-  }
+  };
 
   //
   // Render

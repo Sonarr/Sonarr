@@ -1,9 +1,9 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
-import { icons } from 'Helpers/Props';
-import Icon from 'Components/Icon';
 import CheckInput from 'Components/Form/CheckInput';
+import Icon from 'Components/Icon';
+import { icons } from 'Helpers/Props';
 import styles from './TableOptionsColumn.css';
 
 function TableOptionsColumn(props) {

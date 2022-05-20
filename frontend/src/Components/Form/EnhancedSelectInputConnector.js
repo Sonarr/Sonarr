@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchOptions, clearOptions, defaultState } from 'Store/Actions/providerOptionActions';
+import { clearOptions, defaultState, fetchOptions } from 'Store/Actions/providerOptionActions';
 import EnhancedSelectInput from './EnhancedSelectInput';
 
 const importantFieldNames = [
@@ -73,7 +73,7 @@ class EnhancedSelectInputConnector extends Component {
 
   componentDidMount = () => {
     this._populate();
-  }
+  };
 
   componentDidUpdate = (prevProps) => {
     const prevKey = getProviderDataKey(prevProps.providerData);
@@ -82,11 +82,11 @@ class EnhancedSelectInputConnector extends Component {
     if (!_.isEqual(prevKey, nextKey)) {
       this.setState({ refetchRequired: true });
     }
-  }
+  };
 
   componentWillUnmount = () => {
     this._cleanup();
-  }
+  };
 
   //
   // Listeners
@@ -95,7 +95,7 @@ class EnhancedSelectInputConnector extends Component {
     if (this.state.refetchRequired) {
       this._populate();
     }
-  }
+  };
 
   //
   // Control

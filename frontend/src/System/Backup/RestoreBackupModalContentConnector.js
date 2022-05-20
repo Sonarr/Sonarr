@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { restoreBackup, restart } from 'Store/Actions/systemActions';
+import { restart, restoreBackup } from 'Store/Actions/systemActions';
 import RestoreBackupModalContent from './RestoreBackupModalContent';
 
 function createMapStateToProps() {

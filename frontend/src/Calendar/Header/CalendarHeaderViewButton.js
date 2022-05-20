@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import titleCase from 'Utilities/String/titleCase';
-import Button from 'Components/Link/Button';
 import * as calendarViews from 'Calendar/calendarViews';
+import Button from 'Components/Link/Button';
+import titleCase from 'Utilities/String/titleCase';
 // import styles from './CalendarHeaderViewButton.css';
 
 class CalendarHeaderViewButton extends Component {
@@ -12,7 +12,7 @@ class CalendarHeaderViewButton extends Component {
 
   onPress = () => {
     this.props.onPress(this.props.view);
-  }
+  };
 
   //
   // Render

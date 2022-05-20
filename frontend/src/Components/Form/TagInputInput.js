@@ -19,7 +19,7 @@ class TagInputInput extends Component {
     }
 
     onInputContainerPress();
-  }
+  };
 
   render() {
     const {

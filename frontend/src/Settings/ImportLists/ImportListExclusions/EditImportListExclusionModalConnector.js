@@ -20,7 +20,7 @@ class EditImportListExclusionModalConnector extends Component {
   onModalClose = () => {
     this.props.clearPendingChanges({ section: 'settings.importListExclusions' });
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

@@ -1,8 +1,8 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import DayOfWeek from './DayOfWeek';
 import * as calendarViews from 'Calendar/calendarViews';
+import DayOfWeek from './DayOfWeek';
 import styles from './DaysOfWeek.css';
 
 class DaysOfWeek extends Component {
@@ -47,13 +47,13 @@ class DaysOfWeek extends Component {
     });
 
     this.updateTimeoutId = setTimeout(this.scheduleUpdate, diff);
-  }
+  };
 
   clearUpdateTimeout = () => {
     if (this.updateTimeoutId) {
       clearTimeout(this.updateTimeoutId);
     }
-  }
+  };
 
   //
   // Render

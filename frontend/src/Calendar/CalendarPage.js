@@ -1,19 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { align, icons } from 'Helpers/Props';
-import PageContent from 'Components/Page/PageContent';
 import Measure from 'Components/Measure';
+import FilterMenu from 'Components/Menu/FilterMenu';
+import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import FilterMenu from 'Components/Menu/FilterMenu';
+import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
-import CalendarLinkModal from './iCal/CalendarLinkModal';
-import CalendarOptionsModal from './Options/CalendarOptionsModal';
-import LegendConnector from './Legend/LegendConnector';
 import CalendarConnector from './CalendarConnector';
+import CalendarLinkModal from './iCal/CalendarLinkModal';
+import LegendConnector from './Legend/LegendConnector';
+import CalendarOptionsModal from './Options/CalendarOptionsModal';
 import styles from './CalendarPage.css';
 
 const MINIMUM_DAY_WIDTH = 120;
@@ -41,23 +41,23 @@ class CalendarPage extends Component {
     const days = Math.max(3, Math.min(7, Math.floor(width / MINIMUM_DAY_WIDTH)));
 
     this.props.onDaysCountChange(days);
-  }
+  };
 
   onGetCalendarLinkPress = () => {
     this.setState({ isCalendarLinkModalOpen: true });
-  }
+  };
 
   onGetCalendarLinkModalClose = () => {
     this.setState({ isCalendarLinkModalOpen: false });
-  }
+  };
 
   onOptionsPress = () => {
     this.setState({ isOptionsModalOpen: true });
-  }
+  };
 
   onOptionsModalClose = () => {
     this.setState({ isOptionsModalOpen: false });
-  }
+  };
 
   onSearchMissingPress = () => {
     const {
@@ -66,7 +66,7 @@ class CalendarPage extends Component {
     } = this.props;
 
     onSearchMissingPress(missingEpisodeIds);
-  }
+  };
 
   //
   // Render

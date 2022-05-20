@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'Components/Icon';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
-import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
+import TableRow from 'Components/Table/TableRow';
+import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import SeasonPassSeason from './SeasonPassSeason';
-import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import styles from './SeasonPassRow.css';
 
 class SeasonPassRow extends Component {

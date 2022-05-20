@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { toggleSeasonMonitored, toggleSeriesMonitored } from 'Store/Actions/seriesActions';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
-import { toggleSeriesMonitored, toggleSeasonMonitored } from 'Store/Actions/seriesActions';
 import SeasonPassRow from './SeasonPassRow';
 
 function createMapStateToProps() {
@@ -43,7 +43,7 @@ class SeasonPassRowConnector extends Component {
       seriesId,
       monitored: !monitored
     });
-  }
+  };
 
   onSeasonMonitoredPress = (seasonNumber, monitored) => {
     this.props.toggleSeasonMonitored({
@@ -51,7 +51,7 @@ class SeasonPassRowConnector extends Component {
       seasonNumber,
       monitored
     });
-  }
+  };
 
   //
   // Render

@@ -1,7 +1,7 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import classNames from 'classnames';
 import styles from './Link.css';
 
 class Link extends Component {
@@ -18,7 +18,7 @@ class Link extends Component {
     if (!isDisabled && onPress) {
       onPress(event);
     }
-  }
+  };
 
   //
   // Render

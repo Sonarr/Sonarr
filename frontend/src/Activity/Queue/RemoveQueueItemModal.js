@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import FormGroup from 'Components/Form/FormGroup';
+import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
 import Button from 'Components/Link/Button';
 import Modal from 'Components/Modal/Modal';
-import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
-import FormInputGroup from 'Components/Form/FormInputGroup';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes, kinds, sizes } from 'Helpers/Props';
 
 class RemoveQueueItemModal extends Component {
 
@@ -33,30 +33,30 @@ class RemoveQueueItemModal extends Component {
       remove: true,
       blocklist: false
     });
-  }
+  };
 
   //
   // Listeners
 
   onRemoveChange = ({ value }) => {
     this.setState({ remove: value });
-  }
+  };
 
   onBlocklistChange = ({ value }) => {
     this.setState({ blocklist: value });
-  }
+  };
 
   onRemoveConfirmed = () => {
     const state = this.state;
 
     this.resetState();
     this.props.onRemovePress(state);
-  }
+  };
 
   onModalClose = () => {
     this.resetState();
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

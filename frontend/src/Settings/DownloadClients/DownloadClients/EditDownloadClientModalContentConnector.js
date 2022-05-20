@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { saveDownloadClient, setDownloadClientFieldValue, setDownloadClientValue, testDownloadClient } from 'Store/Actions/settingsActions';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
-import { setDownloadClientValue, setDownloadClientFieldValue, saveDownloadClient, testDownloadClient } from 'Store/Actions/settingsActions';
 import EditDownloadClientModalContent from './EditDownloadClientModalContent';
 
 function createMapStateToProps() {
@@ -42,19 +42,19 @@ class EditDownloadClientModalContentConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setDownloadClientValue({ name, value });
-  }
+  };
 
   onFieldChange = ({ name, value }) => {
     this.props.setDownloadClientFieldValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveDownloadClient({ id: this.props.id });
-  }
+  };
 
   onTestPress = () => {
     this.props.testDownloadClient({ id: this.props.id });
-  }
+  };
 
   //
   // Render

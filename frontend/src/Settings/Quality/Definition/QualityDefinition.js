@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactSlider from 'react-slider';
-import formatBytes from 'Utilities/Number/formatBytes';
-import roundNumber from 'Utilities/Number/roundNumber';
-import { kinds, tooltipPositions } from 'Helpers/Props';
-import Label from 'Components/Label';
 import NumberInput from 'Components/Form/NumberInput';
 import TextInput from 'Components/Form/TextInput';
+import Label from 'Components/Label';
 import Popover from 'Components/Tooltip/Popover';
+import { kinds, tooltipPositions } from 'Helpers/Props';
+import formatBytes from 'Utilities/Number/formatBytes';
+import roundNumber from 'Utilities/Number/roundNumber';
 import QualityDefinitionLimits from './QualityDefinitionLimits';
 import styles from './QualityDefinition.css';
 
@@ -103,7 +103,7 @@ class QualityDefinition extends Component {
       minSize: roundNumber(Math.pow(sliderMinSize, 1.1)),
       maxSize: sliderMaxSize === slider.max ? null : roundNumber(Math.pow(sliderMaxSize, 1.1))
     });
-  }
+  };
 
   onAfterSliderChange = () => {
     const {
@@ -115,7 +115,7 @@ class QualityDefinition extends Component {
       sliderMiSize: getSliderValue(minSize, slider.min),
       sliderMaxSize: getSliderValue(maxSize, slider.max)
     });
-  }
+  };
 
   onMinSizeChange = ({ value }) => {
     const minSize = getValue(value);
@@ -128,7 +128,7 @@ class QualityDefinition extends Component {
       minSize,
       maxSize: this.props.maxSize
     });
-  }
+  };
 
   onMaxSizeChange = ({ value }) => {
     const maxSize = value === MAX ? null : getValue(value);
@@ -141,7 +141,7 @@ class QualityDefinition extends Component {
       minSize: this.props.minSize,
       maxSize
     });
-  }
+  };
 
   //
   // Render

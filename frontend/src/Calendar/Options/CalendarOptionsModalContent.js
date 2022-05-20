@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
-import Button from 'Components/Link/Button';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
+import FormLabel from 'Components/Form/FormLabel';
+import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
-import { firstDayOfWeekOptions, weekColumnOptions, timeFormatOptions } from 'Settings/UI/UISettings';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes } from 'Helpers/Props';
+import { firstDayOfWeekOptions, timeFormatOptions, weekColumnOptions } from 'Settings/UI/UISettings';
 
 class CalendarOptionsModalContent extends Component {
 
@@ -70,7 +70,7 @@ class CalendarOptionsModalContent extends Component {
     } = this.props;
 
     dispatchSetCalendarOption({ [name]: value });
-  }
+  };
 
   onGlobalInputChange = ({ name, value }) => {
     const {
@@ -82,11 +82,11 @@ class CalendarOptionsModalContent extends Component {
     this.setState(setting, () => {
       dispatchSaveUISettings(setting);
     });
-  }
+  };
 
   onLinkFocus = (event) => {
     event.target.select();
-  }
+  };
 
   //
   // Render

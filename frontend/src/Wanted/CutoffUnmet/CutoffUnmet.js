@@ -1,24 +1,24 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import FilterMenu from 'Components/Menu/FilterMenu';
+import ConfirmModal from 'Components/Modal/ConfirmModal';
+import PageContent from 'Components/Page/PageContent';
+import PageContentBody from 'Components/Page/PageContentBody';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
+import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import Table from 'Components/Table/Table';
+import TableBody from 'Components/Table/TableBody';
+import TablePager from 'Components/Table/TablePager';
+import { align, icons, kinds } from 'Helpers/Props';
 import getFilterValue from 'Utilities/Filter/getFilterValue';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import removeOldSelectedState from 'Utilities/Table/removeOldSelectedState';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
-import { align, icons, kinds } from 'Helpers/Props';
-import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import Table from 'Components/Table/Table';
-import TableBody from 'Components/Table/TableBody';
-import TablePager from 'Components/Table/TablePager';
-import PageContent from 'Components/Page/PageContent';
-import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
-import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import FilterMenu from 'Components/Menu/FilterMenu';
-import ConfirmModal from 'Components/Modal/ConfirmModal';
 import CutoffUnmetRowConnector from './CutoffUnmetRowConnector';
 
 function getMonitoredValue(props) {
@@ -61,30 +61,30 @@ class CutoffUnmet extends Component {
 
   getSelectedIds = () => {
     return getSelectedIds(this.state.selectedState);
-  }
+  };
 
   //
   // Listeners
 
   onFilterMenuItemPress = (filterKey, filterValue) => {
     this.props.onFilterSelect(filterKey, filterValue);
-  }
+  };
 
   onSelectAllChange = ({ value }) => {
     this.setState(selectAll(this.state.selectedState, value));
-  }
+  };
 
   onSelectedChange = ({ id, value, shiftKey = false }) => {
     this.setState((state) => {
       return toggleSelected(state, this.props.items, id, value, shiftKey);
     });
-  }
+  };
 
   onSearchSelectedPress = () => {
     const selected = this.getSelectedIds();
 
     this.props.onSearchSelectedPress(selected);
-  }
+  };
 
   onToggleSelectedPress = () => {
     const episodeIds = this.getSelectedIds();
@@ -93,11 +93,11 @@ class CutoffUnmet extends Component {
       episodeIds,
       monitored: !getMonitoredValue(this.props)
     });
-  }
+  };
 
   onSearchAllCutoffUnmetPress = () => {
     this.setState({ isConfirmSearchAllCutoffUnmetModalOpen: true });
-  }
+  };
 
   onSearchAllCutoffUnmetConfirmed = () => {
     const {
@@ -110,11 +110,11 @@ class CutoffUnmet extends Component {
 
     onSearchAllCutoffUnmetPress(selectedFilterKey === 'monitored');
     this.setState({ isConfirmSearchAllCutoffUnmetModalOpen: false });
-  }
+  };
 
   onConfirmSearchAllCutoffUnmetModalClose = () => {
     this.setState({ isConfirmSearchAllCutoffUnmetModalOpen: false });
-  }
+  };
 
   //
   // Render

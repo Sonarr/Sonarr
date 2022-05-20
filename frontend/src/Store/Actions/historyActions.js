@@ -1,15 +1,15 @@
 import React from 'react';
 import { createAction } from 'redux-actions';
+import Icon from 'Components/Icon';
+import { filterTypes, icons, sortDirections } from 'Helpers/Props';
+import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
-import { filterTypes, icons, sortDirections } from 'Helpers/Props';
-import Icon from 'Components/Icon';
-import { createThunk, handleThunks } from 'Store/thunks';
-import createClearReducer from './Creators/Reducers/createClearReducer';
-import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
+import { updateItem } from './baseActions';
 import createHandleActions from './Creators/createHandleActions';
 import createServerSideCollectionHandlers from './Creators/createServerSideCollectionHandlers';
-import { updateItem } from './baseActions';
+import createClearReducer from './Creators/Reducers/createClearReducer';
+import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
 
 //
 // Variables

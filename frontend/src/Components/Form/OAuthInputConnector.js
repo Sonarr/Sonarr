@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { startOAuth, resetOAuth } from 'Store/Actions/oAuthActions';
+import { resetOAuth, startOAuth } from 'Store/Actions/oAuthActions';
 import OAuthInput from './OAuthInput';
 
 function createMapStateToProps() {
@@ -41,7 +41,7 @@ class OAuthInputConnector extends Component {
 
   componentWillUnmount = () => {
     this.props.resetOAuth();
-  }
+  };
 
   //
   // Listeners
@@ -60,7 +60,7 @@ class OAuthInputConnector extends Component {
       providerData,
       section
     });
-  }
+  };
 
   //
   // Render

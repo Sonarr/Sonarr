@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import formatBytes from 'Utilities/Number/formatBytes';
-import { icons, kinds } from 'Helpers/Props';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
-import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableRow from 'Components/Table/TableRow';
+import { icons, kinds } from 'Helpers/Props';
+import formatBytes from 'Utilities/Number/formatBytes';
 import styles from './RootFolderRow.css';
 
 function RootFolderRow(props) {

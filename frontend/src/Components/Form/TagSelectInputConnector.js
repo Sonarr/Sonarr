@@ -60,7 +60,7 @@ class TagSelectInputConnector extends Component {
     }
 
     this.props.onChange({ name, value: newValue });
-  }
+  };
 
   onTagDelete = ({ index }) => {
     const {
@@ -75,7 +75,7 @@ class TagSelectInputConnector extends Component {
       name,
       value: newValue
     });
-  }
+  };
 
   //
   // Render

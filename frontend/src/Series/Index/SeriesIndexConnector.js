@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createSeriesClientSideCollectionItemsSelector from 'Store/Selectors/createSeriesClientSideCollectionItemsSelector';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
-import scrollPositions from 'Store/scrollPositions';
-import { setSeriesSort, setSeriesFilter, setSeriesView, setSeriesTableOption } from 'Store/Actions/seriesIndexActions';
-import { executeCommand } from 'Store/Actions/commandActions';
 import * as commandNames from 'Commands/commandNames';
 import withScrollPosition from 'Components/withScrollPosition';
+import { executeCommand } from 'Store/Actions/commandActions';
+import { setSeriesFilter, setSeriesSort, setSeriesTableOption, setSeriesView } from 'Store/Actions/seriesIndexActions';
+import scrollPositions from 'Store/scrollPositions';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
+import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
+import createSeriesClientSideCollectionItemsSelector from 'Store/Selectors/createSeriesClientSideCollectionItemsSelector';
 import SeriesIndex from './SeriesIndex';
 
 function createMapStateToProps() {
@@ -73,11 +73,11 @@ class SeriesIndexConnector extends Component {
 
   onViewSelect = (view) => {
     this.props.dispatchSetSeriesView(view);
-  }
+  };
 
   onScroll = ({ scrollTop }) => {
     scrollPositions.seriesIndex = scrollTop;
-  }
+  };
 
   //
   // Render

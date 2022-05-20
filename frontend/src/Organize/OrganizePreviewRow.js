@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds } from 'Helpers/Props';
-import Icon from 'Components/Icon';
 import CheckInput from 'Components/Form/CheckInput';
+import Icon from 'Components/Icon';
+import { icons, kinds } from 'Helpers/Props';
 import styles from './OrganizePreviewRow.css';
 
 class OrganizePreviewRow extends Component {
@@ -29,7 +29,7 @@ class OrganizePreviewRow extends Component {
     } = this.props;
 
     onSelectedChange({ id, value, shiftKey });
-  }
+  };
 
   //
   // Render

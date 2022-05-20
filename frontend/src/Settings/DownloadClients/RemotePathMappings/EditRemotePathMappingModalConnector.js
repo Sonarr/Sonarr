@@ -20,7 +20,7 @@ class EditRemotePathMappingModalConnector extends Component {
   onModalClose = () => {
     this.props.clearPendingChanges({ section: 'settings.remotePathMappings' });
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
-import { sortDirections } from 'Helpers/Props';
 import VirtualTable from 'Components/Table/VirtualTable';
 import VirtualTableRow from 'Components/Table/VirtualTableRow';
+import { sortDirections } from 'Helpers/Props';
 import SeriesIndexItemConnector from 'Series/Index/SeriesIndexItemConnector';
+import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
 import SeriesIndexHeaderConnector from './SeriesIndexHeaderConnector';
 import SeriesIndexRow from './SeriesIndexRow';
 import styles from './SeriesIndexTable.css';
@@ -68,7 +68,7 @@ class SeriesIndexTable extends Component {
         />
       </VirtualTableRow>
     );
-  }
+  };
 
   //
   // Render

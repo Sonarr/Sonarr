@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
+import withCurrentPage from 'Components/withCurrentPage';
+import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
+import { clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
+import * as historyActions from 'Store/Actions/historyActions';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
-import withCurrentPage from 'Components/withCurrentPage';
-import * as historyActions from 'Store/Actions/historyActions';
-import { fetchEpisodes, clearEpisodes } from 'Store/Actions/episodeActions';
-import { clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
+import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import History from './History';
 
 function createMapStateToProps() {
@@ -78,38 +78,38 @@ class HistoryConnector extends Component {
 
   repopulate = () => {
     this.props.fetchHistory();
-  }
+  };
 
   //
   // Listeners
 
   onFirstPagePress = () => {
     this.props.gotoHistoryFirstPage();
-  }
+  };
 
   onPreviousPagePress = () => {
     this.props.gotoHistoryPreviousPage();
-  }
+  };
 
   onNextPagePress = () => {
     this.props.gotoHistoryNextPage();
-  }
+  };
 
   onLastPagePress = () => {
     this.props.gotoHistoryLastPage();
-  }
+  };
 
   onPageSelect = (page) => {
     this.props.gotoHistoryPage({ page });
-  }
+  };
 
   onSortPress = (sortKey) => {
     this.props.setHistorySort({ sortKey });
-  }
+  };
 
   onFilterSelect = (selectedFilterKey) => {
     this.props.setHistoryFilter({ selectedFilterKey });
-  }
+  };
 
   onTableOptionChange = (payload) => {
     this.props.setHistoryTableOption(payload);
@@ -117,7 +117,7 @@ class HistoryConnector extends Component {
     if (payload.pageSize) {
       this.props.gotoHistoryFirstPage();
     }
-  }
+  };
 
   //
   // Render

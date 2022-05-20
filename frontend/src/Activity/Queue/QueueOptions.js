@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
-import { inputTypes } from 'Helpers/Props';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
+import { inputTypes } from 'Helpers/Props';
 
 class QueueOptions extends Component {
 
@@ -41,7 +41,7 @@ class QueueOptions extends Component {
         [name]: value
       });
     });
-  }
+  };
 
   //
   // Render

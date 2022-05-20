@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import Mousetrap from 'mousetrap';
+import React, { Component } from 'react';
 import getDisplayName from 'Helpers/getDisplayName';
 
 export const shortcuts = {
@@ -53,14 +53,14 @@ function keyboardShortcuts(WrappedComponent) {
     bindShortcut = (key, callback, options = {}) => {
       this._mousetrap.bind(key, callback);
       this._mousetrapBindings[key] = options;
-    }
+    };
 
     unbindShortcut = (key) => {
       if (this._mousetrap != null) {
         delete this._mousetrapBindings[key];
         this._mousetrap.unbind(key);
       }
-    }
+    };
 
     unbindAllShortcuts = () => {
       const keys = Object.keys(this._mousetrapBindings);
@@ -74,7 +74,7 @@ function keyboardShortcuts(WrappedComponent) {
       });
 
       this._mousetrapBindings = {};
-    }
+    };
 
     stopCallback = (event, element, combo) => {
       const binding = this._mousetrapBindings[combo];
@@ -89,7 +89,7 @@ function keyboardShortcuts(WrappedComponent) {
         element.tagName === 'TEXTAREA' ||
         (element.contentEditable && element.contentEditable === 'true')
       );
-    }
+    };
 
     //
     // Render

@@ -1,9 +1,9 @@
+import classNames from 'classnames';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import isToday from 'Utilities/Date/isToday';
 import * as calendarViews from 'Calendar/calendarViews';
+import isToday from 'Utilities/Date/isToday';
 import CalendarDayConnector from './CalendarDayConnector';
 import styles from './CalendarDays.css';
 
@@ -60,20 +60,20 @@ class CalendarDays extends Component {
     this.setState({ todaysDate: todaysDate.toISOString() });
 
     this.updateTimeoutId = setTimeout(this.scheduleUpdate, diff);
-  }
+  };
 
   clearUpdateTimeout = () => {
     if (this.updateTimeoutId) {
       clearTimeout(this.updateTimeoutId);
     }
-  }
+  };
 
   //
   // Listeners
 
   onEventModalOpenToggle = (isEventModalOpen) => {
     this.setState({ isEventModalOpen });
-  }
+  };
 
   onTouchStart = (event) => {
     const touches = event.touches;
@@ -92,7 +92,7 @@ class CalendarDays extends Component {
     }
 
     this._touchStart = touchStart;
-  }
+  };
 
   onTouchEnd = (event) => {
     const touches = event.changedTouches;
@@ -109,17 +109,17 @@ class CalendarDays extends Component {
     }
 
     this._touchStart = null;
-  }
+  };
 
   onTouchCancel = (event) => {
     this._touchStart = null;
-  }
+  };
 
   onTouchMove = (event) => {
     if (!this._touchStart) {
       return;
     }
-  }
+  };
 
   //
   // Render

@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { saveImportList, setImportListFieldValue, setImportListValue, testImportList } from 'Store/Actions/settingsActions';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
-import { setImportListValue, setImportListFieldValue, saveImportList, testImportList } from 'Store/Actions/settingsActions';
 import EditImportListModalContent from './EditImportListModalContent';
 
 function createMapStateToProps() {
@@ -44,19 +44,19 @@ class EditImportListModalContentConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setImportListValue({ name, value });
-  }
+  };
 
   onFieldChange = ({ name, value }) => {
     this.props.setImportListFieldValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveImportList({ id: this.props.id });
-  }
+  };
 
   onTestPress = () => {
     this.props.testImportList({ id: this.props.id });
-  }
+  };
 
   //
   // Render

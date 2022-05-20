@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchHealth } from 'Store/Actions/systemActions';
 import PageSidebarStatus from 'Components/Page/Sidebar/PageSidebarStatus';
+import { fetchHealth } from 'Store/Actions/systemActions';
 
 function createMapStateToProps() {
   return createSelector(

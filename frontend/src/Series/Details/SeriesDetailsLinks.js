@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { kinds, sizes } from 'Helpers/Props';
 import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
+import { kinds, sizes } from 'Helpers/Props';
 import styles from './SeriesDetailsLinks.css';
 
 function SeriesDetailsLinks(props) {

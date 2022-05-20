@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import sortByName from 'Utilities/Array/sortByName';
 import { filterBuilderTypes } from 'Helpers/Props';
 import * as filterTypes from 'Helpers/Props/filterTypes';
+import sortByName from 'Utilities/Array/sortByName';
 import FilterBuilderRowValue from './FilterBuilderRowValue';
 
 function createTagListSelector() {

@@ -1,25 +1,25 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds } from 'Helpers/Props';
+import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import IconButton from 'Components/Link/IconButton';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import ProgressBar from 'Components/ProgressBar';
-import TableRow from 'Components/Table/TableRow';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
-import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
-import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
+import TableRow from 'Components/Table/TableRow';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
 import EpisodeQuality from 'Episode/EpisodeQuality';
+import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
+import { icons, kinds } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
-import QueueStatusCell from './QueueStatusCell';
-import TimeleftCell from './TimeleftCell';
-import RemoveQueueItemModal from './RemoveQueueItemModal';
-import styles from './QueueRow.css';
 import formatBytes from 'Utilities/Number/formatBytes';
+import QueueStatusCell from './QueueStatusCell';
+import RemoveQueueItemModal from './RemoveQueueItemModal';
+import TimeleftCell from './TimeleftCell';
+import styles from './QueueRow.css';
 
 class QueueRow extends Component {
 
@@ -40,7 +40,7 @@ class QueueRow extends Component {
 
   onRemoveQueueItemPress = () => {
     this.setState({ isRemoveQueueItemModalOpen: true });
-  }
+  };
 
   onRemoveQueueItemModalConfirmed = (blocklist) => {
     const {
@@ -52,25 +52,25 @@ class QueueRow extends Component {
     onRemoveQueueItemPress(blocklist);
 
     this.setState({ isRemoveQueueItemModalOpen: false });
-  }
+  };
 
   onRemoveQueueItemModalClose = () => {
     this.props.onQueueRowModalOpenOrClose(false);
 
     this.setState({ isRemoveQueueItemModalOpen: false });
-  }
+  };
 
   onInteractiveImportPress = () => {
     this.props.onQueueRowModalOpenOrClose(true);
 
     this.setState({ isInteractiveImportModalOpen: true });
-  }
+  };
 
   onInteractiveImportModalClose = () => {
     this.props.onQueueRowModalOpenOrClose(false);
 
     this.setState({ isInteractiveImportModalOpen: false });
-  }
+  };
 
   //
   // Render

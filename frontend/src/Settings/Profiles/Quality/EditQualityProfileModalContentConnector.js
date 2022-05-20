@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { fetchQualityProfileSchema, saveQualityProfile, setQualityProfileValue } from 'Store/Actions/settingsActions';
 import createProfileInUseSelector from 'Store/Selectors/createProfileInUseSelector';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
-import { fetchQualityProfileSchema, setQualityProfileValue, saveQualityProfile } from 'Store/Actions/settingsActions';
 import EditQualityProfileModalContent from './EditQualityProfileModalContent';
 
 function getQualityItemGroupId(qualityProfile) {
@@ -135,14 +135,14 @@ class EditQualityProfileModalContentConnector extends Component {
 
       this.props.setQualityProfileValue({ name: 'cutoff', value: cutoffId });
     }
-  }
+  };
 
   //
   // Listeners
 
   onInputChange = ({ name, value }) => {
     this.props.setQualityProfileValue({ name, value });
-  }
+  };
 
   onCutoffChange = ({ name, value }) => {
     const id = parseInt(value);
@@ -157,11 +157,11 @@ class EditQualityProfileModalContentConnector extends Component {
     const cutoffId = item.quality ? item.quality.id : item.id;
 
     this.props.setQualityProfileValue({ name, value: cutoffId });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveQualityProfile({ id: this.props.id });
-  }
+  };
 
   onQualityProfileItemAllowedChange = (id, allowed) => {
     const qualityProfile = _.cloneDeep(this.props.item);
@@ -176,7 +176,7 @@ class EditQualityProfileModalContentConnector extends Component {
     });
 
     this.ensureCutoff(qualityProfile);
-  }
+  };
 
   onItemGroupAllowedChange = (id, allowed) => {
     const qualityProfile = _.cloneDeep(this.props.item);
@@ -196,7 +196,7 @@ class EditQualityProfileModalContentConnector extends Component {
     });
 
     this.ensureCutoff(qualityProfile);
-  }
+  };
 
   onItemGroupNameChange = (id, name) => {
     const qualityProfile = _.cloneDeep(this.props.item);
@@ -209,7 +209,7 @@ class EditQualityProfileModalContentConnector extends Component {
       name: 'items',
       value: items
     });
-  }
+  };
 
   onCreateGroupPress = (id) => {
     const qualityProfile = _.cloneDeep(this.props.item);
@@ -236,7 +236,7 @@ class EditQualityProfileModalContentConnector extends Component {
     });
 
     this.ensureCutoff(qualityProfile);
-  }
+  };
 
   onDeleteGroupPress = (id) => {
     const qualityProfile = _.cloneDeep(this.props.item);
@@ -253,7 +253,7 @@ class EditQualityProfileModalContentConnector extends Component {
     });
 
     this.ensureCutoff(qualityProfile);
-  }
+  };
 
   onQualityProfileItemDragMove = (options) => {
     const {
@@ -339,7 +339,7 @@ class EditQualityProfileModalContentConnector extends Component {
         dropPosition
       });
     }
-  }
+  };
 
   onQualityProfileItemDragEnd = (didDrop) => {
     const {
@@ -392,11 +392,11 @@ class EditQualityProfileModalContentConnector extends Component {
       dropQualityIndex: null,
       dropPosition: null
     });
-  }
+  };
 
   onToggleEditGroupsMode = () => {
     this.setState({ editGroups: !this.state.editGroups });
-  }
+  };
 
   //
   // Render

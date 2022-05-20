@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { kinds } from 'Helpers/Props';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
+import { kinds } from 'Helpers/Props';
 
 function OAuthInput(props) {
   const {

@@ -1,12 +1,12 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import titleCase from 'Utilities/String/titleCase';
-import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
-import TagList from 'Components/TagList';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import TagList from 'Components/TagList';
+import { icons, kinds } from 'Helpers/Props';
+import titleCase from 'Utilities/String/titleCase';
 import EditDelayProfileModalConnector from './EditDelayProfileModalConnector';
 import styles from './DelayProfile.css';
 
@@ -46,26 +46,26 @@ class DelayProfile extends Component {
 
   onEditDelayProfilePress = () => {
     this.setState({ isEditDelayProfileModalOpen: true });
-  }
+  };
 
   onEditDelayProfileModalClose = () => {
     this.setState({ isEditDelayProfileModalOpen: false });
-  }
+  };
 
   onDeleteDelayProfilePress = () => {
     this.setState({
       isEditDelayProfileModalOpen: false,
       isDeleteDelayProfileModalOpen: true
     });
-  }
+  };
 
   onDeleteDelayProfileModalClose = () => {
     this.setState({ isDeleteDelayProfileModalOpen: false });
-  }
+  };
 
   onConfirmDeleteDelayProfile = () => {
     this.props.onConfirmDeleteDelayProfile(this.props.id);
-  }
+  };
 
   //
   // Render

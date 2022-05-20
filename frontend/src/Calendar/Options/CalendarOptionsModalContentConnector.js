@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { setCalendarOption } from 'Store/Actions/calendarActions';
-import CalendarOptionsModalContent from './CalendarOptionsModalContent';
 import { saveUISettings } from 'Store/Actions/settingsActions';
+import CalendarOptionsModalContent from './CalendarOptionsModalContent';
 
 function createMapStateToProps() {
   return createSelector(

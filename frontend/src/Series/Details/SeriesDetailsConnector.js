@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import * as commandNames from 'Commands/commandNames';
+import { executeCommand } from 'Store/Actions/commandActions';
+import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
+import { clearEpisodeFiles, fetchEpisodeFiles } from 'Store/Actions/episodeFileActions';
+import { clearQueueDetails, fetchQueueDetails } from 'Store/Actions/queueActions';
+import { toggleSeriesMonitored } from 'Store/Actions/seriesActions';
+import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
+import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import filterAlternateTitles from 'Utilities/Series/filterAlternateTitles';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
-import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
-import { fetchEpisodes, clearEpisodes } from 'Store/Actions/episodeActions';
-import { fetchEpisodeFiles, clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
-import { toggleSeriesMonitored } from 'Store/Actions/seriesActions';
-import { fetchQueueDetails, clearQueueDetails } from 'Store/Actions/queueActions';
-import { executeCommand } from 'Store/Actions/commandActions';
-import * as commandNames from 'Commands/commandNames';
 import SeriesDetails from './SeriesDetails';
 
 const selectEpisodes = createSelector(
@@ -197,13 +197,13 @@ class SeriesDetailsConnector extends Component {
     this.props.fetchEpisodes({ seriesId });
     this.props.fetchEpisodeFiles({ seriesId });
     this.props.fetchQueueDetails({ seriesId });
-  }
+  };
 
   unpopulate = () => {
     this.props.clearEpisodes();
     this.props.clearEpisodeFiles();
     this.props.clearQueueDetails();
-  }
+  };
 
   //
   // Listeners
@@ -213,21 +213,21 @@ class SeriesDetailsConnector extends Component {
       seriesId: this.props.id,
       monitored
     });
-  }
+  };
 
   onRefreshPress = () => {
     this.props.executeCommand({
       name: commandNames.REFRESH_SERIES,
       seriesId: this.props.id
     });
-  }
+  };
 
   onSearchPress = () => {
     this.props.executeCommand({
       name: commandNames.SERIES_SEARCH,
       seriesId: this.props.id
     });
-  }
+  };
 
   //
   // Render

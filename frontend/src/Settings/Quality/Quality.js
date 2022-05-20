@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import QualityDefinitionsConnector from './Definition/QualityDefinitionsConnector';
-import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import { icons } from 'Helpers/Props';
 import ResetQualityDefinitionsModal from './Reset/ResetQualityDefinitionsModal';
 
 class Quality extends Component {
@@ -31,25 +31,25 @@ class Quality extends Component {
 
   onChildMounted = (saveCallback) => {
     this._saveCallback = saveCallback;
-  }
+  };
 
   onChildStateChange = (payload) => {
     this.setState(payload);
-  }
+  };
 
   onResetQualityDefinitionsPress = () => {
     this.setState({ isConfirmQualityDefinitionResetModalOpen: true });
-  }
+  };
 
   onCloseResetQualityDefinitionsModal = () => {
     this.setState({ isConfirmQualityDefinitionResetModalOpen: false });
-  }
+  };
 
   onSavePress = () => {
     if (this._saveCallback) {
       this._saveCallback();
     }
-  }
+  };
 
   //
   // Render

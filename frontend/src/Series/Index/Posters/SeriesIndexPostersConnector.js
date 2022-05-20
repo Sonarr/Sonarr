@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
+import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import SeriesIndexPosters from './SeriesIndexPosters';
 
 function createMapStateToProps() {

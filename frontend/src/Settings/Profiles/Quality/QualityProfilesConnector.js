@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import sortByName from 'Utilities/Array/sortByName';
+import { cloneQualityProfile, deleteQualityProfile, fetchQualityProfiles } from 'Store/Actions/settingsActions';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import { fetchQualityProfiles, deleteQualityProfile, cloneQualityProfile } from 'Store/Actions/settingsActions';
+import sortByName from 'Utilities/Array/sortByName';
 import QualityProfiles from './QualityProfiles';
 
 function createMapStateToProps() {
@@ -34,11 +34,11 @@ class QualityProfilesConnector extends Component {
 
   onConfirmDeleteQualityProfile = (id) => {
     this.props.dispatchDeleteQualityProfile({ id });
-  }
+  };
 
   onCloneQualityProfilePress = (id) => {
     this.props.dispatchCloneQualityProfile({ id });
-  }
+  };
 
   //
   // Render

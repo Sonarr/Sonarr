@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import parseUrl from 'Utilities/String/parseUrl';
-import { lookupSeries, clearAddSeries } from 'Store/Actions/addSeriesActions';
+import { clearAddSeries, lookupSeries } from 'Store/Actions/addSeriesActions';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
+import parseUrl from 'Utilities/String/parseUrl';
 import AddNewSeries from './AddNewSeries';
 
 function createMapStateToProps() {
@@ -68,11 +68,11 @@ class AddNewSeriesConnector extends Component {
         this.props.lookupSeries({ term });
       }, 300);
     }
-  }
+  };
 
   onClearSeriesLookup = () => {
     this.props.clearAddSeries();
-  }
+  };
 
   //
   // Render

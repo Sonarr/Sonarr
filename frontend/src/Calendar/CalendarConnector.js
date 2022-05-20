@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
+import * as commandNames from 'Commands/commandNames';
+import * as calendarActions from 'Store/Actions/calendarActions';
+import { clearEpisodeFiles, fetchEpisodeFiles } from 'Store/Actions/episodeFileActions';
+import { clearQueueDetails, fetchQueueDetails } from 'Store/Actions/queueActions';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
-import * as calendarActions from 'Store/Actions/calendarActions';
-import { fetchEpisodeFiles, clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
-import { fetchQueueDetails, clearQueueDetails } from 'Store/Actions/queueActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import * as commandNames from 'Commands/commandNames';
+import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import Calendar from './Calendar';
 
 const UPDATE_DELAY = 3600000; // 1 hour
@@ -120,43 +120,43 @@ class CalendarConnector extends Component {
 
     this.props.fetchQueueDetails({ time, view });
     this.props.fetchCalendar({ time, view });
-  }
+  };
 
   scheduleUpdate = () => {
     this.clearUpdateTimeout();
 
     this.updateTimeoutId = setTimeout(this.updateCalendar, UPDATE_DELAY);
-  }
+  };
 
   clearUpdateTimeout = () => {
     if (this.updateTimeoutId) {
       clearTimeout(this.updateTimeoutId);
     }
-  }
+  };
 
   updateCalendar = () => {
     this.props.gotoCalendarToday();
     this.scheduleUpdate();
-  }
+  };
 
   //
   // Listeners
 
   onCalendarViewChange = (view) => {
     this.props.setCalendarView({ view });
-  }
+  };
 
   onTodayPress = () => {
     this.props.gotoCalendarToday();
-  }
+  };
 
   onPreviousPress = () => {
     this.props.gotoCalendarPreviousRange();
-  }
+  };
 
   onNextPress = () => {
     this.props.gotoCalendarNextRange();
-  }
+  };
 
   //
   // Render

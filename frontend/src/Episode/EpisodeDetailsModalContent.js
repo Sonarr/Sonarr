@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import episodeEntities from 'Episode/episodeEntities';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Button from 'Components/Link/Button';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
-import EpisodeSummaryConnector from './Summary/EpisodeSummaryConnector';
+import episodeEntities from 'Episode/episodeEntities';
 import EpisodeHistoryConnector from './History/EpisodeHistoryConnector';
 import EpisodeSearchConnector from './Search/EpisodeSearchConnector';
 import SeasonEpisodeNumber from './SeasonEpisodeNumber';
+import EpisodeSummaryConnector from './Summary/EpisodeSummaryConnector';
 import styles from './EpisodeDetailsModalContent.css';
 
 const tabs = [
@@ -40,7 +40,7 @@ class EpisodeDetailsModalContent extends Component {
     const selectedTab = tabs[index];
     this.props.onTabChange(selectedTab === 'search');
     this.setState({ selectedTab });
-  }
+  };
 
   //
   // Render

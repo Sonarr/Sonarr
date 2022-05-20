@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
-import { setGeneralSettingsValue, saveGeneralSettings, fetchGeneralSettings } from 'Store/Actions/settingsActions';
+import * as commandNames from 'Commands/commandNames';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import { executeCommand } from 'Store/Actions/commandActions';
+import { fetchGeneralSettings, saveGeneralSettings, setGeneralSettingsValue } from 'Store/Actions/settingsActions';
 import { restart } from 'Store/Actions/systemActions';
-import * as commandNames from 'Commands/commandNames';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
+import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
+import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import GeneralSettings from './GeneralSettings';
 
 const SECTION = 'general';
@@ -68,19 +68,19 @@ class GeneralSettingsConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setGeneralSettingsValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveGeneralSettings();
-  }
+  };
 
   onConfirmResetApiKey = () => {
     this.props.executeCommand({ name: commandNames.RESET_API_KEY });
-  }
+  };
 
   onConfirmRestart = () => {
     this.props.restart();
-  }
+  };
 
   //
   // Render

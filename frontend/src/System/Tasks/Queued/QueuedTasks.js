@@ -54,27 +54,27 @@ function QueuedTasks(props) {
     <FieldSet legend="Queue">
       {
         isFetching && !isPopulated &&
-        <LoadingIndicator />
+          <LoadingIndicator />
       }
 
       {
         isPopulated &&
-        <Table
-          columns={columns}
-        >
-          <TableBody>
-            {
-              items.map((item) => {
-                return (
-                  <QueuedTaskRowConnector
-                    key={item.id}
-                    {...item}
-                  />
-                );
-              })
-            }
-          </TableBody>
-        </Table>
+          <Table
+            columns={columns}
+          >
+            <TableBody>
+              {
+                items.map((item) => {
+                  return (
+                    <QueuedTaskRowConnector
+                      key={item.id}
+                      {...item}
+                    />
+                  );
+                })
+              }
+            </TableBody>
+          </Table>
       }
     </FieldSet>
   );

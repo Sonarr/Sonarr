@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { isMobile, isFirefox } from 'Utilities/browser';
-import { isLocked } from 'Utilities/scrollLock';
-import { scrollDirections } from 'Helpers/Props';
 import OverlayScroller from 'Components/Scroller/OverlayScroller';
 import Scroller from 'Components/Scroller/Scroller';
+import { scrollDirections } from 'Helpers/Props';
+import { isFirefox, isMobile } from 'Utilities/browser';
+import { isLocked } from 'Utilities/scrollLock';
 import styles from './PageContentBody.css';
 
 class PageContentBody extends Component {
@@ -28,7 +28,7 @@ class PageContentBody extends Component {
     if (this.props.onScroll && !isLocked()) {
       onScroll(props);
     }
-  }
+  };
 
   //
   // Render

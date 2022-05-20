@@ -1,29 +1,29 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import isAfter from 'Utilities/Date/isAfter';
-import isBefore from 'Utilities/Date/isBefore';
-import formatBytes from 'Utilities/Number/formatBytes';
-import getToggledRange from 'Utilities/Table/getToggledRange';
-import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'Helpers/Props';
 import Icon from 'Components/Icon';
-import IconButton from 'Components/Link/IconButton';
 import Label from 'Components/Label';
+import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
-import MonitorToggleButton from 'Components/MonitorToggleButton';
-import SpinnerIcon from 'Components/SpinnerIcon';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import Menu from 'Components/Menu/Menu';
 import MenuButton from 'Components/Menu/MenuButton';
 import MenuContent from 'Components/Menu/MenuContent';
 import MenuItem from 'Components/Menu/MenuItem';
+import MonitorToggleButton from 'Components/MonitorToggleButton';
+import SpinnerIcon from 'Components/SpinnerIcon';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import Popover from 'Components/Tooltip/Popover';
+import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModalConnector from 'Series/Search/SeasonInteractiveSearchModalConnector';
+import isAfter from 'Utilities/Date/isAfter';
+import isBefore from 'Utilities/Date/isBefore';
+import formatBytes from 'Utilities/Number/formatBytes';
+import getToggledRange from 'Utilities/Table/getToggledRange';
 import EpisodeRowConnector from './EpisodeRowConnector';
 import SeasonInfo from './SeasonInfo';
 import styles from './SeriesDetailsSeason.css';
@@ -141,35 +141,35 @@ class SeriesDetailsSeason extends Component {
 
   onOrganizePress = () => {
     this.setState({ isOrganizeModalOpen: true });
-  }
+  };
 
   onOrganizeModalClose = () => {
     this.setState({ isOrganizeModalOpen: false });
-  }
+  };
 
   onManageEpisodesPress = () => {
     this.setState({ isManageEpisodesOpen: true });
-  }
+  };
 
   onManageEpisodesModalClose = () => {
     this.setState({ isManageEpisodesOpen: false });
-  }
+  };
 
   onHistoryPress = () => {
     this.setState({ isHistoryModalOpen: true });
-  }
+  };
 
   onHistoryModalClose = () => {
     this.setState({ isHistoryModalOpen: false });
-  }
+  };
 
   onInteractiveSearchPress = () => {
     this.setState({ isInteractiveSearchModalOpen: true });
-  }
+  };
 
   onInteractiveSearchModalClose = () => {
     this.setState({ isInteractiveSearchModalOpen: false });
-  }
+  };
 
   onExpandPress = () => {
     const {
@@ -178,7 +178,7 @@ class SeriesDetailsSeason extends Component {
     } = this.props;
 
     this.props.onExpandPress(seasonNumber, !isExpanded);
-  }
+  };
 
   onMonitorEpisodePress = (episodeId, monitored, { shiftKey }) => {
     const lastToggled = this.state.lastToggledEpisode;
@@ -196,7 +196,7 @@ class SeriesDetailsSeason extends Component {
     this.setState({ lastToggledEpisode: episodeId });
 
     this.props.onMonitorEpisodePress(_.uniq(episodeIds), monitored);
-  }
+  };
 
   //
   // Render

@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { align, icons } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import FilterMenu from 'Components/Menu/FilterMenu';
+import PageContent from 'Components/Page/PageContent';
+import PageContentBody from 'Components/Page/PageContentBody';
+import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
+import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
-import PageContent from 'Components/Page/PageContent';
-import PageContentBody from 'Components/Page/PageContentBody';
-import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
-import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import FilterMenu from 'Components/Menu/FilterMenu';
+import { align, icons } from 'Helpers/Props';
 import LogsTableRow from './LogsTableRow';
 
 function LogsTable(props) {
@@ -76,45 +76,45 @@ function LogsTable(props) {
       <PageContentBody>
         {
           isFetching && !isPopulated &&
-          <LoadingIndicator />
+            <LoadingIndicator />
         }
 
         {
           isPopulated && !error && !items.length &&
-          <div>
-            No events found
-          </div>
+            <div>
+              No events found
+            </div>
         }
 
         {
           isPopulated && !error && !!items.length &&
-          <div>
-            <Table
-              columns={columns}
-              canModifyColumns={false}
-              {...otherProps}
-            >
-              <TableBody>
-                {
-                  items.map((item) => {
-                    return (
-                      <LogsTableRow
-                        key={item.id}
-                        columns={columns}
-                        {...item}
-                      />
-                    );
-                  })
-                }
-              </TableBody>
-            </Table>
+            <div>
+              <Table
+                columns={columns}
+                canModifyColumns={false}
+                {...otherProps}
+              >
+                <TableBody>
+                  {
+                    items.map((item) => {
+                      return (
+                        <LogsTableRow
+                          key={item.id}
+                          columns={columns}
+                          {...item}
+                        />
+                      );
+                    })
+                  }
+                </TableBody>
+              </Table>
 
-            <TablePager
-              totalRecords={totalRecords}
-              isFetching={isFetching}
-              {...otherProps}
-            />
-          </div>
+              <TablePager
+                totalRecords={totalRecords}
+                isFetching={isFetching}
+                {...otherProps}
+              />
+            </div>
         }
       </PageContentBody>
     </PageContent>

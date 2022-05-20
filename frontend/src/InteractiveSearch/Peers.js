@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { kinds } from 'Helpers/Props';
 import Label from 'Components/Label';
+import { kinds } from 'Helpers/Props';
 
 function getKind(seeders) {
   if (seeders > 50) {

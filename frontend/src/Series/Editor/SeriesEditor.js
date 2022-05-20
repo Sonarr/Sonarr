@@ -1,25 +1,25 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
-import selectAll from 'Utilities/Table/selectAll';
-import toggleSelected from 'Utilities/Table/toggleSelected';
-import { align, icons, sortDirections } from 'Helpers/Props';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
-import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
-import FilterMenu from 'Components/Menu/FilterMenu';
-import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import { align, icons, sortDirections } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
+import getSelectedIds from 'Utilities/Table/getSelectedIds';
+import selectAll from 'Utilities/Table/selectAll';
+import toggleSelected from 'Utilities/Table/toggleSelected';
 import OrganizeSeriesModal from './Organize/OrganizeSeriesModal';
-import SeriesEditorRowConnector from './SeriesEditorRowConnector';
-import SeriesEditorFooter from './SeriesEditorFooter';
 import SeriesEditorFilterModalConnector from './SeriesEditorFilterModalConnector';
+import SeriesEditorFooter from './SeriesEditorFooter';
+import SeriesEditorRowConnector from './SeriesEditorRowConnector';
 
 class SeriesEditor extends Component {
 
@@ -58,31 +58,31 @@ class SeriesEditor extends Component {
 
   getSelectedIds = () => {
     return getSelectedIds(this.state.selectedState);
-  }
+  };
 
   //
   // Listeners
 
   onSelectAllChange = ({ value }) => {
     this.setState(selectAll(this.state.selectedState, value));
-  }
+  };
 
   onSelectedChange = ({ id, value, shiftKey = false }) => {
     this.setState((state) => {
       return toggleSelected(state, this.props.items, id, value, shiftKey);
     });
-  }
+  };
 
   onSaveSelected = (changes) => {
     this.props.onSaveSelected({
       seriesIds: this.getSelectedIds(),
       ...changes
     });
-  }
+  };
 
   onOrganizeSeriesPress = () => {
     this.setState({ isOrganizingSeriesModalOpen: true });
-  }
+  };
 
   onOrganizeSeriesModalClose = (organized) => {
     this.setState({ isOrganizingSeriesModalOpen: false });
@@ -90,7 +90,7 @@ class SeriesEditor extends Component {
     if (organized === true) {
       this.onSelectAllChange({ value: false });
     }
-  }
+  };
 
   //
   // Render

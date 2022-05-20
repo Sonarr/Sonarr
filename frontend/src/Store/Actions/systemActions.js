@@ -1,17 +1,17 @@
 import { createAction } from 'redux-actions';
+import { filterTypes, sortDirections } from 'Helpers/Props';
+import { setAppValue } from 'Store/Actions/appActions';
+import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
-import { filterTypes, sortDirections } from 'Helpers/Props';
-import { createThunk, handleThunks } from 'Store/thunks';
-import { setAppValue } from 'Store/Actions/appActions';
-import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
-import createClearReducer from './Creators/Reducers/createClearReducer';
-import createFetchHandler from './Creators/createFetchHandler';
-import createRemoveItemHandler from './Creators/createRemoveItemHandler';
-import createHandleActions from './Creators/createHandleActions';
-import createServerSideCollectionHandlers from './Creators/createServerSideCollectionHandlers';
 import { pingServer } from './appActions';
 import { set } from './baseActions';
+import createFetchHandler from './Creators/createFetchHandler';
+import createHandleActions from './Creators/createHandleActions';
+import createRemoveItemHandler from './Creators/createRemoveItemHandler';
+import createServerSideCollectionHandlers from './Creators/createServerSideCollectionHandlers';
+import createClearReducer from './Creators/Reducers/createClearReducer';
+import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
 
 //
 // Variables

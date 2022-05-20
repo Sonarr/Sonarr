@@ -1,9 +1,9 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { icons } from 'Helpers/Props';
-import Icon from 'Components/Icon';
 import CheckInput from 'Components/Form/CheckInput';
+import Icon from 'Components/Icon';
+import { icons } from 'Helpers/Props';
 import styles from './LanguageProfileItem.css';
 
 class LanguageProfileItem extends Component {
@@ -18,7 +18,7 @@ class LanguageProfileItem extends Component {
     } = this.props;
 
     onLanguageProfileItemAllowedChange(languageId, value);
-  }
+  };
 
   //
   // Render

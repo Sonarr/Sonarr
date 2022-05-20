@@ -1,8 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { kinds } from 'Helpers/Props';
-import classNames from 'classnames';
 import styles from './Icon.css';
 
 class Icon extends PureComponent {

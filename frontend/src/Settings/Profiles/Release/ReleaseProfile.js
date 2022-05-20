@@ -2,11 +2,11 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import MiddleTruncate from 'react-middle-truncate';
-import { kinds } from 'Helpers/Props';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
-import TagList from 'Components/TagList';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import TagList from 'Components/TagList';
+import { kinds } from 'Helpers/Props';
 import EditReleaseProfileModalConnector from './EditReleaseProfileModalConnector';
 import styles from './ReleaseProfile.css';
 
@@ -29,26 +29,26 @@ class ReleaseProfile extends Component {
 
   onEditReleaseProfilePress = () => {
     this.setState({ isEditReleaseProfileModalOpen: true });
-  }
+  };
 
   onEditReleaseProfileModalClose = () => {
     this.setState({ isEditReleaseProfileModalOpen: false });
-  }
+  };
 
   onDeleteReleaseProfilePress = () => {
     this.setState({
       isEditReleaseProfileModalOpen: false,
       isDeleteReleaseProfileModalOpen: true
     });
-  }
+  };
 
   onDeleteReleaseProfileModalClose= () => {
     this.setState({ isDeleteReleaseProfileModalOpen: false });
-  }
+  };
 
   onConfirmDeleteReleaseProfile = () => {
     this.props.onConfirmDeleteReleaseProfile(this.props.id);
-  }
+  };
 
   //
   // Render
@@ -166,22 +166,22 @@ class ReleaseProfile extends Component {
         <div>
           {
             !enabled &&
-            <Label
-              kind={kinds.DISABLED}
-              outline={true}
-            >
-              Disabled
-            </Label>
+              <Label
+                kind={kinds.DISABLED}
+                outline={true}
+              >
+                Disabled
+              </Label>
           }
 
           {
             indexer &&
-            <Label
-              kind={kinds.INFO}
-              outline={true}
-            >
-              {indexer.name}
-            </Label>
+              <Label
+                kind={kinds.INFO}
+                outline={true}
+              >
+                {indexer.name}
+              </Label>
           }
         </div>
 

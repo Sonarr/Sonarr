@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
-import TableRowButton from 'Components/Table/TableRowButton';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableRowButton from 'Components/Table/TableRowButton';
+import { icons } from 'Helpers/Props';
 import LogsTableDetailsModal from './LogsTableDetailsModal';
 import styles from './LogsTableRow.css';
 
@@ -46,11 +46,11 @@ class LogsTableRow extends Component {
     if (!this.state.isDetailsModalOpen) {
       this.setState({ isDetailsModalOpen: true });
     }
-  }
+  };
 
   onModalClose = () => {
     this.setState({ isDetailsModalOpen: false });
-  }
+  };
 
   //
   // Render

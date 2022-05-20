@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds } from 'Helpers/Props';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import { icons, kinds } from 'Helpers/Props';
 import EditLanguageProfileModalConnector from './EditLanguageProfileModalConnector';
 import styles from './LanguageProfile.css';
 
@@ -27,26 +27,26 @@ class LanguageProfile extends Component {
 
   onEditLanguageProfilePress = () => {
     this.setState({ isEditLanguageProfileModalOpen: true });
-  }
+  };
 
   onEditLanguageProfileModalClose = () => {
     this.setState({ isEditLanguageProfileModalOpen: false });
-  }
+  };
 
   onDeleteLanguageProfilePress = () => {
     this.setState({
       isEditLanguageProfileModalOpen: false,
       isDeleteLanguageProfileModalOpen: true
     });
-  }
+  };
 
   onDeleteLanguageProfileModalClose = () => {
     this.setState({ isDeleteLanguageProfileModalOpen: false });
-  }
-onCloneLanguageProfilePress
+  };
+
   onConfirmDeleteLanguageProfile = () => {
     this.props.onConfirmDeleteLanguageProfile(this.props.id);
-  }
+  };
 
   onCloneLanguageProfilePress = () => {
     const {
@@ -55,7 +55,7 @@ onCloneLanguageProfilePress
     } = this.props;
 
     onCloneLanguageProfilePress(id);
-  }
+  };
 
   //
   // Render

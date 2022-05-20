@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import formatBytes from 'Utilities/Number/formatBytes';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
+import formatBytes from 'Utilities/Number/formatBytes';
 import styles from './SeasonInfo.css';
 
 function SeasonInfo(props) {

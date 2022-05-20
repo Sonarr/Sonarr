@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { lookupUnsearchedSeries, cancelLookupSeries } from 'Store/Actions/importSeriesActions';
+import { cancelLookupSeries, lookupUnsearchedSeries } from 'Store/Actions/importSeriesActions';
 import ImportSeriesFooter from './ImportSeriesFooter';
 
 function isMixed(items, selectedIds, defaultValue, key) {

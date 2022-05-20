@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds } from 'Helpers/Props';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
 import Button from 'Components/Link/Button';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes, kinds } from 'Helpers/Props';
 import styles from './DeleteSeriesModalContent.css';
 
 class DeleteSeriesModalContent extends Component {
@@ -30,11 +30,11 @@ class DeleteSeriesModalContent extends Component {
 
   onDeleteFilesChange = ({ value }) => {
     this.setState({ deleteFiles: value });
-  }
+  };
 
   onAddImportListExclusionChange = ({ value }) => {
     this.setState({ addImportListExclusion: value });
-  }
+  };
 
   onDeleteSeriesConfirmed = () => {
     const {
@@ -44,7 +44,7 @@ class DeleteSeriesModalContent extends Component {
 
     this.setState({ deleteFiles: false, addImportListExclusion: false });
     this.props.onDeleteSelectedPress(deleteFiles, addImportListExclusion);
-  }
+  };
 
   //
   // Render

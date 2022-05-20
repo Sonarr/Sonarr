@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchQueueStatus } from 'Store/Actions/queueActions';
 import PageSidebarStatus from 'Components/Page/Sidebar/PageSidebarStatus';
+import { fetchQueueStatus } from 'Store/Actions/queueActions';
 
 function createMapStateToProps() {
   return createSelector(

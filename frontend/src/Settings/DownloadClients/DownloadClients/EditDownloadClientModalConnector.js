@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
-import { cancelTestDownloadClient, cancelSaveDownloadClient } from 'Store/Actions/settingsActions';
+import { cancelSaveDownloadClient, cancelTestDownloadClient } from 'Store/Actions/settingsActions';
 import EditDownloadClientModal from './EditDownloadClientModal';
 
 function createMapDispatchToProps(dispatch, props) {
@@ -33,7 +33,7 @@ class EditDownloadClientModalConnector extends Component {
     this.props.dispatchCancelTestDownloadClient();
     this.props.dispatchCancelSaveDownloadClient();
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

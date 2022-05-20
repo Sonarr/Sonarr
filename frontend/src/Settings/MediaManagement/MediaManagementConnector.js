@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { clearPendingChanges } from 'Store/Actions/baseActions';
+import { fetchMediaManagementSettings, saveMediaManagementSettings, saveNamingSettings, setMediaManagementSettingsValue } from 'Store/Actions/settingsActions';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
-import { fetchMediaManagementSettings, setMediaManagementSettingsValue, saveMediaManagementSettings, saveNamingSettings } from 'Store/Actions/settingsActions';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
 import MediaManagement from './MediaManagement';
 
 const SECTION = 'mediaManagement';
@@ -54,12 +54,12 @@ class MediaManagementConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.setMediaManagementSettingsValue({ name, value });
-  }
+  };
 
   onSavePress = () => {
     this.props.saveMediaManagementSettings();
     this.props.saveNamingSettings();
-  }
+  };
 
   //
   // Render

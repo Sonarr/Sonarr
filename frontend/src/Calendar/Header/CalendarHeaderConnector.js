@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { gotoCalendarNextRange, gotoCalendarPreviousRange, gotoCalendarToday, setCalendarView } from 'Store/Actions/calendarActions';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
-import { setCalendarView, gotoCalendarToday, gotoCalendarPreviousRange, gotoCalendarNextRange } from 'Store/Actions/calendarActions';
 import CalendarHeader from './CalendarHeader';
 
 function createMapStateToProps() {
@@ -45,19 +45,19 @@ class CalendarHeaderConnector extends Component {
 
   onViewChange = (view) => {
     this.props.setCalendarView({ view });
-  }
+  };
 
   onTodayPress = () => {
     this.props.gotoCalendarToday();
-  }
+  };
 
   onPreviousPress = () => {
     this.props.gotoCalendarPreviousRange();
-  }
+  };
 
   onNextPress = () => {
     this.props.gotoCalendarNextRange();
-  }
+  };
 
   //
   // Render

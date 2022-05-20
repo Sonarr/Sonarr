@@ -36,7 +36,7 @@ class ImportSeriesSelectSeriesConnector extends Component {
       term,
       topOfQueue: true
     });
-  }
+  };
 
   onSeriesSelect = (tvdbId) => {
     const {
@@ -58,7 +58,7 @@ class ImportSeriesSelectSeriesConnector extends Component {
         value: selectedSeries.seriesType
       });
     }
-  }
+  };
 
   //
   // Render

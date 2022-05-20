@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { sizes } from 'Helpers/Props';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import EpisodeDetailsModalContentConnector from './EpisodeDetailsModalContentConnector';
 
 class EpisodeDetailsModal extends Component {
@@ -22,7 +22,7 @@ class EpisodeDetailsModal extends Component {
 
   onTabChange = (isSearch) => {
     this.setState({ closeOnBackgroundClick: !isSearch });
-  }
+  };
 
   //
   // Render

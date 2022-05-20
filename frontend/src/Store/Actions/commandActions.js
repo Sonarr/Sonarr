@@ -1,13 +1,13 @@
 import { batchActions } from 'redux-batched-actions';
-import createAjaxRequest from 'Utilities/createAjaxRequest';
-import { isSameCommand } from 'Utilities/Command';
 import { messageTypes } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
+import { isSameCommand } from 'Utilities/Command';
+import createAjaxRequest from 'Utilities/createAjaxRequest';
+import { hideMessage, showMessage } from './appActions';
+import { removeItem, updateItem } from './baseActions';
 import createFetchHandler from './Creators/createFetchHandler';
 import createHandleActions from './Creators/createHandleActions';
 import createRemoveItemHandler from './Creators/createRemoveItemHandler';
-import { showMessage, hideMessage } from './appActions';
-import { updateItem, removeItem } from './baseActions';
 
 //
 // Variables

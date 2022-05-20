@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchTask } from 'Store/Actions/systemActions';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import ScheduledTaskRow from './ScheduledTaskRow';
 
 function createMapStateToProps() {

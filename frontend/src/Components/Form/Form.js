@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { kinds } from 'Helpers/Props';
 import Alert from 'Components/Alert';
+import { kinds } from 'Helpers/Props';
 import styles from './Form.css';
 
 function Form({ children, validationErrors, validationWarnings, ...otherProps }) {

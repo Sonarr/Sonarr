@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { setImportSeriesValue, importSeries, clearImportSeries } from 'Store/Actions/importSeriesActions';
-import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
-import { setAddSeriesDefault } from 'Store/Actions/addSeriesActions';
 import createRouteMatchShape from 'Helpers/Props/Shapes/createRouteMatchShape';
+import { setAddSeriesDefault } from 'Store/Actions/addSeriesActions';
+import { clearImportSeries, importSeries, setImportSeriesValue } from 'Store/Actions/importSeriesActions';
+import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import ImportSeries from './ImportSeries';
 
 function createMapStateToProps() {
@@ -127,11 +127,11 @@ class ImportSeriesConnector extends Component {
         [name]: value
       });
     });
-  }
+  };
 
   onImportPress = (ids) => {
     this.props.dispatchImportSeries({ ids });
-  }
+  };
 
   //
   // Render

@@ -2,16 +2,16 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
+import * as commandNames from 'Commands/commandNames';
+import withCurrentPage from 'Components/withCurrentPage';
+import { executeCommand } from 'Store/Actions/commandActions';
+import { clearEpisodeFiles, fetchEpisodeFiles } from 'Store/Actions/episodeFileActions';
+import { clearQueueDetails, fetchQueueDetails } from 'Store/Actions/queueActions';
+import * as wantedActions from 'Store/Actions/wantedActions';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
-import withCurrentPage from 'Components/withCurrentPage';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import * as wantedActions from 'Store/Actions/wantedActions';
-import { executeCommand } from 'Store/Actions/commandActions';
-import { fetchQueueDetails, clearQueueDetails } from 'Store/Actions/queueActions';
-import { fetchEpisodeFiles, clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
-import * as commandNames from 'Commands/commandNames';
+import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import CutoffUnmet from './CutoffUnmet';
 
 function createMapStateToProps() {
@@ -83,37 +83,37 @@ class CutoffUnmetConnector extends Component {
 
   repopulate = () => {
     this.props.fetchCutoffUnmet();
-  }
+  };
   //
   // Listeners
 
   onFirstPagePress = () => {
     this.props.gotoCutoffUnmetFirstPage();
-  }
+  };
 
   onPreviousPagePress = () => {
     this.props.gotoCutoffUnmetPreviousPage();
-  }
+  };
 
   onNextPagePress = () => {
     this.props.gotoCutoffUnmetNextPage();
-  }
+  };
 
   onLastPagePress = () => {
     this.props.gotoCutoffUnmetLastPage();
-  }
+  };
 
   onPageSelect = (page) => {
     this.props.gotoCutoffUnmetPage({ page });
-  }
+  };
 
   onSortPress = (sortKey) => {
     this.props.setCutoffUnmetSort({ sortKey });
-  }
+  };
 
   onFilterSelect = (selectedFilterKey) => {
     this.props.setCutoffUnmetFilter({ selectedFilterKey });
-  }
+  };
 
   onTableOptionChange = (payload) => {
     this.props.setCutoffUnmetTableOption(payload);
@@ -121,21 +121,21 @@ class CutoffUnmetConnector extends Component {
     if (payload.pageSize) {
       this.props.gotoCutoffUnmetFirstPage();
     }
-  }
+  };
 
   onSearchSelectedPress = (selected) => {
     this.props.executeCommand({
       name: commandNames.EPISODE_SEARCH,
       episodeIds: selected
     });
-  }
+  };
 
   onSearchAllCutoffUnmetPress = (monitored) => {
     this.props.executeCommand({
       name: commandNames.CUTOFF_UNMET_EPISODE_SEARCH,
       monitored
     });
-  }
+  };
 
   //
   // Render

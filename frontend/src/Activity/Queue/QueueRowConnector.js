@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { grabQueueItem, removeQueueItem } from 'Store/Actions/queueActions';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import createEpisodeSelector from 'Store/Selectors/createEpisodeSelector';
+import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import QueueRow from './QueueRow';
 
@@ -40,11 +40,11 @@ class QueueRowConnector extends Component {
 
   onGrabPress = () => {
     this.props.grabQueueItem({ id: this.props.id });
-  }
+  };
 
   onRemoveQueueItemPress = (payload) => {
     this.props.removeQueueItem({ id: this.props.id, ...payload });
-  }
+  };
 
   //
   // Render

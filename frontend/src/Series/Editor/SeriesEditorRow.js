@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import titleCase from 'Utilities/String/titleCase';
-import formatBytes from 'Utilities/Number/formatBytes';
-import TagListConnector from 'Components/TagListConnector';
 import CheckInput from 'Components/Form/CheckInput';
-import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
-import SeriesTitleLink from 'Series/SeriesTitleLink';
+import TableRow from 'Components/Table/TableRow';
+import TagListConnector from 'Components/TagListConnector';
 import SeriesStatusCell from 'Series/Index/Table/SeriesStatusCell';
+import SeriesTitleLink from 'Series/SeriesTitleLink';
+import formatBytes from 'Utilities/Number/formatBytes';
+import titleCase from 'Utilities/String/titleCase';
 import styles from './SeriesEditorRow.css';
 
 class SeriesEditorRow extends Component {
@@ -19,7 +19,7 @@ class SeriesEditorRow extends Component {
   onSeasonFolderChange = () => {
     // Mock handler to satisfy `onChange` being required for `CheckInput`.
     //
-  }
+  };
 
   //
   // Render

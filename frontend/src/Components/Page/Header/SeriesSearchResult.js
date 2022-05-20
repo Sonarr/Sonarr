@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { kinds } from 'Helpers/Props';
 import Label from 'Components/Label';
+import { kinds } from 'Helpers/Props';
 import SeriesPoster from 'Series/SeriesPoster';
 import styles from './SeriesSearchResult.css';
 

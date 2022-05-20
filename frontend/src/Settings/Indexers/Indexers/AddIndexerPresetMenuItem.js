@@ -17,7 +17,7 @@ class AddIndexerPresetMenuItem extends Component {
       name,
       implementation
     });
-  }
+  };
 
   //
   // Render

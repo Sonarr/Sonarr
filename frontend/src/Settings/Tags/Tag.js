@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { kinds } from 'Helpers/Props';
 import Card from 'Components/Card';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import { kinds } from 'Helpers/Props';
 import TagDetailsModal from './Details/TagDetailsModal';
 import styles from './Tag.css';
 
@@ -25,26 +25,26 @@ class Tag extends Component {
 
   onShowDetailsPress = () => {
     this.setState({ isDetailsModalOpen: true });
-  }
+  };
 
   onDetailsModalClose = () => {
     this.setState({ isDetailsModalOpen: false });
-  }
+  };
 
   onDeleteTagPress = () => {
     this.setState({
       isDetailsModalOpen: false,
       isDeleteTagModalOpen: true
     });
-  }
+  };
 
   onDeleteTagModalClose= () => {
     this.setState({ isDeleteTagModalOpen: false });
-  }
+  };
 
   onConfirmDeleteTag = () => {
     this.props.onConfirmDeleteTag({ id: this.props.id });
-  }
+  };
 
   //
   // Render

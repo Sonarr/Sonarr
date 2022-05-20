@@ -1,12 +1,12 @@
-import './preload';
-import './polyfills';
-
+import { createBrowserHistory } from 'history';
 import React from 'react';
 import { render } from 'react-dom';
-import { createBrowserHistory } from 'history';
 import createAppStore from 'Store/createAppStore';
-import 'Diag/ConsoleApi';
 import App from './App/App';
+
+import './preload';
+import './polyfills';
+import 'Diag/ConsoleApi';
 import 'Styles/globals.css';
 import './index.css';
 

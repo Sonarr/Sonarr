@@ -10,7 +10,7 @@ class SelectSeriesRow extends Component {
 
   onPress = () => {
     this.props.onSeriesSelect(this.props.id);
-  }
+  };
 
   //
   // Render

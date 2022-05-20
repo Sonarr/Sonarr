@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Icon from 'Components/Icon';
 import { icons } from 'Helpers/Props';
 import tagShape from 'Helpers/Props/Shapes/tagShape';
-import Icon from 'Components/Icon';
 import FormInputButton from './FormInputButton';
 import TagInput from './TagInput';
 import styles from './DeviceInput.css';
@@ -23,7 +23,7 @@ class DeviceInput extends Component {
       name,
       value: [...value, deviceId]
     });
-  }
+  };
 
   onTagDelete = ({ index }) => {
     const {
@@ -39,7 +39,7 @@ class DeviceInput extends Component {
       name,
       value: newValue
     });
-  }
+  };
 
   //
   // Render

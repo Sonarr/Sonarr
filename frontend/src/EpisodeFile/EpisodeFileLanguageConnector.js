@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createEpisodeFileSelector from 'Store/Selectors/createEpisodeFileSelector';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import createEpisodeFileSelector from 'Store/Selectors/createEpisodeFileSelector';
 
 function createMapStateToProps() {
   return createSelector(

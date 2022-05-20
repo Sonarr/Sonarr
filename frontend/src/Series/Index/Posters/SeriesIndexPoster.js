@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import getRelativeDate from 'Utilities/Date/getRelativeDate';
-import { icons } from 'Helpers/Props';
-import IconButton from 'Components/Link/IconButton';
-import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import Label from 'Components/Label';
+import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
-import SeriesPoster from 'Series/SeriesPoster';
-import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
+import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
+import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
+import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
+import SeriesPoster from 'Series/SeriesPoster';
+import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import SeriesIndexPosterInfo from './SeriesIndexPosterInfo';
 import styles from './SeriesIndexPoster.css';
 
@@ -33,34 +33,34 @@ class SeriesIndexPoster extends Component {
 
   onEditSeriesPress = () => {
     this.setState({ isEditSeriesModalOpen: true });
-  }
+  };
 
   onEditSeriesModalClose = () => {
     this.setState({ isEditSeriesModalOpen: false });
-  }
+  };
 
   onDeleteSeriesPress = () => {
     this.setState({
       isEditSeriesModalOpen: false,
       isDeleteSeriesModalOpen: true
     });
-  }
+  };
 
   onDeleteSeriesModalClose = () => {
     this.setState({ isDeleteSeriesModalOpen: false });
-  }
+  };
 
   onPosterLoad = () => {
     if (this.state.hasPosterError) {
       this.setState({ hasPosterError: false });
     }
-  }
+  };
 
   onPosterLoadError = () => {
     if (!this.state.hasPosterError) {
       this.setState({ hasPosterError: true });
     }
-  }
+  };
 
   //
   // Render

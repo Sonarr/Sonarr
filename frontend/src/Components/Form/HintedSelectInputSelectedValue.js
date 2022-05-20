@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue';
 import Label from 'Components/Label';
+import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue';
 import styles from './HintedSelectInputSelectedValue.css';
 
 function HintedSelectInputSelectedValue(props) {

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { sizes } from 'Helpers/Props';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import EditNotificationModalContentConnector from './EditNotificationModalContentConnector';
 
 function EditNotificationModal({ isOpen, onModalClose, ...otherProps }) {

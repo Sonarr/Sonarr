@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { saveSeasonPass, setSeasonPassFilter, setSeasonPassSort } from 'Store/Actions/seasonPassActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
-import { setSeasonPassSort, setSeasonPassFilter, saveSeasonPass } from 'Store/Actions/seasonPassActions';
 import SeasonPass from './SeasonPass';
 
 function createMapStateToProps() {
@@ -30,15 +30,15 @@ class SeasonPassConnector extends Component {
 
   onSortPress = (sortKey) => {
     this.props.setSeasonPassSort({ sortKey });
-  }
+  };
 
   onFilterSelect = (selectedFilterKey) => {
     this.props.setSeasonPassFilter({ selectedFilterKey });
-  }
+  };
 
   onUpdateSelectedPress = (payload) => {
     this.props.saveSeasonPass(payload);
-  }
+  };
 
   //
   // Render

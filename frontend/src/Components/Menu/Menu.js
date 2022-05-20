@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Manager, Popper, Reference } from 'react-popper';
-import getUniqueElememtId from 'Utilities/getUniqueElementId';
-import { align } from 'Helpers/Props';
 import Portal from 'Components/Portal';
+import { align } from 'Helpers/Props';
+import getUniqueElememtId from 'Utilities/getUniqueElementId';
 import styles from './Menu.css';
 
 const sharedPopperOptions = {
@@ -124,7 +124,7 @@ class Menu extends Component {
       this.setState({ isMenuOpen: false });
       this._removeListener();
     }
-  }
+  };
 
   onTouchStart = (event) => {
     const menuButton = document.getElementById(this._menuButtonId);
@@ -148,17 +148,17 @@ class Menu extends Component {
       this.setState({ isMenuOpen: false });
       this._removeListener();
     }
-  }
+  };
 
   onWindowResize = () => {
     this.setMaxHeight();
-  }
+  };
 
   onWindowScroll = (event) => {
     if (this.state.isMenuOpen) {
       this.setMaxHeight();
     }
-  }
+  };
 
   onMenuButtonPress = () => {
     const state = {
@@ -173,7 +173,7 @@ class Menu extends Component {
     }
 
     this.setState(state);
-  }
+  };
 
   //
   // Render

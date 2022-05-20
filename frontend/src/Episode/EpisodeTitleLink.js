@@ -22,11 +22,11 @@ class EpisodeTitleLink extends Component {
 
   onLinkPress = () => {
     this.setState({ isDetailsModalOpen: true });
-  }
+  };
 
   onModalClose = () => {
     this.setState({ isDetailsModalOpen: false });
-  }
+  };
 
   //
   // Render

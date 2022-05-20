@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
-import { fetchIndexerOptions, setIndexerOptionsValue, saveIndexerOptions } from 'Store/Actions/settingsActions';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
+import { fetchIndexerOptions, saveIndexerOptions, setIndexerOptionsValue } from 'Store/Actions/settingsActions';
+import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import IndexerOptions from './IndexerOptions';
 
 const SECTION = 'indexerOptions';
@@ -72,7 +72,7 @@ class IndexerOptionsConnector extends Component {
 
   onInputChange = ({ name, value }) => {
     this.props.dispatchSetIndexerOptionsValue({ name, value });
-  }
+  };
 
   //
   // Render

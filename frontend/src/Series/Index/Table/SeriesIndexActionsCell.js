@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
-import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
+import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
+import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 
 class SeriesIndexActionsCell extends Component {
 
@@ -26,22 +26,22 @@ class SeriesIndexActionsCell extends Component {
 
   onEditSeriesPress = () => {
     this.setState({ isEditSeriesModalOpen: true });
-  }
+  };
 
   onEditSeriesModalClose = () => {
     this.setState({ isEditSeriesModalOpen: false });
-  }
+  };
 
   onDeleteSeriesPress = () => {
     this.setState({
       isEditSeriesModalOpen: false,
       isDeleteSeriesModalOpen: true
     });
-  }
+  };
 
   onDeleteSeriesModalClose = () => {
     this.setState({ isDeleteSeriesModalOpen: false });
-  }
+  };
 
   //
   // Render

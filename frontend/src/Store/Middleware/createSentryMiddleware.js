@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import * as sentry from '@sentry/browser';
+import _ from 'lodash';
 import parseUrl from 'Utilities/String/parseUrl';
 
 function cleanseUrl(url) {

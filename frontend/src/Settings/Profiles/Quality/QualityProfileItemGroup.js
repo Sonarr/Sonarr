@@ -1,12 +1,12 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { icons } from 'Helpers/Props';
+import CheckInput from 'Components/Form/CheckInput';
+import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
-import CheckInput from 'Components/Form/CheckInput';
-import TextInput from 'Components/Form/TextInput';
+import { icons } from 'Helpers/Props';
 import QualityProfileItemDragSource from './QualityProfileItemDragSource';
 import styles from './QualityProfileItemGroup.css';
 
@@ -22,7 +22,7 @@ class QualityProfileItemGroup extends Component {
     } = this.props;
 
     onItemGroupAllowedChange(groupId, value);
-  }
+  };
 
   onNameChange = ({ value }) => {
     const {
@@ -31,7 +31,7 @@ class QualityProfileItemGroup extends Component {
     } = this.props;
 
     onItemGroupNameChange(groupId, value);
-  }
+  };
 
   onDeleteGroupPress = ({ value }) => {
     const {
@@ -40,7 +40,7 @@ class QualityProfileItemGroup extends Component {
     } = this.props;
 
     onDeleteGroupPress(groupId, value);
-  }
+  };
 
   //
   // Render

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import getQualities from 'Utilities/Quality/getQualities';
+import { reprocessInteractiveImportItems, updateInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
 import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
-import { updateInteractiveImportItems, reprocessInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
+import getQualities from 'Utilities/Quality/getQualities';
 import SelectQualityModalContent from './SelectQualityModalContent';
 
 function createMapStateToProps() {
@@ -44,7 +44,7 @@ class SelectQualityModalContentConnector extends Component {
     if (!this.props.isPopulated) {
       this.props.dispatchFetchQualityProfileSchema();
     }
-  }
+  };
 
   //
   // Listeners
@@ -75,7 +75,7 @@ class SelectQualityModalContentConnector extends Component {
     dispatchReprocessInteractiveImportItems({ ids });
 
     this.props.onModalClose(true);
-  }
+  };
 
   //
   // Render

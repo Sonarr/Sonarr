@@ -15,7 +15,7 @@ class PageJumpBarItem extends Component {
     } = this.props;
 
     onItemPress(label);
-  }
+  };
 
   //
   // Render

@@ -26,26 +26,26 @@ class Notification extends Component {
 
   onEditNotificationPress = () => {
     this.setState({ isEditNotificationModalOpen: true });
-  }
+  };
 
   onEditNotificationModalClose = () => {
     this.setState({ isEditNotificationModalOpen: false });
-  }
+  };
 
   onDeleteNotificationPress = () => {
     this.setState({
       isEditNotificationModalOpen: false,
       isDeleteNotificationModalOpen: true
     });
-  }
+  };
 
   onDeleteNotificationModalClose = () => {
     this.setState({ isDeleteNotificationModalOpen: false });
-  }
+  };
 
   onConfirmDeleteNotification = () => {
     this.props.onConfirmDeleteNotification(this.props.id);
-  }
+  };
 
   //
   // Render

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import createEpisodeFileSelector from 'Store/Selectors/createEpisodeFileSelector';
 import createEpisodeSelector from 'Store/Selectors/createEpisodeSelector';
 import createQueueItemSelector from 'Store/Selectors/createQueueItemSelector';
-import createEpisodeFileSelector from 'Store/Selectors/createEpisodeFileSelector';
 import EpisodeStatus from './EpisodeStatus';
 
 function createMapStateToProps() {

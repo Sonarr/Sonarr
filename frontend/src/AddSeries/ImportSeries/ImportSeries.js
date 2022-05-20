@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import Switch from 'Components/Router/Switch';
-import ImportSeriesSelectFolderConnector from 'AddSeries/ImportSeries/SelectFolder/ImportSeriesSelectFolderConnector';
 import ImportSeriesConnector from 'AddSeries/ImportSeries/Import/ImportSeriesConnector';
+import ImportSeriesSelectFolderConnector from 'AddSeries/ImportSeries/SelectFolder/ImportSeriesSelectFolderConnector';
+import Switch from 'Components/Router/Switch';
 
 class ImportSeries extends Component {
 

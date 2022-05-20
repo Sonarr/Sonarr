@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons, kinds, sizes } from 'Helpers/Props';
-import Button from 'Components/Link/Button';
 import Alert from 'Components/Alert';
-import Icon from 'Components/Icon';
 import FieldSet from 'Components/FieldSet';
-import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FileBrowserModal from 'Components/FileBrowser/FileBrowserModal';
+import Icon from 'Components/Icon';
+import Button from 'Components/Link/Button';
+import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
+import { icons, kinds, sizes } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
 import styles from './ImportSeriesSelectFolder.css';
 
@@ -30,15 +30,15 @@ class ImportSeriesSelectFolder extends Component {
 
   onAddNewRootFolderPress = () => {
     this.setState({ isAddNewRootFolderModalOpen: true });
-  }
+  };
 
   onNewRootFolderSelect = ({ value }) => {
     this.props.onNewRootFolderSelect(value);
-  }
+  };
 
   onAddRootFolderModalClose = () => {
     this.setState({ isAddNewRootFolderModalOpen: false });
-  }
+  };
 
   //
   // Render

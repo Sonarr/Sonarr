@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { cancelFetchReleases, clearReleases } from 'Store/Actions/releaseActions';
+import episodeEntities from 'Episode/episodeEntities';
 import { toggleEpisodeMonitored } from 'Store/Actions/episodeActions';
+import { cancelFetchReleases, clearReleases } from 'Store/Actions/releaseActions';
 import createEpisodeSelector from 'Store/Selectors/createEpisodeSelector';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
-import episodeEntities from 'Episode/episodeEntities';
 import EpisodeDetailsModalContent from './EpisodeDetailsModalContent';
 
 function createMapStateToProps() {

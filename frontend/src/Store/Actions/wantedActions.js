@@ -1,12 +1,12 @@
 import { createAction } from 'redux-actions';
-import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
 import { filterTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
+import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
+import createBatchToggleEpisodeMonitoredHandler from './Creators/createBatchToggleEpisodeMonitoredHandler';
+import createHandleActions from './Creators/createHandleActions';
+import createServerSideCollectionHandlers from './Creators/createServerSideCollectionHandlers';
 import createClearReducer from './Creators/Reducers/createClearReducer';
 import createSetTableOptionReducer from './Creators/Reducers/createSetTableOptionReducer';
-import createBatchToggleEpisodeMonitoredHandler from './Creators/createBatchToggleEpisodeMonitoredHandler';
-import createServerSideCollectionHandlers from './Creators/createServerSideCollectionHandlers';
-import createHandleActions from './Creators/createHandleActions';
 
 //
 // Variables

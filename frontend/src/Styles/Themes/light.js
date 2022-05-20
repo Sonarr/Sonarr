@@ -1,4 +1,5 @@
 const sonarrBlue = '#35c5f4';
+const sonarrAlternateBlue = '#2193b5';
 const darkGray = '#888';
 const gray = '#adadad';
 const black = '#000';
@@ -7,10 +8,11 @@ const offWhite = '#f5f7fa';
 const purple = '#7a43b6';
 const pink = '#ff69b4';
 const lightGray = '#ddd';
+const defaultColor = '#333';
 
 module.exports = {
   textColor: '#515253',
-  defaultColor: '#333',
+  defaultColor,
   disabledColor: '#999',
   dimColor: '#555',
   black,
@@ -33,7 +35,7 @@ module.exports = {
   // Theme Colors
 
   themeBlue: sonarrBlue,
-  themeAlternateBlue: '#2193b5',
+  themeAlternateBlue: sonarrAlternateBlue,
   themeRed: '#c4273c',
   themeDarkColor: '#3a3f51',
   themeLightColor: '#4f566f',
@@ -45,7 +47,7 @@ module.exports = {
 
   // Labels
   inverseLabelColor: '#ddd',
-  inverseLabelTextColor: '#333',
+  inverseLabelTextColor: defaultColor,
   disabledLabelColor: '#999',
   infoTextColor: white,
 
@@ -55,7 +57,7 @@ module.exports = {
   linkHoverColor: '#1b72e2',
 
   // Header
-  pageHeaderBackgroundColor: sonarrBlue,
+  pageHeaderBackgroundColor: sonarrAlternateBlue,
 
   // Sidebar
 
@@ -94,27 +96,27 @@ module.exports = {
   defaultBackgroundColor: '#fff',
   defaultBorderColor: '#eaeaea',
   defaultHoverBackgroundColor: '#f5f5f5',
-  defaultHoverBorderColor: '#d6d6d6;',
+  defaultHoverBorderColor: '#d6d6d6',
 
   primaryBackgroundColor: '#5d9cec',
   primaryBorderColor: '#5899eb',
   primaryHoverBackgroundColor: '#4b91ea',
-  primaryHoverBorderColor: '#3483e7;',
+  primaryHoverBorderColor: '#3483e7',
 
   successBackgroundColor: '#27c24c',
   successBorderColor: '#26be4a',
   successHoverBackgroundColor: '#24b145',
-  successHoverBorderColor: '#1f9c3d;',
+  successHoverBorderColor: '#1f9c3d',
 
   warningBackgroundColor: '#ff902b',
   warningBorderColor: '#ff8d26',
   warningHoverBackgroundColor: '#ff8517',
-  warningHoverBorderColor: '#fc7800;',
+  warningHoverBorderColor: '#fc7800',
 
   dangerBackgroundColor: '#f05050',
   dangerBorderColor: '#f04b4b',
   dangerHoverBackgroundColor: '#ee3d3d',
-  dangerHoverBorderColor: '#ec2626;',
+  dangerHoverBorderColor: '#ec2626',
 
   iconButtonDisabledColor: '#7a7a7a',
   iconButtonHoverColor: '#666',

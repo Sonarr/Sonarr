@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { reprocessInteractiveImportItems, updateInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
 import { fetchLanguageProfileSchema } from 'Store/Actions/settingsActions';
-import { updateInteractiveImportItems, reprocessInteractiveImportItems } from 'Store/Actions/interactiveImportActions';
 import SelectLanguageModalContent from './SelectLanguageModalContent';
 
 function createMapStateToProps() {
@@ -43,7 +43,7 @@ class SelectLanguageModalContentConnector extends Component {
     if (!this.props.isPopulated) {
       this.props.dispatchFetchLanguageProfileSchema();
     }
-  }
+  };
 
   //
   // Listeners
@@ -67,7 +67,7 @@ class SelectLanguageModalContentConnector extends Component {
     dispatchReprocessInteractiveImportItems({ ids });
 
     this.props.onModalClose(true);
-  }
+  };
 
   //
   // Render

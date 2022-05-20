@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import createEpisodeFileSelector from 'Store/Selectors/createEpisodeFileSelector';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import createQueueItemSelector from 'Store/Selectors/createQueueItemSelector';
+import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import AgendaEvent from './AgendaEvent';
 

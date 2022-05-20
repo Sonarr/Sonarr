@@ -1,8 +1,8 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { icons, kinds } from 'Helpers/Props';
 import Icon from 'Components/Icon';
+import { icons, kinds } from 'Helpers/Props';
 import FormInputHelpText from './FormInputHelpText';
 import styles from './CheckInput.css';
 
@@ -59,14 +59,14 @@ class CheckInput extends Component {
         shiftKey
       });
     }
-  }
+  };
 
   //
   // Listeners
 
   setRef = (ref) => {
     this._checkbox = ref;
-  }
+  };
 
   onClick = (event) => {
     if (this.props.isDisabled) {
@@ -78,14 +78,14 @@ class CheckInput extends Component {
 
     event.preventDefault();
     this.toggleChecked(checked, shiftKey);
-  }
+  };
 
   onChange = (event) => {
     const checked = event.target.checked;
     const shiftKey = event.nativeEvent.shiftKey;
 
     this.toggleChecked(checked, shiftKey);
-  }
+  };
 
   //
   // Render

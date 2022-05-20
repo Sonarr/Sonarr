@@ -1,23 +1,23 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import formatBytes from 'Utilities/Number/formatBytes';
-import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
-import titleCase from 'Utilities/String/titleCase';
-import { icons } from 'Helpers/Props';
+import CheckInput from 'Components/Form/CheckInput';
 import HeartRating from 'Components/HeartRating';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import ProgressBar from 'Components/ProgressBar';
-import TagListConnector from 'Components/TagListConnector';
-import CheckInput from 'Components/Form/CheckInput';
-import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
-import SeriesTitleLink from 'Series/SeriesTitleLink';
-import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
+import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
+import TagListConnector from 'Components/TagListConnector';
+import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
+import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 import SeriesBanner from 'Series/SeriesBanner';
+import SeriesTitleLink from 'Series/SeriesTitleLink';
+import formatBytes from 'Utilities/Number/formatBytes';
+import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
+import titleCase from 'Utilities/String/titleCase';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeriesStatusCell from './SeriesStatusCell';
 import styles from './SeriesIndexRow.css';
@@ -39,39 +39,39 @@ class SeriesIndexRow extends Component {
 
   onEditSeriesPress = () => {
     this.setState({ isEditSeriesModalOpen: true });
-  }
+  };
 
   onEditSeriesModalClose = () => {
     this.setState({ isEditSeriesModalOpen: false });
-  }
+  };
 
   onDeleteSeriesPress = () => {
     this.setState({
       isEditSeriesModalOpen: false,
       isDeleteSeriesModalOpen: true
     });
-  }
+  };
 
   onDeleteSeriesModalClose = () => {
     this.setState({ isDeleteSeriesModalOpen: false });
-  }
+  };
 
   onUseSceneNumberingChange = () => {
     // Mock handler to satisfy `onChange` being required for `CheckInput`.
     //
-  }
+  };
 
   onBannerLoad = () => {
     if (this.state.hasBannerError) {
       this.setState({ hasBannerError: false });
     }
-  }
+  };
 
   onBannerLoadError = () => {
     if (!this.state.hasBannerError) {
       this.setState({ hasBannerError: true });
     }
-  }
+  };
 
   //
   // Render

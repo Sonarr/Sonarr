@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import titleCase from 'Utilities/String/titleCase';
-import { inputTypes, sizes } from 'Helpers/Props';
 import FieldSet from 'Components/FieldSet';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
 import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
+import { inputTypes, sizes } from 'Helpers/Props';
+import titleCase from 'Utilities/String/titleCase';
 
 const branchValues = [
   'master',
@@ -105,20 +105,20 @@ function UpdateSettings(props) {
 
             {
               updateMechanism.value === 'script' &&
-              <FormGroup
-                advancedSettings={advancedSettings}
-                isAdvanced={true}
-              >
-                <FormLabel>Script Path</FormLabel>
+                <FormGroup
+                  advancedSettings={advancedSettings}
+                  isAdvanced={true}
+                >
+                  <FormLabel>Script Path</FormLabel>
 
-                <FormInputGroup
-                  type={inputTypes.TEXT}
-                  name="updateScriptPath"
-                  helpText="Path to a custom script that takes an extracted update package and handle the remainder of the update process"
-                  onChange={onInputChange}
-                  {...updateScriptPath}
-                />
-              </FormGroup>
+                  <FormInputGroup
+                    type={inputTypes.TEXT}
+                    name="updateScriptPath"
+                    helpText="Path to a custom script that takes an extracted update package and handle the remainder of the update process"
+                    onChange={onInputChange}
+                    {...updateScriptPath}
+                  />
+                </FormGroup>
             }
           </div>
       }

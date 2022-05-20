@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
 import Icon from 'Components/Icon';
+import { icons } from 'Helpers/Props';
 import MenuItem from './MenuItem';
 import styles from './SelectedMenuItem.css';
 
@@ -17,7 +17,7 @@ class SelectedMenuItem extends Component {
     } = this.props;
 
     onPress(name);
-  }
+  };
 
   //
   // Render

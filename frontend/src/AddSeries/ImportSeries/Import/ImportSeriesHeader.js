@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { icons, tooltipPositions } from 'Helpers/Props';
+import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
+import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
 import Icon from 'Components/Icon';
-import Popover from 'Components/Tooltip/Popover';
 import VirtualTableHeader from 'Components/Table/VirtualTableHeader';
 import VirtualTableHeaderCell from 'Components/Table/VirtualTableHeaderCell';
 import VirtualTableSelectAllHeaderCell from 'Components/Table/VirtualTableSelectAllHeaderCell';
-import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
-import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
+import Popover from 'Components/Tooltip/Popover';
+import { icons, tooltipPositions } from 'Helpers/Props';
 import styles from './ImportSeriesHeader.css';
 
 function ImportSeriesHeader(props) {

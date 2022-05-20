@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { fetchEpisodeHistory, clearEpisodeHistory, episodeHistoryMarkAsFailed } from 'Store/Actions/episodeHistoryActions';
+import { clearEpisodeHistory, episodeHistoryMarkAsFailed, fetchEpisodeHistory } from 'Store/Actions/episodeHistoryActions';
 import EpisodeHistory from './EpisodeHistory';
 
 function createMapStateToProps() {
@@ -38,7 +38,7 @@ class EpisodeHistoryConnector extends Component {
 
   onMarkAsFailedPress = (historyId) => {
     this.props.episodeHistoryMarkAsFailed({ historyId, episodeId: this.props.episodeId });
-  }
+  };
 
   //
   // Render

@@ -1,6 +1,6 @@
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
-import createClientSideCollectionSelector from './createClientSideCollectionSelector';
 import hasDifferentItemsOrOrder from 'Utilities/Object/hasDifferentItemsOrOrder';
+import createClientSideCollectionSelector from './createClientSideCollectionSelector';
 
 function createUnoptimizedSelector(uiSection) {
   return createSelector(

@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import MiddleTruncate from 'react-middle-truncate';
-import { icons, kinds } from 'Helpers/Props';
-import tagShape from 'Helpers/Props/Shapes/tagShape';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
+import { icons, kinds } from 'Helpers/Props';
+import tagShape from 'Helpers/Props/Shapes/tagShape';
 import styles from './TagInputTag.css';
 
 class TagInputTag extends Component {
@@ -24,7 +24,7 @@ class TagInputTag extends Component {
       index,
       id: tag.id
     });
-  }
+  };
 
   onEdit = () => {
     const {
@@ -38,7 +38,7 @@ class TagInputTag extends Component {
       id: tag.id,
       value: tag.name
     });
-  }
+  };
 
   //
   // Render

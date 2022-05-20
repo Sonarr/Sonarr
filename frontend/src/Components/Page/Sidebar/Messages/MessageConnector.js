@@ -35,11 +35,11 @@ class MessageConnector extends Component {
     if (hideAfter) {
       this._hideTimeoutId = setTimeout(this.hideMessage, hideAfter * 1000);
     }
-  }
+  };
 
   hideMessage = () => {
     this.props.hideMessage({ id: this.props.id });
-  }
+  };
 
   //
   // Render

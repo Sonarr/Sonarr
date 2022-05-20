@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { icons } from 'Helpers/Props';
-import FieldSet from 'Components/FieldSet';
 import Card from 'Components/Card';
+import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import QualityProfile from './QualityProfile';
+import { icons } from 'Helpers/Props';
 import EditQualityProfileModalConnector from './EditQualityProfileModalConnector';
+import QualityProfile from './QualityProfile';
 import styles from './QualityProfiles.css';
 
 class QualityProfiles extends Component {
@@ -28,15 +28,15 @@ class QualityProfiles extends Component {
   onCloneQualityProfilePress = (id) => {
     this.props.onCloneQualityProfilePress(id);
     this.setState({ isQualityProfileModalOpen: true });
-  }
+  };
 
   onEditQualityProfilePress = () => {
     this.setState({ isQualityProfileModalOpen: true });
-  }
+  };
 
   onModalClose = () => {
     this.setState({ isQualityProfileModalOpen: false });
-  }
+  };
 
   //
   // Render

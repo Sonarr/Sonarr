@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
+import * as commandNames from 'Commands/commandNames';
 import withCurrentPage from 'Components/withCurrentPage';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import * as blocklistActions from 'Store/Actions/blocklistActions';
 import { executeCommand } from 'Store/Actions/commandActions';
-import * as commandNames from 'Commands/commandNames';
+import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
+import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import Blocklist from './Blocklist';
 
 function createMapStateToProps() {
@@ -65,49 +65,41 @@ class BlocklistConnector extends Component {
 
   repopulate = () => {
     this.props.fetchBlocklist();
-  }
+  };
   //
   // Listeners
 
   onFirstPagePress = () => {
     this.props.gotoBlocklistFirstPage();
-  }
+  };
 
   onPreviousPagePress = () => {
     this.props.gotoBlocklistPreviousPage();
-  }
+  };
 
   onNextPagePress = () => {
     this.props.gotoBlocklistNextPage();
-  }
+  };
 
   onLastPagePress = () => {
     this.props.gotoBlocklistLastPage();
-  }
+  };
 
   onPageSelect = (page) => {
     this.props.gotoBlocklistPage({ page });
-  }
+  };
 
   onRemoveSelected = (ids) => {
     this.props.removeBlocklistItems({ ids });
-  }
+  };
 
   onSortPress = (sortKey) => {
     this.props.setBlocklistSort({ sortKey });
-  }
-
-  onTableOptionChange = (payload) => {
-    this.props.setBlocklistTableOption(payload);
-
-    if (payload.pageSize) {
-      this.props.gotoBlocklistFirstPage();
-    }
-  }
+  };
 
   onClearBlocklistPress = () => {
     this.props.executeCommand({ name: commandNames.CLEAR_BLOCKLIST });
-  }
+  };
 
   onTableOptionChange = (payload) => {
     this.props.setBlocklistTableOption(payload);
@@ -115,7 +107,7 @@ class BlocklistConnector extends Component {
     if (payload.pageSize) {
       this.props.gotoBlocklistFirstPage();
     }
-  }
+  };
 
   //
   // Render

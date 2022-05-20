@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { kinds } from 'Helpers/Props';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import { kinds } from 'Helpers/Props';
 import EditDownloadClientModalConnector from './EditDownloadClientModalConnector';
 import styles from './DownloadClient.css';
 
@@ -26,26 +26,26 @@ class DownloadClient extends Component {
 
   onEditDownloadClientPress = () => {
     this.setState({ isEditDownloadClientModalOpen: true });
-  }
+  };
 
   onEditDownloadClientModalClose = () => {
     this.setState({ isEditDownloadClientModalOpen: false });
-  }
+  };
 
   onDeleteDownloadClientPress = () => {
     this.setState({
       isEditDownloadClientModalOpen: false,
       isDeleteDownloadClientModalOpen: true
     });
-  }
+  };
 
   onDeleteDownloadClientModalClose= () => {
     this.setState({ isDeleteDownloadClientModalOpen: false });
-  }
+  };
 
   onConfirmDeleteDownloadClient = () => {
     this.props.onConfirmDeleteDownloadClient(this.props.id);
-  }
+  };
 
   //
   // Render

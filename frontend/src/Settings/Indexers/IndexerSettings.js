@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
-import { icons } from 'Helpers/Props';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import IndexersConnector from './Indexers/IndexersConnector';
 import IndexerOptionsConnector from './Options/IndexerOptionsConnector';
@@ -30,17 +30,17 @@ class IndexerSettings extends Component {
 
   onChildMounted = (saveCallback) => {
     this._saveCallback = saveCallback;
-  }
+  };
 
   onChildStateChange = (payload) => {
     this.setState(payload);
-  }
+  };
 
   onSavePress = () => {
     if (this._saveCallback) {
       this._saveCallback();
     }
-  }
+  };
 
   // Render
   //

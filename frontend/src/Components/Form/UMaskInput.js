@@ -1,8 +1,8 @@
 /* eslint-disable no-bitwise */
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import styles from './UMaskInput.css';
 import EnhancedSelectInput from './EnhancedSelectInput';
+import styles from './UMaskInput.css';
 
 const umaskOptions = [
   {

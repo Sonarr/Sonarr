@@ -1,19 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { inputTypes, kinds, sizes } from 'Helpers/Props';
-import dimensions from 'Styles/Variables/dimensions';
+import Form from 'Components/Form/Form';
+import FormGroup from 'Components/Form/FormGroup';
+import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Measure from 'Components/Measure';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
-import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import dimensions from 'Styles/Variables/dimensions';
 import QualityProfileItems from './QualityProfileItems';
 import styles from './EditQualityProfileModalContent.css';
 
@@ -66,20 +66,20 @@ class EditQualityProfileModalContent extends Component {
     if (height > this.state.headerHeight) {
       this.setState({ headerHeight: height });
     }
-  }
+  };
 
   onBodyMeasure = ({ height }) => {
 
     if (height > this.state.bodyHeight) {
       this.setState({ bodyHeight: height });
     }
-  }
+  };
 
   onFooterMeasure = ({ height }) => {
     if (height > this.state.footerHeight) {
       this.setState({ footerHeight: height });
     }
-  }
+  };
 
   //
   // Render

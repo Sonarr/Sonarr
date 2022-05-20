@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import isString from 'Utilities/String/isString';
-import { IN_LAST, NOT_IN_LAST, IN_NEXT, NOT_IN_NEXT } from 'Helpers/Props/filterTypes';
 import NumberInput from 'Components/Form/NumberInput';
 import SelectInput from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
+import { IN_LAST, IN_NEXT, NOT_IN_LAST, NOT_IN_NEXT } from 'Helpers/Props/filterTypes';
+import isString from 'Utilities/String/isString';
 import { NAME } from './FilterBuilderRowValue';
 import styles from './DateFilterBuilderRowValue.css';
 
@@ -102,7 +102,7 @@ class DateFilterBuilderRowValue extends Component {
       name: NAME,
       value: newValue
     });
-  }
+  };
 
   onTimeChange = ({ value }) => {
     const {
@@ -117,7 +117,7 @@ class DateFilterBuilderRowValue extends Component {
         value: filterValue.value
       }
     });
-  }
+  };
 
   //
   // Render

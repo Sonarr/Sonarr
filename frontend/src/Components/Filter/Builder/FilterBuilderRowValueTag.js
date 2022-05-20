@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { kinds } from 'Helpers/Props';
 import TagInputTag from 'Components/Form/TagInputTag';
+import { kinds } from 'Helpers/Props';
 import styles from './FilterBuilderRowValueTag.css';
 
 function FilterBuilderRowValueTag(props) {

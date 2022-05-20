@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from 'Components/Link/Button';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
 import CustomFilter from './CustomFilter';
 import styles from './CustomFiltersModalContent.css';
 

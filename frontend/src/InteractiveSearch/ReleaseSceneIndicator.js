@@ -1,13 +1,13 @@
+import classNames from 'classnames';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
-import { tooltipPositions, icons, sizes } from 'Helpers/Props';
-import styles from './ReleaseSceneIndicator.css';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
-import Popover from 'Components/Tooltip/Popover';
 import Icon from 'Components/Icon';
+import Popover from 'Components/Tooltip/Popover';
+import { icons, sizes, tooltipPositions } from 'Helpers/Props';
+import styles from './ReleaseSceneIndicator.css';
 
 function formatReleaseNumber(seasonNumber, episodeNumbers, absoluteEpisodeNumbers) {
   if (episodeNumbers && episodeNumbers.length) {

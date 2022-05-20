@@ -20,7 +20,7 @@ class EditQualityProfileModalConnector extends Component {
   onModalClose = () => {
     this.props.clearPendingChanges({ section: 'settings.qualityProfiles' });
     this.props.onModalClose();
-  }
+  };
 
   //
   // Render

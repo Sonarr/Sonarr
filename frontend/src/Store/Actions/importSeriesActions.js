@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import getSectionState from 'Utilities/State/getSectionState';
-import updateSectionState from 'Utilities/State/updateSectionState';
 import getNewSeries from 'Utilities/Series/getNewSeries';
 import * as seriesTypes from 'Utilities/Series/seriesTypes';
-import { createThunk, handleThunks } from 'Store/thunks';
+import getSectionState from 'Utilities/State/getSectionState';
+import updateSectionState from 'Utilities/State/updateSectionState';
+import { removeItem, set, updateItem } from './baseActions';
 import createHandleActions from './Creators/createHandleActions';
-import { set, removeItem, updateItem } from './baseActions';
 import { fetchRootFolders } from './rootFolderActions';
 
 //

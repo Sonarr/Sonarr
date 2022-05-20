@@ -1,7 +1,7 @@
+import { connectRouter } from 'connected-react-router';
 import { combineReducers } from 'redux';
 import { enableBatching } from 'redux-batched-actions';
 import actions from 'Store/Actions';
-import { connectRouter } from 'connected-react-router';
 
 const defaultState = {};
 const reducers = {};

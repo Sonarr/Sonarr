@@ -2,40 +2,40 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import TextTruncate from 'react-text-truncate';
-import formatBytes from 'Utilities/Number/formatBytes';
-import selectAll from 'Utilities/Table/selectAll';
-import toggleSelected from 'Utilities/Table/toggleSelected';
-import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'Helpers/Props';
-import fonts from 'Styles/Variables/fonts';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
-import IconButton from 'Components/Link/IconButton';
 import Label from 'Components/Label';
+import IconButton from 'Components/Link/IconButton';
+import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Measure from 'Components/Measure';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
-import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
+import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
-import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
+import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
-import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileNameConnector';
-import SeriesPoster from 'Series/SeriesPoster';
-import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
+import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
+import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
+import SeriesPoster from 'Series/SeriesPoster';
+import { getSeriesStatusDetails } from 'Series/SeriesStatus';
+import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileNameConnector';
+import fonts from 'Styles/Variables/fonts';
+import formatBytes from 'Utilities/Number/formatBytes';
+import selectAll from 'Utilities/Table/selectAll';
+import toggleSelected from 'Utilities/Table/toggleSelected';
 import SeriesAlternateTitles from './SeriesAlternateTitles';
+import SeriesDetailsLinks from './SeriesDetailsLinks';
 import SeriesDetailsSeasonConnector from './SeriesDetailsSeasonConnector';
 import SeriesGenres from './SeriesGenres';
 import SeriesTagsConnector from './SeriesTagsConnector';
-import SeriesDetailsLinks from './SeriesDetailsLinks';
-import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
-import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import styles from './SeriesDetails.css';
 
 const defaultFontSize = parseInt(fonts.defaultFontSize);
@@ -89,54 +89,54 @@ class SeriesDetails extends Component {
 
   onOrganizePress = () => {
     this.setState({ isOrganizeModalOpen: true });
-  }
+  };
 
   onOrganizeModalClose = () => {
     this.setState({ isOrganizeModalOpen: false });
-  }
+  };
 
   onManageEpisodesPress = () => {
     this.setState({ isManageEpisodesOpen: true });
-  }
+  };
 
   onManageEpisodesModalClose = () => {
     this.setState({ isManageEpisodesOpen: false });
-  }
+  };
 
   onEditSeriesPress = () => {
     this.setState({ isEditSeriesModalOpen: true });
-  }
+  };
 
   onEditSeriesModalClose = () => {
     this.setState({ isEditSeriesModalOpen: false });
-  }
+  };
 
   onDeleteSeriesPress = () => {
     this.setState({
       isEditSeriesModalOpen: false,
       isDeleteSeriesModalOpen: true
     });
-  }
+  };
 
   onDeleteSeriesModalClose = () => {
     this.setState({ isDeleteSeriesModalOpen: false });
-  }
+  };
 
   onSeriesHistoryPress = () => {
     this.setState({ isSeriesHistoryModalOpen: true });
-  }
+  };
 
   onSeriesHistoryModalClose = () => {
     this.setState({ isSeriesHistoryModalOpen: false });
-  }
+  };
 
   onMonitorOptionsPress = () => {
     this.setState({ isMonitorOptionsModalOpen: true });
-  }
+  };
 
   onMonitorOptionsClose = () => {
     this.setState({ isMonitorOptionsModalOpen: false });
-  }
+  };
 
   onExpandAllPress = () => {
     const {
@@ -145,7 +145,7 @@ class SeriesDetails extends Component {
     } = this.state;
 
     this.setState(getExpandedState(selectAll(expandedState, !allExpanded)));
-  }
+  };
 
   onExpandPress = (seasonNumber, isExpanded) => {
     this.setState((state) => {
@@ -159,11 +159,11 @@ class SeriesDetails extends Component {
 
       return getExpandedState(newState);
     });
-  }
+  };
 
   onMeasure = ({ height }) => {
     this.setState({ overviewHeight: height });
-  }
+  };
 
   //
   // Render

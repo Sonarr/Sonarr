@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import formatBytes from 'Utilities/Number/formatBytes';
-import { kinds } from 'Helpers/Props';
 import Label from 'Components/Label';
+import { kinds } from 'Helpers/Props';
+import formatBytes from 'Utilities/Number/formatBytes';
 
 function getTooltip(title, quality, size) {
   if (!title) {

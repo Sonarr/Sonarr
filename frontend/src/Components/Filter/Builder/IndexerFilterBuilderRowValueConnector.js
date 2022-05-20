@@ -47,7 +47,7 @@ class IndexerFilterBuilderRowValueConnector extends Component {
     if (!this.props.isPopulated) {
       this.props.dispatchFetchIndexers();
     }
-  }
+  };
 
   //
   // Render

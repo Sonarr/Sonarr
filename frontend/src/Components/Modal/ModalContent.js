@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { icons } from 'Helpers/Props';
-import Link from 'Components/Link/Link';
 import Icon from 'Components/Icon';
+import Link from 'Components/Link/Link';
+import { icons } from 'Helpers/Props';
 import styles from './ModalContent.css';
 
 function ModalContent(props) {

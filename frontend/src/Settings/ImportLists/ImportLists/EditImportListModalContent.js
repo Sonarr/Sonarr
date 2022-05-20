@@ -1,22 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
-import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
+import Form from 'Components/Form/Form';
+import FormGroup from 'Components/Form/FormGroup';
+import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormLabel from 'Components/Form/FormLabel';
+import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
-import Form from 'Components/Form/Form';
-import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
-import FormInputGroup from 'Components/Form/FormInputGroup';
+import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
-import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
+import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import styles from './EditImportListModalContent.css';
 
 function EditImportListModalContent(props) {
@@ -210,23 +210,23 @@ function EditImportListModalContent(props) {
 
               {
                 !!fields && !!fields.length &&
-                <div>
-                  {
-                    fields.map((field) => {
-                      return (
-                        <ProviderFieldFormGroup
-                          key={field.name}
-                          advancedSettings={advancedSettings}
-                          provider="importList"
-                          providerData={item}
-                          section="settings.importLists"
-                          {...field}
-                          onChange={onFieldChange}
-                        />
-                      );
-                    })
-                  }
-                </div>
+                  <div>
+                    {
+                      fields.map((field) => {
+                        return (
+                          <ProviderFieldFormGroup
+                            key={field.name}
+                            advancedSettings={advancedSettings}
+                            provider="importList"
+                            providerData={item}
+                            section="settings.importLists"
+                            {...field}
+                            onChange={onFieldChange}
+                          />
+                        );
+                      })
+                    }
+                  </div>
               }
 
             </Form> :

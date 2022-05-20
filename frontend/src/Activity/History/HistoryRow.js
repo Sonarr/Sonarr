@@ -1,19 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
-import { icons } from 'Helpers/Props';
 import IconButton from 'Components/Link/IconButton';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
-import TableRow from 'Components/Table/TableRow';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableRow from 'Components/Table/TableRow';
 import episodeEntities from 'Episode/episodeEntities';
-import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
-import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import EpisodeLanguage from 'Episode/EpisodeLanguage';
 import EpisodeQuality from 'Episode/EpisodeQuality';
+import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
+import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
+import { icons } from 'Helpers/Props';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
-import HistoryEventTypeCell from './HistoryEventTypeCell';
+import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
 import HistoryDetailsModal from './Details/HistoryDetailsModal';
+import HistoryEventTypeCell from './HistoryEventTypeCell';
 import styles from './HistoryRow.css';
 
 class HistoryRow extends Component {
@@ -44,11 +44,11 @@ class HistoryRow extends Component {
 
   onDetailsPress = () => {
     this.setState({ isDetailsModalOpen: true });
-  }
+  };
 
   onDetailsModalClose = () => {
     this.setState({ isDetailsModalOpen: false });
-  }
+  };
 
   //
   // Render

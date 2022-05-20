@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
-import { inputTypes } from 'Helpers/Props';
-import Button from 'Components/Link/Button';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
-import FormLabel from 'Components/Form/FormLabel';
-import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormInputGroup from 'Components/Form/FormInputGroup';
+import FormInputHelpText from 'Components/Form/FormInputHelpText';
+import FormLabel from 'Components/Form/FormLabel';
+import Button from 'Components/Link/Button';
 import Modal from 'Components/Modal/Modal';
-import ModalContent from 'Components/Modal/ModalContent';
-import ModalHeader from 'Components/Modal/ModalHeader';
 import ModalBody from 'Components/Modal/ModalBody';
+import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
+import ModalHeader from 'Components/Modal/ModalHeader';
+import { inputTypes } from 'Helpers/Props';
 import TableOptionsColumn from './TableOptionsColumn';
-import TableOptionsColumnDragSource from './TableOptionsColumnDragSource';
 import TableOptionsColumnDragPreview from './TableOptionsColumnDragPreview';
+import TableOptionsColumnDragSource from './TableOptionsColumnDragSource';
 import styles from './TableOptionsModal.css';
 
 class TableOptionsModal extends Component {
@@ -61,7 +61,7 @@ class TableOptionsModal extends Component {
       pageSize: value,
       pageSizeError
     });
-  }
+  };
 
   onVisibleChange = ({ name, value }) => {
     const columns = _.cloneDeep(this.props.columns);
@@ -70,7 +70,7 @@ class TableOptionsModal extends Component {
     column.isVisible = value;
 
     this.props.onTableOptionChange({ columns });
-  }
+  };
 
   onColumnDragMove = (dragIndex, dropIndex) => {
     if (this.state.dragIndex !== dragIndex || this.state.dropIndex !== dropIndex) {
@@ -79,7 +79,7 @@ class TableOptionsModal extends Component {
         dropIndex
       });
     }
-  }
+  };
 
   onColumnDragEnd = ({ id }, didDrop) => {
     const {
@@ -99,7 +99,7 @@ class TableOptionsModal extends Component {
       dragIndex: null,
       dropIndex: null
     });
-  }
+  };
 
   //
   // Render

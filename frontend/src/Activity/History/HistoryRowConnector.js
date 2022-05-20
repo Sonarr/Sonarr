@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { fetchHistory, markAsFailed } from 'Store/Actions/historyActions';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import createEpisodeSelector from 'Store/Selectors/createEpisodeSelector';
+import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import HistoryRow from './HistoryRow';
 
@@ -49,7 +49,7 @@ class HistoryRowConnector extends Component {
 
   onMarkAsFailedPress = () => {
     this.props.markAsFailed({ id: this.props.id });
-  }
+  };
 
   //
   // Render
