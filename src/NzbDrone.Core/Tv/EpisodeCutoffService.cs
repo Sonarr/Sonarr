@@ -37,7 +37,8 @@ namespace NzbDrone.Core.Tv
             //Get all items less than the cutoff
             foreach (var profile in profiles)
             {
-                var cutoffIndex = profile.GetIndex(profile.Cutoff);
+                var cutoff = profile.UpgradeAllowed ? profile.Cutoff : profile.FirststAllowedQuality().Id;
+                var cutoffIndex = profile.GetIndex(cutoff);
                 var belowCutoff = profile.Items.Take(cutoffIndex.Index).ToList();
 
                 if (belowCutoff.Any())
@@ -48,7 +49,8 @@ namespace NzbDrone.Core.Tv
 
             foreach (var profile in languageProfiles)
             {
-                var languageCutoffIndex = profile.Languages.FindIndex(v => v.Language == profile.Cutoff);
+                var languageCutoff = profile.UpgradeAllowed ? profile.Cutoff : profile.FirstAllowedLanguage();
+                var languageCutoffIndex = profile.Languages.FindIndex(v => v.Language == languageCutoff);
                 var belowLanguageCutoff = profile.Languages.Take(languageCutoffIndex).ToList();
 
                 if (belowLanguageCutoff.Any())
