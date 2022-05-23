@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
-        public void should_reject_if_episode_title_is_required_for_bulk_season_releases_and_it_is_mising()
+        public void should_reject_if_episode_title_is_required_for_bulk_season_releases_and_it_is_missing()
         {
             _localEpisode.Episodes.First().Title = "TBA";
 
@@ -149,6 +149,29 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Setup(s => s.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(Builder<Episode>.CreateListOfSize(5)
                                            .All()
+                                           .With(e => e.AirDateUtc = _localEpisode.Episodes.First().AirDateUtc)
+                                           .BuildList());
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_reject_if_episode_title_is_required_for_bulk_season_releases_and_some_episodes_do_not_have_air_date()
+        {
+            _localEpisode.Episodes.First().Title = "TBA";
+
+            Mocker.GetMock<IConfigService>()
+                  .Setup(s => s.EpisodeTitleRequired)
+                  .Returns(EpisodeTitleRequiredType.BulkSeasonReleases);
+
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(s => s.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()))
+                  .Returns(Builder<Episode>.CreateListOfSize(5)
+                                           .All()
+                                           .With(e => e.Title  = "TBA")
+                                           .With(e => e.AirDateUtc = null)
+                                           .TheFirst(1)
                                            .With(e => e.AirDateUtc = _localEpisode.Episodes.First().AirDateUtc)
                                            .BuildList());
 
