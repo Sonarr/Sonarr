@@ -74,9 +74,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 var airDateUtc = episode.AirDateUtc;
                 var title = episode.Title;
 
-                if (airDateUtc.HasValue && airDateUtc.Value.Before(DateTime.UtcNow.AddDays(-1)))
+                if (airDateUtc.HasValue && airDateUtc.Value.Before(DateTime.UtcNow.AddHours(-48)))
                 {
-                    _logger.Debug("Episode aired more than 1 day ago");
+                    _logger.Debug("Episode aired more than 48 hours ago");
                     continue;
                 }
 

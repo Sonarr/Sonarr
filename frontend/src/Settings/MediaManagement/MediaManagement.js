@@ -139,7 +139,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.SELECT}
                           name="episodeTitleRequired"
-                          helpText="Prevent importing for up to 24 hours if the episode title is in the naming format and the episode title is TBA"
+                          helpText="Prevent importing for up to 48 hours if the episode title is in the naming format and the episode title is TBA"
                           values={episodeTitleRequiredOptions}
                           onChange={onInputChange}
                           {...settings.episodeTitleRequired}
