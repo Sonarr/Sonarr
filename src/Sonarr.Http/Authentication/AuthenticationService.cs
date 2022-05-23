@@ -1,5 +1,8 @@
+using System;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using Sonarr.Http.Extensions;
@@ -15,17 +18,14 @@ namespace Sonarr.Http.Authentication
 
     public class AuthenticationService : IAuthenticationService
     {
-        private const string AnonymousUser = "Anonymous";
         private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
         private readonly IUserService _userService;
 
-        private static string API_KEY;
         private static AuthenticationType AUTH_METHOD;
 
         public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)
         {
             _userService = userService;
-            API_KEY = configFileProvider.ApiKey;
             AUTH_METHOD = configFileProvider.AuthenticationMethod;
         }
 
