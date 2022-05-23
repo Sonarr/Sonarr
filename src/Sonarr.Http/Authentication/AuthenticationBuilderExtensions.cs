@@ -33,6 +33,7 @@ namespace Sonarr.Http.Authentication
                     options.AccessDeniedPath = "/login?loginFailed=true";
                     options.LoginPath = "/login";
                     options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                    options.SlidingExpiration = true;
                 })
                 .AddApiKey("API", options =>
                 {
