@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -46,7 +46,7 @@ namespace NzbDrone.Automation.Test
 
             _runner = new NzbDroneRunner(LogManager.GetCurrentClassLogger());
             _runner.KillAll();
-            _runner.Start();
+            _runner.Start(true);
 
             driver.Url = "http://localhost:8989";
 

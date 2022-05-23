@@ -15,6 +15,7 @@ namespace Sonarr.Api.V3.Config
         public bool EnableSsl { get; set; }
         public bool LaunchBrowser { get; set; }
         public AuthenticationType AuthenticationMethod { get; set; }
+        public AuthenticationRequiredType AuthenticationRequired { get; set; }
         public bool AnalyticsEnabled { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -56,6 +57,7 @@ namespace Sonarr.Api.V3.Config
                 EnableSsl = model.EnableSsl,
                 LaunchBrowser = model.LaunchBrowser,
                 AuthenticationMethod = model.AuthenticationMethod,
+                AuthenticationRequired = model.AuthenticationRequired,
                 AnalyticsEnabled = model.AnalyticsEnabled,
 
                 //Username

@@ -29,7 +29,8 @@ namespace NzbDrone.Http.Authentication
             if (policyName.Equals(POLICY_NAME, StringComparison.OrdinalIgnoreCase))
             {
                 var policy = new AuthorizationPolicyBuilder(_config.AuthenticationMethod.ToString())
-                    .RequireAuthenticatedUser();
+                    .AddRequirements(new BypassableDenyAnonymousAuthorizationRequirement());
+
                 return Task.FromResult(policy.Build());
             }
 
