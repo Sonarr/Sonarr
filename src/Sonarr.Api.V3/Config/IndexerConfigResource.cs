@@ -9,6 +9,7 @@ namespace Sonarr.Api.V3.Config
         public int Retention { get; set; }
         public int MaximumSize { get; set; }
         public int RssSyncInterval { get; set; }
+        public int MaximumSingleEpisodeAge { get; set; }
     }
 
     public static class IndexerConfigResourceMapper
@@ -20,7 +21,8 @@ namespace Sonarr.Api.V3.Config
                 MinimumAge = model.MinimumAge,
                 Retention = model.Retention,
                 MaximumSize = model.MaximumSize,
-                RssSyncInterval = model.RssSyncInterval
+                RssSyncInterval = model.RssSyncInterval,
+                MaximumSingleEpisodeAge = model.MaximumSingleEpisodeAge
             };
         }
     }

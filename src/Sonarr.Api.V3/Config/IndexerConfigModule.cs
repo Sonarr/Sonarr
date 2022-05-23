@@ -18,6 +18,9 @@ namespace Sonarr.Api.V3.Config
 
             SharedValidator.RuleFor(c => c.RssSyncInterval)
                            .IsValidRssSyncInterval();
+
+            SharedValidator.RuleFor(c => c.MaximumSingleEpisodeAge)
+                           .GreaterThanOrEqualTo(0);
         }
 
         protected override IndexerConfigResource ToResource(IConfigService model)

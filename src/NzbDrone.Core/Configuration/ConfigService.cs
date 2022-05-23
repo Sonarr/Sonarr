@@ -107,6 +107,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("RssSyncInterval", value); }
         }
 
+        public int MaximumSingleEpisodeAge
+        {
+            get { return GetValueInt("MaximumSingleEpisodeAge", 0); }
+
+            set { SetValue("MaximumSingleEpisodeAge", value); }
+        }
+
         public int MaximumSize
         {
             get { return GetValueInt("MaximumSize", 0); }
