@@ -9,6 +9,7 @@ using FluentAssertions;
 using FizzWare.NBuilder;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -18,20 +19,37 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private RemoteEpisode parseResultMulti;
         private RemoteEpisode parseResultSingle;
         private Series series;
+        private List<Episode> episodes;
+        private SeasonSearchCriteria multiSearch;
 
         [SetUp]
         public void Setup()
         {
             series = Builder<Series>.CreateNew()
-                                    .With(s => s.Seasons = Builder<Season>.CreateListOfSize(2).Build().ToList())
+                                    .With(s => s.Seasons = Builder<Season>.CreateListOfSize(1).Build().ToList())
+                                    .With(s => s.SeriesType = SeriesTypes.Standard)
                                     .Build();
+
+
+
+
+            episodes = new List<Episode>();
+            episodes.Add(CreateEpisodeStub(1, 400));
+            episodes.Add(CreateEpisodeStub(2, 370));
+            episodes.Add(CreateEpisodeStub(3, 340));
+            episodes.Add(CreateEpisodeStub(4, 310));
+
+            multiSearch = new SeasonSearchCriteria();
+            multiSearch.Episodes = episodes.ToList();
+            multiSearch.SeasonNumber = 1;
+
 
             parseResultMulti = new RemoteEpisode
             {
                 Series = series,
                 Release = new ReleaseInfo(),
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
-                Episodes = Builder<Episode>.CreateListOfSize(6).All().With(s => s.SeasonNumber = 1).BuildList()
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)), FullSeason = true },
+                Episodes = episodes.ToList()
             };
 
             parseResultSingle = new RemoteEpisode
@@ -39,62 +57,48 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Series = series,
                 Release = new ReleaseInfo(),
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
-                Episodes = new List<Episode> {
-                                            Builder<Episode>.CreateNew()
-                                                .With(s => s.SeasonNumber = 1)
-                                                .With(s => s.EpisodeNumber = 1)
-                                                .Build()
-                                        }
+                Episodes = new List<Episode>()
 
             };
 
         }
 
-
-        [TestCase(500, 365, false)]
-        [TestCase(10, 365, true)]
-        [TestCase(500, 0, true)]
-        public void single_episode_release(int airTimeAge, int MaximumSingleEpisodeAge, bool expectedResult)
+        Episode CreateEpisodeStub(int number, int age)
         {
-            parseResultSingle.Series.SeriesType = SeriesTypes.Standard;
+            return new Episode() { 
+                SeasonNumber = 1, 
+                EpisodeNumber = number, 
+                AirDateUtc = DateTime.UtcNow.AddDays(-age) 
+            };
+        }
+
+
+        [TestCase(1, 200, false)]
+        [TestCase(4, 200, false)]
+        [TestCase(1, 600, true)]
+        [TestCase(1, 365, true)]
+        [TestCase(4, 365, true)]
+        [TestCase(1, 0, true)]
+        public void single_episode_release(int episode, int MaximumSingleEpisodeAge, bool expectedResult)
+        {
             parseResultSingle.Release.MaximumSingleEpisodeAge = MaximumSingleEpisodeAge;
-            parseResultSingle.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-airTimeAge);
+            parseResultSingle.Episodes.Clear();
+            parseResultSingle.Episodes.Add(episodes.Find(e => e.EpisodeNumber == episode));
 
-            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultSingle, multiSearch).Accepted.Should().Be(expectedResult);
         }
 
-        [TestCase(500, 365, false)]
-        [TestCase(10, 365, true)]
-        [TestCase(500, 0, true)]
-        public void single_anime_episode_release(int airTimeAge, int MaximumSingleEpisodeAge, bool expectedResult)
+
+        // should always accept all season packs
+        [TestCase(200, true)]
+        [TestCase(600, true)]
+        [TestCase(365, true)]
+        [TestCase(0, true)]
+        public void multi_episode_release(int MaximumSingleEpisodeAge, bool expectedResult)
         {
-            parseResultSingle.Series.SeriesType = SeriesTypes.Anime;
-            parseResultSingle.Release.MaximumSingleEpisodeAge = MaximumSingleEpisodeAge;
-            parseResultSingle.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-airTimeAge);
+            parseResultMulti.Release.MaximumSingleEpisodeAge = MaximumSingleEpisodeAge;
 
-            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultMulti, multiSearch).Accepted.Should().BeTrue();
         }
-
-        [Test]
-        public void multi_episode_release()
-        {
-            parseResultMulti.ParsedEpisodeInfo.FullSeason = true;
-            parseResultMulti.Release.MaximumSingleEpisodeAge = 365;
-            parseResultMulti.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-530);
-            parseResultMulti.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(-500);
-
-            Subject.IsSatisfiedBy(parseResultMulti, null).Accepted.Should().BeTrue();
-        }
-
-        [Test]
-        public void multi_anime_episode_release()
-        {
-            parseResultMulti.Release.MaximumSingleEpisodeAge = 365;
-            parseResultMulti.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-530);
-            parseResultMulti.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(-500);
-
-            Subject.IsSatisfiedBy(parseResultMulti, null).Accepted.Should().BeTrue();
-        }
-
     }
 }

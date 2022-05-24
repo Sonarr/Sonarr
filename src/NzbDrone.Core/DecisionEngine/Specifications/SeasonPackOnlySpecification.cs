@@ -25,15 +25,25 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            if (searchCriteria == null)
+            {
+                return Decision.Accept();
+            }
+
+            if (searchCriteria.Episodes.Count == 1) return Decision.Accept();
+
+
             if (subject.Release.MaximumSingleEpisodeAge > 0)
             {
-                if ((subject.Series.SeriesType != SeriesTypes.Anime && !subject.ParsedEpisodeInfo.FullSeason) 
-                    || (subject.Series.SeriesType == SeriesTypes.Anime && subject.Episodes.Count() == 1))
+                if (subject.Series.SeriesType == SeriesTypes.Standard && !subject.ParsedEpisodeInfo.FullSeason && subject.Episodes.Count >= 1)
                 {
-                    if (!subject.Episodes.Any(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.After(DateTime.UtcNow - TimeSpan.FromDays(subject.Release.MaximumSingleEpisodeAge))))
+                    // test against episodes of the same season in the current search, and make sure they have an air date
+                    var subset = searchCriteria.Episodes.Where(e => e.AirDateUtc.HasValue && e.SeasonNumber == subject.Episodes.First().SeasonNumber);
+
+                    if (subset.Count() > 0 && subset.Max(e => e.AirDateUtc).Value.Before(DateTime.UtcNow - TimeSpan.FromDays(subject.Release.MaximumSingleEpisodeAge)))
                     {
-                        _logger.Debug("Single episode release {0} rejected because it's older than {1} days.", subject.Release.Title, subject.Release.MaximumSingleEpisodeAge);
-                        return Decision.Reject("Single episode release rejected because it's older than {0} days.", subject.Release.MaximumSingleEpisodeAge);
+                        _logger.Debug("Release {0} aired more than {1} days ago, season pack required.", subject.Release.Title, subject.Release.MaximumSingleEpisodeAge);
+                        return Decision.Reject("Aired more than {0} days ago, season pack required.", subject.Release.MaximumSingleEpisodeAge);
                     }
                 }
             }
