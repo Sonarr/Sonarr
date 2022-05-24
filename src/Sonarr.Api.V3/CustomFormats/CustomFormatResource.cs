@@ -48,7 +48,11 @@ namespace Sonarr.Api.V3.CustomFormats
         private static ICustomFormatSpecification MapSpecification(CustomFormatSpecificationSchema resource, List<ICustomFormatSpecification> specifications)
         {
             var type = specifications.SingleOrDefault(x => x.GetType().Name == resource.Implementation).GetType();
-            var spec = (ICustomFormatSpecification)SchemaBuilder.ReadFromSchema(resource.Fields, type);
+
+            // Finding the exact current specification isn't possible given the dynamic nature of them and the possibility that multiple
+            // of the same type exist within the same format. Passing in null is safe as long as there never exists a specification that
+            // relies on additional privacy.
+            var spec = (ICustomFormatSpecification)SchemaBuilder.ReadFromSchema(resource.Fields, type, null);
             spec.Name = resource.Name;
             spec.Negate = resource.Negate;
             spec.Required = resource.Required;

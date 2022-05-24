@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Notifications;
+using NzbDrone.Core.Notifications;
 
 namespace Sonarr.Api.V3.Notifications
 {
@@ -61,14 +61,14 @@ namespace Sonarr.Api.V3.Notifications
             return resource;
         }
 
-        public override NotificationDefinition ToModel(NotificationResource resource)
+        public override NotificationDefinition ToModel(NotificationResource resource, NotificationDefinition existingDefinition)
         {
             if (resource == null)
             {
                 return default(NotificationDefinition);
             }
 
-            var definition = base.ToModel(resource);
+            var definition = base.ToModel(resource, existingDefinition);
 
             definition.OnGrab = resource.OnGrab;
             definition.OnDownload = resource.OnDownload;

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.ThingiProvider;
 using Sonarr.Http.ClientSchema;
@@ -42,7 +42,7 @@ namespace Sonarr.Api.V3
             };
         }
 
-        public virtual TProviderDefinition ToModel(TProviderResource resource)
+        public virtual TProviderDefinition ToModel(TProviderResource resource, TProviderDefinition existingDefinition)
         {
             if (resource == null)
             {
@@ -62,7 +62,7 @@ namespace Sonarr.Api.V3
             };
 
             var configContract = ReflectionExtensions.CoreAssembly.FindTypeByName(definition.ConfigContract);
-            definition.Settings = (IProviderConfig)SchemaBuilder.ReadFromSchema(resource.Fields, configContract);
+            definition.Settings = (IProviderConfig)SchemaBuilder.ReadFromSchema(resource.Fields, configContract, existingDefinition?.Settings);
 
             return definition;
         }
