@@ -11,7 +11,7 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
         [Test, Order(1)]
         public void cutoff_should_have_monitored_items()
         {
-            EnsureProfileCutoff(1, Quality.HDTV720p);
+            EnsureProfileCutoff(1, Quality.HDTV720p, true);
             var series = EnsureSeries(266189, "The Blacklist", true);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
@@ -23,7 +23,7 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
         [Test, Order(1)]
         public void cutoff_should_not_have_unmonitored_items()
         {
-            EnsureProfileCutoff(1, Quality.HDTV720p);
+            EnsureProfileCutoff(1, Quality.HDTV720p, true);
             var series = EnsureSeries(266189, "The Blacklist", false);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
@@ -35,7 +35,7 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
         [Test, Order(1)]
         public void cutoff_should_have_series()
         {
-            EnsureProfileCutoff(1, Quality.HDTV720p);
+            EnsureProfileCutoff(1, Quality.HDTV720p, true);
             var series = EnsureSeries(266189, "The Blacklist", true);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
         [Test, Order(2)]
         public void cutoff_should_have_unmonitored_items()
         {
-            EnsureProfileCutoff(1, Quality.HDTV720p);
+            EnsureProfileCutoff(1, Quality.HDTV720p, true);
             var series = EnsureSeries(266189, "The Blacklist", false);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
