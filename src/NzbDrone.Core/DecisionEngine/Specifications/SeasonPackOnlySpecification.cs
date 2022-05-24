@@ -24,14 +24,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            if (!subject.ParsedEpisodeInfo.FullSeason)
+            if (subject.Release.MaximumSingleEpisodeAge > 0)
             {
-                if (_configService.MaximumSingleEpisodeAge > 0)
+                if (subject.Episodes.Count() == 1)
                 {
-                    if (!subject.Episodes.Any(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.After(DateTime.UtcNow - TimeSpan.FromDays(_configService.MaximumSingleEpisodeAge))))
+                    if (!subject.Episodes.Any(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.After(DateTime.UtcNow - TimeSpan.FromDays(subject.Release.MaximumSingleEpisodeAge))))
                     {
-                        _logger.Debug("Single episode release {0} rejected. All episodes in season are older than {1} days.", subject.Release.Title, _configService.MaximumSingleEpisodeAge);
-                        return Decision.Reject("Single episode release rejected. All episodes in season are older than {0} days.", _configService.MaximumSingleEpisodeAge);
+                        _logger.Debug("Single episode release {0} rejected because it's older than {1} days.", subject.Release.Title, subject.Release.MaximumSingleEpisodeAge);
+                        return Decision.Reject("Single episode release rejected because it's older than {0} days.", subject.Release.MaximumSingleEpisodeAge);
                     }
                 }
             }

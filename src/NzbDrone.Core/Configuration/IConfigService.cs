@@ -48,7 +48,6 @@ namespace NzbDrone.Core.Configuration
         int RssSyncInterval { get; set; }
         int MaximumSize { get; set; }
         int MinimumAge { get; set; }
-        int MaximumSingleEpisodeAge { get; set; }
 
         //UI
         int FirstDayOfWeek { get; set; }

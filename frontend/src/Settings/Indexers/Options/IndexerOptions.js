@@ -75,20 +75,6 @@ function IndexerOptions(props) {
               />
             </FormGroup>
 
-            <FormGroup>
-              <FormLabel>Maximum Single Episode Age</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.NUMBER}
-                name="maximumSingleEpisodeAge"
-                min={0}
-                unit="days"
-                helpText="Will only grab season packs if the air date of all episodes in the season are older than this. Set to 0 to ignore."
-                onChange={onInputChange}
-                {...settings.maximumSingleEpisodeAge}
-              />
-            </FormGroup>
-
             <FormGroup
               advancedSettings={advancedSettings}
               isAdvanced={true}

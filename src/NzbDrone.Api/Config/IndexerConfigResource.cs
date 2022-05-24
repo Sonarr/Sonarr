@@ -9,7 +9,6 @@ namespace NzbDrone.Api.Config
         public int MaximumSize { get; set; }
         public int Retention { get; set; }
         public int RssSyncInterval { get; set; }
-        public int MaximumSingleEpisodeAge { get; set; }
     }
 
     public static class IndexerConfigResourceMapper
@@ -22,7 +21,6 @@ namespace NzbDrone.Api.Config
                 MaximumSize = model.MaximumSize,
                 Retention = model.Retention,
                 RssSyncInterval = model.RssSyncInterval,
-                MaximumSingleEpisodeAge = model.MaximumSingleEpisodeAge
             };
         }
     }

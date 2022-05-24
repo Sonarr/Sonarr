@@ -45,6 +45,7 @@ function EditIndexerModalContent(props) {
     tags,
     fields,
     priority,
+    maximumSingleEpisodeAge,
     protocol,
     downloadClientId
   } = item;
@@ -149,6 +150,23 @@ function EditIndexerModalContent(props) {
                   min={1}
                   max={50}
                   {...priority}
+                  onChange={onInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup
+                advancedSettings={advancedSettings}
+                isAdvanced={true}
+              >
+                <FormLabel>Maximum Single Episode Age</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.NUMBER}
+                  name="maximumSingleEpisodeAge"
+                  helpText="If an episode is older than this it won't be grabbed as a single episode release; only season packs will be allowed. Set to 0 to ignore."
+                  min={0}
+                  unit="days"
+                  {...maximumSingleEpisodeAge}
                   onChange={onInputChange}
                 />
               </FormGroup>
