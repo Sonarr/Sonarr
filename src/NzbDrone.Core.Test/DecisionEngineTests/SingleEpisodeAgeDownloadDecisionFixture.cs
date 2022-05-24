@@ -56,6 +56,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase(500, 0, true)]
         public void single_episode_release(int airTimeAge, int MaximumSingleEpisodeAge, bool expectedResult)
         {
+            parseResultSingle.Series.SeriesType = SeriesTypes.Standard;
+            parseResultSingle.Release.MaximumSingleEpisodeAge = MaximumSingleEpisodeAge;
+            parseResultSingle.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-airTimeAge);
+
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(expectedResult);
+        }
+
+        [TestCase(500, 365, false)]
+        [TestCase(10, 365, true)]
+        [TestCase(500, 0, true)]
+        public void single_anime_episode_release(int airTimeAge, int MaximumSingleEpisodeAge, bool expectedResult)
+        {
+            parseResultSingle.Series.SeriesType = SeriesTypes.Anime;
             parseResultSingle.Release.MaximumSingleEpisodeAge = MaximumSingleEpisodeAge;
             parseResultSingle.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-airTimeAge);
 
@@ -64,6 +77,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         [Test]
         public void multi_episode_release()
+        {
+            parseResultMulti.ParsedEpisodeInfo.FullSeason = true;
+            parseResultMulti.Release.MaximumSingleEpisodeAge = 365;
+            parseResultMulti.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-530);
+            parseResultMulti.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(-500);
+
+            Subject.IsSatisfiedBy(parseResultMulti, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void multi_anime_episode_release()
         {
             parseResultMulti.Release.MaximumSingleEpisodeAge = 365;
             parseResultMulti.Episodes.First().AirDateUtc = DateTime.UtcNow.AddDays(-530);

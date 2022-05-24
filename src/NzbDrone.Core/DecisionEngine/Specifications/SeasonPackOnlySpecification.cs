@@ -5,6 +5,7 @@ using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Common.Extensions;
 using System.Linq;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
@@ -26,7 +27,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             if (subject.Release.MaximumSingleEpisodeAge > 0)
             {
-                if (subject.Episodes.Count() == 1)
+                if ((subject.Series.SeriesType != SeriesTypes.Anime && !subject.ParsedEpisodeInfo.FullSeason) 
+                    || (subject.Series.SeriesType == SeriesTypes.Anime && subject.Episodes.Count() == 1))
                 {
                     if (!subject.Episodes.Any(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.After(DateTime.UtcNow - TimeSpan.FromDays(subject.Release.MaximumSingleEpisodeAge))))
                     {
