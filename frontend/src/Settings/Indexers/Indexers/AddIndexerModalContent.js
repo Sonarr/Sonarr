@@ -51,7 +51,7 @@ class AddIndexerModalContent extends Component {
 
                 <Alert kind={kinds.INFO}>
                   <div>Sonarr supports any indexer that uses the Newznab standard, as well as other indexers listed below.</div>
-                  <div>For more information on the individual indexers, clink on the info buttons.</div>
+                  <div>For more information on the individual indexers, click on the info buttons.</div>
                 </Alert>
 
                 <FieldSet legend="Usenet">
