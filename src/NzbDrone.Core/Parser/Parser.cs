@@ -22,6 +22,9 @@ namespace NzbDrone.Core.Parser
                 // Korean series without season number, replace with S01Exxx and remove airdate
                 new RegexReplace(@"\.E(\d{2,4})\.\d{6}\.(.*-NEXT)$", ".S01E$1.$2", RegexOptions.Compiled),
 
+                // Some Chinese anime releases contain both English and Chinese titles, remove the Chinese title and replace with normal anime pattern
+                new RegexReplace(@"^\[(?:(?<subgroup>[^\]]+?)(?:[\u4E00-\u9FCC]+)?)\]\[(?<title>[^\]]+?)(?:\s(?<chinesetitle>[\u4E00-\u9FCC][^\]]*?))\]\[(?:(?:[\u4E00-\u9FCC]+?)?(?<episode>\d{1,4})(?:[\u4E00-\u9FCC]+?)?)\]", "[${subgroup}] ${title} - ${episode} - ", RegexOptions.Compiled),
+
                 // Chinese LoliHouse/ZERO/Lilith-Raws releases don't use the expected brackets, normalize using brackets
                 new RegexReplace(@"^\[(?<subgroup>[^\]]*?(?:LoliHouse|ZERO|Lilith-Raws)[^\]]*?)\](?<title>[^\[\]]+?)(?: - (?<episode>[0-9-]+)\s*|\[第?(?<episode>[0-9]+(?:-[0-9]+)?)话?(?:END|完)?\])\[", "[${subgroup}][${title}][${episode}][", RegexOptions.Compiled),
                 
@@ -29,10 +32,7 @@ namespace NzbDrone.Core.Parser
                 new RegexReplace(@"^\[(?<subgroup>[^\]]+)\](?:\s?★[^\[ -]+\s?)?\[?(?:(?<chinesetitle>[^\]]*?[\u4E00-\u9FCC][^\]]*?)(?:\]\[|\s*[_/·]\s*))?(?<title>[^\]]+?)\]?(?:\[\d{4}\])?\[第?(?<episode>[0-9]+(?:-[0-9]+)?)话?(?:END|完)?\]", "[${subgroup}] ${title} - ${episode} ", RegexOptions.Compiled),
                 
                 // Some Chinese anime releases contain both Chinese and English titles, remove the Chinese title and replace with normal anime pattern
-                new RegexReplace(@"^\[(?<subgroup>[^\]]+)\](?:\s)(?:(?<chinesetitle>[^\]]*?[\u4E00-\u9FCC][^\]]*?)(?:\s/\s))(?<title>[^\]]+?)(?:[- ]+)(?<episode>[0-9]+(?:-[0-9]+)?)话?(?:END|完)?", "[${subgroup}] ${title} - ${episode} ", RegexOptions.Compiled),
-                
-                // Some Chinese anime releases contain both English and Chinese titles, remove the Chinese title and replace with normal anime pattern
-                new RegexReplace(@"^\[(?:(?<subgroup>[^\]]+?)(?:[\u4E00-\u9FCC]+))\]\[(?<title>[^\]]+?)(?:\s(?<chinesetitle>[\u4E00-\u9FCC][^\]]*?))\]\[(?:(?:[\u4E00-\u9FCC]+?)(?<episode>\d{1,4})(?:[\u4E00-\u9FCC]+?))\]", "[${subgroup}] ${title} - ${episode} - ", RegexOptions.Compiled)
+                new RegexReplace(@"^\[(?<subgroup>[^\]]+)\](?:\s)(?:(?<chinesetitle>[^\]]*?[\u4E00-\u9FCC][^\]]*?)(?:\s/\s))(?<title>[^\]]+?)(?:[- ]+)(?<episode>[0-9]+(?:-[0-9]+)?)话?(?:END|完)?", "[${subgroup}] ${title} - ${episode} ", RegexOptions.Compiled)
             };
 
         private static readonly Regex[] ReportTitleRegex = new[]
@@ -178,6 +178,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:\W+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<seasonpart>\d{1,2}(?!\d+)))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                                // Anime - 4 digit absolute episode number
+                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>.+?)[-_. ]+?(?<absoluteepisode>\d{4}(\.\d{1,2})?(?!\d+))",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Anime - Title 4-digit Absolute Episode Number [SubGroup]
                 new Regex(@"^(?<title>.+?)[-_. ]+(?<absoluteepisode>(?<!\d+)\d{4}(?!\d+))[-_. ]\[(?<subgroup>.+?)\]",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -254,10 +258,6 @@ namespace NzbDrone.Core.Parser
 
                 // Anime - French titles with single episode numbers, with or without leading sub group ([RlsGroup] Title - Episode 1)
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)[-_. ]+?(?:Episode[-_. ]+?)(?<absoluteepisode>\d{1}(\.\d{1,2})?(?!\d+))",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // Anime - 4 digit absolute episode number
-                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>.+?)[-_. ]+?(?<absoluteepisode>\d{4}(\.\d{1,2})?(?!\d+))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Anime - Absolute episode number in square brackets

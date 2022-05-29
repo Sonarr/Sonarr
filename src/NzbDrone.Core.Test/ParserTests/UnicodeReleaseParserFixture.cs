@@ -26,7 +26,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[星空字幕组] 剃须。然后捡到女高中生。 / Anime Series Title [05][1080p][简日内嵌]", "Anime Series Title", "星空字幕组", 5)]
         [TestCase("【DHR动研字幕组】[多田君不恋爱_Anime Series Title][13完][繁体][720P][MP4]", "Anime Series Title", "DHR动研字幕组", 13)]
         [TestCase("【动漫国字幕组】★01月新番[Anime Series Title～！][01][1080P][简体][MP4]", "Anime Series Title～！", "动漫国字幕组", 1)]
-        [TestCase("[OPFans楓雪動漫][ONE PIECE 海賊王][第1008話][典藏版][1080P][MKV][簡繁]", "ONE PIECE", "OPFans", 1008)]
         public void should_parse_chinese_anime_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
@@ -45,6 +44,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Lilith-Raws] 艾梅洛閣下 II 世事件簿 -魔眼蒐集列車 Grace note- / Anime-Series Title - 04 [BiliBili][WEB-DL][1080p][AVC AAC][CHT][MKV]", "Anime-Series Title", "Lilith-Raws", 4)]
         [TestCase("[NC-Raws] 影宅 / Anime-Series Title - 07 [B-Global][WEB-DL][1080p][AVC AAC][CHS_CHT_ENG_TH_SRT][MKV]", "Anime-Series Title", "NC-Raws", 7)]
         [TestCase("[NC-Raws] ANIME-SERIES TITLE－影宅－ / Anime-Series Title - 07 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "NC-Raws", 7)]
+        [TestCase("[OPFans楓雪動漫][ANIME SERIES 海賊王][第1008話][典藏版][1080P][MKV][簡繁]", "ANIME SERIES", "OPFans", 1008)]
+        [TestCase("[Skymoon-Raws][Anime Series 海賊王][1008][ViuTV][WEB-RIP][CHT][SRTx2][1080p][MKV]", "Anime Series", "Skymoon-Raws", 1008)]
         public void should_parse_unbracketed_chinese_anime_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
