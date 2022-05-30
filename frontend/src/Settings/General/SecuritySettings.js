@@ -10,13 +10,15 @@ import ClipboardButton from 'Components/Link/ClipboardButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, inputTypes, kinds } from 'Helpers/Props';
 
-const authenticationMethodOptions = [
-  { key: 'none', value: 'None' },
+export const authenticationRequiredWarning = 'To prevent remote access without authentication, Sonarr now requires authentication to be enabled. You can optionally disable authentication from local addresses.';
+
+export const authenticationMethodOptions = [
+  { key: 'none', value: 'None', isDisabled: true },
   { key: 'basic', value: 'Basic (Browser Popup)' },
   { key: 'forms', value: 'Forms (Login Page)' }
 ];
 
-const authenticationRequiredOptions = [
+export const authenticationRequiredOptions = [
   { key: 'enabled', value: 'Enabled' },
   { key: 'disabledForLocalAddresses', value: 'Disabled for Local Addresses' }
 ];
@@ -91,6 +93,7 @@ class SecuritySettings extends Component {
             name="authenticationMethod"
             values={authenticationMethodOptions}
             helpText="Require Username and Password to access Sonarr"
+            helpTextWarning={authenticationRequiredWarning}
             onChange={onInputChange}
             {...authenticationMethod}
           />
