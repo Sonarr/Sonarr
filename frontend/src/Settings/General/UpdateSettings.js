@@ -16,7 +16,7 @@ function UpdateSettings(props) {
   const {
     advancedSettings,
     settings,
-    isMono,
+    isWindows,
     packageUpdateMechanism,
     onInputChange
   } = props;
@@ -68,7 +68,8 @@ function UpdateSettings(props) {
       </FormGroup>
 
       {
-        isMono &&
+        isWindows ?
+          null :
           <div>
             <FormGroup
               advancedSettings={advancedSettings}
@@ -129,7 +130,7 @@ function UpdateSettings(props) {
 UpdateSettings.propTypes = {
   advancedSettings: PropTypes.bool.isRequired,
   settings: PropTypes.object.isRequired,
-  isMono: PropTypes.bool.isRequired,
+  isWindows: PropTypes.bool.isRequired,
   packageUpdateMechanism: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired
 };

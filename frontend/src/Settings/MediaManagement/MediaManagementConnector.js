@@ -22,7 +22,7 @@ function createMapStateToProps() {
         advancedSettings,
         ...sectionSettings,
         hasPendingChanges: !_.isEmpty(namingSettings.pendingChanges) || sectionSettings.hasPendingChanges,
-        isMono: systemStatus.isMono
+        isWindows: systemStatus.isWindows
       };
     }
   );
