@@ -50,7 +50,7 @@ class MediaManagement extends Component {
       error,
       settings,
       hasSettings,
-      isMono,
+      isWindows,
       onInputChange,
       onSavePress,
       ...otherProps
@@ -147,7 +147,8 @@ class MediaManagement extends Component {
                       </FormGroup>
 
                       {
-                        isMono &&
+                        isWindows ?
+                          null :
                           <FormGroup
                             advancedSettings={advancedSettings}
                             isAdvanced={true}
@@ -357,7 +358,7 @@ class MediaManagement extends Component {
                 </FieldSet>
 
                 {
-                  advancedSettings && isMono &&
+                  advancedSettings && !isWindows &&
                     <FieldSet
                       legend="Permissions"
                     >
@@ -432,7 +433,7 @@ MediaManagement.propTypes = {
   error: PropTypes.object,
   settings: PropTypes.object.isRequired,
   hasSettings: PropTypes.bool.isRequired,
-  isMono: PropTypes.bool.isRequired,
+  isWindows: PropTypes.bool.isRequired,
   onSavePress: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired
 };
