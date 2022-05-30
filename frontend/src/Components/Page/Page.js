@@ -4,6 +4,7 @@ import AppUpdatedModalConnector from 'App/AppUpdatedModalConnector';
 import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModalConnector from 'App/ConnectionLostModalConnector';
 import SignalRConnector from 'Components/SignalRConnector';
+import AuthenticationRequiredModal from 'FirstRun/AuthenticationRequiredModal';
 import locationShape from 'Helpers/Props/Shapes/locationShape';
 import PageHeader from './Header/PageHeader';
 import PageSidebar from './Sidebar/PageSidebar';
@@ -75,6 +76,7 @@ class Page extends Component {
       isSmallScreen,
       isSidebarVisible,
       enableColorImpairedMode,
+      authenticationEnabled,
       onSidebarToggle,
       onSidebarVisibleChange
     } = this.props;
@@ -108,6 +110,10 @@ class Page extends Component {
             isOpen={this.state.isConnectionLostModalOpen}
             onModalClose={this.onConnectionLostModalClose}
           />
+
+          <AuthenticationRequiredModal
+            isOpen={!authenticationEnabled}
+          />
         </div>
       </ColorImpairedContext.Provider>
     );
@@ -123,6 +129,7 @@ Page.propTypes = {
   isUpdated: PropTypes.bool.isRequired,
   isDisconnected: PropTypes.bool.isRequired,
   enableColorImpairedMode: PropTypes.bool.isRequired,
+  authenticationEnabled: PropTypes.bool.isRequired,
   onResize: PropTypes.func.isRequired,
   onSidebarToggle: PropTypes.func.isRequired,
   onSidebarVisibleChange: PropTypes.func.isRequired

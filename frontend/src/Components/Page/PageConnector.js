@@ -10,6 +10,7 @@ import { fetchImportLists, fetchLanguageProfiles, fetchQualityProfiles, fetchUIS
 import { fetchStatus } from 'Store/Actions/systemActions';
 import { fetchTags } from 'Store/Actions/tagActions';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
+import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import ErrorPage from './ErrorPage';
 import LoadingPage from './LoadingPage';
 import Page from './Page';
@@ -125,18 +126,21 @@ function createMapStateToProps() {
     selectErrors,
     selectAppProps,
     createDimensionsSelector(),
+    createSystemStatusSelector(),
     (
       enableColorImpairedMode,
       isPopulated,
       errors,
       app,
-      dimensions
+      dimensions,
+      systemStatus
     ) => {
       return {
         ...app,
         ...errors,
         isPopulated,
         isSmallScreen: dimensions.isSmallScreen,
+        authenticationEnabled: systemStatus.authentication !== 'none',
         enableColorImpairedMode
       };
     }
