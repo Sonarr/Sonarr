@@ -14,6 +14,7 @@ import { fetchHealth } from 'Store/Actions/systemActions';
 import { fetchQueue, fetchQueueDetails } from 'Store/Actions/queueActions';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import { fetchTags, fetchTagDetails } from 'Store/Actions/tagActions';
+import { fetchQualityDefinitions } from 'Store/Actions/settingsActions';
 
 function getState(status) {
   switch (status) {
@@ -70,6 +71,7 @@ const mapDispatchToProps = {
   dispatchUpdateItem: updateItem,
   dispatchRemoveItem: removeItem,
   dispatchFetchHealth: fetchHealth,
+  dispatchFetchQualityDefinitions: fetchQualityDefinitions,
   dispatchFetchQueue: fetchQueue,
   dispatchFetchQueueDetails: fetchQueueDetails,
   dispatchFetchRootFolders: fetchRootFolders,
@@ -219,6 +221,10 @@ class SignalRConnector extends Component {
     } else if (action === 'deleted') {
       this.props.dispatchRemoveItem({ section, id: body.resource.id });
     }
+  }
+
+  handleQualitydefinition = () => {
+    this.props.dispatchFetchQualityDefinitions();
   }
 
   handleQueue = () => {
@@ -377,6 +383,7 @@ SignalRConnector.propTypes = {
   dispatchUpdateItem: PropTypes.func.isRequired,
   dispatchRemoveItem: PropTypes.func.isRequired,
   dispatchFetchHealth: PropTypes.func.isRequired,
+  dispatchFetchQualityDefinitions: PropTypes.func.isRequired,
   dispatchFetchQueue: PropTypes.func.isRequired,
   dispatchFetchQueueDetails: PropTypes.func.isRequired,
   dispatchFetchRootFolders: PropTypes.func.isRequired,

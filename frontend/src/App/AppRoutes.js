@@ -19,7 +19,7 @@ import CutoffUnmetConnector from 'Wanted/CutoffUnmet/CutoffUnmetConnector';
 import Settings from 'Settings/Settings';
 import MediaManagementConnector from 'Settings/MediaManagement/MediaManagementConnector';
 import Profiles from 'Settings/Profiles/Profiles';
-import Quality from 'Settings/Quality/Quality';
+import QualityConnector from 'Settings/Quality/QualityConnector';
 import IndexerSettingsConnector from 'Settings/Indexers/IndexerSettingsConnector';
 import ImportListSettingsConnector from 'Settings/ImportLists/ImportListSettingsConnector';
 import DownloadClientSettingsConnector from 'Settings/DownloadClients/DownloadClientSettingsConnector';
@@ -158,7 +158,7 @@ function AppRoutes(props) {
 
       <Route
         path="/settings/quality"
-        component={Quality}
+        component={QualityConnector}
       />
 
       <Route
