@@ -1,17 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Nancy;
+using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
+using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 
 namespace Sonarr.Api.V3.Qualities
 {
-    public class QualityDefinitionModule : SonarrRestModule<QualityDefinitionResource>
+    public class QualityDefinitionModule : SonarrRestModuleWithSignalR<QualityDefinitionResource, QualityDefinition>, IHandle<CommandExecutedEvent>
     {
         private readonly IQualityDefinitionService _qualityDefinitionService;
 
-        public QualityDefinitionModule(IQualityDefinitionService qualityDefinitionService)
+        public QualityDefinitionModule(IQualityDefinitionService qualityDefinitionService, IBroadcastSignalRMessage signalRBroadcaster)
+            : base(signalRBroadcaster)
         {
             _qualityDefinitionService = qualityDefinitionService;
 
@@ -49,6 +53,14 @@ namespace Sonarr.Api.V3.Qualities
             return ResponseWithCode(_qualityDefinitionService.All()
                                             .ToResource()
                                             , HttpStatusCode.Accepted);
+        }
+
+        public void Handle(CommandExecutedEvent message)
+        {
+            if (message.Command.Name == "ResetQualityDefinitions")
+            {
+                BroadcastResourceChange(ModelAction.Sync);
+            }
         }
     }
 }

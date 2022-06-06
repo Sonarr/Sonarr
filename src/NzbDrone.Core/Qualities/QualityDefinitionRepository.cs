@@ -14,7 +14,5 @@ namespace NzbDrone.Core.Qualities
             : base(database, eventAggregator)
         {
         }
-
-      
     }
 }
