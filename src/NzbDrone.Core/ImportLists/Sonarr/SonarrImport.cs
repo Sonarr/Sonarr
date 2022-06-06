@@ -39,6 +39,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                 foreach (var item in remoteSeries)
                 {
                     if ((!Settings.ProfileIds.Any() || Settings.ProfileIds.Contains(item.QualityProfileId)) &&
+                        (!Settings.LanguageProfileIds.Any() || Settings.LanguageProfileIds.Contains(item.QualityProfileId)) &&
                         (!Settings.TagIds.Any() || Settings.TagIds.Any(tagId => item.Tags.Any(itemTagId => itemTagId == tagId))))
                     {
                         series.Add(new ImportListItemInfo
@@ -74,16 +75,33 @@ namespace NzbDrone.Core.ImportLists.Sonarr
             {
                 Settings.Validate().Filter("ApiKey").ThrowOnError();
 
-                var profiles = _sonarrV3Proxy.GetProfiles(Settings);
+                var profiles = _sonarrV3Proxy.GetQualityProfiles(Settings);
 
                 return new
                 {
                     options = profiles.OrderBy(d => d.Name, StringComparer.InvariantCultureIgnoreCase)
-                                            .Select(d => new
-                                            {
-                                                value = d.Id,
-                                                name = d.Name
-                                            })
+                                      .Select(d => new
+                                      {
+                                          value = d.Id,
+                                          name = d.Name
+                                      })
+                };
+            }
+
+            if (action == "getLanguageProfiles")
+            {
+                Settings.Validate().Filter("ApiKey").ThrowOnError();
+
+                var langProfiles = _sonarrV3Proxy.GetLanguageProfiles(Settings);
+
+                return new
+                {
+                    options = langProfiles.OrderBy(d => d.Name, StringComparer.InvariantCultureIgnoreCase)
+                                          .Select(d => new
+                                          {
+                                              value = d.Id,
+                                              name = d.Name
+                                          })
                 };
             }
 

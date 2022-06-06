@@ -23,6 +23,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
             BaseUrl = "";
             ApiKey = "";
             ProfileIds = new int[] { };
+            LanguageProfileIds = new int[] { };
             TagIds = new int[] { };
         }
 
@@ -32,10 +33,13 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         [FieldDefinition(1, Label = "API Key", HelpText = "Apikey of the Sonarr V3 instance to import from")]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(2, Type = FieldType.Select, SelectOptionsProviderAction = "getProfiles", Label = "Profiles", HelpText = "Profiles from the source instance to import from")]
+        [FieldDefinition(2, Type = FieldType.Select, SelectOptionsProviderAction = "getProfiles", Label = "Quality Profiles", HelpText = "Quality Profiles from the source instance to import from")]
         public IEnumerable<int> ProfileIds { get; set; }
 
-        [FieldDefinition(3, Type = FieldType.Select, SelectOptionsProviderAction = "getTags", Label = "Tags", HelpText = "Tags from the source instance to import from")]
+        [FieldDefinition(3, Type = FieldType.Select, SelectOptionsProviderAction = "getLanguageProfiles", Label = "Language Profiles", HelpText = "Language Profiles from the source instance to import from")]
+        public IEnumerable<int> LanguageProfileIds { get; set; }
+
+        [FieldDefinition(4, Type = FieldType.Select, SelectOptionsProviderAction = "getTags", Label = "Tags", HelpText = "Tags from the source instance to import from")]
         public IEnumerable<int> TagIds { get; set; }
 
         public NzbDroneValidationResult Validate()
