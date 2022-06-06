@@ -12,7 +12,8 @@ namespace NzbDrone.Core.ImportLists.Sonarr
     public interface ISonarrV3Proxy
     {
         List<SonarrSeries> GetSeries(SonarrSettings settings);
-        List<SonarrProfile> GetProfiles(SonarrSettings settings);
+        List<SonarrProfile> GetQualityProfiles(SonarrSettings settings);
+        List<SonarrProfile> GetLanguageProfiles(SonarrSettings settings);
         List<SonarrTag> GetTags(SonarrSettings settings);
         ValidationFailure Test(SonarrSettings settings);
     }
@@ -33,9 +34,14 @@ namespace NzbDrone.Core.ImportLists.Sonarr
             return Execute<SonarrSeries>("/api/v3/series", settings);
         }
 
-        public List<SonarrProfile> GetProfiles(SonarrSettings settings)
+        public List<SonarrProfile> GetQualityProfiles(SonarrSettings settings)
         {
             return Execute<SonarrProfile>("/api/v3/qualityprofile", settings);
+        }
+
+        public List<SonarrProfile> GetLanguageProfiles(SonarrSettings settings)
+        {
+            return Execute<SonarrProfile>("/api/v3/languageprofile", settings);
         }
 
         public List<SonarrTag> GetTags(SonarrSettings settings)
