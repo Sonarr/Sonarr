@@ -244,6 +244,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[HorribleSubs] Series Title! S01 [Web][MKV][h264][1080p][AAC 2.0][Softsubs (HorribleSubs)]", false)]
         [TestCase("[LostYears] Series Title - 01-17 (WEB 1080p x264 10-bit AAC) [Dual-Audio]", false)]
         [TestCase("Series.and.Titles.S01.1080p.NF.WEB.DD2.0.x264-SNEAkY", false)]
+        [TestCase("Series.Title.S02E02.This.Year.Will.Be.Different.1080p.WEB.H 265", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -267,6 +268,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("House.of.Sonarr.AK.s05e13.UHD.4K.WEB.DL", false)]
         [TestCase("[HorribleSubs] Series Title! S01 [Web][MKV][h264][2160p][AAC 2.0][Softsubs (HorribleSubs)]", false)]
         [TestCase("Series Title S02 2013 WEB-DL 4k H265 AAC 2Audio-HDSWEB", false)]
+        [TestCase("Series.Title.S02E02.This.Year.Will.Be.Different.2160p.WEB.H.265", false)]
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
