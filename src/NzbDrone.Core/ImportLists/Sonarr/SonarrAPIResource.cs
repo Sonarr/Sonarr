@@ -14,6 +14,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         public int Year { get; set; }
         public string TitleSlug { get; set; }
         public int QualityProfileId { get; set; }
+        public int LanguageProfileId { get; set; }
         public HashSet<int> Tags { get; set; }
     }
 

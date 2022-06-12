@@ -39,7 +39,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                 foreach (var item in remoteSeries)
                 {
                     if ((!Settings.ProfileIds.Any() || Settings.ProfileIds.Contains(item.QualityProfileId)) &&
-                        (!Settings.LanguageProfileIds.Any() || Settings.LanguageProfileIds.Contains(item.QualityProfileId)) &&
+                        (!Settings.LanguageProfileIds.Any() || Settings.LanguageProfileIds.Contains(item.LanguageProfileId)) &&
                         (!Settings.TagIds.Any() || Settings.TagIds.Any(tagId => item.Tags.Any(itemTagId => itemTagId == tagId))))
                     {
                         series.Add(new ImportListItemInfo
