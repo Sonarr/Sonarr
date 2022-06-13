@@ -25,29 +25,25 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            if (searchCriteria == null)
+            if (searchCriteria == null || searchCriteria.Episodes.Count == 1)
             {
                 return Decision.Accept();
             }
 
-            if (searchCriteria.Episodes.Count == 1) return Decision.Accept();
-
-
-            if (subject.Release.MaximumSingleEpisodeAge > 0)
+            if (subject.Release.SeasonSearchMaximumSingleEpisodeAge > 0)
             {
                 if (subject.Series.SeriesType == SeriesTypes.Standard && !subject.ParsedEpisodeInfo.FullSeason && subject.Episodes.Count >= 1)
                 {
                     // test against episodes of the same season in the current search, and make sure they have an air date
                     var subset = searchCriteria.Episodes.Where(e => e.AirDateUtc.HasValue && e.SeasonNumber == subject.Episodes.First().SeasonNumber);
 
-                    if (subset.Count() > 0 && subset.Max(e => e.AirDateUtc).Value.Before(DateTime.UtcNow - TimeSpan.FromDays(subject.Release.MaximumSingleEpisodeAge)))
+                    if (subset.Count() > 0 && subset.Max(e => e.AirDateUtc).Value.Before(DateTime.UtcNow - TimeSpan.FromDays(subject.Release.SeasonSearchMaximumSingleEpisodeAge)))
                     {
-                        _logger.Debug("Release {0} aired more than {1} days ago, season pack required.", subject.Release.Title, subject.Release.MaximumSingleEpisodeAge);
-                        return Decision.Reject("Aired more than {0} days ago, season pack required.", subject.Release.MaximumSingleEpisodeAge);
+                        _logger.Debug("Release {0} aired more than {1} days ago, season pack required.", subject.Release.Title, subject.Release.SeasonSearchMaximumSingleEpisodeAge);
+                        return Decision.Reject("Aired more than {0} days ago, season pack required.", subject.Release.SeasonSearchMaximumSingleEpisodeAge);
                     }
                 }
             }
-
 
             return Decision.Accept();
         }

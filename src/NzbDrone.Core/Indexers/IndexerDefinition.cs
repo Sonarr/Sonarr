@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Indexers
         public bool SupportsRss { get; set; }
         public bool SupportsSearch { get; set; }
         public int Priority { get; set; } = 25;
-        public int MaximumSingleEpisodeAge { get; set; } = 0;
+        public int SeasonSearchMaximumSingleEpisodeAge { get; set; } = 0;
 
         public override bool Enable => EnableRss || EnableAutomaticSearch || EnableInteractiveSearch;
 

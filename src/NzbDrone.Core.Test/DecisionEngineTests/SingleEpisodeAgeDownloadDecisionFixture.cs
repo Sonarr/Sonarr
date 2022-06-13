@@ -30,9 +30,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                     .With(s => s.SeriesType = SeriesTypes.Standard)
                                     .Build();
 
-
-
-
             episodes = new List<Episode>();
             episodes.Add(CreateEpisodeStub(1, 400));
             episodes.Add(CreateEpisodeStub(2, 370));
@@ -42,7 +39,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             multiSearch = new SeasonSearchCriteria();
             multiSearch.Episodes = episodes.ToList();
             multiSearch.SeasonNumber = 1;
-
 
             parseResultMulti = new RemoteEpisode
             {
@@ -58,9 +54,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Release = new ReleaseInfo(),
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
                 Episodes = new List<Episode>()
-
             };
-
         }
 
         Episode CreateEpisodeStub(int number, int age)
@@ -72,31 +66,29 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             };
         }
 
-
         [TestCase(1, 200, false)]
         [TestCase(4, 200, false)]
         [TestCase(1, 600, true)]
         [TestCase(1, 365, true)]
         [TestCase(4, 365, true)]
         [TestCase(1, 0, true)]
-        public void single_episode_release(int episode, int MaximumSingleEpisodeAge, bool expectedResult)
+        public void single_episode_release(int episode, int SeasonSearchMaximumSingleEpisodeAge, bool expectedResult)
         {
-            parseResultSingle.Release.MaximumSingleEpisodeAge = MaximumSingleEpisodeAge;
+            parseResultSingle.Release.SeasonSearchMaximumSingleEpisodeAge = SeasonSearchMaximumSingleEpisodeAge;
             parseResultSingle.Episodes.Clear();
             parseResultSingle.Episodes.Add(episodes.Find(e => e.EpisodeNumber == episode));
 
             Subject.IsSatisfiedBy(parseResultSingle, multiSearch).Accepted.Should().Be(expectedResult);
         }
 
-
         // should always accept all season packs
         [TestCase(200, true)]
         [TestCase(600, true)]
         [TestCase(365, true)]
         [TestCase(0, true)]
-        public void multi_episode_release(int MaximumSingleEpisodeAge, bool expectedResult)
+        public void multi_episode_release(int SeasonSearchMaximumSingleEpisodeAge, bool expectedResult)
         {
-            parseResultMulti.Release.MaximumSingleEpisodeAge = MaximumSingleEpisodeAge;
+            parseResultMulti.Release.SeasonSearchMaximumSingleEpisodeAge = SeasonSearchMaximumSingleEpisodeAge;
 
             Subject.IsSatisfiedBy(parseResultMulti, multiSearch).Accepted.Should().BeTrue();
         }
