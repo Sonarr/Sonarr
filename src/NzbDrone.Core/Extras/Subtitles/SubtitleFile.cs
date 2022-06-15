@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using NzbDrone.Core.Extras.Files;
 using NzbDrone.Core.Languages;
 
@@ -17,6 +18,11 @@ namespace NzbDrone.Core.Extras.Subtitles
             LanguageTags = string.Join(".", newTags);
         }
 
-        public string FullPath { get; set; }
+        public void SetRelativePath(string fullPath, string seriesPath)
+        {
+            var endsWithSeparator = seriesPath.EndsWith(Path.PathSeparator.ToString());
+            var startPos = endsWithSeparator ? seriesPath.Length : seriesPath.Length + 1;
+            RelativePath = fullPath.Substring(startPos);
+        }
     }
 }

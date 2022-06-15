@@ -185,10 +185,10 @@ namespace NzbDrone.Core.Extras.Subtitles
                 var subFile = new SubtitleFile
                 {
                     Language = language,
-                    Extension = extension,
-                    FullPath = file
+                    Extension = extension
                 };
                 subFile.SetLanguageTags(languageTags);
+                subFile.SetRelativePath(file, sourceFolder);
                 subtitleFiles.Add(subFile);
             }
 
@@ -201,16 +201,15 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                 foreach (var file in group)
                 {
+                    var path = Path.Combine(sourceFolder, file.RelativePath);
+                    var language = file.Language;
+                    var extension = file.Extension;
+                    var suffix = GetSuffix(language, copy, file.LanguageTags, groupCount > 1);
                     try
                     {
-                        var path = file.FullPath;
-                        var language = file.Language;
-                        var extension = file.Extension;
-                        var suffix = GetSuffix(language, copy, file.LanguageTags, groupCount > 1);
                         var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
                         subtitleFile.Language = language;
                         subtitleFile.LanguageTags = file.LanguageTags;
-                        subtitleFile.FullPath = file.FullPath;
 
                         _mediaFileAttributeService.SetFilePermissions(path);
                         _subtitleFileService.Upsert(subtitleFile);
@@ -221,7 +220,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to import subtitle file: {0}", file.FullPath);
+                        _logger.Warn(ex, "Failed to import subtitle file: {0}", path);
                     }
                 }
             }
