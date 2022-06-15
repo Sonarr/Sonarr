@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                 try
                 {
                     // Filename match
-                    if (Path.GetFileNameWithoutExtension(file).StartsWith(sourceFileName, StringComparison.InvariantCultureIgnoreCase))
+                    if (Path.GetFileNameWithoutExtension(file).StartsWithIgnoreCase(sourceFileName))
                     {
                         matchingFiles.Add(file);
                         continue;
@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                 suffixBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
             }
 
-            if (!string.IsNullOrEmpty(languageTags))
+            if (languageTags.IsNotNullOrWhiteSpace())
             {
                 suffixBuilder.Append(".");
                 suffixBuilder.Append(languageTags);    
