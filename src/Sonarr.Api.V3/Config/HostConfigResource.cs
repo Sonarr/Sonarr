@@ -27,6 +27,7 @@ namespace Sonarr.Api.V3.Config
         public string SslCertPassword { get; set; }
         public string UrlBase { get; set; }
         public string InstanceName { get; set; }
+        public string ApplicationUrl { get; set; }
         public bool UpdateAutomatically { get; set; }
         public UpdateMechanism UpdateMechanism { get; set; }
         public string UpdateScriptPath { get; set; }
@@ -70,6 +71,7 @@ namespace Sonarr.Api.V3.Config
                 SslCertPassword = model.SslCertPassword,
                 UrlBase = model.UrlBase,
                 InstanceName = model.InstanceName,
+                ApplicationUrl = model.ApplicationUrl,
                 UpdateAutomatically = model.UpdateAutomatically,
                 UpdateMechanism = model.UpdateMechanism,
                 UpdateScriptPath = model.UpdateScriptPath,

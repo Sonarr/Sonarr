@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import FieldSet from 'Components/FieldSet';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes, sizes } from 'Helpers/Props';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 function HostSettings(props) {
   const {
@@ -20,6 +20,7 @@ function HostSettings(props) {
     port,
     urlBase,
     instanceName,
+    applicationUrl,
     enableSsl,
     sslPort,
     sslCertPath,
@@ -86,6 +87,21 @@ function HostSettings(props) {
           helpTextWarning="Requires restart to take effect"
           onChange={onInputChange}
           {...instanceName}
+        />
+      </FormGroup>
+
+      <FormGroup
+        advancedSettings={advancedSettings}
+        isAdvanced={true}
+      >
+        <FormLabel>Application URL</FormLabel>
+
+        <FormInputGroup
+          type={inputTypes.TEXT}
+          name="applicationUrl"
+          helpText="This applications external URL including http(s):// and optionally port and/or URL base"
+          onChange={onInputChange}
+          {...applicationUrl}
         />
       </FormGroup>
 

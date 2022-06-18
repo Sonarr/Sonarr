@@ -346,6 +346,8 @@ namespace NzbDrone.Core.Configuration
         public CertificateValidationType CertificateValidation =>
             GetValueEnum("CertificateValidation", CertificateValidationType.Enabled);
 
+        public string ApplicationUrl => GetValue("ApplicationUrl", string.Empty);
+
         private string GetValue(string key)
         {
             return GetValue(key, string.Empty);
