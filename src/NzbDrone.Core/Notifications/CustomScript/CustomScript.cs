@@ -52,6 +52,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
+            environmentVariables.Add("Sonarr_Series_Title_Slug", series.TitleSlug.ToString());
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
             environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
@@ -88,6 +89,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_IsUpgrade", message.OldFiles.Any().ToString());
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
+            environmentVariables.Add("Sonarr_Series_Title_Slug", series.TitleSlug.ToString());
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
@@ -130,6 +132,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
+            environmentVariables.Add("Sonarr_Series_Title_Slug", series.TitleSlug.ToString());
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
@@ -156,6 +159,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_EpisodeFile_DeleteReason", deleteMessage.Reason.ToString());
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
+            environmentVariables.Add("Sonarr_Series_Title_Slug", series.TitleSlug.ToString());
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
@@ -188,6 +192,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
+            environmentVariables.Add("Sonarr_Series_Title_Slug", series.TitleSlug.ToString());
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
