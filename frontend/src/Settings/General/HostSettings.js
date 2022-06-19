@@ -99,7 +99,7 @@ function HostSettings(props) {
         <FormInputGroup
           type={inputTypes.TEXT}
           name="applicationUrl"
-          helpText="This applications external URL including http(s):// and optionally port and/or URL base"
+          helpText="This applications external URL including http(s):// and optional port and/or URL base"
           onChange={onInputChange}
           {...applicationUrl}
         />
