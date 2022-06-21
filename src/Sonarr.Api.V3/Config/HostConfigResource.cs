@@ -71,7 +71,6 @@ namespace Sonarr.Api.V3.Config
                 SslCertPassword = model.SslCertPassword,
                 UrlBase = model.UrlBase,
                 InstanceName = model.InstanceName,
-                ApplicationUrl = model.ApplicationUrl,
                 UpdateAutomatically = model.UpdateAutomatically,
                 UpdateMechanism = model.UpdateMechanism,
                 UpdateScriptPath = model.UpdateScriptPath,
@@ -86,7 +85,8 @@ namespace Sonarr.Api.V3.Config
                 CertificateValidation = configService.CertificateValidation,
                 BackupFolder = configService.BackupFolder,
                 BackupInterval = configService.BackupInterval,
-                BackupRetention = configService.BackupRetention
+                BackupRetention = configService.BackupRetention,
+                ApplicationUrl = configService.ApplicationUrl
             };
         }
     }

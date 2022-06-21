@@ -45,7 +45,6 @@ namespace NzbDrone.Core.Configuration
         string UrlBase { get; }
         string UiFolder { get; }
         string InstanceName { get; }
-        string ApplicationUrl { get; }
         bool UpdateAutomatically { get; }
         UpdateMechanism UpdateMechanism { get; }
         string UpdateScriptPath { get; }
@@ -230,8 +229,6 @@ namespace NzbDrone.Core.Configuration
                 return BuildInfo.AppName;
             }
         }
-
-        public string ApplicationUrl => GetValue("ApplicationUrl", "", persist: false);
 
         public bool UpdateAutomatically => GetValueBoolean("UpdateAutomatically", false, false);
 
