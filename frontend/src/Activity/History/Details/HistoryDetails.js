@@ -24,6 +24,7 @@ function HistoryDetails(props) {
       indexer,
       releaseGroup,
       preferredWordScore,
+      seriesMatchType,
       nzbInfoUrl,
       downloadClient,
       downloadClientName,
@@ -68,6 +69,16 @@ function HistoryDetails(props) {
             <DescriptionListItem
               title="Preferred Word Score"
               data={formatPreferredWordScore(preferredWordScore)}
+            /> :
+            null
+        }
+
+        {
+          seriesMatchType ?
+            <DescriptionListItem
+              descriptionClassName={styles.description}
+              title="Series Match Type"
+              data={seriesMatchType}
             /> :
             null
         }
