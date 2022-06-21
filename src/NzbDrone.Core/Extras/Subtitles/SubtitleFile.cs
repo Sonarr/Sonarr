@@ -9,14 +9,9 @@ namespace NzbDrone.Core.Extras.Subtitles
     {
         public Language Language { get; set; }
 
-        public string AggregateString => Language + LanguageTags + Extension;
+        public string AggregateString => Language + LanguageTagsAsString + Extension;
 
-        public string LanguageTags { get; set; }
-
-        public void SetLanguageTags(IEnumerable<string> newTags)
-        {
-            LanguageTags = string.Join(".", newTags);
-        }
+        public List<string> LanguageTags { get; set; }
 
         public void SetRelativePath(string fullPath, string seriesPath)
         {
@@ -24,5 +19,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             var startPos = endsWithSeparator ? seriesPath.Length : seriesPath.Length + 1;
             RelativePath = fullPath.Substring(startPos);
         }
+
+        private string LanguageTagsAsString => string.Join(".", LanguageTags);
     }
 }

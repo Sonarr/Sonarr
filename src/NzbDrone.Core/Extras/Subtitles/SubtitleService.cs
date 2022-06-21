@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                     Language = language,
                     Extension = extension
                 };
-                subFile.SetLanguageTags(languageTags);
+                subFile.LanguageTags = languageTags.ToList();
                 subFile.SetRelativePath(file, sourceFolder);
                 subtitleFiles.Add(subFile);
             }
@@ -228,7 +228,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             return importedFiles;
         }
 
-        private string GetSuffix(Language language, int copy, string languageTags, bool multipleCopies = false)
+        private string GetSuffix(Language language, int copy, List<string> languageTags, bool multipleCopies = false)
         {
             var suffixBuilder = new StringBuilder();
 
@@ -244,10 +244,10 @@ namespace NzbDrone.Core.Extras.Subtitles
                 suffixBuilder.Append(IsoLanguages.Get(language).TwoLetterCode);
             }
 
-            if (languageTags.IsNotNullOrWhiteSpace())
+            if (languageTags.Any())
             {
                 suffixBuilder.Append(".");
-                suffixBuilder.Append(languageTags);    
+                suffixBuilder.Append(string.Join(".", languageTags));    
             }
 
             return suffixBuilder.ToString();
