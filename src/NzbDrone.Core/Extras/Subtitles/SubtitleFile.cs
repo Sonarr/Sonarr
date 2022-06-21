@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Extras.Subtitles
     {
         public Language Language { get; set; }
 
-        public string AggregateString => Language + Extension + LanguageTags;
+        public string AggregateString => Language + LanguageTags + Extension;
 
         public string LanguageTags { get; set; }
 
