@@ -163,7 +163,7 @@ function EditIndexerModalContent(props) {
                 <FormInputGroup
                   type={inputTypes.NUMBER}
                   name="seasonSearchMaximumSingleEpisodeAge"
-                  helpText="During a full season search, only season packs will be allowed when the season's most recent episode is older than this setting. Standard series only. Use 0 to disable."
+                  helpText="During a full season search only season packs will be allowed when the season's last episode is older than this setting. Standard series only. Use 0 to disable."
                   min={0}
                   unit="days"
                   {...seasonSearchMaximumSingleEpisodeAge}
