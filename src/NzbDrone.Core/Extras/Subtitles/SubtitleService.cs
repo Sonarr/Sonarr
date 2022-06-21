@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                     Extension = extension
                 };
                 subFile.LanguageTags = languageTags.ToList();
-                subFile.SetRelativePath(file, sourceFolder);
+                subFile.RelativePath = PathExtensions.GetRelativePath(sourceFolder, file);
                 subtitleFiles.Add(subFile);
             }
 
