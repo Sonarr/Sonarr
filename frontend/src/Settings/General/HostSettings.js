@@ -1,10 +1,10 @@
+import PropTypes from 'prop-types';
+import React from 'react';
 import FieldSet from 'Components/FieldSet';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes, sizes } from 'Helpers/Props';
-import PropTypes from 'prop-types';
-import React from 'react';
 
 function HostSettings(props) {
   const {
@@ -99,7 +99,7 @@ function HostSettings(props) {
         <FormInputGroup
           type={inputTypes.TEXT}
           name="applicationUrl"
-          helpText="This applications external URL including http(s):// and optional port and/or URL base"
+          helpText="This application's external URL including http(s)://, port and URL base"
           onChange={onInputChange}
           {...applicationUrl}
         />
