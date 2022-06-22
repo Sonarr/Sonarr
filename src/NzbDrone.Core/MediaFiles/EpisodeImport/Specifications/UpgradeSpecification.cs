@@ -48,8 +48,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (qualityCompare < 0)
                 {
-                    _logger.Debug("This file isn't a quality upgrade for all episodes. Skipping {0}", localEpisode.Path);
-                    return Decision.Reject("Not an upgrade for existing episode file(s)");
+                    _logger.Debug("This file isn't a quality upgrade for all episodes. Quality Detected is [{0}]. Skipping {1}", episodeFile.Quality.Quality, localEpisode.Path);
+                    return Decision.Reject("Not an upgrade for existing episode file(s). Quality Detected is [{0}]", episodeFile.Quality.Quality);
                 }
 
                 // Same quality, is not a language upgrade, propers/repacks are preferred and it is not a revision update
