@@ -561,6 +561,7 @@ namespace NzbDrone.Core.Parser
                 {
                     if (replace.TryReplace(ref releaseTitle))
                     {
+                        Logger.Trace($"Replace regex: {replace}");
                         Logger.Debug("Substituted with " + releaseTitle);
                     }
                 }

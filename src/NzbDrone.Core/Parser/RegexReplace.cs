@@ -42,5 +42,10 @@ namespace NzbDrone.Core.Parser
                 input = _regex.Replace(input, _replacementFormat);
             return result;
         }
+
+        public override string ToString()
+        {
+            return _regex.ToString();
+        }
     }
 }
