@@ -324,7 +324,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
                     if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0 && searchCriteria.EpisodeNumber > 0)
                     {
-                        pageableRequests.Add(GetPagedRequests(MaxPages, Settings.AnimeCategories, "search",
+                        pageableRequests.Add(GetPagedRequests(MaxPages, Settings.AnimeCategories, "tvsearch",
                         string.Format("&q={0}&season={1}&ep={2}",
                         NewsnabifyTitle(queryTitle),
                         searchCriteria.SeasonNumber,
