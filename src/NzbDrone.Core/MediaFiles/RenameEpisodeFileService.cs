@@ -136,7 +136,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (FileAlreadyExistsException ex)
                 {
-                    _logger.Warn("File not renamed, there is already a file at the destination: {0}", ex.FilePath);
+                    _logger.Warn("File not renamed, there is already a file at the destination: {0}", ex.Filename);
                 }
                 catch (SameFilenameException ex)
                 {
