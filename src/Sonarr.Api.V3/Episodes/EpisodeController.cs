@@ -23,6 +23,7 @@ namespace Sonarr.Api.V3.Episodes
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<EpisodeResource> GetEpisodes(int? seriesId, int? seasonNumber, [FromQuery]List<int> episodeIds, int? episodeFileId, bool includeImages = false)
         {
             if (seriesId.HasValue)
@@ -47,6 +48,7 @@ namespace Sonarr.Api.V3.Episodes
         }
 
         [HttpPut("{id}")]
+        [Consumes("application/json")]
         public IActionResult SetEpisodeMonitored([FromBody] EpisodeResource resource, [FromRoute] int id)
         {
             _episodeService.SetEpisodeMonitored(id, resource.Monitored);
@@ -57,6 +59,7 @@ namespace Sonarr.Api.V3.Episodes
         }
 
         [HttpPut("monitor")]
+        [Consumes("application/json")]
         public IActionResult SetEpisodesMonitored([FromBody] EpisodesMonitoredResource resource)
         {
             var includeImages = Request.GetBooleanQueryParameter("includeImages", false);

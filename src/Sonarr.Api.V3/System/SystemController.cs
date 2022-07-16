@@ -54,6 +54,7 @@ namespace Sonarr.Api.V3.System
         }
 
         [HttpGet("status")]
+        [Produces("application/json")]
         public object GetStatus()
         {
             return new
@@ -92,6 +93,7 @@ namespace Sonarr.Api.V3.System
         }
 
         [HttpGet("routes")]
+        [Produces("application/json")]
         public IActionResult GetRoutes()
         {
             using (var sw = new StringWriter())
@@ -103,6 +105,7 @@ namespace Sonarr.Api.V3.System
         }
 
         [HttpGet("routes/duplicate")]
+        [Produces("application/json")]
         public object DuplicateRoutes()
         {
             return _detector.GetDuplicateEndpoints(_endpointData);

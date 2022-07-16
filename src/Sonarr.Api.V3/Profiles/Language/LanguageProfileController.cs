@@ -24,6 +24,7 @@ namespace Sonarr.Api.V3.Profiles.Language
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<LanguageProfileResource> Create(LanguageProfileResource resource)
         {
             var model = resource.ToModel();
@@ -38,6 +39,7 @@ namespace Sonarr.Api.V3.Profiles.Language
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<LanguageProfileResource> Update(LanguageProfileResource resource)
         {
             var model = resource.ToModel();
@@ -53,6 +55,7 @@ namespace Sonarr.Api.V3.Profiles.Language
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<LanguageProfileResource> GetAll()
         {
             return _profileService.All().ToResource();

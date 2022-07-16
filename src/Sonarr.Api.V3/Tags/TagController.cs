@@ -28,18 +28,21 @@ namespace Sonarr.Api.V3.Tags
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<TagResource> GetAll()
         {
             return _tagService.All().ToResource();
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<TagResource> Create(TagResource resource)
         {
             return Created(_tagService.Add(resource.ToModel()).Id);
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<TagResource> Update(TagResource resource)
         {
             _tagService.Update(resource.ToModel());

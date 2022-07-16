@@ -58,6 +58,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<EpisodeFileResource> GetEpisodeFiles(int? seriesId, [FromQuery] List<int> episodeFileIds)
         {
             if (!seriesId.HasValue && !episodeFileIds.Any())
@@ -101,6 +102,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<EpisodeFileResource> SetQuality(EpisodeFileResource episodeFileResource)
         {
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
@@ -121,6 +123,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         }
 
         [HttpPut("editor")]
+        [Consumes("application/json")]
         public object SetQuality([FromBody] EpisodeFileListResource resource)
         {
             var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
@@ -171,6 +174,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         }
 
         [HttpDelete("bulk")]
+        [Consumes("application/json")]
         public object DeleteEpisodeFiles([FromBody] EpisodeFileListResource resource)
         {
             var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
@@ -185,6 +189,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         }
 
         [HttpPut("bulk")]
+        [Consumes("application/json")]
         public object SetPropertiesBulk([FromBody] List<EpisodeFileResource> resources)
         {
             var episodeFiles = _mediaFileService.GetFiles(resources.Select(r => r.Id));

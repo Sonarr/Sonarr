@@ -15,6 +15,7 @@ namespace Sonarr.Api.V3.Profiles.Language
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public LanguageProfileResource GetSchema()
         {
             var qualityProfile = _profileService.GetDefaultProfile(string.Empty);

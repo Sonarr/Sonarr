@@ -22,6 +22,7 @@ namespace Sonarr.Api.V3.Calendar
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<EpisodeResource> GetCalendar(DateTime? start, DateTime? end, bool unmonitored = false, bool includeSeries = false, bool includeEpisodeFile = false, bool includeEpisodeImages = false)
         {
             var startUse = start ?? DateTime.Today;

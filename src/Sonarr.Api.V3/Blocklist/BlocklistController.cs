@@ -22,6 +22,7 @@ namespace Sonarr.Api.V3.Blocklist
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public PagingResource<BlocklistResource> GetBlocklist()
         {
             var pagingResource = Request.ReadPagingResourceFromRequest<BlocklistResource>();
@@ -37,6 +38,7 @@ namespace Sonarr.Api.V3.Blocklist
         }
 
         [HttpDelete("bulk")]
+        [Produces("application/json")]
         public object Remove([FromBody] BlocklistBulkResource resource)
         {
             _blocklistService.Delete(resource.Ids);

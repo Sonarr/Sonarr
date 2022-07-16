@@ -21,6 +21,7 @@ namespace Sonarr.Api.V3.ManualImport
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<ManualImportResource> GetMediaFiles(string folder, string downloadId, int? seriesId, int? seasonNumber, bool filterExistingFiles = true)
         {
             if (seriesId.HasValue)
@@ -32,6 +33,7 @@ namespace Sonarr.Api.V3.ManualImport
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         public object ReprocessItems([FromBody] List<ManualImportReprocessResource> items)
         {
             foreach (var item in items)

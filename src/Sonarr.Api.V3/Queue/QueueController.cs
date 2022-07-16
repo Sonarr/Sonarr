@@ -99,6 +99,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public PagingResource<QueueResource> GetQueue(bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false)
         {
             var pagingResource = Request.ReadPagingResourceFromRequest<QueueResource>();

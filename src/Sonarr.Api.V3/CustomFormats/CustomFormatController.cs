@@ -48,6 +48,7 @@ namespace Sonarr.Api.V3.CustomFormats
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<CustomFormatResource> Create(CustomFormatResource customFormatResource)
         {
             var model = customFormatResource.ToModel(_specifications);
@@ -55,6 +56,7 @@ namespace Sonarr.Api.V3.CustomFormats
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<CustomFormatResource> Update(CustomFormatResource resource)
         {
             var model = resource.ToModel(_specifications);
@@ -64,6 +66,7 @@ namespace Sonarr.Api.V3.CustomFormats
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<CustomFormatResource> GetAll()
         {
             return _formatService.All().ToResource();

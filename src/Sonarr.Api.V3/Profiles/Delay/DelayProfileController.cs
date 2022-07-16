@@ -34,6 +34,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<DelayProfileResource> Create(DelayProfileResource resource)
         {
             var model = resource.ToModel();
@@ -54,6 +55,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<DelayProfileResource> Update(DelayProfileResource resource)
         {
             var model = resource.ToModel();
@@ -67,6 +69,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<DelayProfileResource> GetAll()
         {
             return _delayProfileService.All().ToResource();

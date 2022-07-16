@@ -42,6 +42,7 @@ namespace Sonarr.Api.V3
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<TProviderResource> GetAll()
         {
             var providerDefinitions = _providerFactory.All().OrderBy(p => p.ImplementationName);
@@ -59,6 +60,7 @@ namespace Sonarr.Api.V3
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<TProviderResource> CreateProvider(TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, true, false, false);
@@ -74,6 +76,7 @@ namespace Sonarr.Api.V3
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<TProviderResource> UpdateProvider(TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, true, false, false);
@@ -112,6 +115,7 @@ namespace Sonarr.Api.V3
         }
 
         [HttpGet("schema")]
+        [Produces("application/json")]
         public List<TProviderResource> GetTemplates()
         {
             var defaultDefinitions = _providerFactory.GetDefaultDefinitions().OrderBy(p => p.ImplementationName).ToList();
@@ -135,6 +139,7 @@ namespace Sonarr.Api.V3
 
         [SkipValidation(true, false)]
         [HttpPost("test")]
+        [Consumes("application/json")]
         public object Test([FromBody] TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, true, true, true);
@@ -171,6 +176,7 @@ namespace Sonarr.Api.V3
 
         [SkipValidation]
         [HttpPost("action/{name}")]
+        [Consumes("application/json")]
         public IActionResult RequestAction(string name, [FromBody] TProviderResource resource)
         {
             var providerDefinition = GetDefinition(resource, false, false, false);

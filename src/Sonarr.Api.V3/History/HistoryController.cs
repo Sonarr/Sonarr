@@ -57,6 +57,7 @@ namespace Sonarr.Api.V3.History
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public PagingResource<HistoryResource> GetHistory(bool includeSeries, bool includeEpisode)
         {
             var pagingResource = Request.ReadPagingResourceFromRequest<HistoryResource>();
@@ -88,12 +89,14 @@ namespace Sonarr.Api.V3.History
         }
 
         [HttpGet("since")]
+        [Produces("application/json")]
         public List<HistoryResource> GetHistorySince(DateTime date, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
         {
             return _historyService.Since(date, eventType).Select(h => MapToResource(h, includeSeries, includeEpisode)).ToList();
         }
 
         [HttpGet("series")]
+        [Produces("application/json")]
         public List<HistoryResource> GetSeriesHistory(int seriesId, int? seasonNumber, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
         {
             if (seasonNumber.HasValue)

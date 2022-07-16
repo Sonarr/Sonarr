@@ -67,6 +67,7 @@ namespace Sonarr.Api.V3.Indexers
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         public object DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
@@ -138,6 +139,7 @@ namespace Sonarr.Api.V3.Indexers
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<ReleaseResource> GetReleases(int? seriesId, int? episodeId, int? seasonNumber)
         {
             if (episodeId.HasValue)

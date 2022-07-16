@@ -23,12 +23,14 @@ namespace Sonarr.Api.V3.CustomFilters
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<CustomFilterResource> GetCustomFilters()
         {
             return _customFilterService.All().ToResource();
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<CustomFilterResource> AddCustomFilter(CustomFilterResource resource)
         {
             var customFilter = _customFilterService.Add(resource.ToModel());
@@ -37,6 +39,7 @@ namespace Sonarr.Api.V3.CustomFilters
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<CustomFilterResource> UpdateCustomFilter(CustomFilterResource resource)
         {
             _customFilterService.Update(resource.ToModel());

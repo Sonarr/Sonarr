@@ -26,6 +26,7 @@ namespace Sonarr.Api.V3.Wanted
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public PagingResource<EpisodeResource> GetCutoffUnmetEpisodes(bool includeSeries = false, bool includeEpisodeFile = false, bool includeImages = false)
         {
             var pagingResource = Request.ReadPagingResourceFromRequest<EpisodeResource>();

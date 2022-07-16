@@ -26,12 +26,14 @@ namespace Sonarr.Api.V3.FileSystem
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public IActionResult GetContents(string path, bool includeFiles = false, bool allowFoldersWithoutTrailingSlashes = false)
         {
             return Ok(_fileSystemLookupService.LookupContents(path, includeFiles, allowFoldersWithoutTrailingSlashes));
         }
 
         [HttpGet("type")]
+        [Produces("application/json")]
         public object GetEntityType(string path)
         {
             if (_diskProvider.FileExists(path))
@@ -44,6 +46,7 @@ namespace Sonarr.Api.V3.FileSystem
         }
 
         [HttpGet("mediafiles")]
+        [Produces("application/json")]
         public object GetMediaFiles(string path)
         {
             if (!_diskProvider.FolderExists(path))

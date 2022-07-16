@@ -22,6 +22,7 @@ namespace Sonarr.Api.V3.Update
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<UpdateResource> GetRecentUpdates()
         {
             var resources = _recentUpdateProvider.GetRecentUpdatePackages()

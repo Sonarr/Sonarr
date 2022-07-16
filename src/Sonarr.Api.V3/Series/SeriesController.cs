@@ -98,6 +98,7 @@ namespace Sonarr.Api.V3.Series
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<SeriesResource> AllSeries(int? tvdbId, bool includeSeasonImages = false)
         {
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
@@ -129,6 +130,7 @@ namespace Sonarr.Api.V3.Series
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<SeriesResource> AddSeries(SeriesResource seriesResource)
         {
             var series = _addSeriesService.AddSeries(seriesResource.ToModel());
@@ -137,6 +139,7 @@ namespace Sonarr.Api.V3.Series
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<SeriesResource> UpdateSeries(SeriesResource seriesResource)
         {
             var moveFiles = Request.GetBooleanQueryParameter("moveFiles");

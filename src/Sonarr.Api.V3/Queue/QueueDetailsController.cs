@@ -32,6 +32,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<QueueResource> GetQueue(int? seriesId, [FromQuery]List<int> episodeIds, bool includeSeries = false, bool includeEpisode = false)
         {
             var queue = _queueService.GetQueue();

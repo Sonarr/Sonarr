@@ -29,12 +29,14 @@ namespace Sonarr.Api.V3.ImportLists
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<ImportListExclusionResource> GetImportListExclusions()
         {
             return _importListExclusionService.All().ToResource();
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<ImportListExclusionResource> AddImportListExclusion(ImportListExclusionResource resource)
         {
             var importListExclusion = _importListExclusionService.Add(resource.ToModel());
@@ -43,6 +45,7 @@ namespace Sonarr.Api.V3.ImportLists
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public ActionResult<ImportListExclusionResource> UpdateImportListExclusion(ImportListExclusionResource resource)
         {
             _importListExclusionService.Update(resource.ToModel());

@@ -23,6 +23,7 @@ namespace Sonarr.Api.V3.Config
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public TResource GetConfig()
         {
             var resource = ToResource(_configService);
@@ -32,6 +33,7 @@ namespace Sonarr.Api.V3.Config
         }
 
         [RestPutById]
+        [Consumes("application/json")]
         public virtual ActionResult<TResource> SaveConfig(TResource resource)
         {
             var dictionary = resource.GetType()

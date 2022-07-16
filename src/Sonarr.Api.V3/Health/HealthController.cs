@@ -28,6 +28,7 @@ namespace Sonarr.Api.V3.Health
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<HealthResource> GetHealth()
         {
             return _healthCheckService.Results().ToResource();

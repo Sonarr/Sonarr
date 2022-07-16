@@ -55,6 +55,7 @@ namespace Sonarr.Api.V3.Qualities
                 .ToResource());
         }
 
+        [NonAction]
         public void Handle(CommandExecutedEvent message)
         {
             if (message.Command.Name == "ResetQualityDefinitions")

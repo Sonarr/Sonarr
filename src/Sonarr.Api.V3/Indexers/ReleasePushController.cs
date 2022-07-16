@@ -44,6 +44,7 @@ namespace Sonarr.Api.V3.Indexers
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         public ActionResult<List<ReleaseResource>> Create(ReleaseResource release)
         {
             _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl);

@@ -22,6 +22,7 @@ namespace Sonarr.Api.V3.Tags
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<TagDetailsResource> GetAll()
         {
             return _tagService.Details().ToResource();

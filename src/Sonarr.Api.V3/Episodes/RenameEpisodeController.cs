@@ -16,6 +16,7 @@ namespace Sonarr.Api.V3.Episodes
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<RenameEpisodeResource> GetEpisodes(int seriesId, int? seasonNumber)
         {
             if (seasonNumber.HasValue)

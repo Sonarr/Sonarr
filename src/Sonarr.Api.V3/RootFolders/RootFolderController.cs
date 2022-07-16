@@ -49,6 +49,7 @@ namespace Sonarr.Api.V3.RootFolders
         }
 
         [RestPostById]
+        [Consumes("application/json")]
         public ActionResult<RootFolderResource> CreateRootFolder(RootFolderResource rootFolderResource)
         {
             var model = rootFolderResource.ToModel();
@@ -57,6 +58,7 @@ namespace Sonarr.Api.V3.RootFolders
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public List<RootFolderResource> GetRootFolders()
         {
             return _rootFolderService.AllWithUnmappedFolders().ToResource();

@@ -160,3 +160,6 @@ Thumbs.db
 
 src/.idea/
 /distribution/windows/setup/output/*
+
+# API doc generation
+.config/

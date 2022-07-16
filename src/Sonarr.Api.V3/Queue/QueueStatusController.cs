@@ -36,6 +36,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [HttpGet]
+        [Produces("application/json")]
         public QueueStatusResource GetQueueStatus()
         {
             _broadcastDebounce.Pause();
