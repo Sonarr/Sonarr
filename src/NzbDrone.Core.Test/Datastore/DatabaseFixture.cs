@@ -28,6 +28,20 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
+        public void postgres_should_not_contain_timestamp_without_timezone_columns()
+        {
+            if (Db.DatabaseType != DatabaseType.PostgreSQL)
+            {
+                return;
+            }
+
+            Mocker.Resolve<IDatabase>()
+                .OpenConnection().Query("SELECT table_name, column_name, data_type FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'public' AND data_type = 'timestamp without time zone'")
+                .Should()
+                .BeNullOrEmpty();
+        }
+
+        [Test]
         public void get_version()
         {
             Mocker.Resolve<IDatabase>().Version.Should().BeGreaterThan(new Version("3.0.0"));
