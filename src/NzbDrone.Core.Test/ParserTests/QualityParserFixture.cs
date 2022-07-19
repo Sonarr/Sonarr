@@ -256,6 +256,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Series 42 S09E13 1.54 GB WEB-RIP 1080p Dual-Audio 2019 MKV", false)]
         [TestCase("Series.Title.1x04.ITA.1080p.WEBMux.x264-NovaRip", false)]
         [TestCase("Series.Title.2019.S02E07.Chapter.15.The.Believer.4Kto1080p.DSNYP.Webrip.x265.10bit.EAC3.5.1.Atmos.GokiTAoE", false)]
+        [TestCase("Series.Title.S01.1080p.AMZN.WEB-Rip.DDP5.1.H.264-Telly", false)]
         public void should_parse_webrip1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip1080p, proper);
