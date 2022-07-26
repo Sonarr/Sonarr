@@ -235,6 +235,52 @@ namespace NzbDrone.Core.Notifications.CustomScript
                 {
                     var environmentVariables = new StringDictionary();
                     environmentVariables.Add("Sonarr_EventType", "Test");
+                    
+                    environmentVariables.Add("Sonarr_DeletedPaths", "sonarr_deletedpaths");
+                    environmentVariables.Add("Sonarr_DeletedRelativePaths", "sonarr_deletedrelativepaths");
+                    environmentVariables.Add("Sonarr_Download_Client", "sonarr_download_client");
+                    environmentVariables.Add("Sonarr_Download_Client_Type", "sonarr_download_client_type");
+                    environmentVariables.Add("Sonarr_Download_Id", "sonarr_download_id");
+                    environmentVariables.Add("Sonarr_EpisodeFile_DeleteReason", "sonarr_episodefile_deletereason");
+                    environmentVariables.Add("Sonarr_EpisodeFile_EpisodeCount", "sonarr_episodefile_episodecount");
+                    environmentVariables.Add("Sonarr_EpisodeFile_EpisodeIds", "sonarr_episodefile_episodeids");
+                    environmentVariables.Add("Sonarr_EpisodeFile_EpisodeNumbers", "sonarr_episodefile_episodenumbers");
+                    environmentVariables.Add("Sonarr_EpisodeFile_Id", "sonarr_episodefile_id");
+                    environmentVariables.Add("Sonarr_EpisodeFile_Ids", "sonarr_episodefile_ids");
+                    environmentVariables.Add("Sonarr_EpisodeFile_Path", "sonarr_episodefile_path");
+                    environmentVariables.Add("Sonarr_EpisodeFile_Paths", "sonarr_episodefile_paths");
+                    environmentVariables.Add("Sonarr_EpisodeFile_PreviousPaths", "sonarr_episodefile_previouspaths");
+                    environmentVariables.Add("Sonarr_EpisodeFile_PreviousRelativePaths", "sonarr_episodefile_previousrelativepaths");
+                    environmentVariables.Add("Sonarr_EpisodeFile_Quality", "sonarr_episodefile_quality");
+                    environmentVariables.Add("Sonarr_EpisodeFile_QualityVersion", "sonarr_episodefile_qualityversion");
+                    environmentVariables.Add("Sonarr_EpisodeFile_RelativePath", "sonarr_episodefile_relativepath");
+                    environmentVariables.Add("Sonarr_EpisodeFile_ReleaseGroup", "sonarr_episodefile_releasegroup");
+                    environmentVariables.Add("Sonarr_EpisodeFile_SceneName", "sonarr_episodefile_scenename");
+                    environmentVariables.Add("Sonarr_EpisodeFile_SourceFolder", "sonarr_episodefile_sourcefolder");
+                    environmentVariables.Add("Sonarr_EpisodeFile_SourcePath", "sonarr_episodefile_sourcepath");
+                    environmentVariables.Add("Sonarr_Health_Issue_Level", "sonarr_health_issue_level");
+                    environmentVariables.Add("Sonarr_Health_Issue_Message", "sonarr_health_issue_message");
+                    environmentVariables.Add("Sonarr_Health_Issue_Type", "sonarr_health_issue_type");
+                    environmentVariables.Add("Sonarr_Health_Issue_Wiki", "sonarr_health_issue_wiki");
+                    environmentVariables.Add("Sonarr_IsUpgrade", "sonarr_isupgrade");
+                    environmentVariables.Add("Sonarr_Release_EpisodeCount", "sonarr_release_episodecount");
+                    environmentVariables.Add("Sonarr_Release_EpisodeNumbers", "sonarr_release_episodenumbers");
+                    environmentVariables.Add("Sonarr_Release_Indexer", "sonarr_release_indexer");
+                    environmentVariables.Add("Sonarr_Release_Quality", "sonarr_release_quality");
+                    environmentVariables.Add("Sonarr_Release_QualityVersion", "sonarr_release_qualityversion");
+                    environmentVariables.Add("Sonarr_Release_ReleaseGroup", "sonarr_release_releasegroup");
+                    environmentVariables.Add("Sonarr_Release_SeasonNumber", "sonarr_release_seasonnumber");
+                    environmentVariables.Add("Sonarr_Release_Size", "sonarr_release_size");
+                    environmentVariables.Add("Sonarr_Release_Title", "sonarr_release_title");
+                    environmentVariables.Add("Sonarr_Series_DeletedFiles", "sonarr_series_deletedfiles");
+                    environmentVariables.Add("Sonarr_Series_Id", "sonarr_series_id");
+                    environmentVariables.Add("Sonarr_Series_ImdbId", "sonarr_series_imdbid");
+                    environmentVariables.Add("Sonarr_Series_Path", "sonarr_series_path");
+                    environmentVariables.Add("Sonarr_Series_Title", "sonarr_series_title");
+                    environmentVariables.Add("Sonarr_Series_TvdbId", "sonarr_series_tvdbid");
+                    environmentVariables.Add("Sonarr_Series_TvMazeId", "sonarr_series_tvmazeid");
+                    environmentVariables.Add("Sonarr_Series_Type", "sonarr_series_type");
+                    environmentVariables.Add("Sonarr_Update_Message", "sonarr_update_message");
 
                     var processOutput = ExecuteScript(environmentVariables);
 
