@@ -45,6 +45,7 @@ function EditIndexerModalContent(props) {
     tags,
     fields,
     priority,
+    seasonSearchMaximumSingleEpisodeAge,
     protocol,
     downloadClientId
   } = item;
@@ -149,6 +150,23 @@ function EditIndexerModalContent(props) {
                   min={1}
                   max={50}
                   {...priority}
+                  onChange={onInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup
+                advancedSettings={advancedSettings}
+                isAdvanced={true}
+              >
+                <FormLabel>Maximum Single Episode Age</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.NUMBER}
+                  name="seasonSearchMaximumSingleEpisodeAge"
+                  helpText="During a full season search only season packs will be allowed when the season's last episode is older than this setting. Standard series only. Use 0 to disable."
+                  min={0}
+                  unit="days"
+                  {...seasonSearchMaximumSingleEpisodeAge}
                   onChange={onInputChange}
                 />
               </FormGroup>

@@ -11,6 +11,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool SupportsSearch { get; set; }
         public DownloadProtocol Protocol { get; set; }
         public int Priority { get; set; }
+        public int SeasonSearchMaximumSingleEpisodeAge { get; set; }
         public int DownloadClientId { get; set; }
     }
 
@@ -29,6 +30,7 @@ namespace Sonarr.Api.V3.Indexers
             resource.SupportsSearch = definition.SupportsSearch;
             resource.Protocol = definition.Protocol;
             resource.Priority = definition.Priority;
+            resource.SeasonSearchMaximumSingleEpisodeAge = definition.SeasonSearchMaximumSingleEpisodeAge;
             resource.DownloadClientId = definition.DownloadClientId;
 
             return resource;
@@ -44,6 +46,7 @@ namespace Sonarr.Api.V3.Indexers
             definition.EnableAutomaticSearch = resource.EnableAutomaticSearch;
             definition.EnableInteractiveSearch = resource.EnableInteractiveSearch;
             definition.Priority = resource.Priority;
+            definition.SeasonSearchMaximumSingleEpisodeAge = resource.SeasonSearchMaximumSingleEpisodeAge;
             definition.DownloadClientId = resource.DownloadClientId;
 
             return definition;
