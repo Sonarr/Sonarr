@@ -134,6 +134,10 @@ namespace NzbDrone.Core.MediaFiles
 
                     _eventAggregator.PublishEvent(new EpisodeFileRenamedEvent(series, episodeFile, previousPath));
                 }
+                catch (FileAlreadyExistsException ex)
+                {
+                    _logger.Warn("File not renamed, there is already a file at the destination: {0}", ex.Filename);
+                }
                 catch (SameFilenameException ex)
                 {
                     _logger.Debug("File not renamed, source and destination are the same: {0}", ex.Filename);
