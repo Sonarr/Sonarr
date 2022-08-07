@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Messaging.Commands
         public virtual string CompletionMessage => "Completed";
         public virtual bool RequiresDiskAccess => false;
         public virtual bool IsExclusive => false;
+        public virtual bool IsLongRunning => false;
 
         public string Name { get; private set; }
         public DateTime? LastExecutionTime { get; set; }

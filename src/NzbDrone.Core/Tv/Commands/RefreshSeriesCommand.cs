@@ -20,5 +20,7 @@ namespace NzbDrone.Core.Tv.Commands
         public override bool SendUpdatesToClient => true;
 
         public override bool UpdateScheduledTask => !SeriesId.HasValue;
+
+        public override bool IsLongRunning => true;
     }
 }
