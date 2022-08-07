@@ -5,6 +5,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -240,6 +241,20 @@ namespace NzbDrone.Core.MediaFiles
                 return new List<ImportResult>
                        {
                            new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName }, new Rejection("Invalid video file, filename starts with '._'")), "Invalid video file, filename starts with '._'")
+                       };
+            }
+
+            var extension = Path.GetExtension(fileInfo.Name);
+
+            if (extension.IsNullOrWhiteSpace() || !MediaFileExtensions.Extensions.Contains(extension))
+            {
+                _logger.Debug("[{0}] has an unsupported extension: '{1}'", fileInfo.FullName, extension);
+
+                return new List<ImportResult>
+                       {
+                           new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName },
+                               new Rejection($"Invalid video file, unsupported extension: '{extension}'")),
+                               $"Invalid video file, unsupported extension: '{extension}'")
                        };
             }
 
