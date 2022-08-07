@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Tv
                 _diskProvider.CreateFolder(new DirectoryInfo(destinationPath).Parent.FullName);
                 _diskTransferService.TransferFolder(sourcePath, destinationPath, TransferMode.Move);
 
-                _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, series.Path);
+                _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, destinationPath);
 
                 _eventAggregator.PublishEvent(new SeriesMovedEvent(series, sourcePath, destinationPath));
             }
