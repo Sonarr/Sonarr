@@ -2,8 +2,8 @@ fromdos ./debian/*
 chmod ugo-x ./debian/*
 cp -r ./debian ./debian_backup
 
-BuildVersion=${dependent_build_number:-3.10.0.999}
-BuildBranch=${dependent_build_branch:-master}
+BuildVersion=${dependent_build_number:-4.10.0.999}
+BuildBranch=${dependent_build_branch:-main}
 BootstrapVersion=`echo "$BuildVersion" | cut -d. -f1,2,3`
 BootstrapUpdater="BuiltIn"
 PackageUpdater="apt"

@@ -1,3 +1,2 @@
 ignores msbuild
-ignores libmediainfo0v5
 ignores libc6
