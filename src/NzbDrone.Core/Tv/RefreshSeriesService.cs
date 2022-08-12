@@ -8,6 +8,7 @@ using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;
@@ -157,26 +158,23 @@ namespace NzbDrone.Core.Tv
         private void RescanSeries(Series series, bool isNew, CommandTrigger trigger)
         {
             var rescanAfterRefresh = _configService.RescanAfterRefresh;
-            var shouldRescan = true;
 
             if (isNew)
             {
                 _logger.Trace("Forcing rescan of {0}. Reason: New series", series);
-                shouldRescan = true;
             }
             else if (rescanAfterRefresh == RescanAfterRefreshType.Never)
             {
                 _logger.Trace("Skipping rescan of {0}. Reason: never rescan after refresh", series);
-                shouldRescan = false;
+                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.NeverRescanAfterRefresh));
+
+                return;
             }
             else if (rescanAfterRefresh == RescanAfterRefreshType.AfterManual && trigger != CommandTrigger.Manual)
             {
                 _logger.Trace("Skipping rescan of {0}. Reason: not after automatic scans", series);
-                shouldRescan = false;
-            }
+                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RescanAfterManualRefreshOnly));
 
-            if (!shouldRescan)
-            {
                 return;
             }
 
