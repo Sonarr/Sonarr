@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann|ger[. ]dub)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VF|VF2|VFF|VFQ|TRUEFRENCH)(?:\W|_))|(?<russian>\brus\b)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<polish>\b(?:PL\W?DUB|DUB\W?PL|LEK\W?PL|PL\W?LEK)\b)|(?<chinese>\[(?:CH[ST]|BIG5|GB)\]|简|繁|字幕)|(?<bulgarian>\bbgaudio\b)|(?<spanish>\b(?:español|castellano)\b)|(?<ukrainian>\b(?:ukr)\b)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex CaseSensitiveLanguageRegex = new Regex(@"(?:(?i)(?<!SUB[\W|_|^]))(?:(?<lithuanian>\bLT\b)|(?<czech>\bCZ\b)|(?<polish>\bPL\b)|(?<bulgarian>\bBG\b))(?:(?i)(?![\W|_|^]SUB))",
+        private static readonly Regex CaseSensitiveLanguageRegex = new Regex(@"(?:(?i)(?<!SUB[\W|_|^]))(?:(?<lithuanian>\bLT\b)|(?<czech>\bCZ\b)|(?<polish>\bPL\b)|(?<bulgarian>\bBG\b)|(?<slovak>\bSK\b))(?:(?i)(?![\W|_|^]SUB))",
                                                                 RegexOptions.Compiled);
 
         private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -156,6 +156,11 @@ namespace NzbDrone.Core.Parser
                 languages.Add(Language.Bulgarian);
             }
 
+            if (lowerTitle.Contains("slovak"))
+            {
+                languages.Add(Language.Slovak);
+            }
+
             var regexLanguages = RegexLanguage(title);
 
             if (regexLanguages.Any())
@@ -255,6 +260,11 @@ namespace NzbDrone.Core.Parser
             if (caseSensitiveMatch.Groups["bulgarian"].Captures.Cast<Capture>().Any())
             {
                 languages.Add(Language.Bulgarian);
+            }
+
+            if (caseSensitiveMatch.Groups["slovak"].Captures.Cast<Capture>().Any())
+            {
+                languages.Add(Language.Slovak);
             }
 
             // Case insensitive

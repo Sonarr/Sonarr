@@ -41,6 +41,7 @@ namespace NzbDrone.Core.Parser
                                                                new IsoLanguage("bg", "", "bul", Language.Bulgarian),
                                                                new IsoLanguage("ml", "", "mal", Language.Malayalam),
                                                                new IsoLanguage("uk", "", "ukr", Language.Ukrainian),
+                                                               new IsoLanguage("sk", "", "slk", Language.Slovak)
                                                            };
 
         public static IsoLanguage Find(string isoCode)
